@@ -1,0 +1,43 @@
+/* ============================================================
+   MATIOS UI — matios-ui-accordion.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-accordion { width: 100%; }
+.mts-accordion__item {
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  margin-bottom: var(--mts-space-2);
+  overflow: hidden;
+}
+.mts-accordion--flush .mts-accordion__item { border-left: none; border-right: none; border-radius: 0; margin-bottom: 0; border-bottom: none; }
+.mts-accordion--flush .mts-accordion__item:first-child { border-top: var(--mts-border-width) solid var(--mts-border-color); }
+.mts-accordion--flush .mts-accordion__item:last-child  { border-bottom: var(--mts-border-width) solid var(--mts-border-color); }
+.mts-accordion__item--disabled { opacity: 0.5; }
+
+.mts-accordion__header {
+  width: 100%; display: flex; align-items: center; gap: var(--mts-space-2);
+  padding: var(--mts-space-3) var(--mts-space-4);
+  background: var(--mts-bg-surface);
+  border: none; cursor: pointer; text-align: left;
+  font-size: var(--mts-font-size-md); font-weight: var(--mts-font-weight-medium);
+  color: var(--mts-text-primary); font-family: var(--mts-font-family);
+  transition: background var(--mts-transition-fast);
+}
+.mts-accordion__header:hover { background: var(--mts-bg-surface-2); }
+.mts-accordion__icon { display: flex; align-items: center; color: var(--mts-text-muted); }
+.mts-accordion__icon svg { width: 16px; height: 16px; }
+.mts-accordion__title { flex: 1; }
+.mts-accordion__arrow { color: var(--mts-text-muted); transition: transform var(--mts-transition-base); flex-shrink: 0; display: flex; align-items: center; }
+.mts-accordion__header--open .mts-accordion__arrow { transform: rotate(180deg); }
+
+.mts-accordion__body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: var(--mts-bg-surface);
+}
+.mts-accordion__content {
+  padding: 0 var(--mts-space-4) var(--mts-space-4);
+  font-size: var(--mts-font-size-md); color: var(--mts-text-secondary);
+  line-height: var(--mts-line-height-base);
+}

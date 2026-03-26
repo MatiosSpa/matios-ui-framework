@@ -1,0 +1,42 @@
+/* ============================================================
+   MATIOS UI — matios-ui-drawer.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-drawer-backdrop { position: fixed; inset: 0; background: var(--mts-bg-overlay); z-index: calc(var(--mts-z-modal) - 1); opacity: 0; transition: opacity var(--mts-transition-base); pointer-events: none; }
+.mts-drawer-backdrop--visible { opacity: 1; pointer-events: auto; }
+
+.mts-drawer {
+  position: fixed; z-index: var(--mts-z-modal);
+  background: var(--mts-bg-surface);
+  box-shadow: var(--mts-shadow-xl);
+  display: flex; flex-direction: column;
+  transition: transform 0.3s ease;
+}
+.mts-drawer[hidden] { display: none; }
+
+/* Posiciones */
+.mts-drawer--right  { top: 0; right: 0; height: 100%; transform: translateX(100%); }
+.mts-drawer--left   { top: 0; left: 0;  height: 100%; transform: translateX(-100%); }
+.mts-drawer--top    { top: 0; left: 0; right: 0; transform: translateY(-100%); }
+.mts-drawer--bottom { bottom: 0; left: 0; right: 0; transform: translateY(100%); }
+.mts-drawer--open   { transform: translate(0, 0) !important; }
+
+/* Tamaños lado */
+.mts-drawer--right.mts-drawer--sm, .mts-drawer--left.mts-drawer--sm { width: 280px; }
+.mts-drawer--right.mts-drawer--md, .mts-drawer--left.mts-drawer--md { width: 400px; }
+.mts-drawer--right.mts-drawer--lg, .mts-drawer--left.mts-drawer--lg { width: 600px; }
+.mts-drawer--right.mts-drawer--full, .mts-drawer--left.mts-drawer--full { width: 100%; }
+
+/* Tamaños arriba/abajo */
+.mts-drawer--top.mts-drawer--sm, .mts-drawer--bottom.mts-drawer--sm { height: 200px; }
+.mts-drawer--top.mts-drawer--md, .mts-drawer--bottom.mts-drawer--md { height: 350px; }
+.mts-drawer--top.mts-drawer--lg, .mts-drawer--bottom.mts-drawer--lg { height: 500px; }
+.mts-drawer--top.mts-drawer--full, .mts-drawer--bottom.mts-drawer--full { height: 100%; }
+
+.mts-drawer__header { display: flex; align-items: center; justify-content: space-between; padding: var(--mts-space-4) var(--mts-space-5); border-bottom: var(--mts-border-width) solid var(--mts-border-color); flex-shrink: 0; }
+.mts-drawer__title  { font-size: var(--mts-font-size-lg); font-weight: var(--mts-font-weight-semibold); color: var(--mts-text-primary); margin: 0; }
+.mts-drawer__close  { background: none; border: none; cursor: pointer; font-size: 20px; color: var(--mts-text-muted); padding: 0; line-height: 1; border-radius: var(--mts-radius-sm); }
+.mts-drawer__close:hover { color: var(--mts-text-primary); }
+.mts-drawer__body   { flex: 1; overflow-y: auto; padding: var(--mts-space-5); }
+.mts-drawer__footer { padding: var(--mts-space-3) var(--mts-space-5); border-top: var(--mts-border-width) solid var(--mts-border-color); display: flex; gap: var(--mts-space-2); justify-content: flex-end; flex-shrink: 0; }

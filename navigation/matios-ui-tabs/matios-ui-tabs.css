@@ -1,0 +1,59 @@
+/* ============================================================
+   MATIOS UI — matios-ui-tabs.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-tabs { display: flex; flex-direction: column; width: 100%; }
+.mts-tabs--vertical { flex-direction: row; }
+
+/* NAV */
+.mts-tabs__nav { display: flex; gap: 2px; }
+.mts-tabs--horizontal .mts-tabs__nav { flex-direction: row; border-bottom: 2px solid var(--mts-border-color); }
+.mts-tabs--vertical   .mts-tabs__nav { flex-direction: column; border-right: 2px solid var(--mts-border-color); min-width: 160px; }
+
+/* TAB BUTTON — base */
+.mts-tabs__tab {
+  display: inline-flex; align-items: center; gap: var(--mts-space-2);
+  padding: 9px var(--mts-space-4);
+  font-size: var(--mts-font-size-sm); font-family: var(--mts-font-family);
+  font-weight: var(--mts-font-weight-medium);
+  color: var(--mts-text-muted);
+  background: none; border: none; cursor: pointer;
+  transition: color var(--mts-transition-fast), background var(--mts-transition-fast);
+  white-space: nowrap; position: relative;
+}
+.mts-tabs__tab:hover:not(:disabled) { color: var(--mts-text-primary); }
+.mts-tabs__tab--disabled { opacity: 0.4; cursor: not-allowed; }
+.mts-tabs__tab-icon svg { width: 16px; height: 16px; }
+.mts-tabs__tab-badge {
+  background: var(--mts-color-primary); color: #fff;
+  font-size: 10px; font-weight: 700;
+  padding: 1px 6px; border-radius: var(--mts-radius-full); min-width: 18px; text-align: center;
+}
+
+/* UNDERLINE */
+.mts-tabs--underline .mts-tabs__tab--active { color: var(--mts-color-primary); }
+.mts-tabs--underline.mts-tabs--horizontal .mts-tabs__tab--active::after {
+  content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px;
+  background: var(--mts-color-primary); border-radius: 2px 2px 0 0;
+}
+.mts-tabs--underline.mts-tabs--vertical .mts-tabs__tab--active::after {
+  content: ''; position: absolute; right: -2px; top: 0; bottom: 0; width: 2px;
+  background: var(--mts-color-primary);
+}
+
+/* PILL */
+.mts-tabs--pill .mts-tabs__nav { background: var(--mts-bg-surface-2); padding: 4px; border-radius: var(--mts-radius-lg); border: none; }
+.mts-tabs--pill .mts-tabs__tab { border-radius: var(--mts-radius-md); }
+.mts-tabs--pill .mts-tabs__tab--active { background: var(--mts-bg-surface); color: var(--mts-text-primary); box-shadow: var(--mts-shadow-sm); }
+
+/* CARD */
+.mts-tabs--card .mts-tabs__nav { border-bottom: var(--mts-border-width) solid var(--mts-border-color); gap: 4px; }
+.mts-tabs--card .mts-tabs__tab { border: var(--mts-border-width) solid transparent; border-bottom: none; border-radius: var(--mts-radius-md) var(--mts-radius-md) 0 0; margin-bottom: -1px; }
+.mts-tabs--card .mts-tabs__tab--active { background: var(--mts-bg-surface); border-color: var(--mts-border-color); color: var(--mts-text-primary); }
+
+/* PANELS */
+.mts-tabs__panels { flex: 1; }
+.mts-tabs__panel { display: none; padding: var(--mts-space-4) 0; }
+.mts-tabs--vertical .mts-tabs__panel { padding: 0 var(--mts-space-4); }
+.mts-tabs__panel--active { display: block; }

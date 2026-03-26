@@ -1,0 +1,41 @@
+/* ============================================================
+   MATIOS UI — matios-ui-stepper.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-stepper { display: flex; width: 100%; }
+.mts-stepper--horizontal { flex-direction: row; align-items: flex-start; }
+.mts-stepper--vertical   { flex-direction: column; }
+
+.mts-stepper__step { display: flex; position: relative; }
+.mts-stepper--horizontal .mts-stepper__step { flex-direction: column; align-items: center; flex: 1; }
+.mts-stepper--vertical   .mts-stepper__step { flex-direction: row; align-items: flex-start; gap: var(--mts-space-3); padding-bottom: var(--mts-space-4); }
+.mts-stepper__step--clickable { cursor: pointer; }
+
+/* Indicador */
+.mts-stepper__indicator {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--mts-font-size-sm); font-weight: var(--mts-font-weight-bold);
+  flex-shrink: 0; position: relative; z-index: 1;
+  border: 2px solid var(--mts-border-color);
+  background: var(--mts-bg-surface); color: var(--mts-text-muted);
+  transition: all var(--mts-transition-base);
+}
+.mts-stepper__step--active   .mts-stepper__indicator { border-color: var(--mts-color-primary); background: var(--mts-color-primary); color: #fff; }
+.mts-stepper__step--complete .mts-stepper__indicator { border-color: var(--mts-color-success);  background: var(--mts-color-success);  color: #fff; }
+.mts-stepper__step--error    .mts-stepper__indicator { border-color: var(--mts-color-danger);   background: var(--mts-color-danger);   color: #fff; }
+
+/* Contenido */
+.mts-stepper__content { display: flex; flex-direction: column; }
+.mts-stepper--horizontal .mts-stepper__content { align-items: center; margin-top: var(--mts-space-2); }
+.mts-stepper__label { font-size: var(--mts-font-size-sm); font-weight: var(--mts-font-weight-medium); color: var(--mts-text-muted); }
+.mts-stepper__step--active   .mts-stepper__label { color: var(--mts-color-primary); }
+.mts-stepper__step--complete .mts-stepper__label { color: var(--mts-text-primary); }
+.mts-stepper__description { font-size: var(--mts-font-size-xs); color: var(--mts-text-muted); margin-top: 2px; }
+
+/* Línea conectora */
+.mts-stepper__line { background: var(--mts-border-color); transition: background var(--mts-transition-base); }
+.mts-stepper--horizontal .mts-stepper__line { position: absolute; top: 16px; left: calc(50% + 16px); right: calc(-50% + 16px); height: 2px; }
+.mts-stepper--vertical   .mts-stepper__line { position: absolute; left: 15px; top: 36px; bottom: 0; width: 2px; }
+.mts-stepper__step--complete .mts-stepper__line { background: var(--mts-color-success); }

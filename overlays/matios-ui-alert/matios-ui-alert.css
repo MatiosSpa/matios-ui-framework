@@ -1,0 +1,35 @@
+/* ============================================================
+   MATIOS UI — matios-ui-alert.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-alert {
+  display: flex; align-items: flex-start; gap: var(--mts-space-3);
+  padding: var(--mts-space-3) var(--mts-space-4);
+  border-radius: var(--mts-radius-md);
+  border-left: 4px solid transparent;
+  margin-bottom: var(--mts-space-3);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.mts-alert--closing { opacity: 0; transform: translateY(-4px); }
+
+.mts-alert--info    { background: var(--mts-color-info-light);    border-color: var(--mts-color-info);    color: var(--mts-color-info); }
+.mts-alert--success { background: var(--mts-color-success-light);  border-color: var(--mts-color-success);  color: var(--mts-color-success); }
+.mts-alert--warning { background: var(--mts-color-warning-light);  border-color: var(--mts-color-warning);  color: var(--mts-color-warning); }
+.mts-alert--danger  { background: var(--mts-color-danger-light);   border-color: var(--mts-color-danger);   color: var(--mts-color-danger); }
+
+.mts-alert__icon { flex-shrink: 0; width: 18px; height: 18px; margin-top: 1px; }
+.mts-alert__icon svg { width: 100%; height: 100%; display: block; }
+.mts-alert__body { flex: 1; min-width: 0; }
+.mts-alert__title { font-size: var(--mts-font-size-sm); font-weight: var(--mts-font-weight-semibold); margin-bottom: 2px; }
+.mts-alert__message { font-size: var(--mts-font-size-sm); color: var(--mts-text-secondary); line-height: var(--mts-line-height-base); }
+.mts-alert--info    .mts-alert__message,
+.mts-alert--success .mts-alert__message,
+.mts-alert--warning .mts-alert__message,
+.mts-alert--danger  .mts-alert__message { color: inherit; opacity: 0.85; }
+.mts-alert__action { background: none; border: none; cursor: pointer; font-size: var(--mts-font-size-sm); font-weight: var(--mts-font-weight-semibold); color: inherit; padding: 0; margin-top: var(--mts-space-2); display: block; text-decoration: underline; }
+.mts-alert__close { background: none; border: none; cursor: pointer; font-size: 18px; color: inherit; opacity: 0.6; padding: 0; line-height: 1; flex-shrink: 0; margin-left: var(--mts-space-2); }
+.mts-alert__close:hover { opacity: 1; }
+
+/* Solo CSS — uso directo en HTML */
+.mts-alert--banner { border-radius: 0; border-left: none; border-top: 4px solid transparent; margin-bottom: 0; }

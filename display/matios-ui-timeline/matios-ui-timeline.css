@@ -1,0 +1,42 @@
+/* ============================================================
+   MATIOS UI — matios-ui-timeline.css
+   Version: 1.0.0
+   ============================================================ */
+
+/* VERTICAL */
+.mts-timeline--vertical { display: flex; flex-direction: column; }
+.mts-timeline--vertical .mts-timeline__item { display: flex; gap: var(--mts-space-4); position: relative; padding-bottom: var(--mts-space-6); }
+.mts-timeline--vertical .mts-timeline__item:last-child { padding-bottom: 0; }
+
+/* Línea vertical */
+.mts-timeline--vertical .mts-timeline__item::before {
+  content: ''; position: absolute; left: 15px; top: 32px; bottom: 0;
+  width: 2px; background: var(--mts-border-color);
+}
+.mts-timeline--vertical .mts-timeline__item:last-child::before { display: none; }
+
+/* Dot */
+.mts-timeline__dot {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  background: var(--mts-color-primary); border: 3px solid var(--mts-bg-surface);
+  box-shadow: 0 0 0 2px var(--mts-color-primary);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+}
+.mts-timeline__dot--icon svg { width: 14px; height: 14px; color: #fff; }
+
+/* Contenido */
+.mts-timeline__content { flex: 1; min-width: 0; padding-top: 4px; }
+.mts-timeline__meta    { display: flex; align-items: center; gap: var(--mts-space-2); margin-bottom: 4px; }
+.mts-timeline__date    { font-size: var(--mts-font-size-xs); color: var(--mts-text-muted); }
+.mts-timeline__title   { font-size: var(--mts-font-size-md); font-weight: var(--mts-font-weight-semibold); color: var(--mts-text-primary); margin-bottom: 4px; }
+.mts-timeline__description { font-size: var(--mts-font-size-sm); color: var(--mts-text-secondary); line-height: var(--mts-line-height-base); }
+.mts-timeline__item--clickable { cursor: pointer; }
+.mts-timeline__item--clickable .mts-timeline__content { transition: opacity var(--mts-transition-fast); }
+.mts-timeline__item--clickable:hover .mts-timeline__content { opacity: 0.8; }
+
+/* Alternate */
+.mts-timeline--alternate .mts-timeline__item:nth-child(even) { flex-direction: row-reverse; }
+.mts-timeline--alternate .mts-timeline__item:nth-child(even) .mts-timeline__content { text-align: right; }
+.mts-timeline--alternate .mts-timeline__item::before { left: 50%; transform: translateX(-50%); }
+.mts-timeline--alternate .mts-timeline__item:nth-child(even)::before { left: 50%; }

@@ -1,0 +1,38 @@
+/* ============================================================
+   MATIOS UI — matios-ui-kpicard.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-kpicard {
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-radius: var(--mts-radius-lg);
+  padding: var(--mts-space-4) var(--mts-space-5);
+  position: relative; overflow: hidden;
+  transition: box-shadow var(--mts-transition-fast), border-color var(--mts-transition-fast);
+}
+.mts-kpicard--clickable:hover { box-shadow: var(--mts-shadow-md); border-color: var(--mts-color-primary); }
+.mts-kpicard::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.mts-kpicard--primary::before { background: var(--mts-color-primary); }
+.mts-kpicard--success::before { background: var(--mts-color-success); }
+.mts-kpicard--warning::before { background: var(--mts-color-warning); }
+.mts-kpicard--danger::before  { background: var(--mts-color-danger); }
+
+.mts-kpicard__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--mts-space-2); }
+.mts-kpicard__label  { font-size: var(--mts-font-size-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--mts-text-muted); }
+.mts-kpicard__icon   { width: 20px; height: 20px; color: var(--mts-text-muted); }
+.mts-kpicard__icon svg { width: 100%; height: 100%; }
+
+.mts-kpicard__value-wrap { display: flex; align-items: baseline; gap: 4px; margin-bottom: var(--mts-space-2); }
+.mts-kpicard__value { font-size: var(--mts-font-size-3xl); font-weight: var(--mts-font-weight-bold); color: var(--mts-text-primary); line-height: 1; letter-spacing: -1px; }
+.mts-kpicard__unit  { font-size: var(--mts-font-size-md); color: var(--mts-text-muted); font-weight: var(--mts-font-weight-medium); }
+
+.mts-kpicard__trend { display: inline-flex; align-items: center; gap: 4px; font-size: var(--mts-font-size-xs); font-weight: 600; }
+.mts-kpicard__trend--up   { color: var(--mts-color-success); }
+.mts-kpicard__trend--down { color: var(--mts-color-danger); }
+.mts-kpicard__trend-label { color: var(--mts-text-muted); font-weight: 400; }
+
+.mts-kpicard__sparkline-wrap { margin-top: var(--mts-space-3); height: 32px; }
+.mts-kpicard__sparkline { width: 100%; height: 100%; color: var(--mts-color-primary); opacity: 0.6; }
+.mts-kpicard--success .mts-kpicard__sparkline { color: var(--mts-color-success); }
+.mts-kpicard--danger  .mts-kpicard__sparkline { color: var(--mts-color-danger); }

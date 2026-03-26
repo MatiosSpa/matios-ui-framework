@@ -1,0 +1,38 @@
+/* ============================================================
+   MATIOS UI — matios-ui-tooltip.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-tooltip {
+  position: absolute; z-index: var(--mts-z-tooltip);
+  padding: 6px var(--mts-space-3);
+  font-size: var(--mts-font-size-xs);
+  line-height: var(--mts-line-height-base);
+  border-radius: var(--mts-radius-md);
+  pointer-events: none;
+  opacity: 0; transform: scale(0.95);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  word-wrap: break-word;
+}
+.mts-tooltip--visible { opacity: 1; transform: scale(1); pointer-events: auto; }
+
+/* Variantes */
+.mts-tooltip--dark  { background: var(--mts-gray-900); color: #fff; }
+.mts-tooltip--light { background: var(--mts-bg-surface); color: var(--mts-text-primary); border: var(--mts-border-width) solid var(--mts-border-color); box-shadow: var(--mts-shadow-lg); }
+[data-mts-theme="dark"] .mts-tooltip--dark  { background: var(--mts-gray-100); color: var(--mts-gray-900); }
+
+/* Arrow via pseudo-element */
+.mts-tooltip::after {
+  content: ''; position: absolute;
+  width: 0; height: 0; border: 5px solid transparent;
+}
+.mts-tooltip[data-position="top"]::after    { bottom: -10px; left: 50%; transform: translateX(-50%); border-top-color: var(--mts-gray-900); }
+.mts-tooltip[data-position="bottom"]::after { top: -10px;    left: 50%; transform: translateX(-50%); border-bottom-color: var(--mts-gray-900); }
+.mts-tooltip[data-position="left"]::after   { right: -10px;  top: 50%;  transform: translateY(-50%); border-left-color: var(--mts-gray-900); }
+.mts-tooltip[data-position="right"]::after  { left: -10px;   top: 50%;  transform: translateY(-50%); border-right-color: var(--mts-gray-900); }
+[data-mts-theme="dark"] .mts-tooltip--dark[data-position="top"]::after    { border-top-color: var(--mts-gray-100); }
+[data-mts-theme="dark"] .mts-tooltip--dark[data-position="bottom"]::after { border-bottom-color: var(--mts-gray-100); }
+[data-mts-theme="dark"] .mts-tooltip--dark[data-position="left"]::after   { border-left-color: var(--mts-gray-100); }
+[data-mts-theme="dark"] .mts-tooltip--dark[data-position="right"]::after  { border-right-color: var(--mts-gray-100); }
+.mts-tooltip--light[data-position="top"]::after    { border-top-color: var(--mts-border-color); }
+.mts-tooltip--light[data-position="bottom"]::after { border-bottom-color: var(--mts-border-color); }

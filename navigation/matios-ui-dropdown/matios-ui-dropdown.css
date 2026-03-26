@@ -1,0 +1,43 @@
+/* ============================================================
+   MATIOS UI — matios-ui-dropdown.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-dropdown {
+  position: absolute; min-width: 180px; max-width: 280px;
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-radius: var(--mts-radius-lg);
+  box-shadow: var(--mts-shadow-xl);
+  z-index: var(--mts-z-dropdown);
+  list-style: none; padding: var(--mts-space-1) 0; margin: 0;
+  opacity: 0; transform: scale(0.97) translateY(-4px);
+  transform-origin: top left;
+  transition: opacity var(--mts-transition-fast), transform var(--mts-transition-fast);
+  pointer-events: none;
+}
+.mts-dropdown--open { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+
+.mts-dropdown__item {
+  display: flex; align-items: center; gap: var(--mts-space-2);
+  padding: 8px var(--mts-space-3);
+  font-size: var(--mts-font-size-sm); color: var(--mts-text-primary);
+  cursor: pointer; list-style: none;
+  transition: background var(--mts-transition-fast);
+  position: relative;
+}
+.mts-dropdown__item:hover { background: var(--mts-bg-surface-2); }
+.mts-dropdown__item--disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.mts-dropdown__item--danger    { color: var(--mts-color-danger); }
+.mts-dropdown__item--danger:hover { background: var(--mts-color-danger-light); }
+.mts-dropdown__item-icon { display: flex; align-items: center; color: var(--mts-text-muted); width: 16px; }
+.mts-dropdown__item-icon svg { width: 14px; height: 14px; }
+.mts-dropdown__shortcut { margin-left: auto; font-size: var(--mts-font-size-xs); color: var(--mts-text-muted); font-family: var(--mts-font-mono); }
+.mts-dropdown__arrow { margin-left: auto; color: var(--mts-text-muted); }
+
+.mts-dropdown__divider { height: var(--mts-border-width); background: var(--mts-border-color); margin: var(--mts-space-1) 0; }
+.mts-dropdown__group { padding: var(--mts-space-2) var(--mts-space-3) var(--mts-space-1); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--mts-text-muted); }
+
+/* Submenú */
+.mts-dropdown--submenu { display: none; position: absolute; left: 100%; top: -4px; }
+.mts-dropdown__item--has-sub:hover .mts-dropdown--submenu { display: block; opacity: 1; transform: none; pointer-events: auto; }
