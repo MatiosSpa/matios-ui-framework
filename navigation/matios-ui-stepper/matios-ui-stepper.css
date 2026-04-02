@@ -1,41 +1,246 @@
 /* ============================================================
    MATIOS UI — matios-ui-stepper.css
-   Version: 1.0.0
+   Version: 2.0.0
    ============================================================ */
 
-.mts-stepper { display: flex; width: 100%; }
-.mts-stepper--horizontal { flex-direction: row; align-items: flex-start; }
-.mts-stepper--vertical   { flex-direction: column; }
-
-.mts-stepper__step { display: flex; position: relative; }
-.mts-stepper--horizontal .mts-stepper__step { flex-direction: column; align-items: center; flex: 1; }
-.mts-stepper--vertical   .mts-stepper__step { flex-direction: row; align-items: flex-start; gap: var(--mts-space-3); padding-bottom: var(--mts-space-4); }
-.mts-stepper__step--clickable { cursor: pointer; }
-
-/* Indicador */
-.mts-stepper__indicator {
-  width: 32px; height: 32px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: var(--mts-font-size-sm); font-weight: var(--mts-font-weight-bold);
-  flex-shrink: 0; position: relative; z-index: 1;
-  border: 2px solid var(--mts-border-color);
-  background: var(--mts-bg-surface); color: var(--mts-text-muted);
-  transition: all var(--mts-transition-base);
+/* ── Raíz ── */
+.mts-stepper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0;
 }
-.mts-stepper__step--active   .mts-stepper__indicator { border-color: var(--mts-color-primary); background: var(--mts-color-primary); color: #fff; }
-.mts-stepper__step--complete .mts-stepper__indicator { border-color: var(--mts-color-success);  background: var(--mts-color-success);  color: #fff; }
-.mts-stepper__step--error    .mts-stepper__indicator { border-color: var(--mts-color-danger);   background: var(--mts-color-danger);   color: #fff; }
 
-/* Contenido */
-.mts-stepper__content { display: flex; flex-direction: column; }
-.mts-stepper--horizontal .mts-stepper__content { align-items: center; margin-top: var(--mts-space-2); }
-.mts-stepper__label { font-size: var(--mts-font-size-sm); font-weight: var(--mts-font-weight-medium); color: var(--mts-text-muted); }
-.mts-stepper__step--active   .mts-stepper__label { color: var(--mts-color-primary); }
+/* ── Track de indicadores ── */
+.mts-stepper__track {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+/* ── Dirección horizontal ── */
+.mts-stepper--horizontal .mts-stepper__track {
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+/* ── Dirección vertical (solo wizard) ── */
+.mts-stepper--vertical .mts-stepper__track {
+  flex-direction: column;
+}
+
+/* ══════════════════════════════════════════════
+   PASO (step)
+   ══════════════════════════════════════════════ */
+
+.mts-stepper__step {
+  display: flex;
+  position: relative;
+}
+
+/* Horizontal */
+.mts-stepper--horizontal .mts-stepper__step {
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+/* Vertical */
+.mts-stepper--vertical .mts-stepper__step {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--mts-space-3);
+  padding-bottom: var(--mts-space-6);
+}
+
+.mts-stepper__step--clickable { cursor: pointer; }
+.mts-stepper__step--disabled  { opacity: .45; pointer-events: none; }
+
+/* ══════════════════════════════════════════════
+   INDICADOR
+   ══════════════════════════════════════════════ */
+
+.mts-stepper__indicator {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-bold);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  border: 2px solid var(--mts-border-color);
+  background: var(--mts-bg-surface);
+  color: var(--mts-text-muted);
+  transition: background var(--mts-transition-base),
+              border-color var(--mts-transition-base),
+              color var(--mts-transition-base),
+              box-shadow var(--mts-transition-base);
+}
+
+.mts-stepper__step--active .mts-stepper__indicator {
+  border-color: var(--mts-color-primary);
+  background:   var(--mts-color-primary);
+  color: #fff;
+  box-shadow: 0 0 0 4px var(--mts-color-primary-light);
+}
+.mts-stepper__step--complete .mts-stepper__indicator {
+  border-color: var(--mts-color-success, #22c55e);
+  background:   var(--mts-color-success, #22c55e);
+  color: #fff;
+}
+.mts-stepper__step--error .mts-stepper__indicator {
+  border-color: var(--mts-color-danger, #f87171);
+  background:   var(--mts-color-danger, #f87171);
+  color: #fff;
+}
+
+/* ══════════════════════════════════════════════
+   TEXTO (label + description)
+   ══════════════════════════════════════════════ */
+
+.mts-stepper__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.mts-stepper--horizontal .mts-stepper__text {
+  align-items: center;
+  text-align: center;
+  margin-top: var(--mts-space-2);
+}
+
+.mts-stepper__label {
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-medium);
+  color: var(--mts-text-muted);
+  white-space: nowrap;
+  transition: color var(--mts-transition-base);
+}
+.mts-stepper__step--active .mts-stepper__label {
+  color: var(--mts-color-primary);
+  font-weight: var(--mts-font-weight-semibold);
+}
 .mts-stepper__step--complete .mts-stepper__label { color: var(--mts-text-primary); }
-.mts-stepper__description { font-size: var(--mts-font-size-xs); color: var(--mts-text-muted); margin-top: 2px; }
+.mts-stepper__step--error    .mts-stepper__label { color: var(--mts-color-danger, #f87171); }
 
-/* Línea conectora */
-.mts-stepper__line { background: var(--mts-border-color); transition: background var(--mts-transition-base); }
-.mts-stepper--horizontal .mts-stepper__line { position: absolute; top: 16px; left: calc(50% + 16px); right: calc(-50% + 16px); height: 2px; }
-.mts-stepper--vertical   .mts-stepper__line { position: absolute; left: 15px; top: 36px; bottom: 0; width: 2px; }
-.mts-stepper__step--complete .mts-stepper__line { background: var(--mts-color-success); }
+.mts-stepper__description {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════
+   LÍNEA CONECTORA
+   ══════════════════════════════════════════════ */
+
+.mts-stepper__line {
+  background: var(--mts-border-color);
+  transition: background var(--mts-transition-base);
+}
+
+/* Horizontal */
+.mts-stepper--horizontal .mts-stepper__line {
+  position: absolute;
+  top: 15px;
+  left:  calc(50% + 18px);
+  right: calc(-50% + 18px);
+  height: 2px;
+}
+
+/* Vertical */
+.mts-stepper--vertical .mts-stepper__line {
+  position: absolute;
+  left: 15px;
+  top: 36px;
+  bottom: 0;
+  width: 2px;
+}
+
+.mts-stepper__line--done {
+  background: var(--mts-color-primary);
+}
+
+/* ══════════════════════════════════════════════
+   PANELES (mode: wizard)
+   ══════════════════════════════════════════════ */
+
+.mts-stepper__panels {
+  margin-top: var(--mts-space-4);
+}
+
+.mts-stepper--vertical .mts-stepper__panels {
+  margin-top: 0;
+  margin-left: calc(32px + var(--mts-space-3));
+}
+
+.mts-stepper__panel {
+  animation: mts-stepper-panel-in .2s ease;
+}
+
+@keyframes mts-stepper-panel-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+/* ══════════════════════════════════════════════
+   VARIANTE COMPACT (mode: progress)
+   ══════════════════════════════════════════════ */
+
+.mts-stepper--compact .mts-stepper__indicator {
+  width: 24px;
+  height: 24px;
+  font-size: 11px;
+}
+.mts-stepper--compact .mts-stepper__step--active .mts-stepper__indicator {
+  box-shadow: 0 0 0 3px var(--mts-color-primary-light);
+}
+.mts-stepper--horizontal.mts-stepper--compact .mts-stepper__line {
+  top: 11px;
+  left:  calc(50% + 14px);
+  right: calc(-50% + 14px);
+}
+.mts-stepper--compact .mts-stepper__label {
+  font-size: 11px;
+}
+
+/* ══════════════════════════════════════════════
+   VARIANTE DOTS (mode: progress)
+   ══════════════════════════════════════════════ */
+
+.mts-stepper--dots .mts-stepper__indicator {
+  width: 12px;
+  height: 12px;
+  font-size: 0;
+  border-width: 2px;
+}
+.mts-stepper--dots .mts-stepper__step--active .mts-stepper__indicator {
+  box-shadow: 0 0 0 3px var(--mts-color-primary-light);
+}
+.mts-stepper--horizontal.mts-stepper--dots .mts-stepper__line {
+  top: 5px;
+  left:  calc(50% + 8px);
+  right: calc(-50% + 8px);
+}
+
+/* Barra de progreso — dots */
+.mts-stepper__progress-bar {
+  position: absolute;
+  bottom: -14px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--mts-border-color);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.mts-stepper__progress-fill {
+  height: 100%;
+  background: var(--mts-color-primary);
+  border-radius: 2px;
+  transition: width .35s cubic-bezier(.4, 0, .2, 1);
+}

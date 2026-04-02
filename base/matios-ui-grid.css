@@ -1,0 +1,303 @@
+/* ============================================================
+   MATIOS UI — matios-ui-grid.css  v1.0.0
+   Sistema de grid basado en CSS Grid nativo + CSS Variables.
+   Sin JS, sin Sass, sin compilar — 100% CSS puro.
+
+   Uso:
+     <link rel="stylesheet" href="base/matios-ui-grid.css">
+
+   Variables de control (en el contenedor .mts-grid):
+     --mts-columns   Número de columnas        (default: 12)
+     --mts-rows      Número de filas            (default: 1)
+     --mts-gap       Gap horizontal y vertical  (default: 1rem)
+     --mts-col-gap   Gap solo horizontal        (sobreescribe --mts-gap)
+     --mts-row-gap   Gap solo vertical          (sobreescribe --mts-gap)
+
+   Breakpoints:
+     sm   576px
+     md   768px
+     lg   992px
+     xl   1200px
+   ============================================================ */
+
+
+/* ============================================================
+   TOKENS DE GRID
+   ============================================================ */
+
+:root {
+  --mts-grid-columns:  12;
+  --mts-grid-gap:      1rem;
+  --mts-grid-gap-sm:   576px;
+  --mts-grid-gap-md:   768px;
+  --mts-grid-gap-lg:   992px;
+  --mts-grid-gap-xl:   1200px;
+}
+
+
+/* ============================================================
+   CONTENEDOR — .mts-grid
+   ============================================================ */
+
+.mts-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--mts-columns, 12), 1fr);
+  grid-template-rows:    repeat(var(--mts-rows, 1), auto);
+  gap: var(--mts-gap, 1rem);
+}
+
+/* Gap separado horizontal/vertical */
+.mts-grid[style*="--mts-col-gap"],
+.mts-grid[style*="--mts-row-gap"] {
+  column-gap: var(--mts-col-gap, var(--mts-gap, 1rem));
+  row-gap:    var(--mts-row-gap, var(--mts-gap, 1rem));
+}
+
+/* Sin gap */
+.mts-grid--no-gap   { gap: 0; }
+.mts-grid--gap-xs   { --mts-gap: var(--mts-space-1, 4px); }
+.mts-grid--gap-sm   { --mts-gap: var(--mts-space-2, 8px); }
+.mts-grid--gap-md   { --mts-gap: var(--mts-space-4, 16px); }
+.mts-grid--gap-lg   { --mts-gap: var(--mts-space-6, 24px); }
+.mts-grid--gap-xl   { --mts-gap: var(--mts-space-8, 32px); }
+
+/* Alineación de ítems */
+.mts-grid--center       { align-items: center; }
+.mts-grid--start        { align-items: start; }
+.mts-grid--end          { align-items: end; }
+.mts-grid--stretch      { align-items: stretch; }
+.mts-grid--justify-center  { justify-items: center; }
+.mts-grid--justify-end     { justify-items: end; }
+
+
+/* ============================================================
+   COLUMNAS — .mts-g-col-{1..12}
+   ============================================================ */
+
+.mts-g-col-1  { grid-column: span 1; }
+.mts-g-col-2  { grid-column: span 2; }
+.mts-g-col-3  { grid-column: span 3; }
+.mts-g-col-4  { grid-column: span 4; }
+.mts-g-col-5  { grid-column: span 5; }
+.mts-g-col-6  { grid-column: span 6; }
+.mts-g-col-7  { grid-column: span 7; }
+.mts-g-col-8  { grid-column: span 8; }
+.mts-g-col-9  { grid-column: span 9; }
+.mts-g-col-10 { grid-column: span 10; }
+.mts-g-col-11 { grid-column: span 11; }
+.mts-g-col-12 { grid-column: span 12; }
+
+/* Ancho completo */
+.mts-g-col-full { grid-column: 1 / -1; }
+
+/* Auto — toma el espacio que necesita */
+.mts-g-col-auto { grid-column: auto; }
+
+
+/* ============================================================
+   FILAS — .mts-g-row-{1..6}
+   ============================================================ */
+
+.mts-g-row-1 { grid-row: span 1; }
+.mts-g-row-2 { grid-row: span 2; }
+.mts-g-row-3 { grid-row: span 3; }
+.mts-g-row-4 { grid-row: span 4; }
+.mts-g-row-5 { grid-row: span 5; }
+.mts-g-row-6 { grid-row: span 6; }
+
+
+/* ============================================================
+   POSICIÓN DE INICIO — .mts-g-start-{1..12}
+   ============================================================ */
+
+.mts-g-start-1  { grid-column-start: 1; }
+.mts-g-start-2  { grid-column-start: 2; }
+.mts-g-start-3  { grid-column-start: 3; }
+.mts-g-start-4  { grid-column-start: 4; }
+.mts-g-start-5  { grid-column-start: 5; }
+.mts-g-start-6  { grid-column-start: 6; }
+.mts-g-start-7  { grid-column-start: 7; }
+.mts-g-start-8  { grid-column-start: 8; }
+.mts-g-start-9  { grid-column-start: 9; }
+.mts-g-start-10 { grid-column-start: 10; }
+.mts-g-start-11 { grid-column-start: 11; }
+.mts-g-start-12 { grid-column-start: 12; }
+
+/* Posición de inicio de fila */
+.mts-g-row-start-1 { grid-row-start: 1; }
+.mts-g-row-start-2 { grid-row-start: 2; }
+.mts-g-row-start-3 { grid-row-start: 3; }
+.mts-g-row-start-4 { grid-row-start: 4; }
+
+
+/* ============================================================
+   RESPONSIVE — sm (576px)
+   ============================================================ */
+
+@media (min-width: 576px) {
+  .mts-g-col-sm-1  { grid-column: span 1; }
+  .mts-g-col-sm-2  { grid-column: span 2; }
+  .mts-g-col-sm-3  { grid-column: span 3; }
+  .mts-g-col-sm-4  { grid-column: span 4; }
+  .mts-g-col-sm-5  { grid-column: span 5; }
+  .mts-g-col-sm-6  { grid-column: span 6; }
+  .mts-g-col-sm-7  { grid-column: span 7; }
+  .mts-g-col-sm-8  { grid-column: span 8; }
+  .mts-g-col-sm-9  { grid-column: span 9; }
+  .mts-g-col-sm-10 { grid-column: span 10; }
+  .mts-g-col-sm-11 { grid-column: span 11; }
+  .mts-g-col-sm-12 { grid-column: span 12; }
+  .mts-g-col-sm-full { grid-column: 1 / -1; }
+  .mts-g-start-sm-1  { grid-column-start: 1; }
+  .mts-g-start-sm-2  { grid-column-start: 2; }
+  .mts-g-start-sm-3  { grid-column-start: 3; }
+  .mts-g-start-sm-4  { grid-column-start: 4; }
+  .mts-g-start-sm-5  { grid-column-start: 5; }
+  .mts-g-start-sm-6  { grid-column-start: 6; }
+}
+
+
+/* ============================================================
+   RESPONSIVE — md (768px)
+   ============================================================ */
+
+@media (min-width: 768px) {
+  .mts-g-col-md-1  { grid-column: span 1; }
+  .mts-g-col-md-2  { grid-column: span 2; }
+  .mts-g-col-md-3  { grid-column: span 3; }
+  .mts-g-col-md-4  { grid-column: span 4; }
+  .mts-g-col-md-5  { grid-column: span 5; }
+  .mts-g-col-md-6  { grid-column: span 6; }
+  .mts-g-col-md-7  { grid-column: span 7; }
+  .mts-g-col-md-8  { grid-column: span 8; }
+  .mts-g-col-md-9  { grid-column: span 9; }
+  .mts-g-col-md-10 { grid-column: span 10; }
+  .mts-g-col-md-11 { grid-column: span 11; }
+  .mts-g-col-md-12 { grid-column: span 12; }
+  .mts-g-col-md-full { grid-column: 1 / -1; }
+  .mts-g-start-md-1  { grid-column-start: 1; }
+  .mts-g-start-md-2  { grid-column-start: 2; }
+  .mts-g-start-md-3  { grid-column-start: 3; }
+  .mts-g-start-md-4  { grid-column-start: 4; }
+  .mts-g-start-md-5  { grid-column-start: 5; }
+  .mts-g-start-md-6  { grid-column-start: 6; }
+  .mts-g-start-md-7  { grid-column-start: 7; }
+  .mts-g-start-md-8  { grid-column-start: 8; }
+}
+
+
+/* ============================================================
+   RESPONSIVE — lg (992px)
+   ============================================================ */
+
+@media (min-width: 992px) {
+  .mts-g-col-lg-1  { grid-column: span 1; }
+  .mts-g-col-lg-2  { grid-column: span 2; }
+  .mts-g-col-lg-3  { grid-column: span 3; }
+  .mts-g-col-lg-4  { grid-column: span 4; }
+  .mts-g-col-lg-5  { grid-column: span 5; }
+  .mts-g-col-lg-6  { grid-column: span 6; }
+  .mts-g-col-lg-7  { grid-column: span 7; }
+  .mts-g-col-lg-8  { grid-column: span 8; }
+  .mts-g-col-lg-9  { grid-column: span 9; }
+  .mts-g-col-lg-10 { grid-column: span 10; }
+  .mts-g-col-lg-11 { grid-column: span 11; }
+  .mts-g-col-lg-12 { grid-column: span 12; }
+  .mts-g-col-lg-full { grid-column: 1 / -1; }
+  .mts-g-start-lg-1  { grid-column-start: 1; }
+  .mts-g-start-lg-2  { grid-column-start: 2; }
+  .mts-g-start-lg-3  { grid-column-start: 3; }
+  .mts-g-start-lg-4  { grid-column-start: 4; }
+  .mts-g-start-lg-5  { grid-column-start: 5; }
+  .mts-g-start-lg-6  { grid-column-start: 6; }
+  .mts-g-start-lg-7  { grid-column-start: 7; }
+  .mts-g-start-lg-8  { grid-column-start: 8; }
+  .mts-g-start-lg-9  { grid-column-start: 9; }
+}
+
+
+/* ============================================================
+   RESPONSIVE — xl (1200px)
+   ============================================================ */
+
+@media (min-width: 1200px) {
+  .mts-g-col-xl-1  { grid-column: span 1; }
+  .mts-g-col-xl-2  { grid-column: span 2; }
+  .mts-g-col-xl-3  { grid-column: span 3; }
+  .mts-g-col-xl-4  { grid-column: span 4; }
+  .mts-g-col-xl-5  { grid-column: span 5; }
+  .mts-g-col-xl-6  { grid-column: span 6; }
+  .mts-g-col-xl-7  { grid-column: span 7; }
+  .mts-g-col-xl-8  { grid-column: span 8; }
+  .mts-g-col-xl-9  { grid-column: span 9; }
+  .mts-g-col-xl-10 { grid-column: span 10; }
+  .mts-g-col-xl-11 { grid-column: span 11; }
+  .mts-g-col-xl-12 { grid-column: span 12; }
+  .mts-g-col-xl-full { grid-column: 1 / -1; }
+  .mts-g-start-xl-1  { grid-column-start: 1; }
+  .mts-g-start-xl-2  { grid-column-start: 2; }
+  .mts-g-start-xl-3  { grid-column-start: 3; }
+  .mts-g-start-xl-4  { grid-column-start: 4; }
+  .mts-g-start-xl-5  { grid-column-start: 5; }
+  .mts-g-start-xl-6  { grid-column-start: 6; }
+  .mts-g-start-xl-7  { grid-column-start: 7; }
+  .mts-g-start-xl-8  { grid-column-start: 8; }
+  .mts-g-start-xl-9  { grid-column-start: 9; }
+  .mts-g-start-xl-10 { grid-column-start: 10; }
+}
+
+
+/* ============================================================
+   COLUMNAS PREDEFINIDAS — atajos para los casos más comunes
+   ============================================================ */
+
+/* 2 columnas iguales */
+.mts-grid--2 { --mts-columns: 2; }
+
+/* 3 columnas iguales */
+.mts-grid--3 { --mts-columns: 3; }
+
+/* 4 columnas iguales */
+.mts-grid--4 { --mts-columns: 4; }
+
+/* Sidebar + contenido (1/4 + 3/4) */
+.mts-grid--sidebar {
+  --mts-columns: 4;
+}
+.mts-grid--sidebar > :first-child { grid-column: span 1; }
+.mts-grid--sidebar > :last-child  { grid-column: span 3; }
+
+/* Contenido + sidebar (3/4 + 1/4) */
+.mts-grid--sidebar-right {
+  --mts-columns: 4;
+}
+.mts-grid--sidebar-right > :first-child { grid-column: span 3; }
+.mts-grid--sidebar-right > :last-child  { grid-column: span 1; }
+
+/* Auto-fill: columnas que se ajustan al espacio disponible */
+.mts-grid--auto-fill {
+  grid-template-columns: repeat(auto-fill, minmax(var(--mts-col-min, 200px), 1fr));
+}
+
+/* Auto-fit: igual que auto-fill pero colapsa columnas vacías */
+.mts-grid--auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(var(--mts-col-min, 200px), 1fr));
+}
+
+
+/* ============================================================
+   UTILIDADES DE ÍTEM
+   ============================================================ */
+
+/* Centrar un ítem dentro de su celda */
+.mts-g-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Alinear ítem al inicio/fin de su celda */
+.mts-g-self-start  { align-self: start; }
+.mts-g-self-end    { align-self: end; }
+.mts-g-self-center { align-self: center; }
+.mts-g-self-stretch{ align-self: stretch; }

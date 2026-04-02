@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Registro — Matios UI</title>
+  <script>(function(){var m=(location.hash||"").match(/mts-theme=([a-z-]+)/);if(m)document.documentElement.setAttribute("data-mts-theme",m[1]);try{var p=window.parent;if(p&&p!==window){var pt=p.currentThemeVal||p.document.documentElement.getAttribute("data-mts-theme");if(pt)document.documentElement.setAttribute("data-mts-theme",pt);}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <link rel="stylesheet" href="../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-validation/matios-ui-validation.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-stepper/matios-ui-stepper.css">
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../forms/matios-ui-validation/matios-ui-validation.js"></script>
+  <script src="../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../navigation/matios-ui-stepper/matios-ui-stepper.js"></script>
+<style>
+*{box-sizing:border-box}
+body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;min-height:100vh;}
+.app-topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:50px;background:var(--mts-bg-surface);border-bottom:1px solid var(--mts-border-color);position:sticky;top:0;z-index:100;}
+.app-topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mts-text-muted);cursor:pointer;padding:4px 8px;border-radius:var(--mts-radius-md);border:none;background:none;transition:color .15s,background .15s;font-family:var(--mts-font-family);}
+.app-topbar-back:hover{color:var(--mts-text-primary);background:var(--mts-bg-surface-2);}
+.app-topbar-title{font-size:14px;font-weight:700;color:var(--mts-text-primary);flex:1;}
+.app-topbar-badge{font-size:10px;padding:2px 8px;border-radius:var(--mts-radius-full);background:var(--mts-color-primary-light);color:var(--mts-color-primary);font-weight:700;}
+.app-content{padding:24px;max-width:1100px;margin:0 auto;}
+.app-card{background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:24px;}
+.app-section{display:flex;flex-direction:column;gap:20px;}
+.app-grid{display:grid;gap:16px;}
+.app-grid-2{grid-template-columns:1fr 1fr;}
+.app-grid-3{grid-template-columns:1fr 1fr 1fr;}
+.app-grid-4{grid-template-columns:repeat(4,1fr);}
+.app-h2{font-size:18px;font-weight:800;margin:0 0 4px;}
+.app-h2 span{color:var(--mts-color-primary);}
+.app-sub{font-size:13px;color:var(--mts-text-muted);margin:0 0 20px;}
+.app-divider{border:none;border-top:1px solid var(--mts-border-color);margin:20px 0;}
+.app-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);margin-bottom:6px;}
+.app-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.app-theme{position:fixed;bottom:16px;right:16px;display:flex;gap:4px;z-index:999;}
+.app-theme-btn{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+.app-theme-btn:hover{background:var(--mts-bg-surface-2);}
+@media(max-width:640px){.app-grid-2,.app-grid-3,.app-grid-4{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="app-topbar"><button class="app-topbar-back" onclick="goBack()">&#8592; Volver</button><span class="app-topbar-title">Registro de Usuario</span><span class="app-topbar-badge">Onboarding</span></div>
+<style>
+.reg-wrap{min-height:calc(100vh - 50px);display:flex;align-items:flex-start;justify-content:center;padding:32px 24px;}
+.reg-card{width:100%;max-width:560px;}
+.reg-stepper{margin-bottom:32px;}
+.reg-step{display:none;flex-direction:column;gap:16px;}
+.reg-step.active{display:flex;}
+.reg-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.reg-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px;}
+.reg-success{text-align:center;padding:40px 20px;}
+</style>
+<div class="reg-wrap">
+  <div class="reg-card">
+    <div class="reg-stepper" id="reg-stepper"></div>
+
+    <div class="app-card">
+      <!-- PASO 1: Datos personales -->
+      <div class="reg-step active" id="reg-step-0">
+        <h3 style="margin:0 0 4px;font-size:16px;font-weight:700;">Datos personales</h3>
+        <p style="margin:0 0 12px;font-size:13px;color:var(--mts-text-muted);">Completa tu información básica</p>
+        <div class="reg-grid">
+          <div id="r-nombre"></div>
+          <div id="r-apellido"></div>
+        </div>
+        <div id="r-email"></div>
+        <div id="r-telefono"></div>
+        <div class="reg-actions"><div id="btn-step1"></div></div>
+      </div>
+
+      <!-- PASO 2: Seguridad -->
+      <div class="reg-step" id="reg-step-1">
+        <h3 style="margin:0 0 4px;font-size:16px;font-weight:700;">Seguridad</h3>
+        <p style="margin:0 0 12px;font-size:13px;color:var(--mts-text-muted);">Crea una contraseña segura</p>
+        <div id="r-pass"></div>
+        <div id="r-pass2"></div>
+        <div id="r-terminos" style="margin-top:4px;"></div>
+        <div class="reg-actions">
+          <div id="btn-back1"></div>
+          <div id="btn-step2"></div>
+        </div>
+      </div>
+
+      <!-- PASO 3: Confirmación -->
+      <div class="reg-step" id="reg-step-2">
+        <div class="reg-success">
+          <div style="font-size:52px;margin-bottom:16px;">🎉</div>
+          <h2 style="margin:0 0 8px;font-size:22px;font-weight:800;">¡Cuenta creada!</h2>
+          <p style="margin:0 0 24px;font-size:14px;color:var(--mts-text-muted);">Revisa tu email para confirmar tu cuenta.</p>
+          <div id="btn-finish"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><div class="app-theme">
+  <button class="app-theme-btn" onclick="setTheme('dark')">Dark</button>
+  <button class="app-theme-btn" onclick="setTheme('light')">Light</button>
+  <button class="app-theme-btn" onclick="setTheme('violet')">Violet</button>
+  <button class="app-theme-btn" onclick="setTheme('blue')">Blue</button>
+</div>
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
+</script>
+<script>
+
+var currentStep = 0;
+var stepper = new MTS.Stepper('#reg-stepper',{
+  direction:'horizontal',
+  steps:[
+    {id:'s1',label:'Datos personales', description:'Información básica'},
+    {id:'s2',label:'Seguridad',        description:'Contraseña'},
+    {id:'s3',label:'Listo',            description:'Confirmación'},
+  ],
+  active:0,
+});
+
+/* Campos paso 1 */
+var rNombre   = new MTS.Input('#r-nombre',  {type:'text',    label:'Nombre',    placeholder:'Juan',            name:'nombre'});
+var rApellido = new MTS.Input('#r-apellido',{type:'text',    label:'Apellido',  placeholder:'Pérez',           name:'apellido'});
+var rEmail    = new MTS.Input('#r-email',   {type:'email',   label:'Email',     placeholder:'juan@empresa.com',name:'email'});
+var rTel      = new MTS.Input('#r-telefono',{type:'text',    label:'Teléfono',  placeholder:'+56 9 1234 5678', name:'telefono'});
+
+/* Campos paso 2 */
+var rPass     = new MTS.Input('#r-pass',    {type:'password',label:'Contraseña',        showPassword:true,name:'password'});
+var rPass2    = new MTS.Input('#r-pass2',   {type:'password',label:'Repetir contraseña',showPassword:true,name:'password2'});
+new MTS.Checkbox('#r-terminos',{label:'Acepto los términos y condiciones de uso'});
+
+/* Validación paso 1 */
+new MTS.Button('#btn-step1',{label:'Siguiente →',variant:'primary',onClick:function(e,inst){
+  var ok=true;
+  if(!rNombre.getValue().trim()){rNombre.setError('Requerido');ok=false;}
+  if(!rApellido.getValue().trim()){rApellido.setError('Requerido');ok=false;}
+  if(!rEmail.getValue().trim()){rEmail.setError('Requerido');ok=false;}
+  if(!ok)return;
+  goStep(1);
+}});
+
+/* Botones paso 2 */
+new MTS.Button('#btn-back1',{label:'← Atrás',variant:'ghost',onClick:function(){goStep(0);}});
+new MTS.Button('#btn-step2',{label:'Crear cuenta',variant:'primary',onClick:function(e,inst){
+  var p1=rPass.getValue(),p2=rPass2.getValue();
+  if(p1.length<8){rPass.setError('Mínimo 8 caracteres');return;}
+  if(p1!==p2){rPass2.setError('Las contraseñas no coinciden');return;}
+  inst.setLoading(true);inst.setLabel('Creando cuenta...');
+  setTimeout(function(){inst.setLoading(false);goStep(2);},1500);
+}});
+
+new MTS.Button('#btn-finish',{label:'Ir al inicio de sesión',variant:'primary',onClick:function(){goBack();}});
+
+function goStep(n){
+  document.querySelectorAll('.reg-step').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('reg-step-'+n).classList.add('active');
+  stepper.goTo?stepper.goTo(n):null;
+  currentStep=n;
+}
+
+</script>
+</body>
+</html>

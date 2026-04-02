@@ -1,0 +1,98 @@
+/* ============================================================
+   MATIOS UI — matios-ui-label.css  v1.0.0
+   MTS.Label — Label de formulario con hint, error y badge
+   ============================================================ */
+
+
+/* ── Label base ─────────────────────────────────────────── */
+
+.mts-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mts-space-1);
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-medium);
+  color: var(--mts-text-secondary);
+  line-height: var(--mts-line-height-tight);
+  cursor: default;
+}
+
+.mts-label__text {
+  /* span interno para no interferir con pseudoelementos */
+}
+
+
+/* ── Requerido — asterisco rojo ─────────────────────────── */
+
+.mts-label--required .mts-label__text::after {
+  content: ' *';
+  color: var(--mts-color-danger);
+}
+
+
+/* ── Opcional — badge gris ──────────────────────────────── */
+
+.mts-label__optional {
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-normal);
+  color: var(--mts-text-muted);
+  background: var(--mts-bg-surface-2);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-full);
+  padding: 1px 7px;
+  line-height: 1.4;
+}
+
+
+/* ── Tamaños ─────────────────────────────────────────────── */
+
+.mts-label--sm {
+  font-size: var(--mts-font-size-xs);
+}
+
+.mts-label--lg {
+  font-size: var(--mts-font-size-md);
+  font-weight: var(--mts-font-weight-semibold);
+}
+
+
+/* ── Visualmente oculto pero accesible ──────────────────── */
+
+.mts-label--hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* ── Hint y error ───────────────────────────────────────── */
+/* Estas clases viven en matios-ui-input.css,
+   aquí solo se aseguran por si se usa label standalone */
+
+.mts-form-hint {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  line-height: var(--mts-line-height-base);
+}
+
+.mts-form-error {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-color-danger);
+  line-height: var(--mts-line-height-base);
+}
+
+
+/* ── Form group — wrapper estándar ──────────────────────── */
+/* Definido en matios-ui-input.css, aquí disponible standalone */
+
+.mts-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-1);
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Checkbox — Demo</title>
+  <script>(function(){var m=(location.hash||"").match(/mts-theme=([a-z-]+)/);if(m)document.documentElement.setAttribute("data-mts-theme",m[1]);try{var p=window.parent;if(p&&p!==window){var pt=p.currentThemeVal||p.document.documentElement.getAttribute("data-mts-theme");if(pt)document.documentElement.setAttribute("data-mts-theme",pt);}}catch(e){}}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="./matios-ui-checkbox.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="./matios-ui-checkbox.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
+    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
+    .demo-section{display:flex;flex-direction:column;gap:14px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
+    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
+    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
+    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
+    .demo-docs-panel.open{display:block;}
+    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
+    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
+    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
+    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
+    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
+    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
+    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
+    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
+    .demo-docs-panel p{margin:0 0 10px;}
+    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
+    .demo-docs-panel a{color:var(--mts-color-primary);text-decoration:none;}
+    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
+    .demo-select-output{margin-top:8px;padding:8px 12px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-color-primary);line-height:1.6;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+</div>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.Checkbox</h1>
+    <p>Checkbox, grupos, radio buttons, toggle y slider.</p>
+    <div class="demo-header-actions"><button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-checkbox.md')">📄 Documentación</button></div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Checkbox individual y grupo</div>
+    <div id="chk-single"></div><div id="chk-group"></div>
+    <div class="result-box" id="chk-result">— interactúa con los checkboxes —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c1"><code>new MTS.Checkbox('#el',{label:'Acepto términos',checked:false,onChange:(e)=>console.log(e.detail.checked)})
+new MTS.CheckboxGroup('#el',{options:[{value:'pdf',label:'PDF'},{value:'xlsx',label:'Excel'}],value:['pdf'],onChange:(e)=>console.log(e.detail.values)})</code></pre>
+  </div>
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Radio buttons</div>
+    <div id="radio-group"></div>
+    <div class="result-box" id="radio-result">— selecciona una prioridad —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c2"><code>new MTS.Radio('#el',{label:'Prioridad',options:[{value:'high',label:'Alta'},{value:'medium',label:'Media'},{value:'low',label:'Baja'}],value:'medium',onChange:(e)=>console.log(e.detail.value)})</code></pre>
+  </div>
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Toggle switch</div>
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:320px">
+      <div id="toggle-1"></div><div id="toggle-2"></div><div id="toggle-3"></div>
+    </div>
+    <div class="result-box" id="toggle-result">— interactúa con los toggles —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c3"><code>new MTS.Toggle('#el',{label:'Notificaciones',checked:true,onChange:(e)=>console.log(e.detail.checked)})</code></pre>
+  </div>
+  <div class="demo-section">
+    <div class="demo-section-title">4 — Slider</div>
+    <div style="max-width:500px;display:flex;flex-direction:column;gap:16px;">
+      <div id="slider-basic"></div><div id="slider-range"></div>
+    </div>
+    <div class="result-box" id="slider-result">— mueve los sliders —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c4')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c4"><code>new MTS.Slider('#el',{label:'Volumen',min:0,max:100,value:65,showValue:true,unit:'%'})
+new MTS.Slider('#el',{label:'Rango precio',min:0,max:1000,value:[200,700],range:true,showValue:true,unit:'$'})</code></pre>
+  </div>
+</div><script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
+function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
+function showSelOutput(id,v,t){var el=document.getElementById(id);if(!el)return;el.style.display='block';el.innerHTML='<b>value:</b> '+JSON.stringify(v)+'&nbsp;&nbsp;<b>text:</b> '+JSON.stringify(t);}
+function showPickerOutput(id,val,fmt){var el=document.getElementById(id);if(!el)return;el.style.display='block';el.innerHTML='<b>value:</b> '+JSON.stringify(fmt||val);}
+function toggleDocs(id,mdPath){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';fetch(mdPath).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>No se pudo cargar.</em>';});}
+function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
+
+new MTS.Checkbox('#chk-single',{label:'Acepto los términos y condiciones',checked:false,onChange:function(e){document.getElementById('chk-result').textContent='Checkbox → checked: '+e.detail.checked;}});
+new MTS.CheckboxGroup('#chk-group',{label:'Formatos de exportación',options:[{value:'pdf',label:'PDF'},{value:'xlsx',label:'Excel'},{value:'csv',label:'CSV'},{value:'docx',label:'Word',disabled:true}],value:['pdf','xlsx'],onChange:function(e){document.getElementById('chk-result').textContent='Grupo → valores: '+JSON.stringify(e.detail.value);}});
+new MTS.Radio('#radio-group',{label:'Prioridad',options:[{value:'high',label:'Alta'},{value:'medium',label:'Media'},{value:'low',label:'Baja'}],value:'medium',onChange:function(e){document.getElementById('radio-result').textContent='Radio → valor: '+e.detail.value;}});
+new MTS.Toggle('#toggle-1',{label:'Notificaciones activas',checked:true,onChange:function(e){document.getElementById('toggle-result').textContent='Toggle → '+e.detail.checked;}});
+new MTS.Toggle('#toggle-2',{label:'Modo mantenimiento',checked:false,onChange:function(e){document.getElementById('toggle-result').textContent='Toggle → '+e.detail.checked;}});
+new MTS.Toggle('#toggle-3',{label:'Sincronización automática',checked:true,onChange:function(e){document.getElementById('toggle-result').textContent='Toggle → '+e.detail.checked;}});
+new MTS.Slider('#slider-basic',{label:'Volumen',min:0,max:100,value:65,showValue:true,unit:'%',onChange:function(e){document.getElementById('slider-result').textContent='Slider → '+e.detail.value+'%';}});
+new MTS.Slider('#slider-range',{label:'Rango de precio',min:0,max:1000,value:[200,700],range:true,showValue:true,unit:'$',onChange:function(e){document.getElementById('slider-result').textContent='Rango → '+JSON.stringify(e.detail.value);}});
+
+</script>
+</body>
+</html>

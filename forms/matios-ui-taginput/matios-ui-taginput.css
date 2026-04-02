@@ -1,0 +1,66 @@
+/* ============================================================
+   MATIOS UI — matios-ui-taginput.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-taginput {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  padding: 6px var(--mts-space-3);
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  cursor: text; min-height: 40px;
+  transition: border-color var(--mts-transition-fast), box-shadow var(--mts-transition-fast);
+}
+.mts-taginput:focus-within {
+  border-color: var(--mts-border-color-focus);
+  box-shadow: 0 0 0 3px var(--mts-color-primary-light);
+}
+
+.mts-taginput__tags { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.mts-taginput__tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px;
+  background: var(--mts-color-primary-light);
+  color: var(--mts-color-primary);
+  border-radius: var(--mts-radius-full);
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-medium);
+}
+.mts-taginput__tag-remove {
+  background: none; border: none; cursor: pointer;
+  color: inherit; padding: 0; font-size: 14px; line-height: 1;
+  display: flex; align-items: center; opacity: 0.7;
+}
+.mts-taginput__tag-remove:hover { opacity: 1; }
+
+.mts-taginput__input {
+  flex: 1; min-width: 120px; border: none; outline: none;
+  background: transparent; font-size: var(--mts-font-size-md);
+  color: var(--mts-text-primary); padding: 0;
+}
+.mts-taginput__input::placeholder { color: var(--mts-text-muted); }
+
+.mts-taginput__dropdown {
+  display: none; position: absolute;
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  box-shadow: var(--mts-shadow-lg);
+  z-index: var(--mts-z-dropdown);
+  max-height: 200px; overflow-y: auto;
+  width: 100%;
+}
+.mts-taginput__dropdown--open { display: block; }
+
+.mts-taginput__suggestion {
+  padding: 8px var(--mts-space-3);
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-primary);
+  cursor: pointer;
+  transition: background var(--mts-transition-fast);
+}
+.mts-taginput__suggestion:hover { background: var(--mts-bg-surface-2); }
+
+.mts-form-group { position: relative; }

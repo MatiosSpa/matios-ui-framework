@@ -19,15 +19,22 @@ MTS.Tabs = class MtsTabs {
    * @param {function} options.onChange
    */
   constructor(selector, options = {}) {
-    this._el       = typeof selector === 'string' ? document.querySelector(selector) : selector;
+    this._el         = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) { console.error('[MTS.Tabs] No encontrado:', selector); return; }
-    this.tabs      = options.tabs      || [];
-    this.active    = options.active    || this.tabs[0]?.id;
-    this.variant   = options.variant   || 'underline';
-    this.direction = options.direction || 'horizontal';
-    this.lazy      = options.lazy      ?? true;
-    this._rendered = new Set();
-    this._listeners = {};
+    this.tabs        = options.tabs        || [];
+    this.active      = options.active      || this.tabs[0]?.id;
+    this.variant     = options.variant     || 'underline';
+    this.direction   = options.direction   || 'horizontal';
+    this.lazy        = options.lazy        ?? true;
+    /* Nuevas opciones */
+    this.border      = options.border      ?? true;       // mostrar borde de separación nav/panel
+    this.borderWidth = options.borderWidth || '2px';      // grosor del borde
+    this.height      = options.height      || 'auto';     // 'auto'|'stretch'|'200px'|etc.
+    this.stretch     = options.stretch     ?? false;      // alias de height:'stretch'
+    this.navWidth    = options.navWidth    || null;       // ancho del nav vertical (ej: '200px')
+    this.panelBorder = options.panelBorder ?? true;       // borde izq en panel (vertical)
+    this._rendered   = new Set();
+    this._listeners  = {};
     if (options.onChange) this.on('change', options.onChange);
     this._build();
   }
@@ -48,12 +55,30 @@ MTS.Tabs = class MtsTabs {
 
   _build() {
     this._el.innerHTML = '';
+    // Resetear clase limpia — quitar modificadores del build anterior
     this._el.className = `mts-tabs mts-tabs--${this.variant} mts-tabs--${this.direction}`;
+    this._el.style.cssText = '';
+    /* Altura stretch */
+    if (this.stretch || this.height === 'stretch') {
+      this._el.style.cssText = 'height:100%;display:flex;flex-direction:' + (this.direction==='vertical'?'row':'column') + ';';
+    }
 
     // Nav
     this._navEl = document.createElement('div');
     this._navEl.className = 'mts-tabs__nav';
     this._navEl.setAttribute('role', 'tablist');
+    /* Borde: clase CSS + variable para el grosor */
+    if (!this.border) {
+      this._el.classList.add('mts-tabs--no-border');
+    } else {
+      /* Setear la CSS variable para el grosor — el CSS la consume */
+      this._el.style.setProperty('--mts-tabs-border-width', this.borderWidth);
+    }
+    /* Ancho custom del nav vertical */
+    if (this.navWidth && this.direction === 'vertical') {
+      this._navEl.style.minWidth = this.navWidth;
+      this._navEl.style.width    = this.navWidth;
+    }
 
     this.tabs.forEach(tab => {
       const btn = document.createElement('button');
@@ -83,6 +108,13 @@ MTS.Tabs = class MtsTabs {
     // Panels
     this._panelsEl = document.createElement('div');
     this._panelsEl.className = 'mts-tabs__panels';
+    /* Altura del panel */
+    if (this.stretch || this.height === 'stretch') {
+      this._panelsEl.style.cssText = 'flex:1;overflow:auto;min-height:0;';
+    } else if (this.height && this.height !== 'auto') {
+      this._panelsEl.style.height   = this.height;
+      this._panelsEl.style.overflow = 'auto';
+    }
 
     this.tabs.forEach(tab => {
       const panel = document.createElement('div');
@@ -97,6 +129,8 @@ MTS.Tabs = class MtsTabs {
       }
       this._panelsEl.appendChild(panel);
     });
+    /* El borde izquierdo lo maneja el CSS via --mts-tabs-border-width */
+    /* No aplicar style inline — evita conflicto con el CSS */
     this._el.appendChild(this._panelsEl);
   }
 

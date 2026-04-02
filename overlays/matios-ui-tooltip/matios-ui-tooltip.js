@@ -23,6 +23,17 @@ MTS.Tooltip = class MtsTooltip {
   constructor(target, options = {}) {
     this._target   = typeof target === 'string' ? document.querySelector(target) : target;
     if (!this._target) return;
+    /* ── data-* → inicialización HTML declarativa ── */
+    const _ds = this._target?.dataset || {};
+    const _fromHTML = {};
+    if (_ds.content !== undefined) _fromHTML.content = _ds.content;
+    if (_ds.position !== undefined) _fromHTML.position = _ds.position;
+    if (_ds.trigger !== undefined) _fromHTML.trigger = _ds.trigger;
+    if (_ds.delay !== undefined) _fromHTML.delay = parseInt(_ds.delay);
+    if (_ds.variant !== undefined) _fromHTML.variant = _ds.variant;
+    if (_ds.maxWidth !== undefined) _fromHTML.maxWidth = _ds.maxWidth;
+    options = { ..._fromHTML, ...options };
+
     this.content   = options.content   || '';
     this.position  = options.position  || 'top';
     this.triggerOn = options.trigger   || 'hover';
@@ -30,6 +41,8 @@ MTS.Tooltip = class MtsTooltip {
     this.hideDelay = options.hideDelay ?? 0;
     this.offset    = options.offset    ?? 8;
     this.variant   = options.variant   || 'dark';
+    this.color     = options.color     || null;
+    this.bg        = options.bg        || null;
     this.maxWidth  = options.maxWidth  ?? 220;
     this._isVisible = false;
     this._showTimer = null;
@@ -72,6 +85,8 @@ MTS.Tooltip = class MtsTooltip {
   _build() {
     this._tooltipEl = document.createElement('div');
     this._tooltipEl.className = `mts-tooltip mts-tooltip--${this.variant}`;
+    if (this.bg)    this._tooltipEl.style.background = this.bg;
+    if (this.color) this._tooltipEl.style.color      = this.color;
     this._tooltipEl.setAttribute('role', 'tooltip');
     this._tooltipEl.setAttribute('hidden', '');
     this._tooltipEl.style.maxWidth = `${this.maxWidth}px`;
@@ -151,6 +166,8 @@ MTS.Tooltip = class MtsTooltip {
         position: el.dataset.mtsTooltipPosition || 'top',
         trigger:  el.dataset.mtsTooltipTrigger  || 'hover',
         variant:  el.dataset.mtsTooltipVariant  || 'dark',
+        color:    el.dataset.mtsTooltipColor   || null,
+        bg:       el.dataset.mtsTooltipBg      || null,
       });
     });
   }

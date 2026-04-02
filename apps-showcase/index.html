@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Matios UI — Apps de Ejemplo</title>
+  <script>
+    (function(){
+      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
+      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
+          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+        }
+      }catch(e){}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../themes/matios-ui-theme-high-contrast.css">
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:0;}
+    /* Topbar */
+    .topbar{display:flex;align-items:center;gap:12px;padding:0 28px;height:56px;background:var(--mts-bg-surface);border-bottom:1px solid var(--mts-border-color);position:sticky;top:0;z-index:100;}
+    .topbar-logo{width:32px;height:32px;border-radius:8px;background:var(--mts-color-primary);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:#fff;flex-shrink:0;}
+    .topbar-title{font-size:15px;font-weight:800;}
+    .topbar-title span{color:var(--mts-color-primary);}
+    .topbar-sub{font-size:12px;color:var(--mts-text-muted);}
+    /* Hero */
+    .hero{padding:56px 28px 40px;text-align:center;max-width:700px;margin:0 auto;}
+    .hero h1{font-size:36px;font-weight:900;margin:0 0 12px;line-height:1.2;}
+    .hero h1 span{color:var(--mts-color-primary);}
+    .hero p{font-size:16px;color:var(--mts-text-muted);margin:0 0 32px;line-height:1.6;}
+    .hero-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+    .hero-badge{padding:4px 12px;border-radius:var(--mts-radius-full);font-size:11px;font-weight:700;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);color:var(--mts-text-muted);}
+    /* Grid */
+    .apps-section{padding:0 28px 56px;max-width:1200px;margin:0 auto;}
+    .apps-category{margin-bottom:36px;}
+    .apps-category-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+    .apps-category-title::after{content:'';flex:1;height:1px;background:var(--mts-border-color);}
+    .apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+    /* App card */
+    .app-card{background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-xl);overflow:hidden;cursor:pointer;transition:box-shadow .2s,transform .15s,border-color .2s;text-decoration:none;display:flex;flex-direction:column;}
+    .app-card:hover{box-shadow:var(--mts-shadow-lg);transform:translateY(-2px);border-color:var(--mts-color-primary);}
+    .app-card-preview{height:140px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;overflow:hidden;}
+    .app-card-body{padding:16px;}
+    .app-card-title{font-size:14px;font-weight:700;margin:0 0 4px;color:var(--mts-text-primary);}
+    .app-card-desc{font-size:12px;color:var(--mts-text-muted);margin:0 0 10px;line-height:1.5;}
+    .app-card-tags{display:flex;gap:4px;flex-wrap:wrap;}
+    .app-card-tag{font-size:10px;padding:2px 7px;border-radius:var(--mts-radius-full);background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);color:var(--mts-text-muted);}
+    /* Modal overlay */
+    .app-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;backdrop-filter:blur(4px);}
+    .app-overlay.open{display:flex;align-items:center;justify-content:center;padding:16px;}
+    .app-frame-wrap{width:100%;max-width:1100px;height:90vh;background:var(--mts-bg-body);border-radius:var(--mts-radius-xl);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.5);}
+    .app-frame-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--mts-bg-surface);border-bottom:1px solid var(--mts-border-color);}
+    .app-frame-dots{display:flex;gap:6px;}
+    .app-frame-dot{width:12px;height:12px;border-radius:50%;}
+    .app-frame{flex:1;border:none;width:100%;}
+    /* Theme */
+    .topbar-theme{display:flex;gap:4px;margin-left:auto;}
+    .topbar-theme-btn{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+    .topbar-theme-btn:hover{background:var(--mts-bg-surface-2);}
+    @media(max-width:600px){.apps-grid{grid-template-columns:1fr;}.hero h1{font-size:26px;}}
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">M</div>
+  <div>
+    <div class="topbar-title">Matios <span>UI</span></div>
+    <div class="topbar-sub">Apps de Ejemplo</div>
+  </div>
+  <div class="topbar-theme">
+    <button class="topbar-theme-btn" onclick="setTheme('dark')">Dark</button>
+    <button class="topbar-theme-btn" onclick="setTheme('light')">Light</button>
+    <button class="topbar-theme-btn" onclick="setTheme('violet')">Violet</button>
+    <button class="topbar-theme-btn" onclick="setTheme('blue')">Blue</button>
+    <button class="topbar-theme-btn" onclick="setTheme('olive')">Olive</button>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>Apps construidas con<br><span>Matios UI</span></h1>
+  <p>Ejemplos funcionales y completos — cero dependencias externas, temas via CSS Variables, todos los componentes del framework.</p>
+  <div class="hero-badges">
+    <span class="hero-badge">🎨 6 Temas</span>
+    <span class="hero-badge">⚡ Zero deps</span>
+    <span class="hero-badge">📱 Responsive</span>
+    <span class="hero-badge">🌙 Dark / Light</span>
+    <span class="hero-badge">30+ Componentes</span>
+  </div>
+</div>
+
+<div class="apps-section">
+
+  <div class="apps-category">
+    <div class="apps-category-title">Autenticación y usuarios</div>
+    <div class="apps-grid">
+      <a class="app-card" onclick="openApp('login/index.html','Inicio de Sesión + OTP')">
+        <div class="app-card-preview" style="background:linear-gradient(135deg,#1e3a5f,#0f1f35);">🔐</div>
+        <div class="app-card-body">
+          <div class="app-card-title">Inicio de Sesión + OTP</div>
+          <div class="app-card-desc">Login con email/password, verificación OTP de 6 dígitos con timer, OAuth Google/GitHub.</div>
+          <div class="app-card-tags"><span class="app-card-tag">MTS.Input</span><span class="app-card-tag">MTS.Button</span><span class="app-card-tag">OTP</span></div>
+        </div>
+      </a>
+      <a class="app-card" onclick="openApp('registro/index.html','Registro de Usuario')">
+        <div class="app-card-preview" style="background:linear-gradient(135deg,#1a3a2a,#0d2018);">✍️</div>
+        <div class="app-card-body">
+          <div class="app-card-title">Registro de Usuario</div>
+          <div class="app-card-desc">Formulario multi-paso con Stepper — datos personales, seguridad y confirmación.</div>
+          <div class="app-card-tags"><span class="app-card-tag">MTS.Stepper</span><span class="app-card-tag">MTS.Validate</span><span class="app-card-tag">MTS.Input</span></div>
+        </div>
+      </a>
+      <a class="app-card" onclick="openApp('onboarding/index.html','Onboarding Wizard')">
+        <div class="app-card-preview" style="background:linear-gradient(135deg,#3a1a4a,#1f0d2a);">🚀</div>
+        <div class="app-card-body">
+          <div class="app-card-title">Onboarding Wizard</div>
+          <div class="app-card-desc">Configuración inicial del workspace en 3 pasos — nombre, industria e invitación al equipo.</div>
+          <div class="app-card-tags"><span class="app-card-tag">MTS.Stepper</span><span class="app-card-tag">MTS.Select</span><span class="app-card-tag">MTS.Input</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="apps-category">
+    <div class="apps-category-title">Gestión y productividad</div>
+    <div class="apps-grid">
+      <a class="app-card" onclick="openApp('dashboard/index.html','Dashboard de Métricas')">
+        <div class="app-card-preview" style="background:linear-gradient(135deg,#0d2a4a,#061525);">📊</div>
+        <div class="app-card-body">
+          <div class="app-card-title">Dashboard de Métricas</div>
+          <div class="app-card-desc">KPIs con sparkline, timeline de actividad, estado de servicios y tabla de proyectos.</div>
+          <div class="app-card-tags"><span class="app-card-tag">MTS.KPICard</span><span class="app-card-tag">MTS.Timeline</span><span class="app-card-tag">MTS.Progress</span></div>
+        </div>
+      </a>
+      <a class="app-card" onclick="openApp('proyectos/index.html','Gestión de Proyectos')">
+        <div class="app-card-preview" style="background:linear-gradient(135deg,#1a2a4a,#0d1525);">📋</div>
+        <div class="app-card-body">
+          <div class="app-card-title">Gestión de Proyectos</div>
+          <div class="app-card-desc">Tablero Kanban completo con drag & drop, prioridades, assignee autocomplete y add cards.</div>
+          <div class="app-card-tags"><span class="app-card-tag">MTS.Kanban</span><span class="app-card-tag">MTS.Dropdown</span><span class="app-card-tag">MTS.Avatar</span></div>
+        </div>
+      </a>
+      <a class="app-card" onclick="openApp('tareas/index.html','Gestión de Tareas')">
+        <div class="app-card-preview" style="background:linear-gradient(135deg,#2a1a0a,#150d05);">✅</div>
+        <div class="app-card-body">
+          <div class="app-card-title">Gestión de Tareas</div>
+          <div class="app-card-desc">To-do list con prioridades, filtros, barra de progreso y marcado de completadas.</div>
+          <div class="app-card-tags"><span class="app-card-tag">MTS.Checkbox</span><span class="app-card-tag">MTS.Progress</span><span class="app-card-tag">MTS.EmptyState</span></div>
+        </div>
+      </a>
+      <a class="app-card" onclick="openApp('helpdesk/index.html','Mesa de Ayuda')">
+        <div class="app-card-preview" style="background:linear-gradient(135deg,#2a0a0a,#150505);">🎧</div>
+        <div class="app-card-body">
+          <div class="app-card-title">Mesa de Ayuda</div>
+          <div class="app-card-desc">Tickets con estados, prioridades, drawer de detalle con historial y modal para nuevo ticket.</div>
+          <div class="app-card-tags"><span class="app-card-tag">MTS.Modal</span><span class="app-card-tag">MTS.Drawer</span><span class="app-card-tag">MTS.Timeline</span><span class="app-card-tag">MTS.Badge</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="apps-category">
+    <div class="apps-category-title">Configuración y perfil</div>
+    <div class="apps-grid">
+      <a class="app-card" onclick="openApp('perfil/index.html','Perfil de Usuario')">
+        <div class="app-card-preview" style="background:linear-gradient(135deg,#1a2a1a,#0d150d);">👤</div>
+        <div class="app-card-body">
+          <div class="app-card-title">Perfil de Usuario</div>
+          <div class="app-card-desc">Edición de datos personales, cambio de contraseña y preferencias de notificaciones con tabs.</div>
+          <div class="app-card-tags"><span class="app-card-tag">MTS.Tabs</span><span class="app-card-tag">MTS.Avatar</span><span class="app-card-tag">MTS.Alert</span></div>
+        </div>
+      </a>
+      <a class="app-card" onclick="openApp('configuracion/index.html','Configuración de Cuenta')">
+        <div class="app-card-preview" style="background:linear-gradient(135deg,#1a1a2a,#0d0d15);">⚙️</div>
+        <div class="app-card-body">
+          <div class="app-card-title">Configuración de Cuenta</div>
+          <div class="app-card-desc">Tabs con general, plan, seguridad y zona de peligro con confirmación de acciones críticas.</div>
+          <div class="app-card-tags"><span class="app-card-tag">MTS.Tabs</span><span class="app-card-tag">MTS.Toggle</span><span class="app-card-tag">MTS.Modal</span></div>
+        </div>
+      </a>
+      <a class="app-card" onclick="openApp('notificaciones/index.html','Centro de Notificaciones')">
+        <div class="app-card-preview" style="background:linear-gradient(135deg,#2a2a0a,#15150d);">🔔</div>
+        <div class="app-card-body">
+          <div class="app-card-title">Centro de Notificaciones</div>
+          <div class="app-card-desc">Lista de notificaciones con leído/no leído, marcar todo y limpiar centro.</div>
+          <div class="app-card-tags"><span class="app-card-tag">MTS.Badge</span><span class="app-card-tag">MTS.Alert</span><span class="app-card-tag">MTS.Button</span></div>
+        </div>
+      </a>
+      <a class="app-card" onclick="openApp('documentos/index.html','Biblioteca de Documentos')">
+        <div class="app-card-preview" style="background:linear-gradient(135deg,#0a2a2a,#051515);">📁</div>
+        <div class="app-card-body">
+          <div class="app-card-title">Biblioteca de Documentos</div>
+          <div class="app-card-desc">Gestor de archivos con vista grid/lista, búsqueda en tiempo real y upload con drag & drop.</div>
+          <div class="app-card-tags"><span class="app-card-tag">MTS.FileUpload</span><span class="app-card-tag">MTS.Input</span><span class="app-card-tag">MTS.Badge</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal overlay para las apps -->
+<div class="app-overlay" id="app-overlay" onclick="closeApp(event)">
+  <div class="app-frame-wrap" onclick="event.stopPropagation()">
+    <div class="app-frame-bar">
+      <div class="app-frame-dots">
+        <div class="app-frame-dot" style="background:#ff5f57;cursor:pointer;" onclick="closeApp()"></div>
+        <div class="app-frame-dot" style="background:#ffbd2e;"></div>
+        <div class="app-frame-dot" style="background:#28c840;"></div>
+      </div>
+      <span id="app-frame-title" style="font-size:12px;font-weight:600;color:var(--mts-text-muted);flex:1;text-align:center;"></span>
+    </div>
+    <iframe id="app-frame" class="app-frame" src="about:blank"></iframe>
+  </div>
+</div>
+
+<script>
+var currentTheme = document.documentElement.getAttribute('data-mts-theme') || 'dark';
+
+function setTheme(t) {
+  currentTheme = t;
+  document.documentElement.setAttribute('data-mts-theme', t);
+  var frame = document.getElementById('app-frame');
+  if (frame && frame.src !== 'about:blank') {
+    try { frame.contentWindow.postMessage({type:'setTheme',theme:t},'*'); } catch(e) {}
+    var src = frame.src.split('#')[0];
+    frame.src = src + '#mts-theme=' + t;
+  }
+}
+
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'setTheme') setTheme(e.data.theme);
+  if (e.data && e.data.type === 'closeApp') closeApp();
+});
+
+function openApp(url, title) {
+  var overlay = document.getElementById('app-overlay');
+  var frame   = document.getElementById('app-frame');
+  var label   = document.getElementById('app-frame-title');
+  label.textContent = title;
+  frame.src = url + '#mts-theme=' + currentTheme;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeApp(e) {
+  if (e && e.target !== document.getElementById('app-overlay')) return;
+  var overlay = document.getElementById('app-overlay');
+  var frame   = document.getElementById('app-frame');
+  overlay.classList.remove('open');
+  frame.src = 'about:blank';
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeApp({target: document.getElementById('app-overlay')});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <!-- Leer tema del parent/hash — inyectado por index.html -->
+  <script>
+    (function() {
+      // 1. Leer desde hash de la URL: #mts-theme=dark
+      var hash = location.hash || '';
+      var m = hash.match(/mts-theme=([a-z]+)/);
+      if (m) document.documentElement.setAttribute('data-mts-theme', m[1]);
+      // 2. También intentar leer del parent frame
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pt = p.currentThemeVal || p.document.documentElement.getAttribute('data-mts-theme');
+          if (pt) document.documentElement.setAttribute('data-mts-theme', pt);
+        }
+      } catch(e) {}
+      // 3. Ocultar el theme picker propio si está en un iframe
+      window.addEventListener('DOMContentLoaded', function() {
+        if (window !== window.top) {
+          var picker = document.querySelector('.demo-theme');
+          if (picker) picker.style.display = 'none';
+        }
+      });
+    })();
+  </script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTS Navigation — Demo</title>
+<link rel="stylesheet" href="../base/matios-ui-base.css">
+<link rel="stylesheet" href="../icons/matios-ui-icons.css">
+<script src="../icons/matios-ui-icons.js"></script>
+<link rel="stylesheet" href="matios-ui-tabs/matios-ui-tabs.css">
+<link rel="stylesheet" href="matios-ui-accordion/matios-ui-accordion.css">
+<link rel="stylesheet" href="matios-ui-breadcrumb/matios-ui-breadcrumb.css">
+<link rel="stylesheet" href="matios-ui-stepper/matios-ui-stepper.css">
+<link rel="stylesheet" href="matios-ui-drawer/matios-ui-drawer.css">
+<link rel="stylesheet" href="matios-ui-dropdown/matios-ui-dropdown.css">
+<script src="matios-ui-tabs/matios-ui-tabs.js"></script>
+<script src="matios-ui-accordion/matios-ui-accordion.js"></script>
+<script src="matios-ui-breadcrumb/matios-ui-breadcrumb.js"></script>
+<script src="matios-ui-stepper/matios-ui-stepper.js"></script>
+<script src="matios-ui-drawer/matios-ui-drawer.js"></script>
+<script src="matios-ui-dropdown/matios-ui-dropdown.js"></script>
+<style>
+  body { background:var(--mts-bg-body); color:var(--mts-text-primary); font-family:var(--mts-font-family); margin:0; padding:32px; }
+  .demo-page { max-width:900px; margin:0 auto; display:flex; flex-direction:column; gap:40px; }
+  .demo-section { display:flex; flex-direction:column; gap:16px; }
+  .demo-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--mts-text-muted); padding-bottom:8px; border-bottom:1px solid var(--mts-border-color); }
+  .demo-row { display:flex; gap:8px; flex-wrap:wrap; align-items:flex-start; }
+  .demo-theme { position:fixed; top:16px; right:16px; display:flex; gap:6px; }
+  .demo-btn { padding:5px 12px; border-radius:var(--mts-radius-md); font-family:var(--mts-font-family); font-size:11px; font-weight:600; cursor:pointer; border:1px solid var(--mts-border-color); background:var(--mts-bg-surface); color:var(--mts-text-secondary); }
+  .demo-btn:hover { background:var(--mts-bg-surface-2); }
+  h1 { font-size:22px; font-weight:800; margin:0 0 4px; }
+  h1 span { color:var(--mts-color-primary); }
+  .demo-subtitle { font-size:13px; color:var(--mts-text-muted); margin:0; }
+</style>
+<script src="../matios-ui-readme-modal.js"></script>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn" onclick="document.documentElement.setAttribute('data-mts-theme','dark')">Dark</button>
+  <button class="demo-btn" onclick="document.documentElement.setAttribute('data-mts-theme','light')">Light</button>
+</div>
+
+<div class="demo-page">
+  <div>
+    <h1>MTS <span>Navigation</span></h1>
+    <p class="demo-subtitle">tabs · accordion · breadcrumb · stepper · drawer · dropdown</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="demo-section">
+    <div class="demo-title" id="sc-tabs" data-section="tabs">MTS.Tabs</div>
+    <div id="tabs-underline"></div>
+    <div id="tabs-pill"></div>
+    <div id="tabs-vertical"></div>
+  </div>
+
+  <!-- ACCORDION -->
+  <div class="demo-section">
+    <div class="demo-title" id="sc-accordion" data-section="accordion">MTS.Accordion</div>
+    <div id="acc-basic"></div>
+    <div id="acc-multiple"></div>
+  </div>
+
+  <!-- BREADCRUMB -->
+  <div class="demo-section">
+    <div class="demo-title" id="sc-breadcrumb" data-section="breadcrumb">MTS.Breadcrumb</div>
+    <div id="bc-basic"></div>
+  </div>
+
+  <!-- STEPPER -->
+  <div class="demo-section">
+    <div class="demo-title" id="sc-stepper" data-section="stepper">MTS.Stepper</div>
+    <div id="stepper-h"></div>
+    <div style="margin-top:12px;display:flex;gap:8px;">
+      <button class="demo-btn" onclick="stepperH.prev()">← Anterior</button>
+      <button class="demo-btn" onclick="stepperH.next()">Siguiente →</button>
+    </div>
+    <div id="stepper-v" style="max-width:260px;margin-top:16px;"></div>
+  </div>
+
+  <!-- DRAWER -->
+  <div class="demo-section">
+    <div class="demo-title" id="sc-drawer" data-section="drawer">MTS.Drawer</div>
+    <div class="demo-row">
+      <button class="demo-btn" onclick="drawerRight.show()">Drawer derecho</button>
+      <button class="demo-btn" onclick="drawerLeft.show()">Drawer izquierdo</button>
+      <button class="demo-btn" onclick="drawerBottom.show()">Drawer abajo</button>
+    </div>
+  </div>
+
+  <!-- DROPDOWN -->
+  <div class="demo-section">
+    <div class="demo-title" id="sc-dropdown" data-section="dropdown">MTS.Dropdown</div>
+    <div class="demo-row">
+      <button id="dd-basic"  class="demo-btn">Acciones ▾</button>
+      <button id="dd-danger" class="demo-btn">Opciones ▾</button>
+      <button id="dd-sub"    class="demo-btn">Con submenú ▾</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── MTS.Tabs ──────────────────────────────── */
+new MTS.Tabs('#tabs-underline', {
+  variant: 'underline',
+  active: 'general',
+  tabs: [
+    { id: 'general',   label: 'General',   content: '<p style="padding:16px;color:var(--mts-text-secondary)">Contenido de la pestaña General.</p>' },
+    { id: 'seguridad', label: 'Seguridad', content: '<p style="padding:16px;color:var(--mts-text-secondary)">Configuración de seguridad.</p>' },
+    { id: 'notif',     label: 'Notif.',    content: '<p style="padding:16px;color:var(--mts-text-secondary)">Preferencias de notificaciones.</p>', badge: 4 },
+    { id: 'api',       label: 'API',       content: '<p style="padding:16px;color:var(--mts-text-secondary)">Claves y tokens de API.</p>', disabled: true },
+  ],
+  onChange: e => console.log('tab:', e.detail.id),
+});
+new MTS.Tabs('#tabs-pill', {
+  variant: 'pill',
+  active: 'lista',
+  tabs: [
+    { id: 'lista',      label: 'Lista',      content: '<p style="padding:16px;color:var(--mts-text-secondary)">Vista en lista.</p>' },
+    { id: 'cuadricula', label: 'Cuadrícula', content: '<p style="padding:16px;color:var(--mts-text-secondary)">Vista en cuadrícula.</p>' },
+    { id: 'mapa',       label: 'Mapa',       content: '<p style="padding:16px;color:var(--mts-text-secondary)">Vista de mapa.</p>' },
+  ],
+});
+new MTS.Tabs('#tabs-vertical', {
+  variant: 'card', direction: 'vertical',
+  active: 'perfil',
+  tabs: [
+    { id: 'perfil',  label: 'Perfil',   content: '<p style="padding:16px;color:var(--mts-text-secondary)">Datos del perfil de usuario.</p>' },
+    { id: 'cuenta',  label: 'Cuenta',   content: '<p style="padding:16px;color:var(--mts-text-secondary)">Configuración de cuenta.</p>' },
+    { id: 'privado', label: 'Privacidad', content: '<p style="padding:16px;color:var(--mts-text-secondary)">Opciones de privacidad.</p>' },
+  ],
+});
+
+/* ── MTS.Accordion ─────────────────────────── */
+new MTS.Accordion('#acc-basic', {
+  multiple: false,
+  items: [
+    { id: 'a1', title: '¿Qué es Matios UI?',         content: '<p style="padding:12px 0;color:var(--mts-text-secondary)">Framework CSS/JS propio, zero dependencias, con temas via CSS Variables.</p>', open: true },
+    { id: 'a2', title: '¿Cómo instalar el framework?', content: '<p style="padding:12px 0;color:var(--mts-text-secondary)">Incluye matios-ui-base.css y los archivos del componente que necesites.</p>' },
+    { id: 'a3', title: '¿Soporta dark mode?',           content: '<p style="padding:12px 0;color:var(--mts-text-secondary)">Sí — agrega data-mts-theme="dark" o "light" en el html.</p>' },
+    { id: 'a4', title: 'Sección deshabilitada',         content: '<p>No disponible.</p>', disabled: true },
+  ],
+  onOpen:  e => console.log('open:', e.detail.id),
+  onClose: e => console.log('close:', e.detail.id),
+});
+new MTS.Accordion('#acc-multiple', {
+  multiple: true, flush: true,
+  items: [
+    { id: 'b1', title: 'Filtros activos',     content: '<p style="padding:12px 0;color:var(--mts-text-secondary)">Estado, Fecha, Responsable.</p>' },
+    { id: 'b2', title: 'Columnas visibles',   content: '<p style="padding:12px 0;color:var(--mts-text-secondary)">Nombre, Fecha, Estado, Acciones.</p>', open: true },
+    { id: 'b3', title: 'Exportar resultados', content: '<p style="padding:12px 0;color:var(--mts-text-secondary)">PDF, Excel, CSV.</p>' },
+  ],
+});
+
+/* ── MTS.Breadcrumb ────────────────────────── */
+new MTS.Breadcrumb('#bc-basic', {
+  separator: '/',
+  maxItems: 5,
+  items: [
+    { label: 'Inicio',       onClick: () => console.log('inicio') },
+    { label: 'Proyectos',    onClick: () => console.log('proyectos') },
+    { label: 'Matios UI',    onClick: () => console.log('matios') },
+    { label: 'Componentes',  onClick: () => console.log('componentes') },
+    { label: 'Navigation' },
+  ],
+  onClick: e => console.log('breadcrumb:', e.detail.item.label),
+});
+
+/* ── MTS.Stepper ───────────────────────────── */
+const stepperH = new MTS.Stepper('#stepper-h', {
+  direction: 'horizontal',
+  clickable: true,
+  active: 0,
+  steps: [
+    { id: 's1', label: 'Datos básicos',   description: 'Nombre y contacto' },
+    { id: 's2', label: 'Documentos',      description: 'Adjuntar archivos' },
+    { id: 's3', label: 'Revisión',        description: 'Confirmar datos' },
+    { id: 's4', label: 'Confirmación' },
+  ],
+  onChange:   e => console.log('step:', e.detail.index),
+  onComplete: ()  => console.log('completado'),
+});
+new MTS.Stepper('#stepper-v', {
+  direction: 'vertical',
+  active: 1,
+  steps: [
+    { id: 'v1', label: 'Creado',    description: '01/03/2026' },
+    { id: 'v2', label: 'En revisión', description: '15/03/2026' },
+    { id: 'v3', label: 'Aprobado' },
+    { id: 'v4', label: 'Publicado' },
+  ],
+});
+
+/* ── MTS.Drawer ────────────────────────────── */
+const drawerRight = new MTS.Drawer({
+  title: 'Filtros',
+  position: 'right', size: 'md',
+  content: `
+    <div style="display:flex;flex-direction:column;gap:16px;padding:4px 0;">
+      <p style="color:var(--mts-text-secondary);font-size:13px;">Aplica filtros a la tabla de resultados.</p>
+      <label style="font-size:12px;font-weight:600;color:var(--mts-text-muted)">ESTADO</label>
+      <select style="padding:8px;border-radius:8px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);color:var(--mts-text-primary);">
+        <option>Todos</option><option>Activo</option><option>Inactivo</option>
+      </select>
+    </div>`,
+  footer: `<button onclick="drawerRight.hide()" style="padding:8px 20px;border-radius:8px;background:var(--mts-color-primary);color:#fff;border:none;cursor:pointer;font-weight:600;">Aplicar</button>`,
+  onOpen:  () => console.log('drawer abierto'),
+  onClose: () => console.log('drawer cerrado'),
+});
+const drawerLeft = new MTS.Drawer({
+  title: 'Menú lateral',
+  position: 'left', size: 'sm',
+  content: '<p style="color:var(--mts-text-secondary);font-size:13px;">Navegación lateral de la aplicación.</p>',
+});
+const drawerBottom = new MTS.Drawer({
+  title: 'Opciones',
+  position: 'bottom', size: 'md',
+  content: '<p style="color:var(--mts-text-secondary);font-size:13px;">Panel inferior con opciones adicionales.</p>',
+});
+
+/* ── MTS.Dropdown ──────────────────────────── */
+new MTS.Dropdown('#dd-basic', {
+  position: 'bottom-start', trigger: 'click',
+  items: [
+    { label: 'Ver detalle',  onClick: () => console.log('ver') },
+    { label: 'Editar',       onClick: () => console.log('editar') },
+    { label: 'Duplicar',     onClick: () => console.log('duplicar') },
+    { divider: true },
+    { label: 'Archivar',     onClick: () => console.log('archivar') },
+  ],
+  onSelect: e => console.log('dropdown:', e.detail.item.label),
+});
+new MTS.Dropdown('#dd-danger', {
+  position: 'bottom-start', trigger: 'click',
+  items: [
+    { label: 'Descargar PDF',  onClick: () => console.log('pdf') },
+    { label: 'Descargar Excel', onClick: () => console.log('excel') },
+    { divider: true },
+    { label: 'Eliminar', danger: true, onClick: () => console.log('eliminar') },
+  ],
+});
+new MTS.Dropdown('#dd-icons', {
+  position: 'bottom-start', trigger: 'click',
+  items: [
+    { label:'Ver detalle',  icon:MTS.Icon.get('eye'),      onClick:()=>console.log('ver') },
+    { label:'Editar',       icon:MTS.Icon.get('edit-2'),   shortcut:'⌘E', onClick:()=>console.log('editar') },
+    { label:'Duplicar',     icon:MTS.Icon.get('copy'),     onClick:()=>console.log('duplicar') },
+    { label:'Compartir',    icon:MTS.Icon.get('share'),    onClick:()=>console.log('compartir') },
+    { divider:true },
+    { label:'Mover a',      icon:MTS.Icon.get('folder'),
+      items:[
+        { label:'Mis documentos', icon:MTS.Icon.get('folder'),     onClick:()=>console.log('mis docs') },
+        { label:'Compartidos',    icon:MTS.Icon.get('users'),       onClick:()=>console.log('compartidos') },
+        { label:'Archivados',     icon:MTS.Icon.get('archive'),     onClick:()=>console.log('archivados') },
+      ]},
+    { divider:true },
+    { label:'Eliminar', danger:true, icon:MTS.Icon.get('trash'), onClick:()=>console.log('eliminar') },
+  ],
+  onSelect: e => console.log('dropdown icon:', e.detail.item?.label),
+});
+
+new MTS.Dropdown('#dd-4lvl', {
+  position: 'bottom-start', trigger: 'click',
+  items: [
+    { label:'Nivel 1 — A', items:[
+      { label:'Nivel 2 — A1', items:[
+        { label:'Nivel 3 — A1a', items:[
+          { label:'Nivel 4 — Final A', onClick:()=>alert('Nivel 4 — A seleccionado') },
+          { label:'Nivel 4 — Final B', onClick:()=>alert('Nivel 4 — B seleccionado') },
+        ]},
+        { label:'Nivel 3 — A1b', onClick:()=>console.log('A1b') },
+      ]},
+      { label:'Nivel 2 — A2', onClick:()=>console.log('A2') },
+    ]},
+    { label:'Nivel 1 — B', items:[
+      { label:'Nivel 2 — B1', onClick:()=>console.log('B1') },
+      { label:'Nivel 2 — B2', items:[
+        { label:'Nivel 3 — B2a', onClick:()=>console.log('B2a') },
+      ]},
+    ]},
+    { divider:true },
+    { label:'Nivel 1 — Acción directa', onClick:()=>console.log('directo') },
+  ],
+});
+</script>
+</body>
+</html>

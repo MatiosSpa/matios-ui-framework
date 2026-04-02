@@ -1,0 +1,103 @@
+/* ============================================================
+   MATIOS UI — matios-ui-numberinput.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-numberinput { display: flex; flex-direction: column; gap: 4px; }
+
+.mts-numberinput__label {
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* ── Wrap ── */
+.mts-numberinput__wrap {
+  display: flex;
+  align-items: center;
+  background: var(--mts-bg-surface-2);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  transition: border-color .15s, box-shadow .15s;
+  overflow: hidden;
+}
+.mts-numberinput__wrap--focus {
+  border-color: var(--mts-color-primary);
+  box-shadow: 0 0 0 3px var(--mts-color-primary-light);
+}
+.mts-numberinput__wrap--error {
+  border-color: var(--mts-color-danger, #f87171);
+}
+.mts-numberinput__wrap--disabled { opacity: .5; pointer-events: none; }
+.mts-numberinput__wrap--active {
+  border-color: var(--mts-color-primary);
+}
+
+/* ── Tamaños ── */
+.mts-numberinput__wrap--sm .mts-numberinput__input { height: 32px; font-size: 13px; }
+.mts-numberinput__wrap--sm .mts-numberinput__btn   { width: 32px; height: 32px; }
+.mts-numberinput__wrap--md .mts-numberinput__input { height: 40px; font-size: 14px; }
+.mts-numberinput__wrap--md .mts-numberinput__btn   { width: 40px; height: 40px; }
+.mts-numberinput__wrap--lg .mts-numberinput__input { height: 48px; font-size: 16px; }
+.mts-numberinput__wrap--lg .mts-numberinput__btn   { width: 48px; height: 48px; }
+
+/* ── Input ── */
+.mts-numberinput__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  outline: none;
+  text-align: center;
+  font-family: var(--mts-font-family);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+  padding: 0 4px;
+}
+.mts-numberinput__input::placeholder { color: var(--mts-text-muted); font-weight: 400; }
+
+/* ── Botones +/- ── */
+.mts-numberinput__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--mts-text-muted);
+  flex-shrink: 0;
+  transition: background .12s, color .12s;
+  outline: none;
+}
+.mts-numberinput__btn:hover:not(:disabled) {
+  background: var(--mts-bg-surface);
+  color: var(--mts-color-primary);
+}
+.mts-numberinput__btn:active:not(:disabled) {
+  background: var(--mts-color-primary-light);
+}
+.mts-numberinput__btn:disabled { opacity: .3; cursor: not-allowed; }
+
+/* Separadores entre btn e input */
+.mts-numberinput__btn--dec { border-right: 1px solid var(--mts-border-color); }
+.mts-numberinput__btn--inc { border-left:  1px solid var(--mts-border-color); }
+
+/* ── Prefix / Suffix ── */
+.mts-numberinput__prefix,
+.mts-numberinput__suffix {
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mts-text-muted);
+  background: var(--mts-bg-surface);
+  white-space: nowrap;
+  user-select: none;
+}
+.mts-numberinput__prefix { border-right: 1px solid var(--mts-border-color); }
+.mts-numberinput__suffix { border-left:  1px solid var(--mts-border-color); }
+
+/* ── Hint / Error ── */
+.mts-numberinput__hint  { font-size: 11px; color: var(--mts-text-muted); }
+.mts-numberinput__error { font-size: 11px; color: var(--mts-color-danger, #f87171); display: none; }

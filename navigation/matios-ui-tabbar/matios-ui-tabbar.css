@@ -1,0 +1,23 @@
+/* MTS.TabBar v1.0.0 */
+.mts-tabbar { display:flex;align-items:stretch;width:100%;background:var(--mts-bg-surface);border-top:1px solid var(--mts-border-color);padding:4px 8px;gap:2px; }
+.mts-tabbar--floating { border-top:none;border-radius:var(--mts-radius-xl);box-shadow:var(--mts-shadow-lg);border:1px solid var(--mts-border-color);padding:6px 10px; }
+.mts-tabbar--pill { background:var(--mts-bg-surface-2);border-radius:var(--mts-radius-xl);border:1px solid var(--mts-border-color);padding:4px; }
+
+.mts-tabbar__item { flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 4px;background:none;border:none;cursor:pointer;border-radius:var(--mts-radius-md);color:var(--mts-text-muted);transition:color .15s,background .15s;min-width:0;font-family:var(--mts-font-family); }
+.mts-tabbar__item:hover { color:var(--mts-color-primary);background:var(--mts-bg-surface-2); }
+.mts-tabbar__item--active { color:var(--mts-color-primary); }
+.mts-tabbar--pill .mts-tabbar__item--active { background:var(--mts-color-primary);color:#fff;border-radius:var(--mts-radius-lg); }
+.mts-tabbar--pill .mts-tabbar__item--active:hover { color:#fff; }
+
+.mts-tabbar__icon { position:relative;display:flex;align-items:center;justify-content:center;width:24px;height:24px; }
+.mts-tabbar__icon svg { width:22px;height:22px; }
+.mts-tabbar__label { font-size:10px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%; }
+.mts-tabbar--no-labels .mts-tabbar__icon { width:28px;height:28px; }
+.mts-tabbar--no-labels .mts-tabbar__icon svg { width:24px;height:24px; }
+
+/* Badge */
+.mts-tabbar__badge { position:absolute;top:-5px;right:-7px;min-width:16px;height:16px;background:var(--mts-color-danger,#f87171);color:#fff;border-radius:var(--mts-radius-full);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 3px;border:2px solid var(--mts-bg-surface);line-height:1; }
+
+/* Indicador activo animado (default) */
+.mts-tabbar--default .mts-tabbar__item--active::after { content:'';display:block;position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:20px;height:3px;background:var(--mts-color-primary);border-radius:2px; }
+.mts-tabbar--default .mts-tabbar__item { position:relative; }

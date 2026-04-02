@@ -1,0 +1,41 @@
+/* ============================================================
+   MATIOS UI — matios-ui-skeleton.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-skeleton { display: block; }
+
+/* ── Bone base ── */
+.mts-skeleton__bone {
+  background: var(--mts-bg-surface-2);
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ── Animación pulse ── */
+@keyframes mts-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .45; }
+}
+.mts-skeleton__bone--pulse {
+  animation: mts-skeleton-pulse 1.6s ease-in-out infinite;
+}
+
+/* ── Animación wave ── */
+@keyframes mts-skeleton-wave {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+.mts-skeleton__bone--wave {
+  background: linear-gradient(
+    90deg,
+    var(--mts-bg-surface-2) 25%,
+    var(--mts-bg-surface)   50%,
+    var(--mts-bg-surface-2) 75%
+  );
+  background-size: 200% 100%;
+  animation: mts-skeleton-wave 1.6s linear infinite;
+}
+
+/* ── Sin animación ── */
+.mts-skeleton__bone--none { animation: none; }

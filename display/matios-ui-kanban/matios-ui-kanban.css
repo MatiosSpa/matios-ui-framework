@@ -88,3 +88,257 @@
   font-family: var(--mts-font-family);
 }
 .mts-kanban__add:hover { background: var(--mts-bg-surface); color: var(--mts-color-primary); border-color: var(--mts-color-primary); }
+
+/* ── Formulario inline agregar tarjeta ─────────────────── */
+.mts-kanban__add-form { padding:6px; display:flex; flex-direction:column; gap:6px; animation:mts-k-fade .15s ease; }
+@keyframes mts-k-fade { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+.mts-kanban__add-input {
+  width:100%; padding:8px 10px;
+  border-radius:var(--mts-radius-md,8px);
+  border:1.5px solid var(--mts-color-primary,#4f8eff);
+  background:var(--mts-bg-surface,#161820);
+  color:var(--mts-text-primary); font-family:var(--mts-font-family);
+  font-size:13px; resize:none; outline:none;
+  box-shadow:0 0 0 3px rgba(79,142,255,.12);
+}
+.mts-kanban__add-actions { display:flex; gap:6px; }
+.mts-kanban__add-accept {
+  flex:1; padding:6px 10px; border-radius:var(--mts-radius-md,8px);
+  background:var(--mts-color-primary,#4f8eff); color:#fff; border:none;
+  cursor:pointer; font-size:12px; font-weight:600; font-family:var(--mts-font-family);
+}
+.mts-kanban__add-accept:hover { opacity:.88; }
+.mts-kanban__add-cancel {
+  padding:6px 10px; border-radius:var(--mts-radius-md,8px);
+  background:var(--mts-bg-surface-2,#1e2028);
+  color:var(--mts-text-muted); border:1px solid var(--mts-border-color);
+  cursor:pointer; font-size:14px;
+}
+.mts-kanban__add-cancel:hover { color:var(--mts-color-danger,#f87171); }
+
+/* ── Campos extras del form inline ── */
+.mts-kanban__add-input--desc {
+  margin-top: 4px;
+  font-size: 12px;
+}
+.mts-kanban__add-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 4px;
+}
+.mts-kanban__add-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--mts-text-muted);
+}
+.mts-kanban__add-field {
+  width: 100%;
+  padding: 5px 8px;
+  font-size: 12px;
+  font-family: var(--mts-font-family);
+  background: var(--mts-bg-surface-2);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-sm);
+  color: var(--mts-text-primary);
+  outline: none;
+  transition: border-color .15s;
+}
+.mts-kanban__add-field:focus {
+  border-color: var(--mts-color-primary);
+}
+
+/* ═══════════════════════════════════════
+   TAGS — estilo TagInput dentro del form
+   ═══════════════════════════════════════ */
+.mts-kanban__tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+  padding: 5px 8px;
+  background: var(--mts-bg-surface-2);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-sm);
+  cursor: text;
+  min-height: 34px;
+  transition: border-color .15s;
+}
+.mts-kanban__tags-wrap:focus-within {
+  border-color: var(--mts-color-primary);
+}
+.mts-kanban__tags-input {
+  flex: 1;
+  min-width: 80px;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 12px;
+  font-family: var(--mts-font-family);
+  color: var(--mts-text-primary);
+  padding: 0;
+}
+.mts-kanban__tags-input::placeholder { color: var(--mts-text-muted); }
+
+.mts-kanban__tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--mts-color-primary-light);
+  color: var(--mts-color-primary);
+  border-radius: var(--mts-radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.mts-kanban__tag-remove {
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  opacity: .7;
+  transition: opacity .1s;
+}
+.mts-kanban__tag-remove:hover { opacity: 1; }
+
+/* ═══════════════════════════════════════
+   ASIGNADO — autocomplete
+   ═══════════════════════════════════════ */
+.mts-kanban__assignee-wrap {
+  position: relative;
+}
+.mts-kanban__add-field--selected {
+  border-color: var(--mts-color-primary) !important;
+  color: var(--mts-color-primary);
+  font-weight: 600;
+}
+.mts-kanban__assignee-dd {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  background: var(--mts-bg-surface);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  box-shadow: var(--mts-shadow-lg);
+  list-style: none;
+  margin: 0; padding: 4px;
+  z-index: 200;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.mts-kanban__assignee-dd-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: var(--mts-radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--mts-text-primary);
+  transition: background .1s;
+}
+.mts-kanban__assignee-dd-item:hover { background: var(--mts-bg-surface-2); }
+.mts-kanban__assignee-av {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--mts-color-primary);
+  color: var(--mts-color-primary-text);
+  font-size: 10px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.mts-kanban__assignee-dd-empty {
+  padding: 10px;
+  font-size: 12px;
+  color: var(--mts-text-muted);
+  text-align: center;
+}
+
+/* ── confirm button update ── */
+.mts-kanban__add-cancel {
+  font-size: 11px;
+  padding: 5px 10px;
+  color: var(--mts-text-muted);
+}
+
+/* ── Botón cerrar form — top-right ── */
+.mts-kanban__form-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--mts-text-muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: var(--mts-radius-sm);
+  padding: 0;
+  transition: color .15s, background .15s;
+  z-index: 1;
+}
+.mts-kanban__form-close:hover {
+  color: var(--mts-color-danger, #f87171);
+  background: var(--mts-bg-surface-2);
+}
+/* Dar espacio al título para no solapar la X */
+.mts-kanban__add-form .mts-kanban__add-input:first-of-type {
+  padding-right: 28px;
+}
+/* Acciones — solo el botón primario alineado a la izquierda */
+.mts-kanban__add-actions {
+  margin-top: 2px;
+}
+
+/* ── Card footer — layout fijo ── */
+.mts-kanban__card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+/* Tags container — flex:1, overflow hidden */
+.mts-kanban__card-tags {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* Cada tag — truncado con ellipsis si no cabe */
+.mts-kanban__card-tag {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+  flex-shrink: 1;
+}
+
+/* Avatar del asignado — siempre a la derecha, nunca se achica */
+.mts-kanban__card-av {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--mts-color-primary);
+  color: var(--mts-color-primary-text);
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: auto;
+  cursor: default;
+}

@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matios UI Framework</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="themes/matios-ui-theme-dark.css">
+<link rel="stylesheet" href="themes/matios-ui-theme-light.css">
+<link rel="stylesheet" href="themes/matios-ui-theme-violet.css">
+<link rel="stylesheet" href="themes/matios-ui-theme-olive.css">
+<link rel="stylesheet" href="themes/matios-ui-theme-blue.css">
+<link rel="stylesheet" href="themes/matios-ui-theme-high-contrast.css">
+<style>
+:root {
+  --bg:#0e0f14; --surface:#161820; --surface2:#1e2028; --border:#2a2d38;
+  --primary:#4f8eff; --accent:#a78bfa; --text:#e8eaf0; --muted:#6b7280;
+  --success:#34d399; --sw:220px; --th:50px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+/* TOPBAR */
+.topbar{height:var(--th);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0;z-index:100;}
+.topbar__brand{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--text);text-decoration:none;cursor:pointer;}
+.topbar__logo{width:26px;height:26px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px;flex-shrink:0;}
+.topbar__brand span{color:var(--primary);}
+.topbar__version{font-size:10px;font-weight:700;background:rgba(52,211,153,.12);color:var(--success);padding:2px 7px;border-radius:4px;}
+.topbar__spacer{flex:1;}
+
+/* "Ver docs" button */
+.docs-btn{display:none;align-items:center;gap:6px;padding:4px 12px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--muted);transition:all .12s;}
+.docs-btn:hover{border-color:var(--primary);color:var(--primary);background:rgba(79,142,255,.08);}
+.docs-btn.visible{display:flex;}
+.docs-btn svg{flex-shrink:0;}
+
+/* Theme picker */
+.tp{display:flex;gap:2px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:2px;}
+.tp-btn{padding:3px 9px;border-radius:5px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .12s;}
+.tp-btn.active{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.25);}
+
+/* BODY */
+.body{display:flex;flex:1;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:var(--sw);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
+.sidebar__scroll{flex:1;overflow-y:auto;padding:6px 0 12px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.sidebar__scroll::-webkit-scrollbar{width:3px;}
+.sidebar__scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.nav-group__label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);padding:10px 14px 4px;display:block;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 12px;margin:0 6px;border-radius:7px;color:var(--muted);font-size:13px;text-decoration:none;transition:background .1s,color .1s;white-space:nowrap;cursor:pointer;border:none;background:none;width:calc(100% - 12px);font-family:'DM Sans',sans-serif;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:rgba(79,142,255,.12);color:var(--primary);font-weight:600;}
+[data-mts-theme="violet"] .nav-item.active{background:rgba(139,92,246,.12);color:var(--primary);}
+[data-mts-theme="olive"]  .nav-item.active{background:rgba(132,167,40,.12);color:var(--primary);}
+[data-mts-theme="blue"]   .nav-item.active{background:rgba(74,158,255,.14);color:var(--primary);}
+.nav-item__icon{font-size:14px;flex-shrink:0;}
+.nav-item__badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;background:var(--success);color:#fff;flex-shrink:0;}
+.sidebar__footer{padding:8px 12px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);flex-shrink:0;}
+
+/* CONTENT */
+.content{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;}
+.content iframe{width:100%;flex:1;border:none;display:none;}
+.content iframe.visible{display:block;}
+
+/* WELCOME */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px;text-align:center;padding:40px;}
+.welcome__logo{width:60px;height:60px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:26px;box-shadow:0 10px 36px rgba(79,142,255,.3);}
+.welcome__title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--text);}
+.welcome__title span{color:var(--primary);}
+.welcome__sub{font-size:13px;color:var(--muted);max-width:400px;line-height:1.7;}
+.welcome__stats{display:flex;gap:24px;}
+.welcome__stat-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--primary);}
+.welcome__stat-lbl{font-size:11px;color:var(--muted);}
+.welcome__chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:400px;}
+.welcome__chip{padding:8px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);font-size:12px;color:var(--muted);cursor:pointer;transition:all .12s;text-align:center;}
+.welcome__chip:hover{border-color:var(--primary);color:var(--primary);}
+.welcome__cta{padding:9px 22px;border-radius:9px;background:var(--primary);color:#fff;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;}
+
+/* README PANEL */
+.rm-overlay{position:fixed;inset:0;z-index:9000;pointer-events:none;}
+.rm-overlay.open{pointer-events:auto;}
+.rm-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .25s;}
+.rm-overlay.open .rm-backdrop{background:rgba(0,0,0,.5);}
+.rm-panel{position:absolute;top:0;right:0;bottom:0;width:min(660px,92vw);background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-12px 0 48px rgba(0,0,0,.5);}
+.rm-overlay.open .rm-panel{transform:translateX(0);}
+.rm-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.rm-hdr-info{flex:1;display:flex;align-items:center;gap:8px;}
+.rm-hdr-title{font-size:13px;font-weight:700;color:var(--text);}
+.rm-hdr-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:4px;background:rgba(79,142,255,.15);color:var(--primary);}
+.rm-cp-btn{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;border:1px solid var(--border);background:var(--surface2);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s;}
+.rm-cp-btn:hover{border-color:var(--primary);color:var(--primary);}
+.rm-close{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:var(--surface2);border:1px solid var(--border);cursor:pointer;color:var(--muted);font-size:16px;line-height:1;transition:all .12s;}
+.rm-close:hover{background:rgba(248,113,113,.1);color:#f87171;}
+.rm-body{flex:1;overflow-y:auto;padding:22px 24px 32px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.rm-body::-webkit-scrollbar{width:4px;}
+.rm-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.rm-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:60px 0;color:var(--muted);font-size:13px;}
+.rm-spin{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--primary);animation:rm-spin .7s linear infinite;}
+@keyframes rm-spin{to{transform:rotate(360deg);}}
+/* Markdown */
+.rm-md{font-size:13.5px;line-height:1.75;color:var(--muted);}
+.rm-md h1{font-size:18px;font-weight:800;color:var(--text);margin:0 0 14px;}
+.rm-md h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.rm-md h3{font-size:13px;font-weight:700;color:var(--text);margin:16px 0 8px;}
+.rm-md p{margin:0 0 11px;}
+.rm-md ul,.rm-md ol{margin:0 0 11px;padding-left:18px;}
+.rm-md li{margin-bottom:3px;}
+.rm-md hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
+.rm-md strong{color:var(--text);font-weight:700;}
+.rm-md a{color:var(--primary);text-decoration:none;}
+.rm-md details{border:1px solid var(--border);border-radius:9px;margin:0 0 8px;overflow:hidden;}
+.rm-md details+details{margin-top:-1px;}
+.rm-md summary{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;cursor:pointer;
+  font-size:13px;font-weight:700;color:var(--text);
+  background:var(--surface2);
+  list-style:none;user-select:none;
+  transition:background .15s;
+}
+.rm-md summary::-webkit-details-marker{display:none;}
+.rm-md summary::before{
+  content:'›';font-size:16px;color:var(--primary);
+  transition:transform .2s;display:inline-block;width:14px;
+}
+.rm-md details[open] summary::before{transform:rotate(90deg);}
+.rm-md details[open] summary{background:rgba(79,142,255,.08);}
+.rm-md summary:hover{background:rgba(79,142,255,.06);}
+.rm-md .rm-accordion-body{padding:14px 16px;}
+.rm-md .rm-accordion-body>*:last-child{margin-bottom:0;}
+.rm-md code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:12px;padding:1px 6px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;color:var(--primary);}
+.rm-md pre{background:var(--surface2);border:1px solid var(--border);border-radius:9px;overflow:hidden;margin:0 0 14px;}
+.rm-pre-top{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:rgba(0,0,0,.2);border-bottom:1px solid var(--border);}
+.rm-pre-lang{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);}
+.rm-pre-cp{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;}
+.rm-pre-cp:hover{color:var(--primary);border-color:var(--primary);}
+.rm-md pre code{display:block;padding:12px 14px;overflow-x:auto;background:none;border:none;border-radius:0;font-size:12px;color:var(--text);line-height:1.65;}
+.rm-md table{width:100%;border-collapse:collapse;margin:0 0 14px;font-size:12.5px;}
+.rm-md th{padding:6px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);background:rgba(0,0,0,.2);border-bottom:1px solid var(--border);}
+.rm-md td{padding:7px 12px;border-bottom:1px solid var(--border);}
+.rm-md tr:last-child td{border-bottom:none;}
+.rm-md tr:hover td{background:rgba(255,255,255,.02);}
+.rm-md blockquote{border-left:3px solid var(--primary);padding:8px 14px;margin:0 0 12px;background:rgba(79,142,255,.06);border-radius:0 6px 6px 0;}
+/* Syntax */
+.hl-kw{color:#c084fc;}.hl-str{color:#86efac;}.hl-num{color:#fbbf24;}.hl-cmt{color:#6b7280;font-style:italic;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar__brand" onclick="goWelcome()">
+    <div class="topbar__logo">M</div>
+    Matios<span>UI</span>
+  </div>
+  <span class="topbar__version">v1.0.0</span>
+  <div class="topbar__spacer"></div>
+  <!-- Botón "Ver docs" — solo visible cuando hay un ítem activo -->
+  <button class="docs-btn" id="docsBtn" onclick="openDocs()">
+    <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+      <rect x="2" y="1" width="10" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/>
+      <path d="M4 5h6M4 8h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    Ver docs
+  </button>
+  <!-- Theme picker -->
+  <div class="tp">
+    <button class="tp-btn active" data-theme="dark"   onclick="setTheme('dark')">Dark</button>
+    <button class="tp-btn"        data-theme="light"  onclick="setTheme('light')">Light</button>
+    <button class="tp-btn"        data-theme="violet" onclick="setTheme('violet')">Violet</button>
+    <button class="tp-btn"        data-theme="olive"  onclick="setTheme('olive')">Olive</button>
+    <button class="tp-btn"        data-theme="blue"   onclick="setTheme('blue')">Blue</button>
+    <button class="tp-btn"        data-theme="high-contrast" onclick="setTheme('high-contrast')">HC</button>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="body">
+  <nav class="sidebar">
+    <div class="sidebar__scroll" id="sidebarScroll"></div>
+    <div class="sidebar__footer">Matios UI · v1.0.0</div>
+  </nav>
+  <div class="content" id="content">
+    <div class="welcome" id="welcomeScreen"></div>
+    <iframe id="mainFrame" src="" style="width:100%;height:100%;border:none;display:none;"></iframe>
+  </div>
+</div>
+
+<!-- README PANEL -->
+<div class="rm-overlay" id="rmOverlay">
+  <div class="rm-backdrop" onclick="closeDocs()"></div>
+  <div class="rm-panel">
+    <div class="rm-hdr">
+      <div class="rm-hdr-info">
+        <span class="rm-hdr-title" id="rmTitle">Documentación</span>
+        <span class="rm-hdr-tag">README</span>
+      </div>
+      <button class="rm-cp-btn" id="rmCpBtn">Copiar MD</button>
+      <button class="rm-close" onclick="closeDocs()">✕</button>
+    </div>
+    <div class="rm-body" id="rmBody"></div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   DATOS
+   ══════════════════════════════════════════════ */
+const GROUPS = [
+  { label: null, items: [
+    { id:'showcase', label:'⚡ Showcase', icon:'🎯', src:'layouts/showcase.html' },
+  ]},
+  { label: 'Componentes', items: [
+    { id:'forms',      label:'Formularios', icon:'✏️',  src:'forms/demo.html',      md:'forms' },
+    { id:'navigation', label:'Navegación',  icon:'🧭',  src:'navigation/demo.html', md:'navigation' },
+    { id:'overlays',   label:'Overlays',    icon:'🪟',  src:'overlays/demo.html',   md:'overlays' },
+    { id:'display',    label:'Display',     icon:'🖼️',  src:'display/demo.html',    md:'display' },
+  ]},
+  { label: 'Data', items: [
+    { id:'tables',   label:'Tablas & Paginación', icon:'📋', src:'data/matios-ui-table/demo.html',          md:'tables' },
+    { id:'datatable',label:'DataTable',           icon:'🗃️', src:'data/matios-ui-datatable/demo.html',      md:'datatable' },
+    { id:'infinite', label:'Infinite Scroll',     icon:'♾️', src:'data/matios-ui-infinite/demo.html',       md:'infinite' },
+    { id:'charts',   label:'Charts',              icon:'📊', src:'data/matios-ui-chart/demo.html',           md:'charts' },
+  ]},
+  { label: 'Especiales', items: [
+    { id:'themes',   label:'Temas',       icon:'🎨', src:null, action:'themes' },
+    { id:'calendar', label:'Calendario', icon:'📅', src:'calendar/demo.html',                      md:'calendar' },
+    { id:'icons',    label:'Íconos',     icon:'✨', src:'icons/demo.html',                          md:'icons' },
+    { id:'layouts',  label:'Layouts',    icon:'🏗️', src:'layouts/demo.html',                        md:'layouts' },
+  ]},
+];
+
+/* MD por grupo — rutas relativas a la raíz */
+const MD_MAP = {
+  /* Componentes — cada uno tiene su propia carpeta con el .md */
+  'forms':        'forms/forms.md',
+  'navigation':   [
+    'navigation/matios-ui-tabs/matios-ui-tabs.md',
+    'navigation/matios-ui-accordion/matios-ui-accordion.md',
+    'navigation/matios-ui-breadcrumb/matios-ui-breadcrumb.md',
+    'navigation/matios-ui-stepper/matios-ui-stepper.md',
+    'navigation/matios-ui-drawer/matios-ui-drawer.md',
+    'navigation/matios-ui-dropdown/matios-ui-dropdown.md',
+  ],
+  'overlays':     [
+    'overlays/matios-ui-alert/matios-ui-alert.md',
+    'overlays/matios-ui-tooltip/matios-ui-tooltip.md',
+    'overlays/matios-ui-modal/matios-ui-modal.md',
+    'overlays/matios-ui-badge/matios-ui-badge.md',
+    'overlays/matios-ui-progress/matios-ui-progress.md',
+  ],
+  'display':      [
+    'display/matios-ui-avatar/matios-ui-avatar.md',
+    'display/matios-ui-kpicard/matios-ui-kpicard.md',
+    'display/matios-ui-emptystate/matios-ui-emptystate.md',
+    'display/matios-ui-timeline/matios-ui-timeline.md',
+    'display/matios-ui-kanban/matios-ui-kanban.md',
+  ],
+  /* Data */
+  'tables':    ['data/matios-ui-table/matios-ui-table.md', 'data/matios-ui-paging/matios-ui-paging.md'],
+  'datatable': 'data/matios-ui-datatable/matios-ui-datatable.md',
+  'infinite':  'data/matios-ui-infinite/matios-ui-infinite.md',
+  'charts':    'data/matios-ui-chart/matios-ui-chart.md',
+  'calendar':     'calendar/matios-ui-calendar.md',
+  'icons':        'icons/matios-ui-icons.md',
+  'layouts':      'layouts/matios-ui-layout.md',
+};
+
+let currentTheme = 'dark';
+// Alias para que los demos puedan leer window.currentThemeVal
+Object.defineProperty(window, 'currentThemeVal', {
+  get() { return currentTheme; },
+  set(v) { currentTheme = v; }
+});
+let currentItem  = null;
+let mdCache      = {};
+let currentMdRaw = '';
+
+/* ══════════════════════════════════════════════
+   SIDEBAR
+   ══════════════════════════════════════════════ */
+function buildSidebar() {
+  const scroll = document.getElementById('sidebarScroll');
+  GROUPS.forEach(group => {
+    if (group.label) {
+      const lbl = document.createElement('span');
+      lbl.className = 'nav-group__label';
+      lbl.textContent = group.label;
+      scroll.appendChild(lbl);
+    }
+    group.items.forEach(item => {
+      const btn = document.createElement('button');
+      btn.className = 'nav-item';
+      btn.id = 'nav-' + item.id;
+      btn.innerHTML =
+        '<span class="nav-item__icon">' + item.icon + '</span>' +
+        '<span>' + item.label + '</span>' +
+        (item.id === 'showcase' ? '<span class="nav-item__badge">NEW</span>' : '');
+      btn.addEventListener('click', () => loadItem(item));
+      scroll.appendChild(btn);
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════
+   NAVEGACIÓN — sin <a>, sin target, control total
+   ══════════════════════════════════════════════ */
+function loadItem(item) {
+  /* Acción especial */
+  if (item.action === 'themes') {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('nav-' + item.id).classList.add('active');
+    currentItem = item;
+    document.getElementById('mainFrame').style.display = 'none';
+    document.getElementById('mainFrame').src = '';
+    document.getElementById('docsBtn').classList.remove('visible');
+    showThemesScreen();
+    return;
+  }
+  /* Marcar activo */
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-' + item.id).classList.add('active');
+  currentItem = item;
+
+  /* Mostrar/ocultar botón docs */
+  const docsBtn = document.getElementById('docsBtn');
+  const hasMd = item.md && MD_MAP[item.md];
+  docsBtn.classList.toggle('visible', !!hasMd);
+
+  /* Ocultar welcome, mostrar iframe */
+  document.getElementById('welcomeScreen').style.display = 'none';
+  const frame = document.getElementById('mainFrame');
+  frame.style.display = 'block';
+
+  /* Cargar la URL — pasando el tema en el hash */
+  const url = item.src + '#mts-theme=' + currentTheme;
+  frame.src = url;
+  /* Tras cargar, inyectar los CSS de themes si no están */
+  frame.onload = () => {
+    try {
+      const fdoc = frame.contentDocument || frame.contentWindow.document;
+      if (!fdoc) return;
+      const THEMES = ['dark','light','violet','olive','blue','high-contrast'];
+      THEMES.forEach(t => {
+        const id = 'mts-theme-' + t;
+        if (!fdoc.getElementById(id)) {
+          const link = fdoc.createElement('link');
+          link.id = id;
+          link.rel = 'stylesheet';
+          link.href = '../themes/matios-ui-theme-' + t + '.css';
+          fdoc.head.appendChild(link);
+        }
+      });
+      fdoc.documentElement.setAttribute('data-mts-theme', currentTheme);
+    } catch(e) {}
+  };
+}
+
+function goWelcome() {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  currentItem = null;
+  document.getElementById('mainFrame').style.display = 'none';
+  document.getElementById('mainFrame').src = '';
+  document.getElementById('docsBtn').classList.remove('visible');
+  document.getElementById('welcomeScreen').style.display = 'flex';
+}
+
+function loadById(id) {
+  let found = null;
+  GROUPS.forEach(g => g.items.forEach(i => { if (i.id === id) found = i; }));
+  if (found) loadItem(found);
+}
+
+/* ══════════════════════════════════════════════
+   TEMA
+   ══════════════════════════════════════════════ */
+function setTheme(t) {
+  localStorage.setItem('mts-theme', t);
+  currentTheme = t;
+  document.documentElement.setAttribute('data-mts-theme', t);
+  document.querySelectorAll('.tp-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.theme === t)
+  );
+  /* Aplicar al iframe activo */
+  if (currentItem && currentItem.src) {
+    const frame = document.getElementById('mainFrame');
+    try {
+      const fdoc = frame.contentDocument || frame.contentWindow.document;
+      if (fdoc && fdoc.documentElement) {
+        fdoc.documentElement.setAttribute('data-mts-theme', t);
+      }
+    } catch(e) {}
+  }
+}
+
+/* ══════════════════════════════════════════════
+   README DOCS PANEL
+   ══════════════════════════════════════════════ */
+async function openDocs() {
+  if (!currentItem?.md) return;
+  const mdKey = currentItem.md;
+  const entry = MD_MAP[mdKey];
+  if (!entry) return;
+
+  document.getElementById('rmTitle').textContent = currentItem.label;
+  document.getElementById('rmBody').innerHTML =
+    '<div class="rm-loading"><div class="rm-spin"></div> Cargando documentación...</div>';
+  document.getElementById('rmOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  /* Usar cache si existe */
+  if (mdCache[mdKey]) { renderMd(mdCache[mdKey]); return; }
+
+  try {
+    let combined = '';
+    const urls = Array.isArray(entry) ? entry : [entry];
+
+    for (const url of urls) {
+      try {
+        const r = await fetch(url);
+        if (!r.ok) continue;
+        const text = await r.text();
+        combined += (combined ? '\n\n---\n\n' : '') + text;
+      } catch(e) { /* saltar este archivo si falla */ }
+    }
+
+    if (!combined) throw new Error('Sin contenido');
+    mdCache[mdKey] = combined;
+    renderMd(combined);
+  } catch(e) {
+    document.getElementById('rmBody').innerHTML =
+      '<div class="rm-loading" style="flex-direction:column;gap:10px">' +
+      '<span style="font-size:28px">📄</span>' +
+      '<span>README no encontrado</span></div>';
+  }
+}
+
+function closeDocs() {
+  document.getElementById('rmOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+
+document.getElementById('rmCpBtn').addEventListener('click', () => {
+  navigator.clipboard?.writeText(currentMdRaw || '');
+  const b = document.getElementById('rmCpBtn');
+  b.textContent = '✅ Copiado';
+  setTimeout(() => b.textContent = 'Copiar MD', 2000);
+});
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDocs(); });
+
+/* ══════════════════════════════════════════════
+   MARKDOWN → HTML
+   ══════════════════════════════════════════════ */
+function renderMd(md) {
+  currentMdRaw = md;
+
+  /* Pre-procesar acordeones: +++ Título\n...contenido...\n+++ */
+  md = md.replace(/^\+\+\+ (.+)\n([\s\S]*?)^\+\+\+$/gm, (_, title, body) => {
+    return '\x00ACC_OPEN\x00' + title.trim() + '\x00ACC_BODY\x00' + body + '\x00ACC_CLOSE\x00';
+  });
+
+  const blocks = [];
+  let h = md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
+      blocks.push({ lang: lang||'js', code: code.trim() });
+      return '\x00B' + (blocks.length-1) + '\x00';
+    })
+    .replace(/^---+$/gm,       '<hr>')
+    .replace(/^### (.+)$/gm,   '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,    '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,     '<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g,     '<code>$1</code>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+    .replace(/^&gt; (.+)$/gm,  '<blockquote>$1</blockquote>')
+    .replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm, (_, hdr, rows) => {
+      const ths = hdr.split('|').filter(c=>c.trim()).map(c=>'<th>'+c.trim()+'</th>').join('');
+      const trs = rows.trim().split('\n').map(r =>
+        '<tr>' + r.split('|').filter(c=>c.trim()).map(c=>'<td>'+c.trim()+'</td>').join('') + '</tr>'
+      ).join('');
+      return '<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';
+    })
+    .replace(/^[\*\-] (.+)$/gm, '<li>$1</li>')
+    .replace(/((?:<li>[^<]*<\/li>\n?)+)/g, '<ul>$1</ul>')
+    .replace(/^(?!<)(.+)$/gm, '<p>$1</p>');
+
+  h = h.replace(/\x00B(\d+)\x00/g, (_, i) => {
+    const { lang, code } = blocks[+i];
+    return '<pre><div class="rm-pre-top">' +
+      '<span class="rm-pre-lang">' + lang + '</span>' +
+      '<button class="rm-pre-cp" onclick="cpBlock(this)">Copiar</button>' +
+      '</div><code class="lang-' + lang + '">' + code + '</code></pre>';
+  });
+
+  /* Convertir marcadores de accordion a HTML */
+  h = h.replace(
+    /\x00ACC_OPEN\x00([^\x00]+)\x00ACC_BODY\x00([\s\S]*?)\x00ACC_CLOSE\x00/g,
+    (_, title, body) =>
+      '<details><summary>' + title + '</summary><div class="rm-accordion-body">' + body.trim() + '</div></details>'
+  );
+
+  document.getElementById('rmBody').innerHTML = '<div class="rm-md">' + h + '</div>';
+  hlCode();
+}
+
+function hlCode() {
+  document.querySelectorAll('#rmBody pre code').forEach(el => {
+    let c = el.innerHTML;
+    c = c.replace(/(&#x27;[^<]*?&#x27;|&quot;[^<]*?&quot;)/g, '<span class="hl-str">$1</span>');
+    c = c.replace(/\/\/[^\n]*/g, '<span class="hl-cmt">$&</span>');
+    c = c.replace(/\b(const|let|var|new|return|if|else|for|of|in|function|async|await|class|this|true|false|null|undefined|import|export|from|default)\b/g, '<span class="hl-kw">$1</span>');
+    c = c.replace(/\b(\d+\.?\d*)\b/g, '<span class="hl-num">$1</span>');
+    el.innerHTML = c;
+  });
+}
+
+function cpBlock(btn) {
+  const code = btn.closest('pre').querySelector('code');
+  navigator.clipboard?.writeText(code.textContent || '');
+  const o = btn.textContent; btn.textContent = '✅';
+  setTimeout(() => btn.textContent = o, 1500);
+}
+
+/* ══════════════════════════════════════════════
+   WELCOME
+   ══════════════════════════════════════════════ */
+function showWelcome() {
+  const el = document.getElementById('welcomeScreen');
+  el.innerHTML = `
+    <div class="welcome__logo">M</div>
+    <div class="welcome__title">Matios <span>UI</span></div>
+    <p class="welcome__sub">Framework CSS/JS — zero deps, temas via CSS Variables, 30+ componentes.</p>
+    <div class="welcome__stats">
+      <div class="welcome__stat"><div class="welcome__stat-val">30+</div><div class="welcome__stat-lbl">Componentes</div></div>
+      <div class="welcome__stat"><div class="welcome__stat-val">262</div><div class="welcome__stat-lbl">Íconos</div></div>
+      <div class="welcome__stat"><div class="welcome__stat-val">5</div><div class="welcome__stat-lbl">Temas</div></div>
+    </div>
+    <div class="welcome__chips">
+      <div class="welcome__chip" onclick="loadById('forms')">✏️ Formularios</div>
+      <div class="welcome__chip" onclick="loadById('navigation')">🧭 Navegación</div>
+      <div class="welcome__chip" onclick="loadById('display')">🖼️ Display</div>
+      <div class="welcome__chip" onclick="loadById('data-charts')">📊 Charts</div>
+      <div class="welcome__chip" onclick="loadById('calendar')">📅 Calendario</div>
+      <div class="welcome__chip" onclick="loadById('icons')">✨ Íconos</div>
+    </div>
+    <button class="welcome__cta" onclick="loadById('showcase')">⚡ Abrir Showcase</button>`;
+}
+
+/* Leer tema guardado en localStorage */
+const _savedTheme = localStorage.getItem('mts-theme');
+if (_savedTheme) {
+  currentTheme = _savedTheme;
+  document.documentElement.setAttribute('data-mts-theme', _savedTheme);
+  document.querySelectorAll('.tp-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.theme === _savedTheme)
+  );
+}
+
+buildSidebar();
+showWelcome();
+
+function showThemesScreen() {
+  const el = document.getElementById('welcomeScreen');
+  el.style.display = 'block';
+  el.className = '';
+  el.style.cssText = 'overflow-y:auto;flex:1;padding:32px;background:var(--bg);';
+
+  const THEMES_INFO = [
+    { id:'dark',          name:'Dark',          bg:'#0e0f14', surface:'#161820', primary:'#4f8eff',  desc:'Oscuro neutro. El default.' },
+    { id:'light',         name:'Light',         bg:'#f4f6fb', surface:'#ffffff', primary:'#2563eb',  desc:'Claro, para ambientes con mucha luz.' },
+    { id:'violet',        name:'Violet',        bg:'#0d0a18', surface:'#150f28', primary:'#6a5acd',  desc:'Oscuro con tinte púrpura profundo.' },
+    { id:'blue',          name:'Blue',          bg:'#060912', surface:'#0a0f22', primary:'#2a52be',  desc:'Oscuro con tinte azul marino.' },
+    { id:'olive',         name:'Olive',         bg:'#080c04', surface:'#0e1408', primary:'#6b8e23',  desc:'Oscuro con tinte verde oliva.' },
+    { id:'high-contrast', name:'High Contrast', bg:'#000000', surface:'#0a0a0a', primary:'#ffff00',  desc:'Máximo contraste. Accesibilidad.' },
+  ];
+
+  const CSS_VARS = [
+    ['--mts-color-primary',   'Color principal (botones, links, activos)'],
+    ['--mts-color-accent',    'Color de acento secundario'],
+    ['--mts-bg-body',         'Fondo de la página'],
+    ['--mts-bg-surface',      'Sidebar, topbar, cards'],
+    ['--mts-bg-surface-2',    'Superficie elevada (hover, inputs)'],
+    ['--mts-text-primary',    'Texto principal'],
+    ['--mts-text-secondary',  'Texto secundario'],
+    ['--mts-text-muted',      'Texto apagado'],
+    ['--mts-border-color',    'Color de bordes'],
+    ['--mts-color-success',   'Color de éxito'],
+    ['--mts-color-warning',   'Color de advertencia'],
+    ['--mts-color-danger',    'Color de error'],
+  ];
+
+  const themeCards = THEMES_INFO.map(t => {
+    const isActive = currentTheme === t.id;
+    return '<div onclick="setTheme(\'' + t.id + '\');showThemesScreen();" style="background:' + t.bg + ';border:2px solid ' + (isActive ? t.primary : 'rgba(255,255,255,.08)') + ';border-radius:12px;overflow:hidden;cursor:pointer;">' +
+      '<div style="padding:12px;display:flex;gap:8px;">' +
+        '<div style="width:48px;background:' + t.surface + ';border-radius:7px;padding:8px 6px;display:flex;flex-direction:column;gap:5px;flex-shrink:0;">' +
+          '<div style="width:26px;height:5px;background:' + t.primary + ';border-radius:3px;"></div>' +
+          '<div style="width:34px;height:3px;background:rgba(255,255,255,.15);border-radius:2px;"></div>' +
+          '<div style="width:30px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;"></div>' +
+          '<div style="width:36px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;"></div>' +
+        '</div>' +
+        '<div style="flex:1;display:flex;flex-direction:column;gap:5px;">' +
+          '<div style="background:' + t.surface + ';border-radius:5px;padding:6px 8px;">' +
+            '<div style="width:70%;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin-bottom:4px;"></div>' +
+            '<div style="width:50%;height:3px;background:rgba(255,255,255,.1);border-radius:2px;"></div>' +
+          '</div>' +
+          '<div style="background:' + t.primary + ';border-radius:4px;padding:4px 8px;width:fit-content;font-size:9px;color:' + (t.id === 'high-contrast' ? '#000' : '#fff') + ';font-weight:700;">Button</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="padding:0 12px 12px;">' +
+        '<div style="display:flex;align-items:center;gap:7px;margin-bottom:2px;">' +
+          '<span style="font-size:13px;font-weight:700;color:' + t.primary + ';">' + t.name + '</span>' +
+          (isActive ? '<span style="font-size:9px;padding:1px 6px;border-radius:99px;background:' + t.primary + ';color:' + (t.id === 'high-contrast' ? '#000' : '#fff') + ';font-weight:700;">ACTIVO</span>' : '') +
+        '</div>' +
+        '<span style="font-size:11px;color:rgba(255,255,255,.35);">' + t.desc + '</span>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  const varRows = CSS_VARS.map((v, i) =>
+    '<tr style="' + (i % 2 === 0 ? '' : 'background:rgba(255,255,255,.02)') + '">' +
+      '<td style="padding:7px 14px;border-bottom:1px solid var(--border);font-family:monospace;"><code style="color:var(--primary);font-size:11px;">' + v[0] + '</code></td>' +
+      '<td style="padding:7px 14px;border-bottom:1px solid var(--border);color:var(--muted);font-size:12px;">' + v[1] + '</td>' +
+    '</tr>'
+  ).join('');
+
+  el.innerHTML =
+    '<div style="max-width:960px;margin:0 auto;">' +
+      '<div style="margin-bottom:24px;">' +
+        '<h1 style="font-family:Syne,sans-serif;font-size:21px;font-weight:800;color:var(--text);margin-bottom:5px;">🎨 Temas</h1>' +
+        '<p style="font-size:13px;color:var(--muted);line-height:1.6;">Todos los temas usan <code style="background:var(--surface2);border:1px solid var(--border);padding:1px 6px;border-radius:4px;font-size:11px;color:var(--primary)">CSS Variables</code>. Pincha un tema para activarlo.</p>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:32px;">' + themeCards + '</div>' +
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;">' +
+        '<div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;font-weight:700;color:var(--text);">Crear un tema custom</div>' +
+        '<div style="padding:16px;">' +
+          '<p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Crea un archivo CSS y redefine las variables que necesites:</p>' +
+          '<pre style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;overflow-x:auto;font-family:monospace;font-size:12px;line-height:1.65;color:var(--text);">' +
+'[data-mts-theme="mi-empresa"] {\n  --mts-color-primary: #e63946;\n  --mts-bg-body:        #1a0a0a;\n  --mts-bg-surface:     #220d0d;\n  --mts-text-primary:   #f8eaea;\n}</pre>' +
+        '</div>' +
+      '</div>' +
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;">' +
+        '<div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;font-weight:700;color:var(--text);">Variables CSS</div>' +
+        '<table style="width:100%;border-collapse:collapse;">' +
+          '<thead><tr style="background:rgba(0,0,0,.2);">' +
+            '<th style="padding:7px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);border-bottom:1px solid var(--border);">Variable</th>' +
+            '<th style="padding:7px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);border-bottom:1px solid var(--border);">Descripción</th>' +
+          '</tr></thead>' +
+          '<tbody>' + varRows + '</tbody>' +
+        '</table>' +
+      '</div>' +
+    '</div>';
+}
+
+</script>
+</body>
+</html>

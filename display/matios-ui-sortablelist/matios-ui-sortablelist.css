@@ -1,0 +1,244 @@
+/* ============================================================
+   MATIOS UI — matios-ui-sortablelist.css
+   Version: 1.0.0
+   ============================================================ */
+
+/* ── Contenedor ── */
+.mts-sortable {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ── Variante default — cada item con borde card ── */
+.mts-sortable--default .mts-sortable__item {
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  margin-bottom: 4px;
+  background: var(--mts-bg-surface);
+}
+.mts-sortable--default .mts-sortable__item:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Variante flush — solo separadores ── */
+.mts-sortable--flush .mts-sortable__item {
+  border-bottom: 1px solid var(--mts-border-color);
+  background: none;
+  border-radius: 0;
+}
+.mts-sortable--flush .mts-sortable__item:last-child {
+  border-bottom: none;
+}
+
+/* ── Variante compact ── */
+.mts-sortable--compact .mts-sortable__item {
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-sm);
+  margin-bottom: 2px;
+  background: var(--mts-bg-surface);
+  padding: 8px 12px !important;
+}
+.mts-sortable--compact .mts-sortable__item:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Item base ── */
+.mts-sortable__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  transition: background var(--mts-transition-fast), box-shadow var(--mts-transition-fast), transform 0.15s;
+  position: relative;
+  cursor: default;
+  user-select: none;
+}
+.mts-sortable__item:not(.mts-sortable__item--disabled):not(.mts-sortable--locked .mts-sortable__item) {
+  cursor: grab;
+}
+.mts-sortable__item:not(.mts-sortable__item--disabled):hover {
+  background: var(--mts-bg-surface-2);
+}
+
+/* ── Item disabled ── */
+.mts-sortable__item--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Lista locked ── */
+.mts-sortable--locked .mts-sortable__item {
+  cursor: default;
+}
+
+/* ── Item arrastrándose ── */
+.mts-sortable__item--dragging {
+  opacity: 0.4;
+  box-shadow: none;
+}
+
+/* ── Indicador de posición al hacer hover durante drag ── */
+.mts-sortable__item--over-top::before,
+.mts-sortable__item--over-bottom::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--mts-color-primary);
+  border-radius: 2px;
+  z-index: 1;
+}
+.mts-sortable__item--over-top::before  { top: -2px; }
+.mts-sortable__item--over-bottom::after { bottom: -2px; }
+
+/* ── Handle de arrastre ── */
+.mts-sortable__handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mts-text-muted);
+  opacity: 0.4;
+  cursor: grab;
+  flex-shrink: 0;
+  padding: 2px;
+  border-radius: var(--mts-radius-sm);
+  transition: opacity var(--mts-transition-fast), color var(--mts-transition-fast);
+}
+.mts-sortable__item:hover .mts-sortable__handle {
+  opacity: 1;
+  color: var(--mts-color-primary);
+}
+.mts-sortable__handle--disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.mts-sortable__handle svg {
+  display: block;
+}
+
+/* ── Número de orden ── */
+.mts-sortable__num {
+  min-width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mts-bg-surface-2);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mts-text-muted);
+  flex-shrink: 0;
+  font-family: var(--mts-font-mono);
+  transition: background var(--mts-transition-fast), color var(--mts-transition-fast);
+}
+
+/* ── Ícono / Avatar ── */
+.mts-sortable__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--mts-bg-surface-2);
+  border: 1px solid var(--mts-border-color);
+  flex-shrink: 0;
+  overflow: hidden;
+  font-size: 16px;
+}
+.mts-sortable__icon svg {
+  width: 18px;
+  height: 18px;
+  color: var(--mts-text-muted);
+}
+
+.mts-sortable__avatar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mts-color-primary);
+  color: var(--mts-color-primary-text);
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 50%;
+}
+
+/* ── Contenido ── */
+.mts-sortable__content {
+  flex: 1;
+  min-width: 0;
+}
+.mts-sortable__title {
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mts-sortable__desc {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Meta ── */
+.mts-sortable__meta {
+  font-size: 11px;
+  color: var(--mts-text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Botones ↑ ↓ ── */
+.mts-sortable__move-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.mts-sortable__move-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: none;
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-sm);
+  color: var(--mts-text-muted);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+  transition: background var(--mts-transition-fast), color var(--mts-transition-fast), border-color var(--mts-transition-fast);
+  font-family: inherit;
+}
+.mts-sortable__move-btn:hover:not(:disabled) {
+  background: var(--mts-color-primary-light);
+  color: var(--mts-color-primary);
+  border-color: var(--mts-color-primary);
+}
+.mts-sortable__move-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+/* ── Animación de reordenamiento ── */
+@keyframes mts-sortable-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mts-sortable__item {
+  animation: mts-sortable-in 0.18s ease;
+}

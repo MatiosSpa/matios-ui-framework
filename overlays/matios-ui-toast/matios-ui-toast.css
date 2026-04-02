@@ -1,0 +1,157 @@
+/* ============================================================
+   MATIOS UI — matios-ui-toast.css
+   Version: 1.0.0
+   ============================================================ */
+
+/* ── Contenedores por posición ── */
+.mts-toast-container {
+  position: fixed;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  max-width: min(420px, calc(100vw - 32px));
+}
+.mts-toast-container--top-right     { top: 16px; right: 16px; align-items: flex-end; }
+.mts-toast-container--top-left      { top: 16px; left:  16px; align-items: flex-start; }
+.mts-toast-container--top-center    { top: 16px; left: 50%; transform: translateX(-50%); align-items: center; }
+.mts-toast-container--bottom-right  { bottom: 16px; right: 16px; align-items: flex-end; }
+.mts-toast-container--bottom-left   { bottom: 16px; left:  16px; align-items: flex-start; }
+.mts-toast-container--bottom-center { bottom: 16px; left: 50%; transform: translateX(-50%); align-items: center; }
+
+/* ── Toast base ── */
+.mts-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--mts-bg-surface);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-lg);
+  box-shadow: var(--mts-shadow-lg);
+  pointer-events: all;
+  position: relative;
+  overflow: hidden;
+  min-width: 280px;
+  max-width: 420px;
+  transform: translateY(12px);
+  opacity: 0;
+  transition: transform .22s cubic-bezier(.34,1.2,.64,1), opacity .2s ease;
+}
+.mts-toast--visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+.mts-toast--hiding {
+  transform: translateY(8px) scale(.97);
+  opacity: 0;
+  transition: transform .18s ease, opacity .18s ease;
+}
+
+/* ── Variantes — borde izquierdo colored ── */
+.mts-toast--success { border-left: 3px solid var(--mts-color-success, #22c55e); }
+.mts-toast--warning { border-left: 3px solid var(--mts-color-warning, #f59e0b); }
+.mts-toast--danger  { border-left: 3px solid var(--mts-color-danger,  #f87171); }
+.mts-toast--info    { border-left: 3px solid var(--mts-color-primary); }
+.mts-toast--loading { border-left: 3px solid var(--mts-color-primary); }
+
+/* ── Ícono ── */
+.mts-toast__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+}
+.mts-toast__icon svg { width: 20px; height: 20px; display: block; }
+
+.mts-toast--success .mts-toast__icon { color: var(--mts-color-success, #22c55e); }
+.mts-toast--warning .mts-toast__icon { color: var(--mts-color-warning, #f59e0b); }
+.mts-toast--danger  .mts-toast__icon { color: var(--mts-color-danger,  #f87171); }
+.mts-toast--info    .mts-toast__icon { color: var(--mts-color-primary); }
+.mts-toast--default .mts-toast__icon { color: var(--mts-text-muted); }
+.mts-toast--loading .mts-toast__icon { color: var(--mts-color-primary); }
+
+/* Spinner para variante loading */
+.mts-toast__spinner {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--mts-color-primary-light, rgba(99,102,241,.25));
+  border-top-color: var(--mts-color-primary);
+  border-radius: 50%;
+  animation: mts-toast-spin .7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes mts-toast-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Contenido ── */
+.mts-toast__content { flex: 1; min-width: 0; }
+.mts-toast__title {
+  font-size: 13px;
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+  margin-bottom: 2px;
+}
+.mts-toast__message {
+  font-size: 13px;
+  color: var(--mts-text-secondary);
+  line-height: 1.45;
+}
+.mts-toast__action {
+  margin-top: 8px;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--mts-font-family);
+  color: var(--mts-color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.mts-toast__action:hover { opacity: .8; }
+
+/* ── Cerrar ── */
+.mts-toast__close {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--mts-text-muted);
+  font-size: 18px;
+  line-height: 1;
+  border-radius: var(--mts-radius-sm);
+  padding: 0;
+  transition: color .12s, background .12s;
+  margin-top: 0;
+}
+.mts-toast__close:hover { color: var(--mts-text-primary); background: var(--mts-bg-surface-2); }
+
+/* ── Barra de progreso ── */
+@keyframes mts-toast-progress {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+.mts-toast__progress {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 2px;
+  background: currentColor;
+  opacity: .25;
+  animation: mts-toast-progress linear forwards;
+}
+.mts-toast--success .mts-toast__progress { background: var(--mts-color-success, #22c55e); }
+.mts-toast--warning .mts-toast__progress { background: var(--mts-color-warning, #f59e0b); }
+.mts-toast--danger  .mts-toast__progress { background: var(--mts-color-danger,  #f87171); }
+.mts-toast--info    .mts-toast__progress { background: var(--mts-color-primary); }
+.mts-toast--default .mts-toast__progress { background: var(--mts-text-muted); }

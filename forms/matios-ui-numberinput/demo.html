@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.NumberInput — Demo</title>
+  <script>(function(){var m=(location.hash||"").match(/mts-theme=([a-z-]+)/);if(m)document.documentElement.setAttribute("data-mts-theme",m[1]);try{var p=window.parent;if(p&&p!==window){var pt=p.currentThemeVal||p.document.documentElement.getAttribute("data-mts-theme");if(pt)document.documentElement.setAttribute("data-mts-theme",pt);}}catch(e){}}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="./matios-ui-numberinput.css">
+  <script src="./matios-ui-numberinput.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
+    .demo-section{display:flex;flex-direction:column;gap:14px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
+    .demo-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;}
+    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
+    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
+    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
+    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;}
+    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
+    .demo-docs-panel.open{display:block;}
+    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
+    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
+    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
+    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
+    .demo-docs-panel pre code{background:none;border:none;padding:0;color:var(--mts-text-primary);}
+    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
+    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel ul,p{margin:0 0 10px;padding-left:18px;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+</div>
+
+<div class="demo-page">
+
+  <div class="demo-header">
+    <h1><span>MTS</span>.NumberInput</h1>
+    <p>Input numérico con botones +/−, min/max, step y formatos de moneda y porcentaje.</p>
+    <div style="display:flex;gap:8px;">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-numberinput.md')">📄 Documentación</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <!-- 1. Básico -->
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Básico con min/max/step</div>
+    <div class="demo-grid">
+      <div id="ni-basic"></div>
+      <div id="ni-step"></div>
+      <div id="ni-decimals"></div>
+    </div>
+    <div class="result-box" id="res-basic">— interactúa con los inputs —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c1"><code>// Básico con límites
+new MTS.NumberInput('#el', {
+  label: 'Cantidad',
+  value: 1, min: 0, max: 10,
+  onChange: (val, formatted) => console.log(val),
+})
+
+// Con step personalizado
+new MTS.NumberInput('#el', {
+  label: 'Cada 5 unidades',
+  value: 0, min: 0, max: 100, step: 5,
+})
+
+// Con decimales
+new MTS.NumberInput('#el', {
+  label: 'Con 2 decimales',
+  value: 1.5, step: 0.1, decimals: 2,
+})</code></pre>
+  </div>
+
+  <!-- 2. Formatos -->
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Formatos: moneda y porcentaje</div>
+    <div class="demo-grid">
+      <div id="ni-clp"></div>
+      <div id="ni-usd"></div>
+      <div id="ni-pct"></div>
+    </div>
+    <div class="result-box" id="res-format">— cambia los valores —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c2"><code>// Moneda CLP
+new MTS.NumberInput('#el', {
+  label: 'Precio (CLP)', value: 15000,
+  format: 'currency', currency: 'CLP', locale: 'es-CL',
+  step: 500, min: 0,
+})
+
+// Moneda USD
+new MTS.NumberInput('#el', {
+  label: 'Precio (USD)', value: 99,
+  format: 'currency', currency: 'USD', locale: 'en-US',
+  step: 1, decimals: 2, min: 0,
+})
+
+// Porcentaje
+new MTS.NumberInput('#el', {
+  label: 'Descuento', value: 10,
+  format: 'percent', min: 0, max: 100, step: 5,
+})</code></pre>
+  </div>
+
+  <!-- 3. Prefix/Suffix -->
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Prefix y Suffix</div>
+    <div class="demo-grid">
+      <div id="ni-prefix"></div>
+      <div id="ni-suffix"></div>
+      <div id="ni-both"></div>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c3"><code>new MTS.NumberInput('#el', { label:'Monto', prefix:'$', value:500, step:100 })
+new MTS.NumberInput('#el', { label:'Peso',  suffix:'kg', value:75, step:0.5, decimals:1 })
+new MTS.NumberInput('#el', { label:'Temperatura', prefix:'~', suffix:'°C', value:20, min:-20, max:50 })</code></pre>
+  </div>
+
+  <!-- 4. Tamaños -->
+  <div class="demo-section">
+    <div class="demo-section-title">4 — Tamaños</div>
+    <div class="demo-row">
+      <div id="ni-sm" style="width:200px;"></div>
+      <div id="ni-md" style="width:200px;"></div>
+      <div id="ni-lg" style="width:200px;"></div>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c4')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c4"><code>new MTS.NumberInput('#el', { label:'SM', size:'sm', value:1 })
+new MTS.NumberInput('#el', { label:'MD', size:'md', value:1 })  // default
+new MTS.NumberInput('#el', { label:'LG', size:'lg', value:1 })</code></pre>
+  </div>
+
+  <!-- 5. API -->
+  <div class="demo-section">
+    <div class="demo-section-title">5 — API — setValue · setError · disable · enable</div>
+    <div id="ni-api" style="max-width:280px;"></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="niApi.setValue(0)">setValue(0)</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="niApi.setValue(50)">setValue(50)</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="niApi.setValue(100)">setValue(100)</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="niApi.setError('Valor inválido')">setError()</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="niApi.clearError()">clearError()</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="niApi.disable()">disable()</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="niApi.enable()">enable()</button>
+    </div>
+    <div class="result-box" id="res-api">— usa los botones —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c5')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c5"><code>const ni = new MTS.NumberInput('#el', {
+  label: 'Puntos', value: 50, min: 0, max: 100,
+  onChange: (val, formatted) => console.log(val, formatted),
+})
+ni.getValue()          // → 50
+ni.setValue(75)        // sin disparar onChange
+ni.setValue(75, true)  // silent — no dispara onChange
+ni.setError('Fuera de rango')
+ni.clearError()
+ni.disable()
+ni.enable()</code></pre>
+  </div>
+
+
+  <div class="demo-section">
+    <div class="demo-section-title">HTML declarativo</div>
+    <div id="nh1"></div>
+    <div class="result-box" id="nh-res">— cambia el valor —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c-nh')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c-nh"><code>&lt;div id="miNum" data-label="Precio" data-min="0" data-max="999999" data-step="100" data-prefix="$" data-decimals="2"&gt;&lt;/div&gt;
+&lt;script&gt;new MTS.NumberInput('#miNum', { onChange: (v) =&gt; console.log(v) })&lt;/script&gt;</code></pre>
+  </div>
+</div>
+
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+if(window!==window.top){document.querySelector('.demo-theme').style.display='none';}
+function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
+function toggleDocs(id,p){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted)">Cargando...</em>';fetch(p).then(r=>r.text()).then(md=>{panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(()=>{panel.innerHTML='<em>No se pudo cargar.</em>';});}
+function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[\s\S]*?<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
+
+/* 1. Básico */
+new MTS.NumberInput('#ni-basic',{label:'Cantidad',value:1,min:0,max:10,onChange:function(v,f){document.getElementById('res-basic').textContent='onChange → valor: '+v+' | formateado: "'+f+'"';}});
+new MTS.NumberInput('#ni-step', {label:'Cada 5 unidades',value:0,min:0,max:100,step:5,onChange:function(v){document.getElementById('res-basic').textContent='onChange → valor: '+v;}});
+new MTS.NumberInput('#ni-decimals',{label:'Con 2 decimales',value:1.5,step:0.1,decimals:2,onChange:function(v,f){document.getElementById('res-basic').textContent='onChange → valor: '+v+' | formateado: "'+f+'"';}});
+
+/* 2. Formatos */
+new MTS.NumberInput('#ni-clp',{label:'Precio (CLP)',value:15000,format:'currency',currency:'CLP',locale:'es-CL',step:500,min:0,onChange:function(v,f){document.getElementById('res-format').textContent='CLP → '+f;}});
+new MTS.NumberInput('#ni-usd',{label:'Precio (USD)',value:99,format:'currency',currency:'USD',locale:'en-US',step:1,decimals:2,min:0,onChange:function(v,f){document.getElementById('res-format').textContent='USD → '+f;}});
+new MTS.NumberInput('#ni-pct',{label:'Descuento',value:10,format:'percent',min:0,max:100,step:5,onChange:function(v,f){document.getElementById('res-format').textContent='Porcentaje → '+f;}});
+
+/* 3. Prefix/Suffix */
+new MTS.NumberInput('#ni-prefix',{label:'Monto',prefix:'$',value:500,step:100,min:0});
+new MTS.NumberInput('#ni-suffix',{label:'Peso',suffix:'kg',value:75,step:0.5,decimals:1,min:0});
+new MTS.NumberInput('#ni-both', {label:'Temperatura',prefix:'~',suffix:'°C',value:20,min:-20,max:50});
+
+/* 4. Tamaños */
+new MTS.NumberInput('#ni-sm',{label:'Tamaño SM',size:'sm',value:1,min:0});
+new MTS.NumberInput('#ni-md',{label:'Tamaño MD',size:'md',value:1,min:0});
+new MTS.NumberInput('#ni-lg',{label:'Tamaño LG',size:'lg',value:1,min:0});
+
+/* 5. API */
+var niApi=new MTS.NumberInput('#ni-api',{label:'Puntos acumulados',value:50,min:0,max:100,hint:'Mínimo 0, máximo 100',onChange:function(v,f){document.getElementById('res-api').textContent='onChange → getValue(): '+v;}});
+
+new MTS.NumberInput(document.getElementById('nh1'),{label:'Precio',min:0,max:999999,step:100,prefix:'$',decimals:2,value:1000,onChange:function(v){document.getElementById('nh-res').textContent='→ onChange: $'+v;}});
+</script>
+</body>
+</html>

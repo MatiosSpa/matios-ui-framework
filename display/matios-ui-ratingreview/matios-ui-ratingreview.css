@@ -1,0 +1,22 @@
+/* MTS.RatingReview v1.0.0 */
+.mts-ratingreview { display:flex;gap:24px;align-items:center;flex-wrap:wrap; }
+/* Score */
+.mts-ratingreview__score { display:flex;flex-direction:column;align-items:center;gap:4px;min-width:80px; }
+.mts-ratingreview__avg   { font-size:48px;font-weight:900;line-height:1;color:var(--mts-text-primary);font-variant-numeric:tabular-nums; }
+.mts-ratingreview--sm .mts-ratingreview__avg { font-size:32px; }
+.mts-ratingreview--lg .mts-ratingreview__avg { font-size:64px; }
+.mts-ratingreview__stars { display:flex;gap:2px; }
+.mts-ratingreview__total { font-size:11px;color:var(--mts-text-muted);text-align:center;white-space:nowrap; }
+/* Breakdown */
+.mts-ratingreview__breakdown { flex:1;min-width:200px;display:flex;flex-direction:column;gap:5px; }
+.mts-ratingreview__row       { display:flex;align-items:center;gap:8px; }
+.mts-ratingreview__row-stars { font-size:11px;font-weight:600;color:var(--mts-text-muted);white-space:nowrap;min-width:28px; }
+.mts-ratingreview__bar       { flex:1;height:8px;background:var(--mts-bg-surface-2);border-radius:4px;overflow:hidden; }
+.mts-ratingreview__bar-fill  { height:100%;background:var(--mts-color-warning,#f59e0b);border-radius:4px;transition:width .4s ease; }
+.mts-ratingreview__row-pct   { font-size:11px;color:var(--mts-text-muted);min-width:30px;text-align:right; }
+/* Interactivo */
+.mts-ratingreview__interactive { width:100%;display:flex;align-items:center;gap:10px;padding-top:12px;border-top:1px solid var(--mts-border-color);margin-top:4px; }
+.mts-ratingreview__interactive-label { font-size:12px;font-weight:600;color:var(--mts-text-muted);white-space:nowrap; }
+.mts-ratingreview__interactive-stars { display:flex;gap:2px; }
+.mts-ratingreview__star-btn { background:none;border:none;cursor:pointer;color:var(--mts-border-color);padding:0;line-height:0;transition:color .1s,transform .1s; }
+.mts-ratingreview__star-btn:hover,.mts-ratingreview__star-btn--active { color:var(--mts-color-warning,#f59e0b);transform:scale(1.15); }

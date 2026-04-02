@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>DataTable — En construcción</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--mts-bg-body);font-family:var(--mts-font-family)}
+    .wip{text-align:center;padding:60px 40px;max-width:420px}
+    .wip__icon{font-size:56px;margin-bottom:20px;display:block;opacity:.7}
+    .wip__title{font-size:24px;font-weight:700;color:var(--mts-text-primary);margin-bottom:10px}
+    .wip__desc{font-size:14px;color:var(--mts-text-muted);line-height:1.6;margin-bottom:28px}
+    .wip__badge{display:inline-flex;align-items:center;gap:8px;background:var(--mts-color-warning-light);color:var(--mts-color-warning);border:1px solid var(--mts-color-warning);border-radius:var(--mts-radius-full);padding:6px 16px;font-size:12px;font-weight:600}
+    .wip__badge::before{content:'⚠';font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="wip">
+    <span class="wip__icon">🗃️</span>
+    <h1 class="wip__title">DataTable</h1>
+    <p class="wip__desc">Nueva versión del DataTable con paginación, ordenamiento, búsqueda y menú contextual integrados.</p>
+    <span class="wip__badge">En construcción</span>
+  </div>
+  <script>
+    window.addEventListener('message', e => {
+      if (e.data?.type==='setTheme') document.documentElement.setAttribute('data-mts-theme', e.data.theme);
+    });
+    try { const t=window.parent?.currentThemeVal; if(t) document.documentElement.setAttribute('data-mts-theme',t); } catch{}
+  </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Lightbox — Demo</title>
+      <script>
+    (function(){
+      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
+      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
+          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+        }
+      }catch(e){}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="./matios-ui-lightbox.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="./matios-ui-lightbox.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
+    .demo-section{display:flex;flex-direction:column;gap:14px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
+    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
+    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
+    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
+    .demo-docs-panel.open{display:block;}
+    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
+    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
+    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
+    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
+    .demo-docs-panel pre code{background:none;border:none;padding:0;color:var(--mts-text-primary);}
+    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
+    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel ul,p{margin:0 0 10px;padding-left:18px;}
+    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+</div>
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.Lightbox</h1>
+    <p>Visor de medios con navegación, zoom, miniaturas. Soporta imagen, video, YouTube y Vimeo.</p>
+    <div style="display:flex;gap:8px;"><button class="demo-docs-btn" onclick="toggleDocs('dp','./matios-ui-lightbox.md')">📄 Documentación</button></div>
+    <div class="demo-docs-panel" id="dp"></div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Uso programático</div>
+    <div class="demo-row">
+      <button class="demo-btn-sm" style="padding:7px 14px;font-size:12px;" onclick="lbBasic.open(0)">Abrir galería (fade)</button>
+      <button class="demo-btn-sm" style="padding:7px 14px;font-size:12px;" onclick="lbSlide.open(0)">Animación slide</button>
+      <button class="demo-btn-sm" style="padding:7px 14px;font-size:12px;" onclick="lbThumbs.open(0)">Con miniaturas</button>
+    </div>
+    <div class="result-box" id="res-lb">— abre el lightbox y navega con las flechas o ← → —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c1"><code>const lb = new MTS.Lightbox([
+  {  src:'foto1.jpg', caption:'Vista al mar'  },
+  {  src:'foto2.jpg', caption:'Atardecer'     },
+], {
+  loop:      true,
+  zoom:      true,
+  animation: 'fade',  // 'fade' | 'slide'
+  onOpen:    ({ item, index }) => console.log('abrió:', item.caption),
+  onChange:  ({ item, index }) => console.log('cambió a:', index),
+})
+lb.open(0)</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Auto-bind con selector CSS</div>
+    <div class="demo-row" id="lb-auto-thumbs" style="flex-wrap:wrap;">
+      <a href="https://picsum.photos/seed/lb1/1200/800" data-lightbox-auto data-caption="Montaña" style="display:block;width:100px;height:70px;overflow:hidden;border-radius:6px;"><img src="https://picsum.photos/seed/lb1/200/140" style="width:100%;height:100%;object-fit:cover;"></a>
+      <a href="https://picsum.photos/seed/lb2/1200/800" data-lightbox-auto data-caption="Ciudad" style="display:block;width:100px;height:70px;overflow:hidden;border-radius:6px;"><img src="https://picsum.photos/seed/lb2/200/140" style="width:100%;height:100%;object-fit:cover;"></a>
+      <a href="https://picsum.photos/seed/lb3/1200/800" data-lightbox-auto data-caption="Arquitectura" style="display:block;width:100px;height:70px;overflow:hidden;border-radius:6px;"><img src="https://picsum.photos/seed/lb3/200/140" style="width:100%;height:100%;object-fit:cover;"></a>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c2"><code>&lt;a href="foto.jpg" data-lightbox data-caption="Mi foto"&gt;
+  &lt;img src="thumb.jpg"&gt;
+&lt;/a&gt;
+
+// JS — auto-bind click en todos los elementos
+new MTS.Lightbox('[data-lightbox]', { zoom:true, thumbnails:true })</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Con descarga + API</div>
+    <div class="demo-row">
+      <button class="demo-btn-sm" style="padding:7px 14px;font-size:12px;" onclick="lbDownload.open(0)">Con botón descarga</button>
+      <button class="demo-btn-sm" style="padding:7px 14px;font-size:12px;" onclick="lbBasic.open(0);setTimeout(function(){lbBasic.goTo(2)},300)">goTo(2)</button>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c3"><code>const lb = new MTS.Lightbox([...], { download:true })
+lb.open(0)
+lb.next()
+lb.prev()
+lb.goTo(2)
+lb.close()
+lb.addItems([{ src:'nueva.jpg' }])</code></pre>
+  </div>
+</div>
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
+function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
+function toggleDocs(id,p){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted)">Cargando...</em>';fetch(p).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>Error.</em>';});}
+function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,function(_,hdr,rows){var ths=hdr.split('|').filter(function(c){return c.trim();}).map(function(c){return'<th>'+c.trim()+'</th>';}).join('');var trs=rows.trim().split('\n').map(function(r){return'<tr>'+r.split('|').filter(function(c){return c.trim();}).map(function(c){return'<td>'+c.trim()+'</td>';}).join('')+'</tr>';}).join('');return'<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';}).replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
+
+var LB_ITEMS=[
+  { src:'https://picsum.photos/seed/lb1/1200/800', thumb:'https://picsum.photos/seed/lb1/200/140', caption:'Paisaje de montaña', alt:'Montaña' },
+    { src:'https://picsum.photos/seed/lb2/1200/800', thumb:'https://picsum.photos/seed/lb2/200/140', caption:'Ciudad al atardecer', alt:'Ciudad' },
+    { src:'https://picsum.photos/seed/lb3/1200/800', thumb:'https://picsum.photos/seed/lb3/200/140', caption:'Arquitectura antigua', alt:'Arquitectura' },
+    { src:'https://picsum.photos/seed/lb4/1200/800', thumb:'https://picsum.photos/seed/lb4/200/140', caption:'Bosque en otoño', alt:'Bosque' }
+];
+function cloneLb(){return JSON.parse(JSON.stringify(LB_ITEMS));}
+var lbBasic=new MTS.Lightbox(cloneLb(),{loop:true,zoom:true,animation:'fade',onOpen:function(e){document.getElementById('res-lb').textContent='onOpen → "'+e.item.caption+'" | índice: '+e.index;},onChange:function(e){document.getElementById('res-lb').textContent='onChange → "'+e.item.caption+'" | índice: '+e.index;}});
+var lbSlide=new MTS.Lightbox(cloneLb(),{animation:'slide',zoom:true});
+var lbThumbs=new MTS.Lightbox(cloneLb(),{thumbnails:true,zoom:true});
+var lbDownload=new MTS.Lightbox(cloneLb(),{download:true,thumbnails:true});
+new MTS.Lightbox('[data-lightbox-auto]',{zoom:true,thumbnails:true});
+</script></body></html>

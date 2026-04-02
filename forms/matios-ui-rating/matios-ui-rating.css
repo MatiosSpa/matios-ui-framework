@@ -1,0 +1,21 @@
+/* ============================================================
+   MATIOS UI — matios-ui-rating.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-rating { display: inline-flex; align-items: center; gap: 2px; }
+.mts-rating--readonly { pointer-events: none; }
+
+.mts-rating__star {
+  background: none; border: none; padding: 0;
+  cursor: pointer; color: var(--mts-color-accent);
+  transition: transform var(--mts-transition-fast), color var(--mts-transition-fast);
+  display: flex; align-items: center;
+}
+.mts-rating__star:hover { transform: scale(1.15); }
+.mts-rating__star--empty { color: var(--mts-gray-300); }
+.mts-rating__star svg { display: block; }
+
+.mts-rating--sm .mts-rating__star svg { width: 16px; height: 16px; }
+.mts-rating--md .mts-rating__star svg { width: 22px; height: 22px; }
+.mts-rating--lg .mts-rating__star svg { width: 30px; height: 30px; }

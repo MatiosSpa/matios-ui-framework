@@ -8,8 +8,8 @@
 
 /* NAV */
 .mts-tabs__nav { display: flex; gap: 2px; }
-.mts-tabs--horizontal .mts-tabs__nav { flex-direction: row; border-bottom: 2px solid var(--mts-border-color); }
-.mts-tabs--vertical   .mts-tabs__nav { flex-direction: column; border-right: 2px solid var(--mts-border-color); min-width: 160px; }
+.mts-tabs--horizontal .mts-tabs__nav { flex-direction: row; border-bottom: var(--mts-tabs-border-width, 2px) solid var(--mts-border-color); }
+.mts-tabs--vertical   .mts-tabs__nav { flex-direction: column; border-right: var(--mts-tabs-border-width, 2px) solid var(--mts-border-color); min-width: 160px; }
 
 /* TAB BUTTON — base */
 .mts-tabs__tab {
@@ -57,3 +57,107 @@
 .mts-tabs__panel { display: none; padding: var(--mts-space-4) 0; }
 .mts-tabs--vertical .mts-tabs__panel { padding: 0 var(--mts-space-4); }
 .mts-tabs__panel--active { display: block; }
+
+/* ── Fix borde izquierdo del panel en vertical (todos los tabs) ── */
+.mts-tabs--vertical .mts-tabs__panels {
+  border-left: var(--mts-tabs-border-width, 2px) solid var(--mts-border-color);
+  flex: 1;
+}
+/* Si border está desactivado, quitar el borde del panel también */
+.mts-tabs--vertical.mts-tabs--no-border .mts-tabs__panels {
+  border-left: none;
+}
+.mts-tabs--vertical.mts-tabs--no-border .mts-tabs__nav {
+  border-right: none;
+}
+
+/* ── Tabs stretch — ocupar todo el espacio disponible ── */
+.mts-tabs--stretch {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.mts-tabs--stretch.mts-tabs--vertical {
+  flex-direction: row;
+}
+.mts-tabs--stretch .mts-tabs__panels {
+  flex: 1;
+  overflow: auto;
+}
+.mts-tabs--stretch .mts-tabs__panel--active {
+  height: 100%;
+  overflow: auto;
+}
+
+/* El borde izquierdo lo maneja el container .mts-tabs__panels,
+   NO el panel individual — así no se duplica */
+.mts-tabs--vertical .mts-tabs__panel {
+  /* sin border propio — lo hereda del container */
+}
+
+/* ── BORDERED — estilo caja cerrada, similar al acordeón ── */
+.mts-tabs--bordered .mts-tabs__nav {
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-bottom: none;
+  border-radius: var(--mts-radius-lg) var(--mts-radius-lg) 0 0;
+  padding: 6px 6px 0;
+  gap: 4px;
+}
+.mts-tabs--bordered .mts-tabs__tab {
+  border-radius: var(--mts-radius-md) var(--mts-radius-md) 0 0;
+  border: var(--mts-border-width) solid transparent;
+  border-bottom: none;
+  margin-bottom: -1px;
+  padding: 9px 16px;
+  color: var(--mts-text-muted);
+}
+.mts-tabs--bordered .mts-tabs__tab:hover:not(:disabled) {
+  background: var(--mts-bg-surface-2);
+  color: var(--mts-text-primary);
+}
+.mts-tabs--bordered .mts-tabs__tab--active {
+  background: var(--mts-bg-body);
+  border-color: var(--mts-border-color);
+  border-bottom-color: var(--mts-bg-body);
+  color: var(--mts-color-primary);
+  font-weight: var(--mts-font-weight-semibold);
+  box-shadow: inset 0 2px 0 var(--mts-color-primary);
+}
+.mts-tabs--bordered .mts-tabs__panels {
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-top: none;
+  border-radius: 0 0 var(--mts-radius-lg) var(--mts-radius-lg);
+  background: var(--mts-bg-body);
+}
+.mts-tabs--bordered .mts-tabs__panel {
+  padding: var(--mts-space-4);
+}
+
+/* Bordered vertical */
+.mts-tabs--bordered.mts-tabs--vertical .mts-tabs__nav {
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-right: none;
+  border-radius: var(--mts-radius-lg) 0 0 var(--mts-radius-lg);
+  padding: 6px 0 6px 6px;
+}
+.mts-tabs--bordered.mts-tabs--vertical .mts-tabs__tab {
+  border-radius: var(--mts-radius-md) 0 0 var(--mts-radius-md);
+  border: var(--mts-border-width) solid transparent;
+  border-right: none;
+  margin-right: -1px;
+  margin-bottom: 0;
+}
+.mts-tabs--bordered.mts-tabs--vertical .mts-tabs__tab--active {
+  border-color: var(--mts-border-color);
+  border-right-color: var(--mts-bg-body);
+  box-shadow: inset 3px 0 0 var(--mts-color-primary);
+}
+.mts-tabs--bordered.mts-tabs--vertical .mts-tabs__panels {
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-left: none;
+  border-radius: 0 var(--mts-radius-lg) var(--mts-radius-lg) 0;
+}
+.mts-tabs--bordered.mts-tabs--vertical .mts-tabs__panel {
+  padding: var(--mts-space-4);
+}

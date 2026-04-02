@@ -1,0 +1,42 @@
+/* MTS.Splitter v1.0.0 */
+.mts-splitter__gutter {
+  background:var(--mts-border-color);
+  flex-shrink:0;
+  position:relative;
+  transition:background .15s;
+  z-index:1;
+}
+.mts-splitter__gutter:hover,
+.mts-splitter__gutter--dragging { background:var(--mts-color-primary); }
+
+/* Handle visual (línea punteada centrada) */
+.mts-splitter__handle {
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  display:flex;align-items:center;justify-content:center;
+  gap:2px;
+}
+.mts-splitter__gutter--horizontal .mts-splitter__handle {
+  flex-direction:column;
+  height:32px;width:100%;
+}
+.mts-splitter__gutter--vertical .mts-splitter__handle {
+  flex-direction:row;
+  width:32px;height:100%;
+}
+.mts-splitter__handle::before,
+.mts-splitter__handle::after {
+  content:'';
+  border-radius:2px;
+  background:var(--mts-text-muted);
+  opacity:.5;
+}
+.mts-splitter__gutter--horizontal .mts-splitter__handle::before,
+.mts-splitter__gutter--horizontal .mts-splitter__handle::after {
+  width:2px;height:8px;
+}
+.mts-splitter__gutter--vertical .mts-splitter__handle::before,
+.mts-splitter__gutter--vertical .mts-splitter__handle::after {
+  height:2px;width:8px;
+}

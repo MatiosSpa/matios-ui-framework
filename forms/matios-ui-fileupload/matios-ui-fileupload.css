@@ -1,0 +1,91 @@
+/* ============================================================
+   MATIOS UI — matios-ui-fileupload.css  v1.0.0
+   ============================================================ */
+
+.mts-fileupload { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+
+/* ── Zona de drop ── */
+.mts-fileupload__zone {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: 32px 20px;
+  border: 2px dashed var(--mts-border-color, #2a2d38);
+  border-radius: var(--mts-radius-lg, 12px);
+  background: var(--mts-bg-surface, #161820);
+  cursor: pointer; text-align: center;
+  transition: border-color .15s, background .15s;
+  position: relative;
+}
+.mts-fileupload__zone:hover,
+.mts-fileupload__zone--dragover {
+  border-color: var(--mts-color-primary, #4f8eff);
+  background: rgba(79,142,255,.05);
+}
+.mts-fileupload__zone--dragover { background: rgba(79,142,255,.1); }
+.mts-fileupload__zone--has-files { padding: 20px; }
+.mts-fileupload__zone--disabled { opacity: .5; cursor: not-allowed; pointer-events: none; }
+
+.mts-fileupload__icon { color: var(--mts-text-muted, #6b7280); opacity: .6; }
+.mts-fileupload__label {
+  font-size: 13px; color: var(--mts-text-secondary);
+}
+.mts-fileupload__label span {
+  color: var(--mts-color-primary, #4f8eff); text-decoration: underline;
+}
+.mts-fileupload__hint {
+  font-size: 11px; color: var(--mts-text-muted, #6b7280);
+}
+.mts-fileupload__zone-error {
+  position: absolute; bottom: 8px;
+  font-size: 11px; font-weight: 600;
+  color: var(--mts-color-danger, #f87171);
+  animation: mts-validation-appear .15s ease;
+}
+
+/* ── Lista de archivos ── */
+.mts-fileupload__list { display: flex; flex-direction: column; gap: 8px; }
+.mts-fileupload__item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px;
+  background: var(--mts-bg-surface, #161820);
+  border: 1px solid var(--mts-border-color, #2a2d38);
+  border-radius: var(--mts-radius-md, 8px);
+  animation: mts-validation-appear .15s ease;
+}
+.mts-fileupload__thumb {
+  width: 36px; height: 36px; flex-shrink: 0;
+  border-radius: var(--mts-radius-sm, 4px);
+  background: var(--mts-bg-surface-2, #1e2028);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.mts-fileupload__info {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.mts-fileupload__name {
+  font-size: 12px; font-weight: 600;
+  color: var(--mts-text-primary); white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.mts-fileupload__size {
+  font-size: 11px; color: var(--mts-text-muted);
+}
+.mts-fileupload__remove {
+  width: 24px; height: 24px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: none; cursor: pointer;
+  border-radius: 50%; font-size: 16px; line-height: 1;
+  color: var(--mts-text-muted); transition: all .1s;
+}
+.mts-fileupload__remove:hover {
+  background: rgba(248,113,113,.12);
+  color: var(--mts-color-danger, #f87171);
+}
+
+/* Light theme */
+[data-mts-theme="light"] .mts-fileupload__zone {
+  background: #f8fafc;
+}
+[data-mts-theme="light"] .mts-fileupload__item {
+  background: #fff;
+}

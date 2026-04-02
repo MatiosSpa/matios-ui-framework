@@ -1,0 +1,291 @@
+/* ============================================================
+   MATIOS UI — matios-ui-input.js
+   MTS.Input — Input, Textarea con validación y estados
+   Eventos DOM: mts:input:change | mts:input:focus | mts:input:blur | mts:input:validate
+   Version: 1.0.0
+   ============================================================ */
+
+window.MTS = window.MTS || {};
+
+MTS.Input = class MtsInput {
+  /**
+   * @param {string|Element} selector
+   * @param {object} options
+   * @param {string}   options.type        'text'|'email'|'password'|'number'|'textarea' — default: 'text'
+   * @param {string}   options.label       Label del campo
+   * @param {string}   options.placeholder
+   * @param {string}   options.hint        Texto de ayuda debajo del input
+   * @param {string}   options.value       Valor inicial
+   * @param {boolean}  options.required    Campo obligatorio
+   * @param {boolean}  options.disabled
+   * @param {boolean}  options.readonly
+   * @param {string}   options.iconLeft    SVG string del ícono izquierdo
+   * @param {string}   options.iconRight   SVG string del ícono derecho
+   * @param {boolean}  options.clearable   Botón × para limpiar
+   * @param {boolean}  options.showPassword Toggle para mostrar contraseña
+   * @param {number}   options.maxLength
+   * @param {boolean}  options.showCount   Muestra contador de caracteres
+   * @param {number}   options.rows        Para textarea — default: 4
+   * @param {object}   options.rules       Reglas de validación { required, min, max, minLength, maxLength, pattern, custom }
+   * @param {boolean}  options.validateOnBlur
+   * @param {boolean}  options.validateOnInput
+   * @param {function} options.onChange
+   * @param {function} options.onFocus
+   * @param {function} options.onBlur
+   */
+  constructor(selector, options = {}) {
+    this._container = typeof selector === 'string'
+      ? document.querySelector(selector)
+      : selector;
+    if (!this._container) { console.error('[MTS.Input] No encontrado:', selector); return; }
+    /* ── data-* → inicialización HTML declarativa ── */
+    const _ds = this._container?.dataset || {};
+    const _fromHTML = {};
+    if (_ds.type !== undefined) _fromHTML.type = _ds.type;
+    if (_ds.label !== undefined) _fromHTML.label = _ds.label;
+    if (_ds.placeholder !== undefined) _fromHTML.placeholder = _ds.placeholder;
+    if (_ds.hint !== undefined) _fromHTML.hint = _ds.hint;
+    if (_ds.value !== undefined) _fromHTML.value = _ds.value;
+    if (_ds.name !== undefined) _fromHTML.name = _ds.name;
+    if (_ds.required !== undefined) _fromHTML.required = true;
+    if (_ds.disabled !== undefined) _fromHTML.disabled = true;
+    if (_ds.readonly !== undefined) _fromHTML.readonly = true;
+    if (_ds.clearable !== undefined) _fromHTML.clearable = true;
+    if (_ds.showPassword !== undefined) _fromHTML.showPassword = true;
+    if (_ds.showCount !== undefined) _fromHTML.showCount = true;
+    if (_ds.maxLength !== undefined) _fromHTML.maxLength = parseInt(_ds.maxLength);
+    if (_ds.rows !== undefined) _fromHTML.rows = parseInt(_ds.rows);
+    options = { ..._fromHTML, ...options };
+
+
+    this.type            = options.type           || 'text';
+    this.label           = options.label          || '';
+    this.placeholder     = options.placeholder    || '';
+    this.hint            = options.hint           || '';
+    this.value           = options.value          ?? '';
+    this.required        = options.required       ?? false;
+    this.disabled        = options.disabled       ?? false;
+    this.readonly        = options.readonly       ?? false;
+    this.iconLeft        = options.iconLeft       || null;
+    this.iconRight       = options.iconRight      || null;
+    this.clearable       = options.clearable      ?? false;
+    this.showPassword    = options.showPassword   ?? (this.type === 'password');
+    this.maxLength       = options.maxLength      || null;
+    this.showCount       = options.showCount      ?? false;
+    this.rows            = options.rows           ?? 4;
+    this.name            = options.name           || null;
+    this.rules           = options.rules          || {};
+    this.validateOnBlur  = options.validateOnBlur  ?? true;
+    this.validateOnInput = options.validateOnInput ?? false;
+    this._listeners      = {};
+    this._isValid        = true;
+    this._errors         = [];
+
+    if (options.onChange) this.on('change', options.onChange);
+    if (options.onFocus)  this.on('focus',  options.onFocus);
+    if (options.onBlur)   this.on('blur',   options.onBlur);
+
+    this._build();
+    this._bindEvents();
+  }
+
+  /* API */
+  getValue()          { return this._inputEl?.value ?? ''; }
+  setValue(val)       { if (this._inputEl) { this._inputEl.value = val; this._updateCount(); } return this; }
+  clear()             { this.setValue(''); this.clearError(); return this; }
+  focus()             { this._inputEl?.focus(); return this; }
+  disable()           { this._inputEl && (this._inputEl.disabled = true); this._container.classList.add('mts-input-wrap--disabled'); return this; }
+  enable()            { this._inputEl && (this._inputEl.disabled = false); this._container.classList.remove('mts-input-wrap--disabled'); return this; }
+  isValid()           { return this._isValid; }
+
+  validate() {
+    const val    = this.getValue();
+    this._errors = [];
+    const r      = this.rules;
+
+    if ((this.required || r.required) && !val.trim()) this._errors.push('Este campo es obligatorio');
+    if (r.minLength && val.length < r.minLength) this._errors.push(`Mínimo ${r.minLength} caracteres`);
+    if (r.maxLength && val.length > r.maxLength) this._errors.push(`Máximo ${r.maxLength} caracteres`);
+    if (r.min !== undefined && Number(val) < r.min) this._errors.push(`Valor mínimo: ${r.min}`);
+    if (r.max !== undefined && Number(val) > r.max) this._errors.push(`Valor máximo: ${r.max}`);
+    if (r.pattern && val && !r.pattern.test(val)) this._errors.push(r.patternMessage || 'Formato inválido');
+    if (r.email && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) this._errors.push('Email inválido');
+    if (r.custom) { const msg = r.custom(val); if (msg) this._errors.push(msg); }
+
+    this._isValid = this._errors.length === 0;
+    this._renderValidation();
+    this._emit('validate', { valid: this._isValid, errors: this._errors });
+    return this._isValid;
+  }
+
+  setError(msg) {
+    this._isValid = false;
+    this._errors  = [msg];
+    this._renderValidation();
+    return this;
+  }
+
+  clearError() {
+    this._isValid = true;
+    this._errors  = [];
+    this._renderValidation();
+    return this;
+  }
+
+  on(event, cb)  { if (!this._listeners[event]) this._listeners[event] = []; this._listeners[event].push(cb); return this; }
+  off(event, cb) { this._listeners[event] = (this._listeners[event] || []).filter(f => f !== cb); return this; }
+  destroy()      { this._container.innerHTML = ''; }
+
+  /* Build */
+  _build() {
+    /* Si el padre ya es mts-form-group (layout HTML), este elemento
+       actúa solo como wrapper del campo — no crea otro mts-form-group */
+    const parentIsGroup = this._container.parentElement?.classList.contains('mts-form-group');
+    if (parentIsGroup) {
+      this._container.className = 'mts-input-wrap' +
+        (this.iconLeft   ? ' mts-input-wrap--icon-left'  : '') +
+        (this.iconRight || this.clearable || this.showPassword ? ' mts-input-wrap--icon-right' : '') +
+        (this.disabled   ? ' mts-input-wrap--disabled' : '');
+      this._container.innerHTML = '';
+      const tag = this.type === 'textarea' ? 'textarea' : 'input';
+      this._inputEl = document.createElement(tag);
+      this._inputEl.className   = this.type === 'textarea' ? 'mts-textarea' : 'mts-input';
+      this._inputEl.placeholder = this.placeholder;
+      this._inputEl.disabled    = this.disabled;
+      this._inputEl.readOnly    = this.readonly;
+      this._inputEl.value       = this.value;
+      if (this.type !== 'textarea') this._inputEl.type = this.type === 'password' ? 'password' : this.type;
+      if (this.name)      this._inputEl.name = this.name;
+      if (this.maxLength) this._inputEl.maxLength = this.maxLength;
+      if (this.type === 'textarea') this._inputEl.rows = this.rows;
+      this._container.appendChild(this._inputEl);
+      this._wrapEl = this._container;
+      this._feedbackEl = document.createElement('span');
+      this._feedbackEl.className = 'mts-form-hint';
+      if (this.hint) this._feedbackEl.textContent = this.hint;
+      this._container.after(this._feedbackEl);
+      this._bindEvents();
+      return;
+    }
+
+    this._container.className = 'mts-form-group';
+
+    if (this.label) {
+      const lbl = document.createElement('label');
+      lbl.className   = 'mts-label' + (this.required ? ' mts-label--required' : '');
+      lbl.textContent = this.label;
+      this._container.appendChild(lbl);
+    }
+
+    const wrap = document.createElement('div');
+    wrap.className = 'mts-input-wrap' +
+      (this.iconLeft   ? ' mts-input-wrap--icon-left'  : '') +
+      (this.iconRight || this.clearable || this.showPassword ? ' mts-input-wrap--icon-right' : '') +
+      (this.disabled   ? ' mts-input-wrap--disabled' : '');
+
+    if (this.iconLeft) {
+      const ic = document.createElement('span');
+      ic.className  = 'mts-input__icon mts-input__icon--left';
+      ic.innerHTML  = this.iconLeft;
+      wrap.appendChild(ic);
+    }
+
+    const tag = this.type === 'textarea' ? 'textarea' : 'input';
+    this._inputEl = document.createElement(tag);
+    this._inputEl.className   = this.type === 'textarea' ? 'mts-textarea' : 'mts-input';
+    this._inputEl.placeholder = this.placeholder;
+    this._inputEl.disabled    = this.disabled;
+    this._inputEl.readOnly    = this.readonly;
+    this._inputEl.value       = this.value;
+    if (this.type !== 'textarea') this._inputEl.type = this.type === 'password' ? 'password' : this.type;
+    if (this.name) this._inputEl.name = this.name;
+    if (this.maxLength) this._inputEl.maxLength = this.maxLength;
+    if (this.type === 'textarea') this._inputEl.rows = this.rows;
+    wrap.appendChild(this._inputEl);
+
+    if (this.clearable) {
+      this._clearBtn = document.createElement('button');
+      this._clearBtn.className = 'mts-input__icon mts-input__icon--right mts-input__clear';
+      this._clearBtn.setAttribute('aria-label', 'Limpiar');
+      this._clearBtn.innerHTML = '&times;';
+      this._clearBtn.style.display = 'none';
+      this._clearBtn.addEventListener('click', () => this.clear());
+      wrap.appendChild(this._clearBtn);
+    }
+
+    if (this.type === 'password' && this.showPassword) {
+      this._eyeBtn = document.createElement('button');
+      this._eyeBtn.className = 'mts-input__icon mts-input__icon--right mts-input__eye';
+      this._eyeBtn.setAttribute('aria-label', 'Mostrar contraseña');
+      // TODO: reemplazar con MTS.Icons cuando estén listos
+      this._eyeBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+      this._eyeBtn.addEventListener('click', () => {
+        const show = this._inputEl.type === 'password';
+        this._inputEl.type = show ? 'text' : 'password';
+        this._eyeBtn.classList.toggle('mts-input__eye--active', show);
+      });
+      wrap.appendChild(this._eyeBtn);
+    }
+
+    if (this.iconRight && !this.clearable && !this.showPassword) {
+      const ic = document.createElement('span');
+      ic.className = 'mts-input__icon mts-input__icon--right';
+      ic.innerHTML = this.iconRight;
+      wrap.appendChild(ic);
+    }
+
+    this._container.appendChild(wrap);
+    this._wrapEl = wrap;
+
+    if (this.showCount) {
+      this._countEl = document.createElement('span');
+      this._countEl.className = 'mts-input__count';
+      this._updateCount();
+      this._container.appendChild(this._countEl);
+    }
+
+    this._feedbackEl = document.createElement('span');
+    this._feedbackEl.className = 'mts-form-hint';
+    if (this.hint) this._feedbackEl.textContent = this.hint;
+    this._container.appendChild(this._feedbackEl);
+
+    /* Registrar instancia en el elemento para que MTS.Validate pueda detectarla */
+    if (this._inputEl) this._inputEl.__mtsInput = this;
+  }
+
+  _bindEvents() {
+    this._inputEl.addEventListener('input', (e) => {
+      if (this._clearBtn) this._clearBtn.style.display = e.target.value ? 'flex' : 'none';
+      this._updateCount();
+      if (this.validateOnInput) this.validate();
+      this._emit('change', { value: e.target.value });
+    });
+    this._inputEl.addEventListener('focus', () => {
+      this._wrapEl.classList.add('mts-input-wrap--focus');
+      this._emit('focus', { value: this.getValue() });
+    });
+    this._inputEl.addEventListener('blur', () => {
+      this._wrapEl.classList.remove('mts-input-wrap--focus');
+      if (this.validateOnBlur) this.validate();
+      this._emit('blur', { value: this.getValue() });
+    });
+  }
+
+  _updateCount() {
+    if (!this._countEl) return;
+    const len = this.getValue().length;
+    this._countEl.textContent = this.maxLength ? `${len}/${this.maxLength}` : len;
+  }
+
+  _renderValidation() {
+    this._wrapEl.classList.toggle('mts-input-wrap--error',   !this._isValid);
+    this._wrapEl.classList.toggle('mts-input-wrap--success',  this._isValid && this.getValue().length > 0);
+    this._feedbackEl.className   = this._isValid ? 'mts-form-hint' : 'mts-form-error';
+    this._feedbackEl.textContent = this._isValid ? this.hint : this._errors[0];
+  }
+
+  _emit(event, detail = {}) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, target: this, detail }));
+    this._inputEl?.dispatchEvent(new CustomEvent(`mts:input:${event}`, { bubbles: true, detail: { input: this, ...detail } }));
+  }
+};

@@ -1,0 +1,133 @@
+/* ============================================================
+   MATIOS UI — matios-ui-theme-high-contrast.css  v1.0.0
+   Tema: High Contrast — accesibilidad máxima
+   Negro puro, texto blanco puro, bordes y acentos amarillo.
+   ============================================================ */
+
+[data-mts-theme="high-contrast"] {
+
+  /* ── Acento — amarillo de alto contraste ───────────────── */
+  --mts-color-primary:        #ffff00;
+  --mts-color-primary-hover:  #e6e600;
+  --mts-color-primary-active: #cccc00;
+  --mts-color-primary-light:  rgba(255,255,0,.15);
+  --mts-color-primary-text:   #000000;
+
+  --mts-color-accent:         #00ffff;
+  --mts-color-accent-hover:   #00e6e6;
+  --mts-color-accent-text:    #000000;
+
+  --mts-color-success:        #00ff00;
+  --mts-color-success-hover:  #00dd00;
+  --mts-color-success-light:  rgba(0,255,0,.12);
+  --mts-color-success-text:   #000000;
+  --mts-color-warning:        #ffaa00;
+  --mts-color-warning-light:  rgba(255,170,0,.12);
+  --mts-color-danger:         #ff4444;
+  --mts-color-danger-light:   rgba(255,68,68,.12);
+  --mts-color-info:           #00aaff;
+  --mts-color-info-light:     rgba(0,170,255,.12);
+
+  /* ── Escala — solo negro y blanco ──────────────────────── */
+  --mts-gray-50:   #000000;
+  --mts-gray-100:  #0a0a0a;
+  --mts-gray-200:  #141414;
+  --mts-gray-300:  #1e1e1e;
+  --mts-gray-400:  #333333;
+  --mts-gray-500:  #666666;
+  --mts-gray-600:  #999999;
+  --mts-gray-700:  #cccccc;
+  --mts-gray-800:  #e6e6e6;
+  --mts-gray-900:  #ffffff;
+
+  /* ── Fondos ────────────────────────────────────────────── */
+  --mts-bg-body:      #000000;
+  --mts-bg-surface:   #0a0a0a;
+  --mts-bg-surface-2: #141414;
+  --mts-bg-overlay:   rgba(0,0,0,.85);
+
+  /* ── Texto ─────────────────────────────────────────────── */
+  --mts-text-primary:   #ffffff;
+  --mts-text-secondary: #eeeeee;
+  --mts-text-muted:     #aaaaaa;
+  --mts-text-disabled:  #555555;
+  --mts-text-inverse:   #000000;
+
+  /* ── Bordes — muy visibles ─────────────────────────────── */
+  --mts-border-color:        #ffffff;
+  --mts-border-color-strong: #ffffff;
+  --mts-border-color-focus:  #ffff00;
+
+  /* ── Sombras ───────────────────────────────────────────── */
+  --mts-shadow-xs: 0 0 0 1px #ffffff;
+  --mts-shadow-sm: 0 0 0 1px #ffffff;
+  --mts-shadow-md: 0 0 0 2px #ffffff;
+  --mts-shadow-lg: 0 0 0 2px #ffff00;
+  --mts-shadow-xl: 0 0 0 3px #ffff00;
+
+  /* ── Sombras de botón (shadow/ring por color) ──────────── */
+  --mts-btn-shadow-primary: 0 0 0 2px #ffff00;
+  --mts-btn-ring-primary:   0 0 0 4px rgba(255,255,0,.4);
+  --mts-btn-shadow-danger:  0 0 0 2px #ff4444;
+  --mts-btn-ring-danger:    0 0 0 4px rgba(255,68,68,.4);
+  --mts-btn-shadow-success: 0 0 0 2px #00ff00;
+  --mts-btn-ring-success:   0 0 0 4px rgba(0,255,0,.4);
+  --mts-btn-shadow-warning: 0 0 0 2px #ffaa00;
+  --mts-btn-ring-warning:   0 0 0 4px rgba(255,170,0,.4);
+
+  --mts-font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ── Elementos específicos de alto contraste ── */
+/* Inputs con borde blanco visible */
+[data-mts-theme="high-contrast"] input,
+[data-mts-theme="high-contrast"] select,
+[data-mts-theme="high-contrast"] textarea {
+  border: 2px solid #ffffff !important;
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+[data-mts-theme="high-contrast"] input:focus,
+[data-mts-theme="high-contrast"] select:focus,
+[data-mts-theme="high-contrast"] textarea:focus {
+  border-color: #ffff00 !important;
+  box-shadow: 0 0 0 2px rgba(255,255,0,.4) !important;
+  outline: none;
+}
+/* Botones con borde blanco */
+[data-mts-theme="high-contrast"] .mts-btn {
+  border: 2px solid currentColor !important;
+}
+[data-mts-theme="high-contrast"] .mts-btn--primary {
+  background: #ffff00 !important;
+  color: #000000 !important;
+  border-color: #ffff00 !important;
+}
+[data-mts-theme="high-contrast"] .mts-btn--secondary,
+[data-mts-theme="high-contrast"] .mts-btn--ghost {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+[data-mts-theme="high-contrast"] .mts-btn--danger {
+  background: #ff4444 !important;
+  color: #000000 !important;
+  border-color: #ff4444 !important;
+}
+/* Links */
+[data-mts-theme="high-contrast"] a {
+  color: #ffff00;
+  text-decoration: underline;
+}
+/* Variables cortas para index.html */
+[data-mts-theme="high-contrast"] {
+  --bg: #000000;
+  --surface: #0a0a0a;
+  --surface2: #141414;
+  --border: #ffffff;
+  --primary: #ffff00;
+  --accent: #00ffff;
+  --text: #ffffff;
+  --muted: #aaaaaa;
+  --success: #00ff00;
+}

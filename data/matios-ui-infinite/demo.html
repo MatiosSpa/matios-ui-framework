@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>MTS Infinite — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="matios-ui-infinite.css">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;padding:24px;background:var(--mts-bg-body);font-family:var(--mts-font-family)}
+    .demo-section{margin-bottom:48px}
+    .demo-title{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:8px;margin-bottom:20px}
+    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);margin:20px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+
+    /* ── Tarjetas de producto (renderItem personalizado) ── */
+    .product-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--mts-bg-surface);
+      border: 1px solid var(--mts-border-color);
+      border-radius: var(--mts-radius-lg);
+      padding: 14px 16px;
+      transition: border-color var(--mts-transition-fast), box-shadow var(--mts-transition-fast);
+      cursor: pointer;
+    }
+    .product-card:hover {
+      border-color: var(--mts-color-primary);
+      box-shadow: var(--mts-shadow-md);
+    }
+    .product-thumb {
+      width: 52px; height: 52px;
+      border-radius: var(--mts-radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+      background: var(--mts-bg-surface-2);
+    }
+    .product-info { flex: 1; min-width: 0; }
+    .product-name { font-size: 14px; font-weight: 600; color: var(--mts-text-primary); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .product-desc { font-size: 12px; color: var(--mts-text-muted); }
+    .product-price { font-size: 15px; font-weight: 700; color: var(--mts-color-primary); flex-shrink: 0; }
+
+    /* ── Grid de tarjetas ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .card-item {
+      background: var(--mts-bg-surface);
+      border: 1px solid var(--mts-border-color);
+      border-radius: var(--mts-radius-lg);
+      padding: 16px;
+      text-align: center;
+      transition: border-color var(--mts-transition-fast);
+    }
+    .card-item:hover { border-color: var(--mts-color-primary); }
+    .card-item .emoji { font-size: 32px; margin-bottom: 8px; }
+    .card-item .name { font-size: 13px; font-weight: 600; color: var(--mts-text-primary); }
+    .card-item .price { font-size: 12px; color: var(--mts-text-muted); margin-top: 4px; }
+
+    /* Controls */
+    .demo-controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .counter { font-size: 11px; color: var(--mts-text-muted); align-self: center; margin-left: auto; }
+  </style>
+</head>
+<body>
+
+<!-- 1. LISTA DE PRODUCTOS (layout vertical) -->
+<div class="demo-section">
+  <div class="demo-title">Lista vertical — productos con renderItem personalizado</div>
+  <div class="demo-controls">
+    <button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="listaProductos.reset()">🔄 Reset</button>
+    <span class="counter" id="count-lista">0 productos cargados</span>
+  </div>
+  <div id="lista-productos"></div>
+</div>
+
+<!-- 2. GRID DE TARJETAS -->
+<div class="demo-section">
+  <div class="demo-title">Grid — tarjetas con layout grid</div>
+  <div class="demo-controls">
+    <button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="gridCards.reset()">🔄 Reset</button>
+    <span class="counter" id="count-grid">0 items cargados</span>
+  </div>
+  <div id="grid-cards"></div>
+</div>
+
+<!-- 3. ESTADO VACÍO -->
+<div class="demo-section">
+  <div class="demo-title">Estado vacío — cuando onLoadMore retorna []</div>
+  <div id="lista-vacia"></div>
+</div>
+
+<script src="matios-ui-infinite.js"></script>
+<script>
+
+/* ═══════════════════════════════════════════════════════════
+   DATOS SIMULADOS
+   En producción, reemplaza el bloque simulado por un fetch:
+
+   onLoadMore: async ({ page, pageSize }) => {
+     const res = await fetch(`/api/productos?page=${page}&pageSize=${pageSize}`)
+     const data = await res.json()
+     return {
+       items:   data.items,    // array de objetos
+       hasMore: data.hasNext,  // boolean
+     }
+   }
+   ═══════════════════════════════════════════════════════════ */
+
+const EMOJIS   = ['📱','💻','⌚','🎧','📷','🖥️','⌨️','🖱️','🎮','📟'];
+const NOMBRES  = ['iPhone 16 Pro','MacBook Air M3','Apple Watch S10','AirPods Pro 2',
+                  'Sony A7 IV','Samsung 4K OLED','Logitech MX Keys','Magic Mouse 3',
+                  'PlayStation 5','BlackBerry KEY2'];
+const PRECIOS  = [1299,1099,449,249,2799,1499,119,89,499,350];
+
+function generarProductos(page, pageSize) {
+  const start   = (page - 1) * pageSize;
+  const TOTAL   = 47; // total simulado
+  const items   = [];
+  for (let i = start; i < Math.min(start + pageSize, TOTAL); i++) {
+    items.push({
+      id:     i + 1,
+      emoji:  EMOJIS[i % EMOJIS.length],
+      nombre: `${NOMBRES[i % NOMBRES.length]} #${i + 1}`,
+      desc:   'Producto de alta gama — tecnología de punta',
+      precio: PRECIOS[i % PRECIOS.length],
+    });
+  }
+  return {
+    items,
+    hasMore: start + pageSize < TOTAL,
+  };
+}
+
+/* Simula delay de red */
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ═══════════════════════════════════════════════════════════
+   1. LISTA VERTICAL DE PRODUCTOS
+   ═══════════════════════════════════════════════════════════ */
+const listaProductos = new MTS.Infinite('#lista-productos', {
+  pageSize: 8,
+  layout:  'vertical',
+  animate:  true,
+
+  loaderText:  'Cargando más productos...',
+  endText:     'Has visto todos los productos',
+
+  emptyState: {
+    icon:    '🛒',
+    title:   'Sin productos',
+    message: 'No hay productos disponibles en este momento',
+  },
+
+  onLoadMore: async ({ page, pageSize }) => {
+    /*
+     * ── PRODUCCIÓN ──────────────────────────────────────────
+     * const res = await fetch(`/api/productos?page=${page}&pageSize=${pageSize}`)
+     * const data = await res.json()
+     * return { items: data.items, hasMore: data.hasNext }
+     * ────────────────────────────────────────────────────────
+     */
+    await delay(600); // simular latencia de red
+    return generarProductos(page, pageSize);
+  },
+
+  renderItem: (item) => {
+    /*
+     * Retorna HTML string o elemento DOM.
+     * El dev tiene control total del markup — ideal para productos,
+     * documentos, usuarios, o cualquier estructura custom.
+     */
+    return `
+      <div class="product-card">
+        <div class="product-thumb">${item.emoji}</div>
+        <div class="product-info">
+          <div class="product-name">${item.nombre}</div>
+          <div class="product-desc">${item.desc}</div>
+        </div>
+        <div class="product-price">$${item.precio.toLocaleString()}</div>
+      </div>
+    `;
+  },
+
+  onLoad: (items, page) => {
+    document.getElementById('count-lista').textContent =
+      `${listaProductos.getCount()} productos cargados`;
+  },
+
+  onEnd: () => {
+    document.getElementById('count-lista').textContent =
+      `${listaProductos.getCount()} productos — lista completa ✓`;
+  },
+});
+
+/* ═══════════════════════════════════════════════════════════
+   2. GRID DE TARJETAS
+   ═══════════════════════════════════════════════════════════ */
+const GRID_DATA = Array.from({ length: 30 }, (_, i) => ({
+  id:     i + 1,
+  emoji:  EMOJIS[i % EMOJIS.length],
+  nombre: NOMBRES[i % NOMBRES.length],
+  precio: `$${PRECIOS[i % PRECIOS.length].toLocaleString()}`,
+}));
+
+const gridCards = new MTS.Infinite('#grid-cards', {
+  pageSize: 12,
+  layout:   'grid',
+  animate:   true,
+  endText:  'Todos los items cargados',
+
+  onLoadMore: async ({ page, pageSize }) => {
+    /*
+     * ── PRODUCCIÓN ──────────────────────────────────────────
+     * const res = await fetch(`/api/items?page=${page}&pageSize=${pageSize}`)
+     * const data = await res.json()
+     * return { items: data.items, hasMore: data.hasNext }
+     * ────────────────────────────────────────────────────────
+     */
+    await delay(400);
+    const start = (page - 1) * pageSize;
+    const items = GRID_DATA.slice(start, start + pageSize);
+    return { items, hasMore: start + pageSize < GRID_DATA.length };
+  },
+
+  renderItem: (item) => `
+    <div class="card-item">
+      <div class="emoji">${item.emoji}</div>
+      <div class="name">${item.nombre}</div>
+      <div class="price">${item.precio}</div>
+    </div>
+  `,
+
+  onLoad: () => {
+    document.getElementById('count-grid').textContent =
+      `${gridCards.getCount()} items cargados`;
+  },
+});
+
+/* ═══════════════════════════════════════════════════════════
+   3. ESTADO VACÍO
+   ═══════════════════════════════════════════════════════════ */
+new MTS.Infinite('#lista-vacia', {
+  pageSize: 10,
+  emptyState: {
+    icon:    '🔍',
+    title:   'Sin resultados',
+    message: 'No se encontraron registros que coincidan con tu búsqueda',
+  },
+  onLoadMore: async () => {
+    await delay(300);
+    return { items: [], hasMore: false }; // retorna vacío
+  },
+  renderItem: (item) => `<div>${item}</div>`,
+});
+
+/* Sync tema */
+window.addEventListener('message', e => {
+  if (e.data?.type === 'setTheme') document.documentElement.setAttribute('data-mts-theme', e.data.theme);
+});
+try { const t = window.parent?.currentThemeVal; if (t) document.documentElement.setAttribute('data-mts-theme', t); } catch {}
+</script>
+</body>
+</html>

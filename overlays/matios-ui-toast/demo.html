@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Toast — Demo</title>
+        <script>
+    (function(){
+      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
+      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
+          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+        }
+      }catch(e){}
+    })();
+  </script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="./matios-ui-toast.css">
+  <script src="./matios-ui-toast.js"></script>
+  <style>
+    *{box-sizing:border-box}body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}.demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0;}
+    .demo-section{display:flex;flex-direction:column;gap:14px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-row{display:flex;gap:8px;flex-wrap:wrap;}
+    .demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);}
+    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;}
+    .demo-btn{padding:7px 16px;border-radius:var(--mts-radius-md);font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-primary);font-family:inherit;transition:background .12s;}
+    .demo-btn:hover{background:var(--mts-bg-surface-2);}
+    .demo-btn.success{border-color:var(--mts-color-success,#22c55e);color:var(--mts-color-success,#22c55e);}
+    .demo-btn.warning{border-color:var(--mts-color-warning,#f59e0b);color:var(--mts-color-warning,#f59e0b);}
+    .demo-btn.danger {border-color:var(--mts-color-danger,#f87171);color:var(--mts-color-danger,#f87171);}
+    .demo-btn.info   {border-color:var(--mts-color-primary);color:var(--mts-color-primary);}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+</div>
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.Toast</h1>
+    <p>Notificaciones fugaces con variantes, posiciones, acciones y barra de progreso.</p>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Variantes</div>
+    <div class="demo-row">
+      <button class="demo-btn" onclick="MTS.Toast.show({message:'Operación completada correctamente.',variant:'success',title:'Éxito'})">✅ Success</button>
+      <button class="demo-btn" onclick="MTS.Toast.show({message:'Revisa los datos antes de continuar.',variant:'warning',title:'Atención'})">⚠️ Warning</button>
+      <button class="demo-btn" onclick="MTS.Toast.show({message:'No se pudo conectar con el servidor.',variant:'danger', title:'Error'})">❌ Danger</button>
+      <button class="demo-btn" onclick="MTS.Toast.show({message:'Nueva versión 2.1.0 disponible.',    variant:'info',    title:'Info'})">ℹ️ Info</button>
+      <button class="demo-btn" onclick="MTS.Toast.show({message:'Mensaje sin variante especificada.'})">Default</button>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c1"><code>MTS.Toast.show({ message:'Guardado', variant:'success', title:'Éxito' })
+MTS.Toast.show({ message:'Revisa los datos', variant:'warning' })
+MTS.Toast.show({ message:'Error al conectar', variant:'danger' })
+MTS.Toast.show({ message:'Actualización disponible', variant:'info' })
+
+// Atajos rápidos
+MTS.Toast.show.success('Guardado correctamente')
+MTS.Toast.show.danger('Error al procesar')</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Posiciones</div>
+    <div class="demo-row">
+      <button class="demo-btn" onclick="toast('top-left')">↖ Top Left</button>
+      <button class="demo-btn" onclick="toast('top-center')">↑ Top Center</button>
+      <button class="demo-btn" onclick="toast('top-right')">↗ Top Right</button>
+      <button class="demo-btn" onclick="toast('bottom-left')">↙ Bottom Left</button>
+      <button class="demo-btn" onclick="toast('bottom-center')">↓ Bottom Center</button>
+      <button class="demo-btn" onclick="toast('bottom-right')">↘ Bottom Right</button>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c2"><code>MTS.Toast.show({
+  message:  'Toast en top-right',
+  position: 'top-right',   // 'top-left'|'top-center'|'top-right'
+                            // 'bottom-left'|'bottom-center'|'bottom-right'
+  variant:  'info',
+})</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Con acción y duración personalizada</div>
+    <div class="demo-row">
+      <button class="demo-btn" onclick="toastAction()">Con botón de acción</button>
+      <button class="demo-btn" onclick="toastPersist()">Sin auto-cierre (duration:0)</button>
+      <button class="demo-btn" onclick="toastFast()">Rápido (1.5s)</button>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c3"><code>// Con botón de acción
+MTS.Toast.show({
+  message:  'Se eliminaron 3 archivos.',
+  variant:  'warning',
+  action:   'Deshacer',
+  onAction: () => console.log('deshacer'),
+  duration:  8000,
+})
+
+// Persistente — no cierra hasta que el usuario lo cierre
+const t = MTS.Toast.show({ message: 'Procesando...', duration: 0 })
+// Cerrar programáticamente
+t.close()
+
+// Duración custom
+MTS.Toast.show({ message: 'Guardado', variant:'success', duration: 1500 })</code></pre>
+  </div>
+</div>
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+if(window!==window.top){document.querySelector('.demo-theme').style.display='none';}
+function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
+var MSGS=['top-left','top-center','top-right','bottom-left','bottom-center','bottom-right'];
+var VARIANTS=['success','warning','danger','info','default'];
+var vIdx=0;
+function toast(pos){MTS.Toast.show({message:'Toast en posición "'+pos+'"',variant:VARIANTS[vIdx%VARIANTS.length],position:pos,title:pos});vIdx++;}
+function toastAction(){var t=MTS.Toast.show({message:'Se eliminaron 3 archivos del servidor.',variant:'warning',title:'Archivos eliminados',action:'Deshacer',onAction:function(){MTS.Toast.show({message:'Eliminación deshecha correctamente.',variant:'success',duration:2000});},duration:8000});}
+var persistToast=null;
+function toastPersist(){if(persistToast){persistToast.close();persistToast=null;return;}persistToast=MTS.Toast.show({message:'Este toast no se cierra solo. Haz click en × o en el botón.',variant:'info',title:'Persistente',duration:0,onClose:function(){persistToast=null;}});}
+function toastFast(){MTS.Toast.show({message:'Guardado rápidamente.',variant:'success',duration:1500});}
+</script>
+</body>
+</html>

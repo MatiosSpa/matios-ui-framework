@@ -1,0 +1,37 @@
+/* MTS.PhoneInput v1.0.0 */
+.mts-phoneinput { display:flex;flex-direction:column;gap:4px; }
+.mts-phoneinput__label { font-size:var(--mts-font-size-xs);font-weight:var(--mts-font-weight-semibold);color:var(--mts-text-secondary);text-transform:uppercase;letter-spacing:.5px; }
+.mts-phoneinput__wrap  { display:flex;align-items:stretch;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);transition:border-color .15s,box-shadow .15s;position:relative;overflow:visible; }
+.mts-phoneinput__wrap--focus { border-color:var(--mts-color-primary);box-shadow:0 0 0 3px var(--mts-color-primary-light); }
+.mts-phoneinput__wrap--error { border-color:var(--mts-color-danger,#f87171); }
+.mts-phoneinput__wrap--disabled { opacity:.5;pointer-events:none; }
+/* Tamaños */
+.mts-phoneinput__wrap--sm .mts-phoneinput__input { height:32px;font-size:13px; }
+.mts-phoneinput__wrap--sm .mts-phoneinput__country { height:32px;padding:0 8px; }
+.mts-phoneinput__wrap--md .mts-phoneinput__input { height:40px;font-size:14px; }
+.mts-phoneinput__wrap--md .mts-phoneinput__country { height:40px;padding:0 10px; }
+.mts-phoneinput__wrap--lg .mts-phoneinput__input { height:48px;font-size:15px; }
+.mts-phoneinput__wrap--lg .mts-phoneinput__country { height:48px;padding:0 12px; }
+/* Selector país */
+.mts-phoneinput__country { display:flex;align-items:center;gap:5px;background:none;border:none;border-right:1px solid var(--mts-border-color);cursor:pointer;color:var(--mts-text-primary);white-space:nowrap;flex-shrink:0;transition:background .12s; }
+.mts-phoneinput__country:hover { background:var(--mts-bg-surface); }
+.mts-phoneinput__country--open { background:var(--mts-bg-surface); }
+.mts-phoneinput__flag   { font-size:16px;line-height:1; }
+.mts-phoneinput__dial   { font-size:13px;font-weight:600;color:var(--mts-text-secondary); }
+.mts-phoneinput__chevron { font-size:10px;color:var(--mts-text-muted);transition:transform .15s; }
+.mts-phoneinput__country--open .mts-phoneinput__chevron { transform:rotate(180deg); }
+/* Input */
+.mts-phoneinput__input { flex:1;min-width:0;border:none;background:none;outline:none;padding:0 12px;font-family:var(--mts-font-family);color:var(--mts-text-primary);font-variant-numeric:tabular-nums; }
+.mts-phoneinput__input::placeholder { color:var(--mts-text-muted); }
+/* Dropdown */
+.mts-phoneinput__dd { position:absolute;top:calc(100% + 4px);left:0;width:280px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);box-shadow:var(--mts-shadow-lg);z-index:200;overflow:hidden; }
+.mts-phoneinput__dd-search { width:100%;box-sizing:border-box;padding:8px 12px;border:none;border-bottom:1px solid var(--mts-border-color);background:var(--mts-bg-surface-2);color:var(--mts-text-primary);font-size:13px;font-family:var(--mts-font-family);outline:none; }
+.mts-phoneinput__dd-list { list-style:none;margin:0;padding:4px;max-height:200px;overflow-y:auto; }
+.mts-phoneinput__dd-item { display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--mts-radius-sm);cursor:pointer;transition:background .1s; }
+.mts-phoneinput__dd-item:hover,.mts-phoneinput__dd-item--active { background:var(--mts-bg-surface-2); }
+.mts-phoneinput__dd-item--active { color:var(--mts-color-primary); }
+.mts-phoneinput__dd-name { flex:1;font-size:13px; }
+.mts-phoneinput__dd-dial { font-size:12px;color:var(--mts-text-muted);font-weight:600; }
+/* Hint / Error */
+.mts-phoneinput__hint  { font-size:11px;color:var(--mts-text-muted); }
+.mts-phoneinput__error { font-size:11px;color:var(--mts-color-danger,#f87171);display:none; }

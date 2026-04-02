@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Stepper — Demo</title>
+      <script>
+    (function(){
+      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
+      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
+          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+        }
+      }catch(e){}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="./matios-ui-stepper.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="./matios-ui-stepper.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
+    .demo-section{display:flex;flex-direction:column;gap:14px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
+    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
+    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
+    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
+    .demo-docs-panel.open{display:block;}
+    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
+    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
+    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
+    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
+    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
+    .demo-docs-panel pre code{background:none;border:none;padding:0;color:var(--mts-text-primary);}
+    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
+    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
+    .demo-docs-panel p{margin:0 0 10px;}
+    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
+    .demo-nav{display:flex;gap:8px;margin-top:12px;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+    /* Panel wizard */
+    .wizard-panel{background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:20px;}
+    .wizard-fields{display:flex;flex-direction:column;gap:14px;}
+    .wizard-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .wizard-success{text-align:center;padding:32px 16px;}
+    .wizard-success .icon{font-size:48px;margin-bottom:12px;}
+    .wizard-success h3{font-size:18px;font-weight:800;margin:0 0 6px;}
+    .wizard-success p{font-size:13px;color:var(--mts-text-muted);margin:0;}
+    @media(max-width:540px){.wizard-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+</div>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.Stepper</h1>
+    <p>Flujo paso a paso — mode:wizard (con paneles) y mode:progress (indicador visual).</p>
+    <div style="display:flex;gap:8px;">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-stepper.md')">📄 Documentación</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <!-- ═══ WIZARD ═══════════════════════════════════════════ -->
+
+  <div class="demo-section">
+    <div class="demo-section-title">1 — mode:wizard — formulario multi-paso con componentes MTS</div>
+    <p style="font-size:12px;color:var(--mts-text-muted);margin:0 0 8px;">
+      💡 Los componentes MTS se montan lazy — solo cuando llegas al paso. Prueba navegar hacia atrás y adelante.
+    </p>
+    <div id="wizard-reg"></div>
+    <div class="demo-nav">
+      <button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="wizReg.prev()">← Anterior</button>
+      <button class="mts-btn mts-btn--primary mts-btn--sm" onclick="wizReg.next()">Siguiente →</button>
+    </div>
+    <div class="result-box" id="res-wizard">— navega entre pasos —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c1"><code>const stepper = new MTS.Stepper('#el', {
+  mode: 'wizard',
+  steps: [
+    { id:'datos',    label:'Datos personales', description:'Nombre y contacto',
+      content: '&lt;div class="wizard-panel"&gt;&lt;div id="wf-nombre"&gt;&lt;/div&gt;&lt;/div&gt;' },
+
+    { id:'seguridad', label:'Seguridad', description:'Contraseña',
+      // Función lazy — se ejecuta solo cuando llegas al paso
+      content: () => buildPanelSeguridad() },
+
+    { id:'confirm',   label:'Confirmación',
+      content: () => buildPanelConfirmacion() },
+  ],
+  onChange: (e) => {
+    // DOM ya visible — montar componentes MTS aquí
+    if (e.detail.index === 0) {
+      new MTS.Input('#wf-nombre', { label: 'Nombre', placeholder: 'Juan Pérez' })
+    }
+  },
+  onComplete: () => console.log('¡Formulario completado!'),
+})</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">2 — mode:wizard — vertical con contenido</div>
+    <div id="wizard-vert" style="max-width:600px;"></div>
+    <div class="demo-nav">
+      <button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="wizVert.prev()">← Anterior</button>
+      <button class="mts-btn mts-btn--primary mts-btn--sm" onclick="wizVert.next()">Siguiente →</button>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c2"><code>new MTS.Stepper('#el', {
+  mode:      'wizard',
+  direction: 'vertical',
+  steps: [
+    { id:'s1', label:'Configuración inicial', content:'...' },
+    { id:'s2', label:'Importar datos',        content:'...' },
+    { id:'s3', label:'Finalizar',             content:'...' },
+  ],
+})</code></pre>
+  </div>
+
+  <!-- ═══ PROGRESS ═══════════════════════════════════════════ -->
+
+  <div class="demo-section">
+    <div class="demo-section-title">3 — mode:progress variant:default — checkout con navegación</div>
+    <div id="prog-checkout" style="padding-bottom:8px;"></div>
+    <div class="demo-nav">
+      <button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="progCheckout.prev()">← Anterior</button>
+      <button class="mts-btn mts-btn--primary mts-btn--sm" onclick="progCheckout.next()">Siguiente →</button>
+    </div>
+    <div class="result-box" id="res-checkout">— navega entre pasos —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c3"><code>new MTS.Stepper('#el', {
+  mode:      'progress',
+  variant:   'default',   // indicador + label + descripción
+  clickable:  true,
+  steps: [
+    { id:'cart',    label:'Carrito',    description:'Revisa tus productos' },
+    { id:'ship',    label:'Envío',      description:'Dirección de entrega'  },
+    { id:'payment', label:'Pago',       description:'Método de pago'        },
+    { id:'confirm', label:'Confirmado'                                       },
+  ],
+  onChange:   (e) => console.log('paso:', e.detail.index, e.detail.direction),
+  onComplete: (e) => console.log('¡completado!'),
+})</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">4 — mode:progress variant:compact + clickable</div>
+    <div id="prog-compact"></div>
+    <div class="result-box" id="res-compact">— haz click en los pasos completados —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c4')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c4"><code>new MTS.Stepper('#el', {
+  mode:      'progress',
+  variant:   'compact',
+  clickable:  true,
+  active:     2,
+  steps: [...],
+  onStepClick: (e) => console.log('click en:', e.detail.step.label),
+})</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">5 — mode:progress variant:dots — pipeline CI/CD</div>
+    <div id="prog-dots" style="padding-bottom:20px;margin-bottom:8px;"></div>
+    <div class="demo-nav">
+      <button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="progDots.prev()">← Paso anterior</button>
+      <button class="mts-btn mts-btn--primary mts-btn--sm" onclick="progDots.next()">Siguiente paso →</button>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c5')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c5"><code>new MTS.Stepper('#el', {
+  mode:    'progress',
+  variant: 'dots',   // minimalista — solo puntos + barra de progreso
+  active:  1,
+  steps: [
+    { id:'trigger', label:'Trigger' },
+    { id:'build',   label:'Build'   },
+    { id:'test',    label:'Tests'   },
+    { id:'deploy',  label:'Deploy'  },
+    { id:'live',    label:'Live'    },
+  ],
+})</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">6 — setStepStatus() — estados error y complete</div>
+    <div id="prog-status"></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="statusStepper.setStepStatus(2,'error')">setStepStatus(2,'error')</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="statusStepper.setStepStatus(2,'pending')">setStepStatus(2,'pending')</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="statusStepper.goTo(0)">goTo(0)</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="statusStepper.goTo(3)">goTo(3)</button>
+    </div>
+    <div class="result-box" id="res-status">— usa los botones —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c6')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c6"><code>const s = new MTS.Stepper('#el', { mode:'progress', active:2, steps:[...] })
+s.setStepStatus(2, 'error')    // marcar como error
+s.setStepStatus(2, 'pending')  // volver a pendiente
+s.goTo(0, 'jump')
+// 'complete' y 'active' se gestionan automáticamente al navegar</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">7 — Eventos: onChange, onComplete, onStepClick, onStatusChange</div>
+    <div id="prog-events"></div>
+    <div class="demo-nav">
+      <button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="evStepper.prev()">← Anterior</button>
+      <button class="mts-btn mts-btn--primary mts-btn--sm" onclick="evStepper.next()">Siguiente →</button>
+    </div>
+    <div class="result-box" id="res-events">— navega para ver los eventos —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c7')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c7"><code>const s = new MTS.Stepper('#el', {
+  mode: 'progress', clickable: true,
+  steps: [...],
+
+  onChange: (e) => {
+    // e.detail.index     → índice nuevo
+    // e.detail.prev      → índice anterior
+    // e.detail.step      → objeto del paso
+    // e.detail.direction → 'next'|'prev'|'jump'
+  },
+  onComplete:     (e) => { /* último paso alcanzado */ },
+  onStepClick:    (e) => { /* click manual en paso */ },
+  onStatusChange: (e) => { /* setStepStatus() llamado */ },
+})
+
+// Eventos DOM — escuchar desde cualquier lugar
+document.addEventListener('mts:stepper:change', (e) => {})
+document.addEventListener('mts:stepper:complete', (e) => {})
+document.addEventListener('mts:stepper:stepclick', (e) => {})
+document.addEventListener('mts:stepper:statuschange', (e) => {})</code></pre>
+  </div>
+
+</div>
+
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+if(window!==window.top){document.querySelector('.demo-theme').style.display='none';}
+function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
+function toggleDocs(id,p){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted)">Cargando...</em>';fetch(p).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>Error.</em>';});}
+function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,function(_,hdr,rows){var ths=hdr.split('|').filter(function(c){return c.trim();}).map(function(c){return'<th>'+c.trim()+'</th>';}).join('');var trs=rows.trim().split('\n').map(function(r){return'<tr>'+r.split('|').filter(function(c){return c.trim();}).map(function(c){return'<td>'+c.trim()+'</td>';}).join('')+'</tr>';}).join('');return'<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';}).replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
+
+/* ─── 1. WIZARD REGISTRO ─────────────────────────────────── */
+var wizReg = new MTS.Stepper('#wizard-reg', {
+  mode: 'wizard',
+  steps: [
+    {
+      id:'datos', label:'Datos personales', description:'Nombre y contacto',
+      content: '<div class="wizard-panel"><div class="wizard-fields"><div class="wizard-grid"><div id="wf-nombre"></div><div id="wf-apellido"></div></div><div id="wf-email"></div><div id="wf-tel"></div></div></div>',
+    },
+    {
+      id:'seguridad', label:'Seguridad', description:'Contraseña de acceso',
+      content: function() {
+        return '<div class="wizard-panel"><div class="wizard-fields"><div id="wf-pass"></div><div id="wf-pass2"></div><div id="wf-terminos"></div></div></div>';
+      },
+    },
+    {
+      id:'confirm', label:'Confirmado',
+      content: function() {
+        return '<div class="wizard-panel"><div class="wizard-success"><div class="icon">🎉</div><h3>¡Cuenta creada!</h3><p>Revisa tu email para confirmar tu cuenta y comenzar.</p></div></div>';
+      },
+    },
+  ],
+  onChange: function(e) {
+    document.getElementById('res-wizard').textContent =
+      'onChange → paso ' + e.detail.index + ' ("' + e.detail.step.label + '") | dir: ' + e.detail.direction;
+    var idx = e.detail.index;
+    if (idx === 0) {
+      setTimeout(function(){
+        new MTS.Input('#wf-nombre',   {label:'Nombre',    placeholder:'Juan'});
+        new MTS.Input('#wf-apellido', {label:'Apellido',  placeholder:'Pérez'});
+        new MTS.Input('#wf-email',    {label:'Email',     type:'email', placeholder:'juan@empresa.com'});
+        new MTS.Input('#wf-tel',      {label:'Teléfono',  placeholder:'+56 9 1234 5678'});
+      }, 30);
+    }
+    if (idx === 1) {
+      setTimeout(function(){
+        new MTS.Input('#wf-pass',  {label:'Contraseña',         type:'password', showPassword:true});
+        new MTS.Input('#wf-pass2', {label:'Repetir contraseña', type:'password', showPassword:true});
+        new MTS.Checkbox('#wf-terminos', {label:'Acepto los términos y condiciones'});
+      }, 30);
+    }
+  },
+  onComplete: function() {
+    document.getElementById('res-wizard').textContent = 'onComplete → ¡formulario terminado!';
+  },
+});
+
+/* ─── 2. WIZARD VERTICAL ─────────────────────────────────── */
+var wizVert = new MTS.Stepper('#wizard-vert', {
+  mode:'wizard', direction:'vertical',
+  steps:[
+    {id:'s1',label:'Configuración inicial',description:'Ajustes básicos',
+     content:'<div class="wizard-panel"><p style="color:var(--mts-text-muted);font-size:13px;">Configura el nombre del workspace, idioma y zona horaria.</p></div>'},
+    {id:'s2',label:'Importar datos',description:'Cargar información',
+     content:'<div class="wizard-panel"><p style="color:var(--mts-text-muted);font-size:13px;">Importa datos desde CSV, Excel o conecta con tu API existente.</p></div>'},
+    {id:'s3',label:'Invitar equipo',description:'Colaboradores',
+     content:'<div class="wizard-panel"><p style="color:var(--mts-text-muted);font-size:13px;">Agrega los emails de tu equipo para darles acceso al workspace.</p></div>'},
+    {id:'s4',label:'Finalizar',
+     content:'<div class="wizard-panel"><div class="wizard-success"><div class="icon">🚀</div><h3>¡Listo para comenzar!</h3><p>Tu workspace está configurado y tu equipo fue invitado.</p></div></div>'},
+  ],
+});
+
+/* ─── 3. PROGRESS DEFAULT ─────────────────────────────────── */
+var progCheckout = new MTS.Stepper('#prog-checkout', {
+  mode:'progress', variant:'default', clickable:true, active:1,
+  steps:[
+    {id:'cart',    label:'Carrito',    description:'Revisa tus productos'},
+    {id:'ship',    label:'Envío',      description:'Dirección de entrega'},
+    {id:'payment', label:'Pago',       description:'Método de pago'},
+    {id:'confirm', label:'Confirmado'},
+  ],
+  onChange:function(e){
+    document.getElementById('res-checkout').textContent=
+      'onChange → paso '+e.detail.index+': "'+e.detail.step.label+'" | dir: '+e.detail.direction;
+  },
+  onComplete:function(){document.getElementById('res-checkout').textContent='onComplete → ¡pedido completado!';}
+});
+
+/* ─── 4. PROGRESS COMPACT ─────────────────────────────────── */
+var progCompact = new MTS.Stepper('#prog-compact', {
+  mode:'progress', variant:'compact', clickable:true, active:2,
+  steps:[
+    {id:'p1',label:'Inicio'},
+    {id:'p2',label:'Análisis'},
+    {id:'p3',label:'Desarrollo'},
+    {id:'p4',label:'Revisión'},
+    {id:'p5',label:'Publicado'},
+  ],
+  onStepClick:function(e){
+    document.getElementById('res-compact').textContent=
+      'onStepClick → paso '+e.detail.index+': "'+e.detail.step.label+'"';
+  },
+  onChange:function(e){
+    document.getElementById('res-compact').textContent=
+      'onChange → paso '+e.detail.index+': "'+e.detail.step.label+'"';
+  },
+});
+
+/* ─── 5. PROGRESS DOTS ─────────────────────────────────── */
+var progDots = new MTS.Stepper('#prog-dots', {
+  mode:'progress', variant:'dots', active:1,
+  steps:[
+    {id:'t',label:'Trigger'},
+    {id:'b',label:'Build'},
+    {id:'te',label:'Tests'},
+    {id:'d',label:'Deploy'},
+    {id:'l',label:'Live'},
+  ],
+});
+
+/* ─── 6. STATUS ─────────────────────────────────── */
+var statusStepper = new MTS.Stepper('#prog-status', {
+  mode:'progress', variant:'default', active:2,
+  steps:[
+    {id:'e1',label:'Validación',  description:'Datos correctos'},
+    {id:'e2',label:'Procesando',  description:'Ejecutando lógica'},
+    {id:'e3',label:'Notificación',description:'Enviando alertas'},
+    {id:'e4',label:'Completado'},
+  ],
+  onStatusChange:function(e){
+    document.getElementById('res-status').textContent=
+      'onStatusChange → paso '+e.detail.index+' → status: "'+e.detail.status+'"';
+  },
+  onChange:function(e){
+    document.getElementById('res-status').textContent=
+      'onChange → goTo('+e.detail.index+') → "'+e.detail.step.label+'"';
+  },
+});
+
+/* ─── 7. EVENTOS ─────────────────────────────────── */
+var evStepper = new MTS.Stepper('#prog-events', {
+  mode:'progress', variant:'compact', clickable:true, active:0,
+  steps:[
+    {id:'a',label:'Paso A'},{id:'b',label:'Paso B'},
+    {id:'c',label:'Paso C'},{id:'d',label:'Paso D'},
+  ],
+  onChange:function(e){
+    document.getElementById('res-events').textContent=
+      'onChange → index:'+e.detail.index+' prev:'+e.detail.prev+' dir:"'+e.detail.direction+'" step:"'+e.detail.step.label+'"';
+  },
+  onComplete:function(e){
+    document.getElementById('res-events').textContent=
+      'onComplete → '+e.detail.steps.length+' pasos completados';
+  },
+  onStepClick:function(e){
+    document.getElementById('res-events').textContent=
+      'onStepClick → paso '+e.detail.index+': "'+e.detail.step.label+'"';
+  },
+});
+</script>
+</body>
+</html>

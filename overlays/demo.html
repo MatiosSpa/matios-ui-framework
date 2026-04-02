@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS Overlays — Demo</title>
+        <script>
+    (function(){
+      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
+      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
+          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+        }
+      }catch(e){}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../themes/matios-ui-theme-high-contrast.css">
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:24px 24px 48px;}
+    .demo-page{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:8px;}
+    .demo-header{padding-bottom:20px;margin-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0;}
+    .acc{border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);overflow:hidden;transition:box-shadow .2s;}
+    .acc:hover{box-shadow:var(--mts-shadow-sm);}
+    .acc-header{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;background:var(--mts-bg-surface);user-select:none;transition:background .15s;}
+    .acc-header:hover{background:var(--mts-bg-surface-2);}
+    .acc-arrow{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--mts-color-primary);font-size:14px;font-weight:700;transition:transform .25s;flex-shrink:0;}
+    .acc.open .acc-arrow{transform:rotate(90deg);}
+    .acc-title{font-size:13px;font-weight:700;color:var(--mts-text-primary);flex:1;}
+    .acc-subtitle{font-size:11px;color:var(--mts-text-muted);}
+    .acc-body{display:none;border-top:1px solid var(--mts-border-color);background:var(--mts-bg-body);}
+    .acc.open .acc-body{display:block;}
+    .acc-iframe{width:100%;border:none;min-height:400px;display:block;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+</div>
+<div class="demo-page">
+  <div class="demo-header">
+    <h1>MTS <span>Overlays</span></h1>
+    <p>alert · tooltip · modal · badge · progress · skeleton · spinner · toast · popover · lightbox</p>
+  </div>
+
+  <div class="acc" id="acc-alert">
+    <div class="acc-header" onclick="toggleAcc('acc-alert','matios-ui-alert/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.Alert</span>
+      <span class="acc-subtitle">Alertas inline con variantes, íconos, acciones y auto-dismiss</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-alert" src="about:blank"></iframe></div>
+  </div>
+
+  <div class="acc" id="acc-tooltip">
+    <div class="acc-header" onclick="toggleAcc('acc-tooltip','matios-ui-tooltip/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.Tooltip</span>
+      <span class="acc-subtitle">Posicionamiento inteligente, triggers y colores custom</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-tooltip" src="about:blank"></iframe></div>
+  </div>
+
+  <div class="acc" id="acc-modal">
+    <div class="acc-header" onclick="toggleAcc('acc-modal','matios-ui-modal/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.Modal</span>
+      <span class="acc-subtitle">Modales con tamaños, botones configurables y helpers rápidos</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-modal" src="about:blank"></iframe></div>
+  </div>
+
+  <div class="acc" id="acc-badge">
+    <div class="acc-header" onclick="toggleAcc('acc-badge','matios-ui-badge/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.Badge</span>
+      <span class="acc-subtitle">Badges, pills y contadores — via CSS puro o JS</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-badge" src="about:blank"></iframe></div>
+  </div>
+
+  <div class="acc" id="acc-progress">
+    <div class="acc-header" onclick="toggleAcc('acc-progress','matios-ui-progress/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.Progress</span>
+      <span class="acc-subtitle">Barras de progreso — lineal, circular e indeterminado</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-progress" src="about:blank"></iframe></div>
+  </div>
+
+  <div class="acc" id="acc-skeleton">
+    <div class="acc-header" onclick="toggleAcc('acc-skeleton','matios-ui-skeleton/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.Skeleton</span>
+      <span class="acc-subtitle">Placeholder animado de carga — text, card, list, table</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-skeleton" src="about:blank"></iframe></div>
+  </div>
+
+  <div class="acc" id="acc-spinner">
+    <div class="acc-header" onclick="toggleAcc('acc-spinner','matios-ui-spinner/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.Spinner</span>
+      <span class="acc-subtitle">Indicadores de carga — circle, ring, dots, bars, pulse</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-spinner" src="about:blank"></iframe></div>
+  </div>
+
+  <div class="acc" id="acc-toast">
+    <div class="acc-header" onclick="toggleAcc('acc-toast','matios-ui-toast/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.Toast</span>
+      <span class="acc-subtitle">Notificaciones fugaces con posición, acción y barra de progreso</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-toast" src="about:blank"></iframe></div>
+  </div>
+
+  <div class="acc" id="acc-popover">
+    <div class="acc-header" onclick="toggleAcc('acc-popover','matios-ui-popover/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.Popover</span>
+      <span class="acc-subtitle">Tooltip enriquecido con título, contenido HTML, flecha y cierre</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-popover" src="about:blank"></iframe></div>
+  </div>
+
+  <div class="acc" id="acc-lightbox">
+    <div class="acc-header" onclick="toggleAcc('acc-lightbox','matios-ui-lightbox/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.Lightbox</span>
+      <span class="acc-subtitle">Visor de medios — imagen, video, YouTube, Vimeo, zoom, miniaturas</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-lightbox" src="about:blank"></iframe></div>
+  </div>
+</div>
+
+<script>
+var currentTheme = document.documentElement.getAttribute('data-mts-theme') || 'dark';
+
+function setTheme(t) {
+  currentTheme = t;
+  document.documentElement.setAttribute('data-mts-theme', t);
+  try {
+    if (window.parent && window.parent !== window)
+      window.parent.postMessage({ type:'setTheme', theme:t }, '*');
+  } catch(e) {}
+}
+
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'setTheme') {
+    currentTheme = e.data.theme;
+    document.documentElement.setAttribute('data-mts-theme', e.data.theme);
+  }
+});
+
+if (window !== window.top) {
+  var ts = document.querySelector('.demo-theme');
+  if (ts) ts.style.display = 'none';
+}
+
+function toggleAcc(id, src) {
+  var acc    = document.getElementById(id);
+  var iframe = document.getElementById('iframe-' + id);
+  acc.classList.toggle('open');
+  iframe.src = '';
+  iframe.src = src + '#mts-theme=' + currentTheme;
+}
+</script>
+</body>
+</html>

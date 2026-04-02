@@ -1,0 +1,107 @@
+/* ============================================================
+   MATIOS UI — matios-ui-progress.css  v1.0.0
+   ============================================================ */
+
+.mts-progress-wrap { width: 100%; }
+
+/* ── Header ── */
+.mts-progress__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.mts-progress__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mts-text-secondary);
+}
+.mts-progress__pct {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mts-text-muted);
+}
+
+/* ── Track ── */
+.mts-progress__track {
+  position: relative;
+  background: var(--mts-bg-surface-2, #1e2028);
+  overflow: hidden;
+  width: 100%;
+}
+.mts-progress__track--xs  { height: 4px; }
+.mts-progress__track--sm  { height: 6px; }
+.mts-progress__track--md  { height: 8px; }
+.mts-progress__track--lg  { height: 12px; }
+.mts-progress__track--rounded { border-radius: 999px; }
+
+/* ── Fill ── */
+.mts-progress__fill {
+  height: 100%;
+  width: 0%;
+  transition: width .4s cubic-bezier(.4,0,.2,1);
+  position: relative;
+  overflow: hidden;
+  background: var(--mts-color-primary, #4f8eff);
+}
+.mts-progress__fill--rounded { border-radius: 999px; }
+
+/* Variantes de color */
+.mts-progress__fill--default { background: var(--mts-color-primary,  #4f8eff); }
+.mts-progress__fill--primary { background: var(--mts-color-primary,  #4f8eff); }
+.mts-progress__fill--success { background: var(--mts-color-success,  #34d399); }
+.mts-progress__fill--warning { background: var(--mts-color-warning,  #fbbf24); }
+.mts-progress__fill--danger  { background: var(--mts-color-danger,   #f87171); }
+.mts-progress__fill--info    { background: #38bdf8; }
+.mts-progress__fill--accent  { background: #a78bfa; }
+
+/* Striped */
+.mts-progress__fill--striped {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255,255,255,.12) 25%, transparent 25%,
+    transparent 50%, rgba(255,255,255,.12) 50%,
+    rgba(255,255,255,.12) 75%, transparent 75%, transparent
+  );
+  background-size: 16px 16px;
+}
+
+/* Animated stripes */
+.mts-progress__fill--animated {
+  animation: mts-progress-stripes 1s linear infinite;
+}
+@keyframes mts-progress-stripes {
+  from { background-position: 16px 0; }
+  to   { background-position: 0 0; }
+}
+
+/* Indeterminate */
+.mts-progress__fill--indeterminate {
+  width: 40% !important;
+  animation: mts-progress-indeterminate 1.5s ease-in-out infinite;
+}
+@keyframes mts-progress-indeterminate {
+  0%   { left: -40%; width: 40%; }
+  50%  { left: 30%;  width: 60%; }
+  100% { left: 110%; width: 40%; }
+}
+
+/* ── CIRCLE ── */
+.mts-progress__circle-track {
+  stroke: var(--mts-bg-surface-2, #1e2028);
+}
+.mts-progress__circle-fill--default { stroke: var(--mts-color-primary,  #4f8eff); }
+.mts-progress__circle-fill--primary { stroke: var(--mts-color-primary,  #4f8eff); }
+.mts-progress__circle-fill--success { stroke: var(--mts-color-success,  #34d399); }
+.mts-progress__circle-fill--warning { stroke: var(--mts-color-warning,  #fbbf24); }
+.mts-progress__circle-fill--danger  { stroke: var(--mts-color-danger,   #f87171); }
+.mts-progress__circle-fill--info    { stroke: #38bdf8; }
+.mts-progress__circle-fill--accent  { stroke: #a78bfa; }
+
+/* Light theme fixes */
+[data-mts-theme="light"] .mts-progress__track {
+  background: #e5e7eb;
+}
+[data-mts-theme="light"] .mts-progress__circle-track {
+  stroke: #e5e7eb;
+}

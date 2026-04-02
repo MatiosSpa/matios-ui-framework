@@ -26,9 +26,10 @@ MTS.Kanban = class MtsKanban {
     this.onMove   = options.onMove    || null;
     this.onCardClick = options.onCardClick || null;
     this.onAddCard   = options.onAddCard   || null;
-    this._dragCard   = null;
-    this._dragCol    = null;
-    this._listeners  = {};
+    this._dragCard        = null;
+    this._dragCol         = null;
+    this._listeners       = {};
+    this.onSearchAssignee = options.onSearchAssignee || null;
     this._build();
   }
 
@@ -100,18 +101,31 @@ MTS.Kanban = class MtsKanban {
       if (!this._dragCard) return;
       const fromColId = this._dragCol;
       const toColId   = col.id;
-      const newIndex  = [...list.querySelectorAll('.mts-kanban__card:not(.mts-kanban__card--dragging)')].indexOf(this._el.querySelector('.mts-kanban__card--dragging'));
-      // Actualizar data
+      /* Calcular la posición real: contar cuántos cards NO-dragging hay ANTES del dragging en la lista */
+      const draggingEl = this._el.querySelector('.mts-kanban__card--dragging');
+      const allCards   = [...list.querySelectorAll('.mts-kanban__card')];
+      let newIndex = 0;
+      for (let i = 0; i < allCards.length; i++) {
+        if (allCards[i] === draggingEl) break;
+        if (!allCards[i].classList.contains('mts-kanban__card--dragging')) newIndex++;
+      }
+      /* Actualizar data */
       const fromCol = this.columns.find(c => c.id === fromColId);
       const toCol   = this.columns.find(c => c.id === toColId);
       if (fromCol && toCol) {
         const ci = fromCol.cards.findIndex(c => c.id === this._dragCard);
         const card = fromCol.cards.splice(ci, 1)[0];
-        toCol.cards.splice(Math.max(0, newIndex), 0, card);
+        toCol.cards.splice(newIndex, 0, card);
         count.textContent = toCol.cards.length;
-        if (this.onMove) this.onMove(card, fromColId, toColId, newIndex);
-        this._emit('move', { card, fromColId, toColId, newIndex });
-        this._emit('drop', { card, toColId });
+        /* Actualizar contador origen si es columna diferente */
+        if (fromColId !== toColId) {
+          const fromCounter = this._el.querySelector(`[data-col-id="${fromColId}"] .mts-kanban__col-count`);
+          if (fromCounter) fromCounter.textContent = fromCol.cards.length;
+        }
+        const position = newIndex + 1;
+        if (this.onMove) this.onMove(card, fromColId, toColId, position);
+        this._emit('move', { card, fromColId, toColId, position, newIndex });
+        this._emit('drop', { card, toColId, position });
       }
       this._dragCard = null; this._dragCol = null;
     });
@@ -123,7 +137,7 @@ MTS.Kanban = class MtsKanban {
       const addBtn = document.createElement('button');
       addBtn.className = 'mts-kanban__add';
       addBtn.innerHTML = `<span>+</span> Agregar tarjeta`;
-      addBtn.addEventListener('click', () => { if (this.onAddCard) this.onAddCard(col.id); this._emit('addCard', { colId: col.id }); });
+      addBtn.addEventListener('click', () => { addBtn.style.display='none'; this._showInlineAddForm(colEl, col.id, list, addBtn); });
       colEl.appendChild(addBtn);
     }
 
@@ -139,12 +153,14 @@ MTS.Kanban = class MtsKanban {
 
     el.addEventListener('dragstart', (e) => {
       this._dragCard = card.id; this._dragCol = colId;
+      document.body.style.cursor = 'grabbing';
       e.dataTransfer.effectAllowed = 'move';
       setTimeout(() => el.classList.add('mts-kanban__card--dragging'), 0);
     });
     el.addEventListener('dragend', () => {
       el.classList.remove('mts-kanban__card--dragging');
       this._el.querySelectorAll('.mts-kanban__list--over').forEach(l => l.classList.remove('mts-kanban__list--over'));
+      document.body.style.cursor = '';
     });
 
     if (this.onCardClick) el.addEventListener('click', () => { this.onCardClick(card, colId); this._emit('cardClick', { card, colId }); });
@@ -159,20 +175,27 @@ MTS.Kanban = class MtsKanban {
     if (card.tags?.length || card.assignee) {
       const footer = document.createElement('div');
       footer.className = 'mts-kanban__card-footer';
+
+      /* Tags — flex:1 + overflow hidden para no empujar el avatar */
+      const tagsEl = document.createElement('div');
+      tagsEl.className = 'mts-kanban__card-tags';
       if (card.tags?.length) {
-        const tagsEl = document.createElement('div');
-        tagsEl.className = 'mts-kanban__card-tags';
         card.tags.forEach(tag => {
           const t = document.createElement('span');
           t.className = 'mts-kanban__card-tag';
           t.textContent = tag;
           tagsEl.appendChild(t);
         });
-        footer.appendChild(tagsEl);
       }
+      footer.appendChild(tagsEl);
+
+      /* Avatar — siempre a la derecha, flex-shrink:0 */
       if (card.assignee) {
-        const av = MTS.Avatar?.create ? MTS.Avatar.create({ name: card.assignee, size: 'xs' }) : document.createElement('span');
-        if (!MTS.Avatar?.create) av.textContent = card.assignee.slice(0, 2);
+        const initials = card.assignee.split(' ').map(p => p[0]).join('').slice(0,2).toUpperCase();
+        const av = document.createElement('span');
+        av.className = 'mts-kanban__card-av';
+        av.textContent = initials;
+        av.title = card.assignee;
         footer.appendChild(av);
       }
       el.appendChild(footer);
@@ -193,6 +216,193 @@ MTS.Kanban = class MtsKanban {
       const offset = y - box.top - box.height / 2;
       return offset < 0 && offset > closest.offset ? { offset, element: child } : closest;
     }, { offset: Number.NEGATIVE_INFINITY }).element;
+  }
+
+  _showInlineAddForm(colEl, colId, list, addBtn) {
+    const form = document.createElement('div');
+    form.className = 'mts-kanban__add-form';
+
+    /* ── Helper ── */
+    const F = (tag, cls, attrs = {}) => {
+      const el = document.createElement(tag);
+      if (cls) el.className = cls;
+      Object.entries(attrs).forEach(([k, v]) => { if (k !== 'text') el[k] = v; });
+      if (attrs.text) el.textContent = attrs.text;
+      return el;
+    };
+
+    /* ═══ TÍTULO ═══ */
+    const titleInput = F('textarea', 'mts-kanban__add-input', { placeholder:'Título de la tarjeta *', rows:2 });
+
+    /* ═══ DESCRIPCIÓN ═══ */
+    const descInput = F('textarea', 'mts-kanban__add-input mts-kanban__add-input--sm', { placeholder:'Descripción (opcional)', rows:2 });
+
+    /* ═══ TAGS — estilo TagInput ═══ */
+    const tagsRow  = F('div', 'mts-kanban__add-row');
+    tagsRow.appendChild(F('label', 'mts-kanban__add-label', { text:'🏷 Tags' }));
+    const tagsWrap = F('div', 'mts-kanban__tags-wrap');
+    const tagsBox  = F('input', 'mts-kanban__tags-input', { type:'text', placeholder:'Escribe y presiona Enter...' });
+    tagsWrap.appendChild(tagsBox);
+    tagsRow.appendChild(tagsWrap);
+    const _tags = [];   // array de tags activos
+
+    const renderTags = () => {
+      tagsWrap.querySelectorAll('.mts-kanban__tag-pill').forEach(p => p.remove());
+      _tags.forEach((tag, i) => {
+        const pill = F('span', 'mts-kanban__tag-pill');
+        pill.innerHTML = tag + ' <span class="mts-kanban__tag-remove">×</span>';
+        pill.querySelector('.mts-kanban__tag-remove').addEventListener('click', () => {
+          _tags.splice(i, 1); renderTags();
+        });
+        tagsWrap.insertBefore(pill, tagsBox);
+      });
+    };
+
+    tagsBox.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ',') && tagsBox.value.trim()) {
+        e.preventDefault();
+        const val = tagsBox.value.replace(',','').trim();
+        if (val && !_tags.includes(val)) { _tags.push(val); renderTags(); }
+        tagsBox.value = '';
+      }
+      if (e.key === 'Backspace' && !tagsBox.value && _tags.length) {
+        _tags.pop(); renderTags();
+      }
+    });
+
+    /* ═══ ASIGNADO — autocomplete async ═══ */
+    const assigneeRow = F('div', 'mts-kanban__add-row');
+    assigneeRow.appendChild(F('label', 'mts-kanban__add-label', { text:'👤 Asignado' }));
+    const assigneeWrap   = F('div', 'mts-kanban__assignee-wrap');
+    const assigneeInput  = F('input', 'mts-kanban__add-field', { type:'text', placeholder:'Buscar usuario...' });
+    const assigneeDropdown = F('ul', 'mts-kanban__assignee-dd');
+    assigneeDropdown.style.display = 'none';
+    assigneeWrap.appendChild(assigneeInput);
+    assigneeWrap.appendChild(assigneeDropdown);
+    assigneeRow.appendChild(assigneeWrap);
+    let _assignee = null;   // { name, avatar? }
+    let _assigneeTimer = null;
+
+    const hideAssigneeDd = () => { assigneeDropdown.style.display = 'none'; };
+    const showAssigneeDd = (users) => {
+      assigneeDropdown.innerHTML = '';
+      if (!users.length) {
+        const li = F('li', 'mts-kanban__assignee-dd-empty', { text: 'Sin resultados' });
+        assigneeDropdown.appendChild(li);
+      } else {
+        users.forEach(u => {
+          const li = F('li', 'mts-kanban__assignee-dd-item');
+          const av = F('span', 'mts-kanban__assignee-av');
+          av.textContent = u.name.split(' ').map(p => p[0]).join('').slice(0,2).toUpperCase();
+          const nm = F('span', '', { text: u.name });
+          li.appendChild(av); li.appendChild(nm);
+          li.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            _assignee = u;
+            assigneeInput.value = u.name;
+            assigneeInput.classList.add('mts-kanban__add-field--selected');
+            hideAssigneeDd();
+          });
+          assigneeDropdown.appendChild(li);
+        });
+      }
+      assigneeDropdown.style.display = 'block';
+    };
+
+    assigneeInput.addEventListener('input', () => {
+      const q = assigneeInput.value.trim();
+      _assignee = null;
+      assigneeInput.classList.remove('mts-kanban__add-field--selected');
+      clearTimeout(_assigneeTimer);
+      if (q.length < 2) { hideAssigneeDd(); return; }
+      assigneeDropdown.innerHTML = '<li class="mts-kanban__assignee-dd-empty">Buscando...</li>';
+      assigneeDropdown.style.display = 'block';
+      _assigneeTimer = setTimeout(() => {
+        /* Llamada a la función de búsqueda — configurable vía onSearchAssignee */
+        const search = this.onSearchAssignee
+          ? this.onSearchAssignee(q)
+          : Promise.resolve(this._defaultAssigneeSearch(q));
+        Promise.resolve(search).then(users => showAssigneeDd(users));
+      }, 300);
+    });
+    assigneeInput.addEventListener('blur', () => setTimeout(hideAssigneeDd, 150));
+
+    /* ═══ PRIORIDAD ═══ */
+    const prioRow    = F('div', 'mts-kanban__add-row');
+    prioRow.appendChild(F('label', 'mts-kanban__add-label', { text:'⚡ Prioridad' }));
+    const prioSelect = F('select', 'mts-kanban__add-field');
+    [['', 'Sin prioridad'], ['low', 'Baja ↓'], ['medium', 'Media →'], ['high', 'Alta ↑']].forEach(([v, t]) => {
+      const o = document.createElement('option'); o.value = v; o.textContent = t; prioSelect.appendChild(o);
+    });
+    prioSelect.value = 'medium';
+    prioRow.appendChild(prioSelect);
+
+    /* ═══ ACCIONES ═══ */
+    const actions    = F('div', 'mts-kanban__add-actions');
+    const confirmBtn = F('button', 'mts-btn mts-btn--primary mts-btn--sm', { text:'Agregar tarjeta' });
+    const cancelBtn  = F('button', 'mts-kanban__form-close', { text:'✕' });
+
+    const cancel = () => { form.remove(); addBtn.style.display = ''; };
+
+    const confirm = () => {
+      const title = titleInput.value.trim();
+      if (!title) {
+        titleInput.focus();
+        titleInput.style.borderColor = 'var(--mts-color-danger,#f87171)';
+        return;
+      }
+      /* Si escribió texto en asignado pero no seleccionó de la lista, usarlo igual */
+      const assigneeName = _assignee?.name || assigneeInput.value.trim() || undefined;
+      const newCard = {
+        id:          'card-' + Date.now(),
+        title,
+        description: descInput.value.trim() || undefined,
+        tags:        _tags.length ? [..._tags] : undefined,
+        assignee:    assigneeName,
+        priority:    prioSelect.value || undefined,
+      };
+      const col = this.columns.find(c => c.id === colId);
+      if (col) col.cards.push(newCard);
+      list.appendChild(this._buildCard(newCard, colId));
+      const counter = colEl.querySelector('.mts-kanban__col-count');
+      if (counter) counter.textContent = col ? col.cards.length : '';
+      if (this.onAddCard) this.onAddCard(newCard, colId);
+      this._emit('cardAdd', { card: newCard, colId });
+      form.remove();
+      addBtn.style.display = '';
+    };
+
+    confirmBtn.addEventListener('click', confirm);
+    titleInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') cancel();
+      titleInput.style.borderColor = '';
+    });
+
+    /* Botón cerrar en top-right del form */
+    cancelBtn.addEventListener('click', cancel);
+    form.style.position = 'relative';
+    form.appendChild(cancelBtn);
+
+    form.appendChild(titleInput);
+    form.appendChild(descInput);
+    form.appendChild(tagsRow);
+    form.appendChild(assigneeRow);
+    form.appendChild(prioRow);
+    actions.appendChild(confirmBtn);
+    form.appendChild(actions);
+    colEl.insertBefore(form, addBtn);
+    titleInput.focus();
+  }
+
+  /* Búsqueda de asignados por defecto — sobreescribible con onSearchAssignee */
+  _defaultAssigneeSearch(query) {
+    const USERS = [
+      'Ana Torres','Carlos Ruiz','Juan Pérez','María Alarcón',
+      'Pedro Díaz','Rosa Medina','Luis García','Sofía Castro',
+      'Diego Herrera','Valentina López','Andrés Muñoz','Camila Soto',
+    ];
+    const q = query.toLowerCase();
+    return USERS.filter(u => u.toLowerCase().includes(q)).map(name => ({ name }));
   }
 
   _emit(event, detail) {

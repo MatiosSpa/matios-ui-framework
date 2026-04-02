@@ -1,0 +1,36 @@
+/* ============================================================
+   MATIOS UI — matios-ui-validation.css  v1.0.0
+   ============================================================ */
+
+/* Mensaje de error */
+.mts-validation-error {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--mts-color-danger, #f87171);
+  animation: mts-validation-appear .15s ease;
+}
+@keyframes mts-validation-appear {
+  from { opacity:0; transform:translateY(-4px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* Input con error */
+input.mts-input-error,
+select.mts-input-error,
+textarea.mts-input-error,
+.mts-input-error .mts-select__trigger,
+.mts-input-error .mts-picker-input {
+  border-color: var(--mts-color-danger, #f87171) !important;
+  box-shadow: 0 0 0 2px rgba(248,113,113,.15) !important;
+}
+
+/* Input con éxito */
+input.mts-input-success,
+select.mts-input-success,
+textarea.mts-input-success,
+.mts-input-success .mts-select__trigger,
+.mts-input-success .mts-picker-input {
+  border-color: var(--mts-color-success, #34d399) !important;
+}

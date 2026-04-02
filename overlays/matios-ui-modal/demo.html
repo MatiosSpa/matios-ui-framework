@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Modal — Demo</title>
+      <script>
+    (function(){
+      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
+      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
+          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+        }
+      }catch(e){}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="./matios-ui-modal.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="./matios-ui-modal.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
+    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
+    .demo-section{display:flex;flex-direction:column;gap:14px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
+    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
+    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
+    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
+    .demo-docs-panel.open{display:block;}
+    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
+    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
+    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
+    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
+    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
+    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
+    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
+    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
+    .demo-docs-panel p{margin:0 0 10px;}
+    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
+    .demo-docs-panel a{color:var(--mts-color-primary);text-decoration:none;}
+    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+</div>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.Modal</h1>
+    <p>Modales con tamaños, botones configurables y helpers rápidos.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-modal.md')">📄 Documentación</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Básico y tamaños</div>
+    <div class="demo-row">
+      <button class="mts-btn mts-btn--secondary" onclick="modalSm.show()">SM</button>
+      <button class="mts-btn mts-btn--secondary" onclick="modalMd.show()">MD (default)</button>
+      <button class="mts-btn mts-btn--secondary" onclick="modalLg.show()">LG</button>
+      <button class="mts-btn mts-btn--secondary" onclick="modalXl.show()">XL</button>
+      <button class="mts-btn mts-btn--secondary" onclick="modalFs.show()">Fullscreen</button>
+    </div>
+    <div class="result-box" id="modal-result">— abre un modal —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c1"><code>const modal = new MTS.Modal({
+  title: 'Título del modal',
+  body:  '&lt;p&gt;Contenido HTML...&lt;/p&gt;',
+  size:  'md',    // 'sm'|'md'|'lg'|'xl'|'fullscreen'
+  buttons: [
+    { label:'Cancelar', variant:'ghost',   close:true },
+    { label:'Aceptar',  variant:'primary', close:true,
+      onClick: () => console.log('aceptar') },
+  ],
+  onShow:   () => console.log('shown'),
+  onHide:   () => console.log('hidden'),
+})
+modal.show()
+modal.hide()</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Helpers rápidos</div>
+    <div class="demo-row" style="flex-wrap:wrap;">
+      <button class="mts-btn mts-btn--danger"   onclick="openConfirm()">Modal.confirm()</button>
+      <button class="mts-btn mts-btn--secondary" onclick="openAlert()">Modal.alert()</button>
+      <button class="mts-btn mts-btn--secondary" onclick="openPrompt()">Modal.prompt()</button>
+    </div>
+    <div class="result-box" id="modal-helper-result">— usa los helpers rápidos —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c2"><code>// Confirmación rápida
+MTS.Modal.confirm({
+  title:     '¿Eliminar registro?',
+  message:   'Esta acción no se puede deshacer.',
+  variant:   'danger',
+  onConfirm: () => console.log('confirmado'),
+  onCancel:  () => console.log('cancelado'),
+})
+
+// Alerta informativa
+MTS.Modal.alert({
+  title:   'Guardado',
+  message: 'Los cambios se guardaron correctamente.',
+  variant: 'success',
+})
+
+// Prompt — input de texto
+MTS.Modal.prompt({
+  title:       'Renombrar archivo',
+  placeholder: 'Nuevo nombre...',
+  onConfirm: (value) => console.log('valor:', value),
+})</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Con formulario</div>
+    <div class="demo-row">
+      <button class="mts-btn mts-btn--primary" onclick="modalForm.show()">Abrir formulario</button>
+    </div>
+    <div class="result-box" id="modal-form-result">— abre el modal con formulario —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c3"><code>const modal = new MTS.Modal({
+  title: 'Crear carpeta',
+  body: `&lt;div style="display:flex;flex-direction:column;gap:12px"&gt;
+    &lt;label&gt;Nombre&lt;/label&gt;
+    &lt;input id="modal-input" type="text" placeholder="Mi carpeta"&gt;
+  &lt;/div&gt;`,
+  buttons: [
+    { label:'Cancelar', variant:'ghost',   close:true },
+    { label:'Crear',    variant:'primary', close:true,
+      onClick: () => {
+        const val = document.getElementById('modal-input').value
+        console.log('nombre:', val)
+      }},
+  ],
+  onShow: () => setTimeout(() => document.getElementById('modal-input')?.focus(), 100),
+})</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">4 — Static (no cierra con Esc/backdrop)</div>
+    <div class="demo-row">
+      <button class="mts-btn mts-btn--secondary" onclick="modalStatic.show()">Modal static</button>
+      <button class="mts-btn mts-btn--secondary" onclick="modalScrollable.show()">Modal scrollable</button>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c4')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c4"><code>// Static: no cierra con Esc ni click en backdrop
+new MTS.Modal({
+  title:  'Aceptar términos',
+  static:  true,
+  body:   '...',
+  buttons: [{ label:'Aceptar', variant:'primary', close:true }],
+})
+
+// Scrollable: body con scroll interno
+new MTS.Modal({
+  title:      'Lista larga',
+  scrollable:  true,
+  body:       '...',  // contenido largo
+})</code></pre>
+  </div>
+</div>
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
+function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
+function toggleDocs(id,mdPath){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';fetch(mdPath).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>No se pudo cargar.</em>';});}
+function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
+
+var PS='color:var(--mts-text-secondary);font-size:13px;line-height:1.6;';
+var BSTYLE='padding:9px 12px;border-radius:8px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);color:var(--mts-text-primary);font-size:13px;outline:none;width:100%;font-family:inherit;';
+
+function logR(elId,msg){var el=document.getElementById(elId);if(el)el.textContent=msg;}
+
+// 1. Tamaños
+var BODY_BASIC='<p style="'+PS+'">Contenido del modal. Puede incluir cualquier HTML válido — texto, imágenes, formularios, tablas, etc.</p>';
+var BTNS=[{label:'Cancelar',variant:'ghost',close:true},{label:'Aceptar',variant:'primary',close:true,onClick:function(){logR('modal-result','onClick → Aceptar presionado');}}];
+var modalSm=new MTS.Modal({title:'Modal pequeño',  body:BODY_BASIC,size:'sm',  buttons:BTNS,onShow:function(){logR('modal-result','onShow → size: sm');}});
+var modalMd=new MTS.Modal({title:'Modal mediano',  body:BODY_BASIC,size:'md',  buttons:BTNS,onShow:function(){logR('modal-result','onShow → size: md (default)');}});
+var modalLg=new MTS.Modal({title:'Modal grande',   body:BODY_BASIC,size:'lg',  buttons:BTNS,onShow:function(){logR('modal-result','onShow → size: lg');}});
+var modalXl=new MTS.Modal({title:'Modal extra large',body:BODY_BASIC,size:'xl',buttons:BTNS,onShow:function(){logR('modal-result','onShow → size: xl');}});
+var modalFs=new MTS.Modal({title:'Pantalla completa',body:'<p style="'+PS+'">Modal en modo fullscreen — ocupa todo el viewport.</p>',size:'fullscreen',buttons:BTNS,onShow:function(){logR('modal-result','onShow → size: fullscreen');}});
+
+// 2. Helpers
+function openConfirm(){
+  MTS.Modal.confirm({
+    title:'¿Eliminar este registro?',
+    message:'Esta acción es permanente y no se puede deshacer.',
+    variant:'danger',
+    onConfirm:function(){logR('modal-helper-result','onConfirm → ¡eliminación confirmada!');},
+    onCancel:function(){logR('modal-helper-result','onCancel → operación cancelada');}
+  });
+}
+function openAlert(){
+  MTS.Modal.alert({
+    title:'Cambios guardados',
+    message:'Los cambios se guardaron correctamente y ya están disponibles.',
+    variant:'success',
+  });
+  logR('modal-helper-result','MTS.Modal.alert() → mostrado');
+}
+function openPrompt(){
+  MTS.Modal.prompt({
+    title:'Renombrar archivo',
+    placeholder:'Nuevo nombre del archivo...',
+    onConfirm:function(v){logR('modal-helper-result','onConfirm → valor: "'+v+'"');},
+    onCancel:function(){logR('modal-helper-result','onCancel → prompt cancelado');}
+  });
+}
+
+// 3. Formulario
+var modalForm=new MTS.Modal({
+  title:'Crear nueva carpeta',
+  body:'<div style="display:flex;flex-direction:column;gap:12px;"><label style="font-size:11px;font-weight:700;color:var(--mts-text-muted);text-transform:uppercase;">NOMBRE</label><input id="modal-folder-input" type="text" placeholder="Mi carpeta" style="'+BSTYLE+'"><label style="font-size:11px;font-weight:700;color:var(--mts-text-muted);text-transform:uppercase;">DESCRIPCIÓN (opcional)</label><input type="text" placeholder="Descripción..." style="'+BSTYLE+'"></div>',
+  buttons:[
+    {label:'Cancelar',variant:'ghost',close:true},
+    {label:'Crear carpeta',variant:'primary',close:true,onClick:function(){
+      var v=document.getElementById('modal-folder-input')?.value||'';
+      logR('modal-form-result','onClick → nombre: "'+v+'"');
+    }},
+  ],
+  onShow:function(){setTimeout(function(){document.getElementById('modal-folder-input')?.focus();},100);},
+});
+
+// 4. Static + Scrollable
+var modalStatic=new MTS.Modal({
+  title:'Debes aceptar para continuar',
+  static:true,
+  body:'<p style="'+PS+'">Este modal no se cierra con Esc ni haciendo click fuera. Debes usar el botón de acción.</p>',
+  buttons:[{label:'Aceptar términos',variant:'primary',close:true}],
+});
+var LONG_BODY='<div style="'+PS+'">'+Array(20).fill(0).map(function(_,i){return '<p>Párrafo '+(i+1)+'  — Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>';}).join('')+'
+  <div class="demo-section">
+    <div class="demo-section-title">Helpers estáticos con callbacks</div>
+    <div class="demo-row">
+      <button class="mts-btn mts-btn--danger"     onclick="demoConfirm()">confirm()</button>
+      <button class="mts-btn mts-btn--secondary"  onclick="demoAlert()">alert()</button>
+      <button class="mts-btn mts-btn--secondary"  onclick="demoPrompt()">prompt()</button>
+    </div>
+    <div class="result-box" id="modal-cb-res">— usa los helpers —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c-modal-cb')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c-modal-cb"><code>// confirm — callback (recomendado)
+MTS.Modal.confirm({
+  title: '¿Eliminar?', message: 'No se puede deshacer.',
+  variant: 'danger', confirmText: 'Eliminar',
+  onConfirm: () =&gt; eliminar(),
+  onCancel:  () =&gt; console.log('cancelado'),
+})
+
+// alert — callback
+MTS.Modal.alert({
+  title: 'Listo', message: 'Cambios guardados.',
+  onAccept: () =&gt; console.log('aceptado'),
+})
+
+// prompt — callback
+MTS.Modal.prompt({
+  title: 'Renombrar', placeholder: 'Nuevo nombre...',
+  onConfirm: (value) =&gt; console.log('valor:', value),
+  onCancel:  ()      =&gt; console.log('cancelado'),
+})</code></pre>
+  </div>
+
+</div>';
+var modalScrollable=new MTS.Modal({
+  title:'Contenido largo — scroll interno',
+  scrollable:true,
+  body:LONG_BODY,
+  buttons:[{label:'Cerrar',variant:'ghost',close:true}],
+});
+
+
+function demoConfirm(){
+  MTS.Modal.confirm({
+    title:'¿Eliminar este registro?', message:'Esta acción es permanente.',
+    variant:'danger', confirmText:'Eliminar', cancelText:'Cancelar',
+    onConfirm: function(){ document.getElementById('modal-cb-res').textContent = '→ onConfirm: ¡eliminación confirmada!'; },
+    onCancel:  function(){ document.getElementById('modal-cb-res').textContent = '→ onCancel: operación cancelada'; },
+  });
+}
+function demoAlert(){
+  MTS.Modal.alert({
+    title:'Cambios guardados', message:'Todo se guardó correctamente.',
+    label:'Entendido',
+    onAccept: function(){ document.getElementById('modal-cb-res').textContent = '→ onAccept: usuario aceptó la alerta'; },
+  });
+}
+function demoPrompt(){
+  MTS.Modal.prompt({
+    title:'Renombrar archivo', label:'Nuevo nombre', placeholder:'Ingresa el nombre...',
+    confirmText:'Renombrar', cancelText:'Cancelar',
+    onConfirm: function(v){ document.getElementById('modal-cb-res').textContent = '→ onConfirm: valor = "' + v + '"'; },
+    onCancel:  function(){  document.getElementById('modal-cb-res').textContent = '→ onCancel: prompt cancelado'; },
+  });
+}
+</script>
+</body>
+</html>

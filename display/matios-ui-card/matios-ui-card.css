@@ -1,0 +1,219 @@
+/* ============================================================
+   MATIOS UI — matios-ui-card.css  v1.0.0
+   MTS.Card — Card genérica con header, body, footer
+   CSS puro — JS opcional para interactividad
+   ============================================================ */
+
+
+/* ── Base ───────────────────────────────────────────────── */
+
+.mts-card {
+  background: var(--mts-bg-surface);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow var(--mts-transition-fast), border-color var(--mts-transition-fast), transform var(--mts-transition-fast);
+}
+
+
+/* ── Variantes ──────────────────────────────────────────── */
+
+.mts-card--flat {
+  border: none;
+  background: var(--mts-bg-surface);
+  box-shadow: none;
+}
+
+.mts-card--elevated {
+  border: none;
+  box-shadow: var(--mts-shadow-md);
+}
+
+.mts-card--outlined {
+  background: transparent;
+  border: 1px solid var(--mts-border-color-strong);
+  box-shadow: none;
+}
+
+/* Colores de acento en el borde izquierdo */
+.mts-card--primary { border-left: 3px solid var(--mts-color-primary); }
+.mts-card--success { border-left: 3px solid var(--mts-color-success); }
+.mts-card--warning { border-left: 3px solid var(--mts-color-warning); }
+.mts-card--danger  { border-left: 3px solid var(--mts-color-danger);  }
+
+
+/* ── Hover & Clickable ──────────────────────────────────── */
+
+.mts-card--hoverable:hover {
+  box-shadow: var(--mts-shadow-md);
+  border-color: var(--mts-border-color-strong);
+  transform: translateY(-2px);
+}
+
+.mts-card--clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.mts-card--clickable:hover {
+  box-shadow: var(--mts-shadow-md);
+  border-color: var(--mts-border-color-strong);
+  transform: translateY(-2px);
+}
+
+.mts-card--clickable:active {
+  transform: translateY(0);
+  box-shadow: var(--mts-shadow-sm);
+}
+
+.mts-card--selected {
+  border-color: var(--mts-color-primary);
+  box-shadow: 0 0 0 3px var(--mts-color-primary-light);
+}
+
+
+/* ── Card Image ─────────────────────────────────────────── */
+
+.mts-card__image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+}
+
+.mts-card__image--square { aspect-ratio: 1/1; }
+.mts-card__image--wide   { aspect-ratio: 21/9; }
+
+
+/* ── Card Header ────────────────────────────────────────── */
+
+.mts-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-4) var(--mts-space-5);
+  border-bottom: 1px solid var(--mts-border-color);
+  flex-shrink: 0;
+}
+
+.mts-card__header--no-border {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.mts-card__header-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-1);
+  min-width: 0;
+}
+
+.mts-card__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+  flex-shrink: 0;
+}
+
+.mts-card__title {
+  font-size: var(--mts-font-size-md);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+  margin: 0;
+  line-height: var(--mts-line-height-tight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mts-card__subtitle {
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-muted);
+  margin: 0;
+  line-height: var(--mts-line-height-base);
+}
+
+
+/* ── Card Body ──────────────────────────────────────────── */
+
+.mts-card__body {
+  padding: var(--mts-space-5);
+  flex: 1;
+  color: var(--mts-text-secondary);
+  font-size: var(--mts-font-size-sm);
+  line-height: var(--mts-line-height-base);
+}
+
+.mts-card__body--compact { padding: var(--mts-space-3) var(--mts-space-4); }
+.mts-card__body--flush   { padding: 0; }
+
+
+/* ── Card Footer ────────────────────────────────────────── */
+
+.mts-card__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+  padding: var(--mts-space-3) var(--mts-space-5);
+  border-top: 1px solid var(--mts-border-color);
+  background: var(--mts-bg-surface-2);
+  flex-shrink: 0;
+}
+
+.mts-card__footer--end     { justify-content: flex-end; }
+.mts-card__footer--between { justify-content: space-between; }
+.mts-card__footer--center  { justify-content: center; }
+.mts-card__footer--no-bg   { background: transparent; }
+
+
+/* ── Tamaños ────────────────────────────────────────────── */
+
+.mts-card--sm .mts-card__header { padding: var(--mts-space-3) var(--mts-space-4); }
+.mts-card--sm .mts-card__body   { padding: var(--mts-space-3) var(--mts-space-4); }
+.mts-card--sm .mts-card__footer { padding: var(--mts-space-2) var(--mts-space-4); }
+.mts-card--sm .mts-card__title  { font-size: var(--mts-font-size-sm); }
+
+.mts-card--lg .mts-card__header { padding: var(--mts-space-6) var(--mts-space-6); }
+.mts-card--lg .mts-card__body   { padding: var(--mts-space-6); }
+.mts-card--lg .mts-card__footer { padding: var(--mts-space-4) var(--mts-space-6); }
+.mts-card--lg .mts-card__title  { font-size: var(--mts-font-size-lg); }
+
+
+/* ── Card horizontal (imagen a la izquierda) ────────────── */
+
+.mts-card--horizontal {
+  flex-direction: row;
+}
+
+.mts-card--horizontal .mts-card__image {
+  width: 200px;
+  height: auto;
+  aspect-ratio: auto;
+  flex-shrink: 0;
+  border-radius: 0;
+}
+
+.mts-card--horizontal .mts-card__body {
+  flex: 1;
+}
+
+
+/* ── Card loading skeleton ──────────────────────────────── */
+
+.mts-card--loading .mts-card__title,
+.mts-card--loading .mts-card__subtitle,
+.mts-card--loading .mts-card__body {
+  background: var(--mts-bg-surface-2);
+  color: transparent;
+  border-radius: var(--mts-radius-sm);
+  animation: mts-card-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes mts-card-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}

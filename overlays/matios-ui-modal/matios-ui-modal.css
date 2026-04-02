@@ -1,0 +1,261 @@
+/* ============================================================
+   MATIOS UI — matios-ui-modal.css
+   MTS.Modal — Estilos
+   Requiere: matios-ui-base.css
+   Version:  1.0.0
+   ============================================================ */
+
+
+/* ============================================================
+   1. SCROLL LOCK — body cuando modal está abierto
+   ============================================================ */
+
+body.mts-modal-open {
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   2. BACKDROP
+   ============================================================ */
+
+.mts-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--mts-bg-overlay);
+  z-index: calc(var(--mts-z-modal) - 1);
+  opacity: 0;
+  transition: opacity var(--mts-transition-base);
+  pointer-events: none;
+}
+
+.mts-modal-backdrop--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* ============================================================
+   3. DIALOG — contenedor posicionado
+   ============================================================ */
+
+.mts-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--mts-z-modal);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--mts-space-8) var(--mts-space-4);
+  overflow-y: auto;
+  pointer-events: none;
+}
+
+.mts-modal[hidden] {
+  display: none;
+}
+
+/* Centrado vertical */
+.mts-modal--centered {
+  align-items: center;
+}
+
+/* Scrollable — body hace scroll, no el viewport */
+.mts-modal--scrollable .mts-modal__content {
+  max-height: calc(100vh - var(--mts-space-8) * 2);
+}
+
+.mts-modal--scrollable .mts-modal__body {
+  overflow-y: auto;
+}
+
+
+/* ============================================================
+   4. CONTENT — la "caja" visible
+   ============================================================ */
+
+.mts-modal__content {
+  position: relative;
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-xl);
+  box-shadow: var(--mts-shadow-xl);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+
+  /* Animación de entrada */
+  opacity: 0;
+  transform: translateY(-16px) scale(0.98);
+  transition:
+    opacity var(--mts-transition-base),
+    transform var(--mts-transition-base);
+}
+
+.mts-modal--visible .mts-modal__content {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+
+/* ============================================================
+   5. TAMAÑOS
+   ============================================================ */
+
+.mts-modal--sm  .mts-modal__content { max-width: 400px;  }
+.mts-modal--md  .mts-modal__content { max-width: 560px;  }
+.mts-modal--lg  .mts-modal__content { max-width: 800px;  }
+.mts-modal--xl  .mts-modal__content { max-width: 1100px; }
+
+.mts-modal--fullscreen {
+  padding: 0;
+  align-items: stretch;
+}
+
+.mts-modal--fullscreen .mts-modal__content {
+  max-width: 100%;
+  min-height: 100vh;
+  border-radius: 0;
+  border: none;
+}
+
+
+/* ============================================================
+   6. HEADER
+   ============================================================ */
+
+.mts-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--mts-space-4) var(--mts-space-5);
+  border-bottom: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  gap: var(--mts-space-3);
+  flex-shrink: 0;
+}
+
+.mts-modal__title {
+  font-size: var(--mts-font-size-lg);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+  line-height: var(--mts-line-height-tight);
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Botón cerrar X */
+.mts-modal__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--mts-text-muted);
+  background: none;
+  border: none;
+  border-radius: var(--mts-radius-md);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color var(--mts-transition-fast), background var(--mts-transition-fast);
+  padding: 0;
+}
+
+.mts-modal__close:hover {
+  color: var(--mts-text-primary);
+  background: var(--mts-bg-surface-2);
+}
+
+
+/* ============================================================
+   7. BODY
+   ============================================================ */
+
+.mts-modal__body {
+  padding: var(--mts-space-5);
+  color: var(--mts-text-secondary);
+  font-size: var(--mts-font-size-md);
+  line-height: var(--mts-line-height-base);
+  flex: 1;
+}
+
+/* Sin padding cuando el body tiene contenido full-bleed */
+.mts-modal__body--flush {
+  padding: 0;
+}
+
+
+/* ============================================================
+   8. FOOTER
+   ============================================================ */
+
+.mts-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--mts-space-2);
+  padding: var(--mts-space-3) var(--mts-space-5);
+  border-top: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* Footer con botones a la izquierda */
+.mts-modal__footer--start {
+  justify-content: flex-start;
+}
+
+/* Footer con botones distribuidos */
+.mts-modal__footer--between {
+  justify-content: space-between;
+}
+
+
+/* ============================================================
+   9. CONFIRM MESSAGE — Modal.confirm() / Modal.alert()
+   ============================================================ */
+
+.mts-modal-confirm__message {
+  margin: 0;
+  color: var(--mts-text-secondary);
+  font-size: var(--mts-font-size-md);
+  line-height: var(--mts-line-height-base);
+}
+
+
+/* ============================================================
+   10. RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 576px) {
+  .mts-modal {
+    padding: var(--mts-space-4) var(--mts-space-2);
+    align-items: flex-end;
+  }
+
+  .mts-modal--centered {
+    align-items: flex-end;
+  }
+
+  .mts-modal__content {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-radius: var(--mts-radius-xl) var(--mts-radius-xl) 0 0;
+    transform: translateY(40px) scale(1) !important;
+  }
+
+  .mts-modal--visible .mts-modal__content {
+    transform: translateY(0) scale(1) !important;
+  }
+
+  .mts-modal--sm .mts-modal__content,
+  .mts-modal--md .mts-modal__content {
+    max-width: 100%;
+  }
+}

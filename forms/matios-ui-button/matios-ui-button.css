@@ -1,0 +1,195 @@
+/* ============================================================
+   MATIOS UI — matios-ui-button.css  v1.0.0
+   MTS.Button — Estilos de botones y grupos
+   ============================================================ */
+
+/* ── Spinner loading ─────────────────────────────────────── */
+.mts-btn__spinner {
+  display: inline-block;
+  width: 13px; height: 13px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: mts-btn-spin .6s linear infinite;
+  opacity: .7;
+  flex-shrink: 0;
+}
+@keyframes mts-btn-spin { to { transform: rotate(360deg); } }
+
+/* ── Íconos ──────────────────────────────────────────────── */
+.mts-btn__icon-left,
+.mts-btn__icon-right {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.mts-btn__icon-left  { margin-right: 2px; }
+.mts-btn__icon-right { margin-left: 2px; }
+
+/* ── Variante Warning (nueva) ────────────────────────────── */
+.mts-btn--warning {
+  background-color: var(--mts-color-warning);
+  border-color:     var(--mts-color-warning);
+  color:            var(--mts-color-warning-text, #fff);
+}
+.mts-btn--warning:hover {
+  background-color: var(--mts-color-warning-hover, #b45309);
+  border-color:     var(--mts-color-warning-hover, #b45309);
+}
+.mts-btn--warning:active {
+  filter: brightness(.9);
+}
+
+/* ── Grupo de botones ────────────────────────────────────── */
+.mts-btn-group {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;           /* SIN gap — los botones van pegados */
+}
+
+.mts-btn-group .mts-btn {
+  border-radius: 0 !important;
+  border-right-width: 0 !important;
+  margin: 0 !important;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Solo el primero tiene borde-izquierdo redondeado */
+.mts-btn-group .mts-btn:first-child {
+  border-radius: var(--mts-radius-md) 0 0 var(--mts-radius-md) !important;
+}
+
+/* Solo el último tiene borde-derecho redondeado Y recupera el borde derecho */
+.mts-btn-group .mts-btn:last-child {
+  border-radius: 0 var(--mts-radius-md) var(--mts-radius-md) 0 !important;
+  border-right-width: var(--mts-border-width) !important;
+}
+
+/* Un solo botón en el grupo */
+.mts-btn-group .mts-btn:only-child {
+  border-radius: var(--mts-radius-md) !important;
+  border-right-width: var(--mts-border-width) !important;
+}
+
+/* Hover y focus elevan el botón para que su borde sea visible */
+.mts-btn-group .mts-btn:hover,
+.mts-btn-group .mts-btn:focus {
+  z-index: 1;
+}
+
+/* Grupo con bordes redondeados tipo pill */
+.mts-btn-group--round .mts-btn:first-child {
+  border-radius: var(--mts-radius-full) 0 0 var(--mts-radius-full) !important;
+}
+.mts-btn-group--round .mts-btn:last-child {
+  border-radius: 0 var(--mts-radius-full) var(--mts-radius-full) 0 !important;
+}
+
+/* ── Estado activo — usado por MTS.ButtonGroup ───────────── */
+.mts-btn--active {
+  background-color: var(--mts-color-primary)    !important;
+  border-color:     var(--mts-color-primary)    !important;
+  color:            var(--mts-color-primary-text, #fff) !important;
+  z-index: 1;
+}
+
+/* Activo en variante secondary/ghost mantiene el color del tema */
+.mts-btn--secondary.mts-btn--active,
+.mts-btn--ghost.mts-btn--active {
+  background-color: var(--mts-color-primary)    !important;
+  border-color:     var(--mts-color-primary)    !important;
+  color:            var(--mts-color-primary-text, #fff) !important;
+}
+
+/* ── Shadow ──────────────────────────────────────────────── */
+/* Sombra direccional sutil que refleja el color del botón    */
+
+.mts-btn--shadow.mts-btn--primary {
+  box-shadow: var(--mts-btn-shadow-primary);
+}
+.mts-btn--shadow.mts-btn--primary:hover  { box-shadow: var(--mts-btn-shadow-primary), 0 2px 6px rgba(0,0,0,.15); transform: translateY(-1px); }
+.mts-btn--shadow.mts-btn--primary:active { box-shadow: none; transform: translateY(0); }
+
+.mts-btn--shadow.mts-btn--danger {
+  box-shadow: var(--mts-btn-shadow-danger);
+}
+.mts-btn--shadow.mts-btn--danger:hover  { box-shadow: var(--mts-btn-shadow-danger), 0 2px 6px rgba(0,0,0,.15); transform: translateY(-1px); }
+.mts-btn--shadow.mts-btn--danger:active { box-shadow: none; transform: translateY(0); }
+
+.mts-btn--shadow.mts-btn--success {
+  box-shadow: var(--mts-btn-shadow-success);
+}
+.mts-btn--shadow.mts-btn--success:hover  { box-shadow: var(--mts-btn-shadow-success), 0 2px 6px rgba(0,0,0,.15); transform: translateY(-1px); }
+.mts-btn--shadow.mts-btn--success:active { box-shadow: none; transform: translateY(0); }
+
+.mts-btn--shadow.mts-btn--warning {
+  box-shadow: var(--mts-btn-shadow-warning);
+}
+.mts-btn--shadow.mts-btn--warning:hover  { box-shadow: var(--mts-btn-shadow-warning), 0 2px 6px rgba(0,0,0,.15); transform: translateY(-1px); }
+.mts-btn--shadow.mts-btn--warning:active { box-shadow: none; transform: translateY(0); }
+
+/* secondary/ghost usan la sombra primary del tema */
+.mts-btn--shadow.mts-btn--secondary,
+.mts-btn--shadow.mts-btn--ghost {
+  box-shadow: var(--mts-btn-shadow-primary);
+}
+.mts-btn--shadow.mts-btn--secondary:hover,
+.mts-btn--shadow.mts-btn--ghost:hover { box-shadow: var(--mts-btn-shadow-primary), 0 2px 6px rgba(0,0,0,.15); transform: translateY(-1px); }
+.mts-btn--shadow.mts-btn--secondary:active,
+.mts-btn--shadow.mts-btn--ghost:active { box-shadow: none; transform: translateY(0); }
+
+/* ── Ring ────────────────────────────────────────────────── */
+/* Ring semitransparente del color del botón                  */
+
+.mts-btn--ring.mts-btn--primary {
+  box-shadow: var(--mts-btn-ring-primary);
+}
+.mts-btn--ring.mts-btn--danger {
+  box-shadow: var(--mts-btn-ring-danger);
+}
+.mts-btn--ring.mts-btn--success {
+  box-shadow: var(--mts-btn-ring-success);
+}
+.mts-btn--ring.mts-btn--warning {
+  box-shadow: var(--mts-btn-ring-warning);
+}
+.mts-btn--ring.mts-btn--secondary,
+.mts-btn--ring.mts-btn--ghost {
+  box-shadow: var(--mts-btn-ring-primary);
+}
+
+/* ── Shadow + Ring combinados ────────────────────────────── */
+
+.mts-btn--shadow.mts-btn--ring.mts-btn--primary {
+  box-shadow: var(--mts-btn-shadow-primary), var(--mts-btn-ring-primary);
+}
+.mts-btn--shadow.mts-btn--ring.mts-btn--primary:hover  { box-shadow: var(--mts-btn-shadow-primary), var(--mts-btn-ring-primary), 0 2px 6px rgba(0,0,0,.15); transform: translateY(-1px); }
+.mts-btn--shadow.mts-btn--ring.mts-btn--primary:active { box-shadow: var(--mts-btn-ring-primary); transform: translateY(0); }
+
+.mts-btn--shadow.mts-btn--ring.mts-btn--danger {
+  box-shadow: var(--mts-btn-shadow-danger), var(--mts-btn-ring-danger);
+}
+.mts-btn--shadow.mts-btn--ring.mts-btn--danger:hover  { box-shadow: var(--mts-btn-shadow-danger), var(--mts-btn-ring-danger), 0 2px 6px rgba(0,0,0,.15); transform: translateY(-1px); }
+.mts-btn--shadow.mts-btn--ring.mts-btn--danger:active { box-shadow: var(--mts-btn-ring-danger); transform: translateY(0); }
+
+.mts-btn--shadow.mts-btn--ring.mts-btn--success {
+  box-shadow: var(--mts-btn-shadow-success), var(--mts-btn-ring-success);
+}
+.mts-btn--shadow.mts-btn--ring.mts-btn--success:hover  { box-shadow: var(--mts-btn-shadow-success), var(--mts-btn-ring-success), 0 2px 6px rgba(0,0,0,.15); transform: translateY(-1px); }
+.mts-btn--shadow.mts-btn--ring.mts-btn--success:active { box-shadow: var(--mts-btn-ring-success); transform: translateY(0); }
+
+.mts-btn--shadow.mts-btn--ring.mts-btn--warning {
+  box-shadow: var(--mts-btn-shadow-warning), var(--mts-btn-ring-warning);
+}
+.mts-btn--shadow.mts-btn--ring.mts-btn--warning:hover  { box-shadow: var(--mts-btn-shadow-warning), var(--mts-btn-ring-warning), 0 2px 6px rgba(0,0,0,.15); transform: translateY(-1px); }
+.mts-btn--shadow.mts-btn--ring.mts-btn--warning:active { box-shadow: var(--mts-btn-ring-warning); transform: translateY(0); }
+
+.mts-btn--shadow.mts-btn--ring.mts-btn--secondary,
+.mts-btn--shadow.mts-btn--ring.mts-btn--ghost {
+  box-shadow: var(--mts-btn-shadow-primary), var(--mts-btn-ring-primary);
+}
+.mts-btn--shadow.mts-btn--ring.mts-btn--secondary:hover,
+.mts-btn--shadow.mts-btn--ring.mts-btn--ghost:hover { box-shadow: var(--mts-btn-shadow-primary), var(--mts-btn-ring-primary), 0 2px 6px rgba(0,0,0,.15); transform: translateY(-1px); }
+.mts-btn--shadow.mts-btn--ring.mts-btn--secondary:active,
+.mts-btn--shadow.mts-btn--ring.mts-btn--ghost:active { box-shadow: var(--mts-btn-ring-primary); transform: translateY(0); }

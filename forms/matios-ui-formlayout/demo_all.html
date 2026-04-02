@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <script>
+  (function(){
+    var m=(location.search||'').match(/mts-theme=([a-z-]+)/);
+    if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+    try{
+      var p=window.parent;
+      if(p&&p!==window){
+        var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
+        if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+      }
+    }catch(e){}
+  })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS Form Layout — Prueba de fuego</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <!-- Forms -->
+  <link rel="stylesheet" href="../matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../matios-ui-taginput/matios-ui-taginput.css">
+  <link rel="stylesheet" href="../matios-ui-rating/matios-ui-rating.css">
+  <link rel="stylesheet" href="../matios-ui-picker/matios-ui-picker.css">
+  <link rel="stylesheet" href="../matios-ui-numberinput/matios-ui-numberinput.css">
+  <link rel="stylesheet" href="../matios-ui-phoneinput/matios-ui-phoneinput.css">
+  <link rel="stylesheet" href="../matios-ui-colorpicker/matios-ui-colorpicker.css">
+  <link rel="stylesheet" href="../matios-ui-fileupload/matios-ui-fileupload.css">
+  <link rel="stylesheet" href="../matios-ui-richtexteditor/matios-ui-richtexteditor.css">
+  <link rel="stylesheet" href="../matios-ui-label/matios-ui-label.css">
+  <!-- Overlays -->
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-tooltip/matios-ui-tooltip.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-progress/matios-ui-progress.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-spinner/matios-ui-spinner.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-toast/matios-ui-toast.css">
+  <!-- Display -->
+  <link rel="stylesheet" href="../../display/matios-ui-avatar/matios-ui-avatar.css">
+  <!-- Form Layout -->
+  <link rel="stylesheet" href="./matios-ui-formlayout.css">
+
+  <!-- JS Forms -->
+  <script src="../matios-ui-input/matios-ui-input.js"></script>
+  <script src="../matios-ui-select/matios-ui-select.js"></script>
+  <script src="../matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../matios-ui-taginput/matios-ui-taginput.js"></script>
+  <script src="../matios-ui-rating/matios-ui-rating.js"></script>
+  <script src="../matios-ui-picker/matios-ui-picker.js"></script>
+  <script src="../matios-ui-numberinput/matios-ui-numberinput.js"></script>
+  <script src="../matios-ui-phoneinput/matios-ui-phoneinput.js"></script>
+  <script src="../matios-ui-colorpicker/matios-ui-colorpicker.js"></script>
+  <script src="../matios-ui-fileupload/matios-ui-fileupload.js"></script>
+  <script src="../matios-ui-richtexteditor/matios-ui-richtexteditor.js"></script>
+  <script src="../matios-ui-button/matios-ui-button.js"></script>
+  <script src="../matios-ui-confirmbutton/matios-ui-confirmbutton.js"></script>
+  <script src="../matios-ui-validation/matios-ui-validation.js"></script>
+  <script src="../matios-ui-label/matios-ui-label.js"></script>
+  <!-- JS Overlays -->
+  <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../overlays/matios-ui-tooltip/matios-ui-tooltip.js"></script>
+  <script src="../../overlays/matios-ui-progress/matios-ui-progress.js"></script>
+  <script src="../../overlays/matios-ui-spinner/matios-ui-spinner.js"></script>
+  <script src="../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+  <!-- JS Display -->
+  <script src="../../display/matios-ui-avatar/matios-ui-avatar.js"></script>
+
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:24px 24px 80px;}
+    .page{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:48px;}
+
+    .page-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+    .page-header h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin:0;}
+    .page-header h1 span{color:var(--mts-color-primary);}
+    .page-header p{font-size:13px;color:var(--mts-text-muted);margin:4px 0 0;}
+    .back-link{font-size:13px;color:var(--mts-color-primary);text-decoration:none;font-weight:600;white-space:nowrap;}
+    .back-link:hover{text-decoration:underline;}
+
+    .form-block{display:flex;flex-direction:column;gap:16px;}
+    .form-block-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .form-block-desc{font-size:12px;color:var(--mts-text-muted);margin:0;}
+
+    .result-box{background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-muted);min-height:40px;line-height:1.6;}
+
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+
+    /* inline avatar en form */
+    .form-avatar-row{display:flex;align-items:center;gap:12px;}
+  </style>
+</head>
+<body>
+
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+</div>
+
+<div class="page">
+
+  <div class="page-header">
+    <div>
+      <h1>🧪 Prueba de <span>Fuego</span></h1>
+      <p>Todos los componentes en los 4 modos de layout — con validación</p>
+    </div>
+    <a href="demo.html" class="back-link">← Volver al demo</a>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       1 — STACK — todos los componentes
+  ══════════════════════════════════════════ -->
+  <div class="form-block">
+    <div class="form-block-title">1 — Stack (default) — todos los componentes</div>
+
+    <form id="form-stack" class="mts-form" style="max-width:560px">
+
+      <!-- Avatar + badge decorativo -->
+      <div class="mts-form-group">
+        <label class="mts-form-label">Foto de perfil</label>
+        <div class="form-avatar-row">
+          <div id="av-stack"></div>
+          <span id="badge-stack"></span>
+        </div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label mts-form-label--required">Nombre completo</label>
+        <div id="s1-nombre"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label mts-form-label--required">Email</label>
+        <div id="s1-email"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label mts-form-label--required">Teléfono</label>
+        <div id="s1-phone"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label mts-form-label--required">Contraseña</label>
+        <div id="s1-pass"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">País</label>
+        <div id="s1-pais"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Rol</label>
+        <div id="s1-rol"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Habilidades</label>
+        <div id="s1-tags"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Fecha de nacimiento</label>
+        <input id="s1-fecha" class="mts-input" placeholder="Selecciona fecha" readonly>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Edad</label>
+        <div id="s1-edad"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Valoración</label>
+        <div id="s1-rating"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Color favorito</label>
+        <div id="s1-color"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Notificaciones</label>
+        <div id="s1-notif"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Plan</label>
+        <div id="s1-plan"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Biografía</label>
+        <div id="s1-bio"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Progreso actual</label>
+        <div id="s1-progress"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Documento</label>
+        <div id="s1-file"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <div id="s1-terms"></div>
+      </div>
+
+      <div class="mts-form-footer mts-form-footer--between">
+        <div id="s1-confirm"></div>
+        <button type="submit" class="mts-btn mts-btn--primary">Guardar perfil</button>
+      </div>
+
+      <div class="result-box" id="result-stack">Resultado de validación aparecerá aquí...</div>
+    </form>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       2 — GRID 2 COLUMNAS — todos los componentes
+  ══════════════════════════════════════════ -->
+  <div class="form-block">
+    <div class="form-block-title">2 — Grid — 2 columnas</div>
+
+    <form id="form-grid" class="mts-form mts-form--grid" style="--mts-form-cols:2">
+
+      <div class="mts-form-group">
+        <label class="mts-form-label mts-form-label--required">Nombre</label>
+        <div id="g2-nombre"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label mts-form-label--required">Apellido</label>
+        <div id="g2-apellido"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label mts-form-label--required">Email</label>
+        <div id="g2-email"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Teléfono</label>
+        <div id="g2-phone"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">País</label>
+        <div id="g2-pais"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Ciudad</label>
+        <div id="g2-ciudad"></div>
+      </div>
+
+      <div class="mts-form-group mts-form-group--full">
+        <label class="mts-form-label">Dirección</label>
+        <div id="g2-dir"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Fecha inicio</label>
+        <input id="g2-fecha" class="mts-input" placeholder="Selecciona fecha" readonly>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Presupuesto</label>
+        <div id="g2-budget"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Categorías</label>
+        <div id="g2-tags"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Valoración</label>
+        <div id="g2-rating"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Color de marca</label>
+        <div id="g2-color"></div>
+      </div>
+
+      <div class="mts-form-group mts-form-group--full">
+        <label class="mts-form-label">Descripción</label>
+        <div id="g2-desc"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <div id="g2-activo"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <div id="g2-notif"></div>
+      </div>
+
+      <div class="mts-form-footer mts-form-footer--end mts-form-group--full">
+        <button type="button" class="mts-btn mts-btn--ghost">Cancelar</button>
+        <button type="submit" class="mts-btn mts-btn--primary">Crear proyecto</button>
+      </div>
+
+      <div class="result-box mts-form-group--full" id="result-grid">Resultado aparecerá aquí...</div>
+    </form>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       3 — HORIZONTAL — todos los componentes
+  ══════════════════════════════════════════ -->
+  <div class="form-block">
+    <div class="form-block-title">3 — Horizontal</div>
+
+    <form id="form-horiz" class="mts-form mts-form--horizontal" style="max-width:680px">
+
+      <div class="mts-form-group">
+        <label class="mts-form-label mts-form-label--required">Nombre</label>
+        <div id="h-nombre"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label mts-form-label--required">Email</label>
+        <div id="h-email"></div>
+        <span class="mts-form-hint">Email corporativo preferido.</span>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Teléfono</label>
+        <div id="h-phone"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label mts-form-label--required">Contraseña</label>
+        <div id="h-pass"></div>
+        <span class="mts-form-hint">Mínimo 8 caracteres.</span>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Departamento</label>
+        <div id="h-depto"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Tecnologías</label>
+        <div id="h-tags"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Fecha ingreso</label>
+        <input id="h-fecha" class="mts-input" placeholder="Selecciona fecha" readonly>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Salario</label>
+        <div id="h-salario"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Valoración</label>
+        <div id="h-rating"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Color de equipo</label>
+        <div id="h-color"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Activo</label>
+        <div id="h-activo"></div>
+      </div>
+
+      <div class="mts-form-group">
+        <label class="mts-form-label">Notas</label>
+        <div id="h-notas"></div>
+      </div>
+
+      <div class="mts-form-footer mts-form-footer--end">
+        <button type="button" class="mts-btn mts-btn--ghost">Cancelar</button>
+        <button type="submit" class="mts-btn mts-btn--primary">Guardar empleado</button>
+      </div>
+
+      <div class="result-box" id="result-horiz">Resultado aparecerá aquí...</div>
+    </form>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       4 — INLINE — filtros con componentes
+  ══════════════════════════════════════════ -->
+  <div class="form-block">
+    <div class="form-block-title">4 — Inline — barra de filtros</div>
+    <p class="form-block-desc">Modo inline con los componentes que aplican en una línea de búsqueda/filtros.</p>
+
+    <form id="form-inline" class="mts-form mts-form--inline">
+      <div class="mts-form-group">
+        <label class="mts-form-label">Buscar</label>
+        <div id="i-buscar"></div>
+      </div>
+      <div class="mts-form-group">
+        <label class="mts-form-label">Estado</label>
+        <div id="i-estado"></div>
+      </div>
+      <div class="mts-form-group">
+        <label class="mts-form-label">Desde</label>
+        <input id="i-fecha" class="mts-input" placeholder="Fecha" readonly style="max-width:160px">
+      </div>
+      <div class="mts-form-group">
+        <label class="mts-form-label">Min.</label>
+        <div id="i-min"></div>
+      </div>
+      <button type="submit" class="mts-btn mts-btn--primary">Buscar</button>
+      <button type="button" class="mts-btn mts-btn--ghost">Limpiar</button>
+    </form>
+
+    <div class="result-box" id="result-inline">Filtros aplicados aparecerán aquí...</div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+/* ── Tema ── */
+function setTheme(t) {
+  document.documentElement.setAttribute('data-mts-theme', t);
+  try {
+    if (window.parent && window.parent !== window)
+      window.parent.postMessage({ type:'setTheme', theme:t }, '*');
+  } catch(e) {}
+}
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'setTheme')
+    document.documentElement.setAttribute('data-mts-theme', e.data.theme);
+});
+if (window !== window.top) {
+  var ts = document.querySelector('.demo-theme');
+  if (ts) ts.style.display = 'none';
+}
+
+/* ── Helper mount ── */
+function el(id) { return document.getElementById(id); }
+
+/* ════════════════════════════════════════
+   SECCIÓN 1 — STACK
+════════════════════════════════════════ */
+
+/* Avatar */
+if (window.MTS?.Avatar) new MTS.Avatar(el('av-stack'), { name:'Juan Pérez', size:'lg' });
+
+/* Badge */
+if (window.MTS?.Badge) new MTS.Badge(el('badge-stack'), { label:'Pro', variant:'primary' });
+
+/* Inputs */
+new MTS.Input(el('s1-nombre'), { placeholder:'Juan Pérez', name:'nombre' });
+new MTS.Input(el('s1-email'),  { type:'email', placeholder:'juan@empresa.com', name:'email' });
+new MTS.Input(el('s1-pass'),   { type:'password', showPassword:true, placeholder:'••••••••', name:'password', hint:'Mínimo 8 caracteres.' });
+
+/* Phone */
+new MTS.PhoneInput(el('s1-phone'), { name:'telefono' });
+
+/* Selects */
+new MTS.Select(el('s1-pais'), {
+  placeholder:'Selecciona país',
+  name:'pais',
+  options:[{value:'cl',label:'Chile'},{value:'ar',label:'Argentina'},{value:'pe',label:'Perú'},{value:'mx',label:'México'}]
+});
+new MTS.Select(el('s1-rol'), {
+  placeholder:'Selecciona rol',
+  name:'rol',
+  options:[{value:'admin',label:'Administrador'},{value:'user',label:'Usuario'},{value:'viewer',label:'Visualizador'}]
+});
+
+/* TagInput */
+new MTS.TagInput(el('s1-tags'), { placeholder:'Agregar habilidad...', name:'habilidades' });
+
+/* Picker */
+new MTS.Picker(el('s1-fecha'), { mode:'date', placeholder:'Selecciona fecha', name:'fecha_nac' });
+
+/* NumberInput */
+new MTS.NumberInput(el('s1-edad'), { min:18, max:99, value:25, name:'edad' });
+
+/* Rating */
+new MTS.Rating(el('s1-rating'), { value:3, name:'valoracion' });
+
+/* ColorPicker */
+new MTS.ColorPicker(el('s1-color'), { name:'color_fav' });
+
+/* Checkbox toggle */
+new MTS.Checkbox(el('s1-notif'), { type:'toggle', label:'Recibir notificaciones', name:'notificaciones', checked:true });
+
+/* Radio */
+new MTS.Checkbox(el('s1-plan'), {
+  type:'radio',
+  name:'plan',
+  options:[{value:'free',label:'Gratis'},{value:'pro',label:'Pro'},{value:'enterprise',label:'Enterprise'}]
+});
+
+/* RichTextEditor */
+new MTS.RichTextEditor(el('s1-bio'), { placeholder:'Cuéntanos sobre ti...', name:'bio', height:140 });
+
+/* Progress */
+if (window.MTS?.Progress) new MTS.Progress(el('s1-progress'), { value:65, type:'bar', label:'65%' });
+
+/* FileUpload */
+new MTS.FileUpload(el('s1-file'), { accept:'.pdf,.doc,.docx', maxFiles:1, hint:'PDF o Word, máx 5MB' });
+
+/* Checkbox terms */
+new MTS.Checkbox(el('s1-terms'), { type:'checkbox', label:'Acepto los términos y condiciones', name:'terminos' });
+
+/* ConfirmButton */
+new MTS.ConfirmButton(el('s1-confirm'), {
+  label:'Eliminar cuenta',
+  variant:'danger',
+  confirmLabel:'¿Seguro?',
+  onConfirm: function() {
+    if (window.MTS?.Toast) MTS.Toast.show({ message:'Cuenta eliminada', variant:'danger' });
+  }
+});
+
+/* Tooltips */
+if (window.MTS?.Tooltip) {
+  new MTS.Tooltip(el('s1-nombre'), { content:'Tu nombre completo tal como aparece en tu documento.' });
+}
+
+/* Validación */
+new MTS.Validate('#form-stack', {
+  validateOnBlur: true,
+  rules: {
+    nombre:   { required:true, minLength:3 },
+    email:    { required:true, email:true },
+    password: { required:true, minLength:8 },
+    terminos: { required:true }
+  },
+  messages: {
+    nombre:   { required:'El nombre es obligatorio', minLength:'Mínimo 3 caracteres' },
+    email:    { required:'El email es obligatorio', email:'Email inválido' },
+    password: { required:'La contraseña es obligatoria', minLength:'Mínimo 8 caracteres' },
+    terminos: { required:'Debes aceptar los términos' }
+  },
+  onValid: function(data) {
+    el('result-stack').style.color = 'var(--mts-color-success)';
+    el('result-stack').textContent = '✅ Válido → ' + JSON.stringify(data).slice(0,120) + '...';
+    if (window.MTS?.Toast) MTS.Toast.show({ message:'Perfil guardado correctamente', variant:'success' });
+  },
+  onInvalid: function(errors) {
+    el('result-stack').style.color = 'var(--mts-color-danger)';
+    el('result-stack').textContent = '❌ Errores: ' + Object.entries(errors).map(function(kv){ return kv[0]+': '+kv[1]; }).join(' | ');
+  }
+});
+
+
+/* ════════════════════════════════════════
+   SECCIÓN 2 — GRID
+════════════════════════════════════════ */
+
+new MTS.Input(el('g2-nombre'),   { placeholder:'Juan', name:'g_nombre' });
+new MTS.Input(el('g2-apellido'), { placeholder:'Pérez', name:'g_apellido' });
+new MTS.Input(el('g2-email'),    { type:'email', placeholder:'juan@empresa.com', name:'g_email' });
+new MTS.PhoneInput(el('g2-phone'), { name:'g_telefono' });
+new MTS.Select(el('g2-pais'), {
+  placeholder:'País', name:'g_pais',
+  options:[{value:'cl',label:'Chile'},{value:'ar',label:'Argentina'},{value:'pe',label:'Perú'}]
+});
+new MTS.Input(el('g2-ciudad'),   { placeholder:'Santiago', name:'g_ciudad' });
+new MTS.Input(el('g2-dir'),      { placeholder:'Av. Principal 123', name:'g_direccion' });
+new MTS.Picker(el('g2-fecha'), { mode:'date', placeholder:'Fecha inicio', name:'g_fecha' });
+new MTS.NumberInput(el('g2-budget'), { prefix:'$', value:1000, step:100, name:'g_presupuesto' });
+new MTS.TagInput(el('g2-tags'), { placeholder:'Agregar categoría...', name:'g_categorias' });
+new MTS.Rating(el('g2-rating'), { value:4, name:'g_valoracion' });
+new MTS.ColorPicker(el('g2-color'), { name:'g_color' });
+new MTS.RichTextEditor(el('g2-desc'), { placeholder:'Descripción del proyecto...', name:'g_descripcion', height:120 });
+new MTS.Checkbox(el('g2-activo'), { type:'toggle', label:'Proyecto activo', name:'g_activo', checked:true });
+new MTS.Checkbox(el('g2-notif'), { type:'checkbox', label:'Notificar al equipo', name:'g_notificar' });
+
+new MTS.Validate('#form-grid', {
+  validateOnBlur: true,
+  rules: { g_nombre:{ required:true }, g_email:{ required:true, email:true } },
+  messages: { g_nombre:{ required:'Nombre requerido' }, g_email:{ required:'Email requerido', email:'Email inválido' } },
+  onValid: function(data) {
+    el('result-grid').style.color = 'var(--mts-color-success)';
+    el('result-grid').textContent = '✅ Válido → ' + JSON.stringify(data).slice(0,120) + '...';
+  },
+  onInvalid: function(errors) {
+    el('result-grid').style.color = 'var(--mts-color-danger)';
+    el('result-grid').textContent = '❌ ' + Object.entries(errors).map(function(kv){ return kv[0]+': '+kv[1]; }).join(' | ');
+  }
+});
+
+
+/* ════════════════════════════════════════
+   SECCIÓN 3 — HORIZONTAL
+════════════════════════════════════════ */
+
+new MTS.Input(el('h-nombre'), { placeholder:'Juan Pérez', name:'h_nombre' });
+new MTS.Input(el('h-email'),  { type:'email', placeholder:'juan@empresa.com', name:'h_email' });
+new MTS.PhoneInput(el('h-phone'), { name:'h_telefono' });
+new MTS.Input(el('h-pass'),   { type:'password', showPassword:true, placeholder:'••••••••', name:'h_password' });
+new MTS.Select(el('h-depto'), {
+  placeholder:'Selecciona departamento', name:'h_depto',
+  options:[{value:'eng',label:'Ingeniería'},{value:'mkt',label:'Marketing'},{value:'ops',label:'Operaciones'},{value:'hr',label:'RRHH'}]
+});
+new MTS.TagInput(el('h-tags'), { placeholder:'Agregar tecnología...', name:'h_tecnologias' });
+new MTS.Picker(el('h-fecha'), { mode:'date', placeholder:'Fecha de ingreso', name:'h_fecha_ingreso' });
+new MTS.NumberInput(el('h-salario'), { prefix:'$', value:1500000, step:50000, name:'h_salario' });
+new MTS.Rating(el('h-rating'), { value:4, name:'h_valoracion' });
+new MTS.ColorPicker(el('h-color'), { name:'h_color_equipo' });
+new MTS.Checkbox(el('h-activo'), { type:'toggle', label:'Empleado activo', name:'h_activo', checked:true });
+new MTS.Input(el('h-notas'), { type:'textarea', placeholder:'Notas adicionales...', name:'h_notas', rows:3 });
+
+new MTS.Validate('#form-horiz', {
+  validateOnBlur: true,
+  rules: { h_nombre:{ required:true }, h_email:{ required:true, email:true }, h_password:{ required:true, minLength:8 } },
+  messages: {
+    h_nombre:   { required:'Nombre requerido' },
+    h_email:    { required:'Email requerido', email:'Email inválido' },
+    h_password: { required:'Contraseña requerida', minLength:'Mínimo 8 caracteres' }
+  },
+  onValid: function(data) {
+    el('result-horiz').style.color = 'var(--mts-color-success)';
+    el('result-horiz').textContent = '✅ Válido → ' + JSON.stringify(data).slice(0,120) + '...';
+    if (window.MTS?.Toast) MTS.Toast.show({ message:'Empleado guardado', variant:'success' });
+  },
+  onInvalid: function(errors) {
+    el('result-horiz').style.color = 'var(--mts-color-danger)';
+    el('result-horiz').textContent = '❌ ' + Object.entries(errors).map(function(kv){ return kv[0]+': '+kv[1]; }).join(' | ');
+  }
+});
+
+
+/* ════════════════════════════════════════
+   SECCIÓN 4 — INLINE
+════════════════════════════════════════ */
+
+new MTS.Input(el('i-buscar'), { placeholder:'Nombre o email...', name:'q' });
+new MTS.Select(el('i-estado'), {
+  placeholder:'Todos', name:'estado',
+  options:[{value:'',label:'Todos'},{value:'active',label:'Activo'},{value:'inactive',label:'Inactivo'},{value:'pending',label:'Pendiente'}]
+});
+new MTS.Picker(el('i-fecha'), { mode:'date', placeholder:'Desde', name:'desde' });
+new MTS.NumberInput(el('i-min'), { min:0, max:9999, value:0, name:'min_valor', size:'sm' });
+
+document.getElementById('form-inline').addEventListener('submit', function(e) {
+  e.preventDefault();
+  el('result-inline').style.color = 'var(--mts-color-success)';
+  el('result-inline').textContent = '🔍 Filtros aplicados';
+  if (window.MTS?.Toast) MTS.Toast.show({ message:'Búsqueda ejecutada', variant:'info' });
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Onboarding — Matios UI</title>
+  <script>(function(){var m=(location.hash||"").match(/mts-theme=([a-z-]+)/);if(m)document.documentElement.setAttribute("data-mts-theme",m[1]);try{var p=window.parent;if(p&&p!==window){var pt=p.currentThemeVal||p.document.documentElement.getAttribute("data-mts-theme");if(pt)document.documentElement.setAttribute("data-mts-theme",pt);}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <link rel="stylesheet" href="../../navigation/matios-ui-stepper/matios-ui-stepper.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <script src="../../navigation/matios-ui-stepper/matios-ui-stepper.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+<style>
+*{box-sizing:border-box}
+body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;min-height:100vh;}
+.app-topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:50px;background:var(--mts-bg-surface);border-bottom:1px solid var(--mts-border-color);position:sticky;top:0;z-index:100;}
+.app-topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mts-text-muted);cursor:pointer;padding:4px 8px;border-radius:var(--mts-radius-md);border:none;background:none;transition:color .15s,background .15s;font-family:var(--mts-font-family);}
+.app-topbar-back:hover{color:var(--mts-text-primary);background:var(--mts-bg-surface-2);}
+.app-topbar-title{font-size:14px;font-weight:700;color:var(--mts-text-primary);flex:1;}
+.app-topbar-badge{font-size:10px;padding:2px 8px;border-radius:var(--mts-radius-full);background:var(--mts-color-primary-light);color:var(--mts-color-primary);font-weight:700;}
+.app-content{padding:24px;max-width:1100px;margin:0 auto;}
+.app-card{background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:24px;}
+.app-section{display:flex;flex-direction:column;gap:20px;}
+.app-grid{display:grid;gap:16px;}
+.app-grid-2{grid-template-columns:1fr 1fr;}
+.app-grid-3{grid-template-columns:1fr 1fr 1fr;}
+.app-grid-4{grid-template-columns:repeat(4,1fr);}
+.app-h2{font-size:18px;font-weight:800;margin:0 0 4px;}
+.app-h2 span{color:var(--mts-color-primary);}
+.app-sub{font-size:13px;color:var(--mts-text-muted);margin:0 0 20px;}
+.app-divider{border:none;border-top:1px solid var(--mts-border-color);margin:20px 0;}
+.app-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);margin-bottom:6px;}
+.app-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.app-theme{position:fixed;bottom:16px;right:16px;display:flex;gap:4px;z-index:999;}
+.app-theme-btn{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+.app-theme-btn:hover{background:var(--mts-bg-surface-2);}
+@media(max-width:640px){.app-grid-2,.app-grid-3,.app-grid-4{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="app-topbar"><button class="app-topbar-back" onclick="goBack()">&#8592; Volver</button><span class="app-topbar-title">Onboarding</span><span class="app-topbar-badge">Wizard</span></div>
+<style>
+.onb-wrap{min-height:calc(100vh - 50px);display:flex;align-items:center;justify-content:center;padding:32px 24px;}
+.onb-card{width:100%;max-width:520px;}
+.onb-step{display:none;flex-direction:column;gap:20px;}
+.onb-step.active{display:flex;}
+.onb-actions{display:flex;gap:10px;justify-content:space-between;margin-top:8px;}
+.onb-icon{font-size:40px;margin-bottom:8px;}
+</style>
+<div class="onb-wrap">
+  <div class="onb-card">
+    <div id="onb-stepper" style="margin-bottom:28px;"></div>
+    <div class="app-card">
+      <!-- Paso 1: Bienvenida -->
+      <div class="onb-step active" id="onb-0">
+        <div style="text-align:center;padding:12px 0;">
+          <div class="onb-icon">👋</div>
+          <h2 style="margin:0 0 8px;font-size:22px;font-weight:800;">¡Bienvenido a Matios!</h2>
+          <p style="margin:0 0 24px;font-size:14px;color:var(--mts-text-muted);">Vamos a configurar tu espacio de trabajo en 3 pasos simples.</p>
+          <div id="btn-onb-start"></div>
+        </div>
+      </div>
+      <!-- Paso 2: Workspace -->
+      <div class="onb-step" id="onb-1">
+        <div><h3 style="margin:0 0 4px;font-size:16px;font-weight:700;">Tu workspace</h3>
+        <p style="margin:0;font-size:13px;color:var(--mts-text-muted);">Personaliza tu espacio de trabajo</p></div>
+        <div id="onb-workspace-name"></div>
+        <div id="onb-industry"></div>
+        <div id="onb-team-size"></div>
+        <div class="onb-actions">
+          <div id="btn-onb-back1"></div>
+          <div id="btn-onb-next1"></div>
+        </div>
+      </div>
+      <!-- Paso 3: Equipo -->
+      <div class="onb-step" id="onb-2">
+        <div><h3 style="margin:0 0 4px;font-size:16px;font-weight:700;">Invita a tu equipo</h3>
+        <p style="margin:0;font-size:13px;color:var(--mts-text-muted);">Agrega los emails de tus colaboradores</p></div>
+        <div id="onb-emails"></div>
+        <div id="onb-rol"></div>
+        <div class="onb-actions">
+          <div id="btn-onb-back2"></div>
+          <div id="btn-onb-next2"></div>
+        </div>
+      </div>
+      <!-- Paso 4: Listo -->
+      <div class="onb-step" id="onb-3">
+        <div style="text-align:center;padding:16px 0;">
+          <div class="onb-icon">🚀</div>
+          <h2 style="margin:0 0 8px;font-size:22px;font-weight:800;">¡Todo listo!</h2>
+          <p style="margin:0 0 8px;font-size:14px;color:var(--mts-text-muted);">Tu workspace <strong id="onb-ws-name-final"></strong> está configurado.</p>
+          <p style="margin:0 0 24px;font-size:13px;color:var(--mts-text-muted);">Las invitaciones fueron enviadas a tu equipo.</p>
+          <div id="btn-onb-finish"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><div class="app-theme">
+  <button class="app-theme-btn" onclick="setTheme('dark')">Dark</button>
+  <button class="app-theme-btn" onclick="setTheme('light')">Light</button>
+  <button class="app-theme-btn" onclick="setTheme('violet')">Violet</button>
+  <button class="app-theme-btn" onclick="setTheme('blue')">Blue</button>
+</div>
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
+</script>
+<script>
+
+var onbStep=0;
+var stepper=new MTS.Stepper('#onb-stepper',{
+  direction:'horizontal',
+  steps:[
+    {id:'s0',label:'Inicio'},
+    {id:'s1',label:'Workspace'},
+    {id:'s2',label:'Equipo'},
+    {id:'s3',label:'Listo'},
+  ],
+  active:0,
+});
+new MTS.Button('#btn-onb-start',{label:'Comenzar →',variant:'primary',onClick:function(){goOnb(1);}});
+var wsNameInp=new MTS.Input('#onb-workspace-name',{label:'Nombre del workspace',placeholder:'Ej: Acme Corp',value:''});
+var industSel=new MTS.Select('#onb-industry',{label:'Industria',placeholder:'Selecciona...',options:[
+  {value:'tech',label:'Tecnología'},{value:'salud',label:'Salud'},{value:'edu',label:'Educación'},
+  {value:'fin',label:'Finanzas'},{value:'retail',label:'Retail'},{value:'otro',label:'Otro'},
+]});
+var teamSel=new MTS.Select('#onb-team-size',{label:'Tamaño del equipo',placeholder:'Selecciona...',options:[
+  {value:'1',label:'Solo yo'},{value:'2-5',label:'2-5 personas'},{value:'6-20',label:'6-20 personas'},
+  {value:'21+',label:'21+ personas'},
+]});
+new MTS.Button('#btn-onb-back1',{label:'← Atrás',variant:'ghost',onClick:function(){goOnb(0);}});
+new MTS.Button('#btn-onb-next1',{label:'Siguiente →',variant:'primary',onClick:function(e,inst){
+  if(!wsNameInp.getValue().trim()){wsNameInp.setError('El nombre es obligatorio');return;}
+  goOnb(2);
+}});
+var emailInp=new MTS.Input('#onb-emails',{label:'Emails del equipo',placeholder:'juan@empresa.com, ana@empresa.com'});
+var rolSel=new MTS.Select('#onb-rol',{label:'Rol por defecto',options:[
+  {value:'admin',label:'Administrador'},{value:'editor',label:'Editor'},{value:'viewer',label:'Visualizador'},
+],value:'editor'});
+new MTS.Button('#btn-onb-back2',{label:'← Atrás',variant:'ghost',onClick:function(){goOnb(1);}});
+new MTS.Button('#btn-onb-next2',{label:'Finalizar configuración',variant:'primary',onClick:function(e,inst){
+  inst.setLoading(true);
+  setTimeout(function(){
+    inst.setLoading(false);
+    document.getElementById('onb-ws-name-final').textContent='"'+wsNameInp.getValue()+'"';
+    goOnb(3);
+  },1500);
+}});
+new MTS.Button('#btn-onb-finish',{label:'Ir al dashboard →',variant:'primary',onClick:function(){goBack();}});
+
+function goOnb(n){
+  document.querySelectorAll('.onb-step').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('onb-'+n).classList.add('active');
+  onbStep=n;
+  if(stepper.goTo)stepper.goTo(n);
+}
+
+</script>
+</body>
+</html>

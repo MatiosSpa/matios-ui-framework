@@ -52,3 +52,26 @@ tt.destroy()
 | Versión | Descripción |
 |---------|-------------|
 | 1.0.0 | Release inicial — flip automático, dark/light, hover/click/focus |
+
+---
+
+## HTML declarativo
+
+```html
+<button id="miBtn" data-content="Guardar cambios" data-position="top">💾</button>
+<script>new MTS.Tooltip('#miBtn')</script>
+
+<!-- Con trigger click -->
+<span id="info" data-content="Más información" data-trigger="click">ℹ️</span>
+<script>new MTS.Tooltip('#info')</script>
+```
+
+| Atributo | JS | Descripción |
+|----------|-----|-------------|
+| `data-content` | `content` | Texto del tooltip |
+| `data-position` | `position` | `top`·`bottom`·`left`·`right` |
+| `data-trigger` | `trigger` | `hover`·`click`·`focus` |
+| `data-delay` | `delay` | ms de espera |
+| `data-variant` | `variant` | `dark`·`light` |
+| `data-max-width` | `maxWidth` | Ancho máximo |
+

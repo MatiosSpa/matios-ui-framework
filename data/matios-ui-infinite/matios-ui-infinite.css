@@ -1,0 +1,204 @@
+/* ============================================================
+   MATIOS UI — matios-ui-infinite.css  v1.0.0
+
+   Scroll infinito standalone.
+   El componente agrega un sentinel al final de la lista
+   y usa IntersectionObserver para detectar cuándo cargar más.
+   ============================================================ */
+
+
+/* ============================================================
+   1. CONTENEDOR
+   ============================================================ */
+
+.mts-infinite {
+  width: 100%;
+  position: relative;
+}
+
+
+/* ============================================================
+   2. LISTA DE ITEMS
+   ============================================================ */
+
+.mts-infinite__list {
+  width: 100%;
+}
+
+/* Layout: vertical (default) */
+.mts-infinite__list--vertical {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-3);
+}
+
+/* Layout: grid */
+.mts-infinite__list--grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--mts-space-4);
+}
+
+/* Layout: tabla — el dev pone un <table> adentro */
+.mts-infinite__list--table {
+  overflow-x: auto;
+}
+
+
+/* ============================================================
+   3. ITEM (cuando el dev usa el helper renderItem)
+   ============================================================ */
+
+.mts-infinite__item {
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  padding: var(--mts-space-3) var(--mts-space-4);
+  transition: border-color var(--mts-transition-fast);
+}
+
+.mts-infinite__item:hover {
+  border-color: var(--mts-border-color-strong);
+}
+
+/* Animación de entrada */
+.mts-infinite__item--entering {
+  animation: mts-infinite-fadein 0.2s ease forwards;
+}
+
+@keyframes mts-infinite-fadein {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ============================================================
+   4. SENTINEL — elemento invisible al final de la lista
+   ============================================================ */
+
+.mts-infinite__sentinel {
+  width: 100%;
+  height: 1px;
+  visibility: hidden;
+}
+
+
+/* ============================================================
+   5. LOADER — visible mientras carga más items
+   ============================================================ */
+
+.mts-infinite__loader {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mts-space-2);
+  padding: var(--mts-space-5) 0;
+  color: var(--mts-text-muted);
+  font-size: var(--mts-font-size-sm);
+  font-family: var(--mts-font-family);
+}
+
+.mts-infinite__loader--visible {
+  display: flex;
+}
+
+.mts-infinite__loader-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--mts-border-color);
+  border-top-color: var(--mts-color-primary);
+  border-radius: 50%;
+  animation: mts-infinite-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes mts-infinite-spin { to { transform: rotate(360deg); } }
+
+
+/* ============================================================
+   6. ESTADO VACÍO
+   ============================================================ */
+
+.mts-infinite__empty {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--mts-space-12) var(--mts-space-6);
+  color: var(--mts-text-muted);
+  font-family: var(--mts-font-family);
+  text-align: center;
+  gap: var(--mts-space-2);
+}
+
+.mts-infinite__empty--visible {
+  display: flex;
+}
+
+.mts-infinite__empty-icon {
+  font-size: 32px;
+  opacity: 0.4;
+}
+
+.mts-infinite__empty-title {
+  font-size: var(--mts-font-size-md);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+}
+
+.mts-infinite__empty-msg {
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-muted);
+}
+
+
+/* ============================================================
+   7. FIN DE LISTA
+   ============================================================ */
+
+.mts-infinite__end {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-4) 0;
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  font-family: var(--mts-font-family);
+}
+
+.mts-infinite__end--visible {
+  display: flex;
+}
+
+.mts-infinite__end::before,
+.mts-infinite__end::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--mts-border-color);
+}
+
+
+/* ============================================================
+   8. ERROR
+   ============================================================ */
+
+.mts-infinite__error {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-4) var(--mts-space-5);
+  background: var(--mts-color-danger-light);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-color-danger);
+  border-radius: var(--mts-radius-md);
+  margin-top: var(--mts-space-3);
+  font-size: var(--mts-font-size-sm);
+  font-family: var(--mts-font-family);
+  color: var(--mts-color-danger);
+}
+
+.mts-infinite__error--visible {
+  display: flex;
+}

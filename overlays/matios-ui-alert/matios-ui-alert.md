@@ -39,3 +39,31 @@ MTS.Alert.show('#contenedor', {
 | Versión | Descripción |
 |---------|-------------|
 | 1.0.0 | Release inicial |
+
+---
+
+## HTML declarativo
+
+```html
+<div id="miAlert"
+  data-variant="success"
+  data-title="¡Guardado!"
+  data-message="Los cambios se guardaron correctamente."
+  data-closable>
+</div>
+
+<script>
+new MTS.Alert('#miAlert', {
+  onClose: () => console.log('cerrado'),
+})
+</script>
+```
+
+| Atributo | JS | Descripción |
+|----------|-----|-------------|
+| `data-variant` | `variant` | `info`·`success`·`warning`·`danger` |
+| `data-title` | `title` | |
+| `data-message` | `message` | |
+| `data-closable` | `closable` | (presencia activa) |
+| `data-auto-dismiss` | `autoDismiss` | ms para cerrar |
+

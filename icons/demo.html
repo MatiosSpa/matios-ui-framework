@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+    <script>
+    (function(){
+      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
+      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
+          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+        }
+      }catch(e){}
+    })();
+  </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTS Icons — Demo</title>
+<link rel="stylesheet" href="../base/matios-ui-base.css">
+<link rel="stylesheet" href="matios-ui-icons.css">
+<script src="matios-ui-icons.js"></script>
+<style>
+  body { background:var(--mts-bg-body); color:var(--mts-text-primary); font-family:var(--mts-font-family); margin:0; padding:24px; }
+  .demo-page { max-width:1100px; margin:0 auto; display:flex; flex-direction:column; gap:32px; }
+  h1 { font-size:22px; font-weight:800; margin:0 0 4px; }
+  h1 span { color:var(--mts-color-primary); }
+  .demo-subtitle { font-size:13px; color:var(--mts-text-muted); margin:0 0 8px; }
+  .demo-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--mts-text-muted); padding-bottom:8px; border-bottom:1px solid var(--mts-border-color); margin-bottom:12px; }
+  .demo-theme { position:fixed; top:16px; right:16px; display:flex; gap:6px; z-index:99; }
+  .demo-btn { padding:5px 12px; border-radius:var(--mts-radius-md); font-family:var(--mts-font-family); font-size:11px; font-weight:600; cursor:pointer; border:1px solid var(--mts-border-color); background:var(--mts-bg-surface); color:var(--mts-text-secondary); }
+  .demo-btn:hover { background:var(--mts-bg-surface-2); }
+  .demo-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .demo-section { display:flex; flex-direction:column; gap:12px; }
+
+  /* Buscador */
+  .icon-search { width:100%; max-width:400px; padding:9px 14px; border-radius:var(--mts-radius-lg); background:var(--mts-bg-surface); border:1px solid var(--mts-border-color); color:var(--mts-text-primary); font-family:var(--mts-font-family); font-size:13px; outline:none; }
+  .icon-search:focus { border-color:var(--mts-color-primary); }
+  .icon-counter { font-size:11px; color:var(--mts-text-muted); margin-left:4px; }
+
+  /* Galería */
+  .icon-gallery { display:grid; grid-template-columns:repeat(auto-fill, minmax(100px,1fr)); gap:4px; }
+  .icon-card {
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:6px; padding:12px 8px; border-radius:var(--mts-radius-lg); cursor:pointer;
+    border:1px solid transparent; transition:all .12s; position:relative;
+  }
+  .icon-card:hover { background:var(--mts-bg-surface); border-color:var(--mts-border-color); }
+  .icon-card.copied { background:rgba(52,211,153,.1); border-color:#34d399; }
+  .icon-card .icon-name { font-size:10px; color:var(--mts-text-muted); text-align:center; word-break:break-all; line-height:1.3; }
+  .icon-card .icon-preview { font-size:22px; color:var(--mts-text-primary); }
+
+  /* Preview grande */
+  .icon-preview-box {
+    background:var(--mts-bg-surface); border:1px solid var(--mts-border-color);
+    border-radius:var(--mts-radius-lg); padding:20px; display:flex;
+    align-items:center; gap:20px; flex-wrap:wrap;
+  }
+  .icon-preview-sizes { display:flex; align-items:center; gap:12px; }
+  .icon-preview-info { display:flex; flex-direction:column; gap:6px; }
+  .icon-preview-info code { font-family:monospace; font-size:12px; background:var(--mts-bg-surface-2); padding:3px 8px; border-radius:4px; color:var(--mts-color-primary); display:block; }
+
+  /* Ejemplos de uso */
+  .usage-item { display:flex; align-items:center; gap:8px; padding:8px 12px; background:var(--mts-bg-surface); border:1px solid var(--mts-border-color); border-radius:var(--mts-radius-md); font-size:13px; }
+  .usage-btn {
+    display:inline-flex; align-items:center; gap:6px; padding:7px 14px;
+    border-radius:var(--mts-radius-md); font-family:var(--mts-font-family); font-size:12px;
+    font-weight:600; cursor:pointer; border:1px solid var(--mts-border-color);
+    background:var(--mts-bg-surface); color:var(--mts-text-primary); transition:all .12s;
+  }
+  .usage-btn:hover { background:var(--mts-bg-surface-2); }
+  .usage-btn--primary { background:var(--mts-color-primary); color:#fff; border-color:transparent; }
+  .usage-btn--primary:hover { background:var(--mts-color-primary-hover); }
+  .usage-btn--danger  { background:rgba(248,113,113,.12); color:#f87171; border-color:rgba(248,113,113,.3); }
+</style>
+<script src="../matios-ui-readme-modal.js"></script>
+</head>
+<body>
+
+<div class="demo-theme">
+  <button class="demo-btn" onclick="document.documentElement.setAttribute('data-mts-theme','dark')">Dark</button>
+  <button class="demo-btn" onclick="document.documentElement.setAttribute('data-mts-theme','light')">Light</button>
+</div>
+
+<div class="demo-page">
+  <div>
+    <h1>MTS <span>Icons</span></h1>
+    <p class="demo-subtitle">262 íconos SVG · outline + filled · tamaños · colores semánticos</p>
+  </div>
+
+  <!-- USO BÁSICO -->
+  <div class="demo-section">
+    <div class="demo-title">Uso básico</div>
+    <div class="demo-row">
+      <!-- Clases CSS — auto-inicializado por MTS.Icon.initAll() -->
+      <i class="mts-icon mts-icon-search  mts-icon--lg"></i>
+      <i class="mts-icon mts-icon-home    mts-icon--lg"></i>
+      <i class="mts-icon mts-icon-bell    mts-icon--lg"></i>
+      <i class="mts-icon mts-icon-user    mts-icon--lg"></i>
+      <i class="mts-icon mts-icon-settings mts-icon--lg"></i>
+      <i class="mts-icon mts-icon-mail    mts-icon--lg"></i>
+      <i class="mts-icon mts-icon-trash   mts-icon--lg"></i>
+      <i class="mts-icon mts-icon-edit    mts-icon--lg"></i>
+      <i class="mts-icon mts-icon-download mts-icon--lg"></i>
+      <i class="mts-icon mts-icon-upload  mts-icon--lg"></i>
+      <i class="mts-icon mts-icon-share   mts-icon--lg"></i>
+      <i class="mts-icon mts-icon-filter  mts-icon--lg"></i>
+    </div>
+    <pre style="background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:8px;padding:12px;font-size:12px;color:var(--mts-text-secondary);overflow-x:auto;">&lt;i class="mts-icon mts-icon-trash"&gt;&lt;/i&gt;
+&lt;i class="mts-icon mts-icon-trash mts-icon--filled"&gt;&lt;/i&gt;
+&lt;i class="mts-icon mts-icon-trash mts-icon--lg"&gt;&lt;/i&gt;
+&lt;i class="mts-icon mts-icon-trash mts-icon--primary"&gt;&lt;/i&gt;</pre>
+  </div>
+
+  <!-- TAMAÑOS -->
+  <div class="demo-section">
+    <div class="demo-title">Tamaños — xs · sm · md · lg · xl · 2xl · 3xl</div>
+    <div class="demo-row" style="align-items:flex-end;">
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <i class="mts-icon mts-icon-star mts-icon--xs"></i>
+        <span style="font-size:10px;color:var(--mts-text-muted)">xs 12</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <i class="mts-icon mts-icon-star mts-icon--sm"></i>
+        <span style="font-size:10px;color:var(--mts-text-muted)">sm 14</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <i class="mts-icon mts-icon-star mts-icon--md"></i>
+        <span style="font-size:10px;color:var(--mts-text-muted)">md 18</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <i class="mts-icon mts-icon-star mts-icon--lg"></i>
+        <span style="font-size:10px;color:var(--mts-text-muted)">lg 22</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <i class="mts-icon mts-icon-star mts-icon--xl"></i>
+        <span style="font-size:10px;color:var(--mts-text-muted)">xl 28</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <i class="mts-icon mts-icon-star mts-icon--2xl"></i>
+        <span style="font-size:10px;color:var(--mts-text-muted)">2xl 36</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <i class="mts-icon mts-icon-star mts-icon--3xl"></i>
+        <span style="font-size:10px;color:var(--mts-text-muted)">3xl 48</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILLED vs OUTLINE -->
+  <div class="demo-section">
+    <div class="demo-title">Outline (default) vs Filled</div>
+    <div class="demo-row">
+      <i class="mts-icon mts-icon-heart  mts-icon--xl"></i>
+      <i class="mts-icon mts-icon-heart  mts-icon--xl mts-icon--filled" style="color:#f87171"></i>
+      <i class="mts-icon mts-icon-star   mts-icon--xl"></i>
+      <i class="mts-icon mts-icon-star   mts-icon--xl mts-icon--filled" style="color:#fbbf24"></i>
+      <i class="mts-icon mts-icon-bookmark mts-icon--xl"></i>
+      <i class="mts-icon mts-icon-bookmark mts-icon--xl mts-icon--filled" style="color:#4f8eff"></i>
+      <i class="mts-icon mts-icon-home   mts-icon--xl"></i>
+      <i class="mts-icon mts-icon-home   mts-icon--xl mts-icon--filled" style="color:#34d399"></i>
+      <i class="mts-icon mts-icon-shield mts-icon--xl"></i>
+      <i class="mts-icon mts-icon-shield mts-icon--xl mts-icon--filled" style="color:#8b5cf6"></i>
+      <i class="mts-icon mts-icon-bell   mts-icon--xl"></i>
+      <i class="mts-icon mts-icon-bell   mts-icon--xl mts-icon--filled" style="color:#fbbf24"></i>
+    </div>
+  </div>
+
+  <!-- COLORES SEMÁNTICOS -->
+  <div class="demo-section">
+    <div class="demo-title">Colores semánticos</div>
+    <div class="demo-row">
+      <i class="mts-icon mts-icon-info    mts-icon--xl mts-icon--primary"></i>
+      <i class="mts-icon mts-icon-success mts-icon--xl mts-icon--success"></i>
+      <i class="mts-icon mts-icon-warning mts-icon--xl mts-icon--warning"></i>
+      <i class="mts-icon mts-icon-error   mts-icon--xl mts-icon--danger"></i>
+      <i class="mts-icon mts-icon-help    mts-icon--xl mts-icon--muted"></i>
+    </div>
+  </div>
+
+  <!-- ANIMACIONES -->
+  <div class="demo-section">
+    <div class="demo-title">Animaciones — spin · pulse</div>
+    <div class="demo-row">
+      <i class="mts-icon mts-icon-spinner mts-icon--xl mts-icon--spin mts-icon--primary"></i>
+      <i class="mts-icon mts-icon-loading mts-icon--xl mts-icon--spin" style="color:var(--mts-text-muted)"></i>
+      <i class="mts-icon mts-icon-refresh mts-icon--xl mts-icon--pulse mts-icon--success"></i>
+    </div>
+    <pre style="background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:8px;padding:12px;font-size:12px;color:var(--mts-text-secondary);">&lt;i class="mts-icon mts-icon-spinner mts-icon--spin"&gt;&lt;/i&gt;
+&lt;i class="mts-icon mts-icon-loading mts-icon--pulse"&gt;&lt;/i&gt;</pre>
+  </div>
+
+  <!-- USO CON BOTONES -->
+  <div class="demo-section">
+    <div class="demo-title">Uso con botones y texto</div>
+    <div class="demo-row">
+      <button class="usage-btn usage-btn--primary">
+        <i class="mts-icon mts-icon-save mts-icon--sm"></i>
+        Guardar
+      </button>
+      <button class="usage-btn">
+        <i class="mts-icon mts-icon-download mts-icon--sm"></i>
+        Descargar
+      </button>
+      <button class="usage-btn">
+        <i class="mts-icon mts-icon-filter mts-icon--sm"></i>
+        Filtros
+      </button>
+      <button class="usage-btn usage-btn--danger">
+        <i class="mts-icon mts-icon-trash mts-icon--sm"></i>
+        Eliminar
+      </button>
+      <button class="usage-btn" style="padding:8px;">
+        <i class="mts-icon mts-icon-settings mts-icon--md"></i>
+      </button>
+      <button class="usage-btn" style="padding:8px;">
+        <i class="mts-icon mts-icon-more-vertical mts-icon--md"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- JS API -->
+  <div class="demo-section">
+    <div class="demo-title">API JavaScript</div>
+    <div id="js-demo" class="demo-row"></div>
+    <pre style="background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:8px;padding:12px;font-size:12px;color:var(--mts-text-secondary);overflow-x:auto;">// Obtener SVG string
+const svg = MTS.Icon.get('trash');
+const svgFilled = MTS.Icon.get('trash', true);
+
+// Insertar en elemento DOM
+MTS.Icon.render('settings', document.getElementById('mi-el'));
+MTS.Icon.render('settings', document.getElementById('mi-el'), true); // filled
+
+// Lista de todos los íconos
+const lista = MTS.Icon.list(); // → ['add', 'alert', ...]
+
+// Re-inicializar íconos añadidos dinámicamente
+MTS.Icon.initAll();</pre>
+  </div>
+
+  <!-- GALERÍA COMPLETA -->
+  <div class="demo-section">
+    <div class="demo-title">
+      Galería completa
+      <span class="icon-counter" id="icon-counter"></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <input type="text" class="icon-search" id="iconSearch" placeholder="Buscar ícono..." oninput="filterIcons(this.value)">
+      <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+        <input type="checkbox" id="showFilled" onchange="renderGallery()"> Mostrar filled
+      </label>
+    </div>
+    <div class="icon-gallery" id="iconGallery"></div>
+  </div>
+
+  <!-- Toast de copiado -->
+  <div id="copyToast" style="display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:10px 18px;font-size:12px;font-weight:600;color:var(--mts-color-success);box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:9999;">
+    ✅ Copiado al portapapeles
+  </div>
+</div>
+
+<script>
+/* ── JS API demo ─── */
+const jsDemoEl = document.getElementById('js-demo');
+['search','star','heart','map-pin','shield','calendar','bar-chart','code','terminal'].forEach(name => {
+  const wrap = document.createElement('span');
+  wrap.style.cssText = 'font-size:28px;display:inline-flex;color:var(--mts-text-primary)';
+  MTS.Icon.render(name, wrap);
+  jsDemoEl.appendChild(wrap);
+});
+
+/* ── Galería ─── */
+let allIcons = MTS.Icon.list();
+
+function renderGallery(filter = '') {
+  const gallery  = document.getElementById('iconGallery');
+  const filled   = document.getElementById('showFilled').checked;
+  const filtered = filter ? allIcons.filter(n => n.includes(filter.toLowerCase())) : allIcons;
+  document.getElementById('icon-counter').textContent = `${filtered.length} / ${allIcons.length}`;
+
+  gallery.innerHTML = '';
+  filtered.forEach(name => {
+    const card = document.createElement('div');
+    card.className = 'icon-card';
+    card.title = name;
+
+    const preview = document.createElement('span');
+    preview.className = 'icon-preview';
+    preview.innerHTML = MTS.Icon.get(name, filled);
+
+    const label = document.createElement('span');
+    label.className = 'icon-name';
+    label.textContent = name;
+
+    card.appendChild(preview);
+    card.appendChild(label);
+
+    /* Click → copiar clase CSS */
+    card.addEventListener('click', () => {
+      const cls = `<i class="mts-icon mts-icon-${name}${filled?' mts-icon--filled':''}"></i>`;
+      navigator.clipboard?.writeText(cls).then(() => {
+        card.classList.add('copied');
+        showCopyToast(name);
+        setTimeout(() => card.classList.remove('copied'), 1200);
+      });
+    });
+
+    gallery.appendChild(card);
+  });
+}
+
+function filterIcons(value) {
+  renderGallery(value);
+}
+
+function showCopyToast(name) {
+  const t = document.getElementById('copyToast');
+  t.textContent = `✅ Copiado: mts-icon-${name}`;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.display = 'none'; }, 2000);
+}
+
+/* Inicializar galería */
+renderGallery();
+</script>
+</body>
+</html>

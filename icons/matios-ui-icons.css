@@ -1,0 +1,65 @@
+/* ============================================================
+   MATIOS UI — matios-ui-icons.css  v1.0.0
+   ============================================================ */
+
+/* Base */
+.mts-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width:  1em;
+  height: 1em;
+  font-size: 1rem;          /* tamaño heredado del contexto */
+  vertical-align: middle;
+  line-height: 1;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.mts-icon svg {
+  display: block;
+  width:  100%;
+  height: 100%;
+}
+
+/* Tamaños explícitos */
+.mts-icon--xs  { font-size: 12px; }
+.mts-icon--sm  { font-size: 14px; }
+.mts-icon--md  { font-size: 18px; }
+.mts-icon--lg  { font-size: 22px; }
+.mts-icon--xl  { font-size: 28px; }
+.mts-icon--2xl { font-size: 36px; }
+.mts-icon--3xl { font-size: 48px; }
+
+/* Colores semánticos */
+.mts-icon--primary { color: var(--mts-color-primary, #4f8eff); }
+.mts-icon--success { color: var(--mts-color-success, #34d399); }
+.mts-icon--warning { color: var(--mts-color-warning, #fbbf24); }
+.mts-icon--danger  { color: var(--mts-color-danger,  #f87171); }
+.mts-icon--muted   { color: var(--mts-text-muted); }
+
+/* Rotaciones */
+.mts-icon--rotate-90  { transform: rotate(90deg); }
+.mts-icon--rotate-180 { transform: rotate(180deg); }
+.mts-icon--rotate-270 { transform: rotate(270deg); }
+
+/* Flip */
+.mts-icon--flip-h { transform: scaleX(-1); }
+.mts-icon--flip-v { transform: scaleY(-1); }
+
+/* Spin (para loading/spinner) */
+.mts-icon--spin {
+  animation: mts-icon-spin 1s linear infinite;
+}
+.mts-icon--pulse {
+  animation: mts-icon-spin 1s steps(8) infinite;
+}
+
+@keyframes mts-icon-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Opacidad para estados */
+.mts-icon--dim     { opacity: .4; }
+.mts-icon--muted   { opacity: .6; }

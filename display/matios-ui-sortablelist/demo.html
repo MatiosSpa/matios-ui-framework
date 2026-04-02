@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.SortableList — Demo</title>
+      <script>
+    (function(){
+      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
+      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
+          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+        }
+      }catch(e){}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="./matios-ui-sortablelist.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="./matios-ui-sortablelist.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
+    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
+    .demo-section{display:flex;flex-direction:column;gap:14px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
+    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
+    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
+    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
+    .demo-docs-panel.open{display:block;}
+    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
+    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
+    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
+    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
+    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
+    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
+    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
+    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
+    .demo-docs-panel p{margin:0 0 10px;}
+    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
+    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+    @media(max-width:640px){.demo-grid-2{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+</div>
+
+<div class="demo-page">
+
+  <div class="demo-header">
+    <h1><span>MTS</span>.SortableList</h1>
+    <p>Lista reordenable con drag &amp; drop, botones ↑ ↓ y eventos de reorden.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-sortablelist.md')">📄 Documentación</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <!-- 1. WORKFLOW DE APROBACIONES -->
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Workflow de aprobaciones — numbered + moveButtons + disabled</div>
+    <p style="font-size:12px;color:var(--mts-text-muted);margin:0 0 8px;">💡 El primer aprobador está fijo (disabled). Arrastra o usa ↑ ↓ para reordenar los demás.</p>
+    <div id="sl-aprobaciones"></div>
+    <div class="result-box" id="result-aprobaciones">— reordena los aprobadores —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c1"><code>new MTS.SortableList('#el', {
+  numbered:    true,
+  moveButtons: true,
+  items: [
+    { id:'1', title:'Juan Pérez',    description:'Gerente General',
+      avatar:'Juan Pérez',    badge:{ label:'Fijo', variant:'danger' }, disabled:true },
+    { id:'2', title:'María Alarcón', description:'Jefe de Proyecto',
+      avatar:'María Alarcón', badge:{ label:'Aprobador', variant:'primary' } },
+    { id:'3', title:'Carlos Ruiz',   description:'Revisor Técnico',
+      avatar:'Carlos Ruiz',   badge:{ label:'Revisor', variant:'default' } },
+  ],
+  onReorder: (e) => {
+    console.log('Nuevo orden:', e.detail.items.map(i => i.title))
+    console.log('item movido:', e.detail.item.title)
+    console.log('de:', e.detail.fromIndex, '→ a:', e.detail.toIndex)
+  },
+})</code></pre>
+  </div>
+
+  <!-- 2. PRIORIDADES CON ÍCONOS -->
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Lista de prioridades — con íconos y meta</div>
+    <div id="sl-prioridades"></div>
+    <div class="result-box" id="result-prioridades">— arrastra para reordenar prioridades —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c2"><code>new MTS.SortableList('#el', {
+  numbered: true,
+  variant:  'default',
+  items: [
+    { id:'p1', title:'Seguridad del sistema',  icon:MTS.Icon.get('shield'),
+      description:'Autenticación, permisos y auditoría', meta:'Crítica' },
+    { id:'p2', title:'Rendimiento de la API',  icon:MTS.Icon.get('activity'),
+      description:'Tiempo de respuesta < 200ms',         meta:'Alta' },
+    { id:'p3', title:'Experiencia de usuario', icon:MTS.Icon.get('heart'),
+      description:'Accesibilidad y usabilidad',          meta:'Alta' },
+  ],
+  onReorder: (e) => console.log('Prioridad actualizada:', e.detail.items.map(i => i.title)),
+})</code></pre>
+  </div>
+
+  <!-- 3. VARIANTES -->
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Variantes</div>
+    <div class="demo-grid-2">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Flush</div>
+        <div id="sl-flush"></div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Compact</div>
+        <div id="sl-compact"></div>
+      </div>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c3"><code>// Flush — solo separadores
+new MTS.SortableList('#el', { variant:'flush', items:[...] })
+
+// Compact — sin descripción, más denso
+new MTS.SortableList('#el', { variant:'compact', items:[...] })</code></pre>
+  </div>
+
+  <!-- 4. COLUMNAS VISIBLES (con badges toggle) -->
+  <div class="demo-section">
+    <div class="demo-section-title">4 — Orden de columnas de tabla</div>
+    <p style="font-size:12px;color:var(--mts-text-muted);margin:0 0 8px;">💡 Reordena y el resultado representa el nuevo orden de columnas.</p>
+    <div id="sl-columnas"></div>
+    <div class="result-box" id="result-columnas">— reordena las columnas —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c4')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c4"><code>new MTS.SortableList('#el', {
+  variant:  'compact',
+  numbered:  true,
+  items: columns.map(col => ({
+    id:    col.key,
+    title: col.label,
+    icon:  MTS.Icon.get(col.icon),
+    badge: col.visible
+      ? { label:'Visible', variant:'success' }
+      : { label:'Oculta',  variant:'default' },
+  })),
+  onReorder: (e) => aplicarOrdenColumnas(e.detail.items),
+})</code></pre>
+  </div>
+
+  <!-- 5. API INTERACTIVA -->
+  <div class="demo-section">
+    <div class="demo-section-title">5 — API — addItem · removeItem · lock · unlock</div>
+    <div id="sl-api"></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="apiAdd()">+ Agregar item</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="apiRemoveLast()">Eliminar último</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="apiLock()">🔒 Bloquear</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="apiUnlock()">🔓 Desbloquear</button>
+    </div>
+    <div class="result-box" id="result-api">— usa los botones para probar la API —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c5')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c5"><code>const list = new MTS.SortableList('#el', { items:[...] })
+
+list.addItem({ id:'nuevo', title:'Nuevo item', description:'...' })
+list.addItem({ id:'top',   title:'Al inicio' }, 0)   // índice 0 = al principio
+list.removeItem('id-a-eliminar')
+list.updateItem('id', { title:'Nuevo título', badge:{ label:'Editado', variant:'warning' } })
+list.lock()     // modo solo lectura
+list.unlock()   // vuelve a ser reordenable
+list.getItems() // → copia del array actual
+
+// Escuchar eventos
+list.on('reorder',   (e) => console.log(e.detail.fromIndex, '→', e.detail.toIndex))
+list.on('itemClick', (e) => console.log('click:', e.detail.item.title))</code></pre>
+  </div>
+
+  <!-- 6. MODO LOCKED -->
+  <div class="demo-section">
+    <div class="demo-section-title">6 — Modo locked — solo lectura</div>
+    <div id="sl-locked"></div>
+    <button class="demo-code-toggle" onclick="toggleCode('c6')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c6"><code>// Sin handle ni drag — solo presenta el orden
+new MTS.SortableList('#el', {
+  locked:   true,
+  numbered: true,
+  items: [...],
+})</code></pre>
+  </div>
+
+</div>
+
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
+function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
+function toggleDocs(id,mdPath){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';fetch(mdPath).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>No se pudo cargar.</em>';});}
+function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,function(_,hdr,rows){var ths=hdr.split('|').filter(function(c){return c.trim();}).map(function(c){return'<th>'+c.trim()+'</th>';}).join('');var trs=rows.trim().split('\n').map(function(r){return'<tr>'+r.split('|').filter(function(c){return c.trim();}).map(function(c){return'<td>'+c.trim()+'</td>';}).join('')+'</tr>';}).join('');return'<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';}).replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
+
+/* ── 1. Workflow de aprobaciones ── */
+new MTS.SortableList('#sl-aprobaciones', {
+  numbered: true,
+  moveButtons: true,
+  items: [
+    { id:'a1', title:'Juan Pérez',       description:'Gerente General — aprueba primero siempre', avatar:'Juan Pérez',       badge:{ label:'Fijo', variant:'danger' },    disabled:true },
+    { id:'a2', title:'María Alarcón',    description:'Jefe de Proyecto — segundo en la cadena',   avatar:'María Alarcón',    badge:{ label:'Aprobador', variant:'primary' } },
+    { id:'a3', title:'Carlos Ruiz',      description:'Revisor Técnico — verifica implementación', avatar:'Carlos Ruiz',      badge:{ label:'Revisor', variant:'info' }     },
+    { id:'a4', title:'Ana Torres',       description:'Legal — valida cumplimiento normativo',      avatar:'Ana Torres',       badge:{ label:'Legal', variant:'warning' }    },
+    { id:'a5', title:'Pedro Díaz',       description:'Finanzas — aprobación presupuestaria',       avatar:'Pedro Díaz',       badge:{ label:'Finanzas', variant:'default' } },
+  ],
+  onReorder: function(e) {
+    var names = e.detail.items.map(function(i){ return i.title.split(' ')[0]; }).join(' → ');
+    document.getElementById('result-aprobaciones').textContent =
+      'onReorder → "' + e.detail.item.title + '" | ' +
+      e.detail.fromIndex + ' → ' + e.detail.toIndex +
+      ' | Orden: ' + names;
+  },
+  onItemClick: function(e) {
+    document.getElementById('result-aprobaciones').textContent =
+      'onItemClick → "' + e.detail.item.title + '" (pos: ' + e.detail.index + ')';
+  },
+});
+
+/* ── 2. Prioridades con íconos ── */
+new MTS.SortableList('#sl-prioridades', {
+  numbered: true,
+  items: [
+    { id:'p1', title:'Seguridad del sistema',    icon: MTS.Icon.get('shield'),      description:'Autenticación, permisos y registro de auditoría', meta:'Crítica' },
+    { id:'p2', title:'Rendimiento de la API',    icon: MTS.Icon.get('activity'),    description:'Tiempo de respuesta menor a 200ms en endpoints',   meta:'Alta' },
+    { id:'p3', title:'Experiencia de usuario',   icon: MTS.Icon.get('heart'),       description:'Accesibilidad WCAG 2.1 y usabilidad mobile',       meta:'Alta' },
+    { id:'p4', title:'Cobertura de tests',        icon: MTS.Icon.get('check-circle'),description:'Mínimo 80% de cobertura en módulos críticos',       meta:'Media' },
+    { id:'p5', title:'Documentación técnica',    icon: MTS.Icon.get('file-text'),   description:'API docs, guías y ejemplos actualizados',          meta:'Media' },
+  ],
+  onReorder: function(e) {
+    document.getElementById('result-prioridades').textContent =
+      'Prioridad #1: "' + e.detail.items[0].title + '" | movido de ' +
+      e.detail.fromIndex + ' → ' + e.detail.toIndex;
+  },
+});
+
+/* ── 3. Variantes ── */
+var SIMPLE_ITEMS = [
+  { id:'v1', title:'Frontend',  description:'React, Vue, Angular' },
+  { id:'v2', title:'Backend',   description:'Node, Python, Go'    },
+  { id:'v3', title:'DevOps',    description:'Docker, CI/CD'       },
+  { id:'v4', title:'QA',        description:'Testing, E2E'        },
+];
+new MTS.SortableList('#sl-flush',   { variant:'flush',   items:SIMPLE_ITEMS.map(function(i){return Object.assign({},i);}) });
+new MTS.SortableList('#sl-compact', { variant:'compact', items:SIMPLE_ITEMS.map(function(i){return Object.assign({},i);}) });
+
+/* ── 4. Columnas de tabla ── */
+var COLUMNS = [
+  { key:'nombre',   label:'Nombre',    icon:'user',        visible:true  },
+  { key:'email',    label:'Email',     icon:'at-sign',     visible:true  },
+  { key:'rol',      label:'Rol',       icon:'shield',      visible:true  },
+  { key:'estado',   label:'Estado',    icon:'check-circle',visible:true  },
+  { key:'creado',   label:'Creado',    icon:'calendar',    visible:false },
+  { key:'acciones', label:'Acciones',  icon:'settings',    visible:true  },
+];
+new MTS.SortableList('#sl-columnas', {
+  variant:  'compact',
+  numbered:  true,
+  items: COLUMNS.map(function(col){
+    return {
+      id:    col.key,
+      title: col.label,
+      icon:  MTS.Icon.get(col.icon),
+      badge: col.visible
+        ? { label:'Visible', variant:'success' }
+        : { label:'Oculta',  variant:'default' },
+    };
+  }),
+  onReorder: function(e) {
+    var order = e.detail.items.map(function(i){ return i.title; }).join(', ');
+    document.getElementById('result-columnas').textContent =
+      'onReorder → nuevo orden: ' + order;
+  },
+});
+
+/* ── 5. API interactiva ── */
+var apiCount = 3;
+var slApi = new MTS.SortableList('#sl-api', {
+  numbered:    true,
+  moveButtons: true,
+  items: [
+    { id:'api1', title:'Paso 1 — Validación de datos',   description:'Verifica formato y reglas de negocio',    avatar:'Paso 1', badge:{ label:'Activo', variant:'success' } },
+    { id:'api2', title:'Paso 2 — Procesamiento',         description:'Ejecuta la lógica principal del sistema', avatar:'Paso 2', badge:{ label:'Activo', variant:'success' } },
+    { id:'api3', title:'Paso 3 — Notificación',          description:'Envía alertas y registra en el log',      avatar:'Paso 3', badge:{ label:'Activo', variant:'success' } },
+  ],
+  onReorder: function(e) {
+    document.getElementById('result-api').textContent =
+      'onReorder → "' + e.detail.item.title + '" movido de pos ' +
+      e.detail.fromIndex + ' → ' + e.detail.toIndex;
+  },
+  onItemClick: function(e) {
+    document.getElementById('result-api').textContent =
+      'onItemClick → "' + e.detail.item.title + '" (pos: ' + e.detail.index + ')';
+  },
+});
+
+function apiAdd() {
+  apiCount++;
+  slApi.addItem({
+    id:          'api'+apiCount,
+    title:       'Paso '+apiCount+' — Nuevo paso',
+    description: 'Agregado via addItem() en la API',
+    avatar:      'Paso '+apiCount,
+    badge:       { label:'Nuevo', variant:'warning' },
+  });
+  document.getElementById('result-api').textContent =
+    'addItem() → "Paso '+apiCount+'" agregado al final ('+slApi.getItems().length+' items total)';
+}
+
+function apiRemoveLast() {
+  var items = slApi.getItems();
+  if (!items.length) return;
+  var last = items[items.length - 1];
+  slApi.removeItem(last.id);
+  document.getElementById('result-api').textContent =
+    'removeItem() → "' + last.title + '" eliminado';
+}
+
+function apiLock() {
+  slApi.lock();
+  document.getElementById('result-api').textContent = 'lock() → lista en modo solo lectura';
+}
+function apiUnlock() {
+  slApi.unlock();
+  document.getElementById('result-api').textContent = 'unlock() → lista reordenable de nuevo';
+}
+
+/* ── 6. Locked ── */
+new MTS.SortableList('#sl-locked', {
+  locked:   true,
+  numbered: true,
+  items: [
+    { id:'l1', title:'1er lugar — Juan Pérez',    description:'84 puntos',  avatar:'Juan Pérez',    badge:{ label:'🥇 Oro',   variant:'warning' } },
+    { id:'l2', title:'2do lugar — María Alarcón', description:'71 puntos',  avatar:'María Alarcón', badge:{ label:'🥈 Plata', variant:'default' } },
+    { id:'l3', title:'3er lugar — Carlos Ruiz',   description:'68 puntos',  avatar:'Carlos Ruiz',   badge:{ label:'🥉 Bronce',variant:'default' } },
+    { id:'l4', title:'4to lugar — Ana Torres',    description:'55 puntos',  avatar:'Ana Torres',    badge:{ label:'Finalista',variant:'info'    } },
+  ],
+});
+</script>
+</body>
+</html>

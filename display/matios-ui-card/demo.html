@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <script>
+  (function(){
+    var m=(location.search||'').match(/mts-theme=([a-z-]+)/);
+    if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+    try{
+      var p=window.parent;
+      if(p&&p!==window){
+        var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
+        if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+      }
+    }catch(e){}
+  })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Card — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="./matios-ui-card.css">
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="./matios-ui-card.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:40px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0;}
+    .demo-section{display:flex;flex-direction:column;gap:16px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+    .demo-grid--2{grid-template-columns:repeat(auto-fill,minmax(360px,1fr));}
+    .demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
+    .demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
+    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+    .tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--mts-radius-full);font-size:11px;font-weight:600;background:var(--mts-color-primary-light);color:var(--mts-color-primary);}
+  </style>
+</head>
+<body>
+
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+</div>
+
+<div class="demo-page">
+
+  <div class="demo-header">
+    <h1>MTS <span>Card</span></h1>
+    <p>Card genérica — header · body · footer · imagen · variantes · hover · clickable</p>
+  </div>
+
+
+  <!-- 1 — BÁSICA CSS PURO -->
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Estructura base — CSS puro</div>
+    <div class="demo-grid">
+      <div class="mts-card">
+        <div class="mts-card__header">
+          <div class="mts-card__header-content">
+            <div class="mts-card__title">Card básica</div>
+            <div class="mts-card__subtitle">Subtítulo opcional</div>
+          </div>
+        </div>
+        <div class="mts-card__body">Cuerpo de la card con contenido de ejemplo. Puede contener cualquier HTML.</div>
+        <div class="mts-card__footer mts-card__footer--end">
+          <button class="mts-btn mts-btn--ghost mts-btn--sm">Cancelar</button>
+          <button class="mts-btn mts-btn--primary mts-btn--sm">Aceptar</button>
+        </div>
+      </div>
+
+      <div class="mts-card mts-card--elevated">
+        <div class="mts-card__header">
+          <div class="mts-card__header-content">
+            <div class="mts-card__title">Elevated</div>
+            <div class="mts-card__subtitle">Con sombra media</div>
+          </div>
+          <div class="mts-card__header-actions">
+            <button class="mts-btn mts-btn--ghost mts-btn--sm">✏️</button>
+          </div>
+        </div>
+        <div class="mts-card__body">Card con sombra y sin borde. Ideal para destacar contenido.</div>
+      </div>
+
+      <div class="mts-card mts-card--outlined">
+        <div class="mts-card__header">
+          <div class="mts-card__header-content">
+            <div class="mts-card__title">Outlined</div>
+            <div class="mts-card__subtitle">Borde fuerte, fondo transparente</div>
+          </div>
+        </div>
+        <div class="mts-card__body">Variante outlined para contextos sobre fondos con color.</div>
+      </div>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('code-s1')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="code-s1">&lt;div class="mts-card"&gt;
+  &lt;div class="mts-card__header"&gt;
+    &lt;div class="mts-card__header-content"&gt;
+      &lt;div class="mts-card__title"&gt;Título&lt;/div&gt;
+      &lt;div class="mts-card__subtitle"&gt;Subtítulo&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="mts-card__header-actions"&gt;
+      &lt;button class="mts-btn mts-btn--ghost mts-btn--sm"&gt;✏️&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="mts-card__body"&gt;Contenido...&lt;/div&gt;
+  &lt;div class="mts-card__footer mts-card__footer--end"&gt;
+    &lt;button class="mts-btn mts-btn--primary mts-btn--sm"&gt;Aceptar&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Variantes --&gt;
+&lt;div class="mts-card mts-card--elevated"&gt;...&lt;/div&gt;
+&lt;div class="mts-card mts-card--outlined"&gt;...&lt;/div&gt;</pre>
+  </div>
+
+
+  <!-- 2 — ACENTOS DE COLOR -->
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Acentos de color</div>
+    <div class="demo-grid">
+      <div class="mts-card mts-card--primary">
+        <div class="mts-card__header"><div class="mts-card__header-content">
+          <div class="mts-card__title">Primary</div>
+        </div></div>
+        <div class="mts-card__body">Acento azul en borde izquierdo.</div>
+      </div>
+      <div class="mts-card mts-card--success">
+        <div class="mts-card__header"><div class="mts-card__header-content">
+          <div class="mts-card__title">Success</div>
+        </div></div>
+        <div class="mts-card__body">Acento verde — operación exitosa.</div>
+      </div>
+      <div class="mts-card mts-card--warning">
+        <div class="mts-card__header"><div class="mts-card__header-content">
+          <div class="mts-card__title">Warning</div>
+        </div></div>
+        <div class="mts-card__body">Acento naranja — requiere atención.</div>
+      </div>
+      <div class="mts-card mts-card--danger">
+        <div class="mts-card__header"><div class="mts-card__header-content">
+          <div class="mts-card__title">Danger</div>
+        </div></div>
+        <div class="mts-card__body">Acento rojo — acción destructiva.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 3 — HOVERABLE Y CLICKABLE -->
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Hoverable y Clickable</div>
+    <div class="demo-grid">
+      <div class="mts-card mts-card--hoverable">
+        <div class="mts-card__header"><div class="mts-card__header-content">
+          <div class="mts-card__title">Hoverable</div>
+          <div class="mts-card__subtitle">Pasa el mouse por encima</div>
+        </div></div>
+        <div class="mts-card__body">Efecto de sombra y lift al hacer hover. Sin interacción de click.</div>
+      </div>
+      <div class="mts-card mts-card--clickable" id="card-click">
+        <div class="mts-card__header"><div class="mts-card__header-content">
+          <div class="mts-card__title">Clickable</div>
+          <div class="mts-card__subtitle">Haz click en la card</div>
+        </div></div>
+        <div class="mts-card__body">Toda la card es clickeable. Cursor pointer y efecto active.</div>
+      </div>
+      <div class="mts-card mts-card--clickable mts-card--selected">
+        <div class="mts-card__header"><div class="mts-card__header-content">
+          <div class="mts-card__title">Selected</div>
+          <div class="mts-card__subtitle">Estado seleccionado</div>
+        </div></div>
+        <div class="mts-card__body">Borde primario que indica selección activa.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 4 — TAMAÑOS -->
+  <div class="demo-section">
+    <div class="demo-section-title">4 — Tamaños</div>
+    <div class="demo-grid">
+      <div class="mts-card mts-card--sm">
+        <div class="mts-card__header"><div class="mts-card__header-content">
+          <div class="mts-card__title">Small</div>
+        </div></div>
+        <div class="mts-card__body">Padding reducido, fuente más pequeña.</div>
+        <div class="mts-card__footer mts-card__footer--end">
+          <button class="mts-btn mts-btn--primary mts-btn--sm">OK</button>
+        </div>
+      </div>
+      <div class="mts-card">
+        <div class="mts-card__header"><div class="mts-card__header-content">
+          <div class="mts-card__title">Default</div>
+        </div></div>
+        <div class="mts-card__body">Tamaño estándar del framework.</div>
+        <div class="mts-card__footer mts-card__footer--end">
+          <button class="mts-btn mts-btn--primary mts-btn--sm">OK</button>
+        </div>
+      </div>
+      <div class="mts-card mts-card--lg">
+        <div class="mts-card__header"><div class="mts-card__header-content">
+          <div class="mts-card__title">Large</div>
+        </div></div>
+        <div class="mts-card__body">Padding generoso para contenido destacado.</div>
+        <div class="mts-card__footer mts-card__footer--end">
+          <button class="mts-btn mts-btn--primary mts-btn--sm">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 5 — VIA JS -->
+  <div class="demo-section">
+    <div class="demo-section-title">5 — Via JS — MTS.Card</div>
+    <div class="demo-grid demo-grid--2">
+      <div id="card-js-1"></div>
+      <div id="card-js-2"></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+      <button class="mts-btn mts-btn--secondary mts-btn--sm" onclick="jsCard1.setSelected(true)">Seleccionar</button>
+      <button class="mts-btn mts-btn--secondary mts-btn--sm" onclick="jsCard1.setSelected(false)">Deseleccionar</button>
+      <button class="mts-btn mts-btn--secondary mts-btn--sm" onclick="jsCard1.setLoading(true)">Loading ON</button>
+      <button class="mts-btn mts-btn--secondary mts-btn--sm" onclick="jsCard1.setLoading(false)">Loading OFF</button>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('code-s5')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="code-s5">const card = new MTS.Card('#mi-card', {
+  title:    'Título de la card',
+  subtitle: 'Subtítulo opcional',
+  body:     '&lt;p&gt;Contenido HTML del cuerpo.&lt;/p&gt;',
+  variant:  'elevated',
+  hoverable: true,
+  clickable: true,
+  actions: [
+    { icon: '✏️', variant: 'ghost', onClick: () => {} },
+    { icon: '🗑️', variant: 'ghost', onClick: () => {} },
+  ],
+  footer: [
+    { label: 'Cancelar', variant: 'ghost',   onClick: () => {} },
+    { label: 'Guardar',  variant: 'primary',  onClick: () => {} },
+  ],
+  footerAlign: 'end',
+  onClick: (e, card) => console.log('clickeada'),
+})</pre>
+  </div>
+
+
+  <!-- 6 — LOADING SKELETON -->
+  <div class="demo-section">
+    <div class="demo-section-title">6 — Loading skeleton</div>
+    <div class="demo-grid">
+      <div class="mts-card mts-card--loading">
+        <div class="mts-card__header"><div class="mts-card__header-content">
+          <div class="mts-card__title">Cargando título...</div>
+          <div class="mts-card__subtitle">Cargando subtítulo...</div>
+        </div></div>
+        <div class="mts-card__body">Cargando contenido del cuerpo de la card...</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function setTheme(t) {
+  document.documentElement.setAttribute('data-mts-theme', t);
+  try {
+    if (window.parent && window.parent !== window)
+      window.parent.postMessage({ type:'setTheme', theme:t }, '*');
+  } catch(e) {}
+}
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'setTheme')
+    document.documentElement.setAttribute('data-mts-theme', e.data.theme);
+});
+if (window !== window.top) {
+  var ts = document.querySelector('.demo-theme');
+  if (ts) ts.style.display = 'none';
+}
+function toggleCode(id) {
+  var el = document.getElementById(id);
+  if (el) el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+
+/* Click demo */
+document.getElementById('card-click').addEventListener('click', function() {
+  this.classList.toggle('mts-card--selected');
+});
+
+/* JS Cards */
+var jsCard1 = new MTS.Card(document.getElementById('card-js-1'), {
+  title:    'Proyecto Alpha',
+  subtitle: 'Ingeniería · 3 miembros',
+  body:     '<p style="margin:0 0 12px">Card generada via JS con acciones en header y footer.</p><span class="tag">En progreso</span>',
+  variant:  'elevated',
+  hoverable: true,
+  clickable: true,
+  actions: [
+    { icon: '✏️', variant: 'ghost', onClick: function() { alert('Editar'); } },
+    { icon: '🗑️', variant: 'ghost', onClick: function() { alert('Eliminar'); } },
+  ],
+  footer: [
+    { label: 'Ver detalles', variant: 'secondary', onClick: function() {} },
+    { label: 'Abrir',        variant: 'primary',   onClick: function() {} },
+  ],
+  footerAlign: 'end',
+  onClick: function(e, card) {
+    card.setSelected(!card.selected);
+  },
+});
+
+new MTS.Card(document.getElementById('card-js-2'), {
+  title:    'Reporte mensual',
+  subtitle: 'Generado el 30/03/2026',
+  body:     '<p style="margin:0">Card con variante primary y footer centrado.</p>',
+  variant:  'primary',
+  footer: [
+    { label: 'Descargar PDF', variant: 'primary',   onClick: function() {} },
+    { label: 'Compartir',     variant: 'secondary',  onClick: function() {} },
+  ],
+  footerAlign: 'between',
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Input — Demo</title>
+  <script>(function(){var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);if(m)document.documentElement.setAttribute('data-mts-theme',m[1]);try{var p=window.parent;if(p&&p!==window){var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');if(pt)document.documentElement.setAttribute('data-mts-theme',pt);}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="./matios-ui-input.css">
+  <link rel="stylesheet" href="../matios-ui-validation/matios-ui-validation.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="./matios-ui-input.js"></script>
+  <script src="../matios-ui-validation/matios-ui-validation.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
+    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
+    .demo-section{display:flex;flex-direction:column;gap:14px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
+    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
+    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
+    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
+    .demo-docs-panel.open{display:block;}
+    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
+    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
+    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
+    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
+    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
+    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
+    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
+    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
+    .demo-docs-panel p{margin:0 0 10px;}
+    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
+    .demo-docs-panel a{color:var(--mts-color-primary);text-decoration:none;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+</div>
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.Input</h1>
+    <p>Input de texto, email, password, número y textarea — con validación integrada.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-input.md')">📄 Documentación</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <!-- 1. TIPOS -->
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Tipos de input</div>
+    <div class="demo-grid">
+      <div id="input-text"></div>
+      <div id="input-email"></div>
+      <div id="input-password"></div>
+      <div id="input-number"></div>
+      <div id="input-disabled"></div>
+      <div id="input-error"></div>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('code-s1')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="code-s1"><code>new MTS.Input('#el', { type:'text',     label:'Nombre',     placeholder:'Juan Pérez', hint:'Mínimo 3 caracteres' })
+new MTS.Input('#el', { type:'email',    label:'Email',      placeholder:'correo@ejemplo.com' })
+new MTS.Input('#el', { type:'password', label:'Contraseña', showPassword:true })
+new MTS.Input('#el', { type:'number',   label:'Cantidad',   rules:{ min:0, max:999 } })
+new MTS.Input('#el', { type:'text',     label:'Disabled',   disabled:true })
+// Establecer error manualmente
+const inp = new MTS.Input('#el', { type:'text', label:'Con error' })
+inp.setError('Este campo no es válido')</code></pre>
+  </div>
+
+  <!-- 2. TEXTAREA -->
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Textarea</div>
+    <div id="input-textarea"></div>
+    <button class="demo-code-toggle" onclick="toggleCode('code-s2')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="code-s2"><code>new MTS.Input('#el', {
+  type:        'textarea',
+  label:       'Descripción',
+  placeholder: 'Escribe aquí...',
+  rows:        4,
+  maxLength:   200,
+  showCounter: true,
+})</code></pre>
+  </div>
+
+  <!-- 3. CON ÍCONOS -->
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Con íconos</div>
+    <div class="demo-grid">
+      <div id="input-icon-left"></div>
+      <div id="input-icon-right"></div>
+      <div id="input-icon-both"></div>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('code-s3')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="code-s3"><code>new MTS.Input('#el', {
+  label:    'Buscar',
+  iconLeft: MTS.Icon.get('search'),
+})
+new MTS.Input('#el', {
+  label:     'Website',
+  iconRight: MTS.Icon.get('external-link'),
+})
+new MTS.Input('#el', {
+  label:     'Usuario',
+  iconLeft:  MTS.Icon.get('user'),
+  iconRight: MTS.Icon.get('check-circle'),
+})</code></pre>
+  </div>
+
+  <!-- 4. ESTADOS DE VALIDACIÓN -->
+  <div class="demo-section">
+    <div class="demo-section-title">4 — Estados de validación</div>
+    <div class="demo-grid">
+      <div id="input-success"></div>
+      <div id="input-val-error"></div>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('code-s4')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="code-s4"><code>// Estado success
+const inp = new MTS.Input('#el', { label:'Email verificado', value:'correo@ok.com' })
+inp.setSuccess?.()    // o clase mts-input-success
+
+// Estado error con mensaje
+const inp2 = new MTS.Input('#el', { label:'Email inválido' })
+inp2.setError('Ingresa un email válido')</code></pre>
+  </div>
+
+  <!-- 5. API -->
+  <div class="demo-section">
+    <div class="demo-section-title">5 — API interactiva</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;">
+      <div id="input-api" style="flex:1;min-width:200px;"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="demo-btn-sm" onclick="apiInp.setError('Error desde la API')">setError()</button>
+        <button class="demo-btn-sm" onclick="apiInp.clearError?.();apiInp.setValue?.('')">clearError()</button>
+        <button class="demo-btn-sm" onclick="apiInp.disable()">disable()</button>
+        <button class="demo-btn-sm" onclick="apiInp.enable()">enable()</button>
+        <button class="demo-btn-sm" onclick="apiInp.focus?.()">focus()</button>
+      </div>
+    </div>
+    <div class="result-box" id="api-result">— escribe algo en el input —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('code-s5')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="code-s5"><code>const inp = new MTS.Input('#el', {
+  label:       'Input API',
+  placeholder: 'Escribe algo...',
+  onChange:    (e) => console.log('value:', e.detail.value),
+  onBlur:      (e) => console.log('blur'),
+  onFocus:     (e) => console.log('focus'),
+})
+
+inp.getValue()          // → string
+inp.setValue('texto')
+inp.setError('mensaje')
+inp.clearError()
+inp.disable()
+inp.enable()
+inp.focus()</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">HTML declarativo</div>
+    <div id="ih1"></div>
+    <div class="result-box" id="ih-res">— escribe algo —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c-ih')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c-ih"><code>&lt;div id="miInput"
+  data-label="Nombre"
+  data-placeholder="Tu nombre"
+  data-hint="Solo letras"
+  data-clearable data-required&gt;
+&lt;/div&gt;
+&lt;script&gt;
+const inp = new MTS.Input('#miInput', { onChange: (v) =&gt; console.log(v) })
+&lt;/script&gt;</code></pre>
+  </div>
+</div>
+
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
+function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
+function toggleDocs(id,mdPath){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';fetch(mdPath).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>No se pudo cargar.</em>';});}
+function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
+
+/* ── Sección 1: Tipos ── */
+new MTS.Input('#input-text',     { type:'text',     label:'Nombre completo',  placeholder:'Juan Pérez',        hint:'Mínimo 3 caracteres', rules:{minLength:3} });
+new MTS.Input('#input-email',    { type:'email',    label:'Email',            placeholder:'correo@ejemplo.com', rules:{pattern:'email'} });
+new MTS.Input('#input-password', { type:'password', label:'Contraseña',       placeholder:'••••••••',           showPassword:true, rules:{minLength:8} });
+new MTS.Input('#input-number',   { type:'number',   label:'Cantidad',         placeholder:'0',                  rules:{min:0, max:999} });
+new MTS.Input('#input-disabled', { type:'text',     label:'Deshabilitado',    value:'Valor fijo',               disabled:true });
+var inpErr = new MTS.Input('#input-error', { type:'text', label:'Con error', value:'dato inválido' });
+inpErr.setError?.('Este campo no es válido');
+
+/* ── Sección 2: Textarea ── */
+new MTS.Input('#input-textarea', { type:'textarea', label:'Descripción', placeholder:'Escribe aquí...', rows:4, maxLength:200, showCounter:true });
+
+/* ── Sección 3: Íconos ── */
+new MTS.Input('#input-icon-left',  { label:'Buscar',  placeholder:'Buscar productos...', iconLeft:  MTS.Icon.get('search') });
+new MTS.Input('#input-icon-right', { label:'Website', placeholder:'https://ejemplo.com', iconRight: MTS.Icon.get('external-link') });
+new MTS.Input('#input-icon-both',  { label:'Usuario', placeholder:'@usuario',            iconLeft:  MTS.Icon.get('user'), iconRight: MTS.Icon.get('check-circle') });
+
+/* ── Sección 4: Estados ── */
+var inpOk  = new MTS.Input('#input-success',   { type:'email', label:'Email verificado', value:'correo@ok.com' });
+var inpBad = new MTS.Input('#input-val-error',  { type:'text',  label:'RUT inválido',     value:'12.345.678-0' });
+setTimeout(function() {
+  inpOk._inputEl?.classList.add('mts-input-success');
+  inpBad.setError?.('RUT inválido — verifica el dígito verificador');
+}, 100);
+
+/* ── Sección 5: API ── */
+var apiInp = new MTS.Input('#input-api', {
+  label:'Input interactivo', placeholder:'Escribe algo...',
+  onChange: function(e) {
+    var r = document.getElementById('api-result');
+    if (r) r.textContent = 'onChange → value: "' + (e.detail?.value || '') + '"';
+  },
+  onFocus: function() {
+    var r = document.getElementById('api-result');
+    if (r) r.textContent = 'onFocus disparado';
+  },
+  onBlur: function(e) {
+    var r = document.getElementById('api-result');
+    if (r) r.textContent = 'onBlur → value: "' + (e.detail?.value || '') + '"';
+  },
+});
+
+new MTS.Input(document.getElementById('ih1'),{label:'Nombre completo',placeholder:'Tu nombre',hint:'Solo letras',clearable:true,required:true,onChange:function(v){document.getElementById('ih-res').textContent='→ onChange: "'+v+'"';}});
+</script>
+</body>
+</html>

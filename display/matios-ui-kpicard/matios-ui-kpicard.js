@@ -105,7 +105,7 @@ MTS.KPICard = class MtsKPICard {
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-    svg.className = 'mts-kpicard__sparkline';
+    svg.setAttribute('class', 'mts-kpicard__sparkline');
     svg.setAttribute('preserveAspectRatio', 'none');
 
     const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');

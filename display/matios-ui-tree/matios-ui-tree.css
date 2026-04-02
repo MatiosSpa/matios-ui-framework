@@ -1,0 +1,41 @@
+/* MTS.Tree v1.0.0 */
+.mts-tree { font-size:13px; }
+.mts-tree__list { list-style:none;margin:0;padding:0; }
+.mts-tree__item { position:relative; }
+
+/* Líneas de conexión */
+.mts-tree--lines .mts-tree__item::before {
+  content:''; position:absolute; left:18px; top:0; bottom:0;
+  width:1px; background:var(--mts-border-color);
+}
+.mts-tree--lines .mts-tree__item--last::before { height:18px; }
+.mts-tree--lines .mts-tree__row::before {
+  content:''; position:absolute; left:10px; top:50%;
+  width:8px; height:1px; background:var(--mts-border-color);
+}
+.mts-tree--lines > .mts-tree__list > .mts-tree__item::before { display:none; }
+.mts-tree--lines > .mts-tree__list > .mts-tree__item > .mts-tree__row::before { display:none; }
+
+.mts-tree__row {
+  display:flex; align-items:center; gap:6px;
+  padding:5px 10px 5px 8px; border-radius:var(--mts-radius-md);
+  cursor:default; position:relative; transition:background .12s;
+}
+.mts-tree__row:hover { background:var(--mts-bg-surface-2); }
+.mts-tree__row--selected { background:var(--mts-color-primary-light); color:var(--mts-color-primary); }
+.mts-tree__row--selected .mts-tree__label { color:var(--mts-color-primary); font-weight:600; }
+.mts-tree__row--disabled { opacity:.4; cursor:not-allowed; }
+
+.mts-tree__toggle { width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;color:var(--mts-text-muted);border-radius:3px;transition:color .12s; }
+.mts-tree__toggle:hover { color:var(--mts-color-primary); }
+.mts-tree__toggle svg { display:block; }
+
+.mts-tree__checkbox { cursor:pointer;accent-color:var(--mts-color-primary);flex-shrink:0; }
+
+.mts-tree__icon { width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--mts-color-primary);opacity:.8; }
+.mts-tree__icon svg { display:block; }
+
+.mts-tree__label { flex:1;color:var(--mts-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+
+/* Nivel anidado indentado */
+.mts-tree__list .mts-tree__list { padding-left:0; }

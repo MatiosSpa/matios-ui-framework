@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Kanban — Demo</title>
+      <script>
+    (function(){
+      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
+      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
+          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+        }
+      }catch(e){}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="./matios-ui-kanban.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="./matios-ui-kanban.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
+    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
+    .demo-section{display:flex;flex-direction:column;gap:14px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+    .demo-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
+    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
+    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
+    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
+    .demo-docs-panel.open{display:block;}
+    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
+    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
+    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
+    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
+    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
+    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
+    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
+    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
+    .demo-docs-panel p{margin:0 0 10px;}
+    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
+    .demo-docs-panel a{color:var(--mts-color-primary);text-decoration:none;}
+    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+</div>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.Kanban</h1>
+    <p>Tablero Kanban con drag &amp; drop entre columnas, prioridades y eventos.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-kanban.md')">📄 Documentación</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Tablero completo con drag &amp; drop</div>
+    <p style="font-size:12px;color:var(--mts-text-muted);margin:0 0 8px;">
+      💡 Arrastra las tarjetas entre columnas · Click en una tarjeta para ver el evento · "+" para agregar
+    </p>
+    <div id="kanban-main" style="height:500px;"></div>
+    <div class="result-box" id="kanban-result">— arrastra una tarjeta o haz click en ella —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c1"><code>new MTS.Kanban('#el', {
+  addCards: true,   // botón "+" en cada columna
+  columns: [
+    {
+      id:    'backlog',
+      title: 'Backlog',
+      color: '#64748b',    // color del header de columna
+      wip:    5,           // Work In Progress limit (opcional)
+      cards: [
+        {
+          id:          'c1',
+          title:       'Diseñar login',
+          description: 'Crear mockup en Figma',
+          tags:        ['UI'],
+          priority:    'high',     // 'low'|'medium'|'high'
+          assignee:    'Juan P.',
+        },
+      ],
+    },
+    { id:'done', title:'Completado', color:'#34d399', cards:[] },
+  ],
+  onMove:      (card, fromColId, toColId, newIndex) => {},
+  onCardClick: (card, colId) => {},
+  onAddCard:   (card, colId) => {},
+  /* Búsqueda async de asignados (opcional) */
+  onSearchAssignee: async (query) => {
+    const res = await fetch('/api/users?q=' + query)
+    return res.json()   // [{ name:'Juan Pérez' }, ...]
+    // Sin onSearchAssignee usa lista de ejemplo interna
+  },
+})</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">2 — API — addCard() / moveCard() / removeCard()</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="addCard()">+ Agregar tarjeta al Backlog</button>
+      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="moveFirst()">Mover primera → En progreso</button>
+    </div>
+    <div class="result-box" id="kanban-api-result">— usa los botones de la API —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c2"><code>const kanban = new MTS.Kanban('#el', { columns:[...] })
+
+// Agregar tarjeta a una columna
+kanban.addCard('backlog', {
+  id:       Date.now().toString(),
+  title:    'Nueva tarea',
+  priority: 'medium',
+  tags:     ['Backend'],
+})
+
+// Mover tarjeta entre columnas
+kanban.moveCard('card-id', 'done', 0)   // mover al índice 0 de "done"
+
+// Eliminar tarjeta
+kanban.removeCard('card-id')</code></pre>
+  </div>
+</div>
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
+function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
+function toggleDocs(id,mdPath){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';fetch(mdPath).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>No se pudo cargar.</em>';});}
+function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
+
+var kanbanMain=new MTS.Kanban('#kanban-main',{
+  addCards:true,
+  /* Búsqueda async de usuarios — simula llamada a API */
+  onSearchAssignee:function(query){
+    return new Promise(function(resolve){
+      setTimeout(function(){
+        var USERS=['Ana Torres','Carlos Ruiz','Juan Pérez','María Alarcón',
+          'Pedro Díaz','Rosa Medina','Luis García','Sofía Castro',
+          'Diego Herrera','Valentina López','Andrés Muñoz','Camila Soto'];
+        var q=query.toLowerCase();
+        resolve(USERS.filter(function(u){return u.toLowerCase().includes(q);}).map(function(n){return{name:n};}));
+      },350); /* simula latencia de red */
+    });
+  },
+  columns:[
+    {id:'backlog',title:'Backlog',color:'#64748b',cards:[
+      {id:'c1',title:'Diseñar login',      description:'Crear mockup en Figma',            tags:['UI'],      priority:'medium'},
+      {id:'c2',title:'Setup base de datos',description:'Configurar PostgreSQL y migraciones',tags:['Backend'],priority:'high'},
+      {id:'c3',title:'Documentación API',  description:'Swagger para endpoints de usuarios',tags:['Docs'],    priority:'low'},
+    ]},
+    {id:'progress',title:'En progreso',color:'#4f8eff',wip:3,cards:[
+      {id:'c4',title:'API de usuarios',  description:'Endpoints CRUD completos',   assignee:'Juan Pérez',   priority:'high',  tags:['API']},
+      {id:'c5',title:'Componente Tabs',  description:'MTS.Tabs v1.0 con bordered', assignee:'María Alarcón',priority:'medium',tags:['UI']},
+    ]},
+    {id:'review',title:'Revisión',color:'#f59e0b',cards:[
+      {id:'c6',title:'Demo forms',description:'Demo de formularios completo',assignee:'Carlos Ruiz',priority:'low',tags:['Demo']},
+    ]},
+    {id:'done',title:'Completado',color:'#34d399',cards:[
+      {id:'c7',title:'MTS Base CSS',   priority:'high',  tags:['Core']},
+      {id:'c8',title:'MTS.Picker',     priority:'high',  tags:['Componente'],assignee:'Dev Team'},
+      {id:'c9',title:'MTS.DataTable',  priority:'medium',tags:['Componente']},
+    ]},
+  ],
+  onMove:function(card,fromCol,toCol,pos){document.getElementById('kanban-result').textContent='onMove → "'+card.title+'" | '+fromCol+' → '+toCol+' (pos: '+pos+')';},
+  onCardClick:function(card,colId){document.getElementById('kanban-result').textContent='onCardClick → "'+card.title+'" en columna: '+colId;},
+  onAddCard:function(card,colId){
+    /* El form inline ya creó la tarjeta — solo registrar el evento */
+    document.getElementById('kanban-result').textContent='onAddCard → "'+card.title+'" agregada en columna: '+colId;
+  },
+});
+var cardCount=10;
+function addCard(){
+  cardCount++;
+  kanbanMain.addCard('backlog',{id:'api'+cardCount,title:'Tarea '+cardCount,description:'Creada via API addCard()',priority:'medium',tags:['API']});
+  document.getElementById('kanban-api-result').textContent='addCard() → "Tarea '+cardCount+'" agregada al Backlog';
+}
+function moveFirst(){
+  kanbanMain.moveCard('c1','progress',0);
+  document.getElementById('kanban-api-result').textContent='moveCard("c1","progress",0) → tarjeta movida';
+}
+
+</script>
+</body>
+</html>

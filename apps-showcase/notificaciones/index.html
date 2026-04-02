@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Notificaciones — Matios UI</title>
+  <script>(function(){var m=(location.hash||"").match(/mts-theme=([a-z-]+)/);if(m)document.documentElement.setAttribute("data-mts-theme",m[1]);try{var p=window.parent;if(p&&p!==window){var pt=p.currentThemeVal||p.document.documentElement.getAttribute("data-mts-theme");if(pt)document.documentElement.setAttribute("data-mts-theme",pt);}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <link rel="stylesheet" href="../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+<style>
+*{box-sizing:border-box}
+body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;min-height:100vh;}
+.app-topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:50px;background:var(--mts-bg-surface);border-bottom:1px solid var(--mts-border-color);position:sticky;top:0;z-index:100;}
+.app-topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mts-text-muted);cursor:pointer;padding:4px 8px;border-radius:var(--mts-radius-md);border:none;background:none;transition:color .15s,background .15s;font-family:var(--mts-font-family);}
+.app-topbar-back:hover{color:var(--mts-text-primary);background:var(--mts-bg-surface-2);}
+.app-topbar-title{font-size:14px;font-weight:700;color:var(--mts-text-primary);flex:1;}
+.app-topbar-badge{font-size:10px;padding:2px 8px;border-radius:var(--mts-radius-full);background:var(--mts-color-primary-light);color:var(--mts-color-primary);font-weight:700;}
+.app-content{padding:24px;max-width:1100px;margin:0 auto;}
+.app-card{background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:24px;}
+.app-section{display:flex;flex-direction:column;gap:20px;}
+.app-grid{display:grid;gap:16px;}
+.app-grid-2{grid-template-columns:1fr 1fr;}
+.app-grid-3{grid-template-columns:1fr 1fr 1fr;}
+.app-grid-4{grid-template-columns:repeat(4,1fr);}
+.app-h2{font-size:18px;font-weight:800;margin:0 0 4px;}
+.app-h2 span{color:var(--mts-color-primary);}
+.app-sub{font-size:13px;color:var(--mts-text-muted);margin:0 0 20px;}
+.app-divider{border:none;border-top:1px solid var(--mts-border-color);margin:20px 0;}
+.app-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);margin-bottom:6px;}
+.app-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.app-theme{position:fixed;bottom:16px;right:16px;display:flex;gap:4px;z-index:999;}
+.app-theme-btn{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+.app-theme-btn:hover{background:var(--mts-bg-surface-2);}
+@media(max-width:640px){.app-grid-2,.app-grid-3,.app-grid-4{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="app-topbar"><button class="app-topbar-back" onclick="goBack()">&#8592; Volver</button><span class="app-topbar-title">Notificaciones</span><span class="app-topbar-badge">Centro</span></div>
+<style>
+.notif-content{padding:20px 24px;max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:20px;}
+.notif-list{display:flex;flex-direction:column;gap:2px;}
+.notif-item{display:flex;align-items:flex-start;gap:14px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);cursor:pointer;transition:background .15s;position:relative;}
+.notif-item:hover{background:var(--mts-bg-surface-2);}
+.notif-item.unread{border-left:3px solid var(--mts-color-primary);}
+.notif-item.unread::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--mts-color-primary);position:absolute;top:16px;right:14px;}
+.notif-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;}
+.notif-body h4{margin:0 0 2px;font-size:13px;font-weight:600;}
+.notif-body p{margin:0;font-size:12px;color:var(--mts-text-muted);}
+.notif-time{font-size:11px;color:var(--mts-text-muted);white-space:nowrap;}
+.notif-toolbar{display:flex;align-items:center;gap:10px;}
+</style>
+<div class="notif-content">
+  <div class="notif-toolbar">
+    <span style="font-size:15px;font-weight:800;">Notificaciones</span>
+    <span class="mts-badge mts-badge--primary" id="notif-count">5 nuevas</span>
+    <span style="flex:1;"></span>
+    <div id="btn-mark-all"></div>
+    <div id="btn-clear-all"></div>
+  </div>
+  <div id="notif-alert"></div>
+  <div class="notif-list" id="notif-list"></div>
+</div><div class="app-theme">
+  <button class="app-theme-btn" onclick="setTheme('dark')">Dark</button>
+  <button class="app-theme-btn" onclick="setTheme('light')">Light</button>
+  <button class="app-theme-btn" onclick="setTheme('violet')">Violet</button>
+  <button class="app-theme-btn" onclick="setTheme('blue')">Blue</button>
+</div>
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
+</script>
+<script>
+
+var NOTIFS=[
+  {id:1,icon:'🚀',iconBg:'#eff6ff',title:'Deploy completado',     desc:'v2.1.4 se desplegó exitosamente en producción.',  time:'Hace 5 min', unread:true,  type:'success'},
+  {id:2,icon:'👤',iconBg:'#f0fdf4',title:'Nuevo usuario registrado',desc:'María Torres se registró en la plataforma.',      time:'Hace 12 min',unread:true,  type:'info'},
+  {id:3,icon:'⚠️',iconBg:'#fff7ed',title:'Uso de storage al 80%',  desc:'Considera limpiar archivos o ampliar el plan.',   time:'Hace 1h',    unread:true,  type:'warning'},
+  {id:4,icon:'💬',iconBg:'#f5f3ff',title:'Nuevo comentario',        desc:'Juan Pérez comentó en el ticket #1047.',          time:'Hace 2h',    unread:true,  type:'info'},
+  {id:5,icon:'🔐',iconBg:'#fff0f0',title:'Inicio de sesión inusual',desc:'Detectamos acceso desde IP 185.x.x.x — España.',  time:'Hace 3h',    unread:true,  type:'danger'},
+  {id:6,icon:'✅',iconBg:'#f0fdf4',title:'Backup completado',       desc:'Respaldo automático diario ejecutado con éxito.',  time:'Ayer 03:00', unread:false, type:'success'},
+  {id:7,icon:'📊',iconBg:'#eff6ff',title:'Informe semanal listo',   desc:'Tu informe de la semana está disponible.',         time:'Ayer 09:00', unread:false, type:'info'},
+];
+
+new MTS.Button('#btn-mark-all',{label:'Marcar todo leído',variant:'ghost',size:'sm',onClick:function(){
+  NOTIFS.forEach(function(n){n.unread=false;});renderNotifs();
+  MTS.Alert.show('#notif-alert',{variant:'success',message:'Todas las notificaciones marcadas como leídas.',autoDismiss:2000});
+}});
+new MTS.Button('#btn-clear-all',{label:'Limpiar todo',variant:'ghost',size:'sm',iconLeft:MTS.Icon.get('trash'),onClick:function(){
+  NOTIFS.length=0;renderNotifs();
+  MTS.Alert.show('#notif-alert',{variant:'info',message:'Centro de notificaciones limpiado.',autoDismiss:2000});
+}});
+
+function renderNotifs(){
+  var list=document.getElementById('notif-list');
+  var count=document.getElementById('notif-count');
+  list.innerHTML='';
+  var unread=NOTIFS.filter(function(n){return n.unread;}).length;
+  count.textContent=unread?unread+' nuevas':'Al día';
+  count.className='mts-badge '+(unread?'mts-badge--primary':'mts-badge--success');
+  if(!NOTIFS.length){
+    list.innerHTML='<div style="text-align:center;padding:40px;color:var(--mts-text-muted);font-size:13px;">🎉 No tienes notificaciones</div>';
+    return;
+  }
+  NOTIFS.forEach(function(n){
+    var item=document.createElement('div');
+    item.className='notif-item'+(n.unread?' unread':'');
+    item.innerHTML='<div class="notif-icon" style="background:'+n.iconBg+'">'+n.icon+'</div>'
+      +'<div class="notif-body" style="flex:1;">'
+      +'<h4>'+n.title+'</h4>'
+      +'<p>'+n.desc+'</p>'
+      +'</div>'
+      +'<span class="notif-time">'+n.time+'</span>';
+    item.addEventListener('click',function(){
+      n.unread=false;renderNotifs();
+    });
+    list.appendChild(item);
+  });
+}
+renderNotifs();
+
+</script>
+</body>
+</html>

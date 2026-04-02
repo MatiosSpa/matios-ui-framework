@@ -24,6 +24,16 @@ MTS.Alert = class MtsAlert {
   constructor(selector, options = {}) {
     this._container = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._container) return;
+    /* ── data-* → inicialización HTML declarativa ── */
+    const _ds = this._container?.dataset || {};
+    const _fromHTML = {};
+    if (_ds.variant !== undefined) _fromHTML.variant = _ds.variant;
+    if (_ds.title !== undefined) _fromHTML.title = _ds.title;
+    if (_ds.message !== undefined) _fromHTML.message = _ds.message;
+    if (_ds.closable !== undefined) _fromHTML.closable = true;
+    if (_ds.autoDismiss !== undefined) _fromHTML.autoDismiss = parseInt(_ds.autoDismiss);
+    options = { ..._fromHTML, ...options };
+
     this.variant     = options.variant     || 'info';
     this.title       = options.title       || '';
     this.message     = options.message     || '';

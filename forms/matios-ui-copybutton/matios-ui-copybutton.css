@@ -1,0 +1,53 @@
+/* ============================================================
+   MATIOS UI — matios-ui-copybutton.css  v1.0.0
+   MTS.CopyButton — Feedback visual al copiar
+   Depende de: matios-ui-button.css
+   ============================================================ */
+
+/* ── Transición del ícono ───────────────────────────────── */
+
+.mts-copybtn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--mts-transition-fast), color var(--mts-transition-fast);
+}
+
+.mts-copybtn__label {
+  transition: color var(--mts-transition-fast);
+}
+
+/* ── Estado copiado ─────────────────────────────────────── */
+
+.mts-copybtn--copied {
+  border-color: var(--mts-color-success) !important;
+  color: var(--mts-color-success) !important;
+}
+
+.mts-copybtn--copied .mts-copybtn__icon {
+  color: var(--mts-color-success);
+  transform: scale(1.1);
+}
+
+.mts-copybtn--copied .mts-copybtn__label {
+  color: var(--mts-color-success);
+}
+
+/* ── Uso inline con input ───────────────────────────────── */
+
+.mts-copy-group {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.mts-copy-group .mts-input {
+  border-radius: var(--mts-radius-md) 0 0 var(--mts-radius-md);
+  border-right: none;
+  flex: 1;
+}
+
+.mts-copy-group .mts-copybtn {
+  border-radius: 0 var(--mts-radius-md) var(--mts-radius-md) 0;
+  flex-shrink: 0;
+}

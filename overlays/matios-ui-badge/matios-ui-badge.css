@@ -1,0 +1,369 @@
+/* ============================================================
+   MATIOS UI — matios-ui-badge.css
+   MTS.Badge — Estilos
+   Requiere: matios-ui-base.css
+   Version:  1.0.0
+   ============================================================ */
+
+
+/* ============================================================
+   1. BASE
+   ============================================================ */
+
+.mts-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-family: var(--mts-font-family);
+  font-weight: var(--mts-font-weight-semibold);
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  transition:
+    background var(--mts-transition-fast),
+    color var(--mts-transition-fast),
+    border-color var(--mts-transition-fast);
+}
+
+.mts-badge--hidden {
+  display: none !important;
+}
+
+.mts-badge__label {
+  line-height: 1;
+}
+
+
+/* ============================================================
+   2. TAMAÑOS
+   ============================================================ */
+
+.mts-badge--xs {
+  font-size: 10px;
+  padding: 1px 5px;
+  min-width: 16px;
+  height: 16px;
+}
+
+.mts-badge--sm {
+  font-size: 11px;
+  padding: 2px 7px;
+  min-width: 18px;
+  height: 18px;
+}
+
+.mts-badge--md {
+  font-size: var(--mts-font-size-xs);
+  padding: 3px 8px;
+  min-width: 20px;
+  height: 20px;
+}
+
+.mts-badge--lg {
+  font-size: var(--mts-font-size-sm);
+  padding: 4px 10px;
+  min-width: 24px;
+  height: 24px;
+}
+
+
+/* ============================================================
+   3. FORMAS
+   ============================================================ */
+
+/* Pill — bordes completamente redondeados */
+.mts-badge--pill {
+  border-radius: var(--mts-radius-full);
+}
+
+/* Square — bordes ligeramente redondeados */
+.mts-badge--square {
+  border-radius: var(--mts-radius-sm);
+}
+
+/* Dot — solo un punto de color, sin texto */
+.mts-badge--dot {
+  width: 8px;
+  height: 8px;
+  min-width: 0;
+  padding: 0;
+  border-radius: var(--mts-radius-full);
+}
+
+.mts-badge--dot.mts-badge--sm { width: 6px;  height: 6px;  }
+.mts-badge--dot.mts-badge--md { width: 8px;  height: 8px;  }
+.mts-badge--dot.mts-badge--lg { width: 10px; height: 10px; }
+
+
+/* ============================================================
+   4. VARIANTES — filled (default)
+   ============================================================ */
+
+.mts-badge--default {
+  background: var(--mts-gray-200);
+  color: var(--mts-gray-700);
+  border: 1px solid var(--mts-gray-300);
+}
+
+[data-mts-theme="dark"] .mts-badge--default {
+  background: var(--mts-gray-700);
+  color: var(--mts-gray-200);
+  border-color: var(--mts-gray-600);
+}
+
+.mts-badge--primary {
+  background: var(--mts-color-primary);
+  color: var(--mts-color-primary-text);
+  border: 1px solid transparent;
+}
+
+.mts-badge--success {
+  background: var(--mts-color-success-light);
+  color: var(--mts-color-success);
+  border: 1px solid var(--mts-color-success);
+}
+
+[data-mts-theme="dark"] .mts-badge--success {
+  background: rgba(26, 127, 75, 0.2);
+  border-color: rgba(26, 127, 75, 0.4);
+}
+
+.mts-badge--warning {
+  background: var(--mts-color-warning-light);
+  color: var(--mts-color-warning);
+  border: 1px solid var(--mts-color-warning);
+}
+
+[data-mts-theme="dark"] .mts-badge--warning {
+  background: rgba(180, 83, 9, 0.2);
+  border-color: rgba(180, 83, 9, 0.4);
+}
+
+.mts-badge--danger {
+  background: var(--mts-color-danger-light);
+  color: var(--mts-color-danger);
+  border: 1px solid var(--mts-color-danger);
+}
+
+[data-mts-theme="dark"] .mts-badge--danger {
+  background: rgba(192, 57, 43, 0.2);
+  border-color: rgba(192, 57, 43, 0.4);
+}
+
+.mts-badge--info {
+  background: var(--mts-color-info-light);
+  color: var(--mts-color-info);
+  border: 1px solid var(--mts-color-info);
+}
+
+[data-mts-theme="dark"] .mts-badge--info {
+  background: rgba(0, 119, 168, 0.2);
+  border-color: rgba(0, 119, 168, 0.4);
+}
+
+.mts-badge--accent {
+  background: var(--mts-color-accent);
+  color: var(--mts-color-accent-text);
+  border: 1px solid transparent;
+}
+
+
+/* ============================================================
+   5. VARIANTE OUTLINE
+   ============================================================ */
+
+.mts-badge--outline-primary {
+  background: transparent;
+  color: var(--mts-color-primary);
+  border: 1px solid var(--mts-color-primary);
+}
+
+.mts-badge--outline-success {
+  background: transparent;
+  color: var(--mts-color-success);
+  border: 1px solid var(--mts-color-success);
+}
+
+.mts-badge--outline-danger {
+  background: transparent;
+  color: var(--mts-color-danger);
+  border: 1px solid var(--mts-color-danger);
+}
+
+.mts-badge--outline-warning {
+  background: transparent;
+  color: var(--mts-color-warning);
+  border: 1px solid var(--mts-color-warning);
+}
+
+.mts-badge--outline-info {
+  background: transparent;
+  color: var(--mts-color-info);
+  border: 1px solid var(--mts-color-info);
+}
+
+
+/* ============================================================
+   6. BOTÓN REMOVER
+   ============================================================ */
+
+.mts-badge--removable {
+  padding-right: 4px;
+}
+
+.mts-badge__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  font-size: 13px;
+  line-height: 1;
+  background: none;
+  border: none;
+  border-radius: var(--mts-radius-full);
+  cursor: pointer;
+  padding: 0;
+  color: inherit;
+  opacity: 0.6;
+  transition: opacity var(--mts-transition-fast), background var(--mts-transition-fast);
+  flex-shrink: 0;
+}
+
+.mts-badge__remove:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+[data-mts-theme="dark"] .mts-badge__remove:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+
+/* ============================================================
+   7. DOT DE NOTIFICACIÓN — con variantes
+   ============================================================ */
+
+.mts-badge--dot.mts-badge--success { background: var(--mts-color-success); }
+.mts-badge--dot.mts-badge--warning { background: var(--mts-color-warning); }
+.mts-badge--dot.mts-badge--danger  { background: var(--mts-color-danger);  }
+.mts-badge--dot.mts-badge--info    { background: var(--mts-color-info);    }
+.mts-badge--dot.mts-badge--primary { background: var(--mts-color-primary); }
+.mts-badge--dot.mts-badge--default { background: var(--mts-gray-400);      }
+
+
+/* ============================================================
+   8. PULSO — para notificaciones activas
+   ============================================================ */
+
+.mts-badge--pulse {
+  position: relative;
+}
+
+.mts-badge--pulse::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: inherit;
+  opacity: 0.4;
+  animation: mts-badge-pulse 1.8s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes mts-badge-pulse {
+  0%   { transform: scale(1);   opacity: 0.4; }
+  70%  { transform: scale(1.6); opacity: 0;   }
+  100% { transform: scale(1.6); opacity: 0;   }
+}
+
+
+/* ============================================================
+   9. CONTADOR — ocultar cuando es 0
+   ============================================================ */
+
+.mts-badge--zero {
+  display: none !important;
+}
+
+
+/* ============================================================
+   10. BADGE POSICIONADO — sobre otro elemento
+      Uso: <div class="mts-badge-wrap">
+             <button>...</button>
+             <span class="mts-badge mts-badge--danger mts-badge--counter">5</span>
+           </div>
+   ============================================================ */
+
+.mts-badge-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.mts-badge--counter {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 1;
+}
+
+/* Variantes de posición del counter */
+.mts-badge--counter-tl { top: -6px;  left: -6px;  right: auto; }
+.mts-badge--counter-tr { top: -6px;  right: -6px; left: auto;  }
+.mts-badge--counter-bl { bottom: -6px; left: -6px;  right: auto; top: auto; }
+.mts-badge--counter-br { bottom: -6px; right: -6px; left: auto;  top: auto; }
+
+/* ── Mejoras visuales de badge ───────────────────────────── */
+.mts-badge {
+  font-family: var(--mts-font-family);
+  font-weight: 600;
+  letter-spacing: .3px;
+  border-radius: var(--mts-radius-full, 999px);
+  border: 1px solid transparent;
+}
+/* Sombra sutil para que no se aplanen */
+.mts-badge--primary { box-shadow: 0 1px 6px rgba(79,142,255,.3); }
+.mts-badge--success { box-shadow: 0 1px 6px rgba(52,211,153,.3); }
+.mts-badge--warning { box-shadow: 0 1px 6px rgba(251,191,36,.25); }
+.mts-badge--danger  { box-shadow: 0 1px 6px rgba(248,113,113,.3); }
+.mts-badge--accent  { box-shadow: 0 1px 6px rgba(167,139,250,.3); }
+/* Pill outline con borde visible */
+.mts-badge--outline-primary { border-color: var(--mts-color-primary); }
+.mts-badge--outline-success { border-color: var(--mts-color-success); }
+.mts-badge--outline-danger  { border-color: var(--mts-color-danger); }
+.mts-badge--outline-warning { border-color: var(--mts-color-warning); }
+/* Badge con punto y texto */
+.mts-badge--dot { display:inline-flex; align-items:center; gap:5px; }
+.mts-badge--dot::before {
+  content:''; width:6px; height:6px; border-radius:50%; flex-shrink:0;
+  background: currentColor;
+}
+
+/* ── Correcciones visuales de badge ────────────── */
+.mts-badge {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px !important;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  border-radius: 999px;
+  letter-spacing: .2px;
+  vertical-align: middle;
+}
+/* Counter — cuadrado */
+.mts-badge--counter {
+  min-width: 20px;
+  padding: 2px 6px !important;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+/* Dot — sin relleno de texto */
+.mts-badge--dot {
+  padding: 3px 8px !important;
+}

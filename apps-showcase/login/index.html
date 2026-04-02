@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Inicio de Sesión — Matios UI</title>
+  <script>(function(){var m=(location.hash||"").match(/mts-theme=([a-z-]+)/);if(m)document.documentElement.setAttribute("data-mts-theme",m[1]);try{var p=window.parent;if(p&&p!==window){var pt=p.currentThemeVal||p.document.documentElement.getAttribute("data-mts-theme");if(pt)document.documentElement.setAttribute("data-mts-theme",pt);}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <link rel="stylesheet" href="../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-input/matios-ui-input.js"></script>
+<style>
+*{box-sizing:border-box}
+body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;min-height:100vh;}
+.app-topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:50px;background:var(--mts-bg-surface);border-bottom:1px solid var(--mts-border-color);position:sticky;top:0;z-index:100;}
+.app-topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mts-text-muted);cursor:pointer;padding:4px 8px;border-radius:var(--mts-radius-md);border:none;background:none;transition:color .15s,background .15s;font-family:var(--mts-font-family);}
+.app-topbar-back:hover{color:var(--mts-text-primary);background:var(--mts-bg-surface-2);}
+.app-topbar-title{font-size:14px;font-weight:700;color:var(--mts-text-primary);flex:1;}
+.app-topbar-badge{font-size:10px;padding:2px 8px;border-radius:var(--mts-radius-full);background:var(--mts-color-primary-light);color:var(--mts-color-primary);font-weight:700;}
+.app-content{padding:24px;max-width:1100px;margin:0 auto;}
+.app-card{background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:24px;}
+.app-section{display:flex;flex-direction:column;gap:20px;}
+.app-grid{display:grid;gap:16px;}
+.app-grid-2{grid-template-columns:1fr 1fr;}
+.app-grid-3{grid-template-columns:1fr 1fr 1fr;}
+.app-grid-4{grid-template-columns:repeat(4,1fr);}
+.app-h2{font-size:18px;font-weight:800;margin:0 0 4px;}
+.app-h2 span{color:var(--mts-color-primary);}
+.app-sub{font-size:13px;color:var(--mts-text-muted);margin:0 0 20px;}
+.app-divider{border:none;border-top:1px solid var(--mts-border-color);margin:20px 0;}
+.app-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);margin-bottom:6px;}
+.app-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.app-theme{position:fixed;bottom:16px;right:16px;display:flex;gap:4px;z-index:999;}
+.app-theme-btn{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+.app-theme-btn:hover{background:var(--mts-bg-surface-2);}
+@media(max-width:640px){.app-grid-2,.app-grid-3,.app-grid-4{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="app-topbar"><button class="app-topbar-back" onclick="goBack()">&#8592; Volver</button><span class="app-topbar-title">Inicio de Sesión</span><span class="app-topbar-badge">Auth</span></div>
+<style>
+.login-wrap{min-height:calc(100vh - 50px);display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-card{width:100%;max-width:400px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-xl);padding:36px 32px;}
+.login-logo{width:40px;height:40px;border-radius:10px;background:var(--mts-color-primary);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;color:#fff;margin:0 auto 20px;}
+.login-title{font-size:20px;font-weight:800;text-align:center;margin:0 0 4px;}
+.login-sub{font-size:13px;color:var(--mts-text-muted);text-align:center;margin:0 0 28px;}
+.login-fields{display:flex;flex-direction:column;gap:14px;}
+.login-footer{margin-top:20px;text-align:center;font-size:12px;color:var(--mts-text-muted);}
+.login-footer a{color:var(--mts-color-primary);cursor:pointer;}
+.login-divider{display:flex;align-items:center;gap:10px;margin:20px 0;font-size:11px;color:var(--mts-text-muted);}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--mts-border-color);}
+.otp-step{display:none;flex-direction:column;gap:20px;}
+.otp-step.active{display:flex;}
+.otp-inputs{display:flex;gap:10px;justify-content:center;}
+.otp-input{width:48px;height:52px;text-align:center;font-size:22px;font-weight:700;background:var(--mts-bg-surface-2);border:2px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-primary);outline:none;font-family:var(--mts-font-mono);transition:border-color .15s;}
+.otp-input:focus{border-color:var(--mts-color-primary);}
+.otp-resend{font-size:12px;color:var(--mts-color-primary);text-align:center;cursor:pointer;background:none;border:none;font-family:inherit;}
+</style>
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">M</div>
+    <div class="otp-step active" id="step-login">
+      <div>
+        <h2 class="login-title">Bienvenido</h2>
+        <p class="login-sub">Ingresa tus credenciales para continuar</p>
+      </div>
+      <div class="login-fields">
+        <div id="inp-email"></div>
+        <div id="inp-pass"></div>
+        <div id="btn-login"></div>
+      </div>
+      <div class="login-divider">o continúa con</div>
+      <div style="display:flex;gap:10px;">
+        <div id="btn-google" style="flex:1;"></div>
+        <div id="btn-github" style="flex:1;"></div>
+      </div>
+      <p class="login-footer">¿No tienes cuenta? <a onclick="alert('Demo')">Regístrate</a></p>
+    </div>
+    <div class="otp-step" id="step-otp">
+      <div>
+        <h2 class="login-title">Código OTP</h2>
+        <p class="login-sub">Enviamos un código a <strong id="otp-email-lbl"></strong></p>
+      </div>
+      <div class="otp-inputs" id="otp-boxes"></div>
+      <p style="font-size:12px;color:var(--mts-text-muted);text-align:center;" id="otp-timer">Expira en <strong>02:00</strong></p>
+      <div id="btn-verify"></div>
+      <button class="otp-resend" onclick="resendOtp()">¿No recibiste el código? Reenviar</button>
+      <p class="login-footer"><a onclick="goToStep('login')">← Volver</a></p>
+    </div>
+    <div class="otp-step" id="step-success">
+      <div style="text-align:center;padding:20px 0;">
+        <div style="font-size:48px;margin-bottom:12px;">✅</div>
+        <h2 class="login-title">¡Acceso concedido!</h2>
+        <p class="login-sub">Has iniciado sesión correctamente.</p>
+        <button class="mts-btn mts-btn--primary mts-btn--block" style="margin-top:16px;" onclick="goToStep('login')">Volver al inicio</button>
+      </div>
+    </div>
+  </div>
+</div><div class="app-theme">
+  <button class="app-theme-btn" onclick="setTheme('dark')">Dark</button>
+  <button class="app-theme-btn" onclick="setTheme('light')">Light</button>
+  <button class="app-theme-btn" onclick="setTheme('violet')">Violet</button>
+  <button class="app-theme-btn" onclick="setTheme('blue')">Blue</button>
+</div>
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
+</script>
+<script>
+
+var emailInp = new MTS.Input('#inp-email',{type:'email',label:'Email',placeholder:'correo@empresa.com',iconLeft:MTS.Icon.get('at-sign')});
+var passInp  = new MTS.Input('#inp-pass', {type:'password',label:'Contraseña',placeholder:'••••••••',showPassword:true});
+var btnLogin = new MTS.Button('#btn-login',{label:'Iniciar sesión',variant:'primary',block:true,onClick:function(e,inst){
+  var email=emailInp.getValue().trim(),pass=passInp.getValue().trim();
+  if(!email){emailInp.setError('El email es obligatorio');return;}
+  if(!pass){passInp.setError('La contraseña es obligatoria');return;}
+  inst.setLoading(true);inst.setLabel('Verificando...');
+  setTimeout(function(){
+    inst.setLoading(false);inst.setLabel('Iniciar sesión');
+    document.getElementById('otp-email-lbl').textContent=email;
+    goToStep('otp');startOtpTimer();
+    setTimeout(function(){otpBoxes[0]&&otpBoxes[0].focus();},100);
+  },1200);
+}});
+new MTS.Button('#btn-google',{label:'Google',variant:'secondary',block:true,onClick:function(){goToStep('success');}});
+new MTS.Button('#btn-github',{label:'GitHub',variant:'secondary',block:true,iconLeft:MTS.Icon.get('github'),onClick:function(){goToStep('success');}});
+
+var otpBoxes=[];
+(function(){
+  var c=document.getElementById('otp-boxes');
+  for(var i=0;i<6;i++){
+    var inp=document.createElement('input');
+    inp.type='text';inp.maxLength=1;inp.className='otp-input';inp.dataset.idx=i;
+    inp.addEventListener('input',function(e){
+      var idx=+e.target.dataset.idx;
+      if(e.target.value&&idx<5)otpBoxes[idx+1].focus();
+    });
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Backspace'&&!e.target.value&&+e.target.dataset.idx>0)
+        otpBoxes[+e.target.dataset.idx-1].focus();
+    });
+    inp.addEventListener('paste',function(e){
+      e.preventDefault();
+      var d=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+      d.split('').forEach(function(ch,i){if(otpBoxes[i])otpBoxes[i].value=ch;});
+      if(d.length)otpBoxes[Math.min(d.length,5)].focus();
+    });
+    c.appendChild(inp);otpBoxes.push(inp);
+  }
+})();
+
+new MTS.Button('#btn-verify',{label:'Verificar código',variant:'primary',block:true,onClick:function(e,inst){
+  var code=otpBoxes.map(function(b){return b.value;}).join('');
+  if(code.length<6){otpBoxes.forEach(function(b){if(!b.value)b.style.borderColor='var(--mts-color-danger)';});return;}
+  inst.setLoading(true);inst.setLabel('Verificando...');
+  setTimeout(function(){inst.setLoading(false);goToStep('success');},1000);
+}});
+
+var timerInterval;
+function startOtpTimer(){
+  clearInterval(timerInterval);var secs=120;
+  var el=document.querySelector('#otp-timer strong');
+  timerInterval=setInterval(function(){
+    secs--;
+    if(el)el.textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');
+    if(secs<=0){clearInterval(timerInterval);if(el)el.parentElement.textContent='Código expirado.';}
+  },1000);
+}
+function resendOtp(){otpBoxes.forEach(function(b){b.value='';});otpBoxes[0].focus();startOtpTimer();}
+function goToStep(s){
+  document.querySelectorAll('.otp-step').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('step-'+s).classList.add('active');
+}
+
+</script>
+</body>
+</html>

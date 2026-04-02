@@ -1,0 +1,296 @@
+/* ============================================================
+   MATIOS UI — matios-ui-table.css  v1.0.0
+
+   Estilos de tabla HTML pura. Sin JS. Sin dependencias.
+   El DataTable (matios-ui-datatable) usa estas clases internamente.
+
+   Uso:
+     <link rel="stylesheet" href="../../base/matios-ui-base.css">
+     <link rel="stylesheet" href="matios-ui-table.css">
+   ============================================================ */
+
+
+/* ============================================================
+   1. WRAPPER — scroll + border-radius
+   ============================================================ */
+
+.mts-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-lg);
+  scrollbar-width: thin;
+  scrollbar-color: var(--mts-border-color) transparent;
+}
+.mts-table-wrap::-webkit-scrollbar       { height: 5px; width: 5px; }
+.mts-table-wrap::-webkit-scrollbar-thumb { background: var(--mts-border-color); border-radius: 3px; }
+.mts-table-wrap::-webkit-scrollbar-track { background: transparent; }
+
+
+/* ============================================================
+   2. TABLA BASE
+   ============================================================ */
+
+.mts-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-primary);
+  background: var(--mts-bg-surface);
+}
+
+
+/* ============================================================
+   3. ENCABEZADO — th
+   ============================================================ */
+
+.mts-table__th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--mts-text-muted);
+  background: var(--mts-bg-surface);
+  border-bottom: 2px solid var(--mts-border-color);
+  white-space: nowrap;
+  user-select: none;
+  vertical-align: middle;
+}
+
+.mts-table__th--center { text-align: center; }
+.mts-table__th--end    { text-align: right; }
+.mts-table__th--check  { width: 40px; padding: 10px 12px; }
+
+/* ── Sort ── */
+.mts-table__th--sortable {
+  cursor: pointer;
+  transition: color var(--mts-transition-fast);
+}
+.mts-table__th--sortable:hover { color: var(--mts-text-primary); }
+
+.mts-table__sort {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  margin-left: 5px;
+  vertical-align: middle;
+  opacity: 0.3;
+  transition: opacity var(--mts-transition-fast);
+}
+.mts-table__th--sortable:hover .mts-table__sort { opacity: 0.6; }
+.mts-table__th--asc  .mts-table__sort,
+.mts-table__th--desc .mts-table__sort {
+  opacity: 1;
+  color: var(--mts-color-primary);
+}
+
+/* Triángulos CSS puro — sin Font Awesome */
+.mts-table__sort-up,
+.mts-table__sort-down { display: block; width: 0; height: 0; }
+
+.mts-table__sort-up {
+  border-left:   4px solid transparent;
+  border-right:  4px solid transparent;
+  border-bottom: 5px solid currentColor;
+}
+.mts-table__sort-down {
+  border-left:  4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top:   5px solid currentColor;
+}
+
+/* Atenuar la flecha inactiva */
+.mts-table__th--asc  .mts-table__sort-down { opacity: 0.2; }
+.mts-table__th--desc .mts-table__sort-up   { opacity: 0.2; }
+
+/* ── Header fijo ── */
+.mts-table--fixed .mts-table__th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  box-shadow: 0 1px 0 var(--mts-border-color);
+}
+
+
+/* ============================================================
+   4. FILAS — tr / td
+   ============================================================ */
+
+.mts-table__row {
+  transition: background var(--mts-transition-fast);
+}
+
+.mts-table__td {
+  padding: 11px 14px;
+  border-bottom: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  color: var(--mts-text-secondary);
+  vertical-align: middle;
+  background: var(--mts-bg-surface);
+  transition: background var(--mts-transition-fast);
+}
+
+/* Última fila sin borde */
+.mts-table__row:last-child .mts-table__td { border-bottom: none; }
+
+.mts-table__td--center  { text-align: center; }
+.mts-table__td--end     { text-align: right; }
+.mts-table__td--check   { width: 40px; padding: 11px 12px; }
+.mts-table__td--actions { white-space: nowrap; text-align: right; }
+
+.mts-table__td--truncate {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Estados de fila ── */
+.mts-table__row--clickable { cursor: pointer; }
+
+.mts-table__row--selected .mts-table__td {
+  background: var(--mts-color-primary-light);
+}
+
+.mts-table__row--success .mts-table__td {
+  background: var(--mts-color-success-light);
+  border-left: 3px solid var(--mts-color-success);
+}
+.mts-table__row--warning .mts-table__td {
+  background: var(--mts-color-warning-light);
+  border-left: 3px solid var(--mts-color-warning);
+}
+.mts-table__row--danger .mts-table__td {
+  background: var(--mts-color-danger-light);
+  border-left: 3px solid var(--mts-color-danger);
+}
+.mts-table__row--info .mts-table__td {
+  background: var(--mts-color-info-light);
+  border-left: 3px solid var(--mts-color-info);
+}
+
+/* ── Drag & Drop ── */
+.mts-table__row--dragging .mts-table__td {
+  background: var(--mts-bg-surface) !important;
+  box-shadow: var(--mts-shadow-lg);
+  opacity: 0.85;
+}
+.mts-table__row--drag-over .mts-table__td:first-child {
+  box-shadow: inset 0 2px 0 var(--mts-color-primary);
+}
+
+
+/* ============================================================
+   5. MODIFICADORES DE TABLA
+   ============================================================ */
+
+/* Hover */
+.mts-table--hover .mts-table__row:hover .mts-table__td {
+  background: var(--mts-bg-surface-2);
+}
+
+/* Striped */
+.mts-table--striped .mts-table__row:nth-child(even) .mts-table__td {
+  background: var(--mts-bg-surface-2);
+}
+.mts-table--striped.mts-table--hover
+  .mts-table__row:nth-child(even):hover .mts-table__td {
+  background: var(--mts-border-color);
+}
+
+/* Bordered */
+.mts-table--bordered .mts-table__th,
+.mts-table--bordered .mts-table__td {
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+}
+.mts-table--bordered .mts-table__th { border-bottom-width: 2px; }
+
+/* Compact */
+.mts-table--compact .mts-table__th { padding: 6px 10px; }
+.mts-table--compact .mts-table__td { padding: 6px 10px; }
+
+/* Flush — para usar dentro de un surface/card */
+.mts-table--flush .mts-table__th:first-child,
+.mts-table--flush .mts-table__td:first-child { padding-left: 0; }
+.mts-table--flush .mts-table__th:last-child,
+.mts-table--flush .mts-table__td:last-child  { padding-right: 0; }
+
+
+/* ============================================================
+   6. FOOTER — tfoot
+   ============================================================ */
+
+.mts-table__tfoot .mts-table__td {
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+  background: var(--mts-bg-surface);
+  border-top: 2px solid var(--mts-border-color);
+  border-bottom: none;
+}
+
+
+/* ============================================================
+   7. CHECKBOX
+   ============================================================ */
+
+.mts-table__checkbox {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--mts-color-primary);
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   8. ESTADO VACÍO
+   ============================================================ */
+
+.mts-table__empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--mts-text-muted);
+  font-size: var(--mts-font-size-sm);
+}
+.mts-table__empty-icon  { display: block; font-size: 28px; margin-bottom: var(--mts-space-2); opacity: 0.4; }
+.mts-table__empty-title { font-size: var(--mts-font-size-md); font-weight: var(--mts-font-weight-semibold); color: var(--mts-text-primary); margin-bottom: var(--mts-space-1); }
+.mts-table__empty-msg   { font-size: var(--mts-font-size-sm); color: var(--mts-text-muted); }
+
+
+/* ============================================================
+   9. RESPONSIVE — colapso en móvil
+   ============================================================ */
+
+@media (max-width: 600px) {
+  .mts-table--responsive thead { display: none; }
+
+  .mts-table--responsive .mts-table__row {
+    display: block;
+    border-bottom: 2px solid var(--mts-border-color);
+    margin-bottom: var(--mts-space-2);
+  }
+
+  .mts-table--responsive .mts-table__td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+    background: var(--mts-bg-surface);
+  }
+
+  .mts-table--responsive .mts-table__td::before {
+    content: attr(data-label);
+    font-weight: var(--mts-font-weight-semibold);
+    font-size: var(--mts-font-size-xs);
+    color: var(--mts-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-right: var(--mts-space-3);
+    white-space: nowrap;
+  }
+}

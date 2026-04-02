@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>Tablas & Paginación — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="matios-ui-table.css">
+  <link rel="stylesheet" href="../matios-ui-paging/matios-ui-paging.css">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;padding:24px;background:var(--mts-bg-body);font-family:var(--mts-font-family)}
+    .demo-section{margin-bottom:48px}
+    .demo-title{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:8px;margin-bottom:20px}
+    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);margin:20px 0 8px;text-transform:uppercase;letter-spacing:.5px}
+    .demo-label:first-child{margin-top:0}
+    .demo-gap{margin-bottom:12px}
+  </style>
+</head>
+<body>
+
+<!-- ══ 1. TABLA BASE ══ -->
+<div class="demo-section">
+  <div class="demo-title">Tabla base</div>
+  <div class="mts-table-wrap">
+    <table class="mts-table">
+      <thead><tr>
+        <th class="mts-table__th">Nombre</th>
+        <th class="mts-table__th">Rol</th>
+        <th class="mts-table__th mts-table__th--end">Ingreso</th>
+        <th class="mts-table__th mts-table__th--center">Estado</th>
+      </tr></thead>
+      <tbody>
+        <tr class="mts-table__row"><td class="mts-table__td">Ana García</td><td class="mts-table__td">Diseñadora UX</td><td class="mts-table__td mts-table__td--end">12/03/2024</td><td class="mts-table__td mts-table__td--center">Activo</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">Carlos Ruiz</td><td class="mts-table__td">Dev Frontend</td><td class="mts-table__td mts-table__td--end">05/07/2023</td><td class="mts-table__td mts-table__td--center">Activo</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">María López</td><td class="mts-table__td">Product Manager</td><td class="mts-table__td mts-table__td--end">18/01/2025</td><td class="mts-table__td mts-table__td--center">Inactivo</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ 2. VARIANTES ══ -->
+<div class="demo-section">
+  <div class="demo-title">Variantes — hover · striped · bordered · compact</div>
+
+  <div class="demo-label">Hover</div>
+  <div class="mts-table-wrap demo-gap">
+    <table class="mts-table mts-table--hover">
+      <thead><tr><th class="mts-table__th">Producto</th><th class="mts-table__th mts-table__th--end">Precio</th><th class="mts-table__th mts-table__th--end">Stock</th></tr></thead>
+      <tbody>
+        <tr class="mts-table__row"><td class="mts-table__td">MacBook Pro 14"</td><td class="mts-table__td mts-table__td--end">$1.999</td><td class="mts-table__td mts-table__td--end">12</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">iPad Air M2</td><td class="mts-table__td mts-table__td--end">$749</td><td class="mts-table__td mts-table__td--end">34</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">AirPods Pro</td><td class="mts-table__td mts-table__td--end">$249</td><td class="mts-table__td mts-table__td--end">87</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="demo-label">Striped + Hover</div>
+  <div class="mts-table-wrap demo-gap">
+    <table class="mts-table mts-table--striped mts-table--hover">
+      <thead><tr><th class="mts-table__th">Producto</th><th class="mts-table__th mts-table__th--end">Precio</th><th class="mts-table__th mts-table__th--end">Stock</th></tr></thead>
+      <tbody>
+        <tr class="mts-table__row"><td class="mts-table__td">MacBook Pro 14"</td><td class="mts-table__td mts-table__td--end">$1.999</td><td class="mts-table__td mts-table__td--end">12</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">iPad Air M2</td><td class="mts-table__td mts-table__td--end">$749</td><td class="mts-table__td mts-table__td--end">34</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">AirPods Pro</td><td class="mts-table__td mts-table__td--end">$249</td><td class="mts-table__td mts-table__td--end">87</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">iPhone 15 Pro</td><td class="mts-table__td mts-table__td--end">$999</td><td class="mts-table__td mts-table__td--end">55</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">Apple Watch Ultra</td><td class="mts-table__td mts-table__td--end">$799</td><td class="mts-table__td mts-table__td--end">21</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="demo-label">Bordered</div>
+  <div class="mts-table-wrap demo-gap">
+    <table class="mts-table mts-table--bordered mts-table--hover">
+      <thead><tr><th class="mts-table__th">Producto</th><th class="mts-table__th mts-table__th--end">Precio</th><th class="mts-table__th mts-table__th--end">Stock</th></tr></thead>
+      <tbody>
+        <tr class="mts-table__row"><td class="mts-table__td">MacBook Pro 14"</td><td class="mts-table__td mts-table__td--end">$1.999</td><td class="mts-table__td mts-table__td--end">12</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">iPad Air M2</td><td class="mts-table__td mts-table__td--end">$749</td><td class="mts-table__td mts-table__td--end">34</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">AirPods Pro</td><td class="mts-table__td mts-table__td--end">$249</td><td class="mts-table__td mts-table__td--end">87</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="demo-label">Compact</div>
+  <div class="mts-table-wrap">
+    <table class="mts-table mts-table--compact mts-table--hover mts-table--striped">
+      <thead><tr><th class="mts-table__th">Producto</th><th class="mts-table__th mts-table__th--end">Precio</th><th class="mts-table__th mts-table__th--end">Stock</th></tr></thead>
+      <tbody>
+        <tr class="mts-table__row"><td class="mts-table__td">MacBook Pro 14"</td><td class="mts-table__td mts-table__td--end">$1.999</td><td class="mts-table__td mts-table__td--end">12</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">iPad Air M2</td><td class="mts-table__td mts-table__td--end">$749</td><td class="mts-table__td mts-table__td--end">34</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">AirPods Pro</td><td class="mts-table__td mts-table__td--end">$249</td><td class="mts-table__td mts-table__td--end">87</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">iPhone 15 Pro</td><td class="mts-table__td mts-table__td--end">$999</td><td class="mts-table__td mts-table__td--end">55</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ 3. SORT ══ -->
+<div class="demo-section">
+  <div class="demo-title">Columnas ordenables — sort icons CSS puro</div>
+  <div class="mts-table-wrap">
+    <table class="mts-table mts-table--hover">
+      <thead><tr>
+        <th class="mts-table__th mts-table__th--sortable mts-table__th--asc" onclick="toggleSort(this)">
+          Nombre <span class="mts-table__sort"><i class="mts-table__sort-up"></i><i class="mts-table__sort-down"></i></span>
+        </th>
+        <th class="mts-table__th mts-table__th--sortable" onclick="toggleSort(this)">
+          Rol <span class="mts-table__sort"><i class="mts-table__sort-up"></i><i class="mts-table__sort-down"></i></span>
+        </th>
+        <th class="mts-table__th mts-table__th--sortable mts-table__th--end" onclick="toggleSort(this)">
+          Salario <span class="mts-table__sort"><i class="mts-table__sort-up"></i><i class="mts-table__sort-down"></i></span>
+        </th>
+      </tr></thead>
+      <tbody>
+        <tr class="mts-table__row"><td class="mts-table__td">Ana García</td><td class="mts-table__td">Diseñadora UX</td><td class="mts-table__td mts-table__td--end">$4.200</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">Carlos Ruiz</td><td class="mts-table__td">Dev Frontend</td><td class="mts-table__td mts-table__td--end">$3.800</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">María López</td><td class="mts-table__td">Product Manager</td><td class="mts-table__td mts-table__td--end">$5.100</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">Pedro Soto</td><td class="mts-table__td">Dev Backend</td><td class="mts-table__td mts-table__td--end">$4.500</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ 4. ESTADOS ══ -->
+<div class="demo-section">
+  <div class="demo-title">Filas de estado — success · warning · danger · info · selected</div>
+  <div class="mts-table-wrap">
+    <table class="mts-table">
+      <thead><tr>
+        <th class="mts-table__th">Tarea</th>
+        <th class="mts-table__th">Responsable</th>
+        <th class="mts-table__th mts-table__th--center">Estado</th>
+      </tr></thead>
+      <tbody>
+        <tr class="mts-table__row mts-table__row--success"><td class="mts-table__td">Deploy producción v2.4</td><td class="mts-table__td">Carlos Ruiz</td><td class="mts-table__td mts-table__td--center">✅ Completado</td></tr>
+        <tr class="mts-table__row mts-table__row--warning"><td class="mts-table__td">Migración base de datos</td><td class="mts-table__td">Pedro Soto</td><td class="mts-table__td mts-table__td--center">⚠️ En progreso</td></tr>
+        <tr class="mts-table__row mts-table__row--danger"><td class="mts-table__td">Servicio de pagos caído</td><td class="mts-table__td">María López</td><td class="mts-table__td mts-table__td--center">🔴 Crítico</td></tr>
+        <tr class="mts-table__row mts-table__row--info"><td class="mts-table__td">Actualización dependencias</td><td class="mts-table__td">Ana García</td><td class="mts-table__td mts-table__td--center">ℹ️ Pendiente</td></tr>
+        <tr class="mts-table__row mts-table__row--selected"><td class="mts-table__td">Revisión código PR #42</td><td class="mts-table__td">Carlos Ruiz</td><td class="mts-table__td mts-table__td--center">👁 Seleccionada</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ 5. CHECKBOX + ACCIONES ══ -->
+<div class="demo-section">
+  <div class="demo-title">Checkbox · acciones · texto truncado</div>
+  <div class="mts-table-wrap">
+    <table class="mts-table mts-table--hover">
+      <thead><tr>
+        <th class="mts-table__th mts-table__th--check"><input type="checkbox" class="mts-table__checkbox" id="chk-all" onchange="toggleAll(this)"></th>
+        <th class="mts-table__th">Documento</th>
+        <th class="mts-table__th">Tipo</th>
+        <th class="mts-table__th mts-table__th--end">Tamaño</th>
+        <th class="mts-table__th mts-table__th--center">Acciones</th>
+      </tr></thead>
+      <tbody id="chk-tbody">
+        <tr class="mts-table__row mts-table__row--clickable" onclick="toggleRow(this)">
+          <td class="mts-table__td mts-table__td--check"><input type="checkbox" class="mts-table__checkbox"></td>
+          <td class="mts-table__td mts-table__td--truncate">Informe_anual_resultados_financieros_Q4_2024_final_v3.pdf</td>
+          <td class="mts-table__td">PDF</td>
+          <td class="mts-table__td mts-table__td--end">4.2 MB</td>
+          <td class="mts-table__td mts-table__td--actions">
+            <button class="mts-btn mts-btn--ghost mts-btn--xs" onclick="event.stopPropagation()">Ver</button>
+            <button class="mts-btn mts-btn--ghost mts-btn--xs" onclick="event.stopPropagation()">Editar</button>
+          </td>
+        </tr>
+        <tr class="mts-table__row mts-table__row--clickable" onclick="toggleRow(this)">
+          <td class="mts-table__td mts-table__td--check"><input type="checkbox" class="mts-table__checkbox"></td>
+          <td class="mts-table__td mts-table__td--truncate">Contrato_servicios_profesionales_2025_firmado.docx</td>
+          <td class="mts-table__td">DOCX</td>
+          <td class="mts-table__td mts-table__td--end">1.8 MB</td>
+          <td class="mts-table__td mts-table__td--actions">
+            <button class="mts-btn mts-btn--ghost mts-btn--xs" onclick="event.stopPropagation()">Ver</button>
+            <button class="mts-btn mts-btn--ghost mts-btn--xs" onclick="event.stopPropagation()">Editar</button>
+          </td>
+        </tr>
+        <tr class="mts-table__row mts-table__row--clickable" onclick="toggleRow(this)">
+          <td class="mts-table__td mts-table__td--check"><input type="checkbox" class="mts-table__checkbox"></td>
+          <td class="mts-table__td mts-table__td--truncate">Presentación_estrategia_comercial_2025.pptx</td>
+          <td class="mts-table__td">PPTX</td>
+          <td class="mts-table__td mts-table__td--end">12.4 MB</td>
+          <td class="mts-table__td mts-table__td--actions">
+            <button class="mts-btn mts-btn--ghost mts-btn--xs" onclick="event.stopPropagation()">Ver</button>
+            <button class="mts-btn mts-btn--ghost mts-btn--xs" onclick="event.stopPropagation()">Editar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ 6. VACÍO ══ -->
+<div class="demo-section">
+  <div class="demo-title">Estado vacío</div>
+  <div class="mts-table-wrap">
+    <table class="mts-table">
+      <thead><tr>
+        <th class="mts-table__th">Nombre</th>
+        <th class="mts-table__th">Email</th>
+        <th class="mts-table__th mts-table__th--end">Fecha</th>
+      </tr></thead>
+      <tbody>
+        <tr class="mts-table__row">
+          <td class="mts-table__td mts-table__empty" colspan="3">
+            <span class="mts-table__empty-icon">📭</span>
+            <p class="mts-table__empty-title">Sin registros</p>
+            <p class="mts-table__empty-msg">No hay datos para mostrar</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ 7. FOOTER ══ -->
+<div class="demo-section">
+  <div class="demo-title">Footer con totales</div>
+  <div class="mts-table-wrap">
+    <table class="mts-table mts-table--hover">
+      <thead><tr>
+        <th class="mts-table__th">Categoría</th>
+        <th class="mts-table__th mts-table__th--end">Ingresos</th>
+        <th class="mts-table__th mts-table__th--end">Gastos</th>
+        <th class="mts-table__th mts-table__th--end">Balance</th>
+      </tr></thead>
+      <tbody>
+        <tr class="mts-table__row"><td class="mts-table__td">Ventas directas</td><td class="mts-table__td mts-table__td--end">$48.200</td><td class="mts-table__td mts-table__td--end">$12.400</td><td class="mts-table__td mts-table__td--end">$35.800</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">Licencias SaaS</td><td class="mts-table__td mts-table__td--end">$22.100</td><td class="mts-table__td mts-table__td--end">$3.200</td><td class="mts-table__td mts-table__td--end">$18.900</td></tr>
+        <tr class="mts-table__row"><td class="mts-table__td">Consultoría</td><td class="mts-table__td mts-table__td--end">$15.500</td><td class="mts-table__td mts-table__td--end">$8.700</td><td class="mts-table__td mts-table__td--end">$6.800</td></tr>
+      </tbody>
+      <tfoot class="mts-table__tfoot">
+        <tr>
+          <td class="mts-table__td">Total</td>
+          <td class="mts-table__td mts-table__td--end">$85.800</td>
+          <td class="mts-table__td mts-table__td--end">$24.300</td>
+          <td class="mts-table__td mts-table__td--end">$61.500</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- ══ 8. PAGINACIÓN — variantes ══ -->
+<div class="demo-section">
+  <div class="demo-title">MTS.Paging — variantes</div>
+
+  <div class="demo-label">Primary (default)</div>
+  <div id="pg-primary"></div>
+
+  <div class="demo-label">Secondary</div>
+  <div id="pg-secondary"></div>
+
+  <div class="demo-label">Ghost</div>
+  <div id="pg-ghost"></div>
+
+  <div class="demo-label">Agrupado — grouped:true</div>
+  <div id="pg-grouped"></div>
+
+  <div class="demo-label">Tamaños — sm · md · lg</div>
+  <div id="pg-sm" class="demo-gap"></div>
+  <div id="pg-md" class="demo-gap"></div>
+  <div id="pg-lg"></div>
+
+  <div class="demo-label">Botones como texto</div>
+  <div id="pg-texto" class="demo-gap"></div>
+
+  <div class="demo-label">Botones con emojis</div>
+  <div id="pg-emoji" class="demo-gap"></div>
+
+  <div class="demo-label">Sin first/last — solo prev/next</div>
+  <div id="pg-minimal"></div>
+</div>
+
+<!-- ══ 9. TABLA + API REAL ══ -->
+<div class="demo-section">
+  <div class="demo-title">Tabla con paginación — datos desde API (restful-api.dev)</div>
+
+  <div class="mts-table-wrap" style="margin-bottom:12px">
+    <table class="mts-table mts-table--hover">
+      <thead><tr>
+        <th class="mts-table__th" style="width:60px">ID</th>
+        <th class="mts-table__th">Nombre</th>
+        <th class="mts-table__th">Color</th>
+        <th class="mts-table__th mts-table__th--end">Capacidad</th>
+      </tr></thead>
+      <tbody id="tbl-body">
+        <tr class="mts-table__row">
+          <td class="mts-table__td mts-table__empty" colspan="4">
+            <span class="mts-table__empty-icon">⏳</span>
+            <p class="mts-table__empty-title">Cargando desde API...</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="pg-tabla"></div>
+</div>
+
+<script src="../matios-ui-paging/matios-ui-paging.js"></script>
+<script>
+
+/* ── Helpers tabla ── */
+function toggleSort(th) {
+  th.closest('table').querySelectorAll('.mts-table__th--asc,.mts-table__th--desc').forEach(el => {
+    if (el !== th) el.classList.remove('mts-table__th--asc','mts-table__th--desc');
+  });
+  if      (th.classList.contains('mts-table__th--asc'))  th.classList.replace('mts-table__th--asc','mts-table__th--desc');
+  else if (th.classList.contains('mts-table__th--desc')) th.classList.replace('mts-table__th--desc','mts-table__th--asc');
+  else                                                    th.classList.add('mts-table__th--asc');
+}
+
+function toggleRow(tr) {
+  tr.classList.toggle('mts-table__row--selected');
+  const chk = tr.querySelector('.mts-table__checkbox');
+  if (chk) chk.checked = tr.classList.contains('mts-table__row--selected');
+}
+
+function toggleAll(master) {
+  document.querySelectorAll('#chk-tbody .mts-table__row--clickable').forEach(tr => {
+    tr.classList.toggle('mts-table__row--selected', master.checked);
+    const chk = tr.querySelector('.mts-table__checkbox');
+    if (chk) chk.checked = master.checked;
+  });
+}
+
+/* ══════════════════════════════════════════════
+   VARIANTES DE PAGINACIÓN
+   ══════════════════════════════════════════════ */
+new MTS.Paging('#pg-primary',   { total:247, page:5, pageSize:10, variant:'primary' });
+new MTS.Paging('#pg-secondary', { total:247, page:5, pageSize:10, variant:'secondary' });
+new MTS.Paging('#pg-ghost',     { total:247, page:5, pageSize:10, variant:'ghost' });
+
+/* Agrupado — propiedad grouped:true en el constructor */
+new MTS.Paging('#pg-grouped', {
+  total:247, page:5, pageSize:10, variant:'primary',
+  grouped: true,
+});
+
+/* Tamaños — propiedad size en el constructor */
+new MTS.Paging('#pg-sm', { total:100, page:3, pageSize:10, variant:'primary', size:'sm' });
+new MTS.Paging('#pg-md', { total:100, page:3, pageSize:10, variant:'primary' });
+new MTS.Paging('#pg-lg', { total:100, page:3, pageSize:10, variant:'primary', size:'lg' });
+
+/* Botones como texto */
+new MTS.Paging('#pg-texto', {
+  total:100, page:3, pageSize:10, variant:'primary',
+  btnFirst: 'Inicio', btnPrev: '← Anterior',
+  btnNext: 'Siguiente →', btnLast: 'Final',
+});
+
+/* Botones con emojis */
+new MTS.Paging('#pg-emoji', {
+  total:100, page:3, pageSize:10, variant:'primary', grouped: true,
+  btnFirst: '⏮', btnPrev: '◀', btnNext: '▶', btnLast: '⏭',
+});
+
+/* Sin botones first/last */
+new MTS.Paging('#pg-minimal', {
+  total:100, page:3, pageSize:10, variant:'ghost',
+  showFirst: false, showLast: false,
+  btnPrev: '‹ Atrás', btnNext: 'Siguiente ›',
+});
+
+/* ══════════════════════════════════════════════
+   TABLA CON API REAL — restful-api.dev
+   ══════════════════════════════════════════════ */
+let todosLosObjetos = [];  // cache de la respuesta API
+
+function renderTabla(page, pageSize) {
+  const start = (page - 1) * pageSize;
+  const items = todosLosObjetos.slice(start, start + pageSize);
+
+  document.getElementById('tbl-body').innerHTML = items.length
+    ? items.map(obj => {
+        const color    = obj.data?.color       || obj.data?.Color       || '—';
+        const capacity = obj.data?.capacity    || obj.data?.['capacity GB']
+                      || obj.data?.['Capacity'] || '—';
+        return `
+          <tr class="mts-table__row">
+            <td class="mts-table__td mts-text-muted">${obj.id}</td>
+            <td class="mts-table__td">${obj.name}</td>
+            <td class="mts-table__td">${color}</td>
+            <td class="mts-table__td mts-table__td--end">${capacity}</td>
+          </tr>`;
+      }).join('')
+    : `<tr class="mts-table__row">
+         <td class="mts-table__td mts-table__empty" colspan="4">
+           <span class="mts-table__empty-icon">📭</span>
+           <p class="mts-table__empty-title">Sin registros</p>
+         </td>
+       </tr>`;
+
+  /* actualizar el paginador con los datos reales */
+  pgTabla.setResponse({
+    page,
+    pageSize,
+    total:      todosLosObjetos.length,
+    totalPages: Math.ceil(todosLosObjetos.length / pageSize),
+  });
+}
+
+/* Crear paginador ANTES de cargar los datos */
+const pgTabla = new MTS.Paging('#pg-tabla', {
+  total:    0,
+  page:     1,
+  pageSize: 5,
+  variant:  'primary',
+  grouped:  true,
+  showInfo: true,
+  showPageSize: true,
+  pageSizes: [5, 10, 13],
+  onChange: (page, pageSize) => renderTabla(page, pageSize),
+});
+
+/* Cargar datos desde la API — solo 1 fetch, paginación client-side */
+fetch('https://api.restful-api.dev/objects')
+  .then(r => r.json())
+  .then(data => {
+    todosLosObjetos = data;
+    renderTabla(1, 5);  /* carga inicial */
+  })
+  .catch(() => {
+    document.getElementById('tbl-body').innerHTML = `
+      <tr class="mts-table__row">
+        <td class="mts-table__td mts-table__empty" colspan="4">
+          <span class="mts-table__empty-icon">⚠️</span>
+          <p class="mts-table__empty-title">Error al conectar con la API</p>
+          <p class="mts-table__empty-msg">Verifica tu conexión e intenta de nuevo</p>
+        </td>
+      </tr>`;
+  });
+
+/* Sync tema desde parent */
+window.addEventListener('message', e => {
+  if (e.data?.type === 'setTheme') document.documentElement.setAttribute('data-mts-theme', e.data.theme);
+});
+try { const t = window.parent?.currentThemeVal; if (t) document.documentElement.setAttribute('data-mts-theme', t); } catch {}
+</script>
+</body>
+</html>

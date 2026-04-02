@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-theme="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Avatar — Demo</title>
+  
+    <script>
+    (function(){
+      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
+      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
+          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+        }
+      }catch(e){}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="./matios-ui-avatar.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="./matios-ui-avatar.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
+    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
+    .demo-section{display:flex;flex-direction:column;gap:14px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+    .demo-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
+    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
+    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
+    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
+    .demo-docs-panel.open{display:block;}
+    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
+    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
+    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
+    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
+    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
+    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
+    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
+    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
+    .demo-docs-panel p{margin:0 0 10px;}
+    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
+    .demo-docs-panel a{color:var(--mts-color-primary);text-decoration:none;}
+    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+</div>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.Avatar</h1>
+    <p>Avatar con imagen, iniciales automáticas, estados y grupos.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-avatar.md')">📄 Documentación</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Imagen, iniciales y estados</div>
+    <div class="demo-row" style="padding:12px 0;flex-wrap:wrap;gap:16px;align-items:flex-end;">
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-img"></div><span style="font-size:10px;color:var(--mts-text-muted)">Imagen</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-name"></div><span style="font-size:10px;color:var(--mts-text-muted)">Iniciales</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-online"></div><span style="font-size:10px;color:var(--mts-text-muted)">Online</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-busy"></div><span style="font-size:10px;color:var(--mts-text-muted)">Busy</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-away"></div><span style="font-size:10px;color:var(--mts-text-muted)">Away</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-offline"></div><span style="font-size:10px;color:var(--mts-text-muted)">Offline</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-badge"></div><span style="font-size:10px;color:var(--mts-text-muted)">Badge</span>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-square"></div><span style="font-size:10px;color:var(--mts-text-muted)">Square</span>
+      </div>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c1"><code>// Con imagen
+new MTS.Avatar('#el', { src:'https://...', name:'Juan Pérez', size:'md' })
+
+// Con iniciales (auto desde name)
+new MTS.Avatar('#el', { name:'María Alarcón', size:'md' })
+
+// Con estado
+new MTS.Avatar('#el', { name:'Carlos Ruiz', status:'online'  })
+new MTS.Avatar('#el', { name:'Ana Torres',  status:'busy'    })
+new MTS.Avatar('#el', { name:'Pedro Díaz',  status:'away'    })
+new MTS.Avatar('#el', { name:'Luis García', status:'offline' })
+
+// Con badge numérico
+new MTS.Avatar('#el', { name:'Rosa Medina', badge:3 })
+
+// Forma cuadrada
+new MTS.Avatar('#el', { name:'Team', square:true })</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Tamaños</div>
+    <div class="demo-row" style="padding:12px 0;align-items:flex-end;gap:20px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-xs"></div><span style="font-size:10px;color:var(--mts-text-muted)">xs</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-sm"></div><span style="font-size:10px;color:var(--mts-text-muted)">sm</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-md"></div><span style="font-size:10px;color:var(--mts-text-muted)">md</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-lg"></div><span style="font-size:10px;color:var(--mts-text-muted)">lg</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div id="av-xl"></div><span style="font-size:10px;color:var(--mts-text-muted)">xl</span>
+      </div>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c2"><code>new MTS.Avatar('#el', { name:'XS', size:'xs' })
+new MTS.Avatar('#el', { name:'SM', size:'sm' })
+new MTS.Avatar('#el', { name:'MD', size:'md' })   // default
+new MTS.Avatar('#el', { name:'LG', size:'lg' })
+new MTS.Avatar('#el', { name:'XL', size:'xl' })</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Grupo de avatares</div>
+    <div class="demo-row" style="padding:12px 0;">
+      <div id="av-group"></div>
+    </div>
+    <div class="result-box" id="av-result">— pasa el mouse sobre el grupo —</div>
+    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c3"><code>new MTS.AvatarGroup('#el', {
+  max:  4,     // máx visibles antes de mostrar "+N"
+  size: 'md',
+  avatars: [
+    { name:'Juan Pérez',    status:'online' },
+    { name:'María Alarcón', status:'busy'   },
+    { src:'https://...', name:'Carlos Ruiz' },
+    { name:'Ana Torres',    status:'away'   },
+    { name:'Pedro Díaz' },
+    { name:'Rosa Medina' },
+  ],
+})</code></pre>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">4 — API — setStatus() y setSrc()</div>
+    <div class="demo-row" style="padding:12px 0;gap:16px;">
+      <div id="av-api"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="avApi.setStatus('online')">online</button>
+        <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="avApi.setStatus('busy')">busy</button>
+        <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="avApi.setStatus('away')">away</button>
+        <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="avApi.setStatus('offline')">offline</button>
+        <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="avApi.setStatus(null)">sin estado</button>
+      </div>
+    </div>
+    <button class="demo-code-toggle" onclick="toggleCode('c4')">&lt;/&gt; Código</button>
+    <pre class="demo-code" id="c4"><code>const av = new MTS.Avatar('#el', { name:'Juan Pérez', size:'lg' })
+av.setStatus('online')    // cambia el indicador de estado
+av.setStatus(null)        // quita el indicador
+av.setSrc('https://...')  // cambia la imagen</code></pre>
+  </div>
+</div>
+<script>
+function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
+function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
+function toggleDocs(id,mdPath){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';fetch(mdPath).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>No se pudo cargar.</em>';});}
+function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
+
+new MTS.Avatar('#av-img',    {src:'https://i.pravatar.cc/80?img=1',name:'Juan Pérez',size:'md'});
+new MTS.Avatar('#av-name',   {name:'María Alarcón',size:'md'});
+new MTS.Avatar('#av-online', {name:'Carlos Ruiz',  size:'md',status:'online'});
+new MTS.Avatar('#av-busy',   {name:'Ana Torres',   size:'md',status:'busy'});
+new MTS.Avatar('#av-away',   {name:'Pedro Díaz',   size:'md',status:'away'});
+new MTS.Avatar('#av-offline',{name:'Luis García',  size:'md',status:'offline'});
+new MTS.Avatar('#av-badge',  {name:'Rosa Medina',  size:'md',badge:3});
+new MTS.Avatar('#av-square', {name:'Team Lead',    size:'md',square:true});
+new MTS.Avatar('#av-xs',{name:'XS',size:'xs'});
+new MTS.Avatar('#av-sm',{name:'SM',size:'sm'});
+new MTS.Avatar('#av-md',{name:'MD',size:'md'});
+new MTS.Avatar('#av-lg',{name:'LG',size:'lg'});
+new MTS.Avatar('#av-xl',{name:'XL',size:'xl'});
+new MTS.AvatarGroup('#av-group',{
+  max:4,size:'md',
+  avatars:[
+    {name:'Juan Pérez',    status:'online'},
+    {name:'María Alarcón', status:'busy'},
+    {src:'https://i.pravatar.cc/80?img=5',name:'Carlos Ruiz'},
+    {name:'Ana Torres',    status:'away'},
+    {name:'Pedro Díaz'},
+    {name:'Rosa Medina'},
+  ],
+});
+document.getElementById('av-group').addEventListener('mouseenter',function(){
+  document.getElementById('av-result').textContent='AvatarGroup — 6 miembros, max:4 visibles';
+});
+var avApi=new MTS.Avatar('#av-api',{name:'Juan Pérez',size:'lg',status:'online'});
+
+</script>
+</body>
+</html>
