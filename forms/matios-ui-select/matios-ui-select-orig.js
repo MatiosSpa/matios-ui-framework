@@ -109,8 +109,6 @@ MTS.Select = class MtsSelect {
   open() {
     if (this._isOpen) return this;
     this._isOpen = true;
-    /* Posicionar el dropdown (portal en document.body) */
-    this._positionDropdown();
     this._dropdownEl.classList.add('mts-select__dropdown--open');
     this._triggerEl.setAttribute('aria-expanded', 'true');
     /* Si es async, disparar búsqueda inicial vacía al abrir */
@@ -122,25 +120,6 @@ MTS.Select = class MtsSelect {
     this._searchEl?.focus();
     this._emit('open', {});
     return this;
-  }
-
-  _positionDropdown() {
-    const rect = this._triggerEl.getBoundingClientRect();
-    const drop  = this._dropdownEl;
-    drop.style.position = 'fixed';
-    drop.style.zIndex   = '9999';
-    drop.style.width    = rect.width + 'px';
-    drop.style.left     = rect.left  + 'px';
-    /* Mostrar abajo si hay espacio, arriba si no */
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const dropH      = drop.offsetHeight || 240;
-    if (spaceBelow >= dropH || spaceBelow >= 120) {
-      drop.style.top    = (rect.bottom + 2) + 'px';
-      drop.style.bottom = 'auto';
-    } else {
-      drop.style.bottom = (window.innerHeight - rect.top + 2) + 'px';
-      drop.style.top    = 'auto';
-    }
   }
 
   close() {
@@ -155,13 +134,7 @@ MTS.Select = class MtsSelect {
   toggle()  { return this._isOpen ? this.close() : this.open(); }
   on(e, cb) { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   off(e, cb){ this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
-  destroy() {
-    this._dropdownEl?.remove();           /* limpiar del body */
-    this._container.innerHTML = '';
-    document.removeEventListener('click', this._outsideClick);
-    window.removeEventListener('scroll',  this._onScroll, true);
-    window.removeEventListener('resize',  this._onResize);
-  }
+  destroy() { this._container.innerHTML = ''; document.removeEventListener('click', this._outsideClick); }
 
   /* ── Búsqueda externa (onSearch) ──────────────────────────
      El dev pasa onSearch: async (query) => [...opciones]
@@ -306,11 +279,7 @@ MTS.Select = class MtsSelect {
     this._listEl = document.createElement('div');
     this._listEl.className = 'mts-select__list';
     this._dropdownEl.appendChild(this._listEl);
-
-    /* Portal — el dropdown va al document.body para escapar cualquier
-       stacking context (overflow, transform, z-index, modal, etc.)
-       La posición se recalcula en open() con getBoundingClientRect */
-    document.body.appendChild(this._dropdownEl);
+    wrap.appendChild(this._dropdownEl);
 
     /* Input oculto (cuando wrap es el container directo) */
     this._hiddenInput = document.createElement('input');
@@ -468,19 +437,8 @@ MTS.Select = class MtsSelect {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.toggle(); }
       if (e.key === 'Escape') this.close();
     });
-    this._outsideClick = (e) => {
-      /* El dropdown está en el body — verificar ambos contenedores */
-      if (!this._container.contains(e.target) && !this._dropdownEl.contains(e.target)) {
-        this.close();
-      }
-    };
+    this._outsideClick = (e) => { if (!this._container.contains(e.target)) this.close(); };
     document.addEventListener('click', this._outsideClick);
-
-    /* Reposicionar si el viewport cambia (scroll/resize) */
-    this._onScroll = () => { if (this._isOpen) this._positionDropdown(); };
-    this._onResize = () => { if (this._isOpen) this._positionDropdown(); };
-    window.addEventListener('scroll', this._onScroll, true);
-    window.addEventListener('resize', this._onResize);
   }
 
   _syncHidden() {
