@@ -1,185 +1,352 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="es" data-mts-mode="dark">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.Tree — Demo</title>
-      <script>
+  <script>
     (function(){
-      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
-      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
       try{
         var p=window.parent;
         if(p&&p!==window){
-          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
-          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
         }
       }catch(e){}
     })();
   </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Tree — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
-  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../shared/demo-shared.css">
   <link rel="stylesheet" href="./matios-ui-tree.css">
-  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../shared/demo-shared.js"></script>
   <script src="./matios-ui-tree.js"></script>
   <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
-    .demo-section{display:flex;flex-direction:column;gap:14px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
-    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
-    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
-    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
-    .demo-docs-panel.open{display:block;}
-    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
-    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
-    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
-    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
-    .demo-docs-panel pre code{background:none;border:none;padding:0;color:var(--mts-text-primary);}
-    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
-    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel ul,p{margin:0 0 10px;padding-left:18px;}
-    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+    .tree-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .tree-box {
+      border: 1px solid var(--mts-border-color);
+      border-radius: var(--mts-radius-lg);
+      padding: 12px;
+      background: var(--mts-surface);
+    }
   </style>
 </head>
 <body>
 <div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
-  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
+  <button class="demo-btn-sm demo-btn-sep">—</button>
+  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Tree</h1>
-    <p>Árbol colapsable de jerarquías con selección, checkboxes e íconos.</p>
-    <div style="display:flex;gap:8px;"><button class="demo-docs-btn" onclick="toggleDocs('dp','./matios-ui-tree.md')">📄 Documentación</button></div>
-    <div class="demo-docs-panel" id="dp"></div>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Básico colapsable</div>
-    <div class="demo-grid">
-      <div id="tree-basic"></div>
-      <div id="tree-expanded"></div>
+    <p>Tree view — expand/collapse, selectable, checkboxes, icons, badges, connection lines.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-tree.md')">📄 Docs</button>
     </div>
-    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c1"><code>new MTS.Tree('#el', {
-  nodes: [
-    { id:'n1', label:'Proyectos', children: [
-      { id:'n2', label:'Frontend', children: [
-        { id:'n3', label:'index.html' },
-        { id:'n4', label:'styles.css' },
-      ]},
-    ]},
-  ],
-})</code></pre>
+    <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
+  <!-- 1. Básico colapsable -->
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Básico colapsable — árbol de archivos / File tree</div>
+    <div class="tree-grid">
+      <div>
+        <div class="demo-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);margin-bottom:8px">showLines: true (default)</div>
+        <div class="tree-box" id="tree-files"></div>
+      </div>
+      <div>
+        <div class="demo-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);margin-bottom:8px">showLines: false</div>
+        <div class="tree-box" id="tree-nolines"></div>
+      </div>
+    </div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-tr1','js-tr1')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-tr1','html-tr1')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-tr1">&lt;div id="my-tree"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.Tree('#my-tree', {
+    showLines: true,
+    showIcons: true,
+    nodes: [
+      { id:'src', label:'src', expanded:true, children:[
+        { id:'components', label:'components', children:[
+          { id:'button', label:'Button.js' },
+          { id:'input',  label:'Input.js' },
+        ]},
+        { id:'index', label:'index.js' },
+      ]},
+      { id:'public', label:'public', children:[
+        { id:'favicon', label:'favicon.ico' },
+      ]},
+    ],
+    onToggle: (e) =&gt; console.log(e.detail.node.id, e.detail.expanded),
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-tr1">var FILE_NODES = [
+  { id:'src', label:'src', expanded:true, children:[
+    { id:'components', label:'components', children:[
+      { id:'btn', label:'Button.js' },
+      { id:'inp', label:'Input.js'  },
+      { id:'sel', label:'Select.js' },
+    ]},
+    { id:'utils', label:'utils', children:[
+      { id:'fmt', label:'format.js' },
+      { id:'api', label:'api.js'    },
+    ]},
+    { id:'idx',  label:'index.js' },
+    { id:'app',  label:'App.js'   },
+  ]},
+  { id:'public', label:'public', children:[
+    { id:'html',  label:'index.html' },
+    { id:'fav',   label:'favicon.ico' },
+  ]},
+  { id:'pkg', label:'package.json' },
+];
+
+// With lines (default) / Con líneas
+new MTS.Tree('#tree-files', {
+  showLines: true,
+  showIcons: true,
+  nodes: FILE_NODES,
+  onToggle: (e) =&gt; console.log(e.detail.node.id, e.detail.expanded),
+});
+
+// Without lines / Sin líneas
+new MTS.Tree('#tree-nolines', {
+  showLines: false,
+  showIcons: true,
+  nodes: FILE_NODES,
+});</div>
+  </div>
+
+  <!-- 2. Selectable -->
   <div class="demo-section">
     <div class="demo-section-title">2 — Selectable + onSelect</div>
-    <div id="tree-select" style="max-width:300px;"></div>
-    <div class="result-box" id="res-tree">— haz click en un nodo —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c2"><code>new MTS.Tree('#el', {
-  selectable: true,
-  nodes: [...],
-  onSelect: ({ node, path }) => {
-    console.log(node.label, path.map(n=>n.label).join(' > '))
-  },
-})</code></pre>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Checkable con propagación a hijos</div>
-    <div id="tree-check" style="max-width:300px;"></div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
-      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="alert(JSON.stringify(treeCheck.getChecked()))">getChecked()</button>
-      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="treeCheck.expandAll2()">expandAll()</button>
-      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="treeCheck.collapseAll()">collapseAll()</button>
+    <div class="tree-box" id="tree-selectable" style="max-width:360px"></div>
+    <div class="result-box" id="tree-select-result">— haz click en un nodo —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-tr2','js-tr2')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-tr2','html-tr2')">JavaScript</button>
     </div>
-    <div class="result-box" id="res-check">— marca nodos —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c3"><code>const tree = new MTS.Tree('#el', {
-  checkable: true,
-  nodes: [...],
-  onCheck: ({ node, checked, checkedIds }) => {
-    console.log('marcados:', checkedIds)
-  },
-})
-tree.getChecked()   // → ['id1', 'id2', ...]
-tree.expandAll2()
-tree.collapseAll()</code></pre>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Con badges + íconos custom + sin líneas</div>
-    <div class="demo-grid">
-      <div id="tree-badges"></div>
-      <div id="tree-nolines"></div>
-    </div>
-    <button class="demo-code-toggle" onclick="toggleCode('c4')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c4"><code>new MTS.Tree('#el', {
-  showLines: false,
+    <div class="code-panel active" id="html-tr2">&lt;div id="my-tree"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.Tree('#my-tree', {
+    selectable: true,
+    nodes: [...],
+    // Fires when a node is selected / Se dispara al seleccionar un nodo
+    onSelect: (e) =&gt; {
+      console.log(e.detail.node.id);   // → 'src'
+      console.log(e.detail.path);      // → ['root', 'src']
+    },
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-tr2">new MTS.Tree('#my-tree', {
+  selectable: true,  // click to select / click para seleccionar
+  showLines:  true,
   nodes: [
-    { id:'n1', label:'Dashboard',  badge:3,  icon:MTS.Icon.get('home')  },
-    { id:'n2', label:'Usuarios',   badge:12, icon:MTS.Icon.get('users') },
+    { id:'dashboard',  label:'Dashboard',  selected: true },
+    { id:'analytics',  label:'Analytics' },
+    { id:'reports',    label:'Reports', children:[
+      { id:'monthly',  label:'Monthly report' },
+      { id:'annual',   label:'Annual report' },
+    ]},
+    { id:'settings',   label:'Settings', children:[
+      { id:'profile',  label:'Profile' },
+      { id:'security', label:'Security' },
+      { id:'billing',  label:'Billing', disabled: true },
+    ]},
   ],
-})</code></pre>
+  // Fires when a node is selected / Se dispara al seleccionar un nodo
+  onSelect: (e) =&gt; {
+    console.log(e.detail.node.id);  // → 'dashboard'
+    console.log(e.detail.path);     // → ['dashboard']
+  },
+});</div>
   </div>
+
+  <!-- 3. Checkable -->
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Checkable con propagación a hijos / Checkboxes with child propagation</div>
+    <div class="tree-box" id="tree-checkable" style="max-width:360px"></div>
+    <div class="result-box" id="tree-check-result">— marca/desmarca checkboxes —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-tr3','js-tr3')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-tr3','html-tr3')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-tr3">&lt;div id="my-tree"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.Tree('#my-tree', {
+    checkable: true,
+    nodes: [...],
+    // Fires when checkbox changes / Se dispara al cambiar un checkbox
+    onCheck: (e) =&gt; {
+      console.log(e.detail.node.id);      // → 'users-read'
+      console.log(e.detail.checked);      // → true | false
+      console.log(e.detail.checkedIds);   // → ['users-read', 'reports-view']
+    },
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-tr3">new MTS.Tree('#my-tree', {
+  checkable:  true,    // show checkboxes / mostrar checkboxes
+  expandAll:  true,    // expand all on init / expandir todo al inicio
+  showIcons:  false,
+  nodes: [
+    { id:'users', label:'Users', children:[
+      { id:'users-read',   label:'Read',   checked:true  },
+      { id:'users-write',  label:'Write',  checked:true  },
+      { id:'users-delete', label:'Delete', disabled:true },
+    ]},
+    { id:'reports', label:'Reports', children:[
+      { id:'reports-view',   label:'View'   },
+      { id:'reports-export', label:'Export' },
+    ]},
+    { id:'settings', label:'Settings', children:[
+      { id:'settings-read',  label:'Read'  },
+      { id:'settings-write', label:'Write', checked:true },
+    ]},
+  ],
+  // Fires when checkbox changes / Se dispara al cambiar un checkbox
+  onCheck: (e) =&gt; {
+    console.log('checked IDs:', e.detail.checkedIds);
+  },
+});</div>
+  </div>
+
+  <!-- 4. Badges + íconos custom -->
+  <div class="demo-section">
+    <div class="demo-section-title">4 — Badges + íconos custom + API</div>
+    <div class="tree-box" id="tree-badges" style="max-width:360px"></div>
+    <div class="demo-row" style="margin-top:10px;flex-wrap:wrap">
+      <button class="demo-btn-sm" onclick="treeBadges.expandAll()">expandAll()</button>
+      <button class="demo-btn-sm" onclick="treeBadges.collapseAll()">collapseAll()</button>
+      <button class="demo-btn-sm" onclick="treeBadges.select('frontend')">select('frontend')</button>
+    </div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-tr4','js-tr4')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-tr4','html-tr4')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-tr4">&lt;div id="my-tree"&gt;&lt;/div&gt;
+&lt;script&gt;
+  const tree = new MTS.Tree('#my-tree', {
+    selectable: true,
+    nodes: [
+      { id:'eng', label:'Engineering', badge:{ label:'12', variant:'primary' }, children:[
+        { id:'frontend', label:'Frontend', badge:{ label:'4' } },
+        { id:'backend',  label:'Backend',  badge:{ label:'8' } },
+      ]},
+    ],
+  });
+
+  tree.expandAll()
+  tree.collapseAll()
+  tree.select('frontend')
+  tree.deselect()
+  tree.getChecked()   // → checked IDs
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-tr4">const tree = new MTS.Tree('#my-tree', {
+  selectable: true,
+  showLines:  true,
+  nodes: [
+    { id:'eng',  label:'Engineering', badge:{ label:'12', variant:'primary' }, children:[
+      { id:'frontend', label:'Frontend', badge:{ label:'4', variant:'info'    } },
+      { id:'backend',  label:'Backend',  badge:{ label:'8', variant:'success' } },
+    ]},
+    { id:'design',  label:'Design',   badge:{ label:'3',  variant:'warning' } },
+    { id:'product', label:'Product',  badge:{ label:'5',  variant:'default' } },
+  ],
+  onSelect: (e) =&gt; console.log('selected:', e.detail.node.id),
+});
+
+// API
+tree.expandAll()          // expand all / expandir todos
+tree.collapseAll()        // collapse all / colapsar todos
+tree.expand('eng')        // expand one / expandir uno
+tree.collapse('eng')      // collapse one / colapsar uno
+tree.select('frontend')   // select programmatically / seleccionar programáticamente
+tree.deselect()           // deselect all / deseleccionar
+tree.getChecked()         // → array of checked IDs</div>
+  </div>
+
 </div>
 <script>
-function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
-window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
-if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
-function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
-function toggleDocs(id,p){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted)">Cargando...</em>';fetch(p).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>Error.</em>';});}
-function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,function(_,hdr,rows){var ths=hdr.split('|').filter(function(c){return c.trim();}).map(function(c){return'<th>'+c.trim()+'</th>';}).join('');var trs=rows.trim().split('\n').map(function(r){return'<tr>'+r.split('|').filter(function(c){return c.trim();}).map(function(c){return'<td>'+c.trim()+'</td>';}).join('')+'</tr>';}).join('');return'<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';}).replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
-
-var NODES = [
-  {id:'p',  label:'Proyecto',   children:[
-    {id:'f',  label:'Frontend', children:[
-      {id:'fi1',label:'index.html'},
-      {id:'fi2',label:'styles.css'},
-      {id:'fi3',label:'app.js'},
+var FILE_NODES = [
+  { id:'src', label:'src', expanded:true, children:[
+    { id:'components', label:'components', children:[
+      { id:'btn', label:'Button.js' },{ id:'inp', label:'Input.js' },{ id:'sel', label:'Select.js' },
     ]},
-    {id:'b',  label:'Backend',  children:[
-      {id:'bi1',label:'server.js'},
-      {id:'bi2',label:'routes.js'},
+    { id:'utils', label:'utils', children:[
+      { id:'fmt', label:'format.js' },{ id:'api', label:'api.js' },
     ]},
-    {id:'d',  label:'docs',     children:[
-      {id:'di1',label:'README.md'},
-    ]},
+    { id:'idx', label:'index.js' },{ id:'app', label:'App.js' },
   ]},
+  { id:'public', label:'public', children:[
+    { id:'html', label:'index.html' },{ id:'fav', label:'favicon.ico' },
+  ]},
+  { id:'pkg', label:'package.json' },
 ];
-function cloneNodes(n){return JSON.parse(JSON.stringify(n));}
-new MTS.Tree('#tree-basic',   {nodes:cloneNodes(NODES)});
-new MTS.Tree('#tree-expanded',{nodes:cloneNodes(NODES),expandAll:true});
-new MTS.Tree('#tree-select',  {nodes:cloneNodes(NODES),selectable:true,onSelect:function(e){document.getElementById('res-tree').textContent='onSelect → "'+e.node.label+'" | path: '+e.path.map(function(n){return n.label;}).join(' › ');}});
-var treeCheck=new MTS.Tree('#tree-check',{nodes:cloneNodes(NODES),checkable:true,expandAll:true,onCheck:function(e){document.getElementById('res-check').textContent='onCheck → checkedIds: '+JSON.stringify(e.checkedIds);}});
-new MTS.Tree('#tree-badges',{showLines:false,nodes:[
-  {id:'t1',label:'Dashboard',badge:3, icon:MTS.Icon.get('home'),  children:[{id:'t1a',label:'Métricas'},{id:'t1b',label:'Gráficas'}]},
-  {id:'t2',label:'Usuarios', badge:12,icon:MTS.Icon.get('users'), children:[{id:'t2a',label:'Lista'},{id:'t2b',label:'Permisos'}]},
-  {id:'t3',label:'Config',         icon:MTS.Icon.get('settings'),children:[{id:'t3a',label:'General'}]},
-]});
-new MTS.Tree('#tree-nolines',{showLines:false,nodes:cloneNodes(NODES),selectable:true});
-</script></body></html>
+new MTS.Tree('#tree-files',   { showLines:true,  showIcons:true, nodes:FILE_NODES });
+new MTS.Tree('#tree-nolines', { showLines:false, showIcons:true, nodes:FILE_NODES });
+
+new MTS.Tree('#tree-selectable', {
+  selectable:true, showLines:true,
+  nodes:[
+    { id:'dashboard', label:'Dashboard', selected:true },
+    { id:'analytics', label:'Analytics' },
+    { id:'reports',   label:'Reports', children:[
+      { id:'monthly', label:'Monthly report' },{ id:'annual', label:'Annual report' },
+    ]},
+    { id:'settings', label:'Settings', children:[
+      { id:'profile', label:'Profile' },{ id:'security', label:'Security' },{ id:'billing', label:'Billing', disabled:true },
+    ]},
+  ],
+  onSelect: function(e){ document.getElementById('tree-select-result').textContent = 'onSelect → id:"'+e.detail.node.id+'" path:'+JSON.stringify(e.detail.path); },
+});
+
+new MTS.Tree('#tree-checkable', {
+  checkable:true, expandAll:true, showIcons:false,
+  nodes:[
+    { id:'users', label:'Users', children:[
+      { id:'users-read', label:'Read', checked:true },{ id:'users-write', label:'Write', checked:true },{ id:'users-delete', label:'Delete', disabled:true },
+    ]},
+    { id:'reports', label:'Reports', children:[
+      { id:'reports-view', label:'View' },{ id:'reports-export', label:'Export' },
+    ]},
+    { id:'settings', label:'Settings', children:[
+      { id:'settings-read', label:'Read' },{ id:'settings-write', label:'Write', checked:true },
+    ]},
+  ],
+  onCheck: function(e){ document.getElementById('tree-check-result').textContent = 'onCheck → checked:'+e.detail.checked+' ids:'+JSON.stringify(e.detail.checkedIds); },
+});
+
+var treeBadges = new MTS.Tree('#tree-badges', {
+  selectable:true, showLines:true,
+  nodes:[
+    { id:'eng',     label:'Engineering', badge:{ label:'12', variant:'primary' }, children:[
+      { id:'frontend', label:'Frontend', badge:{ label:'4', variant:'info'    } },
+      { id:'backend',  label:'Backend',  badge:{ label:'8', variant:'success' } },
+    ]},
+    { id:'design',  label:'Design',  badge:{ label:'3', variant:'warning' } },
+    { id:'product', label:'Product', badge:{ label:'5', variant:'default' } },
+  ],
+});
+</script>
+</body>
+</html>

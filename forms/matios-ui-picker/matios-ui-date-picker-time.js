@@ -1,10 +1,10 @@
 /* ============================================================
    MATIOS UI — matios-ui-picker-time.js  v2.0.0
-   MTS.Picker.Time — Selector de hora
+   MTS.DatePicker.Time — Selector de hora
    Requiere: matios-ui-picker-base.js
    ============================================================ */
 
-MTS.Picker.Time = class MtsPickerTime extends MTS.Picker.Base {
+MTS.DatePicker.Time = class MtsDatePickerTime extends MTS.DatePicker.Base {
 
   constructor(selector, options = {}) {
     options.placeholder  = options.placeholder || "HH:MM";

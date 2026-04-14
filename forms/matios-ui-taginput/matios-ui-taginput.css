@@ -55,12 +55,28 @@
 .mts-taginput__dropdown--open { display: block; }
 
 .mts-taginput__suggestion {
-  padding: 8px var(--mts-space-3);
-  font-size: var(--mts-font-size-sm);
-  color: var(--mts-text-primary);
-  cursor: pointer;
-  transition: background var(--mts-transition-fast);
+  display:     flex;
+  align-items: center;
+  justify-content: space-between;
+  gap:         8px;
+  padding:     8px var(--mts-space-3);
+  font-size:   var(--mts-font-size-sm);
+  color:       var(--mts-text-primary);
+  cursor:      pointer;
+  transition:  background var(--mts-transition-fast);
 }
 .mts-taginput__suggestion:hover { background: var(--mts-bg-surface-2); }
+
+.mts-taginput__suggestion-name {
+  flex: 1;
+  font-weight: var(--mts-font-weight-medium);
+}
+
+.mts-taginput__suggestion-hint {
+  font-size:  var(--mts-font-size-xs);
+  color:      var(--mts-text-muted);
+  font-family: var(--mts-font-mono);
+  white-space: nowrap;
+}
 
 .mts-form-group { position: relative; }

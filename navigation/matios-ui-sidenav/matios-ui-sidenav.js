@@ -23,24 +23,40 @@ MTS.SideNav = class MtsSideNav {
   constructor(selector, options = {}) {
     this._el       = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    this.items     = options.items     || [];
-    this.active    = options.active    || '';
+    // Navigation items tree / Árbol de ítems de navegación
+    // [{ id, label, icon?, badge?, href?, children?[], group?, divider?, disabled? }]
+    this.items = options.items || [];
+
+    // Initially active item ID / ID del ítem activo inicial
+    this.active = options.active || '';
+
+    // Start collapsed (icons only) / Iniciar colapsado (solo íconos)
     this.collapsed = options.collapsed ?? false;
-    this.logo      = options.logo      || '';
-    this.footer    = options.footer    || '';
+
+    // Logo HTML for the nav header / HTML del logo en el header
+    this.logo = options.logo || '';
+
+    // Footer HTML / HTML del pie de la nav
+    this.footer = options.footer || '';
+
+    // Only one submenu open at a time / Solo un submenú abierto a la vez
     this.accordion = options.accordion ?? true;
-    this._onChange   = options.onChange   || null;
-    this._onCollapse = options.onCollapse || null;
+
     this._openGroups = new Set();
     this._listeners  = {};
 
-    /* Botón externo de colapso */
+    // Fires when active item changes / Se dispara al cambiar el ítem activo
+    if (options.onChange)   this.on('change',   options.onChange);
+
+    // Fires when nav collapses or expands / Se dispara al colapsar o expandir
+    if (options.onCollapse) this.on('collapse', options.onCollapse);
+
+    // External collapse button selector / Selector del botón externo de colapso
     if (options.collapseBtn) {
       const btn = document.querySelector(options.collapseBtn);
       btn?.addEventListener('click', () => this.toggleCollapse());
     }
 
-    /* Abrir el grupo del item activo */
     this._autoOpenActive(this.items);
     this._build();
   }
@@ -57,6 +73,7 @@ MTS.SideNav = class MtsSideNav {
     return this;
   }
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   destroy()  { this._el.innerHTML = ''; }
 
   _build() {
@@ -180,9 +197,7 @@ MTS.SideNav = class MtsSideNav {
           } else {
             this.active = item.id;
             this._build();
-            if (this._onChange) this._onChange({ item });
-            (this._listeners['change'] || []).forEach(fn => fn({ type: 'change', detail: { item } }));
-            this._el.dispatchEvent(new CustomEvent('mts:sidenav:change', { bubbles: true, detail: { item } }));
+            this._emit('change', { id: item.id, item });
           }
         });
       }
@@ -209,8 +224,7 @@ MTS.SideNav = class MtsSideNav {
         : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>';
       btn.setAttribute('title', this.collapsed ? 'Expandir' : 'Colapsar');
     }
-    if (this._onCollapse) this._onCollapse(this.collapsed);
-    this._el.dispatchEvent(new CustomEvent('mts:sidenav:collapse', { bubbles: true, detail: { collapsed: this.collapsed } }));
+    this._emit('collapse', { collapsed: this.collapsed });
   }
 
   _autoOpenActive(items) {
@@ -233,5 +247,9 @@ MTS.SideNav = class MtsSideNav {
       if (item.children) { const f = this._findItem(id, item.children); if (f) return f; }
     }
     return null;
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:sidenav:${event}`, { bubbles: true, detail }));
   }
 };

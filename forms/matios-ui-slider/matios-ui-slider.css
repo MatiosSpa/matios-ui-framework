@@ -1,0 +1,71 @@
+/* ============================================================
+   MATIOS UI — matios-ui-slider.css
+   Version: 3.0.0
+   ============================================================ */
+
+.mts-slider-wrap { width: 100%; user-select: none; }
+
+.mts-slider__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--mts-space-2);
+}
+.mts-slider__value {
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-color-primary);
+}
+
+/* Track — contenedor relativo */
+.mts-slider__track {
+  position: relative;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Rail — barra gris de fondo */
+.mts-slider__rail {
+  position: absolute;
+  left: 0; right: 0;
+  height: 4px;
+  background: var(--mts-gray-200);
+  border-radius: var(--mts-radius-full);
+}
+[data-mts-theme="dark"] .mts-slider__rail { background: var(--mts-gray-700); }
+
+/* Fill — barra azul activa */
+.mts-slider__fill {
+  position: absolute;
+  height: 4px;
+  background: var(--mts-color-primary);
+  border-radius: var(--mts-radius-full);
+  pointer-events: none;
+}
+
+/* Thumb — círculo draggable */
+.mts-slider__thumb {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--mts-color-primary);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  transform: translateX(-50%);
+  cursor: grab;
+  z-index: 3;
+  transition: box-shadow var(--mts-transition-fast), transform var(--mts-transition-fast);
+  box-sizing: border-box;
+}
+.mts-slider__thumb:hover {
+  box-shadow: 0 0 0 6px var(--mts-color-primary-light);
+}
+.mts-slider__thumb--active {
+  cursor: grabbing;
+  transform: translateX(-50%) scale(1.15);
+  box-shadow: 0 0 0 8px var(--mts-color-primary-light);
+  z-index: 4;
+}

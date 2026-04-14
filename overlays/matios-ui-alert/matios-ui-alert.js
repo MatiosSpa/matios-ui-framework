@@ -34,17 +34,35 @@ MTS.Alert = class MtsAlert {
     if (_ds.autoDismiss !== undefined) _fromHTML.autoDismiss = parseInt(_ds.autoDismiss);
     options = { ..._fromHTML, ...options };
 
-    this.variant     = options.variant     || 'info';
-    this.title       = options.title       || '';
-    this.message     = options.message     || '';
-    this.closable    = options.closable    ?? true;
-    this.showIcon    = options.icon        ?? true;
-    this.action      = options.action      || null;
-    this.onAction    = options.onAction    || null;
-    this.onClose     = options.onClose     || null;
+    // Alert variant: 'info' | 'success' | 'warning' | 'danger' / Variante de la alerta
+    this.variant = options.variant || 'info';
+
+    // Optional title / Título opcional
+    this.title = options.title || '';
+
+    // Main message / Mensaje principal
+    this.message = options.message || '';
+
+    // Show close button / Mostrar botón de cierre
+    this.closable = options.closable ?? true;
+
+    // Show icon / Mostrar ícono
+    this.showIcon = options.icon ?? true;
+
+    // Action button label / Label del botón de acción
+    this.action = options.action || null;
+
+    // Auto-dismiss after ms (0 = disabled) / Auto-cerrar después de ms (0 = deshabilitado)
     this.autoDismiss = options.autoDismiss ?? 0;
-    this._listeners  = {};
-    if (options.onClose) this.on('close', options.onClose);
+
+    this._listeners = {};
+
+    // Fires when action button is clicked / Se dispara al hacer click en el botón de acción
+    if (options.onAction) this.on('action', options.onAction);
+
+    // Fires when alert is closed / Se dispara al cerrar la alerta
+    if (options.onClose)  this.on('close',  options.onClose);
+
     this._build();
     if (this.autoDismiss > 0) setTimeout(() => this.close(), this.autoDismiss);
   }
@@ -89,7 +107,7 @@ MTS.Alert = class MtsAlert {
       const btn = document.createElement('button');
       btn.className   = 'mts-alert__action';
       btn.textContent = this.action;
-      btn.addEventListener('click', () => this.onAction(this));
+      btn.addEventListener('click', () => this._emit('action', {}));
       body.appendChild(btn);
     }
 

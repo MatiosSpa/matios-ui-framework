@@ -58,32 +58,59 @@ MTS.Modal = class MtsModal {
    * ]
    */
   constructor(options = {}) {
-    this.id         = options.id        || `mts-modal-${Date.now()}`;
-    this.title      = options.title     || '';
-    this.body       = options.body      || '';
-    this.footer     = options.footer    || null;
-    this.buttons    = options.buttons   || [];
-    this.size       = options.size      || 'md';
-    this.closable   = options.closable  ?? true;
-    this.backdrop   = options.static    ? false : (options.backdrop ?? true);
+    // Modal ID (auto-generated if not provided) / ID del modal (auto-generado si no se provee)
+    this.id = options.id || `mts-modal-${Date.now()}`;
+
+    // Modal header title / Título del header
+    this.title = options.title || '';
+
+    // Body content — HTML string or Element / Contenido del body
+    this.body = options.body || '';
+
+    // Footer content — HTML string or Element / Contenido del footer
+    this.footer = options.footer || null;
+
+    // Footer buttons: [{ id?, label, variant?, close?, disabled?, onClick }]
+    // Botones del footer
+    this.buttons = options.buttons || [];
+
+    // Size: 'sm' | 'md' | 'lg' | 'xl' | 'fullscreen' / Tamaño
+    this.size = options.size || 'md';
+
+    // Show close button and allow Esc / Mostrar botón X y permitir Esc
+    this.closable = options.closable ?? true;
+
+    // Click outside closes the modal / Click fuera cierra el modal
+    this.backdrop = options.static ? false : (options.backdrop ?? true);
+
+    // Body is scrollable / Body es scrolleable
     this.scrollable = options.scrollable ?? false;
-    this.centered   = options.centered   ?? true;
-    this.static     = options.static     ?? false;
 
-    // Listeners internos
-    this._listeners  = {};
-    this._isOpen     = false;
-    this._focusTrap  = null;
-    this._prevFocus  = null;
+    // Center modal vertically / Centrar modal verticalmente
+    this.centered = options.centered ?? true;
 
-    // Backward compat Bootstrap
-    this._elementId  = options.elementId || null;
+    // Static — does not close on Esc or backdrop / No cierra con Esc ni backdrop
+    this.static = options.static ?? false;
 
-    // Callbacks directos
-    if (options.onShow)    this.on('show',    options.onShow);
-    if (options.onShown)   this.on('shown',   options.onShown);
-    if (options.onHide)    this.on('hide',    options.onHide);
-    if (options.onHidden)  this.on('hidden',  options.onHidden);
+    this._listeners = {};
+    this._isOpen    = false;
+    this._focusTrap = null;
+    this._prevFocus = null;
+
+    // Bootstrap migration — wraps an existing HTML element / Migración Bootstrap — envuelve elemento existente
+    this._elementId = options.elementId || null;
+
+    // Fires before modal shows (return false to cancel) / Se dispara antes de mostrar (retorna false para cancelar)
+    if (options.onShow)   this.on('show',   options.onShow);
+
+    // Fires after modal is fully shown / Se dispara después de mostrarse completamente
+    if (options.onShown)  this.on('shown',  options.onShown);
+
+    // Fires before modal hides (return false to cancel) / Se dispara antes de ocultar
+    if (options.onHide)   this.on('hide',   options.onHide);
+
+    // Fires after modal is fully hidden / Se dispara después de ocultarse completamente
+    if (options.onHidden) this.on('hidden', options.onHidden);
 
     // Si viene de un elementId existente, envuelve ese elemento
     if (this._elementId) {

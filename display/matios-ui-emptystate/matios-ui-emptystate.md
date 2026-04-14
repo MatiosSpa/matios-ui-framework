@@ -1,27 +1,129 @@
-# matios-ui-emptystate
+# MTS.EmptyState
 
-Estado vacío con ilustración SVG, título y CTA.
+[EN] Empty state placeholder with preset variants, custom icon, CTA button and size options.
+[ES] Placeholder de estado vacío con variantes predefinidas, ícono custom, botón CTA y opciones de tamaño.
 
-## Uso
-```js
-new MTS.EmptyState('#empty', {
-  variant:     'no-data',     // 'no-data'|'search'|'error'|'permissions'
-  title:       'Sin documentos',
-  description: 'Sube tu primer documento para comenzar.',
-  action:      'Subir documento',
-  onAction:    () => uploader.open(),
-  size:        'md',           // 'sm'|'md'|'lg'
-})
+---
 
-// En DataTable cuando no hay resultados
-new MTS.EmptyState('#tabla', {
-  variant: 'search',
-  title:   'Sin resultados',
-  description: `No encontramos resultados para "${query}"`,
-})
+## Installation / Instalación
+
+```html
+<link rel="stylesheet" href="matios-ui-base.css">
+<link rel="stylesheet" href="matios-ui-emptystate.css">
+<script src="matios-ui-emptystate.js"></script>
 ```
 
+---
+
+## Options / Opciones
+
+| Option | Type | Default | [EN] Description / [ES] Descripción |
+|--------|------|---------|--------------------------------------|
+| `variant` | `string` | `'no-data'` | `'no-data'` · `'search'` · `'error'` · `'permissions'` · `'custom'` |
+| `title` | `string` | auto | [EN] Title text (auto from variant) / [ES] Título (auto desde variante) |
+| `description` | `string` | auto | [EN] Description text / [ES] Texto de descripción |
+| `action` | `string` | `null` | [EN] CTA button label / [ES] Label del botón CTA |
+| `icon` | `string` | auto | [EN] Custom SVG icon (overrides variant) / [ES] Ícono SVG custom |
+| `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
+| `onAction` | `function` | — | [EN] Fires when CTA button is clicked / [ES] Se dispara al hacer click en el botón CTA |
+
+---
+
+## Events / Eventos
+
+```js
+new MTS.EmptyState('#my-empty', {
+  variant: 'no-data',
+  action:  'Add item',
+  // Fires when CTA button is clicked / Se dispara al hacer click en el CTA
+  onAction: (e) => openCreateDialog(),
+});
+```
+
+---
+
+## JavaScript Usage / Uso JavaScript
+
+```js
+// Preset variants / Variantes predefinidas
+new MTS.EmptyState('#my-empty', {
+  variant: 'no-data',      // no results / sin resultados
+  action:  'Add first item',
+  onAction: (e) => createItem(),
+});
+
+new MTS.EmptyState('#my-empty', {
+  variant:     'search',   // no search results / sin resultados de búsqueda
+  title:       'No results for "dashboard"',
+  description: 'Try different keywords.',
+  action:      'Clear search',
+  onAction:    (e) => clearSearch(),
+});
+
+new MTS.EmptyState('#my-empty', {
+  variant:     'error',    // error state / estado de error
+  title:       'Something went wrong',
+  description: 'We could not load the data.',
+  action:      'Try again',
+  onAction:    (e) => reload(),
+});
+
+new MTS.EmptyState('#my-empty', {
+  variant:     'permissions',  // no access / sin acceso
+  title:       'Access restricted',
+  description: 'Contact your administrator.',
+});
+
+// Custom icon / Ícono personalizado
+new MTS.EmptyState('#my-empty', {
+  variant:     'custom',
+  icon:        '<svg>...</svg>',
+  title:       'No messages',
+  description: 'Start a conversation.',
+  action:      'New message',
+  onAction:    (e) => openChat(),
+});
+
+// Small size / Tamaño pequeño
+new MTS.EmptyState('#my-empty', {
+  variant: 'no-data',
+  size:    'sm',
+});
+```
+
+---
+
+## API
+
+```js
+const es = new MTS.EmptyState('#my-empty', { variant: 'no-data' });
+
+// Update any option and re-render / Actualizar cualquier opción y re-renderizar
+es.update({
+  variant:     'search',
+  title:       'No results for "xyz"',
+  description: 'Try different keywords.',
+})
+
+// Register / remove listeners / Registrar / eliminar listeners
+es.on('action', (e) => console.log('CTA clicked'))
+es.off('action', handler)
+```
+
+---
+
+## DOM Event / Evento DOM
+
+```js
+document.getElementById('my-empty')
+  .addEventListener('mts:emptystate:action', () => console.log('action clicked'));
+```
+
+---
+
 ## Changelog
-| Versión | Descripción |
+
+| Version | Description |
 |---------|-------------|
-| 1.0.0 | Release inicial — 4 variantes con ilustraciones SVG propias |
+| 1.1.0 | [EN] `onAction` normalized to `.on()`, bilingual docs / [ES] Normalizado a `.on()`, docs bilingüe |
+| 1.0.0 | [EN] Initial release — no-data/search/error/permissions/custom, sizes / [ES] Versión inicial |

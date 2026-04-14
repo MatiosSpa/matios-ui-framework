@@ -1,0 +1,51 @@
+/* ============================================================
+   MATIOS UI — matios-ui-radio.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-radio-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+  cursor: pointer;
+}
+
+.mts-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-2);
+}
+.mts-radio-group--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--mts-space-4);
+}
+
+.mts-radio {
+  appearance: none; -webkit-appearance: none;
+  width: 17px; height: 17px; flex-shrink: 0;
+  border-radius: var(--mts-radius-full);
+  border: 2px solid var(--mts-border-color-strong);
+  background: var(--mts-bg-surface);
+  cursor: pointer;
+  transition: background var(--mts-transition-fast), border-color var(--mts-transition-fast);
+  position: relative;
+}
+.mts-radio:hover           { border-color: var(--mts-color-primary); }
+.mts-radio:checked         { background: var(--mts-color-primary); border-color: var(--mts-color-primary); }
+.mts-radio:checked::after  {
+  content: '';
+  position: absolute; top: 3px; left: 3px;
+  width: 7px; height: 7px;
+  background: #fff;
+  border-radius: 50%;
+}
+.mts-radio:disabled        { opacity: 0.5; cursor: not-allowed; }
+.mts-radio:focus           { outline: none; box-shadow: 0 0 0 3px var(--mts-color-primary-light); }
+
+.mts-radio__label {
+  font-size: var(--mts-font-size-md);
+  color: var(--mts-text-primary);
+  cursor: pointer;
+  user-select: none;
+}

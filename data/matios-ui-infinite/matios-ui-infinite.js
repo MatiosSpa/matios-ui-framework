@@ -46,8 +46,12 @@ MTS.Infinite = class MtsInfinite {
     if (!this._el) { console.error('[MTS.Infinite] No encontrado:', selector); return; }
 
     /* Opciones */
-    this._onLoadMore  = options.onLoadMore  || null;
-    this._renderItem  = options.renderItem  || null;
+    // Data loader — async ({ page, pageSize }) => { items, hasMore } — not an event, required
+    // Cargador de datos — no es un evento, es requerido
+    this._onLoadMore = options.onLoadMore || null;
+
+    // Item renderer: (item, index) => HTMLString | HTMLElement / Renderizador de ítems
+    this._renderItem = options.renderItem || null;
     this.pageSize     = options.pageSize    ?? 20;
     this.layout       = options.layout      || 'vertical';
     this.threshold    = options.threshold   ?? 0.1;
@@ -55,9 +59,14 @@ MTS.Infinite = class MtsInfinite {
     this.endText      = options.endText     || 'No hay más resultados';
     this.animate      = options.animate     ?? true;
     this.emptyState   = options.emptyState  || { icon: '📭', title: 'Sin resultados', message: '' };
-    this._onLoad      = options.onLoad      || null;
-    this._onError     = options.onError     || null;
-    this._onEnd       = options.onEnd       || null;
+    // Fires after each load: ({ items, page }) => {} / Se dispara tras cada carga
+    if (options.onLoad)  this.on('load',  options.onLoad);
+
+    // Fires on load error: ({ error }) => {} / Se dispara al ocurrir un error
+    if (options.onError) this.on('error', options.onError);
+
+    // Fires when all data is loaded / Se dispara al cargar todos los datos
+    if (options.onEnd)   this.on('end',   options.onEnd);
 
     /* Estado */
     this._page        = 1;
@@ -224,17 +233,16 @@ MTS.Infinite = class MtsInfinite {
       if (!hasMore) {
         this._observer?.unobserve(this._sentinelEl);
         if (this._totalLoaded > 0) this._showEnd();
-        this._onEnd?.();
         this._emit('end', { total: this._totalLoaded });
       }
 
-      this._onLoad?.(items, this._page - 1);
+      this._emit('load', { items, page: this._page - 1 });
       this._emit('load', { items, page: this._page - 1, total: this._totalLoaded });
 
     } catch (err) {
       console.error('[MTS.Infinite] onLoadMore error:', err);
       this._showError(err?.message || 'Error al cargar datos');
-      this._onError?.(err);
+      this._emit('error', { error: err });
       this._emit('error', { error: err });
     } finally {
       this._loading = false;

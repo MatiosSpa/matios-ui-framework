@@ -1,104 +1,148 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="es" data-mts-mode="dark">
 <head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.ColorPicker — Demo</title>
-  <script>(function(){var m=(location.hash||"").match(/mts-theme=([a-z-]+)/);if(m)document.documentElement.setAttribute("data-mts-theme",m[1]);try{var p=window.parent;if(p&&p!==window){var pt=p.currentThemeVal||p.document.documentElement.getAttribute("data-mts-theme");if(pt)document.documentElement.setAttribute("data-mts-theme",pt);}}catch(e){}}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
-  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../shared/demo-shared.css">
   <link rel="stylesheet" href="./matios-ui-colorpicker.css">
-  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../shared/demo-shared.js"></script>
   <script src="./matios-ui-colorpicker.js"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
-    .demo-section{display:flex;flex-direction:column;gap:14px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;}
-    .demo-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;}
-    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
-    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
-    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
-    .demo-docs-panel.open{display:block;}
-    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
-    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
-    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
-    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
-    .demo-docs-panel pre code{background:none;border:none;padding:0;color:var(--mts-text-primary);}
-    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
-    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel ul,p{margin:0 0 10px;padding-left:18px;}
-    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-    .color-preview{width:100%;height:80px;border-radius:var(--mts-radius-lg);border:1px solid var(--mts-border-color);transition:background .2s;}
-  </style>
 </head>
 <body>
 <div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
-  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
+  <button class="demo-btn-sm demo-btn-sep">—</button>
+  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.ColorPicker</h1>
-    <p>Selector de color con sliders HSL, paleta de presets y formatos hex/rgb/hsl.</p>
-    <div style="display:flex;gap:8px;"><button class="demo-docs-btn" onclick="toggleDocs('dp','./matios-ui-colorpicker.md')">📄 Documentación</button></div>
-    <div class="demo-docs-panel" id="dp"></div>
+    <p>Standalone color picker — HSL sliders, preset palette, hex/rgb/hsl output.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-colorpicker.md')">📄 Docs</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
+  <!-- 1. Trigger — popup -->
   <div class="demo-section">
-    <div class="demo-section-title">1 — Trigger (popup) — tamaños</div>
+    <div class="demo-section-title">1 — Trigger (popup) — tamaños / sizes</div>
     <div class="demo-grid">
       <div id="cp-sm"></div>
       <div id="cp-md"></div>
       <div id="cp-lg"></div>
     </div>
-    <div id="color-preview" class="color-preview" style="background:#4f8eff;"></div>
-    <div class="result-box" id="res-cp">— elige un color —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c1"><code>new MTS.ColorPicker('#el', {
-  label:   'Color principal',
-  value:   '#4f8eff',
-  format:  'hex',  // 'hex' | 'rgb' | 'hsl'
-  onChange: ({ hex, value }) => {
-    console.log(hex, value)
-  },
-})</code></pre>
+    <div class="result-box" id="cp-result">— selecciona un color —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-cp1','js-cp1')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-cp1','html-cp1')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-cp1">&lt;div id="picker-brand"
+  data-value="#7c3aed"
+  data-label="Brand color"
+  data-format="hex"&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+  new MTS.ColorPicker('#picker-brand', {
+    // Fires when color changes / Se dispara al cambiar el color
+    onChange: ({ hex, value }) =&gt; {
+      console.log(hex);   // → '#7c3aed' (always hex)
+      console.log(value); // → formatted value
+    },
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-cp1">// Small / Pequeño
+new MTS.ColorPicker('#cp-sm', {
+  value:  '#f87171',
+  label:  'Color (sm)',
+  size:   'sm',
+  format: 'hex',
+  // Fires on color change / Se dispara al cambiar el color
+  onChange: ({ hex, value }) => console.log(hex),
+});
+
+// Medium (default) / Mediano
+new MTS.ColorPicker('#cp-md', {
+  value:  '#4f8eff',
+  label:  'Color (md)',
+  size:   'md',
+  onChange: ({ hex }) => console.log(hex),
+});
+
+// Large / Grande
+new MTS.ColorPicker('#cp-lg', {
+  value:  '#34d399',
+  label:  'Color (lg)',
+  size:   'lg',
+  onChange: ({ hex }) => console.log(hex),
+});</div>
   </div>
 
+  <!-- 2. Inline -->
   <div class="demo-section">
-    <div class="demo-section-title">2 — Inline (siempre visible)</div>
-    <div style="max-width:260px;">
+    <div class="demo-section-title">2 — Inline (siempre visible / always visible)</div>
+    <div style="max-width:320px">
       <div id="cp-inline"></div>
     </div>
-    <div class="result-box" id="res-inline">— mueve los sliders —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c2"><code>new MTS.ColorPicker('#el', {
-  inline:  true,
-  value:   '#34d399',
-  onChange: ({ hex, value }) => {},
-})</code></pre>
+    <div class="result-box" id="cp-inline-result">— mueve los sliders —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-cp2','js-cp2')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-cp2','html-cp2')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-cp2">&lt;!-- inline: true — no trigger button / sin botón trigger --&gt;
+&lt;div id="picker-inline" data-inline data-value="#34d399"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  new MTS.ColorPicker('#picker-inline', {
+    onChange: ({ hex }) =&gt; {
+      document.getElementById('preview').style.background = hex;
+    },
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-cp2">new MTS.ColorPicker('#picker-inline', {
+  // Always visible, no trigger / Siempre visible, sin trigger
+  inline: true,
+  value:  '#34d399',
+  format: 'hex',
+  onChange: ({ hex, value }) => {
+    console.log(hex, value);
+  },
+});</div>
   </div>
 
+  <!-- 3. Formatos + API -->
   <div class="demo-section">
     <div class="demo-section-title">3 — Formatos hex · rgb · hsl + API</div>
     <div class="demo-grid">
@@ -106,24 +150,55 @@
       <div id="cp-rgb"></div>
       <div id="cp-hsl"></div>
     </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
-      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="cpApi.setValue('#f87171')">setValue('#f87171')</button>
-      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="cpApi.setValue('#34d399')">setValue('#34d399')</button>
-      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="alert('getHex(): '+cpApi.getHex())">getHex()</button>
+    <div class="demo-row" style="margin-top:8px">
+      <button class="demo-btn-sm" onclick="document.getElementById('cp-api-result').textContent = 'getValue() → ' + cpApi.getValue()">getValue()</button>
+      <button class="demo-btn-sm" onclick="document.getElementById('cp-api-result').textContent = 'getHex() → ' + cpApi.getHex()">getHex()</button>
+      <button class="demo-btn-sm" onclick="cpApi.setValue('#f87171'); document.getElementById('cp-api-result').textContent = 'setValue(#f87171) ✓'">setValue()</button>
+      <button class="demo-btn-sm" onclick="cpApi.open()">open()</button>
+      <button class="demo-btn-sm" onclick="cpApi.close()">close()</button>
     </div>
-    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c3"><code>new MTS.ColorPicker('#el', { format:'hex' })  // → '#4f8eff'
-new MTS.ColorPicker('#el', { format:'rgb' })  // → 'rgb(79, 142, 255)'
-new MTS.ColorPicker('#el', { format:'hsl' })  // → 'hsl(221, 100%, 65%)'
+    <div class="result-box" id="cp-api-result">— usa los botones —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-cp3','js-cp3')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-cp3','html-cp3')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-cp3">&lt;div id="picker-brand" data-value="#4f8eff" data-format="hex"&gt;&lt;/div&gt;
 
-const cp = new MTS.ColorPicker('#el', { value:'#4f8eff' })
-cp.getValue()           // según format actual
-cp.getHex()             // siempre hex
-cp.setValue('#ff0000')
+&lt;script&gt;
+  const cp = new MTS.ColorPicker('#picker-brand', {
+    onChange: ({ hex, value }) =&gt; console.log(hex, value),
+  });
+  cp.getValue()         // respects format / respeta format
+  cp.getHex()           // always hex / siempre hex
+  cp.setValue('#00ff00')
+  cp.setFormat('rgb')
+  cp.open() / cp.close()
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-cp3">// Format: 'hex' | 'rgb' | 'hsl'
+new MTS.ColorPicker('#cp-hex', { value:'#4f8eff', label:'HEX', format:'hex', onChange: ({value}) => console.log(value) });
+new MTS.ColorPicker('#cp-rgb', { value:'#4f8eff', label:'RGB', format:'rgb', onChange: ({value}) => console.log(value) });
+new MTS.ColorPicker('#cp-hsl', { value:'#4f8eff', label:'HSL', format:'hsl', onChange: ({value}) => console.log(value) });
+
+const cp = new MTS.ColorPicker('#my-picker', { value: '#4f8eff', format: 'hex' });
+
+// Get value respecting format / Obtener valor respetando formato
+cp.getValue()          // → '#4f8eff' | 'rgb(79,142,255)' | 'hsl(218,100%,66%)'
+
+// Always get hex / Siempre obtener hex
+cp.getHex()            // → '#4f8eff'
+
+// Set color / Establecer color
+cp.setValue('#f87171')
+
+// Change output format / Cambiar formato de salida
 cp.setFormat('rgb')
-cp.open() / cp.close()</code></pre>
+
+// Open / close / Abrir / cerrar
+cp.open()
+cp.close()</div>
   </div>
 
+  <!-- 4. Opciones avanzadas -->
   <div class="demo-section">
     <div class="demo-section-title">4 — Sin sliders · sin presets · disabled</div>
     <div class="demo-grid">
@@ -131,46 +206,65 @@ cp.open() / cp.close()</code></pre>
       <div id="cp-nopresets"></div>
       <div id="cp-disabled"></div>
     </div>
-    <button class="demo-code-toggle" onclick="toggleCode('c4')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c4"><code>new MTS.ColorPicker('#el', { showSliders:false, label:'Sin sliders' })
-new MTS.ColorPicker('#el', { showPresets:false, label:'Sin presets' })
-new MTS.ColorPicker('#el', { disabled:true,     label:'Deshabilitado', value:'#818cf8' })</code></pre>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-cp4','js-cp4')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-cp4','html-cp4')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-cp4">&lt;!-- Preset only / Solo presets --&gt;
+&lt;div id="picker-presets-only" data-value="#f87171"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.ColorPicker('#picker-presets-only', {
+    showSliders: false,
+    showInput:   false,
+  });
+&lt;/script&gt;
+
+&lt;!-- Sliders only / Solo sliders --&gt;
+&lt;div id="picker-sliders-only" data-value="#4f8eff"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.ColorPicker('#picker-sliders-only', {
+    showPresets: false,
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-cp4">// Preset palette only / Solo paleta de presets
+new MTS.ColorPicker('#cp-presets', {
+  showSliders: false,
+  showInput:   false,
+  value:       '#f87171',
+  label:       'Preset only',
+});
+
+// Sliders only / Solo sliders
+new MTS.ColorPicker('#cp-sliders', {
+  showPresets: false,
+  value:       '#4f8eff',
+  label:       'Sliders only',
+});
+
+// Disabled / Deshabilitado
+new MTS.ColorPicker('#cp-disabled', {
+  value:    '#94a3b8',
+  label:    'Disabled',
+  disabled: true,
+});</div>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-section-title">HTML declarativo</div>
-    <div id="chh1"></div>
-    <div class="result-box" id="chh-res">— selecciona color —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c-chh')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c-chh"><code>&lt;div id="miColor" data-value="#7c3aed" data-label="Color de marca" data-format="hex"&gt;&lt;/div&gt;
-&lt;script&gt;new MTS.ColorPicker('#miColor', { onChange: ({ hex }) =&gt; console.log(hex) })&lt;/script&gt;</code></pre>
-  </div>
 </div>
 
 <script>
-function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
-window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
-if(window!==window.top){document.querySelector('.demo-theme').style.display='none';}
-function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
-function toggleDocs(id,p){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted)">Cargando...</em>';fetch(p).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>Error.</em>';});}
-function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,function(_,hdr,rows){var ths=hdr.split('|').filter(function(c){return c.trim();}).map(function(c){return'<th>'+c.trim()+'</th>';}).join('');var trs=rows.trim().split('\n').map(function(r){return'<tr>'+r.split('|').filter(function(c){return c.trim();}).map(function(c){return'<td>'+c.trim()+'</td>';}).join('')+'</tr>';}).join('');return'<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';}).replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
-
-function onColorChange(v){
-  document.getElementById('res-cp').textContent='onChange → hex: '+v.hex+' | value: "'+v.value+'"';
-  document.getElementById('color-preview').style.background=v.hex;
-}
-new MTS.ColorPicker('#cp-sm',{label:'Tamaño SM',size:'sm',value:'#4f8eff',onChange:onColorChange});
-new MTS.ColorPicker('#cp-md',{label:'Tamaño MD',size:'md',value:'#f59e0b',onChange:onColorChange});
-new MTS.ColorPicker('#cp-lg',{label:'Tamaño LG',size:'lg',value:'#34d399',onChange:onColorChange});
-new MTS.ColorPicker('#cp-inline',{inline:true,value:'#34d399',onChange:function(v){document.getElementById('res-inline').textContent='onChange → hex: '+v.hex+' | value: "'+v.value+'"';}});
-new MTS.ColorPicker('#cp-hex',{label:'Formato HEX',format:'hex',value:'#818cf8'});
-var cpApi=new MTS.ColorPicker('#cp-rgb',{label:'Formato RGB + API',format:'rgb',value:'#818cf8'});
-new MTS.ColorPicker('#cp-hsl',{label:'Formato HSL',format:'hsl',value:'#818cf8'});
-new MTS.ColorPicker('#cp-nosliders',{label:'Sin sliders',showSliders:false,value:'#fb923c'});
-new MTS.ColorPicker('#cp-nopresets',{label:'Sin presets',showPresets:false,value:'#38bdf8'});
-new MTS.ColorPicker('#cp-disabled',{label:'Deshabilitado',disabled:true,value:'#818cf8'});
-
-new MTS.ColorPicker(document.getElementById('chh1'),{value:'#7c3aed',label:'Color de marca',format:'hex',onChange:function(d){document.getElementById('chh-res').textContent='→ onChange: '+d.hex;}});
+var onChange = function(d){ document.getElementById('cp-result').textContent = 'onChange → hex: ' + d.hex + ' | value: ' + d.value; };
+new MTS.ColorPicker('#cp-sm', { value:'#f87171', label:'Small (sm)',   size:'sm', onChange: onChange });
+new MTS.ColorPicker('#cp-md', { value:'#4f8eff', label:'Medium (md)',  size:'md', onChange: onChange });
+new MTS.ColorPicker('#cp-lg', { value:'#34d399', label:'Large (lg)',   size:'lg', onChange: onChange });
+new MTS.ColorPicker('#cp-inline', { inline:true, value:'#34d399', format:'hex',
+  onChange: function(d){ document.getElementById('cp-inline-result').textContent = 'onChange → ' + d.hex; }
+});
+new MTS.ColorPicker('#cp-hex', { value:'#4f8eff', label:'Format: HEX', format:'hex' });
+new MTS.ColorPicker('#cp-rgb', { value:'#4f8eff', label:'Format: RGB', format:'rgb' });
+var cpApi = new MTS.ColorPicker('#cp-hsl', { value:'#4f8eff', label:'Format: HSL', format:'hsl' });
+new MTS.ColorPicker('#cp-nosliders', { value:'#f87171', label:'Sin sliders', showSliders:false, showInput:false });
+new MTS.ColorPicker('#cp-nopresets', { value:'#4f8eff', label:'Sin presets', showPresets:false });
+new MTS.ColorPicker('#cp-disabled',  { value:'#94a3b8', label:'Disabled',    disabled:true });
 </script>
 </body>
 </html>

@@ -41,12 +41,17 @@ MTS.SortableList = class MtsSortableList {
     this.locked      = options.locked      ?? false;
     this.moveButtons = options.moveButtons ?? false;
 
-    this._listeners  = {};
-    this._dragItem   = null;
+    this._listeners   = {};
+    this._dragItem    = null;
     this._dragFromIdx = null;
 
+    // Fires when items are reordered: ({ items, fromIndex, toIndex }) => {}
+    // Se dispara al reordenar los ítems
     if (options.onReorder)   this.on('reorder',   options.onReorder);
-    if (options.onItemClick) this.on('itemClick',  options.onItemClick);
+
+    // Fires when an item is clicked: ({ item, index }) => {}
+    // Se dispara al hacer click en un ítem
+    if (options.onItemClick) this.on('itemClick', options.onItemClick);
 
     this._build();
   }

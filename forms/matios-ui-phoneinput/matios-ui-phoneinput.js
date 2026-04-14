@@ -66,10 +66,18 @@ MTS.PhoneInput = class MtsPhoneInput {
     this.hint         = options.hint        || '';
     this.disabled     = options.disabled    ?? false;
     this.size         = options.size        || 'md';
-    this._onChange    = options.onChange    || null;
-    this._onCountry   = options.onCountryChange || null;
-    this._ddOpen      = false;
-    this._error       = '';
+    this._error     = '';
+    this._listeners = {};
+
+    // Fires when value changes: ({ raw, formatted, full, country }) => {}
+    // Se dispara al cambiar el valor
+    if (options.onChange)       this.on('change',  options.onChange);
+
+    // Fires when country changes: ({ country }) => {}
+    // Se dispara al cambiar el país
+    if (options.onCountryChange) this.on('country', options.onCountryChange);
+
+    this._ddOpen = false;
     this._build();
   }
 
@@ -78,6 +86,8 @@ MTS.PhoneInput = class MtsPhoneInput {
   setValue(v)        { this._raw = v.replace(/\D/g,''); if(this._input) this._input.value = this._format(this._raw); return this; }
   setCountry(code)   { this._countryCode = code; this._build(); return this; }
   setError(msg)      { this._error = msg; this._renderError(); return this; }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   clearError()       { this._error = ''; this._renderError(); return this; }
   disable()          { this.disabled = true;  this._build(); return this; }
   enable()           { this.disabled = false; this._build(); return this; }
@@ -152,7 +162,7 @@ MTS.PhoneInput = class MtsPhoneInput {
       input.value = formatted;
       // Restaurar cursor aproximado
       try { input.setSelectionRange(cursor, cursor); } catch(e){}
-      if (this._onChange) this._onChange(this.getValue());
+      this._emit('change', this.getValue());
     });
     input.addEventListener('focus', () => wrap.classList.add('mts-phoneinput__wrap--focus'));
     input.addEventListener('blur',  () => wrap.classList.remove('mts-phoneinput__wrap--focus'));
@@ -216,8 +226,8 @@ MTS.PhoneInput = class MtsPhoneInput {
         this._closeDd();
         this._build();
         setTimeout(() => this._input?.focus(), 50);
-        if (this._onCountry) this._onCountry({ country: c });
-        if (this._onChange)  this._onChange(this.getValue());
+        this._emit('country', { country: c });
+        this._emit('change', this.getValue());
       });
       list.appendChild(li);
     });
@@ -241,5 +251,9 @@ MTS.PhoneInput = class MtsPhoneInput {
     this._errorEl.textContent = this._error;
     this._errorEl.style.display = this._error ? 'block' : 'none';
     this._wrap?.classList.toggle('mts-phoneinput__wrap--error', !!this._error);
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:phoneinput:${event}`, { bubbles: true, detail }));
   }
 };

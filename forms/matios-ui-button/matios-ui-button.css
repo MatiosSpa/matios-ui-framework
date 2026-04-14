@@ -193,3 +193,105 @@
 .mts-btn--shadow.mts-btn--ring.mts-btn--ghost:hover { box-shadow: var(--mts-btn-shadow-primary), var(--mts-btn-ring-primary), 0 2px 6px rgba(0,0,0,.15); transform: translateY(-1px); }
 .mts-btn--shadow.mts-btn--ring.mts-btn--secondary:active,
 .mts-btn--shadow.mts-btn--ring.mts-btn--ghost:active { box-shadow: var(--mts-btn-ring-primary); transform: translateY(0); }
+
+/* ── MTS.MenuButton / MTS.SplitButton ────────────────────── */
+
+/* Contenedor relativo para posicionar el menú */
+.mts-menu-wrap,
+.mts-split-wrap {
+  position: relative;
+  display:  inline-flex;
+}
+
+/* Split: botón principal sin borde derecho y radio derecho plano */
+.mts-split-wrap > button:first-child .mts-btn,
+.mts-split-wrap > button:first-child {
+  border-radius: var(--mts-radius-md) 0 0 var(--mts-radius-md) !important;
+  border-right-width: 0 !important;
+}
+
+/* Split: botón flecha sin borde izquierdo y radio izquierdo plano */
+.mts-split-wrap > button:nth-child(2) .mts-btn,
+.mts-split-wrap > button:nth-child(2) {
+  border-radius: 0 var(--mts-radius-md) var(--mts-radius-md) 0 !important;
+}
+
+/* Separador visual entre botón principal y flecha */
+.mts-split-wrap > button:nth-child(2)::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 1px;
+  background: currentColor;
+  opacity: .25;
+  pointer-events: none;
+}
+
+/* Lista del menú */
+.mts-menu-list {
+  display:          none;
+  position:         absolute;
+  top:              calc(100% + 4px);
+  left:             0;
+  min-width:        160px;
+  background:       var(--mts-bg-surface);
+  border:           var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius:    var(--mts-radius-md);
+  box-shadow:       var(--mts-shadow-lg, 0 8px 24px rgba(0,0,0,.12));
+  padding:          4px;
+  z-index:          var(--mts-z-dropdown, 100);
+  animation:        mts-menu-in .12s ease;
+}
+
+.mts-menu-list--open  { display: block; }
+.mts-menu-list--right { left: auto; right: 0; }
+
+@keyframes mts-menu-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* Ítem del menú */
+.mts-menu-item {
+  display:       flex;
+  align-items:   center;
+  gap:           8px;
+  width:         100%;
+  padding:       7px 10px;
+  font-size:     var(--mts-font-size-sm);
+  font-family:   var(--mts-font-family);
+  font-weight:   var(--mts-font-weight-medium);
+  color:         var(--mts-text-secondary);
+  background:    none;
+  border:        none;
+  border-radius: var(--mts-radius-sm);
+  cursor:        pointer;
+  text-align:    left;
+  white-space:   nowrap;
+  transition:    background var(--mts-transition-fast), color var(--mts-transition-fast);
+}
+.mts-menu-item:hover {
+  background: var(--mts-bg-surface-2);
+  color:      var(--mts-text-primary);
+}
+.mts-menu-item:disabled {
+  opacity: .4;
+  cursor:  not-allowed;
+  pointer-events: none;
+}
+.mts-menu-item--danger       { color: var(--mts-color-danger); }
+.mts-menu-item--danger:hover { background: color-mix(in srgb, var(--mts-color-danger) 8%, transparent); }
+
+.mts-menu-item__icon {
+  display:     inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity:     .7;
+}
+
+/* Separador */
+.mts-menu-sep {
+  height:     1px;
+  background: var(--mts-border-color);
+  margin:     4px 0;
+}

@@ -1,131 +1,130 @@
-# matios-ui-copybutton
+# MTS.CopyButton
 
-Botón que copia texto al portapapeles con feedback visual automático.
+[EN] Copy-to-clipboard button with automatic visual feedback, target element support and custom icons.
+[ES] Botón de copiar al portapapeles con feedback visual automático, soporte de elemento objetivo e íconos personalizados.
 
 ---
 
-## Instalación
+## Installation / Instalación
 
 ```html
-<link rel="stylesheet" href="../../base/matios-ui-base.css">
-<link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+<link rel="stylesheet" href="matios-ui-base.css">
+<link rel="stylesheet" href="matios-ui-button.css">
 <link rel="stylesheet" href="matios-ui-copybutton.css">
+<script src="matios-ui-button.js"></script>
 <script src="matios-ui-copybutton.js"></script>
 ```
 
 ---
 
-## Uso básico
+## Options / Opciones
+
+| Option | Type | Default | [EN] Description / [ES] Descripción |
+|--------|------|---------|--------------------------------------|
+| `text` | `string` | `null` | [EN] Static text to copy / [ES] Texto estático a copiar |
+| `target` | `string\|Element` | `null` | [EN] Selector/element whose `value` or `textContent` to copy / [ES] Selector/elemento cuyo `value` o `textContent` copiar |
+| `label` | `string` | `'Copiar'` | [EN] Button label / [ES] Label del botón |
+| `labelCopied` | `string` | `'¡Copiado!'` | [EN] Label after copying / [ES] Label tras copiar |
+| `icon` | `string` | clipboard SVG | [EN] Default icon / [ES] Ícono por defecto |
+| `iconCopied` | `string` | check SVG | [EN] Icon after copying / [ES] Ícono tras copiar |
+| `variant` | `string` | `'secondary'` | [EN] Button variant / [ES] Variante del botón |
+| `size` | `string` | `''` | `'sm'` · `''` · `'lg'` |
+| `iconOnly` | `boolean` | `false` | [EN] Icon only, no label / [ES] Solo ícono, sin label |
+| `resetDelay` | `number` | `2000` | [EN] ms before resetting to initial state / [ES] ms antes de resetear al estado inicial |
+| `onCopy` | `function` | — | [EN] Fires after copying: `(text) => {}` / [ES] Se dispara tras copiar |
+
+---
+
+## Events / Eventos
+
+[EN] Use `onCopy` in the constructor. This is the recommended approach.
+[ES] Usa `onCopy` en el constructor. Este es el enfoque recomendado.
 
 ```js
-// Copiar texto fijo
-new MTS.CopyButton('#btn', {
+new MTS.CopyButton('#my-btn', {
   text: 'npm install matios-ui',
-})
-
-// Copiar desde un input
-new MTS.CopyButton('#btn', {
-  target: '#mi-input',
-})
-
-// Solo ícono
-new MTS.CopyButton('#btn', {
-  text:     'texto a copiar',
-  iconOnly: true,
-})
+  // Fires after successful copy / Se dispara tras una copia exitosa
+  onCopy: (text) => {
+    console.log('Copied:', text);
+  },
+});
 ```
 
 ---
 
-## Opciones
+## HTML Usage / Uso HTML
 
-| Propiedad | Tipo | Default | Descripción |
-|-----------|------|---------|-------------|
-| `text` | `string` | `null` | Texto a copiar directamente |
-| `target` | `string\|Element` | `null` | Selector/elemento cuyo `value` o `textContent` copiar |
-| `label` | `string` | `'Copiar'` | Texto del botón |
-| `labelCopied` | `string` | `'¡Copiado!'` | Texto tras copiar |
-| `icon` | `string` | SVG clipboard | Ícono SVG/emoji por defecto |
-| `iconCopied` | `string` | SVG check | Ícono SVG/emoji tras copiar |
-| `variant` | `string` | `'secondary'` | Variante del botón |
-| `size` | `string` | `''` | `'sm'` · `''` · `'lg'` |
-| `iconOnly` | `boolean` | `false` | Solo ícono, sin texto |
-| `resetDelay` | `number` | `2000` | ms para volver al estado inicial |
-| `onCopy` | `function` | `null` | `(text) => {}` — callback tras copiar |
+```html
+<!-- Static text / Texto estático -->
+<button id="btn-copy"
+  data-text="npm install matios-ui"
+  data-label="Copy"
+  data-variant="secondary">
+</button>
+<script>
+  new MTS.CopyButton('#btn-copy', {
+    onCopy: (text) => console.log('copied:', text),
+  });
+</script>
+
+<!-- Copy from input / Copiar desde un input -->
+<div style="display:flex;gap:4px;">
+  <input id="api-key" class="mts-input" value="sk-1234567890abcdef" readonly>
+  <button id="btn-key" data-icon-only data-variant="ghost"></button>
+</div>
+<script>
+  new MTS.CopyButton('#btn-key', {
+    target: '#api-key',
+  });
+</script>
+```
+
+---
+
+## JavaScript Usage / Uso JavaScript
+
+```js
+// Copy static text / Copiar texto estático
+const btn = new MTS.CopyButton('#my-btn', {
+  text:        'npm install matios-ui',
+  label:       'Copy',
+  labelCopied: 'Copied!',
+  variant:     'secondary',
+  resetDelay:  2000,
+  onCopy: (text) => console.log('copied:', text),
+});
+
+// Copy from another element / Copiar desde otro elemento
+new MTS.CopyButton('#btn-copy', {
+  target:   '#code-block',  // reads .value or .textContent
+  iconOnly: true,
+  size:     'sm',
+  variant:  'ghost',
+});
+```
 
 ---
 
 ## API
 
 ```js
-const btn = new MTS.CopyButton('#btn', { text: 'hola' })
+const btn = new MTS.CopyButton('#my-btn', { ... });
 
-btn.setText('nuevo texto')  // cambiar el texto a copiar
-btn.copy()                  // copiar programáticamente
-btn.destroy()               // destruir
+// Change text to copy at runtime / Cambiar texto a copiar en runtime
+btn.setText('new text to copy')
+
+// Trigger copy programmatically / Disparar copia programáticamente
+btn.copy()
+
+// Destroy / Destruir
+btn.destroy()
 ```
 
 ---
 
-## Patrones de uso
+## Changelog
 
-```html
-<!-- Inline con input — copy group -->
-<div class="mts-copy-group">
-  <input id="api-key" class="mts-input" value="sk-1234567890abcdef" readonly>
-  <button id="btn-copy"></button>
-</div>
-
-<script>
-new MTS.CopyButton('#btn-copy', {
-  target: '#api-key',
-  iconOnly: true,
-  variant: 'primary',
-})
-</script>
-
-<!-- Bloque de código con botón -->
-<div style="position:relative">
-  <pre id="code-block">npm install matios-ui</pre>
-  <button id="btn-code" style="position:absolute;top:8px;right:8px"></button>
-</div>
-
-<script>
-new MTS.CopyButton('#btn-code', {
-  target:   '#code-block',
-  iconOnly: true,
-  size:     'sm',
-  variant:  'ghost',
-})
-</script>
-```
-
----
-
-## HTML declarativo
-
-```html
-<!-- Texto fijo -->
-<button id="c1" data-text="npm install matios-ui" data-label="Copiar" data-variant="secondary"></button>
-
-<!-- Desde un input -->
-<input id="apiKey" value="sk-abc123" readonly>
-<button id="c2" data-target="#apiKey" data-icon-only data-variant="ghost"></button>
-
-<script>
-new MTS.CopyButton('#c1', { onCopy: (t) => console.log('copiado:', t) })
-new MTS.CopyButton('#c2')
-</script>
-```
-
-| Atributo | JS | Descripción |
-|----------|-----|-------------|
-| `data-text` | `text` | Texto a copiar |
-| `data-target` | `target` | Selector del elemento fuente |
-| `data-label` | `label` | |
-| `data-label-copied` | `labelCopied` | Texto tras copiar |
-| `data-variant` | `variant` | |
-| `data-size` | `size` | |
-| `data-icon-only` | `iconOnly` | (presencia activa) |
-| `data-reset-delay` | `resetDelay` | ms para resetear |
-
+| Version | Description |
+|---------|-------------|
+| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
+| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

@@ -26,12 +26,21 @@ MTS.TabBar = class MtsTabBar {
     if (_ds.showLabels !== undefined) _fromHTML.showLabels = true;
     options = { ..._fromHTML, ...options };
 
-    this.tabs       = options.tabs       || [];
-    this.active     = options.active     || (this.tabs[0]?.id ?? '');
-    this.variant    = options.variant    || 'default';
+    // Tab items: [{ id, label, icon, badge? }] / Ítems del tab bar
+    this.tabs = options.tabs || [];
+
+    // Initially active tab ID / ID del tab activo inicial
+    this.active = options.active || (this.tabs[0]?.id ?? '');
+
+    // Visual variant: 'default' | 'pill' | 'floating' / Variante visual
+    this.variant = options.variant || 'default';
+
+    // Show labels below icons / Mostrar labels bajo los íconos
     this.showLabels = options.showLabels ?? true;
-    this._onChange  = options.onChange   || null;
+
     this._listeners = {};
+
+    // Fires when active tab changes / Se dispara al cambiar el tab activo
     if (options.onChange) this.on('change', options.onChange);
     this._build();
   }

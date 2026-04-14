@@ -1,55 +1,63 @@
 /* ============================================================
    MATIOS UI — matios-ui-taginput.js
-   MTS.TagInput — Tags con sugerencias y debounce
-   Eventos DOM: mts:taginput:add | mts:taginput:remove | mts:taginput:change
-   Version: 1.0.0
+   MTS.TagInput — Tags with suggestions, debounce and object support
+   Version: 2.0.0
+
+   Tags are stored as objects: { uid, name }
+     uid  — unique identifier (email, id, uuid, etc.)
+     name — display text shown in the chip
+
+   Usage:
+     const ti = new MTS.TagInput('#el', {
+       label: 'Invitados',
+       onSearch: async (q) => {
+         const res = await fetch('/api/users?q=' + q);
+         return res.json(); // [{ uid, name }, ...]
+       },
+       onChange: (e) => console.log(e.detail.tags), // [{ uid, name }, ...]
+     });
+
+     ti.getTags();           // → [{ uid, name }, ...]
+     ti.setTags([{ uid: 'abc@x.com', name: 'Ana López' }]);
    ============================================================ */
 
 window.MTS = window.MTS || {};
 
 MTS.TagInput = class MtsTagInput {
-  /**
-   * @param {string|Element} selector
-   * @param {object} options
-   * @param {Array}    options.tags          Tags iniciales
-   * @param {Array}    options.suggestions   Sugerencias [ string | { value, label } ]
-   * @param {string}   options.placeholder
-   * @param {string}   options.label
-   * @param {number}   options.maxTags
-   * @param {boolean}  options.allowDuplicates
-   * @param {boolean}  options.allowCustom   Permite tags no en suggestions
-   * @param {number}   options.debounce      ms para disparar onSearch
-   * @param {function} options.onSearch      (query) => {} — para búsqueda asíncrona
-   * @param {function} options.onChange
-   * @param {function} options.onAdd
-   * @param {function} options.onRemove
-   */
   constructor(selector, options = {}) {
-    this._el     = typeof selector === 'string' ? document.querySelector(selector) : selector;
+    this._el = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    /* ── data-* → inicialización HTML declarativa ── */
+
     const _ds = this._el?.dataset || {};
     const _fromHTML = {};
-    if (_ds.label !== undefined) _fromHTML.label = _ds.label;
-    if (_ds.placeholder !== undefined) _fromHTML.placeholder = _ds.placeholder;
-    if (_ds.maxTags !== undefined) _fromHTML.maxTags = parseInt(_ds.maxTags);
+    if (_ds.label           !== undefined) _fromHTML.label           = _ds.label;
+    if (_ds.placeholder     !== undefined) _fromHTML.placeholder     = _ds.placeholder;
+    if (_ds.maxTags         !== undefined) _fromHTML.maxTags         = parseInt(_ds.maxTags);
     if (_ds.allowDuplicates !== undefined) _fromHTML.allowDuplicates = true;
-    if (_ds.allowCustom !== undefined) _fromHTML.allowCustom = true;
-    if (_ds.disabled !== undefined) _fromHTML.disabled = true;
+    if (_ds.allowCustom     !== undefined) _fromHTML.allowCustom     = true;
+    if (_ds.disabled        !== undefined) _fromHTML.disabled        = true;
     options = { ..._fromHTML, ...options };
 
-    this.tags           = [...(options.tags || [])];
-    this.suggestions    = options.suggestions    || [];
-    this.placeholder    = options.placeholder    || 'Agregar...';
-    this.label          = options.label          || '';
-    this.maxTags        = options.maxTags        || null;
+    /* Tags: siempre array de { uid, name }
+       Acepta strings legacy → se normaliza a { uid: str, name: str } */
+    this.tags = (options.tags || []).map(t => this._normalize(t));
+
+    /* Sugerencias: [{ uid, name }] o strings */
+    this.suggestions = options.suggestions || [];
+
+    this.placeholder     = options.placeholder    || 'Agregar...';
+    this.label           = options.label          || '';
+    this.maxTags         = options.maxTags        || null;
     this.allowDuplicates = options.allowDuplicates ?? false;
-    this.allowCustom    = options.allowCustom    ?? true;
-    this.debounceMs     = options.debounce       ?? 300;
-    this.onSearch       = options.onSearch       || null;
+    this.allowCustom     = options.allowCustom    ?? true;
+    this.debounceMs      = options.debounce       ?? 300;
+
+    /* onSearch: async (query: string) => { uid, name }[]
+       Si se provee, reemplaza las suggestions estáticas */
+    this.onSearch = options.onSearch || null;
+
     this._listeners     = {};
     this._debounceTimer = null;
-    this._filtered      = [];
 
     if (options.onChange) this.on('change', options.onChange);
     if (options.onAdd)    this.on('add',    options.onAdd);
@@ -59,16 +67,51 @@ MTS.TagInput = class MtsTagInput {
     this._bindEvents();
   }
 
-  getTags()         { return [...this.tags]; }
-  setTags(tags)     { this.tags = [...tags]; this._renderTags(); return this; }
-  addTag(tag)       { this._addTag(tag); return this; }
-  removeTag(tag)    { this._removeTag(tag); return this; }
-  setSuggestions(s) { this.suggestions = s; this._renderSuggestions(this._inputEl?.value || ''); return this; }
-  on(e, cb)         { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
-  destroy()         { this._el.innerHTML = ''; }
+  /* ── Normalización interna ──────────────────────────────── */
+  _normalize(tag) {
+    if (typeof tag === 'string') return { uid: tag, name: tag };
+    /* Acepta { uid, name } o { value, label } (compatibilidad con Select) */
+    return {
+      uid:  tag.uid  ?? tag.value ?? tag.id ?? String(tag.name || tag.label || tag),
+      name: tag.name ?? tag.label ?? String(tag.uid || tag.value || tag),
+    };
+  }
 
+  /* ── API pública ────────────────────────────────────────── */
+
+  /* Retorna [{ uid, name }, ...] */
+  getTags() { return this.tags.map(t => ({ ...t })); }
+
+  /* Acepta [{ uid, name }] o strings */
+  setTags(tags) {
+    this.tags = (tags || []).map(t => this._normalize(t));
+    this._renderTags();
+    return this;
+  }
+
+  /* Agrega un tag — acepta { uid, name } o string */
+  addTag(tag) { this._addTag(this._normalize(tag)); return this; }
+
+  /* Elimina un tag por uid o por objeto { uid } */
+  removeTag(tag) {
+    const uid = typeof tag === 'string' ? tag : tag.uid;
+    this._removeByUid(uid);
+    return this;
+  }
+
+  /* Reemplaza las sugerencias */
+  setSuggestions(s) {
+    this.suggestions = s;
+    this._renderSuggestions(this._inputEl?.value || '');
+    return this;
+  }
+
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
+  destroy()  { this._el.innerHTML = ''; }
+
+  /* ── Build ──────────────────────────────────────────────── */
   _build() {
-    /* Si el padre ya es mts-form-group, actuar solo como wrapper del campo */
     const parentIsGroup = this._el.parentElement?.classList.contains('mts-form-group');
     if (parentIsGroup) {
       this._el.className = 'mts-taginput';
@@ -80,7 +123,7 @@ MTS.TagInput = class MtsTagInput {
     this._el.className = 'mts-form-group';
     if (this.label) {
       const lbl = document.createElement('label');
-      lbl.className = 'mts-label';
+      lbl.className   = 'mts-label';
       lbl.textContent = this.label;
       this._el.appendChild(lbl);
     }
@@ -101,8 +144,8 @@ MTS.TagInput = class MtsTagInput {
     this._tagsEl.className = 'mts-taginput__tags';
 
     this._inputEl = document.createElement('input');
-    this._inputEl.type = 'text';
-    this._inputEl.className = 'mts-taginput__input';
+    this._inputEl.type        = 'text';
+    this._inputEl.className   = 'mts-taginput__input';
     this._inputEl.placeholder = this.tags.length ? '' : this.placeholder;
 
     target.appendChild(this._tagsEl);
@@ -115,14 +158,18 @@ MTS.TagInput = class MtsTagInput {
     this._renderTags();
   }
 
+  /* ── Eventos ─────────────────────────────────────────────── */
   _bindEvents() {
     this._inputEl.addEventListener('keydown', (e) => {
       if ((e.key === 'Enter' || e.key === ',') && this._inputEl.value.trim()) {
         e.preventDefault();
-        if (this.allowCustom) this._addTag(this._inputEl.value.trim());
+        if (this.allowCustom) {
+          const val = this._inputEl.value.trim();
+          this._addTag({ uid: val, name: val });
+        }
       }
       if (e.key === 'Backspace' && !this._inputEl.value && this.tags.length) {
-        this._removeTag(this.tags[this.tags.length - 1]);
+        this._removeByUid(this.tags[this.tags.length - 1].uid);
       }
       if (e.key === 'Escape') this._closeDropdown();
     });
@@ -130,9 +177,12 @@ MTS.TagInput = class MtsTagInput {
     this._inputEl.addEventListener('input', () => {
       const q = this._inputEl.value;
       clearTimeout(this._debounceTimer);
-      this._debounceTimer = setTimeout(() => {
-        if (this.onSearch) this.onSearch(q);
-        else this._renderSuggestions(q);
+      this._debounceTimer = setTimeout(async () => {
+        if (this.onSearch) {
+          const results = await this.onSearch(q);
+          this.suggestions = (results || []).map(r => this._normalize(r));
+        }
+        this._renderSuggestions(q);
       }, this.debounceMs);
     });
 
@@ -143,36 +193,42 @@ MTS.TagInput = class MtsTagInput {
     (this._wrapEl || this._el).addEventListener('click', () => this._inputEl.focus());
   }
 
+  /* ── Internos ────────────────────────────────────────────── */
   _addTag(tag) {
     if (this.maxTags && this.tags.length >= this.maxTags) return;
-    if (!this.allowDuplicates && this.tags.includes(tag)) return;
-    if (!tag) return;
+    if (!tag?.name) return;
+    /* Deduplicación por uid */
+    if (!this.allowDuplicates && this.tags.some(t => t.uid === tag.uid)) return;
     this.tags.push(tag);
     this._inputEl.value = '';
     this._closeDropdown();
     this._renderTags();
-    this._emit('add',    { tag });
-    this._emit('change', { tags: [...this.tags] });
+    this._emit('add',    { tag: { ...tag } });
+    this._emit('change', { tags: this.getTags() });
   }
 
-  _removeTag(tag) {
-    const idx = this.tags.lastIndexOf(tag);
-    if (idx >= 0) this.tags.splice(idx, 1);
+  _removeByUid(uid) {
+    const idx = this.tags.findIndex(t => t.uid === uid);
+    if (idx < 0) return;
+    const tag = this.tags[idx];
+    this.tags.splice(idx, 1);
     this._renderTags();
-    this._emit('remove', { tag });
-    this._emit('change', { tags: [...this.tags] });
+    this._emit('remove', { tag: { ...tag } });
+    this._emit('change', { tags: this.getTags() });
   }
 
   _renderTags() {
     this._tagsEl.innerHTML = '';
     this.tags.forEach(tag => {
       const chip = document.createElement('span');
-      chip.className = 'mts-taginput__tag';
-      chip.textContent = tag;
+      chip.className   = 'mts-taginput__tag';
+      chip.textContent = tag.name;
+      chip.title       = tag.uid !== tag.name ? tag.uid : ''; /* tooltip con uid si difiere del name */
       const rm = document.createElement('button');
       rm.className = 'mts-taginput__tag-remove';
       rm.innerHTML = '&times;';
-      rm.addEventListener('mousedown', (e) => { e.preventDefault(); this._removeTag(tag); });
+      rm.setAttribute('aria-label', 'Eliminar ' + tag.name);
+      rm.addEventListener('mousedown', (e) => { e.preventDefault(); this._removeByUid(tag.uid); });
       chip.appendChild(rm);
       this._tagsEl.appendChild(chip);
     });
@@ -182,19 +238,36 @@ MTS.TagInput = class MtsTagInput {
   _renderSuggestions(q) {
     this._dropdownEl.innerHTML = '';
     if (!q) { this._closeDropdown(); return; }
-    const filtered = this.suggestions.filter(s => {
-      const label = typeof s === 'string' ? s : s.label;
-      return label.toLowerCase().includes(q.toLowerCase()) && !this.tags.includes(label);
-    });
+
+    const activeUids = new Set(this.tags.map(t => t.uid));
+    const filtered   = this.suggestions.filter(s =>
+      s.name.toLowerCase().includes(q.toLowerCase()) && !activeUids.has(s.uid)
+    );
+
     if (!filtered.length) { this._closeDropdown(); return; }
+
     filtered.slice(0, 8).forEach(s => {
-      const label = typeof s === 'string' ? s : s.label;
-      const item  = document.createElement('div');
+      const item = document.createElement('div');
       item.className = 'mts-taginput__suggestion';
-      item.textContent = label;
-      item.addEventListener('mousedown', (e) => { e.preventDefault(); this._addTag(label); });
+
+      /* Nombre principal */
+      const nameEl = document.createElement('span');
+      nameEl.className   = 'mts-taginput__suggestion-name';
+      nameEl.textContent = s.name;
+      item.appendChild(nameEl);
+
+      /* uid como hint si difiere del name */
+      if (s.uid !== s.name) {
+        const hintEl = document.createElement('span');
+        hintEl.className   = 'mts-taginput__suggestion-hint';
+        hintEl.textContent = s.uid;
+        item.appendChild(hintEl);
+      }
+
+      item.addEventListener('mousedown', (e) => { e.preventDefault(); this._addTag(s); });
       this._dropdownEl.appendChild(item);
     });
+
     this._dropdownEl.classList.add('mts-taginput__dropdown--open');
   }
 

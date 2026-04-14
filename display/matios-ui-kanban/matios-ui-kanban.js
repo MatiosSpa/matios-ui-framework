@@ -23,13 +23,25 @@ MTS.Kanban = class MtsKanban {
     if (!this._el) return;
     this.columns  = options.columns   || [];
     this.addCards = options.addCards  ?? false;
-    this.onMove   = options.onMove    || null;
-    this.onCardClick = options.onCardClick || null;
-    this.onAddCard   = options.onAddCard   || null;
+    this._listeners = {};
     this._dragCard        = null;
     this._dragCol         = null;
     this._listeners       = {};
+    // Async assignee search: (query) => items[] | Promise<items[]>
+    // Búsqueda async de asignados — debe retornar arreglo o Promesa
     this.onSearchAssignee = options.onSearchAssignee || null;
+
+    // Fires when a card is moved: ({ card, fromColId, toColId, position, newIndex }) => {}
+    // Se dispara al mover una tarjeta
+    if (options.onMove)      this.on('move',      options.onMove);
+
+    // Fires when a card is clicked: ({ card, colId }) => {}
+    // Se dispara al hacer click en una tarjeta
+    if (options.onCardClick) this.on('cardClick', options.onCardClick);
+
+    // Fires when a new card is added: ({ card, colId }) => {}
+    // Se dispara al agregar una nueva tarjeta
+    if (options.onAddCard)   this.on('cardAdd',   options.onAddCard);
     this._build();
   }
 
@@ -123,7 +135,6 @@ MTS.Kanban = class MtsKanban {
           if (fromCounter) fromCounter.textContent = fromCol.cards.length;
         }
         const position = newIndex + 1;
-        if (this.onMove) this.onMove(card, fromColId, toColId, position);
         this._emit('move', { card, fromColId, toColId, position, newIndex });
         this._emit('drop', { card, toColId, position });
       }
@@ -163,7 +174,7 @@ MTS.Kanban = class MtsKanban {
       document.body.style.cursor = '';
     });
 
-    if (this.onCardClick) el.addEventListener('click', () => { this.onCardClick(card, colId); this._emit('cardClick', { card, colId }); });
+    if (this._listeners['cardClick']?.length) el.addEventListener('click', () => { this._emit('cardClick', { card, colId }); });
 
     const title = document.createElement('div');
     title.className = 'mts-kanban__card-title';
@@ -366,7 +377,6 @@ MTS.Kanban = class MtsKanban {
       list.appendChild(this._buildCard(newCard, colId));
       const counter = colEl.querySelector('.mts-kanban__col-count');
       if (counter) counter.textContent = col ? col.cards.length : '';
-      if (this.onAddCard) this.onAddCard(newCard, colId);
       this._emit('cardAdd', { card: newCard, colId });
       form.remove();
       addBtn.style.display = '';

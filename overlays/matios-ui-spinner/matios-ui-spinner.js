@@ -31,11 +31,22 @@ MTS.Spinner = class MtsSpinner {
     if (_ds.color !== undefined) _fromHTML.color = _ds.color;
     options = { ..._fromHTML, ...options };
 
+    // Spinner variant: 'circle' | 'dots' | 'bars' | 'pulse' | 'ring'
+    // Variante del spinner
     this.variant = options.variant || 'circle';
-    this.size    = options.size    || 'md';
-    this.color   = options.color   || null;
-    this.label   = options.label   || '';
+
+    // Size: 'xs' | 'sm' | 'md' | 'lg' | 'xl' / Tamaño
+    this.size = options.size || 'md';
+
+    // Custom CSS color override / Override de color CSS
+    this.color = options.color || null;
+
+    // Text label below the spinner / Texto debajo del spinner
+    this.label = options.label || '';
+
+    // Full-screen overlay mode / Modo overlay pantalla completa
     this.overlay = options.overlay ?? false;
+
     this._build();
   }
 

@@ -1,19 +1,19 @@
 /* ============================================================
    MATIOS UI — matios-ui-picker-base.js  v2.0.0
-   MTS.Picker.Base — Clase base compartida por todos los pickers
-   No instanciar directamente. Usa MTS.Picker.Date, Time, etc.
+   MTS.DatePicker.Base — Clase base compartida por todos los pickers
+   No instanciar directamente. Usa MTS.DatePicker.Date, Time, etc.
    ============================================================ */
 
 window.MTS = window.MTS || {};
-MTS.Picker = MTS.Picker || {};
+MTS.DatePicker = MTS.DatePicker || {};
 
-MTS.Picker.Base = class MtsPickerBase {
+MTS.DatePicker.Base = class MtsDatePickerBase {
 
   constructor(selector, options = {}) {
     this._input = typeof selector === "string"
       ? document.querySelector(selector)
       : selector;
-    if (!this._input) { console.error("[MTS.Picker] No encontrado:", selector); return; }
+    if (!this._input) { console.error("[MTS.DatePicker] No encontrado:", selector); return; }
 
     this.locale       = options.locale      || "es-CL";
     this.minDate      = options.minDate     || null;
@@ -134,6 +134,7 @@ MTS.Picker.Base = class MtsPickerBase {
   _positionPopup() {
     const rect = this._wrapperEl.getBoundingClientRect();
     this._popupEl.style.position = "fixed";
+    this._popupEl.style.zIndex   = '9999';
     this._popupEl.style.left     = rect.left + "px";
     this._popupEl.style.top      = (rect.bottom + 6) + "px";
     this._popupEl.style.minWidth = Math.max(rect.width, 280) + "px";
@@ -543,3 +544,6 @@ MTS.Picker.Base = class MtsPickerBase {
     return !cancelled;
   }
 };
+
+/* Alias de compatibilidad / Compatibility alias */
+window.MTS.Picker = window.MTS.DatePicker;

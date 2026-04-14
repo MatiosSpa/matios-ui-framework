@@ -32,27 +32,63 @@ MTS.Card = class MtsCard {
       : selector;
     if (!this._el) { console.error('[MTS.Card] No encontrado:', selector); return; }
 
-    this.title       = options.title       ?? null;
-    this.subtitle    = options.subtitle    ?? null;
-    this.body        = options.body        ?? null;
-    this.image       = options.image       ?? null;
-    this.imageAlt    = options.imageAlt    ?? '';
-    this.imageRatio  = options.imageRatio  ?? 'default';
-    this.variant     = options.variant     ?? null;
-    this.size        = options.size        ?? '';
-    this.hoverable   = options.hoverable   ?? false;
-    this.clickable   = options.clickable   ?? false;
-    this.selected    = options.selected    ?? false;
-    this.horizontal  = options.horizontal  ?? false;
-    this.actions     = options.actions     ?? [];
-    this.footer      = options.footer      ?? [];
+    // Card header title / Título del header
+    this.title = options.title ?? null;
+
+    // Card subtitle / Subtítulo
+    this.subtitle = options.subtitle ?? null;
+
+    // Body HTML content / Contenido HTML del cuerpo
+    this.body = options.body ?? null;
+
+    // Cover image URL / URL de imagen de portada
+    this.image = options.image ?? null;
+
+    // Image alt text / Texto alternativo de la imagen
+    this.imageAlt = options.imageAlt ?? '';
+
+    // Image aspect ratio: 'default' | 'square' | 'wide' / Relación de aspecto de la imagen
+    this.imageRatio = options.imageRatio ?? 'default';
+
+    // Color variant: 'flat' | 'elevated' | 'outlined' | 'primary' | 'success' | 'warning' | 'danger'
+    // Variante de color
+    this.variant = options.variant ?? null;
+
+    // Size modifier: '' | 'sm' | 'lg' / Modificador de tamaño
+    this.size = options.size ?? '';
+
+    // Show hover effect / Mostrar efecto hover
+    this.hoverable = options.hoverable ?? false;
+
+    // Make card clickable / Hacer la card clickeable
+    this.clickable = options.clickable ?? false;
+
+    // Selected state / Estado seleccionado
+    this.selected = options.selected ?? false;
+
+    // Horizontal layout / Layout horizontal
+    this.horizontal = options.horizontal ?? false;
+
+    // Header action buttons: [{ label, icon, variant, onClick }] / Botones de acción en el header
+    this.actions = options.actions ?? [];
+
+    // Footer buttons: [{ label, icon, variant, onClick }] / Botones del footer
+    this.footer = options.footer ?? [];
+
+    // Footer alignment: 'start' | 'end' | 'between' | 'center' / Alineación del footer
     this.footerAlign = options.footerAlign ?? 'start';
-    this._onClick    = options.onClick     ?? null;
+
+    this._listeners = {};
+
+    // Fires when clickable card is clicked: (e, card) => {} / Se dispara al hacer click en la card clickeable
+    if (options.onClick) this.on('click', options.onClick);
 
     this._build();
   }
 
   /* ── API ──────────────────────────────────────────────── */
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   setSelected(v) {
     this.selected = v;
@@ -169,8 +205,12 @@ MTS.Card = class MtsCard {
     }
 
     /* Click */
-    if (this.clickable && this._onClick) {
-      this._el.addEventListener('click', (e) => this._onClick(e, this));
+    if (this.clickable) {
+      this._el.addEventListener('click', (e) => this._emit('click', { event: e, card: this }));
     }
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:card:${event}`, { bubbles: true, detail }));
   }
 };

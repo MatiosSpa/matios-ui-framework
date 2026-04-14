@@ -1,51 +1,63 @@
 /* ============================================================
    MATIOS UI — matios-ui-rating.js
-   MTS.Rating — Estrellas con hover y medio punto
-   Eventos DOM: mts:rating:change | mts:rating:hover
-   Version: 1.0.0
+   MTS.Rating — Star rating with hover and half-star support
+   Version: 1.1.0
    ============================================================ */
 
 window.MTS = window.MTS || {};
 
 MTS.Rating = class MtsRating {
-  /**
-   * @param {string|Element} selector
-   * @param {object} options
-   * @param {number}   options.value     Valor inicial (0-max)
-   * @param {number}   options.max       Máximo de estrellas — default: 5
-   * @param {boolean}  options.halfStars Permite medios puntos — default: false
-   * @param {boolean}  options.readonly
-   * @param {string}   options.size      'sm'|'md'|'lg'
-   * @param {function} options.onChange
-   */
   constructor(selector, options = {}) {
-    this._el      = typeof selector === 'string' ? document.querySelector(selector) : selector;
+    // Target container element / Elemento contenedor
+    this._el = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    /* ── data-* → inicialización HTML declarativa ── */
+
+    // Read data-* attributes for declarative HTML initialization
+    // Lee atributos data-* para inicialización HTML declarativa
     const _ds = this._el?.dataset || {};
     const _fromHTML = {};
-    if (_ds.value !== undefined) _fromHTML.value = parseFloat(_ds.value);
-    if (_ds.max !== undefined) _fromHTML.max = parseInt(_ds.max);
+    if (_ds.value    !== undefined) _fromHTML.value    = parseFloat(_ds.value);
+    if (_ds.max      !== undefined) _fromHTML.max      = parseInt(_ds.max);
     if (_ds.halfStars !== undefined) _fromHTML.halfStars = true;
     if (_ds.readonly !== undefined) _fromHTML.readonly = true;
-    if (_ds.size !== undefined) _fromHTML.size = _ds.size;
+    if (_ds.size     !== undefined) _fromHTML.size     = _ds.size;
     options = { ..._fromHTML, ...options };
 
-    this.value    = options.value     ?? 0;
-    this.max      = options.max       ?? 5;
+    // Initial rating value (0 to max) / Valor inicial (0 a max)
+    this.value = options.value ?? 0;
+
+    // Total number of stars / Total de estrellas
+    this.max = options.max ?? 5;
+
+    // Allow half-star ratings / Permitir valoraciones de medio punto
     this.halfStars = options.halfStars ?? false;
-    this.readonly = options.readonly  ?? false;
-    this.size     = options.size      || 'md';
-    this._hover   = null;
+
+    // Disables interaction, display only / Deshabilita interacción, solo display
+    this.readonly = options.readonly ?? false;
+
+    // Size variant: 'sm' | 'md' | 'lg' / Variante de tamaño
+    this.size = options.size || 'md';
+
+    this._hover     = null;
     this._listeners = {};
+
+    // Fires when rating value changes / Se dispara al cambiar el valor
     if (options.onChange) this.on('change', options.onChange);
+
     this._build();
   }
 
-  getValue()   { return this.value; }
-  setValue(v)  { this.value = Math.min(this.max, Math.max(0, v)); this._render(); return this; }
-  on(e, cb)    { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
-  destroy()    { this._el.innerHTML = ''; }
+  // Returns current rating value / Retorna el valor actual
+  getValue() { return this.value; }
+
+  // Sets rating value programmatically / Establece el valor programáticamente
+  setValue(v) { this.value = Math.min(this.max, Math.max(0, v)); this._render(); return this; }
+
+  // Registers an event listener / Registra un listener de evento
+  on(e, cb) { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+
+  // Destroys the component / Destruye el componente
+  destroy() { this._el.innerHTML = ''; }
 
   _build() {
     this._el.className = `mts-rating mts-rating--${this.size}${this.readonly ? ' mts-rating--readonly' : ''}`;
@@ -64,7 +76,9 @@ MTS.Rating = class MtsRating {
       star.setAttribute('type', 'button');
       if (this.readonly) { star.disabled = true; }
 
-      const fill = display >= i ? 'full' : display >= i - 0.5 && this.halfStars ? 'half' : 'empty';
+      const fill = display >= i ? 'full'
+        : display >= i - 0.5 && this.halfStars ? 'half'
+        : 'empty';
       star.classList.add(`mts-rating__star--${fill}`);
       star.innerHTML = this._starSVG(fill);
 
@@ -75,7 +89,7 @@ MTS.Rating = class MtsRating {
             const rect = star.getBoundingClientRect();
             val = e.clientX < rect.left + rect.width / 2 ? i - 0.5 : i;
           }
-          this.value = val;
+          this.value  = val;
           this._hover = null;
           this._render();
           this._emit('change', { value: this.value });

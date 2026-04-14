@@ -1,9 +1,9 @@
 /* ============================================================
    MATIOS UI — matios-ui-input.css
-   Version: 1.0.0
+   Version: 2.0.0
    ============================================================ */
 
-/* ── Elemento base ──────────────────────────────────────── */
+/* ── Base element / Elemento base ───────────────────────── */
 
 .mts-input,
 .mts-textarea {
@@ -45,15 +45,10 @@
   color: var(--mts-color-danger);
 }
 
-.mts-form-hint {
-  font-size: var(--mts-font-size-xs);
-  color: var(--mts-text-muted);
-}
+.mts-form-hint  { font-size: var(--mts-font-size-xs); color: var(--mts-text-muted); }
+.mts-form-error { font-size: var(--mts-font-size-xs); color: var(--mts-color-danger); }
 
-.mts-form-error {
-  font-size: var(--mts-font-size-xs);
-  color: var(--mts-color-danger);
-}
+/* ── Input wrap ─────────────────────────────────────────── */
 
 .mts-input-wrap {
   position: relative;
@@ -67,6 +62,7 @@
 .mts-input-wrap--icon-right .mts-input,
 .mts-input-wrap--icon-right .mts-textarea { padding-right: 38px; }
 
+/* Focus state / Estado focus */
 .mts-input-wrap--focus .mts-input,
 .mts-input-wrap--focus .mts-textarea {
   border-color: var(--mts-border-color-focus);
@@ -74,6 +70,7 @@
   outline: none;
 }
 
+/* Error state / Estado error */
 .mts-input-wrap--error .mts-input,
 .mts-input-wrap--error .mts-textarea {
   border-color: var(--mts-color-danger);
@@ -83,12 +80,58 @@
   box-shadow: 0 0 0 3px var(--mts-color-danger-light);
 }
 
+/* Success state / Estado success */
 .mts-input-wrap--success .mts-input,
 .mts-input-wrap--success .mts-textarea {
   border-color: var(--mts-color-success);
 }
 
-.mts-input-wrap--disabled { opacity: 0.5; pointer-events: none; }
+/* ── Disabled state / Estado disabled ───────────────────── */
+/*
+ * Uses --mts-text-disabled (defined in all themes) for consistent
+ * cross-theme appearance. The wrap loses opacity and pointer-events;
+ * the input itself also shows a visual cue via background + text color.
+ *
+ * Usa --mts-text-disabled (definido en todos los temas) para aspecto
+ * consistente entre temas. El wrap pierde opacidad y pointer-events;
+ * el input también muestra una señal visual via background + color de texto.
+ */
+.mts-input-wrap--disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.mts-input:disabled,
+.mts-textarea:disabled,
+.mts-input-wrap--disabled .mts-input,
+.mts-input-wrap--disabled .mts-textarea {
+  background-color: var(--mts-bg-surface-2);
+  color: var(--mts-text-disabled);
+  border-color: var(--mts-border-color);
+  cursor: not-allowed;
+  -webkit-text-fill-color: var(--mts-text-disabled); /* fix Safari opacity */
+}
+
+/* Disabled label also muted / Label también atenuado cuando disabled */
+.mts-input-wrap--disabled ~ .mts-label,
+.mts-form-group:has(.mts-input-wrap--disabled) .mts-label {
+  color: var(--mts-text-disabled);
+}
+
+/* ── Readonly state / Estado readonly ───────────────────── */
+/*
+ * Visually different from disabled: readable but not editable.
+ * Visualmente diferente al disabled: legible pero no editable.
+ */
+.mts-input:read-only:not(:disabled),
+.mts-textarea:read-only:not(:disabled) {
+  background-color: var(--mts-bg-surface-2);
+  color: var(--mts-text-secondary);
+  border-color: var(--mts-border-color);
+  cursor: default;
+}
+
+/* ── Icons ──────────────────────────────────────────────── */
 
 .mts-input__icon {
   position: absolute;
@@ -121,6 +164,8 @@
 .mts-input__clear:hover,
 .mts-input__eye:hover   { color: var(--mts-text-primary); }
 .mts-input__eye--active { color: var(--mts-color-primary); }
+
+/* ── Character counter ──────────────────────────────────── */
 
 .mts-input__count {
   font-size: var(--mts-font-size-xs);

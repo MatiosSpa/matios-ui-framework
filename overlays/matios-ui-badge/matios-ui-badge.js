@@ -60,16 +60,38 @@ MTS.Badge = class MtsBadge {
       return;
     }
 
-    this.label    = options.label    ?? this._el.textContent.trim();
-    this.count    = options.count    ?? null;
+    // Badge text label / Texto del badge
+    this.label = options.label ?? this._el.textContent.trim();
+
+    // Numeric count (shows formatted number) / Contador numérico
+    this.count = options.count ?? null;
+
+    // Max count before showing "99+" / Máximo antes de mostrar "99+"
     this.maxCount = options.maxCount ?? 99;
-    this.dot      = options.dot      ?? false;
-    this.variant  = options.variant  || 'default';
-    this.shape    = options.shape    || 'pill';
-    this.size     = options.size     || 'md';
+
+    // Show only a dot without text / Mostrar solo un punto sin texto
+    this.dot = options.dot ?? false;
+
+    // Visual variant: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'accent'
+    // Variante visual
+    this.variant = options.variant || 'default';
+
+    // Shape: 'pill' | 'square' | 'dot' / Forma
+    this.shape = options.shape || 'pill';
+
+    // Size: 'xs' | 'sm' | 'md' | 'lg' / Tamaño
+    this.size = options.size || 'md';
+
+    // Show remove button / Mostrar botón de remover
     this.removable = options.removable ?? false;
-    this.onRemove  = options.onRemove  || null;
-    this.pulse     = options.pulse     ?? false;
+
+    // Pulse animation (for notification dots) / Animación de pulso (para dots de notificación)
+    this.pulse = options.pulse ?? false;
+
+    this._listeners = {};
+
+    // Fires when remove button is clicked / Se dispara al hacer click en el botón de remover
+    if (options.onRemove) this.on('remove', options.onRemove);
 
     this._render();
   }
@@ -77,6 +99,9 @@ MTS.Badge = class MtsBadge {
   /* ============================================================
      API PÚBLICA
      ============================================================ */
+
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   /** Actualiza el contador */
   setCount(count) {
@@ -175,8 +200,8 @@ MTS.Badge = class MtsBadge {
       removeBtn.innerHTML = '&times;';
       removeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (this.onRemove) this.onRemove(this);
-        else this.destroy();
+        this._emit('remove', { badge: this });
+        this.destroy();
       });
       this._el.appendChild(removeBtn);
     }
@@ -207,5 +232,9 @@ MTS.Badge = class MtsBadge {
    */
   static html(label, variant = 'default', size = 'md', shape = 'pill') {
     return `<span class="mts-badge mts-badge--${variant} mts-badge--${size} mts-badge--${shape}">${label}</span>`;
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:badge:${event}`, { bubbles: true, detail }));
   }
 };

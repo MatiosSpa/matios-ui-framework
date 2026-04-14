@@ -1,10 +1,11 @@
-# matios-ui-modal
+# MTS.Modal
 
-Componente de diálogo / modal para Matios UI. Sin dependencias externas — reemplaza `bootstrap.Modal` con una API más limpia y eventos con namespace `mts:modal:*`.
+[EN] Full-featured dialog modal with sizes, scrollable body, footer buttons, focus trap and convenience helpers (confirm, alert, prompt).
+[ES] Modal de diálogo completo con tamaños, body scrolleable, botones del footer, trampa de foco y helpers de conveniencia (confirm, alert, prompt).
 
 ---
 
-## Instalación
+## Installation / Instalación
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -14,354 +15,171 @@ Componente de diálogo / modal para Matios UI. Sin dependencias externas — ree
 
 ---
 
-## Uso básico
+## Options / Opciones
+
+| Option | Type | Default | [EN] Description / [ES] Descripción |
+|--------|------|---------|--------------------------------------|
+| `title` | `string` | `''` | [EN] Modal header title / [ES] Título del header |
+| `body` | `string\|Element` | `''` | [EN] Body content / [ES] Contenido del body |
+| `footer` | `string\|Element` | `null` | [EN] Footer HTML (overrides buttons) / [ES] HTML del footer (sobreescribe buttons) |
+| `buttons` | `array` | `[]` | [EN] Footer buttons (see schema) / [ES] Botones del footer |
+| `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` · `'xl'` · `'fullscreen'` |
+| `closable` | `boolean` | `true` | [EN] Show × button and allow Esc / [ES] Mostrar botón × y permitir Esc |
+| `backdrop` | `boolean` | `true` | [EN] Click outside closes modal / [ES] Click fuera cierra el modal |
+| `scrollable` | `boolean` | `false` | [EN] Scrollable body / [ES] Body scrolleable |
+| `centered` | `boolean` | `true` | [EN] Vertically centered / [ES] Centrado verticalmente |
+| `static` | `boolean` | `false` | [EN] No close on Esc or backdrop / [ES] No cierra con Esc ni backdrop |
+| `onShow` | `function` | — | [EN] Fires before modal shows (return false to cancel) / [ES] Se dispara antes de mostrar |
+| `onShown` | `function` | — | [EN] Fires after modal is fully visible / [ES] Se dispara al estar completamente visible |
+| `onHide` | `function` | — | [EN] Fires before modal hides (return false to cancel) / [ES] Se dispara antes de ocultar |
+| `onHidden` | `function` | — | [EN] Fires after modal is fully hidden / [ES] Se dispara al estar completamente oculto |
+
+### Button schema / Esquema de botón
+
+| Property | Type | [EN] Description / [ES] Descripción |
+|----------|------|--------------------------------------|
+| `label` | `string` | [EN] Button text / [ES] Texto del botón |
+| `variant` | `string` | `'primary'` · `'secondary'` · `'ghost'` · `'danger'` |
+| `close` | `boolean` | [EN] Close modal on click / [ES] Cerrar modal al hacer click |
+| `disabled` | `boolean` | [EN] Disables the button / [ES] Deshabilita el botón |
+| `onClick` | `function` | [EN] Click handler / [ES] Handler de click |
+
+---
+
+## Events / Eventos
 
 ```js
 const modal = new MTS.Modal({
-  title: 'Crear carpeta',
-  body:  '<input type="text" class="mts-input" placeholder="Nombre de la carpeta">',
-  buttons: [
-    { label: 'Cancelar', variant: 'ghost',   close: true },
-    { label: 'Crear',    variant: 'primary',  close: true,
-      onClick: () => console.log('Crear!') },
-  ],
+  title: 'Confirm action',
+  body:  '<p>Are you sure?</p>',
+  // Fires before showing (return false to cancel) / Se dispara antes de mostrar
+  onShow:   () => console.log('about to show'),
+  // Fires after fully shown / Se dispara al estar completamente visible
+  onShown:  () => console.log('shown'),
+  // Fires before hiding / Se dispara antes de ocultar
+  onHide:   () => console.log('about to hide'),
+  // Fires after fully hidden / Se dispara al estar completamente oculto
+  onHidden: () => console.log('hidden'),
 });
+```
 
+---
+
+## JavaScript Usage / Uso JavaScript
+
+```js
+// Basic / Básico
+const modal = new MTS.Modal({
+  title: 'Edit user',
+  body:  '<div id="user-form"></div>',
+  size:  'md',
+  buttons: [
+    { label: 'Cancel', variant: 'ghost',   close: true },
+    { label: 'Save',   variant: 'primary', onClick: () => saveUser() },
+  ],
+  onShown:  () => initForm('#user-form'),
+  onHidden: () => console.log('closed'),
+});
 modal.show();
+
+// Large scrollable / Grande con scroll
+new MTS.Modal({
+  title:      'Terms of service',
+  body:       longContent,
+  size:       'lg',
+  scrollable: true,
+  buttons: [
+    { label: 'Accept', variant: 'primary', close: true },
+  ],
+}).show();
+
+// Static — user must click a button / Estático — usuario debe hacer click
+new MTS.Modal({
+  title:   'Required action',
+  body:    '<p>You must complete this step.</p>',
+  static:  true,
+  buttons: [
+    { label: 'Done', variant: 'primary', close: true },
+  ],
+}).show();
 ```
 
 ---
 
-## Configuración completa
+## Convenience Helpers / Helpers de conveniencia
 
 ```js
-const modal = new MTS.Modal({
+// Confirm dialog / Diálogo de confirmación
+MTS.Modal.confirm({
+  title:   'Delete record',
+  message: 'This action cannot be undone.',
+  confirm: 'Delete',
+  cancel:  'Cancel',
+  danger:  true,
+  onConfirm: () => deleteRecord(),
+  onCancel:  () => console.log('cancelled'),
+});
 
-  // — Identificación —
-  id:    'mi-modal',         // ID del elemento DOM (auto si no se provee)
+// Alert dialog / Diálogo de alerta
+MTS.Modal.alert({
+  title:   'Done',
+  message: 'The record was saved successfully.',
+  onClose: () => console.log('acknowledged'),
+});
 
-  // — Contenido —
-  title:   'Título del modal',
-  body:    '<p>Contenido HTML</p>',   // string HTML o Element del DOM
-  footer:  null,                      // HTML o Element custom en el footer
-
-  // — Botones del footer —
-  buttons: [
-    {
-      id:       'btn-cancel',        // ID opcional del botón
-      label:    'Cancelar',
-      variant:  'ghost',             // 'primary'|'secondary'|'ghost'|'danger'
-      close:    true,                // cierra el modal al hacer click
-      disabled: false,
-      onClick:  () => {},
-    },
-    {
-      id:      'btn-confirm',
-      label:   'Confirmar',
-      variant: 'primary',
-      close:   false,                // no cierra — control manual
-      onClick: () => {
-        // hacer algo...
-        modal.hide();
-      },
-    },
-  ],
-
-  // — Comportamiento —
-  size:       'md',     // 'sm'|'md'|'lg'|'xl'|'fullscreen'
-  closable:   true,     // muestra X y cierra con Esc
-  backdrop:   true,     // click fuera cierra
-  scrollable: false,    // body scrolleable en vez del viewport
-  centered:   true,     // centrado vertical
-  static:     false,    // true = no cierra con Esc ni backdrop
-
-  // — Eventos (alternativa a .on()) —
-  onShow:    (e) => {},
-  onShown:   (e) => {},
-  onHide:    (e) => {},
-  onHidden:  (e) => {},
+// Prompt dialog / Diálogo de prompt
+MTS.Modal.prompt({
+  title:       'Rename file',
+  placeholder: 'New name...',
+  value:       currentName,
+  onConfirm:   (value) => renameFile(value),
 });
 ```
 
 ---
 
-## API pública
+## API
 
 ```js
 const modal = new MTS.Modal({ ... });
 
-modal.show()                          // abre el modal
-modal.hide()                          // cierra el modal
-modal.toggle()                        // toggle open/close
-modal.destroy()                       // destruye instancia y DOM
+// Show / hide / toggle / Mostrar / ocultar / alternar
+modal.show()
+modal.hide()
+modal.toggle()
 
-modal.setTitle('<b>Nuevo título</b>') // actualiza el título
-modal.setBody('<p>Nuevo body</p>')    // actualiza el body
+// Update content at runtime / Actualizar contenido en runtime
+modal.setTitle('New title')
+modal.setBody('<p>New content</p>')
 
-modal.setButtonDisabled('btn-ok', true)          // deshabilita botón
-modal.setButtonLabel('btn-ok', 'Guardando...')   // cambia label
-modal.setButtonLoading('btn-ok', true)           // spinner en botón
+// Button state / Estado de botón
+modal.setButtonState('btn-save', { disabled: true, label: 'Saving...' })
 
-modal.isOpen                          // true/false — getter
-modal.element                         // el elemento DOM del modal
+// Register / remove listeners / Registrar / eliminar listeners
+modal.on('shown',  () => console.log('shown'))
+modal.on('hidden', () => console.log('hidden'))
+modal.off('shown', handler)
+
+// Destroy / Destruir
+modal.destroy()
 ```
 
 ---
 
-## Eventos
-
-Todos los eventos se emiten de dos formas simultáneas:
-
-### 1. API `.on()` — recomendado
+## DOM Events / Eventos DOM
 
 ```js
-modal.on('show',    (e) => console.log('abriendo'))
-modal.on('shown',   (e) => console.log('abierto'))
-modal.on('hide',    (e) => console.log('cerrando'))
-modal.on('hidden',  (e) => console.log('cerrado'))
-
-modal.off('shown', miCallback)  // remover listener
-```
-
-### 2. CustomEvent en el DOM — `mts:modal:[evento]`
-
-```js
-document.getElementById('mi-modal')
-  .addEventListener('mts:modal:shown', (e) => {
-    console.log('Modal abierto:', e.detail.modal)
-  })
-```
-
-### Cancelar apertura/cierre
-
-Los eventos `show` y `hide` son cancelables con `preventDefault()`:
-
-```js
-modal.on('hide', (e) => {
-  if (formularioSuciio) {
-    e.preventDefault()  // ← previene el cierre
-    // mostrar confirmación...
-  }
-})
-```
-
-### Tabla de eventos
-
-| Evento | Cuándo | Cancelable | Namespace DOM |
-|--------|--------|-----------|---------------|
-| `show` | Antes de abrir, animación no empezó | ✅ | `mts:modal:show` |
-| `shown` | Después de abrir, animación terminó | ❌ | `mts:modal:shown` |
-| `hide` | Antes de cerrar, animación no empezó | ✅ | `mts:modal:hide` |
-| `hidden` | Después de cerrar, animación terminó | ❌ | `mts:modal:hidden` |
-
----
-
-## Modales de conveniencia
-
-### `MTS.Modal.confirm()` — Confirmación
-
-Retorna una `Promise<boolean>`:
-
-```js
-const confirmado = await MTS.Modal.confirm({
-  title:        '¿Eliminar elementos?',
-  message:      'Esta acción no se puede deshacer.',
-  confirmLabel: 'Eliminar',
-  cancelLabel:  'Cancelar',
-  variant:      'danger',   // color del botón confirmar
-  size:         'sm',
-})
-
-if (confirmado) {
-  // eliminar...
-}
-```
-
-### `MTS.Modal.alert()` — Alerta simple
-
-```js
-await MTS.Modal.alert({
-  title:   'Operación exitosa',
-  message: 'La carpeta fue creada correctamente.',
-  label:   'Aceptar',
-})
-```
-
-### `MTS.Modal.prompt()` — Input de texto
-
-Retorna `Promise<string|null>` — `null` si cancela:
-
-```js
-const nombre = await MTS.Modal.prompt({
-  title:        'Renombrar archivo',
-  label:        'Nuevo nombre',
-  placeholder:  'Ingresa el nombre',
-  value:        item.fileName,
-  confirmLabel: 'Renombrar',
-  cancelLabel:  'Cancelar',
-})
-
-if (nombre !== null) {
-  // renombrar con `nombre`
-}
-```
-
----
-
-## Migración desde Bootstrap
-
-### Antes (Bootstrap)
-
-```js
-// En documentCreateFolderUI.js
-this.createFolderModal = new bootstrap.Modal(
-  document.getElementById('createFolderModal')
-)
-
-document.getElementById('createFolderModal')
-  .addEventListener('shown.bs.modal', () => {
-    document.getElementById('folderNameInput').focus()
-  })
-
-document.getElementById('createFolderModal')
-  .addEventListener('hidden.bs.modal', () => {
-    document.getElementById('folderNameInput').value = ''
-  })
-
-this.createFolderModal.show()
-this.createFolderModal.hide()
-```
-
-### Opción A — Migración completa (recomendada)
-
-```js
-// Sin HTML en el cshtml — modal 100% en JS
-this.createFolderModal = new MTS.Modal({
-  title:  'Crear nueva carpeta',
-  size:   'md',
-  static: true,
-  body: `
-    <div class="mts-form-group">
-      <label class="mts-label">Nombre de la carpeta</label>
-      <input id="folderNameInput" type="text"
-             class="mts-input" placeholder="Nombre" autocomplete="off">
-    </div>
-  `,
-  buttons: [
-    { label: 'Cancelar', variant: 'ghost',   close: true },
-    { id: 'btn-crear', label: 'Crear', variant: 'primary',
-      onClick: () => this.#crearCarpeta() },
-  ],
-  onShown:  () => document.getElementById('folderNameInput').focus(),
-  onHidden: () => document.getElementById('folderNameInput').value = '',
-})
-
-this.createFolderModal.show()
-this.createFolderModal.hide()
-```
-
-### Opción B — Migración mínima (envuelve HTML existente)
-
-Si no quieres tocar el HTML del cshtml todavía:
-
-```js
-// Envuelve el elemento Bootstrap existente
-this.createFolderModal = new MTS.Modal({
-  elementId: 'createFolderModal',   // ← ID del modal en el cshtml
-  size:      'md',
-  static:    true,
-})
-
-// Los eventos ahora usan la API MTS
-this.createFolderModal
-  .on('shown',  () => document.getElementById('folderNameInput').focus())
-  .on('hidden', () => document.getElementById('folderNameInput').value = '')
-
-this.createFolderModal.show()
-this.createFolderModal.hide()
-```
-
-### Tabla de equivalencias
-
-| Bootstrap | MTS.Modal |
-|-----------|-----------|
-| `new bootstrap.Modal(el)` | `new MTS.Modal({ elementId: 'id' })` |
-| `modal.show()` | `modal.show()` ✅ igual |
-| `modal.hide()` | `modal.hide()` ✅ igual |
-| `shown.bs.modal` | `mts:modal:shown` o `.on('shown', cb)` |
-| `hidden.bs.modal` | `mts:modal:hidden` o `.on('hidden', cb)` |
-| `data-bs-backdrop="static"` | `static: true` |
-| `data-bs-dismiss="modal"` | `close: true` en el botón |
-
----
-
-## Spinner en botón durante operación async
-
-```js
-const modal = new MTS.Modal({
-  title: 'Subir documento',
-  buttons: [
-    { label: 'Cancelar', variant: 'ghost', close: true },
-    {
-      id:      'btn-upload',
-      label:   'Subir',
-      variant: 'primary',
-      onClick: async () => {
-        modal.setButtonLoading('btn-upload', true)
-        try {
-          await uploadService.upload(files)
-          modal.hide()
-        } catch (err) {
-          await MTS.Modal.alert({ title: 'Error', message: err.message })
-        } finally {
-          modal.setButtonLoading('btn-upload', false)
-        }
-      }
-    },
-  ],
-})
+document.addEventListener('mts:modal:show',   (e) => {});
+document.addEventListener('mts:modal:shown',  (e) => {});
+document.addEventListener('mts:modal:hide',   (e) => {});
+document.addEventListener('mts:modal:hidden', (e) => {});
 ```
 
 ---
 
 ## Changelog
 
-| Versión | Descripción |
+| Version | Description |
 |---------|-------------|
-| 1.0.0 | Release inicial — Modal, confirm(), alert(), prompt(), eventos `mts:modal:*`, focus trap, backward compat Bootstrap |
-
----
-
-**Siguiente:** [`matios-ui-toast.md`](./matios-ui-toast.md) — Notificaciones flotantes con `mts:toast:*`.
-
----
-
-## Helpers estáticos — estilo callback
-
-```js
-// confirm — callback (recomendado)
-MTS.Modal.confirm({
-  title: '¿Eliminar?', message: 'Esta acción no se puede deshacer.',
-  variant: 'danger', confirmText: 'Eliminar', cancelText: 'Cancelar',
-  onConfirm: () => eliminar(),
-  onCancel:  () => console.log('cancelado'),
-})
-
-// confirm — Promise (también funciona)
-const ok = await MTS.Modal.confirm({ confirmText: 'Eliminar', variant: 'danger' })
-if (ok) eliminar()
-
-// alert — callback
-MTS.Modal.alert({
-  title: 'Guardado', message: 'Cambios guardados.',
-  onAccept: () => console.log('aceptado'),
-})
-
-// prompt — callback
-MTS.Modal.prompt({
-  title: 'Renombrar', placeholder: 'Nuevo nombre...',
-  onConfirm: (value) => renombrar(value),
-  onCancel:  () => console.log('cancelado'),
-})
-```
-
+| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingüe, docs estandarizados |
+| 1.0.0 | [EN] Initial release — sizes, buttons, confirm/alert/prompt helpers, focus trap / [ES] Versión inicial |

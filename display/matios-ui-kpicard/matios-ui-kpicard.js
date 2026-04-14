@@ -23,17 +23,41 @@ MTS.KPICard = class MtsKPICard {
   constructor(selector, options = {}) {
     this._el     = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    this.label      = options.label      || '';
-    this.value      = options.value      ?? 0;
-    this.unit       = options.unit       || '';
-    this.trend      = options.trend      ?? null;
+    // Metric label / Etiqueta de la métrica
+    this.label = options.label || '';
+
+    // Main value / Valor principal
+    this.value = options.value ?? 0;
+
+    // Unit suffix: %, $, km, etc. / Sufijo de unidad
+    this.unit = options.unit || '';
+
+    // Trend percentage (positive = up, negative = down) / Porcentaje de tendencia
+    this.trend = options.trend ?? null;
+
+    // Label next to the trend / Texto junto a la tendencia
     this.trendLabel = options.trendLabel || '';
-    this.sparkline  = options.sparkline  || [];
-    this.variant    = options.variant    || 'default';
-    this.icon       = options.icon       || null;
-    this.onClick    = options.onClick    || null;
+
+    // Sparkline data array / Array de datos para el mini gráfico
+    this.sparkline = options.sparkline || [];
+
+    // Color variant: 'default' | 'primary' | 'success' | 'warning' | 'danger'
+    // Variante de color
+    this.variant = options.variant || 'default';
+
+    // SVG icon string / String SVG del ícono
+    this.icon = options.icon || null;
+
+    this._listeners = {};
+
+    // Fires when KPI card is clicked / Se dispara al hacer click en la KPI card
+    if (options.onClick) this.on('click', options.onClick);
+
     this._build();
   }
+
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   update(opts = {}) {
     Object.assign(this, opts);
@@ -42,9 +66,9 @@ MTS.KPICard = class MtsKPICard {
   }
 
   _build() {
-    this._el.className = `mts-kpicard mts-kpicard--${this.variant}${this.onClick ? ' mts-kpicard--clickable' : ''}`;
+    this._el.className = `mts-kpicard mts-kpicard--${this.variant}${this._listeners['click']?.length ? ' mts-kpicard--clickable' : ''}`;
     this._el.innerHTML = '';
-    if (this.onClick) { this._el.style.cursor = 'pointer'; this._el.addEventListener('click', () => this.onClick(this), { once: true }); }
+    if (this._listeners['click']?.length) { this._el.style.cursor = 'pointer'; this._el.addEventListener('click', () => this._emit('click', { kpi: this })); }
 
     const header = document.createElement('div');
     header.className = 'mts-kpicard__header';
@@ -121,5 +145,9 @@ MTS.KPICard = class MtsKPICard {
     wrap.className = 'mts-kpicard__sparkline-wrap';
     wrap.appendChild(svg);
     return wrap;
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:kpicard:${event}`, { bubbles: true, detail }));
   }
 };

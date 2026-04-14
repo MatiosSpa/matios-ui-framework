@@ -24,14 +24,31 @@ MTS.Skeleton = class MtsSkeleton {
       ? document.querySelector(selector)
       : selector;
     if (!this._el) return;
-    this.variant   = options.variant   || 'text';
-    this.lines     = options.lines     ?? 3;
-    this.rows      = options.rows      ?? 4;
-    this.cols      = options.cols      ?? 4;
-    this.items     = options.items     ?? 3;
-    this.width     = options.width     || '100%';
-    this.height    = options.height    || null;
+    // Layout variant: 'text' | 'circle' | 'rect' | 'card' | 'table' | 'list'
+    // Variante de layout
+    this.variant = options.variant || 'text';
+
+    // Number of text lines (variant 'text') / Número de líneas de texto
+    this.lines = options.lines ?? 3;
+
+    // Number of rows (variant 'table') / Número de filas
+    this.rows = options.rows ?? 4;
+
+    // Number of columns (variant 'table') / Número de columnas
+    this.cols = options.cols ?? 4;
+
+    // Number of list items (variant 'list') / Número de ítems de lista
+    this.items = options.items ?? 3;
+
+    // Container width / Ancho del contenedor
+    this.width = options.width || '100%';
+
+    // Container height / Alto del contenedor
+    this.height = options.height || null;
+
+    // Animation type: 'pulse' | 'wave' | 'none' / Tipo de animación
     this.animation = options.animation || 'pulse';
+
     this._build();
   }
 

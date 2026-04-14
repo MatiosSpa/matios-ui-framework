@@ -31,8 +31,15 @@ MTS.ImageGallery = class MtsImageGallery {
     this.lightbox    = options.lightbox    ?? true;
     this.showCaption = options.showCaption ?? true;
     this.filters     = options.filters     || [];
-    this._onSelect   = options.onSelect    || null;
-    this._onOpen     = options.onOpen      || null;
+    this._listeners = {};
+
+    // Fires when selection changes: ({ selected, image }) => {}
+    // Se dispara al cambiar la selección
+    if (options.onSelect) this.on('select', options.onSelect);
+
+    // Fires when an image opens in lightbox: ({ image, index }) => {}
+    // Se dispara al abrir una imagen en el lightbox
+    if (options.onOpen)   this.on('open',   options.onOpen);
     this._selected   = new Set();
     this._activeFilter = null;
     this._lbEl       = null;
@@ -42,6 +49,8 @@ MTS.ImageGallery = class MtsImageGallery {
 
   /* ── API ── */
   setImages(images)    { this.images = images; this._selected.clear(); this._build(); return this; }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   getSelected()        { return [...this._selected].map(id => this.images.find(i => i.id === id)).filter(Boolean); }
   clearSelection()     { this._selected.clear(); this._build(); return this; }
   setFilter(tag)       { this._activeFilter = tag; this._build(); return this; }
@@ -145,7 +154,7 @@ MTS.ImageGallery = class MtsImageGallery {
     if (this._selected.has(img.id)) this._selected.delete(img.id);
     else this._selected.add(img.id);
     this._build();
-    if (this._onSelect) this._onSelect({ selected: this.getSelected(), image: img });
+    this._emit('select', { selected: this.getSelected(), image: img });
     this._el.dispatchEvent(new CustomEvent('mts:imagegallery:select', { bubbles: true, detail: { selected: this.getSelected(), image: img } }));
   }
 
@@ -217,12 +226,16 @@ MTS.ImageGallery = class MtsImageGallery {
     };
     document.addEventListener('keydown', this._lbKeyHandler);
 
-    if (this._onOpen) this._onOpen({ image: img, index: idx });
+    this._emit('open', { image: img, index: idx });
     this._el.dispatchEvent(new CustomEvent('mts:imagegallery:open', { bubbles: true, detail: { image: img, index: idx } }));
   }
 
   _closeLB() {
     if (this._lbEl) { this._lbEl.remove(); this._lbEl = null; }
     if (this._lbKeyHandler) { document.removeEventListener('keydown', this._lbKeyHandler); this._lbKeyHandler = null; }
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:imagegallery:${event}`, { bubbles: true, detail }));
   }
 };

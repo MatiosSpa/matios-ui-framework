@@ -1,292 +1,312 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="es" data-mts-mode="dark">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.Tabs — Demo</title>
-      <script>
+  <script>
     (function(){
-      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
-      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
       try{
         var p=window.parent;
         if(p&&p!==window){
-          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
-          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
         }
       }catch(e){}
     })();
   </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Tabs — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
-  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../shared/demo-shared.css">
   <link rel="stylesheet" href="./matios-ui-tabs.css">
-  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../shared/demo-shared.js"></script>
   <script src="./matios-ui-tabs.js"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
-    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
-    .demo-section{display:flex;flex-direction:column;gap:14px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
-    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
-    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
-    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
-    .demo-docs-panel.open{display:block;}
-    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
-    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
-    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
-    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
-    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
-    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
-    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
-    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
-    .demo-docs-panel p{margin:0 0 10px;}
-    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
-    .demo-docs-panel a{color:var(--mts-color-primary);text-decoration:none;}
-    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-  </style>
 </head>
 <body>
 <div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
-  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
+  <button class="demo-btn-sm demo-btn-sep">—</button>
+  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
 
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Tabs</h1>
-    <p>Pestañas con variantes underline, pill, card y bordered — horizontal y vertical.</p>
+    <p>Underline, pill and card variants — horizontal and vertical layout — lazy rendering.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-tabs.md')">📄 Documentación</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-tabs.md')">📄 Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
+  <!-- 1. Underline -->
   <div class="demo-section">
     <div class="demo-section-title">1 — Underline (default)</div>
     <div id="tabs-underline"></div>
-    <div class="result-box" id="tabs-result-1">— cambia de pestaña —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c1"><code>new MTS.Tabs('#el', {
+    <div class="result-box" id="tabs-result">— cambia de pestaña —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-t1','js-t1')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-t1','html-t1')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-t1">&lt;div id="my-tabs"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  new MTS.Tabs('#my-tabs', {
+    variant: 'underline',
+    tabs: [
+      { id: 'overview', label: 'Overview',  content: '&lt;p&gt;Overview content&lt;/p&gt;' },
+      { id: 'details',  label: 'Details',   content: '&lt;p&gt;Details content&lt;/p&gt;' },
+      { id: 'history',  label: 'History',   content: '&lt;p&gt;History content&lt;/p&gt;' },
+    ],
+    // Fires when active tab changes / Se dispara al cambiar la pestaña
+    onChange: (e) =&gt; console.log(e.detail.id),
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-t1">new MTS.Tabs('#my-tabs', {
+  // Visual variant: 'underline' | 'pill' | 'card'
   variant: 'underline',
-  active:  'general',
+
+  // Initially active tab / Pestaña activa inicial
+  active: 'overview',
+
   tabs: [
-    { id:'general',   label:'General',   content:'...' },
-    { id:'seguridad', label:'Seguridad', content:'...' },
-    { id:'notif',     label:'Notif.',    content:'...', badge:4 },
-    { id:'api',       label:'API',       content:'...', disabled:true },
+    { id: 'overview', label: 'Overview',  content: '&lt;p&gt;Overview content&lt;/p&gt;' },
+    { id: 'details',  label: 'Details',   content: '&lt;p&gt;Details content&lt;/p&gt;' },
+    { id: 'history',  label: 'History',   content: '&lt;p&gt;History content&lt;/p&gt;', disabled: true },
   ],
-  onChange: (e) => console.log('tab activa:', e.detail.id, e.detail.tab.label),
-})</code></pre>
+
+  // Fires when active tab changes / Se dispara al cambiar la pestaña activa
+  onChange: (e) => {
+    console.log(e.detail.id);  // → 'details'
+    console.log(e.detail.tab); // → { id, label, content }
+  },
+});</div>
   </div>
 
+  <!-- 2. Pill -->
   <div class="demo-section">
-    <div class="demo-section-title">2 — Bordered — caja con bordes (estilo acordeón)</div>
-    <div id="tabs-bordered"></div>
-    <div class="result-box" id="tabs-result-2">— cambia de pestaña —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c2"><code>// variante 'bordered': nav + panel forman una caja cerrada
-// tab activa → borde superior colored + panel con bordes completos
-new MTS.Tabs('#el', {
-  variant: 'bordered',
-  tabs: [
-    { id:'resumen', label:'Resumen',    content:'...' },
-    { id:'detalle', label:'Detalle',    content:'...' },
-    { id:'historial',label:'Historial', content:'...' },
-  ],
-  onChange: (e) => console.log('tab:', e.detail.id),
-})</code></pre>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Pill</div>
+    <div class="demo-section-title">2 — Pill</div>
     <div id="tabs-pill"></div>
-    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c3"><code>new MTS.Tabs('#el', {
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-t2','js-t2')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-t2','html-t2')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-t2">&lt;div id="my-tabs" &gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.Tabs('#my-tabs', { variant: 'pill', tabs: [...] });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-t2">new MTS.Tabs('#tabs-pill', {
   variant: 'pill',
   tabs: [
-    { id:'lista',      label:'Lista'      },
-    { id:'cuadricula', label:'Cuadrícula' },
-    { id:'mapa',       label:'Mapa'       },
+    { id: 'day',   label: 'Day',   content: '&lt;p&gt;Daily view&lt;/p&gt;' },
+    { id: 'week',  label: 'Week',  content: '&lt;p&gt;Weekly view&lt;/p&gt;' },
+    { id: 'month', label: 'Month', content: '&lt;p&gt;Monthly view&lt;/p&gt;' },
   ],
-})</code></pre>
+});</div>
   </div>
 
+  <!-- 3. Card -->
   <div class="demo-section">
-    <div class="demo-section-title">4 — Card horizontal</div>
+    <div class="demo-section-title">3 — Card</div>
     <div id="tabs-card"></div>
-    <button class="demo-code-toggle" onclick="toggleCode('c4')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c4"><code>new MTS.Tabs('#el', {
-  variant: 'card',
-  tabs: [...],
-})</code></pre>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-section-title">5 — Vertical bordered</div>
-    <div id="tabs-vertical" style="height:220px;"></div>
-    <div class="result-box" id="tabs-result-5">— cambia de pestaña —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c5')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c5"><code>new MTS.Tabs('#el', {
-  variant:   'bordered',
-  direction: 'vertical',
-  navWidth:  '160px',
-  stretch:    true,
-  tabs: [...]
-})</code></pre>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-section-title">6 — Con íconos y badges</div>
-    <div id="tabs-icons"></div>
-    <button class="demo-code-toggle" onclick="toggleCode('c6')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c6"><code>new MTS.Tabs('#el', {
-  variant: 'bordered',
-  tabs: [
-    { id:'inbox', label:'Inbox',    icon:MTS.Icon.get('inbox'),  badge:12 },
-    { id:'sent',  label:'Enviados', icon:MTS.Icon.get('send')             },
-    { id:'draft', label:'Borrador', icon:MTS.Icon.get('edit-2'), badge:3  },
-    { id:'trash', label:'Papelera', icon:MTS.Icon.get('trash'),  disabled:true },
-  ],
-})</code></pre>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-section-title">7 — API — setActive() programático</div>
-    <div id="tabs-api"></div>
-    <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-      <button class="demo-btn-sm" onclick="tabsApi.setActive('a')">setActive('a')</button>
-      <button class="demo-btn-sm" onclick="tabsApi.setActive('b')">setActive('b')</button>
-      <button class="demo-btn-sm" onclick="tabsApi.setActive('c')">setActive('c')</button>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-t3','js-t3')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-t3','html-t3')">JavaScript</button>
     </div>
-    <div class="result-box" id="tabs-result-api">— cambia de pestaña —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c7')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c7"><code>const tabs = new MTS.Tabs('#el', {
-  variant: 'underline',
-  tabs: [...],
-  onChange: (e) => {
-    console.log('id:',    e.detail.id)
-    console.log('tab:',   e.detail.tab.label)
-  },
-})
-tabs.setActive('mi-tab')   // programático
-tabs.addTab({ id:'nuevo', label:'Nuevo', content:'...' })
-tabs.removeTab('viejo')</code></pre>
+    <div class="code-panel active" id="html-t3">&lt;div id="my-tabs"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.Tabs('#my-tabs', { variant: 'card', tabs: [...] });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-t3">new MTS.Tabs('#tabs-card', {
+  variant: 'card',
+  tabs: [
+    { id: 'html', label: 'HTML', content: '&lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt;Hello&amp;lt;/div&amp;gt;&lt;/code&gt;&lt;/pre&gt;' },
+    { id: 'css',  label: 'CSS',  content: '&lt;pre&gt;&lt;code&gt;div { color: red; }&lt;/code&gt;&lt;/pre&gt;' },
+    { id: 'js',   label: 'JS',   content: '&lt;pre&gt;&lt;code&gt;console.log("hello");&lt;/code&gt;&lt;/pre&gt;' },
+  ],
+});</div>
   </div>
+
+  <!-- 4. Vertical -->
+  <div class="demo-section">
+    <div class="demo-section-title">4 — Vertical</div>
+    <div id="tabs-vertical" style="min-height:200px"></div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-t4','js-t4')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-t4','html-t4')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-t4">&lt;div id="my-tabs"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.Tabs('#my-tabs', {
+    variant:   'card',
+    direction: 'vertical',
+    navWidth:  '160px',
+    height:    '220px',
+    tabs: [...],
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-t4">new MTS.Tabs('#tabs-vertical', {
+  variant:   'card',
+  // Vertical layout / Layout vertical
+  direction: 'vertical',
+  // Nav width / Ancho del nav
+  navWidth:  '160px',
+  // Panel height / Alto del panel
+  height:    '220px',
+  tabs: [
+    { id: 'profile',  label: 'Profile',  content: '&lt;p&gt;User profile settings&lt;/p&gt;' },
+    { id: 'security', label: 'Security', content: '&lt;p&gt;Password and 2FA&lt;/p&gt;' },
+    { id: 'billing',  label: 'Billing',  content: '&lt;p&gt;Payment methods&lt;/p&gt;' },
+    { id: 'notif',    label: 'Notifications', content: '&lt;p&gt;Email preferences&lt;/p&gt;' },
+  ],
+});</div>
+  </div>
+
+  <!-- 5. Con íconos y badges -->
+  <div class="demo-section">
+    <div class="demo-section-title">5 — Con íconos y badges / With icons and badges</div>
+    <div id="tabs-icons"></div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-t5','js-t5')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-t5','html-t5')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-t5">&lt;div id="my-tabs"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.Tabs('#my-tabs', {
+    tabs: [
+      { id: 'inbox', label: 'Inbox', badge: 5, content: '...' },
+      { id: 'sent',  label: 'Sent',  content: '...' },
+    ],
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-t5">const ICON_INBOX = '&lt;svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/&gt;&lt;path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/&gt;&lt;/svg&gt;';
+const ICON_SENT  = '&lt;svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;line x1="22" y1="2" x2="11" y2="13"/&gt;&lt;polygon points="22 2 15 22 11 13 2 9 22 2"/&gt;&lt;/svg&gt;';
+
+new MTS.Tabs('#tabs-icons', {
+  variant: 'underline',
+  tabs: [
+    // badge: number or string shown on the tab / badge: número o string en la pestaña
+    { id: 'inbox',  label: 'Inbox',  icon: ICON_INBOX, badge: 5,    content: '&lt;p&gt;5 new messages&lt;/p&gt;' },
+    { id: 'sent',   label: 'Sent',   icon: ICON_SENT,  badge: null, content: '&lt;p&gt;Sent messages&lt;/p&gt;' },
+    { id: 'drafts', label: 'Drafts', badge: 'NEW',     content: '&lt;p&gt;Draft messages&lt;/p&gt;' },
+  ],
+});</div>
+  </div>
+
+  <!-- 6. API -->
+  <div class="demo-section">
+    <div class="demo-section-title">6 — API — setActive() programático</div>
+    <div id="tabs-api"></div>
+    <div class="demo-row" style="margin-top:8px;flex-wrap:wrap">
+      <button class="demo-btn-sm" onclick="tabsApi.setActive('alpha')">setActive('alpha')</button>
+      <button class="demo-btn-sm" onclick="tabsApi.setActive('beta')">setActive('beta')</button>
+      <button class="demo-btn-sm" onclick="tabsApi.setActive('gamma')">setActive('gamma')</button>
+    </div>
+    <div class="result-box" id="tabs-api-result">— usa los botones —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-t6','js-t6')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-t6','html-t6')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-t6">&lt;div id="my-tabs"&gt;&lt;/div&gt;
+&lt;script&gt;
+  const tabs = new MTS.Tabs('#my-tabs', { tabs: [...] });
+  tabs.setActive('tab-id')
+  tabs.addTab({ id: 'new', label: 'New', content: '...' })
+  tabs.removeTab('tab-id')
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-t6">const tabs = new MTS.Tabs('#my-tabs', {
+  tabs: [
+    { id: 'alpha', label: 'Alpha', content: '&lt;p&gt;Alpha&lt;/p&gt;' },
+    { id: 'beta',  label: 'Beta',  content: '&lt;p&gt;Beta&lt;/p&gt;' },
+    { id: 'gamma', label: 'Gamma', content: '&lt;p&gt;Gamma&lt;/p&gt;' },
+  ],
+  onChange: (e) => console.log('active:', e.detail.id),
+});
+
+// Activate tab programmatically / Activar pestaña programáticamente
+tabs.setActive('beta')
+
+// Add a new tab / Agregar una nueva pestaña
+tabs.addTab({ id: 'delta', label: 'Delta', content: '&lt;p&gt;Delta&lt;/p&gt;' })
+
+// Remove a tab / Eliminar una pestaña
+tabs.removeTab('delta')</div>
+  </div>
+
 </div>
+
 <script>
-function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
-window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
-if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
-function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
-function toggleDocs(id,mdPath){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';fetch(mdPath).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>No se pudo cargar.</em>';});}
-function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
+var TABS_CONTENT = function(label){ return '<div style="padding:16px;font-size:14px;color:var(--mts-text-secondary)"><p>Contenido de <strong>' + label + '</strong>.</p></div>'; };
 
-var PANEL_STYLE = 'color:var(--mts-text-secondary);font-size:13px;line-height:1.6;';
-
-// 1. Underline
-new MTS.Tabs('#tabs-underline',{
-  variant:'underline', active:'general',
-  tabs:[
-    {id:'general',   label:'General',   content:'<p style="'+PANEL_STYLE+'">Configuración general de la cuenta. Modifica tu nombre, email y preferencias de idioma.</p>'},
-    {id:'seguridad', label:'Seguridad', content:'<p style="'+PANEL_STYLE+'">Gestión de contraseñas, autenticación de dos factores y sesiones activas.</p>'},
-    {id:'notif',     label:'Notificaciones', content:'<p style="'+PANEL_STYLE+'">Configura cómo y cuándo recibir notificaciones por email, push o SMS.</p>', badge:4},
-    {id:'api',       label:'API',       content:'<p style="'+PANEL_STYLE+'">Gestión de claves API y webhooks.</p>', disabled:true},
+new MTS.Tabs('#tabs-underline', {
+  variant: 'underline',
+  tabs: [
+    { id:'overview', label:'Overview',  content: TABS_CONTENT('Overview') },
+    { id:'details',  label:'Details',   content: TABS_CONTENT('Details') },
+    { id:'history',  label:'History',   content: TABS_CONTENT('History') },
+    { id:'disabled', label:'Disabled',  content: TABS_CONTENT('Disabled'), disabled:true },
   ],
-  onChange:function(e){document.getElementById('tabs-result-1').textContent='onChange → id: "'+e.detail.id+'" | label: "'+e.detail.tab.label+'"';}
+  onChange: function(e){ document.getElementById('tabs-result').textContent = 'onChange → id: ' + e.detail.id; },
 });
-
-// 2. Bordered
-new MTS.Tabs('#tabs-bordered',{
-  variant:'bordered', active:'resumen',
-  tabs:[
-    {id:'resumen',  label:'Resumen',   content:'<p style="'+PANEL_STYLE+'">Vista general del proyecto. Métricas clave, estado actual y próximas acciones.</p>'},
-    {id:'detalle',  label:'Detalle',   content:'<p style="'+PANEL_STYLE+'">Información detallada del proyecto, descripción completa y documentación técnica.</p>'},
-    {id:'historial',label:'Historial', content:'<p style="'+PANEL_STYLE+'">Registro de cambios, comentarios y actividad del equipo en los últimos 30 días.</p>'},
-    {id:'adjuntos', label:'Adjuntos',  content:'<p style="'+PANEL_STYLE+'">Archivos y documentos adjuntos al proyecto.</p>', badge:7},
-  ],
-  onChange:function(e){document.getElementById('tabs-result-2').textContent='onChange → id: "'+e.detail.id+'" | label: "'+e.detail.tab.label+'"';}
-});
-
-// 3. Pill
-new MTS.Tabs('#tabs-pill',{
-  variant:'pill', active:'lista',
-  tabs:[
-    {id:'lista',      label:'Lista',      content:'<p style="'+PANEL_STYLE+'padding:12px 0">Vista en lista — muestra todos los elementos en filas ordenadas.</p>'},
-    {id:'cuadricula', label:'Cuadrícula', content:'<p style="'+PANEL_STYLE+'padding:12px 0">Vista en cuadrícula — elementos organizados en tarjetas.</p>'},
-    {id:'mapa',       label:'Mapa',       content:'<p style="'+PANEL_STYLE+'padding:12px 0">Vista de mapa — ubicación geográfica de los elementos.</p>'},
+new MTS.Tabs('#tabs-pill', {
+  variant: 'pill',
+  tabs: [
+    { id:'day',   label:'Day',   content: TABS_CONTENT('Day') },
+    { id:'week',  label:'Week',  content: TABS_CONTENT('Week') },
+    { id:'month', label:'Month', content: TABS_CONTENT('Month') },
   ],
 });
-
-// 4. Card
-new MTS.Tabs('#tabs-card',{
-  variant:'card', active:'tab1',
-  tabs:[
-    {id:'tab1', label:'Dashboard',  content:'<p style="'+PANEL_STYLE+'">Panel principal con métricas y resumen de actividad.</p>'},
-    {id:'tab2', label:'Reportes',   content:'<p style="'+PANEL_STYLE+'">Generador de reportes y exportación de datos.</p>'},
-    {id:'tab3', label:'Configurar', content:'<p style="'+PANEL_STYLE+'">Opciones de configuración del sistema.</p>'},
+new MTS.Tabs('#tabs-card', {
+  variant: 'card',
+  tabs: [
+    { id:'html', label:'HTML', content: '<pre style="margin:12px;font-size:12px;color:var(--mts-text-secondary)">&lt;div&gt;Hello world&lt;/div&gt;</pre>' },
+    { id:'css',  label:'CSS',  content: '<pre style="margin:12px;font-size:12px;color:var(--mts-text-secondary)">div { color: red; }</pre>' },
+    { id:'js',   label:'JS',   content: '<pre style="margin:12px;font-size:12px;color:var(--mts-text-secondary)">console.log("hello");</pre>' },
   ],
 });
-
-// 5. Vertical bordered
-new MTS.Tabs('#tabs-vertical',{
-  variant:'bordered', direction:'vertical', navWidth:'150px', stretch:true,
-  active:'perfil',
-  tabs:[
-    {id:'perfil',    label:'Perfil',     content:'<p style="'+PANEL_STYLE+'">Nombre, avatar y datos personales del usuario.</p>'},
-    {id:'cuenta',    label:'Cuenta',     content:'<p style="'+PANEL_STYLE+'">Configuración de cuenta y plan activo.</p>'},
-    {id:'privacidad',label:'Privacidad', content:'<p style="'+PANEL_STYLE+'">Control de datos y preferencias de privacidad.</p>'},
-    {id:'factura',   label:'Facturación',content:'<p style="'+PANEL_STYLE+'">Métodos de pago y historial de facturas.</p>'},
-  ],
-  onChange:function(e){document.getElementById('tabs-result-5').textContent='onChange → id: "'+e.detail.id+'" | label: "'+e.detail.tab.label+'"';}
-});
-
-// 6. Íconos y badges
-new MTS.Tabs('#tabs-icons',{
-  variant:'bordered', active:'inbox',
-  tabs:[
-    {id:'inbox',    label:'Inbox',    icon:MTS.Icon.get('inbox'),   badge:12, content:'<p style="'+PANEL_STYLE+'">12 mensajes sin leer en tu bandeja de entrada.</p>'},
-    {id:'sent',     label:'Enviados', icon:MTS.Icon.get('send'),              content:'<p style="'+PANEL_STYLE+'">Mensajes enviados en los últimos 7 días.</p>'},
-    {id:'draft',    label:'Borrador', icon:MTS.Icon.get('edit-2'),  badge:3,  content:'<p style="'+PANEL_STYLE+'">3 borradores guardados pendientes de envío.</p>'},
-    {id:'trash',    label:'Papelera', icon:MTS.Icon.get('trash'),   disabled:true, content:''},
+new MTS.Tabs('#tabs-vertical', {
+  variant:'card', direction:'vertical', navWidth:'160px', height:'200px',
+  tabs: [
+    { id:'profile',  label:'Profile',       content: TABS_CONTENT('Profile') },
+    { id:'security', label:'Security',      content: TABS_CONTENT('Security') },
+    { id:'billing',  label:'Billing',       content: TABS_CONTENT('Billing') },
+    { id:'notif',    label:'Notifications', content: TABS_CONTENT('Notifications') },
   ],
 });
-
-// 7. API
-var tabsApi = new MTS.Tabs('#tabs-api',{
-  variant:'underline', active:'a',
-  tabs:[
-    {id:'a', label:'Pestaña A', content:'<p style="'+PANEL_STYLE+'">Contenido de la pestaña A.</p>'},
-    {id:'b', label:'Pestaña B', content:'<p style="'+PANEL_STYLE+'">Contenido de la pestaña B.</p>'},
-    {id:'c', label:'Pestaña C', content:'<p style="'+PANEL_STYLE+'">Contenido de la pestaña C.</p>'},
+var ICON_INBOX = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>';
+var ICON_SENT  = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
+new MTS.Tabs('#tabs-icons', {
+  variant:'underline',
+  tabs: [
+    { id:'inbox',  label:'Inbox',  icon:ICON_INBOX, badge:5,    content: TABS_CONTENT('Inbox') },
+    { id:'sent',   label:'Sent',   icon:ICON_SENT,  badge:null, content: TABS_CONTENT('Sent') },
+    { id:'drafts', label:'Drafts', badge:'NEW',                 content: TABS_CONTENT('Drafts') },
   ],
-  onChange:function(e){document.getElementById('tabs-result-api').textContent='onChange → id: "'+e.detail.id+'" | label: "'+e.detail.tab.label+'"';}
 });
-
+var tabsApi = new MTS.Tabs('#tabs-api', {
+  tabs: [
+    { id:'alpha', label:'Alpha', content: TABS_CONTENT('Alpha') },
+    { id:'beta',  label:'Beta',  content: TABS_CONTENT('Beta') },
+    { id:'gamma', label:'Gamma', content: TABS_CONTENT('Gamma') },
+  ],
+  onChange: function(e){ document.getElementById('tabs-api-result').textContent = 'onChange → id: ' + e.detail.id; },
+});
 </script>
 </body>
 </html>

@@ -1,218 +1,284 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="es" data-mts-mode="dark">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.Progress — Demo</title>
-      <script>
+  <script>
     (function(){
-      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
-      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
       try{
         var p=window.parent;
         if(p&&p!==window){
-          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
-          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
         }
       }catch(e){}
     })();
   </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Progress — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
-  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../shared/demo-shared.css">
   <link rel="stylesheet" href="./matios-ui-progress.css">
-  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../shared/demo-shared.js"></script>
   <script src="./matios-ui-progress.js"></script>
   <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
-    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
-    .demo-section{display:flex;flex-direction:column;gap:14px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
-    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
-    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
-    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
-    .demo-docs-panel.open{display:block;}
-    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
-    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
-    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
-    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
-    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
-    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
-    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
-    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
-    .demo-docs-panel p{margin:0 0 10px;}
-    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
-    .demo-docs-panel a{color:var(--mts-color-primary);text-decoration:none;}
-    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+    .circles-grid { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
+    .progress-stack { display: flex; flex-direction: column; gap: 12px; }
   </style>
 </head>
 <body>
 <div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
-  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
+  <button class="demo-btn-sm demo-btn-sep">—</button>
+  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
-
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Progress</h1>
-    <p>Barras de progreso — lineal, circular e indeterminado.</p>
+    <p>Bar · circle · indeterminate — variants, striped, animated, smooth value transitions.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-progress.md')">📄 Documentación</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-progress.md')">📄 Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
+  <!-- 1. Barras lineales -->
   <div class="demo-section">
-    <div class="demo-section-title">1 — Barras lineales con variantes</div>
-    <div style="display:flex;flex-direction:column;gap:12px;max-width:600px;">
-      <div id="pb-1"></div>
-      <div id="pb-2"></div>
-      <div id="pb-3"></div>
-      <div id="pb-4"></div>
+    <div class="demo-section-title">1 — Barras lineales con variantes / Linear bars with variants</div>
+    <div class="progress-stack" id="bars-container"></div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-pr1','js-pr1')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-pr1','html-pr1')">JavaScript</button>
     </div>
-    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c1"><code>new MTS.Progress('#el', {
-  type:      'bar',
-  value:      35,
-  label:     'Carga general',
-  showLabel:  true,
-  showValue:  true,
-  variant:   'default',   // 'default'|'success'|'warning'|'danger'|'info'
-})
-// Animada y con rayas
-new MTS.Progress('#el', {
-  value:35, striped:true, animated:true, variant:'primary',
-})</code></pre>
+    <div class="code-panel active" id="html-pr1">&lt;div id="my-progress"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.Progress('#my-progress', {
+    type:    'bar',
+    value:   65,
+    variant: 'primary',
+    // Fires on value change / Se dispara al cambiar el valor
+    onChange: (e) =&gt; {
+      console.log(e.detail.value); // → 65
+      console.log(e.detail.pct);   // → 0.65
+    },
+    // Fires when value reaches max / Se dispara al llegar al máximo
+    onComplete: (e) =&gt; console.log('Done!'),
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-pr1">// All variants / Todas las variantes
+['default','primary','success','warning','danger','info'].forEach((v, i) => {
+  new MTS.Progress('#bar-' + v, {
+    type:    'bar',
+    value:   (i + 1) * 15,
+    variant:  v,
+    showValue: true,
+  });
+});
+
+// With label / Con label
+new MTS.Progress('#bar-label', {
+  type:        'bar',
+  value:       3,
+  max:         10,
+  showLabel:   true,
+  labelFormat: (value, pct) =&gt; `Step ${value} of 10`,
+  variant:     'primary',
+});</div>
   </div>
 
+  <!-- 2. Striped + animado -->
   <div class="demo-section">
-    <div class="demo-section-title">2 — Striped y animado</div>
-    <div style="display:flex;flex-direction:column;gap:12px;max-width:600px;">
-      <div id="pb-striped"></div>
-      <div id="pb-animated"></div>
+    <div class="demo-section-title">2 — Striped y animado / Striped and animated</div>
+    <div class="progress-stack" id="striped-container"></div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-pr2','js-pr2')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-pr2','html-pr2')">JavaScript</button>
     </div>
-    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c2"><code>new MTS.Progress('#el', { value:65, striped:true,  label:'Striped',  showLabel:true })
-new MTS.Progress('#el', { value:75, striped:true, animated:true, label:'Animated', showLabel:true })</code></pre>
+    <div class="code-panel active" id="html-pr2">&lt;div id="my-progress"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.Progress('#my-progress', {
+    type:     'bar',
+    value:    75,
+    striped:  true,    // rayado / striped
+    animated: true,    // anima las rayas / animates stripes
+    variant:  'success',
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-pr2">// Striped / Rayado
+new MTS.Progress('#bar-striped', {
+  type:    'bar',
+  value:   60,
+  striped: true,
+  variant: 'primary',
+});
+
+// Striped + animated / Rayado + animado
+new MTS.Progress('#bar-animated', {
+  type:     'bar',
+  value:    75,
+  striped:  true,
+  animated: true,   // stripes move / las rayas se mueven
+  variant:  'success',
+});
+
+// Sizes / Tamaños
+['xs','sm','md','lg'].forEach(size =&gt; {
+  new MTS.Progress('#bar-' + size, {
+    type: 'bar', value: 65, size, variant: 'primary',
+  });
+});</div>
   </div>
 
+  <!-- 3. Circular -->
   <div class="demo-section">
-    <div class="demo-section-title">3 — Indeterminado</div>
-    <div style="display:flex;flex-direction:column;gap:12px;max-width:600px;">
-      <div id="pb-indet-1"></div>
-      <div id="pb-indet-2"></div>
+    <div class="demo-section-title">3 — Circulares / Circles</div>
+    <div class="circles-grid" id="circles-container"></div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-pr3','js-pr3')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-pr3','html-pr3')">JavaScript</button>
     </div>
-    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c3"><code>// Para operaciones sin duración conocida
-new MTS.Progress('#el', {
-  type:      'indeterminate',
-  label:     'Procesando...',
-  showLabel:  true,
-  variant:   'primary',
-})</code></pre>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Circulares</div>
-    <div class="demo-row" style="padding:16px 0;flex-wrap:wrap;gap:24px;">
-      <div id="pc-1"></div>
-      <div id="pc-2"></div>
-      <div id="pc-3"></div>
-      <div id="pc-4"></div>
-    </div>
-    <button class="demo-code-toggle" onclick="toggleCode('c4')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c4"><code>new MTS.Progress('#el', {
+    <div class="code-panel active" id="html-pr3">&lt;div id="my-circle"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.Progress('#my-circle', {
+    type:        'circle',
+    value:       75,
+    radius:      48,
+    strokeWidth: 8,
+    showValue:   true,
+    variant:     'primary',
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-pr3">// Circle with value / Círculo con valor
+new MTS.Progress('#circle-primary', {
   type:        'circle',
-  value:        65,
-  label:       'Progreso',
-  showValue:    true,
-  radius:       40,        // radio en px
-  strokeWidth:  6,
-  variant:     'default',
-})</code></pre>
+  value:       75,
+  radius:      48,
+  strokeWidth: 8,
+  showValue:   true,
+  variant:     'primary',
+});
+
+// Circle variants / Variantes de círculo
+['success','warning','danger'].forEach((v, i) =&gt; {
+  new MTS.Progress('#circle-' + v, {
+    type:        'circle',
+    value:       [85, 60, 40][i],
+    radius:      40,
+    strokeWidth: 6,
+    showValue:   true,
+    variant:     v,
+  });
+});</div>
   </div>
 
+  <!-- 4. Indeterminado + API -->
   <div class="demo-section">
-    <div class="demo-section-title">5 — API — setValue() animado</div>
-    <div style="display:flex;flex-direction:column;gap:12px;max-width:600px;">
-      <div id="pb-api"></div>
+    <div class="demo-section-title">4 — Indeterminado + API / Indeterminate + API</div>
+    <div class="progress-stack">
+      <div id="pr-indeterminate"></div>
+      <div id="pr-api" style="margin-top:4px"></div>
     </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
-      <button class="demo-btn-sm" style="padding:6px 14px;font-size:12px;" onclick="pbApi.setValue(0)">0%</button>
-      <button class="demo-btn-sm" style="padding:6px 14px;font-size:12px;" onclick="pbApi.setValue(25)">25%</button>
-      <button class="demo-btn-sm" style="padding:6px 14px;font-size:12px;" onclick="pbApi.setValue(50)">50%</button>
-      <button class="demo-btn-sm" style="padding:6px 14px;font-size:12px;" onclick="pbApi.setValue(75)">75%</button>
-      <button class="demo-btn-sm" style="padding:6px 14px;font-size:12px;" onclick="pbApi.setValue(100)">100%</button>
-      <button class="demo-btn-sm" style="padding:6px 14px;font-size:12px;" onclick="randomize()">Aleatorio</button>
+    <div class="demo-row" style="margin-top:10px;flex-wrap:wrap">
+      <button class="demo-btn-sm" onclick="prApi.setValue(0)">setValue(0)</button>
+      <button class="demo-btn-sm" onclick="prApi.increment(10)">increment(10)</button>
+      <button class="demo-btn-sm" onclick="prApi.setValue(100)">setValue(100)</button>
+      <button class="demo-btn-sm" onclick="prApi.setVariant('success')">setVariant('success')</button>
+      <button class="demo-btn-sm" onclick="prApi.setVariant('danger')">setVariant('danger')</button>
+      <button class="demo-btn-sm" onclick="prApi.reset()">reset()</button>
     </div>
-    <div class="result-box" id="progress-result">— ajusta el valor —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c5')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c5"><code>const bar = new MTS.Progress('#el', {
-  value:     0,
-  showLabel: true, showValue: true,
-  onChange:   (e) => console.log('valor:', e.detail.value),
-  onComplete: ()  => console.log('¡completado al 100%!'),
-})
-bar.setValue(75)          // con animación CSS
-bar.setValue(75, false)   // sin animación</code></pre>
+    <div class="result-box" id="pr-result">— usa los botones —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-pr4','js-pr4')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-pr4','html-pr4')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-pr4">&lt;div id="loading"&gt;&lt;/div&gt;
+&lt;script&gt;
+  // Indeterminate / Indeterminado
+  new MTS.Progress('#loading', { type: 'indeterminate', variant: 'primary' });
+
+  // API
+  const prog = new MTS.Progress('#my-bar', { value: 0 });
+  prog.setValue(75)       // set value / establecer valor
+  prog.increment(10)      // add 10 / agregar 10
+  prog.decrement(5)       // subtract 5 / restar 5
+  prog.setVariant('success')
+  prog.reset()            // back to 0 / volver a 0
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-pr4">// Indeterminate loading / Carga indeterminada
+new MTS.Progress('#loading', {
+  type:    'indeterminate',
+  variant: 'primary',
+});
+
+// API usage / Uso de la API
+const prog = new MTS.Progress('#my-bar', {
+  type:   'bar',
+  value:  0,
+  // Fires on value change / Se dispara al cambiar el valor
+  onChange: (e) =&gt; {
+    console.log(e.detail.value, e.detail.pct);
+  },
+  // Fires when reaches 100 / Se dispara al llegar al 100
+  onComplete: (e) =&gt; console.log('Done!'),
+});
+
+prog.setValue(75)           // animate to 75 / animar hasta 75
+prog.setValue(75, false)    // no animation / sin animación
+prog.increment(10)          // +10
+prog.decrement(5)           // -5
+prog.setVariant('success')  // change color / cambiar color
+prog.reset()                // back to min / volver al mínimo</div>
   </div>
+
 </div>
 <script>
-function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
-window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
-if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
-function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
-function toggleDocs(id,mdPath){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';fetch(mdPath).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>No se pudo cargar.</em>';});}
-function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
-
-// 1. Barras lineales
-new MTS.Progress('#pb-1',{value:35,label:'Carga general',showLabel:true,showValue:true});
-new MTS.Progress('#pb-2',{value:72,label:'Almacenamiento',showLabel:true,showValue:true,variant:'warning'});
-new MTS.Progress('#pb-3',{value:90,label:'CPU',showLabel:true,showValue:true,variant:'danger'});
-new MTS.Progress('#pb-4',{value:58,label:'Memoria',showLabel:true,showValue:true,variant:'success'});
-// 2. Striped/Animated
-new MTS.Progress('#pb-striped', {value:65,striped:true, label:'Striped', showLabel:true,showValue:true,variant:'primary'});
-new MTS.Progress('#pb-animated',{value:75,striped:true,animated:true,label:'Animated',showLabel:true,showValue:true,variant:'info'});
-// 3. Indeterminado
-new MTS.Progress('#pb-indet-1',{type:'indeterminate',label:'Cargando datos...',showLabel:true});
-new MTS.Progress('#pb-indet-2',{type:'indeterminate',label:'Procesando archivo...',showLabel:true,variant:'warning'});
-// 4. Circulares
-new MTS.Progress('#pc-1',{type:'circle',value:65,label:'Progreso',showValue:true});
-new MTS.Progress('#pc-2',{type:'circle',value:82,label:'Memoria', showValue:true,variant:'success',radius:50,strokeWidth:7});
-new MTS.Progress('#pc-3',{type:'circle',value:45,label:'Red',     showValue:true,variant:'warning',radius:50,strokeWidth:7});
-new MTS.Progress('#pc-4',{type:'circle',value:91,label:'Disco',   showValue:true,variant:'danger', radius:50,strokeWidth:7});
-// 5. API
-var pbApi=new MTS.Progress('#pb-api',{
-  value:0,label:'Progreso del proceso',showLabel:true,showValue:true,
-  onChange:function(e){document.getElementById('progress-result').textContent='onChange → valor: '+e.detail.value+'%';},
-  onComplete:function(){document.getElementById('progress-result').textContent='onComplete → ¡proceso completado al 100%!';}
+// Barras con variantes
+var variants = ['default','primary','success','warning','danger','info'];
+var bc = document.getElementById('bars-container');
+variants.forEach(function(v, i){
+  var el = document.createElement('div'); bc.appendChild(el);
+  new MTS.Progress(el, { type:'bar', value:(i+1)*14+5, variant:v, showValue:true, label:v, showLabel:true });
 });
-function randomize(){pbApi.setValue(Math.floor(Math.random()*100));}
 
+// Striped
+var sc = document.getElementById('striped-container');
+[{v:'primary',s:false,a:false},{v:'success',s:true,a:false},{v:'warning',s:true,a:true}].forEach(function(cfg){
+  var el = document.createElement('div'); sc.appendChild(el);
+  new MTS.Progress(el, { type:'bar', value:70, variant:cfg.v, striped:cfg.s, animated:cfg.a });
+});
+
+// Circles
+var cc = document.getElementById('circles-container');
+[{v:'primary',val:75},{v:'success',val:85},{v:'warning',val:55},{v:'danger',val:35}].forEach(function(cfg){
+  var el = document.createElement('div'); cc.appendChild(el);
+  new MTS.Progress(el, { type:'circle', value:cfg.val, variant:cfg.v, radius:44, strokeWidth:7, showValue:true });
+});
+
+// Indeterminate
+new MTS.Progress('#pr-indeterminate', { type:'indeterminate', variant:'primary' });
+
+// API target
+var prApi = new MTS.Progress('#pr-api', {
+  type:'bar', value:30, variant:'primary', showValue:true,
+  onChange:   function(e){ document.getElementById('pr-result').textContent = 'onChange → value:' + e.detail.value + ' pct:' + Math.round(e.detail.pct*100) + '%'; },
+  onComplete: function(){ document.getElementById('pr-result').textContent = 'onComplete → ¡Completado!'; },
+});
 </script>
 </body>
 </html>

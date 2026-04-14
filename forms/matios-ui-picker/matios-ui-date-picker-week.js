@@ -1,10 +1,10 @@
 /* ============================================================
    MATIOS UI — matios-ui-picker-week.js  v2.0.0
-   MTS.Picker.Week — Selector de semana
+   MTS.DatePicker.Week — Selector de semana
    Requiere: matios-ui-picker-base.js
    ============================================================ */
 
-MTS.Picker.Week = class MtsPickerWeek extends MTS.Picker.Base {
+MTS.DatePicker.Week = class MtsDatePickerWeek extends MTS.DatePicker.Base {
 
   constructor(selector, options = {}) {
     options.placeholder  = options.placeholder || "Semana 01 - 2025";

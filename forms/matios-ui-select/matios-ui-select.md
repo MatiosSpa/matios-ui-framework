@@ -1,10 +1,12 @@
-# matios-ui-select
+# MTS.Select
 
-Select con búsqueda interna, multi-select, grupos y búsqueda externa async.
+[EN] Select component with search, multi-select, option groups, icons and external async search.
+[ES] Componente select con búsqueda, multi-selección, grupos de opciones, íconos y búsqueda asíncrona externa.
 
 ---
 
-## Instalación
+## Installation / Instalación
+
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-select.css">
@@ -13,229 +15,204 @@ Select con búsqueda interna, multi-select, grupos y búsqueda externa async.
 
 ---
 
-## Uso básico
-```js
-const sel = new MTS.Select('#mi-select', {
-  label: 'País',
-  options: [
-    { value: 'cl', label: 'Chile' },
-    { value: 'pe', label: 'Perú' },
-    { value: 'co', label: 'Colombia' },
-  ],
-  onChange: (e) => console.log(e.detail.value),
-})
-```
+## Options / Opciones
+
+| Option | Type | Default | [EN] Description / [ES] Descripción |
+|--------|------|---------|--------------------------------------|
+| `options` | `array` | `[]` | [EN] `[{ value, label, group?, icon?, disabled? }]` |
+| `value` | `any` | `null` | [EN] Initial selected value / [ES] Valor seleccionado inicialmente |
+| `label` | `string` | `''` | [EN] Field label / [ES] Etiqueta del campo |
+| `placeholder` | `string` | `'Selecciona...'` | |
+| `hint` | `string` | `''` | [EN] Helper text / [ES] Texto de ayuda |
+| `multiple` | `boolean` | `false` | [EN] Allow multiple selection / [ES] Permitir selección múltiple |
+| `searchable` | `boolean` | `false` | [EN] Enable search inside list / [ES] Habilitar búsqueda en la lista |
+| `clearable` | `boolean` | `false` | [EN] Show clear button / [ES] Mostrar botón limpiar |
+| `disabled` | `boolean` | `false` | [EN] Disables interaction / [ES] Deshabilita la interacción |
+| `maxSelect` | `number` | `null` | [EN] Max selections in multi mode / [ES] Máximo de selecciones en modo multi |
+| `debounce` | `number` | `300` | [EN] Debounce delay for `onSearch` in ms / [ES] Delay debounce para `onSearch` en ms |
+| `minChars` | `number` | `1` | [EN] Min chars to trigger `onSearch` / [ES] Mínimo de caracteres para disparar `onSearch` |
+| `onSearch` | `function` | — | [EN] Async search: `async (query) => [{value, label}]` / [ES] Búsqueda asíncrona |
+| `onChange` | `function` | — | [EN] Fires on selection change / [ES] Se dispara al cambiar la selección |
 
 ---
 
-## Con grupos
+## Events / Eventos
+
+[EN] Use `onChange` in the constructor. This is the recommended approach.
+[ES] Usa `onChange` en el constructor. Este es el enfoque recomendado.
+
 ```js
-new MTS.Select('#select', {
-  options: [
-    { value: 'stgo', label: 'Santiago',     group: 'Chile' },
-    { value: 'vina', label: 'Viña del Mar', group: 'Chile' },
-    { value: 'lima', label: 'Lima',          group: 'Perú' },
-  ],
-})
-```
-
----
-
-## Multi-select
-```js
-new MTS.Select('#select', {
-  multiple:  true,
-  maxSelect: 3,
-  options:   [...],
-  value:     ['cl', 'pe'],
-})
-```
-
----
-
-## Con búsqueda interna
-Filtra las opciones ya cargadas — no requiere llamada externa.
-```js
-new MTS.Select('#select', {
-  searchable: true,
+new MTS.Select('#my-select', {
   options: [...],
-})
-```
-
----
-
-## Con búsqueda externa (onSearch)
-El componente **no hace fetch**. Emite el query y el dev decide de dónde vienen los datos.
-
-```js
-new MTS.Select('#select', {
-  searchable: true,
-  placeholder: 'Buscar usuario...',
-  debounce: 300,    // ms de espera antes de llamar onSearch
-  minChars: 2,      // mínimo de caracteres para disparar
-
-  onSearch: async (query) => {
-    // El dev controla completamente la fuente de datos
-    const res = await fetch(`/api/usuarios?q=${query}`)
-    const data = await res.json()
-    // Debe retornar un array de { value, label }
-    return data.map(u => ({ value: u.id, label: u.nombre }))
+  // Fires when selection changes / Se dispara al cambiar la selección
+  onChange: (e) => {
+    console.log(e.detail.value);   // → selected value / valor seleccionado
+    console.log(e.detail.text);    // → selected label / label seleccionado
+    console.log(e.detail.option);  // → full option object / objeto opción completo
   },
-
-  onChange: (e) => console.log('Seleccionado:', e.detail.value),
-})
+});
 ```
 
-El componente muestra un spinner mientras `onSearch` está en curso.
+[EN] For multi-select, the event detail contains:
+[ES] Para multi-select, el detalle del evento contiene:
 
-Si `minChars: 0`, dispara `onSearch` al abrir el dropdown (carga inicial).
+```js
+onChange: (e) => {
+  console.log(e.detail.value);   // → ['val1', 'val2']
+  console.log(e.detail.text);    // → ['Label 1', 'Label 2']
+  console.log(e.detail.options); // → [{value, label}, ...]
+},
+```
 
 ---
 
-## Configuración completa
+## HTML Usage / Uso HTML
+
+```html
+<!-- Basic select / Select básico -->
+<div id="sel-country"
+  data-label="Country"
+  data-placeholder="Select a country..."
+  data-clearable>
+</div>
+
+<script>
+  new MTS.Select('#sel-country', {
+    options: [
+      { value: 'cl', label: 'Chile' },
+      { value: 'ar', label: 'Argentina' },
+      { value: 'mx', label: 'México' },
+    ],
+    onChange: (e) => console.log(e.detail.value),
+  });
+</script>
+
+<!-- Multi-select / Multi-selección -->
+<div id="sel-tags"
+  data-label="Technologies"
+  data-multiple
+  data-searchable>
+</div>
+
+<script>
+  new MTS.Select('#sel-tags', {
+    options: [
+      { value: 'js',  label: 'JavaScript' },
+      { value: 'ts',  label: 'TypeScript' },
+      { value: 'css', label: 'CSS' },
+    ],
+    value:    ['js'],
+    onChange: (e) => console.log(e.detail.value),
+  });
+</script>
+```
+
+---
+
+## JavaScript Usage / Uso JavaScript
+
 ```js
-new MTS.Select('#select', {
-  // — Datos —
-  options:     [],          // opciones iniciales
-  value:       null,        // valor inicial (o [] para multiple)
+// Basic / Básico
+const sel = new MTS.Select('#my-select', {
+  // Options list / Lista de opciones
+  options: [
+    { value: 'a', label: 'Option A' },
+    { value: 'b', label: 'Option B', disabled: true },
+    { value: 'c', label: 'Option C' },
+  ],
 
-  // — Apariencia —
-  label:       'Label',
-  placeholder: 'Selecciona...',
-  hint:        'Texto de ayuda',
+  // Initial value / Valor inicial
+  value: 'a',
 
-  // — Comportamiento —
-  multiple:    false,       // multi-select
-  maxSelect:   null,        // límite de selección en multi
-  searchable:  false,       // habilitar campo de búsqueda
-  clearable:   false,       // botón × para limpiar
-  disabled:    false,
+  // Field label / Etiqueta del campo
+  label: 'Select an option',
 
-  // — Búsqueda externa (opcional) —
-  onSearch:    async (query) => [...],  // si se define, búsqueda es externa
-  debounce:    300,         // ms antes de llamar onSearch
-  minChars:    1,           // mínimo de chars para disparar onSearch (0 = al abrir)
+  // Fires on change / Se dispara al cambiar
+  onChange: (e) => console.log(e.detail.value, e.detail.text),
+});
 
-  // — Callbacks —
+// With option groups / Con grupos de opciones
+new MTS.Select('#my-select', {
+  options: [
+    { value: 'a1', label: 'Alpha 1', group: 'Group A' },
+    { value: 'a2', label: 'Alpha 2', group: 'Group A' },
+    { value: 'b1', label: 'Beta 1',  group: 'Group B' },
+  ],
+  label: 'Grouped select',
+});
+
+// With async external search / Con búsqueda externa asíncrona
+new MTS.Select('#my-select', {
+  label:     'Search users',
+  searchable: true,
+  minChars:   2,
+  debounce:   400,
+  // Called by the component on each keystroke
+  // El componente lo llama en cada tecla
+  onSearch: async (query) => {
+    const res = await fetch('/api/users?q=' + query);
+    return res.json(); // must return [{value, label}] / debe retornar [{value, label}]
+  },
   onChange: (e) => console.log(e.detail.value),
-})
+});
 ```
 
 ---
 
 ## API
-```js
-const sel = new MTS.Select('#select', config)
 
-// Valor
-sel.getValue()           // → value | value[]
-sel.setValue('cl')
-sel.setValue(['cl','pe']) // multi
+```js
+const sel = new MTS.Select('#my-select', { ... });
+
+// Get / set value / Obtener / establecer valor
+sel.getValue()         // → value | [value, ...]
+sel.getValue()         // → string | null (single) | string[] (multiple)
+sel.setText()          // → selected label string / label del valor seleccionado
+sel.setValue('b')
+
+// Clear selection / Limpiar selección
 sel.clear()
 
-// Opciones
-sel.setOptions([...])    // reemplaza opciones y re-renderiza
+// Replace options list / Reemplazar lista de opciones
+sel.setOptions([{ value: 'x', label: 'X' }])
+sel.setOptions([...], true) // true = also enable / true = también habilita
 
-// Estado
+// Open / close / toggle dropdown / Abrir / cerrar / alternar dropdown
 sel.open()
 sel.close()
 sel.toggle()
+
+// Enable / disable / Habilitar / deshabilitar
+sel.enable()
+sel.disable()
+
+// Destroy / Destruir
 sel.destroy()
-
-// Eventos
-sel.on('change', (e) => console.log(e.detail.value))
-sel.on('open',   (e) => {})
-sel.on('close',  (e) => {})
-sel.off('change', handler)
 ```
 
 ---
 
-## Eventos DOM
-| Evento   | Namespace DOM          | Detail                  |
-|----------|------------------------|-------------------------|
-| `change` | `mts:select:change`    | `{ select, value }`     |
-| `open`   | `mts:select:open`      | `{ select }`            |
-| `close`  | `mts:select:close`     | `{ select }`            |
+## DOM Events / Eventos DOM
 
 ```js
-document.getElementById('select')
+document.getElementById('my-select')
   .addEventListener('mts:select:change', (e) => {
-    console.log(e.detail.value)
-  })
+    console.log(e.detail.value);
+  });
 ```
 
----
-
-## Ejemplo completo — búsqueda con API real
-```js
-new MTS.Select('#buscar-producto', {
-  searchable:  true,
-  clearable:   true,
-  placeholder: 'Buscar producto...',
-  debounce:    400,
-  minChars:    2,
-
-  onSearch: async (query) => {
-    try {
-      const res = await fetch(`https://api.ejemplo.com/productos?q=${encodeURIComponent(query)}`)
-      const { items } = await res.json()
-      return items.map(p => ({
-        value: p.id,
-        label: p.nombre,
-        group: p.categoria,   // opcional
-      }))
-    } catch {
-      return []
-    }
-  },
-
-  onChange: (e) => {
-    console.log('Producto seleccionado, id:', e.detail.value)
-  },
-})
-```
+| Event / Evento | DOM Namespace |
+|----------------|---------------|
+| `onChange` | `mts:select:change` |
+| — | `mts:select:open` |
+| — | `mts:select:close` |
 
 ---
 
 ## Changelog
-| Versión | Descripción |
+
+| Version | Description |
 |---------|-------------|
-| 2.0.0 | `onSearch` externo — el componente ya no hace fetch. Loading spinner. Arquitectura limpia. |
-| 1.0.0 | Release inicial |
-
----
-
-## HTML declarativo
-
-```html
-<div id="miSelect"
-  data-label="País"
-  data-placeholder="Selecciona..."
-  data-searchable
-  data-clearable>
-</div>
-
-<script>
-new MTS.Select('#miSelect', {
-  options: [
-    { value: 'cl', label: '🇨🇱 Chile' },
-    { value: 'ar', label: '🇦🇷 Argentina' },
-  ],
-  onChange: ({ value }) => console.log(value),
-})
-</script>
-```
-
-| Atributo | JS | Descripción |
-|----------|-----|-------------|
-| `data-label` | `label` | |
-| `data-placeholder` | `placeholder` | |
-| `data-hint` | `hint` | |
-| `data-value` | `value` | Valor inicial |
-| `data-multiple` | `multiple` | (presencia activa) |
-| `data-searchable` | `searchable` | (presencia activa) |
-| `data-clearable` | `clearable` | (presencia activa) |
-| `data-disabled` | `disabled` | (presencia activa) |
-| `data-max-select` | `maxSelect` | Máximo seleccionables |
-
+| 2.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
+| 2.0.0 | [EN] Portal dropdown, async search, multi-select, groups / [ES] Dropdown portal, búsqueda asíncrona, multi-selección, grupos |
+| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

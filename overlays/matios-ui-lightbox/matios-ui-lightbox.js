@@ -44,19 +44,40 @@ MTS.Lightbox = class MtsLightbox {
       this._items = items || [];
     }
 
-    this.loop        = options.loop        ?? true;
-    this.zoom        = options.zoom        ?? true;
-    this.download    = options.download    ?? false;
-    this.counter     = options.counter     ?? true;
-    this.thumbnails  = options.thumbnails  ?? false;
-    this.animation   = options.animation   || 'fade';
-    this._onOpen     = options.onOpen      || null;
-    this._onClose    = options.onClose     || null;
-    this._onChange   = options.onChange    || null;
-    this._idx        = options.index       ?? 0;
-    this._el         = null;
-    this._zoomed     = false;
-    this._zoomScale  = 1;
+    // Infinite loop navigation / Navegación en loop infinito
+    this.loop = options.loop ?? true;
+
+    // Allow zoom on images / Permitir zoom en imágenes
+    this.zoom = options.zoom ?? true;
+
+    // Show download button / Mostrar botón de descarga
+    this.download = options.download ?? false;
+
+    // Show item counter / Mostrar contador de ítems
+    this.counter = options.counter ?? true;
+
+    // Show thumbnails strip / Mostrar tira de miniaturas
+    this.thumbnails = options.thumbnails ?? false;
+
+    // Transition animation: 'fade' | 'slide' / Animación de transición
+    this.animation = options.animation || 'fade';
+
+    // Initially active index / Índice activo inicial
+    this._idx = options.index ?? 0;
+
+    this._el        = null;
+    this._zoomed    = false;
+    this._zoomScale = 1;
+    this._listeners = {};
+
+    // Fires when lightbox opens: ({ item, index }) => {} / Se dispara al abrir
+    if (options.onOpen)   this.on('open',   options.onOpen);
+
+    // Fires when lightbox closes / Se dispara al cerrar
+    if (options.onClose)  this.on('close',  options.onClose);
+
+    // Fires when active item changes: ({ item, index }) => {} / Se dispara al cambiar el ítem activo
+    if (options.onChange) this.on('change', options.onChange);
   }
 
   /* ── API ── */
@@ -66,7 +87,9 @@ MTS.Lightbox = class MtsLightbox {
   prev()       { this._nav(-1); return this; }
   goTo(index)  { this._idx = index; this._updateMedia(); this._updateUI(); return this; }
   addItems(items) { this._items = this._items.concat(items); return this; }
-  destroy()    { this._destroy(); }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
+  destroy()  { this._destroy(); }
 
   _render() {
     this._destroy();
@@ -162,7 +185,7 @@ MTS.Lightbox = class MtsLightbox {
     this._updateUI();
     requestAnimationFrame(() => lb.classList.add('mts-lb--visible'));
 
-    if (this._onOpen) this._onOpen({ item: this._items[this._idx], index: this._idx });
+    this._emit('open', { item: this._items[this._idx], index: this._idx });
   }
 
   _updateMedia() {
@@ -236,7 +259,7 @@ MTS.Lightbox = class MtsLightbox {
         it._thumbEl?.classList.toggle('mts-lb__thumb--active', i === this._idx);
       });
     }
-    if (this._onChange) this._onChange({ item, index: this._idx });
+    this._emit('change', { item, index: this._idx });
   }
 
   _nav(dir) {
@@ -252,6 +275,10 @@ MTS.Lightbox = class MtsLightbox {
     this._el.remove(); this._el = null;
     document.body.style.overflow = '';
     if (this._keyHandler) { document.removeEventListener('keydown', this._keyHandler); this._keyHandler = null; }
-    if (this._onClose) this._onClose();
+    this._emit('close', {});
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    document.dispatchEvent(new CustomEvent(`mts:lightbox:${event}`, { detail }));
   }
 };

@@ -1,73 +1,179 @@
 # MTS.ColorPicker
 
-Selector de color standalone con sliders H/S/L, paleta de presets, input hex y soporte hex/rgb/hsl. Modos trigger e inline. 0 dependencias.
+[EN] Standalone color picker with H/S/L sliders, preset palette, hex input and hex/rgb/hsl output formats. Trigger and inline modes. Zero dependencies.
+[ES] Selector de color standalone con sliders H/S/L, paleta de presets, input hex y formatos hex/rgb/hsl. Modos trigger e inline. 0 dependencias.
 
-## Uso
-```js
-new MTS.ColorPicker('#el', {
-  value:   '#4f8eff',
-  format:  'hex',
-  onChange: ({ hex, value }) => console.log(hex, value),
-})
-```
+---
 
-## Opciones
-| Opción | Tipo | Default | Descripción |
-|--------|------|---------|-------------|
-| `value` | `string` | `'#4f8eff'` | Color inicial (hex) |
-| `label` | `string` | `''` | Etiqueta |
-| `format` | `string` | `'hex'` | `'hex'`\|`'rgb'`\|`'hsl'` |
-| `presets` | `Array` | 14 colores | Paleta de presets |
-| `showPresets` | `boolean` | `true` | Muestra paleta |
-| `showSliders` | `boolean` | `true` | Muestra sliders HSL |
-| `showInput` | `boolean` | `true` | Muestra input hex |
-| `inline` | `boolean` | `false` | Siempre visible, sin trigger |
-| `size` | `string` | `'md'` | `'sm'`\|`'md'`\|`'lg'` |
-| `disabled` | `boolean` | `false` | |
-| `onChange` | `function` | `null` | `({ hex, value, formatted }) => {}` |
-| `onOpen` | `function` | `null` | Al abrir el popup |
-| `onClose` | `function` | `null` | Al cerrar el popup |
+## Installation / Instalación
 
-## API
-```js
-const cp = new MTS.ColorPicker('#el', { value: '#ff0000' })
-cp.getValue()        // → '#ff0000' (según format)
-cp.getHex()          // → '#ff0000' siempre hex
-cp.setValue('#00ff00')
-cp.setFormat('rgb')  // → 'rgb(0, 255, 0)'
-cp.open()
-cp.close()
-cp.disable() / cp.enable()
-cp.destroy()
-```
-
-## Eventos DOM
-```js
-el.addEventListener('mts:colorpicker:change', (e) => {
-  console.log(e.detail.hex, e.detail.value)
-})
+```html
+<link rel="stylesheet" href="matios-ui-base.css">
+<link rel="stylesheet" href="matios-ui-colorpicker.css">
+<script src="matios-ui-colorpicker.js"></script>
 ```
 
 ---
 
-## HTML declarativo
+## Options / Opciones
+
+| Option | Type | Default | [EN] Description / [ES] Descripción |
+|--------|------|---------|--------------------------------------|
+| `value` | `string` | `'#4f8eff'` | [EN] Initial color (hex) / [ES] Color inicial (hex) |
+| `label` | `string` | `''` | [EN] Field label / [ES] Etiqueta del campo |
+| `format` | `string` | `'hex'` | [EN] Output format: `'hex'` · `'rgb'` · `'hsl'` / [ES] Formato de salida |
+| `presets` | `array` | 14 colors | [EN] Preset color palette / [ES] Paleta de colores preset |
+| `showPresets` | `boolean` | `true` | [EN] Show preset palette / [ES] Mostrar paleta |
+| `showSliders` | `boolean` | `true` | [EN] Show HSL sliders / [ES] Mostrar sliders HSL |
+| `showInput` | `boolean` | `true` | [EN] Show hex input / [ES] Mostrar input hex |
+| `inline` | `boolean` | `false` | [EN] Always visible, no trigger / [ES] Siempre visible, sin trigger |
+| `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
+| `disabled` | `boolean` | `false` | [EN] Disables interaction / [ES] Deshabilita la interacción |
+| `onChange` | `function` | — | [EN] Fires when color changes / [ES] Se dispara al cambiar el color |
+| `onOpen` | `function` | — | [EN] Fires when popup opens / [ES] Se dispara al abrir el popup |
+| `onClose` | `function` | — | [EN] Fires when popup closes / [ES] Se dispara al cerrar el popup |
+
+---
+
+## Events / Eventos
+
+[EN] Use `onChange`, `onOpen` and `onClose` in the constructor.
+[ES] Usa `onChange`, `onOpen` y `onClose` en el constructor.
+
+```js
+new MTS.ColorPicker('#my-picker', {
+  // Fires when user selects a color / Se dispara al seleccionar un color
+  onChange: ({ hex, value, formatted }) => {
+    console.log(hex);       // → '#4f8eff' (always hex / siempre hex)
+    console.log(value);     // → depends on format / depende del format
+    console.log(formatted); // → 'rgb(79, 142, 255)' if format: 'rgb'
+  },
+
+  // Fires when popup opens / Se dispara al abrir el popup
+  onOpen: () => console.log('opened'),
+
+  // Fires when popup closes / Se dispara al cerrar el popup
+  onClose: () => console.log('closed'),
+});
+```
+
+---
+
+## HTML Usage / Uso HTML
 
 ```html
-<div id="miColor" data-value="#7c3aed" data-label="Color de marca" data-format="hex"></div>
+<!-- Trigger mode (popup) / Modo trigger (popup) -->
+<div id="picker-brand"
+  data-value="#7c3aed"
+  data-label="Brand color"
+  data-format="hex">
+</div>
 
 <script>
-new MTS.ColorPicker('#miColor', {
-  onChange: ({ hex }) => console.log('Color:', hex),
-})
+  new MTS.ColorPicker('#picker-brand', {
+    onChange: ({ hex }) => console.log('Color:', hex),
+  });
+</script>
+
+<!-- Inline mode (always visible) / Modo inline (siempre visible) -->
+<div id="picker-inline" data-inline></div>
+
+<script>
+  new MTS.ColorPicker('#picker-inline', {
+    value:    '#34d399',
+    onChange: ({ hex }) => console.log(hex),
+  });
 </script>
 ```
 
-| Atributo | JS | Descripción |
-|----------|-----|-------------|
-| `data-value` | `value` | Color inicial |
-| `data-label` | `label` | |
-| `data-format` | `format` | `hex`·`rgb`·`hsl` |
-| `data-inline` | `inline` | Siempre visible (presencia activa) |
-| `data-disabled` | `disabled` | (presencia activa) |
-| `data-size` | `size` | `sm`·`md`·`lg` |
+[EN] Available `data-*` attributes:
+[ES] Atributos `data-*` disponibles:
 
+| Attribute / Atributo | JS Option |
+|----------------------|-----------|
+| `data-value` | `value` |
+| `data-label` | `label` |
+| `data-format` | `format` |
+| `data-inline` | `inline` (presence activates) |
+| `data-disabled` | `disabled` (presence activates) |
+| `data-size` | `size` |
+
+---
+
+## JavaScript Usage / Uso JavaScript
+
+```js
+// Trigger mode / Modo trigger (popup)
+const cp = new MTS.ColorPicker('#my-picker', {
+  value:       '#4f8eff',
+  label:       'Primary color',
+  format:      'hex',       // 'hex' | 'rgb' | 'hsl'
+  showPresets: true,
+  showSliders: true,
+  showInput:   true,
+  size:        'md',
+  onChange: ({ hex, value }) => {
+    document.getElementById('preview').style.background = hex;
+  },
+});
+
+// Inline mode / Modo inline
+new MTS.ColorPicker('#picker-inline', {
+  inline:   true,
+  value:    '#34d399',
+  format:   'rgb',
+  onChange: ({ value }) => console.log(value), // → 'rgb(52, 211, 153)'
+});
+```
+
+---
+
+## API
+
+```js
+const cp = new MTS.ColorPicker('#my-picker', { ... });
+
+// Get current value (respects format) / Obtener valor actual (respeta format)
+cp.getValue()         // → '#4f8eff' | 'rgb(79,142,255)' | 'hsl(218,100%,66%)'
+
+// Always returns hex / Siempre retorna hex
+cp.getHex()           // → '#4f8eff'
+
+// Set color programmatically / Establecer color programáticamente
+cp.setValue('#00ff00')
+
+// Change output format / Cambiar formato de salida
+cp.setFormat('rgb')   // → subsequent getValue() returns 'rgb(...)'
+
+// Open / close popup / Abrir / cerrar popup
+cp.open()
+cp.close()
+
+// Enable / disable / Habilitar / deshabilitar
+cp.disable()
+cp.enable()
+
+// Destroy / Destruir
+cp.destroy()
+```
+
+---
+
+## DOM Event / Evento DOM
+
+```js
+document.getElementById('my-picker')
+  .addEventListener('mts:colorpicker:change', (e) => {
+    console.log(e.detail.hex);   // → always hex
+    console.log(e.detail.value); // → formatted value
+  });
+```
+
+---
+
+## Changelog
+
+| Version | Description |
+|---------|-------------|
+| 1.1.0 | [EN] Bilingual docs, standardized structure / [ES] Docs bilingüe, estructura estandarizada |
+| 1.0.0 | [EN] Initial release — HSL sliders, presets, hex/rgb/hsl / [ES] Versión inicial |

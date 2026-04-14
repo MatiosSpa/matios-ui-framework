@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Radio — Demo</title>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="./matios-ui-radio.css">
+  <script src="../../shared/demo-shared.js"></script>
+  <script src="./matios-ui-radio.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0;}
+    .demo-section{display:flex;flex-direction:column;gap:12px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .result-box{padding:8px 12px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:32px;}
+    .code-tabs{display:flex;gap:0;margin-top:8px;}
+    .code-tab{padding:4px 14px;font-size:11px;font-weight:600;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);cursor:pointer;color:var(--mts-text-muted);font-family:var(--mts-font-family);transition:color .15s,background .15s;}
+    .code-tab:first-child{border-radius:var(--mts-radius-md) 0 0 0;}
+    .code-tab:last-child{border-radius:0 var(--mts-radius-md) 0 0;border-left:none;}
+    .code-tab.active{background:var(--mts-bg-surface-2);color:var(--mts-color-primary);border-bottom-color:var(--mts-bg-surface-2);}
+    .code-panel{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-top:none;border-radius:0 var(--mts-radius-md) var(--mts-radius-md) var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;}
+    .code-panel.active{display:block;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
+  <button class="demo-btn-sm demo-btn-sep">—</button>
+  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
+</div>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.Radio</h1>
+    <p>Grupo de radio buttons — vertical, horizontal, con opción deshabilitada y grupo completo disabled.</p>
+  </div>
+
+  <!-- 1. Vertical -->
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Vertical (default)</div>
+    <div id="radio-v"></div>
+    <div class="result-box" id="radio-v-result">— selecciona una opción —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-rv','js-rv')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-rv','html-rv')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-rv">&lt;div class="mts-radio-group"&gt;
+  &lt;div class="mts-radio-wrap"&gt;
+    &lt;input type="radio" class="mts-radio" name="prioridad" value="high"&gt;
+    &lt;label class="mts-radio__label"&gt;Alta&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;div class="mts-radio-wrap"&gt;
+    &lt;input type="radio" class="mts-radio" name="prioridad" value="medium" checked&gt;
+    &lt;label class="mts-radio__label"&gt;Media&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;div class="mts-radio-wrap"&gt;
+    &lt;input type="radio" class="mts-radio" name="prioridad" value="low"&gt;
+    &lt;label class="mts-radio__label"&gt;Baja&lt;/label&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+    <div class="code-panel" id="js-rv">const radio = new MTS.Radio('#el', {
+  name:  'prioridad',
+  value: 'medium',
+  options: [
+    { value: 'high',   label: 'Alta' },
+    { value: 'medium', label: 'Media' },
+    { value: 'low',    label: 'Baja' },
+  ],
+  onChange: (e) => console.log(e.detail.value),
+});
+
+radio.getValue()      // → 'medium'
+radio.setValue('high')</div>
+  </div>
+
+  <!-- 2. Horizontal -->
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Horizontal</div>
+    <div id="radio-h"></div>
+    <div class="result-box" id="radio-h-result">— selecciona una opción —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-rh','js-rh')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-rh','html-rh')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-rh">&lt;!-- Agregar clase --horizontal para layout en fila --&gt;
+&lt;div class="mts-radio-group mts-radio-group--horizontal"&gt;
+  &lt;div class="mts-radio-wrap"&gt;
+    &lt;input type="radio" class="mts-radio" name="vista" value="tabla" checked&gt;
+    &lt;label class="mts-radio__label"&gt;Tabla&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;div class="mts-radio-wrap"&gt;
+    &lt;input type="radio" class="mts-radio" name="vista" value="tarjetas"&gt;
+    &lt;label class="mts-radio__label"&gt;Tarjetas&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;div class="mts-radio-wrap"&gt;
+    &lt;input type="radio" class="mts-radio" name="vista" value="lista"&gt;
+    &lt;label class="mts-radio__label"&gt;Lista&lt;/label&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+    <div class="code-panel" id="js-rh">const radio = new MTS.Radio('#el', {
+  horizontal: true,  // ← activa layout en fila
+  name:  'vista',
+  value: 'tabla',
+  options: [
+    { value: 'tabla',    label: 'Tabla' },
+    { value: 'tarjetas', label: 'Tarjetas' },
+    { value: 'lista',    label: 'Lista' },
+  ],
+  onChange: (e) => console.log(e.detail.value),
+});</div>
+  </div>
+
+  <!-- 3. Con opción deshabilitada -->
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Con opción deshabilitada</div>
+    <div id="radio-dis-opt"></div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-rdo','js-rdo')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-rdo','html-rdo')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-rdo">&lt;div class="mts-radio-group mts-radio-group--horizontal"&gt;
+  &lt;div class="mts-radio-wrap"&gt;
+    &lt;input type="radio" class="mts-radio" name="plan" value="free" checked&gt;
+    &lt;label class="mts-radio__label"&gt;Free&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;div class="mts-radio-wrap"&gt;
+    &lt;input type="radio" class="mts-radio" name="plan" value="pro"&gt;
+    &lt;label class="mts-radio__label"&gt;Pro&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;!-- Opción individual disabled --&gt;
+  &lt;div class="mts-radio-wrap"&gt;
+    &lt;input type="radio" class="mts-radio" name="plan" value="enterprise" disabled&gt;
+    &lt;label class="mts-radio__label"&gt;Enterprise (próximamente)&lt;/label&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+    <div class="code-panel" id="js-rdo">const radio = new MTS.Radio('#el', {
+  horizontal: true,
+  name:  'plan',
+  value: 'free',
+  options: [
+    { value: 'free',       label: 'Free' },
+    { value: 'pro',        label: 'Pro' },
+    { value: 'enterprise', label: 'Enterprise (próximamente)', disabled: true },
+  ],
+});</div>
+  </div>
+
+  <!-- 4. Grupo completo disabled -->
+  <div class="demo-section">
+    <div class="demo-section-title">4 — Grupo completo deshabilitado</div>
+    <div id="radio-dis-all"></div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-rda','js-rda')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-rda','html-rda')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-rda">&lt;!-- disabled en cada input individualmente --&gt;
+&lt;div class="mts-radio-group"&gt;
+  &lt;div class="mts-radio-wrap"&gt;
+    &lt;input type="radio" class="mts-radio" name="estado" value="activo" checked disabled&gt;
+    &lt;label class="mts-radio__label"&gt;Activo&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;div class="mts-radio-wrap"&gt;
+    &lt;input type="radio" class="mts-radio" name="estado" value="inactivo" disabled&gt;
+    &lt;label class="mts-radio__label"&gt;Inactivo&lt;/label&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+    <div class="code-panel" id="js-rda">// disabled: true deshabilita todo el grupo
+const radio = new MTS.Radio('#el', {
+  disabled: true,
+  name:  'estado',
+  value: 'activo',
+  options: [
+    { value: 'activo',   label: 'Activo' },
+    { value: 'inactivo', label: 'Inactivo' },
+    { value: 'pendiente', label: 'Pendiente' },
+  ],
+});</div>
+  </div>
+
+</div>
+
+<script>
+function setTheme(t) {
+  document.documentElement.setAttribute('data-mts-theme', t);
+  try { if (window.parent && window.parent !== window) window.parent.postMessage({ type: 'setTheme', theme: t }, '*'); } catch(e) {}
+}
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'setTheme') document.documentElement.setAttribute('data-mts-theme', e.data.theme);
+});
+if (window !== window.top) { var ts = document.querySelector('.demo-theme'); if (ts) ts.style.display = 'none'; }
+
+function switchTab(btn, showId, hideId) {
+  btn.parentElement.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(showId).classList.add('active');
+  document.getElementById(hideId).classList.remove('active');
+}
+
+new MTS.Radio('#radio-v', {
+  name: 'prioridad', value: 'medium',
+  options: [{ value: 'high', label: 'Alta' }, { value: 'medium', label: 'Media' }, { value: 'low', label: 'Baja' }],
+  onChange: (e) => document.getElementById('radio-v-result').textContent = 'valor: ' + e.detail.value,
+});
+new MTS.Radio('#radio-h', {
+  horizontal: true, name: 'vista', value: 'tabla',
+  options: [{ value: 'tabla', label: 'Tabla' }, { value: 'tarjetas', label: 'Tarjetas' }, { value: 'lista', label: 'Lista' }],
+  onChange: (e) => document.getElementById('radio-h-result').textContent = 'valor: ' + e.detail.value,
+});
+new MTS.Radio('#radio-dis-opt', {
+  horizontal: true, name: 'plan', value: 'free',
+  options: [{ value: 'free', label: 'Free' }, { value: 'pro', label: 'Pro' }, { value: 'enterprise', label: 'Enterprise (próximamente)', disabled: true }],
+});
+new MTS.Radio('#radio-dis-all', {
+  disabled: true, name: 'estado', value: 'activo',
+  options: [{ value: 'activo', label: 'Activo' }, { value: 'inactivo', label: 'Inactivo' }, { value: 'pendiente', label: 'Pendiente' }],
+});
+</script>
+</body>
+</html>

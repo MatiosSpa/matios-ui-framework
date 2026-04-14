@@ -39,29 +39,62 @@ MTS.ColorPicker = class MtsColorPicker {
     if (_ds.size !== undefined) _fromHTML.size = _ds.size;
     options = { ..._fromHTML, ...options };
 
-    this._hex     = this._toHex(options.value) || '#4f8eff';
-    this.label    = options.label       || '';
-    this.format   = options.format      || 'hex';
-    this.presets  = options.presets || [
+    // Initial color value (hex) / Valor de color inicial (hex)
+    this._hex = this._toHex(options.value) || '#4f8eff';
+
+    // Field label / Etiqueta del campo
+    this.label = options.label || '';
+
+    // Output format: 'hex' | 'rgb' | 'hsl' / Formato de salida
+    this.format = options.format || 'hex';
+
+    // Preset color palette / Paleta de colores preset
+    this.presets = options.presets || [
       '#f87171','#fb923c','#fbbf24','#a3e635','#34d399',
       '#38bdf8','#818cf8','#c084fc','#f472b6','#94a3b8',
       '#ffffff','#64748b','#1e293b','#000000',
     ];
+
+    // Show preset palette / Mostrar paleta de presets
     this.showPresets = options.showPresets ?? true;
+
+    // Show HSL sliders / Mostrar sliders HSL
     this.showSliders = options.showSliders ?? true;
-    this.showInput   = options.showInput   ?? true;
-    this.inline      = options.inline      ?? false;
-    this.size        = options.size        || 'md';
-    this.disabled    = options.disabled    ?? false;
-    this._onChange   = options.onChange    || null;
-    this._onOpen     = options.onOpen      || null;
-    this._onClose    = options.onClose     || null;
+
+    // Show hex input / Mostrar input hex
+    this.showInput = options.showInput ?? true;
+
+    // Always visible, no trigger button / Siempre visible, sin botón trigger
+    this.inline = options.inline ?? false;
+
+    // Size: 'sm' | 'md' | 'lg' / Tamaño
+    this.size = options.size || 'md';
+
+    // Disables interaction / Deshabilita la interacción
+    this.disabled = options.disabled ?? false;
+
+    // Fires when color changes / Se dispara al cambiar el color
+    this._listeners = {};
+
+    // Fires when color changes: ({ hex, value, formatted }) => {}
+    // Se dispara al cambiar el color
+    if (options.onChange) this.on('change', options.onChange);
+
+    // Fires when popup opens / Se dispara al abrir el popup
+    // Fires when picker opens / Se dispara al abrir el picker
+    if (options.onOpen)  this.on('open',  options.onOpen);
+
+    // Fires when picker closes / Se dispara al cerrar el picker
+    if (options.onClose) this.on('close', options.onClose);
+
     this._open       = false;
     this._popEl      = null;
     this._build();
   }
 
   /* ── API ── */
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   getValue()       { return this._formatOutput(); }
   getHex()         { return this._hex; }
   setValue(color)  { this._hex = this._toHex(color) || color; this._updateTrigger(); if (this._open) this._renderPop(); return this; }
@@ -146,7 +179,7 @@ MTS.ColorPicker = class MtsColorPicker {
     this._renderPop();
     this._positionPop();
     this._triggerWrap?.classList.add('mts-colorpicker__trigger-wrap--open');
-    if (this._onOpen) this._onOpen();
+    this._emit('open', {});
   }
 
   _closePop() {
@@ -155,7 +188,7 @@ MTS.ColorPicker = class MtsColorPicker {
     this._popEl?.remove();
     this._popEl = null;
     this._triggerWrap?.classList.remove('mts-colorpicker__trigger-wrap--open');
-    if (this._onClose) this._onClose();
+    this._emit('close', {});
   }
 
   _positionPop() {
@@ -253,7 +286,7 @@ MTS.ColorPicker = class MtsColorPicker {
           this._hex = color;
           this._updateTrigger();
           this._renderPop();
-          this._emit();
+          this._emitChange();
         });
         palette.appendChild(sw);
       });
@@ -279,7 +312,7 @@ MTS.ColorPicker = class MtsColorPicker {
     okBtn.textContent = 'Aceptar';
     okBtn.addEventListener('click', () => {
       this._updateTrigger();
-      this._emit();
+      this._emitChange();
       this._closePop();
     });
 
@@ -300,10 +333,9 @@ MTS.ColorPicker = class MtsColorPicker {
     if (this._valText)  this._valText.textContent = this._formatOutput();
   }
 
-  _emit() {
+  _emitChange() {
     const detail = { hex: this._hex, value: this._formatOutput(), formatted: this._formatOutput() };
-    if (this._onChange) this._onChange(detail);
-    this._el.dispatchEvent(new CustomEvent('mts:colorpicker:change', { bubbles: true, detail }));
+    this._emit('change', detail);
   }
 
   /* ── Formatos ── */
@@ -344,5 +376,9 @@ MTS.ColorPicker = class MtsColorPicker {
     if(s===0){r=g=b=l;}else{const q=l<0.5?l*(1+s):l+s-l*s,p=2*l-q;r=hue2rgb(p,q,h+1/3);g=hue2rgb(p,q,h);b=hue2rgb(p,q,h-1/3);}
     const toH=x=>Math.round(x*255).toString(16).padStart(2,'0');
     return '#'+toH(r)+toH(g)+toH(b);
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:colorpicker:${event}`, { bubbles: true, detail }));
   }
 };

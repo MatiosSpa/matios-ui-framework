@@ -74,13 +74,27 @@ MTS.Paging = class MtsPaging {
     this.grouped      = options.grouped      ?? false; // botones agrupados sin gap
     this.size         = options.size         || '';    // 'sm' | '' | 'lg'
 
-    /* Callbacks */
-    this._onChange         = options.onChange         || null;
-    this._onNext           = options.onNext           || null;
-    this._onPrev           = options.onPrev           || null;
-    this._onPageClick      = options.onPageClick      || null;
-    this._onPageSizeChange = options.onPageSizeChange || null;
-    this._listeners        = {};
+    this._listeners = {};
+
+    // Fires on any page/size change: ({ page, pageSize }) => {}
+    // Se dispara en cualquier cambio de página o tamaño
+    if (options.onChange)        this.on('change',        options.onChange);
+
+    // Fires when advancing to next page: ({ page }) => {}
+    // Se dispara al avanzar a la siguiente página
+    if (options.onNext)          this.on('next',          options.onNext);
+
+    // Fires when going to previous page: ({ page }) => {}
+    // Se dispara al retroceder a la página anterior
+    if (options.onPrev)          this.on('prev',          options.onPrev);
+
+    // Fires when a page number is clicked: ({ page }) => {}
+    // Se dispara al hacer click en un número de página
+    if (options.onPageClick)     this.on('pageClick',     options.onPageClick);
+
+    // Fires when page size changes: ({ pageSize }) => {}
+    // Se dispara al cambiar el tamaño de página
+    if (options.onPageSizeChange) this.on('pageSizeChange', options.onPageSizeChange);
 
     this._build();
   }
@@ -100,9 +114,7 @@ MTS.Paging = class MtsPaging {
     if (!this.hasNext) return this;
     this.page++;
     this._render();
-    this._onNext?.(this.page);
-    this._onChange?.(this.page, this.pageSize);
-    this._emit('next', { page: this.page });
+    this._emit('next',   { page: this.page });
     this._emit('change', { page: this.page, pageSize: this.pageSize });
     return this;
   }
@@ -111,9 +123,7 @@ MTS.Paging = class MtsPaging {
     if (!this.hasPrev) return this;
     this.page--;
     this._render();
-    this._onPrev?.(this.page);
-    this._onChange?.(this.page, this.pageSize);
-    this._emit('prev', { page: this.page });
+    this._emit('prev',   { page: this.page });
     this._emit('change', { page: this.page, pageSize: this.pageSize });
     return this;
   }
@@ -129,8 +139,8 @@ MTS.Paging = class MtsPaging {
     this.pageSize = n;
     this.page = 1;
     this._render();
-    this._onPageSizeChange?.(n);
-    this._onChange?.(this.page, this.pageSize);
+    this._emit('pageSizeChange', { pageSize: n });
+    this._emit('change', { page: this.page, pageSize: this.pageSize });
     this._emit('pageSizeChange', { pageSize: n });
     return this;
   }
@@ -244,7 +254,7 @@ MTS.Paging = class MtsPaging {
     if (this.showFirst) {
       ctrl.appendChild(this._makeBtn(this.btnFirst, !this.hasPrev, () => {
         this.setPage(1);
-        this._onChange?.(this.page, this.pageSize);
+        this._emit('change', { page: this.page, pageSize: this.pageSize });
         this._emit('change', { page: this.page, pageSize: this.pageSize });
       }, 'mts-paging__btn mts-paging__btn--nav', 'Primera página'));
     }
@@ -252,8 +262,8 @@ MTS.Paging = class MtsPaging {
     /* Botón anterior */
     ctrl.appendChild(this._makeBtn(this.btnPrev, !this.hasPrev, () => {
       this.prev();
-      this._onPrev?.(this.page);
-      this._onChange?.(this.page, this.pageSize);
+      this._emit('prev',   { page: this.page });
+      this._emit('change', { page: this.page, pageSize: this.pageSize });
     }, 'mts-paging__btn mts-paging__btn--nav', 'Anterior'));
 
     /* Páginas */
@@ -269,8 +279,8 @@ MTS.Paging = class MtsPaging {
           if (p === this.page) return;
           this.page = p;
           this._render();
-          this._onPageClick?.(p);
-          this._onChange?.(this.page, this.pageSize);
+          this._emit('pageClick', { page: p });
+          this._emit('change', { page: this.page, pageSize: this.pageSize });
           this._emit('change', { page: this.page, pageSize: this.pageSize });
           this._emit('pageClick', { page: p });
         }, `mts-paging__btn${p === this.page ? ' active' : ''}`, `Ir a página ${p}`);
@@ -287,7 +297,7 @@ MTS.Paging = class MtsPaging {
     if (this.showLast) {
       ctrl.appendChild(this._makeBtn(this.btnLast, !this.hasNext, () => {
         this.setPage(this.totalPages);
-        this._onChange?.(this.page, this.pageSize);
+        this._emit('change', { page: this.page, pageSize: this.pageSize });
         this._emit('change', { page: this.page, pageSize: this.pageSize });
       }, 'mts-paging__btn mts-paging__btn--nav', 'Última página'));
     }

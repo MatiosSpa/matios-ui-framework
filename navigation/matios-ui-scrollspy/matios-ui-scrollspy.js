@@ -16,22 +16,39 @@ MTS.ScrollSpy = class MtsScrollSpy {
    * @param {function}     options.onChange  ({ id, section, link }) => {}
    */
   constructor(options = {}) {
+    // Section selectors or array of selectors / Selectores de sección o arreglo de selectores
     const sels = options.sections || [];
-    this._sections   = (typeof sels === 'string' ? [sels] : sels)
+    this._sections = (typeof sels === 'string' ? [sels] : sels)
       .flatMap(s => [...document.querySelectorAll(s)])
       .filter(Boolean);
-    this._navEl      = options.nav ? document.querySelector(options.nav) : null;
-    this._linkAttr   = options.linkAttr   || 'href';
-    this._offset     = options.offset     ?? 80;
-    this._activeClass= options.activeClass|| 'active';
-    this._onChange   = options.onChange   || null;
-    this._current    = null;
-    this._onScroll   = this._check.bind(this);
-    window.addEventListener('scroll', this._onScroll, { passive:true });
+
+    // Nav container selector / Selector del contenedor de navegación
+    this._navEl = options.nav ? document.querySelector(options.nav) : null;
+
+    // Link attribute containing the section ID / Atributo del link que contiene el ID de sección
+    this._linkAttr = options.linkAttr || 'href';
+
+    // Scroll offset in px from top / Offset en px desde el top
+    this._offset = options.offset ?? 80;
+
+    // CSS class applied to the active link / Clase CSS aplicada al link activo
+    this._activeClass = options.activeClass || 'active';
+
+    this._current   = null;
+    this._listeners = {};
+
+    // Fires when active section changes: ({ id, section, link }) => {}
+    // Se dispara al cambiar la sección activa
+    if (options.onChange) this.on('change', options.onChange);
+
+    this._onScroll = this._check.bind(this);
+    window.addEventListener('scroll', this._onScroll, { passive: true });
     this._check();
   }
 
   destroy() { window.removeEventListener('scroll', this._onScroll); }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   _check() {
     let active = null;
@@ -56,11 +73,12 @@ MTS.ScrollSpy = class MtsScrollSpy {
     }
 
     const link = this._navEl?.querySelector('[' + this._linkAttr + '="#' + id + '"]') || null;
-    if (this._onChange) this._onChange({ id, section: active, link });
+    this._emit('change', { id, section: active, link });
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
     if (this._navEl) {
-      this._navEl.dispatchEvent(new CustomEvent('mts:scrollspy:change', {
-        bubbles: true, detail: { id, section: active, link }
-      }));
+      this._navEl.dispatchEvent(new CustomEvent(`mts:scrollspy:${event}`, { bubbles: true, detail }));
     }
   }
 };

@@ -1,114 +1,133 @@
 # MTS.Stepper
 
-Componente unificado para flujos paso a paso. Dos modos: **wizard** (con paneles de contenido) y **progress** (indicador visual puro).
+[EN] Unified step-by-step flow component. Two modes: **wizard** (with content panels) and **progress** (pure visual indicator).
+[ES] Componente unificado para flujos paso a paso. Dos modos: **wizard** (con paneles de contenido) y **progress** (indicador visual puro).
 
-## Instalación
+---
+
+## Installation / Instalación
 
 ```html
+<link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-stepper.css">
 <script src="matios-ui-stepper.js"></script>
 ```
 
 ---
 
-## Modos
+## Modes / Modos
 
-### Modo `wizard` — con contenido (default)
+### `wizard` — with content panels (default) / con paneles de contenido
 
-Cada paso tiene un panel que muestra contenido HTML, formularios, tablas u otros componentes MTS.
+[EN] Each step has a panel showing HTML content, forms, tables or other MTS components.
+[ES] Cada paso tiene un panel con contenido HTML, formularios, tablas u otros componentes MTS.
 
 ```js
 const stepper = new MTS.Stepper('#el', {
-  mode: 'wizard',   // default
+  mode: 'wizard',
   steps: [
     {
-      id:          'datos',
-      label:       'Datos personales',
-      description: 'Nombre y contacto',
-      content:     '<div id="form-datos"></div>',
+      id:          'data',
+      label:       'Personal data',
+      description: 'Name and contact',
+      content:     '<div id="form-data"></div>',
     },
     {
-      id:      'seguridad',
-      label:   'Seguridad',
+      id:      'security',
+      label:   'Security',
       content: '<div id="form-pass"></div>',
     },
     {
       id:      'confirm',
-      label:   'Confirmación',
+      label:   'Confirmation',
+      // Lazy function — runs only when user reaches this step
       // Función lazy — se ejecuta solo cuando el usuario llega a este paso
-      content: () => construirResumen(),
+      content: () => buildSummary(),
     },
   ],
+  // Panel is already in DOM when onChange fires / El panel ya está en el DOM al dispararse onChange
   onChange: (e) => {
-    // El panel ya está visible — el DOM está listo para montar componentes
     if (e.detail.index === 0) {
-      new MTS.Input('#form-datos #nombre', { label: 'Nombre' })
+      new MTS.Input('#form-data #name', { label: 'Name' });
     }
   },
-})
+});
 ```
 
-### Modo `progress` — indicador visual puro
+### `progress` — pure visual indicator / indicador visual puro
 
-Sin paneles. Solo el indicador del estado del proceso. Ideal para checkouts, pipelines, onboarding.
+[EN] No panels — only the step indicator. Ideal for checkouts, pipelines, onboarding.
+[ES] Sin paneles — solo el indicador de pasos. Ideal para checkouts, pipelines, onboarding.
 
 ```js
 new MTS.Stepper('#el', {
   mode:    'progress',
-  variant: 'default',   // 'default' | 'compact' | 'dots'
+  variant: 'default', // 'default' | 'compact' | 'dots'
   steps: [
-    { id: 'cart',    label: 'Carrito',    description: 'Revisa tus productos' },
-    { id: 'ship',    label: 'Envío',      description: 'Dirección de entrega'  },
-    { id: 'payment', label: 'Pago',       description: 'Método de pago'        },
-    { id: 'confirm', label: 'Confirmado'                                        },
+    { id: 'cart',    label: 'Cart',      description: 'Review your products' },
+    { id: 'ship',    label: 'Shipping',  description: 'Delivery address'     },
+    { id: 'payment', label: 'Payment',   description: 'Payment method'       },
+    { id: 'confirm', label: 'Confirmed'                                       },
   ],
-})
+});
 ```
 
 ---
 
-## Opciones
+## Options / Opciones
 
-| Opción | Tipo | Default | Descripción |
-|--------|------|---------|-------------|
-| `mode` | `string` | `'wizard'` | `'wizard'` \| `'progress'` |
-| `variant` | `string` | `'default'` | `'default'` \| `'compact'` \| `'dots'` — solo en `mode:'progress'` |
-| `steps` | `Array` | `[]` | Array de pasos — ver estructura abajo |
-| `active` | `number` | `0` | Índice del paso activo inicial |
-| `direction` | `string` | `'horizontal'` | `'horizontal'` \| `'vertical'` |
-| `clickable` | `boolean` | `false` | Permite navegar clickeando pasos completados |
-| `onChange` | `function` | `null` | Callback al cambiar de paso |
-| `onComplete` | `function` | `null` | Callback al llegar al último paso |
-| `onStepClick` | `function` | `null` | Callback al hacer click manual en un paso |
-| `onStatusChange` | `function` | `null` | Callback al cambiar estado de un paso |
+| Option | Type | Default | [EN] Description / [ES] Descripción |
+|--------|------|---------|--------------------------------------|
+| `mode` | `string` | `'wizard'` | `'wizard'` · `'progress'` |
+| `variant` | `string` | `'default'` | [EN] `'default'` · `'compact'` · `'dots'` — progress mode only / [ES] solo en modo progress |
+| `steps` | `array` | `[]` | [EN] Steps array — see schema below / [ES] Arreglo de pasos |
+| `active` | `number` | `0` | [EN] Initially active step index / [ES] Índice del paso activo inicial |
+| `direction` | `string` | `'horizontal'` | `'horizontal'` · `'vertical'` |
+| `clickable` | `boolean` | `false` | [EN] Allow clicking completed steps to navigate / [ES] Permitir navegar clickeando pasos completados |
+| `onChange` | `function` | — | [EN] Fires when active step changes / [ES] Se dispara al cambiar el paso activo |
+| `onComplete` | `function` | — | [EN] Fires when the last step is reached / [ES] Se dispara al llegar al último paso |
+| `onStepClick` | `function` | — | [EN] Fires when user clicks a step / [ES] Se dispara al hacer click en un paso |
+| `onStatusChange` | `function` | — | [EN] Fires when a step status changes / [ES] Se dispara al cambiar el estado de un paso |
 
-## Estructura de un paso
+### Step schema / Esquema de paso
 
-| Propiedad | Tipo | Descripción |
-|-----------|------|-------------|
-| `id` | `string` | Identificador único (requerido) |
-| `label` | `string` | Texto del paso (requerido) |
-| `description` | `string` | Subtítulo — no se muestra en `compact` ni `dots` |
-| `icon` | `string` | HTML SVG custom para el indicador |
-| `status` | `string` | `'pending'` \| `'error'` — `'complete'` y `'active'` se gestionan solos |
-| `disabled` | `boolean` | No permite navegar a este paso |
-| `content` | `string\|Element\|Function` | Contenido del panel — solo en `mode:'wizard'` |
+| Property | Type | [EN] Description / [ES] Descripción |
+|----------|------|--------------------------------------|
+| `id` | `string` | [EN] Unique identifier (required) / [ES] Identificador único (requerido) |
+| `label` | `string` | [EN] Step text (required) / [ES] Texto del paso (requerido) |
+| `description` | `string` | [EN] Subtitle — hidden in `compact` and `dots` / [ES] Subtítulo |
+| `icon` | `string` | [EN] Custom SVG HTML for the indicator / [ES] HTML SVG del indicador |
+| `status` | `string` | `'pending'` · `'error'` — `'complete'` and `'active'` are managed automatically |
+| `disabled` | `boolean` | [EN] Prevents navigation to this step / [ES] Impide navegar a este paso |
+| `content` | `string\|Element\|Function` | [EN] Panel content — `wizard` mode only / [ES] Contenido del panel — solo modo `wizard` |
 
-### Tipos de `content`
+---
+
+## Events / Eventos
 
 ```js
-// HTML string — más común
-content: '<div id="mi-form"></div>'
-
-// Element del DOM ya existente
-content: document.getElementById('mi-tabla')
-
-// Función lazy — se ejecuta solo cuando el usuario llega al paso
-// Ideal para contenido pesado o que depende de pasos anteriores
-content: () => {
-  const data = recolectarDatosAnteriores()
-  return '<div>' + data.map(item => '<p>' + item + '</p>').join('') + '</div>'
-}
+new MTS.Stepper('#el', {
+  steps: [...],
+  // Fires when active step changes / Se dispara al cambiar el paso activo
+  onChange: (e) => {
+    console.log(e.detail.index);     // → new index (0-based)
+    console.log(e.detail.prev);      // → previous index
+    console.log(e.detail.step);      // → new step object
+    console.log(e.detail.direction); // → 'next' | 'prev' | 'jump'
+  },
+  // Fires when last step is reached / Se dispara al llegar al último paso
+  onComplete: (e) => {
+    console.log(e.detail.steps); // → all steps
+  },
+  // Fires on clickable step click / Se dispara al hacer click (modo clickable)
+  onStepClick: (e) => {
+    console.log(e.detail.index, e.detail.step);
+  },
+  // Fires when step status changes / Se dispara al cambiar estado de un paso
+  onStatusChange: (e) => {
+    console.log(e.detail.index, e.detail.status);
+  },
+});
 ```
 
 ---
@@ -116,121 +135,47 @@ content: () => {
 ## API
 
 ```js
-const stepper = new MTS.Stepper('#el', { steps: [...] })
+const stepper = new MTS.Stepper('#el', { steps: [...] });
 
-stepper.next()              // avanzar un paso
-stepper.prev()              // retroceder un paso
-stepper.goTo(2)             // ir al paso índice 2
-stepper.goTo(2, 'jump')     // con dirección explícita
+// Navigate / Navegar
+stepper.next()
+stepper.prev()
+stepper.goTo(2)            // jump to index / saltar al índice
+stepper.goTo(2, 'jump')    // with explicit direction / con dirección explícita
 
-stepper.setStepStatus(1, 'error')    // marcar paso como error
-stepper.setStepStatus(1, 'pending')  // volver a pendiente
+// Step status / Estado del paso
+stepper.setStepStatus(1, 'error')    // mark as error / marcar como error
+stepper.setStepStatus(1, 'pending')  // reset to pending / resetear a pendiente
 
-stepper.getActive()   // → { index: 1, step: { id, label, ... } }
-stepper.getSteps()    // → copia del array de pasos
-stepper.isFirst()     // → boolean
-stepper.isLast()      // → boolean
+// Getters / Getters
+stepper.getActive()    // → { index, step }
+stepper.getSteps()     // → steps array copy
+stepper.isFirst()      // → boolean
+stepper.isLast()       // → boolean
 
-stepper.setSteps([...]) // reemplazar todos los pasos
+// Replace all steps / Reemplazar todos los pasos
+stepper.setSteps([...])
 
-stepper.on('change', cb)
-stepper.off('change', cb)
 stepper.destroy()
 ```
 
 ---
 
-## Eventos
+## DOM Events / Eventos DOM
 
-### `onChange`
 ```js
-stepper.on('change', (e) => {
-  e.detail.index      // índice nuevo (0-based)
-  e.detail.prev       // índice anterior
-  e.detail.step       // objeto del paso nuevo
-  e.detail.direction  // 'next' | 'prev' | 'jump'
-})
-```
-
-### `onComplete`
-```js
-stepper.on('complete', (e) => {
-  e.detail.steps  // array completo de pasos
-})
-```
-
-### `onStepClick`
-```js
-stepper.on('stepclick', (e) => {
-  e.detail.index  // índice del paso clickeado
-  e.detail.step   // objeto del paso
-})
-```
-
-### `onStatusChange`
-```js
-stepper.on('statuschange', (e) => {
-  e.detail.index   // índice del paso
-  e.detail.status  // nuevo status
-  e.detail.step    // objeto del paso
-})
-```
-
-### Eventos DOM
-```js
-document.addEventListener('mts:stepper:change',       (e) => {})
-document.addEventListener('mts:stepper:complete',     (e) => {})
-document.addEventListener('mts:stepper:stepclick',    (e) => {})
-document.addEventListener('mts:stepper:statuschange', (e) => {})
+el.addEventListener('mts:stepper:change',       (e) => {});
+el.addEventListener('mts:stepper:complete',     (e) => {});
+el.addEventListener('mts:stepper:stepclick',    (e) => {});
+el.addEventListener('mts:stepper:statuschange', (e) => {});
 ```
 
 ---
 
-## Ejemplos prácticos
+## Changelog
 
-### Registro de usuario (wizard)
-```js
-const reg = new MTS.Stepper('#registro', {
-  mode: 'wizard',
-  steps: [
-    { id:'s1', label:'Datos',     content:'<div id="r-datos"></div>' },
-    { id:'s2', label:'Seguridad', content:'<div id="r-pass"></div>'  },
-    { id:'s3', label:'Listo',     content:'<div id="r-ok"></div>'    },
-  ],
-  onChange: (e) => {
-    if (e.detail.index === 0) {
-      new MTS.Input('#r-datos', { label:'Nombre' })
-    }
-  },
-  onComplete: () => enviarFormulario(),
-})
-```
-
-### Checkout (progress)
-```js
-new MTS.Stepper('#checkout', {
-  mode: 'progress', variant: 'compact',
-  active: 1,
-  steps: [
-    { id:'cart',    label:'Carrito'    },
-    { id:'ship',    label:'Envío'      },
-    { id:'payment', label:'Pago'       },
-    { id:'confirm', label:'Confirmado' },
-  ],
-})
-```
-
-### Pipeline CI/CD (dots)
-```js
-new MTS.Stepper('#pipeline', {
-  mode: 'progress', variant: 'dots',
-  active: 2,
-  steps: [
-    { id:'t', label:'Trigger' },
-    { id:'b', label:'Build'   },
-    { id:'t', label:'Tests'   },
-    { id:'d', label:'Deploy'  },
-    { id:'l', label:'Live'    },
-  ],
-})
-```
+| Version | Description |
+|---------|-------------|
+| 2.1.0 | [EN] Bilingual docs, standardized structure / [ES] Docs bilingüe, estructura estandarizada |
+| 2.0.0 | [EN] Unified wizard + progress modes / [ES] Modos wizard y progress unificados |
+| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

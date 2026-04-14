@@ -1,10 +1,10 @@
 /* ============================================================
    MATIOS UI — matios-ui-picker-date.js  v2.0.0
-   MTS.Picker.Date — Selector de fecha
+   MTS.DatePicker.Date — Selector de fecha
    Requiere: matios-ui-picker-base.js
    ============================================================ */
 
-MTS.Picker.Date = class MtsPickerDate extends MTS.Picker.Base {
+MTS.DatePicker.Date = class MtsDatePickerDate extends MTS.DatePicker.Base {
 
   constructor(selector, options = {}) {
     options.placeholder  = options.placeholder || "DD/MM/YYYY";

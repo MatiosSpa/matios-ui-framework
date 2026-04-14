@@ -1,131 +1,172 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="es" data-mts-mode="dark">
 <head>
-  <script>
-  (function(){
-    var m=(location.search||'').match(/mts-theme=([a-z-]+)/);
-    if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
-    try{
-      var p=window.parent;
-      if(p&&p!==window){
-        var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
-        if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
-      }
-    }catch(e){}
-  })();
-  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS Temas — Demo</title>
+  <!-- Anti-flash: apply mode+accent before CSS renders -->
+  <script>(function(){
+    var sp=location.search||location.hash||'';
+    var mm=sp.match(/mts-mode=([a-z-]+)/);
+    var ma=sp.match(/mts-accent=([a-z-]+)/);
+    if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+    if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+    try{
+      var p=window.parent;
+      if(p&&p!==window){
+        var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+        var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+        if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+        if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+        else   document.documentElement.removeAttribute('data-mts-accent');
+      }
+    }catch(e){}
+  })();</script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../base/matios-ui-base.css">
-  <link rel="stylesheet" href="matios-ui-theme-dark.css">
-  <link rel="stylesheet" href="matios-ui-theme-light.css">
-  <link rel="stylesheet" href="matios-ui-theme-violet.css">
-  <link rel="stylesheet" href="matios-ui-theme-blue.css">
-  <link rel="stylesheet" href="matios-ui-theme-olive.css">
-  <link rel="stylesheet" href="matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="matios-ui-mode-light.css">
+  <link rel="stylesheet" href="matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="matios-ui-accent-blue.css">
   <style>
     *{box-sizing:border-box}
     body{margin:0;padding:32px;background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);}
     .page{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:32px;}
 
-    /* Header */
     .page-header h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin:0 0 6px;color:var(--mts-text-primary);}
     .page-header h1 span{color:var(--mts-color-primary);}
     .page-header p{font-size:13px;color:var(--mts-text-muted);margin:0;line-height:1.6;}
     code{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);padding:1px 6px;border-radius:4px;font-size:11px;color:var(--mts-color-primary);font-family:var(--mts-font-mono);}
 
-    /* Theme grid */
-    .themes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
-    .theme-card{border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid rgba(255,255,255,.08);transition:border-color .15s,transform .15s;}
-    .theme-card:hover{transform:translateY(-2px);}
-    .theme-card.active{border-color:var(--mts-color-primary);}
-    .theme-card__preview{padding:12px;display:flex;gap:8px;}
-    .theme-card__sidebar{width:48px;border-radius:7px;padding:8px 6px;display:flex;flex-direction:column;gap:5px;flex-shrink:0;}
-    .theme-card__sidebar-dot{height:5px;border-radius:3px;}
-    .theme-card__sidebar-line{height:3px;border-radius:2px;background:rgba(255,255,255,.15);}
-    .theme-card__sidebar-line.sm{width:70%;}
-    .theme-card__sidebar-line.md{width:88%;}
-    .theme-card__main{flex:1;display:flex;flex-direction:column;gap:5px;}
-    .theme-card__block{border-radius:5px;padding:6px 8px;}
-    .theme-card__block-title{height:4px;border-radius:2px;background:rgba(255,255,255,.2);margin-bottom:4px;width:70%;}
-    .theme-card__block-sub{height:3px;border-radius:2px;background:rgba(255,255,255,.1);width:50%;}
-    .theme-card__info{padding:0 12px 12px;}
-    .theme-card__name{display:flex;align-items:center;gap:7px;margin-bottom:2px;}
-    .theme-card__badge{font-size:9px;padding:1px 6px;border-radius:99px;font-weight:700;}
-    .theme-card__desc{font-size:11px;color:rgba(255,255,255,.35);}
+    /* Mode×Accent grid */
+    .combos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+    .combo-card{border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color .15s,transform .15s;}
+    .combo-card:hover{transform:translateY(-2px);}
+    .combo-card.active{border-color:var(--mts-color-primary);}
+    .combo-card__preview{padding:12px;display:flex;gap:8px;}
+    .combo-card__sidebar{width:44px;border-radius:7px;padding:8px 6px;display:flex;flex-direction:column;gap:5px;flex-shrink:0;}
+    .combo-card__dot{height:5px;border-radius:3px;}
+    .combo-card__line{height:3px;border-radius:2px;background:rgba(255,255,255,.15);}
+    .combo-card__line.sm{width:70%;}
+    .combo-card__main{flex:1;display:flex;flex-direction:column;gap:5px;}
+    .combo-card__block{border-radius:5px;padding:6px 8px;}
+    .combo-card__title{height:4px;border-radius:2px;background:rgba(255,255,255,.2);margin-bottom:4px;width:70%;}
+    .combo-card__sub{height:3px;border-radius:2px;background:rgba(255,255,255,.1);width:50%;}
+    .combo-card__info{padding:0 12px 12px;}
+    .combo-card__name{font-size:12px;font-weight:700;margin-bottom:3px;}
+    .combo-card__desc{font-size:11px;opacity:.5;}
+    .combo-card__badge{font-size:9px;padding:1px 6px;border-radius:99px;font-weight:700;display:inline-block;margin-left:6px;}
+
+    /* Switcher */
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;flex-direction:column;gap:6px;z-index:999;align-items:flex-end;}
+    .tp-row{display:flex;gap:4px;}
+    .tp-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);padding-right:4px;align-self:center;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+    .demo-btn-sm.active{background:var(--mts-color-primary);color:#fff;border-color:var(--mts-color-primary);}
 
     /* Section */
     .section{background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:12px;overflow:hidden;}
     .section__header{padding:12px 16px;border-bottom:1px solid var(--mts-border-color);font-size:13px;font-weight:700;color:var(--mts-text-primary);}
     .section__body{padding:16px;}
     .section__desc{font-size:12px;color:var(--mts-text-muted);margin:0 0 14px;line-height:1.6;}
-
-    /* Code block */
     pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:14px;overflow-x:auto;font-family:var(--mts-font-mono);font-size:12px;line-height:1.65;color:var(--mts-text-primary);margin:0;}
-    pre code{background:none;border:none;padding:0;font-size:inherit;color:inherit;}
 
     /* Variables table */
     .vars-table{width:100%;border-collapse:collapse;font-size:12px;}
     .vars-table th{padding:7px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
     .vars-table td{padding:7px 14px;border-bottom:1px solid var(--mts-border-color);vertical-align:middle;}
     .vars-table tr:last-child td{border-bottom:none;}
-    .vars-table tr:nth-child(even) td{background:rgba(255,255,255,.02);}
     .var-name{color:var(--mts-color-primary);font-family:var(--mts-font-mono);font-size:11px;}
     .var-desc{color:var(--mts-text-muted);}
-    .var-swatch{width:16px;height:16px;border-radius:4px;display:inline-block;border:1px solid var(--mts-border-color);vertical-align:middle;}
-
-    /* Theme switcher flotante */
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-    .demo-btn-sm.active{background:var(--mts-color-primary);color:#fff;border-color:var(--mts-color-primary);}
   </style>
+  <link rel="stylesheet" href="../shared/demo-shared.css">
+  <script src="../shared/demo-shared.js"></script>
 </head>
 <body>
 
+<!-- Theme switcher: 2 groups -->
 <div class="demo-theme" id="themeSwitcher">
-  <button class="demo-btn-sm" data-t="dark"          onclick="applyTheme('dark')">Dark</button>
-  <button class="demo-btn-sm" data-t="light"         onclick="applyTheme('light')">Light</button>
-  <button class="demo-btn-sm" data-t="violet"        onclick="applyTheme('violet')">Violet</button>
-  <button class="demo-btn-sm" data-t="blue"          onclick="applyTheme('blue')">Blue</button>
-  <button class="demo-btn-sm" data-t="olive"         onclick="applyTheme('olive')">Olive</button>
-  <button class="demo-btn-sm" data-t="high-contrast" onclick="applyTheme('high-contrast')">HC</button>
+  <div class="tp-row">
+    <span class="tp-lbl">Modo</span>
+    <button class="demo-btn-sm" data-mode="dark"  onclick="applyMode('dark')">Dark</button>
+    <button class="demo-btn-sm" data-mode="light" onclick="applyMode('light')">Light</button>
+  </div>
+  <div class="tp-row">
+    <span class="tp-lbl">Acento</span>
+    <button class="demo-btn-sm" data-accent=""       onclick="applyAccent(null)">—</button>
+    <button class="demo-btn-sm" data-accent="violet" onclick="applyAccent('violet')">Violet</button>
+    <button class="demo-btn-sm" data-accent="olive"  onclick="applyAccent('olive')">Olive</button>
+    <button class="demo-btn-sm" data-accent="blue"   onclick="applyAccent('blue')">Blue</button>
+  </div>
 </div>
 
 <div class="page">
 
   <div class="page-header">
     <h1>MTS <span>Temas</span></h1>
-    <p>Todos los temas usan <code>CSS Variables</code>. Pincha un tema para activarlo globalmente.</p>
+    <p>Arquitectura <strong>modo × acento</strong>. Elige un modo base y opcionalmente un color de acento.</p>
   </div>
 
-  <!-- Tarjetas de temas -->
-  <div class="themes-grid" id="themesGrid"></div>
+  <!-- Combinaciones modo x acento -->
+  <div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);margin-bottom:10px;">Combinaciones disponibles</div>
+    <div class="combos-grid" id="combosGrid"></div>
+  </div>
+
+  <!-- Cómo usar -->
+  <div class="section">
+    <div class="section__header">Cómo usar / How to use</div>
+    <div class="section__body">
+      <p class="section__desc">Aplica <code>data-mts-mode</code> en el <code>&lt;html&gt;</code> para los fondos y <code>data-mts-accent</code> (opcional) para el color primario.</p>
+      <pre>&lt;!-- Solo modo / Mode only --&gt;
+&lt;html data-mts-mode="dark"&gt;
+
+&lt;!-- Modo + acento / Mode + accent --&gt;
+&lt;html data-mts-mode="dark" data-mts-accent="violet"&gt;
+&lt;html data-mts-mode="light" data-mts-accent="olive"&gt;
+
+&lt;!-- CSS a importar --&gt;
+&lt;link rel="stylesheet" href="themes/matios-ui-mode-dark.css"&gt;
+&lt;link rel="stylesheet" href="themes/matios-ui-mode-light.css"&gt;
+&lt;link rel="stylesheet" href="themes/matios-ui-accent-violet.css"&gt;
+&lt;link rel="stylesheet" href="themes/matios-ui-accent-olive.css"&gt;
+&lt;link rel="stylesheet" href="themes/matios-ui-accent-blue.css"&gt;</pre>
+    </div>
+  </div>
 
   <!-- Crear tema custom -->
   <div class="section">
-    <div class="section__header">Crear un tema custom</div>
+    <div class="section__header">Crear un modo custom</div>
     <div class="section__body">
-      <p class="section__desc">Crea un archivo CSS y redefine solo las variables que necesites. El resto hereda del tema base.</p>
-      <pre><code>[data-mts-theme="mi-empresa"] {
-  --mts-color-primary:        #e63946;
-  --mts-color-primary-hover:  #c1121f;
-  --mts-color-primary-light:  rgba(230,57,70,.12);
-  --mts-color-primary-text:   #ffffff;
-
+      <p class="section__desc">Crea un archivo CSS y redefine solo las variables que necesites en tu propio selector.</p>
+      <pre>[data-mts-mode="mi-empresa"] {
+  /* Fondos / Backgrounds */
   --mts-bg-body:      #1a0a0a;
   --mts-bg-surface:   #220d0d;
   --mts-bg-surface-2: #2d1010;
 
+  /* Texto / Text */
   --mts-text-primary:   #f8eaea;
   --mts-text-secondary: #c9aaaa;
   --mts-text-muted:     #7a5555;
 
+  /* Bordes / Borders */
   --mts-border-color:       #3d1515;
   --mts-border-color-focus: #e63946;
-}</code></pre>
+}
+
+/* Acento custom / Custom accent */
+[data-mts-accent="brand"] {
+  --mts-color-primary:        #e63946;
+  --mts-color-primary-hover:  #c1121f;
+  --mts-color-primary-light:  rgba(230,57,70,.12);
+  --mts-color-primary-text:   #ffffff;
+  --mts-btn-shadow-primary:   0 4px 14px rgba(230,57,70,.4);
+  --mts-btn-ring-primary:     0 0 0 3px rgba(230,57,70,.25);
+  --mts-border-color-focus:   #e63946;
+}</pre>
     </div>
   </div>
 
@@ -138,79 +179,153 @@
 </div>
 
 <script>
-(function(){
-  var m=(location.search||'').match(/mts-theme=([a-z-]+)/);
-  if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
-})();
+var MODES = [
+  { id:'dark',  name:'Dark',  bg:'#0e0f14', surface:'#161820', border:'#2a2d38', text:'#e8eaf0', desc:'Oscuro neutro' },
+  { id:'light', name:'Light', bg:'#f4f6fb', surface:'#ffffff', border:'#e2e5ef', text:'#111827', desc:'Claro' },
+];
 
-var THEMES = [
-  { id:'dark',          name:'Dark',          bg:'#0e0f14', surface:'#161820', primary:'#4f8eff',  textOnPrimary:'#fff', desc:'Oscuro neutro — el default.' },
-  { id:'light',         name:'Light',         bg:'#f4f6fb', surface:'#ffffff', primary:'#2563eb',  textOnPrimary:'#fff', desc:'Claro, para ambientes con mucha luz.' },
-  { id:'violet',        name:'Violet',        bg:'#0d0a18', surface:'#150f28', primary:'#6a5acd',  textOnPrimary:'#fff', desc:'Oscuro con tinte púrpura profundo.' },
-  { id:'blue',          name:'Blue',          bg:'#060912', surface:'#0a0f22', primary:'#2a52be',  textOnPrimary:'#fff', desc:'Oscuro con tinte azul marino.' },
-  { id:'olive',         name:'Olive',         bg:'#080c04', surface:'#0e1408', primary:'#6b8e23',  textOnPrimary:'#fff', desc:'Oscuro con tinte verde oliva.' },
-  { id:'high-contrast', name:'High Contrast', bg:'#000000', surface:'#0a0a0a', primary:'#ffff00',  textOnPrimary:'#000', desc:'Máximo contraste — accesibilidad.' },
+var ACCENTS = [
+  { id:null,     name:'Default',  primary:'#4f8eff', primaryLight:'#2563eb', label:'— (azul)' },
+  { id:'violet', name:'Violet',   primary:'#6a5acd', primaryLight:'#6a5acd', label:'Violet' },
+  { id:'olive',  name:'Olive',    primary:'#6b8e23', primaryLight:'#6b8e23', label:'Olive' },
+  { id:'blue',   name:'Blue',     primary:'#2a52be', primaryLight:'#2a52be', label:'Blue (cobalt)' },
 ];
 
 var CSS_VARS = [
-  { name:'--mts-color-primary',    desc:'Color principal (botones, links, activos)' },
-  { name:'--mts-color-accent',     desc:'Color de acento secundario' },
+  { name:'--mts-color-primary',    desc:'Color primario — botones, links, activos' },
+  { name:'--mts-color-primary-hover', desc:'Primary en hover' },
+  { name:'--mts-color-primary-light', desc:'Primary translúcido — fondos de ítem activo' },
+  { name:'--mts-color-accent',     desc:'Color de acento secundario decorativo' },
   { name:'--mts-bg-body',          desc:'Fondo de la página' },
   { name:'--mts-bg-surface',       desc:'Sidebar, topbar, cards' },
-  { name:'--mts-bg-surface-2',     desc:'Superficie elevada (hover, inputs)' },
+  { name:'--mts-bg-surface-2',     desc:'Superficie elevada — hover, inputs' },
   { name:'--mts-text-primary',     desc:'Texto principal' },
   { name:'--mts-text-secondary',   desc:'Texto secundario' },
   { name:'--mts-text-muted',       desc:'Texto apagado / hints' },
   { name:'--mts-border-color',     desc:'Color de bordes' },
-  { name:'--mts-color-success',    desc:'Verde — éxito, confirmación' },
+  { name:'--mts-border-color-focus', desc:'Borde en foco (= primary)' },
+  { name:'--mts-color-success',    desc:'Verde — éxito' },
   { name:'--mts-color-warning',    desc:'Amarillo — advertencia' },
-  { name:'--mts-color-danger',     desc:'Rojo — error, eliminar' },
+  { name:'--mts-color-danger',     desc:'Rojo — error' },
   { name:'--mts-color-info',       desc:'Azul — información' },
   { name:'--mts-shadow-sm',        desc:'Sombra pequeña' },
   { name:'--mts-shadow-md',        desc:'Sombra mediana' },
   { name:'--mts-shadow-lg',        desc:'Sombra grande' },
+  { name:'--mts-btn-shadow-primary', desc:'Sombra del botón primary' },
+  { name:'--mts-btn-ring-primary',   desc:'Ring/focus del botón primary' },
   { name:'--mts-font-family',      desc:'Fuente principal' },
-  { name:'--mts-radius-md',        desc:'Radio de borde medio (6px)' },
-  { name:'--mts-radius-lg',        desc:'Radio de borde grande (10px)' },
+  { name:'--mts-radius-md',        desc:'Radio de borde medio' },
+  { name:'--mts-radius-lg',        desc:'Radio de borde grande' },
 ];
 
-function getCurrentTheme() {
-  return document.documentElement.getAttribute('data-mts-theme') || 'dark';
+function currentMode() {
+  return document.documentElement.getAttribute('data-mts-mode') || 'dark';
+}
+function currentAccent() {
+  return document.documentElement.getAttribute('data-mts-accent') || null;
 }
 
-function renderGrid() {
-  var current = getCurrentTheme();
-  var grid = document.getElementById('themesGrid');
-  grid.innerHTML = THEMES.map(function(t) {
-    var isActive = current === t.id;
-    return '<div class="theme-card' + (isActive ? ' active' : '') + '" ' +
-      'style="background:' + t.bg + ';border-color:' + (isActive ? t.primary : 'rgba(255,255,255,.08)') + ';" ' +
-      'onclick="applyTheme(\'' + t.id + '\')">' +
-      '<div class="theme-card__preview">' +
-        '<div class="theme-card__sidebar" style="background:' + t.surface + ';">' +
-          '<div class="theme-card__sidebar-dot" style="background:' + t.primary + ';width:26px;"></div>' +
-          '<div class="theme-card__sidebar-line sm"></div>' +
-          '<div class="theme-card__sidebar-line"></div>' +
-          '<div class="theme-card__sidebar-line md"></div>' +
+function renderCombos() {
+  var cm = currentMode();
+  var ca = currentAccent();
+  var grid = document.getElementById('combosGrid');
+
+  var combos = [];
+  MODES.forEach(function(mode) {
+    ACCENTS.forEach(function(accent) {
+      combos.push({ mode: mode, accent: accent });
+    });
+  });
+
+  grid.innerHTML = combos.map(function(c) {
+    var isActive = c.mode.id === cm && (c.accent.id || null) === ca;
+    var primary = c.accent.primary;
+    // For light mode without accent, use light primary
+    if (c.mode.id === 'light' && !c.accent.id) primary = '#2563eb';
+    var btnTextColor = c.mode.id === 'light' ? '#333' : c.mode.text;
+
+    return '<div class="combo-card' + (isActive ? ' active' : '') + '" ' +
+      'style="background:' + c.mode.bg + ';border-color:' + (isActive ? primary : 'rgba(128,128,128,.15)') + ';" ' +
+      'onclick="applyCombo(\'' + c.mode.id + '\',' + (c.accent.id ? '\'' + c.accent.id + '\'' : 'null') + ')">' +
+      '<div class="combo-card__preview">' +
+        '<div class="combo-card__sidebar" style="background:' + c.mode.surface + ';">' +
+          '<div class="combo-card__dot" style="background:' + primary + ';width:26px;"></div>' +
+          '<div class="combo-card__line sm"></div>' +
+          '<div class="combo-card__line"></div>' +
         '</div>' +
-        '<div class="theme-card__main">' +
-          '<div class="theme-card__block" style="background:' + t.surface + ';">' +
-            '<div class="theme-card__block-title"></div>' +
-            '<div class="theme-card__block-sub"></div>' +
+        '<div class="combo-card__main">' +
+          '<div class="combo-card__block" style="background:' + c.mode.surface + ';">' +
+            '<div class="combo-card__title"></div>' +
+            '<div class="combo-card__sub"></div>' +
           '</div>' +
-          '<div style="background:' + t.primary + ';border-radius:4px;padding:4px 8px;width:fit-content;font-size:9px;color:' + t.textOnPrimary + ';font-weight:700;">Button</div>' +
+          '<div style="background:' + primary + ';border-radius:4px;padding:3px 7px;width:fit-content;font-size:9px;color:#fff;font-weight:700;">Button</div>' +
         '</div>' +
       '</div>' +
-      '<div class="theme-card__info">' +
-        '<div class="theme-card__name">' +
-          '<span style="font-size:13px;font-weight:700;color:' + t.primary + ';">' + t.name + '</span>' +
-          (isActive ? '<span class="theme-card__badge" style="background:' + t.primary + ';color:' + t.textOnPrimary + ';">ACTIVO</span>' : '') +
+      '<div class="combo-card__info">' +
+        '<div class="combo-card__name" style="color:' + primary + ';">' +
+          c.mode.name +
+          (c.accent.id ? '<span class="combo-card__badge" style="background:' + primary + ';color:#fff;">+' + c.accent.name + '</span>' : '') +
+          (isActive ? '<span class="combo-card__badge" style="background:' + primary + ';color:#fff;margin-left:4px;">ACTIVO</span>' : '') +
         '</div>' +
-        '<span class="theme-card__desc">' + t.desc + '</span>' +
+        '<div class="combo-card__desc" style="color:' + c.mode.text + ';">' + c.mode.desc + (c.accent.id ? ' + ' + c.accent.label : ' + azul default') + '</div>' +
       '</div>' +
     '</div>';
   }).join('');
 }
+
+function applyMode(m) {
+  document.documentElement.setAttribute('data-mts-mode', m);
+  syncButtons();
+  notify();
+  renderCombos();
+}
+
+function applyAccent(a) {
+  if (a) document.documentElement.setAttribute('data-mts-accent', a);
+  else   document.documentElement.removeAttribute('data-mts-accent');
+  syncButtons();
+  notify();
+  renderCombos();
+}
+
+function applyCombo(mode, accent) {
+  applyMode(mode);
+  applyAccent(accent);
+}
+
+function syncButtons() {
+  var cm = currentMode();
+  var ca = currentAccent();
+  document.querySelectorAll('[data-mode]').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.mode === cm);
+  });
+  document.querySelectorAll('[data-accent]').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.accent === (ca || ''));
+  });
+}
+
+function notify() {
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type:'setMode',   mode:   currentMode()   }, '*');
+      window.parent.postMessage({ type:'setAccent', accent: currentAccent() || '' }, '*');
+    }
+  } catch(e) {}
+}
+
+/* Listen for mode/accent from parent */
+window.addEventListener('message', function(e) {
+  if (!e.data) return;
+  if (e.data.type === 'setMode') {
+    document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+    syncButtons(); renderCombos();
+  }
+  if (e.data.type === 'setAccent') {
+    if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+    else               document.documentElement.removeAttribute('data-mts-accent');
+    syncButtons(); renderCombos();
+  }
+});
 
 function renderVarsTable() {
   var table = document.getElementById('varsTable');
@@ -218,40 +333,10 @@ function renderVarsTable() {
     '<thead><tr><th>Variable</th><th>Descripción</th></tr></thead>' +
     '<tbody>' +
     CSS_VARS.map(function(v) {
-      return '<tr>' +
-        '<td><span class="var-name">' + v.name + '</span></td>' +
-        '<td class="var-desc">' + v.desc + '</td>' +
-      '</tr>';
+      return '<tr><td><span class="var-name">' + v.name + '</span></td><td class="var-desc">' + v.desc + '</td></tr>';
     }).join('') +
     '</tbody>';
 }
-
-function applyTheme(t) {
-  document.documentElement.setAttribute('data-mts-theme', t);
-  /* Sincronizar botones del switcher */
-  document.querySelectorAll('#themeSwitcher [data-t]').forEach(function(b) {
-    b.classList.toggle('active', b.dataset.t === t);
-  });
-  /* Notificar al parent (index.html) */
-  try {
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type:'setTheme', theme:t }, '*');
-    }
-  } catch(e) {}
-  /* Re-renderizar las tarjetas para actualizar el badge ACTIVO */
-  renderGrid();
-}
-
-/* Recibir tema desde el parent */
-window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'setTheme') {
-    document.documentElement.setAttribute('data-mts-theme', e.data.theme);
-    document.querySelectorAll('#themeSwitcher [data-t]').forEach(function(b) {
-      b.classList.toggle('active', b.dataset.t === e.data.theme);
-    });
-    renderGrid();
-  }
-});
 
 /* Ocultar switcher si está en iframe */
 if (window !== window.top) {
@@ -259,17 +344,9 @@ if (window !== window.top) {
   if (ts) ts.style.display = 'none';
 }
 
-/* Marcar botón activo inicial */
-(function(){
-  var t = getCurrentTheme();
-  document.querySelectorAll('#themeSwitcher [data-t]').forEach(function(b) {
-    b.classList.toggle('active', b.dataset.t === t);
-  });
-})();
-
-renderGrid();
+syncButtons();
+renderCombos();
 renderVarsTable();
 </script>
-
 </body>
 </html>

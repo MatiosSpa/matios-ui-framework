@@ -1,89 +1,124 @@
 /* ============================================================
    MATIOS UI — matios-ui-select.js
-   MTS.Select — Select con búsqueda, multi-select y grupos
-   Eventos DOM: mts:select:change | mts:select:open | mts:select:close
-   Version: 2.0.0
+   MTS.Select — Select with search, multi-select and groups
+   Version: 2.1.0
    ============================================================ */
 
 window.MTS = window.MTS || {};
 
 MTS.Select = class MtsSelect {
-  /**
-   * @param {string|Element} selector  Contenedor
-   * @param {object} options
-   * @param {Array}    options.options      [{ value, label, group?, icon?, disabled? }]
-   * @param {*}        options.value        Valor(es) inicial(es)
-   * @param {string}   options.label
-   * @param {string}   options.placeholder
-   * @param {string}   options.hint
-   * @param {boolean}  options.multiple     Multi-select
-   * @param {boolean}  options.searchable   Búsqueda en lista
-   * @param {boolean}  options.clearable
-   * @param {boolean}  options.disabled
-   * @param {number}   options.maxSelect    Límite de selección en multi
-   * @param {number}   options.debounce     ms para disparar onSearch — default: 300
-   * @param {number}   options.minChars     Mínimo de caracteres para disparar onSearch — default: 1
-   * @param {function} options.onSearch     async (query) => [{ value, label, ... }]
-   *                                        Si se define, la búsqueda es controlada externamente.
-   *                                        El dev decide de dónde vienen los datos.
-   * @param {function} options.onChange
-   */
   constructor(selector, options = {}) {
+    // Target container element / Elemento contenedor
     this._container = typeof selector === 'string'
       ? document.querySelector(selector)
       : selector;
-    if (!this._container) { console.error('[MTS.Select] No encontrado:', selector); return; }
-    /* ── data-* → inicialización HTML declarativa ── */
+    if (!this._container) { console.error('[MTS.Select] Not found / No encontrado:', selector); return; }
+
+    // Read data-* attributes for declarative HTML initialization
+    // Lee atributos data-* para inicialización HTML declarativa
     const _ds = this._container?.dataset || {};
     const _fromHTML = {};
-    if (_ds.label !== undefined) _fromHTML.label = _ds.label;
+    if (_ds.label       !== undefined) _fromHTML.label       = _ds.label;
     if (_ds.placeholder !== undefined) _fromHTML.placeholder = _ds.placeholder;
-    if (_ds.hint !== undefined) _fromHTML.hint = _ds.hint;
-    if (_ds.value !== undefined) _fromHTML.value = _ds.value;
-    if (_ds.multiple !== undefined) _fromHTML.multiple = true;
-    if (_ds.searchable !== undefined) _fromHTML.searchable = true;
-    if (_ds.clearable !== undefined) _fromHTML.clearable = true;
-    if (_ds.disabled !== undefined) _fromHTML.disabled = true;
-    if (_ds.maxSelect !== undefined) _fromHTML.maxSelect = parseInt(_ds.maxSelect);
+    if (_ds.hint        !== undefined) _fromHTML.hint        = _ds.hint;
+    if (_ds.value       !== undefined) _fromHTML.value       = _ds.value;
+    if (_ds.multiple    !== undefined) _fromHTML.multiple    = true;
+    if (_ds.searchable  !== undefined) _fromHTML.searchable  = true;
+    if (_ds.clearable   !== undefined) _fromHTML.clearable   = true;
+    if (_ds.disabled    !== undefined) _fromHTML.disabled    = true;
+    if (_ds.maxSelect   !== undefined) _fromHTML.maxSelect   = parseInt(_ds.maxSelect);
     options = { ..._fromHTML, ...options };
 
+    // Options list: [{ value, label, group?, icon?, disabled? }]
+    // Lista de opciones
+    this.options = options.options || [];
 
-    this.options     = options.options     || [];
-    this.label       = options.label       || '';
+    // Field label / Etiqueta del campo
+    this.label = options.label || '';
+
+    // Placeholder text / Texto placeholder
     this.placeholder = options.placeholder || 'Selecciona...';
-    this.hint        = options.hint        || '';
-    this.multiple    = options.multiple    ?? false;
-    this.searchable  = options.searchable  ?? false;
-    this.clearable   = options.clearable   ?? false;
-    this.disabled    = options.disabled    ?? false;
-    this.maxSelect   = options.maxSelect   || null;
-    this.debounce    = options.debounce    ?? 300;
-    this.minChars    = options.minChars    ?? 1;
-    this._value      = this.multiple
+
+    // Helper text / Texto de ayuda
+    this.hint = options.hint || '';
+
+    // Allow multiple selection / Permitir selección múltiple
+    this.multiple = options.multiple ?? false;
+
+    // Enable search inside the list / Habilitar búsqueda en la lista
+    this.searchable = options.searchable ?? false;
+
+    // Show clear button / Mostrar botón limpiar
+    this.clearable = options.clearable ?? false;
+
+    // Disables all interaction / Deshabilita toda interacción
+    this.disabled = options.disabled ?? false;
+
+    // Maximum number of selections in multi mode / Máximo de selecciones en modo multi
+    this.maxSelect = options.maxSelect || null;
+
+    // Debounce delay for onSearch in ms / Delay debounce para onSearch en ms
+    this.debounce = options.debounce ?? 300;
+
+    // Minimum characters to trigger onSearch / Mínimo de caracteres para disparar onSearch
+    this.minChars = options.minChars ?? 1;
+
+    this._value = this.multiple
       ? (Array.isArray(options.value) ? options.value : [])
       : (options.value ?? null);
-    this._isOpen     = false;
-    this._listeners  = {};
-    this._search     = '';
-    this._debTimer   = null;
-    this._isLoading  = false;
-    /* onSearch: si se define, el dev controla de dónde vienen las opciones */
-    this._onSearch   = options.onSearch || null;
 
-    if (options.onChange)  this.on('change', options.onChange);
-    if (options.onSelect)  this.on('change', options.onSelect);  // alias onSelect
+    this._isOpen    = false;
+    this._listeners = {};
+    this._search    = '';
+    this._debTimer  = null;
+    this._isLoading = false;
+
+    // External search handler: async (query) => [{ value, label, ... }]
+    // Manejador de búsqueda externa: async (query) => [{ value, label, ... }]
+    // Async search function: (query) => items[] | Promise<items[]>
+    // Función de búsqueda async — proveedor de datos, no un evento
+    this._onSearch = options.onSearch || null;
+
+    // Fires when selection changes / Se dispara al cambiar la selección
+    if (options.onChange) this.on('change', options.onChange);
+    // onSelect is an alias for onChange / onSelect es un alias de onChange
+    if (options.onSelect) this.on('change', options.onSelect);
+
     this._build();
     this._bindEvents();
   }
 
-  /* ── API pública ─────────────────────────────────────────── */
+  /* ── Public API / API pública ────────────────────────────── */
 
-  getValue()       { return this._value; }
-  getText()        { return this._getText(); }        // retorna el label del valor seleccionado
-  get value()      { return this._value; }            // sel.value — acceso directo
-  get text()       { return this._getText(); }         // sel.text — acceso directo
-  setValue(v)      { this._value = v; this._updateTrigger(); this._syncHidden(); this._emit('change', { value: v }); return this; }
-  clear()          { this._value = this.multiple ? [] : null; this._updateTrigger(); this._syncHidden(); this._emit('change', { value: this._value }); return this; }
+  // Returns current value / Retorna el valor actual
+  getValue() { return this._value; }
+
+  // Returns selected option label / Retorna el label de la opción seleccionada
+  getText()  { return this._getText(); }
+
+  get value() { return this._value; }
+  get text()  { return this._getText(); }
+
+  // Sets value programmatically / Establece el valor programáticamente
+  setValue(v) {
+    this._value = v;
+    this._updateTrigger();
+    this._syncHidden();
+    this._emit('change', { value: v });
+    return this;
+  }
+
+  // Clears selection / Limpia la selección
+  clear() {
+    this._value = this.multiple ? [] : null;
+    this._updateTrigger();
+    this._syncHidden();
+    this._emit('change', { value: this._value });
+    return this;
+  }
+
+  // Replaces option list and optionally enables the select
+  // Reemplaza la lista de opciones y opcionalmente habilita el select
   setOptions(opts, enable = false) {
     this.options = opts;
     this._renderOptions();
@@ -91,6 +126,7 @@ MTS.Select = class MtsSelect {
     return this;
   }
 
+  // Enable / disable interaction / Habilitar / deshabilitar interacción
   enable() {
     this.disabled = false;
     this._triggerEl.classList.remove('mts-select__trigger--disabled');
@@ -106,14 +142,13 @@ MTS.Select = class MtsSelect {
     return this;
   }
 
+  // Open the dropdown / Abrir el dropdown
   open() {
     if (this._isOpen) return this;
     this._isOpen = true;
-    /* Posicionar el dropdown (portal en document.body) */
     this._positionDropdown();
     this._dropdownEl.classList.add('mts-select__dropdown--open');
     this._triggerEl.setAttribute('aria-expanded', 'true');
-    /* Si es async, disparar búsqueda inicial vacía al abrir */
     if (this._onSearch && this._searchEl) {
       this._searchEl.value = '';
       this._search = '';
@@ -124,25 +159,7 @@ MTS.Select = class MtsSelect {
     return this;
   }
 
-  _positionDropdown() {
-    const rect = this._triggerEl.getBoundingClientRect();
-    const drop  = this._dropdownEl;
-    drop.style.position = 'fixed';
-    drop.style.zIndex   = '9999';
-    drop.style.width    = rect.width + 'px';
-    drop.style.left     = rect.left  + 'px';
-    /* Mostrar abajo si hay espacio, arriba si no */
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const dropH      = drop.offsetHeight || 240;
-    if (spaceBelow >= dropH || spaceBelow >= 120) {
-      drop.style.top    = (rect.bottom + 2) + 'px';
-      drop.style.bottom = 'auto';
-    } else {
-      drop.style.bottom = (window.innerHeight - rect.top + 2) + 'px';
-      drop.style.top    = 'auto';
-    }
-  }
-
+  // Close the dropdown / Cerrar el dropdown
   close() {
     if (!this._isOpen) return this;
     this._isOpen = false;
@@ -152,28 +169,31 @@ MTS.Select = class MtsSelect {
     return this;
   }
 
-  toggle()  { return this._isOpen ? this.close() : this.open(); }
-  on(e, cb) { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
-  off(e, cb){ this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
+  toggle() { return this._isOpen ? this.close() : this.open(); }
+
+  // Register / remove event listeners / Registrar / remover listeners
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
+
+  // Destroy and clean up / Destruir y limpiar
   destroy() {
-    this._dropdownEl?.remove();           /* limpiar del body */
+    this._dropdownEl?.remove();
     this._container.innerHTML = '';
     document.removeEventListener('click', this._outsideClick);
-    window.removeEventListener('scroll',  this._onScroll, true);
-    window.removeEventListener('resize',  this._onResize);
+    window.removeEventListener('scroll', this._onScroll, true);
+    window.removeEventListener('resize', this._onResize);
   }
 
-  /* ── Búsqueda externa (onSearch) ──────────────────────────
-     El dev pasa onSearch: async (query) => [...opciones]
-     El componente llama a esa función, muestra loading
-     y renderiza las opciones que devuelve.
-     ─────────────────────────────────────────────────────── */
+  /* ── External search / Búsqueda externa ─────────────────── */
+
+  // Called when onSearch is defined — dev controls data source
+  // Se llama cuando onSearch está definido — el dev controla la fuente de datos
   async _triggerSearch(query) {
     if (!this._onSearch) return;
     this._setLoading(true);
     try {
       const opts = await this._onSearch(query);
-      this._setLoading(false);          // quitar spinner ANTES de renderizar
+      this._setLoading(false);
       if (Array.isArray(opts)) {
         this.options = opts;
         this._renderOptions();
@@ -195,13 +215,11 @@ MTS.Select = class MtsSelect {
       loader.innerHTML = '<span class="mts-select__loading-spinner"></span> Buscando...';
       this._listEl.appendChild(loader);
     }
-    /* cuando v=false no tocar innerHTML — _renderOptions lo reemplaza */
   }
 
-  /* ── Build ─────────────────────────────────────────────── */
+  /* ── Build / Construcción ───────────────────────────────── */
 
   _build() {
-    /* Si el padre ya es mts-form-group, actuar solo como mts-select */
     const parentIsGroup = this._container.parentElement?.classList.contains('mts-form-group');
     if (parentIsGroup) {
       this._container.className = 'mts-select';
@@ -217,7 +235,7 @@ MTS.Select = class MtsSelect {
 
     if (this.label) {
       const lbl = document.createElement('label');
-      lbl.className = 'mts-label';
+      lbl.className   = 'mts-label';
       lbl.textContent = this.label;
       this._container.appendChild(lbl);
     }
@@ -229,13 +247,12 @@ MTS.Select = class MtsSelect {
 
     if (this.hint) {
       const h = document.createElement('span');
-      h.className = 'mts-form-hint';
+      h.className   = 'mts-form-hint';
       h.textContent = this.hint;
       this._container.appendChild(h);
     }
 
-    /* Input oculto para forms */
-    this._hiddenInput = document.createElement('input');
+    this._hiddenInput      = document.createElement('input');
     this._hiddenInput.type = 'hidden';
     this._hiddenInput.name = this._container.dataset.name || this._container.id || '';
     this._container.appendChild(this._hiddenInput);
@@ -248,10 +265,10 @@ MTS.Select = class MtsSelect {
   _buildSelectInner(wrap) {
     this._triggerEl = document.createElement('div');
     this._triggerEl.className = 'mts-select__trigger' + (this.disabled ? ' mts-select__trigger--disabled' : '');
-    this._triggerEl.setAttribute('tabindex', this.disabled ? '-1' : '0');
-    this._triggerEl.setAttribute('role', 'combobox');
-    this._triggerEl.setAttribute('aria-expanded', 'false');
-    this._triggerEl.setAttribute('aria-haspopup', 'listbox');
+    this._triggerEl.setAttribute('tabindex',     this.disabled ? '-1' : '0');
+    this._triggerEl.setAttribute('role',         'combobox');
+    this._triggerEl.setAttribute('aria-expanded','false');
+    this._triggerEl.setAttribute('aria-haspopup','listbox');
 
     this._valueEl = document.createElement('span');
     this._valueEl.className = 'mts-select__value';
@@ -274,7 +291,8 @@ MTS.Select = class MtsSelect {
     this._triggerEl.appendChild(arrow);
     wrap.appendChild(this._triggerEl);
 
-    /* Dropdown */
+    // Dropdown portal — appended to body to escape stacking contexts
+    // Portal del dropdown — se agrega al body para escapar contextos de apilamiento
     this._dropdownEl = document.createElement('div');
     this._dropdownEl.className = 'mts-select__dropdown';
     this._dropdownEl.setAttribute('role', 'listbox');
@@ -283,8 +301,8 @@ MTS.Select = class MtsSelect {
       const searchWrap = document.createElement('div');
       searchWrap.className = 'mts-select__search-wrap';
       this._searchEl = document.createElement('input');
-      this._searchEl.type = 'text';
-      this._searchEl.className = 'mts-select__search';
+      this._searchEl.type        = 'text';
+      this._searchEl.className   = 'mts-select__search';
       this._searchEl.placeholder = 'Buscar...';
       this._searchEl.addEventListener('input', (e) => {
         this._search = e.target.value;
@@ -306,33 +324,29 @@ MTS.Select = class MtsSelect {
     this._listEl = document.createElement('div');
     this._listEl.className = 'mts-select__list';
     this._dropdownEl.appendChild(this._listEl);
-
-    /* Portal — el dropdown va al document.body para escapar cualquier
-       stacking context (overflow, transform, z-index, modal, etc.)
-       La posición se recalcula en open() con getBoundingClientRect */
     document.body.appendChild(this._dropdownEl);
 
-    /* Input oculto (cuando wrap es el container directo) */
-    this._hiddenInput = document.createElement('input');
+    this._hiddenInput      = document.createElement('input');
     this._hiddenInput.type = 'hidden';
     this._hiddenInput.name = this._container.dataset.name || this._container.id || '';
     wrap.appendChild(this._hiddenInput);
   }
 
-  /* ── Render opciones ─────────────────────────────────────── */
+  /* ── Render options / Renderizar opciones ───────────────── */
 
   _renderOptions() {
     this._listEl.innerHTML = '';
     const q = this._search.toLowerCase();
 
-    /* Si hay onSearch activo, no filtrar localmente — las opciones ya vienen filtradas */
+    // If onSearch is active, options come pre-filtered from the dev
+    // Si onSearch está activo, las opciones vienen pre-filtradas del dev
     const filtered = this._onSearch
       ? this.options
       : this.options.filter(o => !q || o.label.toLowerCase().includes(q));
 
     if (!filtered.length) {
       const empty = document.createElement('div');
-      empty.className = 'mts-select__empty';
+      empty.className   = 'mts-select__empty';
       empty.textContent = this._onSearch && this._search.length < this.minChars
         ? `Escribe al menos ${this.minChars} caracter${this.minChars > 1 ? 'es' : ''} para buscar`
         : 'Sin resultados';
@@ -340,7 +354,7 @@ MTS.Select = class MtsSelect {
       return;
     }
 
-    /* Agrupar */
+    // Group options by their group property / Agrupar opciones por su propiedad group
     const groups = {};
     filtered.forEach(opt => {
       const g = opt.group || '__none__';
@@ -351,16 +365,16 @@ MTS.Select = class MtsSelect {
     Object.entries(groups).forEach(([group, opts]) => {
       if (group !== '__none__') {
         const header = document.createElement('div');
-        header.className = 'mts-select__group-header';
+        header.className   = 'mts-select__group-header';
         header.textContent = group;
         this._listEl.appendChild(header);
       }
       opts.forEach(opt => {
         const item = document.createElement('div');
         item.className = 'mts-select__option'
-          + (opt.disabled               ? ' mts-select__option--disabled' : '')
-          + (this._isSelected(opt.value)? ' mts-select__option--selected' : '');
-        item.setAttribute('role', 'option');
+          + (opt.disabled                ? ' mts-select__option--disabled' : '')
+          + (this._isSelected(opt.value) ? ' mts-select__option--selected' : '');
+        item.setAttribute('role',          'option');
         item.setAttribute('aria-selected', this._isSelected(opt.value));
 
         if (opt.icon) {
@@ -399,11 +413,7 @@ MTS.Select = class MtsSelect {
       this._updateTrigger();
       this._syncHidden();
       const selectedOpts = this.options.filter(o => this._value.includes(o.value));
-      this._emit('change', {
-        value: [...this._value],
-        text:  selectedOpts.map(o => o.label),
-        options: selectedOpts,
-      });
+      this._emit('change', { value: [...this._value], text: selectedOpts.map(o => o.label), options: selectedOpts });
     } else {
       this._value = opt.value;
       this._updateTrigger();
@@ -431,7 +441,7 @@ MTS.Select = class MtsSelect {
           const opt = this.options.find(o => o.value === v);
           if (!opt) return;
           const tag = document.createElement('span');
-          tag.className = 'mts-select__tag';
+          tag.className   = 'mts-select__tag';
           tag.textContent = opt.label;
           const rm = document.createElement('button');
           rm.innerHTML = '&times;';
@@ -462,21 +472,40 @@ MTS.Select = class MtsSelect {
     }
   }
 
+  _positionDropdown() {
+    const rect = this._triggerEl.getBoundingClientRect();
+    const drop = this._dropdownEl;
+    drop.style.position = 'fixed';
+    drop.style.zIndex   = '9999';
+    drop.style.width    = rect.width + 'px';
+    drop.style.left     = rect.left  + 'px';
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const dropH      = drop.offsetHeight || 240;
+    if (spaceBelow >= dropH || spaceBelow >= 120) {
+      drop.style.top    = (rect.bottom + 2) + 'px';
+      drop.style.bottom = 'auto';
+    } else {
+      drop.style.bottom = (window.innerHeight - rect.top + 2) + 'px';
+      drop.style.top    = 'auto';
+    }
+  }
+
   _bindEvents() {
     this._triggerEl.addEventListener('click', () => { if (!this.disabled) this.toggle(); });
     this._triggerEl.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.toggle(); }
       if (e.key === 'Escape') this.close();
     });
+
+    // Close when clicking outside / Cerrar al hacer click fuera
     this._outsideClick = (e) => {
-      /* El dropdown está en el body — verificar ambos contenedores */
       if (!this._container.contains(e.target) && !this._dropdownEl.contains(e.target)) {
         this.close();
       }
     };
     document.addEventListener('click', this._outsideClick);
 
-    /* Reposicionar si el viewport cambia (scroll/resize) */
+    // Reposition on scroll/resize / Reposicionar en scroll/resize
     this._onScroll = () => { if (this._isOpen) this._positionDropdown(); };
     this._onResize = () => { if (this._isOpen) this._positionDropdown(); };
     window.addEventListener('scroll', this._onScroll, true);
@@ -486,18 +515,14 @@ MTS.Select = class MtsSelect {
   _syncHidden() {
     if (!this._hiddenInput) return;
     const v = this._value;
-    this._hiddenInput.value = Array.isArray(v) ? v.join(',') : (v ?? '');
-    /* data-value y data-text en el container para acceso sin JS */
+    this._hiddenInput.value      = Array.isArray(v) ? v.join(',') : (v ?? '');
     this._container.dataset.value = this._hiddenInput.value;
     this._container.dataset.text  = this._getText();
   }
 
   _getText() {
     if (this.multiple) {
-      return this.options
-        .filter(o => this._value.includes(o.value))
-        .map(o => o.label)
-        .join(', ');
+      return this.options.filter(o => this._value.includes(o.value)).map(o => o.label).join(', ');
     }
     return this.options.find(o => o.value === this._value)?.label ?? '';
   }

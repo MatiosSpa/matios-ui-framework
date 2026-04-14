@@ -31,11 +31,20 @@ MTS.Tree = class MtsTree {
     this.checkable   = options.checkable   ?? false;
     this.showIcons   = options.showIcons   ?? true;
     this.showLines   = options.showLines   ?? true;
-    this._onSelect   = options.onSelect    || null;
-    this._onToggle   = options.onToggle    || null;
-    this._onCheck    = options.onCheck     || null;
-    this._selected   = null;
-    this._listeners  = {};
+    this._selected  = null;
+    this._listeners = {};
+
+    // Fires when a node is selected: ({ node, path }) => {}
+    // Se dispara al seleccionar un nodo
+    if (options.onSelect) this.on('select', options.onSelect);
+
+    // Fires when a node expands/collapses: ({ node, expanded }) => {}
+    // Se dispara al expandir o colapsar un nodo
+    if (options.onToggle) this.on('toggle', options.onToggle);
+
+    // Fires when a checkbox changes: ({ node, checked, checkedIds }) => {}
+    // Se dispara al cambiar un checkbox
+    if (options.onCheck)  this.on('check',  options.onCheck);
 
     if (this.expandAll) this._expandAllNodes(this.nodes);
     this._build();
@@ -95,7 +104,6 @@ MTS.Tree = class MtsTree {
         if (node.disabled) return;
         node.expanded = !node.expanded;
         this._build();
-        if (this._onToggle) this._onToggle({ node, expanded: node.expanded });
         this._emit('toggle', { node, expanded: node.expanded });
       });
     }
@@ -114,7 +122,6 @@ MTS.Tree = class MtsTree {
         if (node.children) this._setChildrenChecked(node.children, cb.checked);
         this._build();
         const ids = this.getChecked();
-        if (this._onCheck) this._onCheck({ node, checked: cb.checked, checkedIds: ids });
         this._emit('check', { node, checked: cb.checked, checkedIds: ids });
       });
       row.appendChild(cb);
@@ -156,7 +163,6 @@ MTS.Tree = class MtsTree {
       row.addEventListener('click', () => {
         this._selectNode(node.id);
         const path = this._getPath(node.id, this.nodes, []);
-        if (this._onSelect) this._onSelect({ node, path });
         this._emit('select', { node, path });
       });
     }

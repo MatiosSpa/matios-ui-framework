@@ -1,67 +1,85 @@
 /* ============================================================
-   MATIOS UI — matios-ui-fileupload.js  v1.0.0
-   MTS.FileUpload — Zona de arrastrar/soltar archivos
-
-   Uso:
-     const fu = new MTS.FileUpload('#zona', {
-       accept:      'image/*,.pdf',
-       multiple:    true,
-       maxSize:     5,          // MB
-       maxFiles:    10,
-       label:       'Suelta archivos aquí o haz click',
-       hint:        'PNG, JPG, PDF hasta 5MB',
-       preview:     true,       // miniaturas para imágenes
-       onChange:    (files) => console.log(files),
-       onError:     (err)   => console.error(err),
-     })
-
-     fu.getFiles()         → FileList / File[]
-     fu.clear()
-     fu.open()             → abre el selector de archivos
+   MATIOS UI — matios-ui-fileupload.js
+   MTS.FileUpload — Drag & drop file upload zone
+   Version: 1.1.0
    ============================================================ */
 
 window.MTS = window.MTS || {};
 
 MTS.FileUpload = class MtsFileUpload {
   constructor(selector, options = {}) {
+    // Target container element / Elemento contenedor
     this._el = typeof selector === 'string'
       ? document.querySelector(selector) : selector;
-    if (!this._el) { console.error('[MTS.FileUpload] No encontrado:', selector); return; }
+    if (!this._el) { console.error('[MTS.FileUpload] Not found / No encontrado:', selector); return; }
 
-    this.accept    = options.accept    || '*';
-    this.multiple  = options.multiple  ?? false;
-    this.maxSize   = options.maxSize   || null;    // MB
-    this.maxFiles  = options.maxFiles  || null;
-    this.label     = options.label     || 'Arrastra archivos aquí o <span>selecciona</span>';
-    this.hint      = options.hint      || '';
-    this.preview   = options.preview   ?? true;
-    this.disabled  = options.disabled  ?? false;
-    this._onChange = options.onChange  || null;
-    this._onError  = options.onError   || null;
-    this._onAdd    = options.onAdd     || null;
-    this._onRemove = options.onRemove  || null;
-    this._files    = [];
+    // Accepted file types (e.g. 'image/*', '.pdf,.doc') / Tipos de archivo aceptados
+    this.accept = options.accept || '*';
+
+    // Allow multiple file selection / Permitir selección de múltiples archivos
+    this.multiple = options.multiple ?? false;
+
+    // Maximum file size in MB / Tamaño máximo por archivo en MB
+    this.maxSize = options.maxSize || null;
+
+    // Maximum number of files / Número máximo de archivos
+    this.maxFiles = options.maxFiles || null;
+
+    // Drop zone label HTML / HTML del label de la zona de drop
+    this.label = options.label || 'Arrastra archivos aquí o <span>selecciona</span>';
+
+    // Helper text below the zone / Texto de ayuda debajo de la zona
+    this.hint = options.hint || '';
+
+    // Show image thumbnails / Mostrar miniaturas de imágenes
+    this.preview = options.preview ?? true;
+
+    // Disables the drop zone / Deshabilita la zona
+    this.disabled = options.disabled ?? false;
+
+    // Fires when files change (add or remove) / Se dispara al agregar o eliminar archivos
+    this._files     = [];
     this._listeners = {};
 
+    // Fires when file list changes: ({ files }) => {} / Se dispara al cambiar la lista de archivos
+    if (options.onChange) this.on('change', options.onChange);
+
+    // Fires when a file fails validation: ({ message }) => {} / Se dispara al fallar validación
+    if (options.onError)  this.on('error',  options.onError);
+
+    // Fires when a file is added: (file) => {} / Se dispara al agregar un archivo
+    if (options.onAdd)    this.on('add',    options.onAdd);
+
+    // Fires when a file is removed: (file) => {} / Se dispara al remover un archivo
+    if (options.onRemove) this.on('remove', options.onRemove);
     this._build();
   }
 
-  /* ── API ── */
-  getFiles()  { return [...this._files]; }
-  clear()     { this._files = []; this._renderPreviews(); this._syncInput(); }
-  open()      { this._inputEl?.click(); }
-  on(e, fn)   { (this._listeners[e] = this._listeners[e]||[]).push(fn); return this; }
+  /* ── API ─────────────────────────────────────────────── */
 
-  /* ── BUILD ── */
+  // Returns current file list / Retorna la lista de archivos actual
+  getFiles() { return [...this._files]; }
+
+  // Clear all files / Limpiar todos los archivos
+  clear() { this._files = []; this._renderPreviews(); this._syncInput(); }
+
+  // Open the file selector programmatically / Abrir el selector de archivos programáticamente
+  open() { this._inputEl?.click(); }
+
+  // Register an event listener / Registrar un listener de evento
+  on(e, fn) { (this._listeners[e] = this._listeners[e] || []).push(fn); return this; }
+
+  /* ── Build / Construcción ───────────────────────────── */
+
   _build() {
     this._el.className = 'mts-fileupload';
     this._el.innerHTML = '';
 
-    /* Zona de drop */
+    // Drop zone / Zona de drop
     this._zone = document.createElement('div');
-    this._zone.className = 'mts-fileupload__zone' + (this.disabled?' mts-fileupload__zone--disabled':'');
+    this._zone.className = 'mts-fileupload__zone' + (this.disabled ? ' mts-fileupload__zone--disabled' : '');
 
-    /* Ícono upload */
+    // Upload icon / Ícono de carga
     const icon = document.createElement('div');
     icon.className = 'mts-fileupload__icon';
     icon.innerHTML = `<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -71,30 +89,28 @@ MTS.FileUpload = class MtsFileUpload {
     </svg>`;
     this._zone.appendChild(icon);
 
-    /* Label */
     const lbl = document.createElement('div');
     lbl.className = 'mts-fileupload__label';
     lbl.innerHTML = this.label;
     this._zone.appendChild(lbl);
 
-    /* Hint */
     if (this.hint) {
       const h = document.createElement('span');
-      h.className = 'mts-fileupload__hint';
+      h.className   = 'mts-fileupload__hint';
       h.textContent = this.hint;
       this._zone.appendChild(h);
     }
 
-    /* Input file oculto */
+    // Hidden file input / Input file oculto
     this._inputEl = document.createElement('input');
-    this._inputEl.type     = 'file';
-    this._inputEl.accept   = this.accept;
-    this._inputEl.multiple = this.multiple;
-    this._inputEl.style.display = 'none';
+    this._inputEl.type            = 'file';
+    this._inputEl.accept          = this.accept;
+    this._inputEl.multiple        = this.multiple;
+    this._inputEl.style.display   = 'none';
     this._zone.appendChild(this._inputEl);
     this._el.appendChild(this._zone);
 
-    /* Lista de previews */
+    // Preview list / Lista de previews
     this._previewList = document.createElement('div');
     this._previewList.className = 'mts-fileupload__list';
     this._el.appendChild(this._previewList);
@@ -105,14 +121,14 @@ MTS.FileUpload = class MtsFileUpload {
   _bindEvents() {
     if (this.disabled) return;
 
-    /* Click → abrir selector */
+    // Click to open file selector / Click para abrir selector
     this._zone.addEventListener('click', () => this._inputEl.click());
     this._inputEl.addEventListener('change', (e) => {
       this._addFiles(Array.from(e.target.files || []));
       this._inputEl.value = '';
     });
 
-    /* Drag & drop */
+    // Drag & drop events / Eventos drag & drop
     this._zone.addEventListener('dragover', (e) => {
       e.preventDefault();
       this._zone.classList.add('mts-fileupload__zone--dragover');
@@ -123,8 +139,7 @@ MTS.FileUpload = class MtsFileUpload {
     this._zone.addEventListener('drop', (e) => {
       e.preventDefault();
       this._zone.classList.remove('mts-fileupload__zone--dragover');
-      const files = Array.from(e.dataTransfer?.files || []);
-      this._addFiles(files);
+      this._addFiles(Array.from(e.dataTransfer?.files || []));
     });
   }
 
@@ -132,29 +147,29 @@ MTS.FileUpload = class MtsFileUpload {
     const errors = [];
 
     newFiles.forEach(file => {
-      /* Validar tamaño */
+      // Validate file size / Validar tamaño
       if (this.maxSize && file.size > this.maxSize * 1024 * 1024) {
         errors.push(`"${file.name}" supera el límite de ${this.maxSize}MB.`);
         return;
       }
-      /* Validar tipo */
+      // Validate file type / Validar tipo
       if (this.accept && this.accept !== '*') {
-        const accepted = this.accept.split(',').map(s=>s.trim());
+        const accepted = this.accept.split(',').map(s => s.trim());
         const ok = accepted.some(a => {
-          if (a.endsWith('/*')) return file.type.startsWith(a.replace('/*',''));
+          if (a.endsWith('/*')) return file.type.startsWith(a.replace('/*', ''));
           if (a.startsWith('.')) return file.name.toLowerCase().endsWith(a.toLowerCase());
           return file.type === a;
         });
         if (!ok) { errors.push(`"${file.name}" no es un tipo aceptado.`); return; }
       }
-      /* Verificar si ya existe */
-      if (this._files.some(f => f.name===file.name && f.size===file.size)) return;
-      /* Solo uno si !multiple */
+      // Skip duplicates / Omitir duplicados
+      if (this._files.some(f => f.name === file.name && f.size === file.size)) return;
+      // Single file mode — replace / Modo un solo archivo — reemplazar
       if (!this.multiple) this._files = [];
       this._files.push(file);
     });
 
-    /* Validar máximo de archivos */
+    // Validate max files / Validar máximo de archivos
     if (this.maxFiles && this._files.length > this.maxFiles) {
       errors.push(`Máximo ${this.maxFiles} archivos.`);
       this._files = this._files.slice(0, this.maxFiles);
@@ -162,15 +177,14 @@ MTS.FileUpload = class MtsFileUpload {
 
     if (errors.length) {
       errors.forEach(e => this._emit('error', { message: e }));
-      this._onError?.(errors);
+
       this._showZoneError(errors[0]);
     }
 
     this._renderPreviews();
     this._syncInput();
     this._emit('change', { files: this.getFiles() });
-    this._onChange?.(this.getFiles());
-    newFiles.forEach(f => this._onAdd?.(f));
+    newFiles.forEach(f => this._emit('add', f));
   }
 
   _renderPreviews() {
@@ -181,7 +195,6 @@ MTS.FileUpload = class MtsFileUpload {
       const item = document.createElement('div');
       item.className = 'mts-fileupload__item';
 
-      /* Preview imagen o ícono genérico */
       const thumb = document.createElement('div');
       thumb.className = 'mts-fileupload__thumb';
       if (this.preview && file.type.startsWith('image/')) {
@@ -192,28 +205,26 @@ MTS.FileUpload = class MtsFileUpload {
         reader.readAsDataURL(file);
         thumb.appendChild(img);
       } else {
-        const ext = file.name.split('.').pop().toUpperCase().slice(0,4);
+        const ext = file.name.split('.').pop().toUpperCase().slice(0, 4);
         thumb.innerHTML = `<span style="font-size:10px;font-weight:700;color:var(--mts-color-primary)">${ext}</span>`;
       }
       item.appendChild(thumb);
 
-      /* Info */
       const info = document.createElement('div');
       info.className = 'mts-fileupload__info';
       const name = document.createElement('span');
-      name.className = 'mts-fileupload__name';
+      name.className   = 'mts-fileupload__name';
       name.textContent = file.name;
-      name.title = file.name;
+      name.title       = file.name;
       const size = document.createElement('span');
-      size.className = 'mts-fileupload__size';
+      size.className   = 'mts-fileupload__size';
       size.textContent = this._formatSize(file.size);
       info.appendChild(name);
       info.appendChild(size);
       item.appendChild(info);
 
-      /* Botón eliminar */
       const remove = document.createElement('button');
-      remove.type = 'button';
+      remove.type      = 'button';
       remove.className = 'mts-fileupload__remove';
       remove.setAttribute('aria-label', 'Eliminar');
       remove.innerHTML = '&times;';
@@ -223,8 +234,7 @@ MTS.FileUpload = class MtsFileUpload {
         this._renderPreviews();
         this._syncInput();
         this._emit('change', { files: this.getFiles() });
-        this._onChange?.(this.getFiles());
-        this._onRemove?.(removed);
+        this._emit('remove', removed);
       });
       item.appendChild(remove);
       this._previewList.appendChild(item);
@@ -232,7 +242,6 @@ MTS.FileUpload = class MtsFileUpload {
   }
 
   _syncInput() {
-    /* Actualizar clase de la zona */
     this._zone.classList.toggle('mts-fileupload__zone--has-files', this._files.length > 0);
   }
 
@@ -240,20 +249,20 @@ MTS.FileUpload = class MtsFileUpload {
     const old = this._zone.querySelector('.mts-fileupload__zone-error');
     if (old) old.remove();
     const err = document.createElement('span');
-    err.className = 'mts-fileupload__zone-error';
+    err.className   = 'mts-fileupload__zone-error';
     err.textContent = msg;
     this._zone.appendChild(err);
     setTimeout(() => err.remove(), 4000);
   }
 
   _formatSize(bytes) {
-    if (bytes < 1024)        return `${bytes} B`;
-    if (bytes < 1024*1024)   return `${(bytes/1024).toFixed(1)} KB`;
+    if (bytes < 1024)       return `${bytes} B`;
+    if (bytes < 1024*1024)  return `${(bytes/1024).toFixed(1)} KB`;
     return `${(bytes/(1024*1024)).toFixed(1)} MB`;
   }
 
   _emit(event, detail) {
-    (this._listeners[event]||[]).forEach(fn => fn({ type: event, detail }));
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
     this._el.dispatchEvent(new CustomEvent(`mts:fileupload:${event}`, { bubbles: true, detail }));
   }
 };

@@ -1,150 +1,192 @@
 # MTS.Validate
 
-Validación de formularios sin dependencias. Se integra automáticamente con `MTS.Input` — detecta las instancias y usa su propia API de error/éxito.
+[EN] Form validation without dependencies. Auto-integrates with `MTS.Input` — detects instances and uses their own error/success API.
+[ES] Validación de formularios sin dependencias. Se integra automáticamente con `MTS.Input` — detecta las instancias y usa su propia API de error/éxito.
 
 ---
 
-## Instalación
+## Installation / Instalación
+
 ```html
-<link rel="stylesheet" href="../../base/matios-ui-base.css">
-<link rel="stylesheet" href="../matios-ui-input/matios-ui-input.css">
-<script src="../matios-ui-input/matios-ui-input.js"></script>
+<link rel="stylesheet" href="matios-ui-base.css">
+<link rel="stylesheet" href="matios-ui-input.css">
+<script src="matios-ui-input.js"></script>
 <script src="matios-ui-validation.js"></script>
 ```
 
 ---
 
-## Uso básico — formulario completo
+## Options / Opciones
+
+| Option | Type | Default | [EN] Description / [ES] Descripción |
+|--------|------|---------|--------------------------------------|
+| `rules` | `object` | `{}` | [EN] Validation rules per field name / [ES] Reglas de validación por nombre de campo |
+| `messages` | `object` | `{}` | [EN] Custom error messages per field/rule / [ES] Mensajes de error personalizados |
+| `validateOnBlur` | `boolean` | `true` | [EN] Validate when field loses focus / [ES] Validar al perder foco |
+| `validateOnInput` | `boolean` | `false` | [EN] Validate on every keystroke / [ES] Validar en cada tecla |
+| `onValid` | `function` | — | [EN] Fires on submit when form is valid / [ES] Se dispara al enviar cuando el formulario es válido |
+| `onInvalid` | `function` | — | [EN] Fires on submit when form has errors / [ES] Se dispara al enviar cuando hay errores |
+
+---
+
+## Events / Eventos
+
+[EN] Use `onValid` and `onInvalid` in the constructor.
+[ES] Usa `onValid` y `onInvalid` en el constructor.
+
+```js
+new MTS.Validate('#my-form', {
+  rules: { ... },
+  // Fires on submit when all fields are valid / Se dispara al enviar cuando todo es válido
+  onValid: (data) => {
+    console.log(data); // → { fieldName: value, ... }
+    submitToServer(data);
+  },
+  // Fires on submit when there are validation errors / Se dispara al enviar cuando hay errores
+  onInvalid: (errors) => {
+    console.log(errors); // → { fieldName: 'Error message', ... }
+  },
+});
+```
+
+---
+
+## Validation Rules / Reglas de validación
+
+| Rule | Type | [EN] Description / [ES] Descripción |
+|------|------|--------------------------------------|
+| `required` | `boolean` | [EN] Field cannot be empty / [ES] Campo no puede estar vacío |
+| `minLength` | `number` | [EN] Minimum characters / [ES] Mínimo de caracteres |
+| `maxLength` | `number` | [EN] Maximum characters / [ES] Máximo de caracteres |
+| `min` | `number` | [EN] Minimum numeric value / [ES] Valor numérico mínimo |
+| `max` | `number` | [EN] Maximum numeric value / [ES] Valor numérico máximo |
+| `email` | `boolean` | [EN] Valid email format / [ES] Formato email válido |
+| `url` | `boolean` | [EN] Valid URL format / [ES] Formato URL válido |
+| `number` | `boolean` | [EN] Numeric only / [ES] Solo números |
+| `integer` | `boolean` | [EN] Integer only / [ES] Solo enteros |
+| `pattern` | `RegExp` | [EN] Custom regex / [ES] Regex personalizado |
+| `equalTo` | `string` | [EN] Must equal field (e.g. `'#pass'`) / [ES] Debe ser igual al campo |
+| `rut` | `boolean` | [EN] Chilean RUT validation / [ES] Validación RUT chileno |
+| `phone` | `boolean` | [EN] Phone format / [ES] Formato teléfono |
+| `date` | `boolean` | [EN] Valid date / [ES] Fecha válida |
+| `minDate` | `string` | [EN] Min date (e.g. `'2024-01-01'`) / [ES] Fecha mínima |
+| `maxDate` | `string` | [EN] Max date / [ES] Fecha máxima |
+| `accept` | `string` | [EN] File types (`'image/*'`, `'.pdf'`) / [ES] Tipos de archivo |
+| `maxSize` | `number` | [EN] Max file size in MB / [ES] Tamaño máximo en MB |
+| `custom` | `function` | [EN] `(value, el) => true \| 'error'` / [ES] Validación personalizada |
+
+---
+
+## HTML Usage / Uso HTML
+
 ```html
-<form id="mi-form">
-  <div id="campo-nombre"></div>
-  <div id="campo-email"></div>
-  <div id="campo-edad"></div>
-  <button type="submit" class="mts-btn mts-btn--primary">Enviar</button>
+<form id="my-form">
+  <div id="field-name"></div>
+  <div id="field-email"></div>
+  <button type="submit" class="mts-btn mts-btn--primary">Submit</button>
 </form>
-```
 
-```js
-/* Crear inputs con MTS.Input */
-new MTS.Input('#campo-nombre', {
-  label: 'Nombre',
-  placeholder: 'Tu nombre completo',
-  rules: { required: true, minLength: 3 },
-})
+<script>
+  // name: must match the key in rules / name: debe coincidir con la clave en rules
+  new MTS.Input('#field-name',  { name: 'name',  label: 'Name',  rules: { required: true, minLength: 3 } });
+  new MTS.Input('#field-email', { name: 'email', label: 'Email', type: 'email', rules: { required: true, email: true } });
 
-new MTS.Input('#campo-email', {
-  label: 'Email',
-  type: 'email',
-  placeholder: 'correo@ejemplo.com',
-  rules: { required: true, email: true },
-})
-
-new MTS.Input('#campo-edad', {
-  label: 'Edad',
-  type: 'number',
-  rules: { required: true, min: 18, max: 99 },
-})
-
-/* MTS.Validate detecta los MTS.Input con reglas automáticamente */
-const v = new MTS.Validate('#mi-form', {
-  rules: {
-    nombre: { required: true, minLength: 3 },
-    email:  { required: true, email: true },
-    edad:   { required: true, min: 18, max: 99 },
-  },
-  onValid:   (data) => console.log('Datos válidos:', data),
-  onInvalid: (errors) => console.log('Errores:', errors),
-})
-```
-
-> `MTS.Validate` detecta si el campo tiene una instancia `MTS.Input` asociada y usa su API (`setError()`, `clearError()`) para mostrar los mensajes. No hay que conectarlos manualmente.
-
----
-
-## Reglas disponibles
-
-| Regla | Tipo | Descripción |
-|-------|------|-------------|
-| `required` | `boolean` | Campo obligatorio |
-| `minLength` | `number` | Mínimo de caracteres |
-| `maxLength` | `number` | Máximo de caracteres |
-| `min` | `number` | Valor mínimo (numérico) |
-| `max` | `number` | Valor máximo (numérico) |
-| `email` | `boolean` | Valida formato email |
-| `url` | `boolean` | Valida formato URL |
-| `number` | `boolean` | Solo números |
-| `integer` | `boolean` | Solo enteros |
-| `pattern` | `RegExp` | Expresión regular |
-| `equalTo` | `string` | Igual al campo indicado (ej: `'#pass'`) |
-| `rut` | `boolean` | Validación RUT chileno |
-| `phone` | `boolean` | Formato de teléfono |
-| `date` | `boolean` | Fecha válida |
-| `minDate` | `string` | Fecha mínima (ej: `'2024-01-01'`) |
-| `maxDate` | `string` | Fecha máxima |
-| `accept` | `string` | Tipos de archivo (`'image/*'`, `'.pdf,.docx'`) |
-| `maxSize` | `number` | Tamaño máximo de archivo en MB |
-| `custom` | `function` | Validación personalizada `(value, el) => true \| 'mensaje'` |
-
----
-
-## Mensajes personalizados
-```js
-new MTS.Validate('#form', {
-  rules: {
-    nombre: { required: true, minLength: 3 },
-  },
-  messages: {
-    nombre: {
-      required:  'El nombre no puede estar vacío',
-      minLength: 'Ingresa al menos 3 letras',
+  new MTS.Validate('#my-form', {
+    rules: {
+      name:  { required: true, minLength: 3 },
+      email: { required: true, email: true },
     },
-  },
-})
+    onValid:   (data)   => console.log('Valid:', data),
+    onInvalid: (errors) => console.log('Errors:', errors),
+  });
+</script>
 ```
 
 ---
 
-## Configuración completa
+## JavaScript Usage / Uso JavaScript
+
 ```js
-new MTS.Validate('#form', {
+// MTS.Validate detects MTS.Input instances automatically
+// MTS.Validate detecta instancias MTS.Input automáticamente
+// IMPORTANT: name: must match the key in rules
+// IMPORTANTE: name: debe coincidir con la clave en rules
+new MTS.Input('#field-name',  {
+  name:  'name',
+  label: 'Full name',
+  rules: { required: true, minLength: 3 },
+});
+new MTS.Input('#field-email', {
+  name:  'email',
+  label: 'Email',
+  type:  'email',
+  rules: { required: true, email: true },
+});
+new MTS.Input('#field-pass',  {
+  name:  'password',
+  label: 'Password',
+  type:  'password',
+  rules: { required: true, minLength: 8, pattern: /(?=.*\d)(?=.*[a-z])/ },
+});
+
+const v = new MTS.Validate('#my-form', {
   rules: {
-    nombre:   { required: true, minLength: 3 },
-    email:    { required: true, email: true },
-    pass:     { required: true, minLength: 8, pattern: /(?=.*\d)(?=.*[a-z])/ },
-    pass2:    { required: true, equalTo: '#pass' },
-    rut:      { required: true, rut: true },
-    edad:     { required: true, min: 18, max: 99 },
-    archivo:  { required: true, accept: 'image/*', maxSize: 2 },
-    custom:   { custom: (val) => val !== 'admin' ? true : 'Nombre no permitido' },
+    name:  { required: true, minLength: 3 },
+    email: { required: true, email: true },
+    pass:  { required: true, minLength: 8, pattern: /(?=.*\d)(?=.*[a-z])/ },
   },
-  messages: { /* mensajes custom por campo */ },
 
-  validateOnBlur:  true,   // validar al salir del campo
-  validateOnInput: false,  // validar mientras escribe
+  // Custom error messages / Mensajes de error personalizados
+  messages: {
+    name:  { required: 'Name cannot be empty', minLength: 'At least 3 characters' },
+    email: { email: 'Enter a valid email address' },
+  },
 
-  onValid:   (data)   => enviarFormulario(data),
-  onInvalid: (errors) => console.log('Errores:', errors),
-})
+  // Validate on blur / Validar al perder foco
+  validateOnBlur: true,
+
+  // Fires on valid submit / Se dispara al enviar válido
+  onValid: (data) => submitToServer(data),
+
+  // Fires on invalid submit / Se dispara al enviar inválido
+  onInvalid: (errors) => console.log(errors),
+});
 ```
 
 ---
 
 ## API
-```js
-const v = new MTS.Validate('#form', config)
 
-v.validate()                    // → boolean — valida todo el formulario
-v.isValid()                     // → boolean — estado actual
-v.getErrors()                   // → { campo: 'mensaje', ... }
-v.getData()                     // → { campo: valor, ... }
-v.clearErrors()                 // limpia todos los errores visualmente
-v.setError('email', 'Ya existe este email')  // error desde servidor
-v.addRule('nombre', 'minLength', 5)          // agregar regla en runtime
+```js
+const v = new MTS.Validate('#my-form', { ... });
+
+// Validate entire form / Validar todo el formulario
+v.validate()                         // → boolean
+
+// Check current validity / Verificar validez actual
+v.isValid()                          // → boolean
+
+// Get current errors / Obtener errores actuales
+v.getErrors()                        // → { fieldName: 'message', ... }
+
+// Get form data / Obtener datos del formulario
+v.getData()                          // → { fieldName: value, ... }
+
+// Clear all visual errors / Limpiar todos los errores visuales
+v.clearErrors()
+
+// Set a server-side error / Establecer error del lado del servidor
+v.setError('email', 'Email already exists')
+
+// Add a rule at runtime / Agregar una regla en runtime
+v.addRule('name', 'minLength', 5)
 ```
 
 ---
 
 ## Changelog
-| Versión | Descripción |
+
+| Version | Description |
 |---------|-------------|
-| 1.0.0 | Release inicial — integración con MTS.Input, RUT chileno, validación custom |
+| 1.1.0 | [EN] Bilingual docs, standardized structure / [ES] Docs bilingüe, estructura estandarizada |
+| 1.0.0 | [EN] Initial release — MTS.Input integration, Chilean RUT, custom validation / [ES] Versión inicial |

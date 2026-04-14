@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Slider — Demo</title>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="./matios-ui-slider.css">
+  <script src="../../shared/demo-shared.js"></script>
+  <script src="./matios-ui-slider.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
+    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px;}
+    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0;}
+    .demo-section{display:flex;flex-direction:column;gap:12px;}
+    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-sliders{display:flex;flex-direction:column;gap:20px;max-width:560px;}
+    .result-box{padding:8px 12px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:32px;}
+    .code-tabs{display:flex;gap:0;margin-top:8px;}
+    .code-tab{padding:4px 14px;font-size:11px;font-weight:600;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);cursor:pointer;color:var(--mts-text-muted);font-family:var(--mts-font-family);transition:color .15s,background .15s;}
+    .code-tab:first-child{border-radius:var(--mts-radius-md) 0 0 0;}
+    .code-tab:last-child{border-radius:0 var(--mts-radius-md) 0 0;border-left:none;}
+    .code-tab.active{background:var(--mts-bg-surface-2);color:var(--mts-color-primary);border-bottom-color:var(--mts-bg-surface-2);}
+    .code-panel{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-top:none;border-radius:0 var(--mts-radius-md) var(--mts-radius-md) var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;}
+    .code-panel.active{display:block;}
+    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
+    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
+    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
+  </style>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
+  <button class="demo-btn-sm demo-btn-sep">—</button>
+  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
+</div>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.Slider</h1>
+    <p>Range input — simple, doble (rango), con formato personalizado, con step y disabled.</p>
+  </div>
+
+  <!-- 1. Simple -->
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Slider simple</div>
+    <div class="demo-sliders">
+      <div id="sl-basic"></div>
+      <div id="sl-percent"></div>
+      <div id="sl-step"></div>
+    </div>
+    <div class="result-box" id="sl-result">— mueve los sliders —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-ss','js-ss')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-ss','html-ss')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-ss">&lt;!-- El slider requiere JavaScript para el fill dinámico.
+     Usa el componente MTS.Slider para instanciarlo. --&gt;
+&lt;div class="mts-slider-wrap"&gt;
+  &lt;div class="mts-slider__header"&gt;
+    &lt;span class="mts-label"&gt;Volumen&lt;/span&gt;
+    &lt;span class="mts-slider__value"&gt;65&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="mts-slider__track"&gt;
+    &lt;div class="mts-slider__fill" style="left:0%;width:65%"&gt;&lt;/div&gt;
+    &lt;input type="range" class="mts-slider__input" min="0" max="100" value="65"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+    <div class="code-panel" id="js-ss">// Básico
+const sl = new MTS.Slider('#el', {
+  label: 'Volumen',
+  min: 0, max: 100,
+  value: 65,
+  showValue: true,
+  onChange: (e) => console.log(e.detail.value),
+});
+
+// Con formato personalizado
+const slP = new MTS.Slider('#el', {
+  label: 'Brillo',
+  min: 0, max: 100, value: 80,
+  showValue: true,
+  labelFormat: (v) => v + '%',
+});
+
+// Con step
+const slS = new MTS.Slider('#el', {
+  label: 'Temperatura',
+  min: 16, max: 30, step: 0.5, value: 22,
+  showValue: true,
+  labelFormat: (v) => v + '°C',
+});
+
+// API
+sl.getValue()    // → number
+sl.setValue(50)</div>
+  </div>
+
+  <!-- 2. Rango doble -->
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Rango doble (range)</div>
+    <div class="demo-sliders">
+      <div id="sl-range"></div>
+      <div id="sl-price"></div>
+    </div>
+    <div class="result-box" id="sl-range-result">— mueve los sliders de rango —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-sr','js-sr')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-sr','html-sr')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-sr">&lt;!-- El rango doble requiere dos inputs superpuestos.
+     Se recomienda usar MTS.Slider con range: true --&gt;
+&lt;div class="mts-slider-wrap"&gt;
+  &lt;div class="mts-slider__header"&gt;
+    &lt;span class="mts-label"&gt;Rango de edad&lt;/span&gt;
+    &lt;span class="mts-slider__value"&gt;25 – 45&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="mts-slider__track"&gt;
+    &lt;div class="mts-slider__fill" style="left:25%;width:20%"&gt;&lt;/div&gt;
+    &lt;input type="range" class="mts-slider__input" min="0" max="100" value="25"&gt;
+    &lt;input type="range" class="mts-slider__input" min="0" max="100" value="45"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+    <div class="code-panel" id="js-sr">// Rango de edad
+const slR = new MTS.Slider('#el', {
+  range: true,
+  label: 'Rango de edad',
+  min: 0, max: 100,
+  value: [25, 45],
+  showValue: true,
+  onChange: (e) => console.log(e.detail.value), // → [25, 45]
+});
+
+// Rango de precio con formato
+const slP = new MTS.Slider('#el', {
+  range: true,
+  label: 'Precio',
+  min: 0, max: 1000, step: 10,
+  value: [200, 700],
+  showValue: true,
+  labelFormat: ([a, b]) => '$' + a + ' – $' + b,
+});
+
+// API
+slR.getValue()           // → [25, 45]
+slR.setValue([30, 60])</div>
+  </div>
+
+  <!-- 3. Sin label / sin valor -->
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Sin label ni valor visible</div>
+    <div class="demo-sliders">
+      <div id="sl-bare"></div>
+    </div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-sb','js-sb')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-sb','html-sb')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-sb">&lt;div class="mts-slider-wrap"&gt;
+  &lt;div class="mts-slider__track"&gt;
+    &lt;div class="mts-slider__fill" style="left:0%;width:40%"&gt;&lt;/div&gt;
+    &lt;input type="range" class="mts-slider__input" min="0" max="100" value="40"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+    <div class="code-panel" id="js-sb">new MTS.Slider('#el', {
+  min: 0, max: 100, value: 40,
+  showValue: false,  // oculta el display del valor
+  // sin label
+});</div>
+  </div>
+
+</div>
+
+<script>
+function setTheme(t) {
+  document.documentElement.setAttribute('data-mts-theme', t);
+  try { if (window.parent && window.parent !== window) window.parent.postMessage({ type: 'setTheme', theme: t }, '*'); } catch(e) {}
+}
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'setTheme') document.documentElement.setAttribute('data-mts-theme', e.data.theme);
+});
+if (window !== window.top) { var ts = document.querySelector('.demo-theme'); if (ts) ts.style.display = 'none'; }
+
+function switchTab(btn, showId, hideId) {
+  btn.parentElement.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(showId).classList.add('active');
+  document.getElementById(hideId).classList.remove('active');
+}
+
+new MTS.Slider('#sl-basic',   { label: 'Volumen', min: 0, max: 100, value: 65, showValue: true, onChange: (e) => document.getElementById('sl-result').textContent = 'Volumen: ' + e.detail.value });
+new MTS.Slider('#sl-percent', { label: 'Brillo', min: 0, max: 100, value: 80, showValue: true, labelFormat: (v) => v + '%', onChange: (e) => document.getElementById('sl-result').textContent = 'Brillo: ' + e.detail.value + '%' });
+new MTS.Slider('#sl-step',    { label: 'Temperatura', min: 16, max: 30, step: 0.5, value: 22, showValue: true, labelFormat: (v) => v + '°C', onChange: (e) => document.getElementById('sl-result').textContent = 'Temp: ' + e.detail.value + '°C' });
+new MTS.Slider('#sl-range',   { range: true, label: 'Rango de edad', min: 0, max: 100, value: [25, 45], showValue: true, onChange: (e) => document.getElementById('sl-range-result').textContent = 'Edad: ' + JSON.stringify(e.detail.value) });
+new MTS.Slider('#sl-price',   { range: true, label: 'Precio', min: 0, max: 1000, step: 10, value: [200, 700], showValue: true, labelFormat: ([a, b]) => '$' + a + ' – $' + b, onChange: (e) => document.getElementById('sl-range-result').textContent = 'Precio: ' + JSON.stringify(e.detail.value) });
+new MTS.Slider('#sl-bare',    { min: 0, max: 100, value: 40, showValue: false });
+</script>
+</body>
+</html>

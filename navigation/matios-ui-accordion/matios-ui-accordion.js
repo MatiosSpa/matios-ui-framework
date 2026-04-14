@@ -20,12 +20,25 @@ MTS.Accordion = class MtsAccordion {
   constructor(selector, options = {}) {
     this._el      = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    this.items    = options.items    || [];
+    // Accordion items: [{ id, title, content, icon?, open?, disabled? }]
+    // Ítems del acordeón
+    this.items = options.items || [];
+
+    // Allow multiple panels open simultaneously / Permitir múltiples paneles abiertos
     this.multiple = options.multiple ?? false;
-    this.flush    = options.flush    ?? false;
-    this._open    = new Set(this.items.filter(i => i.open).map(i => i.id));
+
+    // Flush mode — no card border / Modo flush — sin borde card
+    this.flush = options.flush ?? false;
+
+    // Track which item IDs are currently open / Seguir qué IDs están actualmente abiertos
+    this._open = new Set(this.items.filter(i => i.open).map(i => i.id));
+
     this._listeners = {};
+
+    // Fires when a panel opens: (e) => e.detail.id / Se dispara al abrir un panel
     if (options.onOpen)  this.on('open',  options.onOpen);
+
+    // Fires when a panel closes: (e) => e.detail.id / Se dispara al cerrar un panel
     if (options.onClose) this.on('close', options.onClose);
     this._build();
   }

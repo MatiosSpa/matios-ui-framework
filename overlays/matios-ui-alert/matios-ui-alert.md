@@ -1,69 +1,164 @@
-# matios-ui-alert
+# MTS.Alert
 
-Alertas y banners inline con variantes semánticas.
-
-## Uso JS
-```js
-MTS.Alert.show('#contenedor', {
-  variant:     'success',     // 'info'|'success'|'warning'|'danger'
-  title:       'Guardado',
-  message:     'Los cambios se guardaron correctamente.',
-  closable:    true,
-  autoDismiss: 5000,          // se cierra solo después de 5s
-  action:      'Ver detalles',
-  onAction:    (alert) => {},
-  onClose:     () => {},
-})
-```
-
-## Uso solo HTML/CSS
-```html
-<div class="mts-alert mts-alert--warning">
-  <div class="mts-alert__icon"><!-- ícono SVG --></div>
-  <div class="mts-alert__body">
-    <div class="mts-alert__title">Atención</div>
-    <div class="mts-alert__message">El archivo supera el tamaño máximo.</div>
-  </div>
-  <button class="mts-alert__close" onclick="this.closest('.mts-alert').remove()">&times;</button>
-</div>
-
-<!-- Banner (sin bordes laterales, ancho completo) -->
-<div class="mts-alert mts-alert--info mts-alert--banner">
-  <div class="mts-alert__body">
-    <div class="mts-alert__message">Versión 2.0 disponible. <a href="#">Ver novedades</a></div>
-  </div>
-</div>
-```
-
-## Changelog
-| Versión | Descripción |
-|---------|-------------|
-| 1.0.0 | Release inicial |
+[EN] Inline alert and banner component with variants, icons, action buttons and auto-dismiss. Works via JS and pure HTML/CSS.
+[ES] Componente de alerta y banner inline con variantes, íconos, botones de acción y auto-dismiss. Funciona via JS y HTML/CSS puro.
 
 ---
 
-## HTML declarativo
+## Installation / Instalación
 
 ```html
-<div id="miAlert"
-  data-variant="success"
-  data-title="¡Guardado!"
-  data-message="Los cambios se guardaron correctamente."
-  data-closable>
+<link rel="stylesheet" href="matios-ui-base.css">
+<link rel="stylesheet" href="matios-ui-alert.css">
+<script src="matios-ui-alert.js"></script>
+```
+
+---
+
+## Options / Opciones
+
+| Option | Type | Default | [EN] Description / [ES] Descripción |
+|--------|------|---------|--------------------------------------|
+| `variant` | `string` | `'info'` | `'info'` · `'success'` · `'warning'` · `'danger'` |
+| `title` | `string` | `''` | [EN] Optional title / [ES] Título opcional |
+| `message` | `string` | `''` | [EN] Main message / [ES] Mensaje principal |
+| `closable` | `boolean` | `true` | [EN] Show close button / [ES] Mostrar botón de cierre |
+| `icon` | `boolean` | `true` | [EN] Show icon / [ES] Mostrar ícono |
+| `action` | `string` | `null` | [EN] Action button label / [ES] Label del botón de acción |
+| `autoDismiss` | `number` | `0` | [EN] Auto-close after ms (0 = disabled) / [ES] Auto-cerrar tras ms (0 = deshabilitado) |
+| `onAction` | `function` | — | [EN] Fires when action button is clicked / [ES] Se dispara al hacer click en el botón de acción |
+| `onClose` | `function` | — | [EN] Fires when alert is closed / [ES] Se dispara al cerrar la alerta |
+
+---
+
+## Events / Eventos
+
+```js
+new MTS.Alert('#my-alert', {
+  variant: 'warning',
+  message: 'Session expires soon.',
+  action:  'Renew',
+  // Fires when action button is clicked / Se dispara al hacer click en el botón de acción
+  onAction: (e) => renewSession(),
+  // Fires when alert is closed / Se dispara al cerrar la alerta
+  onClose:  (e) => console.log('closed'),
+});
+```
+
+---
+
+## HTML Usage / Uso HTML
+
+```html
+<!-- Pure CSS — no JS needed / CSS puro — sin JS -->
+<div class="mts-alert mts-alert--success">
+  <div class="mts-alert__icon">...</div>
+  <div class="mts-alert__body">
+    <div class="mts-alert__title">Success</div>
+    <div class="mts-alert__message">Changes saved correctly.</div>
+  </div>
 </div>
 
+<!-- JS-powered / Con JS -->
+<div id="my-alert"></div>
 <script>
-new MTS.Alert('#miAlert', {
-  onClose: () => console.log('cerrado'),
-})
+  new MTS.Alert('#my-alert', {
+    variant: 'success',
+    title:   'Saved',
+    message: 'Changes saved correctly.',
+    onClose: (e) =&gt; console.log('closed'),
+  });
 </script>
 ```
 
-| Atributo | JS | Descripción |
-|----------|-----|-------------|
-| `data-variant` | `variant` | `info`·`success`·`warning`·`danger` |
-| `data-title` | `title` | |
-| `data-message` | `message` | |
-| `data-closable` | `closable` | (presencia activa) |
-| `data-auto-dismiss` | `autoDismiss` | ms para cerrar |
+---
 
+## JavaScript Usage / Uso JavaScript
+
+```js
+// Basic / Básico
+new MTS.Alert('#alert-container', {
+  variant: 'info',
+  message: 'A new version is available.',
+});
+
+// With title and action / Con título y acción
+new MTS.Alert('#alert-container', {
+  variant: 'warning',
+  title:   'Session expiring',
+  message: 'Your session expires in 5 minutes.',
+  action:  'Renew now',
+  // Fires on action click / Se dispara al hacer click en la acción
+  onAction: (e) => renewSession(),
+  // Fires when closed / Se dispara al cerrar
+  onClose:  (e) => console.log('dismissed'),
+});
+
+// Auto-dismiss / Auto-cerrar
+new MTS.Alert('#alert-container', {
+  variant:     'success',
+  message:     'File uploaded successfully.',
+  autoDismiss: 4000,  // closes after 4s / cierra tras 4s
+  closable:    false,
+});
+
+// Banner (full width) / Banner (ancho completo)
+new MTS.Alert('#banner', {
+  variant: 'danger',
+  title:   'Service outage',
+  message: 'Some services are currently unavailable.',
+  closable: true,
+});
+```
+
+---
+
+## HTML Declarative / HTML Declarativo
+
+```html
+<!-- data-* attributes initialize automatically / Los atributos data-* inicializan automáticamente -->
+<div id="my-alert"
+  data-variant="success"
+  data-title="Done"
+  data-message="Your changes were saved."
+  data-closable
+  data-auto-dismiss="5000">
+</div>
+
+<script>
+  new MTS.Alert('#my-alert');
+</script>
+```
+
+---
+
+## API
+
+```js
+const alert = new MTS.Alert('#container', { ... });
+
+// Close programmatically / Cerrar programáticamente
+alert.close()
+
+// Register listeners / Registrar listeners
+alert.on('close',  (e) => console.log('closed'))
+alert.on('action', (e) => console.log('action clicked'))
+```
+
+---
+
+## DOM Event / Evento DOM
+
+```js
+document.getElementById('my-alert')
+  .addEventListener('mts:alert:close', () => console.log('closed'));
+```
+
+---
+
+## Changelog
+
+| Version | Description |
+|---------|-------------|
+| 1.1.0 | [EN] `onAction` normalized to `.on()`, bilingual docs / [ES] `onAction` normalizado a `.on()`, docs bilingüe |
+| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

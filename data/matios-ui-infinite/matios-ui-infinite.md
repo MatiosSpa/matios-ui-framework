@@ -1,186 +1,144 @@
-# matios-ui-infinite
+# MTS.Infinite
 
-Scroll infinito con `IntersectionObserver`. El componente **no hace fetch** — el dev controla los datos a través de `onLoadMore`.
+[EN] Infinite scroll with IntersectionObserver — vertical list, grid and table layouts. The component does not fetch data; the developer controls loading via `onLoadMore`.
+[ES] Scroll infinito con IntersectionObserver — layouts vertical, grid y table. El componente no hace fetch; el desarrollador controla la carga via `onLoadMore`.
 
 ---
 
-## Instalación
+## Installation / Instalación
+
 ```html
-<link rel="stylesheet" href="../../base/matios-ui-base.css">
+<link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-infinite.css">
 <script src="matios-ui-infinite.js"></script>
 ```
 
 ---
 
-## Uso rápido
+## Options / Opciones
+
+| Option | Type | Default | [EN] Description / [ES] Descripción |
+|--------|------|---------|--------------------------------------|
+| `onLoadMore` | `function` | — | [EN] `async ({ page, pageSize }) => { items, hasMore }` **Required** / [ES] **Requerido** |
+| `renderItem` | `function` | — | [EN] `(item, index) => HTMLString\|Element` Item renderer / [ES] Renderizador de ítems |
+| `pageSize` | `number` | `20` | [EN] Items per load / [ES] Ítems por carga |
+| `layout` | `string` | `'vertical'` | `'vertical'` · `'grid'` · `'table'` |
+| `threshold` | `number` | `0.1` | [EN] IntersectionObserver threshold / [ES] Umbral del observer |
+| `loaderText` | `string` | `'Cargando...'` | [EN] Loading text / [ES] Texto de carga |
+| `endText` | `string` | `'No hay más resultados'` | [EN] End of data text / [ES] Texto al terminar |
+| `animate` | `boolean` | `true` | [EN] Animate item entrance / [ES] Animar entrada de ítems |
+| `emptyState` | `object` | `{ icon, title, message }` | [EN] Empty state config / [ES] Config del estado vacío |
+| `onLoad` | `function` | — | [EN] `({ items, page }) => {}` Fires after each load / [ES] Se dispara tras cada carga |
+| `onError` | `function` | — | [EN] `({ error }) => {}` Fires on load error / [ES] Se dispara al ocurrir un error |
+| `onEnd` | `function` | — | [EN] `({ total }) => {}` Fires when all data is loaded / [ES] Se dispara al cargar todos los datos |
+
+---
+
+## Events / Eventos
 
 ```js
-const lista = new MTS.Infinite('#mi-lista', {
+new MTS.Infinite('#my-list', {
   onLoadMore: async ({ page, pageSize }) => {
-    const res = await fetch(`/api/usuarios?page=${page}&pageSize=${pageSize}`)
-    const data = await res.json()
-    return {
-      items:   data.items,    // array de items
-      hasMore: data.hasNext,  // hay más datos?
-    }
+    const res = await fetch(`/api/items?page=${page}&size=${pageSize}`);
+    const data = await res.json();
+    return { items: data.items, hasMore: data.hasNext };
   },
-  renderItem: (item) => `
-    <div>
-      <strong>${item.nombre}</strong>
-      <span>${item.email}</span>
-    </div>
-  `,
-})
+  renderItem: (item) => `<div class="card">${item.title}</div>`,
+  // Fires after each load / Se dispara tras cada carga
+  onLoad: (e) => {
+    console.log(e.detail.items);  // → loaded items
+    console.log(e.detail.page);   // → page number loaded
+  },
+  // Fires when all data is loaded / Se dispara al no haber más datos
+  onEnd: (e) => {
+    console.log(e.detail.total);  // → total items loaded
+  },
+  // Fires on error / Se dispara al ocurrir un error
+  onError: (e) => {
+    console.error(e.detail.error);
+    showErrorToast();
+  },
+});
 ```
 
 ---
 
-## Configuración completa
+## JavaScript Usage / Uso JavaScript
 
 ```js
-new MTS.Infinite('#lista', {
-
-  // — Datos (requerido) —
+// Vertical list (default) / Lista vertical
+new MTS.Infinite('#my-list', {
+  pageSize:   20,
+  layout:     'vertical',
   onLoadMore: async ({ page, pageSize }) => {
-    // El dev hace el fetch que quiera
-    const res = await fetch(`/api/items?page=${page}&pageSize=${pageSize}`)
-    const data = await res.json()
-
-    return {
-      items:   data.items,      // array — requerido
-      hasMore: data.hasMore,    // boolean — si false, detiene el scroll
-    }
-    // También acepta retornar el array directamente:
-    // return data.items  ← hasMore se calcula como items.length >= pageSize
+    const data = await api.getUsers({ page, pageSize });
+    return { items: data.users, hasMore: data.hasNext };
   },
+  renderItem: (user, index) => `
+    <div class="user-row">
+      <span>#${index + 1}</span>
+      <span>${user.name}</span>
+      <span>${user.email}</span>
+    </div>`,
+  onLoad: (e) => console.log(`Loaded page ${e.detail.page}: ${e.detail.items.length} items`),
+  onEnd:  (e) => console.log(`All done — ${e.detail.total} total items`),
+});
 
-  // — Render —
-  renderItem: (item, index) => {
-    // Puede retornar un string HTML
-    return `<div class="mi-card">${item.titulo}</div>`
-
-    // O un elemento DOM
-    const el = document.createElement('div')
-    el.textContent = item.titulo
-    return el
+// Grid layout / Layout grid
+new MTS.Infinite('#my-grid', {
+  layout:   'grid',
+  pageSize: 12,
+  onLoadMore: async ({ page, pageSize }) => {
+    const data = await api.getProducts({ page, pageSize });
+    return { items: data.items, hasMore: data.hasNext };
   },
-
-  // — Configuración —
-  pageSize:   20,             // registros por carga
-  layout:    'vertical',     // 'vertical' | 'grid' | 'table'
-  threshold:  0.1,           // sensibilidad del IntersectionObserver (0-1)
-  animate:    true,          // animar entrada de items
-
-  // — Textos —
-  loaderText: 'Cargando...',
-  endText:    'No hay más resultados',
-
-  // — Estado vacío —
-  emptyState: {
-    icon:    '📭',
-    title:   'Sin resultados',
-    message: 'No se encontraron items para mostrar',
-  },
-
-  // — Callbacks —
-  onLoad:  (items, page) => console.log(`Cargada página ${page}, ${items.length} items`),
-  onError: (error)       => console.error('Error:', error),
-  onEnd:   ()            => console.log('Fin de la lista'),
-})
+  renderItem: (product) => `
+    <div class="product-card">
+      <img src="${product.image}">
+      <h3>${product.name}</h3>
+      <p>$${product.price}</p>
+    </div>`,
+});
 ```
-
----
-
-## Layouts
-
-### Vertical (default)
-Items apilados uno debajo del otro.
-```js
-new MTS.Infinite('#lista', { layout: 'vertical', ... })
-```
-
-### Grid
-Grid responsivo con columnas automáticas.
-```js
-new MTS.Infinite('#lista', { layout: 'grid', ... })
-```
-
-### Table
-El dev renderiza una `<table>` completa dentro del contenedor.
-```js
-new MTS.Infinite('#tabla-wrap', {
-  layout: 'table',
-  renderItem: (item) => `<tr><td>${item.nombre}</td><td>${item.email}</td></tr>`,
-})
-```
-> En modo table, el dev es responsable de generar el `<table>` y `<thead>` fuera del componente.
 
 ---
 
 ## API
 
 ```js
-const lista = new MTS.Infinite('#lista', config)
+const list = new MTS.Infinite('#my-list', { onLoadMore: ..., renderItem: ... });
 
-lista.reset()              // Vacía la lista y recarga desde página 1
-lista.appendItems([...])   // Agrega items manualmente
-lista.getCount()           // → número total de items cargados
-lista.pause()              // Pausa el IntersectionObserver
-lista.resume()             // Reanuda el IntersectionObserver
-lista.destroy()            // Destruye la instancia y limpia el DOM
+// Reset and reload from page 1 / Resetear y recargar desde página 1
+list.reset()
 
-// Eventos
-lista.on('load',  ({ detail }) => console.log(detail.items, detail.page))
-lista.on('end',   ({ detail }) => console.log('Total:', detail.total))
-lista.on('error', ({ detail }) => console.error(detail.error))
+// Load next page manually / Cargar siguiente página manualmente
+list.loadMore()
+
+// Register listeners / Registrar listeners
+list.on('load',  (e) => console.log(e.detail.items))
+list.on('end',   (e) => console.log(e.detail.total))
+list.on('error', (e) => console.error(e.detail.error))
+list.off('load', handler)
+
+// Destroy / Destruir
+list.destroy()
 ```
 
 ---
 
-## Eventos DOM
+## DOM Events / Eventos DOM
 
 ```js
-document.getElementById('lista')
-  .addEventListener('mts:infinite:load', (e) => {
-    console.log('items:', e.detail.items)
-    console.log('página:', e.detail.page)
-    console.log('total cargado:', e.detail.total)
-  })
-```
-
-| Evento | Namespace DOM | Detail |
-|--------|---------------|--------|
-| `load`  | `mts:infinite:load`  | `{ items, page, total }` |
-| `end`   | `mts:infinite:end`   | `{ total }` |
-| `error` | `mts:infinite:error` | `{ error }` |
-
----
-
-## Ejemplo con búsqueda
-
-```js
-let query = ''
-
-const lista = new MTS.Infinite('#resultados', {
-  onLoadMore: async ({ page, pageSize }) => {
-    const res = await fetch(`/api/buscar?q=${query}&page=${page}&pageSize=${pageSize}`)
-    const data = await res.json()
-    return { items: data.results, hasMore: data.hasNext }
-  },
-  renderItem: (item) => `<div class="mts-surface">${item.titulo}</div>`,
-})
-
-// Al cambiar el buscador, resetear la lista
-document.getElementById('buscador').addEventListener('input', (e) => {
-  query = e.target.value
-  lista.reset()
-})
+el.addEventListener('mts:infinite:load',  (e) => console.log(e.detail));
+el.addEventListener('mts:infinite:end',   (e) => console.log(e.detail.total));
+el.addEventListener('mts:infinite:error', (e) => console.error(e.detail.error));
 ```
 
 ---
 
 ## Changelog
-| Versión | Descripción |
+
+| Version | Description |
 |---------|-------------|
-| 1.0.0 | Release inicial — IntersectionObserver, layouts, estados, sin fetch interno |
+| 1.1.0 | [EN] `onLoad/onError/onEnd` normalized to `.on()`, bilingual docs / [ES] Normalizados a `.on()`, docs bilingüe |
+| 1.0.0 | [EN] Initial release — vertical/grid/table, IntersectionObserver / [ES] Versión inicial |

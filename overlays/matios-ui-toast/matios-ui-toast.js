@@ -37,9 +37,18 @@ MTS.Toast = (() => {
    * @returns {object} { close() }
    */
   function show(options = {}) {
-    const variant  = options.variant  || 'default';
+    // Toast variant: 'default' | 'success' | 'warning' | 'danger' | 'info' | 'loading'
+    // Variante del toast
+    const variant = options.variant || 'default';
+
+    // Position: 'top-right' | 'top-left' | 'top-center' | 'bottom-right' | 'bottom-left' | 'bottom-center'
+    // Posición en pantalla
     const position = options.position || 'bottom-right';
+
+    // Duration in ms before auto-close (0 = no auto-close) / Duración en ms antes de cerrar (0 = no cierra)
     const duration = options.duration ?? (variant === 'loading' ? 0 : 4000);
+
+    // Show close button / Mostrar botón de cierre
     const closable = options.closable ?? (variant !== 'loading');
 
     const container = _getContainer(position);
@@ -84,7 +93,7 @@ MTS.Toast = (() => {
       actBtn.className = 'mts-toast__action';
       actBtn.textContent = options.action;
       actBtn.addEventListener('click', () => {
-        if (options.onAction) options.onAction();
+        if (options.onAction) options.onAction({ type: 'action' });
         close();
       });
       content.appendChild(actBtn);
@@ -129,7 +138,7 @@ MTS.Toast = (() => {
       toast.classList.add('mts-toast--hiding');
       toast.addEventListener('transitionend', () => {
         toast.remove();
-        if (options.onClose) options.onClose();
+        if (options.onClose) options.onClose({ type: 'close' });
       }, { once: true });
     }
 

@@ -71,12 +71,20 @@ MTS.NumberInput = class MtsNumberInput {
     this.disabled    = options.disabled    ?? false;
     this.readonly    = options.readonly    ?? false;
     this.size        = options.size        || 'md';
-    this._onChange   = options.onChange    || null;
-    this._onFocus    = options.onFocus     || null;
-    this._onBlur     = options.onBlur      || null;
-    this._error      = '';
-    this._holdTimer  = null;
+    this._error        = '';
+    this._holdTimer    = null;
     this._holdInterval = null;
+    this._listeners    = {};
+
+    // Fires when value changes: ({ value, formatted }) => {}
+    // Se dispara al cambiar el valor
+    if (options.onChange) this.on('change', options.onChange);
+
+    // Fires when input gains focus / Se dispara al enfocar el input
+    if (options.onFocus)  this.on('focus',  options.onFocus);
+
+    // Fires when input loses focus / Se dispara al perder el foco
+    if (options.onBlur)   this.on('blur',   options.onBlur);
 
     this._build();
   }
@@ -87,12 +95,14 @@ MTS.NumberInput = class MtsNumberInput {
     this.value = this._clamp(Number(v));
     if (this._input) this._input.value = this._formatDisplay(this.value);
     this._updateBtns();
-    if (!silent && this._onChange) this._onChange(this.value, this._formatDisplay(this.value));
+    if (!silent) this._emit('change', { value: this.value, formatted: this._formatDisplay(this.value) });
     return this;
   }
   setMin(v)        { this.min = v; this._updateBtns(); return this; }
   setMax(v)        { this.max = v; this._updateBtns(); return this; }
   setError(msg)    { this._error = msg; this._renderError(); return this; }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   clearError()     { this._error = ''; this._renderError(); return this; }
   disable()        { this.disabled = true;  this._build(); return this; }
   enable()         { this.disabled = false; this._build(); return this; }
@@ -151,7 +161,7 @@ MTS.NumberInput = class MtsNumberInput {
       input.value = this.value === 0 ? '' : String(this.value);
       input.select();
       wrap.classList.add('mts-numberinput__wrap--focus');
-      if (this._onFocus) this._onFocus(e);
+      this._emit('focus', { event: e });
     });
     input.addEventListener('blur', (e) => {
       const parsed = parseFloat(input.value.replace(/[^0-9.,-]/g, '').replace(',', '.'));
@@ -159,8 +169,8 @@ MTS.NumberInput = class MtsNumberInput {
       input.value = this._formatDisplay(this.value);
       wrap.classList.remove('mts-numberinput__wrap--focus');
       this._updateBtns();
-      if (this._onChange) this._onChange(this.value, this._formatDisplay(this.value));
-      if (this._onBlur) this._onBlur(e);
+      this._emit('change', { value: this.value, formatted: this._formatDisplay(this.value) });
+      this._emit('blur', { event: e });
     });
     input.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowUp')   { e.preventDefault(); this._step(1);  }
@@ -218,7 +228,7 @@ MTS.NumberInput = class MtsNumberInput {
     this.value = newVal;
     if (this._input) this._input.value = this._formatDisplay(this.value);
     this._updateBtns();
-    if (this._onChange) this._onChange(this.value, this._formatDisplay(this.value));
+    this._emit('change', { value: this.value, formatted: this._formatDisplay(this.value) });
     /* Flash visual */
     this._wrap?.classList.add('mts-numberinput__wrap--active');
     setTimeout(() => this._wrap?.classList.remove('mts-numberinput__wrap--active'), 120);
@@ -280,5 +290,9 @@ MTS.NumberInput = class MtsNumberInput {
     btn.addEventListener('touchstart', (e) => { e.preventDefault(); start(); });
     ['mouseup','mouseleave','touchend'].forEach(ev => btn.addEventListener(ev, stop));
     btn.addEventListener('click', (e) => e.stopPropagation());
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:numberinput:${event}`, { bubbles: true, detail }));
   }
 };

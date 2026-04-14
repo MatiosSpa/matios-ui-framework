@@ -21,20 +21,47 @@ MTS.Tabs = class MtsTabs {
   constructor(selector, options = {}) {
     this._el         = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) { console.error('[MTS.Tabs] No encontrado:', selector); return; }
-    this.tabs        = options.tabs        || [];
-    this.active      = options.active      || this.tabs[0]?.id;
-    this.variant     = options.variant     || 'underline';
-    this.direction   = options.direction   || 'horizontal';
-    this.lazy        = options.lazy        ?? true;
-    /* Nuevas opciones */
-    this.border      = options.border      ?? true;       // mostrar borde de separación nav/panel
-    this.borderWidth = options.borderWidth || '2px';      // grosor del borde
-    this.height      = options.height      || 'auto';     // 'auto'|'stretch'|'200px'|etc.
-    this.stretch     = options.stretch     ?? false;      // alias de height:'stretch'
-    this.navWidth    = options.navWidth    || null;       // ancho del nav vertical (ej: '200px')
-    this.panelBorder = options.panelBorder ?? true;       // borde izq en panel (vertical)
-    this._rendered   = new Set();
-    this._listeners  = {};
+    // Tab items: [{ id, label, content, icon?, disabled?, badge? }]
+    // Pestañas: arreglo de objetos
+    this.tabs = options.tabs || [];
+
+    // Initially active tab ID / ID de la pestaña activa inicial
+    this.active = options.active || this.tabs[0]?.id;
+
+    // Visual variant: 'underline' | 'pill' | 'card' / Variante visual
+    this.variant = options.variant || 'underline';
+
+    // Layout direction: 'horizontal' | 'vertical' / Dirección del layout
+    this.direction = options.direction || 'horizontal';
+
+    // Lazy render — only renders panel content when first activated
+    // Renderizado lazy — solo renderiza el panel al activarse por primera vez
+    this.lazy = options.lazy ?? true;
+
+    // Show separator border between nav and panels / Mostrar borde separador nav/paneles
+    this.border = options.border ?? true;
+
+    // Separator border width / Grosor del borde separador
+    this.borderWidth = options.borderWidth || '2px';
+
+    // Panel height: 'auto' | 'stretch' | '200px' | etc.
+    // Alto del panel
+    this.height = options.height || 'auto';
+
+    // Stretch panels to fill container height (alias for height:'stretch')
+    // Estirar paneles para llenar el alto del contenedor
+    this.stretch = options.stretch ?? false;
+
+    // Nav width in vertical mode (e.g. '200px') / Ancho del nav en modo vertical
+    this.navWidth = options.navWidth || null;
+
+    // Show left border on panel in vertical mode / Mostrar borde izquierdo en panel vertical
+    this.panelBorder = options.panelBorder ?? true;
+
+    this._rendered  = new Set();
+    this._listeners = {};
+
+    // Fires when active tab changes / Se dispara al cambiar la pestaña activa
     if (options.onChange) this.on('change', options.onChange);
     this._build();
   }

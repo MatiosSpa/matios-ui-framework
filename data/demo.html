@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS Data — Demo</title>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-blue.css">
+  <style>
+    *{box-sizing:border-box}
+    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:24px 24px 48px;}
+    .demo-page{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:8px;}
+    .demo-header{padding-bottom:20px;margin-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
+    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
+    .demo-header h1 span{color:var(--mts-color-primary);}
+    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0;}
+    .acc{border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);overflow:hidden;transition:box-shadow .2s;}
+    .acc:hover{box-shadow:var(--mts-shadow-sm);}
+    .acc-header{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;background:var(--mts-bg-surface);user-select:none;transition:background .15s;}
+    .acc-header:hover{background:var(--mts-bg-surface-2);}
+    .acc-arrow{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--mts-color-primary);font-size:14px;font-weight:700;transition:transform .25s;flex-shrink:0;}
+    .acc.open .acc-arrow{transform:rotate(90deg);}
+    .acc-title{font-size:13px;font-weight:700;color:var(--mts-text-primary);flex:1;}
+    .acc-subtitle{font-size:11px;color:var(--mts-text-muted);}
+    .acc-body{display:none;border-top:1px solid var(--mts-border-color);background:var(--mts-bg-body);}
+    .acc.open .acc-body{display:block;}
+    .acc-iframe{width:100%;border:none;min-height:420px;display:block;}
+  </style>
+  <link rel="stylesheet" href="../shared/demo-shared.css">
+  <script src="../shared/demo-shared.js"></script>
+</head>
+<body>
+<div class="demo-page">
+  <div class="demo-header">
+    <h1>MTS <span>Data</span></h1>
+    <p>Tablas, grids, scroll infinito y visualización de datos — componentes para manejar y presentar información.</p>
+  </div>
+
+  <div class="acc" id="acc-table">
+    <div class="acc-header" onclick="toggleAcc('acc-table','matios-ui-table/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.Table</span>
+      <span class="acc-subtitle">Tabla HTML semántica — variantes hover, striped, bordered, compact y columnas ordenables</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-table" src="about:blank"></iframe></div>
+  </div>
+
+  <div class="acc" id="acc-datatable">
+    <div class="acc-header" onclick="toggleAcc('acc-datatable','matios-ui-datatable/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.DataTable</span>
+      <span class="acc-subtitle">Tabla avanzada — búsqueda, filtros, paginación, selección y ordenamiento dinámico</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-datatable" src="about:blank"></iframe></div>
+  </div>
+
+  <div class="acc" id="acc-infinite">
+    <div class="acc-header" onclick="toggleAcc('acc-infinite','matios-ui-infinite/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.InfiniteScroll</span>
+      <span class="acc-subtitle">Carga automática al hacer scroll — lista, grid y estado vacío</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-infinite" src="about:blank"></iframe></div>
+  </div>
+
+  <div class="acc" id="acc-chart">
+    <div class="acc-header" onclick="toggleAcc('acc-chart','matios-ui-chart/demo.html')">
+      <span class="acc-arrow">›</span>
+      <span class="acc-title">MTS.Chart</span>
+      <span class="acc-subtitle">Gráficos SVG puros — línea, barra, dona, área y sparklines</span>
+    </div>
+    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-chart" src="about:blank"></iframe></div>
+  </div>
+
+</div>
+<script>
+var currentTheme = (document.documentElement.getAttribute('data-mts-theme') || 'dark');
+
+function toggleAcc(id, src) {
+  var acc     = document.getElementById(id);
+  var iframe  = document.getElementById('iframe-' + id);
+  var opening = !acc.classList.contains('open');
+  acc.classList.toggle('open');
+  if (opening) {
+    iframe.src = src + '#mts-theme=' + currentTheme;
+  } else {
+    iframe.src = 'about:blank';
+  }
+  // Notify parent which component is active
+  // Notifica al padre qué componente está activo
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type:      'mts:accActive',
+        component: opening ? id.replace('acc-', '') : null,
+      }, '*');
+    }
+  } catch(e) {}
+}
+
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'setTheme') {
+    currentTheme = e.data.theme;
+    document.documentElement.setAttribute('data-mts-theme', e.data.theme);
+  }
+});
+
+if (window !== window.top) {
+  var ts = document.querySelector('.demo-theme');
+  if (ts) ts.style.display = 'none';
+}
+</script>
+</body>
+</html>

@@ -26,17 +26,41 @@ MTS.RichTextEditor = class MtsRichTextEditor {
   constructor(selector, options = {}) {
     this._el      = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    this._value      = options.value       || '';
+    // Initial HTML content / Contenido HTML inicial
+    this._value = options.value || '';
+
+    // Placeholder text / Texto placeholder
     this.placeholder = options.placeholder || 'Escribe aquí...';
-    this.height      = options.height      || '240px';
-    this.minHeight   = options.minHeight   || '120px';
-    this.disabled    = options.disabled    ?? false;
-    this.readonly    = options.readonly    ?? false;
-    this.toolbar     = options.toolbar     || ['format','lists','align','insert','clean'];
-    this._onChange   = options.onChange    || null;
-    this._onFocus    = options.onFocus     || null;
-    this._onBlur     = options.onBlur      || null;
+
+    // Editor area height / Alto del área del editor
+    this.height = options.height || '240px';
+
+    // Minimum editor height / Alto mínimo del editor
+    this.minHeight = options.minHeight || '120px';
+
+    // Disables editing / Deshabilita la edición
+    this.disabled = options.disabled ?? false;
+
+    // Read-only mode / Modo solo lectura
+    this.readonly = options.readonly ?? false;
+
+    // Toolbar groups to show: 'format' | 'lists' | 'align' | 'insert' | 'clean' | 'table'
+    // Grupos de toolbar a mostrar
+    this.toolbar = options.toolbar || ['format','lists','align','insert','clean'];
+
+    // Fires when content changes (receives HTML string) / Se dispara al cambiar el contenido
     this._savedRange = null;
+    this._listeners  = {};
+
+    // Fires when content changes: ({ html }) => {} / Se dispara al cambiar el contenido
+    if (options.onChange) this.on('change', options.onChange);
+
+    // Fires when editor gains focus / Se dispara al enfocar el editor
+    if (options.onFocus)  this.on('focus',  options.onFocus);
+
+    // Fires when editor loses focus / Se dispara al perder foco
+    if (options.onBlur)   this.on('blur',   options.onBlur);
+
     this._build();
   }
 
@@ -49,7 +73,9 @@ MTS.RichTextEditor = class MtsRichTextEditor {
   disable()         { this.disabled = true;  if (this._editor) this._editor.contentEditable = 'false'; this._el.classList.add('mts-rte--disabled'); return this; }
   enable()          { this.disabled = false; if (this._editor) this._editor.contentEditable = 'true';  this._el.classList.remove('mts-rte--disabled'); return this; }
   insertHTML(html)  { this._restoreRange(); document.execCommand('insertHTML', false, html); return this; }
-  destroy()         { this._el.innerHTML = ''; }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
+  destroy()  { this._el.innerHTML = ''; }
 
   /* ── Build ── */
   _build() {
@@ -80,18 +106,17 @@ MTS.RichTextEditor = class MtsRichTextEditor {
 
     editor.addEventListener('input', () => {
       editor.classList.toggle('mts-rte__editor--empty', !editor.innerHTML || editor.innerHTML === '<br>');
-      if (this._onChange) this._onChange(editor.innerHTML);
-      this._el.dispatchEvent(new CustomEvent('mts:rte:change', { bubbles: true, detail: { html: editor.innerHTML } }));
+      this._emit('change', { html: editor.innerHTML });
       this._updateToolbarState();
     });
     editor.addEventListener('focus', (e) => {
       this._el.classList.add('mts-rte--focused');
-      if (this._onFocus) this._onFocus(e);
+      this._emit('focus', { event: e });
     });
     editor.addEventListener('blur', (e) => {
       this._el.classList.remove('mts-rte--focused');
       this._saveRange();
-      if (this._onBlur) this._onBlur(e);
+      this._emit('blur', { event: e });
     });
     editor.addEventListener('keyup', () => this._updateToolbarState());
     editor.addEventListener('mouseup', () => this._updateToolbarState());
@@ -225,7 +250,7 @@ MTS.RichTextEditor = class MtsRichTextEditor {
     this._editor?.focus();
     this._updateToolbarState();
     this._updateStatus();
-    if (this._onChange) this._onChange(this._editor?.innerHTML || '');
+    this._emit('change', { html: this._editor?.innerHTML || '' });
   }
 
   _saveRange() {
@@ -258,5 +283,9 @@ MTS.RichTextEditor = class MtsRichTextEditor {
     const words = text.trim() ? text.trim().split(/\s+/).length : 0;
     const chars = text.length;
     this._statusEl.textContent = words + ' palabras · ' + chars + ' caracteres';
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:rte:${event}`, { bubbles: true, detail }));
   }
 };

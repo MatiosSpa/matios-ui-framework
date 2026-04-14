@@ -1,10 +1,12 @@
-# matios-ui-tabs
+# MTS.Tabs
 
-Pestañas horizontal/vertical en 3 variantes: underline, pill y card.
+[EN] Tab component with underline, pill and card variants, horizontal and vertical layout, lazy rendering, icons and badges.
+[ES] Componente de pestañas con variantes underline, pill y card, layout horizontal y vertical, renderizado lazy, íconos y badges.
 
 ---
 
-## Instalación
+## Installation / Instalación
+
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-tabs.css">
@@ -13,115 +15,149 @@ Pestañas horizontal/vertical en 3 variantes: underline, pill y card.
 
 ---
 
-## Uso rápido
+## Options / Opciones
+
+| Option | Type | Default | [EN] Description / [ES] Descripción |
+|--------|------|---------|--------------------------------------|
+| `tabs` | `array` | `[]` | [EN] Tab items (see below) / [ES] Ítems de pestañas |
+| `active` | `string` | first tab | [EN] Initially active tab ID / [ES] ID de la pestaña activa inicial |
+| `variant` | `string` | `'underline'` | `'underline'` · `'pill'` · `'card'` |
+| `direction` | `string` | `'horizontal'` | `'horizontal'` · `'vertical'` |
+| `lazy` | `boolean` | `true` | [EN] Render panel content only when first activated / [ES] Renderizar panel solo al activarse por primera vez |
+| `border` | `boolean` | `true` | [EN] Show separator border between nav and panels / [ES] Mostrar borde separador nav/paneles |
+| `borderWidth` | `string` | `'2px'` | [EN] Separator border width / [ES] Grosor del borde separador |
+| `height` | `string` | `'auto'` | [EN] Panel height: `'auto'` · `'stretch'` · `'200px'` / [ES] Alto del panel |
+| `stretch` | `boolean` | `false` | [EN] Alias for `height:'stretch'` / [ES] Alias de `height:'stretch'` |
+| `navWidth` | `string` | `null` | [EN] Nav width in vertical mode (e.g. `'200px'`) / [ES] Ancho del nav en vertical |
+| `panelBorder` | `boolean` | `true` | [EN] Left border on panel in vertical mode / [ES] Borde izquierdo en panel vertical |
+| `onChange` | `function` | — | [EN] Fires when active tab changes / [ES] Se dispara al cambiar la pestaña activa |
+
+### Tab item schema / Esquema de ítem
+
+| Property | Type | [EN] Description / [ES] Descripción |
+|----------|------|--------------------------------------|
+| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
+| `label` | `string` | [EN] Tab label / [ES] Texto de la pestaña |
+| `content` | `string` | [EN] Panel HTML content / [ES] Contenido HTML del panel |
+| `icon` | `string` | [EN] Icon HTML (optional) / [ES] HTML del ícono (opcional) |
+| `badge` | `string\|number` | [EN] Badge text (optional) / [ES] Texto del badge (opcional) |
+| `disabled` | `boolean` | [EN] Disables the tab / [ES] Deshabilita la pestaña |
+
+---
+
+## Events / Eventos
+
 ```js
-const tabs = new MTS.Tabs('#mis-tabs', {
-  variant:   'underline',    // 'underline'|'pill'|'card'
-  direction: 'horizontal',   // 'horizontal'|'vertical'
-  active:    'tab1',
+new MTS.Tabs('#my-tabs', {
+  tabs: [...],
+  // Fires when active tab changes / Se dispara al cambiar la pestaña activa
+  onChange: (e) => {
+    console.log(e.detail.id);  // → 'tab-2'
+    console.log(e.detail.tab); // → { id, label, content, ... }
+  },
+});
+```
+
+---
+
+## HTML Usage / Uso HTML
+
+```html
+<div id="my-tabs"></div>
+
+<script>
+  new MTS.Tabs('#my-tabs', {
+    variant: 'underline',
+    tabs: [
+      { id: 'overview', label: 'Overview',  content: '<p>Overview content</p>' },
+      { id: 'details',  label: 'Details',   content: '<p>Details content</p>' },
+      { id: 'history',  label: 'History',   content: '<p>History content</p>', disabled: true },
+    ],
+    onChange: (e) =&gt; console.log(e.detail.id),
+  });
+</script>
+```
+
+---
+
+## JavaScript Usage / Uso JavaScript
+
+```js
+// Underline (default) / Underline (por defecto)
+new MTS.Tabs('#tabs-basic', {
+  variant: 'underline',
   tabs: [
-    { id: 'tab1', label: 'General',    content: '<p>Contenido 1</p>' },
-    { id: 'tab2', label: 'Seguridad',  content: '<p>Contenido 2</p>' },
-    { id: 'tab3', label: 'Reportes',   content: () => miDiv, disabled: true },
-    { id: 'tab4', label: 'Alertas',    content: '<p>...</p>', badge: 3 },
+    { id: 'a', label: 'Tab A', content: '<p>Content A</p>' },
+    { id: 'b', label: 'Tab B', content: '<p>Content B</p>' },
+    { id: 'c', label: 'Tab C', content: '<p>Content C</p>' },
   ],
-  onChange: (e) => console.log('Tab activa:', e.detail.id),
-})
-```
+  onChange: (e) => console.log(e.detail.id),
+});
 
----
+// Pill variant / Variante pill
+new MTS.Tabs('#tabs-pill', {
+  variant: 'pill',
+  active:  'b',
+  tabs: [...],
+});
 
-## Opciones completas
+// Vertical layout / Layout vertical
+new MTS.Tabs('#tabs-vertical', {
+  variant:   'card',
+  direction: 'vertical',
+  navWidth:  '180px',
+  height:    '300px',
+  tabs: [...],
+});
 
-```js
-new MTS.Tabs('#el', {
-  // — Apariencia —
-  variant:     'underline',   // 'underline' | 'pill' | 'card'
-  direction:   'horizontal',  // 'horizontal' | 'vertical'
-  active:      'tab1',        // id de la pestaña activa inicial
-
-  // — Borde —
-  border:      true,          // mostrar/ocultar el borde de separación nav/panel
-  borderWidth: '2px',         // grosor del borde (cualquier valor CSS)
-
-  // — Alto del panel —
-  height:      'auto',        // 'auto' | 'stretch' | '300px' | '50vh' | etc.
-  stretch:     false,         // alias de height:'stretch' — ocupa todo el espacio disponible
-
-  // — Vertical —
-  navWidth:    null,          // ancho del nav en vertical, ej: '200px'
-
-  // — Comportamiento —
-  lazy:        true,          // renderizar contenido solo al activar la pestaña
-})
-```
-
----
-
-## Alto del panel
-
-```js
-// Auto (default) — se ajusta al contenido
-new MTS.Tabs('#t1', { height: 'auto' })
-
-// Alto fijo — con scroll interno
-new MTS.Tabs('#t2', { height: '300px' })
-new MTS.Tabs('#t3', { height: '50vh' })
-
-// Stretch — ocupa todo el espacio disponible hasta el borde de la pantalla
-// Requiere que el contenedor padre tenga height definido
-new MTS.Tabs('#t4', { height: 'stretch' })
-new MTS.Tabs('#t5', { stretch: true })   // alias
-```
-
----
-
-## Borde
-
-```js
-// Sin borde de separación
-new MTS.Tabs('#t1', { border: false })
-
-// Borde delgado (1px)
-new MTS.Tabs('#t2', { borderWidth: '1px' })
-
-// Borde grueso (3px)
-new MTS.Tabs('#t3', { borderWidth: '3px' })
-```
-
----
-
-## Vertical
-
-```js
-new MTS.Tabs('#t1', {
-  direction:   'vertical',
-  navWidth:    '180px',    // ancho del sidebar de tabs
-  borderWidth: '2px',      // grosor del borde izquierdo del panel
-  height:      'stretch',  // ocupa todo el alto disponible
-})
+// With icons and badges / Con íconos y badges
+new MTS.Tabs('#tabs-icons', {
+  tabs: [
+    { id: 'inbox', label: 'Inbox', badge: 5,     icon: '<svg>...</svg>', content: '...' },
+    { id: 'sent',  label: 'Sent',  badge: null,  icon: '<svg>...</svg>', content: '...' },
+  ],
+});
 ```
 
 ---
 
 ## API
+
 ```js
-tabs.setActive('tab2')
-tabs.addTab({ id: 'nuevo', label: 'Nuevo', content: '...' })
-tabs.removeTab('tab3')
+const tabs = new MTS.Tabs('#my-tabs', { ... });
+
+// Set active tab programmatically / Activar pestaña programáticamente
+tabs.setActive('tab-id')
+
+// Add a tab / Agregar una pestaña
+tabs.addTab({ id: 'new', label: 'New Tab', content: '<p>...</p>' })
+
+// Remove a tab / Eliminar una pestaña
+tabs.removeTab('tab-id')
+
+// Register event listener / Registrar listener
+tabs.on('change', (e) => console.log(e.detail.id))
+
+// Destroy / Destruir
+tabs.destroy()
 ```
 
 ---
 
-## Eventos DOM
-| Evento | Namespace | Detail |
-|--------|-----------|--------|
-| `change` | `mts:tabs:change` | `{ id, tab }` |
+## DOM Event / Evento DOM
+
+```js
+document.getElementById('my-tabs')
+  .addEventListener('mts:tabs:change', (e) => {
+    console.log(e.detail.id);  // → active tab id
+  });
+```
 
 ---
 
 ## Changelog
-| Versión | Descripción |
+
+| Version | Description |
 |---------|-------------|
-| 1.1.0 | Opciones `border`, `borderWidth`, `height`, `stretch`, `navWidth`. Fix borde izquierdo vertical |
-| 1.0.0 | Release inicial — underline, pill, card, horizontal, vertical, lazy load, badges |
+| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
+| 1.0.0 | [EN] Initial release — underline/pill/card, vertical, lazy, icons, badges / [ES] Versión inicial |

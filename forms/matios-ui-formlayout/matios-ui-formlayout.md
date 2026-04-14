@@ -1,27 +1,58 @@
-# matios-ui-formlayout
+# MTS.FormLayout
 
-Layout de formularios — CSS puro, sin JS. Controla cómo se distribuyen los campos, labels e inputs.
+[EN] Form layout system — pure CSS, no JavaScript. Controls how fields, labels and inputs are distributed.
+[ES] Sistema de layout de formularios — CSS puro, sin JavaScript. Controla cómo se distribuyen los campos, labels e inputs.
 
 ---
 
-## Instalación
+## Installation / Instalación
 
 ```html
-<link rel="stylesheet" href="../../base/matios-ui-base.css">
-<link rel="stylesheet" href="../../base/matios-ui-grid.css">
+<link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-formlayout.css">
 ```
 
 ---
 
-## Patrones disponibles
+## Layout Patterns / Patrones de layout
 
-| Clase | Descripción |
-|-------|-------------|
-| `.mts-form` | Stack (default) — label arriba, input abajo |
-| `.mts-form--horizontal` | Label izquierda + campo derecha |
-| `.mts-form--inline` | Todos los campos en una sola línea |
-| `.mts-form--grid` | Grid de columnas — controlado via `--mts-form-cols` |
+| Class / Clase | [EN] Description / [ES] Descripción |
+|---------------|--------------------------------------|
+| `.mts-form` | [EN] Stack (default) — label above, input below / [ES] Stack — label arriba, input abajo |
+| `.mts-form--horizontal` | [EN] Label left, field right / [ES] Label izquierda, campo derecha |
+| `.mts-form--inline` | [EN] All fields in one line / [ES] Todos los campos en una línea |
+| `.mts-form--grid` | [EN] Column grid — controlled via `--mts-form-cols` / [ES] Grid de columnas |
+
+---
+
+## Helper Classes / Clases de apoyo
+
+| Class / Clase | [EN] Description / [ES] Descripción |
+|---------------|--------------------------------------|
+| `.mts-form-group` | [EN] Field wrapper (label + input + hint/error) / [ES] Wrapper del campo |
+| `.mts-form-group--full` | [EN] Spans all columns (grid mode) / [ES] Ocupa todas las columnas |
+| `.mts-form-group--span-2` | [EN] Spans 2 columns / [ES] Ocupa 2 columnas |
+| `.mts-form-label` | [EN] Field label / [ES] Label del campo |
+| `.mts-form-label--required` | [EN] Adds red asterisk / [ES] Agrega asterisco rojo |
+| `.mts-form-label--hidden` | [EN] Visually hidden but accessible / [ES] Oculto visualmente pero accesible |
+| `.mts-form-hint` | [EN] Helper text below field / [ES] Texto de ayuda |
+| `.mts-form-error` | [EN] Error text below field / [ES] Texto de error |
+| `.mts-form-footer` | [EN] Button area at bottom / [ES] Área de botones al final |
+| `.mts-form-footer--end` | [EN] Buttons right-aligned / [ES] Botones alineados a la derecha |
+| `.mts-form-footer--between` | [EN] Buttons at both ends / [ES] Botones en los extremos |
+| `.mts-form-section` | [EN] Section with visual separator / [ES] Sección con separador visual |
+| `.mts-form-divider` | [EN] Horizontal divider line / [ES] Línea separadora horizontal |
+| `.mts-form-card` | [EN] Card wrapper with padding and border / [ES] Card con padding y borde |
+
+---
+
+## CSS Variables
+
+| Variable | Default | [EN] Description / [ES] Descripción |
+|----------|---------|--------------------------------------|
+| `--mts-form-gap` | `16px` | [EN] Space between fields / [ES] Espacio entre campos |
+| `--mts-form-label-width` | `160px` | [EN] Label width in horizontal mode / [ES] Ancho del label en modo horizontal |
+| `--mts-form-cols` | `2` | [EN] Columns in grid mode / [ES] Columnas en modo grid |
 
 ---
 
@@ -30,17 +61,17 @@ Layout de formularios — CSS puro, sin JS. Controla cómo se distribuyen los ca
 ```html
 <form class="mts-form">
   <div class="mts-form-group">
-    <label class="mts-form-label mts-form-label--required">Nombre</label>
-    <input class="mts-input" placeholder="Juan Pérez">
+    <label class="mts-form-label mts-form-label--required">Name</label>
+    <input class="mts-input" placeholder="John Doe">
   </div>
   <div class="mts-form-group">
     <label class="mts-form-label">Email</label>
-    <input class="mts-input" type="email" placeholder="juan@empresa.com">
-    <span class="mts-form-hint">Te enviaremos la confirmación aquí.</span>
+    <input class="mts-input" type="email" placeholder="john@company.com">
+    <span class="mts-form-hint">We'll send confirmations here.</span>
   </div>
   <div class="mts-form-footer mts-form-footer--end">
-    <button class="mts-btn mts-btn--secondary">Cancelar</button>
-    <button class="mts-btn mts-btn--primary">Guardar</button>
+    <button class="mts-btn mts-btn--secondary">Cancel</button>
+    <button class="mts-btn mts-btn--primary">Save</button>
   </div>
 </form>
 ```
@@ -49,29 +80,31 @@ Layout de formularios — CSS puro, sin JS. Controla cómo se distribuyen los ca
 
 ## Grid
 
-Distribuye los campos en columnas. Controla el número via `--mts-form-cols`.
+[EN] Distributes fields in columns. Control the count via `--mts-form-cols`.
+[ES] Distribuye los campos en columnas. Controla el número via `--mts-form-cols`.
 
 ```html
+<!-- 2 columns / 2 columnas -->
 <form class="mts-form mts-form--grid" style="--mts-form-cols:2">
   <div class="mts-form-group">
-    <label class="mts-form-label">Nombre</label>
-    <input class="mts-input" placeholder="Juan">
+    <label class="mts-form-label">First name</label>
+    <input class="mts-input" placeholder="John">
   </div>
   <div class="mts-form-group">
-    <label class="mts-form-label">Apellido</label>
-    <input class="mts-input" placeholder="Pérez">
+    <label class="mts-form-label">Last name</label>
+    <input class="mts-input" placeholder="Doe">
   </div>
-  <!-- Campo que ocupa las 2 columnas -->
+  <!-- Full-width field / Campo ancho completo -->
   <div class="mts-form-group mts-form-group--full">
-    <label class="mts-form-label">Dirección</label>
-    <input class="mts-input" placeholder="Av. Principal 123">
+    <label class="mts-form-label">Address</label>
+    <input class="mts-input" placeholder="Main St. 123">
   </div>
   <div class="mts-form-footer mts-form-footer--end mts-form-group--full">
-    <button class="mts-btn mts-btn--primary">Guardar</button>
+    <button class="mts-btn mts-btn--primary">Save</button>
   </div>
 </form>
 
-<!-- 3 columnas -->
+<!-- 3 columns / 3 columnas -->
 <form class="mts-form mts-form--grid" style="--mts-form-cols:3">
   ...
 </form>
@@ -81,7 +114,8 @@ Distribuye los campos en columnas. Controla el número via `--mts-form-cols`.
 
 ## Horizontal
 
-Label a la izquierda, campo a la derecha. Controla el ancho del label via `--mts-form-label-width`.
+[EN] Label on the left, field on the right. Control label width via `--mts-form-label-width`.
+[ES] Label a la izquierda, campo a la derecha. Controla el ancho via `--mts-form-label-width`.
 
 ```html
 <form class="mts-form mts-form--horizontal">
@@ -90,13 +124,13 @@ Label a la izquierda, campo a la derecha. Controla el ancho del label via `--mts
     <input class="mts-input" type="email">
   </div>
   <div class="mts-form-group">
-    <label class="mts-form-label">Contraseña</label>
+    <label class="mts-form-label">Password</label>
     <input class="mts-input" type="password">
-    <span class="mts-form-hint">Mínimo 8 caracteres.</span>
+    <span class="mts-form-hint">Minimum 8 characters.</span>
   </div>
 </form>
 
-<!-- Label más ancho -->
+<!-- Wider label / Label más ancho -->
 <form class="mts-form mts-form--horizontal" style="--mts-form-label-width:200px">
   ...
 </form>
@@ -106,47 +140,39 @@ Label a la izquierda, campo a la derecha. Controla el ancho del label via `--mts
 
 ## Inline
 
-Todos los campos en una sola línea. Ideal para barras de búsqueda o filtros.
+[EN] All fields in one row. Ideal for search bars or filters.
+[ES] Todos los campos en una fila. Ideal para barras de búsqueda o filtros.
 
 ```html
 <form class="mts-form mts-form--inline">
   <div class="mts-form-group">
-    <label class="mts-form-label">Buscar</label>
-    <input class="mts-input" placeholder="Nombre o email...">
+    <label class="mts-form-label">Search</label>
+    <input class="mts-input" placeholder="Name or email...">
   </div>
   <div class="mts-form-group">
-    <label class="mts-form-label">Estado</label>
-    <!-- MTS.Select o select nativo -->
+    <label class="mts-form-label">Status</label>
+    <!-- MTS.Select or native select -->
   </div>
-  <button class="mts-btn mts-btn--primary">Buscar</button>
-</form>
-
-<!-- Sin labels visibles -->
-<form class="mts-form mts-form--inline">
-  <div class="mts-form-group">
-    <label class="mts-form-label mts-form-label--hidden">Buscar</label>
-    <input class="mts-input" placeholder="Buscar...">
-  </div>
-  <button class="mts-btn mts-btn--primary">🔍</button>
+  <button class="mts-btn mts-btn--primary">Search</button>
 </form>
 ```
 
 ---
 
-## Secciones
+## Sections / Secciones
 
-Divide el formulario en bloques con separador visual.
+[EN] Divides the form into blocks with a visual separator.
+[ES] Divide el formulario en bloques con separador visual.
 
 ```html
 <form class="mts-form">
   <div class="mts-form-section">
-    <h3 class="mts-form-section__title">Datos personales</h3>
-    <p class="mts-form-section__desc">Información básica del usuario.</p>
-    <div class="mts-form-group">...</div>
+    <h3 class="mts-form-section__title">Personal data</h3>
+    <p class="mts-form-section__desc">Basic user information.</p>
     <div class="mts-form-group">...</div>
   </div>
   <div class="mts-form-section">
-    <h3 class="mts-form-section__title">Dirección</h3>
+    <h3 class="mts-form-section__title">Address</h3>
     <div class="mts-form-group">...</div>
   </div>
 </form>
@@ -156,13 +182,14 @@ Divide el formulario en bloques con separador visual.
 
 ## Form Card
 
-Formulario envuelto en una card con header y padding.
+[EN] Form wrapped in a card with header and padding.
+[ES] Formulario envuelto en una card con header y padding.
 
 ```html
 <div class="mts-form-card">
   <div class="mts-form-card__header">
-    <h2 class="mts-form-card__title">Nuevo usuario</h2>
-    <p class="mts-form-card__subtitle">Completa los datos para crear la cuenta.</p>
+    <h2 class="mts-form-card__title">New user</h2>
+    <p class="mts-form-card__subtitle">Fill in the details to create the account.</p>
   </div>
   <form class="mts-form">
     ...
@@ -172,50 +199,29 @@ Formulario envuelto en una card con header y padding.
 
 ---
 
-## Tamaños
+## Sizes / Tamaños
 
-| Clase | Descripción |
-|-------|-------------|
-| `.mts-form--sm` | Compacto — menos espacio entre campos |
-| `.mts-form` | Mediano (default) |
-| `.mts-form--lg` | Espacioso — más espacio entre campos |
-
----
-
-## CSS Variables
-
-| Variable | Default | Descripción |
-|----------|---------|-------------|
-| `--mts-form-gap` | `16px` | Espacio entre campos |
-| `--mts-form-label-width` | `160px` | Ancho del label en modo horizontal |
-| `--mts-form-cols` | `2` | Columnas en modo grid |
-
----
-
-## Clases de apoyo
-
-| Clase | Descripción |
-|-------|-------------|
-| `.mts-form-group` | Wrapper de un campo (label + input + hint/error) |
-| `.mts-form-group--full` | Campo que ocupa todas las columnas (modo grid) |
-| `.mts-form-group--span-2` | Campo que ocupa 2 columnas |
-| `.mts-form-label` | Label del campo |
-| `.mts-form-label--required` | Agrega asterisco rojo al label |
-| `.mts-form-label--hidden` | Label accesible pero visualmente oculto |
-| `.mts-form-hint` | Texto de ayuda bajo el campo |
-| `.mts-form-error` | Texto de error bajo el campo |
-| `.mts-form-footer` | Área de botones al final del formulario |
-| `.mts-form-footer--end` | Botones alineados a la derecha |
-| `.mts-form-footer--between` | Botones en los extremos |
-| `.mts-form-section` | Sección con separador visual |
-| `.mts-form-divider` | Línea separadora horizontal |
-| `.mts-form-card` | Card con padding y borde |
+| Class / Clase | [EN] Description / [ES] Descripción |
+|---------------|--------------------------------------|
+| `.mts-form--sm` | [EN] Compact — less space between fields / [ES] Compacto — menos espacio |
+| `.mts-form` | [EN] Default / [ES] Por defecto |
+| `.mts-form--lg` | [EN] Spacious — more space between fields / [ES] Espacioso — más espacio |
 
 ---
 
 ## Responsive
 
-Todos los modos colapsan automáticamente a stack en mobile (`< 576px`):
-- Horizontal → stack (label arriba)
-- Inline → stack (campos apilados)
-- Grid → 1 columna
+[EN] All modes collapse automatically to stack on mobile (`< 576px`):
+[ES] Todos los modos colapsan automáticamente a stack en mobile (`< 576px`):
+- Horizontal → stack (label above / label arriba)
+- Inline → stack (stacked fields / campos apilados)
+- Grid → 1 column / 1 columna
+
+---
+
+## Changelog
+
+| Version | Description |
+|---------|-------------|
+| 1.1.0 | [EN] Bilingual docs, standardized title / [ES] Docs bilingüe, título estandarizado |
+| 1.0.0 | [EN] Initial release — stack, grid, horizontal, inline, sections, card / [ES] Versión inicial |

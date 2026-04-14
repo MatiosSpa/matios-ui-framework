@@ -30,19 +30,39 @@ MTS.Stepper = class MtsStepper {
       : selector;
     if (!this._el) { console.error('[MTS.Stepper] No encontrado:', selector); return; }
 
-    this.mode      = options.mode      || 'wizard';
-    this.variant   = options.variant   || 'default';
-    this.steps     = (options.steps || []).map(s => ({ ...s }));
-    this.active    = options.active    ?? 0;
+    // Mode: 'wizard' (panels with content) | 'progress' (visual indicator only)
+    // Modo: 'wizard' (paneles con contenido) | 'progress' (solo indicador visual)
+    this.mode = options.mode || 'wizard';
+
+    // Variant (progress mode only): 'default' | 'compact' | 'dots'
+    // Variante (solo modo progress)
+    this.variant = options.variant || 'default';
+
+    // Steps array — each item is a step definition / Arreglo de pasos
+    this.steps = (options.steps || []).map(s => ({ ...s }));
+
+    // Initially active step index / Índice del paso activo inicial
+    this.active = options.active ?? 0;
+
+    // Layout direction: 'horizontal' | 'vertical' / Dirección del layout
     this.direction = options.direction || 'horizontal';
+
+    // Allow clicking steps to navigate / Permitir navegar haciendo click en los pasos
     this.clickable = options.clickable ?? false;
 
     this._listeners = {};
     this._panelEls  = {};
 
+    // Fires when active step changes / Se dispara al cambiar el paso activo
     if (options.onChange)       this.on('change',       options.onChange);
+
+    // Fires when the last step is reached / Se dispara al llegar al último paso
     if (options.onComplete)     this.on('complete',     options.onComplete);
+
+    // Fires when user clicks a step (clickable mode) / Se dispara al hacer click en un paso
     if (options.onStepClick)    this.on('stepclick',    options.onStepClick);
+
+    // Fires when a step status changes / Se dispara al cambiar el estado de un paso
     if (options.onStatusChange) this.on('statuschange', options.onStatusChange);
 
     this._build();

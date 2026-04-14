@@ -1,10 +1,10 @@
 /* ============================================================
    MATIOS UI — matios-ui-picker-month.js  v2.0.0
-   MTS.Picker.Month — Selector de mes/año
+   MTS.DatePicker.Month — Selector de mes/año
    Requiere: matios-ui-picker-base.js
    ============================================================ */
 
-MTS.Picker.Month = class MtsPickerMonth extends MTS.Picker.Base {
+MTS.DatePicker.Month = class MtsDatePickerMonth extends MTS.DatePicker.Base {
 
   constructor(selector, options = {}) {
     options.placeholder  = options.placeholder || "MM/YYYY";

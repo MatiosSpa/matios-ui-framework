@@ -81,9 +81,10 @@ MTS.Input = class MtsInput {
     this._isValid        = true;
     this._errors         = [];
 
-    if (options.onChange) this.on('change', options.onChange);
-    if (options.onFocus)  this.on('focus',  options.onFocus);
-    if (options.onBlur)   this.on('blur',   options.onBlur);
+    if (options.onChange)   this.on('change',   options.onChange);
+    if (options.onFocus)    this.on('focus',    options.onFocus);
+    if (options.onBlur)     this.on('blur',     options.onBlur);
+    if (options.onValidate) this.on('validate', options.onValidate);
 
     this._build();
     this._bindEvents();

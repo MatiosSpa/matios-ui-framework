@@ -22,14 +22,29 @@ MTS.Dropdown = class MtsDropdown {
   constructor(trigger, options = {}) {
     this._trigger  = typeof trigger === 'string' ? document.querySelector(trigger) : trigger;
     if (!this._trigger) { console.error('[MTS.Dropdown] Trigger no encontrado'); return; }
-    this.items     = options.items    || [];
-    this.position  = options.position || 'bottom-start';
-    this.triggerOn = options.trigger  || 'click';
-    this.offset    = options.offset   ?? 4;
-    this._isOpen   = false;
+    // Menu items: [{ id, label, icon?, disabled?, divider?, group?, items?[] }]
+    // Ítems del menú
+    this.items = options.items || [];
+
+    // Popup position relative to trigger / Posición del popup respecto al trigger
+    this.position = options.position || 'bottom-start';
+
+    // Open trigger: 'click' | 'hover' / Evento de apertura
+    this.triggerOn = options.trigger || 'click';
+
+    // Gap in px between trigger and menu / Separación en px entre trigger y menú
+    this.offset = options.offset ?? 4;
+
+    this._isOpen    = false;
     this._listeners = {};
+
+    // Fires when a menu item is selected / Se dispara al seleccionar un ítem
     if (options.onSelect) this.on('select', options.onSelect);
+
+    // Fires when dropdown opens / Se dispara al abrir el dropdown
     if (options.onOpen)   this.on('open',   options.onOpen);
+
+    // Fires when dropdown closes / Se dispara al cerrar el dropdown
     if (options.onClose)  this.on('close',  options.onClose);
     this._build();
     this._bindEvents();
@@ -72,7 +87,7 @@ MTS.Dropdown = class MtsDropdown {
       if (!item.disabled) {
         li.addEventListener('click', (e) => {
           e.stopPropagation();
-          if (!item.items?.length) { this.close(); if (item.onClick) item.onClick(item); this._emit('select', { item }); }
+          if (!item.items?.length) { this.close(); if (item.onClick) item.onClick(item); this._emit('select', { id: item.id, item }); }
         });
       }
       this._menuEl.appendChild(li);
@@ -88,7 +103,7 @@ MTS.Dropdown = class MtsDropdown {
       li.setAttribute('role', 'menuitem');
       if (item.icon) { const ic = document.createElement('span'); ic.className = 'mts-dropdown__item-icon'; ic.innerHTML = item.icon; li.appendChild(ic); }
       const lbl = document.createElement('span'); lbl.textContent = item.label; li.appendChild(lbl);
-      if (!item.disabled) li.addEventListener('click', (e) => { e.stopPropagation(); this.close(); if (item.onClick) item.onClick(item); this._emit('select', { item }); });
+      if (!item.disabled) li.addEventListener('click', (e) => { e.stopPropagation(); this.close(); if (item.onClick) item.onClick(item); this._emit('select', { id: item.id, item }); });
       sub.appendChild(li);
     });
     parent.appendChild(sub);

@@ -18,15 +18,29 @@ MTS.Timeline = class MtsTimeline {
   constructor(selector, options = {}) {
     this._el       = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    this.events    = options.events    || [];
+    // Timeline events: [{ id, title, description?, date?, icon?, color?, badge? }]
+    // Eventos de la timeline
+    this.events = options.events || [];
+
+    // Layout direction: 'vertical' | 'horizontal' / Dirección del layout
     this.direction = options.direction || 'vertical';
-    this.align     = options.align     || 'left';
-    this.onEventClick = options.onEventClick || null;
+
+    // Alignment (vertical only): 'left' | 'right' | 'alternate' / Alineación (solo vertical)
+    this.align = options.align || 'left';
+
+    this._listeners = {};
+
+    // Fires when an event item is clicked: ({ event, index }) => {}
+    // Se dispara al hacer click en un ítem de la timeline
+    if (options.onEventClick) this.on('eventclick', options.onEventClick);
+
     this._build();
   }
 
   setEvents(events) { this.events = events; this._build(); return this; }
   addEvent(event)   { this.events.push(event); this._build(); return this; }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   _build() {
     this._el.className = `mts-timeline mts-timeline--${this.direction} mts-timeline--${this.align}`;
@@ -35,7 +49,10 @@ MTS.Timeline = class MtsTimeline {
     this.events.forEach((ev, idx) => {
       const item = document.createElement('div');
       item.className = 'mts-timeline__item';
-      if (this.onEventClick) { item.classList.add('mts-timeline__item--clickable'); item.addEventListener('click', () => this.onEventClick(ev, idx)); }
+      if (this._listeners['eventclick']?.length) {
+        item.classList.add('mts-timeline__item--clickable');
+        item.addEventListener('click', () => this._emit('eventclick', { event: ev, index: idx }));
+      }
 
       // Punto/ícono
       const dot = document.createElement('div');
@@ -71,5 +88,9 @@ MTS.Timeline = class MtsTimeline {
       item.appendChild(content);
       this._el.appendChild(item);
     });
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:timeline:${event}`, { bubbles: true, detail }));
   }
 };

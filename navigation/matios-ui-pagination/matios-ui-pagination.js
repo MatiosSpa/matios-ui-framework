@@ -34,16 +34,36 @@ MTS.Pagination = class MtsPagination {
     if (_ds.showJump !== undefined) _fromHTML.showJump = true;
     options = { ..._fromHTML, ...options };
 
-    this.total     = options.total     ?? 0;
-    this.page      = options.page      ?? 1;
-    this.pageSize  = options.pageSize  ?? 10;
+    // Total number of records / Total de registros
+    this.total = options.total ?? 0;
+
+    // Current page (1-based) / Página actual (base 1)
+    this.page = options.page ?? 1;
+
+    // Records per page / Registros por página
+    this.pageSize = options.pageSize ?? 10;
+
+    // Page size options for the selector / Opciones del selector de page size
     this.pageSizes = options.pageSizes || [10, 25, 50, 100];
+
+    // Show page size selector / Mostrar selector de page size
     this.showSizes = options.showSizes ?? true;
-    this.showInfo  = options.showInfo  ?? true;
-    this.showJump  = options.showJump  ?? false;
-    this.siblings  = options.siblings  ?? 1;
-    this.size      = options.size      || 'md';
+
+    // Show "Showing X-Y of Z" summary / Mostrar resumen "Mostrando X-Y de Z"
+    this.showInfo = options.showInfo ?? true;
+
+    // Show jump-to-page input / Mostrar input para ir a página
+    this.showJump = options.showJump ?? false;
+
+    // Pages shown on each side of the active page / Páginas a cada lado del activo
+    this.siblings = options.siblings ?? 1;
+
+    // Size variant: 'sm' | 'md' | 'lg' / Variante de tamaño
+    this.size = options.size || 'md';
+
     this._listeners = {};
+
+    // Fires when page or page size changes / Se dispara al cambiar la página o el page size
     if (options.onChange) this.on('change', options.onChange);
     this._build();
   }

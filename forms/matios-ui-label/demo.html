@@ -1,261 +1,293 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="es" data-mts-mode="dark">
 <head>
   <script>
-  (function(){
-    var m=(location.search||'').match(/mts-theme=([a-z-]+)/);
-    if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
-    try{
-      var p=window.parent;
-      if(p&&p!==window){
-        var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
-        if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
-      }
-    }catch(e){}
-  })();
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
   </script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.Label — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../shared/demo-shared.css">
   <link rel="stylesheet" href="../matios-ui-input/matios-ui-input.css">
   <link rel="stylesheet" href="./matios-ui-label.css">
+  <script src="../../shared/demo-shared.js"></script>
   <script src="./matios-ui-label.js"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:40px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0;}
-    .demo-section{display:flex;flex-direction:column;gap:16px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-row{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;}
-    .demo-col{display:flex;flex-direction:column;gap:6px;min-width:160px;}
-    .demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
-    .demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-  </style>
 </head>
 <body>
-
 <div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
-  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
+  <button class="demo-btn-sm demo-btn-sep">—</button>
+  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
 
 <div class="demo-page">
-
   <div class="demo-header">
-    <h1>MTS <span>Label</span></h1>
-    <p>Label de formulario — texto, requerido, opcional, hint, error, tamaños</p>
+    <h1><span>MTS</span>.Label</h1>
+    <p>Form label with required/optional badges, hint text, error state and size variants.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-label.md')">📄 Docs</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-
-  <!-- 1 — VARIANTES CSS PURO -->
+  <!-- 1. CSS puro -->
   <div class="demo-section">
-    <div class="demo-section-title">1 — Variantes — CSS puro</div>
-    <div class="demo-row">
-      <div class="demo-col">
-        <label class="mts-label">Simple</label>
-        <input class="mts-input" placeholder="Texto...">
+    <div class="demo-section-title">1 — HTML puro / Pure HTML (no JS required)</div>
+    <div class="demo-stack" style="max-width:400px">
+      <div class="mts-form-group">
+        <label class="mts-label" for="lbl-basic">Basic label</label>
+        <input class="mts-input" id="lbl-basic" placeholder="Regular field">
       </div>
-      <div class="demo-col">
-        <label class="mts-label mts-label--required">Requerido</label>
-        <input class="mts-input" placeholder="Texto...">
+      <div class="mts-form-group">
+        <label class="mts-label mts-label--required" for="lbl-req">Required field</label>
+        <input class="mts-input" id="lbl-req" placeholder="Required">
       </div>
-      <div class="demo-col">
-        <label class="mts-label mts-label--optional">
-          <span class="mts-label__text">Teléfono</span>
-          <span class="mts-label__optional">opcional</span>
+      <div class="mts-form-group">
+        <label class="mts-label" for="lbl-opt">
+          <span class="mts-label__text">Optional field</span>
+          <span class="mts-label__optional">optional</span>
         </label>
-        <input class="mts-input" placeholder="+56 9...">
+        <input class="mts-input" id="lbl-opt" placeholder="Optional">
       </div>
     </div>
-    <button class="demo-code-toggle" onclick="toggleCode('code-s1')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="code-s1">&lt;!-- Simple --&gt;
-&lt;label class="mts-label" for="campo"&gt;Nombre&lt;/label&gt;
-
-&lt;!-- Requerido --&gt;
-&lt;label class="mts-label mts-label--required" for="email"&gt;Email&lt;/label&gt;
-
-&lt;!-- Opcional --&gt;
-&lt;label class="mts-label mts-label--optional"&gt;
-  &lt;span class="mts-label__text"&gt;Teléfono&lt;/span&gt;
-  &lt;span class="mts-label__optional"&gt;opcional&lt;/span&gt;
-&lt;/label&gt;</pre>
-  </div>
-
-
-  <!-- 2 — CON HINT Y ERROR -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Con hint y error</div>
-    <div class="demo-row">
-      <div class="demo-col" style="min-width:280px;">
-        <div class="mts-form-group">
-          <label class="mts-label mts-label--required">Email</label>
-          <input class="mts-input" type="email" placeholder="juan@empresa.com">
-          <span class="mts-form-hint">Nunca compartiremos tu email.</span>
-        </div>
-      </div>
-      <div class="demo-col" style="min-width:280px;">
-        <div class="mts-form-group">
-          <label class="mts-label mts-label--required">Contraseña</label>
-          <input class="mts-input mts-input--error" type="password" placeholder="••••••••" style="border-color:var(--mts-color-danger)">
-          <span class="mts-form-error">La contraseña debe tener al menos 8 caracteres.</span>
-        </div>
-      </div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-l1','js-l1')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-l1','html-l1')">JavaScript</button>
     </div>
-    <button class="demo-code-toggle" onclick="toggleCode('code-s2')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="code-s2">&lt;div class="mts-form-group"&gt;
-  &lt;label class="mts-label mts-label--required"&gt;Email&lt;/label&gt;
-  &lt;input class="mts-input" type="email"&gt;
-  &lt;span class="mts-form-hint"&gt;Nunca compartiremos tu email.&lt;/span&gt;
+    <div class="code-panel active" id="html-l1">&lt;!-- Basic / Básico --&gt;
+&lt;div class="mts-form-group"&gt;
+  &lt;label class="mts-label" for="name"&gt;Full name&lt;/label&gt;
+  &lt;input class="mts-input" id="name"&gt;
 &lt;/div&gt;
 
+&lt;!-- Required / Requerido --&gt;
 &lt;div class="mts-form-group"&gt;
-  &lt;label class="mts-label mts-label--required"&gt;Contraseña&lt;/label&gt;
-  &lt;input class="mts-input" type="password"&gt;
-  &lt;span class="mts-form-error"&gt;Debe tener al menos 8 caracteres.&lt;/span&gt;
-&lt;/div&gt;</pre>
-  </div>
+  &lt;label class="mts-label mts-label--required" for="email"&gt;Email&lt;/label&gt;
+  &lt;input class="mts-input" id="email" type="email"&gt;
+&lt;/div&gt;
 
-
-  <!-- 3 — TAMAÑOS -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Tamaños</div>
-    <div class="demo-row">
-      <div class="demo-col">
-        <label class="mts-label mts-label--sm mts-label--required">Compacto (sm)</label>
-        <input class="mts-input" placeholder="Texto...">
-      </div>
-      <div class="demo-col">
-        <label class="mts-label mts-label--required">Normal (default)</label>
-        <input class="mts-input" placeholder="Texto...">
-      </div>
-      <div class="demo-col">
-        <label class="mts-label mts-label--lg mts-label--required">Grande (lg)</label>
-        <input class="mts-input" placeholder="Texto...">
-      </div>
-    </div>
-    <button class="demo-code-toggle" onclick="toggleCode('code-s3')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="code-s3">&lt;label class="mts-label mts-label--sm"&gt;Compacto&lt;/label&gt;
-&lt;label class="mts-label"&gt;Normal&lt;/label&gt;
-&lt;label class="mts-label mts-label--lg"&gt;Grande&lt;/label&gt;</pre>
-  </div>
-
-
-  <!-- 4 — VIA JS -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Via JS — MTS.Label</div>
-    <div class="demo-row">
-      <div class="demo-col" style="min-width:280px;">
-        <div class="mts-form-group">
-          <label id="lbl-js-1" for="js-input-1"></label>
-          <input class="mts-input" id="js-input-1" placeholder="Nombre completo">
-        </div>
-      </div>
-      <div class="demo-col" style="min-width:280px;">
-        <div class="mts-form-group">
-          <label id="lbl-js-2" for="js-input-2"></label>
-          <input class="mts-input" id="js-input-2" type="email" placeholder="Email">
-        </div>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
-      <button class="mts-btn mts-btn--secondary mts-btn--sm" onclick="lblEmail.setError('Email inválido.')">Mostrar error</button>
-      <button class="mts-btn mts-btn--secondary mts-btn--sm" onclick="lblEmail.clearError()">Quitar error</button>
-      <button class="mts-btn mts-btn--secondary mts-btn--sm" onclick="lblEmail.setHint('Usa tu email corporativo.')">Mostrar hint</button>
-    </div>
-    <button class="demo-code-toggle" onclick="toggleCode('code-s4')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="code-s4">const lbl = new MTS.Label('#mi-label', {
-  text:     'Nombre completo',
+&lt;!-- Optional / Opcional --&gt;
+&lt;div class="mts-form-group"&gt;
+  &lt;label class="mts-label" for="phone"&gt;
+    &lt;span class="mts-label__text"&gt;Phone&lt;/span&gt;
+    &lt;span class="mts-label__optional"&gt;optional&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;input class="mts-input" id="phone"&gt;
+&lt;/div&gt;</div>
+    <div class="code-panel" id="js-l1">// Required / Requerido
+new MTS.Label('#my-label', {
+  text:     'Email address',
   required: true,
-  hint:     'Tal como aparece en tu documento.',
-  forId:    'mi-input',
-})
+  forId:    'input-email',
+});
 
-// API
-lbl.setText('Nuevo texto')
-lbl.setHint('Texto de ayuda')
-lbl.setError('Campo requerido')
-lbl.clearError()
-lbl.setRequired(true)</pre>
+// Optional / Opcional
+new MTS.Label('#my-label', {
+  text:     'Phone number',
+  optional: true,
+  forId:    'input-phone',
+});</div>
   </div>
 
-
-  <!-- 5 — LABEL OCULTO (ACCESIBLE) -->
+  <!-- 2. Con hint y error -->
   <div class="demo-section">
-    <div class="demo-section-title">5 — Label oculto — accesible</div>
-    <p style="font-size:12px;color:var(--mts-text-muted);">El label existe en el DOM para screen readers pero no es visible. Útil en formularios inline.</p>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-      <div class="mts-form-group" style="margin:0;flex:1;min-width:200px;">
-        <label class="mts-label mts-label--hidden" for="buscar-hidden">Buscar usuarios</label>
-        <input class="mts-input" id="buscar-hidden" placeholder="Buscar usuarios...">
+    <div class="demo-section-title">2 — Con hint y error / With hint and error</div>
+    <div class="demo-stack" style="max-width:400px">
+      <div class="mts-form-group">
+        <label class="mts-label mts-label--required" for="lbl-hint">Email</label>
+        <input class="mts-input" id="lbl-hint" type="email" placeholder="user@example.com">
+        <span class="mts-form-hint">We'll never share your email.</span>
       </div>
-      <button class="mts-btn mts-btn--primary">Buscar</button>
+      <div class="mts-form-group">
+        <label class="mts-label mts-label--required" for="lbl-err">Password</label>
+        <input class="mts-input" id="lbl-err" type="password" value="123">
+        <span class="mts-form-error">Minimum 8 characters required.</span>
+      </div>
     </div>
-    <button class="demo-code-toggle" onclick="toggleCode('code-s5')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="code-s5">&lt;label class="mts-label mts-label--hidden" for="buscar"&gt;Buscar&lt;/label&gt;
-&lt;input class="mts-input" id="buscar" placeholder="Buscar..."&gt;
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-l2','js-l2')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-l2','html-l2')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-l2">&lt;!-- With hint / Con hint --&gt;
+&lt;div class="mts-form-group"&gt;
+  &lt;label class="mts-label mts-label--required" for="email"&gt;Email&lt;/label&gt;
+  &lt;input class="mts-input" id="email" type="email"&gt;
+  &lt;span class="mts-form-hint"&gt;We'll never share your email.&lt;/span&gt;
+&lt;/div&gt;
 
-&lt;!-- Via JS --&gt;
-new MTS.Label('#lbl', { text:'Buscar', hidden:true, forId:'buscar' })</pre>
+&lt;!-- With error / Con error --&gt;
+&lt;div class="mts-form-group"&gt;
+  &lt;label class="mts-label mts-label--required" for="pass"&gt;Password&lt;/label&gt;
+  &lt;input class="mts-input" id="pass" type="password"&gt;
+  &lt;span class="mts-form-error"&gt;Minimum 8 characters required.&lt;/span&gt;
+&lt;/div&gt;</div>
+    <div class="code-panel" id="js-l2">// With hint / Con hint
+new MTS.Label('#my-label', {
+  text:     'Email address',
+  required: true,
+  hint:     "We'll never share your email.",
+  forId:    'input-email',
+});
+
+// With error / Con error
+const lbl = new MTS.Label('#my-label', {
+  text:     'Password',
+  required: true,
+});
+// Set error at runtime / Establecer error en runtime
+lbl.setError('Minimum 8 characters required.')
+// Clear error / Limpiar error
+lbl.clearError()</div>
+  </div>
+
+  <!-- 3. Tamaños -->
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Tamaños / Sizes</div>
+    <div class="demo-stack" style="max-width:400px">
+      <div class="mts-form-group">
+        <label class="mts-label mts-label--sm mts-label--required" for="lbl-sm">Small label</label>
+        <input class="mts-input" id="lbl-sm" placeholder="Small">
+      </div>
+      <div class="mts-form-group">
+        <label class="mts-label mts-label--required" for="lbl-md">Default label</label>
+        <input class="mts-input" id="lbl-md" placeholder="Default">
+      </div>
+      <div class="mts-form-group">
+        <label class="mts-label mts-label--lg mts-label--required" for="lbl-lg">Large label</label>
+        <input class="mts-input" id="lbl-lg" placeholder="Large">
+      </div>
+    </div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-l3','js-l3')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-l3','html-l3')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-l3">&lt;label class="mts-label mts-label--sm"&gt;Small label&lt;/label&gt;
+&lt;label class="mts-label"&gt;Default label&lt;/label&gt;
+&lt;label class="mts-label mts-label--lg"&gt;Large label&lt;/label&gt;</div>
+    <div class="code-panel" id="js-l3">// Size: 'sm' | '' | 'lg' / Tamaño
+new MTS.Label('#lbl-sm', { text: 'Small label',   size: 'sm' });
+new MTS.Label('#lbl-md', { text: 'Default label', size: ''   });
+new MTS.Label('#lbl-lg', { text: 'Large label',   size: 'lg' });</div>
+  </div>
+
+  <!-- 4. API via JS -->
+  <div class="demo-section">
+    <div class="demo-section-title">4 — API via JavaScript</div>
+    <div class="mts-form-group" style="max-width:400px">
+      <div id="lbl-api"></div>
+      <input class="mts-input" id="inp-api" placeholder="Type something...">
+    </div>
+    <div class="demo-row">
+      <button class="demo-btn-sm" onclick="lblApi.setText('Updated label ✏️')">setText()</button>
+      <button class="demo-btn-sm" onclick="lblApi.setHint('Helper text added')">setHint()</button>
+      <button class="demo-btn-sm" onclick="lblApi.setError('Error message')">setError()</button>
+      <button class="demo-btn-sm" onclick="lblApi.clearError()">clearError()</button>
+      <button class="demo-btn-sm" onclick="lblApi.setRequired(true)">setRequired(true)</button>
+      <button class="demo-btn-sm" onclick="lblApi.setRequired(false)">setRequired(false)</button>
+    </div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-l4','js-l4')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-l4','html-l4')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-l4">&lt;div id="my-label"&gt;&lt;/div&gt;
+&lt;input class="mts-input" id="my-input"&gt;
+
+&lt;script&gt;
+  const lbl = new MTS.Label('#my-label', {
+    text:     'Full name',
+    required: true,
+    hint:     'As it appears on your ID',
+    forId:    'my-input',
+  });
+  lbl.setError('This field is required')
+  lbl.clearError()
+  lbl.setText('New label text')
+  lbl.setRequired(false)
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-l4">const lbl = new MTS.Label('#my-label', {
+  text:     'Full name',
+  required: true,
+  hint:     'As it appears on your ID',
+  forId:    'my-input',
+});
+
+// Change text at runtime / Cambiar texto en runtime
+lbl.setText('Updated label')
+
+// Add/remove hint / Agregar/quitar hint
+lbl.setHint('Helper text')
+
+// Show/clear error / Mostrar/limpiar error
+lbl.setError('This field is required')
+lbl.clearError()
+
+// Toggle required asterisk / Alternar asterisco requerido
+lbl.setRequired(true)
+lbl.setRequired(false)</div>
+  </div>
+
+  <!-- 5. Label oculto accesible -->
+  <div class="demo-section">
+    <div class="demo-section-title">5 — Oculto accesible / Visually hidden</div>
+    <div style="max-width:400px">
+      <p style="font-size:12px;color:var(--mts-text-muted);margin:0 0 8px">
+        [EN] The label is invisible but accessible to screen readers.<br>
+        [ES] El label es invisible pero accesible para screen readers.
+      </p>
+      <label class="mts-label mts-label--hidden" for="lbl-hidden">Search products</label>
+      <input class="mts-input" id="lbl-hidden" placeholder="Search products...">
+    </div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-l5','js-l5')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-l5','html-l5')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-l5">&lt;!-- Visually hidden but accessible / Oculto visualmente pero accesible --&gt;
+&lt;label class="mts-label mts-label--hidden" for="search"&gt;
+  Search products
+&lt;/label&gt;
+&lt;input class="mts-input" id="search" placeholder="Search products..."&gt;</div>
+    <div class="code-panel" id="js-l5">new MTS.Label('#my-label', {
+  text:   'Search products',
+  hidden: true,   // visible to screen readers / visible para screen readers
+  forId:  'search-input',
+});</div>
   </div>
 
 </div>
 
 <script>
-function setTheme(t) {
-  document.documentElement.setAttribute('data-mts-theme', t);
-  try {
-    if (window.parent && window.parent !== window)
-      window.parent.postMessage({ type:'setTheme', theme:t }, '*');
-  } catch(e) {}
-}
-window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'setTheme')
-    document.documentElement.setAttribute('data-mts-theme', e.data.theme);
-});
-if (window !== window.top) {
-  var ts = document.querySelector('.demo-theme');
-  if (ts) ts.style.display = 'none';
-}
-function toggleCode(id) {
-  var el = document.getElementById(id);
-  if (el) el.style.display = el.style.display === 'block' ? 'none' : 'block';
-}
-
-/* Sección 4 — via JS */
-new MTS.Label('#lbl-js-1', {
-  text:     'Nombre completo',
+var lblApi = new MTS.Label('#lbl-api', {
+  text:     'Full name',
   required: true,
-  hint:     'Tal como aparece en tu documento de identidad.',
-  forId:    'js-input-1',
-});
-
-var lblEmail = new MTS.Label('#lbl-js-2', {
-  text:     'Email',
-  required: true,
-  optional: false,
-  forId:    'js-input-2',
+  hint:     'As it appears on your ID document',
+  forId:    'inp-api',
 });
 </script>
-
 </body>
 </html>

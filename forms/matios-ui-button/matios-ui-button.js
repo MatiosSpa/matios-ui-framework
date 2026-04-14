@@ -1,85 +1,103 @@
 /* ============================================================
-   MATIOS UI — matios-ui-button.js  v1.1.0
-   MTS.Button — Botón con variantes, estados y eventos
-   MTS.ButtonGroup — Grupo de botones
+   MATIOS UI — matios-ui-button.js
+   MTS.Button | MTS.ButtonGroup
+   Version: 1.2.0
    ============================================================ */
 
 window.MTS = window.MTS || {};
 
 MTS.Button = class MtsButton {
-  /**
-   * @param {string|Element} selector
-   * @param {object}   options
-   * @param {string}   options.label      Texto del botón
-   * @param {string}   options.variant    'primary'|'secondary'|'ghost'|'danger'|'success'|'warning'|'link'
-   * @param {string}   options.size       'xs'|'sm'|''|'lg'|'xl'
-   * @param {boolean}  options.block      Ancho completo
-   * @param {boolean}  options.round      Border-radius full
-   * @param {boolean}  options.iconOnly   Solo ícono (padding cuadrado)
-   * @param {boolean}  options.disabled
-   * @param {boolean}  options.loading    Muestra spinner
-   * @param {string}   options.iconLeft   HTML del ícono izquierdo
-   * @param {string}   options.iconRight  HTML del ícono derecho
-   * @param {string}   options.className  Clases CSS adicionales
-   * @param {object}   options.style      Estilos CSS inline custom
-   * @param {boolean}  options.shadow     Sombra de color del botón
-   * @param {boolean}  options.ring       Ring semitransparente alrededor del botón
-   * @param {function} options.onClick    (event, instance) => {}
-   */
   constructor(selector, options = {}) {
-    this._el = typeof selector === "string"
+    // Target element (selector string or DOM element)
+    // Elemento objetivo (selector string o elemento DOM)
+    this._el = typeof selector === 'string'
       ? document.querySelector(selector)
       : selector;
-    if (!this._el) { console.error("[MTS.Button] No encontrado:", selector); return; }
-    /* ── data-* → inicialización HTML declarativa ── */
+    if (!this._el) { console.error('[MTS.Button] Not found / No encontrado:', selector); return; }
+
+    // Read data-* attributes from HTML for declarative initialization
+    // Lee atributos data-* del HTML para inicialización declarativa
     const _ds = this._el?.dataset || {};
     const _fromHTML = {};
-    if (_ds.label !== undefined) _fromHTML.label = _ds.label;
-    if (_ds.variant !== undefined) _fromHTML.variant = _ds.variant;
-    if (_ds.size !== undefined) _fromHTML.size = _ds.size;
-    if (_ds.disabled !== undefined) _fromHTML.disabled = true;
-    if (_ds.loading !== undefined) _fromHTML.loading = true;
-    if (_ds.block !== undefined) _fromHTML.block = true;
-    if (_ds.round !== undefined) _fromHTML.round = true;
-    if (_ds.iconOnly !== undefined) _fromHTML.iconOnly = true;
-    if (_ds.shadow !== undefined) _fromHTML.shadow = true;
-    if (_ds.ring !== undefined) _fromHTML.ring = true;
+    if (_ds.label     !== undefined) _fromHTML.label     = _ds.label;
+    if (_ds.variant   !== undefined) _fromHTML.variant   = _ds.variant;
+    if (_ds.size      !== undefined) _fromHTML.size      = _ds.size;
+    if (_ds.disabled  !== undefined) _fromHTML.disabled  = true;
+    if (_ds.loading   !== undefined) _fromHTML.loading   = true;
+    if (_ds.block     !== undefined) _fromHTML.block     = true;
+    if (_ds.round     !== undefined) _fromHTML.round     = true;
+    if (_ds.iconOnly  !== undefined) _fromHTML.iconOnly  = true;
+    if (_ds.shadow    !== undefined) _fromHTML.shadow    = true;
+    if (_ds.ring      !== undefined) _fromHTML.ring      = true;
     options = { ..._fromHTML, ...options };
 
+    // Visible button text / Texto visible del botón
+    this.label = options.label ?? this._el.textContent.trim();
 
-    this.label     = options.label     ?? this._el.textContent.trim();
-    this.variant   = options.variant   || "primary";
-    this.size      = options.size      || "";
-    this.block     = options.block     ?? false;
-    this.round     = options.round     ?? false;
-    this.iconOnly  = options.iconOnly  ?? false;
-    this.disabled  = options.disabled  ?? false;
-    this.loading   = options.loading   ?? false;
-    this.iconLeft  = options.iconLeft  || null;
+    // Visual variant / Variante visual
+    this.variant = options.variant || 'primary';
+
+    // Size variant: 'xs' | 'sm' | '' | 'lg' | 'xl'
+    // Variante de tamaño
+    this.size = options.size || '';
+
+    // Full width / Ancho completo
+    this.block = options.block ?? false;
+
+    // Pill border-radius / Border-radius pill
+    this.round = options.round ?? false;
+
+    // Square padding, icon only / Padding cuadrado, solo ícono
+    this.iconOnly = options.iconOnly ?? false;
+
+    // Disables all interaction / Deshabilita toda interacción
+    this.disabled = options.disabled ?? false;
+
+    // Shows loading spinner / Muestra spinner de carga
+    this.loading = options.loading ?? false;
+
+    // Left icon HTML / HTML del ícono izquierdo
+    this.iconLeft = options.iconLeft || null;
+
+    // Right icon HTML / HTML del ícono derecho
     this.iconRight = options.iconRight || null;
-    this.className = options.className || "";
-    this.customStyle = options.style   || null;
-    this.shadow    = options.shadow    ?? false;
-    this.ring      = options.ring      ?? false;
-    this._onClick  = options.onClick   || null;
-    this._listeners = {};
 
+    // Extra CSS classes / Clases CSS adicionales
+    this.className = options.className || '';
+
+    // Inline styles / Estilos inline
+    this.customStyle = options.style || null;
+
+    // Colored shadow / Sombra de color
+    this.shadow = options.shadow ?? false;
+
+    // Semitransparent ring / Ring semitransparente
+    this.ring = options.ring ?? false;
+
+    // Fires on click / Se dispara al hacer click
+    // Fires when button is clicked: (event, button) => {} / Se dispara al hacer click
+    this._listeners = {};
+    if (options.onClick) this.on('click', options.onClick);
     this._build();
     this._bindEvents();
   }
 
-  /* ── API ──────────────────────────────────────────────── */
+  /* ── API ─────────────────────────────────────────────── */
 
-  enable()  { this.disabled = false; this._el.disabled = false; this._el.classList.remove("mts-btn--disabled"); return this; }
-  disable() { this.disabled = true;  this._el.disabled = true;  this._el.classList.add("mts-btn--disabled");    return this; }
+  // Enable interaction / Habilitar interacción
+  enable()  { this.disabled = false; this._el.disabled = false; this._el.classList.remove('mts-btn--disabled'); return this; }
 
+  // Disable interaction / Deshabilitar interacción
+  disable() { this.disabled = true;  this._el.disabled = true;  this._el.classList.add('mts-btn--disabled');    return this; }
+
+  // Show or hide loading spinner / Mostrar u ocultar spinner de carga
   setLoading(v) {
     this.loading = v;
     this._el.disabled = v || this.disabled;
-    const sp = this._el.querySelector(".mts-btn__spinner");
+    const sp = this._el.querySelector('.mts-btn__spinner');
     if (v && !sp) {
-      const el = document.createElement("span");
-      el.className = "mts-btn__spinner";
+      const el = document.createElement('span');
+      el.className = 'mts-btn__spinner';
       this._el.insertBefore(el, this._el.firstChild);
     } else if (!v && sp) {
       sp.remove();
@@ -87,181 +105,369 @@ MTS.Button = class MtsButton {
     return this;
   }
 
+  // Change visible label at runtime / Cambiar texto visible en runtime
   setLabel(text) {
     this.label = text;
-    const lbl = this._el.querySelector(".mts-btn__label");
+    const lbl = this._el.querySelector('.mts-btn__label');
     if (lbl) lbl.textContent = text;
     return this;
   }
 
+  // Change variant at runtime / Cambiar variante en runtime
   setVariant(variant) {
-    ["primary","secondary","ghost","danger","success","warning","link"].forEach(v =>
-      this._el.classList.remove("mts-btn--" + v));
+    ['primary','secondary','ghost','danger','success','warning','link'].forEach(v =>
+      this._el.classList.remove('mts-btn--' + v));
     this.variant = variant;
-    this._el.classList.add("mts-btn--" + variant);
+    this._el.classList.add('mts-btn--' + variant);
     return this;
   }
 
-  setShadow(v) {
-    this.shadow = v;
-    this._el.classList.toggle("mts-btn--shadow", v);
-    return this;
-  }
+  // Toggle colored shadow / Activar o desactivar sombra de color
+  setShadow(v) { this.shadow = v; this._el.classList.toggle('mts-btn--shadow', v); return this; }
 
-  setRing(v) {
-    this.ring = v;
-    this._el.classList.toggle("mts-btn--ring", v);
-    return this;
-  }
+  // Toggle semitransparent ring / Activar o desactivar ring semitransparente
+  setRing(v)   { this.ring   = v; this._el.classList.toggle('mts-btn--ring',   v); return this; }
 
+  // Register an event listener / Registrar un listener de evento
   on(event, cb)  { (this._listeners[event] = this._listeners[event] || []).push(cb); return this; }
-  off(event, cb) { this._listeners[event] = (this._listeners[event] || []).filter(f => f !== cb); return this; }
-  destroy()      { this._el.replaceWith(this._el.cloneNode(true)); }
 
-  /* ── Build ────────────────────────────────────────────── */
+  // Remove an event listener / Eliminar un listener de evento
+  off(event, cb) { this._listeners[event] = (this._listeners[event] || []).filter(f => f !== cb); return this; }
+
+  // Destroy the instance / Destruir la instancia
+  destroy() { this._el.replaceWith(this._el.cloneNode(true)); }
+
+  /* ── Build ───────────────────────────────────────────── */
 
   _build() {
-    const classes = ["mts-btn", "mts-btn--" + this.variant];
-    if (this.size)      classes.push("mts-btn--" + this.size);
-    if (this.block)     classes.push("mts-btn--block");
-    if (this.round)     classes.push("mts-btn--round");
-    if (this.iconOnly)  classes.push("mts-btn--icon");
-    if (this.disabled)  classes.push("mts-btn--disabled");
-    if (this.shadow)    classes.push("mts-btn--shadow");
-    if (this.ring)      classes.push("mts-btn--ring");
-    if (this.className) this.className.split(" ").forEach(c => c && classes.push(c));
+    const classes = ['mts-btn', 'mts-btn--' + this.variant];
+    if (this.size)      classes.push('mts-btn--' + this.size);
+    if (this.block)     classes.push('mts-btn--block');
+    if (this.round)     classes.push('mts-btn--round');
+    if (this.iconOnly)  classes.push('mts-btn--icon');
+    if (this.disabled)  classes.push('mts-btn--disabled');
+    if (this.shadow)    classes.push('mts-btn--shadow');
+    if (this.ring)      classes.push('mts-btn--ring');
+    if (this.className) this.className.split(' ').forEach(c => c && classes.push(c));
 
-    this._el.className = classes.join(" ");
+    this._el.className = classes.join(' ');
     this._el.disabled  = this.disabled || this.loading;
-    this._el.innerHTML = "";
+    this._el.innerHTML = '';
 
-    /* CSS custom inline */
-    if (this.customStyle) {
-      Object.assign(this._el.style, this.customStyle);
-    }
+    if (this.customStyle) Object.assign(this._el.style, this.customStyle);
 
     if (this.loading) {
-      const sp = document.createElement("span");
-      sp.className = "mts-btn__spinner";
+      const sp = document.createElement('span');
+      sp.className = 'mts-btn__spinner';
       this._el.appendChild(sp);
     }
-
     if (this.iconLeft) {
-      const ic = document.createElement("span");
-      ic.className = "mts-btn__icon-left";
+      const ic = document.createElement('span');
+      ic.className = 'mts-btn__icon-left';
       ic.innerHTML = this.iconLeft;
       this._el.appendChild(ic);
     }
-
     if (!this.iconOnly && this.label) {
-      const lbl = document.createElement("span");
-      lbl.className = "mts-btn__label";
+      const lbl = document.createElement('span');
+      lbl.className   = 'mts-btn__label';
       lbl.textContent = this.label;
       this._el.appendChild(lbl);
     }
-
     if (this.iconRight) {
-      const ic = document.createElement("span");
-      ic.className = "mts-btn__icon-right";
+      const ic = document.createElement('span');
+      ic.className = 'mts-btn__icon-right';
       ic.innerHTML = this.iconRight;
       this._el.appendChild(ic);
     }
   }
 
   _bindEvents() {
-    this._el.addEventListener("click", (e) => {
+    this._el.addEventListener('click', (e) => {
       if (this.disabled || this.loading) { e.preventDefault(); return; }
-      this._onClick?.(e, this);
-      (this._listeners["click"] || []).forEach(fn => fn(e, this));
-      this._el.dispatchEvent(new CustomEvent("mts:button:click", {
+      (this._listeners['click'] || []).forEach(fn => fn(e, this));
+      this._el.dispatchEvent(new CustomEvent('mts:button:click', {
         bubbles: true, detail: { button: this },
       }));
     });
   }
 };
 
-/* ── MTS.ButtonGroup ─────────────────────────────────────── */
+/* ── MTS.ButtonGroup ────────────────────────────────────── */
+
 MTS.ButtonGroup = class MtsButtonGroup {
-  /**
-   * @param {string|Element} selector   Contenedor div
-   * @param {Array}  buttons            [{ label, variant, onClick, ... }]
-   * @param {object} options
-   * @param {string} options.size       Tamaño para todos los botones del grupo
-   * @param {boolean} options.activeOnClick  Marcar botón como activo al hacer click — default: true
-   */
   constructor(selector, buttons = [], options = {}) {
-    this._el = typeof selector === "string"
+    // Target container element / Elemento contenedor
+    this._el = typeof selector === 'string'
       ? document.querySelector(selector)
       : selector;
-    if (!this._el) { console.error("[MTS.ButtonGroup] No encontrado:", selector); return; }
+    if (!this._el) { console.error('[MTS.ButtonGroup] Not found / No encontrado:', selector); return; }
 
+    // Mark clicked button as active / Marcar botón clickeado como activo
     this._activeOnClick = options.activeOnClick ?? true;
-    this._el.className = "mts-btn-group";
-    this._instances = [];
+    this._el.className  = 'mts-btn-group';
+    this._instances     = [];
 
     buttons.forEach((cfg, idx) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
+      const btn = document.createElement('button');
+      btn.type  = 'button';
       this._el.appendChild(btn);
 
       const originalOnClick = cfg.onClick || null;
       const instance = new MTS.Button(btn, {
         ...cfg,
-        size: cfg.size || options.size || "",
-        onClick: null,  // se bindea abajo directamente en el DOM
+        // Uniform size for the group / Tamaño uniforme para el grupo
+        size:    cfg.size || options.size || '',
+        onClick: null,
       });
       this._instances.push(instance);
 
-      /* Bindear click directo en el elemento para garantizar que this sea el grupo */
-      btn.addEventListener("click", (e) => {
+      btn.addEventListener('click', (e) => {
         if (instance.disabled || instance.loading) return;
         if (this._activeOnClick) this._setActive(idx);
         originalOnClick?.(e, instance);
       });
     });
 
-    /* Aplicar border-radius directamente via style — gana sobre cualquier CSS */
     this._applyGroupStyles();
   }
 
-  /* Marca el botón en índice como activo, quita activo a los demás */
+  // Set active button by index / Establecer botón activo por índice
   setActive(index) { this._setActive(index); return this; }
 
   _setActive(activeIdx) {
     this._instances.forEach((inst, i) => {
-      if (i === activeIdx) {
-        inst._el.classList.add("mts-btn--active");
-      } else {
-        inst._el.classList.remove("mts-btn--active");
-      }
+      inst._el.classList.toggle('mts-btn--active', i === activeIdx);
     });
   }
 
-  /* Aplica border-radius via style inline — no puede ser sobreescrito por base.css */
   _applyGroupStyles() {
     const total = this._instances.length;
-    const r     = "var(--mts-radius-md)";
-
+    const r     = 'var(--mts-radius-md)';
     this._instances.forEach((inst, i) => {
       const el = inst._el;
-
-      /* Sin gap entre botones — margen 0 y borde derecho oculto salvo el último */
-      el.style.margin      = "0";
-      el.style.borderRight = i < total - 1 ? "0" : "";
-
-      /* Border-radius: solo extremos */
-      if (total === 1) {
-        el.style.borderRadius = r;
-      } else if (i === 0) {
-        el.style.borderRadius = r + " 0 0 " + r;
-      } else if (i === total - 1) {
-        el.style.borderRadius = "0 " + r + " " + r + " 0";
-      } else {
-        el.style.borderRadius = "0";
-      }
+      el.style.margin      = '0';
+      el.style.borderRight = i < total - 1 ? '0' : '';
+      if      (total === 1)        el.style.borderRadius = r;
+      else if (i === 0)            el.style.borderRadius = r + ' 0 0 ' + r;
+      else if (i === total - 1)    el.style.borderRadius = '0 ' + r + ' ' + r + ' 0';
+      else                         el.style.borderRadius = '0';
     });
   }
 
+  // Get all button instances / Obtener todas las instancias de botón
   getButtons()     { return this._instances; }
+
+  // Get button instance by index / Obtener instancia de botón por índice
   getButton(index) { return this._instances[index] || null; }
+};
+
+/* ── MTS.MenuButton ─────────────────────────────────────── */
+/*
+  Botón con menú desplegable encapsulado.
+
+  const mb = new MTS.MenuButton(container, {
+    label:   'Acciones',
+    variant: 'secondary',
+    items: [
+      { label: 'Editar',   icon: MTS.Icon.get('edit-2'), onClick: () => {} },
+      { label: 'Duplicar', icon: MTS.Icon.get('copy'),   onClick: () => {} },
+      '---',
+      { label: 'Eliminar', icon: MTS.Icon.get('trash'),  danger: true, onClick: () => {} },
+    ],
+  });
+*/
+MTS.MenuButton = class MtsMenuButton {
+  constructor(container, options = {}) {
+    this._container = typeof container === 'string'
+      ? document.querySelector(container)
+      : container;
+    if (!this._container) { console.error('[MTS.MenuButton] No encontrado:', container); return; }
+
+    this._items   = options.items   || [];
+    this._open    = false;
+    this._wrap    = document.createElement('div');
+    this._wrap.className = 'mts-menu-wrap';
+
+    /* Botón trigger */
+    const btnEl = document.createElement('button');
+    btnEl.type  = 'button';
+    this._wrap.appendChild(btnEl);
+    this._btn = new MTS.Button(btnEl, {
+      label:     options.label    || 'Acciones',
+      variant:   options.variant  || 'secondary',
+      size:      options.size     || '',
+      iconLeft:  options.iconLeft || null,
+      iconRight: options.iconRight ?? MTS.Icon?.get('chevron-down', 14) ?? '▾',
+      disabled:  options.disabled || false,
+    });
+
+    /* Lista del menú */
+    this._list = document.createElement('div');
+    this._list.className = 'mts-menu-list';
+    this._wrap.appendChild(this._list);
+    this._buildItems();
+
+    this._container.appendChild(this._wrap);
+    this._bindEvents();
+  }
+
+  _buildItems() {
+    this._list.innerHTML = '';
+    this._items.forEach(item => {
+      if (item === '---') {
+        const sep = document.createElement('div');
+        sep.className = 'mts-menu-sep';
+        this._list.appendChild(sep);
+        return;
+      }
+      const btn = document.createElement('button');
+      btn.className = 'mts-menu-item' + (item.danger ? ' mts-menu-item--danger' : '');
+      btn.type = 'button';
+      if (item.icon) {
+        const ic = document.createElement('span');
+        ic.className = 'mts-menu-item__icon';
+        ic.innerHTML = item.icon;
+        btn.appendChild(ic);
+      }
+      btn.appendChild(document.createTextNode(item.label));
+      if (item.disabled) btn.disabled = true;
+      btn.addEventListener('click', () => {
+        this.close();
+        item.onClick?.();
+      });
+      this._list.appendChild(btn);
+    });
+  }
+
+  _bindEvents() {
+    this._btn._el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this._open ? this.close() : this.open();
+    });
+    document.addEventListener('click', (e) => {
+      if (!this._wrap.contains(e.target)) this.close();
+    });
+  }
+
+  open()  { this._open = true;  this._list.classList.add('mts-menu-list--open');    this._btn._el.classList.add('mts-btn--active'); }
+  close() { this._open = false; this._list.classList.remove('mts-menu-list--open'); this._btn._el.classList.remove('mts-btn--active'); }
+  toggle(){ this._open ? this.close() : this.open(); }
+
+  setItems(items) { this._items = items; this._buildItems(); }
+  getButton()     { return this._btn; }
+  destroy()       { this._wrap.remove(); }
+};
+
+/* ── MTS.SplitButton ────────────────────────────────────── */
+/*
+  Botón principal + flecha que abre menú de opciones.
+
+  const sb = new MTS.SplitButton(container, {
+    label:   'Guardar',
+    variant: 'primary',
+    iconLeft: MTS.Icon.get('save'),
+    onClick: () => {},          // acción principal
+    items: [
+      { label: 'Guardar borrador',   onClick: () => {} },
+      { label: 'Guardar y publicar', onClick: () => {} },
+      '---',
+      { label: 'Descartar', danger: true, onClick: () => {} },
+    ],
+  });
+*/
+MTS.SplitButton = class MtsSplitButton {
+  constructor(container, options = {}) {
+    this._container = typeof container === 'string'
+      ? document.querySelector(container)
+      : container;
+    if (!this._container) { console.error('[MTS.SplitButton] No encontrado:', container); return; }
+
+    this._items   = options.items   || [];
+    this._open    = false;
+    this._variant = options.variant || 'primary';
+
+    this._wrap = document.createElement('div');
+    this._wrap.className = 'mts-split-wrap';
+
+    /* Botón principal */
+    const mainEl = document.createElement('button');
+    mainEl.type  = 'button';
+    this._btnMain = new MTS.Button(mainEl, {
+      label:    options.label   || '',
+      variant:  this._variant,
+      size:     options.size    || '',
+      iconLeft: options.iconLeft|| null,
+      disabled: options.disabled|| false,
+      onClick:  options.onClick || null,
+    });
+
+    /* Botón flecha — mismo variant, mismo size, iconOnly */
+    const arrowEl = document.createElement('button');
+    arrowEl.type  = 'button';
+    this._btnArrow = new MTS.Button(arrowEl, {
+      variant:  this._variant,
+      size:     options.size || '',
+      iconLeft: MTS.Icon?.get('chevron-down', 14) ?? '▾',
+      iconOnly: true,
+      disabled: options.disabled || false,
+    });
+
+    /* Lista del menú */
+    this._list = document.createElement('div');
+    this._list.className = 'mts-menu-list mts-menu-list--right';
+    this._buildItems();
+
+    this._wrap.appendChild(mainEl);
+    this._wrap.appendChild(arrowEl);
+    this._wrap.appendChild(this._list);
+    this._container.appendChild(this._wrap);
+    this._bindEvents();
+  }
+
+  _buildItems() {
+    this._list.innerHTML = '';
+    this._items.forEach(item => {
+      if (item === '---') {
+        const sep = document.createElement('div');
+        sep.className = 'mts-menu-sep';
+        this._list.appendChild(sep);
+        return;
+      }
+      const btn = document.createElement('button');
+      btn.className = 'mts-menu-item' + (item.danger ? ' mts-menu-item--danger' : '');
+      btn.type = 'button';
+      if (item.icon) {
+        const ic = document.createElement('span');
+        ic.className = 'mts-menu-item__icon';
+        ic.innerHTML = item.icon;
+        btn.appendChild(ic);
+      }
+      btn.appendChild(document.createTextNode(item.label));
+      if (item.disabled) btn.disabled = true;
+      btn.addEventListener('click', () => {
+        this.close();
+        item.onClick?.();
+      });
+      this._list.appendChild(btn);
+    });
+  }
+
+  _bindEvents() {
+    this._btnArrow._el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this._open ? this.close() : this.open();
+    });
+    document.addEventListener('click', (e) => {
+      if (!this._wrap.contains(e.target)) this.close();
+    });
+  }
+
+  open()  { this._open = true;  this._list.classList.add('mts-menu-list--open');    this._btnArrow._el.classList.add('mts-btn--active'); }
+  close() { this._open = false; this._list.classList.remove('mts-menu-list--open'); this._btnArrow._el.classList.remove('mts-btn--active'); }
+  toggle(){ this._open ? this.close() : this.open(); }
+
+  setItems(items) { this._items = items; this._buildItems(); }
+  getMainButton()  { return this._btnMain;  }
+  getArrowButton() { return this._btnArrow; }
+  destroy()        { this._wrap.remove(); }
 };

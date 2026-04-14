@@ -22,15 +22,36 @@ MTS.Splitter = class MtsSplitter {
   constructor(selector, options = {}) {
     this._el       = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    this.direction   = options.direction   || 'horizontal';
-    this._size       = options.initialSize ?? 50;
-    this.minSize     = options.minSize     ?? 10;
-    this.maxSize     = options.maxSize     ?? 90;
+    // Layout direction: 'horizontal' | 'vertical' / Dirección del layout
+    this.direction = options.direction || 'horizontal';
+
+    // Initial size of first panel in % / Tamaño inicial del primer panel en %
+    this._size = options.initialSize ?? 50;
+
+    // Minimum size in % / Tamaño mínimo en %
+    this.minSize = options.minSize ?? 10;
+
+    // Maximum size in % / Tamaño máximo en %
+    this.maxSize = options.maxSize ?? 90;
+
+    // Allow collapsing panels with double click / Permitir colapsar paneles con doble click
     this.collapsible = options.collapsible ?? false;
-    this.gutterSize  = options.gutterSize  || '6px';
-    this._onChange   = options.onChange    || null;
-    this._onDragStart = options.onDragStart || null;
-    this._onDragEnd   = options.onDragEnd   || null;
+
+    // Gutter/handle size / Tamaño del divisor
+    this.gutterSize = options.gutterSize || '6px';
+
+    this._listeners  = {};
+    this._dragging   = false;
+
+    // Fires while dragging: ({ sizes, firstSize, secondSize }) => {}
+    // Se dispara mientras se arrastra
+    if (options.onChange)   this.on('change',    options.onChange);
+
+    // Fires when drag starts / Se dispara al iniciar el arrastre
+    if (options.onDragStart) this.on('dragstart', options.onDragStart);
+
+    // Fires when drag ends: ({ sizes }) => {} / Se dispara al terminar el arrastre
+    if (options.onDragEnd)   this.on('dragend',   options.onDragEnd);
     this._dragging   = false;
     this._collapsed  = null; // null | 'first' | 'second'
     this._build();
@@ -38,6 +59,8 @@ MTS.Splitter = class MtsSplitter {
 
   /* ── API ── */
   setSize(pct)       { this._size = this._clamp(pct); this._applySize(); return this; }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   getSizes()         { return { firstSize: this._size, secondSize: 100 - this._size }; }
   collapseFirst()    { this._collapsePanel('first');  return this; }
   collapseSecond()   { this._collapsePanel('second'); return this; }
@@ -104,7 +127,7 @@ MTS.Splitter = class MtsSplitter {
       const pos   = clientPos - (isH ? rect.left : rect.top);
       this._size  = this._clamp((pos / total) * 100);
       this._applySize();
-      if (this._onChange) this._onChange(this.getSizes());
+      this._emit('change', this.getSizes());
     };
 
     const onMouseMove = (e) => onMove(isH ? e.clientX : e.clientY);
@@ -120,7 +143,7 @@ MTS.Splitter = class MtsSplitter {
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
       gutter.classList.remove('mts-splitter__gutter--dragging');
-      if (this._onDragEnd) this._onDragEnd(this.getSizes());
+      this._emit('dragend', this.getSizes());
     };
 
     gutter.addEventListener('mousedown', (e) => {
@@ -131,7 +154,7 @@ MTS.Splitter = class MtsSplitter {
       document.body.style.userSelect = 'none';
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup',   stop);
-      if (this._onDragStart) this._onDragStart();
+      this._emit('dragstart', {});
     });
 
     gutter.addEventListener('touchstart', (e) => {
@@ -139,7 +162,7 @@ MTS.Splitter = class MtsSplitter {
       this._dragging = true;
       document.addEventListener('touchmove', onTouchMove, { passive: false });
       document.addEventListener('touchend',  stop);
-      if (this._onDragStart) this._onDragStart();
+      this._emit('dragstart', {});
     }, { passive: false });
   }
 
@@ -161,4 +184,8 @@ MTS.Splitter = class MtsSplitter {
   }
 
   _clamp(v) { return Math.max(this.minSize, Math.min(this.maxSize, v)); }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:splitter:${event}`, { bubbles: true, detail }));
+  }
 };

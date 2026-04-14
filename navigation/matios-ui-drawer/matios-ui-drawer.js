@@ -22,17 +22,38 @@ MTS.Drawer = class MtsDrawer {
    * @param {function}        options.onClose
    */
   constructor(options = {}) {
-    this.title    = options.title    || '';
-    this.content  = options.content  || '';
-    this.footer   = options.footer   || null;
+    // Drawer title HTML / HTML del título del drawer
+    this.title = options.title || '';
+
+    // Drawer body content (HTML string or Element) / Contenido del cuerpo
+    this.content = options.content || '';
+
+    // Drawer footer HTML or Element / Pie del drawer
+    this.footer = options.footer || null;
+
+    // Slide-in position: 'left' | 'right' | 'top' | 'bottom' / Posición de deslizamiento
     this.position = options.position || 'right';
-    this.size     = options.size     || 'md';
-    this.backdrop = options.static   ? false : (options.backdrop ?? true);
+
+    // Size: 'sm' | 'md' | 'lg' | 'full' / Tamaño
+    this.size = options.size || 'md';
+
+    // Show backdrop overlay / Mostrar fondo oscuro
+    this.backdrop = options.static ? false : (options.backdrop ?? true);
+
+    // Show close button / Mostrar botón de cierre
     this.closable = options.closable ?? true;
-    this.static   = options.static   ?? false;
-    this._isOpen  = false;
+
+    // Static mode — does not close on Esc or backdrop click
+    // Modo estático — no cierra con Esc ni click en backdrop
+    this.static = options.static ?? false;
+
+    this._isOpen    = false;
     this._listeners = {};
+
+    // Fires when drawer opens / Se dispara al abrir el drawer
     if (options.onOpen)  this.on('open',  options.onOpen);
+
+    // Fires when drawer closes / Se dispara al cerrar el drawer
     if (options.onClose) this.on('close', options.onClose);
     this._build();
   }

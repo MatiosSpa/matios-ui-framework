@@ -27,8 +27,15 @@ MTS.VirtualList = class MtsVirtualList {
     this.itemHeight  = options.itemHeight  ?? 48;
     this.height      = options.height      ?? 400;
     this.buffer      = options.buffer      ?? 5;
-    this._onScroll   = options.onScroll    || null;
-    this._onEndReached = options.onEndReached || null;
+    this._listeners   = {};
+
+    // Fires on scroll: ({ scrollTop, firstVisible, lastVisible }) => {}
+    // Se dispara al hacer scroll
+    if (options.onScroll)     this.on('scroll',     options.onScroll);
+
+    // Fires when scroll reaches the end: ({ total }) => {} — for infinite scroll
+    // Se dispara al llegar al final — para infinite scroll
+    if (options.onEndReached) this.on('endReached', options.onEndReached);
     this.endThreshold  = options.endThreshold ?? 100;
     this._scrollTop  = 0;
     this._endFired   = false;
@@ -49,7 +56,9 @@ MTS.VirtualList = class MtsVirtualList {
     const last  = Math.min(this.items.length - 1, Math.ceil((this._scrollTop + this.height) / this.itemHeight) + this.buffer);
     return { first, last };
   }
-  destroy()         { this._el.innerHTML = ''; }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
+  destroy()  { this._el.innerHTML = ''; }
 
   _build() {
     this._el.innerHTML = '';
@@ -84,17 +93,15 @@ MTS.VirtualList = class MtsVirtualList {
       this._scrollTop = scroll.scrollTop;
       this._update();
 
-      if (this._onScroll) {
-        const { first, last } = this.getVisibleRange();
-        this._onScroll({ scrollTop: this._scrollTop, firstVisible: first, lastVisible: last });
-      }
+      const { first, last } = this.getVisibleRange();
+      this._emit('scroll', { scrollTop: this._scrollTop, firstVisible: first, lastVisible: last });
 
       /* End reached */
-      if (this._onEndReached && !this._endFired) {
+      if ((this._listeners['endReached']||[]).length && !this._endFired) {
         const remaining = this._spacerEl.offsetHeight - scroll.scrollTop - scroll.offsetHeight;
         if (remaining <= this.endThreshold) {
           this._endFired = true;
-          this._onEndReached({ total: this.items.length });
+          this._emit('endReached', { total: this.items.length });
         }
       }
     }, { passive: true });
@@ -131,5 +138,9 @@ MTS.VirtualList = class MtsVirtualList {
       el.style.overflow  = 'hidden';
       this._visibleEl.appendChild(el);
     }
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:virtuallist:${event}`, { bubbles: true, detail }));
   }
 };

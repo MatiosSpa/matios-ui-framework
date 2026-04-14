@@ -19,18 +19,35 @@ MTS.RatingReview = class MtsRatingReview {
   constructor(selector, options = {}) {
     this._el       = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    this.average     = options.average     ?? 0;
-    this.total       = options.total       ?? 0;
-    this.breakdown   = options.breakdown   || { 5:0, 4:0, 3:0, 2:0, 1:0 };
+    // Average rating (1-5) / Promedio de calificaciones (1-5)
+    this.average = options.average ?? 0;
+
+    // Total number of reviews / Número total de reseñas
+    this.total = options.total ?? 0;
+
+    // Rating breakdown: { 5:n, 4:n, 3:n, 2:n, 1:n }
+    // Desglose por calificación
+    this.breakdown = options.breakdown || { 5:0, 4:0, 3:0, 2:0, 1:0 };
+
+    // Allow interactive voting / Permitir votación interactiva
     this.interactive = options.interactive ?? false;
-    this.size        = options.size        || 'md';
-    this.onRate      = options.onRate      || null;
-    this._hover      = 0;
-    this._selected   = 0;
+
+    // Size: 'sm' | 'md' | 'lg' / Tamaño
+    this.size = options.size || 'md';
+
+    this._hover    = 0;
+    this._selected = 0;
+    this._listeners = {};
+
+    // Fires when user rates: ({ stars }) => {} / Se dispara al calificar
+    if (options.onRate) this.on('rate', options.onRate);
+
     this._build();
   }
 
   update(opts) { Object.assign(this, opts); this._build(); return this; }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   _stars(count, size) {
     let out = '';
@@ -108,8 +125,7 @@ MTS.RatingReview = class MtsRatingReview {
         });
         star.addEventListener('click', () => {
           this._selected = s;
-          if (this.onRate) this.onRate(s);
-          this._el.dispatchEvent(new CustomEvent('mts:ratingreview:rate', { bubbles:true, detail:{ stars:s } }));
+          this._emit('rate', { stars: s });
           this._updateInteractive(starsWrap);
         });
         starsWrap.appendChild(star);
@@ -125,5 +141,9 @@ MTS.RatingReview = class MtsRatingReview {
     wrap.querySelectorAll('.mts-ratingreview__star-btn').forEach((btn, i) => {
       btn.classList.toggle('mts-ratingreview__star-btn--active', i < active);
     });
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:ratingreview:${event}`, { bubbles: true, detail }));
   }
 };

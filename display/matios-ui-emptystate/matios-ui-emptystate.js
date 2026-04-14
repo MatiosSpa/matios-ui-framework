@@ -21,17 +21,36 @@ MTS.EmptyState = class MtsEmptyState {
   constructor(selector, options = {}) {
     this._el       = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    this.variant     = options.variant     || 'no-data';
-    this.title       = options.title       || this._defaultTitle();
+    // Preset variant: 'no-data' | 'search' | 'error' | 'permissions' | 'custom'
+    // Variante predefinida
+    this.variant = options.variant || 'no-data';
+
+    // Title text (auto from variant if not set) / Texto del título (auto desde variante)
+    this.title = options.title || this._defaultTitle();
+
+    // Description text / Texto de descripción
     this.description = options.description || this._defaultDescription();
-    this.action      = options.action      || null;
-    this.onAction    = options.onAction    || null;
-    this.customIcon  = options.icon        || null;
-    this.size        = options.size        || 'md';
+
+    // CTA button label / Label del botón CTA
+    this.action = options.action || null;
+
+    // Custom SVG icon (overrides variant icon) / Ícono SVG custom (sobreescribe el de la variante)
+    this.customIcon = options.icon || null;
+
+    // Size: 'sm' | 'md' | 'lg' / Tamaño
+    this.size = options.size || 'md';
+
+    this._listeners = {};
+
+    // Fires when CTA button is clicked / Se dispara al hacer click en el botón CTA
+    if (options.onAction) this.on('action', options.onAction);
+
     this._build();
   }
 
   update(opts = {}) { Object.assign(this, opts); this._build(); return this; }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   _build() {
     this._el.className = `mts-emptystate mts-emptystate--${this.size}`;
@@ -54,11 +73,11 @@ MTS.EmptyState = class MtsEmptyState {
       this._el.appendChild(desc);
     }
 
-    if (this.action && this.onAction) {
+    if (this.action) {
       const btn = document.createElement('button');
       btn.className = 'mts-btn mts-btn--primary';
       btn.textContent = this.action;
-      btn.addEventListener('click', () => this.onAction());
+      btn.addEventListener('click', () => this._emit('action', {}));
       this._el.appendChild(btn);
     }
   }
@@ -104,5 +123,9 @@ MTS.EmptyState = class MtsEmptyState {
       </svg>`,
     };
     return icons[this.variant] || icons['no-data'];
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:emptystate:action`, { bubbles: true, detail }));
   }
 };

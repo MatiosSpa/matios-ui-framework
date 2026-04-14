@@ -1,147 +1,305 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="es" data-mts-mode="dark">
 <head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.Validate — Demo</title>
-  <script>(function(){var m=(location.hash||"").match(/mts-theme=([a-z-]+)/);if(m)document.documentElement.setAttribute("data-mts-theme",m[1]);try{var p=window.parent;if(p&&p!==window){var pt=p.currentThemeVal||p.document.documentElement.getAttribute("data-mts-theme");if(pt)document.documentElement.setAttribute("data-mts-theme",pt);}}catch(e){}}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
-  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../shared/demo-shared.css">
   <link rel="stylesheet" href="../matios-ui-input/matios-ui-input.css">
-  <link rel="stylesheet" href="./matios-ui-validation.css">
-  <script src="../../icons/matios-ui-icons.js"></script>
+  <link rel="stylesheet" href="../matios-ui-button/matios-ui-button.css">
+  <script src="../../shared/demo-shared.js"></script>
   <script src="../matios-ui-input/matios-ui-input.js"></script>
+  <script src="../matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-validation.js"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
-    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
-    .demo-section{display:flex;flex-direction:column;gap:14px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
-    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
-    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
-    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
-    .demo-docs-panel.open{display:block;}
-    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
-    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
-    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
-    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
-    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
-    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
-    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
-    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
-    .demo-docs-panel p{margin:0 0 10px;}
-    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
-    .demo-docs-panel a{color:var(--mts-color-primary);text-decoration:none;}
-    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
-    .demo-select-output{margin-top:8px;padding:8px 12px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-color-primary);line-height:1.6;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-  </style>
 </head>
 <body>
 <div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
-  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
+  <button class="demo-btn-sm demo-btn-sep">—</button>
+  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
 
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Validate</h1>
-    <p>Validación de formularios — 15+ reglas, integración automática con MTS.Input.</p>
-    <div class="demo-header-actions"><button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-validation.md')">📄 Documentación</button></div>
+    <p>Form validation — auto-integrates with MTS.Input, 20+ rules, custom messages, server-side errors.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-validation.md')">📄 Docs</button>
+    </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
+
+  <!-- 1. Formulario completo -->
   <div class="demo-section">
-    <div class="demo-section-title">1 — Formulario completo con todas las reglas</div>
-    <form id="form-validation" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;">
-      <div id="v-nombre"></div><div id="v-email"></div><div id="v-telefono"></div>
-      <div id="v-rut"></div><div id="v-edad"></div><div id="v-web"></div>
-      <div id="v-pass"></div><div id="v-pass2"></div>
-      <div id="v-terminos" style="display:flex;align-items:flex-end;"></div>
-      <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;">
-        <button type="submit" class="mts-btn mts-btn--primary">Validar formulario</button>
-        <button type="button" class="mts-btn mts-btn--ghost" onclick="window._validator&&window._validator.clearErrors()">Limpiar</button>
-        <button type="button" class="mts-btn mts-btn--ghost" onclick="simularErrorServidor()">Error servidor</button>
+    <div class="demo-section-title">1 — Formulario completo / Full form</div>
+    <form id="form-full" style="max-width:480px">
+      <div id="v-name"></div>
+      <div id="v-email"></div>
+      <div id="v-pass"></div>
+      <div id="v-pass2"></div>
+      <div style="margin-top:8px">
+        <button type="submit" id="v-submit"></button>
       </div>
     </form>
-    <div class="result-box" id="validation-result" style="margin-top:12px">— completa y haz click en Validar —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c1"><code>const v = new MTS.Validate('#mi-form',{
-  validateOnBlur:true,
-  rules:{
-    nombre:   {required:true, minLength:3},
-    email:    {required:true, email:true},
-    rut:      {required:true, rut:true},      // validación RUT chileno
-    edad:     {required:true, min:18, max:99},
-    password: {required:true, minLength:8, pattern:/(?=.*\d)/},
-    password2:{required:true, equalTo:'[name="password"]'},
-    terminos: {required:true},
+    <div class="result-box" id="v-result">— completa y envía el formulario —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-v1','js-v1')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-v1','html-v1')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-v1">&lt;form id="my-form"&gt;
+  &lt;div id="field-name"&gt;&lt;/div&gt;
+  &lt;div id="field-email"&gt;&lt;/div&gt;
+  &lt;button type="submit" class="mts-btn mts-btn--primary"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+  // name: must match the key in rules / name: debe coincidir con la clave en rules
+  new MTS.Input('#field-name',  { name:'name',  label: 'Name',  rules: { required: true, minLength: 3 } });
+  new MTS.Input('#field-email', { name:'email', label: 'Email', type: 'email', rules: { required: true, email: true } });
+
+  new MTS.Validate('#my-form', {
+    rules: {
+      name:  { required: true, minLength: 3 },
+      email: { required: true, email: true },
+    },
+    // Fires when form is valid / Se dispara cuando el formulario es válido
+    onValid:   (data)   =&gt; console.log('Valid:', data),
+    // Fires when form has errors / Se dispara cuando hay errores
+    onInvalid: (errors) =&gt; console.log('Errors:', errors),
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-v1">// Step 1: Create MTS.Input fields with rules
+// Paso 1: Crear campos MTS.Input con reglas
+// name: must match the key in rules / name: debe coincidir con la clave en rules
+new MTS.Input('#v-name',  { name:'name',      label: 'Full name',           placeholder: 'John Doe',         rules: { required: true, minLength: 3 } });
+new MTS.Input('#v-email', { name:'email',     label: 'Email',               placeholder: 'user@example.com', rules: { required: true, email: true }, type: 'email' });
+new MTS.Input('#v-pass',  { name:'password',  label: 'Password',            placeholder: 'Min 8 characters', rules: { required: true, minLength: 8 }, type: 'password' });
+new MTS.Input('#v-pass2', { name:'password2', label: 'Confirm password',    placeholder: 'Repeat password',  rules: { required: true }, type: 'password' });
+
+// Step 2: Attach MTS.Validate to the form
+// Paso 2: Vincular MTS.Validate al formulario
+new MTS.Validate('#form-full', {
+  rules: {
+    name:      { required: true, minLength: 3 },
+    email:     { required: true, email: true },
+    password:  { required: true, minLength: 8 },
+    password2: { required: true },
   },
-  onValid:   (data)   => enviar(data),
-  onInvalid: (errors) => console.log(errors),
-})
-v.validate()
-v.setError('email','Email ya registrado')  // error del servidor
-v.clearErrors()
-v.getData()</code></pre>
+  // Custom messages / Mensajes personalizados
+  messages: {
+    name:  { required: 'Name is required', minLength: 'At least 3 characters' },
+    email: { email: 'Enter a valid email' },
+  },
+  validateOnBlur: true,
+  // Fires when all fields are valid / Se dispara cuando todo es válido
+  onValid:   (data)   => console.log('Form data:', data),
+  // Fires when there are errors / Se dispara cuando hay errores
+  onInvalid: (errors) => console.log('Errors:', errors),
+});</div>
   </div>
-</div><script>
-function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
-window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
-if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
-function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
-function showSelOutput(id,v,t){var el=document.getElementById(id);if(!el)return;el.style.display='block';el.innerHTML='<b>value:</b> '+JSON.stringify(v)+'&nbsp;&nbsp;<b>text:</b> '+JSON.stringify(t);}
-function showPickerOutput(id,val,fmt){var el=document.getElementById(id);if(!el)return;el.style.display='block';el.innerHTML='<b>value:</b> '+JSON.stringify(fmt||val);}
-function toggleDocs(id,mdPath){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';fetch(mdPath).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>No se pudo cargar.</em>';});}
-function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
 
-new MTS.Input('#v-nombre',  {type:'text',     label:'Nombre completo',   placeholder:'Juan Pérez',   name:'nombre'});
-new MTS.Input('#v-email',   {type:'email',    label:'Email',             placeholder:'correo@ejemplo.com', name:'email'});
-new MTS.Input('#v-telefono',{type:'text',     label:'Teléfono',          placeholder:'+56 9 1234 5678',    name:'telefono'});
-new MTS.Input('#v-rut',     {type:'text',     label:'RUT',               placeholder:'12.345.678-9',       name:'rut'});
-new MTS.Input('#v-edad',    {type:'number',   label:'Edad',              placeholder:'25',                 name:'edad'});
-new MTS.Input('#v-web',     {type:'text',     label:'Sitio web',         placeholder:'https://ejemplo.com',name:'web'});
-new MTS.Input('#v-pass',    {type:'password', label:'Contraseña',        showPassword:true, name:'password'});
-new MTS.Input('#v-pass2',   {type:'password', label:'Repetir contraseña',showPassword:true, name:'password2'});
-var terDiv=document.getElementById('v-terminos');
-var terLabel=document.createElement('label');
-terLabel.style.cssText='display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;padding-bottom:2px;';
-var terChk=document.createElement('input');
-terChk.type='checkbox';terChk.name='terminos';terChk.id='chk-terminos';
-terLabel.appendChild(terChk);terLabel.appendChild(document.createTextNode('Acepto los términos y condiciones'));
-terDiv.appendChild(terLabel);
-window._validator=new MTS.Validate('#form-validation',{
-  validateOnBlur:true,
-  rules:{nombre:{required:true,minLength:3},email:{required:true,email:true},telefono:{phone:true},rut:{required:true,rut:true},edad:{required:true,min:18,max:99},web:{url:true},password:{required:true,minLength:8,pattern:/(?=.*\d)/},password2:{required:true,equalTo:'[name="password"]'},terminos:{required:true}},
-  messages:{nombre:{required:'El nombre es obligatorio',minLength:'Mínimo 3 caracteres'},email:{required:'El email es obligatorio',email:'Ingresa un email válido'},rut:{required:'El RUT es obligatorio',rut:'RUT inválido (ej: 12.345.678-9)'},edad:{min:'Debes ser mayor de 18 años'},password:{required:'Contraseña obligatoria',minLength:'Mínimo 8 caracteres',pattern:'Debe incluir al menos un número'},password2:{equalTo:'Las contraseñas no coinciden'},terminos:{required:'Debes aceptar los términos'}},
-  onValid:function(data){var r=document.getElementById('validation-result');r.style.color='var(--mts-color-success,#22c55e)';r.textContent='✅ Formulario válido → '+JSON.stringify(data,null,0).slice(0,100)+'...';},
-  onInvalid:function(errors){var r=document.getElementById('validation-result');r.style.color='var(--mts-color-danger)';r.textContent='❌ Errores: '+Object.entries(errors).map(function(kv){return kv[0]+': '+kv[1];}).join(' | ');}
+  <!-- 2. Reglas avanzadas -->
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Reglas avanzadas / Advanced rules</div>
+    <form id="form-advanced" style="max-width:480px">
+      <div id="v-rut"></div>
+      <div id="v-age"></div>
+      <div id="v-url"></div>
+      <div id="v-custom"></div>
+      <div style="margin-top:8px">
+        <button type="submit" id="v-adv-submit"></button>
+      </div>
+    </form>
+    <div class="result-box" id="v-adv-result">— completa y envía el formulario —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-v2','js-v2')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-v2','html-v2')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-v2">&lt;form id="my-form"&gt;
+  &lt;div id="field-rut"&gt;&lt;/div&gt;
+  &lt;div id="field-age"&gt;&lt;/div&gt;
+  &lt;div id="field-url"&gt;&lt;/div&gt;
+  &lt;div id="field-custom"&gt;&lt;/div&gt;
+  &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+  new MTS.Input('#field-rut', { label:'RUT', rules:{ required:true, rut:true } });
+  new MTS.Input('#field-age', { label:'Age', type:'number', rules:{ required:true, min:18, max:99 } });
+  new MTS.Input('#field-custom', {
+    label:'Username',
+    rules:{ custom: (val) =&gt; val !== 'admin' || 'Username not allowed' }
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-v2">// Chilean RUT / RUT chileno
+new MTS.Input('#field-rut', {
+  label:       'RUT',
+  placeholder: '12.345.678-9',
+  rules:       { required: true, rut: true },
 });
-function simularErrorServidor(){window._validator&&window._validator.setError('email','Este email ya está registrado');}
 
+// Numeric range / Rango numérico
+new MTS.Input('#field-age', {
+  label:       'Age',
+  type:        'number',
+  rules:       { required: true, min: 18, max: 99 },
+});
+
+// URL validation / Validación URL
+new MTS.Input('#field-url', {
+  label:       'Website',
+  placeholder: 'https://...',
+  rules:       { url: true },
+});
+
+// Custom validation / Validación personalizada
+new MTS.Input('#field-custom', {
+  label:       'Username',
+  rules: {
+    required: true,
+    // Return true if valid, or error string / Retorna true si válido o string de error
+    custom: (val) => val !== 'admin' ? true : 'Username not allowed',
+  },
+});</div>
+  </div>
+
+  <!-- 3. API — errores del servidor -->
+  <div class="demo-section">
+    <div class="demo-section-title">3 — API — errores del servidor / Server-side errors</div>
+    <form id="form-api" style="max-width:480px">
+      <div id="v-api-email"></div>
+      <div style="margin-top:8px">
+        <button type="submit" id="v-api-submit"></button>
+      </div>
+    </form>
+    <div class="demo-row" style="margin-top:8px">
+      <button class="demo-btn-sm" onclick="vApi.setError('email','Email already registered'); document.getElementById('v-api-result').textContent = 'setError() → email already registered'">setError()</button>
+      <button class="demo-btn-sm" onclick="vApi.clearErrors(); document.getElementById('v-api-result').textContent = 'clearErrors() ✓'">clearErrors()</button>
+      <button class="demo-btn-sm" onclick="document.getElementById('v-api-result').textContent = 'isValid() → ' + vApi.isValid()">isValid()</button>
+      <button class="demo-btn-sm" onclick="document.getElementById('v-api-result').textContent = 'getData() → ' + JSON.stringify(vApi.getData())">getData()</button>
+    </div>
+    <div class="result-box" id="v-api-result">— usa los botones —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-v3','js-v3')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-v3','html-v3')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-v3">&lt;form id="my-form"&gt;
+  &lt;div id="field-email"&gt;&lt;/div&gt;
+  &lt;button type="submit"&gt;Register&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+  new MTS.Input('#field-email', { label:'Email', type:'email',
+    rules:{ required:true, email:true } });
+
+  const v = new MTS.Validate('#my-form', {
+    rules: { email: { required:true, email:true } },
+    onValid: async (data) =&gt; {
+      const res = await register(data);
+      if (res.error) v.setError('email', 'Email already exists');
+    },
+  });
+
+  v.isValid()                          // → boolean
+  v.getData()                          // → { email: '...' }
+  v.getErrors()                        // → { email: 'message' }
+  v.clearErrors()                      // clear all / limpiar todos
+  v.setError('email', 'Server error')  // server-side error
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-v3">new MTS.Input('#field-email', {
+  label: 'Email address',
+  type:  'email',
+  rules: { required: true, email: true },
+});
+
+const v = new MTS.Validate('#form-api', {
+  rules: { email: { required: true, email: true } },
+  // Fires when valid / Se dispara cuando es válido
+  onValid: async (data) => {
+    // Simulate server error / Simular error del servidor
+    v.setError('email', 'Email already registered');
+  },
+  onInvalid: (errors) => console.log(errors),
+});
+
+// API methods / Métodos de la API
+v.validate()                           // → boolean
+v.isValid()                            // → boolean
+v.getData()                            // → { fieldName: value }
+v.getErrors()                          // → { fieldName: 'message' }
+v.clearErrors()
+v.setError('email', 'Already exists') // server error / error del servidor</div>
+  </div>
+
+</div>
+
+<script>
+new MTS.Input('#v-name',  { name:'name',      label:'Nombre completo',      placeholder:'Juan Pérez',              rules:{ required:true, minLength:3 } });
+new MTS.Input('#v-email', { name:'email',     label:'Email',                placeholder:'user@ejemplo.com',        rules:{ required:true, email:true }, type:'email' });
+new MTS.Input('#v-pass',  { name:'password',  label:'Contraseña',           placeholder:'Mín 8 caracteres',        rules:{ required:true, minLength:8 }, type:'password' });
+new MTS.Input('#v-pass2', { name:'password2', label:'Confirmar contraseña', placeholder:'Repite la contraseña',    rules:{ required:true }, type:'password' });
+new MTS.Button('#v-submit', { label:'Enviar formulario', variant:'primary' });
+
+new MTS.Validate('#form-full', {
+  rules:{
+    name:      { required:true, minLength:3 },
+    email:     { required:true, email:true },
+    password:  { required:true, minLength:8 },
+    password2: { required:true },
+  },
+  messages:{ name:{ required:'El nombre es requerido', minLength:'Mínimo 3 caracteres' } },
+  validateOnBlur:true,
+  onValid:   function(d){ document.getElementById('v-result').textContent = 'onValid → ' + JSON.stringify(d); },
+  onInvalid: function(e){ document.getElementById('v-result').textContent = 'onInvalid → ' + JSON.stringify(e); },
+});
+
+new MTS.Input('#v-rut',    { name:'rut',    label:'RUT',       placeholder:'12.345.678-9',  rules:{ required:true, rut:true } });
+new MTS.Input('#v-age',    { name:'age',    label:'Edad',      type:'number',               rules:{ required:true, min:18, max:99 } });
+new MTS.Input('#v-url',    { name:'url',    label:'Sitio web', placeholder:'https://...',   rules:{ url:true } });
+new MTS.Input('#v-custom', { name:'custom', label:'Usuario',   placeholder:'No uses "admin"', rules:{ required:true, custom: function(v){ return v!=='admin'||'Usuario no permitido'; } } });
+new MTS.Button('#v-adv-submit', { label:'Validar', variant:'primary' });
+new MTS.Validate('#form-advanced', {
+  rules:{ rut:{ required:true, rut:true }, age:{ required:true, min:18, max:99 }, url:{ url:true }, custom:{ required:true } },
+  onValid:   function(d){ document.getElementById('v-adv-result').textContent = 'onValid → ' + JSON.stringify(d); },
+  onInvalid: function(e){ document.getElementById('v-adv-result').textContent = 'onInvalid → ' + JSON.stringify(e); },
+});
+
+new MTS.Input('#v-api-email', { name:'email', label:'Email', type:'email', rules:{ required:true, email:true }, placeholder:'user@example.com' });
+new MTS.Button('#v-api-submit', { label:'Register', variant:'primary' });
+var vApi = new MTS.Validate('#form-api', {
+  rules:{ email:{ required:true, email:true } },
+  onValid:   function(d){ document.getElementById('v-api-result').textContent = 'onValid → ' + JSON.stringify(d); },
+  onInvalid: function(e){ document.getElementById('v-api-result').textContent = 'onInvalid → ' + JSON.stringify(e); },
+});
 </script>
 </body>
 </html>

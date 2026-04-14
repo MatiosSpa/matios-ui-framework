@@ -1,86 +1,114 @@
-# matios-ui-paging
+# MTS.Paging
 
-Componente de paginación standalone. Recibe los datos de la respuesta del servidor y dibuja los controles automáticamente.
+[EN] Standalone pagination component with page size selector, info text, edge buttons and server response integration. Designed to integrate with MTS.DataTable.
+[ES] Componente de paginación standalone con selector de tamaño de página, texto informativo, botones de borde e integración con respuesta del servidor. Diseñado para integrarse con MTS.DataTable.
 
 ---
 
-## Instalación
+## Installation / Instalación
 
 ```html
-<link rel="stylesheet" href="../base/matios-ui-base.css">
-<link rel="stylesheet" href="matios-ui-paging/matios-ui-paging.css">
-<script src="matios-ui-paging/matios-ui-paging.js"></script>
+<link rel="stylesheet" href="matios-ui-base.css">
+<link rel="stylesheet" href="matios-ui-paging.css">
+<script src="matios-ui-paging.js"></script>
 ```
 
 ---
 
-## Uso rápido
+## Options / Opciones
+
+| Option | Type | Default | [EN] Description / [ES] Descripción |
+|--------|------|---------|--------------------------------------|
+| `total` | `number` | `0` | [EN] Total record count / [ES] Total de registros |
+| `page` | `number` | `1` | [EN] Current page (1-based) / [ES] Página actual (base 1) |
+| `pageSize` | `number` | `10` | [EN] Records per page / [ES] Registros por página |
+| `pageSizes` | `number[]` | `[10,25,50,100]` | [EN] Page size options / [ES] Opciones de tamaño de página |
+| `maxVisible` | `number` | `5` | [EN] Max visible page buttons / [ES] Máx botones de página visibles |
+| `showInfo` | `boolean` | `true` | [EN] Show "Showing 1-10 of 150" / [ES] Mostrar "Mostrando 1-10 de 150" |
+| `showPageSize` | `boolean` | `true` | [EN] Show page size selector / [ES] Mostrar selector de tamaño |
+| `showEdges` | `boolean` | `true` | [EN] Always show first/last page / [ES] Mostrar siempre primera/última página |
+| `variant` | `string` | `'primary'` | `'primary'` · `'secondary'` · `'ghost'` |
+| `size` | `string` | `''` | `''` · `'sm'` · `'lg'` |
+| `onChange` | `function` | — | [EN] `({ page, pageSize }) => {}` Any change / [ES] Cualquier cambio |
+| `onNext` | `function` | — | [EN] `({ page }) => {}` Next page / [ES] Página siguiente |
+| `onPrev` | `function` | — | [EN] `({ page }) => {}` Previous page / [ES] Página anterior |
+| `onPageClick` | `function` | — | [EN] `({ page }) => {}` Page number click / [ES] Click en número de página |
+| `onPageSizeChange` | `function` | — | [EN] `({ pageSize }) => {}` Size changed / [ES] Tamaño de página cambiado |
+
+---
+
+## Events / Eventos
 
 ```js
-const pager = new MTS.Paging('#paginacion', {
+const pager = new MTS.Paging('#my-pager', {
   total:    150,
   page:     1,
   pageSize: 10,
-  onChange: (page, pageSize) => {
-    cargarDatos(page, pageSize);
+  // Fires on any page/size change — most common / Se dispara en cualquier cambio
+  onChange: (e) => {
+    console.log(e.detail.page);     // → 2
+    console.log(e.detail.pageSize); // → 10
+    loadPage(e.detail.page, e.detail.pageSize);
   },
-})
+  // Fires specifically on next / Se dispara específicamente al avanzar
+  onNext: (e) => console.log('next:', e.detail.page),
+});
 ```
 
 ---
 
-## Con respuesta del servidor
+## JavaScript Usage / Uso JavaScript
 
 ```js
-const res = await fetch('/api/v1/usuarios?page=1&pageSize=10');
-const data = await res.json();
+// Basic / Básico
+const pager = new MTS.Paging('#my-pager', {
+  total:    150,
+  page:     1,
+  pageSize: 10,
+  onChange: (e) => loadData(e.detail.page, e.detail.pageSize),
+});
 
-// data = { items:[...], page:1, pageSize:10, total:150,
-//          totalPages:15, hasNext:true, hasPrev:false }
-
-pager.setResponse(data);
+// Full config / Configuración completa
+new MTS.Paging('#my-pager', {
+  total:        500,
+  page:         1,
+  pageSize:     25,
+  pageSizes:    [10, 25, 50, 100],
+  maxVisible:   7,
+  showInfo:     true,
+  showPageSize: true,
+  showEdges:    true,
+  variant:      'primary',
+  size:         '',
+  onChange:        (e) => fetchData(e.detail.page, e.detail.pageSize),
+  onPageSizeChange:(e) => console.log('size:', e.detail.pageSize),
+});
 ```
-
-Campos que acepta `setResponse()`:
-
-| Campo | Tipo | Descripción |
-|-------|------|-------------|
-| `page` | number | Página actual |
-| `pageSize` | number | Registros por página |
-| `total` | number | Total de registros |
-| `totalPages` | number | Total de páginas |
-| `hasNext` / `hasnext` | boolean | Hay página siguiente |
-| `hasPrev` / `haspreview` | boolean | Hay página anterior |
-| `from` | number | Registro inicial de la página |
-| `to` | number | Registro final de la página |
 
 ---
 
-## Configuración completa
+## Server Response / Respuesta del servidor
 
 ```js
-new MTS.Paging('#paginacion', {
+const pager = new MTS.Paging('#my-pager', {
+  total:    0,
+  onChange: (e) => fetchAndUpdate(e.detail.page, e.detail.pageSize),
+});
 
-  // — Estado inicial —
-  total:    100,          // total de registros
-  page:     1,            // página actual (1-based)
-  pageSize: 10,           // registros por página
+async function fetchAndUpdate(page, pageSize) {
+  const res = await fetch(`/api/users?page=${page}&pageSize=${pageSize}`);
+  const data = await res.json();
 
-  // — Apariencia —
-  variant:      'primary',        // 'primary'|'secondary'|'ghost'|'custom'
-  showInfo:     true,             // mostrar "Mostrando 1–10 de 100"
-  showPageSize: true,             // selector de registros por página
-  pageSizes:    [10, 25, 50, 100], // opciones de pageSize
-  maxVisible:   5,                // máximo de páginas visibles (el resto se colapsa con ...)
-  showEdges:    true,             // siempre mostrar primera y última página
-
-  // — Callbacks —
-  onChange:         (page, pageSize) => { cargarDatos(page, pageSize); },
-  onNext:           (page) => console.log('siguiente:', page),
-  onPrev:           (page) => console.log('anterior:', page),
-  onPageClick:      (page) => console.log('click página:', page),
-  onPageSizeChange: (ps)   => console.log('pageSize:', ps),
-})
+  // Feed server response directly / Pasar respuesta del servidor directamente
+  pager.setResponse({
+    page:       data.page,
+    pageSize:   data.pageSize,
+    total:      data.total,
+    totalPages: data.totalPages,
+    hasNext:    data.hasNext,
+    hasPrev:    data.hasPrev,
+  });
+}
 ```
 
 ---
@@ -88,89 +116,50 @@ new MTS.Paging('#paginacion', {
 ## API
 
 ```js
-const pager = new MTS.Paging('#paginacion', config)
+const pager = new MTS.Paging('#my-pager', { total: 150 });
 
-// Navegación
-pager.next()               // ir a la siguiente página
-pager.prev()               // ir a la anterior
-pager.setPage(5)           // ir a página 5
+// Navigate / Navegar
+pager.setPage(3)
+pager.next()
+pager.prev()
 
-// Datos
-pager.setTotal(200)        // actualizar total de registros
-pager.setPageSize(25)      // cambiar pageSize (resetea a página 1)
-pager.setResponse({ page:2, total:200, hasNext:true })
+// Update config / Actualizar configuración
+pager.setTotal(200)
+pager.setPageSize(25)
 
-// Estado
-pager.getState()           // → { page, pageSize, total, totalPages, hasNext, hasPrev, from, to }
+// Feed server response / Pasar respuesta del servidor
+pager.setResponse({ page, pageSize, total, totalPages, hasNext, hasPrev })
+
+// Get current state / Obtener estado actual
+pager.getState()
+// → { page: 2, pageSize: 10, total: 150, totalPages: 15 }
+
+// Register listeners / Registrar listeners
+pager.on('change',        (e) => console.log(e.detail))
+pager.on('next',          (e) => console.log(e.detail.page))
+pager.on('prev',          (e) => console.log(e.detail.page))
+pager.on('pageClick',     (e) => console.log(e.detail.page))
+pager.on('pageSizeChange',(e) => console.log(e.detail.pageSize))
+pager.off('change', handler)
 ```
 
 ---
 
-## Variantes visuales
+## DOM Events / Eventos DOM
 
 ```js
-// Primary (default) — botón activo azul
-new MTS.Paging('#p1', { variant: 'primary' })
-
-// Secondary — botón activo con fondo surface
-new MTS.Paging('#p2', { variant: 'secondary' })
-
-// Ghost — sin bordes, activo con fondo sutil
-new MTS.Paging('#p3', { variant: 'ghost' })
-
-// Custom — usa variables CSS propias
-new MTS.Paging('#p4', { variant: 'custom' })
-// + CSS:
-// #p4 { --mts-paging-active-bg: #ff5500; --mts-paging-active-color: #fff; }
-```
-
----
-
-## Eventos DOM
-
-```js
-document.getElementById('paginacion')
-  .addEventListener('mts:paging:change', (e) => {
-    console.log('página:', e.detail.page, 'pageSize:', e.detail.pageSize);
-  });
-
-// Eventos disponibles:
-// mts:paging:change      → { page, pageSize }
-// mts:paging:next        → { page }
-// mts:paging:prev        → { page }
-// mts:paging:pageClick   → { page }
-// mts:paging:pageSizeChange → { pageSize }
-```
-
----
-
-## Integración con DataTable
-
-```js
-const tabla = new MTS.DataTable('#tabla', {
-  columns: [...],
-  datasource: { url: '/api/usuarios', method: 'GET' },
-  paginate: false,   // desactivar paginación interna
-});
-
-const pager = new MTS.Paging('#paginacion', {
-  pageSize: 10,
-  onChange: async (page, pageSize) => {
-    const res = await fetch(`/api/usuarios?page=${page}&pageSize=${pageSize}`);
-    const data = await res.json();
-    tabla.setData(data.items);
-    pager.setResponse(data);
-  },
-});
-
-// Carga inicial
-pager._onChange?.(1, 10);
+el.addEventListener('mts:paging:change',        (e) => console.log(e.detail));
+el.addEventListener('mts:paging:next',           (e) => console.log(e.detail.page));
+el.addEventListener('mts:paging:prev',           (e) => console.log(e.detail.page));
+el.addEventListener('mts:paging:pageClick',      (e) => console.log(e.detail.page));
+el.addEventListener('mts:paging:pageSizeChange', (e) => console.log(e.detail.pageSize));
 ```
 
 ---
 
 ## Changelog
 
-| Versión | Descripción |
+| Version | Description |
 |---------|-------------|
-| 1.0.0 | Release inicial — 4 variantes, setResponse(), eventos DOM, ... colapsables |
+| 1.1.0 | [EN] All callbacks normalized to `.on()`, bilingual docs / [ES] Todos los callbacks normalizados a `.on()`, docs bilingüe |
+| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

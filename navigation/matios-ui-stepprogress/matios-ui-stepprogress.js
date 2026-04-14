@@ -21,11 +21,23 @@ MTS.StepProgress = class MtsStepProgress {
       ? document.querySelector(selector)
       : selector;
     if (!this._el) return;
-    this.steps     = options.steps    || [];
-    this.active    = options.active   ?? 0;
-    this.variant   = options.variant  || 'default';
+    // Step items: [{ id, label, description? }] / Ítems de pasos
+    this.steps = options.steps || [];
+
+    // Initially active step index / Índice del paso activo inicial
+    this.active = options.active ?? 0;
+
+    // Visual variant: 'default' | 'compact' | 'dots' / Variante visual
+    this.variant = options.variant || 'default';
+
+    // Allow clicking steps to navigate / Permitir navegar haciendo click en los pasos
     this.clickable = options.clickable ?? false;
-    this._onChange = options.onChange  || null;
+
+    this._listeners = {};
+
+    // Fires when active step changes: ({ index, step }) => {}
+    // Se dispara al cambiar el paso activo
+    if (options.onChange) this.on('change', options.onChange);
     this._build();
   }
 
@@ -33,7 +45,7 @@ MTS.StepProgress = class MtsStepProgress {
     if (index < 0 || index >= this.steps.length) return this;
     this.active = index;
     this._build();
-    if (this._onChange) this._onChange(index, this.steps[index]);
+    this._emit('change', { index, step: this.steps[index] });
     return this;
   }
   next() { return this.goTo(Math.min(this.active + 1, this.steps.length - 1)); }
@@ -46,6 +58,8 @@ MTS.StepProgress = class MtsStepProgress {
     return this;
   }
   getActive() { return { index: this.active, step: this.steps[this.active] }; }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   _build() {
     this._el.innerHTML = '';
@@ -118,5 +132,9 @@ MTS.StepProgress = class MtsStepProgress {
     fill.style.width = pct + '%';
     bar.appendChild(fill);
     this._el.appendChild(bar);
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el.dispatchEvent(new CustomEvent(`mts:stepprogress:${event}`, { bubbles: true, detail }));
   }
 };

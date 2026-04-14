@@ -1,34 +1,36 @@
-# matios-ui-table
+# MTS.Table
 
-Estilos de tabla HTML pura. Sin JS. Sin dependencias externas.
-El `MTS.DataTable` usa estas clases internamente — no las duplica.
+[EN] CSS-only table component — no JavaScript required. Provides styled classes for all table states, variants and layouts.
+[ES] Componente de tabla solo CSS — sin JavaScript. Clases estilizadas para todos los estados, variantes y layouts de tabla.
 
 ---
 
-## Instalación
+## Installation / Instalación
+
 ```html
-<link rel="stylesheet" href="../../base/matios-ui-base.css">
+<link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-table.css">
 ```
 
 ---
 
-## Estructura base
+## Base Structure / Estructura base
+
 ```html
 <div class="mts-table-wrap">
   <table class="mts-table">
     <thead>
       <tr>
-        <th class="mts-table__th">Nombre</th>
-        <th class="mts-table__th mts-table__th--end">Tamaño</th>
-        <th class="mts-table__th mts-table__th--end">Fecha</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Status</th>
       </tr>
     </thead>
     <tbody>
-      <tr class="mts-table__row">
-        <td class="mts-table__td">Documento.pdf</td>
-        <td class="mts-table__td mts-table__td--end">2.4 MB</td>
-        <td class="mts-table__td mts-table__td--end">12/03/2025</td>
+      <tr>
+        <td>Ana García</td>
+        <td>ana@example.com</td>
+        <td><span class="mts-badge mts-badge--success">Active</span></td>
       </tr>
     </tbody>
   </table>
@@ -37,218 +39,170 @@ El `MTS.DataTable` usa estas clases internamente — no las duplica.
 
 ---
 
-## Modificadores de tabla
-
-| Clase | Descripción |
-|-------|-------------|
-| `mts-table--hover` | Resalta la fila al pasar el mouse |
-| `mts-table--striped` | Filas alternas (zebra) |
-| `mts-table--bordered` | Borde en todas las celdas |
-| `mts-table--compact` | Padding reducido |
-| `mts-table--fixed` | Header sticky (requiere `.mts-table-wrap` con altura fija) |
-| `mts-table--flush` | Sin padding en primera/última columna |
-| `mts-table--responsive` | Colapso en móvil con `data-label` |
+## Variants / Variantes
 
 ```html
-<!-- Hover + zebra -->
-<table class="mts-table mts-table--hover mts-table--striped">
+<!-- Striped rows / Filas rayadas -->
+<table class="mts-table mts-table--striped">...</table>
 
-<!-- Compacta con bordes -->
-<table class="mts-table mts-table--compact mts-table--bordered">
+<!-- Hover effect / Efecto hover -->
+<table class="mts-table mts-table--hover">...</table>
 
-<!-- Header fijo -->
-<div class="mts-table-wrap" style="max-height:400px;">
-  <table class="mts-table mts-table--fixed mts-table--hover">
+<!-- Bordered / Con bordes -->
+<table class="mts-table mts-table--bordered">...</table>
+
+<!-- Compact / Compacto -->
+<table class="mts-table mts-table--sm">...</table>
+
+<!-- Combined / Combinado -->
+<table class="mts-table mts-table--striped mts-table--hover mts-table--sm">...</table>
 ```
 
 ---
 
-## Columnas ordenables
+## Sortable Headers / Cabeceras ordenables
 
 ```html
-<th class="mts-table__th mts-table__th--sortable mts-table__th--asc">
-  Nombre
-  <span class="mts-table__sort">
-    <i class="mts-table__sort-up"></i>
-    <i class="mts-table__sort-down"></i>
-  </span>
-</th>
-```
-
-| Clase | Descripción |
-|-------|-------------|
-| `mts-table__th--sortable` | Cursor pointer |
-| `mts-table__th--asc` | Flecha arriba activa |
-| `mts-table__th--desc` | Flecha abajo activa |
-
-```js
-// Toggle sort al click
-th.addEventListener('click', () => {
-  th.classList.toggle('mts-table__th--asc')
-  th.classList.toggle('mts-table__th--desc')
-})
-```
-
----
-
-## Alineación
-
-```html
-<th class="mts-table__th mts-table__th--center">Centro</th>
-<th class="mts-table__th mts-table__th--end">Derecha</th>
-<td class="mts-table__td mts-table__td--center">Centro</td>
-<td class="mts-table__td mts-table__td--end">Derecha</td>
-```
-
----
-
-## Filas de estado
-
-```html
-<tr class="mts-table__row mts-table__row--success">...</tr>
-<tr class="mts-table__row mts-table__row--warning">...</tr>
-<tr class="mts-table__row mts-table__row--danger">...</tr>
-<tr class="mts-table__row mts-table__row--info">...</tr>
-<tr class="mts-table__row mts-table__row--selected">...</tr>
-<tr class="mts-table__row mts-table__row--clickable" onclick="...">...</tr>
-```
-
----
-
-## Checkbox
-
-```html
-<th class="mts-table__th mts-table__th--check">
-  <input type="checkbox" class="mts-table__checkbox">
-</th>
-<td class="mts-table__td mts-table__td--check">
-  <input type="checkbox" class="mts-table__checkbox" value="1">
-</td>
-```
-
----
-
-## Columna de acciones
-
-```html
-<td class="mts-table__td mts-table__td--actions">
-  <button class="mts-btn mts-btn--ghost mts-btn--xs">Ver</button>
-  <button class="mts-btn mts-btn--ghost mts-btn--xs">Editar</button>
-</td>
-```
-
----
-
-## Texto largo con truncado
-
-```html
-<td class="mts-table__td mts-table__td--truncate">
-  Texto muy largo que se corta con ellipsis...
-</td>
-```
-
----
-
-## Estado vacío
-
-```html
-<tr class="mts-table__row">
-  <td class="mts-table__td mts-table__empty" colspan="4">
-    <span class="mts-table__empty-icon">📂</span>
-    <p class="mts-table__empty-title">Sin registros</p>
-    <p class="mts-table__empty-msg">No hay datos para mostrar</p>
-  </td>
-</tr>
-```
-
----
-
-## Footer con totales
-
-```html
-<tfoot class="mts-table__tfoot">
+<thead>
   <tr>
-    <td class="mts-table__td">Total</td>
-    <td class="mts-table__td mts-table__td--end">24.8 MB</td>
+    <th class="mts-table__th--sort mts-table__th--asc">Name ↑</th>
+    <th class="mts-table__th--sort">Email</th>
+    <th class="mts-table__th--sort mts-table__th--desc">Date ↓</th>
+  </tr>
+</thead>
+```
+
+---
+
+## Row States / Estados de fila
+
+```html
+<tr class="mts-table__tr--selected">...</tr>  <!-- selected / seleccionado -->
+<tr class="mts-table__tr--success">...</tr>   <!-- success / éxito -->
+<tr class="mts-table__tr--warning">...</tr>   <!-- warning / advertencia -->
+<tr class="mts-table__tr--danger">...</tr>    <!-- danger / error -->
+<tr class="mts-table__tr--muted">...</tr>     <!-- muted / opaco -->
+```
+
+---
+
+## Column Alignment / Alineación de columna
+
+```html
+<th class="mts-table__th--right">Amount</th>
+<td class="mts-table__td--right">$1,250.00</td>
+
+<th class="mts-table__th--center">Status</th>
+<td class="mts-table__td--center"><span class="mts-badge">...</span></td>
+```
+
+---
+
+## Actions Column / Columna de acciones
+
+```html
+<th class="mts-table__th--actions">Actions</th>
+<td class="mts-table__td--actions">
+  <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">✏️</button>
+  <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon mts-btn--danger">🗑️</button>
+</td>
+```
+
+---
+
+## Checkbox Column / Columna checkbox
+
+```html
+<th class="mts-table__th--check">
+  <input type="checkbox" class="mts-checkbox">
+</th>
+<td class="mts-table__td--check">
+  <input type="checkbox" class="mts-checkbox">
+</td>
+```
+
+---
+
+## Empty State / Estado vacío
+
+```html
+<tbody>
+  <tr>
+    <td colspan="5" class="mts-table__empty">
+      <div class="mts-table__empty-icon">📭</div>
+      <div class="mts-table__empty-text">No records found</div>
+    </td>
+  </tr>
+</tbody>
+```
+
+---
+
+## Truncated Text / Texto truncado
+
+```html
+<td class="mts-table__td--truncate" style="max-width:200px" title="Full text here">
+  Very long text that gets truncated...
+</td>
+```
+
+---
+
+## Footer / Pie de tabla
+
+```html
+<tfoot>
+  <tr class="mts-table__tr--total">
+    <td colspan="3">Total</td>
+    <td class="mts-table__td--right">$12,450.00</td>
   </tr>
 </tfoot>
 ```
 
 ---
 
-## Responsive (móvil)
-
-```html
-<table class="mts-table mts-table--responsive">
-  ...
-  <tbody>
-    <tr class="mts-table__row">
-      <td class="mts-table__td" data-label="Nombre">Documento.pdf</td>
-      <td class="mts-table__td" data-label="Tamaño">2.4 MB</td>
-      <td class="mts-table__td" data-label="Fecha">12/03/2025</td>
-    </tr>
-  </tbody>
-</table>
-```
-
----
-
-## Referencia de clases
+## CSS Class Reference / Referencia de clases CSS
 
 ### Wrapper
-| Clase | Descripción |
-|-------|-------------|
-| `.mts-table-wrap` | Scroll + border-radius |
+| Class | [EN] Description / [ES] Descripción |
+|-------|--------------------------------------|
+| `.mts-table-wrap` | [EN] Scrollable wrapper / [ES] Contenedor con scroll |
 
-### Tabla
-| Clase | Descripción |
-|-------|-------------|
-| `.mts-table` | Base |
-| `.mts-table--hover` | Hover en filas |
-| `.mts-table--striped` | Zebra |
-| `.mts-table--bordered` | Bordes en todas las celdas |
-| `.mts-table--compact` | Padding reducido |
-| `.mts-table--fixed` | Header sticky |
-| `.mts-table--flush` | Sin padding lateral extremo |
-| `.mts-table--responsive` | Colapso en móvil |
+### Table
+| Class | [EN] Description / [ES] Descripción |
+|-------|--------------------------------------|
+| `.mts-table` | [EN] Base table / [ES] Tabla base |
+| `.mts-table--striped` | [EN] Alternate row colors / [ES] Filas alternadas |
+| `.mts-table--hover` | [EN] Row hover highlight / [ES] Highlight al hover |
+| `.mts-table--bordered` | [EN] Cell borders / [ES] Bordes en celdas |
+| `.mts-table--sm` | [EN] Compact padding / [ES] Padding compacto |
 
-### Encabezados (th)
-| Clase | Descripción |
-|-------|-------------|
-| `.mts-table__th` | Base |
-| `.mts-table__th--sortable` | Cursor + hover |
-| `.mts-table__th--asc` | Sort ascendente activo |
-| `.mts-table__th--desc` | Sort descendente activo |
-| `.mts-table__th--center` | Centrado |
-| `.mts-table__th--end` | Derecha |
-| `.mts-table__th--check` | Columna checkbox |
+### Headers / Cabeceras
+| Class | [EN] Description / [ES] Descripción |
+|-------|--------------------------------------|
+| `.mts-table__th--sort` | [EN] Sortable indicator / [ES] Indicador ordenable |
+| `.mts-table__th--asc` | [EN] Ascending sort / [ES] Orden ascendente |
+| `.mts-table__th--desc` | [EN] Descending sort / [ES] Orden descendente |
+| `.mts-table__th--right` | [EN] Right align / [ES] Alineación derecha |
+| `.mts-table__th--center` | [EN] Center align / [ES] Alineación central |
+| `.mts-table__th--check` | [EN] Checkbox column / [ES] Columna checkbox |
+| `.mts-table__th--actions` | [EN] Actions column / [ES] Columna de acciones |
 
-### Filas (tr)
-| Clase | Descripción |
-|-------|-------------|
-| `.mts-table__row` | Base |
-| `.mts-table__row--clickable` | Cursor pointer |
-| `.mts-table__row--selected` | Seleccionada |
-| `.mts-table__row--success` | Verde |
-| `.mts-table__row--warning` | Amarillo |
-| `.mts-table__row--danger` | Rojo |
-| `.mts-table__row--info` | Azul |
-| `.mts-table__row--dragging` | Estado drag |
-| `.mts-table__row--drag-over` | Target del drop |
-
-### Celdas (td)
-| Clase | Descripción |
-|-------|-------------|
-| `.mts-table__td` | Base |
-| `.mts-table__td--center` | Centrado |
-| `.mts-table__td--end` | Derecha |
-| `.mts-table__td--check` | Checkbox |
-| `.mts-table__td--truncate` | Ellipsis |
-| `.mts-table__td--actions` | Acciones (derecha, nowrap) |
+### Rows / Filas
+| Class | [EN] Description / [ES] Descripción |
+|-------|--------------------------------------|
+| `.mts-table__tr--selected` | [EN] Selected state / [ES] Estado seleccionado |
+| `.mts-table__tr--success` | [EN] Success highlight / [ES] Highlight éxito |
+| `.mts-table__tr--warning` | [EN] Warning highlight / [ES] Highlight advertencia |
+| `.mts-table__tr--danger` | [EN] Danger highlight / [ES] Highlight error |
+| `.mts-table__tr--muted` | [EN] Muted / disabled / [ES] Opaco / deshabilitado |
+| `.mts-table__tr--total` | [EN] Footer total row / [ES] Fila de total en footer |
 
 ---
 
 ## Changelog
-| Versión | Descripción |
+
+| Version | Description |
 |---------|-------------|
-| 1.0.0 | Release inicial — estilos puros sin JS |
+| 1.1.0 | [EN] Bilingual docs, standardized structure / [ES] Docs bilingüe, estructura estandarizada |
+| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

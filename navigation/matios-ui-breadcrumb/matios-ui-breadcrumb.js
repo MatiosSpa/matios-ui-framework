@@ -19,11 +19,22 @@ MTS.Breadcrumb = class MtsBreadcrumb {
   constructor(selector, options = {}) {
     this._el       = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    this.items     = options.items     || [];
+    // Breadcrumb items: [{ label, href?, onClick?, icon? }]
+    // Ítems del breadcrumb
+    this.items = options.items || [];
+
+    // Separator HTML between items / HTML del separador entre ítems
     this.separator = options.separator || '/';
-    this.maxItems  = options.maxItems  || null;
+
+    // Collapse if items exceed this count (null = no collapse)
+    // Colapsar si los ítems superan este número (null = sin colapso)
+    this.maxItems = options.maxItems || null;
+
     this._collapsed = true;
     this._listeners = {};
+
+    // Fires when a breadcrumb item is clicked: (e) => e.detail.item
+    // Se dispara al hacer click en un ítem
     if (options.onClick) this.on('click', options.onClick);
     this._build();
   }

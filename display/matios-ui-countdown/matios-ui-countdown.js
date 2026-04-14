@@ -23,19 +23,35 @@ MTS.Countdown = class MtsCountdown {
   constructor(selector, options = {}) {
     this._el      = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    const t        = options.target;
-    this._target   = t instanceof Date ? t : new Date(t);
-    this.variant   = options.variant   || 'blocks';
+    // Target date: Date object, ISO string or timestamp ms / Fecha objetivo: Date, ISO string o timestamp ms
+    const t = options.target;
+    this._target = t instanceof Date ? t : new Date(t);
+
+    // Visual variant: 'blocks' | 'compact' | 'minimal' / Variante visual
+    this.variant = options.variant || 'blocks';
+
+    // Show/hide each unit / Mostrar u ocultar cada unidad
     this.showDays  = options.showDays  ?? true;
     this.showHours = options.showHours ?? true;
     this.showMins  = options.showMins  ?? true;
     this.showSecs  = options.showSecs  ?? true;
+
+    // Separator between blocks (compact/minimal) / Separador entre bloques
     this.separator = options.separator || ':';
-    this.labels    = Object.assign({ days:'días', hours:'horas', mins:'min', secs:'seg' }, options.labels || {});
-    this._onTick   = options.onTick     || null;
-    this._onComplete = options.onComplete || null;
+
+    // Unit labels / Labels de cada unidad
+    this.labels = Object.assign({ days:'días', hours:'horas', mins:'min', secs:'seg' }, options.labels || {});
     this._interval = null;
     this._prev     = {};
+    this._listeners = {};
+
+    // Fires every second with current values: ({ days, hours, mins, secs, total }) => {}
+    // Se dispara cada segundo con los valores actuales
+    if (options.onTick)     this.on('tick',     options.onTick);
+
+    // Fires when countdown reaches zero / Se dispara cuando el contador llega a cero
+    if (options.onComplete) this.on('complete', options.onComplete);
+
     this._build();
     this.start();
   }
@@ -49,6 +65,8 @@ MTS.Countdown = class MtsCountdown {
   pause()   { clearInterval(this._interval); this._interval = null; return this; }
   resume()  { return this.start(); }
   destroy() { this.pause(); this._el.innerHTML = ''; }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   setTarget(t) {
     this._target = t instanceof Date ? t : new Date(t);
@@ -126,13 +144,17 @@ MTS.Countdown = class MtsCountdown {
       }
     });
 
-    if (this._onTick) this._onTick(v);
+    this._emit('tick', v);
     this._el.dispatchEvent(new CustomEvent('mts:countdown:tick', { bubbles:true, detail:v }));
 
     if (v.total === 0) {
       this.pause();
-      if (this._onComplete) this._onComplete();
+      this._emit('complete', {});
       this._el.dispatchEvent(new CustomEvent('mts:countdown:complete', { bubbles:true }));
     }
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._el?.dispatchEvent(new CustomEvent(`mts:countdown:${event}`, { bubbles: true, detail }));
   }
 };

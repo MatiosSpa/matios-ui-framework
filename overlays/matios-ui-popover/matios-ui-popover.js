@@ -34,18 +34,40 @@ MTS.Popover = class MtsPopover {
     if (_ds.width !== undefined) _fromHTML.width = _ds.width;
     options = { ..._fromHTML, ...options };
 
-    this.title    = options.title    || '';
-    this.content  = options.content  || '';
+    // Popover title / Título del popover
+    this.title = options.title || '';
+
+    // Body content — HTML or text / Contenido del cuerpo — HTML o texto
+    this.content = options.content || '';
+
+    // Position: 'top' | 'bottom' | 'left' | 'right' / Posición
     this.position = options.position || 'bottom';
-    this.trigger  = options.trigger  || 'click';
-    this.offset   = options.offset   ?? 8;
-    this.arrow    = options.arrow    ?? true;
+
+    // Open trigger: 'click' | 'hover' / Evento de apertura
+    this.trigger = options.trigger || 'click';
+
+    // Gap between target and popover in px / Separación en px entre target y popover
+    this.offset = options.offset ?? 8;
+
+    // Show arrow / Mostrar flecha
+    this.arrow = options.arrow ?? true;
+
+    // Show close button in header / Mostrar botón × en el header
     this.closable = options.closable ?? true;
-    this.width    = options.width    || '260px';
-    this.onShow   = options.onShow   || null;
-    this.onHide   = options.onHide   || null;
+
+    // Popover width / Ancho del popover
+    this.width = options.width || '260px';
+
     this._pop     = null;
     this._visible = false;
+    this._listeners = {};
+
+    // Fires when popover shows / Se dispara al mostrar el popover
+    if (options.onShow) this.on('show', options.onShow);
+
+    // Fires when popover hides / Se dispara al ocultar el popover
+    if (options.onHide) this.on('hide', options.onHide);
+
     this._init();
   }
 
@@ -54,13 +76,20 @@ MTS.Popover = class MtsPopover {
   toggle()  { this._visible ? this._close() : this._open(); return this; }
   setContent(html) { this.content = html; if (this._pop) this._pop.querySelector('.mts-popover__body').innerHTML = html; return this; }
   destroy() { this._close(); this._target?.removeEventListener('click', this._clickHandler); }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   _init() {
-    if (this.trigger === 'click') {
+    if (this.trigger === 'manual') {
+      /* Modo manual — sin bindings automáticos, solo Escape */
+    } else if (this.trigger === 'click') {
       this._clickHandler = (e) => { e.stopPropagation(); this.toggle(); };
       this._target.addEventListener('click', this._clickHandler);
-      document.addEventListener('click', () => this._close());
+      document.addEventListener('click', (e) => {
+        if (this._pop && !this._pop.contains(e.target) && e.target !== this._target) this._close();
+      });
     } else {
+      /* hover */
       this._target.addEventListener('mouseenter', () => this._open());
       this._target.addEventListener('mouseleave', (e) => {
         if (!this._pop?.contains(e.relatedTarget)) this._close();
@@ -120,7 +149,7 @@ MTS.Popover = class MtsPopover {
     this._position();
 
     requestAnimationFrame(() => pop.classList.add('mts-popover--visible'));
-    if (this.onShow) this.onShow();
+    this._emit('show', {});
   }
 
   _close() {
@@ -128,7 +157,7 @@ MTS.Popover = class MtsPopover {
     this._pop.remove();
     this._pop     = null;
     this._visible = false;
-    if (this.onHide) this.onHide();
+    this._emit('hide', {});
   }
 
   _position() {
@@ -155,5 +184,9 @@ MTS.Popover = class MtsPopover {
     top  = Math.max(8, Math.min(top,  window.innerHeight - pr.height - 8));
     pop.style.left = left + 'px';
     pop.style.top  = top  + 'px';
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    this._target?.dispatchEvent(new CustomEvent(`mts:popover:${event}`, { bubbles: true, detail }));
   }
 };

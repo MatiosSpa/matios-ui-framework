@@ -1,41 +1,195 @@
-/* MTS.Tree v1.0.0 */
-.mts-tree { font-size:13px; }
-.mts-tree__list { list-style:none;margin:0;padding:0; }
-.mts-tree__item { position:relative; }
+/* MTS.Tree v1.1.0 */
 
-/* Líneas de conexión */
-.mts-tree--lines .mts-tree__item::before {
-  content:''; position:absolute; left:18px; top:0; bottom:0;
-  width:1px; background:var(--mts-border-color);
+/* ── Container ───────────────────────────────────────── */
+.mts-tree {
+  font-size: 13px;
+  font-family: var(--mts-font-family, inherit);
+  color: var(--mts-text-primary);
+  user-select: none;
 }
-.mts-tree--lines .mts-tree__item--last::before { height:18px; }
-.mts-tree--lines .mts-tree__row::before {
-  content:''; position:absolute; left:10px; top:50%;
-  width:8px; height:1px; background:var(--mts-border-color);
-}
-.mts-tree--lines > .mts-tree__list > .mts-tree__item::before { display:none; }
-.mts-tree--lines > .mts-tree__list > .mts-tree__item > .mts-tree__row::before { display:none; }
 
+.mts-tree__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mts-tree__item {
+  position: relative;
+}
+
+/* ── Connection lines ─────────────────────────────────── */
+.mts-tree--lines .mts-tree__list .mts-tree__list {
+  padding-left: 20px;
+}
+
+.mts-tree--lines .mts-tree__list .mts-tree__item::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--mts-border-color);
+}
+
+.mts-tree--lines .mts-tree__list .mts-tree__item--last::before {
+  height: 17px;
+}
+
+.mts-tree--lines .mts-tree__list .mts-tree__item > .mts-tree__row::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  width: 10px;
+  height: 1px;
+  background: var(--mts-border-color);
+}
+
+/* ── Row ──────────────────────────────────────────────── */
 .mts-tree__row {
-  display:flex; align-items:center; gap:6px;
-  padding:5px 10px 5px 8px; border-radius:var(--mts-radius-md);
-  cursor:default; position:relative; transition:background .12s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 8px;
+  border-radius: var(--mts-radius-md, 6px);
+  cursor: default;
+  position: relative;
+  transition: background .1s, color .1s;
+  min-height: 30px;
 }
-.mts-tree__row:hover { background:var(--mts-bg-surface-2); }
-.mts-tree__row--selected { background:var(--mts-color-primary-light); color:var(--mts-color-primary); }
-.mts-tree__row--selected .mts-tree__label { color:var(--mts-color-primary); font-weight:600; }
-.mts-tree__row--disabled { opacity:.4; cursor:not-allowed; }
 
-.mts-tree__toggle { width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;color:var(--mts-text-muted);border-radius:3px;transition:color .12s; }
-.mts-tree__toggle:hover { color:var(--mts-color-primary); }
-.mts-tree__toggle svg { display:block; }
+.mts-tree__row:hover {
+  background: var(--mts-bg-surface-2);
+}
 
-.mts-tree__checkbox { cursor:pointer;accent-color:var(--mts-color-primary);flex-shrink:0; }
+.mts-tree__row--selected {
+  background: color-mix(in srgb, var(--mts-color-primary) 10%, transparent);
+  color: var(--mts-color-primary);
+}
 
-.mts-tree__icon { width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--mts-color-primary);opacity:.8; }
-.mts-tree__icon svg { display:block; }
+.mts-tree__row--selected .mts-tree__label {
+  color: var(--mts-color-primary);
+  font-weight: 600;
+}
 
-.mts-tree__label { flex:1;color:var(--mts-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.mts-tree__row--selected .mts-tree__icon {
+  color: var(--mts-color-primary);
+}
 
-/* Nivel anidado indentado */
-.mts-tree__list .mts-tree__list { padding-left:0; }
+.mts-tree__row--clickable { cursor: pointer; }
+
+.mts-tree__row--disabled {
+  opacity: .4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Toggle arrow ─────────────────────────────────────── */
+.mts-tree__toggle {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  color: var(--mts-text-muted);
+  border-radius: 4px;
+  transition: color .1s, background .1s, transform .15s;
+}
+
+.mts-tree__toggle:hover {
+  color: var(--mts-color-primary);
+  background: color-mix(in srgb, var(--mts-color-primary) 8%, transparent);
+}
+
+.mts-tree__toggle svg {
+  transition: transform .15s ease;
+}
+
+.mts-tree__toggle--open svg {
+  transform: rotate(90deg);
+}
+
+/* spacer for leaf nodes / espacio para nodos hoja */
+.mts-tree__toggle--empty {
+  width: 18px;
+  flex-shrink: 0;
+}
+
+/* ── Icon ─────────────────────────────────────────────── */
+.mts-tree__icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--mts-text-muted);
+  transition: color .1s;
+}
+
+.mts-tree__icon svg { width: 14px; height: 14px; }
+
+.mts-tree__icon--folder { color: #f59e0b; }
+.mts-tree__icon--file   { color: var(--mts-text-muted); }
+
+/* ── Checkbox ─────────────────────────────────────────── */
+.mts-tree__check {
+  width: 15px;
+  height: 15px;
+  border-radius: 3px;
+  border: 1.5px solid var(--mts-border-color);
+  background: var(--mts-bg-surface);
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--mts-color-primary);
+  transition: border-color .1s;
+}
+
+.mts-tree__check:checked {
+  border-color: var(--mts-color-primary);
+}
+
+/* ── Label ────────────────────────────────────────────── */
+.mts-tree__label {
+  flex: 1;
+  line-height: 1.4;
+  color: var(--mts-text-primary);
+  transition: color .1s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Badge ────────────────────────────────────────────── */
+.mts-tree__badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 99px;
+  background: var(--mts-color-primary);
+  color: #fff;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.mts-tree__badge--success { background: var(--mts-color-success, #16a34a); }
+.mts-tree__badge--warning { background: var(--mts-color-warning, #d97706); }
+.mts-tree__badge--danger  { background: var(--mts-color-danger,  #dc2626); }
+.mts-tree__badge--muted   { background: var(--mts-border-color); color: var(--mts-text-muted); }
+
+/* ── Children container ───────────────────────────────── */
+.mts-tree__children {
+  overflow: hidden;
+  transition: max-height .2s ease;
+}
+
+.mts-tree__children--collapsed {
+  max-height: 0 !important;
+}
+
+/* ── Indent levels ────────────────────────────────────── */
+.mts-tree__list .mts-tree__list { padding-left: 20px; }

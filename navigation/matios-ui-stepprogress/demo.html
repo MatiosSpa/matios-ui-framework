@@ -1,177 +1,287 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="es" data-mts-mode="dark">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.StepProgress — Demo</title>
-      <script>
+  <script>
     (function(){
-      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
-      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
       try{
         var p=window.parent;
         if(p&&p!==window){
-          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
-          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
         }
       }catch(e){}
     })();
   </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.StepProgress — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../shared/demo-shared.css">
   <link rel="stylesheet" href="./matios-ui-stepprogress.css">
+  <script src="../../shared/demo-shared.js"></script>
   <script src="./matios-ui-stepprogress.js"></script>
-  <style>
-    *{box-sizing:border-box}body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}.demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0;}
-    .demo-section{display:flex;flex-direction:column;gap:14px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-nav{display:flex;gap:6px;margin-top:12px;}
-    .demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);}
-    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;}
-    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;}
-    .demo-btn-nav{padding:6px 16px;border-radius:var(--mts-radius-md);font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-primary);font-family:inherit;}
-    .demo-btn-nav:hover{background:var(--mts-bg-surface-2);}
-    .demo-btn-nav.primary{background:var(--mts-color-primary);border-color:var(--mts-color-primary);color:#fff;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
-  </style>
 </head>
 <body>
 <div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
-  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
+  <button class="demo-btn-sm demo-btn-sep">—</button>
+  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.StepProgress</h1>
-    <p>Indicador de progreso de pasos — checkout, wizard, pipelines.</p>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Default — checkout con navegación</div>
-    <div id="sp-checkout"></div>
-    <div class="demo-nav">
-      <button class="demo-btn-nav" onclick="checkout.prev()">← Anterior</button>
-      <button class="demo-btn-nav primary" onclick="checkout.next()">Siguiente →</button>
+    <p>Step progress indicator — checkout, onboarding and pipeline style. Default, compact and dots variants.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-stepprogress.md')">📄 Docs</button>
     </div>
-    <div class="result-box" id="res-checkout">— navega entre los pasos —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c1"><code>const sp = new MTS.StepProgress('#el', {
-  active: 0,
-  steps: [
-    { id:'cart',    label:'Carrito',    description:'Revisa tus productos' },
-    { id:'ship',    label:'Envío',      description:'Dirección de entrega'  },
-    { id:'payment', label:'Pago',       description:'Método de pago'        },
-    { id:'confirm', label:'Confirmado'                                       },
-  ],
-  onChange: (index, step) => console.log(index, step.label),
-})
-sp.next()
-sp.prev()
-sp.goTo(2)</code></pre>
+    <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
+  <!-- 1. Default con navegación -->
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Default — checkout con navegación / Checkout with navigation</div>
+    <div id="sp-default"></div>
+    <div class="demo-row" style="margin-top:12px">
+      <button class="demo-btn-sm" onclick="sp1.prev()">← Prev</button>
+      <button class="demo-btn-sm" onclick="sp1.next()">Next →</button>
+      <button class="demo-btn-sm" onclick="sp1.goTo(0)">goTo(0)</button>
+      <button class="demo-btn-sm" onclick="sp1.goTo(3)">goTo(3)</button>
+    </div>
+    <div class="result-box" id="sp-result">— navega los pasos —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-sp1','js-sp1')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-sp1','html-sp1')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-sp1">&lt;div id="checkout-progress"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  const sp = new MTS.StepProgress('#checkout-progress', {
+    variant: 'default',
+    active:  1,
+    steps: [
+      { id: 'cart',    label: 'Cart',      description: 'Review products' },
+      { id: 'ship',    label: 'Shipping',  description: 'Delivery address' },
+      { id: 'payment', label: 'Payment',   description: 'Payment method' },
+      { id: 'confirm', label: 'Confirmed' },
+    ],
+    // Fires when active step changes / Se dispara al cambiar el paso activo
+    onChange: (e) =&gt; {
+      console.log(e.detail.index); // → 2
+      console.log(e.detail.step);  // → { id, label, description }
+    },
+  });
+  sp.next()    // advance / avanzar
+  sp.prev()    // back / retroceder
+  sp.goTo(2)   // jump / saltar
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-sp1">const sp = new MTS.StepProgress('#my-progress', {
+  // Visual variant / Variante visual
+  variant: 'default',
+
+  // Initially active step / Paso activo inicial
+  active: 1,
+
+  steps: [
+    { id: 'cart',    label: 'Cart',      description: 'Review your products' },
+    { id: 'ship',    label: 'Shipping',  description: 'Delivery address' },
+    { id: 'payment', label: 'Payment',   description: 'Payment method' },
+    { id: 'confirm', label: 'Confirmed' },
+  ],
+
+  // Fires when active step changes / Se dispara al cambiar el paso activo
+  onChange: (e) => {
+    console.log(e.detail.index); // → new step index
+    console.log(e.detail.step);  // → { id, label, description }
+  },
+});
+
+// Navigate / Navegar
+sp.next()     // advance one step / avanzar un paso
+sp.prev()     // go back / retroceder
+sp.goTo(2)    // jump to index / saltar al índice</div>
+  </div>
+
+  <!-- 2. Compact + clickable -->
   <div class="demo-section">
     <div class="demo-section-title">2 — Compact + clickable</div>
     <div id="sp-compact"></div>
-    <div class="result-box" id="res-compact">— haz click en los pasos completados —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c2"><code>new MTS.StepProgress('#el', {
+    <div class="result-box" id="sp-compact-result">— haz click en los pasos —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-sp2','js-sp2')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-sp2','html-sp2')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-sp2">&lt;div id="my-progress"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.StepProgress('#my-progress', {
+    variant:   'compact',
+    active:    2,
+    clickable: true,   // click to navigate / click para navegar
+    steps: [
+      { id: 's1', label: 'Datos' },
+      { id: 's2', label: 'Seguridad' },
+      { id: 's3', label: 'Confirmar' },
+      { id: 's4', label: 'Listo' },
+    ],
+    onChange: (e) =&gt; console.log(e.detail.index),
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-sp2">new MTS.StepProgress('#my-progress', {
   variant:   'compact',
-  clickable:  true,
-  active:     2,
-  steps: [...],
-  onChange: (i, step) => console.log('navegado a:', step.label),
-})</code></pre>
+  active:    2,
+  // Allow clicking completed steps / Permitir click en pasos completados
+  clickable: true,
+  steps: [
+    { id: 's1', label: 'Datos personales' },
+    { id: 's2', label: 'Seguridad' },
+    { id: 's3', label: 'Confirmar' },
+    { id: 's4', label: 'Listo' },
+  ],
+  onChange: (e) => console.log('step:', e.detail.index),
+});</div>
   </div>
 
+  <!-- 3. Dots — pipeline -->
   <div class="demo-section">
     <div class="demo-section-title">3 — Dots — pipeline CI/CD</div>
-    <div id="sp-dots" style="padding-bottom:20px;"></div>
-    <div class="demo-nav">
-      <button class="demo-btn-nav" onclick="pipeline.prev()">← Paso anterior</button>
-      <button class="demo-btn-nav primary" onclick="pipeline.next()">Siguiente paso →</button>
+    <div id="sp-dots"></div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-sp3','js-sp3')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-sp3','html-sp3')">JavaScript</button>
     </div>
-    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c3"><code>new MTS.StepProgress('#el', {
+    <div class="code-panel active" id="html-sp3">&lt;div id="my-progress"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.StepProgress('#my-progress', {
+    variant: 'dots',
+    active:  2,
+    steps: [
+      { id: 'trigger', label: 'Trigger' },
+      { id: 'build',   label: 'Build'   },
+      { id: 'test',    label: 'Tests'   },
+      { id: 'deploy',  label: 'Deploy'  },
+      { id: 'live',    label: 'Live'    },
+    ],
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-sp3">new MTS.StepProgress('#my-progress', {
+  // Dots — minimalist style / Estilo minimalista
   variant: 'dots',
-  active:   1,
+  active:  2,
   steps: [
-    { id:'trigger', label:'Trigger'  },
-    { id:'build',   label:'Build'    },
-    { id:'test',    label:'Tests'    },
-    { id:'deploy',  label:'Deploy'   },
-    { id:'live',    label:'Live'     },
+    { id: 'trigger', label: 'Trigger' },
+    { id: 'build',   label: 'Build'   },
+    { id: 'test',    label: 'Tests'   },
+    { id: 'deploy',  label: 'Deploy'  },
+    { id: 'live',    label: 'Live'    },
   ],
-})</code></pre>
+});</div>
   </div>
 
+  <!-- 4. setStepStatus — error -->
   <div class="demo-section">
-    <div class="demo-section-title">4 — Con paso en error</div>
-    <div id="sp-error"></div>
-    <button class="demo-code-toggle" onclick="toggleCode('c4')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c4"><code>const sp = new MTS.StepProgress('#el', { active:2, steps:[...] })
-sp.setStepStatus(2, 'error')  // marcar paso activo como error</code></pre>
+    <div class="demo-section-title">4 — setStepStatus() — error y pending</div>
+    <div id="sp-status"></div>
+    <div class="demo-row" style="margin-top:12px;flex-wrap:wrap">
+      <button class="demo-btn-sm" onclick="spStatus.setStepStatus(1,'error')">setStepStatus(1,'error')</button>
+      <button class="demo-btn-sm" onclick="spStatus.setStepStatus(1,'pending')">setStepStatus(1,'pending')</button>
+      <button class="demo-btn-sm" onclick="spStatus.prev()">← Prev</button>
+      <button class="demo-btn-sm" onclick="spStatus.next()">Next →</button>
+    </div>
+    <div class="result-box" id="sp-status-result">— usa los botones —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-sp4','js-sp4')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-sp4','html-sp4')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-sp4">&lt;div id="my-progress"&gt;&lt;/div&gt;
+&lt;script&gt;
+  const sp = new MTS.StepProgress('#my-progress', {
+    variant: 'default',
+    active:  2,
+    steps: [...],
+  });
+  sp.setStepStatus(1, 'error')    // mark step 1 as error
+  sp.setStepStatus(1, 'pending')  // reset to pending
+  sp.getActive()  // → { index: 2, step: { id, label } }
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-sp4">const sp = new MTS.StepProgress('#my-progress', {
+  variant: 'default',
+  active:  2,
+  steps: [...],
+  onChange: (e) => console.log(e.detail.index),
+});
+
+// Mark step as error / Marcar paso como error
+sp.setStepStatus(1, 'error')
+
+// Reset to pending / Resetear a pendiente
+sp.setStepStatus(1, 'pending')
+
+// Get active step / Obtener paso activo
+sp.getActive()
+// → { index: 2, step: { id: 'review', label: 'Review' } }</div>
   </div>
+
 </div>
+
 <script>
-function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
-window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
-if(window!==window.top){document.querySelector('.demo-theme').style.display='none';}
-function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
-
-var CHECKOUT_STEPS=[
-  {id:'cart',   label:'Carrito',   description:'Revisa tus productos'},
-  {id:'ship',   label:'Envío',     description:'Dirección de entrega'},
-  {id:'payment',label:'Pago',      description:'Método de pago'},
-  {id:'confirm',label:'Confirmado'},
+var STEPS = [
+  { id:'cart',    label:'Carrito',    description:'Revisa tus productos' },
+  { id:'ship',    label:'Envío',      description:'Dirección de entrega' },
+  { id:'payment', label:'Pago',       description:'Método de pago' },
+  { id:'confirm', label:'Confirmado' },
 ];
-var checkout=new MTS.StepProgress('#sp-checkout',{
-  active:0,steps:CHECKOUT_STEPS,
-  onChange:function(i,s){document.getElementById('res-checkout').textContent='onChange → paso '+i+': "'+s.label+'"';}
-});
 
-var compact=new MTS.StepProgress('#sp-compact',{
-  variant:'compact',clickable:true,active:2,
+var sp1 = new MTS.StepProgress('#sp-default', {
+  variant:'default', active:1, steps:STEPS,
+  onChange: function(e){ document.getElementById('sp-result').textContent = 'onChange → index:' + e.detail.index + ' label:"' + e.detail.step.label + '"'; },
+});
+new MTS.StepProgress('#sp-compact', {
+  variant:'compact', active:2, clickable:true,
   steps:[
-    {id:'s1',label:'Datos'},
-    {id:'s2',label:'Documentos'},
-    {id:'s3',label:'Revisión'},
-    {id:'s4',label:'Aprobación'},
-    {id:'s5',label:'Publicado'},
+    { id:'s1', label:'Datos personales' },
+    { id:'s2', label:'Seguridad' },
+    { id:'s3', label:'Confirmar' },
+    { id:'s4', label:'Listo' },
   ],
-  onChange:function(i,s){document.getElementById('res-compact').textContent='onClick → navegado a paso '+i+': "'+s.label+'"';}
+  onChange: function(e){ document.getElementById('sp-compact-result').textContent = 'onChange → index:' + e.detail.index + ' (clickable ✓)'; },
 });
-
-var pipeline=new MTS.StepProgress('#sp-dots',{
-  variant:'dots',active:1,
+new MTS.StepProgress('#sp-dots', {
+  variant:'dots', active:2,
   steps:[
-    {id:'t',label:'Trigger'},{id:'b',label:'Build'},
-    {id:'te',label:'Tests'},{id:'d',label:'Deploy'},{id:'l',label:'Live'},
-  ],
-});
-
-var errStep=new MTS.StepProgress('#sp-error',{
-  active:2,
-  steps:[
-    {id:'e1',label:'Inicio',    description:'Validaciones iniciales'},
-    {id:'e2',label:'Procesando',description:'Ejecutando lógica'},
-    {id:'e3',label:'Error',     description:'Falló la conexión'},
-    {id:'e4',label:'Completado'},
+    { id:'trigger', label:'Trigger' },
+    { id:'build',   label:'Build'   },
+    { id:'test',    label:'Tests'   },
+    { id:'deploy',  label:'Deploy'  },
+    { id:'live',    label:'Live'    },
   ],
 });
-errStep.setStepStatus(2,'error');
+var spStatus = new MTS.StepProgress('#sp-status', {
+  variant:'default', active:2,
+  steps:[
+    { id:'validate', label:'Validar',  description:'Verificar datos' },
+    { id:'process',  label:'Procesar', description:'Ejecutar tareas' },
+    { id:'review',   label:'Revisar',  description:'Verificar resultados' },
+    { id:'complete', label:'Listo' },
+  ],
+  onChange: function(e){ document.getElementById('sp-status-result').textContent = 'onChange → index:' + e.detail.index; },
+});
 </script>
 </body>
 </html>

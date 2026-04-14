@@ -17,7 +17,7 @@
 
 window.MTS = window.MTS || {};
 
-MTS.Picker = class MtsPicker {
+MTS.DatePicker = class MtsDatePicker {
 
   /* ============================================================
      Constructor
@@ -59,7 +59,7 @@ MTS.Picker = class MtsPicker {
       : selector;
 
     if (!this._input) {
-      console.error(`[MTS.Picker] Elemento no encontrado: ${selector}`);
+      console.error(`[MTS.DatePicker] Elemento no encontrado: ${selector}`);
       return;
     }
 

@@ -1,0 +1,63 @@
+/* ============================================================
+   MATIOS UI — matios-ui-toggle.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+}
+
+.mts-toggle {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+.mts-toggle input {
+  opacity: 0; width: 0; height: 0;
+  position: absolute;
+}
+
+.mts-toggle__thumb {
+  display: block;
+  background: var(--mts-gray-400);
+  border-radius: var(--mts-radius-full);
+  transition: background var(--mts-transition-base);
+  position: relative;
+}
+.mts-toggle__thumb::after {
+  content: '';
+  position: absolute; top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  border-radius: 50%;
+  transition: left var(--mts-transition-base);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Tamaños */
+.mts-toggle-wrap--sm .mts-toggle__thumb              { width: 32px; height: 18px; }
+.mts-toggle-wrap--sm .mts-toggle__thumb::after       { width: 12px; height: 12px; left: 3px; }
+.mts-toggle-wrap--md .mts-toggle__thumb              { width: 42px; height: 24px; }
+.mts-toggle-wrap--md .mts-toggle__thumb::after       { width: 16px; height: 16px; left: 4px; }
+.mts-toggle-wrap--lg .mts-toggle__thumb              { width: 52px; height: 30px; }
+.mts-toggle-wrap--lg .mts-toggle__thumb::after       { width: 22px; height: 22px; left: 4px; }
+
+/* Checked */
+.mts-toggle input:checked + .mts-toggle__thumb { background: var(--mts-color-primary); }
+.mts-toggle-wrap--sm .mts-toggle input:checked + .mts-toggle__thumb::after { left: 17px; }
+.mts-toggle-wrap--md .mts-toggle input:checked + .mts-toggle__thumb::after { left: 22px; }
+.mts-toggle-wrap--lg .mts-toggle input:checked + .mts-toggle__thumb::after { left: 26px; }
+
+/* Disabled */
+.mts-toggle input:disabled + .mts-toggle__thumb { opacity: 0.5; cursor: not-allowed; }
+
+/* Focus */
+.mts-toggle input:focus + .mts-toggle__thumb { box-shadow: 0 0 0 3px var(--mts-color-primary-light); }
+
+.mts-toggle__label {
+  font-size: var(--mts-font-size-md);
+  color: var(--mts-text-primary);
+  user-select: none;
+}

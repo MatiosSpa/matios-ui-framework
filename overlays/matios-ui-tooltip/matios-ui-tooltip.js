@@ -34,16 +34,36 @@ MTS.Tooltip = class MtsTooltip {
     if (_ds.maxWidth !== undefined) _fromHTML.maxWidth = _ds.maxWidth;
     options = { ..._fromHTML, ...options };
 
-    this.content   = options.content   || '';
-    this.position  = options.position  || 'top';
-    this.triggerOn = options.trigger   || 'hover';
-    this.delay     = options.delay     ?? 0;
+    // Tooltip HTML content or text / Contenido HTML o texto del tooltip
+    this.content = options.content || '';
+
+    // Position: 'top' | 'bottom' | 'left' | 'right' / Posición
+    this.position = options.position || 'top';
+
+    // Trigger: 'hover' | 'click' | 'focus' / Evento de activación
+    this.triggerOn = options.trigger || 'hover';
+
+    // Delay before showing in ms / Delay antes de mostrar en ms
+    this.delay = options.delay ?? 0;
+
+    // Delay before hiding in ms / Delay antes de ocultar en ms
     this.hideDelay = options.hideDelay ?? 0;
-    this.offset    = options.offset    ?? 8;
-    this.variant   = options.variant   || 'dark';
-    this.color     = options.color     || null;
-    this.bg        = options.bg        || null;
-    this.maxWidth  = options.maxWidth  ?? 220;
+
+    // Gap between target and tooltip in px / Separación entre target y tooltip en px
+    this.offset = options.offset ?? 8;
+
+    // Visual variant: 'dark' | 'light' / Variante visual
+    this.variant = options.variant || 'dark';
+
+    // Custom text color / Color de texto personalizado
+    this.color = options.color || null;
+
+    // Custom background color / Color de fondo personalizado
+    this.bg = options.bg || null;
+
+    // Max width in px / Ancho máximo en px
+    this.maxWidth = options.maxWidth ?? 220;
+
     this._isVisible = false;
     this._showTimer = null;
     this._hideTimer = null;

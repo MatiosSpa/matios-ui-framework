@@ -1,10 +1,10 @@
 /* ============================================================
    MATIOS UI — matios-ui-picker-daterange.js  v2.0.0
-   MTS.Picker.DateRange — Selector de rango de fechas
+   MTS.DatePicker.DateRange — Selector de rango de fechas
    Requiere: matios-ui-picker-base.js
    ============================================================ */
 
-MTS.Picker.DateRange = class MtsPickerDateRange extends MTS.Picker.Base {
+MTS.DatePicker.DateRange = class MtsDatePickerDateRange extends MTS.DatePicker.Base {
 
   constructor(selector, options = {}) {
     options.placeholder  = options.placeholder || "DD/MM/YYYY → DD/MM/YYYY";

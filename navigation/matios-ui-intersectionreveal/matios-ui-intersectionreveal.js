@@ -19,16 +19,35 @@ MTS.IntersectionReveal = class MtsIntersectionReveal {
    * @param {function} options.onReveal  (element, index) => {}
    */
   constructor(selector, options = {}) {
+    // Animation type: 'fade' | 'fade-up' | 'fade-down' | 'fade-left' | 'fade-right' | 'zoom' | 'flip'
+    // Tipo de animación
     this.animation = options.animation || 'fade-up';
-    this.duration  = options.duration  ?? 600;
-    this.delay     = options.delay     ?? 0;
-    this.stagger   = options.stagger   ?? 0;
-    this.easing    = options.easing    || 'cubic-bezier(.4,0,.2,1)';
-    this.threshold = options.threshold ?? 0.15;
-    this.once      = options.once      ?? true;
-    this.onReveal  = options.onReveal  || null;
 
-    /* Recoger elementos */
+    // Animation duration in ms / Duración de la animación en ms
+    this.duration = options.duration ?? 600;
+
+    // Base delay in ms / Delay base en ms
+    this.delay = options.delay ?? 0;
+
+    // Stagger delay between each element in ms / Delay escalonado entre elementos en ms
+    this.stagger = options.stagger ?? 0;
+
+    // CSS easing function / Función CSS de easing
+    this.easing = options.easing || 'cubic-bezier(.4,0,.2,1)';
+
+    // Fraction of element that must be visible (0-1) / Fracción visible para activar (0-1)
+    this.threshold = options.threshold ?? 0.15;
+
+    // Animate only the first time / Animar solo la primera vez
+    this.once = options.once ?? true;
+
+    this._listeners = {};
+
+    // Fires when an element is revealed: ({ element, index }) => {}
+    // Se dispara cuando un elemento es revelado
+    if (options.onReveal) this.on('reveal', options.onReveal);
+
+    // Collect target elements / Recoger elementos objetivo
     let els;
     if (typeof selector === 'string') {
       els = [...document.querySelectorAll(selector)];
@@ -42,6 +61,8 @@ MTS.IntersectionReveal = class MtsIntersectionReveal {
   }
 
   destroy() { if (this._observer) this._observer.disconnect(); }
+  on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
+  off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   /* Revelar todos inmediatamente (sin animación) */
   revealAll() {
@@ -67,8 +88,7 @@ MTS.IntersectionReveal = class MtsIntersectionReveal {
         el.style.transition = `opacity ${this.duration}ms ${this.easing} ${del}ms, transform ${this.duration}ms ${this.easing} ${del}ms`;
         el.style.opacity    = '1';
         el.style.transform  = 'none';
-        if (this.onReveal) this.onReveal(el, idx);
-        el.dispatchEvent(new CustomEvent('mts:reveal', { bubbles:true, detail:{ index:idx } }));
+        this._emit('reveal', { element: el, index: idx });
         if (this.once) this._observer.unobserve(el);
       });
     }, { threshold: this.threshold });
@@ -87,5 +107,10 @@ MTS.IntersectionReveal = class MtsIntersectionReveal {
     if (anim === 'zoom')       return { ...base, transform:'scale(0.9)' };
     if (anim === 'flip')       return { ...base, transform:'rotateX(-20deg)', transformOrigin:'top' };
     return base;
+  }
+  _emit(event, detail) {
+    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
+    const el = detail.element || this._els[0];
+    if (el) el.dispatchEvent(new CustomEvent(`mts:intersectionreveal:${event}`, { bubbles: true, detail }));
   }
 };

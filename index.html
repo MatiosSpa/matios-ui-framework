@@ -1,128 +1,130 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="es" data-mts-mode="light">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matios UI Framework</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="themes/matios-ui-theme-dark.css">
-<link rel="stylesheet" href="themes/matios-ui-theme-light.css">
-<link rel="stylesheet" href="themes/matios-ui-theme-violet.css">
-<link rel="stylesheet" href="themes/matios-ui-theme-olive.css">
-<link rel="stylesheet" href="themes/matios-ui-theme-blue.css">
-<link rel="stylesheet" href="themes/matios-ui-theme-high-contrast.css">
+<link rel="stylesheet" href="themes/matios-ui-mode-dark.css">
+<link rel="stylesheet" href="themes/matios-ui-mode-light.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-violet.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-olive.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-blue.css">
+<link rel="stylesheet" href="icons/matios-ui-icons.css">
+<script src="icons/matios-ui-icons.js"></script>
 <style>
 :root {
-  --bg:#0e0f14; --surface:#161820; --surface2:#1e2028; --border:#2a2d38;
-  --primary:#4f8eff; --accent:#a78bfa; --text:#e8eaf0; --muted:#6b7280;
-  --success:#34d399; --sw:220px; --th:50px;
+  --sw: 224px;
+  --th: 50px;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
 
-/* TOPBAR */
-.topbar{height:var(--th);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0;z-index:100;}
-.topbar__brand{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--text);text-decoration:none;cursor:pointer;}
-.topbar__logo{width:26px;height:26px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px;flex-shrink:0;}
-.topbar__brand span{color:var(--primary);}
-.topbar__version{font-size:10px;font-weight:700;background:rgba(52,211,153,.12);color:var(--success);padding:2px 7px;border-radius:4px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:'DM Sans',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+/* ── TOPBAR ───────────────────────────────────────── */
+.topbar{height:var(--th);background:var(--mts-bg-surface);border-bottom:1px solid var(--mts-border-color);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.05);}
+.topbar__brand{display:flex;align-items:center;gap:9px;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--mts-text-primary);cursor:pointer;flex-shrink:0;}
+.topbar__logo{width:28px;height:28px;background:linear-gradient(135deg,var(--mts-color-primary),var(--mts-color-accent));border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex-shrink:0;}
+.topbar__brand span{color:var(--mts-color-primary);}
+.topbar__version{font-size:10px;font-weight:700;background:rgba(22,163,74,.1);color:var(--mts-color-success);padding:2px 7px;border-radius:4px;}
 .topbar__spacer{flex:1;}
 
-/* "Ver docs" button */
-.docs-btn{display:none;align-items:center;gap:6px;padding:4px 12px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--muted);transition:all .12s;}
-.docs-btn:hover{border-color:var(--primary);color:var(--primary);background:rgba(79,142,255,.08);}
+.docs-btn{display:none;align-items:center;gap:6px;padding:5px 12px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface-2);color:var(--mts-text-muted);transition:all .12s;}
+.docs-btn:hover{border-color:var(--mts-color-primary);color:var(--mts-color-primary);background:var(--mts-color-primary-light);}
 .docs-btn.visible{display:flex;}
-.docs-btn svg{flex-shrink:0;}
 
-/* Theme picker */
-.tp{display:flex;gap:2px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:2px;}
-.tp-btn{padding:3px 9px;border-radius:5px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .12s;}
-.tp-btn.active{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.25);}
+/* ── Theme picker — 2 groups ──────────────────────── */
+.tp-wrap{display:flex;gap:6px;align-items:center;}
+.tp{display:flex;gap:2px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:7px;padding:2px;}
+.tp-btn{padding:3px 9px;border-radius:5px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--mts-text-muted);transition:all .12s;}
+.tp-btn:hover{color:var(--mts-text-primary);}
+.tp-btn.active{background:var(--mts-bg-surface);color:var(--mts-text-primary);box-shadow:0 1px 3px rgba(0,0,0,.1);}
+.tp-btn.active-accent{background:var(--mts-color-primary);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.15);}
+.tp-sep{width:1px;height:18px;background:var(--mts-border-color);margin:0 2px;}
 
-/* BODY */
+/* ── LAYOUT ───────────────────────────────────────── */
 .body{display:flex;flex:1;overflow:hidden;}
 
-/* SIDEBAR */
-.sidebar{width:var(--sw);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
-.sidebar__scroll{flex:1;overflow-y:auto;padding:6px 0 12px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+/* ── SIDEBAR ──────────────────────────────────────── */
+.sidebar{width:var(--sw);background:var(--mts-bg-surface);border-right:1px solid var(--mts-border-color);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
+.sidebar__scroll{flex:1;overflow-y:auto;padding:8px 0 16px;scrollbar-width:thin;scrollbar-color:var(--mts-border-color) transparent;}
 .sidebar__scroll::-webkit-scrollbar{width:3px;}
-.sidebar__scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-.nav-group__label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);padding:10px 14px 4px;display:block;}
-.nav-item{display:flex;align-items:center;gap:8px;padding:7px 12px;margin:0 6px;border-radius:7px;color:var(--muted);font-size:13px;text-decoration:none;transition:background .1s,color .1s;white-space:nowrap;cursor:pointer;border:none;background:none;width:calc(100% - 12px);font-family:'DM Sans',sans-serif;}
-.nav-item:hover{background:var(--surface2);color:var(--text);}
-.nav-item.active{background:rgba(79,142,255,.12);color:var(--primary);font-weight:600;}
-[data-mts-theme="violet"] .nav-item.active{background:rgba(139,92,246,.12);color:var(--primary);}
-[data-mts-theme="olive"]  .nav-item.active{background:rgba(132,167,40,.12);color:var(--primary);}
-[data-mts-theme="blue"]   .nav-item.active{background:rgba(74,158,255,.14);color:var(--primary);}
-.nav-item__icon{font-size:14px;flex-shrink:0;}
-.nav-item__badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:99px;background:var(--success);color:#fff;flex-shrink:0;}
-.sidebar__footer{padding:8px 12px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);flex-shrink:0;}
+.sidebar__scroll::-webkit-scrollbar-thumb{background:var(--mts-border-color);border-radius:3px;}
 
-/* CONTENT */
+.nav-group__label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--mts-text-muted);padding:12px 16px 4px;display:block;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:7px 12px;margin:1px 6px;border-radius:7px;color:var(--mts-text-muted);font-size:13px;cursor:pointer;border:none;background:none;width:calc(100% - 12px);font-family:'DM Sans',sans-serif;transition:background .1s,color .1s;white-space:nowrap;text-align:left;}
+.nav-item:hover{background:var(--mts-bg-surface-2);color:var(--mts-text-primary);}
+.nav-item.active{background:var(--mts-color-primary-light);color:var(--mts-color-primary);font-weight:600;}
+.nav-item__icon{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:inherit;}
+.nav-item__badge{font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;background:linear-gradient(135deg,var(--mts-color-primary),var(--mts-color-accent));color:#fff;flex-shrink:0;margin-left:auto;}
+.nav-divider{height:1px;background:var(--mts-border-color);margin:6px 12px;}
+.sidebar__footer{padding:8px 14px;border-top:1px solid var(--mts-border-color);font-size:10px;color:var(--mts-text-muted);flex-shrink:0;}
+
+/* ── CONTENT ──────────────────────────────────────── */
 .content{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;}
 .content iframe{width:100%;flex:1;border:none;display:none;}
-.content iframe.visible{display:block;}
+.content iframe.active{display:block;}
 
-/* WELCOME */
-.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px;text-align:center;padding:40px;}
-.welcome__logo{width:60px;height:60px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:26px;box-shadow:0 10px 36px rgba(79,142,255,.3);}
-.welcome__title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--text);}
-.welcome__title span{color:var(--primary);}
-.welcome__sub{font-size:13px;color:var(--muted);max-width:400px;line-height:1.7;}
-.welcome__stats{display:flex;gap:24px;}
-.welcome__stat-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--primary);}
-.welcome__stat-lbl{font-size:11px;color:var(--muted);}
-.welcome__chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:400px;}
-.welcome__chip{padding:8px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);font-size:12px;color:var(--muted);cursor:pointer;transition:all .12s;text-align:center;}
-.welcome__chip:hover{border-color:var(--primary);color:var(--primary);}
-.welcome__cta{padding:9px 22px;border-radius:9px;background:var(--primary);color:#fff;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;}
+/* ── WELCOME ──────────────────────────────────────── */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:16px;text-align:center;padding:40px;}
+.welcome__logo{width:64px;height:64px;background:linear-gradient(135deg,var(--mts-color-primary),var(--mts-color-accent));border-radius:18px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:28px;box-shadow:0 12px 40px var(--mts-color-primary-light);}
+.welcome__title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--mts-text-primary);}
+.welcome__title span{color:var(--mts-color-primary);}
+.welcome__sub{font-size:13px;color:var(--mts-text-muted);max-width:420px;line-height:1.7;}
+.welcome__stats{display:flex;gap:28px;}
+.welcome__stat-val{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--mts-color-primary);}
+.welcome__stat-lbl{font-size:11px;color:var(--mts-text-muted);}
+.welcome__chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:440px;}
+.welcome__chip{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:9px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;color:var(--mts-text-muted);cursor:pointer;transition:all .12s;text-align:left;}
+.welcome__chip:hover{border-color:var(--mts-color-primary);color:var(--mts-color-primary);background:var(--mts-color-primary-light);}
+.welcome__cta{padding:10px 24px;border-radius:9px;background:var(--mts-color-primary);color:#fff;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:8px;transition:opacity .12s;}
+.welcome__cta:hover{opacity:.88;}
 
-/* README PANEL */
+/* ── README PANEL ─────────────────────────────────── */
 .rm-overlay{position:fixed;inset:0;z-index:9000;pointer-events:none;}
 .rm-overlay.open{pointer-events:auto;}
 .rm-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .25s;}
-.rm-overlay.open .rm-backdrop{background:rgba(0,0,0,.5);}
-.rm-panel{position:absolute;top:0;right:0;bottom:0;width:min(660px,92vw);background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-12px 0 48px rgba(0,0,0,.5);}
+.rm-overlay.open .rm-backdrop{background:rgba(0,0,0,.3);}
+.rm-panel{position:absolute;top:0;right:0;bottom:0;width:min(660px,92vw);background:var(--mts-bg-surface);border-left:1px solid var(--mts-border-color);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.1);}
 .rm-overlay.open .rm-panel{transform:translateX(0);}
-.rm-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.rm-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--mts-border-color);flex-shrink:0;}
 .rm-hdr-info{flex:1;display:flex;align-items:center;gap:8px;}
-.rm-hdr-title{font-size:13px;font-weight:700;color:var(--text);}
-.rm-hdr-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:4px;background:rgba(79,142,255,.15);color:var(--primary);}
-.rm-cp-btn{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;border:1px solid var(--border);background:var(--surface2);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s;}
-.rm-cp-btn:hover{border-color:var(--primary);color:var(--primary);}
-.rm-close{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:var(--surface2);border:1px solid var(--border);cursor:pointer;color:var(--muted);font-size:16px;line-height:1;transition:all .12s;}
-.rm-close:hover{background:rgba(248,113,113,.1);color:#f87171;}
-.rm-body{flex:1;overflow-y:auto;padding:22px 24px 32px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.rm-hdr-title{font-size:18px;font-weight:700;color:var(--mts-text-primary);}
+.rm-hdr-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:4px;background:var(--mts-color-primary-light);color:var(--mts-color-primary);}
+.rm-cp-btn{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface-2);color:var(--mts-text-muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s;}
+.rm-cp-btn:hover{border-color:var(--mts-color-primary);color:var(--mts-color-primary);}
+.rm-close{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);cursor:pointer;color:var(--mts-text-muted);font-size:16px;line-height:1;transition:all .12s;}
+.rm-close:hover{background:rgba(248,113,113,.1);color:#ef4444;}
+.rm-body{flex:1;overflow-y:auto;padding:22px 24px 32px;scrollbar-width:thin;scrollbar-color:var(--mts-border-color) transparent;}
 .rm-body::-webkit-scrollbar{width:4px;}
-.rm-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-.rm-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:60px 0;color:var(--muted);font-size:13px;}
-.rm-spin{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--primary);animation:rm-spin .7s linear infinite;}
+.rm-body::-webkit-scrollbar-thumb{background:var(--mts-border-color);border-radius:3px;}
+.rm-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:60px 0;color:var(--mts-text-muted);font-size:13px;}
+.rm-spin{width:18px;height:18px;border-radius:50%;border:2px solid var(--mts-border-color);border-top-color:var(--mts-color-primary);animation:rm-spin .7s linear infinite;}
 @keyframes rm-spin{to{transform:rotate(360deg);}}
-/* Markdown */
-.rm-md{font-size:13.5px;line-height:1.75;color:var(--muted);}
-.rm-md h1{font-size:18px;font-weight:800;color:var(--text);margin:0 0 14px;}
-.rm-md h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
-.rm-md h3{font-size:13px;font-weight:700;color:var(--text);margin:16px 0 8px;}
+.rm-md{font-size:13.5px;line-height:1.75;color:var(--mts-text-muted);}
+.rm-md h1{font-size:18px;font-weight:800;color:var(--mts-text-primary);margin:0 0 14px;}
+.rm-md h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--mts-border-color);}
+.rm-md h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:16px 0 8px;}
 .rm-md p{margin:0 0 11px;}
 .rm-md ul,.rm-md ol{margin:0 0 11px;padding-left:18px;}
 .rm-md li{margin-bottom:3px;}
-.rm-md hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
-.rm-md strong{color:var(--text);font-weight:700;}
-.rm-md a{color:var(--primary);text-decoration:none;}
-.rm-md code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:12px;padding:1px 6px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;color:var(--primary);}
-.rm-md pre{background:var(--surface2);border:1px solid var(--border);border-radius:9px;overflow:hidden;margin:0 0 14px;}
-.rm-pre-top{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:rgba(0,0,0,.2);border-bottom:1px solid var(--border);}
-.rm-pre-lang{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);}
-.rm-pre-cp{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;}
-.rm-pre-cp:hover{color:var(--primary);border-color:var(--primary);}
-.rm-md pre code{display:block;padding:12px 14px;overflow-x:auto;background:none;border:none;border-radius:0;font-size:12px;color:var(--text);line-height:1.65;}
+.rm-md hr{border:none;border-top:1px solid var(--mts-border-color);margin:18px 0;}
+.rm-md strong{color:var(--mts-text-primary);font-weight:700;}
+.rm-md a{color:var(--mts-color-primary);text-decoration:none;}
+.rm-md code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:12px;padding:1px 6px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:4px;color:var(--mts-color-primary);}
+.rm-md pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:9px;overflow:hidden;margin:0 0 14px;}
+.rm-pre-top{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:rgba(0,0,0,.03);border-bottom:1px solid var(--mts-border-color);}
+.rm-pre-lang{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--mts-text-muted);}
+.rm-pre-cp{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:transparent;border:1px solid var(--mts-border-color);color:var(--mts-text-muted);cursor:pointer;font-family:'DM Sans',sans-serif;}
+.rm-pre-cp:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
+.rm-md pre code{display:block;padding:12px 14px;overflow-x:auto;background:none;border:none;border-radius:0;font-size:12px;color:var(--mts-text-primary);line-height:1.65;}
 .rm-md table{width:100%;border-collapse:collapse;margin:0 0 14px;font-size:12.5px;}
-.rm-md th{padding:6px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);background:rgba(0,0,0,.2);border-bottom:1px solid var(--border);}
-.rm-md td{padding:7px 12px;border-bottom:1px solid var(--border);}
+.rm-md th{padding:6px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
+.rm-md td{padding:7px 12px;border-bottom:1px solid var(--mts-border-color);}
 .rm-md tr:last-child td{border-bottom:none;}
-.rm-md tr:hover td{background:rgba(255,255,255,.02);}
-.rm-md blockquote{border-left:3px solid var(--primary);padding:8px 14px;margin:0 0 12px;background:rgba(79,142,255,.06);border-radius:0 6px 6px 0;}
-/* Syntax */
-.hl-kw{color:#c084fc;}.hl-str{color:#86efac;}.hl-num{color:#fbbf24;}.hl-cmt{color:#6b7280;font-style:italic;}
+.rm-md tr:hover td{background:rgba(0,0,0,.02);}
+.rm-md blockquote{border-left:3px solid var(--mts-color-primary);padding:8px 14px;margin:0 0 12px;background:var(--mts-color-primary-light);border-radius:0 6px 6px 0;}
+/* Syntax highlighting */
+.hl-kw{color:var(--mts-color-primary);}.hl-str{color:var(--mts-color-success);}.hl-num{color:var(--mts-color-warning);}.hl-cmt{color:var(--mts-text-muted);font-style:italic;}
 </style>
 </head>
 <body>
@@ -135,22 +137,23 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;hei
   </div>
   <span class="topbar__version">v1.0.0</span>
   <div class="topbar__spacer"></div>
-  <!-- Botón "Ver docs" — solo visible cuando hay un ítem activo -->
   <button class="docs-btn" id="docsBtn" onclick="openDocs()">
-    <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-      <rect x="2" y="1" width="10" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/>
-      <path d="M4 5h6M4 8h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-    </svg>
+    <i class="mts-icon mts-icon-file-text mts-icon--sm"></i>
     Ver docs
   </button>
-  <!-- Theme picker -->
-  <div class="tp">
-    <button class="tp-btn active" data-theme="dark"   onclick="setTheme('dark')">Dark</button>
-    <button class="tp-btn"        data-theme="light"  onclick="setTheme('light')">Light</button>
-    <button class="tp-btn"        data-theme="violet" onclick="setTheme('violet')">Violet</button>
-    <button class="tp-btn"        data-theme="olive"  onclick="setTheme('olive')">Olive</button>
-    <button class="tp-btn"        data-theme="blue"   onclick="setTheme('blue')">Blue</button>
-    <button class="tp-btn"        data-theme="high-contrast" onclick="setTheme('high-contrast')">HC</button>
+  <!-- Group 1: Mode -->
+  <div class="tp-wrap">
+    <div class="tp" id="tp-mode">
+      <button class="tp-btn" data-mode="dark"  onclick="setMode('dark')">Dark</button>
+      <button class="tp-btn active" data-mode="light" onclick="setMode('light')">Light</button>
+    </div>
+    <!-- Group 2: Accent -->
+    <div class="tp" id="tp-accent">
+      <button class="tp-btn active" data-accent="" onclick="setAccent(null)">—</button>
+      <button class="tp-btn" data-accent="violet" onclick="setAccent('violet')">Violet</button>
+      <button class="tp-btn" data-accent="olive"  onclick="setAccent('olive')">Olive</button>
+      <button class="tp-btn" data-accent="blue"   onclick="setAccent('blue')">Blue</button>
+    </div>
   </div>
 </div>
 
@@ -184,138 +187,154 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;hei
 
 <script>
 /* ══════════════════════════════════════════════
-   DATOS
+   ESTRUCTURA
    ══════════════════════════════════════════════ */
 const GROUPS = [
   { label: null, items: [
-    { id:'showcase', label:'⚡ Showcase', icon:'🎯', src:'layouts/showcase.html' },
+    { id:'showcase', label:'Showcase', icon:'activity', badge:'NEW', src:'apps-showcase/index.html' },
   ]},
   { label: 'Componentes', items: [
-    { id:'forms',      label:'Formularios', icon:'✏️',  src:'forms/demo.html',      md:'forms' },
-    { id:'navigation', label:'Navegación',  icon:'🧭', src:'navigation/demo.html',  md:'navigation' },
-    { id:'overlays',   label:'Overlays',    icon:'🪟',  src:'overlays/demo.html',   md:'overlays' },
-    { id:'display',    label:'Display',     icon:'🖼️', src:'display/demo.html',     md:'display' },
-  ]},
-  { label: 'Data', items: [
-    { id:'tables',   label:'Tablas & Paginación', icon:'📋', src:'data/matios-ui-table/demo.html',     md:'tables' },
-    { id:'datatable',label:'DataTable',           icon:'🗃️', src:'data/matios-ui-datatable/demo.html', md:'datatable' },
-    { id:'infinite', label:'Infinite Scroll',     icon:'♾️', src:'data/matios-ui-infinite/demo.html',  md:'infinite' },
-    { id:'charts',   label:'Charts',              icon:'📊', src:'data/matios-ui-chart/demo.html',     md:'charts' },
-  ]},
-  { label: 'Especiales', items: [
-    { id:'themes',      label:'Temas',          icon:'🎨', src:'themes/demo.html',        md:null },
-    { id:'calendar',    label:'Calendario',     icon:'📅', src:'calendar/demo.html',      md:'calendar' },
-    { id:'calendar-v2', label:'Calendario v2',  icon:'📅', src:'calendar_v2/demo.html',   md:'calendar-v2' },
-    { id:'calendar-x', label:'Cal. Académico', icon:'🎓', src:'/index.html', md:null },
-    { id:'icons',       label:'Íconos',         icon:'✨', src:'icons/demo.html',          md:'icons' },
+    { id:'forms',      label:'Formularios', icon:'form',     src:'forms/demo.html',      md:'forms' },
+    { id:'navigation', label:'Navegación',  icon:'compass',  src:'navigation/demo.html', md:'navigation' },
+    { id:'overlays',   label:'Overlays',    icon:'layers',   src:'overlays/demo.html',   md:'overlays' },
+    { id:'display',    label:'Display',     icon:'grid',     src:'display/demo.html',    md:'display' },
+    { id:'data',       label:'Data',        icon:'database', src:'data/demo.html',       md:'data' },
   ]},
   { label: 'Showcase', items: [
-    { id:'showcase-dashboard', label:'Dashboard',   icon:'📊', src:null, action:'wip' },
-    { id:'showcase-calendar',  label:'Calendario',  icon:'📅', src:null, action:'wip' },
-    { id:'showcase-datatable', label:'DataTable',   icon:'🗃️', src:null, action:'wip' },
-    { id:'showcase-charts',    label:'Charts',      icon:'📈', src:null, action:'wip' },
+    { id:'sc-dashboard', label:'Dashboard',  icon:'bar-chart-2', src:null,                      action:'wip' },
+    { id:'sc-calendar',  label:'Calendario', icon:'calendar',    src:'calendar_v2/demo.html'               },
+    { id:'sc-datatable', label:'DataTable',  icon:'table',       src:null,                      action:'wip' },
+    { id:'sc-charts',    label:'Charts',     icon:'pie-chart',   src:null,                      action:'wip' },
+  ]},
+  { label: 'Sistema', items: [
+    { id:'themes', label:'Temas',  icon:'sun',  src:'themes/demo.html', md:null },
+    { id:'icons',  label:'Íconos', icon:'star', src:'icons/demo.html',  md:'icons' },
+  ]},
+  { label: 'Cliente', items: [
+    { id:'cal-x', label:'Cal. Académico', icon:'award', src:'/index.html', md:null },
   ]},
 ];
 
-/* MD por grupo — rutas relativas a la raíz */
 const MD_MAP = {
-  /* ── Forms ── */
-  'forms':            'forms/forms.md',
-  'button':           'forms/matios-ui-button/matios-ui-button.md',
-  'input':            'forms/matios-ui-input/matios-ui-input.md',
-  'select':           'forms/matios-ui-select/matios-ui-select.md',
-  'checkbox':         'forms/matios-ui-checkbox/matios-ui-checkbox.md',
-  'taginput':         'forms/matios-ui-taginput/matios-ui-taginput.md',
-  'rating':           'forms/matios-ui-rating/matios-ui-rating.md',
-  'picker':           'forms/matios-ui-picker/matios-ui-picker.md',
-  'fileupload':       'forms/matios-ui-fileupload/matios-ui-fileupload.md',
-  'validation':       'forms/matios-ui-validation/matios-ui-validation.md',
-  'numberinput':      'forms/matios-ui-numberinput/matios-ui-numberinput.md',
-  'phoneinput':       'forms/matios-ui-phoneinput/matios-ui-phoneinput.md',
-  'confirmbutton':    'forms/matios-ui-confirmbutton/matios-ui-confirmbutton.md',
-  'colorpicker':      'forms/matios-ui-colorpicker/matios-ui-colorpicker.md',
-  'richtexteditor':   'forms/matios-ui-richtexteditor/matios-ui-richtexteditor.md',
-  'formlayout':       'forms/matios-ui-formlayout/matios-ui-formlayout.md',
-  'label':            'forms/matios-ui-label/matios-ui-label.md',
-  'copybutton':       'forms/matios-ui-copybutton/matios-ui-copybutton.md',
-
-  /* ── Navigation ── */
-  'navigation':   [
-    'navigation/matios-ui-tabs/matios-ui-tabs.md',
-    'navigation/matios-ui-accordion/matios-ui-accordion.md',
-    'navigation/matios-ui-breadcrumb/matios-ui-breadcrumb.md',
-    'navigation/matios-ui-stepper/matios-ui-stepper.md',
-    'navigation/matios-ui-drawer/matios-ui-drawer.md',
-    'navigation/matios-ui-dropdown/matios-ui-dropdown.md',
-    'navigation/matios-ui-tabbar/matios-ui-tabbar.md',
-    'navigation/matios-ui-pagination/matios-ui-pagination.md',
+  'forms':'forms/forms.md','button':'forms/matios-ui-button/matios-ui-button.md',
+  'input':'forms/matios-ui-input/matios-ui-input.md','select':'forms/matios-ui-select/matios-ui-select.md',
+  'checkbox':'forms/matios-ui-checkbox/matios-ui-checkbox.md','radio':'forms/matios-ui-radio/matios-ui-radio.md',
+  'toggle':'forms/matios-ui-toggle/matios-ui-toggle.md','slider':'forms/matios-ui-slider/matios-ui-slider.md',
+  'taginput':'forms/matios-ui-taginput/matios-ui-taginput.md','rating':'forms/matios-ui-rating/matios-ui-rating.md',
+  'picker':'forms/matios-ui-picker/matios-ui-date-picker.md','fileupload':'forms/matios-ui-fileupload/matios-ui-fileupload.md',
+  'validation':'forms/matios-ui-validation/matios-ui-validation.md',
+  'numberinput':'forms/matios-ui-numberinput/matios-ui-numberinput.md',
+  'phoneinput':'forms/matios-ui-phoneinput/matios-ui-phoneinput.md',
+  'confirmbutton':'forms/matios-ui-confirmbutton/matios-ui-confirmbutton.md',
+  'colorpicker':'forms/matios-ui-colorpicker/matios-ui-colorpicker.md',
+  'richtexteditor':'forms/matios-ui-richtexteditor/matios-ui-richtexteditor.md',
+  'formlayout':'forms/matios-ui-formlayout/matios-ui-formlayout.md',
+  'label':'forms/matios-ui-label/matios-ui-label.md',
+  'copybutton':'forms/matios-ui-copybutton/matios-ui-copybutton.md',
+  'navigation':['navigation/matios-ui-tabs/matios-ui-tabs.md','navigation/matios-ui-accordion/matios-ui-accordion.md',
+    'navigation/matios-ui-breadcrumb/matios-ui-breadcrumb.md','navigation/matios-ui-stepper/matios-ui-stepper.md',
+    'navigation/matios-ui-drawer/matios-ui-drawer.md','navigation/matios-ui-dropdown/matios-ui-dropdown.md',
+    'navigation/matios-ui-tabbar/matios-ui-tabbar.md','navigation/matios-ui-pagination/matios-ui-pagination.md',
     'navigation/matios-ui-contextmenu/matios-ui-contextmenu.md',
     'navigation/matios-ui-commandpalette/matios-ui-commandpalette.md',
-    'navigation/matios-ui-sidenav/matios-ui-sidenav.md',
-    'navigation/matios-ui-scrollspy/matios-ui-scrollspy.md',
-    'navigation/matios-ui-intersectionreveal/matios-ui-intersectionreveal.md',
-  ],
-
-  /* ── Overlays ── */
-  'overlays': [
-    'overlays/matios-ui-alert/matios-ui-alert.md',
-    'overlays/matios-ui-tooltip/matios-ui-tooltip.md',
-    'overlays/matios-ui-modal/matios-ui-modal.md',
-    'overlays/matios-ui-badge/matios-ui-badge.md',
-    'overlays/matios-ui-progress/matios-ui-progress.md',
-    'overlays/matios-ui-skeleton/matios-ui-skeleton.md',
-    'overlays/matios-ui-spinner/matios-ui-spinner.md',
-    'overlays/matios-ui-toast/matios-ui-toast.md',
-    'overlays/matios-ui-popover/matios-ui-popover.md',
-    'overlays/matios-ui-lightbox/matios-ui-lightbox.md',
-  ],
-
-  /* ── Display ── */
-  'display': [
-    'display/matios-ui-avatar/matios-ui-avatar.md',
-    'display/matios-ui-kpicard/matios-ui-kpicard.md',
-    'display/matios-ui-emptystate/matios-ui-emptystate.md',
-    'display/matios-ui-timeline/matios-ui-timeline.md',
-    'display/matios-ui-kanban/matios-ui-kanban.md',
-    'display/matios-ui-sortablelist/matios-ui-sortablelist.md',
-    'display/matios-ui-countdown/matios-ui-countdown.md',
-    'display/matios-ui-ratingreview/matios-ui-ratingreview.md',
-    'display/matios-ui-tree/matios-ui-tree.md',
-    'display/matios-ui-imagegallery/matios-ui-imagegallery.md',
-    'display/matios-ui-virtuallist/matios-ui-virtuallist.md',
-    'display/matios-ui-splitter/matios-ui-splitter.md',
-    'display/matios-ui-card/matios-ui-card.md',
-  ],
-
-  /* ── Data ── */
-  'tables':    ['data/matios-ui-table/matios-ui-table.md', 'data/matios-ui-paging/matios-ui-paging.md'],
-  'datatable': 'data/matios-ui-datatable/matios-ui-datatable.md',
-  'infinite':  'data/matios-ui-infinite/matios-ui-infinite.md',
-  'charts':    'data/matios-ui-chart/matios-ui-chart.md',
-
-  /* ── Especiales ── */
-  'calendar':    'calendar/matios-ui-calendar.md',
-  'calendar-v2': 'calendar_v2/matios-ui-calendar.md',
-  'icons':    'icons/matios-ui-icons.md',
-  'layouts':  'layouts/matios-ui-layout.md',
+    'navigation/matios-ui-sidenav/matios-ui-sidenav.md','navigation/matios-ui-scrollspy/matios-ui-scrollspy.md',
+    'navigation/matios-ui-stepprogress/matios-ui-stepprogress.md',
+    'navigation/matios-ui-intersectionreveal/matios-ui-intersectionreveal.md'],
+  'overlays':['overlays/matios-ui-alert/matios-ui-alert.md','overlays/matios-ui-tooltip/matios-ui-tooltip.md',
+    'overlays/matios-ui-modal/matios-ui-modal.md','overlays/matios-ui-badge/matios-ui-badge.md',
+    'overlays/matios-ui-progress/matios-ui-progress.md','overlays/matios-ui-skeleton/matios-ui-skeleton.md',
+    'overlays/matios-ui-spinner/matios-ui-spinner.md','overlays/matios-ui-toast/matios-ui-toast.md',
+    'overlays/matios-ui-popover/matios-ui-popover.md','overlays/matios-ui-lightbox/matios-ui-lightbox.md'],
+  'display':['display/matios-ui-avatar/matios-ui-avatar.md','display/matios-ui-card/matios-ui-card.md',
+    'display/matios-ui-kpicard/matios-ui-kpicard.md','display/matios-ui-emptystate/matios-ui-emptystate.md',
+    'display/matios-ui-timeline/matios-ui-timeline.md','display/matios-ui-kanban/matios-ui-kanban.md',
+    'display/matios-ui-sortablelist/matios-ui-sortablelist.md','display/matios-ui-countdown/matios-ui-countdown.md',
+    'display/matios-ui-ratingreview/matios-ui-ratingreview.md','display/matios-ui-tree/matios-ui-tree.md',
+    'display/matios-ui-imagegallery/matios-ui-imagegallery.md','display/matios-ui-virtuallist/matios-ui-virtuallist.md',
+    'display/matios-ui-splitter/matios-ui-splitter.md'],
+  'data':['data/matios-ui-table/matios-ui-table.md','data/matios-ui-paging/matios-ui-paging.md',
+    'data/matios-ui-datatable/matios-ui-datatable.md','data/matios-ui-infinite/matios-ui-infinite.md',
+    'data/matios-ui-chart/matios-ui-chart.md'],
+  'icons':'icons/matios-ui-icons.md',
 };
 
-let currentTheme = 'dark';
-// Alias para que los demos puedan leer window.currentThemeVal
-Object.defineProperty(window, 'currentThemeVal', {
-  get() { return currentTheme; },
-  set(v) { currentTheme = v; }
-});
-let currentItem  = null;
-let mdCache      = {};
-let currentMdRaw = '';
+/* ── State ───────────────────────────────────────── */
+let currentMode   = 'light';
+let currentAccent = null;   // null = default (no accent attr)
+let currentItem   = null;
+let currentActiveMd = null;
+let mdCache       = {};
+let currentMdRaw  = '';
 
-/* ══════════════════════════════════════════════
-   SIDEBAR
-   ══════════════════════════════════════════════ */
+// Expose to iframes
+Object.defineProperty(window, 'currentModeVal',   { get(){ return currentMode; },   set(v){ currentMode = v; } });
+Object.defineProperty(window, 'currentAccentVal',  { get(){ return currentAccent; }, set(v){ currentAccent = v; } });
+
+/* ── Mode + Accent ───────────────────────────────── */
+function setMode(m) {
+  currentMode = m;
+  document.documentElement.setAttribute('data-mts-mode', m);
+  // Update mode buttons
+  document.querySelectorAll('#tp-mode .tp-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.mode === m));
+  // Reload iframe with new mode
+  _reloadFrame();
+  // Broadcast to iframe
+  _broadcast();
+}
+
+function setAccent(a) {
+  currentAccent = a || null;
+  if (a) document.documentElement.setAttribute('data-mts-accent', a);
+  else   document.documentElement.removeAttribute('data-mts-accent');
+  // Update accent buttons
+  document.querySelectorAll('#tp-accent .tp-btn').forEach(b => {
+    const isActive = b.dataset.accent === (a || '');
+    b.classList.toggle('active', isActive && !a);       // "—" button = white pill
+    b.classList.toggle('active-accent', isActive && !!a); // color buttons = colored pill
+  });
+  // Reload iframe
+  _reloadFrame();
+  // Broadcast to iframe
+  _broadcast();
+}
+
+function _buildParams() {
+  const p = new URLSearchParams();
+  p.set('mts-mode', currentMode);
+  if (currentAccent) p.set('mts-accent', currentAccent);
+  return p.toString();
+}
+
+function _reloadFrame() {
+  if (!currentItem?.src) return;
+  const frame = document.getElementById('mainFrame');
+  // If already loaded with same base, broadcast in-place (no reload)
+  if (frame.src && frame.src.includes(currentItem.src.split('?')[0])) {
+    _broadcast();
+    return;
+  }
+  frame.src = currentItem.src + '?' + _buildParams();
+}
+
+function _broadcast() {
+  try {
+    const frame = document.getElementById('mainFrame');
+    if (!frame?.contentWindow) return;
+    frame.contentWindow.postMessage({ type: 'setMode',   mode:   currentMode   }, '*');
+    frame.contentWindow.postMessage({ type: 'setAccent', accent: currentAccent || '' }, '*');
+  } catch(e) {}
+}
+
+/* ── Sidebar ─────────────────────────────────────── */
 function buildSidebar() {
   const scroll = document.getElementById('sidebarScroll');
-  GROUPS.forEach(group => {
+  GROUPS.forEach((group, gi) => {
+    if (gi > 0) {
+      const div = document.createElement('div');
+      div.className = 'nav-divider';
+      scroll.appendChild(div);
+    }
     if (group.label) {
       const lbl = document.createElement('span');
       lbl.className = 'nav-group__label';
@@ -327,73 +346,50 @@ function buildSidebar() {
       btn.className = 'nav-item';
       btn.id = 'nav-' + item.id;
       btn.innerHTML =
-        '<span class="nav-item__icon">' + item.icon + '</span>' +
-        '<span>' + item.label + '</span>' +
-        (item.id === 'showcase' ? '<span class="nav-item__badge">NEW</span>' : '')
-      + (item.id === 'apps' ? '<span class="nav-item__badge" style="background:linear-gradient(135deg,#7c3aed,#4f8eff)">APP</span>' : '');
+        `<span class="nav-item__icon"><i class="mts-icon mts-icon-${item.icon}"></i></span>` +
+        `<span>${item.label}</span>` +
+        (item.badge ? `<span class="nav-item__badge">${item.badge}</span>` : '');
       btn.addEventListener('click', () => loadItem(item));
       scroll.appendChild(btn);
     });
   });
+  if (window.MTS && MTS.Icon) MTS.Icon.initAll();
 }
 
-/* ══════════════════════════════════════════════
-   NAVEGACIÓN — sin <a>, sin target, control total
-   ══════════════════════════════════════════════ */
+/* ── Navigation ──────────────────────────────────── */
 function loadItem(item) {
-  /* Marcar activo */
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('nav-' + item.id).classList.add('active');
-  currentItem = item;
+  document.getElementById('nav-' + item.id)?.classList.add('active');
+  currentItem     = item;
+  currentActiveMd = null;
 
-  /* Mostrar/ocultar botón docs */
   const docsBtn = document.getElementById('docsBtn');
-  const hasMd = item.md && MD_MAP[item.md];
-  docsBtn.classList.toggle('visible', !!hasMd);
+  docsBtn.classList.toggle('visible', !!(item.md && MD_MAP[item.md]));
 
-  /* WIP — próximamente */
-  if (item.action === 'wip') {
-    document.getElementById('welcomeScreen').style.display = 'flex';
-    document.getElementById('mainFrame').style.display = 'none';
-    document.getElementById('mainFrame').src = '';
-    const el = document.getElementById('welcomeScreen');
-    el.innerHTML = `
-      <div style="text-align:center;padding:40px;max-width:400px;">
-        <div style="font-size:48px;margin-bottom:16px;">🚧</div>
-        <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px;">${item.label}</div>
-        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:24px;">Esta demo de aplicación completa está en el roadmap.<br>Llegará como parte de la sección <strong style="color:var(--primary)">Showcase</strong>.</p>
-        <div style="display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--mts-radius-full,9999px);padding:6px 16px;font-size:12px;color:var(--muted);">⏳ Próximamente</div>
-      </div>`;
-    return;
-  }
+  if (item.action === 'wip') { showWip(item); return; }
 
-  /* Ocultar welcome, mostrar iframe */
   document.getElementById('welcomeScreen').style.display = 'none';
   const frame = document.getElementById('mainFrame');
   frame.style.display = 'block';
 
-  /* Cargar la URL — pasando el tema en el hash */
-  const url = item.src + '#mts-theme=' + currentTheme;
-  frame.src = url;
-  /* Tras cargar, inyectar los CSS de themes si no están */
-  frame.onload = () => {
-    try {
-      const fdoc = frame.contentDocument || frame.contentWindow.document;
-      if (!fdoc) return;
-      const THEMES = ['dark','light','violet','olive','blue','high-contrast'];
-      THEMES.forEach(t => {
-        const id = 'mts-theme-' + t;
-        if (!fdoc.getElementById(id)) {
-          const link = fdoc.createElement('link');
-          link.id = id;
-          link.rel = 'stylesheet';
-          link.href = '../themes/matios-ui-theme-' + t + '.css';
-          fdoc.head.appendChild(link);
-        }
-      });
-      fdoc.documentElement.setAttribute('data-mts-theme', currentTheme);
-    } catch(e) {}
-  };
+  frame.src = item.src + '?' + _buildParams();
+
+
+}
+
+function showWip(item) {
+  document.getElementById('welcomeScreen').style.display = 'flex';
+  document.getElementById('mainFrame').style.display = 'none';
+  document.getElementById('mainFrame').src = '';
+  const ws = document.getElementById('welcomeScreen');
+  ws.innerHTML = `
+    <div style="width:56px;height:56px;border-radius:14px;background:var(--mts-color-primary-light);display:flex;align-items:center;justify-content:center;font-size:26px;">🚧</div>
+    <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--mts-text-primary);margin-bottom:8px;">${item.label}</div>
+    <p style="font-size:13px;color:var(--mts-text-muted);line-height:1.7;margin-bottom:22px;">Esta demo de interfaz completa está en el roadmap.<br>Llegará como parte de la sección <strong style="color:var(--mts-color-primary)">Showcase</strong>.</p>
+    <div style="display:inline-flex;align-items:center;gap:7px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:99px;padding:6px 16px;font-size:12px;color:var(--mts-text-muted);">
+      <i class="mts-icon mts-icon-clock mts-icon--sm"></i> Próximamente
+    </div>`;
+  if (window.MTS && MTS.Icon) MTS.Icon.initAll();
 }
 
 function goWelcome() {
@@ -402,7 +398,9 @@ function goWelcome() {
   document.getElementById('mainFrame').style.display = 'none';
   document.getElementById('mainFrame').src = '';
   document.getElementById('docsBtn').classList.remove('visible');
-  document.getElementById('welcomeScreen').style.display = 'flex';
+  const ws = document.getElementById('welcomeScreen');
+  ws.style.display = 'flex';
+  showWelcome();
 }
 
 function loadById(id) {
@@ -411,71 +409,62 @@ function loadById(id) {
   if (found) loadItem(found);
 }
 
-/* ══════════════════════════════════════════════
-   TEMA
-   ══════════════════════════════════════════════ */
-function setTheme(t) {
-  var baseUrl = window.location.origin + "/";
-  //console.log(baseUrl);
-  currentTheme = t;
-  document.documentElement.setAttribute('data-mts-theme', t);
-  document.querySelectorAll('.tp-btn').forEach(b =>
-    b.classList.toggle('active', b.dataset.theme === t)
-  );
-  if(currentItem==null) return;
-  baseUrl+= currentItem.src;
-  var iframeUrl= baseUrl + '?mts-theme=' + t
-  var frame = document.getElementById('mainFrame');
-  frame.src = '';
-  frame.src = iframeUrl;
-}
-
-/* Recibir setTheme desde iframes hijos (ej: themes/demo.html) */
+/* ── Messages from iframe ────────────────────────── */
 window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'setTheme') {
-    setTheme(e.data.theme);
+  if (!e.data) return;
+  // Iframe changed mode
+  if (e.data.type === 'setMode') {
+    currentMode = e.data.mode;
+    document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+    document.querySelectorAll('#tp-mode .tp-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.mode === e.data.mode));
+  }
+  // Iframe changed accent
+  if (e.data.type === 'setAccent') {
+    const a = e.data.accent || null;
+    currentAccent = a;
+    if (a) document.documentElement.setAttribute('data-mts-accent', a);
+    else   document.documentElement.removeAttribute('data-mts-accent');
+    document.querySelectorAll('#tp-accent .tp-btn').forEach(b => {
+      b.classList.toggle('active',        b.dataset.accent === (a || '') && !a);
+      b.classList.toggle('active-accent', b.dataset.accent === (a || '') && !!a);
+    });
+  }
+  // Component activated in iframe
+  if (e.data.type === 'mts:accActive') {
+    const component = e.data.component;
+    currentActiveMd = (component && MD_MAP[component]) ? component : null;
+    const mdKey = currentActiveMd || currentItem?.md;
+    document.getElementById('docsBtn').classList.toggle('visible', !!(mdKey && MD_MAP[mdKey]));
+    if (currentActiveMd) delete mdCache[currentActiveMd];
   }
 });
 
-/* ══════════════════════════════════════════════
-   README DOCS PANEL
-   ══════════════════════════════════════════════ */
+/* ── Docs panel ──────────────────────────────────── */
 async function openDocs() {
-  if (!currentItem?.md) return;
-  const mdKey = currentItem.md;
+  const mdKey = currentActiveMd || currentItem?.md;
+  if (!mdKey) return;
   const entry = MD_MAP[mdKey];
   if (!entry) return;
 
   document.getElementById('rmTitle').textContent = currentItem.label;
-  document.getElementById('rmBody').innerHTML =
-    '<div class="rm-loading"><div class="rm-spin"></div> Cargando documentación...</div>';
+  document.getElementById('rmBody').innerHTML = '<div class="rm-loading"><div class="rm-spin"></div> Cargando...</div>';
   document.getElementById('rmOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  /* Usar cache si existe */
   if (mdCache[mdKey]) { renderMd(mdCache[mdKey]); return; }
 
   try {
     let combined = '';
-    const urls = Array.isArray(entry) ? entry : [entry];
-
-    for (const url of urls) {
-      try {
-        const r = await fetch(url);
-        if (!r.ok) continue;
-        const text = await r.text();
-        combined += (combined ? '\n\n---\n\n' : '') + text;
-      } catch(e) { /* saltar este archivo si falla */ }
+    for (const url of (Array.isArray(entry) ? entry : [entry])) {
+      try { const r = await fetch(url); if (r.ok) combined += (combined ? '\n\n---\n\n' : '') + await r.text(); } catch(e) {}
     }
-
-    if (!combined) throw new Error('Sin contenido');
+    if (!combined) throw new Error('vacío');
     mdCache[mdKey] = combined;
     renderMd(combined);
   } catch(e) {
     document.getElementById('rmBody').innerHTML =
-      '<div class="rm-loading" style="flex-direction:column;gap:10px">' +
-      '<span style="font-size:28px">📄</span>' +
-      '<span>README no encontrado</span></div>';
+      '<div class="rm-loading" style="flex-direction:column;gap:10px"><span style="font-size:28px">📄</span><span>README no encontrado</span></div>';
   }
 }
 
@@ -490,99 +479,82 @@ document.getElementById('rmCpBtn').addEventListener('click', () => {
   b.textContent = '✅ Copiado';
   setTimeout(() => b.textContent = 'Copiar MD', 2000);
 });
-
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDocs(); });
 
-/* ══════════════════════════════════════════════
-   MARKDOWN → HTML
-   ══════════════════════════════════════════════ */
+/* ── Markdown → HTML ─────────────────────────────── */
 function renderMd(md) {
   currentMdRaw = md;
   const blocks = [];
   let h = md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
-      blocks.push({ lang: lang||'js', code: code.trim() });
-      return '\x00B' + (blocks.length-1) + '\x00';
-    })
-    .replace(/^---+$/gm,       '<hr>')
-    .replace(/^### (.+)$/gm,   '<h3>$1</h3>')
-    .replace(/^## (.+)$/gm,    '<h2>$1</h2>')
-    .replace(/^# (.+)$/gm,     '<h1>$1</h1>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/`([^`]+)`/g,     '<code>$1</code>')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-    .replace(/^&gt; (.+)$/gm,  '<blockquote>$1</blockquote>')
-    .replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm, (_, hdr, rows) => {
-      const ths = hdr.split('|').filter(c=>c.trim()).map(c=>'<th>'+c.trim()+'</th>').join('');
-      const trs = rows.trim().split('\n').map(r =>
-        '<tr>' + r.split('|').filter(c=>c.trim()).map(c=>'<td>'+c.trim()+'</td>').join('') + '</tr>'
-      ).join('');
-      return '<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';
-    })
-    .replace(/^[\*\-] (.+)$/gm, '<li>$1</li>')
-    .replace(/((?:<li>[^<]*<\/li>\n?)+)/g, '<ul>$1</ul>')
-    .replace(/^(?!<)(.+)$/gm, '<p>$1</p>');
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code)=>{blocks.push({lang:lang||'js',code:code.trim()});return '\x00B'+(blocks.length-1)+'\x00';})
+    .replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>')
+    .replace(/^&gt; (.+)$/gm,'<blockquote>$1</blockquote>')
+    .replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,(_,hdr,rows)=>{
+      const ths=hdr.split('|').filter(c=>c.trim()).map(c=>'<th>'+c.trim()+'</th>').join('');
+      const trs=rows.trim().split('\n').map(r=>'<tr>'+r.split('|').filter(c=>c.trim()).map(c=>'<td>'+c.trim()+'</td>').join('')+'</tr>').join('');
+      return '<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';})
+    .replace(/^[\*\-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>')
+    .replace(/^(?!<)(.+)$/gm,'<p>$1</p>');
 
-  h = h.replace(/\x00B(\d+)\x00/g, (_, i) => {
-    const { lang, code } = blocks[+i];
-    return '<pre><div class="rm-pre-top">' +
-      '<span class="rm-pre-lang">' + lang + '</span>' +
-      '<button class="rm-pre-cp" onclick="cpBlock(this)">Copiar</button>' +
-      '</div><code class="lang-' + lang + '">' + code + '</code></pre>';
+  h = h.replace(/\x00B(\d+)\x00/g,(_,i)=>{
+    const{lang,code}=blocks[+i];
+    return '<pre><div class="rm-pre-top"><span class="rm-pre-lang">'+lang+'</span><button class="rm-pre-cp" onclick="cpBlock(this)">Copiar</button></div><code class="lang-'+lang+'">'+code+'</code></pre>';
   });
 
-  document.getElementById('rmBody').innerHTML = '<div class="rm-md">' + h + '</div>';
+  document.getElementById('rmBody').innerHTML = '<div class="rm-md">'+h+'</div>';
+  const h1El = document.querySelector('#rmBody h1');
+  if (h1El) { document.getElementById('rmTitle').textContent = h1El.textContent; h1El.style.display = 'none'; }
   hlCode();
 }
 
 function hlCode() {
   document.querySelectorAll('#rmBody pre code').forEach(el => {
     let c = el.innerHTML;
-    c = c.replace(/(&#x27;[^<]*?&#x27;|&quot;[^<]*?&quot;)/g, '<span class="hl-str">$1</span>');
-    c = c.replace(/\/\/[^\n]*/g, '<span class="hl-cmt">$&</span>');
-    c = c.replace(/\b(const|let|var|new|return|if|else|for|of|in|function|async|await|class|this|true|false|null|undefined|import|export|from|default)\b/g, '<span class="hl-kw">$1</span>');
-    c = c.replace(/\b(\d+\.?\d*)\b/g, '<span class="hl-num">$1</span>');
+    c = c.replace(/(&#x27;[^<]*?&#x27;|&quot;[^<]*?&quot;)/g,'<span class="hl-str">$1</span>');
+    c = c.replace(/\/\/[^\n]*/g,'<span class="hl-cmt">$&</span>');
+    c = c.replace(/\b(const|let|var|new|return|if|else|for|of|in|function|async|await|class|this|true|false|null|undefined|import|export|from|default)\b/g,'<span class="hl-kw">$1</span>');
+    c = c.replace(/\b(\d+\.?\d*)\b/g,'<span class="hl-num">$1</span>');
     el.innerHTML = c;
   });
 }
 
 function cpBlock(btn) {
-  const code = btn.closest('pre').querySelector('code');
-  navigator.clipboard?.writeText(code.textContent || '');
-  const o = btn.textContent; btn.textContent = '✅';
-  setTimeout(() => btn.textContent = o, 1500);
+  navigator.clipboard?.writeText(btn.closest('pre').querySelector('code').textContent||'');
+  const o=btn.textContent; btn.textContent='✅'; setTimeout(()=>btn.textContent=o,1500);
 }
 
-/* ══════════════════════════════════════════════
-   WELCOME
-   ══════════════════════════════════════════════ */
+/* ── Welcome ─────────────────────────────────────── */
 function showWelcome() {
   const el = document.getElementById('welcomeScreen');
   el.innerHTML = `
     <div class="welcome__logo">M</div>
     <div class="welcome__title">Matios <span>UI</span></div>
-    <p class="welcome__sub">Framework CSS/JS — zero deps, temas via CSS Variables, 30+ componentes.</p>
+    <p class="welcome__sub">Framework CSS/JS · 0 dependencias · temas via CSS Variables · 60+ componentes.</p>
     <div class="welcome__stats">
-      <div class="welcome__stat"><div class="welcome__stat-val">30+</div><div class="welcome__stat-lbl">Componentes</div></div>
-      <div class="welcome__stat"><div class="welcome__stat-val">262</div><div class="welcome__stat-lbl">Íconos</div></div>
-      <div class="welcome__stat"><div class="welcome__stat-val">5</div><div class="welcome__stat-lbl">Temas</div></div>
+      <div class="welcome__stat"><div class="welcome__stat-val">60+</div><div class="welcome__stat-lbl">Componentes</div></div>
+      <div class="welcome__stat"><div class="welcome__stat-val">278</div><div class="welcome__stat-lbl">Íconos</div></div>
+      <div class="welcome__stat"><div class="welcome__stat-val">2×4</div><div class="welcome__stat-lbl">Temas</div></div>
     </div>
     <div class="welcome__chips">
-      <div class="welcome__chip" onclick="loadById('forms')">✏️ Formularios</div>
-      <div class="welcome__chip" onclick="loadById('navigation')">🧭 Navegación</div>
-      <div class="welcome__chip" onclick="loadById('display')">🖼️ Display</div>
-      <div class="welcome__chip" onclick="loadById('charts')">📊 Charts</div>
-      <div class="welcome__chip" onclick="loadById('calendar')">📅 Calendario</div>
-      <div class="welcome__chip" onclick="loadById('icons')">✨ Íconos</div>
+      <div class="welcome__chip" onclick="loadById('forms')"><i class="mts-icon mts-icon-form"></i>Formularios</div>
+      <div class="welcome__chip" onclick="loadById('navigation')"><i class="mts-icon mts-icon-compass"></i>Navegación</div>
+      <div class="welcome__chip" onclick="loadById('overlays')"><i class="mts-icon mts-icon-layers"></i>Overlays</div>
+      <div class="welcome__chip" onclick="loadById('display')"><i class="mts-icon mts-icon-grid"></i>Display</div>
+      <div class="welcome__chip" onclick="loadById('data')"><i class="mts-icon mts-icon-database"></i>Data</div>
+      <div class="welcome__chip" onclick="loadById('icons')"><i class="mts-icon mts-icon-star"></i>Íconos</div>
     </div>
-    <button class="welcome__cta" onclick="loadById('showcase')">⚡ Abrir Showcase</button>`;
+    <button class="welcome__cta" onclick="loadById('showcase')">
+      <i class="mts-icon mts-icon-activity mts-icon--sm"></i>
+      Abrir Showcase
+    </button>`;
+  if (window.MTS && MTS.Icon) MTS.Icon.initAll();
 }
 
 buildSidebar();
 showWelcome();
-
-
 </script>
 </body>
 </html>

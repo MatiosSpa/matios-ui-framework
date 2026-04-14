@@ -38,12 +38,24 @@ MTS.Validate = class MtsValidate {
       : selectorOrForm;
     if (!this._form) { console.error('[MTS.Validate] Form no encontrado:', selectorOrForm); return; }
 
-    this.rules    = options.rules    || {};
+    // Validation rules per field / Reglas de validación por campo
+    this.rules = options.rules || {};
+
+    // Custom error messages per field and rule / Mensajes de error personalizados
     this.messages = options.messages || {};
-    this.onValid   = options.onValid   || null;
+
+    // Fires when form is valid on submit / Se dispara cuando el formulario es válido al enviar
+    this.onValid = options.onValid || null;
+
+    // Fires when form has errors on submit / Se dispara cuando el formulario tiene errores al enviar
     this.onInvalid = options.onInvalid || null;
-    this.validateOnBlur  = options.validateOnBlur  ?? true;
+
+    // Validate when field loses focus / Validar al perder foco
+    this.validateOnBlur = options.validateOnBlur ?? true;
+
+    // Validate on every keystroke / Validar en cada tecla
     this.validateOnInput = options.validateOnInput ?? false;
+
     this._errors  = {};
     this._touched = {};
 

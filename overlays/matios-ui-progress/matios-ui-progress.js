@@ -10,26 +10,60 @@ MTS.Progress = class MtsProgress {
       ? document.querySelector(selector) : selector;
     if (!this._el) { console.error('[MTS.Progress] No encontrado:', selector); return; }
 
-    this.type        = options.type        || 'bar';
-    this.value       = options.value       ?? 0;
-    this.min         = options.min         ?? 0;
-    this.max         = options.max         ?? 100;
-    this.variant     = options.variant     || 'default';
-    this.size        = options.size        || 'md';
-    this.showLabel   = options.showLabel   ?? false;
-    this.showValue   = options.showValue   ?? false;
-    this.striped     = options.striped     ?? false;
-    this.animated    = options.animated    ?? false;
-    this.rounded     = options.rounded     ?? true;
-    this.radius      = options.radius      || 40;
+    // Type: 'bar' | 'circle' | 'indeterminate' / Tipo
+    this.type = options.type || 'bar';
+
+    // Current value / Valor actual
+    this.value = options.value ?? 0;
+
+    // Minimum value / Valor mínimo
+    this.min = options.min ?? 0;
+
+    // Maximum value / Valor máximo
+    this.max = options.max ?? 100;
+
+    // Color variant: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
+    // Variante de color
+    this.variant = options.variant || 'default';
+
+    // Size: 'xs' | 'sm' | 'md' | 'lg' / Tamaño
+    this.size = options.size || 'md';
+
+    // Show label text / Mostrar texto de label
+    this.showLabel = options.showLabel ?? false;
+
+    // Show value as percentage / Mostrar valor como porcentaje
+    this.showValue = options.showValue ?? false;
+
+    // Striped fill pattern / Patrón de relleno rayado
+    this.striped = options.striped ?? false;
+
+    // Animate stripes / Animar las rayas
+    this.animated = options.animated ?? false;
+
+    // Rounded corners / Esquinas redondeadas
+    this.rounded = options.rounded ?? true;
+
+    // Circle radius in px (circle type only) / Radio del círculo en px (solo tipo circle)
+    this.radius = options.radius || 40;
+
+    // Stroke width in px (circle type only) / Ancho del trazo en px (solo tipo circle)
     this.strokeWidth = options.strokeWidth || 6;
-    this.label       = options.label       || '';
+
+    // Label text / Texto del label
+    this.label = options.label || '';
+
+    // Custom label formatter: (value, pct) => string / Formateador de label personalizado
     this.labelFormat = options.labelFormat || null;
-    this._listeners  = {};
+
+    this._listeners     = {};
     this._indeterminate = (this.type === 'indeterminate');
 
+    // Fires when value changes: ({ value, pct }) => {} / Se dispara al cambiar el valor
     if (options.onChange)   this.on('change',   options.onChange);
-    if (options.onComplete) this.on('complete',  options.onComplete);
+
+    // Fires when value reaches max / Se dispara cuando el valor llega al máximo
+    if (options.onComplete) this.on('complete', options.onComplete);
 
     this._build();
   }

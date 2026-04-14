@@ -1,206 +1,233 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="es" data-mts-mode="dark">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.Alert — Demo</title>
-      <script>
+  <script>
     (function(){
-      var m=(location.hash||'').match(/mts-theme=([a-z-]+)/);
-      if(m) document.documentElement.setAttribute('data-mts-theme',m[1]);
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
       try{
         var p=window.parent;
         if(p&&p!==window){
-          var pt=p.currentThemeVal||p.document.documentElement.getAttribute('data-mts-theme');
-          if(pt) document.documentElement.setAttribute('data-mts-theme',pt);
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
         }
       }catch(e){}
     })();
   </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Alert — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-blue.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-theme-high-contrast.css">
-  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../shared/demo-shared.css">
   <link rel="stylesheet" href="./matios-ui-alert.css">
-  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../shared/demo-shared.js"></script>
   <script src="./matios-ui-alert.js"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
-    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
-    .demo-section{display:flex;flex-direction:column;gap:14px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
-    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
-    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
-    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
-    .demo-docs-panel.open{display:block;}
-    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
-    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
-    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
-    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
-    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
-    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
-    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
-    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
-    .demo-docs-panel p{margin:0 0 10px;}
-    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
-    .demo-docs-panel a{color:var(--mts-color-primary);text-decoration:none;}
-    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-  </style>
 </head>
 <body>
 <div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setTheme('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setTheme('light')">Light</button>
-  <button class="demo-btn-sm" onclick="setTheme('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setTheme('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setTheme('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setTheme('high-contrast')">HC</button>
+  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
+  <button class="demo-btn-sm demo-btn-sep">—</button>
+  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
-
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Alert</h1>
-    <p>Alertas inline con variantes, íconos, acciones y auto-dismiss.</p>
+    <p>Inline alerts and banners — variants, icons, action buttons, auto-dismiss.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-alert.md')">📄 Documentación</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-alert.md')">📄 Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
+  <!-- 1. Variantes -->
   <div class="demo-section">
-    <div class="demo-section-title">1 — Variantes</div>
+    <div class="demo-section-title">1 — Variantes / Variants</div>
     <div id="alert-info"></div>
     <div id="alert-success"></div>
     <div id="alert-warning"></div>
     <div id="alert-danger"></div>
-    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c1"><code>MTS.Alert.show('#el', {
-  variant: 'info',      // 'info'|'success'|'warning'|'danger'
-  title:   'Información',
-  message: 'El sistema se actualizará el próximo domingo.',
-  closable: true,
-  onClose: (e) => console.log('cerrado'),
-})
-// También con acción
-MTS.Alert.show('#el', {
-  variant: 'success',
-  title:   'Guardado',
-  message: 'Los cambios ya están disponibles.',
-  action:  'Ver cambios',
-  onAction: () => console.log('acción ejecutada'),
-})</code></pre>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Banner (ancho completo)</div>
-    <div id="alert-banner"></div>
-    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c2"><code>MTS.Alert.show('#el', {
-  variant: 'info',
-  banner:   true,     // sin border-radius, diseño más compacto
-  message: 'Versión 2.0 disponible. Nuevos componentes y mejoras.',
-  action:  'Ver novedades',
-  onAction: () => console.log('ver novedades'),
-})</code></pre>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Programático con auto-dismiss</div>
-    <div class="demo-row" style="flex-wrap:wrap;">
-      <button class="demo-btn-sm" style="padding:6px 14px;font-size:12px;" onclick="showAlert('info')">Info</button>
-      <button class="demo-btn-sm" style="padding:6px 14px;font-size:12px;" onclick="showAlert('success')">Success</button>
-      <button class="demo-btn-sm" style="padding:6px 14px;font-size:12px;" onclick="showAlert('warning')">Warning</button>
-      <button class="demo-btn-sm" style="padding:6px 14px;font-size:12px;" onclick="showAlert('danger')">Danger</button>
-      <button class="demo-btn-sm" style="padding:6px 14px;font-size:12px;" onclick="showAlert('success',true)">Auto-dismiss 3s</button>
+    <div class="result-box" id="alert-result">— cierra una alerta —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-al1','js-al1')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-al1','html-al1')">JavaScript</button>
     </div>
-    <div id="alert-container" style="margin-top:8px;"></div>
-    <div class="result-box" id="alert-result">— dispara una alerta —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c3')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c3"><code>// Mostrar en un contenedor (reemplaza el anterior)
-MTS.Alert.show('#mi-contenedor', {
-  variant:     'success',
-  title:       'Guardado',
-  message:     'Los datos se guardaron correctamente.',
-  autoDismiss: 3000,    // se cierra automáticamente en 3 segundos
-  onClose: (e) => console.log('cerrado:', e.detail),
-})</code></pre>
-  </div>
+    <div class="code-panel active" id="html-al1">&lt;div id="my-alert"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new MTS.Alert('#my-alert', {
+    variant: 'success',
+    title:   'Saved',
+    message: 'Changes saved correctly.',
+    // Fires when closed / Se dispara al cerrar
+    onClose: (e) =&gt; console.log('closed'),
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-al1">// Info (default)
+new MTS.Alert('#alert-info', {
+  variant: 'info',
+  title:   'New version available',
+  message: 'Update to get the latest features.',
+  onClose: (e) =&gt; console.log('info closed'),
+});
 
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Sin ícono / sin botón cerrar</div>
-    <div id="alert-no-icon"></div>
-    <div id="alert-no-close"></div>
-    <button class="demo-code-toggle" onclick="toggleCode('c4')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c4"><code>MTS.Alert.show('#el', {
+// Success
+new MTS.Alert('#alert-success', {
+  variant: 'success',
+  title:   'Changes saved',
+  message: 'Your data was saved correctly.',
+  onClose: (e) =&gt; console.log('success closed'),
+});
+
+// Warning
+new MTS.Alert('#alert-warning', {
   variant: 'warning',
-  icon:     false,    // sin ícono
-  message: 'Sin ícono y sin botón de cierre.',
-  closable: false,
-})</code></pre>
+  title:   'Session expiring',
+  message: 'Your session expires in 5 minutes.',
+  onClose: (e) =&gt; console.log('warning closed'),
+});
+
+// Danger
+new MTS.Alert('#alert-danger', {
+  variant: 'danger',
+  title:   'Connection error',
+  message: 'Could not connect to the server.',
+  onClose: (e) =&gt; console.log('danger closed'),
+});</div>
   </div>
 
+  <!-- 2. Con acción y auto-dismiss -->
   <div class="demo-section">
-    <div class="demo-section-title">HTML declarativo</div>
-    <div id="alerth1"></div>
-    <button class="demo-code-toggle" onclick="toggleCode('c-alerth')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c-alerth"><code>&lt;div id="miAlert" data-variant="success" data-title="¡Guardado!" data-message="Cambios guardados." data-closable&gt;&lt;/div&gt;
-&lt;script&gt;new MTS.Alert('#miAlert', { onClose: () =&gt; console.log('cerrado') })&lt;/script&gt;</code></pre>
+    <div class="demo-section-title">2 — Con acción y auto-dismiss / With action and auto-dismiss</div>
+    <div class="demo-row" style="margin-bottom:8px">
+      <button class="demo-btn-sm" onclick="showAction()">Mostrar con acción</button>
+      <button class="demo-btn-sm" onclick="showAutoDismiss()">Auto-dismiss (3s)</button>
+    </div>
+    <div id="alert-action" style="min-height:8px"></div>
+    <div class="result-box" id="alert-action-result">— usa los botones —</div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-al2','js-al2')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-al2','html-al2')">JavaScript</button>
+    </div>
+    <div class="code-panel active" id="html-al2">&lt;div id="my-alert"&gt;&lt;/div&gt;
+&lt;script&gt;
+  // With action button / Con botón de acción
+  new MTS.Alert('#my-alert', {
+    variant: 'warning',
+    message: 'Session expires soon.',
+    action:  'Renew',
+    // Fires on action click / Se dispara al hacer click en la acción
+    onAction: (e) =&gt; renewSession(),
+    onClose:  (e) =&gt; console.log('dismissed'),
+  });
+
+  // Auto-dismiss after 3s / Auto-cerrar tras 3s
+  new MTS.Alert('#my-alert', {
+    variant:     'success',
+    message:     'File uploaded successfully.',
+    autoDismiss: 3000,
+    closable:    false,
+  });
+&lt;/script&gt;</div>
+    <div class="code-panel" id="js-al2">// With action button / Con botón de acción
+new MTS.Alert('#my-alert', {
+  variant: 'warning',
+  title:   'Session expiring',
+  message: 'Your session expires in 5 minutes.',
+  action:  'Renew now',
+  // Fires when action button is clicked / Se dispara al hacer click en la acción
+  onAction: (e) =&gt; console.log('action clicked'),
+  onClose:  (e) =&gt; console.log('dismissed'),
+});
+
+// Auto-dismiss / Auto-cerrar
+new MTS.Alert('#my-alert', {
+  variant:     'success',
+  message:     'File uploaded successfully.',
+  autoDismiss: 3000,   // closes after 3s / cierra tras 3s
+  closable:    false,  // no close button / sin botón de cierre
+});</div>
   </div>
+
+  <!-- 3. Solo CSS -->
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Solo CSS / CSS only (no JS)</div>
+    <div class="mts-alert mts-alert--info" style="margin-bottom:8px">
+      <div class="mts-alert__body"><div class="mts-alert__message">Alerta info — solo CSS.</div></div>
+    </div>
+    <div class="mts-alert mts-alert--success" style="margin-bottom:8px">
+      <div class="mts-alert__body"><div class="mts-alert__title">Éxito</div><div class="mts-alert__message">Cambios guardados.</div></div>
+    </div>
+    <div class="mts-alert mts-alert--warning" style="margin-bottom:8px">
+      <div class="mts-alert__body"><div class="mts-alert__message">Advertencia — revisa tu configuración.</div></div>
+    </div>
+    <div class="mts-alert mts-alert--danger">
+      <div class="mts-alert__body"><div class="mts-alert__message">Error — no se pudo completar la operación.</div></div>
+    </div>
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="switchTab(this,'html-al3','js-al3')">HTML</button>
+      <button class="code-tab" onclick="switchTab(this,'js-al3','html-al3')">CSS classes</button>
+    </div>
+    <div class="code-panel active" id="html-al3">&lt;!-- No JS needed / Sin JS --&gt;
+&lt;div class="mts-alert mts-alert--success"&gt;
+  &lt;div class="mts-alert__body"&gt;
+    &lt;div class="mts-alert__title"&gt;Success&lt;/div&gt;
+    &lt;div class="mts-alert__message"&gt;Changes saved correctly.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+    <div class="code-panel" id="js-al3">.mts-alert               → base alert
+.mts-alert--info         → blue info
+.mts-alert--success      → green success
+.mts-alert--warning      → yellow warning
+.mts-alert--danger       → red danger
+.mts-alert__body         → text container
+.mts-alert__title        → title
+.mts-alert__message      → message</div>
+  </div>
+
 </div>
 <script>
-function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
-window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
-if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
-function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
-function toggleDocs(id,mdPath){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';fetch(mdPath).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>No se pudo cargar.</em>';});}
-function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
-
-MTS.Alert.show('#alert-info',{variant:'info',title:'Información',message:'El sistema se actualizará el próximo domingo a las 03:00 hrs.',closable:true,onClose:function(e){document.getElementById('alert-result').textContent='onClose → variant: "'+e.detail.variant+'"';}});
-MTS.Alert.show('#alert-success',{variant:'success',title:'Guardado correctamente',message:'Los cambios se guardaron y ya están disponibles para todos los usuarios.',closable:true,action:'Ver cambios',onAction:function(){document.getElementById('alert-result').textContent='onAction → "Ver cambios" ejecutado';}});
-MTS.Alert.show('#alert-warning',{variant:'warning',title:'Atención requerida',message:'El archivo supera el tamaño recomendado de 10MB. Puede afectar el rendimiento.',closable:true});
-MTS.Alert.show('#alert-danger',{variant:'danger',title:'Error al procesar',message:'No se pudo conectar con el servidor de pagos. Intenta de nuevo en unos minutos.',closable:true,action:'Reintentar',onAction:function(){document.getElementById('alert-result').textContent='onAction → "Reintentar" ejecutado';}});
-MTS.Alert.show('#alert-banner',{variant:'info',banner:true,message:'Versión 2.0 disponible — nuevos componentes, temas mejorados y rendimiento optimizado.',action:'Ver novedades',onAction:function(){document.getElementById('alert-result').textContent='onAction → "Ver novedades"';}});
-
-var ALERT_MSGS={
-  info:    {title:'Información',  message:'Operación realizada correctamente.'},
-  success: {title:'Éxito',        message:'Los datos se guardaron correctamente.'},
-  warning: {title:'Advertencia',  message:'Revisa los campos antes de continuar.'},
-  danger:  {title:'Error',        message:'Ocurrió un error inesperado. Intenta de nuevo.'},
-};
-function showAlert(variant,autoDismiss){
-  var m=ALERT_MSGS[variant];
-  MTS.Alert.show('#alert-container',{
-    variant:variant,title:m.title,message:m.message,closable:true,
-    autoDismiss:autoDismiss?3000:undefined,
-    onClose:function(e){document.getElementById('alert-result').textContent='onClose → variant: "'+variant+'"';}
+function mountVariants() {
+  ['info','success','warning','danger'].forEach(function(v){
+    var el = document.getElementById('alert-' + v);
+    if (el) el.innerHTML = '';
   });
-  document.getElementById('alert-result').textContent='Alert "'+variant+'" mostrada'+(autoDismiss?' — se cierra en 3s':'');
+  new MTS.Alert('#alert-info',    { variant:'info',    title:'Nueva versión disponible', message:'Actualiza para obtener las últimas funciones.', onClose: function(){ document.getElementById('alert-result').textContent = 'onClose → info'; } });
+  new MTS.Alert('#alert-success', { variant:'success',  title:'Cambios guardados',        message:'Tus datos se guardaron correctamente.',         onClose: function(){ document.getElementById('alert-result').textContent = 'onClose → success'; } });
+  new MTS.Alert('#alert-warning', { variant:'warning',  title:'Sesión por expirar',       message:'Tu sesión expira en 5 minutos.',                onClose: function(){ document.getElementById('alert-result').textContent = 'onClose → warning'; } });
+  new MTS.Alert('#alert-danger',  { variant:'danger',   title:'Error de conexión',        message:'No se pudo conectar con el servidor.',          onClose: function(){ document.getElementById('alert-result').textContent = 'onClose → danger'; } });
 }
-
-MTS.Alert.show('#alert-no-icon', {variant:'warning',icon:false,message:'Alerta sin ícono — solo texto y botón de cierre.',closable:true});
-MTS.Alert.show('#alert-no-close',{variant:'info',message:'Alerta sin botón de cierre — solo se puede cerrar programáticamente.',closable:false});
-
-
-new MTS.Alert(document.getElementById('alerth1'),{variant:'success',title:'¡Guardado!',message:'Iniciado desde data-* del HTML.',closable:true,onClose:function(){console.log('alert cerrado');}});
+function showAction() {
+  document.getElementById('alert-action').innerHTML = '';
+  new MTS.Alert('#alert-action', {
+    variant:'warning', title:'Sesión por expirar', message:'Tu sesión expira en 5 minutos.',
+    action:'Renovar ahora',
+    onAction: function(){ document.getElementById('alert-action-result').textContent = 'onAction → renovar'; },
+    onClose:  function(){ document.getElementById('alert-action-result').textContent = 'onClose → descartado'; },
+  });
+}
+function showAutoDismiss() {
+  document.getElementById('alert-action').innerHTML = '';
+  document.getElementById('alert-action-result').textContent = 'Auto-dismiss en 3 segundos...';
+  new MTS.Alert('#alert-action', {
+    variant:'success', message:'Archivo subido correctamente.', autoDismiss:3000, closable:false,
+    onClose: function(){ document.getElementById('alert-action-result').textContent = 'onClose → auto-dismissed ✓'; },
+  });
+}
+mountVariants();
 </script>
 </body>
 </html>

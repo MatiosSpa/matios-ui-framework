@@ -22,14 +22,30 @@ MTS.Avatar = class MtsAvatar {
   constructor(selector, options = {}) {
     this._el    = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    this.src      = options.src      || null;
-    this.name     = options.name     || '';
+    // Image URL — falls back to initials on error / URL de imagen — cae a iniciales si falla
+    this.src = options.src || null;
+
+    // Full name — used to generate initials and auto color / Nombre completo — genera iniciales y color auto
+    this.name = options.name || '';
+
+    // Manual initials — overrides name / Iniciales manuales — sobreescribe name
     this.initials = options.initials || MTS.Avatar.getInitials(this.name);
-    this.size     = options.size     || 'md';
-    this.color    = options.color    || MTS.Avatar.colorFromName(this.name);
-    this.status   = options.status   || null;
-    this.square   = options.square   ?? false;
-    this.badge    = options.badge    ?? null;
+
+    // Size: 'xs' | 'sm' | 'md' | 'lg' | 'xl' / Tamaño
+    this.size = options.size || 'md';
+
+    // Background color (auto-generated from name if not set) / Color de fondo (auto desde name)
+    this.color = options.color || MTS.Avatar.colorFromName(this.name);
+
+    // Status dot: 'online' | 'offline' | 'busy' | 'away' / Indicador de estado
+    this.status = options.status || null;
+
+    // Square shape / Forma cuadrada
+    this.square = options.square ?? false;
+
+    // Badge text or number / Texto o número en badge
+    this.badge = options.badge ?? null;
+
     this._build();
   }
 
