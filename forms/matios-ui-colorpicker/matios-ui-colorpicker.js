@@ -17,7 +17,8 @@ MTS.ColorPicker = class MtsColorPicker {
    * @param {Array}    options.presets     Colores de la paleta — default: 14 colores
    * @param {boolean}  options.showPresets Muestra paleta — default: true
    * @param {boolean}  options.showSliders Muestra sliders HSL — default: true
-   * @param {boolean}  options.showInput   Muestra input de texto — default: true
+   * @param {boolean}  options.showInput         Muestra input de texto — default: true
+   * @param {boolean}  options.showFormatSwitch  Muestra botón para cambiar hex/rgb/hsl — default: true
    * @param {boolean}  options.inline      Siempre visible (sin trigger) — default: false
    * @param {string}   options.size        'sm'|'md'|'lg' — default: 'md'
    * @param {boolean}  options.disabled
@@ -63,6 +64,9 @@ MTS.ColorPicker = class MtsColorPicker {
 
     // Show hex input / Mostrar input hex
     this.showInput = options.showInput ?? true;
+
+    // Show format switch button (hex/rgb/hsl) / Mostrar botón de formato
+    this.showFormatSwitch = options.showFormatSwitch ?? true;
 
     // Always visible, no trigger button / Siempre visible, sin botón trigger
     this.inline = options.inline ?? false;
@@ -293,31 +297,34 @@ MTS.ColorPicker = class MtsColorPicker {
       this._popEl.appendChild(palette);
     }
 
-    /* ── Footer ── */
-    const footer = document.createElement('div');
-    footer.className = 'mts-colorpicker__footer';
+    /* ── Footer — only in popup mode (not inline) ── */
+    if (!this.inline) {
+      const footer = document.createElement('div');
+      footer.className = 'mts-colorpicker__footer';
 
-    const fmtBtn = document.createElement('button');
-    fmtBtn.type = 'button'; fmtBtn.className = 'mts-btn mts-btn--ghost mts-btn--sm';
-    fmtBtn.textContent = this.format.toUpperCase();
-    fmtBtn.addEventListener('click', () => {
-      const fmts = ['hex','rgb','hsl'];
-      this.format = fmts[(fmts.indexOf(this.format)+1) % fmts.length];
+      const fmtBtn = document.createElement('button');
+      fmtBtn.type = 'button'; fmtBtn.className = 'mts-btn mts-btn--ghost mts-btn--sm';
       fmtBtn.textContent = this.format.toUpperCase();
-      if (this._valText) this._valText.textContent = this._formatOutput();
-    });
+      if (!this.showFormatSwitch) fmtBtn.style.display = 'none';
+      fmtBtn.addEventListener('click', () => {
+        const fmts = ['hex','rgb','hsl'];
+        this.format = fmts[(fmts.indexOf(this.format)+1) % fmts.length];
+        fmtBtn.textContent = this.format.toUpperCase();
+        if (this._valText) this._valText.textContent = this._formatOutput();
+      });
 
-    const okBtn = document.createElement('button');
-    okBtn.type = 'button'; okBtn.className = 'mts-btn mts-btn--primary mts-btn--sm';
-    okBtn.textContent = 'Aceptar';
-    okBtn.addEventListener('click', () => {
-      this._updateTrigger();
-      this._emitChange();
-      this._closePop();
-    });
+      const okBtn = document.createElement('button');
+      okBtn.type = 'button'; okBtn.className = 'mts-btn mts-btn--primary mts-btn--sm';
+      okBtn.textContent = 'Aceptar';
+      okBtn.addEventListener('click', () => {
+        this._updateTrigger();
+        this._emitChange();
+        this._closePop();
+      });
 
-    footer.appendChild(fmtBtn); footer.appendChild(okBtn);
-    this._popEl.appendChild(footer);
+      footer.appendChild(fmtBtn); footer.appendChild(okBtn);
+      this._popEl.appendChild(footer);
+    }
   }
 
   _syncSliders() {

@@ -74,6 +74,7 @@ MTS.Input = class MtsInput {
     this.showCount       = options.showCount      ?? false;
     this.rows            = options.rows           ?? 4;
     this.name            = options.name           || null;
+    this.autocomplete    = options.autocomplete   ?? null;
     this.rules           = options.rules          || {};
     this.validateOnBlur  = options.validateOnBlur  ?? true;
     this.validateOnInput = options.validateOnInput ?? false;
@@ -157,7 +158,8 @@ MTS.Input = class MtsInput {
       this._inputEl.value       = this.value;
       if (this.type !== 'textarea') this._inputEl.type = this.type === 'password' ? 'password' : this.type;
       if (this.name)      this._inputEl.name = this.name;
-      if (this.maxLength) this._inputEl.maxLength = this.maxLength;
+      if (this.maxLength)     this._inputEl.maxLength   = this.maxLength;
+      if (this.autocomplete) this._inputEl.setAttribute('autocomplete', this.autocomplete);
       if (this.type === 'textarea') this._inputEl.rows = this.rows;
       this._container.appendChild(this._inputEl);
       this._wrapEl = this._container;
@@ -200,7 +202,8 @@ MTS.Input = class MtsInput {
     this._inputEl.value       = this.value;
     if (this.type !== 'textarea') this._inputEl.type = this.type === 'password' ? 'password' : this.type;
     if (this.name) this._inputEl.name = this.name;
-    if (this.maxLength) this._inputEl.maxLength = this.maxLength;
+    if (this.maxLength)    this._inputEl.maxLength   = this.maxLength;
+    if (this.autocomplete) this._inputEl.setAttribute('autocomplete', this.autocomplete);
     if (this.type === 'textarea') this._inputEl.rows = this.rows;
     wrap.appendChild(this._inputEl);
 
