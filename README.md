@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./Matios-UI-logo.png" alt="Matios UI Framework" width="560">
+  <img src="./logos/Matios-UI-logo-768w.png" alt="Matios UI Framework" width="560">
 </p>
 
 <h1 align="center">Matios UI Framework</h1>
@@ -33,7 +33,6 @@ Matios UI includes:
 - **Standalone demos per component**
 - **Component-level Markdown documentation**
 - **Shared utilities and showcase pages**
-- **Calendar and calendar integrations**
 
 ---
 
@@ -82,7 +81,6 @@ Open `index.html` in your browser to explore the framework.
 ```text
 matios-ui-framework/
 ├─ index.html
-├─ Matios-UI-logo.png
 ├─ base/
 ├─ forms/
 ├─ navigation/
@@ -94,7 +92,6 @@ matios-ui-framework/
 ├─ shared/
 ├─ themes/
 ├─ calendar/
-├─ /
 └─ apps-showcase/
 ```
 
@@ -288,9 +285,8 @@ Example:
 - high-contrast preview
 - CSS variable inspection
 
-### Calendars
+### Calendar
 - calendar demos
-- calendar
 - schedule-oriented UI examples
 
 ### Showcase
@@ -370,7 +366,6 @@ Matios UI is already in a strong state:
 - more consistent demos
 - consolidated mode/accent theming
 - integrated high-contrast mode
-- restored calendar compatibility in the v2 architecture
 - strong open-source baseline
 
 This is no longer just a prototype.  
