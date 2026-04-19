@@ -1,43 +1,62 @@
-# Matios UI
+<p align="center">
+  <img src="./Matios-UI-logo.png" alt="Matios UI Framework" width="560">
+</p>
 
-**Matios UI** is a zero-dependency UI framework for modern web applications built with **plain CSS and JavaScript**.
+<h1 align="center">Matios UI Framework</h1>
+
+<p align="center">
+  Zero-dependency UI framework built with plain CSS and JavaScript.
+  <br>
+  Mode + accent theming, high-contrast support, live demos, and real component structure.
+</p>
+
+---
+
+## Overview
+
+**Matios UI Framework** is a framework-agnostic UI system for modern web applications built with **pure CSS and JavaScript**.
 
 It is designed to be:
-- **framework-agnostic**
-- **themeable via CSS variables**
-- **easy to inspect and extend**
-- **usable directly from static HTML**
-- **consistent across demos, docs, and real apps**
+
+- **Zero dependency**
+- **Easy to inspect**
+- **Easy to extend**
+- **Reusable in static sites, server-rendered apps, legacy systems, and custom platforms**
+- **Consistent across components, demos, and documentation**
 
 Matios UI includes:
+
 - **60+ components**
 - **278 SVG icons**
-- **mode + accent theming**
-- **high-contrast support**
-- **live component demos**
-- **component-level documentation**
-- **real showcase pages and app shells**
+- **Mode + accent theming**
+- **High-contrast mode**
+- **Standalone demos per component**
+- **Component-level Markdown documentation**
+- **Shared utilities and showcase pages**
+- **Calendar and calendar integrations**
 
 ---
 
 ## Why Matios UI
 
-Most UI libraries are tied to a framework, overloaded with dependencies, or hard to customize.
+Most UI libraries are tied to a framework, overloaded with dependencies, or difficult to adapt to real projects.
 
 Matios UI takes a different approach:
 
 - **No external runtime dependencies**
 - **Pure CSS + JS**
-- **Same design language across the whole framework**
-- **Simple folder structure**
+- **Consistent design language**
+- **Simple and inspectable folder structure**
 - **Each component ships with its own CSS, JS, docs, and demo**
-- **Easy to use in legacy apps, server-rendered apps, static sites, or custom platforms**
+- **Works well in enterprise, internal tools, and custom frontends**
 
 ---
 
 ## Features
 
 - **Zero dependencies**
+- **Framework-agnostic**
+- **Pure CSS and JavaScript**
 - **Mode-based theming**
   - `dark`
   - `light`
@@ -47,13 +66,12 @@ Matios UI takes a different approach:
   - `olive`
   - `blue`
 - **Reusable demo shell**
-- **Per-component documentation**
+- **High-contrast support**
 - **Component grouping by domain**
-- **Accessible visual direction**
-- **Responsive-friendly layout tools**
-- **Built-in HTTP client helper**
-- **calendar and full calendar demos**
-- **Consistent naming and structure across the framework**
+- **Realistic showcase pages**
+- **HTTP client helper**
+- **Icon system**
+- **Open and easy-to-read structure**
 
 ---
 
@@ -64,6 +82,7 @@ Open `index.html` in your browser to explore the framework.
 ```text
 matios-ui-framework/
 ├─ index.html
+├─ Matios-UI-logo.png
 ├─ base/
 ├─ forms/
 ├─ navigation/
@@ -79,7 +98,7 @@ matios-ui-framework/
 └─ apps-showcase/
 ```
 
-### Minimal usage
+### Minimal Usage
 
 ```html
 <link rel="stylesheet" href="base/matios-ui-base.css">
@@ -124,7 +143,7 @@ Matios UI uses a **mode + accent** model.
 
 ### High Contrast
 
-`high-contrast` is a full mode on its own.
+`high-contrast` is a complete mode by itself.
 
 ```html
 <html data-mts-mode="high-contrast">
@@ -132,9 +151,7 @@ Matios UI uses a **mode + accent** model.
 
 It does **not require an accent** to work correctly.
 
-If an integrator decides to combine high contrast with an accent, that is possible at application level, but the framework treats **high-contrast as a complete standalone mode**.
-
-### Theme CSS files
+### Theme CSS Files
 
 ```html
 <link rel="stylesheet" href="themes/matios-ui-mode-dark.css">
@@ -161,6 +178,7 @@ matios-ui-xxx/
 ```
 
 This makes the framework:
+
 - easy to learn
 - easy to debug
 - easy to maintain
@@ -171,7 +189,6 @@ This makes the framework:
 ## Component Groups
 
 ### Forms
-Inputs and form helpers such as:
 - Button
 - Input
 - Select
@@ -194,7 +211,6 @@ Inputs and form helpers such as:
 - Label
 
 ### Navigation
-Navigation and interaction patterns such as:
 - Tabs
 - Accordion
 - Breadcrumb
@@ -210,7 +226,6 @@ Navigation and interaction patterns such as:
 - Intersection Reveal
 
 ### Overlays
-Transient feedback and layered UI:
 - Alert
 - Badge
 - Tooltip
@@ -223,7 +238,6 @@ Transient feedback and layered UI:
 - Lightbox
 
 ### Display
-Presentation-focused components:
 - Avatar
 - Card
 - KPI Card
@@ -239,30 +253,26 @@ Presentation-focused components:
 - Splitter
 
 ### Layout
-Structural page composition:
 - Grid
 - ScrollSpy
 - Intersection Reveal
 - Splitter
 
 ### Data
-Data visualization and data-heavy UI:
 - Table
-- Infinite scroll utilities
-- additional data-oriented demos and helpers
+- Infinite utilities
+- data-oriented demos and helpers
 
 ### Shared
-Cross-cutting helpers:
 - HttpClient
-- internal demo/shared support
+- shared demo support
 
 ### Icons
-Built-in SVG icon system:
 - **278 icons**
-- outline / filled support
-- semantic coloring
+- outline / filled
+- semantic colors
 - size variants
-- easy usage in components and demos
+- animation support
 
 Example:
 
@@ -273,37 +283,35 @@ Example:
 ```
 
 ### Themes
-Dedicated theme demo and structure for:
 - mode switching
 - accent switching
-- high contrast preview
+- high-contrast preview
 - CSS variable inspection
 
 ### Calendars
-Matios UI includes calendar-related work such as:
 - calendar demos
-- calendar implementation
-- richer schedule-oriented UI examples
+- calendar
+- schedule-oriented UI examples
 
 ### Showcase
-The framework also includes higher-level demo pages and showcase experiences to validate components in realistic layouts.
+- higher-level demo pages
+- more realistic app-like screens
+- shell validation for components in context
 
 ---
 
 ## Documentation Strategy
 
-Matios UI is not just a component dump.
+Matios UI is not just a list of components.
 
-It follows a documentation pattern where each component includes:
+Each component includes:
 
 - a **standalone demo**
 - a **Markdown documentation file**
-- real **HTML / JavaScript usage examples**
+- real **HTML / JavaScript examples**
 - a **consistent preview structure**
 
-This makes the repo useful both as:
-- a UI framework
-- and a living reference library
+That makes the repo useful both as a framework and as a living reference library.
 
 ---
 
@@ -313,31 +321,29 @@ Matios UI is being shaped around these principles:
 
 - **Use Matios components first**
 - **Avoid fake demo-only UI when a real component already exists**
-- **Keep visual consistency across demos**
+- **Keep demos visually consistent**
 - **Keep helpers minimal**
-- **Respect the framework naming and grouping**
+- **Respect naming and grouping**
 - **Prefer clarity over cleverness**
-- **Keep the framework easy to inspect from source**
+- **Keep the source easy to inspect**
 
 ---
 
 ## Accessibility Direction
 
-Matios UI includes a dedicated **high-contrast mode** and is moving toward stronger accessibility consistency through:
+Matios UI includes a dedicated **high-contrast mode** and continues moving toward stronger accessibility consistency through:
 
 - visible focus states
 - stronger contrast handling
 - semantic colors
-- clearer interactive states
+- clearer interaction states
 - reusable theme variables
 
 ---
 
 ## Events and Integration
 
-Components can emit events using the `mts:*` namespace pattern, making integration with external apps straightforward.
-
-Example:
+Components can emit events using the `mts:*` namespace pattern.
 
 ```javascript
 document.getElementById('my-calendar')
@@ -346,12 +352,13 @@ document.getElementById('my-calendar')
   });
 ```
 
-Because Matios UI is framework-agnostic, it can be integrated into:
+Because Matios UI is framework-agnostic, it can be used in:
+
 - static HTML projects
 - server-rendered apps
-- legacy enterprise systems
+- legacy enterprise apps
+- custom JavaScript apps
 - microfrontend environments
-- custom JavaScript applications
 
 ---
 
@@ -359,15 +366,15 @@ Because Matios UI is framework-agnostic, it can be integrated into:
 
 Matios UI is already in a strong state:
 
-- the framework structure is coherent
-- demos are much more consistent
-- mode/accent theming is consolidated
-- high-contrast mode is integrated
-- calendar  compatibility was restored in the v2 architecture
-- the repo is approaching a very solid open-source baseline
+- coherent framework structure
+- more consistent demos
+- consolidated mode/accent theming
+- integrated high-contrast mode
+- restored calendar compatibility in the v2 architecture
+- strong open-source baseline
 
-This is no longer just a prototype.
-It is a real framework with its own visual and technical identity.
+This is no longer just a prototype.  
+It is a real framework with its own technical and visual identity.
 
 ---
 
@@ -376,8 +383,8 @@ It is a real framework with its own visual and technical identity.
 - `index.html` → main framework shell
 - `themes/demo.html` → theming preview
 - `icons/demo.html` → icon system
-- group `demo.html` files → grouped component navigation
-- per-component `demo.html` files → isolated usage examples
+- group `demo.html` files → grouped navigation
+- per-component `demo.html` files → isolated examples
 
 ---
 
@@ -385,10 +392,11 @@ It is a real framework with its own visual and technical identity.
 
 Use it, inspect it, adapt it, and build on top of it.
 
-Matios UI is being built to be practical, understandable, and genuinely reusable.
+Matios UI Framework is being built to be practical, understandable, and genuinely reusable.
 
 ---
 
-**Matios UI**  
-Zero-dependency UI framework.  
-Pure CSS. Pure JavaScript. Real structure.
+<p align="center">
+  <strong>Matios UI Framework</strong><br>
+  Pure CSS. Pure JavaScript. Real structure.
+</p>
