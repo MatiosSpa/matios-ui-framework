@@ -1,118 +1,66 @@
-# Temas — Matios UI
+# Themes — Matios UI
 
-Sistema de temas via CSS Variables. Cada tema redefine las variables de `matios-ui-base.css`.
+Arquitectura oficial de temas basada en:
 
----
+- **Modes**
+  - `matios-ui-mode-dark.css`
+  - `matios-ui-mode-light.css`
+  - `matios-ui-mode-high-contrast.css`
+- **Accents**
+  - `matios-ui-accent-blue.css`
+  - `matios-ui-accent-olive.css`
+  - `matios-ui-accent-violet.css`
 
-## Temas incluidos
+## Regla base
 
-| Archivo | Nombre | Descripción |
-|---------|--------|-------------|
-| `matios-ui-theme-dark.css`    | `dark`    | Oscuro neutro (default) |
-| `matios-ui-theme-light.css`   | `light`   | Claro |
-| `matios-ui-theme-violet.css` | `violet` | Púrpura oscuro profundo, Syne en títulos |
+- `data-mts-mode` define la base visual completa.
+- `data-mts-accent` es opcional y solo redefine el color primario.
+- `high-contrast` funciona completo por sí solo.
 
----
-
-## Instalación
+## Activación
 
 ```html
-<!-- Base siempre primero -->
+<html data-mts-mode="dark">
+<html data-mts-mode="light">
+<html data-mts-mode="high-contrast">
+
+<html data-mts-mode="dark" data-mts-accent="violet">
+<html data-mts-mode="light" data-mts-accent="olive">
+```
+
+## CSS a importar
+
+```html
 <link rel="stylesheet" href="../base/matios-ui-base.css">
 
-<!-- Luego el tema que quieras usar -->
-<link rel="stylesheet" href="../themes/matios-ui-theme-dark.css">
-<!-- o -->
-<link rel="stylesheet" href="../themes/matios-ui-theme-violet.css">
+<link rel="stylesheet" href="../themes/matios-ui-mode-dark.css">
+<link rel="stylesheet" href="../themes/matios-ui-mode-light.css">
+<link rel="stylesheet" href="../themes/matios-ui-mode-high-contrast.css">
+
+<link rel="stylesheet" href="../themes/matios-ui-accent-violet.css">
+<link rel="stylesheet" href="../themes/matios-ui-accent-olive.css">
+<link rel="stylesheet" href="../themes/matios-ui-accent-blue.css">
 ```
 
----
+## High contrast
 
-## Activar un tema
+`matios-ui-mode-high-contrast.css` es un **mode** completo:
 
-### Via HTML
-```html
-<html data-mts-theme="dark">
-<html data-mts-theme="light">
-<html data-mts-theme="violeta">
-```
+- negro puro
+- texto blanco
+- foco reforzado
+- bordes muy visibles
+- paleta pensada para accesibilidad
 
-### Via JavaScript
-```js
-document.documentElement.setAttribute('data-mts-theme', 'violeta');
-```
+No necesita accent para funcionar.
 
-### Via MTS.Layout
-```js
-const layout = new MTS.Layout('#app', {
-  theme: 'violeta',
-  onThemeChange: (t) => localStorage.setItem('mts-theme', t),
-});
+Si un integrador además carga un accent encima, la mezcla queda bajo su responsabilidad.
 
-// Cambiar en runtime
-layout.setTheme('dark');
-layout.toggleTheme();   // alterna dark ↔ light
-layout.getTheme();      // → 'dark'
-```
-
----
-
-## Variables principales
-
-Todas las variables que puedes sobrescribir al crear un tema custom:
+## Crear un mode custom
 
 ```css
-[data-mts-theme="mi-tema"] {
-
-  /* ── Colores de acento ── */
-  --mts-color-primary:        #ff5500;
-  --mts-color-primary-hover:  #e04d00;
-  --mts-color-primary-active: #c44400;
-  --mts-color-primary-light:  rgba(255,85,0,.12);
-  --mts-color-primary-text:   #ffffff;
-
-  --mts-color-accent:         #ffaa00;
-  --mts-color-success:        #34d399;
-  --mts-color-warning:        #fbbf24;
-  --mts-color-danger:         #f87171;
-  --mts-color-info:           #38bdf8;
-
-  /* ── Fondos ── */
-  --mts-bg-body:      #0a0a0a;
-  --mts-bg-surface:   #111111;
-  --mts-bg-surface-2: #1a1a1a;
-
-  /* ── Texto ── */
-  --mts-text-primary:   #ffffff;
-  --mts-text-secondary: #cccccc;
-  --mts-text-muted:     #888888;
-
-  /* ── Bordes ── */
-  --mts-border-color:       #333333;
-  --mts-border-color-focus: #ff5500;
-
-  /* ── Sombras ── */
-  --mts-shadow-md: 0 2px 10px rgba(0,0,0,.5);
-  --mts-shadow-lg: 0 4px 20px rgba(0,0,0,.6);
-
-  /* ── Tipografía ── */
-  --mts-font-family: 'Mi Fuente', sans-serif;
-}
-```
-
----
-
-## Crear un tema custom completo
-
-```css
-/* mi-empresa-theme.css */
-[data-mts-theme="mi-empresa"] {
-  --mts-color-primary:       #e63946;   /* rojo corporativo */
-  --mts-color-primary-hover: #c1121f;
-  --mts-color-primary-light: rgba(230,57,70,.12);
-  --mts-color-primary-text:  #ffffff;
-
-  --mts-bg-body:      #1a0a0a;          /* rojo muy oscuro */
+[data-mts-mode="mi-empresa"] {
+  --mts-bg-body:      #1a0a0a;
   --mts-bg-surface:   #220d0d;
   --mts-bg-surface-2: #2d1010;
 
@@ -123,33 +71,24 @@ Todas las variables que puedes sobrescribir al crear un tema custom:
   --mts-border-color:       #3d1515;
   --mts-border-color-focus: #e63946;
 }
+```
 
-/* Estilos específicos de tu tema */
-[data-mts-theme="mi-empresa"] .mts-sidebar {
-  background: linear-gradient(180deg, #220d0d, #1a0a0a);
+## Crear un accent custom
+
+```css
+[data-mts-accent="brand"] {
+  --mts-color-primary:        #e63946;
+  --mts-color-primary-hover:  #c1121f;
+  --mts-color-primary-light:  rgba(230,57,70,.12);
+  --mts-color-primary-text:   #ffffff;
+  --mts-btn-shadow-primary:   0 4px 14px rgba(230,57,70,.4);
+  --mts-btn-ring-primary:     0 0 0 3px rgba(230,57,70,.25);
+  --mts-border-color-focus:   #e63946;
 }
 ```
 
-```js
-// Activar
-document.documentElement.setAttribute('data-mts-theme', 'mi-empresa');
-// o via Layout
-layout.setTheme('mi-empresa');
-```
+## Nota de limpieza
 
----
+`matios-ui-theme-high-contrast.css` pasa a ser `matios-ui-mode-high-contrast.css`.
 
-## Nota sobre el tema `violet`
-
-Requiere las fuentes de Google para los títulos:
-```html
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-```
-
----
-
-## Changelog
-
-| Versión | Descripción |
-|---------|-------------|
-| 1.0.0 | Release inicial — dark, light, violeta |
+Si quieres dejar el árbol limpio, elimina el archivo legacy anterior al aplicar este cambio.

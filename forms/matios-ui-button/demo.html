@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
+  <script>
+    (function(){
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else    document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.Button — Demo</title>
-  <script>
-    (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
-        }
-      }catch(e){}
-    })();
-  </script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
   <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
@@ -30,126 +30,16 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
-  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-button.css">
-  <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-button.js"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:40px;}
-
-    /* ── Header ── */
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
-    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
-
-    /* ── Secciones ── */
-    .demo-section{display:flex;flex-direction:column;gap:14px;}
-    .demo-section-title{
-      font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;
-      color:var(--mts-text-muted);padding-bottom:8px;
-      border-bottom:1px solid var(--mts-border-color);
-    }
-    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);
-      text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
-
-    /* ── Feedback ── */
-    .demo-feedback{
-      min-height:34px;
-      display:flex;align-items:center;
-    }
-    .demo-feedback-pill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:5px 14px;
-      background:var(--mts-bg-surface);
-      border:1px solid var(--mts-border-color);
-      border-radius:var(--mts-radius-full);
-      font-size:12px;color:var(--mts-text-primary);
-      animation:feedbackIn .15s ease;
-    }
-    .demo-feedback-dot{
-      width:8px;height:8px;border-radius:50%;background:var(--mts-color-primary);
-      flex-shrink:0;
-    }
-    @keyframes feedbackIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
-
-    /* ── Code tabs ── */
-    .code-tabs{display:flex;gap:0;margin-top:4px;}
-    .code-tab{padding:4px 14px;font-size:11px;font-weight:600;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);cursor:pointer;color:var(--mts-text-muted);font-family:var(--mts-font-family);transition:color .15s,background .15s;}
-    .code-tab:first-child{border-radius:var(--mts-radius-md) 0 0 0;}
-    .code-tab:last-child{border-radius:0 var(--mts-radius-md) 0 0;border-left:none;}
-    .code-tab.active{background:var(--mts-bg-surface-2);color:var(--mts-color-primary);border-bottom-color:var(--mts-bg-surface-2);}
-    .code-panel{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-top:none;border-radius:0 var(--mts-radius-md) var(--mts-radius-md) var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;}
-    .code-panel.active{display:block;}
-    .result-box{padding:8px 12px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:32px;}
-
-    /* ── Código ── */
-    .demo-code-toggle{
-      display:inline-flex;align-items:center;gap:5px;
-      padding:4px 12px;font-size:11px;font-weight:600;
-      background:none;border:1px solid var(--mts-border-color);
-      border-radius:var(--mts-radius-md);color:var(--mts-text-muted);
-      cursor:pointer;font-family:var(--mts-font-family);
-      transition:color .15s,border-color .15s;
-    }
-    .demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-code{
-      display:none;
-      background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);
-      border-radius:var(--mts-radius-md);padding:12px 14px;
-      font-size:12px;font-family:var(--mts-font-mono);
-      color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;
-      margin-top:4px;
-    }
-    .demo-code code{background:none;border:none;padding:0;color:inherit;font-size:inherit;}
-
-    /* ── Docs panel ── */
-    .demo-docs-btn{
-      display:inline-flex;align-items:center;gap:5px;
-      padding:4px 12px;font-size:11px;font-weight:600;
-      background:none;border:1px solid var(--mts-border-color);
-      border-radius:var(--mts-radius-md);color:var(--mts-text-muted);
-      cursor:pointer;font-family:var(--mts-font-family);
-      transition:color .15s,border-color .15s;
-    }
-    .demo-docs-btn:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-docs-panel{
-      display:none;margin-top:10px;padding:16px;
-      background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);
-      border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;
-      color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;
-    }
-    .demo-docs-panel.open{display:block;}
-    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
-    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
-    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
-    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
-    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
-    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
-    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
-    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
-    .demo-docs-panel p{margin:0 0 10px;}
-    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
-    .demo-docs-panel a{color:var(--mts-color-primary);text-decoration:none;}
-
-    /* Estilos de menú → matios-ui-button.css */
-
-    /* ── Theme switcher ── */
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-  </style>
 </head>
 <body>
-
 <div class="demo-theme">
   <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
   <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
@@ -161,772 +51,364 @@
 </div>
 
 <div class="demo-page">
-
-  <!-- ══ HEADER ══════════════════════════════════════════ -->
   <div class="demo-header">
     <h1><span>MTS</span>.Button</h1>
-    <p>Botones con variantes, tamaños, íconos, grupos y eventos — sin dependencias externas.</p>
+    <p>Botones con variantes, tamaños, iconos, agrupación y enhancement progresivo desde HTML declarativo.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-button.md')">
-        📄 Documentación
-      </button>
-      <button class="demo-code-toggle" onclick="toggleCode('code-all')">
-        &lt;/&gt; Ver todo el código
-      </button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-button.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
-    <pre id="code-all" class="demo-code" style="margin-top:10px"><code id="code-all-content"></code></pre>
   </div>
 
-  <!-- ══ 1. VARIANTES ═════════════════════════════════════ -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Variantes</div>
-    <div class="demo-row" id="s1-btns"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-s1','js-s1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-s1','html-s1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-s1">&lt;!-- HTML declarativo — instanciar con new MTS.Button('#id') para activar --&gt;
-&lt;button id="btn-primary"   data-variant="primary"   data-label="Primary"&gt;&lt;/button&gt;
-&lt;button id="btn-secondary" data-variant="secondary" data-label="Secondary"&gt;&lt;/button&gt;
-&lt;button id="btn-ghost"     data-variant="ghost"     data-label="Ghost"&gt;&lt;/button&gt;
-&lt;button id="btn-danger"    data-variant="danger"    data-label="Danger"&gt;&lt;/button&gt;
-&lt;button id="btn-success"   data-variant="success"   data-label="Success"&gt;&lt;/button&gt;
-&lt;button id="btn-warning"   data-variant="warning"   data-label="Warning"&gt;&lt;/button&gt;
-&lt;button id="btn-link"      data-variant="link"      data-label="Link"&gt;&lt;/button&gt;
-
-&lt;script&gt;
-  ['primary','secondary','ghost','danger','success','warning','link'].forEach(v =&gt;
-    new MTS.Button('#btn-' + v)
-  );
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-s1">// Crear 100% desde JavaScript — sin HTML previo
-new MTS.Button('#contenedor', { label: 'Primary',   variant: 'primary'   });
-new MTS.Button('#contenedor', { label: 'Secondary', variant: 'secondary' });
-new MTS.Button('#contenedor', { label: 'Ghost',     variant: 'ghost'     });
-new MTS.Button('#contenedor', { label: 'Danger',    variant: 'danger'    });
-new MTS.Button('#contenedor', { label: 'Success',   variant: 'success'   });
-new MTS.Button('#contenedor', { label: 'Warning',   variant: 'warning'   });
-new MTS.Button('#contenedor', { label: 'Link',      variant: 'link'      });
-
-// Cambiar variante en runtime
-const btn = new MTS.Button('#mi-btn', { label: 'Guardar', variant: 'primary' });
-btn.setVariant('secondary');</div>
-  </div>
-
-  <!-- ══ 2. TAMAÑOS ════════════════════════════════════════ -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Tamaños</div>
-    <div class="demo-row" id="s2-btns" style="align-items:flex-end;"></div>
-    <button class="demo-code-toggle" onclick="toggleCode('code-s2')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="code-s2"><code>new MTS.Button('#btn', { label: 'XSmall', size: 'xs' })
-new MTS.Button('#btn', { label: 'Small',  size: 'sm' })
-new MTS.Button('#btn', { label: 'Medium'              })   // default
-new MTS.Button('#btn', { label: 'Large',  size: 'lg' })
-new MTS.Button('#btn', { label: 'XLarge', size: 'xl' })</code></pre>
-  </div>
-
-  <!-- ══ 3. CON ÍCONOS ═════════════════════════════════════ -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Con íconos</div>
-
-    <div class="demo-label">Ícono izquierdo</div>
-    <div class="demo-row" id="s3-left"></div>
-
-    <div class="demo-label">Ícono derecho</div>
-    <div class="demo-row" id="s3-right"></div>
-
-    <div class="demo-label">Solo ícono (iconOnly)</div>
-    <div class="demo-row" id="s3-only"></div>
-
-    <button class="demo-code-toggle" onclick="toggleCode('code-s3')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="code-s3"><code>// Ícono izquierdo
-new MTS.Button('#btn', {
-  label:    'Guardar',
-  variant:  'primary',
-  iconLeft: MTS.Icon.get('save'),
-})
-
-// Ícono derecho (chevron)
-new MTS.Button('#btn', {
-  label:     'Siguiente',
-  variant:   'secondary',
-  iconRight: MTS.Icon.get('arrow-right'),
-})
-
-// Solo ícono — iconOnly: true da padding cuadrado
-new MTS.Button('#btn', {
-  iconLeft: MTS.Icon.get('trash'),
-  iconOnly: true,
-  variant:  'danger',
-})</code></pre>
-  </div>
-
-  <!-- ══ 4. ESTADOS ════════════════════════════════════════ -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Estados</div>
-
-    <div class="demo-label">Disabled</div>
-    <div class="demo-row" id="s4-disabled"></div>
-
-    <div class="demo-label">Loading — se activa/desactiva con la API</div>
-    <div class="demo-row" id="s4-loading"></div>
-
-    <div class="demo-label">Round — border-radius pill</div>
-    <div class="demo-row" id="s4-round"></div>
-
-    <div class="demo-label">Block — ancho completo</div>
-    <div id="s4-block"></div>
-
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-s4','js-s4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-s4','html-s4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-s4">&lt;!-- Disabled --&gt;
-&lt;button id="btn-dis" data-variant="primary" data-label="Deshabilitado" data-disabled&gt;&lt;/button&gt;
-&lt;script&gt;new MTS.Button('#btn-dis');&lt;/script&gt;
-
-&lt;!-- Loading --&gt;
-&lt;button id="btn-load" data-variant="primary" data-label="Guardar" data-loading&gt;&lt;/button&gt;
-&lt;script&gt;
-  const btn = new MTS.Button('#btn-load');
-  setTimeout(() =&gt; { btn.setLoading(false); btn.setLabel('✓ Guardado'); }, 2000);
-&lt;/script&gt;
-
-&lt;!-- Round --&gt;
-&lt;button id="btn-round" data-variant="primary" data-label="Pill" data-round&gt;&lt;/button&gt;
-&lt;script&gt;new MTS.Button('#btn-round');&lt;/script&gt;
-
-&lt;!-- Block --&gt;
-&lt;button id="btn-block" data-variant="primary" data-label="Ancho completo" data-block&gt;&lt;/button&gt;
-&lt;script&gt;new MTS.Button('#btn-block');&lt;/script&gt;</div>
-    <div class="code-panel" id="js-s4">// Disabled
-new MTS.Button('#btn', { label: 'Deshabilitado', variant: 'primary', disabled: true });
-
-// Habilitar / deshabilitar via API
-const btn = new MTS.Button('#btn', { label: 'Guardar', variant: 'primary' });
-btn.disable();
-btn.enable();
-
-// Loading
-btn.setLoading(true);
-setTimeout(() => {
-  btn.setLoading(false);
-  btn.setLabel('✓ Guardado');
-}, 2000);
-
-// Round
-new MTS.Button('#btn', { label: 'Pill button', variant: 'primary', round: true });
-
-// Block
-new MTS.Button('#btn', { label: 'Ancho completo', variant: 'primary', block: true });</div>
-  </div>
-
-  <!-- ══ 5. GRUPOS ═════════════════════════════════════════ -->
-  <div class="demo-section">
-    <div class="demo-section-title">5 — Grupos de botones</div>
-
-    <div class="demo-label">Selector de vista — activo al hacer click</div>
-    <div id="s5-vista"></div>
-
-    <div class="demo-label">Acciones — variantes mixtas</div>
-    <div id="s5-acciones"></div>
-
-    <div class="demo-label">Tamaño sm — group con size</div>
-    <div id="s5-sm"></div>
-
-    <div class="demo-label">Paginación simple</div>
-    <div id="s5-paging"></div>
-
-    <button class="demo-code-toggle" onclick="toggleCode('code-s5')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="code-s5"><code>// Selector con estado activo automático
-const grupo = new MTS.ButtonGroup('#contenedor', [
-  { label: 'Día',    variant: 'secondary' },
-  { label: 'Semana', variant: 'secondary' },
-  { label: 'Mes',    variant: 'primary'   },  // inicia activo
-], { activeOnClick: true })
-
-// Marcar activo programáticamente
-grupo.setActive(2)          // activa el tercer botón
-grupo.getButton(0).disable()  // deshabilita el primero
-
-// Acciones con variantes mixtas
-new MTS.ButtonGroup('#contenedor', [
-  { label: 'Exportar', variant: 'ghost'  },
-  { label: 'Duplicar', variant: 'ghost'  },
-  { label: 'Eliminar', variant: 'danger' },
-])
-
-// Con tamaño uniforme
-new MTS.ButtonGroup('#contenedor', [...botones], { size: 'sm' })</code></pre>
-  </div>
-
-  <!-- ══ 6. CON MENÚ ════════════════════════════════════════ -->
-  <div class="demo-section">
-    <div class="demo-section-title">6 — MenuButton y SplitButton</div>
-
-    <div class="demo-label">Menú de acciones</div>
-    <div class="demo-row" id="s6-menu"></div>
-
-    <div class="demo-label">Split button — acción principal + opciones</div>
-    <div class="demo-row" id="s6-split"></div>
-
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-s6','js-s6')">HTML</button>
-      <button class="code-tab"        onclick="switchTab(this,'js-s6','html-s6')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-s6">&lt;div id="menu-acciones"&gt;&lt;/div&gt;
-&lt;div id="split-guardar"&gt;&lt;/div&gt;</div>
-    <div class="code-panel" id="js-s6">// MenuButton — botón + menú desplegable
-const mb = new MTS.MenuButton('#menu-acciones', {
-  label:   'Acciones',
-  variant: 'secondary',
-  items: [
-    { label: 'Editar',    icon: MTS.Icon.get('edit-2'),   onClick: () => {} },
-    { label: 'Duplicar',  icon: MTS.Icon.get('copy'),     onClick: () => {} },
-    { label: 'Descargar', icon: MTS.Icon.get('download'), onClick: () => {} },
-    '---',
-    { label: 'Eliminar',  icon: MTS.Icon.get('trash'), danger: true, onClick: () => {} },
-  ],
-});
-
-// SplitButton — acción principal + flecha con opciones
-const sb = new MTS.SplitButton('#split-guardar', {
-  label:    'Guardar',
-  variant:  'primary',
-  iconLeft: MTS.Icon.get('save'),
-  onClick:  () => console.log('Guardar principal'),
-  items: [
-    { label: 'Guardar borrador',   onClick: () => {} },
-    { label: 'Guardar y publicar', onClick: () => {} },
-    '---',
-    { label: 'Descartar', danger: true, onClick: () => {} },
-  ],
-});</div>
-  </div>
-
-  <!-- ══ 7. EVENTOS onClick ════════════════════════════════ -->
-  <div class="demo-section">
-    <div class="demo-section-title">7 — Eventos onClick</div>
-    <p style="font-size:13px;color:var(--mts-text-muted);margin:0 0 8px">
-      Haz click en cualquier botón — el resultado aparece debajo en tiempo real.
-    </p>
-    <div class="demo-row" id="s7-btns"></div>
-    <div class="demo-feedback" id="s7-feedback"></div>
-
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-s7','js-s7')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-s7','html-s7')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-s7">&lt;!-- El HTML declara el botón, el JS maneja el evento --&gt;
-&lt;button id="btn-guardar" data-variant="primary" data-label="Guardar cambios"&gt;&lt;/button&gt;
-&lt;button id="btn-contador" data-variant="secondary" data-label="Contador: 0"&gt;&lt;/button&gt;
-
-&lt;script&gt;
-  // onClick en la instancia — forma recomendada
-  const btnGuardar = new MTS.Button('#btn-guardar', {
-    onClick: (event, instance) =&gt; {
-      instance.setLoading(true);
-      instance.setLabel('Guardando...');
-      setTimeout(() =&gt; {
-        instance.setLoading(false);
-        instance.setLabel('✓ Guardado');
-      }, 1500);
-    },
-  });
-
-  // .on() — permite múltiples listeners sin reemplazar el onClick
-  let clicks = 0;
-  const btnContador = new MTS.Button('#btn-contador');
-  btnContador.on('click', (e, inst) =&gt; {
-    clicks++;
-    inst.setLabel('Contador: ' + clicks);
-  });
-
-  // Evento DOM nativo — útil cuando no tienes la instancia
-  document.getElementById('btn-guardar')
-    .addEventListener('mts:button:click', (e) =&gt; {
-      console.log('instancia:', e.detail.button.label);
-    });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-s7">// onClick en el constructor — forma más directa
-const btn = new MTS.Button('#btn', {
-  label:   'Guardar cambios',
-  variant: 'primary',
-  onClick: (event, instance) => {
-    instance.setLoading(true);
-    instance.setLabel('Guardando...');
-    setTimeout(() => {
-      instance.setLoading(false);
-      instance.setLabel('✓ Guardado');
-      instance.setVariant('secondary');
-    }, 1500);
-  },
-});
-
-// .on() — agrega listeners sin reemplazar el onClick original
-btn.on('click', (event, instance) => {
-  console.log('click en:', instance.label);
-});
-
-// .off() — remueve un listener específico
-const handler = (e, i) => console.log('click');
-btn.on('click', handler);
-btn.off('click', handler);
-
-// Evento DOM nativo — útil cuando no tienes la instancia
-document.getElementById('btn')
-  .addEventListener('mts:button:click', (e) => {
-    console.log('instancia desde DOM:', e.detail.button);
-  });</div>
-  </div>
-
-  <!-- ══ 8. CSS CUSTOM ═════════════════════════════════════ -->
-  <div class="demo-section">
-    <div class="demo-section-title">8 — CSS personalizado</div>
-    <div class="demo-row" id="s8-btns"></div>
-    <button class="demo-code-toggle" onclick="toggleCode('code-s8')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="code-s8"><code>// Vía style inline
-new MTS.Button('#btn', {
-  label: 'Custom color',
-  style: { background: '#8b5cf6', borderColor: '#8b5cf6', color: '#fff' },
-})
-
-// Vía className — agrega clases extra sin reemplazar las base
-new MTS.Button('#btn', {
-  label:     'Con clase extra',
-  variant:   'ghost',
-  className: 'mi-clase-personalizada',
-})</code></pre>
-  </div>
-
-  <div class="demo-section">
-    <div class="demo-section-title">9 — Shadow &amp; Ring</div>
-    <div class="demo-row" id="s9-btns"></div>
-    <button class="demo-code-toggle" onclick="toggleCode('code-s9')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="code-s9"><code>// Solo sombra de color
-new MTS.Button('#btn', { label: 'Shadow', shadow: true })
-
-// Solo ring semitransparente
-new MTS.Button('#btn', { label: 'Ring', ring: true })
-
-// Ambos combinados
-new MTS.Button('#btn', { label: 'Shadow + Ring', shadow: true, ring: true })
-
-// Funciona en todas las variantes
-new MTS.Button('#btn', { label: 'Danger', variant: 'danger', shadow: true, ring: true })
-new MTS.Button('#btn', { label: 'Success', variant: 'success', shadow: true, ring: true })
-
-// API dinámica
-btn.setShadow(true)
-btn.setRing(true)</code></pre>
-  </div>
-
-
-  <div class="demo-section">
-    <div class="demo-section-title">HTML declarativo</div>
-    <div class="demo-row">
-      <button id="bh1" data-variant="primary" data-label="Guardar" data-shadow></button>
-      <button id="bh2" data-variant="danger" data-label="Eliminar" data-round></button>
-      <button id="bh3" data-variant="ghost" data-label="Cancelar"></button>
-      <button id="bh4" data-variant="secondary" data-size="sm" data-label="Pequeño"></button>
-    </div>
-    <div class="result-box" id="bh-res">— haz click en un botón —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-bh','js-bh')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-bh','html-bh')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-bh">&lt;!-- El HTML define toda la apariencia via data-* --&gt;
-&lt;button id="btn-guardar"  data-variant="primary"   data-label="Guardar"   data-shadow&gt;&lt;/button&gt;
-&lt;button id="btn-eliminar" data-variant="danger"    data-label="Eliminar"  data-round&gt;&lt;/button&gt;
-&lt;button id="btn-cancelar" data-variant="ghost"     data-label="Cancelar"&gt;&lt;/button&gt;
-&lt;button id="btn-pequeno"  data-variant="secondary" data-label="Pequeño"   data-size="sm"&gt;&lt;/button&gt;
-
-&lt;script&gt;
-  // Instanciar — lee automáticamente los data-*
-  new MTS.Button('#btn-guardar',  { onClick: (e, i) =&gt; console.log('Guardar') });
-  new MTS.Button('#btn-eliminar', { onClick: (e, i) =&gt; console.log('Eliminar') });
-  new MTS.Button('#btn-cancelar', { onClick: (e, i) =&gt; console.log('Cancelar') });
-  new MTS.Button('#btn-pequeno',  { onClick: (e, i) =&gt; console.log('Pequeño') });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-bh">// Crear 100% desde JavaScript — el HTML solo necesita el contenedor vacío
-// &lt;div id="btn-guardar"&gt;&lt;/div&gt; o &lt;button id="btn-guardar"&gt;&lt;/button&gt;
-
-const btnGuardar = new MTS.Button('#btn-guardar', {
-  label:   'Guardar',
-  variant: 'primary',
-  shadow:  true,
-  onClick: (event, instance) => {
-    instance.setLoading(true);
-    setTimeout(() => instance.setLoading(false), 1500);
-  },
-});
-
-const btnEliminar = new MTS.Button('#btn-eliminar', {
-  label:   'Eliminar',
-  variant: 'danger',
-  round:   true,
-  onClick: () => console.log('Eliminar'),
-});</div>
-  </div>
-</div><!-- /demo-page -->
+  <div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Tamaños</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Con iconos</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Estados</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Grupos</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — MenuButton y SplitButton</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title">7 — Eventos onClick</div><div id="tabs-s7"></div></div>
+  <div class="demo-section"><div class="demo-section-title">8 — Shadow y Ring</div><div id="tabs-s8"></div></div>
+  <div class="demo-section"><div class="demo-section-title">9 — HTML declarativo + enhancement</div><div id="tabs-s9"></div></div>
+</div>
 
 <script>
-/* ═══════════════════════════════════════════════════════
-   HELPERS
-   ═══════════════════════════════════════════════════════ */
-function setTheme(t) {
-  document.documentElement.setAttribute('data-mts-theme', t);
-  try {
-    if (window.parent && window.parent !== window)
-      window.parent.postMessage({ type:'setTheme', theme:t }, '*');
-  } catch(e) {}
-}
-window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'setTheme')
-    document.documentElement.setAttribute('data-mts-theme', e.data.theme);
-});
-if (window !== window.top) {
-  var ts = document.querySelector('.demo-theme');
-  if (ts) ts.style.display = 'none';
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
-function switchTab(btn, showId, hideId) {
-  btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){ t.classList.remove('active'); });
-  btn.classList.add('active');
-  document.getElementById(showId).classList.add('active');
-  document.getElementById(hideId).classList.remove('active');
-}
-
-function toggleCode(id) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  el.style.display = el.style.display === 'block' ? 'none' : 'block';
-}
-
-function toggleDocs(id, mdPath) {
-  var panel = document.getElementById(id);
-  if (!panel) return;
-  panel.classList.toggle('open');
-  if (!panel.classList.contains('open') || panel.dataset.loaded) return;
-  panel.innerHTML = '<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';
-  fetch(mdPath).then(function(r) { return r.text(); }).then(function(md) {
-    panel.innerHTML = mdToHtml(md);
-    panel.dataset.loaded = '1';
-  }).catch(function() {
-    panel.innerHTML = '<em style="color:var(--mts-text-muted)">No se pudo cargar.</em>';
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
   });
+  return result.trimEnd();
 }
 
-function mdToHtml(md) {
-  if (!md) return '';
-  var blocks = [];
-  var h = md
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/```(\w*)\n?([\s\S]*?)```/g, function(_,l,c){ blocks.push(c.trim()); return '\x00B'+(blocks.length-1)+'\x00'; })
-    .replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>')
-    .replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,function(_,hdr,rows){
-      var ths=hdr.split('|').filter(function(c){return c.trim();}).map(function(c){return'<th>'+c.trim()+'</th>';}).join('');
-      var trs=rows.trim().split('\n').map(function(r){return'<tr>'+r.split('|').filter(function(c){return c.trim();}).map(function(c){return'<td>'+c.trim()+'</td>';}).join('')+'</tr>';}).join('');
-      return'<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';
-    })
-    .replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');
-  return h.replace(/\x00B(\d+)\x00/g, function(_,i){ return '<pre><code>'+blocks[+i]+'</code></pre>'; });
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
 }
 
-function feedback(msg, color) {
-  var fb = document.getElementById('s7-feedback');
-  if (!fb) return;
-  fb.innerHTML = '<span class="demo-feedback-pill">'
-    + '<span class="demo-feedback-dot" style="background:' + (color || 'var(--mts-color-primary)') + '"></span>'
-    + msg + '</span>';
-  clearTimeout(fb._t);
-  fb._t = setTimeout(function() { fb.innerHTML = ''; }, 2800);
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
 }
 
-function mkBtn(container) {
-  var el = document.createElement('button');
-  el.type = 'button';
-  document.getElementById(container).appendChild(el);
-  return el;
+function makeSection(id, previewHtml, jsCode, initFn) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '340px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  if (typeof initFn === 'function') initFn();
 }
 
-/* ═══════════════════════════════════════════════════════
-   1. VARIANTES
-   ═══════════════════════════════════════════════════════ */
-[
-  { label:'Primary',   variant:'primary'   },
-  { label:'Secondary', variant:'secondary' },
-  { label:'Ghost',     variant:'ghost'     },
-  { label:'Danger',    variant:'danger'    },
-  { label:'Success',   variant:'success'   },
-  { label:'Warning',   variant:'warning'   },
-  { label:'Link',      variant:'link'      },
-].forEach(function(cfg) {
-  new MTS.Button(mkBtn('s1-btns'), cfg);
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+var preview_s1 =
+  '<div class="demo-row">' +
+    '<button id="btn-v-primary" data-variant="primary" data-label="Primary"></button>' +
+    '<button id="btn-v-secondary" data-variant="secondary" data-label="Secondary"></button>' +
+    '<button id="btn-v-ghost" data-variant="ghost" data-label="Ghost"></button>' +
+    '<button id="btn-v-danger" data-variant="danger" data-label="Danger"></button>' +
+    '<button id="btn-v-success" data-variant="success" data-label="Success"></button>' +
+    '<button id="btn-v-warning" data-variant="warning" data-label="Warning"></button>' +
+    '<button id="btn-v-link" data-variant="link" data-label="Link"></button>' +
+  '</div>';
+
+var js_s1 =
+  "['primary','secondary','ghost','danger','success','warning','link'].forEach(function(variant) {\n" +
+  "  new MTS.Button('#btn-v-' + variant);\n" +
+  "});";
+
+var preview_s2 =
+  '<div class="demo-row">' +
+    '<button id="btn-s-xs" data-label="XSmall" data-size="xs" data-variant="secondary"></button>' +
+    '<button id="btn-s-sm" data-label="Small" data-size="sm" data-variant="secondary"></button>' +
+    '<button id="btn-s-md" data-label="Medium" data-variant="secondary"></button>' +
+    '<button id="btn-s-lg" data-label="Large" data-size="lg" data-variant="secondary"></button>' +
+    '<button id="btn-s-xl" data-label="XLarge" data-size="xl" data-variant="secondary"></button>' +
+  '</div>';
+
+var js_s2 =
+  "new MTS.Button('#btn-s-xs');\n" +
+  "new MTS.Button('#btn-s-sm');\n" +
+  "new MTS.Button('#btn-s-md');\n" +
+  "new MTS.Button('#btn-s-lg');\n" +
+  "new MTS.Button('#btn-s-xl');";
+
+var preview_s3 =
+  '<div class="demo-stack">' +
+    '<div class="demo-col">' +
+      '<div class="demo-label">Icono izquierdo</div>' +
+      '<div class="demo-row">' +
+        '<button id="btn-i-save"></button>' +
+        '<button id="btn-i-edit"></button>' +
+        '<button id="btn-i-trash"></button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="demo-col">' +
+      '<div class="demo-label">Icono derecho</div>' +
+      '<div class="demo-row">' +
+        '<button id="btn-i-next"></button>' +
+        '<button id="btn-i-export"></button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="demo-col">' +
+      '<div class="demo-label">Solo icono</div>' +
+      '<div class="demo-row">' +
+        '<button id="btn-i-heart"></button>' +
+        '<button id="btn-i-search"></button>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+var js_s3 =
+  "new MTS.Button('#btn-i-save', { label: 'Guardar', iconLeft: MTS.Icon.get('save') });\n" +
+  "new MTS.Button('#btn-i-edit', { label: 'Editar', variant: 'secondary', iconLeft: MTS.Icon.get('edit-2') });\n" +
+  "new MTS.Button('#btn-i-trash', { label: 'Eliminar', variant: 'danger', iconLeft: MTS.Icon.get('trash') });\n\n" +
+  "new MTS.Button('#btn-i-next', { label: 'Siguiente', iconRight: MTS.Icon.get('arrow-right') });\n" +
+  "new MTS.Button('#btn-i-export', { label: 'Exportar', variant: 'ghost', iconRight: MTS.Icon.get('download') });\n\n" +
+  "new MTS.Button('#btn-i-heart', { iconLeft: MTS.Icon.get('heart'), iconOnly: true, variant: 'secondary' });\n" +
+  "new MTS.Button('#btn-i-search', { iconLeft: MTS.Icon.get('search'), iconOnly: true, variant: 'ghost' });";
+
+var preview_s4 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<button id="btn-st-loading" data-label="Loading" data-loading data-variant="primary"></button>' +
+      '<button id="btn-st-disabled" data-label="Disabled" data-disabled data-variant="secondary"></button>' +
+      '<button id="btn-st-round" data-label="Round" data-round data-variant="success"></button>' +
+      '<button id="btn-st-block" data-label="Block" data-block data-variant="warning"></button>' +
+    '</div>' +
+  '</div>';
+
+var js_s4 =
+  "new MTS.Button('#btn-st-loading');\n" +
+  "new MTS.Button('#btn-st-disabled');\n" +
+  "new MTS.Button('#btn-st-round');\n" +
+  "new MTS.Button('#btn-st-block');";
+
+var preview_s5 =
+  '<div class="demo-stack">' +
+    '<div id="btn-group-main"></div>' +
+    '<div id="btn-group-ghost"></div>' +
+  '</div>';
+
+var js_s5 =
+  "new MTS.ButtonGroup('#btn-group-main', [\n" +
+  "  { label: 'Left', variant: 'secondary' },\n" +
+  "  { label: 'Center', variant: 'secondary' },\n" +
+  "  { label: 'Right', variant: 'secondary' }\n" +
+  "]);\n\n" +
+  "new MTS.ButtonGroup('#btn-group-ghost', [\n" +
+  "  { label: 'Day', variant: 'ghost' },\n" +
+  "  { label: 'Week', variant: 'ghost' },\n" +
+  "  { label: 'Month', variant: 'ghost' }\n" +
+  "]);";
+
+var preview_s6 =
+  '<div class="demo-stack">' +
+    '<div id="menu-button-demo"></div>' +
+    '<div id="split-button-demo"></div>' +
+    '<div class="result-box" id="result-s6">— sin acciones —</div>' +
+  '</div>';
+
+var js_s6 =
+  "new MTS.MenuButton('#menu-button-demo', {\n" +
+  "  label: 'Acciones',\n" +
+  "  variant: 'secondary',\n" +
+  "  items: [\n" +
+  "    { label: 'Editar', icon: MTS.Icon.get('edit-2'), onClick: function() { setResult('result-s6', 'Editar'); } },\n" +
+  "    { label: 'Duplicar', icon: MTS.Icon.get('copy'), onClick: function() { setResult('result-s6', 'Duplicar'); } },\n" +
+  "    '---',\n" +
+  "    { label: 'Eliminar', icon: MTS.Icon.get('trash'), danger: true, onClick: function() { setResult('result-s6', 'Eliminar'); } }\n" +
+  "  ]\n" +
+  "});\n\n" +
+  "new MTS.SplitButton('#split-button-demo', {\n" +
+  "  label: 'Guardar',\n" +
+  "  variant: 'primary',\n" +
+  "  iconLeft: MTS.Icon.get('save'),\n" +
+  "  onClick: function() { setResult('result-s6', 'Guardar'); },\n" +
+  "  items: [\n" +
+  "    { label: 'Guardar borrador', onClick: function() { setResult('result-s6', 'Guardar borrador'); } },\n" +
+  "    { label: 'Guardar y publicar', onClick: function() { setResult('result-s6', 'Guardar y publicar'); } }\n" +
+  "  ]\n" +
+  "});";
+
+var preview_s7 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<button id="btn-e-save" data-label="Guardar" data-variant="primary"></button>' +
+      '<button id="btn-e-cancel" data-label="Cancelar" data-variant="ghost"></button>' +
+      '<button id="btn-e-archive" data-label="Archivar" data-variant="secondary"></button>' +
+    '</div>' +
+    '<div class="result-box" id="result-s7">— sin eventos —</div>' +
+  '</div>';
+
+var js_s7 =
+  "new MTS.Button('#btn-e-save', {\n" +
+  "  onClick: function() { setResult('result-s7', 'Guardar'); }\n" +
+  "});\n\n" +
+  "new MTS.Button('#btn-e-cancel', {\n" +
+  "  onClick: function() { setResult('result-s7', 'Cancelar'); }\n" +
+  "});\n\n" +
+  "new MTS.Button('#btn-e-archive', {\n" +
+  "  onClick: function() { setResult('result-s7', 'Archivar'); }\n" +
+  "});";
+
+var preview_s8 =
+  '<div class="demo-row">' +
+    '<button id="btn-f-shadow" data-label="Shadow" data-shadow data-variant="primary"></button>' +
+    '<button id="btn-f-ring" data-label="Ring" data-ring data-variant="secondary"></button>' +
+    '<button id="btn-f-both" data-label="Shadow + Ring" data-shadow data-ring data-variant="success"></button>' +
+  '</div>';
+
+var js_s8 =
+  "new MTS.Button('#btn-f-shadow');\n" +
+  "new MTS.Button('#btn-f-ring');\n" +
+  "new MTS.Button('#btn-f-both');";
+
+var preview_s9 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<button id="btn-d-save" data-variant="primary" data-label="Save" data-shadow></button>' +
+      '<button id="btn-d-delete" data-variant="danger" data-label="Delete" data-round></button>' +
+      '<button id="btn-d-cancel" data-variant="ghost" data-label="Cancel"></button>' +
+      '<button id="btn-d-small" data-variant="secondary" data-size="sm" data-label="Small"></button>' +
+    '</div>' +
+    '<div class="result-box" id="result-s9">— declarative enhancement —</div>' +
+  '</div>';
+
+var js_s9 =
+  "new MTS.Button('#btn-d-save', {\n" +
+  "  onClick: function() { setResult('result-s9', 'Save'); }\n" +
+  "});\n\n" +
+  "new MTS.Button('#btn-d-delete', {\n" +
+  "  onClick: function() { setResult('result-s9', 'Delete'); }\n" +
+  "});\n\n" +
+  "new MTS.Button('#btn-d-cancel', {\n" +
+  "  onClick: function() { setResult('result-s9', 'Cancel'); }\n" +
+  "});\n\n" +
+  "new MTS.Button('#btn-d-small', {\n" +
+  "  onClick: function() { setResult('result-s9', 'Small'); }\n" +
+  "});";
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  ['primary','secondary','ghost','danger','success','warning','link'].forEach(function(variant) {
+    new MTS.Button('#btn-v-' + variant);
+  });
 });
 
-/* ═══════════════════════════════════════════════════════
-   2. TAMAÑOS
-   ═══════════════════════════════════════════════════════ */
-[
-  { label:'XSmall', size:'xs', variant:'secondary' },
-  { label:'Small',  size:'sm', variant:'secondary' },
-  { label:'Medium',            variant:'secondary' },
-  { label:'Large',  size:'lg', variant:'secondary' },
-  { label:'XLarge', size:'xl', variant:'secondary' },
-].forEach(function(cfg) {
-  new MTS.Button(mkBtn('s2-btns'), cfg);
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  new MTS.Button('#btn-s-xs');
+  new MTS.Button('#btn-s-sm');
+  new MTS.Button('#btn-s-md');
+  new MTS.Button('#btn-s-lg');
+  new MTS.Button('#btn-s-xl');
 });
 
-/* ═══════════════════════════════════════════════════════
-   3. CON ÍCONOS
-   ═══════════════════════════════════════════════════════ */
-// Ícono izquierdo
-[
-  { label:'Guardar',    variant:'primary',   iconLeft: MTS.Icon.get('save')      },
-  { label:'Descargar',  variant:'secondary', iconLeft: MTS.Icon.get('download')  },
-  { label:'Compartir',  variant:'ghost',     iconLeft: MTS.Icon.get('share')     },
-  { label:'Eliminar',   variant:'danger',    iconLeft: MTS.Icon.get('trash')     },
-].forEach(function(cfg) {
-  new MTS.Button(mkBtn('s3-left'), cfg);
+makeSection('tabs-s3', preview_s3, js_s3, function() {
+  new MTS.Button('#btn-i-save',   { label: 'Guardar', iconLeft: MTS.Icon.get('save') });
+  new MTS.Button('#btn-i-edit',   { label: 'Editar', variant: 'secondary', iconLeft: MTS.Icon.get('edit-2') });
+  new MTS.Button('#btn-i-trash',  { label: 'Eliminar', variant: 'danger', iconLeft: MTS.Icon.get('trash') });
+  new MTS.Button('#btn-i-next',   { label: 'Siguiente', iconRight: MTS.Icon.get('arrow-right') });
+  new MTS.Button('#btn-i-export', { label: 'Exportar', variant: 'ghost', iconRight: MTS.Icon.get('download') });
+  new MTS.Button('#btn-i-heart',  { iconLeft: MTS.Icon.get('heart'), iconOnly: true, variant: 'secondary' });
+  new MTS.Button('#btn-i-search', { iconLeft: MTS.Icon.get('search'), iconOnly: true, variant: 'ghost' });
 });
 
-// Ícono derecho
-[
-  { label:'Siguiente',  variant:'primary',   iconRight: MTS.Icon.get('arrow-right') },
-  { label:'Abrir',      variant:'secondary', iconRight: MTS.Icon.get('external-link') },
-  { label:'Más opciones', variant:'ghost',   iconRight: MTS.Icon.get('chevron-down')  },
-].forEach(function(cfg) {
-  new MTS.Button(mkBtn('s3-right'), cfg);
+makeSection('tabs-s4', preview_s4, js_s4, function() {
+  new MTS.Button('#btn-st-loading');
+  new MTS.Button('#btn-st-disabled');
+  new MTS.Button('#btn-st-round');
+  new MTS.Button('#btn-st-block');
 });
 
-// Solo ícono
-[
-  { iconLeft: MTS.Icon.get('edit-2'),  iconOnly:true, variant:'primary'   },
-  { iconLeft: MTS.Icon.get('copy'),    iconOnly:true, variant:'secondary' },
-  { iconLeft: MTS.Icon.get('trash'),   iconOnly:true, variant:'danger'    },
-  { iconLeft: MTS.Icon.get('eye'),     iconOnly:true, variant:'ghost'     },
-  { iconLeft: MTS.Icon.get('settings'),iconOnly:true, variant:'ghost'     },
-  { iconLeft: MTS.Icon.get('save'),    iconOnly:true, variant:'ghost', size:'sm' },
-].forEach(function(cfg) {
-  new MTS.Button(mkBtn('s3-only'), cfg);
+makeSection('tabs-s5', preview_s5, js_s5, function() {
+  new MTS.ButtonGroup('#btn-group-main', [
+    { label: 'Left', variant: 'secondary' },
+    { label: 'Center', variant: 'secondary' },
+    { label: 'Right', variant: 'secondary' }
+  ]);
+  new MTS.ButtonGroup('#btn-group-ghost', [
+    { label: 'Day', variant: 'ghost' },
+    { label: 'Week', variant: 'ghost' },
+    { label: 'Month', variant: 'ghost' }
+  ]);
 });
 
-/* ═══════════════════════════════════════════════════════
-   4. ESTADOS
-   ═══════════════════════════════════════════════════════ */
-// Disabled
-[
-  { label:'Primary',   variant:'primary',   disabled:true },
-  { label:'Secondary', variant:'secondary', disabled:true },
-  { label:'Ghost',     variant:'ghost',     disabled:true },
-  { label:'Danger',    variant:'danger',    disabled:true },
-].forEach(function(cfg) {
-  new MTS.Button(mkBtn('s4-disabled'), cfg);
+makeSection('tabs-s6', preview_s6, js_s6, function() {
+  new MTS.MenuButton('#menu-button-demo', {
+    label: 'Acciones',
+    variant: 'secondary',
+    items: [
+      { label: 'Editar', icon: MTS.Icon.get('edit-2'), onClick: function() { setResult('result-s6', 'Editar'); } },
+      { label: 'Duplicar', icon: MTS.Icon.get('copy'), onClick: function() { setResult('result-s6', 'Duplicar'); } },
+      '---',
+      { label: 'Eliminar', icon: MTS.Icon.get('trash'), danger: true, onClick: function() { setResult('result-s6', 'Eliminar'); } }
+    ]
+  });
+
+  new MTS.SplitButton('#split-button-demo', {
+    label: 'Guardar',
+    variant: 'primary',
+    iconLeft: MTS.Icon.get('save'),
+    onClick: function() { setResult('result-s6', 'Guardar'); },
+    items: [
+      { label: 'Guardar borrador', onClick: function() { setResult('result-s6', 'Guardar borrador'); } },
+      { label: 'Guardar y publicar', onClick: function() { setResult('result-s6', 'Guardar y publicar'); } }
+    ]
+  });
 });
 
-// Loading — auto-desactiva en 2.5s
-var loadingConfigs = [
-  { label:'Guardando...', variant:'primary'   },
-  { label:'Cargando...',  variant:'secondary' },
-  { label:'Procesando...', variant:'ghost'    },
-];
-loadingConfigs.forEach(function(cfg) {
-  var b = new MTS.Button(mkBtn('s4-loading'), Object.assign({}, cfg, { loading:true }));
-  setTimeout(function() { b.setLoading(false); b.setLabel(cfg.label.replace('...','') + ' ✓'); }, 2500);
+makeSection('tabs-s7', preview_s7, js_s7, function() {
+  new MTS.Button('#btn-e-save',    { onClick: function() { setResult('result-s7', 'Guardar'); } });
+  new MTS.Button('#btn-e-cancel',  { onClick: function() { setResult('result-s7', 'Cancelar'); } });
+  new MTS.Button('#btn-e-archive', { onClick: function() { setResult('result-s7', 'Archivar'); } });
 });
 
-// Round
-[
-  { label:'Pill Primary',   variant:'primary',   round:true },
-  { label:'Pill Secondary', variant:'secondary', round:true },
-  { label:'Pill Ghost',     variant:'ghost',     round:true },
-  { iconLeft:MTS.Icon.get('add'), iconOnly:true, variant:'primary', round:true },
-].forEach(function(cfg) {
-  new MTS.Button(mkBtn('s4-round'), cfg);
+makeSection('tabs-s8', preview_s8, js_s8, function() {
+  new MTS.Button('#btn-f-shadow');
+  new MTS.Button('#btn-f-ring');
+  new MTS.Button('#btn-f-both');
 });
 
-// Block
-new MTS.Button(mkBtn('s4-block'), {
-  label:   'Botón de ancho completo (block)',
-  variant: 'primary',
-  block:   true,
-  iconLeft: MTS.Icon.get('arrow-right'),
-});
-
-/* ═══════════════════════════════════════════════════════
-   5. GRUPOS
-   ═══════════════════════════════════════════════════════ */
-// Vista
-var grpVista = new MTS.ButtonGroup(mkBtn('s5-vista'), [
-  { label:'Día',     variant:'secondary' },
-  { label:'Semana',  variant:'secondary' },
-  { label:'Mes',     variant:'secondary' },
-  { label:'Año',     variant:'secondary' },
-]);
-grpVista.setActive(1); // Semana activo por defecto
-
-// Acciones
-new MTS.ButtonGroup(mkBtn('s5-acciones'), [
-  { label:'Exportar',  variant:'ghost',   iconLeft: MTS.Icon.get('download') },
-  { label:'Duplicar',  variant:'ghost',   iconLeft: MTS.Icon.get('copy')     },
-  { label:'Archivar',  variant:'ghost',   iconLeft: MTS.Icon.get('archive')  },
-  { label:'Eliminar',  variant:'danger',  iconLeft: MTS.Icon.get('trash')    },
-]);
-
-// Tamaño sm
-new MTS.ButtonGroup(mkBtn('s5-sm'), [
-  { label:'Alinear izq', variant:'secondary', iconLeft: MTS.Icon.get('align-left')   },
-  { label:'Centrar',     variant:'secondary', iconLeft: MTS.Icon.get('align-center') },
-  { label:'Alinear der', variant:'secondary', iconLeft: MTS.Icon.get('align-right')  },
-], { size:'sm' });
-
-// Paginación
-var grpPaging = new MTS.ButtonGroup(mkBtn('s5-paging'), [
-  { label:'«',  variant:'secondary' },
-  { label:'‹',  variant:'secondary' },
-  { label:'1',  variant:'secondary' },
-  { label:'2',  variant:'primary'   },
-  { label:'3',  variant:'secondary' },
-  { label:'›',  variant:'secondary' },
-  { label:'»',  variant:'secondary' },
-], { activeOnClick:true });
-grpPaging.setActive(3); // página 2 activa
-
-/* ═══════════════════════════════════════════════════════
-   6. MENU BUTTON / SPLIT BUTTON
-   ═══════════════════════════════════════════════════════ */
-
-new MTS.MenuButton(document.getElementById('s6-menu'), {
-  label:   'Acciones',
-  variant: 'secondary',
-  items: [
-    { label:'Editar',    icon: MTS.Icon.get('edit-2'),   onClick: function(){ feedback('Click: Editar',     'var(--mts-color-primary)'); } },
-    { label:'Duplicar',  icon: MTS.Icon.get('copy'),     onClick: function(){ feedback('Click: Duplicar'); } },
-    { label:'Descargar', icon: MTS.Icon.get('download'), onClick: function(){ feedback('Click: Descargar'); } },
-    '---',
-    { label:'Eliminar',  icon: MTS.Icon.get('trash'), danger:true, onClick: function(){ feedback('Click: Eliminar', 'var(--mts-color-danger)'); } },
-  ],
-});
-
-new MTS.SplitButton(document.getElementById('s6-split'), {
-  label:    'Guardar',
-  variant:  'primary',
-  iconLeft: MTS.Icon.get('save'),
-  onClick:  function(){ feedback('Guardado correctamente ✓', 'var(--mts-color-success,#22c55e)'); },
-  items: [
-    { label:'Guardar borrador',   onClick: function(){ feedback('Guardar como borrador'); } },
-    { label:'Guardar y publicar', onClick: function(){ feedback('Guardar y publicar'); } },
-    '---',
-    { label:'Descartar', danger:true, onClick: function(){ feedback('Descartar cambios', 'var(--mts-color-danger)'); } },
-  ],
-});
-
-/* ═══════════════════════════════════════════════════════
-   7. EVENTOS onClick
-   ═══════════════════════════════════════════════════════ */
-var s7 = document.getElementById('s7-btns');
-
-// Botón con cambio de estado al click
-var btnGuardar = new MTS.Button(mkBtn('s7-btns'), {
-  label:'Guardar cambios', variant:'primary', iconLeft: MTS.Icon.get('save'),
-  onClick: function(e, inst) {
-    inst.setLoading(true); inst.setLabel('Guardando...');
-    feedback('onClick → guardando...', 'var(--mts-color-primary)');
-    setTimeout(function() {
-      inst.setLoading(false); inst.setLabel('✓ Guardado'); inst.setVariant('secondary');
-      feedback('✓ Guardado correctamente', 'var(--mts-color-success,#22c55e)');
-      setTimeout(function() { inst.setLabel('Guardar cambios'); inst.setVariant('primary'); }, 2000);
-    }, 1500);
-  },
-});
-
-// Botón con conteo de clicks
-var clicks = 0;
-var btnCount = new MTS.Button(mkBtn('s7-btns'), {
-  label:'Contador: 0', variant:'secondary',
-  onClick: function(e, inst) {
-    clicks++;
-    inst.setLabel('Contador: ' + clicks);
-    feedback('onClick → clicks: ' + clicks);
-  },
-});
-
-// Botón danger con confirmación
-var btnDanger = new MTS.Button(mkBtn('s7-btns'), {
-  label:'Eliminar', variant:'danger', iconLeft: MTS.Icon.get('trash'),
-  onClick: function(e, inst) {
-    inst.setLabel('¿Confirmar?'); inst.setVariant('warning');
-    feedback('¿Confirmar eliminación?', 'var(--mts-color-warning)');
-    setTimeout(function() { inst.setLabel('Eliminar'); inst.setVariant('danger'); }, 2500);
-  },
-});
-
-// Evento DOM nativo
-new MTS.Button(mkBtn('s7-btns'), {
-  label:'Evento DOM', variant:'ghost',
-  onClick: function() {
-    feedback('mts:button:click disparado — ver consola', 'var(--mts-text-muted)');
-    console.log('[MTS.Button] evento mts:button:click');
-  },
-});
-
-/* Escuchar evento DOM nativo */
-document.addEventListener('mts:button:click', function(e) {
-  console.log('[mts:button:click]', e.detail.button.label);
-});
-
-/* ═══════════════════════════════════════════════════════
-   8. CSS PERSONALIZADO
-   ═══════════════════════════════════════════════════════ */
-[
-  { label:'Violeta',   style:{ background:'#7c3aed', borderColor:'#7c3aed', color:'#fff' } },
-  { label:'Naranja',   style:{ background:'#ea580c', borderColor:'#ea580c', color:'#fff' } },
-  { label:'Teal',      style:{ background:'#0d9488', borderColor:'#0d9488', color:'#fff' } },
-  { label:'Rosa',      style:{ background:'#db2777', borderColor:'#db2777', color:'#fff' } },
-  { label:'Outline custom', variant:'ghost', style:{ borderColor:'#7c3aed', color:'#7c3aed' } },
-].forEach(function(cfg) {
-  new MTS.Button(mkBtn('s8-btns'), cfg);
-});
-
-/* ═══════════════════════════════════════════════════════
-   9. SHADOW & RING
-   ═══════════════════════════════════════════════════════ */
-[
-  { label:'Sin nada',      variant:'primary' },
-  { label:'Shadow',        variant:'primary',  shadow:true },
-  { label:'Ring',          variant:'primary',  ring:true },
-  { label:'Shadow + Ring', variant:'primary',  shadow:true, ring:true },
-  { label:'Danger',        variant:'danger',   shadow:true, ring:true },
-  { label:'Success',       variant:'success',  shadow:true, ring:true },
-  { label:'Warning',       variant:'warning',  shadow:true, ring:true },
-  { label:'Ghost',         variant:'ghost',    shadow:true, ring:true },
-].forEach(function(cfg) {
-  new MTS.Button(mkBtn('s9-btns'), cfg);
-});
-
-/* ── Construir el bloque "ver todo el código" ── */
-document.addEventListener('DOMContentLoaded', function() {
-  var allCode = document.getElementById('code-all-content');
-  if (allCode) {
-    var sections = document.querySelectorAll('.demo-code:not(#code-all) code');
-    var full = '';
-    document.querySelectorAll('.demo-section-title').forEach(function(t, i) {
-      full += '/* ── ' + t.textContent + ' ── */\n';
-      var codes = t.closest('.demo-section').querySelectorAll('.demo-code code');
-      codes.forEach(function(c) { full += c.textContent + '\n\n'; });
-    });
-    allCode.textContent = full.trim();
-  }
-});
-
-['bh1','bh2','bh3','bh4'].forEach(function(id){
-  new MTS.Button(document.getElementById(id),{onClick:function(e,i){document.getElementById('bh-res').textContent='→ onClick: "'+i.label+'" · variant: '+i.variant;}});
+makeSection('tabs-s9', preview_s9, js_s9, function() {
+  new MTS.Button('#btn-d-save',   { onClick: function() { setResult('result-s9', 'Save'); } });
+  new MTS.Button('#btn-d-delete', { onClick: function() { setResult('result-s9', 'Delete'); } });
+  new MTS.Button('#btn-d-cancel', { onClick: function() { setResult('result-s9', 'Cancel'); } });
+  new MTS.Button('#btn-d-small',  { onClick: function() { setResult('result-s9', 'Small'); } });
 });
 </script>
-
 </body>
 </html>

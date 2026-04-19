@@ -3,24 +3,25 @@
 <head>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.CopyButton — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
@@ -30,24 +31,14 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="../matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../matios-ui-input/matios-ui-input.css">
   <link rel="stylesheet" href="./matios-ui-copybutton.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-copybutton.js"></script>
-  <style>
-    .copy-group { display:flex; gap:0; }
-    .copy-group .mts-input { border-radius:var(--mts-radius-md) 0 0 var(--mts-radius-md); border-right:none; }
-    .copy-group .mts-btn   { border-radius:0 var(--mts-radius-md) var(--mts-radius-md) 0; flex-shrink:0; }
-    .code-block-wrap { position:relative; }
-    .code-block-wrap pre {
-      background:var(--mts-bg-surface-2); border:1px solid var(--mts-border-color);
-      border-radius:var(--mts-radius-md); padding:12px 48px 12px 14px;
-      font-size:12px; font-family:var(--mts-font-mono); margin:0; line-height:1.6;
-    }
-    .code-block-wrap .mts-btn { position:absolute; top:6px; right:6px; }
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -63,235 +54,193 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.CopyButton</h1>
-    <p>Copy-to-clipboard button with automatic visual feedback and target element support.</p>
+    <p>Botón para copiar texto o contenido objetivo al portapapeles con feedback visual.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-copybutton.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-copybutton.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Variantes y tamaños -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Variantes y tamaños / Variants and sizes</div>
-    <div class="demo-row">
-      <button id="cp-primary"></button>
-      <button id="cp-secondary"></button>
-      <button id="cp-ghost"></button>
-      <button id="cp-sm"></button>
-      <button id="cp-lg"></button>
-    </div>
-    <div class="result-box" id="cp-result">— haz click para copiar —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cp1','js-cp1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cp1','html-cp1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cp1">&lt;button id="btn-copy"
-  data-text="npm install matios-ui"
-  data-label="Copy"
-  data-variant="secondary"&gt;
-&lt;/button&gt;
-
-&lt;script&gt;
-  new MTS.CopyButton('#btn-copy', {
-    // Fires after successful copy / Se dispara tras copiar
-    onCopy: (text) =&gt; console.log('copied:', text),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cp1">new MTS.CopyButton('#btn-primary', {
-  text:    'npm install matios-ui',
-  variant: 'primary',
-  onCopy:  (text) => console.log('copied:', text),
-});
-
-new MTS.CopyButton('#btn-secondary', {
-  text:    'npm install matios-ui',
-  variant: 'secondary',
-});
-
-// Ghost variant / Variante ghost
-new MTS.CopyButton('#btn-ghost', {
-  text:    'npm install matios-ui',
-  variant: 'ghost',
-});
-
-// Sizes / Tamaños
-new MTS.CopyButton('#btn-sm', { text: 'copy me', size: 'sm', variant: 'secondary' });
-new MTS.CopyButton('#btn-lg', { text: 'copy me', size: 'lg', variant: 'secondary' });</div>
-  </div>
-
-  <!-- 2. Solo ícono -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Solo ícono / Icon only</div>
-    <div class="demo-row">
-      <button id="cp-icon1"></button>
-      <button id="cp-icon2"></button>
-      <button id="cp-icon3"></button>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cp2','js-cp2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cp2','html-cp2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cp2">&lt;button id="btn-icon"
-  data-text="text to copy"
-  data-icon-only
-  data-variant="ghost"&gt;
-&lt;/button&gt;
-
-&lt;script&gt;
-  new MTS.CopyButton('#btn-icon');
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cp2">// Icon only — no label / Solo ícono — sin label
-new MTS.CopyButton('#btn-sm',  { text: 'copy me', iconOnly: true, size: 'sm',  variant: 'ghost' });
-new MTS.CopyButton('#btn-md',  { text: 'copy me', iconOnly: true, size: '',    variant: 'secondary' });
-new MTS.CopyButton('#btn-pri', { text: 'copy me', iconOnly: true, size: '',    variant: 'primary' });</div>
-  </div>
-
-  <!-- 3. Inline con input — copy group -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Inline con input / Input copy group</div>
-    <div style="max-width:480px;display:flex;flex-direction:column;gap:12px;">
-      <div>
-        <div class="demo-label" style="margin-bottom:6px">API Key</div>
-        <div class="copy-group">
-          <input id="api-key-input" class="mts-input" value="sk-1234567890abcdef" readonly>
-          <button id="cp-apikey"></button>
-        </div>
-      </div>
-      <div>
-        <div class="demo-label" style="margin-bottom:6px">Install command</div>
-        <div class="copy-group">
-          <input id="install-input" class="mts-input" value="npm install matios-ui" readonly>
-          <button id="cp-install"></button>
-        </div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cp3','js-cp3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cp3','html-cp3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cp3">&lt;div class="copy-group"&gt;
-  &lt;input id="api-key" class="mts-input" value="sk-1234567890abcdef" readonly&gt;
-  &lt;button id="btn-copy" data-icon-only data-variant="primary"&gt;&lt;/button&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.CopyButton('#btn-copy', {
-    // Reads value from the input / Lee el value del input
-    target: '#api-key',
-    onCopy: (text) =&gt; console.log('copied:', text),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cp3">new MTS.CopyButton('#btn-apikey', {
-  // Reads .value from target element / Lee .value del elemento objetivo
-  target:   '#api-key-input',
-  iconOnly: true,
-  variant:  'primary',
-  onCopy:   (text) => console.log('copied:', text),
-});
-
-new MTS.CopyButton('#btn-install', {
-  target:   '#install-input',
-  iconOnly: true,
-  variant:  'secondary',
-});</div>
-  </div>
-
-  <!-- 4. Bloque de código -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Bloque de código / Code block</div>
-    <div class="code-block-wrap" style="max-width:480px">
-      <pre id="code-npm">npm install matios-ui</pre>
-      <button id="cp-code"></button>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cp4','js-cp4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cp4','html-cp4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cp4">&lt;div style="position:relative"&gt;
-  &lt;pre id="code-block"&gt;npm install matios-ui&lt;/pre&gt;
-  &lt;button id="btn-copy"
-    style="position:absolute;top:6px;right:6px"&gt;
-  &lt;/button&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.CopyButton('#btn-copy', {
-    target:   '#code-block', // reads textContent / lee textContent
-    iconOnly: true,
-    size:     'sm',
-    variant:  'ghost',
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cp4">new MTS.CopyButton('#btn-code', {
-  // Reads .textContent from &lt;pre&gt; / Lee .textContent del &lt;pre&gt;
-  target:   '#code-block',
-  iconOnly: true,
-  size:     'sm',
-  variant:  'ghost',
-});</div>
-  </div>
-
-  <!-- 5. API y callback -->
-  <div class="demo-section">
-    <div class="demo-section-title">5 — API y callback / API and callback</div>
-    <div class="demo-row">
-      <button id="cp-api"></button>
-      <button class="demo-btn-sm" onclick="cpApi.setText('new text ' + Date.now()); document.getElementById('cp-api-result').textContent='setText() → texto actualizado'">setText()</button>
-      <button class="demo-btn-sm" onclick="cpApi.copy()">copy()</button>
-    </div>
-    <div class="result-box" id="cp-api-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cp5','js-cp5')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cp5','html-cp5')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cp5">&lt;button id="btn-copy"
-  data-text="initial text"
-  data-variant="secondary"&gt;
-&lt;/button&gt;
-
-&lt;script&gt;
-  const btn = new MTS.CopyButton('#btn-copy', {
-    onCopy: (text) =&gt; console.log('copied:', text),
-  });
-  btn.setText('new text')  // change text at runtime
-  btn.copy()               // copy programmatically
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cp5">const btn = new MTS.CopyButton('#btn-copy', {
-  text:    'initial text to copy',
-  variant: 'secondary',
-  // Fires after copy / Se dispara tras copiar
-  onCopy:  (text) => {
-    console.log('copied:', text);
-  },
-});
-
-// Change text at runtime / Cambiar texto en runtime
-btn.setText('new text to copy')
-
-// Copy programmatically / Copiar programáticamente
-btn.copy()</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Variantes y tamaños</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Solo ícono</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Con target</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Bloque de código</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — HTML declarativo + enhancement</div><div id="tabs-s5"></div></div>
 </div>
 
 <script>
-var onCopyResult = function(t){ document.getElementById('cp-result').textContent = 'onCopy → "' + t + '"'; };
-new MTS.CopyButton('#cp-primary',   { text:'npm install matios-ui', variant:'primary',   onCopy: onCopyResult });
-new MTS.CopyButton('#cp-secondary', { text:'npm install matios-ui', variant:'secondary', onCopy: onCopyResult });
-new MTS.CopyButton('#cp-ghost',     { text:'npm install matios-ui', variant:'ghost',     onCopy: onCopyResult });
-new MTS.CopyButton('#cp-sm',        { text:'npm install matios-ui', variant:'secondary', size:'sm', onCopy: onCopyResult });
-new MTS.CopyButton('#cp-lg',        { text:'npm install matios-ui', variant:'secondary', size:'lg', onCopy: onCopyResult });
-new MTS.CopyButton('#cp-icon1', { text:'copy me', iconOnly:true, size:'sm',  variant:'ghost' });
-new MTS.CopyButton('#cp-icon2', { text:'copy me', iconOnly:true, size:'',   variant:'secondary' });
-new MTS.CopyButton('#cp-icon3', { text:'copy me', iconOnly:true, size:'',   variant:'primary' });
-new MTS.CopyButton('#cp-apikey',  { target:'#api-key-input', iconOnly:true, variant:'primary' });
-new MTS.CopyButton('#cp-install', { target:'#install-input', iconOnly:true, variant:'secondary' });
-new MTS.CopyButton('#cp-code', { target:'#code-npm', iconOnly:true, size:'sm', variant:'ghost' });
-var cpApi = new MTS.CopyButton('#cp-api', {
-  text: 'texto inicial a copiar',
-  variant: 'secondary',
-  onCopy: function(t){ document.getElementById('cp-api-result').textContent = 'onCopy → "' + t + '"'; }
-});
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '340px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  if (typeof initFn === 'function') initFn();
+}
+
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+var preview_s1 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<button id="cp-primary"></button>' +
+      '<button id="cp-secondary"></button>' +
+      '<button id="cp-ghost"></button>' +
+    '</div>' +
+    '<div class="demo-row">' +
+      '<button id="cp-sm"></button>' +
+      '<button id="cp-lg"></button>' +
+    '</div>' +
+    '<div class="result-box" id="cp-result">— haz click para copiar —</div>' +
+  '</div>';
+
+var js_s1 =
+  "new MTS.CopyButton('#cp-primary', { text: 'npm install matios-ui', label: 'Copy', variant: 'primary', onCopy: function(e) { setResult('cp-result', 'copiado: ' + e.detail.text); } });\n" +
+  "new MTS.CopyButton('#cp-secondary', { text: 'npm install matios-ui', label: 'Copy', variant: 'secondary' });\n" +
+  "new MTS.CopyButton('#cp-ghost', { text: 'npm install matios-ui', label: 'Copy', variant: 'ghost' });\n" +
+  "new MTS.CopyButton('#cp-sm', { text: 'copy me', label: 'Small', size: 'sm', variant: 'secondary' });\n" +
+  "new MTS.CopyButton('#cp-lg', { text: 'copy me', label: 'Large', size: 'lg', variant: 'secondary' });";
+
+var preview_s2 =
+  '<div class="demo-row">' +
+    '<button id="cp-icon1"></button>' +
+    '<button id="cp-icon2"></button>' +
+    '<button id="cp-icon3"></button>' +
+  '</div>';
+
+var js_s2 =
+  "new MTS.CopyButton('#cp-icon1', { text: 'copy me', iconOnly: true, size: 'sm', variant: 'ghost' });\n" +
+  "new MTS.CopyButton('#cp-icon2', { text: 'copy me', iconOnly: true, variant: 'secondary' });\n" +
+  "new MTS.CopyButton('#cp-icon3', { text: 'copy me', iconOnly: true, variant: 'primary' });";
+
+var preview_s3 =
+  '<div class="demo-stack">' +
+    '<div class="mts-form-group">' +
+      '<label class="mts-label" for="api-key-input">API Key</label>' +
+      '<div class="demo-row">' +
+        '<input id="api-key-input" class="mts-input" value="sk-1234567890abcdef" readonly>' +
+        '<button id="cp-apikey"></button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="mts-form-group">' +
+      '<label class="mts-label" for="install-input">Install command</label>' +
+      '<div class="demo-row">' +
+        '<input id="install-input" class="mts-input" value="npm install matios-ui" readonly>' +
+        '<button id="cp-install"></button>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+var js_s3 =
+  "new MTS.CopyButton('#cp-apikey', { target: '#api-key-input', iconOnly: true, variant: 'primary' });\n" +
+  "new MTS.CopyButton('#cp-install', { target: '#install-input', iconOnly: true, variant: 'secondary' });";
+
+var preview_s4 =
+  '<div class="demo-stack">' +
+    '<pre id="code-npm" class="demo-code">npm install matios-ui</pre>' +
+    '<div class="demo-row">' +
+      '<button id="cp-code"></button>' +
+    '</div>' +
+  '</div>';
+
+var js_s4 =
+  "new MTS.CopyButton('#cp-code', { target: '#code-npm', label: 'Copy code', variant: 'secondary' });";
+
+var preview_s5 =
+  '<button id="btn-copy-decl" data-text="npm install matios-ui" data-label="Copy" data-variant="secondary"></button>';
+
+var js_s5 =
+  "new MTS.CopyButton('#btn-copy-decl');";
+
+function initS1() {
+  new MTS.CopyButton('#cp-primary', {
+    text: 'npm install matios-ui',
+    label: 'Copy',
+    variant: 'primary',
+    onCopy: function(e) { setResult('cp-result', 'copiado: ' + e.detail.text); }
+  });
+  new MTS.CopyButton('#cp-secondary', { text: 'npm install matios-ui', label: 'Copy', variant: 'secondary' });
+  new MTS.CopyButton('#cp-ghost', { text: 'npm install matios-ui', label: 'Copy', variant: 'ghost' });
+  new MTS.CopyButton('#cp-sm', { text: 'copy me', label: 'Small', size: 'sm', variant: 'secondary' });
+  new MTS.CopyButton('#cp-lg', { text: 'copy me', label: 'Large', size: 'lg', variant: 'secondary' });
+}
+
+function initS2() {
+  new MTS.CopyButton('#cp-icon1', { text: 'copy me', iconOnly: true, size: 'sm', variant: 'ghost' });
+  new MTS.CopyButton('#cp-icon2', { text: 'copy me', iconOnly: true, variant: 'secondary' });
+  new MTS.CopyButton('#cp-icon3', { text: 'copy me', iconOnly: true, variant: 'primary' });
+}
+
+function initS3() {
+  new MTS.CopyButton('#cp-apikey', { target: '#api-key-input', iconOnly: true, variant: 'primary' });
+  new MTS.CopyButton('#cp-install', { target: '#install-input', iconOnly: true, variant: 'secondary' });
+}
+
+function initS4() {
+  new MTS.CopyButton('#cp-code', { target: '#code-npm', label: 'Copy code', variant: 'secondary' });
+}
+
+function initS5() {
+  new MTS.CopyButton('#btn-copy-decl');
+}
+
+makeSection('tabs-s1', preview_s1, js_s1, initS1);
+makeSection('tabs-s2', preview_s2, js_s2, initS2);
+makeSection('tabs-s3', preview_s3, js_s3, initS3);
+makeSection('tabs-s4', preview_s4, js_s4, initS4);
+makeSection('tabs-s5', preview_s5, js_s5, initS5);
 </script>
 </body>
 </html>

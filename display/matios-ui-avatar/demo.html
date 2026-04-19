@@ -21,17 +21,19 @@
     })();
   </script>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.Avatar — Demo</title>
+  <title>Avatar — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
-  <link rel="stylesheet" href="../../shared/demo-shared.css">
+<link rel="stylesheet" href="../../base/matios-ui-base.css">
+<link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+<link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+<link rel="stylesheet" href="../../shared/demo-shared.css">
+<link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-avatar.css">
-  <script src="../../shared/demo-shared.js"></script>
+<script src="../../shared/demo-shared.js"></script>
+<script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-avatar.js"></script>
 </head>
 <body>
@@ -47,210 +49,93 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Avatar</h1>
-    <p>Avatar with image, initials fallback, status dot, badge and group support.</p>
-    <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-avatar.md')">📄 Docs</button>
-    </div>
+    <p>Avatar demo actualizado al patrón Preview | HTML | JavaScript.</p>
+    <div class="demo-header-actions"><button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-avatar.md')">Documentación</button></div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-
-  <!-- 1. Imagen, iniciales y estados -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Imagen, iniciales y estados / Image, initials and status</div>
-    <div class="demo-row" style="gap:16px;align-items:center;flex-wrap:wrap">
-      <div id="av-img"></div>
-      <div id="av-initials"></div>
-      <div id="av-custom"></div>
-      <div id="av-online"></div>
-      <div id="av-busy"></div>
-      <div id="av-away"></div>
-      <div id="av-offline"></div>
-      <div id="av-square"></div>
-      <div id="av-badge"></div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-av1','js-av1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-av1','html-av1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-av1">&lt;div id="my-avatar"&gt;&lt;/div&gt;
-&lt;script&gt;
-  // With image / Con imagen
-  new MTS.Avatar('#my-avatar', { src: 'photo.jpg', name: 'Ana García' });
-
-  // Initials from name (auto color) / Iniciales desde nombre (color auto)
-  new MTS.Avatar('#my-avatar', { name: 'Pedro Martínez' });
-
-  // With status / Con estado
-  new MTS.Avatar('#my-avatar', { name: 'Laura', status: 'online' });
-
-  // Square + badge / Cuadrado + badge
-  new MTS.Avatar('#my-avatar', { name: 'Bot', square: true, badge: 3 });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-av1">// Image with name fallback / Imagen con fallback a nombre
-new MTS.Avatar('#av-img', {
-  src:  'https://i.pravatar.cc/150?img=1',
-  name: 'Ana García',
-  size: 'md',
-});
-
-// Initials auto-generated from name / Iniciales auto desde nombre
-new MTS.Avatar('#av-initials', { name: 'Pedro Martínez' });  // → 'PM'
-
-// Manual initials + custom color / Iniciales manuales + color
-new MTS.Avatar('#av-custom', { initials: 'JD', color: '#7c3aed' });
-
-// Status dots / Dots de estado
-new MTS.Avatar('#av-online',  { name: 'Laura',   status: 'online' });
-new MTS.Avatar('#av-busy',    { name: 'Carlos',  status: 'busy' });
-new MTS.Avatar('#av-away',    { name: 'María',   status: 'away' });
-new MTS.Avatar('#av-offline', { name: 'Jorge',   status: 'offline' });
-
-// Square + badge / Cuadrado + badge
-new MTS.Avatar('#av-square', { name: 'Bot', square: true });
-new MTS.Avatar('#av-badge',  { name: 'Ana',  badge: 3 });</div>
-  </div>
-
-  <!-- 2. Tamaños -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Tamaños / Sizes</div>
-    <div class="demo-row" style="gap:16px;align-items:center">
-      <div id="av-xs"></div>
-      <div id="av-sm"></div>
-      <div id="av-md"></div>
-      <div id="av-lg"></div>
-      <div id="av-xl"></div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-av2','js-av2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-av2','html-av2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-av2">&lt;div id="av-xs"&gt;&lt;/div&gt;
-&lt;!-- × 5 --&gt;
-&lt;script&gt;
-  ['xs','sm','md','lg','xl'].forEach(size =&gt; {
-    new MTS.Avatar('#av-' + size, { name: 'Ana García', size });
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-av2">// Sizes: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-['xs','sm','md','lg','xl'].forEach(size =&gt; {
-  new MTS.Avatar('#av-' + size, {
-    name: 'Ana García',
-    size,
-  });
-});</div>
-  </div>
-
-  <!-- 3. Grupo -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — AvatarGroup</div>
-    <div class="demo-row" style="gap:24px;flex-wrap:wrap;align-items:center">
-      <div id="av-group-1"></div>
-      <div id="av-group-2"></div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-av3','js-av3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-av3','html-av3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-av3">&lt;div id="my-group"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.AvatarGroup('#my-group', {
-    avatars: [
-      { src: '/img/1.jpg', name: 'Ana' },
-      { name: 'Pedro' },
-      { name: 'Laura' },
-      { name: 'Carlos' },
-      { name: 'María' },
-    ],
-    max:  3,   // show 3, then "+2" / mostrar 3, luego "+2"
-    size: 'md',
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-av3">// AvatarGroup — stacked overlapping avatars
-new MTS.AvatarGroup('#my-group', {
-  avatars: [
-    { src: 'https://i.pravatar.cc/150?img=1', name: 'Ana García' },
-    { src: 'https://i.pravatar.cc/150?img=2', name: 'Pedro Martínez' },
-    { name: 'Laura Sánchez' },
-    { name: 'Carlos Ruiz' },
-    { name: 'María Torres' },
-  ],
-  max:  3,    // max visible — rest shown as "+N" / máx visibles
-  size: 'md',
-});</div>
-  </div>
-
-  <!-- 4. API -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — API — setStatus() y setSrc()</div>
-    <div class="demo-row" style="gap:16px;align-items:center">
-      <div id="av-api"></div>
-    </div>
-    <div class="demo-row" style="margin-top:12px;flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="avApi.setStatus('online')">setStatus('online')</button>
-      <button class="demo-btn-sm" onclick="avApi.setStatus('busy')">setStatus('busy')</button>
-      <button class="demo-btn-sm" onclick="avApi.setStatus('away')">setStatus('away')</button>
-      <button class="demo-btn-sm" onclick="avApi.setStatus(null)">setStatus(null)</button>
-      <button class="demo-btn-sm" onclick="avApi.setSrc('https://i.pravatar.cc/150?img=5')">setSrc(img)</button>
-      <button class="demo-btn-sm" onclick="avApi.setSrc(null)">setSrc(null)</button>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-av4','js-av4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-av4','html-av4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-av4">&lt;div id="my-avatar"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const av = new MTS.Avatar('#my-avatar', { name: 'Ana García', size: 'lg' });
-
-  av.setStatus('online')  // set status dot / establecer dot de estado
-  av.setStatus(null)      // remove dot / quitar dot
-  av.setSrc('photo.jpg')  // set image / establecer imagen
-  av.setSrc(null)         // remove image (show initials) / quitar imagen (mostrar iniciales)
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-av4">const av = new MTS.Avatar('#my-avatar', {
-  name: 'Ana García',
-  size: 'lg',
-});
-
-// Update status dot / Actualizar dot de estado
-av.setStatus('online')   // green dot
-av.setStatus('busy')     // red dot
-av.setStatus('away')     // yellow dot
-av.setStatus('offline')  // gray dot
-av.setStatus(null)       // remove dot / quitar dot
-
-// Update image / Actualizar imagen
-av.setSrc('https://example.com/photo.jpg')
-av.setSrc(null)          // falls back to initials / cae a iniciales</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Básico y estados</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Tamaños</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — AvatarGroup</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — API setStatus() / setSrc()</div><div id="tabs-s4"></div></div>
 </div>
 <script>
-new MTS.Avatar('#av-img',      { src:'https://i.pravatar.cc/150?img=1', name:'Ana García' });
-new MTS.Avatar('#av-initials', { name:'Pedro Martínez' });
-new MTS.Avatar('#av-custom',   { initials:'JD', color:'#7c3aed' });
-new MTS.Avatar('#av-online',   { name:'Laura',  status:'online' });
-new MTS.Avatar('#av-busy',     { name:'Carlos', status:'busy' });
-new MTS.Avatar('#av-away',     { name:'María',  status:'away' });
-new MTS.Avatar('#av-offline',  { name:'Jorge',  status:'offline' });
-new MTS.Avatar('#av-square',   { name:'Bot', square:true });
-new MTS.Avatar('#av-badge',    { name:'Ana', badge:3 });
-['xs','sm','md','lg','xl'].forEach(function(s){ new MTS.Avatar('#av-'+s, { name:'Ana García', size:s }); });
-new MTS.AvatarGroup('#av-group-1', {
-  avatars:[
-    { src:'https://i.pravatar.cc/150?img=1', name:'Ana García' },
-    { src:'https://i.pravatar.cc/150?img=2', name:'Pedro Martínez' },
-    { name:'Laura Sánchez' },
-    { name:'Carlos Ruiz' },
-    { name:'María Torres' },
-  ], max:3, size:'md',
-});
-new MTS.AvatarGroup('#av-group-2', {
-  avatars:[
-    { name:'Ana' },{ name:'Pedro' },{ name:'Laura' },{ name:'Carlos' },
-    { name:'María' },{ name:'Jorge' },{ name:'Elena' },
-  ], max:4, size:'sm',
-});
-var avApi = new MTS.Avatar('#av-api', { name:'Ana García', size:'lg' });
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(indentHtml(previewHtml)) + '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(code) + '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '340px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+  if (typeof initFn === 'function') initFn();
+}
+var preview_s1 = "<div class=\"demo-row\">\n  <div id=\"av-img\"></div>\n  <div id=\"av-initials\"></div>\n  <div id=\"av-online\"></div>\n  <div id=\"av-busy\"></div>\n  <div id=\"av-away\"></div>\n  <div id=\"av-square\"></div>\n  <div id=\"av-badge\"></div>\n</div>";
+var js_s1 = "new MTS.Avatar('#av-img', { src:'https://i.pravatar.cc/150?img=1', name:'Ana Garc\u00eda' });\nnew MTS.Avatar('#av-initials', { name:'Pedro Mart\u00ednez' });\nnew MTS.Avatar('#av-online', { name:'Laura', status:'online' });\nnew MTS.Avatar('#av-busy', { name:'Carlos', status:'busy' });\nnew MTS.Avatar('#av-away', { name:'Mar\u00eda', status:'away' });\nnew MTS.Avatar('#av-square', { name:'Bot', square:true });\nnew MTS.Avatar('#av-badge', { name:'Ana', badge:3 });";
+var preview_s2 = "<div class=\"demo-row\">\n  <div id=\"av-xs\"></div>\n  <div id=\"av-sm\"></div>\n  <div id=\"av-md\"></div>\n  <div id=\"av-lg\"></div>\n  <div id=\"av-xl\"></div>\n</div>";
+var js_s2 = "['xs','sm','md','lg','xl'].forEach(function(size) { new MTS.Avatar('#av-' + size, { name:'Ana Garc\u00eda', size:size }); });";
+var preview_s3 = "<div class=\"demo-stack\">\n  <div id=\"av-group-1\"></div>\n  <div id=\"av-group-2\"></div>\n</div>";
+var js_s3 = "new MTS.AvatarGroup('#av-group-1', { avatars:[{src:'https://i.pravatar.cc/150?img=1',name:'Ana'},{name:'Pedro Mart\u00ednez'},{name:'Laura S\u00e1nchez'},{name:'Carlos Ruiz'},{name:'Mar\u00eda Torres'}], max:3, size:'md' });\nnew MTS.AvatarGroup('#av-group-2', { avatars:[{name:'Ana'},{name:'Pedro'},{name:'Laura'}], size:'lg' });";
+var preview_s4 = "<div class=\"demo-stack\">\n  <div id=\"av-api\"></div>\n  <div class=\"demo-row\">\n    <button class=\"demo-btn-sm\" onclick=\"avatarApi.update({ name:'Carla Soto', status:'online', badge:2 })\">update()</button>\n    <button class=\"demo-btn-sm\" onclick=\"avatarApi.update({ src:'https://i.pravatar.cc/150?img=12', name:'Ana Garc\u00eda', status:null, badge:null })\">restore</button>\n  </div>\n</div>";
+var js_s4 = "var avatarApi = new MTS.Avatar('#av-api', { src:'https://i.pravatar.cc/150?img=12', name:'Ana Garc\u00eda', size:'lg' });\navatarApi.update({ name:'Carla Soto', status:'online', badge:2 });";
+var avatarApi;
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.Avatar('#av-img', { src:'https://i.pravatar.cc/150?img=1', name:'Ana García' });
+  new MTS.Avatar('#av-initials', { name:'Pedro Martínez' });
+  new MTS.Avatar('#av-online', { name:'Laura', status:'online' });
+  new MTS.Avatar('#av-busy', { name:'Carlos', status:'busy' });
+  new MTS.Avatar('#av-away', { name:'María', status:'away' });
+  new MTS.Avatar('#av-square', { name:'Bot', square:true });
+  new MTS.Avatar('#av-badge', { name:'Ana', badge:3 });
+}, '320px');
+makeSection('tabs-s2', preview_s2, js_s2, function() { ['xs','sm','md','lg','xl'].forEach(function(size) { new MTS.Avatar('#av-' + size, { name:'Ana García', size:size }); }); }, '300px');
+makeSection('tabs-s3', preview_s3, js_s3, function() {
+  new MTS.AvatarGroup('#av-group-1', { avatars:[{src:'https://i.pravatar.cc/150?img=1',name:'Ana'},{name:'Pedro Martínez'},{name:'Laura Sánchez'},{name:'Carlos Ruiz'},{name:'María Torres'}], max:3, size:'md' });
+  new MTS.AvatarGroup('#av-group-2', { avatars:[{name:'Ana'},{name:'Pedro'},{name:'Laura'}], size:'lg' });
+}, '320px');
+makeSection('tabs-s4', preview_s4, js_s4, function() { avatarApi = new MTS.Avatar('#av-api', { src:'https://i.pravatar.cc/150?img=12', name:'Ana García', size:'lg' }); }, '340px');
+
 </script>
 </body>
 </html>

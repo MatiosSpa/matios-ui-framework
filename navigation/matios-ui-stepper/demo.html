@@ -3,24 +3,25 @@
 <head>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.Stepper — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
@@ -30,16 +31,13 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
-  <link rel="stylesheet" href="../matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-stepper.css">
   <script src="../../shared/demo-shared.js"></script>
-  <script src="../matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-stepper.js"></script>
-  <style>
-    .step-panel { padding: 20px; font-size: 14px; color: var(--mts-text-secondary); }
-    .step-panel h3 { font-size: 15px; font-weight: 700; color: var(--mts-text-primary); margin: 0 0 8px; }
-    .step-nav { display: flex; gap: 8px; margin-top: 16px; }
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -55,257 +53,340 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Stepper</h1>
-    <p>Wizard (with panels) and progress (visual indicator) — horizontal/vertical, clickable, status management.</p>
+    <p>Wizard + progress. Componente oficial unificado para flujos, checkout, compact y dots.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-stepper.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-stepper.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Wizard -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — mode:wizard — flujo multi-paso / Multi-step flow</div>
-    <div id="stepper-wizard"></div>
-    <div class="result-box" id="wizard-result">— navega los pasos —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-st1','js-st1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-st1','html-st1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-st1">&lt;div id="my-stepper"&gt;&lt;/div&gt;
+  <div class="result-box" style="margin-bottom:16px">MTS.StepProgress queda como alias de compatibilidad. Los ejemplos nuevos viven en MTS.Stepper.</div>
 
-&lt;script&gt;
-  const stepper = new MTS.Stepper('#my-stepper', {
-    mode: 'wizard',
-    steps: [
-      { id: 's1', label: 'Personal data', content: '&lt;div id="form-s1"&gt;&lt;/div&gt;' },
-      { id: 's2', label: 'Security',      content: '&lt;div id="form-s2"&gt;&lt;/div&gt;' },
-      { id: 's3', label: 'Confirm',       content: '&lt;div id="summary"&gt;&lt;/div&gt;' },
-    ],
-    // Fires when step changes / Se dispara al cambiar de paso
-    onChange: (e) =&gt; console.log(e.detail.index, e.detail.direction),
-    // Fires when last step reached / Se dispara al llegar al último paso
-    onComplete: () =&gt; console.log('complete!'),
-  });
-  stepper.next()
-  stepper.prev()
-  stepper.goTo(2)
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-st1">const stepper = new MTS.Stepper('#my-stepper', {
-  mode: 'wizard',
-  steps: [
-    {
-      id:          's1',
-      label:       'Personal data',
-      description: 'Name and contact',
-      content:     '&lt;div class="step-panel"&gt;&lt;h3&gt;Step 1&lt;/h3&gt;&lt;p&gt;Fill in your personal info.&lt;/p&gt;&lt;/div&gt;',
-    },
-    {
-      id:      's2',
-      label:   'Security',
-      content: '&lt;div class="step-panel"&gt;&lt;h3&gt;Step 2&lt;/h3&gt;&lt;p&gt;Create a password.&lt;/p&gt;&lt;/div&gt;',
-    },
-    {
-      id:      's3',
-      label:   'Confirm',
-      content: '&lt;div class="step-panel"&gt;&lt;h3&gt;Step 3&lt;/h3&gt;&lt;p&gt;Review and submit.&lt;/p&gt;&lt;/div&gt;',
-    },
-  ],
-  // Fires when step changes / Se dispara al cambiar de paso
-  onChange: (e) =&gt; {
-    console.log(e.detail.index);     // → new step index
-    console.log(e.detail.direction); // → 'next' | 'prev' | 'jump'
-  },
-  // Fires on last step / Se dispara en el último paso
-  onComplete: () =&gt; console.log('All steps done!'),
-});</div>
-  </div>
-
-  <!-- 2. Progress variants -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — mode:progress — variantes / Variants</div>
-    <div class="demo-stack" style="gap:24px">
-      <div>
-        <div class="demo-label" style="margin-bottom:8px">variant: default</div>
-        <div id="sp-default"></div>
-      </div>
-      <div>
-        <div class="demo-label" style="margin-bottom:8px">variant: compact</div>
-        <div id="sp-compact"></div>
-      </div>
-      <div>
-        <div class="demo-label" style="margin-bottom:8px">variant: dots</div>
-        <div id="sp-dots"></div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-st2','js-st2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-st2','html-st2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-st2">&lt;div id="progress-checkout"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.Stepper('#progress-checkout', {
-    mode:    'progress',
-    variant: 'compact',  // 'default' | 'compact' | 'dots'
-    active:  1,
-    steps: [
-      { id: 'cart',    label: 'Cart'      },
-      { id: 'ship',    label: 'Shipping'  },
-      { id: 'payment', label: 'Payment'   },
-      { id: 'confirm', label: 'Confirmed' },
-    ],
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-st2">const CHECKOUT_STEPS = [
-  { id: 'cart',    label: 'Cart',      description: 'Review products' },
-  { id: 'ship',    label: 'Shipping',  description: 'Delivery address' },
-  { id: 'payment', label: 'Payment',   description: 'Payment method' },
-  { id: 'confirm', label: 'Confirmed'  },
-];
-
-// Default — with description / Con descripción
-new MTS.Stepper('#sp-default', { mode:'progress', variant:'default', active:1, steps: CHECKOUT_STEPS });
-
-// Compact — label only / Solo label
-new MTS.Stepper('#sp-compact', { mode:'progress', variant:'compact', active:2, steps: CHECKOUT_STEPS });
-
-// Dots — minimalist / Minimalista
-new MTS.Stepper('#sp-dots',    { mode:'progress', variant:'dots',    active:1, steps: CHECKOUT_STEPS });</div>
-  </div>
-
-  <!-- 3. Clickable + setStepStatus -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Clickable + setStepStatus()</div>
-    <div id="sp-status"></div>
-    <div class="demo-row" style="flex-wrap:wrap;margin-top:8px">
-      <button class="demo-btn-sm" onclick="spStatus.setStepStatus(1,'error')">setStepStatus(1,'error')</button>
-      <button class="demo-btn-sm" onclick="spStatus.setStepStatus(1,'pending')">setStepStatus(1,'pending')</button>
-      <button class="demo-btn-sm" onclick="spStatus.setStepStatus(0,'error')">setStepStatus(0,'error')</button>
-      <button class="demo-btn-sm" onclick="spStatus.goTo(0)">goTo(0)</button>
-      <button class="demo-btn-sm" onclick="spStatus.goTo(3)">goTo(3)</button>
-    </div>
-    <div class="result-box" id="status-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-st3','js-st3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-st3','html-st3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-st3">&lt;div id="my-stepper"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const s = new MTS.Stepper('#my-stepper', {
-    mode: 'progress', variant: 'default',
-    clickable: true,
-    steps: [...],
-    onStepClick:    (e) =&gt; console.log('clicked:', e.detail.index),
-    onStatusChange: (e) =&gt; console.log('status:', e.detail.status),
-  });
-  s.setStepStatus(1, 'error')    // mark error / marcar error
-  s.setStepStatus(1, 'pending')  // reset / resetear
-  s.goTo(2)                      // jump / saltar
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-st3">const s = new MTS.Stepper('#my-stepper', {
-  mode:      'progress',
-  variant:   'default',
-  // Allow clicking completed steps / Permitir click en pasos completados
-  clickable: true,
-  steps: [
-    { id:'a', label:'Validate',  description:'Check data' },
-    { id:'b', label:'Process',   description:'Run tasks' },
-    { id:'c', label:'Review',    description:'Verify results' },
-    { id:'d', label:'Complete',  description:'Done' },
-  ],
-  // Fires on step click / Se dispara al hacer click en un paso
-  onStepClick:    (e) =&gt; console.log('clicked:', e.detail.index),
-  // Fires on status change / Se dispara al cambiar el estado
-  onStatusChange: (e) =&gt; console.log('status:', e.detail.status),
-});
-
-s.setStepStatus(1, 'error')    // mark step 1 as error / marcar paso 1 como error
-s.setStepStatus(1, 'pending')  // reset to pending / resetear a pendiente
-s.goTo(2)                      // jump to step 2 / saltar al paso 2</div>
-  </div>
-
-  <!-- 4. Vertical -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Vertical + wizard</div>
-    <div style="max-width:600px">
-      <div id="stepper-vertical"></div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-st4','js-st4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-st4','html-st4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-st4">&lt;div id="my-stepper"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Stepper('#my-stepper', {
-    mode:      'wizard',
-    direction: 'vertical',
-    steps: [...],
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-st4">new MTS.Stepper('#my-stepper', {
-  mode:      'wizard',
-  // Vertical layout / Layout vertical
-  direction: 'vertical',
-  steps: [
-    { id:'s1', label:'Step 1', description:'First action',  content: '&lt;div class="step-panel"&gt;&lt;p&gt;Content 1&lt;/p&gt;&lt;/div&gt;' },
-    { id:'s2', label:'Step 2', description:'Second action', content: '&lt;div class="step-panel"&gt;&lt;p&gt;Content 2&lt;/p&gt;&lt;/div&gt;' },
-    { id:'s3', label:'Step 3', description:'Final action',  content: '&lt;div class="step-panel"&gt;&lt;p&gt;Content 3&lt;/p&gt;&lt;/div&gt;' },
-  ],
-});</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Wizard</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Checkout con navegación</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Compact + clickable</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Dots / pipeline</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — API + status</div><div id="tabs-s5"></div></div>
 </div>
 
 <script>
-// Wizard
-var wizardStepper = new MTS.Stepper('#stepper-wizard', {
-  mode: 'wizard',
-  steps: [
-    { id:'s1', label:'Datos personales', description:'Nombre y contacto',
-      content: '<div class="step-panel"><h3>Paso 1 — Datos personales</h3><p>Aquí irían los campos del formulario.</p><div class="step-nav"><button class="mts-btn mts-btn--primary mts-btn--sm" onclick="wizardStepper.next()">Siguiente →</button></div></div>' },
-    { id:'s2', label:'Seguridad', description:'Contraseña',
-      content: '<div class="step-panel"><h3>Paso 2 — Seguridad</h3><p>Define una contraseña segura.</p><div class="step-nav"><button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="wizardStepper.prev()">← Anterior</button><button class="mts-btn mts-btn--primary mts-btn--sm" onclick="wizardStepper.next()">Siguiente →</button></div></div>' },
-    { id:'s3', label:'Confirmar', description:'Revisar y enviar',
-      content: '<div class="step-panel"><h3>Paso 3 — Confirmar</h3><p>Revisa la información antes de enviar.</p><div class="step-nav"><button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="wizardStepper.prev()">← Anterior</button><button class="mts-btn mts-btn--primary mts-btn--sm" onclick="document.getElementById(\'wizard-result\').textContent=\'onComplete → ✓\'">Enviar ✓</button></div></div>' },
-  ],
-  onChange:   function(e){ document.getElementById('wizard-result').textContent = 'onChange → index: ' + e.detail.index + ' | direction: ' + e.detail.direction; },
-  onComplete: function(){ document.getElementById('wizard-result').textContent = 'onComplete → ¡Completado!'; },
-});
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
-var STEPS = [
-  { id:'cart',    label:'Carrito',    description:'Revisa los productos' },
-  { id:'ship',    label:'Envío',      description:'Dirección de entrega' },
-  { id:'payment', label:'Pago',       description:'Método de pago' },
-  { id:'confirm', label:'Confirmado' },
-];
-new MTS.Stepper('#sp-default', { mode:'progress', variant:'default', active:1, steps: STEPS });
-new MTS.Stepper('#sp-compact', { mode:'progress', variant:'compact', active:2, steps: STEPS });
-new MTS.Stepper('#sp-dots',    { mode:'progress', variant:'dots',    active:1, steps: STEPS });
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.replace(/\s+$/, '');
+}
 
-var spStatus = new MTS.Stepper('#sp-status', {
-  mode:'progress', variant:'default', active:2, clickable:true,
-  steps: [
-    { id:'a', label:'Validate',  description:'Check data' },
-    { id:'b', label:'Process',   description:'Run tasks' },
-    { id:'c', label:'Review',    description:'Verify results' },
-    { id:'d', label:'Complete',  description:'Done' },
-  ],
-  onStepClick:    function(e){ document.getElementById('status-result').textContent = 'onStepClick → index: ' + e.detail.index; },
-  onStatusChange: function(e){ document.getElementById('status-result').textContent = 'onStatusChange → status: ' + e.detail.status; },
-  onChange:       function(e){ document.getElementById('status-result').textContent = 'onChange → index: ' + e.detail.index; },
-});
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
 
-new MTS.Stepper('#stepper-vertical', {
-  mode:'wizard', direction:'vertical',
-  steps: [
-    { id:'s1', label:'Step 1', description:'First action',
-      content: '<div class="step-panel"><h3>Step 1</h3><p>First panel content.</p><div class="step-nav"><button class="mts-btn mts-btn--primary mts-btn--sm" onclick="document.querySelector(\'#stepper-vertical .__stepper_next\') && document.querySelector(\'#stepper-vertical .__stepper_next\').click()">Next</button></div></div>' },
-    { id:'s2', label:'Step 2', description:'Second action',
-      content: '<div class="step-panel"><h3>Step 2</h3><p>Second panel content.</p></div>' },
-    { id:'s3', label:'Step 3', description:'Final action',
-      content: '<div class="step-panel"><h3>Step 3</h3><p>Final panel content.</p></div>' },
-  ],
-});
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '380px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+  if (typeof initFn === 'function') initFn();
+}
+
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+function bindMatiosButtons(selectors) {
+  selectors.forEach(function(selector) {
+    var el = document.querySelector(selector);
+    if (el) new MTS.Button(el);
+  });
+}
+
+var wizardStepper;
+var checkoutStepper;
+var compactStepper;
+var statusStepper;
+
+var preview_s1 = `
+<div class="demo-stack">
+  <div id="stepper-wizard"></div>
+  <div class="result-box" id="stepper-result">— navega los pasos —</div>
+</div>`;
+
+var js_s1 = [
+"const wizardStepper = new MTS.Stepper('#stepper-wizard', {",
+"  mode: 'wizard',",
+"  steps: [",
+"    { id: 'account', label: 'Account', content: '<div class=\"demo-stack\"><div class=\"demo-label\">Account</div><div>Step 1 content</div></div>' },",
+"    { id: 'security', label: 'Security', content: '<div class=\"demo-stack\"><div class=\"demo-label\">Security</div><div>Step 2 content</div></div>' },",
+"    { id: 'confirm', label: 'Confirm', content: '<div class=\"demo-stack\"><div class=\"demo-label\">Confirm</div><div>Step 3 content</div></div>' }",
+"  ],",
+"  onChange: function(e) {",
+"    console.log(e.detail.step.id);",
+"  }",
+"});"
+].join('\n');
+
+var preview_s2 = `
+<div class="demo-stack">
+  <div id="stepper-checkout"></div>
+  <div class="demo-row">
+    <button type="button" id="btn-checkout-prev">Prev</button>
+    <button type="button" id="btn-checkout-next">Next</button>
+    <button type="button" id="btn-checkout-go0">goTo(0)</button>
+    <button type="button" id="btn-checkout-go3">goTo(3)</button>
+  </div>
+  <div class="result-box" id="stepper-checkout-result">— navega el checkout —</div>
+</div>`;
+
+var js_s2 = [
+"const checkoutStepper = new MTS.Stepper('#stepper-checkout', {",
+"  mode: 'progress',",
+"  variant: 'default',",
+"  active: 1,",
+"  steps: [",
+"    { id: 'cart', label: 'Cart', description: 'Review products' },",
+"    { id: 'ship', label: 'Shipping', description: 'Delivery address' },",
+"    { id: 'payment', label: 'Payment', description: 'Payment method' },",
+"    { id: 'confirm', label: 'Confirmed' }",
+"  ],",
+"  onChange: function(e) {",
+"    console.log(e.detail.index, e.detail.step);",
+"  }",
+"});",
+"",
+"checkoutStepper.prev();",
+"checkoutStepper.next();",
+"checkoutStepper.goTo(3);"
+].join('\n');
+
+var preview_s3 = `
+<div class="demo-stack">
+  <div id="stepper-compact"></div>
+  <div class="result-box" id="stepper-compact-result">— haz click en los pasos —</div>
+</div>`;
+
+var js_s3 = [
+"const compactStepper = new MTS.Stepper('#stepper-compact', {",
+"  mode: 'progress',",
+"  variant: 'compact',",
+"  active: 2,",
+"  clickable: true,",
+"  steps: [",
+"    { id: 's1', label: 'Datos' },",
+"    { id: 's2', label: 'Seguridad' },",
+"    { id: 's3', label: 'Confirmar' },",
+"    { id: 's4', label: 'Listo' }",
+"  ],",
+"  onChange: function(e) {",
+"    console.log(e.detail.index);",
+"  }",
+"});"
+].join('\n');
+
+var preview_s4 = `
+<div class="demo-stack">
+  <div class="demo-label">Pipeline tracker</div>
+  <div id="stepper-dots"></div>
+  <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:-4px;font-size:11px;color:var(--mts-text-muted);text-align:center">
+    <div>Trigger</div>
+    <div>Build</div>
+    <div>Tests</div>
+    <div>Deploy</div>
+    <div>Live</div>
+  </div>
+  <div class="result-box" id="stepper-dots-result">build #184 · Tests running</div>
+</div>`;
+
+var js_s4 = [
+"const pipelineStepper = new MTS.Stepper('#stepper-dots', {",
+"  mode: 'progress',",
+"  variant: 'dots',",
+"  active: 2,",
+"  clickable: true,",
+"  steps: [",
+"    { id: 'trigger', label: 'Trigger' },",
+"    { id: 'build', label: 'Build' },",
+"    { id: 'test', label: 'Tests' },",
+"    { id: 'deploy', label: 'Deploy' },",
+"    { id: 'live', label: 'Live' }",
+"  ],",
+"  onChange: function(e) {",
+"    console.log('pipeline →', e.detail.step.label);",
+"  }",
+"});"
+].join('\n');
+
+var preview_s5 = `
+<div class="demo-stack">
+  <div id="stepper-status"></div>
+  <div class="demo-row" style="flex-wrap:wrap">
+    <button type="button" id="btn-status-error">setStepStatus(1, 'error')</button>
+    <button type="button" id="btn-status-pending">setStepStatus(1, 'pending')</button>
+    <button type="button" id="btn-status-prev">Prev</button>
+    <button type="button" id="btn-status-next">Next</button>
+  </div>
+  <div class="result-box" id="stepper-status-result">— usa la API —</div>
+</div>`;
+
+var js_s5 = [
+"const statusStepper = new MTS.Stepper('#stepper-status', {",
+"  mode: 'progress',",
+"  variant: 'default',",
+"  active: 2,",
+"  steps: [",
+"    { id: 'draft', label: 'Draft' },",
+"    { id: 'review', label: 'Review' },",
+"    { id: 'publish', label: 'Publish' }",
+"  ],",
+"  onChange: function(e) {",
+"    console.log(e.detail.index);",
+"  },",
+"  onStatusChange: function(e) {",
+"    console.log(e.detail.status);",
+"  }",
+"});",
+"",
+"statusStepper.setStepStatus(1, 'error');",
+"statusStepper.setStepStatus(1, 'pending');",
+"statusStepper.getActive();"
+].join('\n');
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  wizardStepper = new MTS.Stepper('#stepper-wizard', {
+    mode: 'wizard',
+    steps: [
+      { id: 'account', label: 'Account', content: '<div class="demo-stack"><div class="demo-label">Account</div><div>Step 1 content</div></div>' },
+      { id: 'security', label: 'Security', content: '<div class="demo-stack"><div class="demo-label">Security</div><div>Step 2 content</div></div>' },
+      { id: 'confirm', label: 'Confirm', content: '<div class="demo-stack"><div class="demo-label">Confirm</div><div>Step 3 content</div></div>' }
+    ],
+    onChange: function(e) { setResult('stepper-result', 'step → ' + e.detail.step.id); }
+  });
+}, '420px');
+
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  checkoutStepper = new MTS.Stepper('#stepper-checkout', {
+    mode: 'progress',
+    variant: 'default',
+    active: 1,
+    steps: [
+      { id: 'cart', label: 'Cart', description: 'Review products' },
+      { id: 'ship', label: 'Shipping', description: 'Delivery address' },
+      { id: 'payment', label: 'Payment', description: 'Payment method' },
+      { id: 'confirm', label: 'Confirmed' }
+    ],
+    onChange: function(e) {
+      setResult('stepper-checkout-result', 'step → ' + e.detail.step.label);
+    }
+  });
+
+  bindMatiosButtons(['#btn-checkout-prev', '#btn-checkout-next', '#btn-checkout-go0', '#btn-checkout-go3']);
+  document.getElementById('btn-checkout-prev').addEventListener('click', function(){ checkoutStepper.prev(); });
+  document.getElementById('btn-checkout-next').addEventListener('click', function(){ checkoutStepper.next(); });
+  document.getElementById('btn-checkout-go0').addEventListener('click', function(){ checkoutStepper.goTo(0); });
+  document.getElementById('btn-checkout-go3').addEventListener('click', function(){ checkoutStepper.goTo(3); });
+}, '360px');
+
+makeSection('tabs-s3', preview_s3, js_s3, function() {
+  compactStepper = new MTS.Stepper('#stepper-compact', {
+    mode: 'progress',
+    variant: 'compact',
+    active: 2,
+    clickable: true,
+    steps: [
+      { id: 's1', label: 'Datos' },
+      { id: 's2', label: 'Seguridad' },
+      { id: 's3', label: 'Confirmar' },
+      { id: 's4', label: 'Listo' }
+    ],
+    onChange: function(e) {
+      setResult('stepper-compact-result', 'step → ' + e.detail.step.label);
+    }
+  });
+}, '300px');
+
+makeSection('tabs-s4', preview_s4, js_s4, function() {
+  var pipelineStepper = new MTS.Stepper('#stepper-dots', {
+    mode: 'progress',
+    variant: 'dots',
+    active: 2,
+    clickable: true,
+    steps: [
+      { id: 'trigger', label: 'Trigger' },
+      { id: 'build', label: 'Build' },
+      { id: 'test', label: 'Tests' },
+      { id: 'deploy', label: 'Deploy' },
+      { id: 'live', label: 'Live' }
+    ],
+    onChange: function(e) {
+      setResult('stepper-dots-result', 'build #184 · ' + e.detail.step.label + ' running');
+    }
+  });
+
+  setResult('stepper-dots-result', 'build #184 · ' + pipelineStepper.getActive().step.label + ' running');
+}, '280px');
+
+makeSection('tabs-s5', preview_s5, js_s5, function() {
+  statusStepper = new MTS.Stepper('#stepper-status', {
+    mode: 'progress',
+    variant: 'default',
+    active: 2,
+    steps: [
+      { id: 'draft', label: 'Draft' },
+      { id: 'review', label: 'Review' },
+      { id: 'publish', label: 'Publish' }
+    ],
+    onChange: function(e) {
+      setResult('stepper-status-result', 'step → ' + e.detail.step.label);
+    },
+    onStatusChange: function(e) {
+      setResult('stepper-status-result', 'status → ' + e.detail.status + ' / ' + e.detail.step.label);
+    }
+  });
+
+  bindMatiosButtons(['#btn-status-error', '#btn-status-pending', '#btn-status-prev', '#btn-status-next']);
+  document.getElementById('btn-status-error').addEventListener('click', function(){ statusStepper.setStepStatus(1, 'error'); });
+  document.getElementById('btn-status-pending').addEventListener('click', function(){ statusStepper.setStepStatus(1, 'pending'); });
+  document.getElementById('btn-status-prev').addEventListener('click', function(){ statusStepper.prev(); });
+  document.getElementById('btn-status-next').addEventListener('click', function(){ statusStepper.next(); });
+}, '360px');
 </script>
 </body>
 </html>

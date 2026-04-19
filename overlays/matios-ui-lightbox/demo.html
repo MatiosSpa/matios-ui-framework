@@ -30,8 +30,14 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-lightbox.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-lightbox.js"></script>
   <style>
     .gallery-grid {
@@ -46,12 +52,19 @@
       cursor: pointer;
       background: var(--mts-surface-2);
       border: 1px solid var(--mts-border-color);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: opacity .12s;
+      text-decoration: none;
+      color: var(--mts-text-primary);
+    }
+    .gallery-thumb svg {
+      width: 28px;
+      height: 28px;
+      opacity: .92;
     }
     .gallery-thumb:hover { opacity: .8; }
-    .gallery-thumb[data-lightbox] { text-decoration: none; }
   </style>
 </head>
 <body>
@@ -64,6 +77,7 @@
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
   <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Lightbox</h1>
@@ -74,227 +88,263 @@
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Programático -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Uso programático / Programmatic</div>
-    <div class="demo-row">
-      <button class="mts-btn mts-btn--secondary" onclick="lb1.open(0)">Abrir desde índice 0</button>
-      <button class="mts-btn mts-btn--secondary" onclick="lb1.open(2)">Abrir desde índice 2</button>
-    </div>
-    <div class="result-box" id="lb-result">— abre el lightbox —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-lb1','js-lb1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-lb1','html-lb1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-lb1">&lt;button onclick="lb.open(0)"&gt;Open gallery&lt;/button&gt;
+  <div class="demo-section"><div class="demo-section-title">1 — Uso programático / Programmatic</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Auto-bind con selector CSS</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — API + opciones</div><div id="tabs-s3"></div></div>
+</div>
 
-&lt;script&gt;
-  const lb = new MTS.Lightbox([
-    { src: '/img/photo1.jpg', caption: 'Mountain view' },
-    { src: '/img/photo2.jpg', caption: 'Ocean sunset'  },
-    { src: '/img/photo3.jpg', caption: 'Forest trail'  },
-  ], {
-    loop:       true,
-    zoom:       true,
-    thumbnails: true,
-    download:   true,
-    // Fires when lightbox opens / Se dispara al abrir
-    onOpen:   (e) =&gt; console.log('opened:', e.detail.index),
-    // Fires when item changes / Se dispara al cambiar el ítem
-    onChange: (e) =&gt; console.log('changed:', e.detail.index),
-    // Fires when closed / Se dispara al cerrar
-    onClose:  ()  =&gt; console.log('closed'),
+<script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
   });
-  lb.open(0);
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-lb1">const lb = new MTS.Lightbox([
-  {
-    src:     'https://picsum.photos/seed/1/1200/800',
-    caption: 'Landscape 1',
-    thumb:   'https://picsum.photos/seed/1/120/80',
-    type:    'image',
-  },
-  {
-    src:     'https://picsum.photos/seed/2/1200/800',
-    caption: 'Landscape 2',
-    thumb:   'https://picsum.photos/seed/2/120/80',
-  },
-  {
-    src:     'https://picsum.photos/seed/3/1200/800',
-    caption: 'Landscape 3',
-    thumb:   'https://picsum.photos/seed/3/120/80',
-  },
-], {
-  loop:       true,
-  zoom:       true,
-  thumbnails: true,
-  download:   false,
-  animation:  'fade',   // 'fade' | 'slide'
+  return result.trimEnd();
+}
 
-  // Fires when lightbox opens / Se dispara al abrir el lightbox
-  onOpen: (e) =&gt; {
-    console.log(e.detail.item);  // → { src, caption, ... }
-    console.log(e.detail.index); // → 0
+function htmlTab(previewHtml) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+}
+
+var preview_s1 = `
+<div class="demo-stack">
+  <div class="demo-row">
+    <button id="btn-lb-open-0" data-label="Abrir índice 0" data-variant="secondary"></button>
+    <button id="btn-lb-open-2" data-label="Abrir índice 2" data-variant="secondary"></button>
+  </div>
+  <div class="result-box" id="lb-result">— abre el lightbox —</div>
+</div>`;
+
+var js_s1 = `new MTS.Button('#btn-lb-open-0');
+new MTS.Button('#btn-lb-open-2');
+
+var ITEMS = [
+  {
+    src: 'https://picsum.photos/seed/1/1200/800',
+    caption: 'Paisaje 1 — usa ← → para navegar',
+    thumb: 'https://picsum.photos/seed/1/120/80'
   },
-  // Fires when item changes / Se dispara al cambiar el ítem activo
-  onChange: (e) =&gt; console.log('index:', e.detail.index),
-  // Fires when closed / Se dispara al cerrar
-  onClose:  () =&gt; console.log('closed'),
+  {
+    src: 'https://picsum.photos/seed/2/1200/800',
+    caption: 'Paisaje 2 — usa + / - para zoom',
+    thumb: 'https://picsum.photos/seed/2/120/80'
+  },
+  {
+    src: 'https://picsum.photos/seed/3/1200/800',
+    caption: 'Paisaje 3 — Esc para cerrar',
+    thumb: 'https://picsum.photos/seed/3/120/80'
+  }
+];
+
+var lb1 = new MTS.Lightbox(ITEMS, {
+  thumbnails: true,
+  zoom: true,
+  loop: true,
+  onOpen: function (e) {
+    document.getElementById('lb-result').textContent = 'onOpen → index: ' + e.detail.index;
+  },
+  onChange: function (e) {
+    document.getElementById('lb-result').textContent = 'onChange → index: ' + e.detail.index;
+  },
+  onClose: function () {
+    document.getElementById('lb-result').textContent = 'onClose → cerrado';
+  }
 });
 
-lb.open(0);   // open at first item / abrir en el primer ítem
-lb.open(2);   // open at third item / abrir en el tercer ítem</div>
-  </div>
+document.getElementById('btn-lb-open-0').addEventListener('click', function () {
+  lb1.open(0);
+});
 
-  <!-- 2. Auto-bind con selector CSS -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Auto-bind con selector CSS / Auto-bind from CSS selector</div>
-    <div class="gallery-grid">
-      <a class="gallery-thumb" data-lightbox
-        data-src="https://picsum.photos/seed/10/1200/800"
-        data-caption="Foto 1 — click para abrir" href="#">🏔️</a>
-      <a class="gallery-thumb" data-lightbox
-        data-src="https://picsum.photos/seed/20/1200/800"
-        data-caption="Foto 2 — navegación con ← →" href="#">🌊</a>
-      <a class="gallery-thumb" data-lightbox
-        data-src="https://picsum.photos/seed/30/1200/800"
-        data-caption="Foto 3 — zoom con + / -" href="#">🌲</a>
-      <a class="gallery-thumb" data-lightbox
-        data-src="https://picsum.photos/seed/40/1200/800"
-        data-caption="Foto 4" href="#">🏜️</a>
-      <a class="gallery-thumb" data-lightbox
-        data-src="https://picsum.photos/seed/50/1200/800"
-        data-caption="Foto 5" href="#">🌅</a>
-      <a class="gallery-thumb" data-lightbox
-        data-src="https://picsum.photos/seed/60/1200/800"
-        data-caption="Foto 6" href="#">🌺</a>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-lb2','js-lb2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-lb2','html-lb2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-lb2">&lt;!-- Add data-lightbox to any element / Agregar data-lightbox a cualquier elemento --&gt;
-&lt;a href="/img/1.jpg"
-   data-lightbox
-   data-caption="Mountain view"&gt;
-  &lt;img src="/img/1-thumb.jpg" alt="Mountain"&gt;
-&lt;/a&gt;
-&lt;a href="/img/2.jpg"
-   data-lightbox
-   data-caption="Ocean sunset"&gt;
-  &lt;img src="/img/2-thumb.jpg" alt="Ocean"&gt;
-&lt;/a&gt;
+document.getElementById('btn-lb-open-2').addEventListener('click', function () {
+  lb1.open(2);
+});`;
 
-&lt;script&gt;
-  // Pass selector — clicks bound automatically / Selector — clicks vinculados automáticamente
-  new MTS.Lightbox('[data-lightbox]', {
-    thumbnails: true,
-    zoom:       true,
-    onChange:   (e) =&gt; console.log(e.detail.index),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-lb2">// CSS selector mode — reads data-* attributes from matched elements
-// Modo selector CSS — lee atributos data-* de los elementos encontrados
+var preview_s2 = `
+<div class="gallery-grid">
+  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/10/1200/800" data-caption="Foto 1 — click para abrir" href="#"><span data-gallery-icon="image"></span></a>
+  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/20/1200/800" data-caption="Foto 2 — navegación con ← →" href="#"><span data-gallery-icon="images"></span></a>
+  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/30/1200/800" data-caption="Foto 3 — zoom con + / -" href="#"><span data-gallery-icon="camera"></span></a>
+  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/40/1200/800" data-caption="Foto 4" href="#"><span data-gallery-icon="aperture"></span></a>
+  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/50/1200/800" data-caption="Foto 5" href="#"><span data-gallery-icon="sunrise"></span></a>
+  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/60/1200/800" data-caption="Foto 6" href="#"><span data-gallery-icon="sunset"></span></a>
+</div>`;
+
+var js_s2 = `document.querySelectorAll('[data-gallery-icon]').forEach(function (el) {
+  var name = el.getAttribute('data-gallery-icon');
+  el.innerHTML = MTS.Icon.get(name, 28);
+});
+
 new MTS.Lightbox('[data-lightbox]', {
   thumbnails: true,
-  zoom:       true,
-  loop:       true,
-  // Fires when item changes / Se dispara al cambiar el ítem activo
-  onChange: (e) =&gt; console.log('active:', e.detail.index),
+  zoom: true,
+  loop: true,
+  onChange: function (e) {
+    console.log('active:', e.detail.index);
+  }
 });
 
-// data-* attributes read automatically / Atributos data-* leídos automáticamente:
-// data-src     → item.src  (or href attribute)
+// data-* leídos automáticamente:
+// data-src     → item.src
 // data-type    → item.type ('image' | 'video' | 'youtube' | 'vimeo')
 // data-caption → item.caption
 // data-alt     → item.alt
-// data-thumb   → item.thumb</div>
+// data-thumb   → item.thumb`;
+
+var preview_s3 = `
+<div class="demo-stack">
+  <div class="demo-row" style="flex-wrap:wrap">
+    <button id="btn-lb-api-0" data-label="open(0)" data-variant="secondary"></button>
+    <button id="btn-lb-api-1" data-label="open(1)" data-variant="secondary"></button>
+    <button id="btn-lb-api-2" data-label="open(2)" data-variant="secondary"></button>
   </div>
+  <div class="result-box" id="lb-api-result">— usa los botones —</div>
+</div>`;
 
-  <!-- 3. API + opciones -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — API + opciones / Options + API</div>
-    <div class="demo-row" style="flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="lbApi.open(0)">open(0)</button>
-      <button class="demo-btn-sm" onclick="lbApi.open(1)">open(1)</button>
-      <button class="demo-btn-sm" onclick="lbApi.open(2)">open(2)</button>
-    </div>
-    <div class="result-box" id="lb-api-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-lb3','js-lb3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-lb3','html-lb3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-lb3">&lt;script&gt;
-  const lb = new MTS.Lightbox([...], {
-    animation: 'slide',   // 'fade' | 'slide'
-    download:  true,      // show download button / mostrar botón descarga
-    counter:   true,      // show "1 / 3" counter / mostrar contador
-  });
+var js_s3 = `new MTS.Button('#btn-lb-api-0');
+new MTS.Button('#btn-lb-api-1');
+new MTS.Button('#btn-lb-api-2');
 
-  lb.open(0)    // open at index / abrir en índice
-  lb.close()    // close / cerrar
-  lb.next()     // next item / ítem siguiente
-  lb.prev()     // prev item / ítem anterior
-  lb.goTo(2)    // jump to index / saltar al índice
-
-  lb.on('change', (e) =&gt; console.log(e.detail.index))
-  lb.off('change', handler)
-  lb.destroy()
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-lb3">const lb = new MTS.Lightbox([
-  { src: 'https://picsum.photos/seed/100/1200/800', caption: 'Image 1' },
-  { src: 'https://picsum.photos/seed/200/1200/800', caption: 'Image 2' },
-  { src: 'https://picsum.photos/seed/300/1200/800', caption: 'Image 3' },
+var lbApi = new MTS.Lightbox([
+  { src: 'https://picsum.photos/seed/100/1200/800', caption: 'Opción A — animation: slide' },
+  { src: 'https://picsum.photos/seed/200/1200/800', caption: 'Opción B — download: true' },
+  { src: 'https://picsum.photos/seed/300/1200/800', caption: 'Opción C — counter: true' }
 ], {
-  animation:  'slide',  // 'fade' | 'slide'
-  download:   true,     // show download button / botón de descarga
-  counter:    true,     // show "1 / 3" / mostrar contador
+  animation: 'slide',
+  download: true,
+  counter: true,
   thumbnails: false,
-  loop:       true,
-  onOpen:   (e) =&gt; console.log('opened:', e.detail.index),
-  onChange: (e) =&gt; console.log('changed:', e.detail.index),
-  onClose:  () =&gt; console.log('closed'),
+  loop: true,
+  onOpen: function (e) {
+    document.getElementById('lb-api-result').textContent = 'onOpen → index: ' + e.detail.index;
+  },
+  onChange: function (e) {
+    document.getElementById('lb-api-result').textContent = 'onChange → index: ' + e.detail.index;
+  },
+  onClose: function () {
+    document.getElementById('lb-api-result').textContent = 'onClose → cerrado';
+  }
 });
 
-// API
-lb.open(0)      // open at index / abrir en índice
-lb.close()      // close / cerrar
-lb.next()       // next / siguiente
-lb.prev()       // previous / anterior
-lb.goTo(2)      // jump / saltar
+document.getElementById('btn-lb-api-0').addEventListener('click', function () {
+  lbApi.open(0);
+});
 
-// Events / Eventos
-lb.on('change', (e) =&gt; console.log(e.detail.index))
-lb.off('change', handler)
-lb.destroy()</div>
-  </div>
+document.getElementById('btn-lb-api-1').addEventListener('click', function () {
+  lbApi.open(1);
+});
 
-</div>
-<script>
+document.getElementById('btn-lb-api-2').addEventListener('click', function () {
+  lbApi.open(2);
+});`;
+
+makeSection('tabs-s1', preview_s1, js_s1);
+makeSection('tabs-s2', preview_s2, js_s2);
+makeSection('tabs-s3', preview_s3, js_s3);
+
+document.querySelectorAll('[data-gallery-icon]').forEach(function (el) {
+  var name = el.getAttribute('data-gallery-icon');
+  el.innerHTML = MTS.Icon.get(name, 28);
+});
+
 var ITEMS = [
   { src:'https://picsum.photos/seed/1/1200/800', caption:'Paisaje 1 — usa ← → para navegar', thumb:'https://picsum.photos/seed/1/120/80' },
   { src:'https://picsum.photos/seed/2/1200/800', caption:'Paisaje 2 — usa + / - para zoom',  thumb:'https://picsum.photos/seed/2/120/80' },
-  { src:'https://picsum.photos/seed/3/1200/800', caption:'Paisaje 3 — Esc para cerrar',       thumb:'https://picsum.photos/seed/3/120/80' },
+  { src:'https://picsum.photos/seed/3/1200/800', caption:'Paisaje 3 — Esc para cerrar',       thumb:'https://picsum.photos/seed/3/120/80' }
 ];
+
 var lb1 = new MTS.Lightbox(ITEMS, {
-  thumbnails:true, zoom:true, loop:true,
-  onOpen:   function(e){ document.getElementById('lb-result').textContent = 'onOpen → index:' + e.detail.index; },
-  onChange: function(e){ document.getElementById('lb-result').textContent = 'onChange → index:' + e.detail.index; },
-  onClose:  function(){ document.getElementById('lb-result').textContent = 'onClose → cerrado'; },
+  thumbnails:true,
+  zoom:true,
+  loop:true,
+  onOpen: function(e){
+    document.getElementById('lb-result').textContent = 'onOpen → index: ' + e.detail.index;
+  },
+  onChange: function(e){
+    document.getElementById('lb-result').textContent = 'onChange → index: ' + e.detail.index;
+  },
+  onClose: function(){
+    document.getElementById('lb-result').textContent = 'onClose → cerrado';
+  }
 });
+
+new MTS.Button('#btn-lb-open-0');
+new MTS.Button('#btn-lb-open-2');
+document.getElementById('btn-lb-open-0').addEventListener('click', function(){ lb1.open(0); });
+document.getElementById('btn-lb-open-2').addEventListener('click', function(){ lb1.open(2); });
 
 new MTS.Lightbox('[data-lightbox]', { thumbnails:true, zoom:true, loop:true });
 
 var lbApi = new MTS.Lightbox([
   { src:'https://picsum.photos/seed/100/1200/800', caption:'Opción A — animation:slide' },
   { src:'https://picsum.photos/seed/200/1200/800', caption:'Opción B — download:true' },
-  { src:'https://picsum.photos/seed/300/1200/800', caption:'Opción C — counter:true' },
+  { src:'https://picsum.photos/seed/300/1200/800', caption:'Opción C — counter:true' }
 ], {
-  animation:'slide', download:true, counter:true, thumbnails:false,
-  onOpen:   function(e){ document.getElementById('lb-api-result').textContent = 'onOpen → index:' + e.detail.index; },
-  onChange: function(e){ document.getElementById('lb-api-result').textContent = 'onChange → index:' + e.detail.index; },
-  onClose:  function(){ document.getElementById('lb-api-result').textContent = 'onClose → cerrado'; },
+  animation:'slide',
+  download:true,
+  counter:true,
+  thumbnails:false,
+  loop:true,
+  onOpen: function(e){
+    document.getElementById('lb-api-result').textContent = 'onOpen → index: ' + e.detail.index;
+  },
+  onChange: function(e){
+    document.getElementById('lb-api-result').textContent = 'onChange → index: ' + e.detail.index;
+  },
+  onClose: function(){
+    document.getElementById('lb-api-result').textContent = 'onClose → cerrado';
+  }
 });
+
+new MTS.Button('#btn-lb-api-0');
+new MTS.Button('#btn-lb-api-1');
+new MTS.Button('#btn-lb-api-2');
+document.getElementById('btn-lb-api-0').addEventListener('click', function(){ lbApi.open(0); });
+document.getElementById('btn-lb-api-1').addEventListener('click', function(){ lbApi.open(1); });
+document.getElementById('btn-lb-api-2').addEventListener('click', function(){ lbApi.open(2); });
 </script>
 </body>
 </html>

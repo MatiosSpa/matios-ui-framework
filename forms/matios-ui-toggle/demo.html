@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.Toggle — Demo</title>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else    document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Toggle — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
   <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
@@ -30,41 +31,18 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-toggle.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-toggle.js"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0;}
-    .demo-section{display:flex;flex-direction:column;gap:12px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-row{display:flex;gap:24px;flex-wrap:wrap;align-items:center;}
-    .demo-col{display:flex;flex-direction:column;gap:8px;}
-    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;}
-    .demo-stack{display:flex;flex-direction:column;gap:12px;}
-    .result-box{padding:8px 12px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:32px;}
-    .code-tabs{display:flex;gap:0;margin-top:8px;}
-    .code-tab{padding:4px 14px;font-size:11px;font-weight:600;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);cursor:pointer;color:var(--mts-text-muted);font-family:var(--mts-font-family);transition:color .15s,background .15s;}
-    .code-tab:first-child{border-radius:var(--mts-radius-md) 0 0 0;}
-    .code-tab:last-child{border-radius:0 var(--mts-radius-md) 0 0;border-left:none;}
-    .code-tab.active{background:var(--mts-bg-surface-2);color:var(--mts-color-primary);border-bottom-color:var(--mts-bg-surface-2);}
-    .code-panel{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-top:none;border-radius:0 var(--mts-radius-md) var(--mts-radius-md) var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;}
-    .code-panel.active{display:block;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-  </style>
 </head>
 <body>
 <div class="demo-theme">
   <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
   <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
-  <button class="demo-btn-sm demo-btn-sep">—</button>
   <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
   <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
@@ -74,266 +52,183 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Toggle</h1>
-    <p>Switch on/off — three sizes, with or without label, disabled state.</p>
+    <p>Switch on/off en distintos tamaños, con label, disabled y API programática.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-toggle.md')">Documentación</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-
-  <!-- 1. Tamaños -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Tamaños / Sizes: sm · md · lg</div>
-    <div class="demo-row">
-      <div class="demo-col">
-        <div class="demo-label">sm</div>
-        <div id="tgl-sm"></div>
-      </div>
-      <div class="demo-col">
-        <div class="demo-label">md (default)</div>
-        <div id="tgl-md"></div>
-      </div>
-      <div class="demo-col">
-        <div class="demo-label">lg</div>
-        <div id="tgl-lg"></div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-ts','js-ts')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-ts','html-ts')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-ts">&lt;!-- sm --&gt;
-&lt;div id="toggle-sm"&gt;&lt;/div&gt;
-
-&lt;!-- md (default) --&gt;
-&lt;div id="toggle-md"&gt;&lt;/div&gt;
-
-&lt;!-- lg --&gt;
-&lt;div id="toggle-lg"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.Toggle('#toggle-sm', { label: 'Small',  size: 'sm' });
-  new MTS.Toggle('#toggle-md', { label: 'Medium', size: 'md', checked: true });
-  new MTS.Toggle('#toggle-lg', { label: 'Large',  size: 'lg' });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-ts">// Size variant: 'sm' | 'md' | 'lg' (default: 'md')
-// Variante de tamaño: 'sm' | 'md' | 'lg' (default: 'md')
-new MTS.Toggle('#toggle-sm', { label: 'Small',  size: 'sm' });
-new MTS.Toggle('#toggle-md', { label: 'Medium', size: 'md', checked: true });
-new MTS.Toggle('#toggle-lg', { label: 'Large',  size: 'lg' });</div>
-  </div>
-
-  <!-- 2. Con y sin label -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Con label / Con eventos / Sin label</div>
-    <div class="demo-stack">
-      <div id="tgl-label1"></div>
-      <div id="tgl-label2"></div>
-      <div id="tgl-nolabel"></div>
-    </div>
-    <div class="result-box" id="tgl-result">— interactúa con los toggles / interact with the toggles —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tl','js-tl')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tl','html-tl')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tl">&lt;div id="toggle-notif"&gt;&lt;/div&gt;
-&lt;div id="toggle-maint"&gt;&lt;/div&gt;
-&lt;div id="toggle-bare"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.Toggle('#toggle-notif', {
-    label:    'Active notifications',
-    checked:  true,
-    onChange: (e) =&gt; console.log('checked:', e.detail.checked),
-  });
-
-  new MTS.Toggle('#toggle-maint', {
-    label:    'Maintenance mode',
-    onChange: (e) =&gt; console.log('checked:', e.detail.checked),
-  });
-
-  // Without label / Sin label
-  new MTS.Toggle('#toggle-bare', {
-    checked:  false,
-    onChange: (e) =&gt; console.log('checked:', e.detail.checked),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tl">// With label and onChange event
-// Con label y evento onChange
-const t1 = new MTS.Toggle('#toggle-notif', {
-  // Text next to the switch / Texto junto al switch
-  label: 'Active notifications',
-
-  // Initial state / Estado inicial
-  checked: true,
-
-  // Fires when state changes / Se dispara al cambiar el estado
-  onChange: (e) => {
-    console.log('checked:', e.detail.checked); // → true | false
-  },
-});
-
-// Without label / Sin label
-const t2 = new MTS.Toggle('#toggle-bare', {
-  checked:  false,
-  onChange: (e) => console.log('checked:', e.detail.checked),
-});
-
-// API
-t1.isChecked()       // → boolean
-t1.setChecked(false) // set state / establece estado
-t1.toggle()          // invert state / invierte estado</div>
-  </div>
-
-  <!-- 3. Disabled -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Disabled</div>
-    <div class="demo-stack">
-      <div id="tgl-dis-off"></div>
-      <div id="tgl-dis-on"></div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-td','js-td')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-td','html-td')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-td">&lt;div id="toggle-dis-off"&gt;&lt;/div&gt;
-&lt;div id="toggle-dis-on"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  // Disabled off / Deshabilitado apagado
-  new MTS.Toggle('#toggle-dis-off', {
-    label:    'Not available',
-    disabled: true,
-    checked:  false,
-  });
-
-  // Disabled on / Deshabilitado encendido
-  new MTS.Toggle('#toggle-dis-on', {
-    label:    'Forced active',
-    disabled: true,
-    checked:  true,
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-td">// Disabled off / Deshabilitado apagado
-new MTS.Toggle('#toggle-dis-off', {
-  label:    'Not available',
-
-  // Disables all interaction / Deshabilita toda interacción
-  disabled: true,
-  checked:  false,
-});
-
-// Disabled on / Deshabilitado encendido
-new MTS.Toggle('#toggle-dis-on', {
-  label:    'Forced active',
-  disabled: true,
-  checked:  true,
-});</div>
-  </div>
-
-  <!-- 4. API programática -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — API programática / Programmatic API</div>
-    <div id="tgl-api"></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
-      <button class="demo-btn-sm" onclick="apiDemo('isChecked')">isChecked()</button>
-      <button class="demo-btn-sm" onclick="apiDemo('setTrue')">setChecked(true)</button>
-      <button class="demo-btn-sm" onclick="apiDemo('setFalse')">setChecked(false)</button>
-      <button class="demo-btn-sm" onclick="apiDemo('toggle')">toggle()</button>
-    </div>
-    <div class="result-box" id="api-result">— usa los botones para llamar la API / use the buttons to call the API —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-ta','js-ta')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-ta','html-ta')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-ta">&lt;div id="toggle-api"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  const toggle = new MTS.Toggle('#toggle-api', {
-    label:    'Controlled toggle',
-    checked:  false,
-    onChange: (e) =&gt; console.log('changed:', e.detail.checked),
-  });
-
-  toggle.isChecked()       // → boolean
-  toggle.setChecked(true)
-  toggle.setChecked(false)
-  toggle.toggle()
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-ta">const toggle = new MTS.Toggle('#toggle-api', {
-  label:    'Controlled toggle',
-  checked:  false,
-  onChange: (e) => console.log('changed:', e.detail.checked),
-});
-
-// Returns current state / Retorna el estado actual
-toggle.isChecked()        // → boolean
-
-// Sets state programmatically / Establece el estado programáticamente
-toggle.setChecked(true)
-toggle.setChecked(false)
-
-// Toggles current state / Invierte el estado actual
-toggle.toggle()</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Tamaños</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Con label y eventos</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Disabled</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — API programática</div><div id="tabs-s4"></div></div>
 </div>
 
 <script>
-function setTheme(t) {
-  document.documentElement.setAttribute('data-mts-theme', t);
-  try {
-    if (window.parent && window.parent !== window)
-      window.parent.postMessage({ type: 'setTheme', theme: t }, '*');
-  } catch(e) {}
-}
-window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'setTheme')
-    document.documentElement.setAttribute('data-mts-theme', e.data.theme);
-});
-if (window !== window.top) {
-  var ts = document.querySelector('.demo-theme');
-  if (ts) ts.style.display = 'none';
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
-function switchTab(btn, showId, hideId) {
-  btn.parentElement.querySelectorAll('.code-tab').forEach(function(t) { t.classList.remove('active'); });
-  btn.classList.add('active');
-  document.getElementById(showId).classList.add('active');
-  document.getElementById(hideId).classList.remove('active');
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
 }
 
-// Instancias
-new MTS.Toggle('#tgl-sm', { label: 'Small',  size: 'sm' });
-new MTS.Toggle('#tgl-md', { label: 'Medium', size: 'md', checked: true });
-new MTS.Toggle('#tgl-lg', { label: 'Large',  size: 'lg' });
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
 
-new MTS.Toggle('#tgl-label1', {
-  label:    'Active notifications',
-  checked:  true,
-  onChange: function(e) { document.getElementById('tgl-result').textContent = 'Notifications: ' + e.detail.checked; },
-});
-new MTS.Toggle('#tgl-label2', {
-  label:    'Maintenance mode',
-  onChange: function(e) { document.getElementById('tgl-result').textContent = 'Maintenance: ' + e.detail.checked; },
-});
-new MTS.Toggle('#tgl-nolabel', {
-  checked:  false,
-  onChange: function(e) { document.getElementById('tgl-result').textContent = 'No label: ' + e.detail.checked; },
-});
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
 
-new MTS.Toggle('#tgl-dis-off', { label: 'Not available', disabled: true, checked: false });
-new MTS.Toggle('#tgl-dis-on',  { label: 'Forced active', disabled: true, checked: true });
+function makeSection(id, previewHtml, jsCode, initFn) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '340px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
 
-var tglApi = new MTS.Toggle('#tgl-api', {
-  label:    'Controlled toggle',
-  checked:  false,
-  onChange: function(e) { document.getElementById('api-result').textContent = 'onChange → checked: ' + e.detail.checked; },
+  if (typeof initFn === 'function') initFn();
+}
+
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+var preview_s1 =
+  '<div class="demo-row">' +
+    '<div class="demo-col"><div class="demo-label">sm</div><div id="tgl-sm"></div></div>' +
+    '<div class="demo-col"><div class="demo-label">md (default)</div><div id="tgl-md"></div></div>' +
+    '<div class="demo-col"><div class="demo-label">lg</div><div id="tgl-lg"></div></div>' +
+  '</div>';
+
+var js_s1 =
+  "new MTS.Toggle('#tgl-sm', { label: 'Small', size: 'sm' });\n" +
+  "new MTS.Toggle('#tgl-md', { label: 'Medium', size: 'md', checked: true });\n" +
+  "new MTS.Toggle('#tgl-lg', { label: 'Large', size: 'lg' });";
+
+var preview_s2 =
+  '<div class="demo-stack">' +
+    '<div id="tgl-label1"></div>' +
+    '<div id="tgl-label2"></div>' +
+    '<div id="tgl-nolabel"></div>' +
+    '<div class="result-box" id="tgl-result">— interactúa con los toggles —</div>' +
+  '</div>';
+
+var js_s2 =
+  "new MTS.Toggle('#tgl-label1', {\n" +
+  "  label: 'Active notifications',\n" +
+  "  checked: true,\n" +
+  "  onChange: function(e) { setResult('tgl-result', 'Notifications: ' + e.detail.checked); }\n" +
+  "});\n" +
+  "new MTS.Toggle('#tgl-label2', {\n" +
+  "  label: 'Maintenance mode',\n" +
+  "  onChange: function(e) { setResult('tgl-result', 'Maintenance: ' + e.detail.checked); }\n" +
+  "});\n" +
+  "new MTS.Toggle('#tgl-nolabel', {\n" +
+  "  checked: false,\n" +
+  "  onChange: function(e) { setResult('tgl-result', 'No label: ' + e.detail.checked); }\n" +
+  "});";
+
+var preview_s3 =
+  '<div class="demo-stack">' +
+    '<div id="tgl-dis-off"></div>' +
+    '<div id="tgl-dis-on"></div>' +
+  '</div>';
+
+var js_s3 =
+  "new MTS.Toggle('#tgl-dis-off', { label: 'Not available', disabled: true, checked: false });\n" +
+  "new MTS.Toggle('#tgl-dis-on', { label: 'Forced active', disabled: true, checked: true });";
+
+var preview_s4 =
+  '<div class="demo-stack">' +
+    '<div id="tgl-api"></div>' +
+    '<div class="demo-row">' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'isChecked\')">isChecked()</button>' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'setTrue\')">setChecked(true)</button>' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'setFalse\')">setChecked(false)</button>' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'toggle\')">toggle()</button>' +
+    '</div>' +
+    '<div class="result-box" id="api-result">— usa los botones para llamar la API —</div>' +
+  '</div>';
+
+var js_s4 =
+  "var toggle = new MTS.Toggle('#tgl-api', {\n" +
+  "  label: 'Controlled toggle',\n" +
+  "  checked: false,\n" +
+  "  onChange: function(e) { setResult('api-result', 'changed: ' + e.detail.checked); }\n" +
+  "});\n\n" +
+  "toggle.isChecked();\n" +
+  "toggle.setChecked(true);\n" +
+  "toggle.setChecked(false);\n" +
+  "toggle.toggle();";
+
+var tglApi;
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.Toggle('#tgl-sm', { label: 'Small', size: 'sm' });
+  new MTS.Toggle('#tgl-md', { label: 'Medium', size: 'md', checked: true });
+  new MTS.Toggle('#tgl-lg', { label: 'Large', size: 'lg' });
+});
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  new MTS.Toggle('#tgl-label1', { label: 'Active notifications', checked: true, onChange: function(e) { setResult('tgl-result', 'Notifications: ' + e.detail.checked); } });
+  new MTS.Toggle('#tgl-label2', { label: 'Maintenance mode', onChange: function(e) { setResult('tgl-result', 'Maintenance: ' + e.detail.checked); } });
+  new MTS.Toggle('#tgl-nolabel', { checked: false, onChange: function(e) { setResult('tgl-result', 'No label: ' + e.detail.checked); } });
+});
+makeSection('tabs-s3', preview_s3, js_s3, function() {
+  new MTS.Toggle('#tgl-dis-off', { label: 'Not available', disabled: true, checked: false });
+  new MTS.Toggle('#tgl-dis-on', { label: 'Forced active', disabled: true, checked: true });
+});
+makeSection('tabs-s4', preview_s4, js_s4, function() {
+  tglApi = new MTS.Toggle('#tgl-api', {
+    label: 'Controlled toggle',
+    checked: false,
+    onChange: function(e) { setResult('api-result', 'changed: ' + e.detail.checked); }
+  });
 });
 
 function apiDemo(action) {
   var res = document.getElementById('api-result');
+  if (!tglApi || !res) return;
   if (action === 'isChecked') res.textContent = 'isChecked() → ' + tglApi.isChecked();
   if (action === 'setTrue')   { tglApi.setChecked(true);  res.textContent = 'setChecked(true) ✓'; }
   if (action === 'setFalse')  { tglApi.setChecked(false); res.textContent = 'setChecked(false) ✓'; }
   if (action === 'toggle')    { tglApi.toggle();          res.textContent = 'toggle() → now: ' + tglApi.isChecked(); }
 }
+
 </script>
 </body>
 </html>

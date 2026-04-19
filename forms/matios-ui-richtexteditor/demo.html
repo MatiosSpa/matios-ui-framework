@@ -23,6 +23,7 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.RichTextEditor — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
   <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
   <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
@@ -30,8 +31,10 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-richtexteditor.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-richtexteditor.js"></script>
 </head>
 <body>
@@ -50,152 +53,77 @@
     <h1><span>MTS</span>.RichTextEditor</h1>
     <p>WYSIWYG editor — contentEditable, no dependencies, no iframe.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-richtexteditor.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-richtexteditor.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Toolbar completa -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Toolbar completa / Full toolbar</div>
-    <div id="rte-full"></div>
-    <div class="result-box" id="rte-result" style="min-height:40px;max-height:80px;overflow:auto;font-family:var(--mts-font-mono);font-size:11px;white-space:pre-wrap">— el HTML aparece aquí al escribir —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-rte1','js-rte1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-rte1','html-rte1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-rte1">&lt;div id="my-editor"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.RichTextEditor('#my-editor', {
-    placeholder: 'Start writing...',
-    height:      '240px',
-    // Fires on every content change / Se dispara al cambiar el contenido
-    onChange: (html) =&gt; console.log(html),
-    onFocus:  ()     =&gt; console.log('focused'),
-    onBlur:   (html) =&gt; console.log('blurred'),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-rte1">const rte = new MTS.RichTextEditor('#my-editor', {
-  // Initial HTML / HTML inicial
-  value: '&lt;p&gt;Hello &lt;strong&gt;world&lt;/strong&gt;&lt;/p&gt;',
-
-  placeholder: 'Start writing...',
-  height:      '240px',
-  minHeight:   '120px',
-
-  // All toolbar groups / Todos los grupos de toolbar
-  toolbar: ['format', 'lists', 'align', 'insert', 'clean'],
-
-  // Fires on every change / Se dispara en cada cambio
-  onChange: (html) =&gt; console.log(html),
-  onFocus:  ()     =&gt; console.log('focused'),
-  onBlur:   (html) =&gt; console.log('blurred'),
-});</div>
-  </div>
-
-  <!-- 2. Toolbar personalizada -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Toolbar personalizada / Custom toolbar</div>
-    <div class="demo-grid">
-      <div>
-        <div class="demo-label" style="margin-bottom:6px">Solo formato / Format only</div>
-        <div id="rte-format"></div>
-      </div>
-      <div>
-        <div class="demo-label" style="margin-bottom:6px">Formato + listas / Format + lists</div>
-        <div id="rte-lists"></div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-rte2','js-rte2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-rte2','html-rte2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-rte2">&lt;div id="editor-format"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.RichTextEditor('#editor-format', {
-    toolbar: ['format', 'clean'],
-    height:  '160px',
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-rte2">// Toolbar groups: 'format' | 'lists' | 'align' | 'insert' | 'clean' | 'table'
-// Grupos de toolbar
-
-// Format only / Solo formato
-new MTS.RichTextEditor('#editor-format', {
-  toolbar: ['format', 'clean'],
-  height:  '160px',
-});
-
-// Format + lists / Formato + listas
-new MTS.RichTextEditor('#editor-lists', {
-  toolbar: ['format', 'lists', 'clean'],
-  height:  '160px',
-});</div>
-  </div>
-
-  <!-- 3. API -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — API</div>
-    <div id="rte-api"></div>
-    <div class="demo-row" style="margin-top:8px;flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="document.getElementById('rte-api-res').textContent = 'getValue() → ' + rteApi.getValue()">getValue()</button>
-      <button class="demo-btn-sm" onclick="document.getElementById('rte-api-res').textContent = 'getText() → ' + rteApi.getText()">getText()</button>
-      <button class="demo-btn-sm" onclick="rteApi.setValue('&lt;p&gt;Set via &lt;strong&gt;setValue()&lt;/strong&gt;&lt;/p&gt;'); document.getElementById('rte-api-res').textContent = 'setValue() ✓'">setValue()</button>
-      <button class="demo-btn-sm" onclick="rteApi.clear(); document.getElementById('rte-api-res').textContent = 'clear() ✓'">clear()</button>
-      <button class="demo-btn-sm" onclick="rteApi.disable(); document.getElementById('rte-api-res').textContent = 'disable() ✓'">disable()</button>
-      <button class="demo-btn-sm" onclick="rteApi.enable(); document.getElementById('rte-api-res').textContent = 'enable() ✓'">enable()</button>
-      <button class="demo-btn-sm" onclick="rteApi.focus()">focus()</button>
-    </div>
-    <div class="result-box" id="rte-api-res">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-rte3','js-rte3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-rte3','html-rte3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-rte3">&lt;div id="my-editor"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  const rte = new MTS.RichTextEditor('#my-editor', {
-    value: '&lt;p&gt;Initial content&lt;/p&gt;',
-  });
-  rte.getValue()    // → HTML string
-  rte.getText()     // → plain text
-  rte.setValue('&lt;p&gt;New content&lt;/p&gt;')
-  rte.clear()
-  rte.disable()
-  rte.enable()
-  rte.focus()
-  rte.insertHTML('&lt;strong&gt;inserted&lt;/strong&gt;')
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-rte3">const rte = new MTS.RichTextEditor('#my-editor', {
-  value: '&lt;p&gt;Initial &lt;em&gt;content&lt;/em&gt;&lt;/p&gt;',
-  onChange: (html) =&gt; console.log(html),
-});
-
-// Get HTML / Obtener HTML
-rte.getValue()     // → '&lt;p&gt;Initial &lt;em&gt;content&lt;/em&gt;&lt;/p&gt;'
-
-// Get plain text / Obtener texto plano
-rte.getText()      // → 'Initial content'
-
-// Set HTML / Establecer HTML
-rte.setValue('&lt;p&gt;New &lt;strong&gt;content&lt;/strong&gt;&lt;/p&gt;')
-
-// Clear / Limpiar
-rte.clear()
-
-// Disable / enable / Deshabilitar / habilitar
-rte.disable()
-rte.enable()
-
-// Insert HTML at cursor / Insertar HTML en el cursor
-rte.insertHTML('&lt;mark&gt;highlighted&lt;/mark&gt;')</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Toolbar completa / Full toolbar</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Toolbar personalizada / Custom toolbar</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — API</div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(sourceHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(sourceHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, htmlCode, jsCode) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(htmlCode || previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+}
+
+makeSection("tabs-s1", "<div id=\"rte-full\"></div><div class=\"result-box\" id=\"rte-result\" style=\"min-height:40px;max-height:80px;overflow:auto;font-family:var(--mts-font-mono);font-size:11px;white-space:pre-wrap\">\u2014 el HTML aparece aqu\u00ed al escribir \u2014</div>", "<div id=\"my-editor\"></div>\n\n<script>\n  new MTS.RichTextEditor('#my-editor', {\n    placeholder: 'Start writing...',\n    height:      '240px',\n    // Fires on every content change / Se dispara al cambiar el contenido\n    onChange: (html) => console.log(html),\n    onFocus:  ()     => console.log('focused'),\n    onBlur:   (html) => console.log('blurred'),\n  });\n<\/script>", "const rte = new MTS.RichTextEditor('#my-editor', {\n  // Initial HTML / HTML inicial\n  value: '<p>Hello <strong>world</strong></p>',\n\n  placeholder: 'Start writing...',\n  height:      '240px',\n  minHeight:   '120px',\n\n  // All toolbar groups / Todos los grupos de toolbar\n  toolbar: ['format', 'lists', 'align', 'insert', 'clean'],\n\n  // Fires on every change / Se dispara en cada cambio\n  onChange: (html) => console.log(html),\n  onFocus:  ()     => console.log('focused'),\n  onBlur:   (html) => console.log('blurred'),\n});");
+makeSection("tabs-s2", "<div class=\"demo-grid\">\n<div>\n<div class=\"demo-label\" style=\"margin-bottom:6px\">Solo formato / Format only</div>\n<div id=\"rte-format\"></div>\n</div>\n<div>\n<div class=\"demo-label\" style=\"margin-bottom:6px\">Formato + listas / Format + lists</div>\n<div id=\"rte-lists\"></div>\n</div>\n</div>", "<div id=\"editor-format\"></div>\n\n<script>\n  new MTS.RichTextEditor('#editor-format', {\n    toolbar: ['format', 'clean'],\n    height:  '160px',\n  });\n<\/script>", "// Toolbar groups: 'format' | 'lists' | 'align' | 'insert' | 'clean' | 'table'\n// Grupos de toolbar\n\n// Format only / Solo formato\nnew MTS.RichTextEditor('#editor-format', {\n  toolbar: ['format', 'clean'],\n  height:  '160px',\n});\n\n// Format + lists / Formato + listas\nnew MTS.RichTextEditor('#editor-lists', {\n  toolbar: ['format', 'lists', 'clean'],\n  height:  '160px',\n});");
+makeSection("tabs-s3", "<div id=\"rte-api\"></div><div class=\"demo-row\" style=\"margin-top:8px;flex-wrap:wrap\">\n<button class=\"demo-btn-sm\" onclick=\"document.getElementById('rte-api-res').textContent = 'getValue() \u2192 ' + rteApi.getValue()\">getValue()</button>\n<button class=\"demo-btn-sm\" onclick=\"document.getElementById('rte-api-res').textContent = 'getText() \u2192 ' + rteApi.getText()\">getText()</button>\n<button class=\"demo-btn-sm\" onclick=\"rteApi.setValue('&lt;p&gt;Set via &lt;strong&gt;setValue()&lt;/strong&gt;&lt;/p&gt;'); document.getElementById('rte-api-res').textContent = 'setValue() \u2713'\">setValue()</button>\n<button class=\"demo-btn-sm\" onclick=\"rteApi.clear(); document.getElementById('rte-api-res').textContent = 'clear() \u2713'\">clear()</button>\n<button class=\"demo-btn-sm\" onclick=\"rteApi.disable(); document.getElementById('rte-api-res').textContent = 'disable() \u2713'\">disable()</button>\n<button class=\"demo-btn-sm\" onclick=\"rteApi.enable(); document.getElementById('rte-api-res').textContent = 'enable() \u2713'\">enable()</button>\n<button class=\"demo-btn-sm\" onclick=\"rteApi.focus()\">focus()</button>\n</div><div class=\"result-box\" id=\"rte-api-res\">\u2014 usa los botones \u2014</div>", "<div id=\"my-editor\"></div>\n\n<script>\n  const rte = new MTS.RichTextEditor('#my-editor', {\n    value: '<p>Initial content</p>',\n  });\n  rte.getValue()    // \u2192 HTML string\n  rte.getText()     // \u2192 plain text\n  rte.setValue('<p>New content</p>')\n  rte.clear()\n  rte.disable()\n  rte.enable()\n  rte.focus()\n  rte.insertHTML('<strong>inserted</strong>')\n<\/script>", "const rte = new MTS.RichTextEditor('#my-editor', {\n  value: '<p>Initial <em>content</em></p>',\n  onChange: (html) => console.log(html),\n});\n\n// Get HTML / Obtener HTML\nrte.getValue()     // \u2192 '<p>Initial <em>content</em></p>'\n\n// Get plain text / Obtener texto plano\nrte.getText()      // \u2192 'Initial content'\n\n// Set HTML / Establecer HTML\nrte.setValue('<p>New <strong>content</strong></p>')\n\n// Clear / Limpiar\nrte.clear()\n\n// Disable / enable / Deshabilitar / habilitar\nrte.disable()\nrte.enable()\n\n// Insert HTML at cursor / Insertar HTML en el cursor\nrte.insertHTML('<mark>highlighted</mark>')");
+
 var rte1 = new MTS.RichTextEditor('#rte-full', {
   value: '<p>Escribe algo aquí — usa la <strong>toolbar</strong> para dar formato.</p>',
   placeholder: 'Escribe aquí...',

@@ -1,237 +1,49 @@
 <!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS Navigation — Demo</title>
-      <script>
-    (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
-        }
-      }catch(e){}
-    })();
-  </script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../base/matios-ui-base.css">
   <link rel="stylesheet" href="../themes/matios-ui-mode-dark.css">
   <link rel="stylesheet" href="../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../themes/matios-ui-mode-high-contrast.css">
+  
   <link rel="stylesheet" href="../themes/matios-ui-accent-violet.css">
   <link rel="stylesheet" href="../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../themes/matios-ui-accent-blue.css">
-  <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:24px 24px 48px;}
-    .demo-page{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:8px;}
-    .demo-header{padding-bottom:20px;margin-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0;}
-    .acc{border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);overflow:hidden;transition:box-shadow .2s;}
-    .acc:hover{box-shadow:var(--mts-shadow-sm);}
-    .acc-header{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;background:var(--mts-bg-surface);user-select:none;transition:background .15s;}
-    .acc-header:hover{background:var(--mts-bg-surface-2);}
-    .acc-arrow{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--mts-color-primary);font-size:14px;font-weight:700;transition:transform .25s;flex-shrink:0;}
-    .acc.open .acc-arrow{transform:rotate(90deg);}
-    .acc-title{font-size:13px;font-weight:700;color:var(--mts-text-primary);flex:1;}
-    .acc-subtitle{font-size:11px;color:var(--mts-text-muted);}
-    .acc-body{display:none;border-top:1px solid var(--mts-border-color);background:var(--mts-bg-body);}
-    .acc.open .acc-body{display:block;}
-    .acc-iframe{width:100%;border:none;min-height:400px;display:block;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-  </style>
+  <link rel="stylesheet" href="../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="matios-ui-accordion/matios-ui-accordion.css">
   <link rel="stylesheet" href="../shared/demo-shared.css">
   <script src="../shared/demo-shared.js"></script>
+  <script src="matios-ui-accordion/matios-ui-accordion.js"></script>
 </head>
 <body>
-<div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
-  <button class="demo-btn-sm demo-btn-sep">—</button>
-  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
-</div>
-
-<div class="demo-page">
-  <div class="demo-header">
-    <h1>MTS <span>Navigation</span></h1>
-    <p>tabs · accordion · breadcrumb · stepper · drawer · dropdown · tabbar · pagination · contextmenu · commandpalette · sidenav · scrollspy · intersectionreveal</p>
-  </div>
-
-  <div class="acc" id="acc-tabs">
-    <div class="acc-header" onclick="toggleAcc('acc-tabs','matios-ui-tabs/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.Tabs</span>
-      <span class="acc-subtitle">Pestañas underline, pill, card y bordered — horizontal y vertical</span>
+  <div class="demo-page demo-page--launcher">
+    <div class="demo-header">
+      <h1>MTS <span>Navigation</span></h1>
+      <p>tabs · accordion · breadcrumb · stepper · drawer · dropdown · tabbar · pagination · contextmenu · commandpalette · sidenav</p>
     </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-tabs" src="about:blank"></iframe></div>
+
+    <div id="navigation-launcher" class="demo-launcher"></div>
   </div>
 
-  <div class="acc" id="acc-accordion">
-    <div class="acc-header" onclick="toggleAcc('acc-accordion','matios-ui-accordion/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.Accordion</span>
-      <span class="acc-subtitle">Secciones expandibles — individual o múltiple</span>
-    </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-accordion" src="about:blank"></iframe></div>
-  </div>
-
-  <div class="acc" id="acc-breadcrumb">
-    <div class="acc-header" onclick="toggleAcc('acc-breadcrumb','matios-ui-breadcrumb/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.Breadcrumb</span>
-      <span class="acc-subtitle">Ruta de navegación con separadores, íconos y colapso</span>
-    </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-breadcrumb" src="about:blank"></iframe></div>
-  </div>
-
-  <div class="acc" id="acc-stepper">
-    <div class="acc-header" onclick="toggleAcc('acc-stepper','matios-ui-stepper/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.Stepper</span>
-      <span class="acc-subtitle">Flujo paso a paso — horizontal y vertical</span>
-    </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-stepper" src="about:blank"></iframe></div>
-  </div>
-
-  <div class="acc" id="acc-drawer">
-    <div class="acc-header" onclick="toggleAcc('acc-drawer','matios-ui-drawer/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.Drawer</span>
-      <span class="acc-subtitle">Panel lateral deslizante — derecha, izquierda, arriba, abajo</span>
-    </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-drawer" src="about:blank"></iframe></div>
-  </div>
-
-  <div class="acc" id="acc-dropdown">
-    <div class="acc-header" onclick="toggleAcc('acc-dropdown','matios-ui-dropdown/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.Dropdown</span>
-      <span class="acc-subtitle">Menú desplegable con grupos, íconos, shortcuts y submenús</span>
-    </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-dropdown" src="about:blank"></iframe></div>
-  </div>
-
-  <div class="acc" id="acc-tabbar">
-    <div class="acc-header" onclick="toggleAcc('acc-tabbar','matios-ui-tabbar/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.TabBar</span>
-      <span class="acc-subtitle">Navegación estilo app mobile — default, pill y floating</span>
-    </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-tabbar" src="about:blank"></iframe></div>
-  </div>
-  <div class="acc" id="acc-pagination">
-    <div class="acc-header" onclick="toggleAcc('acc-pagination','matios-ui-pagination/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.Pagination</span>
-      <span class="acc-subtitle">Paginación con resumen, page size y salto a página</span>
-    </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-pagination" src="about:blank"></iframe></div>
-  </div>
-  <div class="acc" id="acc-contextmenu">
-    <div class="acc-header" onclick="toggleAcc('acc-contextmenu','matios-ui-contextmenu/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.ContextMenu</span>
-      <span class="acc-subtitle">Menú contextual con click derecho y long press</span>
-    </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-contextmenu" src="about:blank"></iframe></div>
-  </div>
-
-  <div class="acc" id="acc-commandpalette">
-    <div class="acc-header" onclick="toggleAcc('acc-commandpalette','matios-ui-commandpalette/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.CommandPalette</span>
-      <span class="acc-subtitle">Paleta de comandos ⌘K con búsqueda, grupos y shortcuts</span>
-    </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-commandpalette" src="about:blank"></iframe></div>
-  </div>
-  <div class="acc" id="acc-sidenav">
-    <div class="acc-header" onclick="toggleAcc('acc-sidenav','matios-ui-sidenav/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.SideNav</span>
-      <span class="acc-subtitle">Navegación lateral colapsable con submenús y badges</span>
-    </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-sidenav" src="about:blank"></iframe></div>
-  </div>
-
-  <div class="acc" id="acc-scrollspy">
-    <div class="acc-header" onclick="toggleAcc('acc-scrollspy','matios-ui-scrollspy/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.ScrollSpy</span>
-      <span class="acc-subtitle">Resalta el link activo al hacer scroll por las secciones</span>
-    </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-scrollspy" src="about:blank"></iframe></div>
-  </div>
-
-  <div class="acc" id="acc-intersectionreveal">
-    <div class="acc-header" onclick="toggleAcc('acc-intersectionreveal','matios-ui-intersectionreveal/demo.html')">
-      <span class="acc-arrow">›</span>
-      <span class="acc-title">MTS.IntersectionReveal</span>
-      <span class="acc-subtitle">Anima elementos al entrar al viewport — reemplaza AOS/ScrollReveal</span>
-    </div>
-    <div class="acc-body"><iframe class="acc-iframe" id="iframe-acc-intersectionreveal" src="about:blank"></iframe></div>
-  </div>
-</div>
-
-<script>
-var currentTheme = document.documentElement.getAttribute('data-mts-theme') || 'dark';
-
-function setTheme(t) {
-  currentTheme = t;
-  document.documentElement.setAttribute('data-mts-theme', t);
-  try {
-    if (window.parent && window.parent !== window)
-      window.parent.postMessage({ type:'setTheme', theme:t }, '*');
-  } catch(e) {}
-}
-
-window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'setTheme') {
-    currentTheme = e.data.theme;
-    document.documentElement.setAttribute('data-mts-theme', e.data.theme);
-  }
-});
-
-if (window !== window.top) {
-  var ts = document.querySelector('.demo-theme');
-  if (ts) ts.style.display = 'none';
-}
-
-function toggleAcc(id, src) {
-  var acc     = document.getElementById(id);
-  var iframe  = document.getElementById('iframe-' + id);
-  var opening = !acc.classList.contains('open');
-  acc.classList.toggle('open');
-  if (opening) {
-    iframe.src = src + '#mts-theme=' + currentTheme;
-  } else {
-    iframe.src = 'about:blank';
-  }
-  // Notify parent which component is active
-  // Notifica al padre qué componente está activo
-  try {
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({
-        type:      'mts:accActive',
-        component: opening ? id.replace('acc-', '') : null,
-      }, '*');
-    }
-  } catch(e) {}
-}
-</script>
+  <script>
+    initGroupLauncher('#navigation-launcher', [
+      { id: 'tabs', component: 'tabs', title: 'MTS.Tabs', subtitle: 'Pestañas underline, pill, card y bordered — horizontal y vertical', src: 'matios-ui-tabs/demo.html' },
+      { id: 'accordion', component: 'accordion', title: 'MTS.Accordion', subtitle: 'Secciones expandibles — individual o múltiple', src: 'matios-ui-accordion/demo.html' },
+      { id: 'breadcrumb', component: 'breadcrumb', title: 'MTS.Breadcrumb', subtitle: 'Ruta de navegación con separadores, íconos y colapso', src: 'matios-ui-breadcrumb/demo.html' },
+      { id: 'stepper', component: 'stepper', title: 'MTS.Stepper', subtitle: 'Flujo paso a paso — horizontal y vertical', src: 'matios-ui-stepper/demo.html' },
+      { id: 'stepperProgress', component: 'stepProgress', title: 'MTS.StepProgress', subtitle: 'Flujo paso a paso — horizontal y vertical', src: 'matios-ui-stepprogress/demo.html' },
+      { id: 'drawer', component: 'drawer', title: 'MTS.Drawer', subtitle: 'Panel lateral deslizante — derecha, izquierda, arriba, abajo', src: 'matios-ui-drawer/demo.html' },
+      { id: 'dropdown', component: 'dropdown', title: 'MTS.Dropdown', subtitle: 'Menú desplegable con grupos, íconos, shortcuts y submenús', src: 'matios-ui-dropdown/demo.html' },
+      { id: 'tabbar', component: 'tabbar', title: 'MTS.TabBar', subtitle: 'Navegación estilo app mobile — default, pill y floating', src: 'matios-ui-tabbar/demo.html' },
+      { id: 'pagination', component: 'pagination', title: 'MTS.Pagination', subtitle: 'Paginación con resumen, page size y salto a página', src: 'matios-ui-pagination/demo.html' },
+      { id: 'contextmenu', component: 'contextmenu', title: 'MTS.ContextMenu', subtitle: 'Menú contextual con click derecho y long press', src: 'matios-ui-contextmenu/demo.html' },
+      { id: 'commandpalette', component: 'commandpalette', title: 'MTS.CommandPalette', subtitle: 'Paleta de comandos con búsqueda, grupos y shortcuts', src: 'matios-ui-commandpalette/demo.html' },
+      { id: 'sidenav', component: 'sidenav', title: 'MTS.SideNav', subtitle: 'Navegación lateral colapsable con submenús y badges', src: 'matios-ui-sidenav/demo.html' }
+    ]);
+  </script>
 </body>
 </html>

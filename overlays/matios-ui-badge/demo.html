@@ -15,7 +15,7 @@
           var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
           if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
           if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
       }catch(e){}
     })();
@@ -30,8 +30,12 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-badge.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-badge.js"></script>
 </head>
 <body>
@@ -44,202 +48,227 @@
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
   <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Badge</h1>
-    <p>Badges, pills and counters — CSS-only or JS-powered — removable tags, notification dots.</p>
+    <p>Badges, pills and counters — CSS-only o vía JS — tags removibles y notification dots.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-badge.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-badge.md')">Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. CSS only -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Solo CSS / CSS only (no JS)</div>
-    <div class="demo-row" style="flex-wrap:wrap;gap:8px">
-      <span class="mts-badge">Default</span>
-      <span class="mts-badge mts-badge--primary">Primary</span>
-      <span class="mts-badge mts-badge--success">Success</span>
-      <span class="mts-badge mts-badge--warning">Warning</span>
-      <span class="mts-badge mts-badge--danger">Danger</span>
-      <span class="mts-badge mts-badge--info">Info</span>
-      <span class="mts-badge mts-badge--accent">Accent</span>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-bd1','css-bd1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'css-bd1','html-bd1')">CSS classes</button>
-    </div>
-    <div class="code-panel active" id="html-bd1">&lt;!-- No JS needed / Sin JS --&gt;
-&lt;span class="mts-badge"&gt;Default&lt;/span&gt;
-&lt;span class="mts-badge mts-badge--primary"&gt;Primary&lt;/span&gt;
-&lt;span class="mts-badge mts-badge--success"&gt;Success&lt;/span&gt;
-&lt;span class="mts-badge mts-badge--warning"&gt;Warning&lt;/span&gt;
-&lt;span class="mts-badge mts-badge--danger"&gt;Danger&lt;/span&gt;
-&lt;span class="mts-badge mts-badge--info"&gt;Info&lt;/span&gt;
-&lt;span class="mts-badge mts-badge--accent"&gt;Accent&lt;/span&gt;</div>
-    <div class="code-panel" id="css-bd1">.mts-badge               → base badge (pill, md)
-.mts-badge--primary      → primary color
-.mts-badge--success      → green
-.mts-badge--warning      → yellow
-.mts-badge--danger       → red
-.mts-badge--info         → blue
-.mts-badge--accent       → accent color
-.mts-badge--xs / --sm / --lg  → size variants
-.mts-badge--square       → square shape (no radius)
-.mts-badge--dot          → dot only
-.mts-badge--pulse        → pulse animation</div>
-  </div>
-
-  <!-- 2. Tamaños y formas -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Tamaños y formas / Sizes and shapes</div>
-    <div class="demo-row" style="flex-wrap:wrap;gap:12px;align-items:center">
-      <span class="mts-badge mts-badge--primary mts-badge--xs">XS</span>
-      <span class="mts-badge mts-badge--primary mts-badge--sm">SM</span>
-      <span class="mts-badge mts-badge--primary">MD</span>
-      <span class="mts-badge mts-badge--primary mts-badge--lg">LG</span>
-      <span style="width:1px;height:20px;background:var(--mts-border-color)"></span>
-      <span class="mts-badge mts-badge--success">Pill</span>
-      <span class="mts-badge mts-badge--success mts-badge--square">Square</span>
-      <span class="mts-badge mts-badge--danger mts-badge--dot mts-badge--pulse"></span>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-bd2','css-bd2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'css-bd2','html-bd2')">CSS classes</button>
-    </div>
-    <div class="code-panel active" id="html-bd2">&lt;span class="mts-badge mts-badge--primary mts-badge--xs"&gt;XS&lt;/span&gt;
-&lt;span class="mts-badge mts-badge--primary mts-badge--sm"&gt;SM&lt;/span&gt;
-&lt;span class="mts-badge mts-badge--primary"&gt;MD&lt;/span&gt;
-&lt;span class="mts-badge mts-badge--primary mts-badge--lg"&gt;LG&lt;/span&gt;
-
-&lt;span class="mts-badge mts-badge--success"&gt;Pill&lt;/span&gt;
-&lt;span class="mts-badge mts-badge--success mts-badge--square"&gt;Square&lt;/span&gt;
-
-&lt;!-- Dot with pulse / Dot con pulso --&gt;
-&lt;span class="mts-badge mts-badge--danger mts-badge--dot mts-badge--pulse"&gt;&lt;/span&gt;</div>
-    <div class="code-panel" id="css-bd2">.mts-badge--xs      → extra small
-.mts-badge--sm      → small
-.mts-badge (no mod) → medium (default)
-.mts-badge--lg      → large
-.mts-badge--pill    → rounded (default)
-.mts-badge--square  → no border-radius
-.mts-badge--dot     → dot only, no text
-.mts-badge--pulse   → pulsing animation</div>
-  </div>
-
-  <!-- 3. Via JS -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Via JS — contador, removible, dot</div>
-    <div class="demo-row" style="flex-wrap:wrap;gap:16px;align-items:center;padding:8px 0">
-      <span id="badge-count"></span>
-      <div id="tag-container" style="display:flex;gap:6px;flex-wrap:wrap">
-        <span id="tag-ts"></span>
-        <span id="tag-react"></span>
-        <span id="tag-css"></span>
-      </div>
-      <div style="position:relative;display:inline-flex">
-        <button class="mts-btn mts-btn--secondary">Notifs</button>
-        <span id="badge-dot" style="position:absolute;top:-4px;right:-4px"></span>
-      </div>
-    </div>
-    <div class="demo-row" style="margin-top:8px;flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="bdCount.setCount(0)">setCount(0)</button>
-      <button class="demo-btn-sm" onclick="bdCount.setCount(5)">setCount(5)</button>
-      <button class="demo-btn-sm" onclick="bdCount.setCount(100)">setCount(100)</button>
-    </div>
-    <div class="result-box" id="badge-result">— usa los botones o remueve un tag —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-bd3','js-bd3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-bd3','html-bd3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-bd3">&lt;span id="badge-count"&gt;&lt;/span&gt;
-&lt;span id="tag-ts"&gt;&lt;/span&gt;
-&lt;span id="badge-dot"&gt;&lt;/span&gt;
-
-&lt;script&gt;
-  // Dynamic counter / Contador dinámico
-  const badge = new MTS.Badge('#badge-count', {
-    count:   42,
-    variant: 'danger',
-  });
-  badge.setCount(100); // → shows "99+"
-  badge.setCount(0);   // → hides badge
-
-  // Removable tag / Tag removible
-  new MTS.Badge('#tag-ts', {
-    label:    'TypeScript',
-    variant:  'primary',
-    removable: true,
-    // Fires on remove / Se dispara al remover
-    onRemove: (e) =&gt; e.detail.badge._el.remove(),
-  });
-
-  // Notification dot / Dot de notificación
-  new MTS.Badge('#badge-dot', {
-    dot:     true,
-    pulse:   true,
-    variant: 'danger',
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-bd3">// Dynamic counter / Contador dinámico
-const badge = new MTS.Badge('#badge-count', {
-  count:    42,
-  maxCount: 99,    // shows "99+" above 99 / muestra "99+" si supera
-  variant:  'danger',
-  shape:    'pill',
-  size:     'md',
-});
-
-badge.setCount(100); // → "99+"
-badge.setCount(0);   // → hides / oculta
-badge.setCount(5);   // → "5"
-
-// Removable tags / Tags removibles
-['TypeScript','React','CSS'].forEach(label =&gt; {
-  new MTS.Badge('#tag-' + label.toLowerCase(), {
-    label:     label,
-    variant:   'primary',
-    removable: true,
-    // Fires when remove is clicked / Se dispara al hacer click en remover
-    onRemove: (e) =&gt; {
-      e.detail.badge._el.remove();
-      console.log('removed:', label);
-    },
-  });
-});
-
-// Notification dot with pulse / Dot de notificación con pulso
-new MTS.Badge('#badge-dot', {
-  dot:     true,
-  pulse:   true,
-  variant: 'danger',
-});</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Solo CSS</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Tamaños y formas</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Via JS</div><div id="tabs-s3"></div></div>
 </div>
-<script>
-var bdCount = new MTS.Badge('#badge-count', {
-  count:42, maxCount:99, variant:'danger',
-});
-bdCount.on('remove', function(e){ document.getElementById('badge-result').textContent = 'onRemove →'; });
 
-function makeTag(id, label, variant) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = label;
-  new MTS.Badge(el, {
-    label:label, variant:variant||'primary', removable:true,
-    onRemove: function(e){
-      e.detail.badge._el.remove();
-      document.getElementById('badge-result').textContent = 'onRemove → "' + label + '"';
-    },
+<script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
   });
 }
-makeTag('tag-ts',    'TypeScript', 'primary');
-makeTag('tag-react', 'React',      'info');
-makeTag('tag-css',   'CSS',        'success');
-new MTS.Badge('#badge-dot', { dot:true, pulse:true, variant:'danger' });
+
+var preview_s1 = `
+<div class="demo-row" style="flex-wrap:wrap;gap:8px">
+  <span class="mts-badge">Default</span>
+  <span class="mts-badge mts-badge--primary">Primary</span>
+  <span class="mts-badge mts-badge--success">Success</span>
+  <span class="mts-badge mts-badge--warning">Warning</span>
+  <span class="mts-badge mts-badge--danger">Danger</span>
+  <span class="mts-badge mts-badge--info">Info</span>
+  <span class="mts-badge mts-badge--accent">Accent</span>
+</div>`;
+
+var js_s1 = `// No JavaScript needed.
+// Esta variante usa solo clases CSS del componente.`;
+
+var preview_s2 = `
+<div class="demo-row" style="flex-wrap:wrap;gap:12px;align-items:center">
+  <span class="mts-badge mts-badge--primary mts-badge--xs">XS</span>
+  <span class="mts-badge mts-badge--primary mts-badge--sm">SM</span>
+  <span class="mts-badge mts-badge--primary">MD</span>
+  <span class="mts-badge mts-badge--primary mts-badge--lg">LG</span>
+  <span style="width:1px;height:20px;background:var(--mts-border-color)"></span>
+  <span class="mts-badge mts-badge--success">Pill</span>
+  <span class="mts-badge mts-badge--success mts-badge--square">Square</span>
+  <span class="mts-badge mts-badge--danger mts-badge--dot mts-badge--pulse"></span>
+</div>`;
+
+var js_s2 = `// No JavaScript needed.
+// Tamaños, shapes y dot/pulse funcionan solo con clases CSS.`;
+
+var preview_s3 = `
+<div class="demo-stack">
+  <div class="demo-row" style="flex-wrap:wrap;gap:16px;align-items:center;padding:8px 0">
+    <span id="badge-count"></span>
+    <div id="tag-container" style="display:flex;gap:6px;flex-wrap:wrap">
+      <span id="tag-ts"></span>
+      <span id="tag-react"></span>
+      <span id="tag-css"></span>
+    </div>
+    <div style="position:relative;display:inline-flex">
+      <button id="btn-notifs" data-label="Notifs" data-variant="secondary"></button>
+      <span id="badge-dot" style="position:absolute;top:-4px;right:-4px"></span>
+    </div>
+  </div>
+  <div class="demo-row" style="gap:8px;flex-wrap:wrap">
+    <button id="btn-count-0" data-label="setCount(0)" data-variant="secondary"></button>
+    <button id="btn-count-5" data-label="setCount(5)" data-variant="secondary"></button>
+    <button id="btn-count-100" data-label="setCount(100)" data-variant="primary"></button>
+  </div>
+  <div class="result-box" id="badge-result">— usa los botones o remueve un tag —</div>
+</div>`;
+
+var js_s3 = `new MTS.Button('#btn-notifs');
+new MTS.Button('#btn-count-0');
+new MTS.Button('#btn-count-5');
+new MTS.Button('#btn-count-100');
+
+const badge = new MTS.Badge('#badge-count', {
+  count: 42,
+  maxCount: 99,
+  variant: 'danger',
+  shape: 'pill',
+  size: 'md'
+});
+
+document.getElementById('btn-count-0').addEventListener('click', function () {
+  badge.setCount(0);
+});
+document.getElementById('btn-count-5').addEventListener('click', function () {
+  badge.setCount(5);
+});
+document.getElementById('btn-count-100').addEventListener('click', function () {
+  badge.setCount(100);
+});
+
+function makeTag(id, label, variant) {
+  new MTS.Badge('#' + id, {
+    label: label,
+    variant: variant,
+    removable: true,
+    onRemove: function (e) {
+      e.detail.badge._el.remove();
+      document.getElementById('badge-result').textContent = 'onRemove → "' + label + '"';
+    }
+  });
+}
+
+makeTag('tag-ts', 'TypeScript', 'primary');
+makeTag('tag-react', 'React', 'info');
+makeTag('tag-css', 'CSS', 'success');
+
+new MTS.Badge('#badge-dot', {
+  dot: true,
+  pulse: true,
+  variant: 'danger'
+});`;
+
+makeSection('tabs-s1', preview_s1, js_s1);
+makeSection('tabs-s2', preview_s2, js_s2);
+makeSection('tabs-s3', preview_s3, js_s3);
+
+var bdCount = null;
+
+function mountBadgeDemo() {
+  new MTS.Button('#btn-notifs');
+  new MTS.Button('#btn-count-0');
+  new MTS.Button('#btn-count-5');
+  new MTS.Button('#btn-count-100');
+
+  bdCount = new MTS.Badge('#badge-count', {
+    count: 42,
+    maxCount: 99,
+    variant: 'danger'
+  });
+
+  document.getElementById('btn-count-0').addEventListener('click', function () {
+    bdCount.setCount(0);
+  });
+  document.getElementById('btn-count-5').addEventListener('click', function () {
+    bdCount.setCount(5);
+  });
+  document.getElementById('btn-count-100').addEventListener('click', function () {
+    bdCount.setCount(100);
+  });
+
+  function makeTag(id, label, variant) {
+    new MTS.Badge('#' + id, {
+      label: label,
+      variant: variant,
+      removable: true,
+      onRemove: function (e) {
+        e.detail.badge._el.remove();
+        document.getElementById('badge-result').textContent = 'onRemove → "' + label + '"';
+      }
+    });
+  }
+
+  makeTag('tag-ts', 'TypeScript', 'primary');
+  makeTag('tag-react', 'React', 'info');
+  makeTag('tag-css', 'CSS', 'success');
+
+  new MTS.Badge('#badge-dot', {
+    dot: true,
+    pulse: true,
+    variant: 'danger'
+  });
+}
+
+mountBadgeDemo();
 </script>
 </body>
 </html>

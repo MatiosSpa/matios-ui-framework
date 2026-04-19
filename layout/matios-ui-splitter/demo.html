@@ -32,38 +32,13 @@
   <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
   <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-splitter.css">
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../../shared/demo-shared.js"></script>
-  <script src="./matios-ui-splitter.js"></script>  <style>
-    *{box-sizing:border-box}body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}.demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
-    .demo-section{display:flex;flex-direction:column;gap:14px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
-    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
-    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
-    .demo-docs-panel.open{display:block;}
-    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
-    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
-    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
-    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
-    .demo-docs-panel pre code{background:none;border:none;padding:0;color:var(--mts-text-primary);}
-    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
-    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel ul,p{margin:0 0 10px;padding-left:18px;}
-    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:9998;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-  </style>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="./matios-ui-splitter.js"></script>  
 </head>
 <body>
 <div class="demo-theme">
@@ -79,65 +54,79 @@
     .sp-panel{background:var(--mts-bg-surface);padding:16px;min-height:0;display:flex;flex-direction:column;gap:8px;}
     .sp-panel h4{font-size:13px;font-weight:700;margin:0;color:var(--mts-text-secondary);}
     .sp-panel p{font-size:12px;color:var(--mts-text-muted);margin:0;line-height:1.6;}
-    .sp-wrap{border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);overflow:hidden;}
+    .sp-wrap{border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);overflow:hidden;}.mts-splitter-demo__code{display:block;margin:0;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;}.mts-splitter-demo__code code{font-family:inherit;color:inherit;}
   </style>
   <div class="demo-header">
     <h1><span>MTS</span>.Splitter</h1>
     <p>Paneles redimensionables con drag. Horizontal, vertical y colapsable.</p>
-    <div style="display:flex;gap:8px;"><button class="demo-docs-btn" onclick="toggleDocs('dp','./matios-ui-splitter.md')">📄 Documentación</button></div>
+    <div  class="demo-header-actions"><button class="demo-docs-btn" onclick="toggleDocs('dp','./matios-ui-splitter.md')">📄 Documentación</button></div>
     <div class="demo-docs-panel" id="dp"></div>
   </div>
 
   <div class="demo-section">
     <div class="demo-section-title">1 — Horizontal — arrastra el divisor</div>
-    <div class="sp-wrap" id="sp-h">
-      <div class="sp-panel"><h4>Panel izquierdo</h4><p>Arrastra el divisor central para redimensionar los paneles.</p></div>
-      <div class="sp-panel"><h4>Panel derecho</h4><p>El tamaño mínimo es 15% y el máximo 85%.</p></div>
-    </div>
-    <div class="result-box" id="res-sp">— arrastra el divisor —</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
-      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spH.setSize(30)">setSize(30%)</button>
-      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spH.setSize(50)">setSize(50%)</button>
-      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spH.setSize(70)">setSize(70%)</button>
-      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="var s=spH.getSizes();document.getElementById('res-sp').textContent='getSizes() → '+JSON.stringify(s)">getSizes()</button>
-    </div>
-    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c1"><code>new MTS.Splitter('#el', {
-  direction:   'horizontal',
-  initialSize: 40,  // primer panel 40%
-  minSize:     15,
-  maxSize:     85,
-  onChange: ({ firstSize, secondSize }) => console.log(firstSize, secondSize),
-})</code></pre>
+    <div id="splitter-code-1"></div>
   </div>
 
   <div class="demo-section">
     <div class="demo-section-title">2 — Vertical + colapsable con doble click</div>
-    <div class="sp-wrap" id="sp-v" style="height:280px;">
-      <div class="sp-panel"><h4>Panel superior</h4><p>Doble click en el divisor para colapsar el panel inferior.</p></div>
-      <div class="sp-panel"><h4>Panel inferior</h4><p>Restaura haciendo doble click nuevamente en el divisor.</p></div>
-    </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
-      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spV.collapseSecond()">collapseSecond()</button>
-      <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spV.restore()">restore()</button>
-    </div>
-    <button class="demo-code-toggle" onclick="toggleCode('c2')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c2"><code>new MTS.Splitter('#el', {
-  direction:   'vertical',
-  initialSize:  60,
-  collapsible:  true,  // doble click en divisor colapsa
-  onDragEnd: ({ firstSize, secondSize }) => guardarLayout(firstSize),
-})</code></pre>
+    <div id="splitter-code-2"></div>
   </div>
 </div>
 <script>
 function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
 window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
 if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
-function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
 function toggleDocs(id,p){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted)">Cargando...</em>';fetch(p).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>Error.</em>';});}
 function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,function(_,hdr,rows){var ths=hdr.split('|').filter(function(c){return c.trim();}).map(function(c){return'<th>'+c.trim()+'</th>';}).join('');var trs=rows.trim().split('\n').map(function(r){return'<tr>'+r.split('|').filter(function(c){return c.trim();}).map(function(c){return'<td>'+c.trim()+'</td>';}).join('')+'</tr>';}).join('');return'<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';}).replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
 
+function escapeHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function codeBlock(source){return '<pre class="mts-splitter-demo__code"><code>'+escapeHtml(source)+'</code></pre>';}
+function buildSplitterSection(target, previewHtml, htmlCode, jsCode){
+  new MTS.Tabs(target,{variant:'card',lazy:false,active:'preview',tabs:[
+    {id:'preview',label:'Preview',content:previewHtml},
+    {id:'html',label:'HTML',content:codeBlock(htmlCode)},
+    {id:'js',label:'JavaScript',content:codeBlock(jsCode)}
+  ]});
+}
+var splitterPreview1 = `<div class="sp-wrap" id="sp-h">
+  <div class="sp-panel"><h4>Panel izquierdo</h4><p>Arrastra el divisor central para redimensionar los paneles.</p></div>
+  <div class="sp-panel"><h4>Panel derecho</h4><p>El tamaño mínimo es 15% y el máximo 85%.</p></div>
+</div>
+<div class="result-box" id="res-sp">— arrastra el divisor —</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+  <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spH.setSize(30)">setSize(30%)</button>
+  <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spH.setSize(50)">setSize(50%)</button>
+  <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spH.setSize(70)">setSize(70%)</button>
+  <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="var s=spH.getSizes();document.getElementById('res-sp').textContent='getSizes() → '+JSON.stringify(s)">getSizes()</button>
+</div>`;
+var splitterPreview2 = `<div class="sp-wrap" id="sp-v" style="height:280px;">
+  <div class="sp-panel"><h4>Panel superior</h4><p>Doble click en el divisor para colapsar el panel inferior.</p></div>
+  <div class="sp-panel"><h4>Panel inferior</h4><p>Restaura haciendo doble click nuevamente en el divisor.</p></div>
+</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+  <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spV.collapseSecond()">collapseSecond()</button>
+  <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spV.restore()">restore()</button>
+</div>`;
+buildSplitterSection('#splitter-code-1', splitterPreview1, `<div id="split-horizontal">
+  <div>Panel izquierdo</div>
+  <div>Panel derecho</div>
+</div>`, `const splitter = new MTS.Splitter('#split-horizontal', {
+  direction: 'horizontal',
+  initialSize: 40,
+  minSize: 15,
+  maxSize: 85,
+  onChange: ({ firstSize, secondSize }) => console.log(firstSize, secondSize),
+});`);
+buildSplitterSection('#splitter-code-2', splitterPreview2, `<div id="split-vertical">
+  <div>Panel superior</div>
+  <div>Panel inferior</div>
+</div>`, `const splitter = new MTS.Splitter('#split-vertical', {
+  direction: 'vertical',
+  initialSize: 60,
+  collapsible: true,
+  onDragEnd: ({ firstSize, secondSize }) => console.log(firstSize, secondSize),
+});`);
 document.getElementById('sp-h').style.height='200px';
 var spH=new MTS.Splitter('#sp-h',{direction:'horizontal',initialSize:40,minSize:15,maxSize:85,onChange:function(e){document.getElementById('res-sp').textContent='onChange → primer panel: '+Math.round(e.firstSize)+'% | segundo: '+Math.round(e.secondSize)+'%';}});
 var spV=new MTS.Splitter('#sp-v',{direction:'vertical',initialSize:60,collapsible:true,gutterSize:'8px'});

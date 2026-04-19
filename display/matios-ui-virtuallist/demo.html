@@ -30,7 +30,13 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
   <script src="./matios-ui-virtuallist.js"></script>
   <style>
     .vl-row {
@@ -68,137 +74,88 @@
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. 100k ítems -->
   <div class="demo-section">
     <div class="demo-section-title">1 — 100.000 ítems virtualizados / 100,000 virtualized items</div>
-    <div class="demo-row" style="margin-bottom:8px;flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="vl1.scrollToIndex(0)">scrollToIndex(0)</button>
-      <button class="demo-btn-sm" onclick="vl1.scrollToIndex(49999)">scrollToIndex(50000)</button>
-      <button class="demo-btn-sm" onclick="vl1.scrollToIndex(99999)">scrollToIndex(100000)</button>
-    </div>
-    <div id="vl-big"></div>
-    <div class="result-box" id="vl-result">— haz scroll en la lista —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-vl1','js-vl1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-vl1','html-vl1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-vl1">&lt;div id="my-list"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const list = new MTS.VirtualList('#my-list', {
-    items:      Array.from({ length: 100000 }, (_, i) =&gt; ({ id: i, name: `Item ${i}` })),
-    itemHeight: 52,
-    height:     400,
-    renderItem: (item, index) =&gt; {
-      const el = document.createElement('div');
-      el.className = 'my-row';
-      el.innerHTML = `&lt;span&gt;#${index + 1}&lt;/span&gt; ${item.name}`;
-      return el;
-    },
-    // Fires on scroll / Se dispara al hacer scroll
-    onScroll: (e) =&gt; {
-      console.log(e.detail.firstVisible); // → first visible index
-      console.log(e.detail.lastVisible);  // → last visible index
-    },
-  });
-  list.scrollToIndex(50000);
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-vl1">const list = new MTS.VirtualList('#my-list', {
-  // 100,000 items — only visible ones are in the DOM
-  // 100,000 ítems — solo los visibles están en el DOM
-  items:      Array.from({ length: 100000 }, (_, i) =&gt; ({
-    id:     i,
-    name:   `User #${i + 1}`,
-    email:  `user${i}@example.com`,
-    active: i % 3 !== 0,
-  })),
-
-  // Fixed height per item / Altura fija por ítem
-  itemHeight: 52,
-
-  // Container height / Altura del contenedor
-  height:     400,
-
-  // Renderer — returns HTMLElement or string / Retorna HTMLElement o string
-  renderItem: (item, index) =&gt; {
-    const el = document.createElement('div');
-    el.className = 'vl-row';
-    el.innerHTML = `
-      &lt;span class="vl-idx"&gt;#${index + 1}&lt;/span&gt;
-      &lt;span class="vl-name"&gt;${item.name}&lt;/span&gt;
-      &lt;span class="vl-meta"&gt;${item.email}&lt;/span&gt;
-      &lt;span class="vl-badge ${item.active ? 'vl-badge--active' : 'vl-badge--inactive'}"&gt;
-        ${item.active ? 'Active' : 'Inactive'}
-      &lt;/span&gt;`;
-    return el;
-  },
-
-  // Fires on scroll / Se dispara al hacer scroll
-  onScroll: (e) =&gt; {
-    console.log('visible:', e.detail.firstVisible, '-', e.detail.lastVisible);
-  },
-});
-
-list.scrollToIndex(50000); // jump to any index / saltar a cualquier índice</div>
+    <div id="vl1-tabs"></div>
   </div>
 
-  <!-- 2. Infinite scroll -->
   <div class="demo-section">
     <div class="demo-section-title">2 — appendItems() — Infinite scroll simulado / Simulated infinite scroll</div>
-    <div id="vl-infinite"></div>
-    <div class="result-box" id="vl-inf-result">— haz scroll hasta el final para cargar más —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-vl2','js-vl2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-vl2','html-vl2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-vl2">&lt;div id="my-list"&gt;&lt;/div&gt;
-&lt;script&gt;
-  let page = 1;
-  const list = new MTS.VirtualList('#my-list', {
-    items:      fetchPage(page++),
-    renderItem: (item) =&gt; `&lt;div&gt;${item.title}&lt;/div&gt;`,
-    // Fires when near the end / Se dispara cerca del final del scroll
-    onEndReached: async (e) =&gt; {
-      console.log('total so far:', e.detail.total);
-      const more = await fetchPage(page++);
-      list.appendItems(more);
-    },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-vl2">function fetchPage(page) {
-  // Simulate API call / Simular llamada API
-  return Array.from({ length: 20 }, (_, i) =&gt; ({
-    id:    page * 20 + i,
-    title: `Post #${page * 20 + i + 1}`,
-    date:  `Dec ${(i % 28) + 1}, 2024`,
-  }));
-}
-
-let page = 1;
-const list = new MTS.VirtualList('#my-list', {
-  items:        fetchPage(page++),
-  itemHeight:   56,
-  height:       400,
-  endThreshold: 150,   // px from bottom to trigger / px desde el fondo para activar
-  renderItem: (item, index) =&gt; {
-    const el = document.createElement('div');
-    el.className = 'vl-row';
-    el.innerHTML = `
-      &lt;span class="vl-idx"&gt;#${index + 1}&lt;/span&gt;
-      &lt;span class="vl-name"&gt;${item.title}&lt;/span&gt;
-      &lt;span class="vl-meta"&gt;${item.date}&lt;/span&gt;`;
-    return el;
-  },
-  // Fires when near the end — load more / Se dispara cerca del final — cargar más
-  onEndReached: (e) =&gt; {
-    console.log('loading page', page, '(', e.detail.total, 'items so far)');
-    const more = fetchPage(page++);
-    list.appendItems(more);
-  },
-});</div>
+    <div id="vl2-tabs"></div>
   </div>
-
 </div>
 <script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step   = 2;
+  var voids  = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(sectionId, previewHtml) {
+  var preId = 'pre-' + sectionId;
+  return '<div style="position:relative;height:100%;box-sizing:border-box">' +
+    '<button id="copybtn-' + sectionId + '" style="position:absolute;top:6px;right:6px;z-index:2"></button>' +
+    '<pre id="' + preId + '" class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0;padding-right:40px">' +
+      esc(indentHtml(previewHtml)) +
+    '</pre>' +
+  '</div>';
+}
+
+function jsTab(code) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '520px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(id, previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  var btnEl = document.getElementById('copybtn-' + id);
+  var preEl = document.getElementById('pre-' + id);
+  if (btnEl && preEl) {
+    new MTS.CopyButton(btnEl, {
+      iconOnly: true,
+      variant: 'ghost',
+      size: 'sm',
+      target: preEl
+    });
+  }
+}
+
 function makeItems(count, offset) {
   offset = offset || 0;
   return Array.from({ length: count }, function(_, i) {
@@ -206,9 +163,91 @@ function makeItems(count, offset) {
     return { id:n, name:'Usuario #'+(n+1), email:'user'+n+'@empresa.com', active: n % 3 !== 0 };
   });
 }
+
 var BIG_ITEMS = makeItems(100000);
-var vl1 = new MTS.VirtualList('#vl-big', {
-  items: BIG_ITEMS, itemHeight:52, height:380,
+var vl1;
+var infPage = 1;
+var vlInf;
+function getPage(p){ return makeItems(20, (p-1)*20); }
+
+var preview_vl1 = '' +
+  '<div class="demo-row" style="margin-bottom:8px;flex-wrap:wrap">' +
+    '<button class="demo-btn-sm" onclick="vl1.scrollToIndex(0)">scrollToIndex(0)</button>' +
+    '<button class="demo-btn-sm" onclick="vl1.scrollToIndex(49999)">scrollToIndex(50000)</button>' +
+    '<button class="demo-btn-sm" onclick="vl1.scrollToIndex(99999)">scrollToIndex(100000)</button>' +
+  '</div>' +
+  '<div id="vl-big"></div>' +
+  '<div class="result-box" id="vl-result">— haz scroll en la lista —</div>';
+
+var js_vl1 = `const list = new MTS.VirtualList('#my-list', {
+  items: Array.from({ length: 100000 }, (_, i) => ({
+    id: i,
+    name: \`User #\${i + 1}\`,
+    email: \`user\${i}@example.com\`,
+    active: i % 3 !== 0,
+  })),
+  itemHeight: 52,
+  height: 400,
+  renderItem: (item, index) => {
+    const el = document.createElement('div');
+    el.className = 'vl-row';
+    el.innerHTML = \`
+      <span class="vl-idx">#\${index + 1}</span>
+      <span class="vl-name">\${item.name}</span>
+      <span class="vl-meta">\${item.email}</span>
+      <span class="vl-badge \${item.active ? 'vl-badge--active' : 'vl-badge--inactive'}">
+        \${item.active ? 'Active' : 'Inactive'}
+      </span>\`;
+    return el;
+  },
+  onScroll: (e) => {
+    console.log('visible:', e.detail.firstVisible, '-', e.detail.lastVisible);
+  },
+});
+
+list.scrollToIndex(50000);`;
+
+var preview_vl2 = '' +
+  '<div id="vl-infinite"></div>' +
+  '<div class="result-box" id="vl-inf-result">— haz scroll hasta el final para cargar más —</div>';
+
+var js_vl2 = `function fetchPage(page) {
+  return Array.from({ length: 20 }, (_, i) => ({
+    id: page * 20 + i,
+    title: \`Post #\${page * 20 + i + 1}\`,
+    date: \`Dec \${(i % 28) + 1}, 2024\`,
+  }));
+}
+
+let page = 1;
+const list = new MTS.VirtualList('#my-list', {
+  items: fetchPage(page++),
+  itemHeight: 56,
+  height: 400,
+  endThreshold: 150,
+  renderItem: (item, index) => {
+    const el = document.createElement('div');
+    el.className = 'vl-row';
+    el.innerHTML = \`
+      <span class="vl-idx">#\${index + 1}</span>
+      <span class="vl-name">\${item.title}</span>
+      <span class="vl-meta">\${item.date}</span>\`;
+    return el;
+  },
+  onEndReached: (e) => {
+    console.log('loading page', page, '(', e.detail.total, 'items so far)');
+    const more = fetchPage(page++);
+    list.appendItems(more);
+  },
+});`;
+
+makeSection('vl1-tabs', preview_vl1, js_vl1, '560px');
+makeSection('vl2-tabs', preview_vl2, js_vl2, '500px');
+
+vl1 = new MTS.VirtualList('#vl-big', {
+  items: BIG_ITEMS,
+  itemHeight: 52,
+  height: 380,
   renderItem: function(item, idx){
     var el = document.createElement('div');
     el.className = 'vl-row';
@@ -218,20 +257,22 @@ var vl1 = new MTS.VirtualList('#vl-big', {
   onScroll: function(e){ document.getElementById('vl-result').textContent = 'onScroll → firstVisible:'+e.detail.firstVisible+' lastVisible:'+e.detail.lastVisible; },
 });
 
-var infPage = 1;
-function getPage(p){ return makeItems(20, (p-1)*20); }
-var vlInf = new MTS.VirtualList('#vl-infinite', {
-  items:getPage(infPage++), itemHeight:52, height:320, endThreshold:100,
+vlInf = new MTS.VirtualList('#vl-infinite', {
+  items: getPage(infPage++),
+  itemHeight: 52,
+  height: 320,
+  endThreshold: 100,
   renderItem: function(item, idx){
     var el = document.createElement('div');
     el.className = 'vl-row';
-    el.innerHTML = '<span class="vl-idx">#'+(idx+1)+'</span><span class="vl-name">'+item.name+'</span><span class="vl-meta">'+item.email+'</span>';
+    el.innerHTML = '<span class="vl-idx">#'+(idx+1)+'</span><span class="vl-name">Post #'+item.id+'</span><span class="vl-meta">'+item.email+'</span>';
     return el;
   },
   onEndReached: function(e){
-    document.getElementById('vl-inf-result').textContent = 'onEndReached → cargando página '+infPage+' ('+e.detail.total+' ítems)';
-    vlInf.appendItems(getPage(infPage++));
-  },
+    var more = getPage(infPage++);
+    vlInf.appendItems(more);
+    document.getElementById('vl-inf-result').textContent = 'appendItems() → total: '+(e.detail.total + more.length)+' ítems';
+  }
 });
 </script>
 </body>

@@ -23,6 +23,7 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.ColorPicker — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
   <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
   <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
@@ -30,8 +31,10 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-colorpicker.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-colorpicker.js"></script>
 </head>
 <body>
@@ -50,208 +53,81 @@
     <h1><span>MTS</span>.ColorPicker</h1>
     <p>Standalone color picker — HSL sliders, preset palette, hex/rgb/hsl output.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-colorpicker.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-colorpicker.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Trigger — popup -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Trigger (popup) — tamaños / sizes</div>
-    <div class="demo-grid">
-      <div id="cp-sm"></div>
-      <div id="cp-md"></div>
-      <div id="cp-lg"></div>
-    </div>
-    <div class="result-box" id="cp-result">— selecciona un color —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cp1','js-cp1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cp1','html-cp1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cp1">&lt;div id="picker-brand"
-  data-value="#7c3aed"
-  data-label="Brand color"
-  data-format="hex"&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.ColorPicker('#picker-brand', {
-    // Fires when color changes / Se dispara al cambiar el color
-    onChange: ({ hex, value }) =&gt; {
-      console.log(hex);   // → '#7c3aed' (always hex)
-      console.log(value); // → formatted value
-    },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cp1">// Small / Pequeño
-new MTS.ColorPicker('#cp-sm', {
-  value:  '#f87171',
-  label:  'Color (sm)',
-  size:   'sm',
-  format: 'hex',
-  // Fires on color change / Se dispara al cambiar el color
-  onChange: ({ hex, value }) => console.log(hex),
-});
-
-// Medium (default) / Mediano
-new MTS.ColorPicker('#cp-md', {
-  value:  '#4f8eff',
-  label:  'Color (md)',
-  size:   'md',
-  onChange: ({ hex }) => console.log(hex),
-});
-
-// Large / Grande
-new MTS.ColorPicker('#cp-lg', {
-  value:  '#34d399',
-  label:  'Color (lg)',
-  size:   'lg',
-  onChange: ({ hex }) => console.log(hex),
-});</div>
-  </div>
-
-  <!-- 2. Inline -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Inline (siempre visible / always visible)</div>
-    <div style="max-width:320px">
-      <div id="cp-inline"></div>
-    </div>
-    <div class="result-box" id="cp-inline-result">— mueve los sliders —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cp2','js-cp2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cp2','html-cp2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cp2">&lt;!-- inline: true — no trigger button / sin botón trigger --&gt;
-&lt;div id="picker-inline" data-inline data-value="#34d399"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.ColorPicker('#picker-inline', {
-    onChange: ({ hex }) =&gt; {
-      document.getElementById('preview').style.background = hex;
-    },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cp2">new MTS.ColorPicker('#picker-inline', {
-  // Always visible, no trigger / Siempre visible, sin trigger
-  inline: true,
-  value:  '#34d399',
-  format: 'hex',
-  onChange: ({ hex, value }) => {
-    console.log(hex, value);
-  },
-});</div>
-  </div>
-
-  <!-- 3. Formatos + API -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Formatos hex · rgb · hsl + API</div>
-    <div class="demo-grid">
-      <div id="cp-hex"></div>
-      <div id="cp-rgb"></div>
-      <div id="cp-hsl"></div>
-    </div>
-    <div class="demo-row" style="margin-top:8px">
-      <button class="demo-btn-sm" onclick="document.getElementById('cp-api-result').textContent = 'getValue() → ' + cpApi.getValue()">getValue()</button>
-      <button class="demo-btn-sm" onclick="document.getElementById('cp-api-result').textContent = 'getHex() → ' + cpApi.getHex()">getHex()</button>
-      <button class="demo-btn-sm" onclick="cpApi.setValue('#f87171'); document.getElementById('cp-api-result').textContent = 'setValue(#f87171) ✓'">setValue()</button>
-      <button class="demo-btn-sm" onclick="cpApi.open()">open()</button>
-      <button class="demo-btn-sm" onclick="cpApi.close()">close()</button>
-    </div>
-    <div class="result-box" id="cp-api-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cp3','js-cp3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cp3','html-cp3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cp3">&lt;div id="picker-brand" data-value="#4f8eff" data-format="hex"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  const cp = new MTS.ColorPicker('#picker-brand', {
-    onChange: ({ hex, value }) =&gt; console.log(hex, value),
-  });
-  cp.getValue()         // respects format / respeta format
-  cp.getHex()           // always hex / siempre hex
-  cp.setValue('#00ff00')
-  cp.setFormat('rgb')
-  cp.open() / cp.close()
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cp3">// Format: 'hex' | 'rgb' | 'hsl'
-new MTS.ColorPicker('#cp-hex', { value:'#4f8eff', label:'HEX', format:'hex', onChange: ({value}) => console.log(value) });
-new MTS.ColorPicker('#cp-rgb', { value:'#4f8eff', label:'RGB', format:'rgb', onChange: ({value}) => console.log(value) });
-new MTS.ColorPicker('#cp-hsl', { value:'#4f8eff', label:'HSL', format:'hsl', onChange: ({value}) => console.log(value) });
-
-const cp = new MTS.ColorPicker('#my-picker', { value: '#4f8eff', format: 'hex' });
-
-// Get value respecting format / Obtener valor respetando formato
-cp.getValue()          // → '#4f8eff' | 'rgb(79,142,255)' | 'hsl(218,100%,66%)'
-
-// Always get hex / Siempre obtener hex
-cp.getHex()            // → '#4f8eff'
-
-// Set color / Establecer color
-cp.setValue('#f87171')
-
-// Change output format / Cambiar formato de salida
-cp.setFormat('rgb')
-
-// Open / close / Abrir / cerrar
-cp.open()
-cp.close()</div>
-  </div>
-
-  <!-- 4. Opciones avanzadas -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Sin sliders · sin presets · disabled</div>
-    <div class="demo-grid">
-      <div id="cp-nosliders"></div>
-      <div id="cp-nopresets"></div>
-      <div id="cp-disabled"></div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cp4','js-cp4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cp4','html-cp4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cp4">&lt;!-- Preset only / Solo presets --&gt;
-&lt;div id="picker-presets-only" data-value="#f87171"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.ColorPicker('#picker-presets-only', {
-    showSliders: false,
-    showInput:   false,
-  });
-&lt;/script&gt;
-
-&lt;!-- Sliders only / Solo sliders --&gt;
-&lt;div id="picker-sliders-only" data-value="#4f8eff"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.ColorPicker('#picker-sliders-only', {
-    showPresets: false,
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cp4">// Preset palette only / Solo paleta de presets
-new MTS.ColorPicker('#cp-presets', {
-  showSliders: false,
-  showInput:   false,
-  value:       '#f87171',
-  label:       'Preset only',
-});
-
-// Sliders only / Solo sliders
-new MTS.ColorPicker('#cp-sliders', {
-  showPresets: false,
-  value:       '#4f8eff',
-  label:       'Sliders only',
-});
-
-// Disabled / Deshabilitado
-new MTS.ColorPicker('#cp-disabled', {
-  value:    '#94a3b8',
-  label:    'Disabled',
-  disabled: true,
-});</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Trigger (popup) — tamaños / sizes</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Inline (siempre visible / always visible)</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Formatos hex · rgb · hsl + API</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Sin sliders · sin presets · disabled</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — HTML declarativo + enhancement</div><div id="tabs-s5"></div></div>
 </div>
 
 <script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(sourceHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(sourceHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, htmlCode, jsCode) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(htmlCode || previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+}
+
+makeSection("tabs-s1", "<div class=\"demo-grid\">\n<div id=\"cp-sm\"></div>\n<div id=\"cp-md\"></div>\n<div id=\"cp-lg\"></div>\n</div><div class=\"result-box\" id=\"cp-result\">\u2014 selecciona un color \u2014</div>", "<div id=\"picker-brand\"\n  data-value=\"#7c3aed\"\n  data-label=\"Brand color\"\n  data-format=\"hex\">\n</div>\n\n<script>\n  new MTS.ColorPicker('#picker-brand', {\n    // Fires when color changes / Se dispara al cambiar el color\n    onChange: ({ hex, value }) => {\n      console.log(hex);   // \u2192 '#7c3aed' (always hex)\n      console.log(value); // \u2192 formatted value\n    },\n  });\n<\/script>", "// Small / Peque\u00f1o\nnew MTS.ColorPicker('#cp-sm', {\n  value:  '#f87171',\n  label:  'Color (sm)',\n  size:   'sm',\n  format: 'hex',\n  // Fires on color change / Se dispara al cambiar el color\n  onChange: ({ hex, value }) => console.log(hex),\n});\n\n// Medium (default) / Mediano\nnew MTS.ColorPicker('#cp-md', {\n  value:  '#4f8eff',\n  label:  'Color (md)',\n  size:   'md',\n  onChange: ({ hex }) => console.log(hex),\n});\n\n// Large / Grande\nnew MTS.ColorPicker('#cp-lg', {\n  value:  '#34d399',\n  label:  'Color (lg)',\n  size:   'lg',\n  onChange: ({ hex }) => console.log(hex),\n});");
+makeSection("tabs-s2", "<div style=\"max-width:320px\">\n<div id=\"cp-inline\"></div>\n</div><div class=\"result-box\" id=\"cp-inline-result\">\u2014 mueve los sliders \u2014</div>", "<\!-- inline: true \u2014 no trigger button / sin bot\u00f3n trigger -->\n<div id=\"picker-inline\" data-inline data-value=\"#34d399\"></div>\n\n<script>\n  new MTS.ColorPicker('#picker-inline', {\n    onChange: ({ hex }) => {\n      document.getElementById('preview').style.background = hex;\n    },\n  });\n<\/script>", "new MTS.ColorPicker('#picker-inline', {\n  // Always visible, no trigger / Siempre visible, sin trigger\n  inline: true,\n  value:  '#34d399',\n  format: 'hex',\n  onChange: ({ hex, value }) => {\n    console.log(hex, value);\n  },\n});");
+makeSection("tabs-s3", "<div class=\"demo-grid\">\n<div id=\"cp-hex\"></div>\n<div id=\"cp-rgb\"></div>\n<div id=\"cp-hsl\"></div>\n</div><div class=\"demo-row\" style=\"margin-top:8px\">\n<button class=\"demo-btn-sm\" onclick=\"document.getElementById('cp-api-result').textContent = 'getValue() \u2192 ' + cpApi.getValue()\">getValue()</button>\n<button class=\"demo-btn-sm\" onclick=\"document.getElementById('cp-api-result').textContent = 'getHex() \u2192 ' + cpApi.getHex()\">getHex()</button>\n<button class=\"demo-btn-sm\" onclick=\"cpApi.setValue('#f87171'); document.getElementById('cp-api-result').textContent = 'setValue(#f87171) \u2713'\">setValue()</button>\n<button class=\"demo-btn-sm\" onclick=\"cpApi.open()\">open()</button>\n<button class=\"demo-btn-sm\" onclick=\"cpApi.close()\">close()</button>\n</div><div class=\"result-box\" id=\"cp-api-result\">\u2014 usa los botones \u2014</div>", "<div id=\"picker-brand\" data-value=\"#4f8eff\" data-format=\"hex\"></div>\n\n<script>\n  const cp = new MTS.ColorPicker('#picker-brand', {\n    onChange: ({ hex, value }) => console.log(hex, value),\n  });\n  cp.getValue()         // respects format / respeta format\n  cp.getHex()           // always hex / siempre hex\n  cp.setValue('#00ff00')\n  cp.setFormat('rgb')\n  cp.open() / cp.close()\n<\/script>", "// Format: 'hex' | 'rgb' | 'hsl'\nnew MTS.ColorPicker('#cp-hex', { value:'#4f8eff', label:'HEX', format:'hex', onChange: ({value}) => console.log(value) });\nnew MTS.ColorPicker('#cp-rgb', { value:'#4f8eff', label:'RGB', format:'rgb', onChange: ({value}) => console.log(value) });\nnew MTS.ColorPicker('#cp-hsl', { value:'#4f8eff', label:'HSL', format:'hsl', onChange: ({value}) => console.log(value) });\n\nconst cp = new MTS.ColorPicker('#my-picker', { value: '#4f8eff', format: 'hex' });\n\n// Get value respecting format / Obtener valor respetando formato\ncp.getValue()          // \u2192 '#4f8eff' | 'rgb(79,142,255)' | 'hsl(218,100%,66%)'\n\n// Always get hex / Siempre obtener hex\ncp.getHex()            // \u2192 '#4f8eff'\n\n// Set color / Establecer color\ncp.setValue('#f87171')\n\n// Change output format / Cambiar formato de salida\ncp.setFormat('rgb')\n\n// Open / close / Abrir / cerrar\ncp.open()\ncp.close()");
+makeSection("tabs-s4", "<div class=\"demo-grid\">\n<div id=\"cp-nosliders\"></div>\n<div id=\"cp-nopresets\"></div>\n<div id=\"cp-disabled\"></div>\n</div>", "<\!-- Preset only / Solo presets -->\n<div id=\"picker-presets-only\" data-value=\"#f87171\"></div>\n<script>\n  new MTS.ColorPicker('#picker-presets-only', {\n    showSliders: false,\n    showInput:   false,\n  });\n<\/script>\n\n<\!-- Sliders only / Solo sliders -->\n<div id=\"picker-sliders-only\" data-value=\"#4f8eff\"></div>\n<script>\n  new MTS.ColorPicker('#picker-sliders-only', {\n    showPresets: false,\n  });\n<\/script>", "// Preset palette only / Solo paleta de presets\nnew MTS.ColorPicker('#cp-presets', {\n  showSliders: false,\n  showInput:   false,\n  value:       '#f87171',\n  label:       'Preset only',\n});\n\n// Sliders only / Solo sliders\nnew MTS.ColorPicker('#cp-sliders', {\n  showPresets: false,\n  value:       '#4f8eff',\n  label:       'Sliders only',\n});\n\n// Disabled / Deshabilitado\nnew MTS.ColorPicker('#cp-disabled', {\n  value:    '#94a3b8',\n  label:    'Disabled',\n  disabled: true,\n});");
+makeSection("tabs-s5", "<div id=\"cp-declarative\" data-value=\"#7c3aed\" data-label=\"Brand color\" data-format=\"hex\" data-size=\"md\"></div>\n<div class=\"result-box\" id=\"cp-declarative-result\">\u2014 enhancement declarativo \u2014</div>", "<div id=\"cp-declarative\"\n  data-value=\"#7c3aed\"\n  data-label=\"Brand color\"\n  data-format=\"hex\"\n  data-size=\"md\">\n</div>", "new MTS.ColorPicker('#cp-declarative', {\n  onChange: function(detail) {\n    document.getElementById('cp-declarative-result').textContent = 'onChange \u2192 ' + detail.hex;\n  }\n});");
+
 var onChange = function(d){ document.getElementById('cp-result').textContent = 'onChange → hex: ' + d.hex + ' | value: ' + d.value; };
 new MTS.ColorPicker('#cp-sm', { value:'#f87171', label:'Small (sm)',   size:'sm', onChange: onChange });
 new MTS.ColorPicker('#cp-md', { value:'#4f8eff', label:'Medium (md)',  size:'md', onChange: onChange });
@@ -265,6 +141,10 @@ var cpApi = new MTS.ColorPicker('#cp-hsl', { value:'#4f8eff', label:'Format: HSL
 new MTS.ColorPicker('#cp-nosliders', { value:'#f87171', label:'Sin sliders', showSliders:false, showInput:false });
 new MTS.ColorPicker('#cp-nopresets', { value:'#4f8eff', label:'Sin presets', showPresets:false });
 new MTS.ColorPicker('#cp-disabled',  { value:'#94a3b8', label:'Disabled',    disabled:true });
+new MTS.ColorPicker('#cp-declarative', {
+  onChange: function(detail){ document.getElementById('cp-declarative-result').textContent = 'onChange → ' + detail.hex; }
+});
+
 </script>
 </body>
 </html>

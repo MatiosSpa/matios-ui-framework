@@ -3,24 +3,25 @@
 <head>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else    document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.ConfirmButton — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
@@ -30,10 +31,12 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
-  <link rel="stylesheet" href="../matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-confirmbutton.css">
   <script src="../../shared/demo-shared.js"></script>
-  <script src="../matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-confirmbutton.js"></script>
 </head>
 <body>
@@ -50,174 +53,193 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.ConfirmButton</h1>
-    <p>Two-step inline confirmation — prevents accidental actions without a modal.</p>
+    <p>Confirmación inline en dos pasos para acciones sensibles, con enhancement progresivo desde HTML declarativo.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-confirmbutton.md')">Documentación</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Variantes -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Variantes / Variants</div>
-    <div class="demo-row">
-      <div id="cb-danger"></div>
-      <div id="cb-warning"></div>
-      <div id="cb-secondary"></div>
-    </div>
-    <div class="result-box" id="cb-result">— interactúa con los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-c1','js-c1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-c1','html-c1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-c1">&lt;div id="btn-delete"
-  data-label="Delete record"
-  data-confirm-label="Yes, delete"
-  data-cancel-label="Cancel"
-  data-variant="secondary"
-  data-confirm-variant="danger"
-  data-timeout="4000"&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.ConfirmButton('#btn-delete', {
-    onConfirm: () =&gt; console.log('deleted'),
-    onCancel:  () =&gt; console.log('cancelled'),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-c1">// Danger variant / Variante danger
-new MTS.ConfirmButton('#btn-delete', {
-  label:          'Delete record',
-  confirmLabel:   'Yes, delete',
-  cancelLabel:    'Cancel',
-  variant:        'secondary',
-  confirmVariant: 'danger',
-  timeout:        4000,
-  // Fires when user confirms / Se dispara al confirmar
-  onConfirm: () => console.log('deleted'),
-  // Fires on cancel or timeout / Se dispara al cancelar o expirar
-  onCancel:  () => console.log('cancelled'),
-});
-
-// Warning variant
-new MTS.ConfirmButton('#btn-archive', {
-  label:          'Archive',
-  confirmLabel:   'Yes, archive',
-  variant:        'secondary',
-  confirmVariant: 'warning',
-  onConfirm: () => console.log('archived'),
-});</div>
-  </div>
-
-  <!-- 2. Sin timeout + con ícono -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Sin timeout / Without timeout</div>
-    <div class="demo-row">
-      <div id="cb-notimeout"></div>
-      <div id="cb-icon"></div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-c2','js-c2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-c2','html-c2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-c2">&lt;!-- timeout: 0 disables auto-cancel / timeout: 0 desactiva el auto-cancelar --&gt;
-&lt;div id="btn-no-timeout"
-  data-label="Logout"
-  data-confirm-label="Yes, logout"
-  data-variant="ghost"
-  data-confirm-variant="danger"
-  data-timeout="0"&gt;
-&lt;/div&gt;
-&lt;script&gt;
-  new MTS.ConfirmButton('#btn-no-timeout', {
-    onConfirm: () =&gt; console.log('logged out'),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-c2">// No timeout — stays open until user decides
-// Sin timeout — permanece abierto hasta que el usuario decide
-new MTS.ConfirmButton('#btn-logout', {
-  label:          'Logout',
-  confirmLabel:   'Yes, logout',
-  variant:        'ghost',
-  confirmVariant: 'danger',
-  timeout:        0,  // 0 = no auto-cancel / 0 = sin auto-cancelar
-  onConfirm: () => logout(),
-});</div>
-  </div>
-
-  <!-- 3. Tamaños -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Tamaños / Sizes</div>
-    <div class="demo-row" style="align-items:flex-end">
-      <div id="cb-sm"></div>
-      <div id="cb-md"></div>
-      <div id="cb-lg"></div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-c3','js-c3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-c3','html-c3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-c3">&lt;div id="btn-sm" data-label="Delete" data-size="sm" data-confirm-variant="danger"&gt;&lt;/div&gt;
-&lt;div id="btn-md" data-label="Delete" data-size="md" data-confirm-variant="danger"&gt;&lt;/div&gt;
-&lt;div id="btn-lg" data-label="Delete" data-size="lg" data-confirm-variant="danger"&gt;&lt;/div&gt;
-&lt;script&gt;
-  ['sm','md','lg'].forEach(s =&gt;
-    new MTS.ConfirmButton('#btn-' + s, { onConfirm: () =&gt; {} })
-  );
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-c3">// Size: 'sm' | 'md' | 'lg' / Tamaño
-new MTS.ConfirmButton('#btn-sm', { label: 'Delete', size: 'sm', confirmVariant: 'danger', onConfirm: () => {} });
-new MTS.ConfirmButton('#btn-md', { label: 'Delete', size: 'md', confirmVariant: 'danger', onConfirm: () => {} });
-new MTS.ConfirmButton('#btn-lg', { label: 'Delete', size: 'lg', confirmVariant: 'danger', onConfirm: () => {} });</div>
-  </div>
-
-  <!-- 4. API -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — API</div>
-    <div class="demo-row">
-      <div id="cb-api"></div>
-      <button class="demo-btn-sm" onclick="cbApi.reset()">reset()</button>
-      <button class="demo-btn-sm" onclick="cbApi.disable()">disable()</button>
-      <button class="demo-btn-sm" onclick="cbApi.enable()">enable()</button>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-c4','js-c4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-c4','html-c4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-c4">&lt;div id="btn-api" data-label="Delete" data-confirm-variant="danger"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const btn = new MTS.ConfirmButton('#btn-api', {
-    onConfirm: () =&gt; console.log('confirmed'),
-  });
-  btn.reset()    // reset to initial state / resetear al estado inicial
-  btn.disable()  // disable / deshabilitar
-  btn.enable()   // enable / habilitar
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-c4">const btn = new MTS.ConfirmButton('#btn-api', {
-  label:          'Delete',
-  confirmVariant: 'danger',
-  onConfirm:      () => console.log('confirmed'),
-  onCancel:       () => console.log('cancelled'),
-});
-
-// Reset to initial state / Resetear al estado inicial
-btn.reset()
-
-// Disable all buttons / Deshabilitar todos los botones
-btn.disable()
-
-// Enable all buttons / Habilitar todos los botones
-btn.enable()</div>
-  </div>
-
+<div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
+<div class="demo-section"><div class="demo-section-title">2 — Sin timeout</div><div id="tabs-s2"></div></div>
+<div class="demo-section"><div class="demo-section-title">3 — Tamaños</div><div id="tabs-s3"></div></div>
+<div class="demo-section"><div class="demo-section-title">4 — API</div><div id="tabs-s4"></div></div>
+<div class="demo-section"><div class="demo-section-title">5 — HTML declarativo + enhancement</div><div id="tabs-s5"></div></div>
 </div>
 
 <script>
-new MTS.ConfirmButton('#cb-danger',    { label:'Delete record', confirmLabel:'Yes, delete', variant:'secondary', confirmVariant:'danger',  timeout:4000, onConfirm:function(){ document.getElementById('cb-result').textContent='onConfirm → deleted ✓'; }, onCancel:function(){ document.getElementById('cb-result').textContent='onCancel → cancelled'; }});
-new MTS.ConfirmButton('#cb-warning',   { label:'Archive',       confirmLabel:'Yes, archive',variant:'secondary', confirmVariant:'warning', timeout:4000, onConfirm:function(){ document.getElementById('cb-result').textContent='onConfirm → archived ✓'; }});
-new MTS.ConfirmButton('#cb-secondary', { label:'Reset settings',confirmLabel:'Confirm',     variant:'secondary', confirmVariant:'secondary',timeout:4000,onConfirm:function(){ document.getElementById('cb-result').textContent='onConfirm → reset ✓'; }});
-new MTS.ConfirmButton('#cb-notimeout', { label:'Logout', confirmLabel:'Yes, logout', variant:'ghost', confirmVariant:'danger', timeout:0, onConfirm:function(){ document.getElementById('cb-result').textContent='onConfirm → logged out ✓'; }});
-new MTS.ConfirmButton('#cb-icon',      { label:'Delete file', confirmLabel:'Delete', iconLeft:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>', variant:'secondary', confirmVariant:'danger', timeout:4000, onConfirm:function(){ document.getElementById('cb-result').textContent='onConfirm → file deleted ✓'; }});
-new MTS.ConfirmButton('#cb-sm', { label:'Delete', size:'sm', confirmVariant:'danger', onConfirm:function(){} });
-new MTS.ConfirmButton('#cb-md', { label:'Delete', size:'md', confirmVariant:'danger', onConfirm:function(){} });
-new MTS.ConfirmButton('#cb-lg', { label:'Delete', size:'lg', confirmVariant:'danger', onConfirm:function(){} });
-var cbApi = new MTS.ConfirmButton('#cb-api', { label:'Delete', confirmVariant:'danger', onConfirm:function(){} });
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var m = t.match(/^<\s*([a-z0-9-]+)/i);
+      var tag = m ? m[1] : '';
+      var selfClosing = /\/>$/.test(t) || voids.test(tag);
+      if (!selfClosing) indent += step;
+    } else {
+      result += ' '.repeat(indent) + t + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  if (typeof initFn === 'function') initFn();
+}
+
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+
+var preview_s1 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<div id="cb-danger"></div>' +
+      '<div id="cb-warning"></div>' +
+      '<div id="cb-secondary"></div>' +
+    '</div>' +
+    '<div class="result-box" id="cb-result">— interactúa con los botones —</div>' +
+  '</div>';
+
+var js_s1 =
+  "new MTS.ConfirmButton('#cb-danger', { label: 'Delete record', confirmLabel: 'Yes, delete', variant: 'secondary', confirmVariant: 'danger', timeout: 4000, onConfirm: function() { setResult('cb-result', 'onConfirm → deleted ✓'); }, onCancel: function() { setResult('cb-result', 'onCancel → cancelled'); } });\n" +
+  "new MTS.ConfirmButton('#cb-warning', { label: 'Archive', confirmLabel: 'Yes, archive', variant: 'secondary', confirmVariant: 'warning', timeout: 4000, onConfirm: function() { setResult('cb-result', 'onConfirm → archived ✓'); } });\n" +
+  "new MTS.ConfirmButton('#cb-secondary', { label: 'Reset settings', confirmLabel: 'Confirm', variant: 'secondary', confirmVariant: 'secondary', timeout: 4000, onConfirm: function() { setResult('cb-result', 'onConfirm → reset ✓'); } });";
+
+var preview_s2 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<div id="cb-notimeout"></div>' +
+      '<div id="cb-ghost"></div>' +
+    '</div>' +
+    '<div class="result-box" id="cb-timeout-result">— confirma o cancela —</div>' +
+  '</div>';
+
+var js_s2 =
+  "new MTS.ConfirmButton('#cb-notimeout', { label: 'Logout', confirmLabel: 'Yes, logout', variant: 'ghost', confirmVariant: 'danger', timeout: 0, onConfirm: function() { setResult('cb-timeout-result', 'onConfirm → logged out ✓'); }, onCancel: function() { setResult('cb-timeout-result', 'onCancel → cancelled'); } });\n" +
+  "new MTS.ConfirmButton('#cb-ghost', { label: 'Publish', confirmLabel: 'Yes, publish', variant: 'secondary', confirmVariant: 'primary', timeout: 4000, onConfirm: function() { setResult('cb-timeout-result', 'onConfirm → published ✓'); } });";
+
+var preview_s3 =
+  '<div class="demo-row">' +
+    '<div class="demo-col"><div class="demo-label">SM</div><div id="cb-sm"></div></div>' +
+    '<div class="demo-col"><div class="demo-label">MD</div><div id="cb-md"></div></div>' +
+    '<div class="demo-col"><div class="demo-label">LG</div><div id="cb-lg"></div></div>' +
+  '</div>';
+
+var js_s3 =
+  "new MTS.ConfirmButton('#cb-sm', { label: 'Delete', size: 'sm', confirmVariant: 'danger', onConfirm: function() {} });\n" +
+  "new MTS.ConfirmButton('#cb-md', { label: 'Delete', size: 'md', confirmVariant: 'danger', onConfirm: function() {} });\n" +
+  "new MTS.ConfirmButton('#cb-lg', { label: 'Delete', size: 'lg', confirmVariant: 'danger', onConfirm: function() {} });";
+
+var preview_s4 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<div id="cb-api"></div>' +
+      '<button class="demo-btn-sm" onclick="cbApiDemo(\'reset\')">reset()</button>' +
+      '<button class="demo-btn-sm" onclick="cbApiDemo(\'disable\')">disable()</button>' +
+      '<button class="demo-btn-sm" onclick="cbApiDemo(\'enable\')">enable()</button>' +
+    '</div>' +
+    '<div class="result-box" id="cb-api-result">— usa los botones para llamar la API —</div>' +
+  '</div>';
+
+var js_s4 =
+  "var cbApi = new MTS.ConfirmButton('#cb-api', { label: 'Delete', confirmVariant: 'danger', onConfirm: function() { setResult('cb-api-result', 'onConfirm → confirmed'); }, onCancel: function() { setResult('cb-api-result', 'onCancel → cancelled'); } });\n\n" +
+  "cbApi.reset();\ncbApi.disable();\ncbApi.enable();";
+
+var preview_s5 =
+  '<div class="demo-stack">' +
+    '<div class="demo-col">' +
+      '<div class="demo-label">HTML declarativo</div>' +
+      '<div id="cb-declarative" data-label="Delete record" data-confirm-label="Yes, delete" data-cancel-label="Cancel" data-variant="secondary" data-confirm-variant="danger" data-timeout="4000"></div>' +
+    '</div>' +
+    '<div class="demo-col">' +
+      '<div class="demo-label">HTML declarativo + enhancement</div>' +
+      '<div id="cb-enhanced" data-label="Archive item" data-confirm-label="Yes, archive" data-variant="secondary" data-confirm-variant="warning" data-timeout="4000"></div>' +
+      '<div class="result-box" id="cb-enhance-result">— confirma o cancela para ver el enhancement —</div>' +
+    '</div>' +
+  '</div>';
+
+var js_s5 =
+  "new MTS.ConfirmButton('#cb-declarative');\n\n" +
+  "new MTS.ConfirmButton('#cb-enhanced', { onConfirm: function() { setResult('cb-enhance-result', 'onConfirm → archived ✓'); }, onCancel: function() { setResult('cb-enhance-result', 'onCancel → cancelled'); } });";
+
+var cbApi;
+
+function cbApiDemo(action) {
+  if (!cbApi) return;
+  if (action === 'reset') { cbApi.reset(); setResult('cb-api-result', 'reset() aplicado'); }
+  if (action === 'disable') { cbApi.disable(); setResult('cb-api-result', 'disable() aplicado'); }
+  if (action === 'enable') { cbApi.enable(); setResult('cb-api-result', 'enable() aplicado'); }
+}
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.ConfirmButton('#cb-danger',{label:'Delete record',confirmLabel:'Yes, delete',variant:'secondary',confirmVariant:'danger',timeout:4000,onConfirm:function(){setResult('cb-result','onConfirm → deleted ✓');},onCancel:function(){setResult('cb-result','onCancel → cancelled');}});
+  new MTS.ConfirmButton('#cb-warning',{label:'Archive',confirmLabel:'Yes, archive',variant:'secondary',confirmVariant:'warning',timeout:4000,onConfirm:function(){setResult('cb-result','onConfirm → archived ✓');}});
+  new MTS.ConfirmButton('#cb-secondary',{label:'Reset settings',confirmLabel:'Confirm',variant:'secondary',confirmVariant:'secondary',timeout:4000,onConfirm:function(){setResult('cb-result','onConfirm → reset ✓');}});
+});
+
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  new MTS.ConfirmButton('#cb-notimeout',{label:'Logout',confirmLabel:'Yes, logout',variant:'ghost',confirmVariant:'danger',timeout:0,onConfirm:function(){setResult('cb-timeout-result','onConfirm → logged out ✓');},onCancel:function(){setResult('cb-timeout-result','onCancel → cancelled');}});
+  new MTS.ConfirmButton('#cb-ghost',{label:'Publish',confirmLabel:'Yes, publish',variant:'secondary',confirmVariant:'primary',timeout:4000,onConfirm:function(){setResult('cb-timeout-result','onConfirm → published ✓');}});
+});
+
+makeSection('tabs-s3', preview_s3, js_s3, function() {
+  new MTS.ConfirmButton('#cb-sm',{label:'Delete',size:'sm',confirmVariant:'danger',onConfirm:function(){}});
+  new MTS.ConfirmButton('#cb-md',{label:'Delete',size:'md',confirmVariant:'danger',onConfirm:function(){}});
+  new MTS.ConfirmButton('#cb-lg',{label:'Delete',size:'lg',confirmVariant:'danger',onConfirm:function(){}});
+});
+
+makeSection('tabs-s4', preview_s4, js_s4, function() {
+  cbApi = new MTS.ConfirmButton('#cb-api',{label:'Delete',confirmVariant:'danger',onConfirm:function(){setResult('cb-api-result','onConfirm → confirmed');},onCancel:function(){setResult('cb-api-result','onCancel → cancelled');}});
+});
+
+makeSection('tabs-s5', preview_s5, js_s5, function() {
+  new MTS.ConfirmButton('#cb-declarative');
+  new MTS.ConfirmButton('#cb-enhanced',{onConfirm:function(){setResult('cb-enhance-result','onConfirm → archived ✓');},onCancel:function(){setResult('cb-enhance-result','onCancel → cancelled');}});
+});
+
 </script>
 </body>
 </html>

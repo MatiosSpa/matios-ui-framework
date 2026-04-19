@@ -34,40 +34,10 @@
   <link rel="stylesheet" href="./matios-ui-scrollspy.css">
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../shared/demo-shared.js"></script>
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-scrollspy.js"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
-    .demo-section{display:flex;flex-direction:column;gap:14px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
-    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
-    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
-    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
-    .demo-docs-panel.open{display:block;}
-    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
-    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
-    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
-    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
-    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
-    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
-    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
-    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
-    .demo-docs-panel p{margin:0 0 10px;}
-    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-  </style>
+
 
 </head>
 <body>
@@ -85,42 +55,32 @@
   <div class="demo-header">
     <h1><span>MTS</span>.ScrollSpy</h1>
     <p>Resalta el link activo al hacer scroll por las secciones.</p>
-    <div style="display:flex;gap:8px;"><button class="demo-docs-btn" onclick="toggleDocs('dp','./matios-ui-scrollspy.md')">📄 Documentación</button></div>
+    <div  class="demo-header-actions"><button class="demo-docs-btn" onclick="toggleDocs('dp','./matios-ui-scrollspy.md')">📄 Documentación</button></div>
     <div class="demo-docs-panel" id="dp"></div>
   </div>
   <div class="demo-section">
     <div class="demo-section-title">1 — Demo interactivo — scroll dentro del panel</div>
-    <style>.spy-wrap{display:flex;gap:0;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);overflow:hidden;height:320px;}.spy-nav{width:160px;padding:12px;background:var(--mts-bg-surface);border-right:1px solid var(--mts-border-color);flex-shrink:0;overflow-y:auto;}.spy-content{flex:1;overflow-y:auto;padding:0 20px 40px;}.spy-section{padding:24px 0;border-bottom:1px solid var(--mts-border-color);}.spy-section:last-child{border-bottom:none;}.spy-section h3{font-size:14px;font-weight:700;margin:0 0 8px;}.spy-section p{font-size:13px;color:var(--mts-text-muted);margin:0;line-height:1.6;}</style><div class="spy-wrap"><nav id="spy-nav" class="spy-nav mts-spy-nav mts-spy-nav--indicator"><a href="#s-intro">Introducción</a><a href="#s-install">Instalación</a><a href="#s-uso">Uso básico</a><a href="#s-api">API</a><a href="#s-eventos">Eventos</a></nav><div id="spy-scroll" class="spy-content"><div id="s-intro"    class="spy-section"><h3>Introducción</h3><p>Lorem ipsum dolor sit amet consectetur. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium.</p></div><div id="s-install"  class="spy-section"><h3>Instalación</h3><p>Incluye el CSS y JS del componente en tu proyecto. No requiere dependencias adicionales.</p></div><div id="s-uso"      class="spy-section"><h3>Uso básico</h3><p>Inicializa el componente con las secciones y el contenedor de navegación que quieres espiar.</p></div><div id="s-api"      class="spy-section"><h3>API</h3><p>El componente expone métodos para destruir el observer cuando ya no se necesita el seguimiento.</p></div><div id="s-eventos"  class="spy-section"><h3>Eventos</h3><p>Escucha el evento onChange para reaccionar cuando cambia la sección activa en el scroll.</p></div></div></div><div class="result-box" id="res-spy">— haz scroll en el panel de arriba —</div>
-    <button class="demo-code-toggle" onclick="toggleCode('c1')">&lt;/&gt; Código</button>
-    <pre class="demo-code" id="c1"><code>new MTS.ScrollSpy({
-  sections:    '#intro, #instalacion, #uso, #api',
-  nav:         '#mi-nav',
-  offset:       80,
-  onChange: ({ id, section, link }) => {
-    console.log('sección activa:', id)
-  },
-})</code></pre>
+    <div id="scrollspy-code-1"></div>
   </div>
 </div>
 <script>
-function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
-window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
+function setMode(mode){document.documentElement.setAttribute('data-mts-mode',mode);} 
+function setAccent(accent){if(accent)document.documentElement.setAttribute('data-mts-accent',accent);else document.documentElement.removeAttribute('data-mts-accent');}
 if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
-function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
 function toggleDocs(id,p){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted)">Cargando...</em>';fetch(p).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>Error al cargar.</em>';});}
 function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,function(_,hdr,rows){var ths=hdr.split('|').filter(function(c){return c.trim();}).map(function(c){return'<th>'+c.trim()+'</th>';}).join('');var trs=rows.trim().split('\n').map(function(r){return'<tr>'+r.split('|').filter(function(c){return c.trim();}).map(function(c){return'<td>'+c.trim()+'</td>';}).join('')+'</tr>';}).join('');return'<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';}).replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
-
-var scrollEl=document.getElementById('spy-scroll');
-var sections=scrollEl.querySelectorAll('.spy-section');
-var navLinks=document.querySelectorAll('#spy-nav a');
-scrollEl.addEventListener('scroll',function(){
-  var scrollTop=scrollEl.scrollTop;
-  var active=sections[0];
-  sections.forEach(function(sec){if(sec.offsetTop-40<=scrollTop)active=sec;});
-  navLinks.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+active.id);});
-  document.getElementById('res-spy').textContent='sección activa: "'+active.querySelector('h3').textContent+'"';
-});
-
+function escapeHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function codeBlock(source){return '<pre class="mts-scrollspy-demo__code"><code>'+escapeHtml(source)+'</code></pre>';}
+function buildScrollSpyDemo(){
+  var host=document.getElementById('scrollspy-code-1');
+  if(!host) return;
+  var previewHtml='<div class="spy-wrap"><nav id="spy-nav" class="spy-nav mts-spy-nav mts-spy-nav--indicator"><a href="#s-intro">Introducción</a><a href="#s-install">Instalación</a><a href="#s-uso">Uso básico</a><a href="#s-api">API</a><a href="#s-eventos">Eventos</a></nav><div id="spy-scroll" class="spy-content"><div id="s-intro" class="spy-section"><h3>Introducción</h3><p>MTS.ScrollSpy resalta el enlace activo según la sección visible dentro del contenedor de scroll.</p><p>Este ejemplo usa un panel interno con scroll para validar que la navegación cambie correctamente al recorrer cada bloque.</p><p>La idea es mantener el panel izquierdo sincronizado con el contenido derecho sin depender del scroll global de la ventana.</p></div><div id="s-install" class="spy-section"><h3>Instalación</h3><p>Incluye el archivo CSS para el nav y el JS del componente en la página donde lo necesites.</p><p>El nav puede usar enlaces con <code>href="#id"</code> y el componente se encarga de aplicar la clase activa.</p><p>También puedes ajustar el offset si tienes headers fijos o separaciones visuales adicionales.</p></div><div id="s-uso" class="spy-section"><h3>Uso básico</h3><p>Define tus secciones con IDs únicos y pásalas en la opción <code>sections</code>.</p><p>Luego indica el selector del nav y, si el scroll ocurre dentro de un panel, usa <code>scrollContainer</code>.</p><p>Con eso el componente cambia el estado activo automáticamente mientras se desplaza el contenido.</p></div><div id="s-api" class="spy-section"><h3>API</h3><p>La instancia mantiene sincronizado el nav y expone <code>destroy()</code> para limpiar listeners cuando el componente ya no se usa.</p><p>También puedes reaccionar a cada cambio con <code>onChange</code> y obtener el <code>id</code>, la sección y el link activo.</p><p>Esto sirve para analytics, headers contextuales o navegación secundaria.</p></div><div id="s-eventos" class="spy-section"><h3>Eventos</h3><p>En cada cambio puedes actualizar textos de estado, métricas o cualquier otro indicador visual.</p><p>En esta demo, el panel inferior muestra el nombre de la sección activa mientras haces scroll.</p><p>Si llegas hasta aquí, ScrollSpy debería marcar correctamente la última sección del panel.</p></div></div></div><div class="result-box" id="res-spy">— haz scroll en el panel de arriba —</div>';
+  var htmlCode=`<nav id="spy-nav" class="mts-spy-nav mts-spy-nav--indicator">\n  <a href="#s-intro">Introducción</a>\n  <a href="#s-install">Instalación</a>\n  <a href="#s-uso">Uso básico</a>\n  <a href="#s-api">API</a>\n  <a href="#s-eventos">Eventos</a>\n</nav>\n\n<div id="spy-scroll">\n  <section id="s-intro">...</section>\n  <section id="s-install">...</section>\n  <section id="s-uso">...</section>\n  <section id="s-api">...</section>\n  <section id="s-eventos">...</section>\n</div>`;
+  var jsCode=`new MTS.ScrollSpy({\n  sections: '#s-intro, #s-install, #s-uso, #s-api, #s-eventos',\n  nav: '#spy-nav',\n  scrollContainer: '#spy-scroll',\n  offset: 24,\n  onChange: ({ id, section, link }) => {\n    console.log('sección activa:', id);\n  },\n});`;
+  new MTS.Tabs(host,{variant:'card',lazy:false,active:'preview',tabs:[{id:'preview',label:'Preview',content:previewHtml},{id:'html',label:'HTML',content:codeBlock(htmlCode)},{id:'js',label:'JavaScript',content:codeBlock(jsCode)}]});
+  new MTS.ScrollSpy({sections:'#s-intro, #s-install, #s-uso, #s-api, #s-eventos',nav:'#spy-nav',scrollContainer:'#spy-scroll',offset:24,onChange:function(payload){var title=payload.section?payload.section.querySelector('h3').textContent:'—';var box=document.getElementById('res-spy');if(box) box.textContent='sección activa: "'+title+'"';}});
+}
+buildScrollSpyDemo();
 </script>
 </body>
 </html>

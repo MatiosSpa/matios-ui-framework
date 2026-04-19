@@ -30,8 +30,12 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-modal.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-modal.js"></script>
 </head>
 <body>
@@ -44,239 +48,318 @@
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
   <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Modal</h1>
     <p>Dialog modal — sizes, footer buttons, scrollable, static, confirm/alert/prompt helpers.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-modal.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-modal.md')">Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Tamaños -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Tamaños / Sizes</div>
-    <div class="demo-row">
-      <button class="mts-btn mts-btn--secondary" onclick="openModal('sm')">sm</button>
-      <button class="mts-btn mts-btn--secondary" onclick="openModal('md')">md</button>
-      <button class="mts-btn mts-btn--secondary" onclick="openModal('lg')">lg</button>
-      <button class="mts-btn mts-btn--secondary" onclick="openModal('xl')">xl</button>
-      <button class="mts-btn mts-btn--secondary" onclick="openModal('fullscreen')">fullscreen</button>
-    </div>
-    <div class="result-box" id="modal-result">— abre un modal —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-m1','js-m1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-m1','html-m1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-m1">&lt;!-- MTS.Modal appends to body — no HTML container needed
-     MTS.Modal se agrega al body — no necesita contenedor HTML --&gt;
-
-&lt;button onclick="modal.show()"&gt;Open modal&lt;/button&gt;
-
-&lt;script&gt;
-  const modal = new MTS.Modal({
-    title: 'Edit user',
-    body:  '&lt;div id="form"&gt;&lt;/div&gt;',
-    size:  'md',
-    buttons: [
-      { label: 'Cancel', variant: 'ghost',   close: true },
-      { label: 'Save',   variant: 'primary', onClick: () =&gt; save() },
-    ],
-    // Fires after modal is fully visible / Se dispara al estar completamente visible
-    onShown:  () =&gt; initForm(),
-    // Fires after modal is fully hidden / Se dispara al estar completamente oculto
-    onHidden: () =&gt; console.log('closed'),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-m1">// Sizes: 'sm' | 'md' | 'lg' | 'xl' | 'fullscreen'
-const modal = new MTS.Modal({
-  title: 'Modal title',
-  body:  '&lt;p&gt;Modal body content.&lt;/p&gt;',
-  size:  'md',     // change to see different sizes
-  buttons: [
-    { label: 'Cancel', variant: 'ghost',   close: true },
-    { label: 'Accept', variant: 'primary', close: true,
-      onClick: () =&gt; console.log('accepted') },
-  ],
-  // Fires before showing / Se dispara antes de mostrar
-  onShow:   () =&gt; console.log('about to show'),
-  // Fires after fully shown / Se dispara al estar completamente visible
-  onShown:  () =&gt; console.log('shown'),
-  // Fires after fully hidden / Se dispara al estar completamente oculto
-  onHidden: () =&gt; console.log('hidden'),
-});
-modal.show();</div>
-  </div>
-
-  <!-- 2. Helpers — confirm, alert, prompt -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Helpers rápidos / Convenience helpers</div>
-    <div class="demo-row">
-      <button class="mts-btn mts-btn--secondary" onclick="showConfirm()">confirm()</button>
-      <button class="mts-btn mts-btn--secondary" onclick="showAlert()">alert()</button>
-      <button class="mts-btn mts-btn--secondary" onclick="showPrompt()">prompt()</button>
-    </div>
-    <div class="result-box" id="modal-helper-result">— usa los helpers —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-m2','js-m2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-m2','html-m2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-m2">&lt;script&gt;
-  // Confirm dialog / Diálogo de confirmación
-  MTS.Modal.confirm({
-    title:     'Delete record',
-    message:   'This action cannot be undone.',
-    confirm:   'Delete',
-    cancel:    'Cancel',
-    danger:    true,
-    onConfirm: () =&gt; deleteRecord(),
-    onCancel:  () =&gt; console.log('cancelled'),
-  });
-
-  // Simple alert / Alerta simple
-  MTS.Modal.alert({
-    title:   'Done',
-    message: 'Record saved successfully.',
-  });
-
-  // Prompt with input / Prompt con input
-  MTS.Modal.prompt({
-    title:       'Rename',
-    placeholder: 'New name...',
-    onConfirm:   (value) =&gt; rename(value),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-m2">// Confirm dialog / Diálogo de confirmación
-MTS.Modal.confirm({
-  title:   'Delete record',
-  message: 'This action cannot be undone.',
-  confirm: 'Delete',
-  cancel:  'Cancel',
-  danger:  true,
-  // Fires on confirm / Se dispara al confirmar
-  onConfirm: () =&gt; console.log('confirmed'),
-  // Fires on cancel / Se dispara al cancelar
-  onCancel:  () =&gt; console.log('cancelled'),
-});
-
-// Alert / Alerta
-MTS.Modal.alert({
-  title:   'Done',
-  message: 'Your changes were saved.',
-  onClose: () =&gt; console.log('acknowledged'),
-});
-
-// Prompt — input dialog / Diálogo con input
-MTS.Modal.prompt({
-  title:       'Rename file',
-  placeholder: 'New name...',
-  value:       'document.pdf',
-  // Fires with the entered value / Se dispara con el valor ingresado
-  onConfirm: (value) =&gt; console.log('new name:', value),
-});</div>
-  </div>
-
-  <!-- 3. Static + scrollable -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Static + scrollable body</div>
-    <div class="demo-row">
-      <button class="mts-btn mts-btn--secondary" onclick="showStatic()">Static modal</button>
-      <button class="mts-btn mts-btn--secondary" onclick="showScrollable()">Scrollable body</button>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-m3','js-m3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-m3','html-m3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-m3">&lt;!-- Static — only closes via button / Solo cierra con botón --&gt;
-&lt;script&gt;
-  new MTS.Modal({
-    title:  'Required action',
-    body:   '&lt;p&gt;You must complete this step.&lt;/p&gt;',
-    static: true,   // no Esc, no backdrop click
-    buttons: [{ label: 'OK', variant: 'primary', close: true }],
-  }).show();
-&lt;/script&gt;
-
-&lt;!-- Scrollable body / Body scrolleable --&gt;
-&lt;script&gt;
-  new MTS.Modal({
-    title:      'Terms of service',
-    body:       longContent,
-    size:       'lg',
-    scrollable: true,
-  }).show();
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-m3">// Static — no close on Esc or backdrop / Sin cierre con Esc ni backdrop
-new MTS.Modal({
-  title:  'Required action',
-  body:   '&lt;p&gt;You must complete this step before continuing.&lt;/p&gt;',
-  static: true,
-  buttons: [
-    { label: 'Complete later', variant: 'ghost',   close: true },
-    { label: 'Do it now',      variant: 'primary', close: true },
-  ],
-}).show();
-
-// Scrollable body / Body con scroll
-new MTS.Modal({
-  title:      'Terms of service',
-  size:       'lg',
-  scrollable: true,   // body scrolls, header/footer stay fixed
-  body:       '&lt;p&gt;' + 'Long text... '.repeat(100) + '&lt;/p&gt;',
-  buttons: [
-    { label: 'Decline', variant: 'ghost',   close: true },
-    { label: 'Accept',  variant: 'primary', close: true },
-  ],
-}).show();</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Tamaños / Sizes</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Helpers rápidos / Convenience helpers</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Static + scrollable body</div><div id="tabs-s3"></div></div>
 </div>
+
 <script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '340px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  if (typeof initFn === 'function') initFn();
+}
+
+function setText(id, value) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+var preview_s1 = `
+<div class="demo-row">
+  <button id="btn-modal-sm" data-variant="secondary" data-label="sm"></button>
+  <button id="btn-modal-md" data-variant="secondary" data-label="md"></button>
+  <button id="btn-modal-lg" data-variant="secondary" data-label="lg"></button>
+  <button id="btn-modal-xl" data-variant="secondary" data-label="xl"></button>
+  <button id="btn-modal-fullscreen" data-variant="secondary" data-label="fullscreen"></button>
+</div>
+<div class="result-box" id="modal-result">— abre un modal —</div>`;
+
+var js_s1 = `// Sizes: 'sm' | 'md' | 'lg' | 'xl' | 'fullscreen'
 function openModal(size) {
   new MTS.Modal({
     title: 'Modal — size: ' + size,
-    body:  '<p style="color:var(--mts-text-muted);font-size:13px">Contenido del modal con tamaño <strong>' + size + '</strong>.</p>',
-    size:  size,
-    buttons:[
-      { label:'Cancelar', variant:'ghost', close:true },
-      { label:'Aceptar',  variant:'primary', close:true, onClick:function(){ document.getElementById('modal-result').textContent = 'onClick → size:' + size; } },
+    body: '<p style="color:var(--mts-text-muted);font-size:13px">Contenido del modal con tamaño <strong>' + size + '</strong>.</p>',
+    size: size,
+    buttons: [
+      { label: 'Cancelar', variant: 'ghost', close: true },
+      {
+        label: 'Aceptar',
+        variant: 'primary',
+        close: true,
+        onClick: function () {
+          document.getElementById('modal-result').textContent = 'onClick → size:' + size;
+        }
+      }
     ],
-    onShown:  function(){ document.getElementById('modal-result').textContent = 'onShown → size:' + size; },
-    onHidden: function(){ document.getElementById('modal-result').textContent = 'onHidden → size:' + size; },
+    onShown: function () {
+      document.getElementById('modal-result').textContent = 'onShown → size:' + size;
+    },
+    onHidden: function () {
+      document.getElementById('modal-result').textContent = 'onHidden → size:' + size;
+    }
   }).show();
-}
+}`;
+
+var preview_s2 = `
+<div class="demo-row">
+  <button id="btn-modal-confirm" data-variant="secondary" data-label="confirm()"></button>
+  <button id="btn-modal-alert" data-variant="secondary" data-label="alert()"></button>
+  <button id="btn-modal-prompt" data-variant="secondary" data-label="prompt()"></button>
+</div>
+<div class="result-box" id="modal-helper-result">— usa los helpers —</div>`;
+
+var js_s2 = `// Confirm dialog / Diálogo de confirmación
 function showConfirm() {
   MTS.Modal.confirm({
-    title:'Eliminar registro', message:'Esta acción no se puede deshacer.', confirm:'Eliminar', cancel:'Cancelar', danger:true,
-    onConfirm:function(){ document.getElementById('modal-helper-result').textContent = 'onConfirm → confirmado'; },
-    onCancel: function(){ document.getElementById('modal-helper-result').textContent = 'onCancel → cancelado'; },
+    title: 'Eliminar registro',
+    message: 'Esta acción no se puede deshacer.',
+    confirm: 'Eliminar',
+    cancel: 'Cancelar',
+    danger: true,
+    onConfirm: function () {
+      document.getElementById('modal-helper-result').textContent = 'onConfirm → confirmado';
+    },
+    onCancel: function () {
+      document.getElementById('modal-helper-result').textContent = 'onCancel → cancelado';
+    }
   });
 }
+
 function showAlert() {
   MTS.Modal.alert({
-    title:'Listo', message:'Los cambios fueron guardados correctamente.',
-    onClose:function(){ document.getElementById('modal-helper-result').textContent = 'onClose → aceptado'; },
+    title: 'Listo',
+    message: 'Los cambios fueron guardados correctamente.',
+    onClose: function () {
+      document.getElementById('modal-helper-result').textContent = 'onClose → aceptado';
+    }
   });
 }
+
 function showPrompt() {
   MTS.Modal.prompt({
-    title:'Renombrar archivo', placeholder:'Nuevo nombre...', value:'documento.pdf',
-    onConfirm:function(v){ document.getElementById('modal-helper-result').textContent = 'onConfirm → "' + v + '"'; },
-    onCancel: function(){ document.getElementById('modal-helper-result').textContent = 'onCancel → cancelado'; },
+    title: 'Renombrar archivo',
+    placeholder: 'Nuevo nombre...',
+    value: 'documento.pdf',
+    onConfirm: function (value) {
+      document.getElementById('modal-helper-result').textContent = 'onConfirm → "' + value + '"';
+    },
+    onCancel: function () {
+      document.getElementById('modal-helper-result').textContent = 'onCancel → cancelado';
+    }
   });
-}
-function showStatic() {
+}`;
+
+var preview_s3 = `
+<div class="demo-row">
+  <button id="btn-modal-static" data-variant="secondary" data-label="Static modal"></button>
+  <button id="btn-modal-scrollable" data-variant="secondary" data-label="Scrollable body"></button>
+</div>`;
+
+var js_s3 = `function showStatic() {
   new MTS.Modal({
-    title:'Acción requerida', body:'<p style="color:var(--mts-text-muted);font-size:13px">Este modal no cierra con Esc ni haciendo click fuera.</p>',
-    static:true, buttons:[{label:'Entendido', variant:'primary', close:true}],
+    title: 'Acción requerida',
+    body: '<p style="color:var(--mts-text-muted);font-size:13px">Este modal no cierra con Esc ni haciendo click fuera.</p>',
+    static: true,
+    buttons: [
+      { label: 'Entendido', variant: 'primary', close: true }
+    ]
   }).show();
 }
+
 function showScrollable() {
   new MTS.Modal({
-    title:'Términos y condiciones', size:'lg', scrollable:true,
-    body:'<p style="color:var(--mts-text-muted);font-size:13px">' + 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '.repeat(20) + '</p>',
-    buttons:[{label:'Rechazar',variant:'ghost',close:true},{label:'Aceptar',variant:'primary',close:true}],
+    title: 'Términos y condiciones',
+    size: 'lg',
+    scrollable: true,
+    body: '<p style="color:var(--mts-text-muted);font-size:13px">' +
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '.repeat(20) +
+      '</p>',
+    buttons: [
+      { label: 'Rechazar', variant: 'ghost', close: true },
+      { label: 'Aceptar', variant: 'primary', close: true }
+    ]
+  }).show();
+}`;
+
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  ['sm', 'md', 'lg', 'xl', 'fullscreen'].forEach(function (size) {
+    new MTS.Button('#btn-modal-' + size);
+    document.getElementById('btn-modal-' + size).addEventListener('click', function () {
+      openModal(size);
+    });
+  });
+});
+
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  ['confirm', 'alert', 'prompt'].forEach(function (name) {
+    new MTS.Button('#btn-modal-' + name);
+  });
+
+  document.getElementById('btn-modal-confirm').addEventListener('click', showConfirm);
+  document.getElementById('btn-modal-alert').addEventListener('click', showAlert);
+  document.getElementById('btn-modal-prompt').addEventListener('click', showPrompt);
+});
+
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.Button('#btn-modal-static');
+  new MTS.Button('#btn-modal-scrollable');
+
+  document.getElementById('btn-modal-static').addEventListener('click', showStatic);
+  document.getElementById('btn-modal-scrollable').addEventListener('click', showScrollable);
+});
+
+function openModal(size) {
+  new MTS.Modal({
+    title: 'Modal — size: ' + size,
+    body: '<p style="color:var(--mts-text-muted);font-size:13px">Contenido del modal con tamaño <strong>' + size + '</strong>.</p>',
+    size: size,
+    buttons: [
+      { label: 'Cancelar', variant: 'ghost', close: true },
+      {
+        label: 'Aceptar',
+        variant: 'primary',
+        close: true,
+        onClick: function () {
+          setText('modal-result', 'onClick → size:' + size);
+        }
+      }
+    ],
+    onShown: function () {
+      setText('modal-result', 'onShown → size:' + size);
+    },
+    onHidden: function () {
+      setText('modal-result', 'onHidden → size:' + size);
+    }
+  }).show();
+}
+
+function showConfirm() {
+  MTS.Modal.confirm({
+    title: 'Eliminar registro',
+    message: 'Esta acción no se puede deshacer.',
+    confirm: 'Eliminar',
+    cancel: 'Cancelar',
+    danger: true,
+    onConfirm: function () {
+      setText('modal-helper-result', 'onConfirm → confirmado');
+    },
+    onCancel: function () {
+      setText('modal-helper-result', 'onCancel → cancelado');
+    }
+  });
+}
+
+function showAlert() {
+  MTS.Modal.alert({
+    title: 'Listo',
+    message: 'Los cambios fueron guardados correctamente.',
+    onClose: function () {
+      setText('modal-helper-result', 'onClose → aceptado');
+    }
+  });
+}
+
+function showPrompt() {
+  MTS.Modal.prompt({
+    title: 'Renombrar archivo',
+    placeholder: 'Nuevo nombre...',
+    value: 'documento.pdf',
+    onConfirm: function (value) {
+      setText('modal-helper-result', 'onConfirm → "' + value + '"');
+    },
+    onCancel: function () {
+      setText('modal-helper-result', 'onCancel → cancelado');
+    }
+  });
+}
+
+function showStatic() {
+  new MTS.Modal({
+    title: 'Acción requerida',
+    body: '<p style="color:var(--mts-text-muted);font-size:13px">Este modal no cierra con Esc ni haciendo click fuera.</p>',
+    static: true,
+    buttons: [
+      { label: 'Entendido', variant: 'primary', close: true }
+    ]
+  }).show();
+}
+
+function showScrollable() {
+  new MTS.Modal({
+    title: 'Términos y condiciones',
+    size: 'lg',
+    scrollable: true,
+    body: '<p style="color:var(--mts-text-muted);font-size:13px">' +
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '.repeat(20) +
+      '</p>',
+    buttons: [
+      { label: 'Rechazar', variant: 'ghost', close: true },
+      { label: 'Aceptar', variant: 'primary', close: true }
+    ]
   }).show();
 }
 </script>

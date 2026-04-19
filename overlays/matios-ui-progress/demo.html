@@ -30,13 +30,13 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-progress.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-progress.js"></script>
-  <style>
-    .circles-grid { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
-    .progress-stack { display: flex; flex-direction: column; gap: 12px; }
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -48,236 +48,242 @@
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
   <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Progress</h1>
-    <p>Bar · circle · indeterminate — variants, striped, animated, smooth value transitions.</p>
+    <p>Bar · circle · indeterminate — variants, striped, animated and API methods.</p>
     <div class="demo-header-actions">
       <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-progress.md')">📄 Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Barras lineales -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Barras lineales con variantes / Linear bars with variants</div>
-    <div class="progress-stack" id="bars-container"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-pr1','js-pr1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-pr1','html-pr1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-pr1">&lt;div id="my-progress"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Progress('#my-progress', {
-    type:    'bar',
-    value:   65,
-    variant: 'primary',
-    // Fires on value change / Se dispara al cambiar el valor
-    onChange: (e) =&gt; {
-      console.log(e.detail.value); // → 65
-      console.log(e.detail.pct);   // → 0.65
-    },
-    // Fires when value reaches max / Se dispara al llegar al máximo
-    onComplete: (e) =&gt; console.log('Done!'),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-pr1">// All variants / Todas las variantes
-['default','primary','success','warning','danger','info'].forEach((v, i) => {
-  new MTS.Progress('#bar-' + v, {
-    type:    'bar',
-    value:   (i + 1) * 15,
-    variant:  v,
-    showValue: true,
-  });
-});
-
-// With label / Con label
-new MTS.Progress('#bar-label', {
-  type:        'bar',
-  value:       3,
-  max:         10,
-  showLabel:   true,
-  labelFormat: (value, pct) =&gt; `Step ${value} of 10`,
-  variant:     'primary',
-});</div>
-  </div>
-
-  <!-- 2. Striped + animado -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Striped y animado / Striped and animated</div>
-    <div class="progress-stack" id="striped-container"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-pr2','js-pr2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-pr2','html-pr2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-pr2">&lt;div id="my-progress"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Progress('#my-progress', {
-    type:     'bar',
-    value:    75,
-    striped:  true,    // rayado / striped
-    animated: true,    // anima las rayas / animates stripes
-    variant:  'success',
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-pr2">// Striped / Rayado
-new MTS.Progress('#bar-striped', {
-  type:    'bar',
-  value:   60,
-  striped: true,
-  variant: 'primary',
-});
-
-// Striped + animated / Rayado + animado
-new MTS.Progress('#bar-animated', {
-  type:     'bar',
-  value:    75,
-  striped:  true,
-  animated: true,   // stripes move / las rayas se mueven
-  variant:  'success',
-});
-
-// Sizes / Tamaños
-['xs','sm','md','lg'].forEach(size =&gt; {
-  new MTS.Progress('#bar-' + size, {
-    type: 'bar', value: 65, size, variant: 'primary',
-  });
-});</div>
-  </div>
-
-  <!-- 3. Circular -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Circulares / Circles</div>
-    <div class="circles-grid" id="circles-container"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-pr3','js-pr3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-pr3','html-pr3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-pr3">&lt;div id="my-circle"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Progress('#my-circle', {
-    type:        'circle',
-    value:       75,
-    radius:      48,
-    strokeWidth: 8,
-    showValue:   true,
-    variant:     'primary',
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-pr3">// Circle with value / Círculo con valor
-new MTS.Progress('#circle-primary', {
-  type:        'circle',
-  value:       75,
-  radius:      48,
-  strokeWidth: 8,
-  showValue:   true,
-  variant:     'primary',
-});
-
-// Circle variants / Variantes de círculo
-['success','warning','danger'].forEach((v, i) =&gt; {
-  new MTS.Progress('#circle-' + v, {
-    type:        'circle',
-    value:       [85, 60, 40][i],
-    radius:      40,
-    strokeWidth: 6,
-    showValue:   true,
-    variant:     v,
-  });
-});</div>
-  </div>
-
-  <!-- 4. Indeterminado + API -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Indeterminado + API / Indeterminate + API</div>
-    <div class="progress-stack">
-      <div id="pr-indeterminate"></div>
-      <div id="pr-api" style="margin-top:4px"></div>
-    </div>
-    <div class="demo-row" style="margin-top:10px;flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="prApi.setValue(0)">setValue(0)</button>
-      <button class="demo-btn-sm" onclick="prApi.increment(10)">increment(10)</button>
-      <button class="demo-btn-sm" onclick="prApi.setValue(100)">setValue(100)</button>
-      <button class="demo-btn-sm" onclick="prApi.setVariant('success')">setVariant('success')</button>
-      <button class="demo-btn-sm" onclick="prApi.setVariant('danger')">setVariant('danger')</button>
-      <button class="demo-btn-sm" onclick="prApi.reset()">reset()</button>
-    </div>
-    <div class="result-box" id="pr-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-pr4','js-pr4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-pr4','html-pr4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-pr4">&lt;div id="loading"&gt;&lt;/div&gt;
-&lt;script&gt;
-  // Indeterminate / Indeterminado
-  new MTS.Progress('#loading', { type: 'indeterminate', variant: 'primary' });
-
-  // API
-  const prog = new MTS.Progress('#my-bar', { value: 0 });
-  prog.setValue(75)       // set value / establecer valor
-  prog.increment(10)      // add 10 / agregar 10
-  prog.decrement(5)       // subtract 5 / restar 5
-  prog.setVariant('success')
-  prog.reset()            // back to 0 / volver a 0
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-pr4">// Indeterminate loading / Carga indeterminada
-new MTS.Progress('#loading', {
-  type:    'indeterminate',
-  variant: 'primary',
-});
-
-// API usage / Uso de la API
-const prog = new MTS.Progress('#my-bar', {
-  type:   'bar',
-  value:  0,
-  // Fires on value change / Se dispara al cambiar el valor
-  onChange: (e) =&gt; {
-    console.log(e.detail.value, e.detail.pct);
-  },
-  // Fires when reaches 100 / Se dispara al llegar al 100
-  onComplete: (e) =&gt; console.log('Done!'),
-});
-
-prog.setValue(75)           // animate to 75 / animar hasta 75
-prog.setValue(75, false)    // no animation / sin animación
-prog.increment(10)          // +10
-prog.decrement(5)           // -5
-prog.setVariant('success')  // change color / cambiar color
-prog.reset()                // back to min / volver al mínimo</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Barras lineales</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Striped y tamaños</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Circulares</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Indeterminado + API</div><div id="tabs-s4"></div></div>
 </div>
+
 <script>
-// Barras con variantes
-var variants = ['default','primary','success','warning','danger','info'];
-var bc = document.getElementById('bars-container');
-variants.forEach(function(v, i){
-  var el = document.createElement('div'); bc.appendChild(el);
-  new MTS.Progress(el, { type:'bar', value:(i+1)*14+5, variant:v, showValue:true, label:v, showLabel:true });
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trim();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(indentHtml(previewHtml)) + '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(code).trim() + '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  if (typeof initFn === 'function') initFn();
+}
+
+var preview_s1 =
+  '<div class="demo-stack">' +
+    '<div id="bar-default"></div>' +
+    '<div id="bar-primary"></div>' +
+    '<div id="bar-success"></div>' +
+    '<div id="bar-warning"></div>' +
+    '<div id="bar-danger"></div>' +
+    '<div id="bar-info"></div>' +
+    '<div id="bar-label"></div>' +
+  '</div>';
+
+var js_s1 =
+  "new MTS.Progress('#bar-default', { type: 'bar', value: 20, variant: 'default', showValue: true });\n" +
+  "new MTS.Progress('#bar-primary', { type: 'bar', value: 35, variant: 'primary', showValue: true });\n" +
+  "new MTS.Progress('#bar-success', { type: 'bar', value: 55, variant: 'success', showValue: true });\n" +
+  "new MTS.Progress('#bar-warning', { type: 'bar', value: 70, variant: 'warning', showValue: true });\n" +
+  "new MTS.Progress('#bar-danger',  { type: 'bar', value: 85, variant: 'danger', showValue: true });\n" +
+  "new MTS.Progress('#bar-info',    { type: 'bar', value: 95, variant: 'info', showValue: true });\n\n" +
+  "new MTS.Progress('#bar-label', {\n" +
+  "  type: 'bar',\n" +
+  "  value: 3,\n" +
+  "  max: 10,\n" +
+  "  variant: 'primary',\n" +
+  "  showLabel: true,\n" +
+  "  label: 'Onboarding',\n" +
+  "  labelFormat: function(value) { return 'Paso ' + value + ' de 10'; }\n" +
+  "});";
+
+var preview_s2 =
+  '<div class="demo-stack">' +
+    '<div id="bar-striped"></div>' +
+    '<div id="bar-animated"></div>' +
+    '<div id="bar-xs"></div>' +
+    '<div id="bar-sm"></div>' +
+    '<div id="bar-md"></div>' +
+    '<div id="bar-lg"></div>' +
+  '</div>';
+
+var js_s2 =
+  "new MTS.Progress('#bar-striped', { type: 'bar', value: 60, striped: true, variant: 'primary', showValue: true });\n" +
+  "new MTS.Progress('#bar-animated', { type: 'bar', value: 75, striped: true, animated: true, variant: 'success', showValue: true });\n\n" +
+  "['xs','sm','md','lg'].forEach(function(size) {\n" +
+  "  new MTS.Progress('#bar-' + size, {\n" +
+  "    type: 'bar',\n" +
+  "    value: 65,\n" +
+  "    size: size,\n" +
+  "    variant: 'primary',\n" +
+  "    showValue: true,\n" +
+  "    label: 'size: ' + size,\n" +
+  "    showLabel: true\n" +
+  "  });\n" +
+  "});";
+
+var preview_s3 =
+  '<div class="demo-row">' +
+    '<div id="circle-primary"></div>' +
+    '<div id="circle-success"></div>' +
+    '<div id="circle-warning"></div>' +
+    '<div id="circle-danger"></div>' +
+  '</div>';
+
+var js_s3 =
+  "new MTS.Progress('#circle-primary', { type: 'circle', value: 75, radius: 44, strokeWidth: 7, showValue: true, variant: 'primary' });\n" +
+  "new MTS.Progress('#circle-success', { type: 'circle', value: 85, radius: 44, strokeWidth: 7, showValue: true, variant: 'success' });\n" +
+  "new MTS.Progress('#circle-warning', { type: 'circle', value: 55, radius: 44, strokeWidth: 7, showValue: true, variant: 'warning' });\n" +
+  "new MTS.Progress('#circle-danger',  { type: 'circle', value: 35, radius: 44, strokeWidth: 7, showValue: true, variant: 'danger' });";
+
+var preview_s4 =
+  '<div class="demo-stack">' +
+    '<div id="pr-indeterminate"></div>' +
+    '<div id="pr-api"></div>' +
+    '<div class="demo-row">' +
+      '<button id="btn-set-0" data-label="setValue(0)" data-variant="secondary"></button>' +
+      '<button id="btn-inc-10" data-label="increment(10)" data-variant="primary"></button>' +
+      '<button id="btn-set-100" data-label="setValue(100)" data-variant="success"></button>' +
+      '<button id="btn-var-success" data-label="setVariant(success)" data-variant="secondary"></button>' +
+      '<button id="btn-var-danger" data-label="setVariant(danger)" data-variant="danger"></button>' +
+      '<button id="btn-reset" data-label="reset()" data-variant="ghost"></button>' +
+    '</div>' +
+    '<div class="result-box" id="pr-result">— usa los botones —</div>' +
+  '</div>';
+
+var js_s4 =
+  "new MTS.Progress('#pr-indeterminate', { type: 'indeterminate', variant: 'primary' });\n\n" +
+  "const prApi = new MTS.Progress('#pr-api', {\n" +
+  "  type: 'bar',\n" +
+  "  value: 30,\n" +
+  "  variant: 'primary',\n" +
+  "  showValue: true,\n" +
+  "  onChange: function(e) {\n" +
+  "    document.getElementById('pr-result').textContent = 'onChange → value:' + e.detail.value + ' pct:' + Math.round(e.detail.pct * 100) + '%';\n" +
+  "  },\n" +
+  "  onComplete: function() {\n" +
+  "    document.getElementById('pr-result').textContent = 'onComplete → ¡Completado!';\n" +
+  "  }\n" +
+  "});\n\n" +
+  "new MTS.Button('#btn-set-0');\n" +
+  "new MTS.Button('#btn-inc-10');\n" +
+  "new MTS.Button('#btn-set-100');\n" +
+  "new MTS.Button('#btn-var-success');\n" +
+  "new MTS.Button('#btn-var-danger');\n" +
+  "new MTS.Button('#btn-reset');\n\n" +
+  "document.getElementById('btn-set-0').addEventListener('click', function() { prApi.setValue(0); });\n" +
+  "document.getElementById('btn-inc-10').addEventListener('click', function() { prApi.increment(10); });\n" +
+  "document.getElementById('btn-set-100').addEventListener('click', function() { prApi.setValue(100); });\n" +
+  "document.getElementById('btn-var-success').addEventListener('click', function() { prApi.setVariant('success'); });\n" +
+  "document.getElementById('btn-var-danger').addEventListener('click', function() { prApi.setVariant('danger'); });\n" +
+  "document.getElementById('btn-reset').addEventListener('click', function() { prApi.reset(); });";
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.Progress('#bar-default', { type: 'bar', value: 20, variant: 'default', showValue: true });
+  new MTS.Progress('#bar-primary', { type: 'bar', value: 35, variant: 'primary', showValue: true });
+  new MTS.Progress('#bar-success', { type: 'bar', value: 55, variant: 'success', showValue: true });
+  new MTS.Progress('#bar-warning', { type: 'bar', value: 70, variant: 'warning', showValue: true });
+  new MTS.Progress('#bar-danger',  { type: 'bar', value: 85, variant: 'danger', showValue: true });
+  new MTS.Progress('#bar-info',    { type: 'bar', value: 95, variant: 'info', showValue: true });
+  new MTS.Progress('#bar-label', {
+    type: 'bar', value: 3, max: 10, variant: 'primary', showLabel: true, label: 'Onboarding',
+    labelFormat: function(value) { return 'Paso ' + value + ' de 10'; }
+  });
 });
 
-// Striped
-var sc = document.getElementById('striped-container');
-[{v:'primary',s:false,a:false},{v:'success',s:true,a:false},{v:'warning',s:true,a:true}].forEach(function(cfg){
-  var el = document.createElement('div'); sc.appendChild(el);
-  new MTS.Progress(el, { type:'bar', value:70, variant:cfg.v, striped:cfg.s, animated:cfg.a });
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  new MTS.Progress('#bar-striped', { type: 'bar', value: 60, striped: true, variant: 'primary', showValue: true });
+  new MTS.Progress('#bar-animated', { type: 'bar', value: 75, striped: true, animated: true, variant: 'success', showValue: true });
+  ['xs','sm','md','lg'].forEach(function(size) {
+    new MTS.Progress('#bar-' + size, {
+      type: 'bar', value: 65, size: size, variant: 'primary', showValue: true, label: 'size: ' + size, showLabel: true
+    });
+  });
 });
 
-// Circles
-var cc = document.getElementById('circles-container');
-[{v:'primary',val:75},{v:'success',val:85},{v:'warning',val:55},{v:'danger',val:35}].forEach(function(cfg){
-  var el = document.createElement('div'); cc.appendChild(el);
-  new MTS.Progress(el, { type:'circle', value:cfg.val, variant:cfg.v, radius:44, strokeWidth:7, showValue:true });
+makeSection('tabs-s3', preview_s3, js_s3, function() {
+  new MTS.Progress('#circle-primary', { type: 'circle', value: 75, radius: 44, strokeWidth: 7, showValue: true, variant: 'primary' });
+  new MTS.Progress('#circle-success', { type: 'circle', value: 85, radius: 44, strokeWidth: 7, showValue: true, variant: 'success' });
+  new MTS.Progress('#circle-warning', { type: 'circle', value: 55, radius: 44, strokeWidth: 7, showValue: true, variant: 'warning' });
+  new MTS.Progress('#circle-danger',  { type: 'circle', value: 35, radius: 44, strokeWidth: 7, showValue: true, variant: 'danger' });
 });
 
-// Indeterminate
-new MTS.Progress('#pr-indeterminate', { type:'indeterminate', variant:'primary' });
+makeSection('tabs-s4', preview_s4, js_s4, function() {
+  new MTS.Progress('#pr-indeterminate', { type: 'indeterminate', variant: 'primary' });
+  var prApi = new MTS.Progress('#pr-api', {
+    type: 'bar',
+    value: 30,
+    variant: 'primary',
+    showValue: true,
+    onChange: function(e) {
+      document.getElementById('pr-result').textContent = 'onChange → value:' + e.detail.value + ' pct:' + Math.round(e.detail.pct * 100) + '%';
+    },
+    onComplete: function() {
+      document.getElementById('pr-result').textContent = 'onComplete → ¡Completado!';
+    }
+  });
 
-// API target
-var prApi = new MTS.Progress('#pr-api', {
-  type:'bar', value:30, variant:'primary', showValue:true,
-  onChange:   function(e){ document.getElementById('pr-result').textContent = 'onChange → value:' + e.detail.value + ' pct:' + Math.round(e.detail.pct*100) + '%'; },
-  onComplete: function(){ document.getElementById('pr-result').textContent = 'onComplete → ¡Completado!'; },
+  ['#btn-set-0','#btn-inc-10','#btn-set-100','#btn-var-success','#btn-var-danger','#btn-reset'].forEach(function(sel){
+    new MTS.Button(sel);
+  });
+
+  document.getElementById('btn-set-0').addEventListener('click', function() { prApi.setValue(0); });
+  document.getElementById('btn-inc-10').addEventListener('click', function() { prApi.increment(10); });
+  document.getElementById('btn-set-100').addEventListener('click', function() { prApi.setValue(100); });
+  document.getElementById('btn-var-success').addEventListener('click', function() { prApi.setVariant('success'); });
+  document.getElementById('btn-var-danger').addEventListener('click', function() { prApi.setVariant('danger'); });
+  document.getElementById('btn-reset').addEventListener('click', function() { prApi.reset(); });
 });
 </script>
 </body>

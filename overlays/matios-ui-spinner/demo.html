@@ -30,21 +30,13 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-spinner.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-spinner.js"></script>
-  <style>
-    .spinner-cell {
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      padding: 16px;
-      background: var(--mts-surface);
-      border: 1px solid var(--mts-border-color);
-      border-radius: var(--mts-radius-lg);
-      font-size: 11px; color: var(--mts-text-muted);
-    }
-    .spinner-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-    .sizes-grid   { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -56,169 +48,257 @@
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
   <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Spinner</h1>
-    <p>Animated loading indicators — circle, dots, bars, pulse, ring · 5 sizes · overlay mode.</p>
+    <p>Animated loading indicators — variants, sizes, custom color, label and overlay mode.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-spinner.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-spinner.md')">Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Variantes -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Variantes / Variants</div>
-    <div class="spinner-grid" id="variants-grid"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-sp1','js-sp1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-sp1','html-sp1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-sp1">&lt;div id="my-spinner"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Spinner('#my-spinner', {
-    variant: 'circle',  // 'circle' | 'dots' | 'bars' | 'pulse' | 'ring'
-    size:    'md',
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-sp1">// Variants: 'circle' | 'dots' | 'bars' | 'pulse' | 'ring'
-['circle', 'dots', 'bars', 'pulse', 'ring'].forEach(variant =&gt; {
-  new MTS.Spinner('#spinner-' + variant, {
-    variant,
-    size: 'md',
-  });
-});</div>
-  </div>
-
-  <!-- 2. Tamaños -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Tamaños / Sizes</div>
-    <div class="sizes-grid" id="sizes-grid"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-sp2','js-sp2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-sp2','html-sp2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-sp2">&lt;div id="my-spinner" data-variant="circle" data-size="lg"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Spinner('#my-spinner');
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-sp2">// Sizes: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-['xs', 'sm', 'md', 'lg', 'xl'].forEach(size =&gt; {
-  new MTS.Spinner('#spinner-size-' + size, {
-    variant: 'circle',
-    size,
-  });
-});</div>
-  </div>
-
-  <!-- 3. Label + colores + overlay -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Con label, colores y overlay / Label, colors and overlay</div>
-    <div class="demo-row" style="flex-wrap:wrap;gap:16px;align-items:flex-start">
-      <div class="spinner-cell">
-        <div id="sp-label"></div>
-        <div>Con label</div>
-      </div>
-      <div class="spinner-cell">
-        <div id="sp-violet"></div>
-        <div>Color violet</div>
-      </div>
-      <div class="spinner-cell">
-        <div id="sp-green"></div>
-        <div>Color green</div>
-      </div>
-      <div class="spinner-cell" style="position:relative;width:120px;height:80px;overflow:hidden">
-        <div id="sp-overlay" style="position:absolute;inset:0"></div>
-        <div style="z-index:1">Overlay mode</div>
-      </div>
-    </div>
-    <div class="demo-row" style="margin-top:10px">
-      <button class="demo-btn-sm" onclick="showOverlay()">Show overlay (2s)</button>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-sp3','js-sp3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-sp3','html-sp3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-sp3">&lt;!-- With label / Con label --&gt;
-&lt;div id="my-spinner"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Spinner('#my-spinner', {
-    variant: 'circle',
-    size:    'lg',
-    label:   'Loading data...',
-  });
-&lt;/script&gt;
-
-&lt;!-- Full-screen overlay / Overlay pantalla completa --&gt;
-&lt;div id="overlay-spinner"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const spinner = new MTS.Spinner('#overlay-spinner', {
-    variant: 'circle',
-    size:    'xl',
-    overlay: true,
-    label:   'Processing...',
-  });
-  spinner.show();
-  // Later / Luego:
-  spinner.hide();
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-sp3">// With label / Con label
-new MTS.Spinner('#my-spinner', {
-  variant: 'circle',
-  size:    'lg',
-  label:   'Loading data...',
-});
-
-// Custom color / Color personalizado
-new MTS.Spinner('#my-custom', {
-  variant: 'ring',
-  size:    'md',
-  color:   '#7c3aed',  // any CSS color / cualquier color CSS
-});
-
-// Full-screen overlay / Overlay pantalla completa
-const overlay = new MTS.Spinner('#my-overlay', {
-  variant: 'circle',
-  size:    'xl',
-  overlay: true,
-  label:   'Processing...',
-});
-
-overlay.show();  // show / mostrar
-overlay.hide();  // hide / ocultar</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Tamaños</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Label, color y overlay</div><div id="tabs-s3"></div></div>
 </div>
+
 <script>
-var vg = document.getElementById('variants-grid');
-['circle','dots','bars','pulse','ring'].forEach(function(v){
-  var cell = document.createElement('div'); cell.className = 'spinner-cell'; vg.appendChild(cell);
-  var el = document.createElement('div'); cell.appendChild(el);
-  new MTS.Spinner(el, { variant:v, size:'md' });
-  var lbl = document.createElement('div'); lbl.textContent = v; cell.appendChild(lbl);
-});
-
-var sg = document.getElementById('sizes-grid');
-['xs','sm','md','lg','xl'].forEach(function(s){
-  var cell = document.createElement('div'); cell.className = 'spinner-cell'; sg.appendChild(cell);
-  var el = document.createElement('div'); cell.appendChild(el);
-  new MTS.Spinner(el, { variant:'circle', size:s });
-  var lbl = document.createElement('div'); lbl.textContent = s; cell.appendChild(lbl);
-});
-
-new MTS.Spinner('#sp-label',  { variant:'circle', size:'lg', label:'Cargando...' });
-new MTS.Spinner('#sp-violet', { variant:'ring',   size:'md', color:'#7c3aed' });
-new MTS.Spinner('#sp-green',  { variant:'dots',   size:'md', color:'#16a34a' });
-
-var overlaySpinner = null;
-function showOverlay(){
-  if (overlaySpinner) overlaySpinner.hide();
-  overlaySpinner = new MTS.Spinner(document.body.appendChild(Object.assign(document.createElement('div'),{id:'ov-temp'})), {
-    variant:'circle', size:'xl', overlay:true, label:'Procesando...'
-  });
-  overlaySpinner.show();
-  setTimeout(function(){ overlaySpinner.hide(); document.getElementById('ov-temp')?.remove(); }, 2000);
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+}
+
+var preview_s1 = `
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+    <div id="spinner-circle"></div>
+    <div style="font-size:12px;color:var(--mts-text-muted)">circle</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+    <div id="spinner-dots"></div>
+    <div style="font-size:12px;color:var(--mts-text-muted)">dots</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+    <div id="spinner-bars"></div>
+    <div style="font-size:12px;color:var(--mts-text-muted)">bars</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+    <div id="spinner-pulse"></div>
+    <div style="font-size:12px;color:var(--mts-text-muted)">pulse</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+    <div id="spinner-ring"></div>
+    <div style="font-size:12px;color:var(--mts-text-muted)">ring</div>
+  </div>
+</div>`;
+
+var js_s1 = `new MTS.Spinner('#spinner-circle', { variant: 'circle', size: 'md' });
+new MTS.Spinner('#spinner-dots',   { variant: 'dots',   size: 'md' });
+new MTS.Spinner('#spinner-bars',   { variant: 'bars',   size: 'md' });
+new MTS.Spinner('#spinner-pulse',  { variant: 'pulse',  size: 'md' });
+new MTS.Spinner('#spinner-ring',   { variant: 'ring',   size: 'md' });`;
+
+var preview_s2 = `
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+    <div id="spinner-xs"></div>
+    <div style="font-size:12px;color:var(--mts-text-muted)">xs</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+    <div id="spinner-sm"></div>
+    <div style="font-size:12px;color:var(--mts-text-muted)">sm</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+    <div id="spinner-md"></div>
+    <div style="font-size:12px;color:var(--mts-text-muted)">md</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+    <div id="spinner-lg"></div>
+    <div style="font-size:12px;color:var(--mts-text-muted)">lg</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+    <div id="spinner-xl"></div>
+    <div style="font-size:12px;color:var(--mts-text-muted)">xl</div>
+  </div>
+</div>`;
+
+var js_s2 = `new MTS.Spinner('#spinner-xs', { variant: 'circle', size: 'xs' });
+new MTS.Spinner('#spinner-sm', { variant: 'circle', size: 'sm' });
+new MTS.Spinner('#spinner-md', { variant: 'circle', size: 'md' });
+new MTS.Spinner('#spinner-lg', { variant: 'circle', size: 'lg' });
+new MTS.Spinner('#spinner-xl', { variant: 'circle', size: 'xl' });`;
+
+var preview_s3 = `
+<div class="demo-stack">
+  <div class="demo-row" style="align-items:stretch">
+    <div style="flex:1;min-width:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+      <div id="spinner-label"></div>
+      <div style="font-size:12px;color:var(--mts-text-muted)">Con label</div>
+    </div>
+    <div style="flex:1;min-width:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+      <div id="spinner-violet"></div>
+      <div style="font-size:12px;color:var(--mts-text-muted)">Color personalizado</div>
+    </div>
+    <div style="flex:1;min-width:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
+      <div id="spinner-green"></div>
+      <div style="font-size:12px;color:var(--mts-text-muted)">Otra variante</div>
+    </div>
+  </div>
+  <div class="demo-row">
+    <button id="btn-spinner-overlay" data-label="Mostrar overlay 2s" data-variant="secondary"></button>
+  </div>
+  <div class="result-box" id="spinner-result">— prueba el overlay —</div>
+</div>`;
+
+var js_s3 = `new MTS.Button('#btn-spinner-overlay');
+
+new MTS.Spinner('#spinner-label', {
+  variant: 'circle',
+  size: 'lg',
+  label: 'Cargando...'
+});
+
+new MTS.Spinner('#spinner-violet', {
+  variant: 'ring',
+  size: 'md',
+  color: '#7c3aed'
+});
+
+new MTS.Spinner('#spinner-green', {
+  variant: 'dots',
+  size: 'md',
+  color: '#16a34a'
+});
+
+document.getElementById('btn-spinner-overlay').addEventListener('click', function () {
+  document.getElementById('spinner-result').textContent = 'Overlay visible por 2 segundos...';
+
+  var host = document.createElement('div');
+  document.body.appendChild(host);
+
+  var overlay = new MTS.Spinner(host, {
+    variant: 'circle',
+    size: 'xl',
+    overlay: true,
+    label: 'Procesando...'
+  });
+
+  overlay.show();
+
+  setTimeout(function () {
+    overlay.hide();
+    host.remove();
+    document.getElementById('spinner-result').textContent = 'Overlay cerrado ✓';
+  }, 2000);
+});`;
+
+makeSection('tabs-s1', preview_s1, js_s1, '360px');
+makeSection('tabs-s2', preview_s2, js_s2, '360px');
+makeSection('tabs-s3', preview_s3, js_s3, '390px');
+
+new MTS.Spinner('#spinner-circle', { variant: 'circle', size: 'md' });
+new MTS.Spinner('#spinner-dots',   { variant: 'dots',   size: 'md' });
+new MTS.Spinner('#spinner-bars',   { variant: 'bars',   size: 'md' });
+new MTS.Spinner('#spinner-pulse',  { variant: 'pulse',  size: 'md' });
+new MTS.Spinner('#spinner-ring',   { variant: 'ring',   size: 'md' });
+
+new MTS.Spinner('#spinner-xs', { variant: 'circle', size: 'xs' });
+new MTS.Spinner('#spinner-sm', { variant: 'circle', size: 'sm' });
+new MTS.Spinner('#spinner-md', { variant: 'circle', size: 'md' });
+new MTS.Spinner('#spinner-lg', { variant: 'circle', size: 'lg' });
+new MTS.Spinner('#spinner-xl', { variant: 'circle', size: 'xl' });
+
+new MTS.Button('#btn-spinner-overlay');
+new MTS.Spinner('#spinner-label', {
+  variant: 'circle',
+  size: 'lg',
+  label: 'Cargando...'
+});
+new MTS.Spinner('#spinner-violet', {
+  variant: 'ring',
+  size: 'md',
+  color: '#7c3aed'
+});
+new MTS.Spinner('#spinner-green', {
+  variant: 'dots',
+  size: 'md',
+  color: '#16a34a'
+});
+
+document.getElementById('btn-spinner-overlay').addEventListener('click', function () {
+  document.getElementById('spinner-result').textContent = 'Overlay visible por 2 segundos...';
+
+  var host = document.createElement('div');
+  document.body.appendChild(host);
+
+  var overlay = new MTS.Spinner(host, {
+    variant: 'circle',
+    size: 'xl',
+    overlay: true,
+    label: 'Procesando...'
+  });
+
+  overlay.show();
+
+  setTimeout(function () {
+    overlay.hide();
+    host.remove();
+    document.getElementById('spinner-result').textContent = 'Overlay cerrado ✓';
+  }, 2000);
+});
 </script>
 </body>
 </html>

@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.Rating — Demo</title>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Rating — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
   <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
@@ -29,57 +30,12 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
-  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-rating.css">
-  <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-rating.js"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
-    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
-    .demo-section{display:flex;flex-direction:column;gap:14px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
-    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
-    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
-    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
-    .demo-docs-panel.open{display:block;}
-    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
-    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
-    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
-    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
-    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
-    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
-    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
-    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
-    .demo-docs-panel p{margin:0 0 10px;}
-    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
-    .demo-docs-panel a{color:var(--mts-color-primary);text-decoration:none;}
-    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
-    .demo-select-output{margin-top:8px;padding:8px 12px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-color-primary);line-height:1.6;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-    .code-tabs{display:flex;gap:0;margin-top:4px;}
-    .code-tab{padding:4px 14px;font-size:11px;font-weight:600;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);cursor:pointer;color:var(--mts-text-muted);font-family:var(--mts-font-family);transition:color .15s,background .15s;}
-    .code-tab:first-child{border-radius:var(--mts-radius-md) 0 0 0;}
-    .code-tab:last-child{border-radius:0 var(--mts-radius-md) 0 0;border-left:none;}
-    .code-tab.active{background:var(--mts-bg-surface-2);color:var(--mts-color-primary);border-bottom-color:var(--mts-bg-surface-2);}
-    .code-panel{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-top:none;border-radius:0 var(--mts-radius-md) var(--mts-radius-md) var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;}
-    .code-panel.active{display:block;}
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -95,148 +51,190 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Rating</h1>
-    <p>Calificación por estrellas — enteras, medias y solo lectura.</p>
-    <div class="demo-header-actions"><button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-rating.md')">📄 Documentación</button></div>
+    <p>Calificación por estrellas con variantes, tamaños y enhancement progresivo desde HTML declarativo.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-rating.md')">Documentación</button>
+    </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-  <!-- 1. Variantes -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Variantes / Variants</div>
-    <div style="display:flex;flex-direction:column;gap:16px;max-width:400px;">
-      <div id="rating-basic"></div>
-      <div id="rating-half"></div>
-      <div id="rating-readonly"></div>
-      <div id="rating-10"></div>
-    </div>
-    <div class="result-box" id="rating-result">— haz click en las estrellas —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-r1','js-r1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-r1','html-r1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-r1">&lt;!-- Basic / Básico --&gt;
-&lt;div id="rating-basic"
-  data-value="3"
-  data-max="5"&gt;
-&lt;/div&gt;
 
-&lt;!-- Half stars / Medio punto --&gt;
-&lt;div id="rating-half"
-  data-value="3.5"
-  data-half-stars&gt;
-&lt;/div&gt;
+  <div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Tamaños y API</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — HTML declarativo + enhancement</div><div id="tabs-s3"></div></div>
+</div>
 
-&lt;!-- Readonly / Solo lectura --&gt;
-&lt;div id="rating-readonly"
-  data-value="4.5"
-  data-half-stars
-  data-readonly&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.Rating('#rating-basic',   { onChange: (e) =&gt; console.log(e.detail.value) });
-  new MTS.Rating('#rating-half',    { onChange: (e) =&gt; console.log(e.detail.value) });
-  new MTS.Rating('#rating-readonly');
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-r1">// Basic / Básico
-new MTS.Rating('#rating-basic', {
-  value:   3,
-  max:     5,
-  // Fires when rating changes / Se dispara al cambiar la valoración
-  onChange: (e) => console.log(e.detail.value),
-});
-
-// Half stars / Medio punto
-new MTS.Rating('#rating-half', {
-  value:     3.5,
-  halfStars: true,
-  onChange:  (e) => console.log(e.detail.value),
-});
-
-// Readonly / Solo lectura
-new MTS.Rating('#rating-readonly', {
-  value:     4.5,
-  halfStars: true,
-  readonly:  true,
-});
-
-// Custom scale / Escala personalizada
-new MTS.Rating('#rating-10', {
-  value: 7,
-  max:   10,
-  size:  'sm',
-});</div>
-  </div>
-
-  <!-- 2. Tamaños y API -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Tamaños y API / Sizes and API</div>
-    <div style="display:flex;flex-direction:column;gap:16px;max-width:400px;">
-      <div id="rating-sm"></div>
-      <div id="rating-md"></div>
-      <div id="rating-lg"></div>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
-      <button class="demo-btn-sm" onclick="apiRating('getValue')">getValue()</button>
-      <button class="demo-btn-sm" onclick="apiRating('setValue3')">setValue(3)</button>
-      <button class="demo-btn-sm" onclick="apiRating('setValue5')">setValue(5)</button>
-    </div>
-    <div class="result-box" id="rating-api-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-r2','js-r2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-r2','html-r2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-r2">&lt;div id="rating-sm" data-size="sm" data-value="3"&gt;&lt;/div&gt;
-&lt;div id="rating-md" data-size="md" data-value="3"&gt;&lt;/div&gt;
-&lt;div id="rating-lg" data-size="lg" data-value="3"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  const r = new MTS.Rating('#rating-md', {
-    onChange: (e) =&gt; console.log(e.detail.value),
-  });
-  r.getValue()  // → 3
-  r.setValue(5)
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-r2">// Size: 'sm' | 'md' | 'lg' / Tamaño
-new MTS.Rating('#rating-sm', { value: 3, size: 'sm' });
-new MTS.Rating('#rating-md', { value: 3, size: 'md' });
-new MTS.Rating('#rating-lg', { value: 3, size: 'lg' });
-
-// API
-const r = new MTS.Rating('#my-rating', { value: 3, max: 5 });
-
-// Get current value / Obtener valor actual
-r.getValue()    // → 3
-
-// Set value programmatically / Establecer valor programáticamente
-r.setValue(4)
-r.setValue(4.5) // requires halfStars: true / requiere halfStars: true</div>
-  </div>
-
-</div><script>
-function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
-window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
-if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
-function switchTab(btn,showId,hideId){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active');});btn.classList.add('active');document.getElementById(showId).classList.add('active');document.getElementById(hideId).classList.remove('active');}
-function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
-function showSelOutput(id,v,t){var el=document.getElementById(id);if(!el)return;el.style.display='block';el.innerHTML='<b>value:</b> '+JSON.stringify(v)+'&nbsp;&nbsp;<b>text:</b> '+JSON.stringify(t);}
-function showPickerOutput(id,val,fmt){var el=document.getElementById(id);if(!el)return;el.style.display='block';el.innerHTML='<b>value:</b> '+JSON.stringify(fmt||val);}
-function toggleDocs(id,mdPath){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';fetch(mdPath).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>No se pudo cargar.</em>';});}
-function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
-
-new MTS.Rating('#rating-basic',   { value:3, max:5,  onChange: function(e){ document.getElementById('rating-result').textContent='onChange → '+e.detail.value+' ⭐'; }});
-new MTS.Rating('#rating-half',    { value:3.5, halfStars:true, onChange: function(e){ document.getElementById('rating-result').textContent='onChange → '+e.detail.value+' ⭐'; }});
-new MTS.Rating('#rating-readonly',{ value:4.5, halfStars:true, readonly:true });
-new MTS.Rating('#rating-10',      { value:7, max:10, size:'sm', onChange: function(e){ document.getElementById('rating-result').textContent='onChange → '+e.detail.value+'/10'; }});
-
-new MTS.Rating('#rating-sm', { value:3, size:'sm' });
-new MTS.Rating('#rating-md', { value:3, size:'md' });
-var ratingApi = new MTS.Rating('#rating-lg', { value:3, size:'lg', onChange: function(e){ document.getElementById('rating-api-result').textContent='onChange → '+e.detail.value+' ⭐'; }});
-
-function apiRating(action){
-  if(action==='getValue')  document.getElementById('rating-api-result').textContent='getValue() → '+ratingApi.getValue();
-  if(action==='setValue3') { ratingApi.setValue(3); document.getElementById('rating-api-result').textContent='setValue(3) ✓'; }
-  if(action==='setValue5') { ratingApi.setValue(5); document.getElementById('rating-api-result').textContent='setValue(5) ✓'; }
+<script>
+function esc(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+  if (typeof initFn === 'function') initFn();
+}
+
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+var preview_s1 =
+  '<div class="demo-stack">' +
+    '<div id="rating-basic"></div>' +
+    '<div id="rating-half"></div>' +
+    '<div id="rating-readonly"></div>' +
+    '<div id="rating-10"></div>' +
+    '<div class="result-box" id="rating-result">— haz click en las estrellas —</div>' +
+  '</div>';
+
+var js_s1 =
+  "new MTS.Rating('#rating-basic', {\n" +
+  "  value: 3,\n" +
+  "  max: 5,\n" +
+  "  onChange: function(e) { setResult('rating-result', 'Basic → ' + e.detail.value); }\n" +
+  "});\n\n" +
+  "new MTS.Rating('#rating-half', {\n" +
+  "  value: 3.5,\n" +
+  "  halfStars: true,\n" +
+  "  onChange: function(e) { setResult('rating-result', 'Half → ' + e.detail.value); }\n" +
+  "});\n\n" +
+  "new MTS.Rating('#rating-readonly', {\n" +
+  "  value: 4.5,\n" +
+  "  halfStars: true,\n" +
+  "  readonly: true\n" +
+  "});\n\n" +
+  "new MTS.Rating('#rating-10', {\n" +
+  "  value: 7,\n" +
+  "  max: 10,\n" +
+  "  size: 'sm',\n" +
+  "  onChange: function(e) { setResult('rating-result', 'Escala 10 → ' + e.detail.value); }\n" +
+  "});";
+
+var preview_s2 =
+  '<div class="demo-stack">' +
+    '<div id="rating-sm"></div>' +
+    '<div id="rating-md"></div>' +
+    '<div id="rating-lg"></div>' +
+    '<div class="demo-row">' +
+      '<button class="demo-btn-sm" onclick="ratingApi(3)">setValue(3)</button>' +
+      '<button class="demo-btn-sm" onclick="ratingApi(4)">setValue(4)</button>' +
+      '<button class="demo-btn-sm" onclick="ratingApi(5)">setValue(5)</button>' +
+      '<button class="demo-btn-sm" onclick="ratingApiGet()">getValue()</button>' +
+    '</div>' +
+    '<div class="result-box" id="rating-api-result">— usa los botones —</div>' +
+  '</div>';
+
+var js_s2 =
+  "new MTS.Rating('#rating-sm', { value: 3, size: 'sm' });\n" +
+  "new MTS.Rating('#rating-md', { value: 3, size: 'md' });\n" +
+  "var ratingApiInstance = new MTS.Rating('#rating-lg', { value: 3, size: 'lg' });\n\n" +
+  "ratingApiInstance.getValue();\n" +
+  "ratingApiInstance.setValue(5);";
+
+var preview_s3 =
+  '<div class="demo-stack">' +
+    '<div id="rating-declarative" data-value="4" data-half-stars data-size="lg"></div>' +
+    '<div class="result-box" id="rating-declarative-result">— HTML declarativo + enhancement —</div>' +
+  '</div>';
+
+var js_s3 =
+  "new MTS.Rating('#rating-declarative', {\n" +
+  "  onChange: function(e) {\n" +
+  "    setResult('rating-declarative-result', 'onChange → ' + e.detail.value);\n" +
+  "  }\n" +
+  "});";
+
+var ratingApiInstance;
+function ratingApi(value) {
+  if (!ratingApiInstance) return;
+  ratingApiInstance.setValue(value);
+  setResult('rating-api-result', 'setValue(' + value + ') ✓');
+}
+function ratingApiGet() {
+  if (!ratingApiInstance) return;
+  setResult('rating-api-result', 'getValue() → ' + ratingApiInstance.getValue());
+}
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.Rating('#rating-basic', {
+    value: 3,
+    max: 5,
+    onChange: function(e) { setResult('rating-result', 'Basic → ' + e.detail.value); }
+  });
+  new MTS.Rating('#rating-half', {
+    value: 3.5,
+    halfStars: true,
+    onChange: function(e) { setResult('rating-result', 'Half → ' + e.detail.value); }
+  });
+  new MTS.Rating('#rating-readonly', {
+    value: 4.5,
+    halfStars: true,
+    readonly: true
+  });
+  new MTS.Rating('#rating-10', {
+    value: 7,
+    max: 10,
+    size: 'sm',
+    onChange: function(e) { setResult('rating-result', 'Escala 10 → ' + e.detail.value); }
+  });
+});
+
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  new MTS.Rating('#rating-sm', { value: 3, size: 'sm' });
+  new MTS.Rating('#rating-md', { value: 3, size: 'md' });
+  ratingApiInstance = new MTS.Rating('#rating-lg', { value: 3, size: 'lg' });
+});
+
+makeSection('tabs-s3', preview_s3, js_s3, function() {
+  new MTS.Rating('#rating-declarative', {
+    onChange: function(e) { setResult('rating-declarative-result', 'onChange → ' + e.detail.value); }
+  });
+});
 </script>
 </body>
 </html>

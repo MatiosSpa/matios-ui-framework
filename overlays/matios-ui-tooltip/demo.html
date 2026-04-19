@@ -15,7 +15,7 @@
           var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
           if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
           if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
       }catch(e){}
     })();
@@ -30,8 +30,14 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-input/matios-ui-input.css">
   <link rel="stylesheet" href="./matios-ui-tooltip.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-input/matios-ui-input.js"></script>
   <script src="./matios-ui-tooltip.js"></script>
 </head>
 <body>
@@ -44,203 +50,242 @@
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
   <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Tooltip</h1>
-    <p>Smart positioning tooltip — hover, click, focus triggers · dark/light variants · HTML content.</p>
+    <p>Tooltip con smart positioning — hover, click, focus, variantes dark/light y contenido HTML.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-tooltip.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-tooltip.md')">Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Posiciones -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Posiciones / Positions</div>
-    <div class="demo-row" style="justify-content:center;gap:16px;padding:24px 0">
-      <button class="mts-btn mts-btn--secondary" id="tt-top">Top</button>
-      <button class="mts-btn mts-btn--secondary" id="tt-bottom">Bottom</button>
-      <button class="mts-btn mts-btn--secondary" id="tt-left">Left</button>
-      <button class="mts-btn mts-btn--secondary" id="tt-right">Right</button>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tt1','js-tt1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tt1','html-tt1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tt1">&lt;button id="btn-save"&gt;Save&lt;/button&gt;
-
-&lt;script&gt;
-  new MTS.Tooltip('#btn-save', {
-    content:  'Save document',
-    position: 'top',   // 'top' | 'bottom' | 'left' | 'right'
-    trigger:  'hover', // default
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tt1">new MTS.Tooltip('#btn-top',    { content: 'Tooltip on top',    position: 'top' });
-new MTS.Tooltip('#btn-bottom', { content: 'Tooltip on bottom', position: 'bottom' });
-new MTS.Tooltip('#btn-left',   { content: 'Tooltip on left',   position: 'left' });
-new MTS.Tooltip('#btn-right',  { content: 'Tooltip on right',  position: 'right' });</div>
-  </div>
-
-  <!-- 2. Triggers -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Triggers</div>
-    <div class="demo-row" style="gap:16px;padding:12px 0">
-      <button class="mts-btn mts-btn--secondary" id="tt-hover">Hover</button>
-      <button class="mts-btn mts-btn--secondary" id="tt-click">Click</button>
-      <input class="mts-input" id="tt-focus" placeholder="Focus me" style="width:160px">
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tt2','js-tt2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tt2','html-tt2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tt2">&lt;button id="btn-hover"&gt;Hover&lt;/button&gt;
-&lt;button id="btn-click"&gt;Click&lt;/button&gt;
-&lt;input  id="input-focus" placeholder="Focus me"&gt;
-
-&lt;script&gt;
-  new MTS.Tooltip('#btn-hover',    { content: 'Hover tooltip',  trigger: 'hover' });
-  new MTS.Tooltip('#btn-click',    { content: 'Click tooltip',  trigger: 'click' });
-  new MTS.Tooltip('#input-focus',  { content: 'Focus tooltip',  trigger: 'focus' });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tt2">// Hover (default) / Hover (por defecto)
-new MTS.Tooltip('#btn-hover', {
-  content: 'Hover to see me',
-  trigger: 'hover',
-});
-
-// Click — toggles / Click — alterna
-new MTS.Tooltip('#btn-click', {
-  content: 'Click again to hide',
-  trigger: 'click',
-});
-
-// Focus — shows on focus / Se muestra al enfocar
-new MTS.Tooltip('#input-focus', {
-  content:  'Enter your email address',
-  trigger:  'focus',
-  position: 'bottom',
-});</div>
-  </div>
-
-  <!-- 3. Variantes y HTML -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Variantes y contenido HTML / Variants and HTML content</div>
-    <div class="demo-row" style="gap:16px;padding:12px 0">
-      <button class="mts-btn mts-btn--secondary" id="tt-dark">Dark</button>
-      <button class="mts-btn mts-btn--secondary" id="tt-light">Light</button>
-      <button class="mts-btn mts-btn--secondary" id="tt-html">Con HTML</button>
-      <button class="mts-btn mts-btn--secondary" id="tt-custom">Color custom</button>
-      <button class="mts-btn mts-btn--secondary" id="tt-delay">Con delay</button>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tt3','js-tt3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tt3','html-tt3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tt3">&lt;!-- Dark (default) / Oscuro --&gt;
-&lt;button data-tooltip="Dark tooltip"&gt;Dark&lt;/button&gt;
-
-&lt;!-- Light / Claro --&gt;
-&lt;button data-tooltip="Light tooltip" data-tooltip-variant="light"&gt;Light&lt;/button&gt;
-
-&lt;!-- HTML content / Contenido HTML --&gt;
-&lt;button id="btn-html"&gt;Con HTML&lt;/button&gt;
-&lt;script&gt;
-  new MTS.Tooltip('#btn-html', {
-    content: '&lt;strong&gt;Pro tip:&lt;/strong&gt; Use ⌘S to save.',
-    maxWidth: 200,
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tt3">// Dark variant (default) / Variante oscura
-new MTS.Tooltip('#btn-dark', { content: 'Dark tooltip', variant: 'dark' });
-
-// Light variant / Variante clara
-new MTS.Tooltip('#btn-light', { content: 'Light tooltip', variant: 'light' });
-
-// HTML content / Contenido HTML
-new MTS.Tooltip('#btn-html', {
-  content:  '&lt;strong&gt;Pro tip:&lt;/strong&gt; Use ⌘S to save quickly.',
-  maxWidth: 200,
-  position: 'bottom',
-});
-
-// Custom colors / Colores personalizados
-new MTS.Tooltip('#btn-custom', {
-  content: 'Custom violet tooltip',
-  bg:      '#7c3aed',
-  color:   '#ffffff',
-});
-
-// With delay / Con delay
-new MTS.Tooltip('#btn-delay', {
-  content:   'Appears after 500ms',
-  delay:     500,
-  hideDelay: 200,
-});</div>
-  </div>
-
-  <!-- 4. initAll() -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — initAll() — desde atributos HTML</div>
-    <div class="demo-row" style="gap:12px;padding:12px 0">
-      <button class="mts-btn mts-btn--secondary"
-        data-tooltip="Tooltip desde data-tooltip"
-        data-tooltip-position="top">Top</button>
-      <button class="mts-btn mts-btn--secondary"
-        data-tooltip="Posición bottom"
-        data-tooltip-position="bottom">Bottom</button>
-      <button class="mts-btn mts-btn--secondary"
-        data-tooltip="Variante light"
-        data-tooltip-position="top"
-        data-tooltip-variant="light">Light</button>
-      <button class="mts-btn mts-btn--secondary"
-        data-tooltip="Trigger click"
-        data-tooltip-trigger="click">Click</button>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tt4','js-tt4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tt4','html-tt4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tt4">&lt;!-- Add data-tooltip to any element / Agregar data-tooltip a cualquier elemento --&gt;
-&lt;button data-tooltip="Save document"    data-tooltip-position="top"&gt;Save&lt;/button&gt;
-&lt;button data-tooltip="Delete item"      data-tooltip-position="bottom" data-tooltip-variant="light"&gt;Delete&lt;/button&gt;
-&lt;button data-tooltip="Click to toggle"  data-tooltip-trigger="click"&gt;Info&lt;/button&gt;
-
-&lt;script&gt;
-  // Initialize all at once / Inicializar todos a la vez
-  MTS.Tooltip.initAll();
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tt4">// Initialize all [data-tooltip] elements at once
-// Inicializa todos los elementos [data-tooltip] a la vez
-MTS.Tooltip.initAll();
-
-// Or within a specific container / O dentro de un contenedor específico
-MTS.Tooltip.initAll('#my-toolbar');
-
-// Supported data-* attributes / Atributos data-* soportados:
-// data-tooltip           → content
-// data-tooltip-position  → 'top' | 'bottom' | 'left' | 'right'
-// data-tooltip-trigger   → 'hover' | 'click' | 'focus'
-// data-tooltip-variant   → 'dark' | 'light'
-// data-tooltip-delay     → ms
-// data-tooltip-max-width → px</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Posiciones</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Triggers</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Variantes y HTML</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — initAll()</div><div id="tabs-s4"></div></div>
 </div>
+
 <script>
-new MTS.Tooltip('#tt-top',    { content:'Tooltip arriba',   position:'top' });
-new MTS.Tooltip('#tt-bottom', { content:'Tooltip abajo',    position:'bottom' });
-new MTS.Tooltip('#tt-left',   { content:'Tooltip izquierda',position:'left' });
-new MTS.Tooltip('#tt-right',  { content:'Tooltip derecha',  position:'right' });
-new MTS.Tooltip('#tt-hover',  { content:'Hover tooltip',    trigger:'hover' });
-new MTS.Tooltip('#tt-click',  { content:'Click para ocultar', trigger:'click' });
-new MTS.Tooltip('#tt-focus',  { content:'Ingresa tu email', trigger:'focus', position:'bottom' });
-new MTS.Tooltip('#tt-dark',   { content:'Variante oscura (default)', variant:'dark' });
-new MTS.Tooltip('#tt-light',  { content:'Variante clara',            variant:'light' });
-new MTS.Tooltip('#tt-html',   { content:'<strong>Pro tip:</strong> Usa ⌘S para guardar.', position:'bottom', maxWidth:200 });
-new MTS.Tooltip('#tt-custom', { content:'Tooltip violeta custom', bg:'#7c3aed', color:'#fff' });
-new MTS.Tooltip('#tt-delay',  { content:'Aparece tras 500ms', delay:500, hideDelay:200 });
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+}
+
+var preview_s1 = `
+<div class="demo-row" style="justify-content:center;gap:16px;padding:24px 0;flex-wrap:wrap">
+  <button id="tt-top" data-label="Top" data-variant="secondary"></button>
+  <button id="tt-bottom" data-label="Bottom" data-variant="secondary"></button>
+  <button id="tt-left" data-label="Left" data-variant="secondary"></button>
+  <button id="tt-right" data-label="Right" data-variant="secondary"></button>
+</div>`;
+
+var js_s1 = `new MTS.Button('#tt-top');
+new MTS.Button('#tt-bottom');
+new MTS.Button('#tt-left');
+new MTS.Button('#tt-right');
+
+new MTS.Tooltip('#tt-top', { content: 'Tooltip arriba', position: 'top' });
+new MTS.Tooltip('#tt-bottom', { content: 'Tooltip abajo', position: 'bottom' });
+new MTS.Tooltip('#tt-left', { content: 'Tooltip izquierda', position: 'left' });
+new MTS.Tooltip('#tt-right', { content: 'Tooltip derecha', position: 'right' });`;
+
+var preview_s2 = `
+<div class="demo-row" style="gap:16px;padding:12px 0;flex-wrap:wrap">
+  <button id="tt-hover" data-label="Hover" data-variant="secondary"></button>
+  <button id="tt-click" data-label="Click" data-variant="secondary"></button>
+  <input id="tt-focus" class="mts-input" placeholder="Focus me" style="width:180px">
+</div>`;
+
+var js_s2 = `new MTS.Button('#tt-hover');
+new MTS.Button('#tt-click');
+new MTS.Input('#tt-focus');
+
+new MTS.Tooltip('#tt-hover', {
+  content: 'Hover tooltip',
+  trigger: 'hover'
+});
+
+new MTS.Tooltip('#tt-click', {
+  content: 'Click again to hide',
+  trigger: 'click'
+});
+
+new MTS.Tooltip('#tt-focus', {
+  content: 'Enter your email address',
+  trigger: 'focus',
+  position: 'bottom'
+});`;
+
+var preview_s3 = `
+<div class="demo-row" style="gap:16px;padding:12px 0;flex-wrap:wrap">
+  <button id="tt-dark" data-label="Dark" data-variant="secondary"></button>
+  <button id="tt-light" data-label="Light" data-variant="secondary"></button>
+  <button id="tt-html" data-label="Con HTML" data-variant="secondary"></button>
+  <button id="tt-custom" data-label="Color custom" data-variant="secondary"></button>
+  <button id="tt-delay" data-label="Con delay" data-variant="secondary"></button>
+</div>`;
+
+var js_s3 = `new MTS.Button('#tt-dark');
+new MTS.Button('#tt-light');
+new MTS.Button('#tt-html');
+new MTS.Button('#tt-custom');
+new MTS.Button('#tt-delay');
+
+new MTS.Tooltip('#tt-dark', {
+  content: 'Variante oscura (default)',
+  variant: 'dark'
+});
+
+new MTS.Tooltip('#tt-light', {
+  content: 'Variante clara',
+  variant: 'light'
+});
+
+new MTS.Tooltip('#tt-html', {
+  content: '<strong>Pro tip:</strong> Usa ⌘S para guardar.',
+  position: 'bottom',
+  maxWidth: 200
+});
+
+new MTS.Tooltip('#tt-custom', {
+  content: 'Tooltip violeta custom',
+  bg: '#7c3aed',
+  color: '#ffffff'
+});
+
+new MTS.Tooltip('#tt-delay', {
+  content: 'Aparece tras 500ms',
+  delay: 500,
+  hideDelay: 200
+});`;
+
+var preview_s4 = `
+<div class="demo-row" style="gap:12px;padding:12px 0;flex-wrap:wrap">
+  <button id="tt-data-top"
+    data-label="Top"
+    data-variant="secondary"
+    data-tooltip="Tooltip desde data-tooltip"
+    data-tooltip-position="top"></button>
+
+  <button id="tt-data-bottom"
+    data-label="Bottom"
+    data-variant="secondary"
+    data-tooltip="Posición bottom"
+    data-tooltip-position="bottom"></button>
+
+  <button id="tt-data-light"
+    data-label="Light"
+    data-variant="secondary"
+    data-tooltip="Variante light"
+    data-tooltip-position="top"
+    data-tooltip-variant="light"></button>
+
+  <button id="tt-data-click"
+    data-label="Click"
+    data-variant="secondary"
+    data-tooltip="Trigger click"
+    data-tooltip-trigger="click"></button>
+</div>`;
+
+var js_s4 = `new MTS.Button('#tt-data-top');
+new MTS.Button('#tt-data-bottom');
+new MTS.Button('#tt-data-light');
+new MTS.Button('#tt-data-click');
+
 MTS.Tooltip.initAll();
+
+// También puedes inicializar dentro de un contenedor:
+// MTS.Tooltip.initAll('#my-toolbar');`;
+
+makeSection('tabs-s1', preview_s1, js_s1);
+makeSection('tabs-s2', preview_s2, js_s2);
+makeSection('tabs-s3', preview_s3, js_s3);
+makeSection('tabs-s4', preview_s4, js_s4);
+
+function mountTooltipDemo() {
+  [
+    '#tt-top','#tt-bottom','#tt-left','#tt-right',
+    '#tt-hover','#tt-click',
+    '#tt-dark','#tt-light','#tt-html','#tt-custom','#tt-delay',
+    '#tt-data-top','#tt-data-bottom','#tt-data-light','#tt-data-click'
+  ].forEach(function(sel) {
+    new MTS.Button(sel);
+  });
+
+  new MTS.Input('#tt-focus');
+
+  new MTS.Tooltip('#tt-top', { content: 'Tooltip arriba', position: 'top' });
+  new MTS.Tooltip('#tt-bottom', { content: 'Tooltip abajo', position: 'bottom' });
+  new MTS.Tooltip('#tt-left', { content: 'Tooltip izquierda', position: 'left' });
+  new MTS.Tooltip('#tt-right', { content: 'Tooltip derecha', position: 'right' });
+
+  new MTS.Tooltip('#tt-hover', { content: 'Hover tooltip', trigger: 'hover' });
+  new MTS.Tooltip('#tt-click', { content: 'Click para ocultar', trigger: 'click' });
+  new MTS.Tooltip('#tt-focus', { content: 'Ingresa tu email', trigger: 'focus', position: 'bottom' });
+
+  new MTS.Tooltip('#tt-dark', { content: 'Variante oscura (default)', variant: 'dark' });
+  new MTS.Tooltip('#tt-light', { content: 'Variante clara', variant: 'light' });
+  new MTS.Tooltip('#tt-html', { content: '<strong>Pro tip:</strong> Usa ⌘S para guardar.', position: 'bottom', maxWidth: 200 });
+  new MTS.Tooltip('#tt-custom', { content: 'Tooltip violeta custom', bg: '#7c3aed', color: '#fff' });
+  new MTS.Tooltip('#tt-delay', { content: 'Aparece tras 500ms', delay: 500, hideDelay: 200 });
+
+  MTS.Tooltip.initAll();
+}
+
+mountTooltipDemo();
 </script>
 </body>
 </html>

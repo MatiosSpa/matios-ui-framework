@@ -58,6 +58,14 @@
 .mts-tabs--vertical .mts-tabs__panel { padding: 0 var(--mts-space-4); }
 .mts-tabs__panel--active { display: block; }
 
+/* Cuando el contenedor tiene height fijo, el panel activo ocupa
+   todo ese espacio y maneja su propio scroll interno */
+.mts-tabs__panels[style*="height"] .mts-tabs__panel--active {
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
 /* ── Fix borde izquierdo del panel en vertical (todos los tabs) ── */
 .mts-tabs--vertical .mts-tabs__panels {
   border-left: var(--mts-tabs-border-width, 2px) solid var(--mts-border-color);

@@ -30,9 +30,11 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="../matios-ui-input/matios-ui-input.css">
   <link rel="stylesheet" href="../matios-ui-button/matios-ui-button.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../matios-ui-input/matios-ui-input.js"></script>
   <script src="../matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-validation.js"></script>
@@ -51,255 +53,171 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Validate</h1>
-    <p>Form validation — auto-integrates with MTS.Input, 20+ rules, custom messages, server-side errors.</p>
+    <p>Form validation with rules, messages and API helpers.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-validation.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-validation.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Formulario completo -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Formulario completo / Full form</div>
-    <form id="form-full" style="max-width:480px">
-      <div id="v-name"></div>
-      <div id="v-email"></div>
-      <div id="v-pass"></div>
-      <div id="v-pass2"></div>
-      <div style="margin-top:8px">
-        <button type="submit" id="v-submit"></button>
-      </div>
-    </form>
-    <div class="result-box" id="v-result">— completa y envía el formulario —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-v1','js-v1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-v1','html-v1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-v1">&lt;form id="my-form"&gt;
-  &lt;div id="field-name"&gt;&lt;/div&gt;
-  &lt;div id="field-email"&gt;&lt;/div&gt;
-  &lt;button type="submit" class="mts-btn mts-btn--primary"&gt;Submit&lt;/button&gt;
-&lt;/form&gt;
-
-&lt;script&gt;
-  // name: must match the key in rules / name: debe coincidir con la clave en rules
-  new MTS.Input('#field-name',  { name:'name',  label: 'Name',  rules: { required: true, minLength: 3 } });
-  new MTS.Input('#field-email', { name:'email', label: 'Email', type: 'email', rules: { required: true, email: true } });
-
-  new MTS.Validate('#my-form', {
-    rules: {
-      name:  { required: true, minLength: 3 },
-      email: { required: true, email: true },
-    },
-    // Fires when form is valid / Se dispara cuando el formulario es válido
-    onValid:   (data)   =&gt; console.log('Valid:', data),
-    // Fires when form has errors / Se dispara cuando hay errores
-    onInvalid: (errors) =&gt; console.log('Errors:', errors),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-v1">// Step 1: Create MTS.Input fields with rules
-// Paso 1: Crear campos MTS.Input con reglas
-// name: must match the key in rules / name: debe coincidir con la clave en rules
-new MTS.Input('#v-name',  { name:'name',      label: 'Full name',           placeholder: 'John Doe',         rules: { required: true, minLength: 3 } });
-new MTS.Input('#v-email', { name:'email',     label: 'Email',               placeholder: 'user@example.com', rules: { required: true, email: true }, type: 'email' });
-new MTS.Input('#v-pass',  { name:'password',  label: 'Password',            placeholder: 'Min 8 characters', rules: { required: true, minLength: 8 }, type: 'password' });
-new MTS.Input('#v-pass2', { name:'password2', label: 'Confirm password',    placeholder: 'Repeat password',  rules: { required: true }, type: 'password' });
-
-// Step 2: Attach MTS.Validate to the form
-// Paso 2: Vincular MTS.Validate al formulario
-new MTS.Validate('#form-full', {
-  rules: {
-    name:      { required: true, minLength: 3 },
-    email:     { required: true, email: true },
-    password:  { required: true, minLength: 8 },
-    password2: { required: true },
-  },
-  // Custom messages / Mensajes personalizados
-  messages: {
-    name:  { required: 'Name is required', minLength: 'At least 3 characters' },
-    email: { email: 'Enter a valid email' },
-  },
-  validateOnBlur: true,
-  // Fires when all fields are valid / Se dispara cuando todo es válido
-  onValid:   (data)   => console.log('Form data:', data),
-  // Fires when there are errors / Se dispara cuando hay errores
-  onInvalid: (errors) => console.log('Errors:', errors),
-});</div>
-  </div>
-
-  <!-- 2. Reglas avanzadas -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Reglas avanzadas / Advanced rules</div>
-    <form id="form-advanced" style="max-width:480px">
-      <div id="v-rut"></div>
-      <div id="v-age"></div>
-      <div id="v-url"></div>
-      <div id="v-custom"></div>
-      <div style="margin-top:8px">
-        <button type="submit" id="v-adv-submit"></button>
-      </div>
-    </form>
-    <div class="result-box" id="v-adv-result">— completa y envía el formulario —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-v2','js-v2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-v2','html-v2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-v2">&lt;form id="my-form"&gt;
-  &lt;div id="field-rut"&gt;&lt;/div&gt;
-  &lt;div id="field-age"&gt;&lt;/div&gt;
-  &lt;div id="field-url"&gt;&lt;/div&gt;
-  &lt;div id="field-custom"&gt;&lt;/div&gt;
-  &lt;button type="submit"&gt;Submit&lt;/button&gt;
-&lt;/form&gt;
-
-&lt;script&gt;
-  new MTS.Input('#field-rut', { label:'RUT', rules:{ required:true, rut:true } });
-  new MTS.Input('#field-age', { label:'Age', type:'number', rules:{ required:true, min:18, max:99 } });
-  new MTS.Input('#field-custom', {
-    label:'Username',
-    rules:{ custom: (val) =&gt; val !== 'admin' || 'Username not allowed' }
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-v2">// Chilean RUT / RUT chileno
-new MTS.Input('#field-rut', {
-  label:       'RUT',
-  placeholder: '12.345.678-9',
-  rules:       { required: true, rut: true },
-});
-
-// Numeric range / Rango numérico
-new MTS.Input('#field-age', {
-  label:       'Age',
-  type:        'number',
-  rules:       { required: true, min: 18, max: 99 },
-});
-
-// URL validation / Validación URL
-new MTS.Input('#field-url', {
-  label:       'Website',
-  placeholder: 'https://...',
-  rules:       { url: true },
-});
-
-// Custom validation / Validación personalizada
-new MTS.Input('#field-custom', {
-  label:       'Username',
-  rules: {
-    required: true,
-    // Return true if valid, or error string / Retorna true si válido o string de error
-    custom: (val) => val !== 'admin' ? true : 'Username not allowed',
-  },
-});</div>
-  </div>
-
-  <!-- 3. API — errores del servidor -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — API — errores del servidor / Server-side errors</div>
-    <form id="form-api" style="max-width:480px">
-      <div id="v-api-email"></div>
-      <div style="margin-top:8px">
-        <button type="submit" id="v-api-submit"></button>
-      </div>
-    </form>
-    <div class="demo-row" style="margin-top:8px">
-      <button class="demo-btn-sm" onclick="vApi.setError('email','Email already registered'); document.getElementById('v-api-result').textContent = 'setError() → email already registered'">setError()</button>
-      <button class="demo-btn-sm" onclick="vApi.clearErrors(); document.getElementById('v-api-result').textContent = 'clearErrors() ✓'">clearErrors()</button>
-      <button class="demo-btn-sm" onclick="document.getElementById('v-api-result').textContent = 'isValid() → ' + vApi.isValid()">isValid()</button>
-      <button class="demo-btn-sm" onclick="document.getElementById('v-api-result').textContent = 'getData() → ' + JSON.stringify(vApi.getData())">getData()</button>
-    </div>
-    <div class="result-box" id="v-api-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-v3','js-v3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-v3','html-v3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-v3">&lt;form id="my-form"&gt;
-  &lt;div id="field-email"&gt;&lt;/div&gt;
-  &lt;button type="submit"&gt;Register&lt;/button&gt;
-&lt;/form&gt;
-
-&lt;script&gt;
-  new MTS.Input('#field-email', { label:'Email', type:'email',
-    rules:{ required:true, email:true } });
-
-  const v = new MTS.Validate('#my-form', {
-    rules: { email: { required:true, email:true } },
-    onValid: async (data) =&gt; {
-      const res = await register(data);
-      if (res.error) v.setError('email', 'Email already exists');
-    },
-  });
-
-  v.isValid()                          // → boolean
-  v.getData()                          // → { email: '...' }
-  v.getErrors()                        // → { email: 'message' }
-  v.clearErrors()                      // clear all / limpiar todos
-  v.setError('email', 'Server error')  // server-side error
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-v3">new MTS.Input('#field-email', {
-  label: 'Email address',
-  type:  'email',
-  rules: { required: true, email: true },
-});
-
-const v = new MTS.Validate('#form-api', {
-  rules: { email: { required: true, email: true } },
-  // Fires when valid / Se dispara cuando es válido
-  onValid: async (data) => {
-    // Simulate server error / Simular error del servidor
-    v.setError('email', 'Email already registered');
-  },
-  onInvalid: (errors) => console.log(errors),
-});
-
-// API methods / Métodos de la API
-v.validate()                           // → boolean
-v.isValid()                            // → boolean
-v.getData()                            // → { fieldName: value }
-v.getErrors()                          // → { fieldName: 'message' }
-v.clearErrors()
-v.setError('email', 'Already exists') // server error / error del servidor</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Formulario completo / Full form</div><div id="tabs-v1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Reglas avanzadas / Advanced rules</div><div id="tabs-v2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — API — errores del servidor / Server-side errors</div><div id="tabs-v3"></div></div>
 </div>
 
 <script>
-new MTS.Input('#v-name',  { name:'name',      label:'Nombre completo',      placeholder:'Juan Pérez',              rules:{ required:true, minLength:3 } });
-new MTS.Input('#v-email', { name:'email',     label:'Email',                placeholder:'user@ejemplo.com',        rules:{ required:true, email:true }, type:'email' });
-new MTS.Input('#v-pass',  { name:'password',  label:'Contraseña',           placeholder:'Mín 8 caracteres',        rules:{ required:true, minLength:8 }, type:'password' });
-new MTS.Input('#v-pass2', { name:'password2', label:'Confirmar contraseña', placeholder:'Repite la contraseña',    rules:{ required:true }, type:'password' });
-new MTS.Button('#v-submit', { label:'Enviar formulario', variant:'primary' });
+function esc(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function indentHtml(html){
+  var indent=0, step=2;
+  var voids=/^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result='';
+  (html.match(/<[^>]+>|[^<]+/g)||[]).forEach(function(tok){
+    var t=tok.trim(); if(!t) return;
+    if(/^<\//.test(t)){ indent=Math.max(0,indent-step); result+=' '.repeat(indent)+t+'\n'; }
+    else if(/^<[^!]/.test(t)){
+      result+=' '.repeat(indent)+t+'\n';
+      var tag=(t.match(/^<([a-z][a-z0-9-]*)/i)||[])[1]||'';
+      if(!voids.test(tag) && !/\/>$/.test(t)) indent+=step;
+    } else {
+      var text=t.replace(/\s+/g,' '); if(text) result+=' '.repeat(indent)+text+'\n';
+    }
+  });
+  return result.trimEnd();
+}
+function htmlTab(previewHtml){ return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">'+esc(indentHtml(previewHtml))+'</pre>'; }
+function jsTab(code){ return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">'+esc(code)+'</pre>'; }
+function makeSection(id, previewHtml, jsCode, initFn, height){
+  new MTS.Tabs('#'+id,{variant:'card',height:height||'420px',lazy:false,tabs:[
+    {id:id+'-preview',label:'Preview',content:previewHtml},
+    {id:id+'-html',label:'HTML',content:htmlTab(previewHtml)},
+    {id:id+'-js',label:'JavaScript',content:jsTab(jsCode)}
+  ]});
+  if(typeof initFn==='function') initFn();
+}
 
-new MTS.Validate('#form-full', {
-  rules:{
-    name:      { required:true, minLength:3 },
-    email:     { required:true, email:true },
-    password:  { required:true, minLength:8 },
-    password2: { required:true },
-  },
-  messages:{ name:{ required:'El nombre es requerido', minLength:'Mínimo 3 caracteres' } },
-  validateOnBlur:true,
-  onValid:   function(d){ document.getElementById('v-result').textContent = 'onValid → ' + JSON.stringify(d); },
-  onInvalid: function(e){ document.getElementById('v-result').textContent = 'onInvalid → ' + JSON.stringify(e); },
-});
+var preview1 =
+  '<div class="demo-stack">' +
+    '<form id="form-full">' +
+      '<div id="v-name"></div>' +
+      '<div id="v-email"></div>' +
+      '<div id="v-pass"></div>' +
+      '<div id="v-pass2"></div>' +
+      '<div><button type="submit" id="v-submit"></button></div>' +
+    '</form>' +
+    '<div class="result-box" id="v-result">— completa y envía el formulario —</div>' +
+  '</div>';
+var js1 =
+  "new MTS.Input('#v-name', { name:'name', label:'Nombre completo', placeholder:'Juan Pérez', rules:{ required:true, minLength:3 } });\n" +
+  "new MTS.Input('#v-email', { name:'email', label:'Email', placeholder:'user@ejemplo.com', rules:{ required:true, email:true }, type:'email' });\n" +
+  "new MTS.Input('#v-pass', { name:'password', label:'Contraseña', placeholder:'Mín 8 caracteres', rules:{ required:true, minLength:8 }, type:'password' });\n" +
+  "new MTS.Input('#v-pass2', { name:'password2', label:'Confirmar contraseña', placeholder:'Repite la contraseña', rules:{ required:true }, type:'password' });\n" +
+  "new MTS.Button('#v-submit', { label:'Enviar formulario', variant:'primary' });\n\n" +
+  "new MTS.Validate('#form-full', {\n" +
+  "  rules:{\n" +
+  "    name:{ required:true, minLength:3 },\n" +
+  "    email:{ required:true, email:true },\n" +
+  "    password:{ required:true, minLength:8 },\n" +
+  "    password2:{ required:true }\n" +
+  "  },\n" +
+  "  messages:{ name:{ required:'El nombre es requerido', minLength:'Mínimo 3 caracteres' } },\n" +
+  "  validateOnBlur:true,\n" +
+  "  onValid:function(data){ document.getElementById('v-result').textContent = 'onValid → ' + JSON.stringify(data); },\n" +
+  "  onInvalid:function(errors){ document.getElementById('v-result').textContent = 'onInvalid → ' + JSON.stringify(errors); }\n" +
+  "});";
 
-new MTS.Input('#v-rut',    { name:'rut',    label:'RUT',       placeholder:'12.345.678-9',  rules:{ required:true, rut:true } });
-new MTS.Input('#v-age',    { name:'age',    label:'Edad',      type:'number',               rules:{ required:true, min:18, max:99 } });
-new MTS.Input('#v-url',    { name:'url',    label:'Sitio web', placeholder:'https://...',   rules:{ url:true } });
-new MTS.Input('#v-custom', { name:'custom', label:'Usuario',   placeholder:'No uses "admin"', rules:{ required:true, custom: function(v){ return v!=='admin'||'Usuario no permitido'; } } });
-new MTS.Button('#v-adv-submit', { label:'Validar', variant:'primary' });
-new MTS.Validate('#form-advanced', {
-  rules:{ rut:{ required:true, rut:true }, age:{ required:true, min:18, max:99 }, url:{ url:true }, custom:{ required:true } },
-  onValid:   function(d){ document.getElementById('v-adv-result').textContent = 'onValid → ' + JSON.stringify(d); },
-  onInvalid: function(e){ document.getElementById('v-adv-result').textContent = 'onInvalid → ' + JSON.stringify(e); },
-});
+var preview2 =
+  '<div class="demo-stack">' +
+    '<form id="form-advanced">' +
+      '<div id="v-rut"></div>' +
+      '<div id="v-age"></div>' +
+      '<div id="v-url"></div>' +
+      '<div id="v-custom"></div>' +
+      '<div><button type="submit" id="v-adv-submit"></button></div>' +
+    '</form>' +
+    '<div class="result-box" id="v-adv-result">— completa y envía el formulario —</div>' +
+  '</div>';
+var js2 =
+  "new MTS.Input('#v-rut', { name:'rut', label:'RUT', placeholder:'12.345.678-9', rules:{ required:true, rut:true } });\n" +
+  "new MTS.Input('#v-age', { name:'age', label:'Edad', type:'number', rules:{ required:true, min:18, max:99 } });\n" +
+  "new MTS.Input('#v-url', { name:'url', label:'Sitio web', placeholder:'https://...', rules:{ url:true } });\n" +
+  "new MTS.Input('#v-custom', { name:'custom', label:'Usuario', placeholder:'No uses \"admin\"', rules:{ required:true, custom:function(v){ return v !== 'admin' || 'Usuario no permitido'; } } });\n" +
+  "new MTS.Button('#v-adv-submit', { label:'Validar', variant:'primary' });\n\n" +
+  "new MTS.Validate('#form-advanced', {\n" +
+  "  rules:{ rut:{ required:true, rut:true }, age:{ required:true, min:18, max:99 }, url:{ url:true }, custom:{ required:true } },\n" +
+  "  onValid:function(data){ document.getElementById('v-adv-result').textContent = 'onValid → ' + JSON.stringify(data); },\n" +
+  "  onInvalid:function(errors){ document.getElementById('v-adv-result').textContent = 'onInvalid → ' + JSON.stringify(errors); }\n" +
+  "});";
 
-new MTS.Input('#v-api-email', { name:'email', label:'Email', type:'email', rules:{ required:true, email:true }, placeholder:'user@example.com' });
-new MTS.Button('#v-api-submit', { label:'Register', variant:'primary' });
-var vApi = new MTS.Validate('#form-api', {
-  rules:{ email:{ required:true, email:true } },
-  onValid:   function(d){ document.getElementById('v-api-result').textContent = 'onValid → ' + JSON.stringify(d); },
-  onInvalid: function(e){ document.getElementById('v-api-result').textContent = 'onInvalid → ' + JSON.stringify(e); },
-});
+var preview3 =
+  '<div class="demo-stack">' +
+    '<form id="form-api">' +
+      '<div id="v-api-email"></div>' +
+      '<div><button type="submit" id="v-api-submit"></button></div>' +
+    '</form>' +
+    '<div class="demo-row">' +
+      '<button class="demo-btn-sm" onclick="vApi.setError(\'email\',\'Already exists\'); document.getElementById(\'v-api-result\').textContent = \'setError() → Already exists\'">setError()</button>' +
+      '<button class="demo-btn-sm" onclick="vApi.clearErrors(); document.getElementById(\'v-api-result\').textContent = \'clearErrors() ✓\'">clearErrors()</button>' +
+      '<button class="demo-btn-sm" onclick="document.getElementById(\'v-api-result\').textContent = \'isValid() → \' + vApi.isValid()">isValid()</button>' +
+      '<button class="demo-btn-sm" onclick="document.getElementById(\'v-api-result\').textContent = \'getData() → \' + JSON.stringify(vApi.getData())">getData()</button>' +
+    '</div>' +
+    '<div class="result-box" id="v-api-result">— usa los botones —</div>' +
+  '</div>';
+var js3 =
+  "new MTS.Input('#v-api-email', { name:'email', label:'Email', type:'email', rules:{ required:true, email:true }, placeholder:'user@example.com' });\n" +
+  "new MTS.Button('#v-api-submit', { label:'Register', variant:'primary' });\n\n" +
+  "var vApi = new MTS.Validate('#form-api', {\n" +
+  "  rules:{ email:{ required:true, email:true } },\n" +
+  "  onValid:function(data){ document.getElementById('v-api-result').textContent = 'onValid → ' + JSON.stringify(data); },\n" +
+  "  onInvalid:function(errors){ document.getElementById('v-api-result').textContent = 'onInvalid → ' + JSON.stringify(errors); }\n" +
+  "});\n\n" +
+  "vApi.setError('email', 'Already exists');\n" +
+  "vApi.clearErrors();\n" +
+  "vApi.isValid();\n" +
+  "vApi.getData();";
+
+makeSection('tabs-v1', preview1, js1, function(){
+  new MTS.Input('#v-name',  { name:'name',      label:'Nombre completo',      placeholder:'Juan Pérez',              rules:{ required:true, minLength:3 } });
+  new MTS.Input('#v-email', { name:'email',     label:'Email',                placeholder:'user@ejemplo.com',        rules:{ required:true, email:true }, type:'email' });
+  new MTS.Input('#v-pass',  { name:'password',  label:'Contraseña',           placeholder:'Mín 8 caracteres',        rules:{ required:true, minLength:8 }, type:'password' });
+  new MTS.Input('#v-pass2', { name:'password2', label:'Confirmar contraseña', placeholder:'Repite la contraseña',    rules:{ required:true }, type:'password' });
+  new MTS.Button('#v-submit', { label:'Enviar formulario', variant:'primary' });
+  new MTS.Validate('#form-full', {
+    rules:{
+      name:{ required:true, minLength:3 },
+      email:{ required:true, email:true },
+      password:{ required:true, minLength:8 },
+      password2:{ required:true }
+    },
+    messages:{ name:{ required:'El nombre es requerido', minLength:'Mínimo 3 caracteres' } },
+    validateOnBlur:true,
+    onValid:function(data){ document.getElementById('v-result').textContent = 'onValid → ' + JSON.stringify(data); },
+    onInvalid:function(errors){ document.getElementById('v-result').textContent = 'onInvalid → ' + JSON.stringify(errors); }
+  });
+}, '520px');
+
+makeSection('tabs-v2', preview2, js2, function(){
+  new MTS.Input('#v-rut',    { name:'rut',    label:'RUT',       placeholder:'12.345.678-9',  rules:{ required:true, rut:true } });
+  new MTS.Input('#v-age',    { name:'age',    label:'Edad',      type:'number',               rules:{ required:true, min:18, max:99 } });
+  new MTS.Input('#v-url',    { name:'url',    label:'Sitio web', placeholder:'https://...',   rules:{ url:true } });
+  new MTS.Input('#v-custom', { name:'custom', label:'Usuario',   placeholder:'No uses "admin"', rules:{ required:true, custom:function(v){ return v !== 'admin' || 'Usuario no permitido'; } } });
+  new MTS.Button('#v-adv-submit', { label:'Validar', variant:'primary' });
+  new MTS.Validate('#form-advanced', {
+    rules:{ rut:{ required:true, rut:true }, age:{ required:true, min:18, max:99 }, url:{ url:true }, custom:{ required:true } },
+    onValid:function(data){ document.getElementById('v-adv-result').textContent = 'onValid → ' + JSON.stringify(data); },
+    onInvalid:function(errors){ document.getElementById('v-adv-result').textContent = 'onInvalid → ' + JSON.stringify(errors); }
+  });
+}, '500px');
+
+var vApi;
+makeSection('tabs-v3', preview3, js3, function(){
+  new MTS.Input('#v-api-email', { name:'email', label:'Email', type:'email', rules:{ required:true, email:true }, placeholder:'user@example.com' });
+  new MTS.Button('#v-api-submit', { label:'Register', variant:'primary' });
+  vApi = new MTS.Validate('#form-api', {
+    rules:{ email:{ required:true, email:true } },
+    onValid:function(data){ document.getElementById('v-api-result').textContent = 'onValid → ' + JSON.stringify(data); },
+    onInvalid:function(errors){ document.getElementById('v-api-result').textContent = 'onInvalid → ' + JSON.stringify(errors); }
+  });
+}, '480px');
 </script>
 </body>
 </html>

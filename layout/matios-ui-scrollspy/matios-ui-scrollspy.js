@@ -21,26 +21,57 @@ MTS.ScrollSpy = class MtsScrollSpy {
       .flatMap(s => [...document.querySelectorAll(s)])
       .filter(Boolean);
     this._navEl      = options.nav ? document.querySelector(options.nav) : null;
+    this._scrollEl   = options.scrollContainer
+      ? (typeof options.scrollContainer === 'string' ? document.querySelector(options.scrollContainer) : options.scrollContainer)
+      : window;
     this._linkAttr   = options.linkAttr   || 'href';
     this._offset     = options.offset     ?? 80;
     this._activeClass= options.activeClass|| 'active';
     this._onChange   = options.onChange   || null;
     this._current    = null;
     this._onScroll   = this._check.bind(this);
-    window.addEventListener('scroll', this._onScroll, { passive:true });
+    this._scrollEl.addEventListener('scroll', this._onScroll, { passive:true });
     this._check();
   }
 
-  destroy() { window.removeEventListener('scroll', this._onScroll); }
+  destroy() { this._scrollEl.removeEventListener('scroll', this._onScroll); }
 
   _check() {
     let active = null;
-    const scrollY = window.scrollY || window.pageYOffset;
 
-    this._sections.forEach(sec => {
-      const top = sec.getBoundingClientRect().top + scrollY - this._offset;
-      if (scrollY >= top) active = sec;
-    });
+    if (this._scrollEl === window) {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const line = scrollY + this._offset;
+
+      this._sections.forEach(sec => {
+        const top = sec.getBoundingClientRect().top + scrollY;
+        const bottom = top + sec.offsetHeight;
+        if (line >= top && line < bottom) active = sec;
+      });
+
+      if (!active) {
+        this._sections.forEach(sec => {
+          const top = sec.getBoundingClientRect().top + scrollY;
+          if (line >= top) active = sec;
+        });
+      }
+    } else {
+      const scrollTop = this._scrollEl.scrollTop;
+      const line = scrollTop + this._offset;
+
+      this._sections.forEach(sec => {
+        const top = sec.offsetTop;
+        const bottom = top + sec.offsetHeight;
+        if (line >= top && line < bottom) active = sec;
+      });
+
+      if (!active) {
+        this._sections.forEach(sec => {
+          const top = sec.offsetTop;
+          if (line >= top) active = sec;
+        });
+      }
+    }
 
     const id = active?.id || (this._sections[0]?.id ?? '');
     if (id === this._current) return;

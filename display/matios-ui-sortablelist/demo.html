@@ -30,8 +30,12 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
   <link rel="stylesheet" href="./matios-ui-sortablelist.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
   <script src="./matios-ui-sortablelist.js"></script>
 </head>
 <body>
@@ -47,207 +51,124 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.SortableList</h1>
-    <p>Drag-and-drop sortable list — numbered, move buttons, icons, avatars, badges, read-only.</p>
+    <p>Drag-and-drop sortable list — numbered, move buttons, icons, badges and API controls.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-sortablelist.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-sortablelist.md')">Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-
-  <!-- 1. Workflow -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Workflow de aprobaciones — numbered + moveButtons + disabled</div>
-    <div id="sl-workflow"></div>
-    <div class="result-box" id="sl-result">— reordena la lista —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-sl1','js-sl1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-sl1','html-sl1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-sl1">&lt;div id="my-list"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.SortableList('#my-list', {
-    numbered:    true,
-    moveButtons: true,
-    items: [
-      { id:'1', title:'Design review', badge:{ label:'Pending', variant:'warning' } },
-      { id:'2', title:'Backend API',   badge:{ label:'In progress', variant:'primary' } },
-      { id:'3', title:'QA testing',    disabled: true },
-    ],
-    // Fires when reordered / Se dispara al reordenar
-    onReorder: (e) =&gt; {
-      console.log(e.detail.items);     // → new order
-      console.log(e.detail.fromIndex); // → 0
-      console.log(e.detail.toIndex);   // → 2
-    },
-    // Fires on item click / Se dispara al hacer click
-    onItemClick: (e) =&gt; console.log(e.detail.item.id),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-sl1">new MTS.SortableList('#my-list', {
-  variant:     'default',
-  numbered:    true,    // show order numbers / mostrar números de orden
-  moveButtons: true,    // show ↑ ↓ buttons / mostrar botones ↑ ↓
-  showHandle:  true,    // show drag handle / mostrar asa de arrastre
-  items: [
-    { id:'1', title:'Design review',    description:'Ana García',   badge:{ label:'Pending',     variant:'warning' } },
-    { id:'2', title:'Backend API',      description:'Pedro López',  badge:{ label:'In progress', variant:'primary' } },
-    { id:'3', title:'QA testing',       description:'Laura Sánchez', disabled: true },
-    { id:'4', title:'Deploy to prod',   description:'Carlos Ruiz',  badge:{ label:'Blocked',     variant:'danger'  } },
-    { id:'5', title:'Write changelog',  description:'María Torres', badge:{ label:'Todo',        variant:'default' } },
-  ],
-  onReorder:   (e) =&gt; console.log('reordered from', e.detail.fromIndex, 'to', e.detail.toIndex),
-  onItemClick: (e) =&gt; console.log('clicked:', e.detail.item.title),
-});</div>
-  </div>
-
-  <!-- 2. Prioridades con íconos -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Lista de prioridades — íconos y meta</div>
-    <div id="sl-priorities"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-sl2','js-sl2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-sl2','html-sl2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-sl2">&lt;div id="my-list"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.SortableList('#my-list', {
-    variant: 'compact',
-    items: [
-      { id:'1', title:'Critical bug',    icon:'🔴', meta:'P1 · 2h' },
-      { id:'2', title:'Feature request', icon:'🟡', meta:'P2 · 4h' },
-      { id:'3', title:'Documentation',   icon:'🟢', meta:'P3 · 1h' },
-    ],
-    onReorder: (e) =&gt; saveOrder(e.detail.items),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-sl2">new MTS.SortableList('#my-list', {
-  variant: 'compact',
-  items: [
-    { id:'1', title:'Critical bug',    description:'Auth fails on login', icon:'🔴', meta:'P1 · 2h' },
-    { id:'2', title:'Feature request', description:'Dark mode toggle',    icon:'🟡', meta:'P2 · 4h' },
-    { id:'3', title:'Documentation',   description:'Update API docs',     icon:'🟢', meta:'P3 · 1h' },
-    { id:'4', title:'Refactor DB',     description:'Optimize queries',    icon:'🔵', meta:'P4 · 6h' },
-  ],
-  onReorder: (e) =&gt; console.log('new order:', e.detail.items.map(i =&gt; i.id)),
-});</div>
-  </div>
-
-  <!-- 3. Variantes -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Variantes / Variants</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
-      <div>
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);margin-bottom:8px">default</div>
-        <div id="sl-v1"></div>
-      </div>
-      <div>
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);margin-bottom:8px">flush</div>
-        <div id="sl-v2"></div>
-      </div>
-      <div>
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);margin-bottom:8px">compact</div>
-        <div id="sl-v3"></div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-sl3','js-sl3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-sl3','html-sl3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-sl3">&lt;div id="my-list"&gt;&lt;/div&gt;
-&lt;script&gt;
-  // Variants: 'default' | 'flush' | 'compact'
-  new MTS.SortableList('#my-list', { variant: 'flush', items:[...] });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-sl3">['default','flush','compact'].forEach(variant =&gt; {
-  new MTS.SortableList('#sl-' + variant, {
-    variant,
-    items: [
-      { id:'a', title:'Item Alpha' },
-      { id:'b', title:'Item Beta' },
-      { id:'c', title:'Item Gamma' },
-    ],
-  });
-});</div>
-  </div>
-
-  <!-- 4. API -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — API — addItem · removeItem · lock · unlock</div>
-    <div id="sl-api"></div>
-    <div class="demo-row" style="margin-top:10px;flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="slApi.addItem({id:'n'+Date.now(),title:'New item #'+ ++slCount})">addItem()</button>
-      <button class="demo-btn-sm" onclick="slApi.removeItem('sl-a1')">removeItem('sl-a1')</button>
-      <button class="demo-btn-sm" onclick="slApi.lock()">lock()</button>
-      <button class="demo-btn-sm" onclick="slApi.unlock()">unlock()</button>
-    </div>
-    <div class="result-box" id="sl-api-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-sl4','js-sl4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-sl4','html-sl4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-sl4">&lt;div id="my-list"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const list = new MTS.SortableList('#my-list', { items:[...] });
-
-  list.addItem({ id:'new', title:'New item' })
-  list.addItem({ id:'top', title:'At top' }, 0)
-  list.removeItem('new')
-  list.updateItem('top', { title:'Updated' })
-  list.lock()    // disable drag / deshabilitar drag
-  list.unlock()  // re-enable / rehabilitar
-  list.getItems() // → current order
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-sl4">const list = new MTS.SortableList('#my-list', {
-  numbered: true,
-  items: [
-    { id:'sl-a1', title:'Item Alpha' },
-    { id:'sl-a2', title:'Item Beta'  },
-    { id:'sl-a3', title:'Item Gamma' },
-  ],
-  onReorder: (e) =&gt; console.log('reordered:', e.detail.items.map(i =&gt; i.id)),
-});
-
-list.addItem({ id:'new-item', title:'New item' })         // add at end
-list.addItem({ id:'top-item', title:'At top' }, 0)         // add at index
-list.removeItem('sl-a1')                                   // remove by id
-list.updateItem('sl-a2', { title:'Updated title' })       // update item
-list.lock()                                                // read-only
-list.unlock()                                              // re-enable drag
-list.getItems()                                            // current order</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Workflow de aprobaciones</div><div id="tabs-sl1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Lista de prioridades — íconos y meta</div><div id="tabs-sl2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Variantes</div><div id="tabs-sl3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — API — addItem · removeItem · lock · unlock</div><div id="tabs-sl4"></div></div>
 </div>
 <script>
-var ITEMS_WF = [
-  { id:'1', title:'Revisión de diseño',    description:'Ana García',    badge:{ label:'Pendiente',   variant:'warning' } },
-  { id:'2', title:'API Backend',           description:'Pedro López',   badge:{ label:'En progreso', variant:'primary' } },
-  { id:'3', title:'Pruebas QA',            description:'Laura Sánchez', disabled:true },
-  { id:'4', title:'Deploy a producción',   description:'Carlos Ruiz',   badge:{ label:'Bloqueado',   variant:'danger'  } },
-  { id:'5', title:'Documentar changelog',  description:'María Torres',  badge:{ label:'Todo',        variant:'default' } },
-];
+function esc(str){return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function indentHtml(html){
+  var indent=0, step=2;
+  var voids=/^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var out='';
+  (html.match(/<[^>]+>|[^<]+/g)||[]).forEach(function(tok){
+    var t=tok.trim(); if(!t) return;
+    if(/^<\//.test(t)){ indent=Math.max(0, indent-step); out += ' '.repeat(indent) + t + '\n'; }
+    else if(/^<[^!]/.test(t)){ out += ' '.repeat(indent) + t + '\n'; var tag=(t.match(/^<([a-z][a-z0-9-]*)/i)||[])[1]||''; if(!voids.test(tag) && !/\/>$/.test(t)) indent += step; }
+    else { var text=t.replace(/\s+/g,' '); if(text) out += ' '.repeat(indent) + text + '\n'; }
+  });
+  return out.trimEnd();
+}
+function codeBlock(code){return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">'+esc(code)+'</pre>';}
+function makeSection(id, previewHtml, jsCode){
+  new MTS.Tabs('#'+id, {
+    variant:'card',
+    height:'380px',
+    lazy:false,
+    tabs:[
+      { id:id+'-preview', label:'Preview', content:previewHtml },
+      { id:id+'-html', label:'HTML', content:codeBlock(indentHtml(previewHtml)) },
+      { id:id+'-js', label:'JavaScript', content:codeBlock(jsCode) }
+    ]
+  });
+}
+
+makeSection('tabs-sl1',
+  '<div><div id="sl-workflow"></div><div class="result-box" id="sl-result">— reordena la lista —</div></div>',
+`new MTS.SortableList('#sl-workflow', {
+  numbered: true,
+  moveButtons: true,
+  items: [
+    { id:'1', title:'Design review', badge:{ label:'Pending', variant:'warning' } },
+    { id:'2', title:'Backend API', badge:{ label:'In progress', variant:'primary' } },
+    { id:'3', title:'QA testing', disabled: true }
+  ],
+  onReorder: (e) => console.log(e.detail.items),
+  onItemClick: (e) => console.log(e.detail.item.id)
+});`);
 new MTS.SortableList('#sl-workflow', {
-  numbered:true, moveButtons:true, items:ITEMS_WF,
-  onReorder:   function(e){ document.getElementById('sl-result').textContent = 'onReorder → from:'+e.detail.fromIndex+' to:'+e.detail.toIndex; },
-  onItemClick: function(e){ document.getElementById('sl-result').textContent = 'onItemClick → "'+e.detail.item.title+'"'; },
+  numbered:true,
+  moveButtons:true,
+  items:[
+    { id:'1', title:'Revisión de diseño', description:'Ana García', badge:{ label:'Pendiente', variant:'warning' } },
+    { id:'2', title:'API Backend', description:'Pedro López', badge:{ label:'En progreso', variant:'primary' } },
+    { id:'3', title:'Pruebas QA', description:'Laura Sánchez', disabled:true },
+    { id:'4', title:'Deploy a producción', description:'Carlos Ruiz', badge:{ label:'Bloqueado', variant:'danger' } },
+    { id:'5', title:'Documentar changelog', description:'María Torres', badge:{ label:'Todo', variant:'default' } }
+  ],
+  onReorder:function(e){ document.getElementById('sl-result').textContent='onReorder → from:'+e.detail.fromIndex+' to:'+e.detail.toIndex; },
+  onItemClick:function(e){ document.getElementById('sl-result').textContent='onItemClick → "'+e.detail.item.title+'"'; }
 });
+
+makeSection('tabs-sl2',
+  '<div id="sl-priorities"></div>',
+`new MTS.SortableList('#sl-priorities', {
+  variant: 'compact',
+  items: [
+    { id:'1', title:'Critical bug', icon: MTS.Icon.get('warning', 16), meta:'P1 · 2h' },
+    { id:'2', title:'Feature request', icon: MTS.Icon.get('star', 16), meta:'P2 · 4h' },
+    { id:'3', title:'Documentation', icon: MTS.Icon.get('check-circle', 16), meta:'P3 · 1h' }
+  ]
+});`);
 new MTS.SortableList('#sl-priorities', {
   variant:'compact',
   items:[
-    { id:'p1', title:'Critical bug',    description:'Auth fails',       icon:'🔴', meta:'P1 · 2h' },
-    { id:'p2', title:'Feature request', description:'Dark mode',        icon:'🟡', meta:'P2 · 4h' },
-    { id:'p3', title:'Documentation',   description:'Update API docs',  icon:'🟢', meta:'P3 · 1h' },
-    { id:'p4', title:'Refactor DB',     description:'Optimize queries', icon:'🔵', meta:'P4 · 6h' },
-  ],
+    { id:'p1', title:'Critical bug', description:'Auth fails', icon:MTS.Icon.get('warning',16), meta:'P1 · 2h' },
+    { id:'p2', title:'Feature request', description:'Dark mode', icon:MTS.Icon.get('star',16), meta:'P2 · 4h' },
+    { id:'p3', title:'Documentation', description:'Update API docs', icon:MTS.Icon.get('check-circle',16), meta:'P3 · 1h' },
+    { id:'p4', title:'Refactor DB', description:'Optimize queries', icon:MTS.Icon.get('flag',16), meta:'P4 · 6h' }
+  ]
 });
-var ITEMS_V = [{ id:'a', title:'Item Alpha' },{ id:'b', title:'Item Beta' },{ id:'c', title:'Item Gamma' }];
-new MTS.SortableList('#sl-v1', { variant:'default', items:ITEMS_V.map(function(x){ return Object.assign({},x); }) });
-new MTS.SortableList('#sl-v2', { variant:'flush',   items:ITEMS_V.map(function(x){ return Object.assign({},x); }) });
-new MTS.SortableList('#sl-v3', { variant:'compact', items:ITEMS_V.map(function(x){ return Object.assign({},x); }) });
+
+makeSection('tabs-sl3',
+  '<div><div id="sl-v1"></div><div style="height:12px"></div><div id="sl-v2"></div><div style="height:12px"></div><div id="sl-v3"></div></div>',
+`new MTS.SortableList('#sl-v1', { variant: 'default', items: [...] });
+new MTS.SortableList('#sl-v2', { variant: 'flush', items: [...] });
+new MTS.SortableList('#sl-v3', { variant: 'compact', items: [...] });`);
+['default','flush','compact'].forEach(function(variant, index){
+  new MTS.SortableList('#sl-v'+(index+1), {
+    variant: variant,
+    items:[{id:'a',title:'Item Alpha'},{id:'b',title:'Item Beta'},{id:'c',title:'Item Gamma'}]
+  });
+});
+
+makeSection('tabs-sl4',
+  '<div><div id="sl-api"></div><div class="demo-row" style="margin-top:10px;flex-wrap:wrap"><button class="demo-btn-sm" onclick="slApi.addItem({id:\'n\'+Date.now(),title:\'New item #\'+ ++slCount})">addItem()</button><button class="demo-btn-sm" onclick="slApi.removeItem(\'sl-a1\')">removeItem(\'sl-a1\')</button><button class="demo-btn-sm" onclick="slApi.lock()">lock()</button><button class="demo-btn-sm" onclick="slApi.unlock()">unlock()</button></div><div class="result-box" id="sl-api-result">— usa los botones —</div></div>',
+`const list = new MTS.SortableList('#sl-api', {
+  numbered: true,
+  items: [
+    { id:'sl-a1', title:'Item Alpha' },
+    { id:'sl-a2', title:'Item Beta' },
+    { id:'sl-a3', title:'Item Gamma' }
+  ]
+});
+
+list.addItem({ id:'new-item', title:'New item' });
+list.removeItem('sl-a1');
+list.lock();
+list.unlock();`);
 var slCount = 0;
 var slApi = new MTS.SortableList('#sl-api', {
   numbered:true,
   items:[{ id:'sl-a1', title:'Item Alpha' },{ id:'sl-a2', title:'Item Beta' },{ id:'sl-a3', title:'Item Gamma' }],
-  onReorder:function(e){ document.getElementById('sl-api-result').textContent = 'onReorder → '+e.detail.items.map(function(i){ return i.id; }).join(', '); },
+  onReorder:function(e){ document.getElementById('sl-api-result').textContent='reordered → '+e.detail.items.map(function(i){return i.id;}).join(', '); }
 });
 </script>
 </body>

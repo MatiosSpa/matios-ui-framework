@@ -3,24 +3,25 @@
 <head>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.SideNav — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
@@ -30,28 +31,13 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-sidenav.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-sidenav.js"></script>
-  <style>
-    .nav-wrap {
-      border: 1px solid var(--mts-border-color);
-      border-radius: var(--mts-radius-lg);
-      overflow: hidden;
-      height: 420px;
-      display: flex;
-    }
-    .nav-content {
-      flex: 1;
-      padding: 20px;
-      font-size: 13px;
-      color: var(--mts-text-muted);
-      background: var(--mts-bg-body);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -67,174 +53,159 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.SideNav</h1>
-    <p>Collapsible sidebar — submenus, badges, groups, dividers, accordion mode.</p>
+    <p>Navegación lateral colapsable con grupos, submenús y badges.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-sidenav.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-sidenav.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Completo -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Completo con submenús y badges / Full with submenus and badges</div>
-    <div class="nav-wrap">
-      <div id="sidenav-1" style="height:100%"></div>
-      <div class="nav-content" id="nav-content-1">← Selecciona un ítem</div>
-    </div>
-    <div class="result-box" id="nav-result">— selecciona un ítem del menú —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-sn1','js-sn1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-sn1','html-sn1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-sn1">&lt;div id="sidebar"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.SideNav('#sidebar', {
-    active: 'dashboard',
-    items: [
-      { group: 'Main' },
-      { id: 'dashboard', label: 'Dashboard', icon: ICON_GRID, href: '/dashboard' },
-      { id: 'analytics', label: 'Analytics', icon: ICON_CHART, badge: 'NEW' },
-      { id: 'products',  label: 'Products',  icon: ICON_BOX, children: [
-        { id: 'products-list',   label: 'All products' },
-        { id: 'products-create', label: 'Add product' },
-      ]},
-      { divider: true },
-      { group: 'Settings' },
-      { id: 'settings', label: 'Settings', icon: ICON_COG },
-    ],
-    // Fires when active item changes / Se dispara al cambiar el ítem activo
-    onChange: (e) =&gt; console.log(e.detail.id),
-    // Fires when nav collapses/expands / Se dispara al colapsar/expandir
-    onCollapse: (e) =&gt; console.log(e.detail.collapsed),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-sn1">const nav = new MTS.SideNav('#sidebar', {
-  active:    'dashboard',
-  accordion: true,  // one submenu open at a time / un submenú abierto a la vez
-
-  items: [
-    { group: 'Main' },
-    { id: 'dashboard', label: 'Dashboard', icon: ICON_GRID  },
-    { id: 'analytics', label: 'Analytics', icon: ICON_CHART, badge: 'NEW' },
-    // Submenu / Submenú
-    { id: 'products', label: 'Products', icon: ICON_BOX, children: [
-      { id: 'products-list',   label: 'All products' },
-      { id: 'products-create', label: 'Add product' },
-    ]},
-    // Divider + group / Separador + grupo
-    { divider: true },
-    { group: 'Settings' },
-    { id: 'settings', label: 'Settings', icon: ICON_COG },
-    { id: 'disabled', label: 'Disabled',  icon: ICON_BAN, disabled: true },
-  ],
-
-  // Fires when active item changes / Se dispara al cambiar el ítem activo
-  onChange: (e) =&gt; {
-    console.log(e.detail.id);   // → 'analytics'
-    console.log(e.detail.item); // → { id, label, ... }
-  },
-  // Fires when nav collapses or expands / Se dispara al colapsar o expandir
-  onCollapse: (e) =&gt; console.log('collapsed:', e.detail.collapsed),
-});</div>
-  </div>
-
-  <!-- 2. Colapsable + API -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Colapsable + API</div>
-    <div class="demo-row" style="margin-bottom:8px">
-      <button class="demo-btn-sm" onclick="nav2.collapse()">collapse()</button>
-      <button class="demo-btn-sm" onclick="nav2.expand()">expand()</button>
-      <button class="demo-btn-sm" onclick="nav2.toggleCollapse()">toggleCollapse()</button>
-      <button class="demo-btn-sm" onclick="nav2.setActive('analytics')">setActive('analytics')</button>
-      <button class="demo-btn-sm" onclick="nav2.setBadge('inbox', 9)">setBadge('inbox', 9)</button>
-    </div>
-    <div class="nav-wrap">
-      <div id="sidenav-2" style="height:100%"></div>
-      <div class="nav-content">← Usa los botones para controlar el nav</div>
-    </div>
-    <div class="result-box" id="nav-result-2">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-sn2','js-sn2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-sn2','html-sn2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-sn2">&lt;button id="btn-toggle"&gt;Toggle&lt;/button&gt;
-&lt;div id="sidebar"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  const nav = new MTS.SideNav('#sidebar', {
-    collapseBtn: '#btn-toggle',  // external button / botón externo
-    items: [...],
-    onCollapse: (e) =&gt; console.log(e.detail.collapsed),
-  });
-  nav.collapse()
-  nav.expand()
-  nav.toggleCollapse()
-  nav.setActive('analytics')
-  nav.setBadge('inbox', 5)
-  nav.setBadge('inbox', null)  // clear / limpiar
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-sn2">const nav = new MTS.SideNav('#sidebar', {
-  active:    'dashboard',
-  // Start collapsed / Iniciar colapsado
-  collapsed: false,
-  items: [...],
-  onChange:   (e) =&gt; console.log('active:', e.detail.id),
-  onCollapse: (e) =&gt; console.log('collapsed:', e.detail.collapsed),
-});
-
-// API
-nav.collapse()                 // collapse to icons only / colapsar a solo íconos
-nav.expand()                   // expand / expandir
-nav.toggleCollapse()           // toggle / alternar
-
-nav.setActive('analytics')     // set active item / establecer ítem activo
-nav.setBadge('inbox', 5)       // set badge / establecer badge
-nav.setBadge('inbox', null)    // clear badge / limpiar badge</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Básico</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Colapsable</div><div id="tabs-s2"></div></div>
 </div>
 
 <script>
-var IG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>';
-var IC = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>';
-var IB = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>';
-var IK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
-var IX = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>';
-var IM = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
-var IU = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
 
-var ITEMS = [
-  { group:'Principal' },
-  { id:'dashboard', label:'Dashboard',  icon:IG },
-  { id:'analytics', label:'Analytics',  icon:IC, badge:'NEW' },
-  { id:'products',  label:'Products',   icon:IB, children:[
-    { id:'products-list',   label:'All products' },
-    { id:'products-create', label:'Add product' },
-    { id:'products-import', label:'Import' },
-  ]},
-  { id:'inbox',     label:'Inbox',      icon:IM, badge:3 },
-  { divider:true },
-  { group:'Cuenta' },
-  { id:'profile',   label:'Profile',    icon:IU },
-  { id:'settings',  label:'Settings',   icon:IK },
-  { id:'disabled',  label:'Restricted', icon:IX, disabled:true },
-];
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
-new MTS.SideNav('#sidenav-1', {
-  active:'dashboard', accordion:true, items:ITEMS,
-  onChange: function(e){
-    document.getElementById('nav-content-1').textContent = 'Sección: ' + e.detail.item.label;
-    document.getElementById('nav-result').textContent = 'onChange → id:"' + e.detail.id + '"';
-  },
-  onCollapse: function(e){ document.getElementById('nav-result').textContent = 'onCollapse → collapsed:' + e.detail.collapsed; },
-});
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
 
-var nav2 = new MTS.SideNav('#sidenav-2', {
-  active:'dashboard', items:ITEMS,
-  onChange:   function(e){ document.getElementById('nav-result-2').textContent = 'onChange → id:"' + e.detail.id + '"'; },
-  onCollapse: function(e){ document.getElementById('nav-result-2').textContent = 'onCollapse → collapsed:' + e.detail.collapsed; },
-});
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+  if (typeof initFn === 'function') initFn();
+}
+
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+var sidenavApi;
+var preview_s1 =
+  '<div class="demo-stack">' +
+    '<div class="demo-grid-outline demo-grid-outline--tall"><div id="sidenav-basic"></div></div>' +
+    '<div class="result-box" id="sidenav-result">— selecciona un item —</div>' +
+  '</div>';
+
+var js_s1 =
+  "new MTS.SideNav('#sidenav-basic', {\n" +
+  "  active: 'dashboard',\n" +
+  "  items: [\n" +
+  "    { group: 'Main' },\n" +
+  "    { id: 'dashboard', label: 'Dashboard', icon: MTS.Icon.get('grid') },\n" +
+  "    { id: 'analytics', label: 'Analytics', icon: MTS.Icon.get('analytics'), badge: 'NEW' },\n" +
+  "    { id: 'products', label: 'Products', icon: MTS.Icon.get('package'), children: [\n" +
+  "      { id: 'all-products', label: 'All products' },\n" +
+  "      { id: 'add-product', label: 'Add product' }\n" +
+  "    ] },\n" +
+  "    { divider: true },\n" +
+  "    { group: 'Settings' },\n" +
+  "    { id: 'settings', label: 'Settings', icon: MTS.Icon.get('cog') }\n" +
+  "  ],\n" +
+  "  onChange: function(e) { setResult('sidenav-result', 'active → ' + e.detail.item.id); }\n" +
+  "});";
+
+var preview_s2 =
+  '<div class="demo-stack">' +
+    '<div class="demo-grid-outline demo-grid-outline--tall"><div id="sidenav-api"></div></div>' +
+    '<div class="demo-row">' +
+      '<button class="demo-btn-sm" onclick="sidenavApi.collapse()">collapse()</button>' +
+      '<button class="demo-btn-sm" onclick="sidenavApi.expand()">expand()</button>' +
+      '<button class="demo-btn-sm" onclick="sidenavApi.setActive(\'settings\')">setActive(\'settings\')</button>' +
+    '</div>' +
+    '<div class="result-box" id="sidenav-api-result">— usa la API —</div>' +
+  '</div>';
+
+var js_s2 =
+  "var sidenavApi = new MTS.SideNav('#sidenav-api', {\n" +
+  "  active: 'dashboard',\n" +
+  "  items: [\n" +
+  "    { id: 'dashboard', label: 'Dashboard', icon: MTS.Icon.get('grid') },\n" +
+  "    { id: 'messages', label: 'Messages', icon: MTS.Icon.get('message-circle') },\n" +
+  "    { id: 'settings', label: 'Settings', icon: MTS.Icon.get('cog') }\n" +
+  "  ],\n" +
+  "  onChange: function(e) { setResult('sidenav-api-result', 'active → ' + e.detail.item.id); }\n" +
+  "});";
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.SideNav('#sidenav-basic', {
+    active: 'dashboard',
+    items: [
+      { group: 'Main' },
+      { id: 'dashboard', label: 'Dashboard', icon: MTS.Icon.get('grid') },
+      { id: 'analytics', label: 'Analytics', icon: MTS.Icon.get('analytics'), badge: 'NEW' },
+      { id: 'products', label: 'Products', icon: MTS.Icon.get('package'), children: [
+        { id: 'all-products', label: 'All products' },
+        { id: 'add-product', label: 'Add product' }
+      ] },
+      { divider: true },
+      { group: 'Settings' },
+      { id: 'settings', label: 'Settings', icon: MTS.Icon.get('cog') }
+    ],
+    onChange: function(e) { setResult('sidenav-result', 'active → ' + e.detail.item.id); }
+  });
+}, '420px');
+
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  sidenavApi = new MTS.SideNav('#sidenav-api', {
+    active: 'dashboard',
+    items: [
+      { id: 'dashboard', label: 'Dashboard', icon: MTS.Icon.get('grid') },
+      { id: 'messages', label: 'Messages', icon: MTS.Icon.get('message-circle') },
+      { id: 'settings', label: 'Settings', icon: MTS.Icon.get('cog') }
+    ],
+    onChange: function(e) { setResult('sidenav-api-result', 'active → ' + e.detail.item.id); }
+  });
+}, '420px');
+
 </script>
 </body>
 </html>

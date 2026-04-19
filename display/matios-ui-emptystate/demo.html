@@ -21,22 +21,20 @@
     })();
   </script>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.EmptyState — Demo</title>
+  <title>EmptyState — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
-  <link rel="stylesheet" href="../../shared/demo-shared.css">
+<link rel="stylesheet" href="../../base/matios-ui-base.css">
+<link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+<link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+<link rel="stylesheet" href="../../shared/demo-shared.css">
+<link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-emptystate.css">
-  <script src="../../shared/demo-shared.js"></script>
+<script src="../../shared/demo-shared.js"></script>
+<script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-emptystate.js"></script>
-  <style>
-    .es-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
-    .es-box { border: 1px solid var(--mts-border-color); border-radius: var(--mts-radius-lg); overflow:hidden; }
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -51,160 +49,91 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.EmptyState</h1>
-    <p>Empty state placeholder — no-data, search, error, permissions, custom · sizes · CTA button.</p>
-    <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-emptystate.md')">📄 Docs</button>
-    </div>
+    <p>EmptyState demo actualizado al patrón Preview | HTML | JavaScript.</p>
+    <div class="demo-header-actions"><button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-emptystate.md')">Documentación</button></div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-
-  <!-- 1. Variantes predefinidas -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Variantes predefinidas / Preset variants</div>
-    <div class="es-grid">
-      <div class="es-box" id="es-nodata"></div>
-      <div class="es-box" id="es-search"></div>
-      <div class="es-box" id="es-error"></div>
-      <div class="es-box" id="es-perms"></div>
-    </div>
-    <div class="result-box" id="es-result">— haz click en un botón CTA —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-es1','js-es1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-es1','html-es1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-es1">&lt;div id="my-empty"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.EmptyState('#my-empty', {
-    variant:     'no-data',
-    title:       'No items yet',
-    description: 'Create your first item to get started.',
-    action:      'Add item',
-    // Fires when CTA is clicked / Se dispara al hacer click en el CTA
-    onAction: (e) =&gt; openDialog(),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-es1">// No data / Sin datos
-new MTS.EmptyState('#es-nodata', {
-  variant:     'no-data',
-  action:      'Agregar ítem',
-  // Fires when CTA button is clicked / Se dispara al hacer click en el botón CTA
-  onAction: (e) =&gt; console.log('add'),
-});
-
-// Search — no results / Sin resultados de búsqueda
-new MTS.EmptyState('#es-search', {
-  variant:     'search',
-  title:       'Sin resultados para "dashboard"',
-  description: 'Prueba con otras palabras.',
-  action:      'Limpiar búsqueda',
-  onAction:    (e) =&gt; console.log('clear'),
-});
-
-// Error state / Estado de error
-new MTS.EmptyState('#es-error', {
-  variant:     'error',
-  action:      'Reintentar',
-  onAction:    (e) =&gt; reload(),
-});
-
-// Permissions / Sin permisos
-new MTS.EmptyState('#es-perms', {
-  variant:     'permissions',
-  description: 'Contacta al administrador.',
-});</div>
-  </div>
-
-  <!-- 2. Tamaños -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Tamaños / Sizes</div>
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <div class="es-box" id="es-sm"></div>
-      <div class="es-box" id="es-md"></div>
-      <div class="es-box" id="es-lg"></div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-es2','js-es2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-es2','html-es2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-es2">&lt;div id="es-sm"&gt;&lt;/div&gt;
-&lt;div id="es-md"&gt;&lt;/div&gt;
-&lt;div id="es-lg"&gt;&lt;/div&gt;
-&lt;script&gt;
-  ['sm','md','lg'].forEach(size =&gt; {
-    new MTS.EmptyState('#es-' + size, {
-      variant: 'no-data',
-      size,
-    });
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-es2">// Sizes: 'sm' | 'md' | 'lg'
-['sm', 'md', 'lg'].forEach(size =&gt; {
-  new MTS.EmptyState('#es-' + size, {
-    variant: 'no-data',
-    size,
-    action:  'Add item',
-  });
-});</div>
-  </div>
-
-  <!-- 3. Custom + update() -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Custom + update() dinámico</div>
-    <div class="demo-row" style="margin-bottom:12px;flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="showNoData()">no-data</button>
-      <button class="demo-btn-sm" onclick="showSearch()">search</button>
-      <button class="demo-btn-sm" onclick="showError()">error</button>
-      <button class="demo-btn-sm" onclick="showCustom()">custom</button>
-    </div>
-    <div class="es-box" id="es-dynamic"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-es3','js-es3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-es3','html-es3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-es3">&lt;div id="my-empty"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const es = new MTS.EmptyState('#my-empty', { variant: 'no-data' });
-
-  // Update any option and re-render / Actualizar cualquier opción
-  es.update({
-    variant:     'search',
-    title:       'No results for "xyz"',
-    description: 'Try different keywords.',
-    action:      'Clear search',
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-es3">const es = new MTS.EmptyState('#my-empty', { variant: 'no-data' });
-
-// Update any option and re-render / Actualizar cualquier opción y re-renderizar
-es.update({ variant: 'search', title: 'Sin resultados' });
-es.update({ variant: 'error',  action: 'Reintentar' });
-
-// Custom icon / Ícono personalizado
-es.update({
-  variant:     'custom',
-  icon:        '&lt;svg&gt;...&lt;/svg&gt;',
-  title:       'No messages',
-  description: 'Start a conversation.',
-  action:      'New message',
-});</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Tamaños</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — API update()</div><div id="tabs-s3"></div></div>
 </div>
 <script>
-var esResult = document.getElementById('es-result');
-function cb(label){ return function(){ esResult.textContent = 'onAction → "' + label + '"'; }; }
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
-new MTS.EmptyState('#es-nodata', { variant:'no-data', action:'Agregar ítem', onAction:cb('Agregar ítem') });
-new MTS.EmptyState('#es-search', { variant:'search', title:'Sin resultados para "dashboard"', description:'Prueba con otras palabras.', action:'Limpiar búsqueda', onAction:cb('Limpiar búsqueda') });
-new MTS.EmptyState('#es-error',  { variant:'error',  action:'Reintentar', onAction:cb('Reintentar') });
-new MTS.EmptyState('#es-perms',  { variant:'permissions', description:'Contacta al administrador.' });
-['sm','md','lg'].forEach(function(s){ new MTS.EmptyState('#es-'+s, { variant:'no-data', size:s, action:'Add item' }); });
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
 
-var esDynamic = new MTS.EmptyState('#es-dynamic', { variant:'no-data', action:'Agregar', onAction:cb('Agregar') });
-function showNoData(){ esDynamic.update({ variant:'no-data',    action:'Agregar ítem',     onAction:cb('Agregar') }); }
-function showSearch(){ esDynamic.update({ variant:'search',     title:'Sin resultados para "xyz"', description:'Prueba con otras palabras.', action:'Limpiar', onAction:cb('Limpiar') }); }
-function showError(){  esDynamic.update({ variant:'error',      action:'Reintentar', onAction:cb('Reintentar') }); }
-function showCustom(){ esDynamic.update({ variant:'custom', icon:'<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>', title:'Sin mensajes', description:'Inicia una conversación.', action:'Nuevo mensaje', onAction:cb('Nuevo mensaje') }); }
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(indentHtml(previewHtml)) + '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(code) + '</pre>';
+}
+
+
+function cb(label) {
+  return function() {
+    var box = document.getElementById('es-result');
+    if (box) box.textContent = 'click → ' + label;
+  };
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '340px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+  if (typeof initFn === 'function') initFn();
+}
+var preview_s1 = "<div class=\"demo-grid\"><div id=\"es-nodata\"></div><div id=\"es-search\"></div><div id=\"es-error\"></div><div id=\"es-perms\"></div></div>";
+var js_s1 = "new MTS.EmptyState('#es-nodata', { variant:'no-data', action:'Agregar \u00edtem' });\nnew MTS.EmptyState('#es-search', { variant:'search', title:'Sin resultados para \"dashboard\"', description:'Prueba con otras palabras.', action:'Limpiar b\u00fasqueda' });\nnew MTS.EmptyState('#es-error', { variant:'error', action:'Reintentar' });\nnew MTS.EmptyState('#es-perms', { variant:'permissions', description:'Contacta al administrador.' });";
+var preview_s2 = "<div class=\"demo-grid\"><div id=\"es-sm\"></div><div id=\"es-md\"></div><div id=\"es-lg\"></div></div>";
+var js_s2 = "['sm','md','lg'].forEach(function(size) { new MTS.EmptyState('#es-' + size, { variant:'no-data', size:size, action:'Add item' }); });";
+var preview_s3 = "<div class=\"demo-stack\"><div id=\"es-dynamic\"></div><div class=\"demo-row\"><button class=\"demo-btn-sm\" onclick=\"esDynamic.update({ variant:'search', title:'Sin resultados', description:'Ajusta los filtros', action:'Limpiar' })\">search</button><button class=\"demo-btn-sm\" onclick=\"esDynamic.update({ variant:'error', action:'Reintentar' })\">error</button><button class=\"demo-btn-sm\" onclick=\"esDynamic.update({ variant:'no-data', action:'Agregar' })\">restore</button></div><div class=\"result-box\" id=\"es-result\">\u2014 usa los botones \u2014</div></div>";
+var js_s3 = "var esDynamic = new MTS.EmptyState('#es-dynamic', { variant:'no-data', action:'Agregar', onAction:function(){ document.getElementById('es-result').textContent='click \u2192 Agregar'; } });\nesDynamic.update({ variant:'search', title:'Sin resultados', description:'Ajusta los filtros', action:'Limpiar' });";
+var esDynamic;
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.EmptyState('#es-nodata', { variant:'no-data', action:'Agregar ítem', onAction:cb('Agregar ítem') });
+  new MTS.EmptyState('#es-search', { variant:'search', title:'Sin resultados para "dashboard"', description:'Prueba con otras palabras.', action:'Limpiar búsqueda', onAction:cb('Limpiar búsqueda') });
+  new MTS.EmptyState('#es-error', { variant:'error', action:'Reintentar', onAction:cb('Reintentar') });
+  new MTS.EmptyState('#es-perms', { variant:'permissions', description:'Contacta al administrador.' });
+}, '360px');
+makeSection('tabs-s2', preview_s2, js_s2, function() { ['sm','md','lg'].forEach(function(size) { new MTS.EmptyState('#es-' + size, { variant:'no-data', size:size, action:'Add item' }); }); }, '340px');
+makeSection('tabs-s3', preview_s3, js_s3, function() { esDynamic = new MTS.EmptyState('#es-dynamic', { variant:'no-data', action:'Agregar', onAction:function(){ document.getElementById('es-result').textContent='click → Agregar'; } }); }, '340px');
+
 </script>
 </body>
 </html>

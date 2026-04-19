@@ -30,8 +30,10 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-fileupload.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-fileupload.js"></script>
 </head>
 <body>
@@ -48,168 +50,130 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.FileUpload</h1>
-    <p>Drag & drop file zone with image preview and validation.</p>
+    <p>Drag & drop file zone with validation, previews and API helpers.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-fileupload.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-fileupload.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Imágenes con preview -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Imágenes con preview / Images with preview</div>
-    <div id="fu-images"></div>
-    <div class="result-box" id="fu-result">— sube archivos para ver los callbacks —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-fu1','js-fu1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-fu1','html-fu1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-fu1">&lt;div id="upload-photos"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.FileUpload('#upload-photos', {
-    accept:   'image/*',
-    multiple: true,
-    maxSize:  2,
-    maxFiles: 5,
-    hint:     'PNG, JPG up to 2MB · Max 5 files',
-    // Fires when file list changes / Se dispara al cambiar la lista
-    onChange: (files) =&gt; console.log('files:', files.length),
-    // Fires on add / Se dispara al agregar
-    onAdd:    (file)  =&gt; console.log('added:', file.name),
-    // Fires on remove / Se dispara al eliminar
-    onRemove: (file)  =&gt; console.log('removed:', file.name),
-    // Fires on validation error / Se dispara en error de validación
-    onError:  (errs)  =&gt; console.error(errs),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-fu1">new MTS.FileUpload('#upload-photos', {
-  // Accepted types / Tipos aceptados
-  accept:   'image/*',
-
-  // Multiple files / Múltiples archivos
-  multiple: true,
-
-  // Max size per file in MB / Tamaño máximo por archivo en MB
-  maxSize:  2,
-
-  // Max number of files / Número máximo de archivos
-  maxFiles: 5,
-
-  // Show image thumbnails / Mostrar miniaturas de imágenes
-  preview:  true,
-
-  hint: 'PNG, JPG up to 2MB · Max 5 files',
-
-  // Fires when file list changes / Se dispara al cambiar la lista
-  onChange: (files) => console.log('total:', files.length),
-
-  // Fires when a file is added / Se dispara al agregar un archivo
-  onAdd:    (file)  => console.log('added:', file.name),
-
-  // Fires when a file is removed / Se dispara al eliminar un archivo
-  onRemove: (file)  => console.log('removed:', file.name),
-
-  // Fires on validation errors / Se dispara en errores de validación
-  onError:  (errs)  => console.error(errs),
-});</div>
-  </div>
-
-  <!-- 2. Documento único -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Documento único / Single document</div>
-    <div id="fu-single"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-fu2','js-fu2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-fu2','html-fu2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-fu2">&lt;div id="upload-cv"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.FileUpload('#upload-cv', {
-    accept:   '.pdf',
-    multiple: false,
-    maxSize:  5,
-    label:    'Upload your CV in PDF',
-    hint:     'PDF up to 5MB',
-    preview:  false,
-    onChange: (files) =&gt; console.log(files[0]?.name),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-fu2">new MTS.FileUpload('#upload-cv', {
-  accept:   '.pdf',
-  multiple: false,    // single file / archivo único
-  maxSize:  5,        // 5 MB
-  preview:  false,    // no thumbnail / sin miniatura
-  label:    'Upload your CV in PDF',
-  hint:     'PDF up to 5MB',
-  onChange: (files) => console.log(files[0]?.name),
-});</div>
-  </div>
-
-  <!-- 3. Múltiples tipos + API -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Múltiples tipos / Multiple types + API</div>
-    <div id="fu-docs"></div>
-    <div class="demo-row" style="margin-top:8px">
-      <button class="demo-btn-sm" onclick="fuDocs.getFiles().forEach(f => document.getElementById('fu-api-result').textContent = 'getFiles() → ' + fuDocs.getFiles().map(f=>f.name).join(', '))">getFiles()</button>
-      <button class="demo-btn-sm" onclick="fuDocs.clear(); document.getElementById('fu-api-result').textContent = 'clear() ✓'">clear()</button>
-      <button class="demo-btn-sm" onclick="fuDocs.open()">open()</button>
-    </div>
-    <div class="result-box" id="fu-api-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-fu3','js-fu3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-fu3','html-fu3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-fu3">&lt;div id="upload-docs"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  const fu = new MTS.FileUpload('#upload-docs', {
-    accept:   '.pdf,.doc,.docx,.xls,.xlsx',
-    multiple: true,
-    maxSize:  10,
-    preview:  false,
-    hint:     'PDF, Word or Excel up to 10MB',
-  });
-  fu.getFiles()  // → File[]
-  fu.clear()     // clear all files / limpiar todos
-  fu.open()      // open selector / abrir selector
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-fu3">const fu = new MTS.FileUpload('#upload-docs', {
-  accept:   '.pdf,.doc,.docx,.xls,.xlsx',
-  multiple: true,
-  maxSize:  10,
-  preview:  false,
-  hint:     'PDF, Word or Excel up to 10MB',
-  onChange: (files) => console.log('total:', files.length),
-});
-
-// API
-fu.getFiles()  // → File[]
-fu.clear()     // clear all / limpiar todos
-fu.open()      // open file selector / abrir selector</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Imágenes con preview / Images with preview</div><div id="tabs-fu1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Documento único / Single document</div><div id="tabs-fu2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Múltiples tipos + API / Multiple types + API</div><div id="tabs-fu3"></div></div>
 </div>
 
 <script>
-new MTS.FileUpload('#fu-images', {
-  accept:'image/*', multiple:true, maxSize:2, maxFiles:5,
-  hint:'PNG, JPG hasta 2MB · Máx 5',
-  onChange: function(files){ document.getElementById('fu-result').textContent = 'onChange → ' + files.length + ' archivo(s)'; },
-  onAdd:    function(f){ document.getElementById('fu-result').textContent = 'onAdd → "' + f.name + '"'; },
-  onRemove: function(f){ document.getElementById('fu-result').textContent = 'onRemove → "' + f.name + '"'; },
-  onError:  function(e){ document.getElementById('fu-result').textContent = 'onError → ' + e[0]; },
-});
-new MTS.FileUpload('#fu-single', {
-  accept:'.pdf', multiple:false, maxSize:5, preview:false,
-  label:'Sube tu CV en PDF', hint:'PDF hasta 5MB',
-});
-var fuDocs = new MTS.FileUpload('#fu-docs', {
-  accept:'.pdf,.doc,.docx,.xls,.xlsx', multiple:true, maxSize:10, preview:false,
-  hint:'PDF, Word o Excel hasta 10MB',
-  onChange: function(files){ document.getElementById('fu-api-result').textContent = 'onChange → ' + files.length + ' archivo(s)'; },
-});
+function esc(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function indentHtml(html){
+  var indent=0, step=2;
+  var voids=/^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result='';
+  (html.match(/<[^>]+>|[^<]+/g)||[]).forEach(function(tok){
+    var t=tok.trim(); if(!t) return;
+    if(/^<\//.test(t)){ indent=Math.max(0,indent-step); result+=' '.repeat(indent)+t+'\n'; }
+    else if(/^<[^!]/.test(t)){
+      result+=' '.repeat(indent)+t+'\n';
+      var tag=(t.match(/^<([a-z][a-z0-9-]*)/i)||[])[1]||'';
+      if(!voids.test(tag) && !/\/>$/.test(t)) indent+=step;
+    } else {
+      var text=t.replace(/\s+/g,' '); if(text) result+=' '.repeat(indent)+text+'\n';
+    }
+  });
+  return result.trimEnd();
+}
+function htmlTab(previewHtml){
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">'+esc(indentHtml(previewHtml))+'</pre>';
+}
+function jsTab(code){
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">'+esc(code)+'</pre>';
+}
+function makeSection(id, previewHtml, jsCode, initFn, height){
+  new MTS.Tabs('#'+id,{variant:'card',height:height||'380px',lazy:false,tabs:[
+    {id:id+'-preview',label:'Preview',content:previewHtml},
+    {id:id+'-html',label:'HTML',content:htmlTab(previewHtml)},
+    {id:id+'-js',label:'JavaScript',content:jsTab(jsCode)}
+  ]});
+  if(typeof initFn==='function') initFn();
+}
+
+var preview1 =
+  '<div class="demo-stack">' +
+    '<div id="fu-images"></div>' +
+    '<div class="result-box" id="fu-result">— sube archivos para ver los callbacks —</div>' +
+  '</div>';
+var js1 =
+  "new MTS.FileUpload('#fu-images', {\n" +
+  "  accept: 'image/*',\n" +
+  "  multiple: true,\n" +
+  "  maxSize: 2,\n" +
+  "  maxFiles: 5,\n" +
+  "  hint: 'PNG, JPG hasta 2MB · Máx 5',\n" +
+  "  onChange: function(files){ document.getElementById('fu-result').textContent = 'onChange → ' + files.length + ' archivo(s)'; },\n" +
+  "  onAdd: function(file){ document.getElementById('fu-result').textContent = 'onAdd → \"' + file.name + '\"'; },\n" +
+  "  onRemove: function(file){ document.getElementById('fu-result').textContent = 'onRemove → \"' + file.name + '\"'; },\n" +
+  "  onError: function(errors){ document.getElementById('fu-result').textContent = 'onError → ' + errors[0]; }\n" +
+  "});";
+
+var preview2 = '<div id="fu-single"></div>';
+var js2 =
+  "new MTS.FileUpload('#fu-single', {\n" +
+  "  accept: '.pdf',\n" +
+  "  multiple: false,\n" +
+  "  maxSize: 5,\n" +
+  "  preview: false,\n" +
+  "  label: 'Sube tu CV en PDF',\n" +
+  "  hint: 'PDF hasta 5MB'\n" +
+  "});";
+
+var preview3 =
+  '<div class="demo-stack">' +
+    '<div id="fu-docs"></div>' +
+    '<div class="demo-row">' +
+      '<button class="demo-btn-sm" onclick="document.getElementById(\'fu-api-result\').textContent = \'getFiles() → \' + fuDocs.getFiles().map(function(f){ return f.name; }).join(\', \')">getFiles()</button>' +
+      '<button class="demo-btn-sm" onclick="fuDocs.clear(); document.getElementById(\'fu-api-result\').textContent = \'clear() ✓\'">clear()</button>' +
+      '<button class="demo-btn-sm" onclick="fuDocs.open()">open()</button>' +
+    '</div>' +
+    '<div class="result-box" id="fu-api-result">— usa los botones —</div>' +
+  '</div>';
+var js3 =
+  "var fuDocs = new MTS.FileUpload('#fu-docs', {\n" +
+  "  accept: '.pdf,.doc,.docx,.xls,.xlsx',\n" +
+  "  multiple: true,\n" +
+  "  maxSize: 10,\n" +
+  "  preview: false,\n" +
+  "  hint: 'PDF, Word o Excel hasta 10MB',\n" +
+  "  onChange: function(files){ document.getElementById('fu-api-result').textContent = 'onChange → ' + files.length + ' archivo(s)'; }\n" +
+  "});\n\n" +
+  "fuDocs.getFiles();\n" +
+  "fuDocs.clear();\n" +
+  "fuDocs.open();";
+
+makeSection('tabs-fu1', preview1, js1, function(){
+  new MTS.FileUpload('#fu-images', {
+    accept:'image/*', multiple:true, maxSize:2, maxFiles:5,
+    hint:'PNG, JPG hasta 2MB · Máx 5',
+    onChange:function(files){ document.getElementById('fu-result').textContent = 'onChange → ' + files.length + ' archivo(s)'; },
+    onAdd:function(file){ document.getElementById('fu-result').textContent = 'onAdd → "' + file.name + '"'; },
+    onRemove:function(file){ document.getElementById('fu-result').textContent = 'onRemove → "' + file.name + '"'; },
+    onError:function(errors){ document.getElementById('fu-result').textContent = 'onError → ' + errors[0]; }
+  });
+}, '420px');
+
+makeSection('tabs-fu2', preview2, js2, function(){
+  new MTS.FileUpload('#fu-single', {
+    accept:'.pdf', multiple:false, maxSize:5, preview:false,
+    label:'Sube tu CV en PDF', hint:'PDF hasta 5MB'
+  });
+}, '300px');
+
+var fuDocs;
+makeSection('tabs-fu3', preview3, js3, function(){
+  fuDocs = new MTS.FileUpload('#fu-docs', {
+    accept:'.pdf,.doc,.docx,.xls,.xlsx', multiple:true, maxSize:10, preview:false,
+    hint:'PDF, Word o Excel hasta 10MB',
+    onChange:function(files){ document.getElementById('fu-api-result').textContent = 'onChange → ' + files.length + ' archivo(s)'; }
+  });
+}, '420px');
 </script>
 </body>
 </html>

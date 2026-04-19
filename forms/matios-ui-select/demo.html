@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.Select — Demo</title>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else    document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Select — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
   <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
@@ -29,57 +30,14 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
-  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-select.css">
-  <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-select.js"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:36px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0 0 12px;}
-    .demo-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
-    .demo-section{display:flex;flex-direction:column;gap:14px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
-    .demo-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-    .demo-label{font-size:11px;font-weight:600;color:var(--mts-text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-    .demo-docs-btn,.demo-code-toggle{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;font-size:11px;font-weight:600;background:none;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);color:var(--mts-text-muted);cursor:pointer;font-family:var(--mts-font-family);transition:color .15s,border-color .15s;}
-    .demo-docs-btn:hover,.demo-code-toggle:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-    .demo-code{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;margin-top:4px;}
-    .demo-docs-panel{display:none;margin-top:10px;padding:16px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);font-size:13px;line-height:1.75;color:var(--mts-text-secondary);max-height:500px;overflow-y:auto;}
-    .demo-docs-panel.open{display:block;}
-    .demo-docs-panel h1{font-size:17px;font-weight:800;color:var(--mts-text-primary);margin:0 0 12px;}
-    .demo-docs-panel h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);border-bottom:1px solid var(--mts-border-color);padding-bottom:4px;margin:16px 0 8px;}
-    .demo-docs-panel h3{font-size:13px;font-weight:700;color:var(--mts-text-primary);margin:12px 0 6px;}
-    .demo-docs-panel code{font-family:var(--mts-font-mono);font-size:11px;padding:1px 5px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:3px;color:var(--mts-color-primary);}
-    .demo-docs-panel pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:8px;padding:10px 12px;overflow-x:auto;margin:0 0 10px;}
-    .demo-docs-panel pre code{background:none;border:none;padding:0;font-size:11px;color:var(--mts-text-primary);}
-    .demo-docs-panel table{width:100%;border-collapse:collapse;font-size:12px;margin:0 0 10px;}
-    .demo-docs-panel th{padding:5px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel td{padding:6px 10px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-docs-panel ul{margin:0 0 10px;padding-left:18px;}
-    .demo-docs-panel p{margin:0 0 10px;}
-    .demo-docs-panel hr{border:none;border-top:1px solid var(--mts-border-color);margin:12px 0;}
-    .demo-docs-panel a{color:var(--mts-color-primary);text-decoration:none;}
-    .result-box{padding:10px 14px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:36px;margin-top:8px;}
-    .demo-select-output{margin-top:8px;padding:8px 12px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-color-primary);line-height:1.6;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-    .code-tabs{display:flex;gap:0;margin-top:4px;}
-    .code-tab{padding:4px 14px;font-size:11px;font-weight:600;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);cursor:pointer;color:var(--mts-text-muted);font-family:var(--mts-font-family);transition:color .15s,background .15s;}
-    .code-tab:first-child{border-radius:var(--mts-radius-md) 0 0 0;}
-    .code-tab:last-child{border-radius:0 var(--mts-radius-md) 0 0;border-left:none;}
-    .code-tab.active{background:var(--mts-bg-surface-2);color:var(--mts-color-primary);border-bottom-color:var(--mts-bg-surface-2);}
-    .code-panel{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-top:none;border-radius:0 var(--mts-radius-md) var(--mts-radius-md) var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;}
-    .code-panel.active{display:block;}
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -95,270 +53,485 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Select</h1>
-    <p>Select personalizado — básico, grupos, multi-select, autocomplete y cascada.</p>
-    <div class="demo-header-actions"><button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-select.md')">📄 Documentación</button></div>
+    <p>Select personalizado con búsqueda, multi-select, carga asíncrona, cascada y enhancement progresivo desde HTML declarativo.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-select.md')">Documentación</button>
+    </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Básico y variantes -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Variantes básicas</div>
-    <div class="demo-grid">
-      <div id="sel-basic"></div>
-      <div id="sel-groups"></div>
-      <div id="sel-search"></div>
-      <div id="sel-clearable"></div>
-    </div>
-    <div class="demo-select-output" id="out-sel-basic" style="display:none"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-s1','js-s1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-s1','html-s1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-s1">&lt;!-- Basic select / Select básico --&gt;
-&lt;div id="sel-country"
-  data-label="Country"
-  data-placeholder="Select a country..."
-  data-clearable&gt;
-&lt;/div&gt;
+  <div class="demo-section"><div class="demo-section-title">1 — Variantes básicas</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Multi-select</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Autocomplete</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Cascada País → Estado → Ciudad</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — HTML declarativo + enhancement</div><div id="tabs-s5"></div></div>
+</div>
 
-&lt;script&gt;
-  new MTS.Select('#sel-country', {
+<script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '400px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  if (typeof initFn === 'function') initFn();
+}
+
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+var PRODUCTS = [
+  { value: 'iphone-15', label: 'iPhone 15' },
+  { value: 'ipad-pro', label: 'iPad Pro' },
+  { value: 'samsung-galaxy', label: 'Samsung Galaxy' },
+  { value: 'google-pixel', label: 'Google Pixel' }
+];
+
+var preview_s1 =
+  '<div class="demo-grid">' +
+    '<div id="sel-basic"></div>' +
+    '<div id="sel-groups"></div>' +
+    '<div id="sel-search"></div>' +
+    '<div><div id="sel-clearable"></div><div class="result-box" id="result-s1">— sin selección —</div></div>' +
+  '</div>';
+
+var js_s1 =
+  "new MTS.Select('#sel-basic', {\n" +
+  "  label: 'Country',\n" +
+  "  placeholder: 'Select a country...',\n" +
+  "  options: [\n" +
+  "    { value: 'cl', label: 'Chile' },\n" +
+  "    { value: 'ar', label: 'Argentina' },\n" +
+  "    { value: 'mx', label: 'México' }\n" +
+  "  ]\n" +
+  "});\n\n" +
+  "new MTS.Select('#sel-groups', {\n" +
+  "  label: 'Framework',\n" +
+  "  placeholder: 'Choose one...',\n" +
+  "  options: [\n" +
+  "    { value: 'react', label: 'React', group: 'Frontend' },\n" +
+  "    { value: 'vue', label: 'Vue', group: 'Frontend' },\n" +
+  "    { value: 'node', label: 'Node.js', group: 'Backend' },\n" +
+  "    { value: 'dotnet', label: '.NET', group: 'Backend' }\n" +
+  "  ]\n" +
+  "});\n\n" +
+  "new MTS.Select('#sel-search', {\n" +
+  "  label: 'Searchable',\n" +
+  "  placeholder: 'Type to search...',\n" +
+  "  searchable: true,\n" +
+  "  options: [\n" +
+  "    { value: 'ux', label: 'UX Design' },\n" +
+  "    { value: 'dev', label: 'Development' },\n" +
+  "    { value: 'qa', label: 'QA Testing' },\n" +
+  "    { value: 'pm', label: 'Project Management' }\n" +
+  "  ]\n" +
+  "});\n\n" +
+  "new MTS.Select('#sel-clearable', {\n" +
+  "  label: 'Clearable',\n" +
+  "  placeholder: 'Pick one...',\n" +
+  "  clearable: true,\n" +
+  "  options: [\n" +
+  "    { value: '1', label: 'One' },\n" +
+  "    { value: '2', label: 'Two' },\n" +
+  "    { value: '3', label: 'Three' }\n" +
+  "  ],\n" +
+  "  onChange: function(e) { setResult('result-s1', 'value → ' + JSON.stringify(e.detail.value)); }\n" +
+  "});";
+
+var preview_s2 =
+  '<div class="demo-stack">' +
+    '<div id="sel-multi"></div>' +
+    '<div class="result-box" id="result-s2">— sin selección —</div>' +
+  '</div>';
+
+var js_s2 =
+  "new MTS.Select('#sel-multi', {\n" +
+  "  label: 'Technologies',\n" +
+  "  multiple: true,\n" +
+  "  searchable: true,\n" +
+  "  maxSelect: 3,\n" +
+  "  value: ['js'],\n" +
+  "  options: [\n" +
+  "    { value: 'js', label: 'JavaScript' },\n" +
+  "    { value: 'ts', label: 'TypeScript' },\n" +
+  "    { value: 'css', label: 'CSS' },\n" +
+  "    { value: 'html', label: 'HTML' }\n" +
+  "  ],\n" +
+  "  onChange: function(e) {\n" +
+  "    setResult('result-s2', 'value → ' + JSON.stringify(e.detail.value));\n" +
+  "  }\n" +
+  "});";
+
+var preview_s3 =
+  '<div class="demo-grid">' +
+    '<div><div id="sel-autocomplete"></div><div class="result-box" id="result-s3-local">— sin selección —</div></div>' +
+    '<div><div id="sel-async"></div><div class="result-box" id="result-s3-async">— sin selección —</div></div>' +
+  '</div>';
+
+var js_s3 =
+  "new MTS.Select('#sel-autocomplete', {\n" +
+  "  label: 'Search locally',\n" +
+  "  searchable: true,\n" +
+  "  minChars: 0,\n" +
+  "  options: PRODUCTS,\n" +
+  "  onChange: function(e) { setResult('result-s3-local', 'value → ' + JSON.stringify(e.detail.value)); }\n" +
+  "});\n\n" +
+  "new MTS.Select('#sel-async', {\n" +
+  "  label: 'Search (async)',\n" +
+  "  searchable: true,\n" +
+  "  minChars: 1,\n" +
+  "  debounce: 250,\n" +
+  "  onSearch: async function(query) {\n" +
+  "    await new Promise(function(resolve) { setTimeout(resolve, 200); });\n" +
+  "    return PRODUCTS.filter(function(item) {\n" +
+  "      return item.label.toLowerCase().indexOf(query.toLowerCase()) !== -1;\n" +
+  "    });\n" +
+  "  },\n" +
+  "  onChange: function(e) { setResult('result-s3-async', 'value → ' + JSON.stringify(e.detail.value)); }\n" +
+  "});";
+
+var preview_s4 =
+  '<div class="demo-grid">' +
+    '<div id="sel-country"></div>' +
+    '<div id="sel-state"></div>' +
+    '<div id="sel-city"></div>' +
+  '</div>' +
+  '<div class="result-box" id="result-s4">— sin selección —</div>';
+
+var js_s4 =
+  "var COUNTRIES = [\n" +
+  "  { value: 'cl', label: 'Chile' },\n" +
+  "  { value: 'ar', label: 'Argentina' }\n" +
+  "];\n\n" +
+  "var STATES = {\n" +
+  "  cl: [\n" +
+  "    { value: 'rm', label: 'Región Metropolitana' },\n" +
+  "    { value: 'bi', label: 'Biobío' }\n" +
+  "  ],\n" +
+  "  ar: [\n" +
+  "    { value: 'ba', label: 'Buenos Aires' },\n" +
+  "    { value: 'cb', label: 'Córdoba' }\n" +
+  "  ]\n" +
+  "};\n\n" +
+  "var CITIES = {\n" +
+  "  rm: [\n" +
+  "    { value: 'stgo', label: 'Santiago' },\n" +
+  "    { value: 'nunoa', label: 'Ñuñoa' }\n" +
+  "  ],\n" +
+  "  bi: [\n" +
+  "    { value: 'conce', label: 'Concepción' },\n" +
+  "    { value: 'talc', label: 'Talcahuano' }\n" +
+  "  ],\n" +
+  "  ba: [\n" +
+  "    { value: 'caba', label: 'CABA' },\n" +
+  "    { value: 'lp', label: 'La Plata' }\n" +
+  "  ],\n" +
+  "  cb: [\n" +
+  "    { value: 'cba', label: 'Córdoba Capital' },\n" +
+  "    { value: 'vcp', label: 'Villa Carlos Paz' }\n" +
+  "  ]\n" +
+  "};\n\n" +
+  "var country = new MTS.Select('#sel-country', {\n" +
+  "  label: 'Country',\n" +
+  "  options: COUNTRIES,\n" +
+  "  onChange: function(e) {\n" +
+  "    state.clear();\n" +
+  "    city.clear();\n" +
+  "    state.setOptions(STATES[e.detail.value] || [], true);\n" +
+  "    city.setOptions([], false);\n" +
+  "    city.disable();\n" +
+  "    setResult('result-s4', 'country → ' + JSON.stringify(e.detail.value));\n" +
+  "  }\n" +
+  "});\n\n" +
+  "var state = new MTS.Select('#sel-state', {\n" +
+  "  label: 'State',\n" +
+  "  options: [],\n" +
+  "  disabled: true,\n" +
+  "  onChange: function(e) {\n" +
+  "    city.clear();\n" +
+  "    city.setOptions(CITIES[e.detail.value] || [], true);\n" +
+  "    setResult('result-s4', 'state → ' + JSON.stringify(e.detail.value));\n" +
+  "  }\n" +
+  "});\n\n" +
+  "var city = new MTS.Select('#sel-city', {\n" +
+  "  label: 'City',\n" +
+  "  options: [],\n" +
+  "  disabled: true,\n" +
+  "  onChange: function(e) {\n" +
+  "    setResult('result-s4', 'city → ' + JSON.stringify(e.detail.value));\n" +
+  "  }\n" +
+  "});";
+
+var preview_s5 =
+  '<div class="demo-stack">' +
+    '<div class="demo-col">' +
+      '<div class="demo-label">HTML declarativo</div>' +
+      '<div id="sel-declarative" data-label="Country" data-placeholder="Select a country..." data-clearable data-searchable></div>' +
+    '</div>' +
+    '<div class="demo-col">' +
+      '<div class="demo-label">HTML declarativo + enhancement</div>' +
+      '<div id="sel-enhanced" data-label="Project role" data-placeholder="Choose a role" data-clearable data-searchable></div>' +
+      '<div class="result-box" id="result-s5">— sin selección —</div>' +
+    '</div>' +
+  '</div>';
+
+var js_s5 =
+  "new MTS.Select('#sel-declarative', {\n" +
+  "  options: [\n" +
+  "    { value: 'cl', label: 'Chile' },\n" +
+  "    { value: 'ar', label: 'Argentina' },\n" +
+  "    { value: 'mx', label: 'México' }\n" +
+  "  ]\n" +
+  "});\n\n" +
+  "new MTS.Select('#sel-enhanced', {\n" +
+  "  options: [\n" +
+  "    { value: 'dev', label: 'Developer' },\n" +
+  "    { value: 'qa', label: 'QA Analyst' },\n" +
+  "    { value: 'ux', label: 'UX Designer' }\n" +
+  "  ],\n" +
+  "  onChange: function(e) {\n" +
+  "    setResult('result-s5', 'value → ' + JSON.stringify(e.detail.value) + ' | text → ' + JSON.stringify(e.detail.text));\n" +
+  "  }\n" +
+  "});";
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.Select('#sel-basic', {
+    label: 'Country',
+    placeholder: 'Select a country...',
     options: [
       { value: 'cl', label: 'Chile' },
       { value: 'ar', label: 'Argentina' },
-      { value: 'mx', label: 'México' },
-    ],
-    onChange: (e) =&gt; console.log(e.detail.value, e.detail.text),
+      { value: 'mx', label: 'México' }
+    ]
   });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-s1">// Basic / Básico
-const sel = new MTS.Select('#sel-country', {
-  label:       'Country',
-  placeholder: 'Select a country...',
-  clearable:   true,
-  options: [
-    { value: 'cl', label: 'Chile' },
-    { value: 'ar', label: 'Argentina' },
-    { value: 'mx', label: 'México' },
-  ],
-  // Fires on selection change / Se dispara al cambiar la selección
-  onChange: (e) => console.log(e.detail.value, e.detail.text),
-});
 
-// API
-sel.getValue()   // → 'cl'
-sel.getText()    // → 'Chile'
-sel.setValue('ar')
-sel.clear()</div>
-  </div>
-
-  <!-- 2. Multi-select -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Multi-select</div>
-    <div id="sel-multi"></div>
-    <div class="demo-select-output" id="out-sel-multi" style="display:none"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-s2','js-s2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-s2','html-s2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-s2">&lt;div id="sel-tags"
-  data-label="Technologies"
-  data-multiple
-  data-searchable&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.Select('#sel-tags', {
+  new MTS.Select('#sel-groups', {
+    label: 'Framework',
+    placeholder: 'Choose one...',
     options: [
-      { value: 'js',  label: 'JavaScript' },
-      { value: 'ts',  label: 'TypeScript' },
-      { value: 'css', label: 'CSS' },
-    ],
-    value:    ['js'],
-    maxSelect: 3,
-    onChange: (e) =&gt; console.log(e.detail.value),
+      { value: 'react', label: 'React', group: 'Frontend' },
+      { value: 'vue', label: 'Vue', group: 'Frontend' },
+      { value: 'node', label: 'Node.js', group: 'Backend' },
+      { value: 'dotnet', label: '.NET', group: 'Backend' }
+    ]
   });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-s2">const sel = new MTS.Select('#sel-tags', {
-  label:     'Technologies',
-  multiple:  true,
-  maxSelect: 3,
-  value:     ['ux', 'dev'],
-  options: [
-    { value: 'ux',   label: 'UX Design' },
-    { value: 'dev',  label: 'Development' },
-    { value: 'qa',   label: 'QA Testing' },
-    { value: 'pm',   label: 'Project Management' },
-  ],
-  // Returns array / Retorna arreglo
-  onChange: (e) => {
-    console.log(e.detail.value);   // → ['ux', 'dev']
-    console.log(e.detail.text);    // → ['UX Design', 'Development']
-  },
-});</div>
-  </div>
 
-  <!-- 3. Autocomplete async -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Autocomplete</div>
-    <p style="font-size:12px;color:var(--mts-text-muted);margin:0 0 8px">💡 Escribe: <code>Apple</code>, <code>Samsung</code>, <code>Google</code>, <code>iPad</code></p>
-    <div class="demo-grid">
-      <div><div id="sel-autocomplete"></div><div class="demo-select-output" id="out-sel-autocomplete" style="display:none"></div></div>
-      <div><div id="sel-async"></div><div class="demo-select-output" id="out-sel-async" style="display:none"></div></div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-s3','js-s3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-s3','html-s3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-s3">&lt;!-- Async search requires JavaScript / La búsqueda asíncrona requiere JavaScript --&gt;
-&lt;div id="sel-search"&gt;&lt;/div&gt;
-
-&lt;script&gt;
   new MTS.Select('#sel-search', {
-    label:      'Search products',
+    label: 'Searchable',
+    placeholder: 'Type to search...',
     searchable: true,
-    minChars:   1,
-    debounce:   300,
-    // Called on each search / Se llama en cada búsqueda
-    onSearch: async (query) =&gt; {
-      const res = await fetch('/api/products?q=' + query);
-      return res.json(); // [{ value, label }]
-    },
-    onChange: (e) =&gt; console.log(e.detail.value),
+    options: [
+      { value: 'ux', label: 'UX Design' },
+      { value: 'dev', label: 'Development' },
+      { value: 'qa', label: 'QA Testing' },
+      { value: 'pm', label: 'Project Management' }
+    ]
   });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-s3">// Local search / Búsqueda local
-const DATA = [
-  { value: '1', label: 'iPhone 15' },
-  { value: '2', label: 'iPad Pro' },
-  { value: '3', label: 'Samsung Galaxy' },
-  { value: '4', label: 'Google Pixel' },
-];
 
-new MTS.Select('#sel-autocomplete', {
-  label:      'Search locally',
-  searchable: true,
-  minChars:   0,
-  options:    DATA,
-  onChange:   (e) => console.log(e.detail.value),
-});
+  new MTS.Select('#sel-clearable', {
+    label: 'Clearable',
+    placeholder: 'Pick one...',
+    clearable: true,
+    options: [
+      { value: '1', label: 'One' },
+      { value: '2', label: 'Two' },
+      { value: '3', label: 'Three' }
+    ],
+    onChange: function(e) {
+      setResult('result-s1', 'value → ' + JSON.stringify(e.detail.value));
+    }
+  });
+}, '420px');
 
-// Async search / Búsqueda asíncrona
-new MTS.Select('#sel-async', {
-  label:      'Search (async)',
-  searchable: true,
-  minChars:   1,
-  debounce:   300,
-  // Component calls this on each keystroke / El componente llama esto en cada tecla
-  onSearch: async (query) => {
-    await new Promise(r => setTimeout(r, 250)); // simulate API / simular API
-    return DATA.filter(o => o.label.toLowerCase().includes(query.toLowerCase()));
-  },
-  onChange: (e) => console.log(e.detail.value),
-});</div>
-  </div>
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  new MTS.Select('#sel-multi', {
+    label: 'Technologies',
+    multiple: true,
+    searchable: true,
+    maxSelect: 3,
+    value: ['js'],
+    options: [
+      { value: 'js', label: 'JavaScript' },
+      { value: 'ts', label: 'TypeScript' },
+      { value: 'css', label: 'CSS' },
+      { value: 'html', label: 'HTML' }
+    ],
+    onChange: function(e) {
+      setResult('result-s2', 'value → ' + JSON.stringify(e.detail.value));
+    }
+  });
+}, '340px');
 
-  <!-- 4. Cascada -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Cascada País → Estado → Ciudad</div>
-    <div class="demo-grid">
-      <div id="sel-pais"></div>
-      <div id="sel-region"></div>
-      <div id="sel-ciudad"></div>
-    </div>
-    <div class="demo-select-output" id="out-sel-cascada" style="display:none"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-s4','js-s4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-s4','html-s4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-s4">&lt;!-- Three containers / Tres contenedores --&gt;
-&lt;div id="sel-country"&gt;&lt;/div&gt;
-&lt;div id="sel-state"&gt;&lt;/div&gt;
-&lt;div id="sel-city"&gt;&lt;/div&gt;
+makeSection('tabs-s3', preview_s3, js_s3, function() {
+  new MTS.Select('#sel-autocomplete', {
+    label: 'Search locally',
+    searchable: true,
+    minChars: 0,
+    options: PRODUCTS,
+    onChange: function(e) {
+      setResult('result-s3-local', 'value → ' + JSON.stringify(e.detail.value));
+    }
+  });
 
-&lt;script&gt;
-  const COUNTRIES = [
+  new MTS.Select('#sel-async', {
+    label: 'Search (async)',
+    searchable: true,
+    minChars: 1,
+    debounce: 250,
+    onSearch: async function(query) {
+      await new Promise(function(resolve) { setTimeout(resolve, 200); });
+      return PRODUCTS.filter(function(item) {
+        return item.label.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+      });
+    },
+    onChange: function(e) {
+      setResult('result-s3-async', 'value → ' + JSON.stringify(e.detail.value));
+    }
+  });
+}, '420px');
+
+makeSection('tabs-s4', preview_s4, js_s4, function() {
+  var COUNTRIES = [
     { value: 'cl', label: 'Chile' },
-    { value: 'ar', label: 'Argentina' },
+    { value: 'ar', label: 'Argentina' }
   ];
-
-  const STATES = {
-    cl: [{ value: 'rm', label: 'Región Metropolitana' }, { value: 'bi', label: 'Biobío' }],
-    ar: [{ value: 'ba', label: 'Buenos Aires' }, { value: 'cb', label: 'Córdoba' }],
+  var STATES = {
+    cl: [
+      { value: 'rm', label: 'Región Metropolitana' },
+      { value: 'bi', label: 'Biobío' }
+    ],
+    ar: [
+      { value: 'ba', label: 'Buenos Aires' },
+      { value: 'cb', label: 'Córdoba' }
+    ]
+  };
+  var CITIES = {
+    rm: [
+      { value: 'stgo', label: 'Santiago' },
+      { value: 'nunoa', label: 'Ñuñoa' }
+    ],
+    bi: [
+      { value: 'conce', label: 'Concepción' },
+      { value: 'talc', label: 'Talcahuano' }
+    ],
+    ba: [
+      { value: 'caba', label: 'CABA' },
+      { value: 'lp', label: 'La Plata' }
+    ],
+    cb: [
+      { value: 'cba', label: 'Córdoba Capital' },
+      { value: 'vcp', label: 'Villa Carlos Paz' }
+    ]
   };
 
-  const selCountry = new MTS.Select('#sel-country', { label: 'Country', options: COUNTRIES });
-  const selState   = new MTS.Select('#sel-state',   { label: 'State',   options: [], disabled: true });
-  const selCity    = new MTS.Select('#sel-city',     { label: 'City',    options: [], disabled: true });
+  var state;
+  var city;
 
-  selCountry.onChange = null; // set via constructor below
-  new MTS.Select('#sel-country', {
-    label: 'Country', options: COUNTRIES,
-    onChange: (e) =&gt; {
-      selState.setOptions(STATES[e.detail.value] || [], true); // true = also enable
-      selCity.setOptions([], false);
-      selCity.disable();
-    },
+  var country = new MTS.Select('#sel-country', {
+    label: 'Country',
+    options: COUNTRIES,
+    onChange: function(e) {
+      state.clear();
+      city.clear();
+      state.setOptions(STATES[e.detail.value] || [], true);
+      city.setOptions([], false);
+      city.disable();
+      setResult('result-s4', 'country → ' + JSON.stringify(e.detail.value));
+    }
   });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-s4">const COUNTRIES = [
-  { value: 'cl', label: 'Chile' },
-  { value: 'ar', label: 'Argentina' },
-];
-const STATES = {
-  cl: [{ value: 'rm', label: 'Región Metropolitana' }, { value: 'bi', label: 'Biobío' }],
-  ar: [{ value: 'ba', label: 'Buenos Aires' }, { value: 'cb', label: 'Córdoba' }],
-};
 
-const selPais   = new MTS.Select('#sel-pais',   { label: 'País',   options: COUNTRIES });
-const selEstado = new MTS.Select('#sel-estado',  { label: 'Estado', options: [], disabled: true });
-const selCiudad = new MTS.Select('#sel-ciudad',  { label: 'Ciudad', options: [], disabled: true });
+  state = new MTS.Select('#sel-state', {
+    label: 'State',
+    options: [],
+    disabled: true,
+    onChange: function(e) {
+      city.clear();
+      city.setOptions(CITIES[e.detail.value] || [], true);
+      setResult('result-s4', 'state → ' + JSON.stringify(e.detail.value));
+    }
+  });
 
-selPais.on('change', (e) => {
-  // setOptions(opts, enable) — second param enables the select
-  // setOptions(opts, habilitar) — segundo param habilita el select
-  selEstado.setOptions(STATES[e.detail.value] || [], true);
-  selCiudad.setOptions([], false);
-  selCiudad.disable();
-});
+  city = new MTS.Select('#sel-city', {
+    label: 'City',
+    options: [],
+    disabled: true,
+    onChange: function(e) {
+      setResult('result-s4', 'city → ' + JSON.stringify(e.detail.value));
+    }
+  });
+}, '420px');
 
-selEstado.on('change', (e) => {
-  selCiudad.setOptions([
-    { value: 'stg', label: 'Santiago' },
-    { value: 'pud', label: 'Pudahuel' },
-  ], true);
-});</div>
-  </div>
+makeSection('tabs-s5', preview_s5, js_s5, function() {
+  new MTS.Select('#sel-declarative', {
+    options: [
+      { value: 'cl', label: 'Chile' },
+      { value: 'ar', label: 'Argentina' },
+      { value: 'mx', label: 'México' }
+    ]
+  });
 
-</div><script>
-function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
-window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
-if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
-function switchTab(btn,showId,hideId){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active');});btn.classList.add('active');document.getElementById(showId).classList.add('active');document.getElementById(hideId).classList.remove('active');}
-function toggleCode(id){var el=document.getElementById(id);if(el)el.style.display=el.style.display==='block'?'none':'block';}
-function showSelOutput(id,v,t){var el=document.getElementById(id);if(!el)return;el.style.display='block';el.innerHTML='<b>value:</b> '+JSON.stringify(v)+'&nbsp;&nbsp;<b>text:</b> '+JSON.stringify(t);}
-function showPickerOutput(id,val,fmt){var el=document.getElementById(id);if(!el)return;el.style.display='block';el.innerHTML='<b>value:</b> '+JSON.stringify(fmt||val);}
-function toggleDocs(id,mdPath){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted);font-size:12px">Cargando...</em>';fetch(mdPath).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>No se pudo cargar.</em>';});}
-function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>').replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
-
-var PROD=[{id:'1',name:'Google Pixel 6 Pro'},{id:'2',name:'Apple iPhone 12 Mini'},{id:'3',name:'Apple iPhone 12 Pro Max'},{id:'4',name:'Apple iPhone 11'},{id:'5',name:'Samsung Galaxy Z Fold 2'},{id:'6',name:'Apple AirPods Pro'},{id:'7',name:'Apple iPad Mini'},{id:'8',name:'Apple iPad Air'},{id:'9',name:'Apple Watch Series 8'},{id:'10',name:'Samsung Galaxy S22'},{id:'11',name:'Google Pixel 7'},{id:'12',name:'Apple iPhone 14 Pro'},{id:'13',name:'Apple MacBook Air M2'}];
-var CASC={'Chile':['Metropolitana de Santiago','Valparaíso Region','Biobío Region','Coquimbo Region'],'Argentina':['Buenos Aires','Ciudad Autónoma de Buenos Aires','Córdoba'],'México':['Ciudad de México','Jalisco','Nuevo León'],'Perú':['Lima','Arequipa','Cusco']};
-var CIUD={'Metropolitana de Santiago':['Santiago','Maipú','La Florida','Puente Alto'],'Valparaíso Region':['Valparaíso','Viña del Mar','Quilpué'],'Buenos Aires':['La Plata','Mar del Plata'],'Ciudad Autónoma de Buenos Aires':['Palermo','Recoleta'],'Ciudad de México':['Coyoacán','Iztapalapa'],'Lima':['Miraflores','San Isidro']};
-new MTS.Select('#sel-basic',{label:'País',placeholder:'Seleccionar...',options:[{value:'cl',label:'Chile'},{value:'pe',label:'Perú'},{value:'ar',label:'Argentina'},{value:'co',label:'Colombia'},{value:'mx',label:'México'}],onSelect:function(e){showSelOutput('out-sel-basic',e.detail.value,e.detail.text);}});
-new MTS.Select('#sel-groups',{label:'Ciudad (grupos)',options:[{value:'stgo',label:'Santiago',group:'Chile'},{value:'vina',label:'Viña del Mar',group:'Chile'},{value:'lima',label:'Lima',group:'Perú'},{value:'bsas',label:'Buenos Aires',group:'Argentina'}]});
-new MTS.Select('#sel-search',{label:'Con búsqueda',searchable:true,placeholder:'Buscar...',options:Array.from({length:15},function(_,i){return{value:'o'+i,label:'Opción '+(i+1)};})});
-new MTS.Select('#sel-clearable',{label:'Con limpiar',clearable:true,placeholder:'Selecciona...',options:[{value:'a',label:'Alpha'},{value:'b',label:'Beta'},{value:'c',label:'Gamma'}]});
-new MTS.Select('#sel-multi',{label:'Roles (máx 3)',multiple:true,maxSelect:3,value:['dev','ux'],options:[{value:'ux',label:'UX Design'},{value:'dev',label:'Desarrollo'},{value:'qa',label:'QA'},{value:'pm',label:'Product Manager'},{value:'devops',label:'DevOps'}],onSelect:function(e){showSelOutput('out-sel-multi',e.detail.value,e.detail.text);}});
-new MTS.Select('#sel-autocomplete',{label:'Autocomplete array',searchable:true,placeholder:'Apple, Samsung, Google...',clearable:true,minChars:0,onSearch:function(q){if(!q)return PROD.map(function(o){return{value:o.id,label:o.name};});var ql=q.toLowerCase();return PROD.filter(function(o){return o.name.toLowerCase().includes(ql);}).map(function(o){return{value:o.id,label:o.name};});},onSelect:function(e){showSelOutput('out-sel-autocomplete',e.detail.value,e.detail.text);}});
-new MTS.Select('#sel-async',{label:'Autocomplete async',searchable:true,placeholder:'Buscar...',clearable:true,minChars:1,debounce:300,onSearch:async function(q){await new Promise(function(r){setTimeout(r,250);});var ql=q.toLowerCase();return PROD.filter(function(o){return o.name.toLowerCase().includes(ql);}).map(function(o){return{value:o.id,label:o.name,icon:'<span style="font-size:10px;opacity:.4;font-family:monospace">#'+o.id+'</span>'};});},onSelect:function(e){showSelOutput('out-sel-async',e.detail.value,e.detail.text);}});
-var sP=new MTS.Select('#sel-pais',{label:'País',placeholder:'Seleccionar...',options:Object.keys(CASC).map(function(p){return{value:p,label:p};}),clearable:true});
-var sR=new MTS.Select('#sel-region',{label:'Estado',placeholder:'Primero selecciona un país',options:[],disabled:true});
-var sC=new MTS.Select('#sel-ciudad',{label:'Ciudad',placeholder:'Primero selecciona un estado',options:[],disabled:true});
-sP.on('change',function(e){sR.clear();sC.clear();sC.setOptions([]);sC.disable();if(!e.detail.value){sR.setOptions([]);sR.disable();return;}sR.setOptions((CASC[e.detail.value]||[]).map(function(s){return{value:s,label:s};}),true);sR.setValue(null);});
-sR.on('change',function(e){sC.clear();if(!e.detail.value){sC.setOptions([]);sC.disable();return;}var cs=CIUD[e.detail.value]||[];sC.setOptions(cs.length?cs.map(function(c){return{value:c,label:c};}): [{value:'n/a',label:'Sin ciudades registradas'}],true);sC.setValue(null);sC.on('change',function(ev){showSelOutput('out-sel-cascada',sP.getValue()+'/'+sR.getValue()+'/'+ev.detail.value,sP.getText()+'→'+sR.getText()+'→'+ev.detail.text);});});
-
-
-new MTS.Select(document.getElementById('sh1'),{label:'País',placeholder:'Selecciona un país',searchable:true,clearable:true,options:[{value:'cl',label:'🇨🇱 Chile'},{value:'ar',label:'🇦🇷 Argentina'},{value:'pe',label:'🇵🇪 Perú'},{value:'mx',label:'🇲🇽 México'}],onChange:function(d){document.getElementById('sh-res').textContent='→ value: "'+d.value+'" label: "'+d.label+'"';}});
+  new MTS.Select('#sel-enhanced', {
+    options: [
+      { value: 'dev', label: 'Developer' },
+      { value: 'qa', label: 'QA Analyst' },
+      { value: 'ux', label: 'UX Designer' }
+    ],
+    onChange: function(e) {
+      setResult('result-s5', 'value → ' + JSON.stringify(e.detail.value) + ' | text → ' + JSON.stringify(e.detail.text));
+    }
+  });
+}, '380px');
 </script>
 </body>
 </html>

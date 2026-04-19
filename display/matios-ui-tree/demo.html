@@ -3,24 +3,25 @@
 <head>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.Tree — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
@@ -30,18 +31,13 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-tree.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-tree.js"></script>
-  <style>
-    .tree-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .tree-box {
-      border: 1px solid var(--mts-border-color);
-      border-radius: var(--mts-radius-lg);
-      padding: 12px;
-      background: var(--mts-surface);
-    }
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -53,299 +49,226 @@
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
   <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Tree</h1>
-    <p>Tree view — expand/collapse, selectable, checkboxes, icons, badges, connection lines.</p>
+    <p>Tree view con expand/collapse, selección, checkboxes y API básica para escenarios jerárquicos.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-tree.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-tree.md')">Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Básico colapsable -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Básico colapsable — árbol de archivos / File tree</div>
-    <div class="tree-grid">
-      <div>
-        <div class="demo-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);margin-bottom:8px">showLines: true (default)</div>
-        <div class="tree-box" id="tree-files"></div>
-      </div>
-      <div>
-        <div class="demo-label" style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);margin-bottom:8px">showLines: false</div>
-        <div class="tree-box" id="tree-nolines"></div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tr1','js-tr1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tr1','html-tr1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tr1">&lt;div id="my-tree"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Tree('#my-tree', {
+  <div class="demo-section"><div class="demo-section-title">1 — Básico colapsable — árbol de archivos / File tree</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Selectable + onSelect</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Checkable con propagación a hijos / Checkboxes with child propagation</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Badges + íconos custom + API</div><div id="tabs-s4"></div></div>
+</div>
+
+<script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function (tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  if (typeof initFn === 'function') initFn();
+}
+
+var preview_s1 = "<div class=\"demo-grid\"><div class=\"demo-col\"><div class=\"demo-label\">showLines: true (default)</div><div class=\"result-box\" style=\"min-height:220px;color:inherit;font-family:inherit\"><div id=\"tree-files\"></div></div></div><div class=\"demo-col\"><div class=\"demo-label\">showLines: false</div><div class=\"result-box\" style=\"min-height:220px;color:inherit;font-family:inherit\"><div id=\"tree-nolines\"></div></div></div></div>";
+var js_s1 = "const FILE_NODES = [\n  { id:'src', label:'src', expanded:true, children:[\n    { id:'components', label:'components', children:[\n      { id:'btn', label:'Button.js' },\n      { id:'inp', label:'Input.js' },\n      { id:'sel', label:'Select.js' },\n    ]},\n    { id:'utils', label:'utils', children:[\n      { id:'fmt', label:'format.js' },\n      { id:'api', label:'api.js' },\n    ]},\n    { id:'idx', label:'index.js' },\n    { id:'app', label:'App.js' },\n  ]},\n  { id:'public', label:'public', children:[\n    { id:'html', label:'index.html' },\n    { id:'fav', label:'favicon.ico' },\n  ]},\n  { id:'pkg', label:'package.json' },\n];\n\nnew MTS.Tree('#tree-files', {\n  showLines: true,\n  showIcons: true,\n  nodes: FILE_NODES,\n});\n\nnew MTS.Tree('#tree-nolines', {\n  showLines: false,\n  showIcons: true,\n  nodes: FILE_NODES,\n});";
+var preview_s2 = "<div class=\"demo-stack\" style=\"max-width:420px\"><div class=\"result-box\" style=\"color:inherit;font-family:inherit\"><div id=\"tree-selectable\"></div></div><div class=\"result-box\" id=\"tree-select-result\">\u2014 haz click en un nodo \u2014</div></div>";
+var js_s2 = "new MTS.Tree('#tree-selectable', {\n  selectable: true,\n  showLines: true,\n  nodes: [\n    { id:'dashboard', label:'Dashboard', selected:true },\n    { id:'analytics', label:'Analytics' },\n    { id:'reports', label:'Reports', children:[\n      { id:'monthly', label:'Monthly report' },\n      { id:'annual', label:'Annual report' },\n    ]},\n    { id:'settings', label:'Settings', children:[\n      { id:'profile', label:'Profile' },\n      { id:'security', label:'Security' },\n      { id:'billing', label:'Billing', disabled:true },\n    ]},\n  ],\n  onSelect: function (e) {\n    document.getElementById('tree-select-result').textContent =\n      'onSelect \u2192 id: \"' + e.detail.node.id + '\" path: ' + JSON.stringify(e.detail.path);\n  },\n});";
+var preview_s3 = "<div class=\"demo-stack\" style=\"max-width:420px\"><div class=\"result-box\" style=\"color:inherit;font-family:inherit\"><div id=\"tree-checkable\"></div></div><div class=\"result-box\" id=\"tree-check-result\">\u2014 marca/desmarca checkboxes \u2014</div></div>";
+var js_s3 = "new MTS.Tree('#tree-checkable', {\n  checkable: true,\n  expandAll: true,\n  showIcons: false,\n  nodes: [\n    { id:'users', label:'Users', children:[\n      { id:'users-read', label:'Read', checked:true },\n      { id:'users-write', label:'Write', checked:true },\n      { id:'users-delete', label:'Delete', disabled:true },\n    ]},\n    { id:'reports', label:'Reports', children:[\n      { id:'reports-view', label:'View' },\n      { id:'reports-export', label:'Export' },\n    ]},\n    { id:'settings', label:'Settings', children:[\n      { id:'settings-read', label:'Read' },\n      { id:'settings-write', label:'Write', checked:true },\n    ]},\n  ],\n  onCheck: function (e) {\n    document.getElementById('tree-check-result').textContent =\n      'onCheck \u2192 checked: ' + e.detail.checked + ' ids: ' + JSON.stringify(e.detail.checkedIds);\n  },\n});";
+var preview_s4 = "<div class=\"demo-stack\"><div class=\"result-box\" style=\"max-width:420px;color:inherit;font-family:inherit\"><div id=\"tree-badges\"></div></div><div class=\"demo-row\"><button id=\"tree-btn-expand\"></button><button id=\"tree-btn-collapse\"></button><button id=\"tree-btn-select\"></button></div><div class=\"result-box\" id=\"tree-api-result\">\u2014 usa la API \u2014</div></div>";
+var js_s4 = "const treeBadges = new MTS.Tree('#tree-badges', {\n  selectable: true,\n  showLines: true,\n  nodes: [\n    { id:'eng', label:'Engineering', badge:'12', expanded:true, icon:\n      '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 2l1.7 4.4 4.7.4-3.6 3 1.1 4.6L12 12.8 8.1 14.4l1.1-4.6-3.6-3 4.7-.4L12 2z\"/></svg>',\n      children:[\n        { id:'frontend', label:'Frontend', badge:'4' },\n        { id:'backend', label:'Backend', badge:'8' },\n      ]\n    },\n    { id:'design', label:'Design', badge:'3', icon:\n      '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><circle cx=\"12\" cy=\"12\" r=\"9\"/></svg>' },\n    { id:'product', label:'Product', badge:'5', icon:\n      '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><rect x=\"5\" y=\"5\" width=\"14\" height=\"14\" rx=\"3\"/></svg>' },\n  ],\n  onSelect: function (e) {\n    document.getElementById('tree-api-result').textContent =\n      'selected \u2192 ' + e.detail.node.id;\n  },\n});\n\nnew MTS.Button('#tree-btn-expand', {\n  label: \"expand('eng')\",\n  variant: 'secondary',\n  onClick: function () {\n    treeBadges.expand('eng');\n    document.getElementById('tree-api-result').textContent = \"API \u2192 expand('eng')\";\n  },\n});\n\nnew MTS.Button('#tree-btn-collapse', {\n  label: \"collapse('eng')\",\n  variant: 'ghost',\n  onClick: function () {\n    treeBadges.collapse('eng');\n    document.getElementById('tree-api-result').textContent = \"API \u2192 collapse('eng')\";\n  },\n});\n\nnew MTS.Button('#tree-btn-select', {\n  label: \"select('frontend')\",\n  variant: 'primary',\n  onClick: function () {\n    treeBadges.select('frontend');\n    document.getElementById('tree-api-result').textContent = \"API \u2192 select('frontend')\";\n  },\n});";
+
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  const FILE_NODES = [
+    { id:'src', label:'src', expanded:true, children:[
+      { id:'components', label:'components', children:[
+        { id:'btn', label:'Button.js' },
+        { id:'inp', label:'Input.js' },
+        { id:'sel', label:'Select.js' },
+      ]},
+      { id:'utils', label:'utils', children:[
+        { id:'fmt', label:'format.js' },
+        { id:'api', label:'api.js' },
+      ]},
+      { id:'idx', label:'index.js' },
+      { id:'app', label:'App.js' },
+    ]},
+    { id:'public', label:'public', children:[
+      { id:'html', label:'index.html' },
+      { id:'fav', label:'favicon.ico' },
+    ]},
+    { id:'pkg', label:'package.json' },
+  ];
+
+  new MTS.Tree('#tree-files', {
     showLines: true,
     showIcons: true,
-    nodes: [
-      { id:'src', label:'src', expanded:true, children:[
-        { id:'components', label:'components', children:[
-          { id:'button', label:'Button.js' },
-          { id:'input',  label:'Input.js' },
-        ]},
-        { id:'index', label:'index.js' },
-      ]},
-      { id:'public', label:'public', children:[
-        { id:'favicon', label:'favicon.ico' },
-      ]},
-    ],
-    onToggle: (e) =&gt; console.log(e.detail.node.id, e.detail.expanded),
+    nodes: FILE_NODES,
   });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tr1">var FILE_NODES = [
-  { id:'src', label:'src', expanded:true, children:[
-    { id:'components', label:'components', children:[
-      { id:'btn', label:'Button.js' },
-      { id:'inp', label:'Input.js'  },
-      { id:'sel', label:'Select.js' },
-    ]},
-    { id:'utils', label:'utils', children:[
-      { id:'fmt', label:'format.js' },
-      { id:'api', label:'api.js'    },
-    ]},
-    { id:'idx',  label:'index.js' },
-    { id:'app',  label:'App.js'   },
-  ]},
-  { id:'public', label:'public', children:[
-    { id:'html',  label:'index.html' },
-    { id:'fav',   label:'favicon.ico' },
-  ]},
-  { id:'pkg', label:'package.json' },
-];
 
-// With lines (default) / Con líneas
-new MTS.Tree('#tree-files', {
-  showLines: true,
-  showIcons: true,
-  nodes: FILE_NODES,
-  onToggle: (e) =&gt; console.log(e.detail.node.id, e.detail.expanded),
+  new MTS.Tree('#tree-nolines', {
+    showLines: false,
+    showIcons: true,
+    nodes: FILE_NODES,
+  });
 });
 
-// Without lines / Sin líneas
-new MTS.Tree('#tree-nolines', {
-  showLines: false,
-  showIcons: true,
-  nodes: FILE_NODES,
-});</div>
-  </div>
-
-  <!-- 2. Selectable -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Selectable + onSelect</div>
-    <div class="tree-box" id="tree-selectable" style="max-width:360px"></div>
-    <div class="result-box" id="tree-select-result">— haz click en un nodo —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tr2','js-tr2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tr2','html-tr2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tr2">&lt;div id="my-tree"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Tree('#my-tree', {
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  new MTS.Tree('#tree-selectable', {
     selectable: true,
-    nodes: [...],
-    // Fires when a node is selected / Se dispara al seleccionar un nodo
-    onSelect: (e) =&gt; {
-      console.log(e.detail.node.id);   // → 'src'
-      console.log(e.detail.path);      // → ['root', 'src']
+    showLines: true,
+    nodes: [
+      { id:'dashboard', label:'Dashboard', selected:true },
+      { id:'analytics', label:'Analytics' },
+      { id:'reports', label:'Reports', children:[
+        { id:'monthly', label:'Monthly report' },
+        { id:'annual', label:'Annual report' },
+      ]},
+      { id:'settings', label:'Settings', children:[
+        { id:'profile', label:'Profile' },
+        { id:'security', label:'Security' },
+        { id:'billing', label:'Billing', disabled:true },
+      ]},
+    ],
+    onSelect: function (e) {
+      document.getElementById('tree-select-result').textContent =
+        'onSelect → id: "' + e.detail.node.id + '" path: ' + JSON.stringify(e.detail.path);
     },
   });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tr2">new MTS.Tree('#my-tree', {
-  selectable: true,  // click to select / click para seleccionar
-  showLines:  true,
-  nodes: [
-    { id:'dashboard',  label:'Dashboard',  selected: true },
-    { id:'analytics',  label:'Analytics' },
-    { id:'reports',    label:'Reports', children:[
-      { id:'monthly',  label:'Monthly report' },
-      { id:'annual',   label:'Annual report' },
-    ]},
-    { id:'settings',   label:'Settings', children:[
-      { id:'profile',  label:'Profile' },
-      { id:'security', label:'Security' },
-      { id:'billing',  label:'Billing', disabled: true },
-    ]},
-  ],
-  // Fires when a node is selected / Se dispara al seleccionar un nodo
-  onSelect: (e) =&gt; {
-    console.log(e.detail.node.id);  // → 'dashboard'
-    console.log(e.detail.path);     // → ['dashboard']
-  },
-});</div>
-  </div>
+});
 
-  <!-- 3. Checkable -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Checkable con propagación a hijos / Checkboxes with child propagation</div>
-    <div class="tree-box" id="tree-checkable" style="max-width:360px"></div>
-    <div class="result-box" id="tree-check-result">— marca/desmarca checkboxes —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tr3','js-tr3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tr3','html-tr3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tr3">&lt;div id="my-tree"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Tree('#my-tree', {
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.Tree('#tree-checkable', {
     checkable: true,
-    nodes: [...],
-    // Fires when checkbox changes / Se dispara al cambiar un checkbox
-    onCheck: (e) =&gt; {
-      console.log(e.detail.node.id);      // → 'users-read'
-      console.log(e.detail.checked);      // → true | false
-      console.log(e.detail.checkedIds);   // → ['users-read', 'reports-view']
-    },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tr3">new MTS.Tree('#my-tree', {
-  checkable:  true,    // show checkboxes / mostrar checkboxes
-  expandAll:  true,    // expand all on init / expandir todo al inicio
-  showIcons:  false,
-  nodes: [
-    { id:'users', label:'Users', children:[
-      { id:'users-read',   label:'Read',   checked:true  },
-      { id:'users-write',  label:'Write',  checked:true  },
-      { id:'users-delete', label:'Delete', disabled:true },
-    ]},
-    { id:'reports', label:'Reports', children:[
-      { id:'reports-view',   label:'View'   },
-      { id:'reports-export', label:'Export' },
-    ]},
-    { id:'settings', label:'Settings', children:[
-      { id:'settings-read',  label:'Read'  },
-      { id:'settings-write', label:'Write', checked:true },
-    ]},
-  ],
-  // Fires when checkbox changes / Se dispara al cambiar un checkbox
-  onCheck: (e) =&gt; {
-    console.log('checked IDs:', e.detail.checkedIds);
-  },
-});</div>
-  </div>
-
-  <!-- 4. Badges + íconos custom -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Badges + íconos custom + API</div>
-    <div class="tree-box" id="tree-badges" style="max-width:360px"></div>
-    <div class="demo-row" style="margin-top:10px;flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="treeBadges.expandAll()">expandAll()</button>
-      <button class="demo-btn-sm" onclick="treeBadges.collapseAll()">collapseAll()</button>
-      <button class="demo-btn-sm" onclick="treeBadges.select('frontend')">select('frontend')</button>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tr4','js-tr4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tr4','html-tr4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tr4">&lt;div id="my-tree"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const tree = new MTS.Tree('#my-tree', {
-    selectable: true,
+    expandAll: true,
+    showIcons: false,
     nodes: [
-      { id:'eng', label:'Engineering', badge:{ label:'12', variant:'primary' }, children:[
-        { id:'frontend', label:'Frontend', badge:{ label:'4' } },
-        { id:'backend',  label:'Backend',  badge:{ label:'8' } },
+      { id:'users', label:'Users', children:[
+        { id:'users-read', label:'Read', checked:true },
+        { id:'users-write', label:'Write', checked:true },
+        { id:'users-delete', label:'Delete', disabled:true },
+      ]},
+      { id:'reports', label:'Reports', children:[
+        { id:'reports-view', label:'View' },
+        { id:'reports-export', label:'Export' },
+      ]},
+      { id:'settings', label:'Settings', children:[
+        { id:'settings-read', label:'Read' },
+        { id:'settings-write', label:'Write', checked:true },
       ]},
     ],
+    onCheck: function (e) {
+      document.getElementById('tree-check-result').textContent =
+        'onCheck → checked: ' + e.detail.checked + ' ids: ' + JSON.stringify(e.detail.checkedIds);
+    },
+  });
+});
+
+makeSection('tabs-s4', preview_s4, js_s4, function () {
+  const treeBadges = new MTS.Tree('#tree-badges', {
+    selectable: true,
+    showLines: true,
+    nodes: [
+      { id:'eng', label:'Engineering', badge:'12', expanded:true, icon:
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.7 4.4 4.7.4-3.6 3 1.1 4.6L12 12.8 8.1 14.4l1.1-4.6-3.6-3 4.7-.4L12 2z"/></svg>',
+        children:[
+          { id:'frontend', label:'Frontend', badge:'4' },
+          { id:'backend', label:'Backend', badge:'8' },
+        ]
+      },
+      { id:'design', label:'Design', badge:'3', icon:
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9"/></svg>' },
+      { id:'product', label:'Product', badge:'5', icon:
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="3"/></svg>' },
+    ],
+    onSelect: function (e) {
+      document.getElementById('tree-api-result').textContent =
+        'selected → ' + e.detail.node.id;
+    },
   });
 
-  tree.expandAll()
-  tree.collapseAll()
-  tree.select('frontend')
-  tree.deselect()
-  tree.getChecked()   // → checked IDs
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tr4">const tree = new MTS.Tree('#my-tree', {
-  selectable: true,
-  showLines:  true,
-  nodes: [
-    { id:'eng',  label:'Engineering', badge:{ label:'12', variant:'primary' }, children:[
-      { id:'frontend', label:'Frontend', badge:{ label:'4', variant:'info'    } },
-      { id:'backend',  label:'Backend',  badge:{ label:'8', variant:'success' } },
-    ]},
-    { id:'design',  label:'Design',   badge:{ label:'3',  variant:'warning' } },
-    { id:'product', label:'Product',  badge:{ label:'5',  variant:'default' } },
-  ],
-  onSelect: (e) =&gt; console.log('selected:', e.detail.node.id),
-});
+  new MTS.Button('#tree-btn-expand', {
+    label: "expand('eng')",
+    variant: 'secondary',
+    onClick: function () {
+      treeBadges.expand('eng');
+      document.getElementById('tree-api-result').textContent = "API → expand('eng')";
+    },
+  });
 
-// API
-tree.expandAll()          // expand all / expandir todos
-tree.collapseAll()        // collapse all / colapsar todos
-tree.expand('eng')        // expand one / expandir uno
-tree.collapse('eng')      // collapse one / colapsar uno
-tree.select('frontend')   // select programmatically / seleccionar programáticamente
-tree.deselect()           // deselect all / deseleccionar
-tree.getChecked()         // → array of checked IDs</div>
-  </div>
+  new MTS.Button('#tree-btn-collapse', {
+    label: "collapse('eng')",
+    variant: 'ghost',
+    onClick: function () {
+      treeBadges.collapse('eng');
+      document.getElementById('tree-api-result').textContent = "API → collapse('eng')";
+    },
+  });
 
-</div>
-<script>
-var FILE_NODES = [
-  { id:'src', label:'src', expanded:true, children:[
-    { id:'components', label:'components', children:[
-      { id:'btn', label:'Button.js' },{ id:'inp', label:'Input.js' },{ id:'sel', label:'Select.js' },
-    ]},
-    { id:'utils', label:'utils', children:[
-      { id:'fmt', label:'format.js' },{ id:'api', label:'api.js' },
-    ]},
-    { id:'idx', label:'index.js' },{ id:'app', label:'App.js' },
-  ]},
-  { id:'public', label:'public', children:[
-    { id:'html', label:'index.html' },{ id:'fav', label:'favicon.ico' },
-  ]},
-  { id:'pkg', label:'package.json' },
-];
-new MTS.Tree('#tree-files',   { showLines:true,  showIcons:true, nodes:FILE_NODES });
-new MTS.Tree('#tree-nolines', { showLines:false, showIcons:true, nodes:FILE_NODES });
-
-new MTS.Tree('#tree-selectable', {
-  selectable:true, showLines:true,
-  nodes:[
-    { id:'dashboard', label:'Dashboard', selected:true },
-    { id:'analytics', label:'Analytics' },
-    { id:'reports',   label:'Reports', children:[
-      { id:'monthly', label:'Monthly report' },{ id:'annual', label:'Annual report' },
-    ]},
-    { id:'settings', label:'Settings', children:[
-      { id:'profile', label:'Profile' },{ id:'security', label:'Security' },{ id:'billing', label:'Billing', disabled:true },
-    ]},
-  ],
-  onSelect: function(e){ document.getElementById('tree-select-result').textContent = 'onSelect → id:"'+e.detail.node.id+'" path:'+JSON.stringify(e.detail.path); },
-});
-
-new MTS.Tree('#tree-checkable', {
-  checkable:true, expandAll:true, showIcons:false,
-  nodes:[
-    { id:'users', label:'Users', children:[
-      { id:'users-read', label:'Read', checked:true },{ id:'users-write', label:'Write', checked:true },{ id:'users-delete', label:'Delete', disabled:true },
-    ]},
-    { id:'reports', label:'Reports', children:[
-      { id:'reports-view', label:'View' },{ id:'reports-export', label:'Export' },
-    ]},
-    { id:'settings', label:'Settings', children:[
-      { id:'settings-read', label:'Read' },{ id:'settings-write', label:'Write', checked:true },
-    ]},
-  ],
-  onCheck: function(e){ document.getElementById('tree-check-result').textContent = 'onCheck → checked:'+e.detail.checked+' ids:'+JSON.stringify(e.detail.checkedIds); },
-});
-
-var treeBadges = new MTS.Tree('#tree-badges', {
-  selectable:true, showLines:true,
-  nodes:[
-    { id:'eng',     label:'Engineering', badge:{ label:'12', variant:'primary' }, children:[
-      { id:'frontend', label:'Frontend', badge:{ label:'4', variant:'info'    } },
-      { id:'backend',  label:'Backend',  badge:{ label:'8', variant:'success' } },
-    ]},
-    { id:'design',  label:'Design',  badge:{ label:'3', variant:'warning' } },
-    { id:'product', label:'Product', badge:{ label:'5', variant:'default' } },
-  ],
+  new MTS.Button('#tree-btn-select', {
+    label: "select('frontend')",
+    variant: 'primary',
+    onClick: function () {
+      treeBadges.select('frontend');
+      document.getElementById('tree-api-result').textContent = "API → select('frontend')";
+    },
+  });
 });
 </script>
 </body>

@@ -3,24 +3,25 @@
 <head>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.RatingReview — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
@@ -30,24 +31,12 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-ratingreview.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-ratingreview.js"></script>
-  <style>
-    .rr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .rr-box {
-      border: 1px solid var(--mts-border-color);
-      border-radius: var(--mts-radius-lg);
-      padding: 20px;
-      background: var(--mts-surface);
-    }
-    .rr-label {
-      font-size: 10px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .8px;
-      color: var(--mts-text-muted);
-      margin-bottom: 12px;
-    }
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -59,190 +48,246 @@
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
   <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.RatingReview</h1>
-    <p>Rating review widget — average score, star display, breakdown bars, interactive voting.</p>
+    <p>Widget de reseñas con promedio, breakdown por estrellas y votación interactiva.</p>
     <div class="demo-header-actions">
       <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-ratingreview.md')">📄 Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Solo lectura -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Solo lectura con breakdown / Read-only with breakdown</div>
-    <div class="rr-grid">
-      <div class="rr-box">
-        <div class="rr-label">size: md (default)</div>
-        <div id="rr-md"></div>
-      </div>
-      <div class="rr-box">
-        <div class="rr-label">size: lg</div>
-        <div id="rr-lg"></div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-rr1','js-rr1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-rr1','html-rr1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-rr1">&lt;div id="my-widget"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.RatingReview('#my-widget', {
-    average:   4.3,
-    total:     1284,
-    size:      'md',
-    breakdown: { 5: 720, 4: 380, 3: 120, 2: 48, 1: 16 },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-rr1">// Read-only display / Visualización de solo lectura
-new MTS.RatingReview('#my-widget', {
-  average:   4.3,    // average score (1-5) / promedio (1-5)
-  total:     1284,   // total review count / total de reseñas
-  size:      'md',   // 'sm' | 'md' | 'lg'
-  breakdown: {
-    5: 720,          // count per star / cantidad por estrella
-    4: 380,
-    3: 120,
-    2: 48,
-    1: 16,
-  },
-});</div>
-  </div>
-
-  <!-- 2. Interactivo -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Interactivo — permite votar / Interactive voting</div>
-    <div class="rr-box" style="max-width:500px">
-      <div id="rr-interactive"></div>
-    </div>
-    <div class="result-box" id="rr-result">— haz click en las estrellas para calificar —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-rr2','js-rr2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-rr2','html-rr2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-rr2">&lt;div id="my-widget"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.RatingReview('#my-widget', {
-    average:     4.3,
-    total:       1284,
-    breakdown:   { 5:720, 4:380, 3:120, 2:48, 1:16 },
-    interactive: true,   // shows clickable stars at bottom
-    // Fires when user rates / Se dispara al calificar
-    onRate: (e) =&gt; {
-      console.log(e.detail.stars); // → 4
-      submitRating(e.detail.stars);
-    },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-rr2">const widget = new MTS.RatingReview('#my-widget', {
-  average:     4.3,
-  total:       1284,
-  breakdown:   { 5: 720, 4: 380, 3: 120, 2: 48, 1: 16 },
-  interactive: true,   // shows clickable stars below breakdown
-
-  // Fires when user rates / Se dispara al calificar
-  onRate: (e) =&gt; {
-    console.log(e.detail.stars); // → 1-5
-
-    // Optimistically update breakdown / Actualizar optimistamente
-    widget.update({
-      total:   widget.total + 1,
-      average: ((widget.average * widget.total) + e.detail.stars) / (widget.total + 1),
-      breakdown: { ...widget.breakdown, [e.detail.stars]: widget.breakdown[e.detail.stars] + 1 },
-    });
-  },
-});</div>
-  </div>
-
-  <!-- 3. update() en vivo -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — update() — actualizar datos en vivo / Live data update</div>
-    <div class="rr-box" style="max-width:500px">
-      <div id="rr-live"></div>
-    </div>
-    <div class="demo-row" style="margin-top:12px;flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="simulateRating(5)">+★★★★★</button>
-      <button class="demo-btn-sm" onclick="simulateRating(4)">+★★★★</button>
-      <button class="demo-btn-sm" onclick="simulateRating(3)">+★★★</button>
-      <button class="demo-btn-sm" onclick="simulateRating(2)">+★★</button>
-      <button class="demo-btn-sm" onclick="simulateRating(1)">+★</button>
-      <button class="demo-btn-sm" onclick="resetData()">Reset</button>
-    </div>
-    <div class="result-box" id="rr-live-result">— usa los botones para simular nuevas reseñas —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-rr3','js-rr3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-rr3','html-rr3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-rr3">&lt;div id="my-widget"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const w = new MTS.RatingReview('#my-widget', {
-    average: 4.3, total: 1284,
-    breakdown: { 5:720, 4:380, 3:120, 2:48, 1:16 },
-  });
-
-  // Update any option and re-render / Actualizar cualquier opción y re-renderizar
-  w.update({
-    average:   4.5,
-    total:     1300,
-    breakdown: { 5:750, 4:380, 3:110, 2:48, 1:12 },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-rr3">const w = new MTS.RatingReview('#my-widget', {
-  average:   4.3,
-  total:     1284,
-  breakdown: { 5: 720, 4: 380, 3: 120, 2: 48, 1: 16 },
-});
-
-// Update with new review / Actualizar con nueva reseña
-function addReview(stars) {
-  const newTotal    = w.total + 1;
-  const newAverage  = ((w.average * w.total) + stars) / newTotal;
-  const newBreakdown = { ...w.breakdown, [stars]: w.breakdown[stars] + 1 };
-
-  w.update({
-    average:   +newAverage.toFixed(2),
-    total:     newTotal,
-    breakdown: newBreakdown,
-  });
-}</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Solo lectura con breakdown / Read-only with breakdown</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Interactivo — permite votar / Interactive voting</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — update() — actualizar datos en vivo / Live data update</div><div id="tabs-s3"></div></div>
 </div>
+
 <script>
-var BD = { 5:720, 4:380, 3:120, 2:48, 1:16 };
-var TOTAL = 1284;
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '350px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+}
+
+var BASE_BREAKDOWN = { 5: 720, 4: 380, 3: 120, 2: 48, 1: 16 };
+var BASE_TOTAL = 1284;
+
+function cloneBreakdown() {
+  return { 5: BASE_BREAKDOWN[5], 4: BASE_BREAKDOWN[4], 3: BASE_BREAKDOWN[3], 2: BASE_BREAKDOWN[2], 1: BASE_BREAKDOWN[1] };
+}
+
 function calcAvg(bd, total) {
   var sum = 0;
-  for (var s = 1; s <= 5; s++) sum += s * (bd[s]||0);
+  for (var s = 1; s <= 5; s++) sum += s * (bd[s] || 0);
   return total > 0 ? sum / total : 0;
 }
 
-new MTS.RatingReview('#rr-md', { average:4.3, total:1284, size:'md', breakdown:Object.assign({},BD) });
-new MTS.RatingReview('#rr-lg', { average:4.3, total:1284, size:'lg', breakdown:Object.assign({},BD) });
+var preview_s1 =
+  '<div class="demo-grid">' +
+    '<div class="demo-stack">' +
+      '<div class="demo-label">size: md (default)</div>' +
+      '<div id="rr-md"></div>' +
+    '</div>' +
+    '<div class="demo-stack">' +
+      '<div class="demo-label">size: lg</div>' +
+      '<div id="rr-lg"></div>' +
+    '</div>' +
+  '</div>';
 
-new MTS.RatingReview('#rr-interactive', {
-  average:1284, total:1284, breakdown:Object.assign({},BD), interactive:true,
-  average:4.3,
-  onRate: function(e){
-    document.getElementById('rr-result').textContent = 'onRate → stars:' + e.detail.stars + ' ★';
-  },
+makeSection('tabs-s1', preview_s1,
+"const breakdown = { 5: 720, 4: 380, 3: 120, 2: 48, 1: 16 };\n\n" +
+"new MTS.RatingReview('#my-widget', {\n" +
+"  average: 4.3,\n" +
+"  total: 1284,\n" +
+"  size: 'md',\n" +
+"  breakdown: breakdown\n" +
+"});\n\n" +
+"new MTS.RatingReview('#my-widget-lg', {\n" +
+"  average: 4.3,\n" +
+"  total: 1284,\n" +
+"  size: 'lg',\n" +
+"  breakdown: breakdown\n" +
+"});"
+);
+
+var preview_s2 =
+  '<div class="demo-stack" style="max-width:520px">' +
+    '<div id="rr-interactive"></div>' +
+    '<div class="result-box" id="rr-result">— haz click en las estrellas para calificar —</div>' +
+  '</div>';
+
+makeSection('tabs-s2', preview_s2,
+"const widget = new MTS.RatingReview('#my-widget', {\n" +
+"  average: 4.3,\n" +
+"  total: 1284,\n" +
+"  breakdown: { 5: 720, 4: 380, 3: 120, 2: 48, 1: 16 },\n" +
+"  interactive: true,\n" +
+"  onRate: function (e) {\n" +
+"    console.log('stars:', e.detail.stars);\n" +
+"  }\n" +
+"});"
+);
+
+var preview_s3 =
+  '<div class="demo-stack" style="max-width:520px">' +
+    '<div id="rr-live"></div>' +
+    '<div class="demo-row">' +
+      '<button type="button" class="mts-btn mts-btn--primary mts-btn--sm" onclick="simulateRating(5)">+★★★★★</button>' +
+      '<button type="button" class="mts-btn mts-btn--primary mts-btn--sm" onclick="simulateRating(4)">+★★★★</button>' +
+      '<button type="button" class="mts-btn mts-btn--primary mts-btn--sm" onclick="simulateRating(3)">+★★★</button>' +
+      '<button type="button" class="mts-btn mts-btn--primary mts-btn--sm" onclick="simulateRating(2)">+★★</button>' +
+      '<button type="button" class="mts-btn mts-btn--primary mts-btn--sm" onclick="simulateRating(1)">+★</button>' +
+      '<button type="button" class="mts-btn mts-btn--outline mts-btn--sm" onclick="resetData()">Reset</button>' +
+    '</div>' +
+    '<div class="result-box" id="rr-live-result">— usa los botones para simular nuevas reseñas —</div>' +
+  '</div>';
+
+makeSection('tabs-s3', preview_s3,
+"const widget = new MTS.RatingReview('#my-widget', {\n" +
+"  average: 4.3,\n" +
+"  total: 1284,\n" +
+"  breakdown: { 5: 720, 4: 380, 3: 120, 2: 48, 1: 16 }\n" +
+"});\n\n" +
+"function addReview(stars) {\n" +
+"  const nextTotal = widget.total + 1;\n" +
+"  const nextBreakdown = { ...widget.breakdown, [stars]: widget.breakdown[stars] + 1 };\n" +
+"  const nextAverage = ((widget.average * widget.total) + stars) / nextTotal;\n\n" +
+"  widget.update({\n" +
+"    average: +nextAverage.toFixed(2),\n" +
+"    total: nextTotal,\n" +
+"    breakdown: nextBreakdown\n" +
+"  });\n" +
+"}"
+);
+
+new MTS.RatingReview('#rr-md', {
+  average: 4.3,
+  total: BASE_TOTAL,
+  size: 'md',
+  breakdown: cloneBreakdown()
 });
 
-var liveData = { average:4.3, total:TOTAL, breakdown:Object.assign({},BD) };
-var rrLive = new MTS.RatingReview('#rr-live', Object.assign({}, liveData));
+new MTS.RatingReview('#rr-lg', {
+  average: 4.3,
+  total: BASE_TOTAL,
+  size: 'lg',
+  breakdown: cloneBreakdown()
+});
+
+new MTS.RatingReview('#rr-interactive', {
+  average: 4.3,
+  total: BASE_TOTAL,
+  breakdown: cloneBreakdown(),
+  interactive: true,
+  onRate: function (e) {
+    document.getElementById('rr-result').textContent = 'onRate → stars: ' + e.detail.stars + ' ★';
+  }
+});
+
+var liveData = {
+  average: 4.3,
+  total: BASE_TOTAL,
+  breakdown: cloneBreakdown()
+};
+
+var rrLive = new MTS.RatingReview('#rr-live', {
+  average: liveData.average,
+  total: liveData.total,
+  breakdown: cloneBreakdown()
+});
 
 function simulateRating(stars) {
-  liveData.total++;
-  liveData.breakdown[stars]++;
+  liveData.total += 1;
+  liveData.breakdown[stars] += 1;
   liveData.average = calcAvg(liveData.breakdown, liveData.total);
-  rrLive.update({ average:+liveData.average.toFixed(2), total:liveData.total, breakdown:Object.assign({},liveData.breakdown) });
-  document.getElementById('rr-live-result').textContent = 'update() → nueva reseña ★'+stars+' · promedio:'+liveData.average.toFixed(2)+' · total:'+liveData.total;
+
+  rrLive.update({
+    average: +liveData.average.toFixed(2),
+    total: liveData.total,
+    breakdown: {
+      5: liveData.breakdown[5],
+      4: liveData.breakdown[4],
+      3: liveData.breakdown[3],
+      2: liveData.breakdown[2],
+      1: liveData.breakdown[1]
+    }
+  });
+
+  document.getElementById('rr-live-result').textContent =
+    'update() → nueva reseña ★' + stars + ' · promedio: ' + liveData.average.toFixed(2) + ' · total: ' + liveData.total;
 }
 
 function resetData() {
-  liveData = { average:4.3, total:TOTAL, breakdown:Object.assign({},BD) };
-  rrLive.update(Object.assign({},liveData));
+  liveData = {
+    average: 4.3,
+    total: BASE_TOTAL,
+    breakdown: cloneBreakdown()
+  };
+
+  rrLive.update({
+    average: liveData.average,
+    total: liveData.total,
+    breakdown: {
+      5: liveData.breakdown[5],
+      4: liveData.breakdown[4],
+      3: liveData.breakdown[3],
+      2: liveData.breakdown[2],
+      1: liveData.breakdown[1]
+    }
+  });
+
   document.getElementById('rr-live-result').textContent = 'reset() → datos originales restaurados';
 }
 </script>

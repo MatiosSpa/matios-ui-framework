@@ -15,7 +15,7 @@
           var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
           if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
           if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
       }catch(e){}
     })();
@@ -30,8 +30,12 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-toast.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-toast.js"></script>
 </head>
 <body>
@@ -44,170 +48,292 @@
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
   <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Toast</h1>
-    <p>Transient notifications — variants, positions, action button, loading state. Static API.</p>
+    <p>Transient notifications — variants, positions, action button y loading state.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-toast.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-toast.md')">Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Variantes -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Variantes / Variants</div>
-    <div class="demo-row" style="flex-wrap:wrap">
-      <button class="mts-btn mts-btn--secondary" onclick="MTS.Toast.show({message:'Default notification'})">Default</button>
-      <button class="mts-btn mts-btn--secondary" onclick="MTS.Toast.show({variant:'success', message:'File saved successfully.'})">Success</button>
-      <button class="mts-btn mts-btn--secondary" onclick="MTS.Toast.show({variant:'warning', message:'Low disk space remaining.'})">Warning</button>
-      <button class="mts-btn mts-btn--secondary" onclick="MTS.Toast.show({variant:'danger',  message:'Connection failed. Try again.'})">Danger</button>
-      <button class="mts-btn mts-btn--secondary" onclick="MTS.Toast.show({variant:'info',    message:'New version available.'})">Info</button>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-t1','js-t1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-t1','html-t1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-t1">&lt;!-- MTS.Toast is a static API — no HTML container needed
-     MTS.Toast es una API estática — no necesita contenedor HTML --&gt;
+  <div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Posiciones</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Acción + loading</div><div id="tabs-s3"></div></div>
+</div>
 
-&lt;button onclick="MTS.Toast.show({ variant: 'success', message: 'Saved!' })"&gt;
-  Show toast
-&lt;/button&gt;</div>
-    <div class="code-panel" id="js-t1">// Static API — call directly / API estática — llamar directamente
-MTS.Toast.show({ message: 'Default notification' });
+<script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
-MTS.Toast.show({ variant: 'success', message: 'File saved successfully.' });
-MTS.Toast.show({ variant: 'warning', message: 'Low disk space remaining.' });
-MTS.Toast.show({ variant: 'danger',  message: 'Connection failed.',  duration: 0 });
-MTS.Toast.show({ variant: 'info',    message: 'New version available.' });
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
 
-// With title / Con título
-MTS.Toast.show({
-  variant:  'warning',
-  title:    'Low storage',
-  message:  'Only 2GB remaining.',
-  duration: 6000,
-  // Fires when closed / Se dispara al cerrar
-  onClose: (e) =&gt; console.log('dismissed'),
-});</div>
+function htmlTab(previewHtml) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+}
+
+var preview_s1 = `
+<div class="demo-row" style="flex-wrap:wrap">
+  <button id="toast-default" data-label="Default" data-variant="secondary"></button>
+  <button id="toast-success" data-label="Success" data-variant="secondary"></button>
+  <button id="toast-warning" data-label="Warning" data-variant="secondary"></button>
+  <button id="toast-danger" data-label="Danger" data-variant="secondary"></button>
+  <button id="toast-info" data-label="Info" data-variant="secondary"></button>
+</div>`;
+
+var js_s1 = `new MTS.Button('#toast-default');
+new MTS.Button('#toast-success');
+new MTS.Button('#toast-warning');
+new MTS.Button('#toast-danger');
+new MTS.Button('#toast-info');
+
+document.getElementById('toast-default').addEventListener('click', function () {
+  MTS.Toast.show({ message: 'Default notification' });
+});
+document.getElementById('toast-success').addEventListener('click', function () {
+  MTS.Toast.show({ variant: 'success', message: 'File saved successfully.' });
+});
+document.getElementById('toast-warning').addEventListener('click', function () {
+  MTS.Toast.show({ variant: 'warning', message: 'Low disk space remaining.' });
+});
+document.getElementById('toast-danger').addEventListener('click', function () {
+  MTS.Toast.show({ variant: 'danger', message: 'Connection failed. Try again.' });
+});
+document.getElementById('toast-info').addEventListener('click', function () {
+  MTS.Toast.show({ variant: 'info', message: 'New version available.' });
+});`;
+
+var preview_s2 = `
+<div class="demo-row" style="flex-wrap:wrap">
+  <button id="toast-tr" data-label="Top right" data-variant="secondary"></button>
+  <button id="toast-tc" data-label="Top center" data-variant="secondary"></button>
+  <button id="toast-tl" data-label="Top left" data-variant="secondary"></button>
+  <button id="toast-br" data-label="Bottom right" data-variant="secondary"></button>
+  <button id="toast-bc" data-label="Bottom center" data-variant="secondary"></button>
+  <button id="toast-bl" data-label="Bottom left" data-variant="secondary"></button>
+</div>`;
+
+var js_s2 = `new MTS.Button('#toast-tr');
+new MTS.Button('#toast-tc');
+new MTS.Button('#toast-tl');
+new MTS.Button('#toast-br');
+new MTS.Button('#toast-bc');
+new MTS.Button('#toast-bl');
+
+document.getElementById('toast-tr').addEventListener('click', function () {
+  MTS.Toast.show({ variant: 'info', message: 'Top right', position: 'top-right' });
+});
+document.getElementById('toast-tc').addEventListener('click', function () {
+  MTS.Toast.show({ variant: 'info', message: 'Top center', position: 'top-center' });
+});
+document.getElementById('toast-tl').addEventListener('click', function () {
+  MTS.Toast.show({ variant: 'info', message: 'Top left', position: 'top-left' });
+});
+document.getElementById('toast-br').addEventListener('click', function () {
+  MTS.Toast.show({ variant: 'info', message: 'Bottom right', position: 'bottom-right' });
+});
+document.getElementById('toast-bc').addEventListener('click', function () {
+  MTS.Toast.show({ variant: 'info', message: 'Bottom center', position: 'bottom-center' });
+});
+document.getElementById('toast-bl').addEventListener('click', function () {
+  MTS.Toast.show({ variant: 'info', message: 'Bottom left', position: 'bottom-left' });
+});`;
+
+var preview_s3 = `
+<div class="demo-stack">
+  <div class="demo-row" style="flex-wrap:wrap">
+    <button id="toast-action" data-label="Con acción" data-variant="secondary"></button>
+    <button id="toast-loading" data-label="Loading → success" data-variant="secondary"></button>
+    <button id="toast-plain-success" data-label="Sin × (2s)" data-variant="primary"></button>
   </div>
+  <div class="result-box" id="toast-result">— usa los botones —</div>
+</div>`;
 
-  <!-- 2. Posiciones -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Posiciones / Positions</div>
-    <div class="demo-row" style="flex-wrap:wrap">
-      <button class="mts-btn mts-btn--secondary" onclick="MTS.Toast.show({variant:'info', message:'Top right',     position:'top-right'})">Top right</button>
-      <button class="mts-btn mts-btn--secondary" onclick="MTS.Toast.show({variant:'info', message:'Top center',    position:'top-center'})">Top center</button>
-      <button class="mts-btn mts-btn--secondary" onclick="MTS.Toast.show({variant:'info', message:'Top left',      position:'top-left'})">Top left</button>
-      <button class="mts-btn mts-btn--secondary" onclick="MTS.Toast.show({variant:'info', message:'Bottom right',  position:'bottom-right'})">Bottom right</button>
-      <button class="mts-btn mts-btn--secondary" onclick="MTS.Toast.show({variant:'info', message:'Bottom center', position:'bottom-center'})">Bottom center</button>
-      <button class="mts-btn mts-btn--secondary" onclick="MTS.Toast.show({variant:'info', message:'Bottom left',   position:'bottom-left'})">Bottom left</button>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-t2','js-t2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-t2','html-t2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-t2">&lt;script&gt;
-  MTS.Toast.show({ variant:'success', message:'Saved!', position:'top-center' });
-  MTS.Toast.show({ variant:'danger',  message:'Error!', position:'bottom-left' });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-t2">// 6 positions / 6 posiciones
-MTS.Toast.show({ message: 'Top right',     position: 'top-right' });     // default
-MTS.Toast.show({ message: 'Top center',    position: 'top-center' });
-MTS.Toast.show({ message: 'Top left',      position: 'top-left' });
-MTS.Toast.show({ message: 'Bottom right',  position: 'bottom-right' });
-MTS.Toast.show({ message: 'Bottom center', position: 'bottom-center' });
-MTS.Toast.show({ message: 'Bottom left',   position: 'bottom-left' });</div>
-  </div>
+var js_s3 = `new MTS.Button('#toast-action');
+new MTS.Button('#toast-loading');
+new MTS.Button('#toast-plain-success');
 
-  <!-- 3. Acción + loading -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Acción + loading state</div>
-    <div class="demo-row" style="flex-wrap:wrap">
-      <button class="mts-btn mts-btn--secondary" onclick="showAction()">Con acción</button>
-      <button class="mts-btn mts-btn--secondary" onclick="showLoading()">Loading → success</button>
-      <button class="mts-btn mts-btn--secondary" onclick="MTS.Toast.show({variant:'success',message:'¡Hecho!',duration:2000,closable:false})">Sin × (2s)</button>
-    </div>
-    <div class="result-box" id="toast-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-t3','js-t3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-t3','html-t3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-t3">&lt;script&gt;
-  // With action button / Con botón de acción
+document.getElementById('toast-action').addEventListener('click', function () {
   MTS.Toast.show({
-    variant:  'info',
-    message:  'New version available.',
-    action:   'Update now',
-    // Fires on action click / Se dispara al hacer click en la acción
-    onAction: () =&gt; installUpdate(),
-    onClose:  () =&gt; console.log('dismissed'),
+    variant: 'info',
+    title: 'Update available',
+    message: 'Version 2.0 is ready.',
+    action: 'Install now',
+    duration: 0,
+    onAction: function () {
+      document.getElementById('toast-result').textContent = 'onAction → install';
+    },
+    onClose: function () {
+      document.getElementById('toast-result').textContent = 'onClose → dismissed';
+    }
+  });
+});
+
+document.getElementById('toast-loading').addEventListener('click', function () {
+  document.getElementById('toast-result').textContent = 'Loading... (3s)';
+  var loader = MTS.Toast.show({
+    variant: 'loading',
+    message: 'Uploading file...',
+    duration: 0,
+    closable: false
   });
 
-  // Loading → then close / Loading → luego cerrar
-  const loader = MTS.Toast.show({
-    variant:  'loading',
-    message:  'Uploading file...',
-    duration: 0,      // does not auto-close / no cierra automáticamente
-    closable: false,
-  });
-  setTimeout(() =&gt; {
+  setTimeout(function () {
     loader.close();
     MTS.Toast.show({ variant: 'success', message: 'Upload complete!' });
-  }, 3000);
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-t3">// With action button / Con botón de acción
-MTS.Toast.show({
-  variant:  'info',
-  title:    'Update available',
-  message:  'Version 2.0 is ready.',
-  action:   'Install now',
-  duration: 0,        // stays until action or close / permanece hasta acción o cierre
-  // Fires when action is clicked / Se dispara al hacer click en la acción
-  onAction: (e) =&gt; console.log('install triggered'),
-  // Fires when closed / Se dispara al cerrar
-  onClose:  (e) =&gt; console.log('dismissed'),
-});
-
-// Loading state → then close / Estado loading → luego cerrar
-const loader = MTS.Toast.show({
-  variant:  'loading',
-  message:  'Uploading file...',
-  duration: 0,        // does not auto-close / no cierra automáticamente
-  closable: false,    // no close button / sin botón de cierre
-});
-
-// Close manually when done / Cerrar manualmente al terminar
-setTimeout(() =&gt; {
-  loader.close();
-  MTS.Toast.show({ variant: 'success', message: 'Upload complete!' });
-}, 3000);
-
-// Returns { close() } / Retorna { close() }
-const toast = MTS.Toast.show({ message: 'Processing...' });
-toast.close(); // close programmatically / cerrar programáticamente</div>
-  </div>
-
-</div>
-<script>
-function showAction() {
-  MTS.Toast.show({
-    variant:'info', title:'Actualización disponible', message:'La versión 2.0 está lista.',
-    action:'Instalar ahora', duration:0,
-    onAction: function(){ document.getElementById('toast-result').textContent = 'onAction → instalar'; },
-    onClose:  function(){ document.getElementById('toast-result').textContent = 'onClose → descartado'; },
-  });
-}
-function showLoading() {
-  document.getElementById('toast-result').textContent = 'Loading... (3s)';
-  var loader = MTS.Toast.show({ variant:'loading', message:'Subiendo archivo...', duration:0, closable:false });
-  setTimeout(function(){
-    loader.close();
-    MTS.Toast.show({ variant:'success', message:'¡Archivo subido correctamente!' });
     document.getElementById('toast-result').textContent = 'loader.close() → success ✓';
   }, 3000);
+});
+
+document.getElementById('toast-plain-success').addEventListener('click', function () {
+  MTS.Toast.show({
+    variant: 'success',
+    message: '¡Hecho!',
+    duration: 2000,
+    closable: false
+  });
+});`;
+
+makeSection('tabs-s1', preview_s1, js_s1);
+makeSection('tabs-s2', preview_s2, js_s2);
+makeSection('tabs-s3', preview_s3, js_s3);
+
+function mountToastDemo() {
+  [
+    '#toast-default','#toast-success','#toast-warning','#toast-danger','#toast-info',
+    '#toast-tr','#toast-tc','#toast-tl','#toast-br','#toast-bc','#toast-bl',
+    '#toast-action','#toast-loading','#toast-plain-success'
+  ].forEach(function(sel) {
+    new MTS.Button(sel);
+  });
+
+  document.getElementById('toast-default').addEventListener('click', function () {
+    MTS.Toast.show({ message: 'Default notification' });
+  });
+  document.getElementById('toast-success').addEventListener('click', function () {
+    MTS.Toast.show({ variant: 'success', message: 'File saved successfully.' });
+  });
+  document.getElementById('toast-warning').addEventListener('click', function () {
+    MTS.Toast.show({ variant: 'warning', message: 'Low disk space remaining.' });
+  });
+  document.getElementById('toast-danger').addEventListener('click', function () {
+    MTS.Toast.show({ variant: 'danger', message: 'Connection failed. Try again.' });
+  });
+  document.getElementById('toast-info').addEventListener('click', function () {
+    MTS.Toast.show({ variant: 'info', message: 'New version available.' });
+  });
+
+  document.getElementById('toast-tr').addEventListener('click', function () {
+    MTS.Toast.show({ variant: 'info', message: 'Top right', position: 'top-right' });
+  });
+  document.getElementById('toast-tc').addEventListener('click', function () {
+    MTS.Toast.show({ variant: 'info', message: 'Top center', position: 'top-center' });
+  });
+  document.getElementById('toast-tl').addEventListener('click', function () {
+    MTS.Toast.show({ variant: 'info', message: 'Top left', position: 'top-left' });
+  });
+  document.getElementById('toast-br').addEventListener('click', function () {
+    MTS.Toast.show({ variant: 'info', message: 'Bottom right', position: 'bottom-right' });
+  });
+  document.getElementById('toast-bc').addEventListener('click', function () {
+    MTS.Toast.show({ variant: 'info', message: 'Bottom center', position: 'bottom-center' });
+  });
+  document.getElementById('toast-bl').addEventListener('click', function () {
+    MTS.Toast.show({ variant: 'info', message: 'Bottom left', position: 'bottom-left' });
+  });
+
+  document.getElementById('toast-action').addEventListener('click', function () {
+    MTS.Toast.show({
+      variant: 'info',
+      title: 'Actualización disponible',
+      message: 'La versión 2.0 está lista.',
+      action: 'Instalar ahora',
+      duration: 0,
+      onAction: function () {
+        document.getElementById('toast-result').textContent = 'onAction → instalar';
+      },
+      onClose: function () {
+        document.getElementById('toast-result').textContent = 'onClose → descartado';
+      }
+    });
+  });
+
+  document.getElementById('toast-loading').addEventListener('click', function () {
+    document.getElementById('toast-result').textContent = 'Loading... (3s)';
+    var loader = MTS.Toast.show({
+      variant: 'loading',
+      message: 'Subiendo archivo...',
+      duration: 0,
+      closable: false
+    });
+
+    setTimeout(function () {
+      loader.close();
+      MTS.Toast.show({ variant: 'success', message: '¡Archivo subido correctamente!' });
+      document.getElementById('toast-result').textContent = 'loader.close() → success ✓';
+    }, 3000);
+  });
+
+  document.getElementById('toast-plain-success').addEventListener('click', function () {
+    MTS.Toast.show({
+      variant: 'success',
+      message: '¡Hecho!',
+      duration: 2000,
+      closable: false
+    });
+  });
 }
+
+mountToastDemo();
 </script>
 </body>
 </html>

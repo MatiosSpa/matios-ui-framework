@@ -3,24 +3,25 @@
 <head>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.ContextMenu — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
@@ -30,22 +31,13 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-contextmenu.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-contextmenu.js"></script>
-  <style>
-    .ctx-zone {
-      border: 2px dashed var(--mts-border-color);
-      border-radius: var(--mts-radius-lg);
-      padding: 32px 24px;
-      text-align: center;
-      font-size: 13px;
-      color: var(--mts-text-muted);
-      cursor: context-menu;
-      user-select: none;
-    }
-    .ctx-zone:hover { border-color: var(--mts-color-primary); }
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -61,153 +53,143 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.ContextMenu</h1>
-    <p>Right-click context menu — icons, shortcuts, groups, dividers, danger items, long-press mobile.</p>
+    <p>Menú contextual por click derecho con acciones, iconos y shortcuts.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-contextmenu.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-contextmenu.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. En zona delimitada -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — En zona delimitada / On a specific zone</div>
-    <div id="ctx-zone1" class="ctx-zone">
-      🖱️ Click derecho aquí / Right-click here
-    </div>
-    <div class="result-box" id="ctx-result">— haz click derecho en la zona —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-ctx1','js-ctx1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-ctx1','html-ctx1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-ctx1">&lt;div id="my-zone"&gt;Right-click here&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.ContextMenu('#my-zone', {
-    items: [
-      { id: 'copy',   label: 'Copy',   shortcut: '⌘C' },
-      { id: 'cut',    label: 'Cut',    shortcut: '⌘X' },
-      { id: 'paste',  label: 'Paste',  shortcut: '⌘V' },
-      { divider: true },
-      { id: 'delete', label: 'Delete', danger: true },
-    ],
-    // Fires when menu opens / Se dispara al abrir
-    onOpen:   (e) =&gt; console.log('opened at', e.detail.x, e.detail.y),
-    // Fires when menu closes / Se dispara al cerrar
-    onClose:  () =&gt; console.log('closed'),
-    // Fires when item selected / Se dispara al seleccionar un ítem
-    onSelect: (e) =&gt; {
-      console.log(e.detail.id);   // → 'copy'
-      console.log(e.detail.item); // → { id, label, ... }
-    },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-ctx1">new MTS.ContextMenu('#my-zone', {
-  items: [
-    { id: 'copy',   label: 'Copy',   shortcut: '⌘C' },
-    { id: 'cut',    label: 'Cut',    shortcut: '⌘X' },
-    { id: 'paste',  label: 'Paste',  shortcut: '⌘V' },
-    { divider: true },
-    // danger: true — red danger style / estilo de peligro rojo
-    { id: 'delete', label: 'Delete', danger: true },
-  ],
-  // Fires when menu opens / Se dispara al abrir el menú
-  onOpen: (e) =&gt; {
-    console.log('opened at', e.detail.x, e.detail.y);
-  },
-  // Fires when menu closes / Se dispara al cerrar el menú
-  onClose: () =&gt; console.log('closed'),
-  // Fires when item selected / Se dispara al seleccionar un ítem
-  onSelect: (e) =&gt; {
-    console.log(e.detail.id);   // → 'copy'
-    console.log(e.detail.item); // → { id, label, shortcut }
-  },
-});</div>
-  </div>
-
-  <!-- 2. Con grupos, íconos y shortcuts -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Con grupos e íconos / With groups and icons</div>
-    <div id="ctx-zone2" class="ctx-zone">
-      🖱️ Click derecho aquí / Right-click here
-    </div>
-    <div class="result-box" id="ctx-result2">— haz click derecho en la zona —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-ctx2','js-ctx2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-ctx2','html-ctx2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-ctx2">&lt;div id="my-zone"&gt;Right-click here&lt;/div&gt;
-&lt;script&gt;
-  new MTS.ContextMenu('#my-zone', {
-    items: [
-      { group: 'File' },
-      { id: 'open',   label: 'Open',   icon: ICON_FOLDER },
-      { id: 'save',   label: 'Save',   icon: ICON_SAVE,  shortcut: '⌘S' },
-      { divider: true },
-      { group: 'Edit' },
-      { id: 'copy',   label: 'Copy',   icon: ICON_COPY,  shortcut: '⌘C' },
-      { id: 'paste',  label: 'Paste',  icon: ICON_PASTE, shortcut: '⌘V', disabled: true },
-      { divider: true },
-      { id: 'delete', label: 'Delete', icon: ICON_TRASH, danger: true },
-    ],
-    onSelect: (e) =&gt; console.log(e.detail.id),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-ctx2">new MTS.ContextMenu('#my-zone', {
-  items: [
-    // group: label above items / etiqueta de grupo
-    { group: 'File' },
-    { id: 'open', label: 'Open',   icon: ICON_FOLDER },
-    { id: 'save', label: 'Save',   icon: ICON_SAVE,  shortcut: '⌘S' },
-    { divider: true },
-    { group: 'Edit' },
-    { id: 'copy',  label: 'Copy',  icon: ICON_COPY,  shortcut: '⌘C' },
-    { id: 'paste', label: 'Paste', icon: ICON_PASTE, shortcut: '⌘V', disabled: true },
-    { divider: true },
-    // danger: true — red style / estilo rojo
-    { id: 'delete', label: 'Delete', icon: ICON_TRASH, danger: true },
-  ],
-  onSelect: (e) =&gt; console.log(e.detail.id),
-  // Per-item onClick also works / onClick por ítem también funciona
-  // onClick: (item) =&gt; console.log(item.id)
-});</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Básico</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Iconos y acciones</div><div id="tabs-s2"></div></div>
 </div>
 
 <script>
-var IC = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
-var IX = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>';
-var IT = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
-var IF = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>';
-var IS = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>';
-var IP = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>';
 
-new MTS.ContextMenu('#ctx-zone1', {
-  items: [
-    { id:'copy',   label:'Copy',   shortcut:'⌘C' },
-    { id:'cut',    label:'Cut',    shortcut:'⌘X' },
-    { id:'paste',  label:'Paste',  shortcut:'⌘V' },
-    { divider:true },
-    { id:'delete', label:'Delete', danger:true },
-  ],
-  onOpen:   function(e){ document.getElementById('ctx-result').textContent = 'onOpen → x:' + Math.round(e.detail.x) + ' y:' + Math.round(e.detail.y); },
-  onClose:  function(){ document.getElementById('ctx-result').textContent = 'onClose → cerrado'; },
-  onSelect: function(e){ document.getElementById('ctx-result').textContent = 'onSelect → id:"' + e.detail.id + '" label:"' + e.detail.item.label + '"'; },
-});
-new MTS.ContextMenu('#ctx-zone2', {
-  items: [
-    { group:'File' },
-    { id:'open',   label:'Open',   icon:IF },
-    { id:'save',   label:'Save',   icon:IS, shortcut:'⌘S' },
-    { divider:true },
-    { group:'Edit' },
-    { id:'copy',   label:'Copy',   icon:IC, shortcut:'⌘C' },
-    { id:'paste',  label:'Paste',  icon:IP, shortcut:'⌘V', disabled:true },
-    { divider:true },
-    { id:'delete', label:'Delete', icon:IT, danger:true },
-  ],
-  onSelect: function(e){ document.getElementById('ctx-result2').textContent = 'onSelect → id:"' + e.detail.id + '" label:"' + e.detail.item.label + '"'; },
-});
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+  if (typeof initFn === 'function') initFn();
+}
+
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+var preview_s1 =
+  '<div class="demo-stack">' +
+    '<div id="ctx-zone-basic" class="demo-grid-outline demo-grid-outline--tall">Click derecho aquí / Right click here</div>' +
+    '<div class="result-box" id="ctx-result-basic">— abre el menú contextual —</div>' +
+  '</div>';
+
+var js_s1 =
+  "new MTS.ContextMenu('#ctx-zone-basic', {\n" +
+  "  items: [\n" +
+  "    { id: 'copy', label: 'Copy' },\n" +
+  "    { id: 'cut', label: 'Cut' },\n" +
+  "    { id: 'paste', label: 'Paste' },\n" +
+  "    { divider: true },\n" +
+  "    { id: 'delete', label: 'Delete', danger: true }\n" +
+  "  ],\n" +
+  "  onSelect: function(e) { setResult('ctx-result-basic', 'select → ' + e.detail.id); }\n" +
+  "});";
+
+var preview_s2 =
+  '<div class="demo-stack">' +
+    '<div id="ctx-zone-icons" class="demo-grid-outline demo-grid-outline--tall">Zona con iconos y shortcuts</div>' +
+    '<div class="result-box" id="ctx-result-icons">— click derecho para probar items con iconos —</div>' +
+  '</div>';
+
+var js_s2 =
+  "new MTS.ContextMenu('#ctx-zone-icons', {\n" +
+  "  items: [\n" +
+  "    { id: 'open', label: 'Open', icon: MTS.Icon.get('folder-open') },\n" +
+  "    { id: 'copy', label: 'Copy', icon: MTS.Icon.get('copy'), shortcut: '⌘C' },\n" +
+  "    { id: 'paste', label: 'Paste', icon: MTS.Icon.get('paste'), shortcut: '⌘V' },\n" +
+  "    { divider: true },\n" +
+  "    { id: 'delete', label: 'Delete', icon: MTS.Icon.get('trash'), danger: true }\n" +
+  "  ],\n" +
+  "  onSelect: function(e) { setResult('ctx-result-icons', 'select → ' + e.detail.id); }\n" +
+  "});";
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.ContextMenu('#ctx-zone-basic', {
+    items: [
+      { id: 'copy', label: 'Copy' },
+      { id: 'cut', label: 'Cut' },
+      { id: 'paste', label: 'Paste' },
+      { divider: true },
+      { id: 'delete', label: 'Delete', danger: true }
+    ],
+    onSelect: function(e) { setResult('ctx-result-basic', 'select → ' + e.detail.id); }
+  });
+}, '320px');
+
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  new MTS.ContextMenu('#ctx-zone-icons', {
+    items: [
+      { id: 'open', label: 'Open', icon: MTS.Icon.get('folder-open') },
+      { id: 'copy', label: 'Copy', icon: MTS.Icon.get('copy'), shortcut: '⌘C' },
+      { id: 'paste', label: 'Paste', icon: MTS.Icon.get('paste'), shortcut: '⌘V' },
+      { divider: true },
+      { id: 'delete', label: 'Delete', icon: MTS.Icon.get('trash'), danger: true }
+    ],
+    onSelect: function(e) { setResult('ctx-result-icons', 'select → ' + e.detail.id); }
+  });
+}, '320px');
+
 </script>
 </body>
 </html>

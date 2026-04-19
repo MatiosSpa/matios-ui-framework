@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.FormLayout v2 — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="./matios-ui-formlayout-v2.css">
+  <script src="../../shared/demo-shared.js"></script>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
+  <button class="demo-btn-sm demo-btn-sep">—</button>
+  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
+</div>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.FormLayout v2</h1>
+    <p>New form layout system. Grid is the backbone, but v2 also covers horizontal, inline, sections, actions and form cards.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-formlayout-v2.md')">📄 Docs</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Form grid — 2 columns</div>
+    <form class="mts-form-v2" onsubmit="return false">
+      <div class="mts-form-section">
+        <div class="mts-form-grid">
+          <div class="mts-form-group mts-form-col-6">
+            <label class="mts-form-label mts-form-label--required">First name</label>
+            <input class="mts-input" placeholder="John">
+          </div>
+          <div class="mts-form-group mts-form-col-6">
+            <label class="mts-form-label mts-form-label--required">Last name</label>
+            <input class="mts-input" placeholder="Doe">
+          </div>
+          <div class="mts-form-group mts-form-col-12">
+            <label class="mts-form-label">Email</label>
+            <input class="mts-input" type="email" placeholder="john@company.com">
+            <span class="mts-form-hint">This email will receive notifications.</span>
+          </div>
+        </div>
+      </div>
+      <div class="mts-form-actions">
+        <button class="mts-btn mts-btn--ghost" type="button">Cancel</button>
+        <button class="mts-btn mts-btn--primary" type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Form grid — row + cols</div>
+    <form class="mts-form-v2" onsubmit="return false">
+      <div class="mts-form-grid">
+        <div class="mts-form-row">
+          <div class="mts-form-group mts-form-col-4">
+            <label class="mts-form-label">Country</label>
+            <input class="mts-input" placeholder="Chile">
+          </div>
+          <div class="mts-form-group mts-form-col-4">
+            <label class="mts-form-label">City</label>
+            <input class="mts-input" placeholder="Santiago">
+          </div>
+          <div class="mts-form-group mts-form-col-4">
+            <label class="mts-form-label">Zip code</label>
+            <input class="mts-input" placeholder="8320000">
+          </div>
+        </div>
+        <div class="mts-form-group mts-form-col-12">
+          <label class="mts-form-label">Address</label>
+          <input class="mts-input" placeholder="Main street 123">
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Form sections</div>
+    <form class="mts-form-v2" onsubmit="return false">
+      <div class="mts-form-section">
+        <div class="mts-form-section__header">
+          <h3 class="mts-form-section__title">Personal data</h3>
+          <p class="mts-form-section__desc">Fields grouped with spacing and a light divider.</p>
+        </div>
+        <div class="mts-form-grid">
+          <div class="mts-form-group mts-form-col-6">
+            <label class="mts-form-label">Name</label>
+            <input class="mts-input" placeholder="Guillermo">
+          </div>
+          <div class="mts-form-group mts-form-col-6">
+            <label class="mts-form-label">Role</label>
+            <input class="mts-input" placeholder="Architect">
+          </div>
+        </div>
+      </div>
+
+      <div class="mts-form-section">
+        <div class="mts-form-section__header">
+          <h3 class="mts-form-section__title">Contact</h3>
+          <p class="mts-form-section__desc">Second block separated without changing the component structure.</p>
+        </div>
+        <div class="mts-form-grid">
+          <div class="mts-form-group mts-form-col-6">
+            <label class="mts-form-label">Email</label>
+            <input class="mts-input" placeholder="mail@domain.com">
+          </div>
+          <div class="mts-form-group mts-form-col-6">
+            <label class="mts-form-label">Phone</label>
+            <input class="mts-input" placeholder="+56 9 1234 5678">
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">4 — Horizontal</div>
+    <form class="mts-form-v2 mts-form-horizontal" onsubmit="return false" style="max-width:720px">
+      <div class="mts-form-group">
+        <label class="mts-form-label mts-form-label--required">Email</label>
+        <input class="mts-input" type="email" placeholder="user@example.com">
+        <span class="mts-form-hint">We will use this email to notify the user.</span>
+      </div>
+      <div class="mts-form-group">
+        <label class="mts-form-label">Password</label>
+        <input class="mts-input" type="password" placeholder="Minimum 8 characters">
+        <span class="mts-form-hint">At least one uppercase letter is recommended.</span>
+      </div>
+      <div class="mts-form-group">
+        <label class="mts-form-label">Role</label>
+        <input class="mts-input" placeholder="Admin">
+      </div>
+      <div class="mts-form-actions">
+        <button class="mts-btn mts-btn--ghost" type="button">Cancel</button>
+        <button class="mts-btn mts-btn--primary" type="button">Save</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">5 — Inline filters</div>
+    <form class="mts-form-v2 mts-form-inline" onsubmit="return false">
+      <div class="mts-form-group mts-form-inline__field mts-form-inline__field--grow">
+        <label class="mts-form-label mts-form-label--hidden">Search</label>
+        <input class="mts-input" placeholder="Search by name, email or company">
+      </div>
+      <div class="mts-form-group mts-form-inline__field">
+        <label class="mts-form-label mts-form-label--hidden">Status</label>
+        <input class="mts-input" placeholder="All statuses">
+      </div>
+      <div class="mts-form-group mts-form-inline__field">
+        <label class="mts-form-label mts-form-label--hidden">Role</label>
+        <input class="mts-input" placeholder="Any role">
+      </div>
+      <div class="mts-form-actions mts-form-inline__actions">
+        <button class="mts-btn mts-btn--ghost" type="button">Clear</button>
+        <button class="mts-btn mts-btn--primary" type="submit">Search</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">6 — Actions alignment</div>
+    <div class="demo-stack">
+      <div class="mts-form-actions mts-form-actions--start">
+        <button class="mts-btn mts-btn--ghost">Start</button>
+        <button class="mts-btn mts-btn--secondary">Secondary</button>
+      </div>
+      <div class="mts-form-actions mts-form-actions--center">
+        <button class="mts-btn mts-btn--secondary">Center</button>
+        <button class="mts-btn mts-btn--primary">Save</button>
+      </div>
+      <div class="mts-form-actions mts-form-actions--between">
+        <button class="mts-btn mts-btn--ghost">Back</button>
+        <button class="mts-btn mts-btn--primary">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">7 — Form Card</div>
+    <div class="mts-form-card" style="max-width:760px">
+      <div class="mts-form-card__header">
+        <h2 class="mts-form-card__title">Create workspace</h2>
+        <p class="mts-form-card__subtitle">Structured surface for a larger form with sections and actions.</p>
+      </div>
+
+      <form class="mts-form-v2" onsubmit="return false">
+        <div class="mts-form-section">
+          <div class="mts-form-grid">
+            <div class="mts-form-group mts-form-col-6">
+              <label class="mts-form-label mts-form-label--required">Workspace name</label>
+              <input class="mts-input" placeholder="Matios Platform">
+            </div>
+            <div class="mts-form-group mts-form-col-6">
+              <label class="mts-form-label">Environment</label>
+              <input class="mts-input" placeholder="Production">
+            </div>
+            <div class="mts-form-group mts-form-col-12">
+              <label class="mts-form-label">Description</label>
+              <textarea class="mts-input" rows="3" placeholder="Short description of the workspace..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="mts-form-actions">
+          <button class="mts-btn mts-btn--ghost" type="button">Cancel</button>
+          <button class="mts-btn mts-btn--primary" type="submit">Create workspace</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

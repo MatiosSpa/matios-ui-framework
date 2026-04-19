@@ -21,17 +21,19 @@
     })();
   </script>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.Kanban — Demo</title>
+  <title>Kanban — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
-  <link rel="stylesheet" href="../../shared/demo-shared.css">
+<link rel="stylesheet" href="../../base/matios-ui-base.css">
+<link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+<link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+<link rel="stylesheet" href="../../shared/demo-shared.css">
+<link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-kanban.css">
-  <script src="../../shared/demo-shared.js"></script>
+<script src="../../shared/demo-shared.js"></script>
+<script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-kanban.js"></script>
 </head>
 <body>
@@ -47,155 +49,79 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Kanban</h1>
-    <p>Kanban board — drag & drop, WIP limits, priorities, assignees, programmatic API.</p>
-    <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-kanban.md')">📄 Docs</button>
-    </div>
+    <p>Kanban demo actualizado al patrón Preview | HTML | JavaScript.</p>
+    <div class="demo-header-actions"><button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-kanban.md')">Documentación</button></div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-
-  <!-- 1. Tablero completo -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Tablero completo con drag & drop / Full board with drag & drop</div>
-    <div id="kanban-board"></div>
-    <div class="result-box" id="kanban-result">— arrastra tarjetas o haz click en una —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-kb1','js-kb1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-kb1','html-kb1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-kb1">&lt;div id="my-board"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const board = new MTS.Kanban('#my-board', {
-    addCards: true,
-    columns: [
-      { id:'backlog', title:'Backlog', cards:[
-        { id:'c1', title:'Set up CI/CD', priority:'high', tags:['devops'],
-          assignees:[{ name:'Ana García' }], dueDate:'Dec 15' },
-      ]},
-      { id:'in-progress', title:'In Progress', wip:3, cards:[] },
-      { id:'done', title:'Done', color:'#16a34a', cards:[] },
-    ],
-    // Fires on card move / Se dispara al mover una tarjeta
-    onMove: (e) =&gt; {
-      console.log(e.detail.card.id);
-      console.log(e.detail.fromColId, '→', e.detail.toColId);
-    },
-    // Fires on card click / Se dispara al hacer click en una tarjeta
-    onCardClick: (e) =&gt; openDetail(e.detail.card),
-    // Fires on card add / Se dispara al agregar tarjeta
-    onAddCard: (e) =&gt; console.log(e.detail.card, e.detail.colId),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-kb1">const board = new MTS.Kanban('#my-board', {
-  addCards: true,
-  columns: [
-    {
-      id: 'backlog', title: 'Backlog',
-      cards: [
-        { id:'c1', title:'Set up CI/CD pipeline', priority:'critical',
-          tags:['devops','infra'], assignees:[{ name:'Ana García' }], dueDate:'Dec 15',
-          description:'Configure GitHub Actions for auto-deploy.' },
-        { id:'c2', title:'Design system tokens', priority:'high',
-          tags:['design'], assignees:[{ name:'Pedro M.' },{ name:'Laura S.' }] },
-        { id:'c3', title:'Write unit tests', priority:'medium', tags:['qa'] },
-      ],
-    },
-    { id:'in-progress', title:'In Progress', wip:3, cards:[
-      { id:'c4', title:'API authentication', priority:'high', tags:['backend'],
-        assignees:[{ name:'Carlos R.' }], dueDate:'Dec 10' },
-    ]},
-    { id:'review',  title:'In Review', wip:2, cards:[] },
-    { id:'done', title:'Done', color:'#16a34a', cards:[
-      { id:'c5', title:'Database schema', priority:'low', tags:['backend'] },
-    ]},
-  ],
-  onMove:      (e) =&gt; console.log('moved:', e.detail.card.id, 'to', e.detail.toColId),
-  onCardClick: (e) =&gt; console.log('clicked:', e.detail.card.title),
-  onAddCard:   (e) =&gt; console.log('added:', e.detail.card, 'in', e.detail.colId),
-});</div>
-  </div>
-
-  <!-- 2. API programática -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — API — addCard · moveCard · removeCard</div>
-    <div id="kanban-api"></div>
-    <div class="demo-row" style="margin-top:10px;flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="addToBacklog()">addCard('backlog')</button>
-      <button class="demo-btn-sm" onclick="kb2.moveCard('api-1','done')">moveCard → done</button>
-      <button class="demo-btn-sm" onclick="kb2.removeCard('api-1')">removeCard('api-1')</button>
-    </div>
-    <div class="result-box" id="kanban-api-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-kb2','js-kb2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-kb2','html-kb2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-kb2">&lt;script&gt;
-  const board = new MTS.Kanban('#my-board', { columns:[...] });
-
-  board.addCard('backlog', { id:'new-1', title:'New task', priority:'medium' });
-  board.moveCard('new-1', 'done');
-  board.removeCard('new-1');
-  board.getCards();           // all cards / todas las tarjetas
-  board.getCards('backlog');  // cards in column / tarjetas de la columna
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-kb2">const board = new MTS.Kanban('#my-board', {
-  columns: [
-    { id:'backlog', title:'Backlog', cards:[
-      { id:'api-1', title:'Task from API', priority:'high' },
-    ]},
-    { id:'done', title:'Done', cards:[] },
-  ],
-  onMove:    (e) =&gt; console.log('moved:', e.detail.card.id),
-  onAddCard: (e) =&gt; console.log('added:', e.detail.card.title),
-});
-
-// Programmatic API
-board.addCard('backlog', { id:'new-task', title:'New task', priority:'medium' });
-board.moveCard('api-1', 'done');
-board.removeCard('api-1');
-
-const all   = board.getCards();           // all cards flat
-const inCol = board.getCards('backlog');  // cards in column</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Tablero completo</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — API addCard · moveCard · removeCard</div><div id="tabs-s2"></div></div>
 </div>
 <script>
-var result = document.getElementById('kanban-result');
-var board1 = new MTS.Kanban('#kanban-board', {
-  addCards:true,
-  columns:[
-    { id:'backlog', title:'Backlog', cards:[
-      { id:'c1', title:'Set up CI/CD pipeline',  priority:'critical', tags:['devops'], assignees:[{name:'Ana García'}], dueDate:'Dec 15', description:'Configure GitHub Actions.' },
-      { id:'c2', title:'Design system tokens',   priority:'high',     tags:['design'], assignees:[{name:'Pedro M.'},{name:'Laura S.'}] },
-      { id:'c3', title:'Write unit tests',        priority:'medium',   tags:['qa'] },
-    ]},
-    { id:'in-progress', title:'In Progress', wip:3, cards:[
-      { id:'c4', title:'API authentication', priority:'high', tags:['backend'], assignees:[{name:'Carlos R.'}], dueDate:'Dec 10' },
-    ]},
-    { id:'review', title:'In Review', wip:2, cards:[] },
-    { id:'done', title:'Done', color:'#16a34a', cards:[
-      { id:'c5', title:'Database schema', priority:'low', tags:['backend'] },
-    ]},
-  ],
-  onMove:      function(e){ result.textContent = 'onMove → "'+e.detail.card.title+'" → '+e.detail.toColId; },
-  onCardClick: function(e){ result.textContent = 'onCardClick → "'+e.detail.card.title+'"'; },
-  onAddCard:   function(e){ result.textContent = 'onAddCard → "'+e.detail.card.title+'" en '+e.detail.colId; },
-});
-var apiResult = document.getElementById('kanban-api-result');
-var kb2 = new MTS.Kanban('#kanban-api', {
-  columns:[
-    { id:'backlog', title:'Backlog', cards:[{ id:'api-1', title:'Tarea desde API', priority:'high', tags:['api'] }]},
-    { id:'done', title:'Done', color:'#16a34a', cards:[] },
-  ],
-  onMove:    function(e){ apiResult.textContent = 'onMove → "'+e.detail.card.title+'" → '+e.detail.toColId; },
-  onAddCard: function(e){ apiResult.textContent = 'onAddCard → "'+e.detail.card.title+'"'; },
-});
-var apiCount = 1;
-function addToBacklog(){
-  kb2.addCard('backlog', { id:'new-'+apiCount, title:'Nueva tarea #'+apiCount, priority:['low','medium','high'][apiCount%3] });
-  apiResult.textContent = 'addCard → "Nueva tarea #' + apiCount + '"';
-  apiCount++;
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(indentHtml(previewHtml)) + '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(code) + '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '340px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+  if (typeof initFn === 'function') initFn();
+}
+var preview_s1 = "<div class=\"demo-stack\"><div id=\"kanban-board\"></div><div class=\"result-box\" id=\"kanban-result\">\u2014 arrastra una tarjeta o haz click \u2014</div></div>";
+var js_s1 = "new MTS.Kanban('#kanban-board', { addCards:true, columns:[{ id:'backlog', title:'Backlog', cards:[{ id:'c1', title:'Set up CI/CD pipeline', priority:'critical', tags:['devops'] },{ id:'c2', title:'Design system tokens', priority:'high', tags:['design'] }] },{ id:'in-progress', title:'In Progress', wip:3, cards:[{ id:'c3', title:'API authentication', priority:'high', tags:['backend'] }] },{ id:'done', title:'Done', color:'#16a34a', cards:[{ id:'c4', title:'Database schema', priority:'low', tags:['backend'] }] }], onMove:function(e){ console.log(e.detail.card.id); }, onCardClick:function(e){ console.log(e.detail.card.title); } });";
+var preview_s2 = "<div class=\"demo-stack\"><div id=\"kanban-api\"></div><div class=\"demo-row\"><button class=\"demo-btn-sm\" onclick=\"addToBacklog()\">addCard()</button><button class=\"demo-btn-sm\" onclick=\"kb2.moveCard('api-1','done')\">moveCard()</button><button class=\"demo-btn-sm\" onclick=\"kb2.removeCard('api-1')\">removeCard()</button></div><div class=\"result-box\" id=\"kanban-api-result\">\u2014 usa los botones \u2014</div></div>";
+var js_s2 = "var kb2 = new MTS.Kanban('#kanban-api', { columns:[{ id:'backlog', title:'Backlog', cards:[{ id:'api-1', title:'Task from API', priority:'high' }] },{ id:'done', title:'Done', cards:[] }] });\nkb2.addCard('backlog', { id:'new-task', title:'New task', priority:'medium' });\nkb2.moveCard('api-1', 'done');\nkb2.removeCard('api-1');";
+var kb2;
+function addToBacklog() {
+  var id = 'task-' + Math.floor(Math.random() * 1000);
+  kb2.addCard('backlog', { id:id, title:'Nueva tarea ' + id, priority:'medium' });
+  document.getElementById('kanban-api-result').textContent = 'addCard → ' + id;
+}
+makeSection('tabs-s1', preview_s1, js_s1, function() { new MTS.Kanban('#kanban-board', { addCards:true, columns:[{ id:'backlog', title:'Backlog', cards:[{ id:'c1', title:'Set up CI/CD pipeline', priority:'critical', tags:['devops'] },{ id:'c2', title:'Design system tokens', priority:'high', tags:['design'] }] },{ id:'in-progress', title:'In Progress', wip:3, cards:[{ id:'c3', title:'API authentication', priority:'high', tags:['backend'] }] },{ id:'done', title:'Done', color:'#16a34a', cards:[{ id:'c4', title:'Database schema', priority:'low', tags:['backend'] }] }], onMove:function(e){ document.getElementById('kanban-result').textContent = 'move → ' + e.detail.card.title + ' → ' + e.detail.toColId; }, onCardClick:function(e){ document.getElementById('kanban-result').textContent = 'click → ' + e.detail.card.title; } }); }, '420px');
+makeSection('tabs-s2', preview_s2, js_s2, function() { kb2 = new MTS.Kanban('#kanban-api', { columns:[{ id:'backlog', title:'Backlog', cards:[{ id:'api-1', title:'Task from API', priority:'high' }] },{ id:'done', title:'Done', cards:[] }] }); }, '400px');
+
 </script>
 </body>
 </html>

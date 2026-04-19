@@ -21,17 +21,19 @@
     })();
   </script>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.Timeline — Demo</title>
+  <title>Timeline — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
-  <link rel="stylesheet" href="../../shared/demo-shared.css">
+<link rel="stylesheet" href="../../base/matios-ui-base.css">
+<link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+<link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+<link rel="stylesheet" href="../../shared/demo-shared.css">
+<link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-timeline.css">
-  <script src="../../shared/demo-shared.js"></script>
+<script src="../../shared/demo-shared.js"></script>
+<script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-timeline.js"></script>
 </head>
 <body>
@@ -47,203 +49,82 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Timeline</h1>
-    <p>Vertical or horizontal timeline — icons, badges, dates, colors, clickable events.</p>
-    <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-timeline.md')">📄 Docs</button>
-    </div>
+    <p>Timeline demo actualizado al patrón Preview | HTML | JavaScript.</p>
+    <div class="demo-header-actions"><button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-timeline.md')">Documentación</button></div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-
-  <!-- 1. Vertical izquierda -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Vertical izquierda con badges / Left vertical with badges</div>
-    <div id="tl-left"></div>
-    <div class="result-box" id="tl-result">— haz click en un evento —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tl1','js-tl1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tl1','html-tl1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tl1">&lt;div id="my-timeline"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Timeline('#my-timeline', {
-    direction: 'vertical',
-    align:     'left',
-    events: [
-      { id:'deploy', title:'Production deploy', date:'2 min ago', badge:{ label:'Success', variant:'success' } },
-      { id:'review', title:'Code review',       date:'1h ago',   description:'PR #142 approved.' },
-      { id:'commit', title:'Commit pushed',      date:'Yesterday' },
-    ],
-    // Fires on item click / Se dispara al hacer click en un ítem
-    onEventClick: (e) =&gt; {
-      console.log(e.detail.event.id); // → 'deploy'
-      console.log(e.detail.index);    // → 0
-    },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tl1">new MTS.Timeline('#my-timeline', {
-  direction: 'vertical',
-  align:     'left',
-  events: [
-    { id:'deploy', title:'Production deploy',  date:'2 min ago', badge:{ label:'Success', variant:'success' }, description:'v2.4.0 deployed correctly.' },
-    { id:'review', title:'Code review passed', date:'1h ago',    badge:{ label:'Approved', variant:'primary' }, description:'PR #142 merged.' },
-    { id:'ci',     title:'CI pipeline',        date:'2h ago',    badge:{ label:'Passed', variant:'info' } },
-    { id:'commit', title:'Commit pushed',       date:'Yesterday', description:'feat: add dark mode support' },
-    { id:'branch', title:'Branch created',      date:'2 days ago' },
-  ],
-  // Fires when item is clicked / Se dispara al hacer click en ítem
-  onEventClick: (e) =&gt; {
-    console.log(e.detail.event.id); // → 'deploy'
-    console.log(e.detail.index);    // → 0
-  },
-});</div>
-  </div>
-
-  <!-- 2. Alternado -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Vertical alternada / Alternate layout</div>
-    <div id="tl-alternate"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tl2','js-tl2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tl2','html-tl2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tl2">&lt;div id="my-timeline"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Timeline('#my-timeline', {
-    direction: 'vertical',
-    align:     'alternate',   // left · right · alternate
-    events: [...],
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tl2">new MTS.Timeline('#my-timeline', {
-  direction: 'vertical',
-  align:     'alternate',  // events alternate left and right
-  events: [
-    { title:'Founded',        date:'2018', description:'Company founded in San Francisco.' },
-    { title:'First product',  date:'2019', description:'Launched MVP to 100 beta users.' },
-    { title:'Series A',       date:'2020', description:'Raised $5M in funding.' },
-    { title:'100K users',     date:'2021', description:'Reached 100,000 active users.' },
-    { title:'IPO',            date:'2024', description:'Listed on NASDAQ.' },
-  ],
-});</div>
-  </div>
-
-  <!-- 3. Con íconos custom -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Con íconos y colores custom / Custom icons and colors</div>
-    <div id="tl-icons"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tl3','js-tl3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tl3','html-tl3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tl3">&lt;div id="my-timeline"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Timeline('#my-timeline', {
-    events: [
-      { title:'Payment',  icon:'&lt;svg&gt;...&lt;/svg&gt;', color:'#16a34a', date:'Today' },
-      { title:'Shipped',  icon:'&lt;svg&gt;...&lt;/svg&gt;', color:'#4f8eff', date:'Yesterday' },
-      { title:'Ordered',  icon:'&lt;svg&gt;...&lt;/svg&gt;', color:'#6b7280', date:'3 days ago' },
-    ],
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tl3">var ICON_CHECK = '&lt;svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"&gt;&lt;path d="M20 6L9 17l-5-5"/&gt;&lt;/svg&gt;';
-var ICON_TRUCK = '&lt;svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;rect x="1" y="3" width="15" height="13"/&gt;&lt;path d="M16 8h4l3 3v5h-7V8z"/&gt;&lt;circle cx="5.5" cy="18.5" r="2.5"/&gt;&lt;circle cx="18.5" cy="18.5" r="2.5"/&gt;&lt;/svg&gt;';
-var ICON_BOX  = '&lt;svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/&gt;&lt;/svg&gt;';
-
-new MTS.Timeline('#tl-icons', {
-  events: [
-    { title:'Payment received',  icon:ICON_CHECK, color:'#16a34a', date:'Today',     description:'$248.00 charged.' },
-    { title:'Order shipped',     icon:ICON_TRUCK, color:'#4f8eff', date:'Yesterday', description:'Tracking: #9X4712.' },
-    { title:'Order placed',      icon:ICON_BOX,   color:'#6b7280', date:'3 days ago',description:'3 items.' },
-  ],
-});</div>
-  </div>
-
-  <!-- 4. addEvent() dinámico -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — addEvent() dinámico / Dynamic addEvent()</div>
-    <div class="demo-row" style="margin-bottom:12px">
-      <button class="demo-btn-sm" onclick="addRandom()">+ addEvent()</button>
-      <button class="demo-btn-sm" onclick="tlApi.setEvents([])">setEvents([])</button>
-    </div>
-    <div id="tl-api"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tl4','js-tl4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tl4','html-tl4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tl4">&lt;div id="my-timeline"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const tl = new MTS.Timeline('#my-timeline', { events: [] });
-
-  // Add one event / Agregar un evento
-  tl.addEvent({ id:'new', title:'New event', date:'Just now' });
-
-  // Replace all / Reemplazar todos
-  tl.setEvents([...]);
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tl4">const tl = new MTS.Timeline('#my-timeline', {
-  events: [{ title:'Initial event', date:'Start' }],
-  onEventClick: (e) =&gt; console.log(e.detail.event.title),
-});
-
-// Add event dynamically / Agregar evento dinámicamente
-tl.addEvent({
-  id:          'new-' + Date.now(),
-  title:       'New event',
-  date:        'Just now',
-  badge:       { label: 'New', variant: 'primary' },
-  description: 'Added at runtime.',
-});
-
-// Replace all events / Reemplazar todos los eventos
-tl.setEvents([
-  { title: 'Reset event 1', date: 'Yesterday' },
-  { title: 'Reset event 2', date: 'Today' },
-]);</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Básica</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Alineaciones</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — addEvent() / setEvents()</div><div id="tabs-s3"></div></div>
 </div>
 <script>
-var EVENTS_LEFT = [
-  { id:'deploy', title:'Production deploy',  date:'2 min ago', badge:{ label:'Success',  variant:'success' }, description:'v2.4.0 deployed correctly.' },
-  { id:'review', title:'Code review passed', date:'1h ago',    badge:{ label:'Approved', variant:'primary' }, description:'PR #142 merged into main.' },
-  { id:'ci',     title:'CI pipeline',        date:'2h ago',    badge:{ label:'Passed',   variant:'info'    } },
-  { id:'commit', title:'Commit pushed',       date:'Yesterday', description:'feat: add dark mode support' },
-  { id:'branch', title:'Branch created',      date:'2 days ago' },
-];
-new MTS.Timeline('#tl-left', {
-  direction:'vertical', align:'left', events:EVENTS_LEFT,
-  onEventClick:function(e){ document.getElementById('tl-result').textContent = 'onEventClick → id:"' + e.detail.event.id + '" index:' + e.detail.index; },
-});
-new MTS.Timeline('#tl-alternate', {
-  direction:'vertical', align:'alternate',
-  events:[
-    { title:'Fundación',    date:'2018', description:'Empresa fundada en Santiago.' },
-    { title:'Primer MVP',   date:'2019', description:'Lanzamiento a 100 usuarios beta.' },
-    { title:'Serie A',      date:'2020', description:'$5M en financiamiento.' },
-    { title:'100K usuarios',date:'2021', description:'Alcanzamos 100,000 usuarios activos.' },
-    { title:'IPO',          date:'2024', description:'Listados en la bolsa.' },
-  ],
-});
-var IC = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
-var IT = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>';
-var IB = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>';
-new MTS.Timeline('#tl-icons', {
-  events:[
-    { title:'Pago recibido', icon:IC, color:'#16a34a', date:'Hoy',         description:'$248.000 procesado.' },
-    { title:'Pedido enviado',icon:IT, color:'#4f8eff', date:'Ayer',        description:'Tracking: #9X4712.' },
-    { title:'Pedido creado', icon:IB, color:'#6b7280', date:'Hace 3 días', description:'3 ítems.' },
-  ],
-});
-var TITLES = ['Commit','CI passed','Review','Deploy','Hotfix','Rollback'];
-var BADGES = [null,{label:'OK',variant:'success'},{label:'Pending',variant:'warning'},{label:'Done',variant:'primary'},null,{label:'Alert',variant:'danger'}];
-var tlApi = new MTS.Timeline('#tl-api', { events:[{ title:'Evento inicial', date:'Inicio', badge:{label:'Start',variant:'default'} }] });
-var tlCount = 1;
-function addRandom(){
-  var t = TITLES[tlCount % TITLES.length];
-  var b = BADGES[tlCount % BADGES.length];
-  tlApi.addEvent({ id:'ev-'+tlCount, title:t, date:'Justo ahora', badge:b });
-  tlCount++;
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(indentHtml(previewHtml)) + '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(code) + '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '340px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+  if (typeof initFn === 'function') initFn();
+}
+var preview_s1 = "<div id=\"tl-basic\"></div>";
+var js_s1 = "new MTS.Timeline('#tl-basic', { events:[{ title:'Order charged', date:'Today', description:'$248.00 charged.' },{ title:'Order shipped', date:'Yesterday', description:'Tracking #9X4712.' },{ title:'Order placed', date:'3 days ago', description:'3 items.' }] });";
+var preview_s2 = "<div class=\"demo-grid\"><div id=\"tl-left\"></div><div id=\"tl-alternate\"></div></div>";
+var js_s2 = "new MTS.Timeline('#tl-left', { align:'left', events:[{ title:'Kickoff', date:'Week 1' },{ title:'Build', date:'Week 2' },{ title:'Launch', date:'Week 3' }] });\nnew MTS.Timeline('#tl-alternate', { align:'alternate', events:[{ title:'Kickoff', date:'Week 1' },{ title:'Build', date:'Week 2' },{ title:'Launch', date:'Week 3' }] });";
+var preview_s3 = "<div class=\"demo-stack\"><div id=\"tl-api\"></div><div class=\"demo-row\"><button class=\"demo-btn-sm\" onclick=\"addRandom()\">addEvent()</button><button class=\"demo-btn-sm\" onclick=\"tlApi.setEvents([])\">setEvents([])</button></div></div>";
+var js_s3 = "var tlApi = new MTS.Timeline('#tl-api', { events:[{ title:'Evento inicial', date:'Inicio' }] });\ntlApi.addEvent({ title:'Nuevo evento', date:'Ahora' });\ntlApi.setEvents([]);";
+var tlApi;
+function addRandom() {
+  var n = Math.floor(Math.random() * 1000);
+  tlApi.addEvent({ title:'Evento #' + n, date:'Ahora', description:'Creado dinámicamente.' });
+}
+makeSection('tabs-s1', preview_s1, js_s1, function() { new MTS.Timeline('#tl-basic', { events:[{ title:'Order charged', date:'Today', description:'$248.00 charged.' },{ title:'Order shipped', date:'Yesterday', description:'Tracking #9X4712.' },{ title:'Order placed', date:'3 days ago', description:'3 items.' }] }); }, '360px');
+makeSection('tabs-s2', preview_s2, js_s2, function() { new MTS.Timeline('#tl-left', { align:'left', events:[{ title:'Kickoff', date:'Week 1' },{ title:'Build', date:'Week 2' },{ title:'Launch', date:'Week 3' }] }); new MTS.Timeline('#tl-alternate', { align:'alternate', events:[{ title:'Kickoff', date:'Week 1' },{ title:'Build', date:'Week 2' },{ title:'Launch', date:'Week 3' }] }); }, '380px');
+makeSection('tabs-s3', preview_s3, js_s3, function() { tlApi = new MTS.Timeline('#tl-api', { events:[{ title:'Evento inicial', date:'Inicio' }] }); }, '340px');
+
 </script>
 </body>
 </html>

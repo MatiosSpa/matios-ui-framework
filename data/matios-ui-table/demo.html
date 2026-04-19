@@ -30,8 +30,16 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
   <link rel="stylesheet" href="./matios-ui-table.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
 </head>
 <body>
 <div class="demo-theme">
@@ -43,185 +51,774 @@
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
   <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Table</h1>
-    <p>CSS-only table — no JavaScript required. Variants, row states, sortable headers, actions column.</p>
+    <p>Componente de tabla CSS-only — sin JavaScript requerido. Variantes, estados de fila, cabeceras ordenables, columnas de acciones.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-table.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-table.md')">
+        <i class="mts-icon mts-icon-file-text mts-icon--sm"></i> Docs
+      </button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Base + variantes -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Base + variantes / Base + variants</div>
-    <div class="demo-row" style="flex-wrap:wrap;gap:8px;margin-bottom:10px">
-      <button class="demo-btn-sm" onclick="toggleClass('demo-table','mts-table--striped')">--striped</button>
-      <button class="demo-btn-sm" onclick="toggleClass('demo-table','mts-table--hover')">--hover</button>
-      <button class="demo-btn-sm" onclick="toggleClass('demo-table','mts-table--bordered')">--bordered</button>
-      <button class="demo-btn-sm" onclick="toggleClass('demo-table','mts-table--sm')">--sm</button>
-    </div>
-    <div class="mts-table-wrap">
-      <table class="mts-table mts-table--hover" id="demo-table">
-        <thead>
-          <tr>
-            <th class="mts-table__th--check"><input type="checkbox" class="mts-checkbox"></th>
-            <th class="mts-table__th--sort mts-table__th--asc">Nombre ↑</th>
-            <th class="mts-table__th--sort">Email</th>
-            <th class="mts-table__th--sort">Rol</th>
-            <th class="mts-table__th--center">Estado</th>
-            <th class="mts-table__th--right">Fecha</th>
-            <th class="mts-table__th--actions">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="mts-table__tr--selected">
-            <td class="mts-table__td--check"><input type="checkbox" class="mts-checkbox" checked></td>
-            <td>Ana García</td>
-            <td>ana@empresa.com</td>
-            <td>Admin</td>
-            <td class="mts-table__td--center"><span class="mts-badge mts-badge--success">Activo</span></td>
-            <td class="mts-table__td--right">Dec 1, 2024</td>
-            <td class="mts-table__td--actions">
-              <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">✏️</button>
-              <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">🗑️</button>
-            </td>
-          </tr>
-          <tr>
-            <td class="mts-table__td--check"><input type="checkbox" class="mts-checkbox"></td>
-            <td>Pedro Martínez</td>
-            <td>pedro@empresa.com</td>
-            <td>Editor</td>
-            <td class="mts-table__td--center"><span class="mts-badge mts-badge--primary">Pendiente</span></td>
-            <td class="mts-table__td--right">Nov 28, 2024</td>
-            <td class="mts-table__td--actions">
-              <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">✏️</button>
-              <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">🗑️</button>
-            </td>
-          </tr>
-          <tr class="mts-table__tr--warning">
-            <td class="mts-table__td--check"><input type="checkbox" class="mts-checkbox"></td>
-            <td>Laura Sánchez</td>
-            <td>laura@empresa.com</td>
-            <td>Viewer</td>
-            <td class="mts-table__td--center"><span class="mts-badge mts-badge--warning">Suspendido</span></td>
-            <td class="mts-table__td--right">Nov 15, 2024</td>
-            <td class="mts-table__td--actions">
-              <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">✏️</button>
-              <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">🗑️</button>
-            </td>
-          </tr>
-          <tr class="mts-table__tr--muted">
-            <td class="mts-table__td--check"><input type="checkbox" class="mts-checkbox" disabled></td>
-            <td>Carlos Ruiz</td>
-            <td>carlos@empresa.com</td>
-            <td>Viewer</td>
-            <td class="mts-table__td--center"><span class="mts-badge">Inactivo</span></td>
-            <td class="mts-table__td--right">Oct 3, 2024</td>
-            <td class="mts-table__td--actions">
-              <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" disabled>✏️</button>
-              <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" disabled>🗑️</button>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr class="mts-table__tr--total">
-            <td colspan="6">Total usuarios</td>
-            <td class="mts-table__td--right">4</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tb1','css-tb1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'css-tb1','html-tb1')">CSS classes</button>
-    </div>
-    <div class="code-panel active" id="html-tb1">&lt;div class="mts-table-wrap"&gt;
-  &lt;table class="mts-table mts-table--hover"&gt;
-    &lt;thead&gt;
-      &lt;tr&gt;
-        &lt;th class="mts-table__th--check"&gt;&lt;input type="checkbox"&gt;&lt;/th&gt;
-        &lt;th class="mts-table__th--sort mts-table__th--asc"&gt;Name ↑&lt;/th&gt;
-        &lt;th class="mts-table__th--center"&gt;Status&lt;/th&gt;
-        &lt;th class="mts-table__th--actions"&gt;Actions&lt;/th&gt;
-      &lt;/tr&gt;
-    &lt;/thead&gt;
-    &lt;tbody&gt;
-      &lt;tr class="mts-table__tr--selected"&gt;...&lt;/tr&gt;
-      &lt;tr class="mts-table__tr--warning"&gt;...&lt;/tr&gt;
-      &lt;tr class="mts-table__tr--muted"&gt;...&lt;/tr&gt;
-    &lt;/tbody&gt;
-    &lt;tfoot&gt;
-      &lt;tr class="mts-table__tr--total"&gt;...&lt;/tr&gt;
-    &lt;/tfoot&gt;
-  &lt;/table&gt;
-&lt;/div&gt;</div>
-    <div class="code-panel" id="css-tb1">/* Table modifiers / Modificadores de tabla */
-.mts-table              → base table
-.mts-table--striped     → alternate row colors
-.mts-table--hover       → row hover highlight
-.mts-table--bordered    → cell borders
-.mts-table--sm          → compact padding
-
-/* Row states / Estados de fila */
-.mts-table__tr--selected  → selected (blue tint)
-.mts-table__tr--success   → green tint
-.mts-table__tr--warning   → yellow tint
-.mts-table__tr--danger    → red tint
-.mts-table__tr--muted     → opaque / disabled look
-.mts-table__tr--total     → footer total row
-
-/* Column types / Tipos de columna */
-.mts-table__th--sort      → sortable (adds cursor)
-.mts-table__th--asc       → ascending arrow
-.mts-table__th--desc      → descending arrow
-.mts-table__th--center    → center align
-.mts-table__th--right     → right align
-.mts-table__th--check     → checkbox column (narrow)
-.mts-table__th--actions   → actions column (right)</div>
-  </div>
-
-  <!-- 2. Estado vacío -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Estado vacío / Empty state</div>
-    <div class="mts-table-wrap">
-      <table class="mts-table">
-        <thead>
-          <tr><th>Nombre</th><th>Email</th><th>Estado</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="3" class="mts-table__empty">
-              <div class="mts-table__empty-icon">📭</div>
-              <div class="mts-table__empty-text">No se encontraron registros</div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tb2','css-tb2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'css-tb2','html-tb2')">CSS classes</button>
-    </div>
-    <div class="code-panel active" id="html-tb2">&lt;tbody&gt;
-  &lt;tr&gt;
-    &lt;td colspan="5" class="mts-table__empty"&gt;
-      &lt;div class="mts-table__empty-icon"&gt;📭&lt;/div&gt;
-      &lt;div class="mts-table__empty-text"&gt;No records found&lt;/div&gt;
-    &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;</div>
-    <div class="code-panel" id="css-tb2">.mts-table__empty       → empty state cell (centered)
-.mts-table__empty-icon  → large icon/emoji
-.mts-table__empty-text  → description text</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Base</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Variantes</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Combinadas (toggle interactivo)</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Estados de fila</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Cabeceras ordenables</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Checkbox y selección múltiple</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title">7 — Columna de acciones</div><div id="tabs-s7"></div></div>
+  <div class="demo-section"><div class="demo-section-title">8 — Estado vacío</div><div id="tabs-s8"></div></div>
+  <div class="demo-section"><div class="demo-section-title">9 — Footer y totales</div><div id="tabs-s9"></div></div>
+  <div class="demo-section"><div class="demo-section-title">10 — Header fijo (scroll vertical)</div><div id="tabs-s10"></div></div>
+  <div class="demo-section"><div class="demo-section-title">11 — Texto truncado</div><div id="tabs-s11"></div></div>
+  <div class="demo-section"><div class="demo-section-title">12 — Responsive</div><div id="tabs-s12"></div></div>
 </div>
+
 <script>
-function toggleClass(id, cls) {
-  document.getElementById(id).classList.toggle(cls);
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+
+function esc(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
+
+function indentHtml(html) {
+  var indent = 0;
+  var step   = 2;
+  var voids  = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+/*
+ * Tab HTML: wrapper relativo + botón CopyButton + <pre> con id único.
+ * lazy:false garantiza que el panel está en el DOM al instanciar CopyButton.
+ */
+function htmlTab(sectionId, previewHtml) {
+  var preId = 'pre-' + sectionId;
+  return '<div style="position:relative;height:100%;box-sizing:border-box">' +
+    '<button id="copybtn-' + sectionId + '" ' +
+      'style="position:absolute;top:6px;right:6px;z-index:2"></button>' +
+    '<pre id="' + preId + '" class="demo-code" ' +
+      'style="display:block;height:100%;box-sizing:border-box;' +
+             'white-space:pre;overflow:auto;margin:0;padding-right:40px">' +
+      esc(indentHtml(previewHtml)) +
+    '</pre>' +
+  '</div>';
+}
+
+function jsTab(code) {
+  return '<pre class="demo-code" ' +
+    'style="display:block;height:100%;box-sizing:border-box;' +
+           'white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+/*
+ * Crea las tabs con height fijo y lazy:false.
+ * Con lazy:false todos los paneles están en el DOM inmediatamente,
+ * por lo que getElementById funciona sin setTimeout ni RAF.
+ */
+function makeSection(id, previewHtml, jsCode) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height:  '350px',
+    lazy:    false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',        content: htmlTab(id, previewHtml) },
+      { id: id + '-js',      label: 'JavaScript',  content: jsTab(jsCode) },
+    ],
+  });
+
+  /* Con lazy:false el panel ya está en el DOM — getElementById funciona directo */
+  var btnEl = document.getElementById('copybtn-' + id);
+  var preEl = document.getElementById('pre-' + id);
+  if (btnEl && preEl) {
+    new MTS.CopyButton(btnEl, {
+      iconOnly: true,
+      variant:  'ghost',
+      size:     'sm',
+      target:   preEl,
+    });
+  }
+}
+
+/* ============================================================
+   DATOS MOCK
+   ============================================================ */
+var USERS = [
+  { id:1, name:'Ana García',     email:'ana@empresa.com',    role:'Admin',  status:'active',    date:'01 Dic 2024' },
+  { id:2, name:'Pedro Martínez', email:'pedro@empresa.com',  role:'Editor', status:'pending',   date:'28 Nov 2024' },
+  { id:3, name:'Laura Sánchez',  email:'laura@empresa.com',  role:'Viewer', status:'suspended', date:'15 Nov 2024' },
+  { id:4, name:'Carlos Ruiz',    email:'carlos@empresa.com', role:'Viewer', status:'inactive',  date:'03 Oct 2024' },
+  { id:5, name:'Sofía Torres',   email:'sofia@empresa.com',  role:'Editor', status:'active',    date:'20 Sep 2024' },
+];
+
+var PRODUCTS = [
+  { id:1, name:'Notebook Pro 15"',  sku:'NB-PRO-15',  category:'Computación', stock:42,  price:1299.00 },
+  { id:2, name:'Mouse Inalámbrico', sku:'MS-WL-01',   category:'Periféricos',  stock:128, price:34.90  },
+  { id:3, name:'Monitor 27" 4K',    sku:'MN-27-4K',   category:'Pantallas',    stock:15,  price:749.00 },
+  { id:4, name:'Teclado Mecánico',  sku:'KB-MEC-BL',  category:'Periféricos',  stock:0,   price:129.00 },
+  { id:5, name:'Webcam HD 1080p',   sku:'WC-HD-01',   category:'Accesorios',   stock:67,  price:89.90  },
+  { id:6, name:'Hub USB-C 7 in 1',  sku:'HB-USBC-7',  category:'Accesorios',   stock:33,  price:54.90  },
+];
+
+var BADGES = {
+  active:    '<span class="mts-badge mts-badge--success">Activo</span>',
+  pending:   '<span class="mts-badge mts-badge--primary">Pendiente</span>',
+  suspended: '<span class="mts-badge mts-badge--warning">Suspendido</span>',
+  inactive:  '<span class="mts-badge">Inactivo</span>',
+};
+
+function fmtPrice(n) {
+  return '$' + n.toLocaleString('es-CL', { minimumFractionDigits: 2 });
+}
+
+function iconBtn(icon) {
+  return '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">' +
+    '<i class="mts-icon mts-icon-' + icon + ' mts-icon--sm"></i>' +
+    '</button>';
+}
+
+/* ============================================================
+   S1 — Base
+   ============================================================ */
+var preview_s1 =
+  '<div class="mts-table-wrap">' +
+    '<table class="mts-table">' +
+      '<thead><tr>' +
+        '<th class="mts-table__th">Nombre</th>' +
+        '<th class="mts-table__th">Email</th>' +
+        '<th class="mts-table__th">Rol</th>' +
+        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
+        '<th class="mts-table__th mts-table__th--end">Fecha</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        USERS.map(function(u) {
+          return '<tr class="mts-table__row">' +
+            '<td class="mts-table__td">' + u.name + '</td>' +
+            '<td class="mts-table__td">' + u.email + '</td>' +
+            '<td class="mts-table__td">' + u.role + '</td>' +
+            '<td class="mts-table__td mts-table__td--center">' + BADGES[u.status] + '</td>' +
+            '<td class="mts-table__td mts-table__td--end">' + u.date + '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody>' +
+    '</table>' +
+  '</div>';
+
+makeSection('tabs-s1', preview_s1,
+'var users = [\n' +
+'  { name: "Ana García",  email: "ana@empresa.com",   role: "Admin",  status: "active",  date: "01 Dic 2024" },\n' +
+'  { name: "Pedro M.",    email: "pedro@empresa.com", role: "Editor", status: "pending", date: "28 Nov 2024" },\n' +
+'];\n' +
+'\n' +
+'var badges = {\n' +
+'  active:    \'<span class="mts-badge mts-badge--success">Activo</span>\',\n' +
+'  pending:   \'<span class="mts-badge mts-badge--primary">Pendiente</span>\',\n' +
+'  suspended: \'<span class="mts-badge mts-badge--warning">Suspendido</span>\',\n' +
+'  inactive:  \'<span class="mts-badge">Inactivo</span>\',\n' +
+'};\n' +
+'\n' +
+'var rows = users.map(function(u) {\n' +
+'  return \'<tr class="mts-table__row">\' +\n' +
+'    \'<td class="mts-table__td">\' + u.name  + \'</td>\' +\n' +
+'    \'<td class="mts-table__td">\' + u.email + \'</td>\' +\n' +
+'    \'<td class="mts-table__td">\' + u.role  + \'</td>\' +\n' +
+'    \'<td class="mts-table__td mts-table__td--center">\' + badges[u.status] + \'</td>\' +\n' +
+'    \'<td class="mts-table__td mts-table__td--end">\' + u.date + \'</td>\' +\n' +
+'  \'</tr>\';\n' +
+'}).join("");\n' +
+'\n' +
+'document.querySelector("#mi-tabla tbody").innerHTML = rows;'
+);
+
+/* ============================================================
+   S2 — Variantes
+   ============================================================ */
+function variantBlock(modifier, label) {
+  return '<p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;' +
+      'color:var(--mts-text-muted);margin:0 0 6px">' + label + '</p>' +
+    '<div class="mts-table-wrap" style="margin-bottom:20px">' +
+      '<table class="mts-table ' + modifier + '">' +
+        '<thead><tr>' +
+          '<th class="mts-table__th">Producto</th>' +
+          '<th class="mts-table__th">Categoría</th>' +
+          '<th class="mts-table__th mts-table__th--end">Precio</th>' +
+        '</tr></thead>' +
+        '<tbody>' +
+          PRODUCTS.slice(0, 4).map(function(p) {
+            return '<tr class="mts-table__row">' +
+              '<td class="mts-table__td">' + p.name + '</td>' +
+              '<td class="mts-table__td">' + p.category + '</td>' +
+              '<td class="mts-table__td mts-table__td--end">' + fmtPrice(p.price) + '</td>' +
+            '</tr>';
+          }).join('') +
+        '</tbody>' +
+      '</table>' +
+    '</div>';
+}
+
+var preview_s2 =
+  variantBlock('mts-table--hover',    '.mts-table--hover') +
+  variantBlock('mts-table--striped',  '.mts-table--striped') +
+  variantBlock('mts-table--bordered', '.mts-table--bordered') +
+  variantBlock('mts-table--compact',  '.mts-table--compact');
+
+makeSection('tabs-s2', preview_s2,
+'var table = document.getElementById("mi-tabla");\n' +
+'\n' +
+'table.classList.add("mts-table--striped");    // activar\n' +
+'table.classList.remove("mts-table--striped"); // desactivar\n' +
+'table.classList.toggle("mts-table--hover");   // toggle\n' +
+'\n' +
+'// Combinadas\n' +
+'table.classList.add("mts-table--striped", "mts-table--hover", "mts-table--compact");'
+);
+
+/* ============================================================
+   S3 — Combinadas (toggle interactivo)
+   ============================================================ */
+var preview_s3 =
+  '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">' +
+    '<button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="toggleVariant(\'mts-table--striped\')">--striped</button>' +
+    '<button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="toggleVariant(\'mts-table--hover\')">--hover</button>' +
+    '<button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="toggleVariant(\'mts-table--bordered\')">--bordered</button>' +
+    '<button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="toggleVariant(\'mts-table--compact\')">--compact</button>' +
+  '</div>' +
+  '<div class="mts-table-wrap">' +
+    '<table class="mts-table mts-table--hover" id="demo-toggle-table">' +
+      '<thead><tr>' +
+        '<th class="mts-table__th">Producto</th>' +
+        '<th class="mts-table__th">SKU</th>' +
+        '<th class="mts-table__th">Categoría</th>' +
+        '<th class="mts-table__th mts-table__th--end">Stock</th>' +
+        '<th class="mts-table__th mts-table__th--end">Precio</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        PRODUCTS.map(function(p) {
+          return '<tr class="mts-table__row">' +
+            '<td class="mts-table__td">' + p.name + '</td>' +
+            '<td class="mts-table__td"><code style="font-size:11px">' + p.sku + '</code></td>' +
+            '<td class="mts-table__td">' + p.category + '</td>' +
+            '<td class="mts-table__td mts-table__td--end">' + p.stock + '</td>' +
+            '<td class="mts-table__td mts-table__td--end">' + fmtPrice(p.price) + '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody>' +
+    '</table>' +
+  '</div>';
+
+makeSection('tabs-s3', preview_s3,
+'function toggleVariant(cls) {\n' +
+'  document.getElementById("demo-toggle-table").classList.toggle(cls);\n' +
+'}'
+);
+
+/* ============================================================
+   S4 — Row states
+   ============================================================ */
+var ROW_STATES = [
+  { user: USERS[0], cls: 'mts-table__row--selected', badge: '<span class="mts-badge mts-badge--primary">Seleccionado</span>' },
+  { user: USERS[1], cls: 'mts-table__row--success',  badge: '<span class="mts-badge mts-badge--success">Éxito</span>'        },
+  { user: USERS[2], cls: 'mts-table__row--warning',  badge: '<span class="mts-badge mts-badge--warning">Advertencia</span>'  },
+  { user: USERS[3], cls: 'mts-table__row--danger',   badge: '<span class="mts-badge mts-badge--danger">Error</span>'         },
+  { user: USERS[4], cls: 'mts-table__row--info',     badge: '<span class="mts-badge mts-badge--info">Info</span>'            },
+];
+
+var preview_s4 =
+  '<div class="mts-table-wrap">' +
+    '<table class="mts-table">' +
+      '<thead><tr>' +
+        '<th class="mts-table__th">Usuario</th>' +
+        '<th class="mts-table__th">Clase aplicada</th>' +
+        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        ROW_STATES.map(function(r) {
+          return '<tr class="mts-table__row ' + r.cls + '">' +
+            '<td class="mts-table__td">' + r.user.name + '</td>' +
+            '<td class="mts-table__td"><code style="font-size:11px">' + r.cls + '</code></td>' +
+            '<td class="mts-table__td mts-table__td--center">' + r.badge + '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody>' +
+    '</table>' +
+  '</div>';
+
+makeSection('tabs-s4', preview_s4,
+'var STATE_MAP = {\n' +
+'  active:    "mts-table__row--success",\n' +
+'  suspended: "mts-table__row--warning",\n' +
+'  banned:    "mts-table__row--danger",\n' +
+'  selected:  "mts-table__row--selected",\n' +
+'  info:      "mts-table__row--info",\n' +
+'};\n' +
+'\n' +
+'var rows = users.map(function(u) {\n' +
+'  var stateClass = STATE_MAP[u.status] || "";\n' +
+'  return \'<tr class="mts-table__row \' + stateClass + \'">\' +\n' +
+'    \'<td class="mts-table__td">\' + u.name + \'</td>\' +\n' +
+'  \'</tr>\';\n' +
+'}).join("");'
+);
+
+/* ============================================================
+   S5 — Sortable headers
+   ============================================================ */
+var sortData = PRODUCTS.slice();
+var sortCol  = 'name';
+var sortDir  = 'asc';
+
+function sortIcon() {
+  return '<span class="mts-table__sort">' +
+    '<span class="mts-table__sort-up"></span>' +
+    '<span class="mts-table__sort-down"></span>' +
+  '</span>';
+}
+
+function buildSortPreview() {
+  var sorted = sortData.slice().sort(function(a, b) {
+    var av = a[sortCol], bv = b[sortCol];
+    if (typeof av === 'number') return sortDir === 'asc' ? av - bv : bv - av;
+    return sortDir === 'asc'
+      ? String(av).localeCompare(String(bv))
+      : String(bv).localeCompare(String(av));
+  });
+
+  function thCls(col, extra) {
+    var c = 'mts-table__th mts-table__th--sortable' + (extra ? ' ' + extra : '');
+    if (col === sortCol) c += ' mts-table__th--' + sortDir;
+    return c;
+  }
+
+  return '<div class="mts-table-wrap">' +
+    '<table class="mts-table mts-table--hover" id="sort-table">' +
+      '<thead><tr>' +
+        '<th class="' + thCls('name')     + '" onclick="doSort(\'name\')"     style="cursor:pointer">Producto'  + sortIcon() + '</th>' +
+        '<th class="' + thCls('category') + '" onclick="doSort(\'category\')" style="cursor:pointer">Categoría' + sortIcon() + '</th>' +
+        '<th class="' + thCls('stock', 'mts-table__th--end') + '" onclick="doSort(\'stock\')" style="cursor:pointer">Stock'  + sortIcon() + '</th>' +
+        '<th class="' + thCls('price', 'mts-table__th--end') + '" onclick="doSort(\'price\')" style="cursor:pointer">Precio' + sortIcon() + '</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        sorted.map(function(p) {
+          return '<tr class="mts-table__row">' +
+            '<td class="mts-table__td">' + p.name + '</td>' +
+            '<td class="mts-table__td">' + p.category + '</td>' +
+            '<td class="mts-table__td mts-table__td--end">' + p.stock + '</td>' +
+            '<td class="mts-table__td mts-table__td--end">' + fmtPrice(p.price) + '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody>' +
+    '</table>' +
+  '</div>';
+}
+
+function doSort(col) {
+  if (sortCol === col) { sortDir = sortDir === 'asc' ? 'desc' : 'asc'; }
+  else { sortCol = col; sortDir = 'asc'; }
+  var panel = document.getElementById('mts-panel-tabs-s5-preview');
+  if (panel) panel.innerHTML = buildSortPreview();
+}
+
+makeSection('tabs-s5', buildSortPreview(),
+'var sortCol = "name";\n' +
+'var sortDir = "asc";\n' +
+'\n' +
+'function doSort(col) {\n' +
+'  sortDir = (sortCol === col && sortDir === "asc") ? "desc" : "asc";\n' +
+'  sortCol = col;\n' +
+'  renderTable();\n' +
+'}\n' +
+'\n' +
+'function renderTable() {\n' +
+'  document.querySelectorAll(".mts-table__th--sortable").forEach(function(th) {\n' +
+'    th.classList.remove("mts-table__th--asc", "mts-table__th--desc");\n' +
+'    if (th.dataset.col === sortCol) th.classList.add("mts-table__th--" + sortDir);\n' +
+'  });\n' +
+'  var sorted = data.slice().sort(function(a, b) {\n' +
+'    return sortDir === "asc"\n' +
+'      ? String(a[sortCol]).localeCompare(String(b[sortCol]))\n' +
+'      : String(b[sortCol]).localeCompare(String(a[sortCol]));\n' +
+'  });\n' +
+'  document.querySelector("#mi-tabla tbody").innerHTML = sorted.map(renderRow).join("");\n' +
+'}'
+);
+
+/* ============================================================
+   S6 — Checkbox + selección múltiple
+   ============================================================ */
+var preview_s6 =
+  '<div class="mts-table-wrap">' +
+    '<table class="mts-table mts-table--hover" id="chk-table">' +
+      '<thead><tr>' +
+        '<th class="mts-table__th mts-table__th--check">' +
+          '<input type="checkbox" class="mts-table__checkbox" id="chk-all" onchange="toggleAll(this)">' +
+        '</th>' +
+        '<th class="mts-table__th">Nombre</th>' +
+        '<th class="mts-table__th">Email</th>' +
+        '<th class="mts-table__th">Rol</th>' +
+        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        USERS.map(function(u, i) {
+          return '<tr class="mts-table__row" id="chk-row-' + i + '">' +
+            '<td class="mts-table__td mts-table__td--check">' +
+              '<input type="checkbox" class="mts-table__checkbox row-chk" onchange="toggleRow(this,' + i + ')">' +
+            '</td>' +
+            '<td class="mts-table__td">' + u.name + '</td>' +
+            '<td class="mts-table__td">' + u.email + '</td>' +
+            '<td class="mts-table__td">' + u.role + '</td>' +
+            '<td class="mts-table__td mts-table__td--center">' + BADGES[u.status] + '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody>' +
+    '</table>' +
+  '</div>' +
+  '<div class="result-box" id="chk-result" style="margin-top:8px">— selecciona filas —</div>';
+
+makeSection('tabs-s6', preview_s6,
+'document.getElementById("chk-all").addEventListener("change", function() {\n' +
+'  document.querySelectorAll(".row-chk").forEach(function(chk) {\n' +
+'    chk.checked = this.checked;\n' +
+'    chk.closest("tr").classList.toggle("mts-table__row--selected", this.checked);\n' +
+'  }, this);\n' +
+'});\n' +
+'\n' +
+'document.querySelectorAll(".row-chk").forEach(function(chk) {\n' +
+'  chk.addEventListener("change", function() {\n' +
+'    this.closest("tr").classList.toggle("mts-table__row--selected", this.checked);\n' +
+'    var total   = document.querySelectorAll(".row-chk").length;\n' +
+'    var checked = document.querySelectorAll(".row-chk:checked").length;\n' +
+'    var master  = document.getElementById("chk-all");\n' +
+'    master.indeterminate = checked > 0 && checked < total;\n' +
+'    master.checked = checked === total;\n' +
+'  });\n' +
+'});'
+);
+
+/* ============================================================
+   S7 — Columna de acciones
+   ============================================================ */
+var preview_s7 =
+  '<div class="mts-table-wrap">' +
+    '<table class="mts-table mts-table--hover">' +
+      '<thead><tr>' +
+        '<th class="mts-table__th">Nombre</th>' +
+        '<th class="mts-table__th">Email</th>' +
+        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
+        '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        USERS.map(function(u) {
+          return '<tr class="mts-table__row mts-table__row--clickable">' +
+            '<td class="mts-table__td">' + u.name + '</td>' +
+            '<td class="mts-table__td">' + u.email + '</td>' +
+            '<td class="mts-table__td mts-table__td--center">' + BADGES[u.status] + '</td>' +
+            '<td class="mts-table__td mts-table__td--actions">' +
+              iconBtn('eye') + iconBtn('edit') + iconBtn('trash') +
+            '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody>' +
+    '</table>' +
+  '</div>';
+
+makeSection('tabs-s7', preview_s7,
+'function actionsCell(id) {\n' +
+'  return \'<td class="mts-table__td mts-table__td--actions">\' +\n' +
+'    \'<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" onclick="onView(\' + id + \')">\' +\n' +
+'      \'<i class="mts-icon mts-icon-eye mts-icon--sm"></i></button>\' +\n' +
+'    \'<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" onclick="onEdit(\' + id + \')">\' +\n' +
+'      \'<i class="mts-icon mts-icon-edit mts-icon--sm"></i></button>\' +\n' +
+'    \'<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" onclick="onDelete(\' + id + \')">\' +\n' +
+'      \'<i class="mts-icon mts-icon-trash mts-icon--sm"></i></button>\' +\n' +
+'  \'</td>\';\n' +
+'}'
+);
+
+/* ============================================================
+   S8 — Empty state
+   ============================================================ */
+var preview_s8 =
+  '<div class="mts-table-wrap">' +
+    '<table class="mts-table">' +
+      '<thead><tr>' +
+        '<th class="mts-table__th">Nombre</th>' +
+        '<th class="mts-table__th">Email</th>' +
+        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
+        '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        '<tr>' +
+          '<td colspan="4" class="mts-table__empty">' +
+            '<i class="mts-icon mts-icon-inbox mts-icon--xl mts-table__empty-icon"></i>' +
+            '<div class="mts-table__empty-title">No se encontraron registros</div>' +
+            '<div class="mts-table__empty-msg">Intenta con otros filtros o agrega un nuevo elemento.</div>' +
+          '</td>' +
+        '</tr>' +
+      '</tbody>' +
+    '</table>' +
+  '</div>';
+
+makeSection('tabs-s8', preview_s8,
+'function renderTable(data) {\n' +
+'  var tbody = document.querySelector("#mi-tabla tbody");\n' +
+'  var COLS  = 4;\n' +
+'\n' +
+'  if (!data || data.length === 0) {\n' +
+'    tbody.innerHTML =\n' +
+'      \'<tr><td colspan="\' + COLS + \'" class="mts-table__empty">\' +\n' +
+'      \'<i class="mts-icon mts-icon-inbox mts-icon--xl mts-table__empty-icon"></i>\' +\n' +
+'      \'<div class="mts-table__empty-title">Sin resultados</div>\' +\n' +
+'      \'<div class="mts-table__empty-msg">Intenta con otros filtros.</div>\' +\n' +
+'      \'</td></tr>\';\n' +
+'    return;\n' +
+'  }\n' +
+'  tbody.innerHTML = data.map(renderRow).join("");\n' +
+'}'
+);
+
+/* ============================================================
+   S9 — Footer / tfoot
+   ============================================================ */
+var totalPrice = PRODUCTS.reduce(function(s, p) { return s + p.price; }, 0);
+var totalStock = PRODUCTS.reduce(function(s, p) { return s + p.stock; }, 0);
+
+var preview_s9 =
+  '<div class="mts-table-wrap">' +
+    '<table class="mts-table mts-table--hover">' +
+      '<thead><tr>' +
+        '<th class="mts-table__th">Producto</th>' +
+        '<th class="mts-table__th">Categoría</th>' +
+        '<th class="mts-table__th mts-table__th--end">Stock</th>' +
+        '<th class="mts-table__th mts-table__th--end">Precio</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        PRODUCTS.map(function(p) {
+          return '<tr class="mts-table__row">' +
+            '<td class="mts-table__td">' + p.name + '</td>' +
+            '<td class="mts-table__td">' + p.category + '</td>' +
+            '<td class="mts-table__td mts-table__td--end">' + p.stock + '</td>' +
+            '<td class="mts-table__td mts-table__td--end">' + fmtPrice(p.price) + '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody>' +
+      '<tfoot>' +
+        '<tr class="mts-table__tfoot">' +
+          '<td class="mts-table__td" colspan="2"><strong>Total</strong></td>' +
+          '<td class="mts-table__td mts-table__td--end"><strong>' + totalStock + '</strong></td>' +
+          '<td class="mts-table__td mts-table__td--end"><strong>' + fmtPrice(totalPrice) + '</strong></td>' +
+        '</tr>' +
+      '</tfoot>' +
+    '</table>' +
+  '</div>';
+
+makeSection('tabs-s9', preview_s9,
+'var total = data.reduce(function(acc, row) { return acc + row.price; }, 0);\n' +
+'\n' +
+'var tfoot =\n' +
+'  \'<tfoot><tr class="mts-table__tfoot">\' +\n' +
+'  \'<td class="mts-table__td" colspan="2"><strong>Total</strong></td>\' +\n' +
+'  \'<td class="mts-table__td mts-table__td--end"><strong>\' +\n' +
+'    total.toLocaleString("es-CL", { minimumFractionDigits: 2 }) +\n' +
+'  \'</strong></td>\' +\n' +
+'  \'</tr></tfoot>\';\n' +
+'\n' +
+'document.getElementById("mi-tabla").insertAdjacentHTML("beforeend", tfoot);'
+);
+
+/* ============================================================
+   S10 — Header fijo
+   ============================================================ */
+var fixedRows = Array.from({ length: 12 }, function(_, i) { return USERS[i % USERS.length]; });
+
+var preview_s10 =
+  '<div class="mts-table-wrap" style="max-height:260px;overflow-y:auto">' +
+    '<table class="mts-table mts-table--hover mts-table--fixed">' +
+      '<thead><tr>' +
+        '<th class="mts-table__th" style="width:36px">#</th>' +
+        '<th class="mts-table__th">Nombre</th>' +
+        '<th class="mts-table__th">Email</th>' +
+        '<th class="mts-table__th">Rol</th>' +
+        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        fixedRows.map(function(u, i) {
+          return '<tr class="mts-table__row">' +
+            '<td class="mts-table__td" style="color:var(--mts-text-muted);font-size:11px">' + (i + 1) + '</td>' +
+            '<td class="mts-table__td">' + u.name + '</td>' +
+            '<td class="mts-table__td">' + u.email + '</td>' +
+            '<td class="mts-table__td">' + u.role + '</td>' +
+            '<td class="mts-table__td mts-table__td--center">' + BADGES[u.status] + '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody>' +
+    '</table>' +
+  '</div>';
+
+makeSection('tabs-s10', preview_s10,
+'// Requisitos:\n' +
+'//   1. .mts-table--fixed en la <table>\n' +
+'//   2. max-height + overflow-y: auto en el .mts-table-wrap\n' +
+'\n' +
+'var wrap = document.createElement("div");\n' +
+'wrap.className = "mts-table-wrap";\n' +
+'wrap.style.maxHeight = "260px";\n' +
+'wrap.style.overflowY = "auto";\n' +
+'\n' +
+'var table = document.createElement("table");\n' +
+'table.className = "mts-table mts-table--hover mts-table--fixed";\n' +
+'\n' +
+'wrap.appendChild(table);\n' +
+'container.appendChild(wrap);'
+);
+
+/* ============================================================
+   S11 — Texto truncado
+   ============================================================ */
+var TRUNC_DATA = [
+  { name: 'Notebook Pro 15"', desc: 'Procesador Intel Core i7 de 12ª generación, 16GB RAM DDR5, SSD NVMe 512GB, pantalla IPS 1920×1080 antirreflejo con cobertura sRGB 100%.', price: 1299.00 },
+  { name: 'Monitor 27" 4K',   desc: 'Panel IPS Ultra HD 3840×2160, 144Hz, HDR400, cobertura DCI-P3 95%, puertos HDMI 2.1 y DisplayPort 1.4, ajuste de altura y rotación pivot.', price: 749.00  },
+  { name: 'Teclado Mecánico', desc: 'Switches Cherry MX Red, retroiluminación RGB por zona, construcción aluminio CNC, cable USB-C desmontable, compatible Win/Mac/Linux.', price: 129.00  },
+];
+
+var preview_s11 =
+  '<div class="mts-table-wrap">' +
+    '<table class="mts-table mts-table--hover">' +
+      '<thead><tr>' +
+        '<th class="mts-table__th">Producto</th>' +
+        '<th class="mts-table__th" style="max-width:200px">Descripción</th>' +
+        '<th class="mts-table__th mts-table__th--end">Precio</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        TRUNC_DATA.map(function(p) {
+          return '<tr class="mts-table__row">' +
+            '<td class="mts-table__td">' + p.name + '</td>' +
+            '<td class="mts-table__td mts-table__td--truncate" style="max-width:200px" title="' + p.desc + '">' + p.desc + '</td>' +
+            '<td class="mts-table__td mts-table__td--end">' + fmtPrice(p.price) + '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody>' +
+    '</table>' +
+  '</div>';
+
+makeSection('tabs-s11', preview_s11,
+'function truncCell(text, maxWidth) {\n' +
+'  return \'<td class="mts-table__td mts-table__td--truncate"\' +\n' +
+'    \' style="max-width:\' + (maxWidth || "200px") + \'"\' +\n' +
+'    \' title="\' + text + \'">\' +\n' +
+'    text + \'</td>\';\n' +
+'}\n' +
+'\n' +
+'// mts-table__td--truncate aplica:\n' +
+'//   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'
+);
+
+/* ============================================================
+   S12 — Responsive
+   ============================================================ */
+var preview_s12 =
+  '<p style="font-size:11px;color:var(--mts-text-muted);margin:0 0 10px">' +
+    'Reduce el ancho de la ventana para ver el colapso de columnas en móvil.' +
+  '</p>' +
+  '<div class="mts-table-wrap">' +
+    '<table class="mts-table mts-table--hover mts-table--responsive">' +
+      '<thead><tr>' +
+        '<th class="mts-table__th">Nombre</th>' +
+        '<th class="mts-table__th">Email</th>' +
+        '<th class="mts-table__th">Rol</th>' +
+        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
+      '</tr></thead>' +
+      '<tbody>' +
+        USERS.map(function(u) {
+          return '<tr class="mts-table__row">' +
+            '<td class="mts-table__td" data-label="Nombre">'  + u.name  + '</td>' +
+            '<td class="mts-table__td" data-label="Email">'   + u.email + '</td>' +
+            '<td class="mts-table__td" data-label="Rol">'     + u.role  + '</td>' +
+            '<td class="mts-table__td mts-table__td--center" data-label="Estado">' + BADGES[u.status] + '</td>' +
+          '</tr>';
+        }).join('') +
+      '</tbody>' +
+    '</table>' +
+  '</div>';
+
+makeSection('tabs-s12', preview_s12,
+'var cols = ["Nombre", "Email", "Rol", "Estado"];\n' +
+'\n' +
+'var rows = users.map(function(u) {\n' +
+'  return \'<tr class="mts-table__row">\' +\n' +
+'    \'<td class="mts-table__td" data-label="\' + cols[0] + \'">\' + u.name  + \'</td>\' +\n' +
+'    \'<td class="mts-table__td" data-label="\' + cols[1] + \'">\' + u.email + \'</td>\' +\n' +
+'    \'<td class="mts-table__td" data-label="\' + cols[2] + \'">\' + u.role  + \'</td>\' +\n' +
+'    \'<td class="mts-table__td" data-label="\' + cols[3] + \'">\' + badges[u.status] + \'</td>\' +\n' +
+'  \'</tr>\';\n' +
+'}).join("");'
+);
+
+/* ============================================================
+   LÓGICA INTERACTIVA
+   ============================================================ */
+function toggleAll(master) {
+  document.querySelectorAll('.row-chk').forEach(function(chk) {
+    chk.checked = master.checked;
+    chk.closest('tr').classList.toggle('mts-table__row--selected', master.checked);
+  });
+  updateChkResult();
+}
+
+function toggleRow(chk, idx) {
+  document.getElementById('chk-row-' + idx).classList.toggle('mts-table__row--selected', chk.checked);
+  var total   = document.querySelectorAll('.row-chk').length;
+  var checked = document.querySelectorAll('.row-chk:checked').length;
+  var master  = document.getElementById('chk-all');
+  if (master) {
+    master.indeterminate = checked > 0 && checked < total;
+    master.checked = checked === total;
+  }
+  updateChkResult();
+}
+
+function updateChkResult() {
+  var n  = document.querySelectorAll('.row-chk:checked').length;
+  var el = document.getElementById('chk-result');
+  if (el) el.textContent = n === 0
+    ? '— selecciona filas —'
+    : n + ' fila' + (n > 1 ? 's' : '') + ' seleccionada' + (n > 1 ? 's' : '');
+}
+
+function toggleVariant(cls) {
+  var t = document.getElementById('demo-toggle-table');
+  if (t) t.classList.toggle(cls);
+}
+
+MTS.Icon.initAll();
 </script>
 </body>
 </html>

@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.Input — Demo</title>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else    document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Input — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
   <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
@@ -30,33 +31,13 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-input.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-input.js"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;padding:20px 24px 56px;}
-    .demo-page{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:32px;}
-    .demo-header{padding-bottom:16px;border-bottom:2px solid var(--mts-border-color);}
-    .demo-header h1{font-size:22px;font-weight:800;margin:0 0 4px;}
-    .demo-header h1 span{color:var(--mts-color-primary);}
-    .demo-header p{font-size:13px;color:var(--mts-text-muted);margin:0;}
-    .demo-section{display:flex;flex-direction:column;gap:12px;}
-    .demo-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--mts-text-muted);padding-bottom:8px;border-bottom:1px solid var(--mts-border-color);}
-    .demo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
-    .result-box{padding:8px 12px;border-radius:8px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);font-size:12px;font-family:monospace;color:var(--mts-color-primary);min-height:32px;}
-    /* Code tabs */
-    .code-tabs{display:flex;gap:0;margin-top:4px;}
-    .code-tab{padding:4px 14px;font-size:11px;font-weight:600;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);cursor:pointer;color:var(--mts-text-muted);font-family:var(--mts-font-family);transition:color .15s,background .15s;}
-    .code-tab:first-child{border-radius:var(--mts-radius-md) 0 0 0;}
-    .code-tab:last-child{border-radius:0 var(--mts-radius-md) 0 0;border-left:none;}
-    .code-tab.active{background:var(--mts-bg-surface-2);color:var(--mts-color-primary);border-bottom-color:var(--mts-bg-surface-2);}
-    .code-panel{display:none;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-top:none;border-radius:0 var(--mts-radius-md) var(--mts-radius-md) var(--mts-radius-md);padding:12px 14px;font-size:12px;font-family:var(--mts-font-mono);color:var(--mts-text-secondary);overflow-x:auto;white-space:pre;line-height:1.65;}
-    .code-panel.active{display:block;}
-    .demo-theme{position:fixed;top:12px;right:12px;display:flex;gap:4px;z-index:999;flex-wrap:wrap;max-width:240px;justify-content:flex-end;}
-    .demo-btn-sm{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);transition:background .12s;}
-    .demo-btn-sm:hover{background:var(--mts-bg-surface-2);}
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -72,428 +53,291 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Input</h1>
-    <p>Input de texto, email, password, number y textarea — con validación, íconos, clearable y contador.</p>
+    <p>Campos de texto, textarea, validación, estados y enhancement progresivo desde HTML declarativo.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-input.md')">Documentación</button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Tipos -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Tipos de input</div>
-    <div class="demo-grid">
-      <div id="inp-text"></div>
-      <div id="inp-email"></div>
-      <div id="inp-password"></div>
-      <div id="inp-number"></div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-t1','js-t1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-t1','html-t1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-t1">&lt;!-- HTML declarativo — el componente lee los data-* al instanciar --&gt;
-&lt;div id="inp-text"
-  data-type="text"
-  data-label="Nombre"
-  data-placeholder="Ingresa tu nombre"
-  data-hint="Mínimo 3 caracteres"&gt;
-&lt;/div&gt;
+  <div class="demo-section"><div class="demo-section-title">1 — Tipos básicos</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Textarea y contador</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Estados visuales</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Validación</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Eventos</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — API programática</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title">7 — HTML declarativo + enhancement</div><div id="tabs-s7"></div></div>
+</div>
 
-&lt;div id="inp-email"
-  data-type="email"
-  data-label="Correo electrónico"
-  data-placeholder="usuario@ejemplo.com"
-  data-required&gt;
-&lt;/div&gt;
+<script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
-&lt;div id="inp-password"
-  data-type="password"
-  data-label="Contraseña"
-  data-placeholder="••••••••"
-  data-show-password&gt;
-&lt;/div&gt;
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
 
-&lt;div id="inp-number"
-  data-type="number"
-  data-label="Cantidad"
-  data-placeholder="0"&gt;
-&lt;/div&gt;
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
 
-&lt;script&gt;
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  if (typeof initFn === 'function') initFn();
+}
+
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+var preview_s1 =
+  '<div class="demo-grid">' +
+    '<div id="inp-text" data-type="text" data-label="Nombre" data-placeholder="Ingresa tu nombre" data-hint="Mínimo 3 caracteres"></div>' +
+    '<div id="inp-email" data-type="email" data-label="Correo electrónico" data-placeholder="usuario@ejemplo.com" data-required></div>' +
+    '<div id="inp-password" data-type="password" data-label="Contraseña" data-placeholder="••••••••" data-show-password></div>' +
+    '<div id="inp-number" data-type="number" data-label="Cantidad" data-placeholder="0"></div>' +
+  '</div>';
+
+var js_s1 =
+  "new MTS.Input('#inp-text');\n" +
+  "new MTS.Input('#inp-email');\n" +
+  "new MTS.Input('#inp-password');\n" +
+  "new MTS.Input('#inp-number');";
+
+var preview_s2 =
+  '<div id="inp-textarea" data-type="textarea" data-label="Descripción" data-placeholder="Escribe aquí..." data-rows="4" data-max-length="300" data-show-count></div>';
+
+var js_s2 =
+  "new MTS.Input('#inp-textarea');";
+
+var preview_s3 =
+  '<div class="demo-grid">' +
+    '<div id="inp-disabled" data-label="Campo deshabilitado" data-value="No editable" data-disabled></div>' +
+    '<div id="inp-readonly" data-label="Solo lectura" data-value="Valor fijo" data-readonly></div>' +
+    '<div id="inp-clearable" data-label="Con botón limpiar" data-placeholder="Escribe algo..." data-clearable></div>' +
+    '<div id="inp-icon"></div>' +
+  '</div>';
+
+var js_s3 =
+  "new MTS.Input('#inp-disabled');\n" +
+  "new MTS.Input('#inp-readonly');\n" +
+  "new MTS.Input('#inp-clearable');\n" +
+  "new MTS.Input('#inp-icon', {\n" +
+  "  label: 'Buscar',\n" +
+  "  placeholder: 'Buscar...',\n" +
+  "  iconLeft: MTS.Icon.get('search'),\n" +
+  "  clearable: true\n" +
+  "});";
+
+var preview_s4 =
+  '<div class="demo-stack">' +
+    '<div class="demo-grid">' +
+      '<div id="inp-valid-email"></div>' +
+      '<div id="inp-valid-len"></div>' +
+    '</div>' +
+    '<div class="result-box" id="valid-result">— interactúa con los campos, la validación ocurre al perder foco —</div>' +
+  '</div>';
+
+var js_s4 =
+  "new MTS.Input('#inp-valid-email', {\n" +
+  "  label: 'Email',\n" +
+  "  placeholder: 'usuario@ejemplo.com',\n" +
+  "  required: true,\n" +
+  "  rules: { email: true },\n" +
+  "  onBlur: function() { setResult('valid-result', 'Validado — válido: ' + this.isValid()); }\n" +
+  "});\n\n" +
+  "new MTS.Input('#inp-valid-len', {\n" +
+  "  label: 'Usuario',\n" +
+  "  placeholder: 'mínimo 4, máximo 20 caracteres',\n" +
+  "  rules: { minLength: 4, maxLength: 20 },\n" +
+  "  showCount: true,\n" +
+  "  maxLength: 20\n" +
+  "});";
+
+var preview_s5 =
+  '<div class="demo-stack">' +
+    '<div id="inp-events" data-label="Campo con eventos" data-placeholder="Escribe algo..." data-hint="Observa los eventos en el panel inferior" data-required></div>' +
+    '<div class="result-box" id="events-result">— interactúa con el campo —</div>' +
+  '</div>';
+
+var js_s5 =
+  "new MTS.Input('#inp-events', {\n" +
+  "  onChange: function(e) { setResult('events-result', 'change → \"' + e.detail.value + '\"'); },\n" +
+  "  onFocus: function() { setResult('events-result', 'focus'); },\n" +
+  "  onBlur: function(e) { setResult('events-result', 'blur → \"' + e.detail.value + '\"'); },\n" +
+  "  onValidate: function(e) {\n" +
+  "    setResult('events-result', 'validate → válido: ' + e.detail.valid + (e.detail.errors.length ? ' | ' + e.detail.errors[0] : ''));\n" +
+  "  }\n" +
+  "});";
+
+var preview_s6 =
+  '<div class="demo-stack">' +
+    '<div id="inp-api" data-label="Campo controlado" data-placeholder="Controlado por API"></div>' +
+    '<div class="demo-row">' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'getValue\')">getValue()</button>' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'setValue\')">setValue(\'Hola!\')</button>' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'clear\')">clear()</button>' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'disable\')">disable()</button>' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'enable\')">enable()</button>' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'setError\')">setError()</button>' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'clearError\')">clearError()</button>' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'focus\')">focus()</button>' +
+    '</div>' +
+    '<div class="result-box" id="api-result">— usa los botones para llamar la API —</div>' +
+  '</div>';
+
+var js_s6 =
+  "var inpApi = new MTS.Input('#inp-api');\n\n" +
+  "inpApi.getValue();\n" +
+  "inpApi.setValue('Hola!');\n" +
+  "inpApi.clear();\n" +
+  "inpApi.disable();\n" +
+  "inpApi.enable();\n" +
+  "inpApi.setError('Mensaje de error externo');\n" +
+  "inpApi.clearError();\n" +
+  "inpApi.focus();";
+
+var preview_s7 =
+  '<div class="demo-stack">' +
+    '<div class="demo-col">' +
+      '<div class="demo-label">HTML declarativo</div>' +
+      '<div id="inp-declarative" data-type="text" data-label="Nombre completo" data-placeholder="Ingresa tu nombre" data-hint="Inicializado desde data-*" data-clearable></div>' +
+    '</div>' +
+    '<div class="demo-col">' +
+      '<div class="demo-label">HTML declarativo + enhancement</div>' +
+      '<div id="inp-enhanced" data-type="email" data-label="Correo" data-placeholder="usuario@empresa.com" data-hint="Matios UI potencia el HTML base" data-required></div>' +
+      '<div class="result-box" id="enhancement-result">— escribe y cambia el foco para ver el enhancement —</div>' +
+    '</div>' +
+  '</div>';
+
+var js_s7 =
+  "new MTS.Input('#inp-declarative');\n\n" +
+  "new MTS.Input('#inp-enhanced', {\n" +
+  "  onChange: function(e) { setResult('enhancement-result', 'change → ' + e.detail.value); },\n" +
+  "  onValidate: function(e) {\n" +
+  "    setResult('enhancement-result', 'validate → válido: ' + e.detail.valid + (e.detail.errors.length ? ' | ' + e.detail.errors[0] : ''));\n" +
+  "  }\n" +
+  "});";
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
   new MTS.Input('#inp-text');
   new MTS.Input('#inp-email');
   new MTS.Input('#inp-password');
   new MTS.Input('#inp-number');
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-t1">// Crear el componente 100% desde JavaScript — sin HTML previo
-const inputTexto = new MTS.Input('#inp-text', {
-  type:        'text',
-  label:       'Nombre',
-  placeholder: 'Ingresa tu nombre',
-  hint:        'Mínimo 3 caracteres',
 });
 
-const inputEmail = new MTS.Input('#inp-email', {
-  type:        'email',
-  label:       'Correo electrónico',
-  placeholder: 'usuario@ejemplo.com',
-  required:    true,
-});
-
-const inputPassword = new MTS.Input('#inp-password', {
-  type:         'password',
-  label:        'Contraseña',
-  placeholder:  '••••••••',
-  showPassword: true,
-});
-
-const inputNumber = new MTS.Input('#inp-number', {
-  type:        'number',
-  label:       'Cantidad',
-  placeholder: '0',
-});</div>
-  </div>
-
-  <!-- 2. Textarea -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Textarea</div>
-    <div id="inp-textarea"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-t2','js-t2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-t2','html-t2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-t2">&lt;div id="inp-textarea"
-  data-type="textarea"
-  data-label="Descripción"
-  data-placeholder="Escribe aquí..."
-  data-rows="4"
-  data-max-length="300"
-  data-show-count&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
+makeSection('tabs-s2', preview_s2, js_s2, function() {
   new MTS.Input('#inp-textarea');
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-t2">new MTS.Input('#inp-textarea', {
-  type:        'textarea',
-  label:       'Descripción',
-  placeholder: 'Escribe aquí...',
-  rows:        4,
-  maxLength:   300,
-  showCount:   true,
-});</div>
-  </div>
+});
 
-  <!-- 3. Variantes visuales -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Estados visuales: disabled · readonly · clearable · con ícono</div>
-    <div class="demo-grid">
-      <div id="inp-disabled"></div>
-      <div id="inp-readonly"></div>
-      <div id="inp-clearable"></div>
-      <div id="inp-icon"></div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-t3','js-t3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-t3','html-t3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-t3">&lt;!-- Disabled --&gt;
-&lt;div id="inp-disabled"
-  data-label="Campo deshabilitado"
-  data-value="No editable"
-  data-disabled&gt;
-&lt;/div&gt;
-
-&lt;!-- Readonly --&gt;
-&lt;div id="inp-readonly"
-  data-label="Solo lectura"
-  data-value="Valor fijo"
-  data-readonly&gt;
-&lt;/div&gt;
-
-&lt;!-- Clearable --&gt;
-&lt;div id="inp-clearable"
-  data-label="Con botón limpiar"
-  data-placeholder="Escribe algo..."
-  data-clearable&gt;
-&lt;/div&gt;
-
-&lt;!-- Con ícono (requiere JavaScript para pasar el SVG) --&gt;
-&lt;div id="inp-icon"&gt;&lt;/div&gt;
-&lt;script&gt;
+makeSection('tabs-s3', preview_s3, js_s3, function() {
   new MTS.Input('#inp-disabled');
   new MTS.Input('#inp-readonly');
   new MTS.Input('#inp-clearable');
   new MTS.Input('#inp-icon', {
-    label:    'Buscar',
+    label: 'Buscar',
     placeholder: 'Buscar...',
     iconLeft: MTS.Icon.get('search'),
-    clearable: true,
+    clearable: true
   });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-t3">// Disabled
-new MTS.Input('#inp-disabled', {
-  label:    'Campo deshabilitado',
-  value:    'No editable',
-  disabled: true,
 });
 
-// Readonly
-new MTS.Input('#inp-readonly', {
-  label:    'Solo lectura',
-  value:    'Valor fijo',
-  readonly: true,
-});
-
-// Clearable
-new MTS.Input('#inp-clearable', {
-  label:       'Con botón limpiar',
-  placeholder: 'Escribe algo...',
-  clearable:   true,
-});
-
-// Con ícono izquierdo
-new MTS.Input('#inp-icon', {
-  label:       'Buscar',
-  placeholder: 'Buscar...',
-  iconLeft:    MTS.Icon.get('search'),
-  clearable:   true,
-});</div>
-  </div>
-
-  <!-- 4. Validación -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Validación con reglas</div>
-    <div class="demo-grid">
-      <div id="inp-valid-email"></div>
-      <div id="inp-valid-len"></div>
-    </div>
-    <div class="result-box" id="valid-result">— interactúa con los campos, la validación ocurre al perder foco —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-t4','js-t4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-t4','html-t4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-t4">&lt;!-- Las reglas de validación solo se pueden pasar por JavaScript --&gt;
-&lt;div id="inp-valid-email"&gt;&lt;/div&gt;
-&lt;div id="inp-valid-len"&gt;&lt;/div&gt;
-
-&lt;script&gt;
+makeSection('tabs-s4', preview_s4, js_s4, function() {
   new MTS.Input('#inp-valid-email', {
-    label:       'Email',
+    label: 'Email',
     placeholder: 'usuario@ejemplo.com',
-    required:    true,
-    rules:       { email: true },
-    onBlur: (e) =&gt; console.log('válido:', e.target.isValid()),
+    required: true,
+    rules: { email: true },
+    onBlur: function() { setResult('valid-result', 'Validado — válido: ' + this.isValid()); }
   });
-
   new MTS.Input('#inp-valid-len', {
-    label:       'Usuario',
+    label: 'Usuario',
     placeholder: 'mínimo 4, máximo 20 caracteres',
-    rules:       { minLength: 4, maxLength: 20 },
-    showCount:   true,
-    maxLength:   20,
+    rules: { minLength: 4, maxLength: 20 },
+    showCount: true,
+    maxLength: 20
   });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-t4">const inpEmail = new MTS.Input('#inp-valid-email', {
-  label:       'Email',
-  placeholder: 'usuario@ejemplo.com',
-  required:    true,
-  rules:       { email: true },
-  // validateOnBlur: true  (default)
-  // validateOnInput: false (default)
 });
 
-const inpLen = new MTS.Input('#inp-valid-len', {
-  label:       'Usuario',
-  placeholder: 'mínimo 4, máximo 20 caracteres',
-  rules:       { minLength: 4, maxLength: 20 },
-  showCount:   true,
-  maxLength:   20,
-});
-
-// API de validación
-inpEmail.validate()          // → true | false
-inpEmail.isValid()           // → boolean
-inpEmail.setError('Ya existe')
-inpEmail.clearError()</div>
-  </div>
-
-  <!-- 5. Eventos -->
-  <div class="demo-section">
-    <div class="demo-section-title">5 — Eventos: onChange · onFocus · onBlur · validate</div>
-    <div id="inp-events"></div>
-    <div class="result-box" id="events-result">— interactúa con el campo —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-t5','js-t5')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-t5','html-t5')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-t5">&lt;!-- Con HTML declarativo, los callbacks van en el new MTS.Input --&gt;
-&lt;div id="inp-events"
-  data-label="Campo con eventos"
-  data-placeholder="Escribe algo..."
-  data-hint="Observa los eventos en el panel inferior"
-  data-required&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
+makeSection('tabs-s5', preview_s5, js_s5, function() {
   new MTS.Input('#inp-events', {
-    onChange:  (e) =&gt; log('change → "' + e.detail.value + '"'),
-    onFocus:   (e) =&gt; log('focus'),
-    onBlur:    (e) =&gt; log('blur → "' + e.detail.value + '"'),
+    onChange: function(e) { setResult('events-result', 'change → "' + e.detail.value + '"'); },
+    onFocus: function() { setResult('events-result', 'focus'); },
+    onBlur: function(e) { setResult('events-result', 'blur → "' + e.detail.value + '"'); },
+    onValidate: function(e) {
+      setResult('events-result', 'validate → válido: ' + e.detail.valid + (e.detail.errors.length ? ' | ' + e.detail.errors[0] : ''));
+    }
   });
-
-  // O usando eventos DOM nativos (sin instancia JS)
-  document.getElementById('inp-events')
-    .querySelector('input')
-    .addEventListener('mts:input:validate', (e) =&gt; {
-      log('validate → válido: ' + e.detail.valid);
-    });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-t5">const inp = new MTS.Input('#inp-events', {
-  label:       'Campo con eventos',
-  placeholder: 'Escribe algo...',
-  hint:        'Observa los eventos en el panel inferior',
-  required:    true,
-
-  // Fires on every value change / Se dispara en cada cambio de valor
-  onChange:  (e) => log('change → "' + e.detail.value + '"'),
-
-  // Fires when focused / Se dispara al enfocar
-  onFocus:   (e) => log('focus'),
-
-  // Fires when focus is lost / Se dispara al perder foco
-  onBlur:    (e) => log('blur → "' + e.detail.value + '"'),
-
-  // Fires after validation / Se dispara después de validar
-  onValidate: (e) => {
-    log('validate → válido: ' + e.detail.valid +
-        (e.detail.errors.length ? ' | error: ' + e.detail.errors[0] : ''));
-  },
-});</div>
-  </div>
-
-  <!-- 6. API programática -->
-  <div class="demo-section">
-    <div class="demo-section-title">6 — API programática</div>
-    <div id="inp-api"></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
-      <button class="demo-btn-sm" onclick="apiDemo('getValue')">getValue()</button>
-      <button class="demo-btn-sm" onclick="apiDemo('setValue')">setValue('Hola!')</button>
-      <button class="demo-btn-sm" onclick="apiDemo('clear')">clear()</button>
-      <button class="demo-btn-sm" onclick="apiDemo('disable')">disable()</button>
-      <button class="demo-btn-sm" onclick="apiDemo('enable')">enable()</button>
-      <button class="demo-btn-sm" onclick="apiDemo('setError')">setError()</button>
-      <button class="demo-btn-sm" onclick="apiDemo('clearError')">clearError()</button>
-      <button class="demo-btn-sm" onclick="apiDemo('focus')">focus()</button>
-    </div>
-    <div class="result-box" id="api-result">— usa los botones para llamar la API —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-t6','js-t6')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-t6','html-t6')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-t6">&lt;div id="inp-api"
-  data-label="Campo controlado"
-  data-placeholder="Controlado por API"&gt;
-&lt;/div&gt;
-
-&lt;script&gt;
-  const inp = new MTS.Input('#inp-api');
-
-  inp.getValue()              // → string
-  inp.setValue('Hola!')
-  inp.clear()
-  inp.disable()
-  inp.enable()
-  inp.setError('Mensaje de error externo')
-  inp.clearError()
-  inp.focus()
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-t6">const inp = new MTS.Input('#inp-api', {
-  label:       'Campo controlado',
-  placeholder: 'Controlado por API',
 });
 
-inp.getValue()                       // → string
-inp.setValue('Hola!')                // establece valor
-inp.clear()                          // limpia valor y error
-inp.disable()                        // deshabilita
-inp.enable()                         // habilita
-inp.setError('Mensaje de error')     // error externo (ej: desde el servidor)
-inp.clearError()                     // limpia el error
-inp.focus()                          // foco programático
-inp.validate()                       // ejecuta validación manualmente → boolean
-inp.isValid()                        // → boolean
-inp.destroy()                        // destruye el componente</div>
-  </div>
-
-</div>
-
-<script>
-function setTheme(t) {
-  document.documentElement.setAttribute('data-mts-theme', t);
-  try { if (window.parent && window.parent !== window) window.parent.postMessage({ type: 'setTheme', theme: t }, '*'); } catch(e) {}
-}
-window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'setTheme') document.documentElement.setAttribute('data-mts-theme', e.data.theme);
-});
-if (window !== window.top) { var ts = document.querySelector('.demo-theme'); if (ts) ts.style.display = 'none'; }
-
-function switchTab(btn, showId, hideId) {
-  btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){ t.classList.remove('active'); });
-  btn.classList.add('active');
-  document.getElementById(showId).classList.add('active');
-  document.getElementById(hideId).classList.remove('active');
-}
-
-function log(msg) {
-  var el = document.getElementById('events-result');
-  if (el) el.textContent = msg;
-}
-
-// Instancias
-new MTS.Input('#inp-text',     { type: 'text',     label: 'Nombre',             placeholder: 'Ingresa tu nombre',        hint: 'Mínimo 3 caracteres' });
-new MTS.Input('#inp-email',    { type: 'email',     label: 'Correo electrónico', placeholder: 'usuario@ejemplo.com',      required: true });
-new MTS.Input('#inp-password', { type: 'password',  label: 'Contraseña',         placeholder: '••••••••',                 showPassword: true });
-new MTS.Input('#inp-number',   { type: 'number',    label: 'Cantidad',           placeholder: '0' });
-new MTS.Input('#inp-textarea', { type: 'textarea',  label: 'Descripción',        placeholder: 'Escribe aquí...',          rows: 4, maxLength: 300, showCount: true });
-new MTS.Input('#inp-disabled', { label: 'Campo deshabilitado', value: 'No editable', disabled: true });
-new MTS.Input('#inp-readonly', { label: 'Solo lectura',        value: 'Valor fijo',  readonly: true });
-new MTS.Input('#inp-clearable',{ label: 'Con botón limpiar',   placeholder: 'Escribe algo...', clearable: true });
-new MTS.Input('#inp-icon',     { label: 'Buscar', placeholder: 'Buscar...', iconLeft: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>', clearable: true });
-
-new MTS.Input('#inp-valid-email', {
-  label: 'Email', placeholder: 'usuario@ejemplo.com', required: true,
-  rules: { email: true },
-  onChange: function(e) { document.getElementById('valid-result').textContent = 'Escribiendo: "' + e.detail.value + '"'; },
-  onBlur:   function()  { document.getElementById('valid-result').textContent = 'Validado — válido: ' + this.isValid(); },
-});
-new MTS.Input('#inp-valid-len', {
-  label: 'Usuario', placeholder: 'mínimo 4, máximo 20 caracteres',
-  rules: { minLength: 4, maxLength: 20 }, showCount: true, maxLength: 20,
+var inpApi;
+makeSection('tabs-s6', preview_s6, js_s6, function() {
+  inpApi = new MTS.Input('#inp-api');
 });
 
-new MTS.Input('#inp-events', {
-  label: 'Campo con eventos', placeholder: 'Escribe algo...', hint: 'Observa los eventos abajo', required: true,
-  onChange:   function(e) { log('change → "' + e.detail.value + '"'); },
-  onFocus:    function()  { log('focus'); },
-  onBlur:     function(e) { log('blur → "' + e.detail.value + '"'); },
-  onValidate: function(e) { log('validate → válido: ' + e.detail.valid + (e.detail.errors.length ? ' | ' + e.detail.errors[0] : '')); },
-});
-
-var inpApi = new MTS.Input('#inp-api', {
-  label: 'Campo controlado', placeholder: 'Controlado por API',
-  onValidate: function(e) {
-    document.getElementById('api-result').textContent = 'validate → válido: ' + e.detail.valid;
-  },
+makeSection('tabs-s7', preview_s7, js_s7, function() {
+  new MTS.Input('#inp-declarative');
+  new MTS.Input('#inp-enhanced', {
+    onChange: function(e) { setResult('enhancement-result', 'change → ' + e.detail.value); },
+    onValidate: function(e) {
+      setResult('enhancement-result', 'validate → válido: ' + e.detail.valid + (e.detail.errors.length ? ' | ' + e.detail.errors[0] : ''));
+    }
+  });
 });
 
 function apiDemo(action) {
-  var res = document.getElementById('api-result');
-  if (action === 'getValue')   res.textContent = 'getValue() → "' + inpApi.getValue() + '"';
-  if (action === 'setValue')   { inpApi.setValue('Hola!'); res.textContent = 'setValue("Hola!") ✓'; }
-  if (action === 'clear')      { inpApi.clear();           res.textContent = 'clear() ✓'; }
-  if (action === 'disable')    { inpApi.disable();         res.textContent = 'disable() ✓'; }
-  if (action === 'enable')     { inpApi.enable();          res.textContent = 'enable() ✓'; }
-  if (action === 'setError')   { inpApi.setError('Error externo del servidor'); res.textContent = 'setError() ✓'; }
-  if (action === 'clearError') { inpApi.clearError();      res.textContent = 'clearError() ✓'; }
-  if (action === 'focus')      { inpApi.focus();           res.textContent = 'focus() ✓'; }
+  if (!inpApi) return;
+  if (action === 'getValue')   setResult('api-result', 'getValue() → "' + inpApi.getValue() + '"');
+  if (action === 'setValue')   { inpApi.setValue('Hola!'); setResult('api-result', 'setValue("Hola!") ✓'); }
+  if (action === 'clear')      { inpApi.clear(); setResult('api-result', 'clear() ✓'); }
+  if (action === 'disable')    { inpApi.disable(); setResult('api-result', 'disable() ✓'); }
+  if (action === 'enable')     { inpApi.enable(); setResult('api-result', 'enable() ✓'); }
+  if (action === 'setError')   { inpApi.setError('Error externo del servidor'); setResult('api-result', 'setError() ✓'); }
+  if (action === 'clearError') { inpApi.clearError(); setResult('api-result', 'clearError() ✓'); }
+  if (action === 'focus')      { inpApi.focus(); setResult('api-result', 'focus() ✓'); }
 }
 </script>
 </body>

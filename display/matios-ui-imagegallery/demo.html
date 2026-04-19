@@ -30,8 +30,12 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-imagegallery.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-imagegallery.js"></script>
 </head>
 <body>
@@ -44,175 +48,223 @@
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
   <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.ImageGallery</h1>
     <p>Image gallery — grid, masonry, list · filters by category · multi-selection · built-in lightbox.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-imagegallery.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-imagegallery.md')">Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Grid con filtros y lightbox -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Grid con filtros y lightbox / Grid with filters and lightbox</div>
-    <div id="gallery-grid"></div>
-    <div class="result-box" id="gallery-result">— haz click en una imagen para abrirla —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-ig1','js-ig1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-ig1','html-ig1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-ig1">&lt;div id="my-gallery"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.ImageGallery('#my-gallery', {
-    layout:   'grid',
-    cols:     3,
-    filters:  true,
-    lightbox: true,
-    images: [
-      { id:'1', src:'/img/1.jpg', caption:'Mountain', category:'nature' },
-      { id:'2', src:'/img/2.jpg', caption:'Ocean',    category:'nature' },
-      { id:'3', src:'/img/3.jpg', caption:'City',     category:'urban'  },
-    ],
-    // Fires when image opens in lightbox / Se dispara al abrir en lightbox
-    onOpen: (e) =&gt; {
-      console.log(e.detail.image.id);    // → '1'
-      console.log(e.detail.image.caption);
-      console.log(e.detail.index);       // → 0
-    },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-ig1">new MTS.ImageGallery('#my-gallery', {
-  layout:   'grid',
-  cols:     3,
-  gap:      '8px',
-  filters:  true,    // shows category filter buttons / botones de filtro por categoría
-  lightbox: true,    // click opens lightbox / click abre lightbox
-  images: IMAGES,    // see image schema below / ver esquema de imagen abajo
-
-  // Fires when image opens in lightbox / Se dispara al abrir en lightbox
-  onOpen: (e) =&gt; {
-    console.log(e.detail.image.id);      // → '1'
-    console.log(e.detail.image.caption); // → 'Mountain view'
-    console.log(e.detail.index);         // → 0
-  },
-});</div>
-  </div>
-
-  <!-- 2. Selección múltiple -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Selección múltiple / Multi-selection</div>
-    <div id="gallery-select"></div>
-    <div class="demo-row" style="margin-top:8px">
-      <button class="demo-btn-sm" onclick="galSelect.clearSelection()">clearSelection()</button>
-      <button class="demo-btn-sm" onclick="showSelected()">getSelected()</button>
-    </div>
-    <div class="result-box" id="gallery-select-result">— haz click en imágenes para seleccionarlas —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-ig2','js-ig2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-ig2','html-ig2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-ig2">&lt;div id="my-gallery"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const gallery = new MTS.ImageGallery('#my-gallery', {
-    selectable: true,
-    lightbox:   false,
-    images: [...],
-    // Fires when selection changes / Se dispara al cambiar la selección
-    onSelect: (e) =&gt; {
-      console.log(e.detail.selected.length); // → 2
-      console.log(e.detail.image.id);        // → last toggled
-    },
-  });
-  gallery.getSelected()     // → selected images array
-  gallery.clearSelection()  // → clear all
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-ig2">const gallery = new MTS.ImageGallery('#my-gallery', {
-  selectable: true,   // click to select / click para seleccionar
-  lightbox:   false,  // no lightbox when selecting / sin lightbox al seleccionar
-  cols:       4,
-  images: IMAGES,
-  // Fires when selection changes / Se dispara al cambiar la selección
-  onSelect: (e) =&gt; {
-    const count = e.detail.selected.length;
-    console.log(`${count} image(s) selected`);
-    updateDeleteButton(count &gt; 0);
-  },
-});
-
-// API
-gallery.getSelected()    // → [{ id, src, ... }, ...]
-gallery.clearSelection() // → clear all selected</div>
-  </div>
-
-  <!-- 3. Masonry + list -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Variante masonry + list</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-      <div>
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);margin-bottom:8px">layout: masonry</div>
-        <div id="gallery-masonry"></div>
-      </div>
-      <div>
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);margin-bottom:8px">layout: list</div>
-        <div id="gallery-list"></div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-ig3','js-ig3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-ig3','html-ig3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-ig3">&lt;div id="my-gallery"&gt;&lt;/div&gt;
-&lt;script&gt;
-  // Masonry
-  new MTS.ImageGallery('#gallery-masonry', { layout: 'masonry', cols: 2, images: [...] });
-
-  // List
-  new MTS.ImageGallery('#gallery-list', { layout: 'list', images: [...] });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-ig3">// Masonry — variable height / Altura variable
-new MTS.ImageGallery('#gallery-masonry', {
-  layout: 'masonry',
-  cols:   2,
-  images: IMAGES,
-  onOpen: (e) =&gt; console.log('opened:', e.detail.image.id),
-});
-
-// List — horizontal cards / Tarjetas horizontales
-new MTS.ImageGallery('#gallery-list', {
-  layout: 'list',
-  images: IMAGES.slice(0, 4),
-  onOpen: (e) =&gt; console.log('opened:', e.detail.image.id),
-});</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Grid con filtros y lightbox / Grid with filters and lightbox</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Selección múltiple / Multi-selection</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Variante masonry + list</div><div id="tabs-s3"></div></div>
 </div>
+
 <script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+  if (typeof initFn === 'function') initFn();
+}
+
 var SEEDS = [10,20,30,40,50,60,70,80,90,100,110,120];
 var CATS  = ['nature','nature','urban','nature','urban','urban','nature','urban','nature','urban','nature','urban'];
 var CAPS  = ['Mountain view','Ocean sunset','City at night','Forest trail','Downtown','Harbor view','Waterfall','Skyline','Meadow','Bridge','Lake','Architecture'];
 var IMAGES = SEEDS.map(function(s,i){
-  return { id:String(i+1), src:'https://picsum.photos/seed/'+s+'/400/300', thumb:'https://picsum.photos/seed/'+s+'/120/90', alt:CAPS[i], caption:CAPS[i], category:CATS[i] };
+  return {
+    id: String(i + 1),
+    src: 'https://picsum.photos/seed/' + s + '/400/300',
+    thumb: 'https://picsum.photos/seed/' + s + '/120/90',
+    alt: CAPS[i],
+    caption: CAPS[i],
+    category: CATS[i]
+  };
 });
+
+var preview_s1 = `
+<div id="gallery-grid"></div>
+<div class="result-box" id="gallery-result">— haz click en una imagen para abrirla —</div>`;
+
+var js_s1 = `const images = IMAGES;
 
 new MTS.ImageGallery('#gallery-grid', {
-  layout:'grid', cols:3, filters:true, lightbox:true, images:IMAGES,
-  onOpen: function(e){ document.getElementById('gallery-result').textContent = 'onOpen → "'+e.detail.image.caption+'" index:'+e.detail.index; },
+  variant: 'grid',
+  cols: 3,
+  gap: '8px',
+  filters: ['nature', 'urban'],
+  lightbox: true,
+  images: images,
+  onOpen: function (e) {
+    document.getElementById('gallery-result').textContent = 'onOpen → "' + e.detail.image.caption + '" index:' + e.detail.index;
+  }
+});`;
+
+var preview_s2 = `
+<div id="gallery-select"></div>
+<div class="demo-row" style="margin-top:8px">
+  <button id="btn-clear-selection" data-variant="secondary" data-label="clearSelection()"></button>
+  <button id="btn-show-selection" data-variant="primary" data-label="getSelected()"></button>
+</div>
+<div class="result-box" id="gallery-select-result">— haz click en imágenes para seleccionarlas —</div>`;
+
+var js_s2 = `const gallery = new MTS.ImageGallery('#gallery-select', {
+  variant: 'grid',
+  cols: 4,
+  selectable: true,
+  lightbox: false,
+  images: IMAGES.slice(0, 8),
+  onSelect: function (e) {
+    document.getElementById('gallery-select-result').textContent = 'onSelect → ' + e.detail.selected.length + ' imagen(es) seleccionada(s)';
+  }
 });
 
-var galSelect = new MTS.ImageGallery('#gallery-select', {
-  selectable:true, lightbox:false, cols:4, images:IMAGES.slice(0,8),
-  onSelect: function(e){ document.getElementById('gallery-select-result').textContent = 'onSelect → '+e.detail.selected.length+' imagen(es) seleccionada(s)'; },
+new MTS.Button('#btn-clear-selection');
+new MTS.Button('#btn-show-selection');
+
+document.getElementById('btn-clear-selection').addEventListener('click', function () {
+  gallery.clearSelection();
+  document.getElementById('gallery-select-result').textContent = 'clearSelection() → selección limpiada';
 });
 
-function showSelected(){
-  var sel = galSelect.getSelected();
-  document.getElementById('gallery-select-result').textContent = 'getSelected() → ['+sel.map(function(i){ return i.id; }).join(', ')+']';
-}
+document.getElementById('btn-show-selection').addEventListener('click', function () {
+  var selected = gallery.getSelected();
+  document.getElementById('gallery-select-result').textContent = 'getSelected() → [' + selected.map(function (item) { return item.id; }).join(', ') + ']';
+});`;
 
-new MTS.ImageGallery('#gallery-masonry', { layout:'masonry', cols:2, images:IMAGES.slice(0,6), lightbox:true });
-new MTS.ImageGallery('#gallery-list',    { layout:'list',    images:IMAGES.slice(0,4), lightbox:true });
+var preview_s3 = `
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+  <div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);margin-bottom:8px">variant: masonry</div>
+    <div id="gallery-masonry"></div>
+  </div>
+  <div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mts-text-muted);margin-bottom:8px">variant: list</div>
+    <div id="gallery-list"></div>
+  </div>
+</div>`;
+
+var js_s3 = `new MTS.ImageGallery('#gallery-masonry', {
+  variant: 'masonry',
+  cols: 2,
+  lightbox: true,
+  images: IMAGES.slice(0, 6)
+});
+
+new MTS.ImageGallery('#gallery-list', {
+  variant: 'list',
+  lightbox: true,
+  images: IMAGES.slice(0, 4)
+});`;
+
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  new MTS.ImageGallery('#gallery-grid', {
+    variant: 'grid',
+    cols: 3,
+    gap: '8px',
+    filters: ['nature', 'urban'],
+    lightbox: true,
+    images: IMAGES,
+    onOpen: function (e) {
+      document.getElementById('gallery-result').textContent = 'onOpen → "' + e.detail.image.caption + '" index:' + e.detail.index;
+    }
+  });
+}, '420px');
+
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  var gallery = new MTS.ImageGallery('#gallery-select', {
+    variant: 'grid',
+    cols: 4,
+    selectable: true,
+    lightbox: false,
+    images: IMAGES.slice(0, 8),
+    onSelect: function (e) {
+      document.getElementById('gallery-select-result').textContent = 'onSelect → ' + e.detail.selected.length + ' imagen(es) seleccionada(s)';
+    }
+  });
+
+  new MTS.Button('#btn-clear-selection');
+  new MTS.Button('#btn-show-selection');
+
+  document.getElementById('btn-clear-selection').addEventListener('click', function () {
+    gallery.clearSelection();
+    document.getElementById('gallery-select-result').textContent = 'clearSelection() → selección limpiada';
+  });
+
+  document.getElementById('btn-show-selection').addEventListener('click', function () {
+    var selected = gallery.getSelected();
+    document.getElementById('gallery-select-result').textContent = 'getSelected() → [' + selected.map(function (item) { return item.id; }).join(', ') + ']';
+  });
+}, '440px');
+
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.ImageGallery('#gallery-masonry', {
+    variant: 'masonry',
+    cols: 2,
+    lightbox: true,
+    images: IMAGES.slice(0, 6)
+  });
+
+  new MTS.ImageGallery('#gallery-list', {
+    variant: 'list',
+    lightbox: true,
+    images: IMAGES.slice(0, 4)
+  });
+}, '460px');
 </script>
 </body>
 </html>

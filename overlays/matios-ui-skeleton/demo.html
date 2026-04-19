@@ -30,8 +30,10 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-skeleton.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-skeleton.js"></script>
 </head>
 <body>
@@ -49,182 +51,191 @@
     <h1><span>MTS</span>.Skeleton</h1>
     <p>Animated loading placeholder — text, circle, rect, card, list, table · pulse and wave animations.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-skeleton.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-skeleton.md')">Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Text · Circle · Rect -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Text · Circle · Rect</div>
-    <div class="demo-grid">
-      <div>
-        <div class="demo-label" style="margin-bottom:8px">variant: text (4 lines)</div>
-        <div id="sk-text"></div>
-      </div>
-      <div>
-        <div class="demo-label" style="margin-bottom:8px">variant: circle</div>
-        <div id="sk-circle"></div>
-      </div>
-      <div>
-        <div class="demo-label" style="margin-bottom:8px">variant: rect</div>
-        <div id="sk-rect"></div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-sk1','js-sk1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-sk1','html-sk1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-sk1">&lt;div id="loading-text"&gt;&lt;/div&gt;
-&lt;div id="loading-avatar"&gt;&lt;/div&gt;
-&lt;div id="loading-image"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  // Text lines / Líneas de texto
-  new MTS.Skeleton('#loading-text',   { variant: 'text',   lines: 4 });
-
-  // Circle avatar / Avatar circular
-  new MTS.Skeleton('#loading-avatar', { variant: 'circle', width: '56px', height: '56px' });
-
-  // Rectangle / Rectángulo
-  new MTS.Skeleton('#loading-image',  { variant: 'rect',   width: '100%', height: '120px' });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-sk1">// Text with N lines / Texto con N líneas
-new MTS.Skeleton('#loading-text', {
-  variant:   'text',
-  lines:     4,        // number of text lines / número de líneas
-  animation: 'pulse',  // 'pulse' | 'wave' | 'none'
-});
-
-// Circle — for avatars / Para avatares
-new MTS.Skeleton('#loading-circle', {
-  variant: 'circle',
-  width:   '56px',
-  height:  '56px',
-});
-
-// Rect — for images / Para imágenes
-new MTS.Skeleton('#loading-rect', {
-  variant: 'rect',
-  width:   '100%',
-  height:  '120px',
-});</div>
-  </div>
-
-  <!-- 2. Card · List · Table -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Card · List · Table</div>
-    <div class="demo-grid">
-      <div>
-        <div class="demo-label" style="margin-bottom:8px">variant: card</div>
-        <div id="sk-card"></div>
-      </div>
-      <div>
-        <div class="demo-label" style="margin-bottom:8px">variant: list (4 items)</div>
-        <div id="sk-list"></div>
-      </div>
-      <div>
-        <div class="demo-label" style="margin-bottom:8px">variant: table</div>
-        <div id="sk-table"></div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-sk2','js-sk2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-sk2','html-sk2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-sk2">&lt;div id="loading-card"&gt;&lt;/div&gt;
-&lt;div id="loading-list"&gt;&lt;/div&gt;
-&lt;div id="loading-table"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  // Card layout / Layout de tarjeta
-  new MTS.Skeleton('#loading-card',  { variant: 'card' });
-
-  // List with N items / Lista con N ítems
-  new MTS.Skeleton('#loading-list',  { variant: 'list',  items: 4 });
-
-  // Table with rows and cols / Tabla con filas y columnas
-  new MTS.Skeleton('#loading-table', { variant: 'table', rows: 4, cols: 4 });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-sk2">// Card — image + title + text / Imagen + título + texto
-new MTS.Skeleton('#loading-card', { variant: 'card' });
-
-// List items — avatar + text / Ítems de lista — avatar + texto
-new MTS.Skeleton('#loading-list', {
-  variant: 'list',
-  items:   4,         // number of list items / número de ítems
-});
-
-// Table — rows and columns / Tabla — filas y columnas
-new MTS.Skeleton('#loading-table', {
-  variant: 'table',
-  rows:    4,         // table rows / filas
-  cols:    4,         // table columns / columnas
-});</div>
-  </div>
-
-  <!-- 3. Animaciones + use case -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Animaciones / Animations</div>
-    <div class="demo-grid">
-      <div>
-        <div class="demo-label" style="margin-bottom:8px">animation: pulse (default)</div>
-        <div id="sk-pulse"></div>
-      </div>
-      <div>
-        <div class="demo-label" style="margin-bottom:8px">animation: wave</div>
-        <div id="sk-wave"></div>
-      </div>
-      <div>
-        <div class="demo-label" style="margin-bottom:8px">animation: none</div>
-        <div id="sk-none"></div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-sk3','js-sk3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-sk3','html-sk3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-sk3">&lt;div id="loading"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  // Typical use: show skeleton, then replace with real content
-  // Uso típico: mostrar skeleton, luego reemplazar con contenido real
-  const sk = new MTS.Skeleton('#loading', { variant: 'card' });
-
-  fetchData().then(data =&gt; {
-    sk.destroy();      // clear skeleton / limpiar skeleton
-    render(data);      // render real content / renderizar contenido real
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-sk3">// Pulse (default) / Pulse (por defecto)
-new MTS.Skeleton('#sk-pulse', { variant: 'text', lines: 3, animation: 'pulse' });
-
-// Wave / Ola
-new MTS.Skeleton('#sk-wave',  { variant: 'text', lines: 3, animation: 'wave' });
-
-// No animation / Sin animación
-new MTS.Skeleton('#sk-none',  { variant: 'text', lines: 3, animation: 'none' });
-
-// Typical use / Uso típico
-const sk = new MTS.Skeleton('#content', { variant: 'card' });
-
-fetchUser().then(user =&gt; {
-  sk.destroy();         // clear skeleton / limpiar skeleton
-  renderUser(user);     // render real content / contenido real
-});</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Text · Circle · Rect</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Card · List · Table</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Animations</div><div id="tabs-s3"></div></div>
 </div>
+
 <script>
-new MTS.Skeleton('#sk-text',   { variant:'text',   lines:4 });
-new MTS.Skeleton('#sk-circle', { variant:'circle', width:'56px', height:'56px' });
-new MTS.Skeleton('#sk-rect',   { variant:'rect',   width:'100%', height:'120px' });
-new MTS.Skeleton('#sk-card',   { variant:'card' });
-new MTS.Skeleton('#sk-list',   { variant:'list',  items:4 });
-new MTS.Skeleton('#sk-table',  { variant:'table', rows:4, cols:4 });
-new MTS.Skeleton('#sk-pulse',  { variant:'text',  lines:3, animation:'pulse' });
-new MTS.Skeleton('#sk-wave',   { variant:'text',  lines:3, animation:'wave' });
-new MTS.Skeleton('#sk-none',   { variant:'text',  lines:3, animation:'none' });
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '340px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  if (typeof initFn === 'function') initFn();
+}
+
+var preview_s1 = `
+<div class="demo-grid">
+  <div>
+    <div class="demo-label">variant: text (4 lines)</div>
+    <div id="sk-text"></div>
+  </div>
+  <div>
+    <div class="demo-label">variant: circle</div>
+    <div id="sk-circle"></div>
+  </div>
+  <div>
+    <div class="demo-label">variant: rect</div>
+    <div id="sk-rect"></div>
+  </div>
+</div>`;
+
+var js_s1 = `new MTS.Skeleton('#sk-text', {
+  variant: 'text',
+  lines: 4,
+  animation: 'pulse'
+});
+
+new MTS.Skeleton('#sk-circle', {
+  variant: 'circle',
+  width: '56px',
+  height: '56px'
+});
+
+new MTS.Skeleton('#sk-rect', {
+  variant: 'rect',
+  width: '100%',
+  height: '120px'
+});`;
+
+var preview_s2 = `
+<div class="demo-grid">
+  <div>
+    <div class="demo-label">variant: card</div>
+    <div id="sk-card"></div>
+  </div>
+  <div>
+    <div class="demo-label">variant: list (4 items)</div>
+    <div id="sk-list"></div>
+  </div>
+  <div>
+    <div class="demo-label">variant: table</div>
+    <div id="sk-table"></div>
+  </div>
+</div>`;
+
+var js_s2 = `new MTS.Skeleton('#sk-card', {
+  variant: 'card'
+});
+
+new MTS.Skeleton('#sk-list', {
+  variant: 'list',
+  items: 4
+});
+
+new MTS.Skeleton('#sk-table', {
+  variant: 'table',
+  rows: 4,
+  cols: 4
+});`;
+
+var preview_s3 = `
+<div class="demo-grid">
+  <div>
+    <div class="demo-label">animation: pulse</div>
+    <div id="sk-pulse"></div>
+  </div>
+  <div>
+    <div class="demo-label">animation: wave</div>
+    <div id="sk-wave"></div>
+  </div>
+  <div>
+    <div class="demo-label">animation: none</div>
+    <div id="sk-none"></div>
+  </div>
+</div>`;
+
+var js_s3 = `new MTS.Skeleton('#sk-pulse', {
+  variant: 'text',
+  lines: 3,
+  animation: 'pulse'
+});
+
+new MTS.Skeleton('#sk-wave', {
+  variant: 'text',
+  lines: 3,
+  animation: 'wave'
+});
+
+new MTS.Skeleton('#sk-none', {
+  variant: 'text',
+  lines: 3,
+  animation: 'none'
+});`;
+
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  new MTS.Skeleton('#sk-text', { variant: 'text', lines: 4, animation: 'pulse' });
+  new MTS.Skeleton('#sk-circle', { variant: 'circle', width: '56px', height: '56px' });
+  new MTS.Skeleton('#sk-rect', { variant: 'rect', width: '100%', height: '120px' });
+});
+
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  new MTS.Skeleton('#sk-card', { variant: 'card' });
+  new MTS.Skeleton('#sk-list', { variant: 'list', items: 4 });
+  new MTS.Skeleton('#sk-table', { variant: 'table', rows: 4, cols: 4 });
+});
+
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.Skeleton('#sk-pulse', { variant: 'text', lines: 3, animation: 'pulse' });
+  new MTS.Skeleton('#sk-wave', { variant: 'text', lines: 3, animation: 'wave' });
+  new MTS.Skeleton('#sk-none', { variant: 'text', lines: 3, animation: 'none' });
+});
 </script>
 </body>
 </html>

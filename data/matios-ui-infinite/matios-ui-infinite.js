@@ -59,14 +59,6 @@ MTS.Infinite = class MtsInfinite {
     this.endText      = options.endText     || 'No hay más resultados';
     this.animate      = options.animate     ?? true;
     this.emptyState   = options.emptyState  || { icon: '📭', title: 'Sin resultados', message: '' };
-    // Fires after each load: ({ items, page }) => {} / Se dispara tras cada carga
-    if (options.onLoad)  this.on('load',  options.onLoad);
-
-    // Fires on load error: ({ error }) => {} / Se dispara al ocurrir un error
-    if (options.onError) this.on('error', options.onError);
-
-    // Fires when all data is loaded / Se dispara al cargar todos los datos
-    if (options.onEnd)   this.on('end',   options.onEnd);
 
     /* Estado */
     this._page        = 1;
@@ -75,6 +67,15 @@ MTS.Infinite = class MtsInfinite {
     this._totalLoaded = 0;
     this._listeners   = {};
     this._observer    = null;
+
+    // Fires after each load: ({ items, page }) => {} / Se dispara tras cada carga
+    if (options.onLoad)  this.on('load',  options.onLoad);
+
+    // Fires on load error: ({ error }) => {} / Se dispara al ocurrir un error
+    if (options.onError) this.on('error', options.onError);
+
+    // Fires when all data is loaded / Se dispara al cargar todos los datos
+    if (options.onEnd)   this.on('end',   options.onEnd);
 
     this._build();
     this._observe();

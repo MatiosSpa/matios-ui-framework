@@ -21,22 +21,20 @@
     })();
   </script>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS.KPICard — Demo</title>
+  <title>KPICard — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
-  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
-  <link rel="stylesheet" href="../../shared/demo-shared.css">
+<link rel="stylesheet" href="../../base/matios-ui-base.css">
+<link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+<link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+<link rel="stylesheet" href="../../shared/demo-shared.css">
+<link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-kpicard.css">
-  <script src="../../shared/demo-shared.js"></script>
+<script src="../../shared/demo-shared.js"></script>
+<script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-kpicard.js"></script>
-  <style>
-    .kpi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-    .kpi-grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -51,204 +49,90 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.KPICard</h1>
-    <p>KPI metric card — trend indicator, sparkline, icon, variants, real-time update().</p>
-    <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-kpicard.md')">📄 Docs</button>
-    </div>
+    <p>KPICard demo actualizado al patrón Preview | HTML | JavaScript.</p>
+    <div class="demo-header-actions"><button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-kpicard.md')">Documentación</button></div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-
-  <!-- 1. Variantes con sparkline -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Variantes con sparkline / Variants with sparkline</div>
-    <div class="kpi-grid" id="kpi-grid-1"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-k1','js-k1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-k1','html-k1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-k1">&lt;div id="my-kpi"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.KPICard('#my-kpi', {
-    label:      'Total Revenue',
-    value:      48500,
-    unit:       '$',
-    trend:      12.4,           // positive = up / positivo = arriba
-    trendLabel: 'vs last month',
-    sparkline:  [30,45,38,60,55,72,65,80,70,90],
-    variant:    'success',
-    // Fires when card is clicked / Se dispara al hacer click
-    onClick: (e) =&gt; console.log(e.detail.kpi),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-k1">new MTS.KPICard('#kpi-revenue', {
-  label:      'Total Revenue',
-  value:      '48,500',
-  unit:       '$',
-  trend:      +12.4,         // positive = up arrow / flecha arriba
-  trendLabel: 'vs last month',
-  sparkline:  [30,45,38,60,55,72,65,80,70,90],
-  variant:    'success',
-});
-
-new MTS.KPICard('#kpi-visits', {
-  label:      'Page Visits',
-  value:      '12,847',
-  trend:      -3.2,          // negative = down arrow / flecha abajo
-  trendLabel: 'vs last week',
-  sparkline:  [80,65,72,58,65,48,55,42,50,38],
-  variant:    'danger',
-});
-
-new MTS.KPICard('#kpi-users', {
-  label:      'Active Users',
-  value:      1284,
-  trend:      +8.1,
-  trendLabel: 'this month',
-  sparkline:  [40,52,45,65,55,70,60,75,68,85],
-  variant:    'primary',
-});</div>
-  </div>
-
-  <!-- 2. Con íconos y clickable -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Con íconos y clickable / With icons and clickable</div>
-    <div class="kpi-grid" id="kpi-grid-2"></div>
-    <div class="result-box" id="kpi-result">— haz click en una KPI card —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-k2','js-k2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-k2','html-k2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-k2">&lt;div id="my-kpi"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.KPICard('#my-kpi', {
-    label:   'Orders',
-    value:   342,
-    trend:   5.7,
-    icon:    '&lt;svg&gt;...&lt;/svg&gt;',
-    variant: 'primary',
-    // Fires when clicked / Se dispara al hacer click
-    onClick: (e) =&gt; {
-      console.log(e.detail.kpi); // → MTS.KPICard instance
-    },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-k2">var ICON_CHART = '&lt;svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;line x1="18" y1="20" x2="18" y2="10"/&gt;&lt;line x1="12" y1="20" x2="12" y2="4"/&gt;&lt;line x1="6" y1="20" x2="6" y2="14"/&gt;&lt;/svg&gt;';
-var ICON_USERS = '&lt;svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/&gt;&lt;circle cx="9" cy="7" r="4"/&gt;&lt;path d="M23 21v-2a4 4 0 0 0-3-3.87"/&gt;&lt;path d="M16 3.13a4 4 0 0 1 0 7.75"/&gt;&lt;/svg&gt;';
-var ICON_DOLLAR = '&lt;svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;line x1="12" y1="1" x2="12" y2="23"/&gt;&lt;path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/&gt;&lt;/svg&gt;';
-
-['Orders','Users','Revenue'].forEach((label, i) =&gt; {
-  new MTS.KPICard('#kpi-icon-'+i, {
-    label,
-    value:   [342, 1284, '48.5K'][i],
-    unit:    ['','',''  ][i],
-    trend:   [5.7, 8.1, 12.4][i],
-    icon:    [ICON_CHART, ICON_USERS, ICON_DOLLAR][i],
-    variant: ['primary','success','warning'][i],
-    // Fires on click / Se dispara al hacer click
-    onClick: (e) =&gt; console.log('clicked:', label),
-  });
-});</div>
-  </div>
-
-  <!-- 3. API — update() -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — API — update() en tiempo real / Real-time update()</div>
-    <div class="kpi-grid-2">
-      <div id="kpi-live"></div>
-      <div style="display:flex;flex-direction:column;gap:8px;justify-content:center">
-        <button class="demo-btn-sm" onclick="simulateGood()">📈 Simular subida</button>
-        <button class="demo-btn-sm" onclick="simulateBad()">📉 Simular bajada</button>
-        <button class="demo-btn-sm" onclick="simulateRandom()">🎲 Aleatorio</button>
-      </div>
-    </div>
-    <div class="result-box" id="kpi-live-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-k3','js-k3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-k3','html-k3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-k3">&lt;div id="my-kpi"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const kpi = new MTS.KPICard('#my-kpi', {
-    label: 'Revenue', value: 0, unit: '$',
-  });
-
-  // Update all values at once / Actualizar todos los valores a la vez
-  kpi.update({
-    value:     52300,
-    trend:     +8.2,
-    sparkline: [50,60,45,70,55,80],
-    variant:   'success',
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-k3">const kpi = new MTS.KPICard('#my-kpi', {
-  label:      'Revenue',
-  value:      48500,
-  unit:       '$',
-  trend:      0,
-  sparkline:  [50,55,48,60,52,65,58,70,62,75],
-  variant:    'primary',
-});
-
-// update() — replace any option and re-render / reemplaza cualquier opción y re-renderiza
-kpi.update({
-  value:     52300,
-  trend:     +8.2,
-  trendLabel:'vs yesterday',
-  sparkline: [55,62,58,70,65,78,72,85,80,90],
-  variant:   'success',
-});</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Básico</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Variantes</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Clickable</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — API update()</div><div id="tabs-s4"></div></div>
 </div>
 <script>
-var sparkUp   = [30,35,28,42,38,50,45,58,52,65];
-var sparkDown = [70,65,72,58,62,48,55,42,48,35];
-
-// Grid 1
-var g1 = document.getElementById('kpi-grid-1');
-[
-  { label:'Total Revenue', value:'48,500', unit:'$', trend:12.4, trendLabel:'vs last month', sparkline:[30,45,38,60,55,72,65,80,70,90], variant:'success' },
-  { label:'Page Visits',   value:'12,847', unit:'',  trend:-3.2, trendLabel:'vs last week',  sparkline:[80,65,72,58,65,48,55,42,50,38], variant:'danger' },
-  { label:'Active Users',  value:'1,284',  unit:'',  trend:8.1,  trendLabel:'this month',    sparkline:[40,52,45,65,55,70,60,75,68,85], variant:'primary' },
-].forEach(function(cfg){
-  var el = document.createElement('div'); g1.appendChild(el);
-  new MTS.KPICard(el, cfg);
-});
-
-// Grid 2 — with icons and clickable
-var ICH = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>';
-var ICU = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>';
-var ICD = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>';
-var g2 = document.getElementById('kpi-grid-2');
-[
-  { label:'Orders',  value:342,    trend:5.7,  icon:ICH, variant:'primary' },
-  { label:'Users',   value:1284,   trend:8.1,  icon:ICU, variant:'success' },
-  { label:'Revenue', value:'48.5K',trend:12.4, icon:ICD, variant:'warning' },
-].forEach(function(cfg){
-  var el = document.createElement('div'); g2.appendChild(el);
-  new MTS.KPICard(el, Object.assign({}, cfg, {
-    onClick: function(e){ document.getElementById('kpi-result').textContent = 'onClick → "' + cfg.label + '"'; }
-  }));
-});
-
-// Live KPI
-var kpiLive = new MTS.KPICard('#kpi-live', {
-  label:'Revenue', value:'48,500', unit:'$', trend:0, sparkline:[50,55,48,60,52,65,58,70,62,75], variant:'primary',
-  onClick: function(e){ document.getElementById('kpi-live-result').textContent = 'onClick → "Revenue"'; },
-});
-function simulateGood(){
-  var v = Math.floor(48000 + Math.random()*8000);
-  var t = +(Math.random()*15+2).toFixed(1);
-  kpiLive.update({ value:v.toLocaleString(), unit:'$', trend:t, trendLabel:'vs ayer', sparkline:sparkUp.map(function(x){ return x + Math.random()*10|0; }), variant:'success' });
-  document.getElementById('kpi-live-result').textContent = 'update() → value:$'+v+' trend:+'+t+'%';
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
-function simulateBad(){
-  var v = Math.floor(35000 + Math.random()*8000);
-  var t = -(Math.random()*12+1).toFixed(1);
-  kpiLive.update({ value:v.toLocaleString(), unit:'$', trend:t, trendLabel:'vs ayer', sparkline:sparkDown.map(function(x){ return x + Math.random()*10|0; }), variant:'danger' });
-  document.getElementById('kpi-live-result').textContent = 'update() → value:$'+v+' trend:'+t+'%';
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
 }
-function simulateRandom(){ Math.random() > 0.5 ? simulateGood() : simulateBad(); }
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(indentHtml(previewHtml)) + '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(code) + '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '340px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+  if (typeof initFn === 'function') initFn();
+}
+var preview_s1 = "<div class=\"demo-grid\"><div id=\"kpi-revenue\"></div><div id=\"kpi-visits\"></div><div id=\"kpi-users\"></div></div>";
+var js_s1 = "new MTS.KPICard('#kpi-revenue', { label:'Revenue', value:'$24.8K', trend:12, trendLabel:'vs last month', sparkline:[12,18,14,20,19,24,22] });\nnew MTS.KPICard('#kpi-visits', { label:'Visits', value:'148K', trend:8, trendLabel:'this week', variant:'primary', sparkline:[8,10,12,11,14,15,16] });\nnew MTS.KPICard('#kpi-users', { label:'New users', value:'1,248', trend:-4, trendLabel:'vs previous week', variant:'warning', sparkline:[20,18,19,17,16,15,14] });";
+var preview_s2 = "<div class=\"demo-grid\"><div id=\"kpi-v-default\"></div><div id=\"kpi-v-success\"></div><div id=\"kpi-v-danger\"></div></div>";
+var js_s2 = "new MTS.KPICard('#kpi-v-default', { label:'MRR', value:'$8.4K', trend:4, sparkline:[8,10,11,10,12,11,13] });\nnew MTS.KPICard('#kpi-v-success', { label:'Closed deals', value:'32', trend:17, variant:'success', sparkline:[14,16,18,17,19,21,24] });\nnew MTS.KPICard('#kpi-v-danger', { label:'Churn', value:'6.2%', trend:-9, variant:'danger', sparkline:[18,17,16,15,14,13,12] });";
+var preview_s3 = "<div class=\"demo-stack\"><div id=\"kpi-clickable\"></div><div class=\"result-box\" id=\"kpi-result\">\u2014 click en la tarjeta \u2014</div></div>";
+var js_s3 = "new MTS.KPICard('#kpi-clickable', { label:'Tickets abiertos', value:'28', trend:3, variant:'primary', onClick:function(){ document.getElementById('kpi-result').textContent = 'click \u2192 Tickets abiertos'; } });";
+var preview_s4 = "<div class=\"demo-stack\"><div id=\"kpi-live\"></div><div class=\"demo-row\"><button class=\"demo-btn-sm\" onclick=\"kpiLive.update({ value:'$13.4K', trend:15, variant:'success', sparkline:[10,12,13,14,15,16,18] })\">update()</button><button class=\"demo-btn-sm\" onclick=\"kpiLive.update({ value:'$11.2K', trend:4, variant:'default', sparkline:[8,10,11,10,12,11,13] })\">restore</button></div></div>";
+var js_s4 = "var kpiLive = new MTS.KPICard('#kpi-live', { label:'ARR', value:'$11.2K', trend:4, sparkline:[8,10,11,10,12,11,13] });\nkpiLive.update({ value:'$13.4K', trend:15, variant:'success', sparkline:[10,12,13,14,15,16,18] });";
+var kpiLive;
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.KPICard('#kpi-revenue', { label:'Revenue', value:'$24.8K', trend:12, trendLabel:'vs last month', sparkline:[12,18,14,20,19,24,22] });
+  new MTS.KPICard('#kpi-visits', { label:'Visits', value:'148K', trend:8, trendLabel:'this week', variant:'primary', sparkline:[8,10,12,11,14,15,16] });
+  new MTS.KPICard('#kpi-users', { label:'New users', value:'1,248', trend:-4, trendLabel:'vs previous week', variant:'warning', sparkline:[20,18,19,17,16,15,14] });
+}, '340px');
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  new MTS.KPICard('#kpi-v-default', { label:'MRR', value:'$8.4K', trend:4, sparkline:[8,10,11,10,12,11,13] });
+  new MTS.KPICard('#kpi-v-success', { label:'Closed deals', value:'32', trend:17, variant:'success', sparkline:[14,16,18,17,19,21,24] });
+  new MTS.KPICard('#kpi-v-danger', { label:'Churn', value:'6.2%', trend:-9, variant:'danger', sparkline:[18,17,16,15,14,13,12] });
+}, '340px');
+makeSection('tabs-s3', preview_s3, js_s3, function() { new MTS.KPICard('#kpi-clickable', { label:'Tickets abiertos', value:'28', trend:3, variant:'primary', onClick:function(){ document.getElementById('kpi-result').textContent = 'click → Tickets abiertos'; } }); }, '320px');
+makeSection('tabs-s4', preview_s4, js_s4, function() { kpiLive = new MTS.KPICard('#kpi-live', { label:'ARR', value:'$11.2K', trend:4, sparkline:[8,10,11,10,12,11,13] }); }, '320px');
+
 </script>
 </body>
 </html>

@@ -15,7 +15,7 @@
           var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
           if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
           if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
       }catch(e){}
     })();
@@ -30,12 +30,14 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-card.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-card.js"></script>
   <style>
-    .cards-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
-    .cards-grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+    .cards-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .cards-grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
   </style>
 </head>
 <body>
@@ -48,219 +50,303 @@
   <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
   <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
 </div>
+
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Card</h1>
     <p>Generic card — header, body, footer, image, variants, hoverable, clickable, actions.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-card.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-card.md')">Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. CSS puro -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Solo CSS / CSS only (no JS)</div>
-    <div class="cards-grid">
-      <div class="mts-card">
-        <div class="mts-card__header"><div class="mts-card__title">Basic card</div><div class="mts-card__subtitle">Subtitle</div></div>
-        <div class="mts-card__body"><p style="font-size:13px;color:var(--mts-text-muted)">Card body content.</p></div>
-      </div>
-      <div class="mts-card mts-card--elevated">
-        <div class="mts-card__header"><div class="mts-card__title">Elevated</div></div>
-        <div class="mts-card__body"><p style="font-size:13px;color:var(--mts-text-muted)">With drop shadow.</p></div>
-      </div>
-      <div class="mts-card mts-card--outlined">
-        <div class="mts-card__header"><div class="mts-card__title">Outlined</div></div>
-        <div class="mts-card__body"><p style="font-size:13px;color:var(--mts-text-muted)">Border only style.</p></div>
+  <div class="demo-section"><div class="demo-section-title">1 — Solo CSS / CSS only (no JS)</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Variantes de color / Color variants</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Hoverable y clickable / Hoverable and clickable</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Con imagen y acciones / With image and actions</div><div id="tabs-s4"></div></div>
+</div>
+
+<script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  if (typeof initFn === 'function') initFn();
+}
+
+var preview_s1 = `
+<div class="cards-grid">
+  <div class="mts-card">
+    <div class="mts-card__header">
+      <div class="mts-card__header-content">
+        <div class="mts-card__title">Basic card</div>
+        <div class="mts-card__subtitle">Subtitle</div>
       </div>
     </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-c1','js-c1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-c1','html-c1')">CSS classes</button>
+    <div class="mts-card__body">
+      <p style="font-size:13px;color:var(--mts-text-muted)">Card body content.</p>
     </div>
-    <div class="code-panel active" id="html-c1">&lt;!-- No JS needed / Sin JS --&gt;
-&lt;div class="mts-card"&gt;
-  &lt;div class="mts-card__header"&gt;
-    &lt;div class="mts-card__title"&gt;Title&lt;/div&gt;
-    &lt;div class="mts-card__subtitle"&gt;Subtitle&lt;/div&gt;
-  &lt;/div&gt;
-  &lt;div class="mts-card__body"&gt;
-    &lt;p&gt;Card body content.&lt;/p&gt;
-  &lt;/div&gt;
-  &lt;div class="mts-card__footer"&gt;
-    &lt;button class="mts-btn mts-btn--primary"&gt;Action&lt;/button&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</div>
-    <div class="code-panel" id="js-c1">.mts-card               → base card
-.mts-card--elevated     → drop shadow
-.mts-card--outlined     → border only
-.mts-card--hoverable    → lift on hover
-.mts-card--clickable    → pointer cursor
-.mts-card--selected     → selected highlight
-.mts-card--horizontal   → side-by-side layout
-.mts-card--sm / --lg    → size modifiers
-.mts-card--primary/success/warning/danger → color accents</div>
   </div>
 
-  <!-- 2. Variantes y acentos -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Variantes de color / Color variants</div>
-    <div class="cards-grid" id="variants-grid"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-c2','js-c2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-c2','html-c2')">JavaScript</button>
+  <div class="mts-card mts-card--elevated">
+    <div class="mts-card__header">
+      <div class="mts-card__header-content">
+        <div class="mts-card__title">Elevated</div>
+      </div>
     </div>
-    <div class="code-panel active" id="html-c2">&lt;div id="my-card"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Card('#my-card', {
-    title:   'Success',
-    body:    '&lt;p&gt;Card body.&lt;/p&gt;',
-    variant: 'success',
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-c2">['primary','success','warning','danger'].forEach(variant =&gt; {
+    <div class="mts-card__body">
+      <p style="font-size:13px;color:var(--mts-text-muted)">With drop shadow.</p>
+    </div>
+  </div>
+
+  <div class="mts-card mts-card--outlined">
+    <div class="mts-card__header">
+      <div class="mts-card__header-content">
+        <div class="mts-card__title">Outlined</div>
+      </div>
+    </div>
+    <div class="mts-card__body">
+      <p style="font-size:13px;color:var(--mts-text-muted)">Border only style.</p>
+    </div>
+  </div>
+</div>`;
+
+var js_s1 = `// CSS only example / Ejemplo solo CSS
+// No JavaScript is required for this block.
+
+// Useful classes:
+// .mts-card
+// .mts-card--elevated
+// .mts-card--outlined
+// .mts-card--hoverable
+// .mts-card--clickable
+// .mts-card--selected
+// .mts-card--horizontal
+// .mts-card--sm | .mts-card--lg
+// .mts-card--primary | --success | --warning | --danger`;
+
+var preview_s2 = `
+<div class="cards-grid" id="variants-grid">
+  <div id="card-primary"></div>
+  <div id="card-success"></div>
+  <div id="card-warning"></div>
+</div>
+<div class="cards-grid" style="margin-top:12px;grid-template-columns:repeat(1,1fr)">
+  <div id="card-danger"></div>
+</div>`;
+
+var js_s2 = `['primary', 'success', 'warning', 'danger'].forEach(function (variant) {
   new MTS.Card('#card-' + variant, {
-    title:   variant.charAt(0).toUpperCase() + variant.slice(1),
-    body:    '&lt;p style="font-size:13px"&gt;Card with ' + variant + ' accent.&lt;/p&gt;',
-    variant,
+    title: variant.charAt(0).toUpperCase() + variant.slice(1),
+    body: '<p style="font-size:13px;color:var(--mts-text-muted)">Card with ' + variant + ' accent.</p>',
+    variant: variant
   });
-});</div>
-  </div>
+});`;
 
-  <!-- 3. Hoverable y clickable -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Hoverable y clickable / Hoverable and clickable</div>
-    <div class="cards-grid-2">
-      <div id="card-hover"></div>
-      <div id="card-click"></div>
-    </div>
-    <div class="result-box" id="card-result">— haz click en la card clickeable —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-c3','js-c3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-c3','html-c3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-c3">&lt;div id="my-card"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Card('#my-card', {
-    title:     'Clickable card',
-    body:      '&lt;p&gt;Click anywhere on the card.&lt;/p&gt;',
-    clickable: true,
-    hoverable: true,
-    // Fires when card is clicked / Se dispara al hacer click
-    onClick: (e) =&gt; {
-      console.log(e.detail.card);  // → MTS.Card instance
-      console.log(e.detail.event); // → MouseEvent
-    },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-c3">// Hoverable / Con efecto hover
-new MTS.Card('#card-hover', {
-  title:     'Hoverable',
-  body:      '&lt;p&gt;Hover to see lift effect.&lt;/p&gt;',
-  hoverable: true,
+var preview_s3 = `
+<div class="cards-grid-2">
+  <div id="card-hover"></div>
+  <div id="card-click"></div>
+</div>
+<div class="result-box" id="card-result">— haz click en la card clickeable —</div>`;
+
+var js_s3 = `new MTS.Card('#card-hover', {
+  title: 'Hoverable',
+  body: '<p style="font-size:13px;color:var(--mts-text-muted)">Hover to see lift effect.</p>',
+  hoverable: true
 });
 
-// Clickable / Clickeable
 new MTS.Card('#card-click', {
-  title:     'Clickable',
-  body:      '&lt;p&gt;Click anywhere on the card.&lt;/p&gt;',
+  title: 'Clickable',
+  body: '<p style="font-size:13px;color:var(--mts-text-muted)">Click anywhere on the card.</p>',
   clickable: true,
   hoverable: true,
-  // Fires when card is clicked / Se dispara al hacer click
-  onClick: (e) =&gt; {
-    console.log(e.detail.card);  // → MTS.Card instance
-    console.log(e.detail.event); // → MouseEvent
-  },
-});</div>
-  </div>
+  onClick: function () {
+    document.getElementById('card-result').textContent = 'onClick → card clickeada ✓';
+  }
+});`;
 
-  <!-- 4. Con imagen y acciones -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Con imagen y acciones / With image and actions</div>
-    <div class="cards-grid-2">
-      <div id="card-img"></div>
-      <div id="card-actions"></div>
-    </div>
-    <div class="result-box" id="card-action-result">— usa los botones de las cards —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-c4','js-c4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-c4','html-c4')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-c4">&lt;div id="my-card"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Card('#my-card', {
-    title:      'Mountain Trek',
-    subtitle:   'Footwear',
-    image:      '/img/product.jpg',
-    imageRatio: 'wide',
-    body:       '&lt;p&gt;Premium hiking boots.&lt;/p&gt;',
-    actions: [
-      { label: 'Edit',   variant: 'ghost',  onClick: () =&gt; edit() },
-      { label: 'Delete', variant: 'danger', onClick: () =&gt; del() },
-    ],
-    footer: [
-      { label: 'Cancel', variant: 'ghost',   onClick: () =&gt; {} },
-      { label: 'Buy',    variant: 'primary', onClick: () =&gt; buy() },
-    ],
-    footerAlign: 'between',
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-c4">// Card with image and header actions / Con imagen y acciones en el header
-new MTS.Card('#card-img', {
-  title:      'Mountain Trek',
-  subtitle:   'Premium Footwear',
-  image:      'https://picsum.photos/seed/shoe/400/200',
+var preview_s4 = `
+<div class="cards-grid-2">
+  <div id="card-img"></div>
+  <div id="card-actions"></div>
+</div>
+<div class="result-box" id="card-action-result">— usa los botones de las cards —</div>`;
+
+var js_s4 = `new MTS.Card('#card-img', {
+  title: 'Mountain Trek',
+  subtitle: 'Premium Footwear',
+  image: 'https://picsum.photos/seed/shoe/400/200',
   imageRatio: 'wide',
-  body:       '&lt;p style="font-size:13px;color:var(--mts-text-muted)"&gt;Premium hiking boots for rough terrain.&lt;/p&gt;',
+  body: '<p style="font-size:13px;color:var(--mts-text-muted)">Premium hiking boots for rough terrain.</p>',
   actions: [
-    { label: '✏️', variant: 'ghost',  onClick: () =&gt; console.log('edit') },
-    { label: '🗑️', variant: 'danger', onClick: () =&gt; console.log('delete') },
-  ],
+    {
+      label: 'Editar',
+      variant: 'ghost',
+      onClick: function () {
+        document.getElementById('card-action-result').textContent = 'action → Editar';
+      }
+    },
+    {
+      label: 'Borrar',
+      variant: 'danger',
+      onClick: function () {
+        document.getElementById('card-action-result').textContent = 'action → Borrar';
+      }
+    }
+  ]
 });
 
-// Card with footer buttons / Con botones en el footer
 new MTS.Card('#card-actions', {
   title: 'Checkout',
-  body:  '&lt;p style="font-size:13px;color:var(--mts-text-muted)"&gt;Complete your purchase.&lt;/p&gt;',
+  body: '<p style="font-size:13px;color:var(--mts-text-muted)">Completa tu compra.</p>',
   footer: [
-    { label: 'Cancel', variant: 'ghost',   onClick: () =&gt; {} },
-    { label: 'Buy now', variant: 'primary', onClick: () =&gt; {} },
+    {
+      label: 'Cancelar',
+      variant: 'ghost',
+      onClick: function () {
+        document.getElementById('card-action-result').textContent = 'footer → Cancelar';
+      }
+    },
+    {
+      label: 'Comprar',
+      variant: 'primary',
+      onClick: function () {
+        document.getElementById('card-action-result').textContent = 'footer → Comprar';
+      }
+    }
   ],
-  footerAlign: 'between',   // 'start' | 'end' | 'between' | 'center'
-});</div>
-  </div>
+  footerAlign: 'between'
+});`;
 
-</div>
-<script>
-var variants = ['primary','success','warning','danger'];
-var vg = document.getElementById('variants-grid');
-variants.forEach(function(v){
-  var el = document.createElement('div'); vg.appendChild(el);
-  new MTS.Card(el, { title:v.charAt(0).toUpperCase()+v.slice(1), body:'<p style="font-size:13px;color:var(--mts-text-muted)">Card con variante '+v+'.</p>', variant:v });
+makeSection('tabs-s1', preview_s1, js_s1);
+
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  ['primary', 'success', 'warning', 'danger'].forEach(function (variant) {
+    new MTS.Card('#card-' + variant, {
+      title: variant.charAt(0).toUpperCase() + variant.slice(1),
+      body: '<p style="font-size:13px;color:var(--mts-text-muted)">Card con variante ' + variant + '.</p>',
+      variant: variant
+    });
+  });
 });
 
-new MTS.Card('#card-hover', { title:'Hoverable', body:'<p style="font-size:13px;color:var(--mts-text-muted)">Hover para ver el efecto de elevación.</p>', hoverable:true });
-new MTS.Card('#card-click', {
-  title:'Clickable', body:'<p style="font-size:13px;color:var(--mts-text-muted)">Haz click en cualquier parte de la card.</p>', clickable:true, hoverable:true,
-  onClick:function(e){ document.getElementById('card-result').textContent = 'onClick → card clickeada ✓'; },
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.Card('#card-hover', {
+    title: 'Hoverable',
+    body: '<p style="font-size:13px;color:var(--mts-text-muted)">Hover para ver el efecto de elevación.</p>',
+    hoverable: true
+  });
+
+  new MTS.Card('#card-click', {
+    title: 'Clickable',
+    body: '<p style="font-size:13px;color:var(--mts-text-muted)">Haz click en cualquier parte de la card.</p>',
+    clickable: true,
+    hoverable: true,
+    onClick: function () {
+      document.getElementById('card-result').textContent = 'onClick → card clickeada ✓';
+    }
+  });
 });
-new MTS.Card('#card-img', {
-  title:'Mountain Trek', subtitle:'Premium Footwear',
-  image:'https://picsum.photos/seed/shoe/400/200', imageRatio:'wide',
-  body:'<p style="font-size:13px;color:var(--mts-text-muted)">Premium hiking boots.</p>',
-  actions:[
-    { label:'✏️ Editar',  variant:'ghost',  onClick:function(){ document.getElementById('card-action-result').textContent = 'action → Editar'; } },
-    { label:'🗑️ Borrar', variant:'danger', onClick:function(){ document.getElementById('card-action-result').textContent = 'action → Borrar'; } },
-  ],
-});
-new MTS.Card('#card-actions', {
-  title:'Checkout', body:'<p style="font-size:13px;color:var(--mts-text-muted)">Completa tu compra.</p>',
-  footer:[
-    { label:'Cancelar', variant:'ghost',   onClick:function(){ document.getElementById('card-action-result').textContent = 'footer → Cancelar'; } },
-    { label:'Comprar',  variant:'primary', onClick:function(){ document.getElementById('card-action-result').textContent = 'footer → Comprar'; } },
-  ],
-  footerAlign:'between',
+
+makeSection('tabs-s4', preview_s4, js_s4, function () {
+  new MTS.Card('#card-img', {
+    title: 'Mountain Trek',
+    subtitle: 'Premium Footwear',
+    image: 'https://picsum.photos/seed/shoe/400/200',
+    imageRatio: 'wide',
+    body: '<p style="font-size:13px;color:var(--mts-text-muted)">Premium hiking boots.</p>',
+    actions: [
+      {
+        label: 'Editar',
+        variant: 'ghost',
+        onClick: function () {
+          document.getElementById('card-action-result').textContent = 'action → Editar';
+        }
+      },
+      {
+        label: 'Borrar',
+        variant: 'danger',
+        onClick: function () {
+          document.getElementById('card-action-result').textContent = 'action → Borrar';
+        }
+      }
+    ]
+  });
+
+  new MTS.Card('#card-actions', {
+    title: 'Checkout',
+    body: '<p style="font-size:13px;color:var(--mts-text-muted)">Completa tu compra.</p>',
+    footer: [
+      {
+        label: 'Cancelar',
+        variant: 'ghost',
+        onClick: function () {
+          document.getElementById('card-action-result').textContent = 'footer → Cancelar';
+        }
+      },
+      {
+        label: 'Comprar',
+        variant: 'primary',
+        onClick: function () {
+          document.getElementById('card-action-result').textContent = 'footer → Comprar';
+        }
+      }
+    ],
+    footerAlign: 'between'
+  });
 });
 </script>
 </body>

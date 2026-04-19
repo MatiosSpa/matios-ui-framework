@@ -3,24 +3,25 @@
 <head>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.CommandPalette — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
@@ -30,8 +31,12 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-commandpalette.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-commandpalette.js"></script>
 </head>
 <body>
@@ -48,177 +53,141 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.CommandPalette</h1>
-    <p>⌘K command palette — keyboard navigation, groups, icons, shortcuts, async search.</p>
+    <p>Buscador de comandos tipo ⌘K con comandos agrupados y acciones.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-commandpalette.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-commandpalette.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Demo interactivo -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Demo interactivo / Interactive demo</div>
-    <div class="demo-row">
-      <button class="mts-btn mts-btn--secondary" onclick="cp1.open()">Abrir paleta</button>
-      <button class="mts-btn mts-btn--ghost" onclick="">o presiona <kbd style="padding:2px 6px;border-radius:4px;border:1px solid var(--mts-border-color);font-size:11px">⌘K</kbd> / <kbd style="padding:2px 6px;border-radius:4px;border:1px solid var(--mts-border-color);font-size:11px">Ctrl+K</kbd></button>
-    </div>
-    <div class="result-box" id="cp-result">— abre la paleta y selecciona un comando —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cp1','js-cp1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cp1','html-cp1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cp1">&lt;!-- MTS.CommandPalette has no HTML container — it appends to body
-     MTS.CommandPalette no tiene contenedor HTML — se agrega al body --&gt;
-
-&lt;button onclick="cp.open()"&gt;Open palette&lt;/button&gt;
-&lt;!-- or press ⌘K / Ctrl+K --&gt;
-
-&lt;script&gt;
-  const cp = new MTS.CommandPalette({
-    commands: [...],
-    // Fires when a command is selected / Se dispara al seleccionar un comando
-    onSelect: (e) =&gt; {
-      console.log(e.detail.id);      // → 'create-file'
-      console.log(e.detail.command); // → { id, label, ... }
-    },
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cp1">const cp = new MTS.CommandPalette({
-  placeholder: 'Search commands...',
-
-  commands: [
-    // Group: Navigation / Grupo: Navegación
-    { group: 'Navigation' },
-    { id: 'go-dashboard', label: 'Go to Dashboard',  shortcut: '⌘D', action: () =&gt; alert('Dashboard') },
-    { id: 'go-settings',  label: 'Open Settings',    shortcut: '⌘,', action: () =&gt; alert('Settings') },
-    { id: 'go-profile',   label: 'View Profile',                      action: () =&gt; alert('Profile') },
-
-    // Group: Actions / Grupo: Acciones
-    { group: 'Actions' },
-    { id: 'create',  label: 'Create new file',   shortcut: '⌘N', action: () =&gt; alert('Create') },
-    { id: 'save',    label: 'Save document',     shortcut: '⌘S', action: () =&gt; alert('Save') },
-    { id: 'export',  label: 'Export as PDF',                     action: () =&gt; alert('Export') },
-    { id: 'delete',  label: 'Delete selected',   disabled: true  },
-
-    // Group: Theme / Grupo: Tema
-    { group: 'Theme' },
-    { id: 'theme-dark',  label: 'Switch to Dark mode',  action: () =&gt; setTheme('dark') },
-    { id: 'theme-light', label: 'Switch to Light mode', action: () =&gt; setTheme('light') },
-  ],
-
-  // Fires when palette opens / Se dispara al abrir
-  onOpen:  () =&gt; console.log('opened'),
-  // Fires when palette closes / Se dispara al cerrar
-  onClose: () =&gt; console.log('closed'),
-  // Fires when a command is selected / Se dispara al seleccionar un comando
-  onSelect: (e) =&gt; {
-    console.log(e.detail.id);      // → 'create'
-    console.log(e.detail.command); // → full command object
-  },
-});</div>
-  </div>
-
-  <!-- 2. Búsqueda async -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Búsqueda async / Async search</div>
-    <div class="demo-row">
-      <button class="mts-btn mts-btn--secondary" onclick="cp2.open()">Abrir paleta async</button>
-    </div>
-    <div class="result-box" id="cp-async-result">— escribe algo en la paleta para simular búsqueda async —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cp2','js-cp2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cp2','html-cp2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cp2">&lt;!-- onSearch replaces local search / onSearch reemplaza la búsqueda local --&gt;
-&lt;script&gt;
-  new MTS.CommandPalette({
-    // onSearch receives query, must return array or Promise
-    // onSearch recibe query, debe retornar arreglo o Promesa
-    onSearch: async (e) =&gt; {
-      const query = e.detail.query;
-      if (!query) return defaultCommands;
-      const res = await fetch('/api/commands?q=' + query);
-      return await res.json();
-    },
-    onSelect: (e) =&gt; console.log(e.detail.id),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cp2">const DB = [
-  { id:'user-1', label:'Ana García',     description:'ana@empresa.com', group:'Usuarios' },
-  { id:'user-2', label:'Pedro Martínez', description:'pedro@empresa.com', group:'Usuarios' },
-  { id:'user-3', label:'Laura Sánchez',  description:'laura@empresa.com', group:'Usuarios' },
-  { id:'doc-1',  label:'Reporte Q1',     description:'Excel · 2.4MB',   group:'Documentos' },
-  { id:'doc-2',  label:'Contrato 2025',  description:'PDF · 856KB',     group:'Documentos' },
-  { id:'doc-3',  label:'Manual de uso',  description:'PDF · 1.1MB',     group:'Documentos' },
-];
-
-new MTS.CommandPalette({
-  placeholder: 'Buscar usuarios y documentos...',
-  hotkey:      'j',  // opens with ⌘J / abre con ⌘J
-
-  // Async search — simulates API call with 200ms delay
-  // Búsqueda async — simula llamada API con 200ms de delay
-  onSearch: async (e) =&gt; {
-    const query = e.detail.query;
-    await new Promise(r =&gt; setTimeout(r, 200)); // simulate network
-    if (!query) return DB;
-    const q = query.toLowerCase();
-    return DB.filter(c =&gt;
-      c.label.toLowerCase().includes(q) ||
-      c.description.toLowerCase().includes(q)
-    );
-  },
-  onSelect: (e) =&gt; console.log(e.detail.id),
-});</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Básico</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Agrupado</div><div id="tabs-s2"></div></div>
 </div>
 
 <script>
-var ICON_DASH = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>';
-var ICON_COG  = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
-var ICON_PLUS = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
-var ICON_SUN  = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
 
-var cp1 = new MTS.CommandPalette({
-  placeholder: 'Buscar comandos...',
-  commands: [
-    { group:'Navegación' },
-    { id:'go-dashboard', label:'Ir al Dashboard',  icon:ICON_DASH, shortcut:'⌘D', action:function(){ document.getElementById('cp-result').textContent = 'action → Dashboard'; } },
-    { id:'go-settings',  label:'Abrir Ajustes',    icon:ICON_COG,  shortcut:'⌘,', action:function(){ document.getElementById('cp-result').textContent = 'action → Ajustes'; } },
-    { group:'Acciones' },
-    { id:'create', label:'Crear nuevo archivo', icon:ICON_PLUS, shortcut:'⌘N', action:function(){ document.getElementById('cp-result').textContent = 'action → Crear archivo'; } },
-    { id:'delete', label:'Eliminar seleccionado', disabled:true },
-    { group:'Tema' },
-    { id:'theme-dark',  label:'Modo Oscuro',  icon:ICON_SUN, action:function(){ setTheme('dark');  document.getElementById('cp-result').textContent = 'action → Tema oscuro'; } },
-    { id:'theme-light', label:'Modo Claro',   icon:ICON_SUN, action:function(){ setTheme('light'); document.getElementById('cp-result').textContent = 'action → Tema claro'; } },
-  ],
-  onSelect: function(e){ document.getElementById('cp-result').textContent = 'onSelect → id:"' + e.detail.id + '" label:"' + e.detail.command.label + '"'; },
-});
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
-var DB = [
-  { id:'user-1', label:'Ana García',     description:'ana@empresa.com',   group:'Usuarios' },
-  { id:'user-2', label:'Pedro Martínez', description:'pedro@empresa.com', group:'Usuarios' },
-  { id:'user-3', label:'Laura Sánchez',  description:'laura@empresa.com', group:'Usuarios' },
-  { id:'doc-1',  label:'Reporte Q1',     description:'Excel · 2.4MB',     group:'Documentos' },
-  { id:'doc-2',  label:'Contrato 2025',  description:'PDF · 856KB',       group:'Documentos' },
-  { id:'doc-3',  label:'Manual de uso',  description:'PDF · 1.1MB',       group:'Documentos' },
-];
-var cp2 = new MTS.CommandPalette({
-  placeholder: 'Buscar usuarios y documentos...',
-  hotkey: 'j',
-  onSearch: function(e) {
-    var query = e.detail.query;
-    return new Promise(function(resolve){
-      setTimeout(function(){
-        if (!query) { resolve(DB); return; }
-        var q = query.toLowerCase();
-        resolve(DB.filter(function(c){ return c.label.toLowerCase().includes(q) || c.description.toLowerCase().includes(q); }));
-      }, 200);
-    });
-  },
-  onSelect: function(e){ document.getElementById('cp-async-result').textContent = 'onSelect → id:"' + e.detail.id + '" label:"' + e.detail.command.label + '"'; },
-});
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+  if (typeof initFn === 'function') initFn();
+}
+
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+var cpBasic, cpGrouped;
+var preview_s1 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<button class="demo-btn-sm" onclick="cpBasic.open()">Abrir palette</button>' +
+      '<button class="demo-btn-sm" onclick="cpBasic.close()">Cerrar</button>' +
+    '</div>' +
+    '<div class="result-box" id="cp-result-basic">— abre la palette para probar comandos —</div>' +
+  '</div>';
+
+var js_s1 =
+  "var cpBasic = new MTS.CommandPalette({\n" +
+  "  placeholder: 'Buscar comando...',\n" +
+  "  commands: [\n" +
+  "    { id: 'dashboard', label: 'Ir al Dashboard', icon: MTS.Icon.get('grid'), action: function(){ setResult('cp-result-basic', 'action → dashboard'); } },\n" +
+  "    { id: 'settings', label: 'Abrir ajustes', icon: MTS.Icon.get('cog'), action: function(){ setResult('cp-result-basic', 'action → settings'); } },\n" +
+  "    { id: 'new', label: 'Crear nuevo', icon: MTS.Icon.get('add-circle'), action: function(){ setResult('cp-result-basic', 'action → new'); } }\n" +
+  "  ]\n" +
+  "});";
+
+var preview_s2 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<button class="demo-btn-sm" onclick="cpGrouped.open()">Abrir palette agrupada</button>' +
+    '</div>' +
+    '<div class="result-box" id="cp-result-grouped">— palette con grupos y shortcuts —</div>' +
+  '</div>';
+
+var js_s2 =
+  "var cpGrouped = new MTS.CommandPalette({\n" +
+  "  commands: [\n" +
+  "    { id: 'dashboard', label: 'Dashboard', group: 'Navigation', icon: MTS.Icon.get('grid'), shortcut: '⌘D', action: function(){ setResult('cp-result-grouped', 'select → dashboard'); } },\n" +
+  "    { id: 'projects', label: 'Projects', group: 'Navigation', icon: MTS.Icon.get('kanban'), shortcut: '⌘P', action: function(){ setResult('cp-result-grouped', 'select → projects'); } },\n" +
+  "    { id: 'theme-dark', label: 'Modo oscuro', group: 'Preferences', icon: MTS.Icon.get('moon'), action: function(){ setMode('dark'); setResult('cp-result-grouped', 'theme → dark'); } },\n" +
+  "    { id: 'theme-light', label: 'Modo claro', group: 'Preferences', icon: MTS.Icon.get('sun'), action: function(){ setMode('light'); setResult('cp-result-grouped', 'theme → light'); } }\n" +
+  "  ]\n" +
+  "});";
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  cpBasic = new MTS.CommandPalette({
+    placeholder: 'Buscar comando...',
+    commands: [
+      { id: 'dashboard', label: 'Ir al Dashboard', icon: MTS.Icon.get('grid'), action: function(){ setResult('cp-result-basic', 'action → dashboard'); } },
+      { id: 'settings', label: 'Abrir ajustes', icon: MTS.Icon.get('cog'), action: function(){ setResult('cp-result-basic', 'action → settings'); } },
+      { id: 'new', label: 'Crear nuevo', icon: MTS.Icon.get('add-circle'), action: function(){ setResult('cp-result-basic', 'action → new'); } }
+    ]
+  });
+}, '280px');
+
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  cpGrouped = new MTS.CommandPalette({
+    commands: [
+      { id: 'dashboard', label: 'Dashboard', group: 'Navigation', icon: MTS.Icon.get('grid'), shortcut: '⌘D', action: function(){ setResult('cp-result-grouped', 'select → dashboard'); } },
+      { id: 'projects', label: 'Projects', group: 'Navigation', icon: MTS.Icon.get('kanban'), shortcut: '⌘P', action: function(){ setResult('cp-result-grouped', 'select → projects'); } },
+      { id: 'theme-dark', label: 'Modo oscuro', group: 'Preferences', icon: MTS.Icon.get('moon'), action: function(){ setMode('dark'); setResult('cp-result-grouped', 'theme → dark'); } },
+      { id: 'theme-light', label: 'Modo claro', group: 'Preferences', icon: MTS.Icon.get('sun'), action: function(){ setMode('light'); setResult('cp-result-grouped', 'theme → light'); } }
+    ]
+  });
+}, '280px');
+
 </script>
 </body>
 </html>

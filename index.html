@@ -6,11 +6,15 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="themes/matios-ui-mode-dark.css">
 <link rel="stylesheet" href="themes/matios-ui-mode-light.css">
+<link rel="stylesheet" href="themes/matios-ui-mode-high-contrast.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-violet.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-olive.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-blue.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-high-contrast.css">
 <link rel="stylesheet" href="icons/matios-ui-icons.css">
+<link rel="stylesheet" href="forms/matios-ui-button/matios-ui-button.css">
 <script src="icons/matios-ui-icons.js"></script>
+<script src="forms/matios-ui-button/matios-ui-button.js"></script>
 <style>
 :root {
   --sw: 224px;
@@ -32,14 +36,17 @@ body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:'DM
 .docs-btn:hover{border-color:var(--mts-color-primary);color:var(--mts-color-primary);background:var(--mts-color-primary-light);}
 .docs-btn.visible{display:flex;}
 
-/* ── Theme picker — 2 groups ──────────────────────── */
-.tp-wrap{display:flex;gap:6px;align-items:center;}
-.tp{display:flex;gap:2px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:7px;padding:2px;}
-.tp-btn{padding:3px 9px;border-radius:5px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--mts-text-muted);transition:all .12s;}
-.tp-btn:hover{color:var(--mts-text-primary);}
-.tp-btn.active{background:var(--mts-bg-surface);color:var(--mts-text-primary);box-shadow:0 1px 3px rgba(0,0,0,.1);}
-.tp-btn.active-accent{background:var(--mts-color-primary);color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.15);}
-.tp-sep{width:1px;height:18px;background:var(--mts-border-color);margin:0 2px;}
+/* ── Theme picker — ButtonGroup ───────────────────── */
+.theme-picker{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.theme-picker__group{display:flex;align-items:center;gap:6px;}
+.theme-picker__label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mts-text-muted);}
+.theme-picker .mts-btn-group{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);overflow:hidden;}
+.theme-picker .mts-btn-group .mts-btn{min-height:auto;padding:4px 10px;font-size:11px;line-height:1.2;box-shadow:none;}
+.theme-picker .mts-btn-group .mts-btn:not(.mts-btn--active){background:transparent;color:var(--mts-text-muted);}
+.theme-picker .mts-btn-group .mts-btn:not(.mts-btn--active):hover{color:var(--mts-text-primary);background:var(--mts-bg-surface);}
+.theme-picker .mts-btn-group .mts-btn--active{background:var(--mts-color-primary) !important;border-color:var(--mts-color-primary) !important;color:var(--mts-color-primary-text, #fff) !important;}
+.theme-picker .mts-btn-group .mts-btn--ghost:not(.mts-btn--active),
+.theme-picker .mts-btn-group .mts-btn--secondary:not(.mts-btn--active){border-color:transparent !important;}
 
 /* ── LAYOUT ───────────────────────────────────────── */
 .body{display:flex;flex:1;overflow:hidden;}
@@ -141,18 +148,14 @@ body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:'DM
     <i class="mts-icon mts-icon-file-text mts-icon--sm"></i>
     Ver docs
   </button>
-  <!-- Group 1: Mode -->
-  <div class="tp-wrap">
-    <div class="tp" id="tp-mode">
-      <button class="tp-btn" data-mode="dark"  onclick="setMode('dark')">Dark</button>
-      <button class="tp-btn active" data-mode="light" onclick="setMode('light')">Light</button>
+  <div class="theme-picker">
+    <div class="theme-picker__group">
+      <span class="theme-picker__label">Mode</span>
+      <div id="themeModeGroup"></div>
     </div>
-    <!-- Group 2: Accent -->
-    <div class="tp" id="tp-accent">
-      <button class="tp-btn active" data-accent="" onclick="setAccent(null)">—</button>
-      <button class="tp-btn" data-accent="violet" onclick="setAccent('violet')">Violet</button>
-      <button class="tp-btn" data-accent="olive"  onclick="setAccent('olive')">Olive</button>
-      <button class="tp-btn" data-accent="blue"   onclick="setAccent('blue')">Blue</button>
+    <div class="theme-picker__group">
+      <span class="theme-picker__label">Accent</span>
+      <div id="themeAccentGroup"></div>
     </div>
   </div>
 </div>
@@ -198,6 +201,7 @@ const GROUPS = [
     { id:'navigation', label:'Navegación',  icon:'compass',  src:'navigation/demo.html', md:'navigation' },
     { id:'overlays',   label:'Overlays',    icon:'layers',   src:'overlays/demo.html',   md:'overlays' },
     { id:'display',    label:'Display',     icon:'grid',     src:'display/demo.html',    md:'display' },
+    { id:'layout',     label:'Layout',      icon:'layout',   src:'layout/demo.html',     md:'layout' },
     { id:'data',       label:'Data',        icon:'database', src:'data/demo.html',       md:'data' },
   ]},
   { label: 'Showcase', items: [
@@ -205,6 +209,10 @@ const GROUPS = [
     { id:'sc-calendar',  label:'Calendario', icon:'calendar',    src:'calendar_v2/demo.html', md:'sc-calendar' },
     { id:'sc-datatable', label:'DataTable',  icon:'table',       src:null,                      action:'wip' },
     { id:'sc-charts',    label:'Charts',     icon:'pie-chart',   src:null,                      action:'wip' },
+  ]},
+  { label: 'Shared', items: [
+    { id:'httpclient', label:'HttpClient', icon:'globe', src:'shared/matios-ui-httpclient/demo.html', md:'httpclient' },
+    { id:'devpanel',   label:'DevPanel',   icon:'terminal', src:null, action:'wip' },
   ]},
   { label: 'Sistema', items: [
     { id:'themes', label:'Temas',  icon:'sun',  src:'themes/demo.html', md:null },
@@ -252,16 +260,39 @@ const MD_MAP = {
     'display/matios-ui-ratingreview/matios-ui-ratingreview.md','display/matios-ui-tree/matios-ui-tree.md',
     'display/matios-ui-imagegallery/matios-ui-imagegallery.md','display/matios-ui-virtuallist/matios-ui-virtuallist.md',
     'display/matios-ui-splitter/matios-ui-splitter.md'],
+  'layout':['layout/matios-ui-grid/matios-ui-grid.md','layout/matios-ui-scrollspy/matios-ui-scrollspy.md',
+    'layout/matios-ui-intersectionreveal/matios-ui-intersectionreveal.md','layout/matios-ui-splitter/matios-ui-splitter.md'],
+  'grid':'layout/matios-ui-grid/matios-ui-grid.md',
+  'scrollspy':'layout/matios-ui-scrollspy/matios-ui-scrollspy.md',
+  'intersectionreveal':'layout/matios-ui-intersectionreveal/matios-ui-intersectionreveal.md',
+  'splitter':'layout/matios-ui-splitter/matios-ui-splitter.md',
   'data':['data/matios-ui-table/matios-ui-table.md','data/matios-ui-paging/matios-ui-paging.md',
     'data/matios-ui-datatable/matios-ui-datatable.md','data/matios-ui-infinite/matios-ui-infinite.md',
     'data/matios-ui-chart/matios-ui-chart.md'],
   'icons':'icons/matios-ui-icons.md',
   'sc-calendar':'calendar_v2/matios-ui-calendar.md',
+  'httpclient':'shared/matios-ui-httpclient/matios-ui-httpclient.md',
 };
 
 /* ── State ───────────────────────────────────────── */
 let currentMode   = 'light';
 let currentAccent = null;   // null = default (no accent attr)
+let modeGroup      = null;
+let accentGroup    = null;
+
+const MODE_OPTIONS = [
+  { id:'dark', label:'Dark' },
+  { id:'light', label:'Light' },
+  { id:'high-contrast', label:'HC' },
+];
+
+const ACCENT_OPTIONS = [
+  { id:null, label:'—' },
+  { id:'high-contrast', label:'HC' },
+  { id:'violet', label:'Violet' },
+  { id:'olive', label:'Olive' },
+  { id:'blue', label:'Blue' },
+];
 let currentItem   = null;
 let currentActiveMd = null;
 let mdCache       = {};
@@ -272,15 +303,59 @@ Object.defineProperty(window, 'currentModeVal',   { get(){ return currentMode; }
 Object.defineProperty(window, 'currentAccentVal',  { get(){ return currentAccent; }, set(v){ currentAccent = v; } });
 
 /* ── Mode + Accent ───────────────────────────────── */
+function syncThemePicker() {
+  if (modeGroup) {
+    const idx = MODE_OPTIONS.findIndex(function (item) { return item.id === currentMode; });
+    if (idx >= 0) modeGroup.setActive(idx);
+  }
+  if (accentGroup) {
+    const idx = ACCENT_OPTIONS.findIndex(function (item) { return (item.id || '') === (currentAccent || ''); });
+    if (idx >= 0) accentGroup.setActive(idx);
+  }
+}
+
+function initThemePicker() {
+  if (!(window.MTS && MTS.ButtonGroup)) return;
+
+  modeGroup = new MTS.ButtonGroup('#themeModeGroup',
+    MODE_OPTIONS.map(function (item) {
+      return {
+        label: item.label,
+        variant: 'ghost',
+        onClick: function () { setMode(item.id); }
+      };
+    }),
+    { size: 'sm', activeOnClick: false }
+  );
+
+  accentGroup = new MTS.ButtonGroup('#themeAccentGroup',
+    ACCENT_OPTIONS.map(function (item) {
+      return {
+        label: item.label,
+        variant: 'ghost',
+        onClick: function () { setAccent(item.id); }
+      };
+    }),
+    { size: 'sm', activeOnClick: false }
+  );
+
+  syncThemePicker();
+}
+
 function setMode(m) {
   currentMode = m;
   document.documentElement.setAttribute('data-mts-mode', m);
-  // Update mode buttons
-  document.querySelectorAll('#tp-mode .tp-btn').forEach(b =>
-    b.classList.toggle('active', b.dataset.mode === m));
-  // Reload iframe with new mode
+
+  if (m === 'high-contrast') {
+    currentAccent = 'high-contrast';
+    document.documentElement.setAttribute('data-mts-accent', 'high-contrast');
+  } else if (currentAccent === 'high-contrast') {
+    currentAccent = null;
+    document.documentElement.removeAttribute('data-mts-accent');
+  }
+
+  syncThemePicker();
   _reloadFrame();
-  // Broadcast to iframe
   _broadcast();
 }
 
@@ -288,15 +363,8 @@ function setAccent(a) {
   currentAccent = a || null;
   if (a) document.documentElement.setAttribute('data-mts-accent', a);
   else   document.documentElement.removeAttribute('data-mts-accent');
-  // Update accent buttons
-  document.querySelectorAll('#tp-accent .tp-btn').forEach(b => {
-    const isActive = b.dataset.accent === (a || '');
-    b.classList.toggle('active', isActive && !a);       // "—" button = white pill
-    b.classList.toggle('active-accent', isActive && !!a); // color buttons = colored pill
-  });
-  // Reload iframe
+  syncThemePicker();
   _reloadFrame();
-  // Broadcast to iframe
   _broadcast();
 }
 
@@ -413,25 +481,30 @@ function loadById(id) {
 /* ── Messages from iframe ────────────────────────── */
 window.addEventListener('message', function(e) {
   if (!e.data) return;
-  // Iframe changed mode
+
   if (e.data.type === 'setMode') {
     currentMode = e.data.mode;
     document.documentElement.setAttribute('data-mts-mode', e.data.mode);
-    document.querySelectorAll('#tp-mode .tp-btn').forEach(b =>
-      b.classList.toggle('active', b.dataset.mode === e.data.mode));
+
+    if (e.data.mode === 'high-contrast' && !currentAccent) {
+      currentAccent = 'high-contrast';
+      document.documentElement.setAttribute('data-mts-accent', 'high-contrast');
+    } else if (e.data.mode !== 'high-contrast' && currentAccent === 'high-contrast') {
+      currentAccent = null;
+      document.documentElement.removeAttribute('data-mts-accent');
+    }
+
+    syncThemePicker();
   }
-  // Iframe changed accent
+
   if (e.data.type === 'setAccent') {
     const a = e.data.accent || null;
     currentAccent = a;
     if (a) document.documentElement.setAttribute('data-mts-accent', a);
     else   document.documentElement.removeAttribute('data-mts-accent');
-    document.querySelectorAll('#tp-accent .tp-btn').forEach(b => {
-      b.classList.toggle('active',        b.dataset.accent === (a || '') && !a);
-      b.classList.toggle('active-accent', b.dataset.accent === (a || '') && !!a);
-    });
+    syncThemePicker();
   }
-  // Component activated in iframe
+
   if (e.data.type === 'mts:accActive') {
     const component = e.data.component;
     currentActiveMd = (component && MD_MAP[component]) ? component : null;
@@ -483,12 +556,20 @@ document.getElementById('rmCpBtn').addEventListener('click', () => {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDocs(); });
 
 /* ── Markdown → HTML ─────────────────────────────── */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+
 function renderMd(md) {
   currentMdRaw = md;
   const blocks = [];
+  /* Extraer bloques de código ANTES de escapar HTML */
   let h = md
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code)=>{blocks.push({lang:lang||'js',code:code.trim()});return '\x00B'+(blocks.length-1)+'\x00';})
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>')
     .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>')
@@ -502,7 +583,7 @@ function renderMd(md) {
 
   h = h.replace(/\x00B(\d+)\x00/g,(_,i)=>{
     const{lang,code}=blocks[+i];
-    return '<pre><div class="rm-pre-top"><span class="rm-pre-lang">'+lang+'</span><button class="rm-pre-cp" onclick="cpBlock(this)">Copiar</button></div><code class="lang-'+lang+'">'+code+'</code></pre>';
+    return '<pre><div class="rm-pre-top"><span class="rm-pre-lang">'+lang+'</span><button class="rm-pre-cp" onclick="cpBlock(this)">Copiar</button></div><code class="lang-'+lang+'">'+escapeHtml(code)+'</code></pre>';
   });
 
   document.getElementById('rmBody').innerHTML = '<div class="rm-md">'+h+'</div>';
@@ -513,12 +594,15 @@ function renderMd(md) {
 
 function hlCode() {
   document.querySelectorAll('#rmBody pre code').forEach(el => {
-    let c = el.innerHTML;
-    c = c.replace(/(&#x27;[^<]*?&#x27;|&quot;[^<]*?&quot;)/g,'<span class="hl-str">$1</span>');
-    c = c.replace(/\/\/[^\n]*/g,'<span class="hl-cmt">$&</span>');
-    c = c.replace(/\b(const|let|var|new|return|if|else|for|of|in|function|async|await|class|this|true|false|null|undefined|import|export|from|default)\b/g,'<span class="hl-kw">$1</span>');
-    c = c.replace(/\b(\d+\.?\d*)\b/g,'<span class="hl-num">$1</span>');
-    el.innerHTML = c;
+    var lines = el.textContent.split('\n');
+    var out = lines.map(function(line) {
+      var s = line.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      s = s.replace(/(\/\/[^\n]*)$/,'<span class="hl-cmt">$1</span>');
+      s = s.replace(/\b(const|let|var|new|return|if|else|for|of|in|function|async|await|class|this|true|false|null|undefined|import|export|from|default)\b/g,'<span class="hl-kw">$1</span>');
+      s = s.replace(/\b(\d+\.?\d*)\b/g,'<span class="hl-num">$1</span>');
+      return s;
+    });
+    el.innerHTML = out.join('\n');
   });
 }
 
@@ -537,13 +621,14 @@ function showWelcome() {
     <div class="welcome__stats">
       <div class="welcome__stat"><div class="welcome__stat-val">60+</div><div class="welcome__stat-lbl">Componentes</div></div>
       <div class="welcome__stat"><div class="welcome__stat-val">278</div><div class="welcome__stat-lbl">Íconos</div></div>
-      <div class="welcome__stat"><div class="welcome__stat-val">2×4</div><div class="welcome__stat-lbl">Temas</div></div>
+      <div class="welcome__stat"><div class="welcome__stat-val">3×4</div><div class="welcome__stat-lbl">Modes × accents</div></div>
     </div>
     <div class="welcome__chips">
       <div class="welcome__chip" onclick="loadById('forms')"><i class="mts-icon mts-icon-form"></i>Formularios</div>
       <div class="welcome__chip" onclick="loadById('navigation')"><i class="mts-icon mts-icon-compass"></i>Navegación</div>
       <div class="welcome__chip" onclick="loadById('overlays')"><i class="mts-icon mts-icon-layers"></i>Overlays</div>
       <div class="welcome__chip" onclick="loadById('display')"><i class="mts-icon mts-icon-grid"></i>Display</div>
+      <div class="welcome__chip" onclick="loadById('layout')"><i class="mts-icon mts-icon-layout"></i>Layout</div>
       <div class="welcome__chip" onclick="loadById('data')"><i class="mts-icon mts-icon-database"></i>Data</div>
       <div class="welcome__chip" onclick="loadById('icons')"><i class="mts-icon mts-icon-star"></i>Íconos</div>
     </div>
@@ -554,6 +639,7 @@ function showWelcome() {
   if (window.MTS && MTS.Icon) MTS.Icon.initAll();
 }
 
+initThemePicker();
 buildSidebar();
 showWelcome();
 </script>

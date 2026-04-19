@@ -3,24 +3,25 @@
 <head>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
-      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
-      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
-      try{
-        var p=window.parent;
-        if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
-          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
-          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
-      }catch(e){}
+      } catch (e) {}
     })();
   </script>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.TabBar — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
@@ -30,12 +31,13 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-tabbar.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-tabbar.js"></script>
-  <style>
-    .tabbar-wrap { border: 1px solid var(--mts-border-color); border-radius: var(--mts-radius-lg); overflow: hidden; max-width: 400px; }
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -51,156 +53,174 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.TabBar</h1>
-    <p>Mobile-style bottom navigation — default, pill and floating variants.</p>
+    <p>Barra de navegación tipo app móvil con variantes, badges y API básica.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-tabbar.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-tabbar.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Default -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Default</div>
-    <div class="tabbar-wrap"><div id="tb-default"></div></div>
-    <div class="result-box" id="tb-result">— cambia de tab —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tb1','js-tb1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tb1','html-tb1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tb1">&lt;div id="app-tabbar" data-active="home"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.TabBar('#app-tabbar', {
-    tabs: [
-      { id: 'home',    label: 'Home',     icon: ICON_HOME    },
-      { id: 'search',  label: 'Search',   icon: ICON_SEARCH  },
-      { id: 'inbox',   label: 'Inbox',    icon: ICON_INBOX, badge: 3 },
-      { id: 'profile', label: 'Profile',  icon: ICON_USER    },
-    ],
-    // Fires when active tab changes / Se dispara al cambiar el tab activo
-    onChange: (e) =&gt; console.log(e.detail.id),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tb1">new MTS.TabBar('#app-tabbar', {
-  variant:    'default',
-  active:     'home',
-  showLabels: true,
-  tabs: [
-    { id: 'home',    label: 'Home',    icon: ICON_HOME   },
-    { id: 'search',  label: 'Search',  icon: ICON_SEARCH },
-    { id: 'inbox',   label: 'Inbox',   icon: ICON_INBOX, badge: 3 },
-    { id: 'profile', label: 'Profile', icon: ICON_USER   },
-  ],
-  // Fires when active tab changes / Se dispara al cambiar el tab activo
-  onChange: (e) =&gt; {
-    console.log(e.detail.id);  // → 'search'
-    console.log(e.detail.tab); // → { id, label, icon, badge }
-  },
-});</div>
-  </div>
-
-  <!-- 2. Pill + Floating -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Pill + Floating</div>
-    <div class="demo-stack" style="gap:16px">
-      <div>
-        <div class="demo-label" style="margin-bottom:6px">variant: pill</div>
-        <div class="tabbar-wrap"><div id="tb-pill"></div></div>
-      </div>
-      <div>
-        <div class="demo-label" style="margin-bottom:6px">variant: floating</div>
-        <div class="tabbar-wrap"><div id="tb-floating"></div></div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tb2','js-tb2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tb2','html-tb2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tb2">&lt;div id="tb-pill"     data-variant="pill"&gt;&lt;/div&gt;
-&lt;div id="tb-floating" data-variant="floating"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.TabBar('#tb-pill',     { variant: 'pill',     tabs: [...] });
-  new MTS.TabBar('#tb-floating', { variant: 'floating', tabs: [...] });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tb2">// Pill — active tab has pill background / Tab activo con fondo pill
-new MTS.TabBar('#tb-pill', {
-  variant: 'pill',
-  tabs:    TABS,
-});
-
-// Floating — elevated bar style / Estilo barra flotante elevada
-new MTS.TabBar('#tb-floating', {
-  variant: 'floating',
-  tabs:    TABS,
-});</div>
-  </div>
-
-  <!-- 3. Sin labels + setBadge -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Sin labels + setBadge() / No labels + API</div>
-    <div class="tabbar-wrap"><div id="tb-api"></div></div>
-    <div class="demo-row" style="margin-top:8px;flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="tbApi.setBadge('inbox', 9)">setBadge('inbox', 9)</button>
-      <button class="demo-btn-sm" onclick="tbApi.setBadge('inbox', null)">setBadge('inbox', null)</button>
-      <button class="demo-btn-sm" onclick="tbApi.setActive('profile')">setActive('profile')</button>
-    </div>
-    <div class="result-box" id="tb-api-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-tb3','js-tb3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-tb3','html-tb3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-tb3">&lt;!-- showLabels: false — icon only / solo ícono --&gt;
-&lt;div id="my-tabbar"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const tb = new MTS.TabBar('#my-tabbar', {
-    showLabels: false,
-    tabs: [...],
-  });
-  tb.setBadge('inbox', 5)    // set badge / establecer badge
-  tb.setBadge('inbox', null) // clear / limpiar
-  tb.setActive('profile')    // programmatic activation / activación programática
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-tb3">const tb = new MTS.TabBar('#my-tabbar', {
-  // Hide labels — icon only / Ocultar labels — solo ícono
-  showLabels: false,
-  variant:    'pill',
-  tabs: TABS,
-  onChange: (e) =&gt; console.log(e.detail.id),
-});
-
-// Update badge dynamically / Actualizar badge dinámicamente
-tb.setBadge('inbox', 5)    // show badge 5
-tb.setBadge('inbox', '!')  // show badge !
-tb.setBadge('inbox', null) // clear badge / limpiar badge
-
-// Activate tab programmatically / Activar tab programáticamente
-tb.setActive('profile')</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Base</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Variantes</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — API</div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
-var IH = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
-var IS = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
-var IM = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
-var IU = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
-var TABS = [
-  { id:'home',    label:'Home',    icon:IH },
-  { id:'search',  label:'Search',  icon:IS },
-  { id:'inbox',   label:'Inbox',   icon:IM, badge:3 },
-  { id:'profile', label:'Profile', icon:IU },
-];
 
-new MTS.TabBar('#tb-default', {
-  variant:'default', tabs: TABS,
-  onChange: function(e){ document.getElementById('tb-result').textContent = 'onChange → id: ' + e.detail.id; },
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+  if (typeof initFn === 'function') initFn();
+}
+
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+var preview_s1 =
+  '<div class="demo-stack">' +
+    '<div id="tb-base"></div>' +
+    '<div class="result-box" id="tb-result">— cambia de tab —</div>' +
+  '</div>';
+
+var js_s1 =
+  "new MTS.TabBar('#tb-base', {\n" +
+  "  active: 'home',\n" +
+  "  tabs: [\n" +
+  "    { id: 'home', label: 'Home', icon: MTS.Icon.get('home') },\n" +
+  "    { id: 'search', label: 'Search', icon: MTS.Icon.get('search') },\n" +
+  "    { id: 'inbox', label: 'Inbox', icon: MTS.Icon.get('inbox'), badge: 3 },\n" +
+  "    { id: 'profile', label: 'Profile', icon: MTS.Icon.get('contact') }\n" +
+  "  ],\n" +
+  "  onChange: function(e) { setResult('tb-result', 'active → ' + e.detail.id); }\n" +
+  "});";
+
+var preview_s2 =
+  '<div class="demo-stack">' +
+    '<div class="demo-col"><div class="demo-label">Pill</div><div id="tb-pill"></div></div>' +
+    '<div class="demo-col"><div class="demo-label">Floating</div><div id="tb-floating"></div></div>' +
+  '</div>';
+
+var js_s2 =
+  "var tabs = [\n" +
+  "  { id: 'home', label: 'Home', icon: MTS.Icon.get('home') },\n" +
+  "  { id: 'activity', label: 'Activity', icon: MTS.Icon.get('activity') },\n" +
+  "  { id: 'messages', label: 'Messages', icon: MTS.Icon.get('message-circle'), badge: 2 },\n" +
+  "  { id: 'settings', label: 'Settings', icon: MTS.Icon.get('cog') }\n" +
+  "];\n" +
+  "new MTS.TabBar('#tb-pill', { variant: 'pill', tabs: tabs });\n" +
+  "new MTS.TabBar('#tb-floating', { variant: 'floating', tabs: tabs });";
+
+var preview_s3 =
+  '<div class="demo-stack">' +
+    '<div id="tb-api"></div>' +
+    '<div class="demo-row">' +
+      '<button class="demo-btn-sm" onclick="tbApi.setActive(\'search\')">setActive(\'search\')</button>' +
+      '<button class="demo-btn-sm" onclick="tbApi.setBadge(\'inbox\', 9)">setBadge(\'inbox\', 9)</button>' +
+    '</div>' +
+    '<div class="result-box" id="tb-api-result">— usa la API —</div>' +
+  '</div>';
+
+var js_s3 =
+  "var tbApi = new MTS.TabBar('#tb-api', {\n" +
+  "  active: 'home',\n" +
+  "  tabs: [\n" +
+  "    { id: 'home', label: 'Home', icon: MTS.Icon.get('home') },\n" +
+  "    { id: 'search', label: 'Search', icon: MTS.Icon.get('search') },\n" +
+  "    { id: 'inbox', label: 'Inbox', icon: MTS.Icon.get('inbox'), badge: 1 }\n" +
+  "  ],\n" +
+  "  onChange: function(e) { setResult('tb-api-result', 'active → ' + e.detail.id); }\n" +
+  "});";
+
+var tbApi;
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.TabBar('#tb-base', {
+    active: 'home',
+    tabs: [
+      { id: 'home', label: 'Home', icon: MTS.Icon.get('home') },
+      { id: 'search', label: 'Search', icon: MTS.Icon.get('search') },
+      { id: 'inbox', label: 'Inbox', icon: MTS.Icon.get('inbox'), badge: 3 },
+      { id: 'profile', label: 'Profile', icon: MTS.Icon.get('contact') }
+    ],
+    onChange: function(e) { setResult('tb-result', 'active → ' + e.detail.id); }
+  });
 });
-new MTS.TabBar('#tb-pill',     { variant:'pill',     tabs: TABS });
-new MTS.TabBar('#tb-floating', { variant:'floating', tabs: TABS });
-var tbApi = new MTS.TabBar('#tb-api', {
-  variant:'pill', showLabels:false, tabs: TABS,
-  onChange: function(e){ document.getElementById('tb-api-result').textContent = 'onChange → id: ' + e.detail.id; },
+
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  var tabs = [
+    { id: 'home', label: 'Home', icon: MTS.Icon.get('home') },
+    { id: 'activity', label: 'Activity', icon: MTS.Icon.get('activity') },
+    { id: 'messages', label: 'Messages', icon: MTS.Icon.get('message-circle'), badge: 2 },
+    { id: 'settings', label: 'Settings', icon: MTS.Icon.get('cog') }
+  ];
+  new MTS.TabBar('#tb-pill', { variant: 'pill', tabs: tabs });
+  new MTS.TabBar('#tb-floating', { variant: 'floating', tabs: tabs });
 });
+
+makeSection('tabs-s3', preview_s3, js_s3, function() {
+  tbApi = new MTS.TabBar('#tb-api', {
+    active: 'home',
+    tabs: [
+      { id: 'home', label: 'Home', icon: MTS.Icon.get('home') },
+      { id: 'search', label: 'Search', icon: MTS.Icon.get('search') },
+      { id: 'inbox', label: 'Inbox', icon: MTS.Icon.get('inbox'), badge: 1 }
+    ],
+    onChange: function(e) { setResult('tb-api-result', 'active → ' + e.detail.id); }
+  });
+});
+
 </script>
 </body>
 </html>

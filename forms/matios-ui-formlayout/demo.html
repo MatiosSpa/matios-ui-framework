@@ -23,6 +23,7 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.FormLayout — Demo</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
   <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
   <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
@@ -30,10 +31,12 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="../matios-ui-input/matios-ui-input.css">
   <link rel="stylesheet" href="../matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-formlayout.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
 </head>
 <body>
 <div class="demo-theme">
@@ -51,313 +54,86 @@
     <h1><span>MTS</span>.FormLayout</h1>
     <p>Form layout system — pure CSS. Stack, grid, horizontal, inline, sections and card.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-formlayout.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-formlayout.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Stack (default) -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Stack (default)</div>
-    <form class="mts-form" style="max-width:480px" onsubmit="return false">
-      <div class="mts-form-group">
-        <label class="mts-form-label mts-form-label--required" for="s-name">Full name</label>
-        <input class="mts-input" id="s-name" placeholder="John Doe">
-      </div>
-      <div class="mts-form-group">
-        <label class="mts-form-label" for="s-email">Email</label>
-        <input class="mts-input" id="s-email" type="email" placeholder="john@company.com">
-        <span class="mts-form-hint">We'll send confirmations here.</span>
-      </div>
-      <div class="mts-form-footer mts-form-footer--end">
-        <button class="mts-btn mts-btn--secondary" type="button">Cancel</button>
-        <button class="mts-btn mts-btn--primary" type="button">Save</button>
-      </div>
-    </form>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-fl1','css-fl1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'css-fl1','html-fl1')">CSS classes</button>
-    </div>
-    <div class="code-panel active" id="html-fl1">&lt;form class="mts-form"&gt;
-  &lt;div class="mts-form-group"&gt;
-    &lt;label class="mts-form-label mts-form-label--required" for="name"&gt;Full name&lt;/label&gt;
-    &lt;input class="mts-input" id="name" placeholder="John Doe"&gt;
-  &lt;/div&gt;
-  &lt;div class="mts-form-group"&gt;
-    &lt;label class="mts-form-label" for="email"&gt;Email&lt;/label&gt;
-    &lt;input class="mts-input" id="email" type="email"&gt;
-    &lt;span class="mts-form-hint"&gt;We'll send confirmations here.&lt;/span&gt;
-  &lt;/div&gt;
-  &lt;div class="mts-form-footer mts-form-footer--end"&gt;
-    &lt;button class="mts-btn mts-btn--secondary"&gt;Cancel&lt;/button&gt;
-    &lt;button class="mts-btn mts-btn--primary"&gt;Save&lt;/button&gt;
-  &lt;/div&gt;
-&lt;/form&gt;</div>
-    <div class="code-panel" id="css-fl1">.mts-form              → stack layout (default)
-.mts-form-group        → field wrapper
-.mts-form-label        → label
-.mts-form-label--required → adds red asterisk *
-.mts-form-hint         → helper text below field
-.mts-form-error        → error text below field
-.mts-form-footer       → button area
-.mts-form-footer--end  → right-aligned buttons</div>
-  </div>
-
-  <!-- 2. Grid 2 columnas -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Grid — 2 columnas / 2 columns</div>
-    <form class="mts-form mts-form--grid" style="--mts-form-cols:2;max-width:600px" onsubmit="return false">
-      <div class="mts-form-group">
-        <label class="mts-form-label mts-form-label--required">First name</label>
-        <input class="mts-input" placeholder="John">
-      </div>
-      <div class="mts-form-group">
-        <label class="mts-form-label mts-form-label--required">Last name</label>
-        <input class="mts-input" placeholder="Doe">
-      </div>
-      <div class="mts-form-group mts-form-group--full">
-        <label class="mts-form-label">Address</label>
-        <input class="mts-input" placeholder="Main St. 123">
-      </div>
-      <div class="mts-form-group">
-        <label class="mts-form-label">City</label>
-        <input class="mts-input" placeholder="Santiago">
-      </div>
-      <div class="mts-form-group">
-        <label class="mts-form-label">Zip code</label>
-        <input class="mts-input" placeholder="12345">
-      </div>
-      <div class="mts-form-footer mts-form-footer--end mts-form-group--full">
-        <button class="mts-btn mts-btn--primary" type="button">Save</button>
-      </div>
-    </form>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-fl2','css-fl2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'css-fl2','html-fl2')">CSS classes</button>
-    </div>
-    <div class="code-panel active" id="html-fl2">&lt;!-- --mts-form-cols controls column count / controla la cantidad de columnas --&gt;
-&lt;form class="mts-form mts-form--grid" style="--mts-form-cols:2"&gt;
-  &lt;div class="mts-form-group"&gt;...&lt;/div&gt;
-  &lt;div class="mts-form-group"&gt;...&lt;/div&gt;
-  &lt;!-- Full-width field / Campo de ancho completo --&gt;
-  &lt;div class="mts-form-group mts-form-group--full"&gt;...&lt;/div&gt;
-&lt;/form&gt;
-
-&lt;!-- 3 columns / 3 columnas --&gt;
-&lt;form class="mts-form mts-form--grid" style="--mts-form-cols:3"&gt;...&lt;/form&gt;</div>
-    <div class="code-panel" id="css-fl2">.mts-form--grid           → grid layout
---mts-form-cols: 2        → 2 columns
---mts-form-cols: 3        → 3 columns
-.mts-form-group--full     → spans all columns
-.mts-form-group--span-2   → spans 2 columns</div>
-  </div>
-
-  <!-- 3. Grid 3 columnas -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — Grid — 3 columnas / 3 columns</div>
-    <form class="mts-form mts-form--grid" style="--mts-form-cols:3;max-width:700px" onsubmit="return false">
-      <div class="mts-form-group">
-        <label class="mts-form-label">Product</label>
-        <input class="mts-input" placeholder="Product name">
-      </div>
-      <div class="mts-form-group">
-        <label class="mts-form-label">SKU</label>
-        <input class="mts-input" placeholder="ABC-001">
-      </div>
-      <div class="mts-form-group">
-        <label class="mts-form-label">Price</label>
-        <input class="mts-input" placeholder="$0.00">
-      </div>
-      <div class="mts-form-group mts-form-group--full">
-        <label class="mts-form-label">Description</label>
-        <textarea class="mts-input" rows="2" placeholder="Product description..."></textarea>
-      </div>
-      <div class="mts-form-footer mts-form-footer--end mts-form-group--full">
-        <button class="mts-btn mts-btn--secondary" type="button">Cancel</button>
-        <button class="mts-btn mts-btn--primary" type="button">Add product</button>
-      </div>
-    </form>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-fl3','css-fl3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'css-fl3','html-fl3')">CSS classes</button>
-    </div>
-    <div class="code-panel active" id="html-fl3">&lt;form class="mts-form mts-form--grid" style="--mts-form-cols:3"&gt;
-  &lt;div class="mts-form-group"&gt;...&lt;/div&gt;
-  &lt;div class="mts-form-group"&gt;...&lt;/div&gt;
-  &lt;div class="mts-form-group"&gt;...&lt;/div&gt;
-  &lt;!-- Span all 3 columns / Span las 3 columnas --&gt;
-  &lt;div class="mts-form-group mts-form-group--full"&gt;...&lt;/div&gt;
-&lt;/form&gt;</div>
-    <div class="code-panel" id="css-fl3">style="--mts-form-cols:3"   → 3 columns
-.mts-form-group--full       → spans all 3
-.mts-form-group--span-2     → spans 2 of 3</div>
-  </div>
-
-  <!-- 4. Horizontal -->
-  <div class="demo-section">
-    <div class="demo-section-title">4 — Horizontal</div>
-    <form class="mts-form mts-form--horizontal" style="max-width:520px" onsubmit="return false">
-      <div class="mts-form-group">
-        <label class="mts-form-label mts-form-label--required">Email</label>
-        <input class="mts-input" type="email" placeholder="user@example.com">
-      </div>
-      <div class="mts-form-group">
-        <label class="mts-form-label">Password</label>
-        <input class="mts-input" type="password" placeholder="Min 8 characters">
-        <span class="mts-form-hint">Minimum 8 characters.</span>
-      </div>
-      <div class="mts-form-group">
-        <label class="mts-form-label">Role</label>
-        <input class="mts-input" placeholder="Admin">
-      </div>
-      <div class="mts-form-footer mts-form-footer--end">
-        <button class="mts-btn mts-btn--primary" type="button">Save</button>
-      </div>
-    </form>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-fl4','css-fl4')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'css-fl4','html-fl4')">CSS classes</button>
-    </div>
-    <div class="code-panel active" id="html-fl4">&lt;form class="mts-form mts-form--horizontal"&gt;
-  &lt;div class="mts-form-group"&gt;
-    &lt;label class="mts-form-label"&gt;Email&lt;/label&gt;
-    &lt;input class="mts-input" type="email"&gt;
-  &lt;/div&gt;
-&lt;/form&gt;
-
-&lt;!-- Custom label width / Ancho de label personalizado --&gt;
-&lt;form class="mts-form mts-form--horizontal" style="--mts-form-label-width:200px"&gt;
-  ...
-&lt;/form&gt;</div>
-    <div class="code-panel" id="css-fl4">.mts-form--horizontal          → label left, field right
---mts-form-label-width: 160px  → default label width
---mts-form-label-width: 200px  → wider label</div>
-  </div>
-
-  <!-- 5. Inline -->
-  <div class="demo-section">
-    <div class="demo-section-title">5 — Inline</div>
-    <form class="mts-form mts-form--inline" onsubmit="return false">
-      <div class="mts-form-group">
-        <label class="mts-form-label">Search</label>
-        <input class="mts-input" placeholder="Name or email...">
-      </div>
-      <div class="mts-form-group">
-        <label class="mts-form-label">Status</label>
-        <input class="mts-input" placeholder="All">
-      </div>
-      <button class="mts-btn mts-btn--primary" type="button">Search</button>
-      <button class="mts-btn mts-btn--ghost" type="button">Clear</button>
-    </form>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-fl5','css-fl5')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'css-fl5','html-fl5')">CSS classes</button>
-    </div>
-    <div class="code-panel active" id="html-fl5">&lt;form class="mts-form mts-form--inline"&gt;
-  &lt;div class="mts-form-group"&gt;
-    &lt;label class="mts-form-label"&gt;Search&lt;/label&gt;
-    &lt;input class="mts-input" placeholder="Name..."&gt;
-  &lt;/div&gt;
-  &lt;button class="mts-btn mts-btn--primary"&gt;Search&lt;/button&gt;
-&lt;/form&gt;</div>
-    <div class="code-panel" id="css-fl5">.mts-form--inline   → all fields in one row
-                       collapses to stack on mobile</div>
-  </div>
-
-  <!-- 6. Secciones -->
-  <div class="demo-section">
-    <div class="demo-section-title">6 — Secciones / Sections</div>
-    <form class="mts-form" style="max-width:480px" onsubmit="return false">
-      <div class="mts-form-section">
-        <h3 class="mts-form-section__title">Personal data</h3>
-        <p class="mts-form-section__desc">Basic user information.</p>
-        <div class="mts-form-group">
-          <label class="mts-form-label mts-form-label--required">Full name</label>
-          <input class="mts-input" placeholder="John Doe">
-        </div>
-        <div class="mts-form-group">
-          <label class="mts-form-label mts-form-label--required">Email</label>
-          <input class="mts-input" type="email" placeholder="john@company.com">
-        </div>
-      </div>
-      <div class="mts-form-section">
-        <h3 class="mts-form-section__title">Address</h3>
-        <div class="mts-form-group">
-          <label class="mts-form-label">Street</label>
-          <input class="mts-input" placeholder="Main St. 123">
-        </div>
-        <div class="mts-form-group">
-          <label class="mts-form-label">City</label>
-          <input class="mts-input" placeholder="Santiago">
-        </div>
-      </div>
-      <div class="mts-form-footer mts-form-footer--end">
-        <button class="mts-btn mts-btn--primary" type="button">Save</button>
-      </div>
-    </form>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-fl6','css-fl6')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'css-fl6','html-fl6')">CSS classes</button>
-    </div>
-    <div class="code-panel active" id="html-fl6">&lt;form class="mts-form"&gt;
-  &lt;div class="mts-form-section"&gt;
-    &lt;h3 class="mts-form-section__title"&gt;Personal data&lt;/h3&gt;
-    &lt;p class="mts-form-section__desc"&gt;Basic user information.&lt;/p&gt;
-    &lt;div class="mts-form-group"&gt;...&lt;/div&gt;
-  &lt;/div&gt;
-  &lt;div class="mts-form-section"&gt;
-    &lt;h3 class="mts-form-section__title"&gt;Address&lt;/h3&gt;
-    &lt;div class="mts-form-group"&gt;...&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/form&gt;</div>
-    <div class="code-panel" id="css-fl6">.mts-form-section           → section with visual separator
-.mts-form-section__title    → section title
-.mts-form-section__desc     → section description
-.mts-form-divider           → standalone horizontal divider</div>
-  </div>
-
-  <!-- 7. Form Card -->
-  <div class="demo-section">
-    <div class="demo-section-title">7 — Form Card</div>
-    <div class="mts-form-card" style="max-width:480px">
-      <div class="mts-form-card__header">
-        <h2 class="mts-form-card__title">New user</h2>
-        <p class="mts-form-card__subtitle">Fill in the details to create the account.</p>
-      </div>
-      <form class="mts-form" onsubmit="return false">
-        <div class="mts-form-group">
-          <label class="mts-form-label mts-form-label--required">Username</label>
-          <input class="mts-input" placeholder="johndoe">
-        </div>
-        <div class="mts-form-group">
-          <label class="mts-form-label mts-form-label--required">Email</label>
-          <input class="mts-input" type="email" placeholder="john@company.com">
-        </div>
-        <div class="mts-form-footer mts-form-footer--end">
-          <button class="mts-btn mts-btn--secondary" type="button">Cancel</button>
-          <button class="mts-btn mts-btn--primary" type="button">Create account</button>
-        </div>
-      </form>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-fl7','css-fl7')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'css-fl7','html-fl7')">CSS classes</button>
-    </div>
-    <div class="code-panel active" id="html-fl7">&lt;div class="mts-form-card"&gt;
-  &lt;div class="mts-form-card__header"&gt;
-    &lt;h2 class="mts-form-card__title"&gt;New user&lt;/h2&gt;
-    &lt;p class="mts-form-card__subtitle"&gt;Fill in the details.&lt;/p&gt;
-  &lt;/div&gt;
-  &lt;form class="mts-form"&gt;
-    ...
-  &lt;/form&gt;
-&lt;/div&gt;</div>
-    <div class="code-panel" id="css-fl7">.mts-form-card             → card wrapper
-.mts-form-card__header     → header area
-.mts-form-card__title      → card title
-.mts-form-card__subtitle   → card subtitle</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Stack (default)</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Grid — 2 columnas / 2 columns</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Grid — 3 columnas / 3 columns</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Horizontal</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Inline</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Secciones / Sections</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title">7 — Form Card</div><div id="tabs-s7"></div></div>
 </div>
+
+<script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(sourceHtml) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(sourceHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, htmlCode, jsCode) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(htmlCode || previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+}
+
+makeSection("tabs-s1", "<form class=\"mts-form\" onsubmit=\"return false\" style=\"max-width:480px\">\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label mts-form-label--required\" for=\"s-name\">Full name</label>\n<input class=\"mts-input\" id=\"s-name\" placeholder=\"John Doe\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\" for=\"s-email\">Email</label>\n<input class=\"mts-input\" id=\"s-email\" placeholder=\"john@company.com\" type=\"email\"/>\n<span class=\"mts-form-hint\">We'll send confirmations here.</span>\n</div>\n<div class=\"mts-form-footer mts-form-footer--end\">\n<button class=\"mts-btn mts-btn--secondary\" type=\"button\">Cancel</button>\n<button class=\"mts-btn mts-btn--primary\" type=\"button\">Save</button>\n</div>\n</form>", "<form class=\"mts-form\">\n  <div class=\"mts-form-group\">\n    <label class=\"mts-form-label mts-form-label--required\" for=\"name\">Full name</label>\n    <input class=\"mts-input\" id=\"name\" placeholder=\"John Doe\">\n  </div>\n  <div class=\"mts-form-group\">\n    <label class=\"mts-form-label\" for=\"email\">Email</label>\n    <input class=\"mts-input\" id=\"email\" type=\"email\">\n    <span class=\"mts-form-hint\">We'll send confirmations here.</span>\n  </div>\n  <div class=\"mts-form-footer mts-form-footer--end\">\n    <button class=\"mts-btn mts-btn--secondary\">Cancel</button>\n    <button class=\"mts-btn mts-btn--primary\">Save</button>\n  </div>\n</form>", "// Pure CSS component \u2014 no JavaScript enhancement required.\n// This demo shows layout patterns using HTML classes only.\n// Use the HTML tab as the source of truth for implementation.");
+makeSection("tabs-s2", "<form class=\"mts-form mts-form--grid\" onsubmit=\"return false\" style=\"--mts-form-cols:2;max-width:600px\">\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label mts-form-label--required\">First name</label>\n<input class=\"mts-input\" placeholder=\"John\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label mts-form-label--required\">Last name</label>\n<input class=\"mts-input\" placeholder=\"Doe\"/>\n</div>\n<div class=\"mts-form-group mts-form-group--full\">\n<label class=\"mts-form-label\">Address</label>\n<input class=\"mts-input\" placeholder=\"Main St. 123\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">City</label>\n<input class=\"mts-input\" placeholder=\"Santiago\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">Zip code</label>\n<input class=\"mts-input\" placeholder=\"12345\"/>\n</div>\n<div class=\"mts-form-footer mts-form-footer--end mts-form-group--full\">\n<button class=\"mts-btn mts-btn--primary\" type=\"button\">Save</button>\n</div>\n</form>", "<\!-- --mts-form-cols controls column count / controla la cantidad de columnas -->\n<form class=\"mts-form mts-form--grid\" style=\"--mts-form-cols:2\">\n  <div class=\"mts-form-group\">...</div>\n  <div class=\"mts-form-group\">...</div>\n  <\!-- Full-width field / Campo de ancho completo -->\n  <div class=\"mts-form-group mts-form-group--full\">...</div>\n</form>\n\n<\!-- 3 columns / 3 columnas -->\n<form class=\"mts-form mts-form--grid\" style=\"--mts-form-cols:3\">...</form>", "// Pure CSS component \u2014 no JavaScript enhancement required.\n// This demo shows layout patterns using HTML classes only.\n// Use the HTML tab as the source of truth for implementation.");
+makeSection("tabs-s3", "<form class=\"mts-form mts-form--grid\" onsubmit=\"return false\" style=\"--mts-form-cols:3;max-width:700px\">\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">Product</label>\n<input class=\"mts-input\" placeholder=\"Product name\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">SKU</label>\n<input class=\"mts-input\" placeholder=\"ABC-001\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">Price</label>\n<input class=\"mts-input\" placeholder=\"$0.00\"/>\n</div>\n<div class=\"mts-form-group mts-form-group--full\">\n<label class=\"mts-form-label\">Description</label>\n<textarea class=\"mts-input\" placeholder=\"Product description...\" rows=\"2\"></textarea>\n</div>\n<div class=\"mts-form-footer mts-form-footer--end mts-form-group--full\">\n<button class=\"mts-btn mts-btn--secondary\" type=\"button\">Cancel</button>\n<button class=\"mts-btn mts-btn--primary\" type=\"button\">Add product</button>\n</div>\n</form>", "<form class=\"mts-form mts-form--grid\" style=\"--mts-form-cols:3\">\n  <div class=\"mts-form-group\">...</div>\n  <div class=\"mts-form-group\">...</div>\n  <div class=\"mts-form-group\">...</div>\n  <\!-- Span all 3 columns / Span las 3 columnas -->\n  <div class=\"mts-form-group mts-form-group--full\">...</div>\n</form>", "// Pure CSS component \u2014 no JavaScript enhancement required.\n// This demo shows layout patterns using HTML classes only.\n// Use the HTML tab as the source of truth for implementation.");
+makeSection("tabs-s4", "<form class=\"mts-form mts-form--horizontal\" onsubmit=\"return false\" style=\"max-width:520px\">\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label mts-form-label--required\">Email</label>\n<input class=\"mts-input\" placeholder=\"user@example.com\" type=\"email\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">Password</label>\n<input class=\"mts-input\" placeholder=\"Min 8 characters\" type=\"password\"/>\n<span class=\"mts-form-hint\">Minimum 8 characters.</span>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">Role</label>\n<input class=\"mts-input\" placeholder=\"Admin\"/>\n</div>\n<div class=\"mts-form-footer mts-form-footer--end\">\n<button class=\"mts-btn mts-btn--primary\" type=\"button\">Save</button>\n</div>\n</form>", "<form class=\"mts-form mts-form--horizontal\">\n  <div class=\"mts-form-group\">\n    <label class=\"mts-form-label\">Email</label>\n    <input class=\"mts-input\" type=\"email\">\n  </div>\n</form>\n\n<\!-- Custom label width / Ancho de label personalizado -->\n<form class=\"mts-form mts-form--horizontal\" style=\"--mts-form-label-width:200px\">\n  ...\n</form>", "// Pure CSS component \u2014 no JavaScript enhancement required.\n// This demo shows layout patterns using HTML classes only.\n// Use the HTML tab as the source of truth for implementation.");
+makeSection("tabs-s5", "<form class=\"mts-form mts-form--inline\" onsubmit=\"return false\">\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">Search</label>\n<input class=\"mts-input\" placeholder=\"Name or email...\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">Status</label>\n<input class=\"mts-input\" placeholder=\"All\"/>\n</div>\n<button class=\"mts-btn mts-btn--primary\" type=\"button\">Search</button>\n<button class=\"mts-btn mts-btn--ghost\" type=\"button\">Clear</button>\n</form>", "<form class=\"mts-form mts-form--inline\">\n  <div class=\"mts-form-group\">\n    <label class=\"mts-form-label\">Search</label>\n    <input class=\"mts-input\" placeholder=\"Name...\">\n  </div>\n  <button class=\"mts-btn mts-btn--primary\">Search</button>\n</form>", "// Pure CSS component \u2014 no JavaScript enhancement required.\n// This demo shows layout patterns using HTML classes only.\n// Use the HTML tab as the source of truth for implementation.");
+makeSection("tabs-s6", "<form class=\"mts-form\" onsubmit=\"return false\" style=\"max-width:480px\">\n<div class=\"mts-form-section\">\n<h3 class=\"mts-form-section__title\">Personal data</h3>\n<p class=\"mts-form-section__desc\">Basic user information.</p>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label mts-form-label--required\">Full name</label>\n<input class=\"mts-input\" placeholder=\"John Doe\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label mts-form-label--required\">Email</label>\n<input class=\"mts-input\" placeholder=\"john@company.com\" type=\"email\"/>\n</div>\n</div>\n<div class=\"mts-form-section\">\n<h3 class=\"mts-form-section__title\">Address</h3>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">Street</label>\n<input class=\"mts-input\" placeholder=\"Main St. 123\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">City</label>\n<input class=\"mts-input\" placeholder=\"Santiago\"/>\n</div>\n</div>\n<div class=\"mts-form-footer mts-form-footer--end\">\n<button class=\"mts-btn mts-btn--primary\" type=\"button\">Save</button>\n</div>\n</form>", "<form class=\"mts-form\">\n  <div class=\"mts-form-section\">\n    <h3 class=\"mts-form-section__title\">Personal data</h3>\n    <p class=\"mts-form-section__desc\">Basic user information.</p>\n    <div class=\"mts-form-group\">...</div>\n  </div>\n  <div class=\"mts-form-section\">\n    <h3 class=\"mts-form-section__title\">Address</h3>\n    <div class=\"mts-form-group\">...</div>\n  </div>\n</form>", "// Pure CSS component \u2014 no JavaScript enhancement required.\n// This demo shows layout patterns using HTML classes only.\n// Use the HTML tab as the source of truth for implementation.");
+makeSection("tabs-s7", "<div class=\"mts-form-card\" style=\"max-width:480px\">\n<div class=\"mts-form-card__header\">\n<h2 class=\"mts-form-card__title\">New user</h2>\n<p class=\"mts-form-card__subtitle\">Fill in the details to create the account.</p>\n</div>\n<form class=\"mts-form\" onsubmit=\"return false\">\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label mts-form-label--required\">Username</label>\n<input class=\"mts-input\" placeholder=\"johndoe\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label mts-form-label--required\">Email</label>\n<input class=\"mts-input\" placeholder=\"john@company.com\" type=\"email\"/>\n</div>\n<div class=\"mts-form-footer mts-form-footer--end\">\n<button class=\"mts-btn mts-btn--secondary\" type=\"button\">Cancel</button>\n<button class=\"mts-btn mts-btn--primary\" type=\"button\">Create account</button>\n</div>\n</form>\n</div>", "<div class=\"mts-form-card\">\n  <div class=\"mts-form-card__header\">\n    <h2 class=\"mts-form-card__title\">New user</h2>\n    <p class=\"mts-form-card__subtitle\">Fill in the details.</p>\n  </div>\n  <form class=\"mts-form\">\n    ...\n  </form>\n</div>", "// Pure CSS component \u2014 no JavaScript enhancement required.\n// This demo shows layout patterns using HTML classes only.\n// Use the HTML tab as the source of truth for implementation.");
+
+
+</script>
 </body>
 </html>

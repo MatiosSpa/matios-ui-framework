@@ -30,8 +30,10 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-countdown.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-countdown.js"></script>
 </head>
 <body>
@@ -47,155 +49,93 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Countdown</h1>
-    <p>Animated countdown timer — blocks, compact, minimal · pause/resume · onTick/onComplete.</p>
+    <p>Animated countdown timer — blocks, compact, minimal, and imperative API.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-countdown.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-countdown.md')">Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Blocks -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Variant: blocks (default)</div>
-    <div id="cd-blocks"></div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cd1','js-cd1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cd1','html-cd1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cd1">&lt;div id="my-countdown"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Countdown('#my-countdown', {
-    target:  new Date('2025-12-31T23:59:59'),
-    variant: 'blocks',
-    // Fires every second / Se dispara cada segundo
-    onTick: (e) =&gt; {
-      console.log(e.detail.days, e.detail.hours, e.detail.mins, e.detail.secs);
-    },
-    // Fires when reaches zero / Se dispara al llegar a cero
-    onComplete: (e) =&gt; console.log('Done!'),
-  });
-&lt;/script&gt;    <div class="code-panel" id="js-cd1">new MTS.Countdown('#cd-blocks', {
-  // Target: Date, ISO string or timestamp / Fecha objetivo: Date, ISO string o timestamp
-  target:  new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-  variant: 'blocks',
-
-  // Fires every second / Se dispara cada segundo
-  onTick: (e) =&gt; {
-    // e.detail.days, e.detail.hours, e.detail.mins, e.detail.secs, e.detail.total
-  },
-  // Fires when reaches zero / Se dispara al llegar a cero
-  onComplete: (e) =&gt; console.log('Done!'),
-});</div>
-  </div>
-
-  <!-- 2. Compact y minimal -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Compact y minimal</div>
-    <div style="display:flex;flex-direction:column;gap:16px">
-      <div>
-        <div class="demo-label" style="margin-bottom:8px;font-size:11px;color:var(--mts-text-muted)">variant: compact</div>
-        <div id="cd-compact"></div>
-      </div>
-      <div>
-        <div class="demo-label" style="margin-bottom:8px;font-size:11px;color:var(--mts-text-muted)">variant: minimal</div>
-        <div id="cd-minimal"></div>
-      </div>
-    </div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cd2','js-cd2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cd2','html-cd2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cd2">&lt;div id="cd-compact"&gt;&lt;/div&gt;
-&lt;div id="cd-minimal"&gt;&lt;/div&gt;
-&lt;script&gt;
-  // Compact — inline with separator
-  new MTS.Countdown('#cd-compact', {
-    target:  new Date(Date.now() + 3600000),
-    variant: 'compact',
-    labels:  { days:'d', hours:'h', mins:'m', secs:'s' },
-  });
-
-  // Minimal — numbers only
-  new MTS.Countdown('#cd-minimal', {
-    target:    new Date(Date.now() + 3600000),
-    variant:   'minimal',
-    showDays:  false,
-    separator: ':',
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cd2">// Compact — inline style with separator
-new MTS.Countdown('#cd-compact', {
-  target:  new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-  variant: 'compact',
-  labels:  { days:'d', hours:'h', mins:'m', secs:'s' },
-});
-
-// Minimal — just numbers, no labels
-new MTS.Countdown('#cd-minimal', {
-  target:    new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-  variant:   'minimal',
-  showDays:  false,   // hide days / ocultar días
-  separator: ':',
-});</div>
-  </div>
-
-  <!-- 3. API pause/resume/setTarget -->
-  <div class="demo-section">
-    <div class="demo-section-title">3 — API — pause · resume · setTarget</div>
-    <div id="cd-api"></div>
-    <div class="demo-row" style="margin-top:12px;flex-wrap:wrap">
-      <button class="demo-btn-sm" onclick="cdApi.pause()">pause()</button>
-      <button class="demo-btn-sm" onclick="cdApi.resume()">resume()</button>
-      <button class="demo-btn-sm" onclick="cdApi.setTarget(new Date(Date.now()+30000))">setTarget(+30s)</button>
-      <button class="demo-btn-sm" onclick="cdApi.setTarget(new Date(Date.now()+3600000))">setTarget(+1h)</button>
-    </div>
-    <div class="result-box" id="cd-result">— usa los botones —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-cd3','js-cd3')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-cd3','html-cd3')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-cd3">&lt;div id="my-countdown"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const cd = new MTS.Countdown('#my-countdown', {
-    target:  new Date(Date.now() + 60000),
-    variant: 'blocks',
-    onTick:     (e) =&gt; updateUI(e.detail),
-    onComplete: (e) =&gt; alert('Time is up!'),
-  });
-
-  cd.pause()                              // pause / pausar
-  cd.resume()                             // resume / reanudar
-  cd.setTarget(new Date(Date.now() + 3600000)) // new target / nuevo objetivo
-  cd.destroy()                            // stop and clear / detener y limpiar
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-cd3">const cd = new MTS.Countdown('#my-countdown', {
-  target:  new Date(Date.now() + 60000),
-  variant: 'blocks',
-  // Fires every second / Se dispara cada segundo
-  onTick: (e) =&gt; {
-    console.log(`${e.detail.hours}:${e.detail.mins}:${e.detail.secs}`);
-  },
-  // Fires when reaches zero / Se dispara al llegar a cero
-  onComplete: (e) =&gt; console.log('Time is up!'),
-});
-
-cd.pause()                                         // pause timer / pausar
-cd.resume()                                        // resume / reanudar
-cd.setTarget(new Date(Date.now() + 3600000))       // new target / nuevo objetivo
-cd.setTarget('2026-12-31T23:59:59')               // ISO string also works
-cd.destroy()                                       // stop and clear DOM</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Variant: blocks (default)</div><div id="tabs-cd1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Compact y minimal</div><div id="tabs-cd2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — API — pause · resume · setTarget</div><div id="tabs-cd3"></div></div>
 </div>
 <script>
-var TARGET = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000 + 5 * 60 * 60 * 1000 + 30 * 60 * 1000);
-new MTS.Countdown('#cd-blocks', { target:TARGET, variant:'blocks' });
-new MTS.Countdown('#cd-compact', { target:TARGET, variant:'compact', labels:{ days:'d', hours:'h', mins:'m', secs:'s' } });
-new MTS.Countdown('#cd-minimal', { target:TARGET, variant:'minimal', showDays:false, separator:':' });
+function esc(str){return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function indentHtml(html){
+  var indent=0, step=2;
+  var voids=/^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var out='';
+  (html.match(/<[^>]+>|[^<]+/g)||[]).forEach(function(tok){
+    var t=tok.trim(); if(!t) return;
+    if(/^<\//.test(t)){ indent=Math.max(0, indent-step); out += ' '.repeat(indent) + t + '\n'; }
+    else if(/^<[^!]/.test(t)){ out += ' '.repeat(indent) + t + '\n'; var tag=(t.match(/^<([a-z][a-z0-9-]*)/i)||[])[1]||''; if(!voids.test(tag) && !/\/>$/.test(t)) indent += step; }
+    else { var text=t.replace(/\s+/g,' '); if(text) out += ' '.repeat(indent) + text + '\n'; }
+  });
+  return out.trimEnd();
+}
+function codeBlock(code){return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">'+esc(code)+'</pre>';}
+function makeSection(id, previewHtml, jsCode){
+  new MTS.Tabs('#'+id, {
+    variant:'card',
+    height:'350px',
+    lazy:false,
+    tabs:[
+      { id:id+'-preview', label:'Preview', content:previewHtml },
+      { id:id+'-html', label:'HTML', content:codeBlock(indentHtml(previewHtml)) },
+      { id:id+'-js', label:'JavaScript', content:codeBlock(jsCode) }
+    ]
+  });
+}
+
+makeSection('tabs-cd1',
+  '<div id="cd-blocks"></div>',
+`new MTS.Countdown('#cd-blocks', {
+  target: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+  variant: 'blocks',
+  onTick: (e) => {
+    console.log(e.detail.days, e.detail.hours, e.detail.mins, e.detail.secs);
+  },
+  onComplete: () => console.log('Done!')
+});`);
+new MTS.Countdown('#cd-blocks', { target:new Date(Date.now()+2*24*60*60*1000), variant:'blocks' });
+
+makeSection('tabs-cd2',
+  '<div><div id="cd-compact"></div><div style="height:16px"></div><div id="cd-minimal"></div></div>',
+`new MTS.Countdown('#cd-compact', {
+  target: new Date(Date.now() + 3600000),
+  variant: 'compact',
+  labels: { days:'d', hours:'h', mins:'m', secs:'s' }
+});
+
+new MTS.Countdown('#cd-minimal', {
+  target: new Date(Date.now() + 3600000),
+  variant: 'minimal',
+  showDays: false,
+  separator: ':'
+});`);
+new MTS.Countdown('#cd-compact', { target:new Date(Date.now()+2*24*60*60*1000), variant:'compact', labels:{days:'d',hours:'h',mins:'m',secs:'s'} });
+new MTS.Countdown('#cd-minimal', { target:new Date(Date.now()+2*24*60*60*1000), variant:'minimal', showDays:false, separator:':' });
+
+makeSection('tabs-cd3',
+  '<div><div id="cd-api"></div><div class="demo-row" style="margin-top:12px;flex-wrap:wrap"><button class="demo-btn-sm" onclick="cdApi.pause()">pause()</button><button class="demo-btn-sm" onclick="cdApi.resume()">resume()</button><button class="demo-btn-sm" onclick="cdApi.setTarget(new Date(Date.now()+30000))">setTarget(+30s)</button><button class="demo-btn-sm" onclick="cdApi.setTarget(new Date(Date.now()+3600000))">setTarget(+1h)</button></div><div class="result-box" id="cd-result">— usa los botones —</div></div>',
+`const cdApi = new MTS.Countdown('#cd-api', {
+  target: new Date(Date.now() + 60000),
+  variant: 'blocks',
+  onTick: (e) => {
+    console.log(e.detail.hours, e.detail.mins, e.detail.secs);
+  },
+  onComplete: () => console.log('Time is up!')
+});
+
+cdApi.pause();
+cdApi.resume();
+cdApi.setTarget(new Date(Date.now() + 3600000));`);
 var cdApi = new MTS.Countdown('#cd-api', {
-  target: new Date(Date.now() + 60000), variant:'blocks',
-  onTick:     function(e){ document.getElementById('cd-result').textContent = 'onTick → ' + e.detail.hours + 'h ' + e.detail.mins + 'm ' + e.detail.secs + 's'; },
-  onComplete: function(){ document.getElementById('cd-result').textContent = 'onComplete → ¡Tiempo agotado!'; },
+  target:new Date(Date.now()+60000),
+  variant:'blocks',
+  onTick:function(e){ document.getElementById('cd-result').textContent='onTick → '+e.detail.hours+'h '+e.detail.mins+'m '+e.detail.secs+'s'; },
+  onComplete:function(){ document.getElementById('cd-result').textContent='onComplete → ¡Tiempo agotado!'; }
 });
 </script>
 </body>

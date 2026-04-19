@@ -13,8 +13,9 @@ Detecta la sección visible durante el scroll y resalta el link correspondiente 
 ```js
 new MTS.ScrollSpy({
   sections: '#intro, #instalacion, #uso',
-  nav:       '#mi-nav',
-  offset:     80,
+  nav:             '#mi-nav',
+  scrollContainer: '#mi-panel-scroll',
+  offset:          80,
   onChange:  ({ id }) => console.log('sección activa:', id),
 })
 ```
@@ -24,6 +25,7 @@ new MTS.ScrollSpy({
 |--------|------|---------|-------------|
 | `sections` | `string\|Array` | — | Selector(es) CSS de las secciones |
 | `nav` | `string` | `null` | Selector del contenedor de navegación |
+| `scrollContainer` | `string\|Element` | `window` | Contenedor real del scroll cuando no es la ventana |
 | `linkAttr` | `string` | `'href'` | Atributo del link con el ID |
 | `offset` | `number` | `80` | Offset desde el top en px |
 | `activeClass` | `string` | `'active'` | Clase CSS para el link activo |

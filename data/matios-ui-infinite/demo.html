@@ -15,7 +15,7 @@
           var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
           if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
           if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
-          else   document.documentElement.removeAttribute('data-mts-accent');
+          else document.documentElement.removeAttribute('data-mts-accent');
         }
       }catch(e){}
     })();
@@ -30,25 +30,17 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../shared/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-infinite.css">
   <script src="../../shared/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-infinite.js"></script>
-  <style>
-    .inf-row {
-      display:flex; align-items:center; gap:12px; padding:10px 14px;
-      border-bottom:1px solid var(--mts-border-color); font-size:13px;
-    }
-    .inf-row:last-child { border-bottom:none; }
-    .inf-idx { width:36px; font-size:11px; color:var(--mts-text-muted); flex-shrink:0; }
-    .inf-name { flex:1; font-weight:500; }
-    .inf-email { font-size:11px; color:var(--mts-text-muted); }
-    .inf-card {
-      border:1px solid var(--mts-border-color); border-radius:var(--mts-radius-lg);
-      padding:14px; font-size:13px; background:var(--mts-surface);
-    }
-    .inf-card strong { display:block; color:var(--mts-text-primary); margin-bottom:4px; }
-    .inf-wrap { border:1px solid var(--mts-border-color); border-radius:var(--mts-radius-lg); overflow:hidden; }
-  </style>
 </head>
 <body>
 <div class="demo-theme">
@@ -63,190 +55,242 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Infinite</h1>
-    <p>Infinite scroll with IntersectionObserver — vertical, grid and table layouts. Dev controls data loading.</p>
+    <p>Infinite scroll con carga incremental controlada por el desarrollador en layouts vertical y grid.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-infinite.md')">📄 Docs</button>
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-infinite.md')">
+        <i class="mts-icon mts-icon-file-text mts-icon--sm"></i> Docs
+      </button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- 1. Layout vertical -->
-  <div class="demo-section">
-    <div class="demo-section-title">1 — Layout vertical (default)</div>
-    <div class="inf-wrap" id="inf-vertical" style="max-height:320px;overflow:auto"></div>
-    <div class="result-box" id="inf-result">— haz scroll hasta el final para cargar más —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-if1','js-if1')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-if1','html-if1')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-if1">&lt;div id="my-list"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Infinite('#my-list', {
-    pageSize: 15,
-    layout:   'vertical',
-    // Required: async data loader / Requerido: cargador de datos async
-    onLoadMore: async ({ page, pageSize }) =&gt; {
-      const res = await fetch(`/api/users?page=${page}&amp;size=${pageSize}`);
-      const data = await res.json();
-      return { items: data.users, hasMore: data.hasNext };
-    },
-    // Required: item renderer / Requerido: renderizador de ítems
-    renderItem: (user, index) =&gt; `
-      &lt;div class="row"&gt;
-        &lt;span&gt;#${index + 1}&lt;/span&gt;
-        &lt;span&gt;${user.name}&lt;/span&gt;
-      &lt;/div&gt;`,
-    // Fires after each load / Se dispara tras cada carga
-    onLoad: (e) =&gt; console.log('loaded page', e.detail.page),
-    // Fires when all data is loaded / Se dispara al no haber más datos
-    onEnd:  (e) =&gt; console.log('done, total:', e.detail.total),
-  });
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-if1">new MTS.Infinite('#my-list', {
-  pageSize: 15,
-  layout:   'vertical',
-
-  // Data loader — receives { page, pageSize }, must return { items, hasMore }
-  // Cargador de datos — recibe { page, pageSize }, retorna { items, hasMore }
-  onLoadMore: async ({ page, pageSize }) =&gt; {
-    // Simulate API / Simular API
-    await new Promise(r =&gt; setTimeout(r, 300));
-    const items = Array.from({ length: pageSize }, (_, i) =&gt; ({
-      id:    (page - 1) * pageSize + i,
-      name:  `Usuario ${(page - 1) * pageSize + i + 1}`,
-      email: `user${(page - 1) * pageSize + i}@empresa.com`,
-    }));
-    return { items, hasMore: page &lt; 5 };  // 5 pages max
-  },
-
-  // Item renderer / Renderizador de ítems
-  renderItem: (user, index) =&gt; {
-    const el = document.createElement('div');
-    el.className = 'inf-row';
-    el.innerHTML = `&lt;span class="inf-idx"&gt;#${index + 1}&lt;/span&gt;
-      &lt;span class="inf-name"&gt;${user.name}&lt;/span&gt;
-      &lt;span class="inf-email"&gt;${user.email}&lt;/span&gt;`;
-    return el;
-  },
-
-  // Fires after each load / Se dispara tras cada carga
-  onLoad: (e) =&gt; console.log(`Page ${e.detail.page}: ${e.detail.items.length} items`),
-  // Fires when no more data / Se dispara al no haber más datos
-  onEnd:  (e) =&gt; console.log(`Done — ${e.detail.total} total`),
-});</div>
-  </div>
-
-  <!-- 2. Layout grid + reset -->
-  <div class="demo-section">
-    <div class="demo-section-title">2 — Layout grid + reset()</div>
-    <div class="demo-row" style="margin-bottom:10px">
-      <button class="demo-btn-sm" onclick="infGrid.reset()">reset()</button>
-    </div>
-    <div class="inf-wrap" id="inf-grid" style="max-height:360px;overflow:auto"></div>
-    <div class="result-box" id="inf-grid-result">— haz scroll hasta el final para cargar más —</div>
-    <div class="code-tabs">
-      <button class="code-tab active" onclick="switchTab(this,'html-if2','js-if2')">HTML</button>
-      <button class="code-tab" onclick="switchTab(this,'js-if2','html-if2')">JavaScript</button>
-    </div>
-    <div class="code-panel active" id="html-if2">&lt;div id="my-grid"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const grid = new MTS.Infinite('#my-grid', {
-    layout:   'grid',
-    pageSize: 8,
-    onLoadMore: async ({ page, pageSize }) =&gt; {
-      const data = await api.getProducts({ page, pageSize });
-      return { items: data.items, hasMore: data.hasNext };
-    },
-    renderItem: (item) =&gt; `
-      &lt;div class="product-card"&gt;
-        &lt;h3&gt;${item.name}&lt;/h3&gt;
-        &lt;p&gt;$${item.price}&lt;/p&gt;
-      &lt;/div&gt;`,
-    onEnd: (e) =&gt; console.log('done:', e.detail.total),
-  });
-  grid.reset(); // reset and reload from page 1 / resetear y recargar
-&lt;/script&gt;</div>
-    <div class="code-panel" id="js-if2">const grid = new MTS.Infinite('#my-grid', {
-  layout:   'grid',    // 3-column grid / grid de 3 columnas
-  pageSize: 8,
-  animate:  true,
-
-  onLoadMore: async ({ page, pageSize }) =&gt; {
-    await new Promise(r =&gt; setTimeout(r, 400));
-    const items = Array.from({ length: pageSize }, (_, i) =&gt; ({
-      id:    (page - 1) * pageSize + i,
-      name:  `Producto ${(page - 1) * pageSize + i + 1}`,
-      price: (Math.random() * 500 + 10).toFixed(2),
-    }));
-    return { items, hasMore: page &lt; 4 };
-  },
-
-  renderItem: (item) =&gt; {
-    const el = document.createElement('div');
-    el.className = 'inf-card';
-    el.innerHTML = `&lt;strong&gt;${item.name}&lt;/strong&gt;$${item.price}`;
-    return el;
-  },
-
-  onLoad: (e) =&gt; console.log('grid page', e.detail.page),
-  onEnd:  (e) =&gt; console.log('grid done:', e.detail.total),
-});
-
-// Reset to page 1 / Resetear a página 1
-grid.reset();</div>
-  </div>
-
+  <div class="demo-section"><div class="demo-section-title">1 — Layout vertical</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Layout grid</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — reset() y eventos</div><div id="tabs-s3"></div></div>
 </div>
+
 <script>
-function makeUsers(page, size) {
-  return Array.from({ length:size }, function(_,i){
-    var n = (page-1)*size + i;
-    return { id:n, name:'Usuario '+(n+1), email:'user'+n+'@empresa.com' };
-  });
+function esc(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-new MTS.Infinite('#inf-vertical', {
-  pageSize:15, layout:'vertical',
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(sectionId, previewHtml) {
+  var preId = 'pre-' + sectionId;
+  return '<div style="position:relative;height:100%;box-sizing:border-box">' +
+    '<button id="copybtn-' + sectionId + '" style="position:absolute;top:6px;right:6px;z-index:2"></button>' +
+    '<pre id="' + preId + '" class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0;padding-right:40px">' + esc(indentHtml(previewHtml)) + '</pre>' +
+  '</div>';
+}
+
+function jsTab(code) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(code) + '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '350px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(id, previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  var btnEl = document.getElementById('copybtn-' + id);
+  var preEl = document.getElementById('pre-' + id);
+  if (btnEl && preEl) {
+    new MTS.CopyButton(btnEl, { iconOnly: true, variant: 'ghost', size: 'sm', target: preEl });
+  }
+}
+
+var previewS1 = '<div id="inf-vertical-demo" style="max-height:300px;overflow:auto;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg)"></div>' +
+  '<div class="result-box" id="inf-result-vertical" style="margin-top:12px">— haz scroll hasta el final para cargar más —</div>';
+
+var jsS1 = [
+  "const infinite = new MTS.Infinite('#inf-vertical-demo', {",
+  "  pageSize: 12,",
+  "  layout: 'vertical',",
+  "  onLoadMore: async ({ page, pageSize }) => {",
+  "    await new Promise(r => setTimeout(r, 300));",
+  "    const items = Array.from({ length: pageSize }, (_, i) => ({",
+  "      id: (page - 1) * pageSize + i,",
+  "      name: 'Usuario ' + ((page - 1) * pageSize + i + 1),",
+  "      email: 'user' + ((page - 1) * pageSize + i) + '@empresa.com'",
+  "    }));",
+  "    return { items, hasMore: page < 4 };",
+  "  },",
+  "  renderItem: (user, index) => {",
+  "    const row = document.createElement('div');",
+  "    row.style.cssText = 'display:flex;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--mts-border-color)';",
+  "    row.innerHTML = '<span style=\'width:36px;font-size:11px;color:var(--mts-text-muted)\'>#' + (index + 1) + '</span>' +",
+  "      '<span style=\'flex:1;font-weight:500\'>' + user.name + '</span>' +",
+  "      '<span style=\'font-size:11px;color:var(--mts-text-muted)\'>' + user.email + '</span>';",
+  "    return row;",
+  "  },",
+  "  onLoad: (e) => console.log('page', e.detail.page),",
+  "  onEnd: (e) => console.log('total', e.detail.total)",
+  "});"
+].join('\n');
+
+var previewS2 = '<div id="inf-grid-demo" style="max-height:320px;overflow:auto;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg)"></div>' +
+  '<div class="result-box" id="inf-result-grid" style="margin-top:12px">— layout grid con tarjetas simples —</div>';
+
+var jsS2 = [
+  "const infiniteGrid = new MTS.Infinite('#inf-grid-demo', {",
+  "  pageSize: 8,",
+  "  layout: 'grid',",
+  "  animate: true,",
+  "  onLoadMore: async ({ page, pageSize }) => {",
+  "    await new Promise(r => setTimeout(r, 250));",
+  "    const items = Array.from({ length: pageSize }, (_, i) => ({",
+  "      id: (page - 1) * pageSize + i,",
+  "      title: 'Producto ' + ((page - 1) * pageSize + i + 1),",
+  "      price: (Math.random() * 300 + 20).toFixed(2)",
+  "    }));",
+  "    return { items, hasMore: page < 3 };",
+  "  },",
+  "  renderItem: (item) => {",
+  "    const card = document.createElement('div');",
+  "    card.style.cssText = 'border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:14px;background:var(--mts-surface)';",
+  "    card.innerHTML = '<strong style=\'display:block;margin-bottom:4px\'>' + item.title + '</strong>$' + item.price;",
+  "    return card;",
+  "  },",
+  "  onEnd: (e) => console.log('grid total', e.detail.total)",
+  "});"
+].join('\n');
+
+var previewS3 = '<div class="demo-row" style="margin-bottom:12px"><button id="btn-reset-inf"></button></div>' +
+  '<div id="inf-events-demo" style="max-height:260px;overflow:auto;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg)"></div>' +
+  '<div class="result-box" id="inf-result-events" style="margin-top:12px">— observa onLoad y onEnd —</div>';
+
+var jsS3 = [
+  "const eventsInfinite = new MTS.Infinite('#inf-events-demo', {",
+  "  pageSize: 10,",
+  "  layout: 'vertical',",
+  "  onLoadMore: async ({ page, pageSize }) => {",
+  "    await new Promise(r => setTimeout(r, 200));",
+  "    const items = Array.from({ length: pageSize }, (_, i) => ({",
+  "      id: (page - 1) * pageSize + i,",
+  "      label: 'Registro ' + ((page - 1) * pageSize + i + 1)",
+  "    }));",
+  "    return { items, hasMore: page < 2 };",
+  "  },",
+  "  renderItem: (item) => '<div style=\'padding:10px 14px;border-bottom:1px solid var(--mts-border-color)\'>' + item.label + '</div>',",
+  "  onLoad: (e) => console.log('loaded', e.detail.page),",
+  "  onEnd: (e) => console.log('finished', e.detail.total)",
+  "});",
+  "",
+  "new MTS.Button('#btn-reset-inf', {",
+  "  label: 'reset()',",
+  "  variant: 'secondary',",
+  "  onClick: () => eventsInfinite.reset()",
+  "});"
+].join('\n');
+
+makeSection('tabs-s1', previewS1, jsS1);
+makeSection('tabs-s2', previewS2, jsS2);
+makeSection('tabs-s3', previewS3, jsS3);
+
+new MTS.Infinite('#inf-vertical-demo', {
+  pageSize: 12,
+  layout: 'vertical',
   onLoadMore: function(opts) {
-    return new Promise(function(resolve){
-      setTimeout(function(){
-        resolve({ items:makeUsers(opts.page, opts.pageSize), hasMore: opts.page < 5 });
+    return new Promise(function(resolve) {
+      setTimeout(function() {
+        var items = Array.from({ length: opts.pageSize }, function(_, i) {
+          var n = (opts.page - 1) * opts.pageSize + i;
+          return { id: n, name: 'Usuario ' + (n + 1), email: 'user' + n + '@empresa.com' };
+        });
+        resolve({ items: items, hasMore: opts.page < 4 });
+      }, 300);
+    });
+  },
+  renderItem: function(user, index) {
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--mts-border-color)';
+    row.innerHTML = '<span style="width:36px;font-size:11px;color:var(--mts-text-muted)">#' + (index + 1) + '</span>' + '<span style="flex:1;font-weight:500">' + user.name + '</span>' + '<span style="font-size:11px;color:var(--mts-text-muted)">' + user.email + '</span>';
+    return row;
+  },
+  onLoad: function(e) { document.getElementById('inf-result-vertical').textContent = 'onLoad → page:' + e.detail.page + ' items:' + e.detail.items.length; },
+  onEnd: function(e) { document.getElementById('inf-result-vertical').textContent = 'onEnd → total:' + e.detail.total + ' ✓'; }
+});
+
+new MTS.Infinite('#inf-grid-demo', {
+  pageSize: 8,
+  layout: 'grid',
+  animate: true,
+  onLoadMore: function(opts) {
+    return new Promise(function(resolve) {
+      setTimeout(function() {
+        var items = Array.from({ length: opts.pageSize }, function(_, i) {
+          var n = (opts.page - 1) * opts.pageSize + i;
+          return { id: n, title: 'Producto ' + (n + 1), price: (Math.random() * 300 + 20).toFixed(2) };
+        });
+        resolve({ items: items, hasMore: opts.page < 3 });
       }, 250);
     });
   },
-  renderItem: function(user, idx){
-    var el = document.createElement('div');
-    el.className = 'inf-row';
-    el.innerHTML = '<span class="inf-idx">#'+(idx+1)+'</span><span class="inf-name">'+user.name+'</span><span class="inf-email">'+user.email+'</span>';
-    return el;
+  renderItem: function(item) {
+    var card = document.createElement('div');
+    card.style.cssText = 'border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:14px;background:var(--mts-surface)';
+    card.innerHTML = '<strong style="display:block;margin-bottom:4px">' + item.title + '</strong>$' + item.price;
+    return card;
   },
-  onLoad: function(e){ document.getElementById('inf-result').textContent = 'onLoad → page:'+e.detail.page+' items:'+e.detail.items.length; },
-  onEnd:  function(e){ document.getElementById('inf-result').textContent = 'onEnd → total:'+e.detail.total+' ✓'; },
+  onLoad: function(e) { document.getElementById('inf-result-grid').textContent = 'onLoad → page:' + e.detail.page + ' items:' + e.detail.items.length; },
+  onEnd: function(e) { document.getElementById('inf-result-grid').textContent = 'onEnd → total:' + e.detail.total + ' ✓'; }
 });
 
-function makeProducts(page, size) {
-  return Array.from({ length:size }, function(_,i){
-    var n = (page-1)*size + i;
-    return { id:n, name:'Producto '+(n+1), price:(Math.random()*500+10).toFixed(2) };
-  });
-}
-var infGrid = new MTS.Infinite('#inf-grid', {
-  pageSize:8, layout:'grid', animate:true,
-  onLoadMore: function(opts){
-    return new Promise(function(resolve){
-      setTimeout(function(){
-        resolve({ items:makeProducts(opts.page, opts.pageSize), hasMore: opts.page < 4 });
-      }, 350);
+var eventsInfinite = new MTS.Infinite('#inf-events-demo', {
+  pageSize: 10,
+  layout: 'vertical',
+  onLoadMore: function(opts) {
+    return new Promise(function(resolve) {
+      setTimeout(function() {
+        var items = Array.from({ length: opts.pageSize }, function(_, i) {
+          var n = (opts.page - 1) * opts.pageSize + i;
+          return { id: n, label: 'Registro ' + (n + 1) };
+        });
+        resolve({ items: items, hasMore: opts.page < 2 });
+      }, 200);
     });
   },
-  renderItem: function(item){
-    var el = document.createElement('div');
-    el.className = 'inf-card';
-    el.innerHTML = '<strong>'+item.name+'</strong>$'+item.price;
-    return el;
+  renderItem: function(item) {
+    return '<div style="padding:10px 14px;border-bottom:1px solid var(--mts-border-color)">' + item.label + '</div>';
   },
-  onLoad: function(e){ document.getElementById('inf-grid-result').textContent = 'onLoad → page:'+e.detail.page+' items:'+e.detail.items.length; },
-  onEnd:  function(e){ document.getElementById('inf-grid-result').textContent = 'onEnd → total:'+e.detail.total+' ✓'; },
+  onLoad: function(e) { document.getElementById('inf-result-events').textContent = 'onLoad → page:' + e.detail.page + ' items:' + e.detail.items.length; },
+  onEnd: function(e) { document.getElementById('inf-result-events').textContent = 'onEnd → total:' + e.detail.total + ' ✓'; }
+});
+
+new MTS.Button('#btn-reset-inf', {
+  label: 'reset()',
+  variant: 'secondary',
+  onClick: function() { eventsInfinite.reset(); }
 });
 </script>
 </body>

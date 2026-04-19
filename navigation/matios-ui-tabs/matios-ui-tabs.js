@@ -36,7 +36,8 @@ MTS.Tabs = class MtsTabs {
 
     // Lazy render — only renders panel content when first activated
     // Renderizado lazy — solo renderiza el panel al activarse por primera vez
-    this.lazy = options.lazy ?? true;
+    // Default false: all panels render on build so DOM elements are immediately available
+    this.lazy = options.lazy ?? false;
 
     // Show separator border between nav and panels / Mostrar borde separador nav/paneles
     this.border = options.border ?? true;
@@ -140,7 +141,7 @@ MTS.Tabs = class MtsTabs {
       this._panelsEl.style.cssText = 'flex:1;overflow:auto;min-height:0;';
     } else if (this.height && this.height !== 'auto') {
       this._panelsEl.style.height   = this.height;
-      this._panelsEl.style.overflow = 'auto';
+      this._panelsEl.style.overflow = 'hidden';
     }
 
     this.tabs.forEach(tab => {
