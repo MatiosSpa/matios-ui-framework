@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Recuperar Contrasena - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-formlayout/matios-ui-formlayout.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../layout/matios-ui-grid/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="forgot-password.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="forgot-page">
+    <header class="forgot-page__topbar mts-surface">
+      <div class="forgot-page__brand">
+        <div class="forgot-page__logo">M</div>
+        <div>
+          <div class="forgot-page__title">Recuperar Contrasena</div>
+          <div class="forgot-page__subtitle">Showcase / Autenticacion</div>
+        </div>
+      </div>
+      <div class="forgot-page__topbar-actions">
+        <div id="forgot-back-btn"></div>
+      </div>
+    </header>
+
+    <main class="forgot-page__main mts-grid mts-grid--gap-md">
+      <section class="forgot-page__hero mts-g-col-12 mts-g-col-lg-7 mts-surface">
+        <p class="forgot-page__kicker">Pantalla activa</p>
+        <h1 class="forgot-page__hero-title">Recuperacion simple, clara y reutilizable</h1>
+        <p class="forgot-page__hero-copy">
+          Esta UI pide un unico identificador y simula el envio del enlace de recuperacion.
+          La intencion es dejar una pantalla facil de copiar, facil de adaptar y construida
+          completamente con componentes Matios UI.
+        </p>
+
+        <div class="forgot-page__cards mts-grid mts-grid--gap-md">
+          <div class="mts-g-col-12 mts-g-col-md-6"><div id="forgot-card-identity"></div></div>
+          <div class="mts-g-col-12 mts-g-col-md-6"><div id="forgot-card-flow"></div></div>
+        </div>
+      </section>
+
+      <section class="forgot-page__form-wrap mts-g-col-12 mts-g-col-lg-5">
+        <div class="mts-form-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Recuperar acceso</h2>
+            <p class="mts-form-card__subtitle">
+              Ingresa tu correo, usuario o telefono para preparar el envio del enlace.
+            </p>
+          </div>
+
+          <div id="forgot-alert"></div>
+
+          <div class="mts-form">
+            <div class="mts-form-section">
+              <div id="forgot-identity"></div>
+
+              <div class="forgot-page__hint mts-surface">
+                <div class="forgot-page__hint-icon"><i class="mts-icon mts-icon-mail"></i></div>
+                <div>
+                  <p class="forgot-page__hint-title">Destino de recuperacion</p>
+                  <p class="forgot-page__hint-copy">
+                    La simulacion UI enviara un enlace al correo o canal asociado a la cuenta.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mts-form-footer mts-form-footer--between forgot-page__footer">
+              <div id="forgot-login-btn"></div>
+              <div class="forgot-page__submit" id="forgot-submit"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+window.addEventListener('message',function(e){
+  if(!e.data) return;
+  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+  if(e.data.type==='setAccent'){
+    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
+function openScreen(path){
+  var params=location.search||'';
+  window.location.href=path+params;
+}
+</script>
+<script>
+new MTS.Button('#forgot-back-btn',{
+  label:'Volver al grupo',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-left'),
+  onClick:function(){goBack();}
+});
+
+new MTS.Card('#forgot-card-identity',{
+  title:'Identidad unica',
+  subtitle:'Entrada simplificada',
+  variant:'outlined',
+  body:'<p class="forgot-card-copy">La pantalla acepta <strong>correo</strong>, <strong>usuario</strong> o <strong>telefono</strong> sin bifurcar el flujo.</p>'
+});
+
+new MTS.Card('#forgot-card-flow',{
+  title:'Paso siguiente',
+  subtitle:'Continuidad del flujo',
+  variant:'outlined',
+  body:'<p class="forgot-card-copy">Despues de esta pantalla, el recorrido natural sigue con <strong>reset-password</strong> usando un enlace o token.</p>'
+});
+
+var identityInput=new MTS.Input('#forgot-identity',{
+  type:'text',
+  label:'Correo, usuario o telefono',
+  placeholder:'nombre@empresa.com / usuario / +56 9 1234 5678',
+  iconLeft:MTS.Icon.get('user')
+});
+
+new MTS.Button('#forgot-login-btn',{
+  label:'Volver al login',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-left'),
+  onClick:function(){openScreen('../login/index.html');}
+});
+
+var submitButton=new MTS.Button('#forgot-submit',{
+  label:'Enviar enlace',
+  variant:'primary',
+  block:true,
+  iconLeft:MTS.Icon.get('mail'),
+  onClick:function(e,inst){submitRecovery(inst);}
+});
+
+function clearAlert(){
+  document.getElementById('forgot-alert').innerHTML='';
+}
+
+function showAlert(options){
+  clearAlert();
+  MTS.Alert.show('#forgot-alert',options);
+}
+
+function submitRecovery(inst){
+  var identity=identityInput.getValue().trim();
+  clearAlert();
+  identityInput.clearError();
+
+  if(!identity){
+    identityInput.setError('Debes ingresar correo, usuario o telefono');
+    return;
+  }
+
+  inst.setLoading(true);
+  inst.setLabel('Preparando enlace...');
+
+  setTimeout(function(){
+    inst.setLoading(false);
+    inst.setLabel('Enviar enlace');
+    showAlert({
+      variant:'success',
+      title:'Enlace preparado',
+      message:'Simulacion UI: se enviaria un enlace de recuperacion al destino asociado a <strong>'+escapeHtml(identity)+'</strong>.',
+      closable:true
+    });
+  },900);
+}
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>
+

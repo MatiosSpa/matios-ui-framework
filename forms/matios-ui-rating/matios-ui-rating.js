@@ -59,8 +59,15 @@ MTS.Rating = class MtsRating {
   // Destroys the component / Destruye el componente
   destroy() { this._el.innerHTML = ''; }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-rating'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-rating', `mts-rating--${this.size}`);
+    if (this.readonly) this._el.classList.add('mts-rating--readonly');
+  }
+
   _build() {
-    this._el.className = `mts-rating mts-rating--${this.size}${this.readonly ? ' mts-rating--readonly' : ''}`;
+    this._syncClasses();
     this._el.setAttribute('role', 'radiogroup');
     this._render();
   }

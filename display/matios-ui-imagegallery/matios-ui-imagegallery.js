@@ -65,7 +65,7 @@ MTS.ImageGallery = class MtsImageGallery {
 
   _build() {
     this._el.innerHTML = '';
-    this._el.className = 'mts-imagegallery mts-imagegallery--' + this.variant;
+    this._syncClasses(['mts-imagegallery', 'mts-imagegallery--' + this.variant]);
 
     /* ── Filtros ── */
     if (this.filters.length) {
@@ -234,6 +234,15 @@ MTS.ImageGallery = class MtsImageGallery {
     if (this._lbEl) { this._lbEl.remove(); this._lbEl = null; }
     if (this._lbKeyHandler) { document.removeEventListener('keydown', this._lbKeyHandler); this._lbKeyHandler = null; }
   }
+
+  _syncClasses(classes) {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-imagegallery' || cls.startsWith('mts-imagegallery--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add(...classes.filter(Boolean));
+  }
+
   _emit(event, detail) {
     (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
     this._el?.dispatchEvent(new CustomEvent(`mts:imagegallery:${event}`, { bubbles: true, detail }));

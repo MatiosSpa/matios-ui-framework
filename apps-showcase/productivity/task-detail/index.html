@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Task Detail - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="task-detail.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="task-detail-page">
+    <header class="task-detail-page__topbar mts-surface">
+      <div class="task-detail-page__brand">
+        <div class="task-detail-page__logo">T</div>
+        <div>
+          <div class="task-detail-page__title">Task Detail</div>
+          <div class="task-detail-page__subtitle">Detalle ampliado con checklist, prioridad y siguiente acción operativa</div>
+        </div>
+      </div>
+      <div class="task-detail-page__topbar-actions">
+        <div id="task-detail-back"></div>
+      </div>
+    </header>
+
+    <main class="task-detail-page__main mts-grid mts-grid--gap-md">
+      <section class="task-detail-page__hero mts-g-col-12 mts-surface">
+        <div class="task-detail-page__eyebrow">
+          <span class="task-detail-page__eyebrow-dot"></span>
+          <span>Tarea TK-390</span>
+        </div>
+        <h1 class="task-detail-page__hero-title">Corregir alta de empresa hija sin perder trazabilidad del workspace.</h1>
+        <p class="task-detail-page__hero-text">
+          La vista de detalle deja el contexto completo de la tarea en una sola pantalla para que el equipo revise prioridad, responsable, checklist y relación con planificación.
+        </p>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="mts-form-card task-detail-page__form-card">
+          <div id="task-detail-feedback"></div>
+          <div class="mts-grid mts-grid--gap-md">
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="task-detail-title"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="task-detail-priority"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="task-detail-owner"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="task-detail-state"></div></div>
+            <div class="mts-g-col-12"><div id="task-detail-description"></div></div>
+          </div>
+
+          <div class="task-detail-page__checklist">
+            <div class="task-detail-page__checklist-title">Checklist operativo</div>
+            <div id="task-detail-check-api"></div>
+            <div id="task-detail-check-copy"></div>
+            <div id="task-detail-check-workspace"></div>
+          </div>
+
+          <div class="task-detail-page__footer">
+            <div id="task-detail-save"></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4 task-detail-page__sidebar">
+        <div id="task-detail-context-card"></div>
+        <div id="task-detail-planner-card"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message',function(e){
+      if(!e.data) return;
+      if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+      if(e.data.type==='setAccent'){
+        if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+    function openScreen(path){
+      var params=location.search||'';
+      window.location.href=path+params;
+    }
+  </script>
+  <script>
+    var taskTitle = new MTS.Input('#task-detail-title',{
+      type:'text',
+      label:'Titulo',
+      value:'Corregir alta de empresa hija',
+      placeholder:'Nombre de la tarea'
+    });
+
+    var taskPriority = new MTS.Select('#task-detail-priority',{
+      label:'Prioridad',
+      options:[
+        {value:'critical',label:'Critica'},
+        {value:'high',label:'Alta'},
+        {value:'medium',label:'Media'},
+        {value:'low',label:'Baja'}
+      ],
+      value:'critical'
+    });
+
+    var taskOwner = new MTS.Select('#task-detail-owner',{
+      label:'Responsable',
+      options:[
+        {value:'camila',label:'Camila'},
+        {value:'diego',label:'Diego'},
+        {value:'paula',label:'Paula'},
+        {value:'andres',label:'Andres'}
+      ],
+      value:'diego'
+    });
+
+    var taskState = new MTS.Select('#task-detail-state',{
+      label:'Estado',
+      options:[
+        {value:'backlog',label:'Backlog'},
+        {value:'in-progress',label:'In Progress'},
+        {value:'review',label:'Review'},
+        {value:'done',label:'Done'}
+      ],
+      value:'in-progress'
+    });
+
+    var taskDescription = new MTS.Input('#task-detail-description',{
+      type:'text',
+      label:'Descripcion',
+      value:'El flujo interno debe permitir crear empresa hija desde el contexto activo y reflejar permisos efectivos sin romper el selector de workspace.',
+      placeholder:'Contexto y siguiente accion'
+    });
+
+    new MTS.Checkbox('#task-detail-check-api',{
+      label:'Validar contratos de API del flujo interno',
+      checked:true
+    });
+
+    new MTS.Checkbox('#task-detail-check-copy',{
+      label:'Ajustar copy de alta y confirmacion',
+      checked:false
+    });
+
+    new MTS.Checkbox('#task-detail-check-workspace',{
+      label:'Revisar impacto sobre workspace-selector',
+      checked:true
+    });
+
+    new MTS.Button('#task-detail-back',{
+      label:'Volver al board',
+      variant:'ghost',
+      iconLeft:MTS.Icon.get('arrow-left'),
+      onClick:function(){openScreen('../task-board/index.html');}
+    });
+
+    new MTS.Button('#task-detail-save',{
+      label:'Guardar tarea',
+      variant:'primary',
+      iconLeft:MTS.Icon.get('save'),
+      onClick:function(){
+        var title = taskTitle.getValue().trim();
+        var description = taskDescription.getValue().trim();
+        taskTitle.clearError();
+        taskDescription.clearError();
+        if(!title){
+          taskTitle.setError('Ingresa el titulo de la tarea');
+          return;
+        }
+        if(!description){
+          taskDescription.setError('Describe el contexto operativo');
+          return;
+        }
+        MTS.Alert.show('#task-detail-feedback',{
+          variant:'success',
+          title:'Tarea actualizada',
+          message:'El detalle quedó guardado con prioridad, responsable y checklist operativo.',
+          closable:true
+        });
+      }
+    });
+
+    new MTS.Card('#task-detail-context-card',{
+      title:'Contexto actual',
+      subtitle:'Resumen rápido',
+      variant:'elevated',
+      size:'lg',
+      body:
+        '<div class="task-detail-page__meta-list">'+
+          '<div><span>Proyecto</span><strong>Productividad interna</strong></div>'+
+          '<div><span>Deadline</span><strong>Hoy</strong></div>'+
+          '<div><span>Relacion</span><strong>Workspace + Account</strong></div>'+
+        '</div>'
+    });
+
+    new MTS.Card('#task-detail-planner-card',{
+      title:'Relacion con agenda',
+      subtitle:'Siguiente bloque',
+      variant:'outlined',
+      size:'lg',
+      body:
+        '<div class="task-detail-page__planner-copy">'+
+          '<strong>Hoy · 11:00 a 13:00</strong>'+
+          '<p>Esta tarea aparece en el planner como bloque de foco para cerrar permisos y copy antes de pasar a review.</p>'+
+        '</div>'
+    });
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

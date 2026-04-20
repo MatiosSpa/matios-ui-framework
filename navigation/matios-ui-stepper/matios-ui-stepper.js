@@ -1,21 +1,21 @@
-/* ============================================================
-   MATIOS UI — matios-ui-stepper.js
-   MTS.Stepper — Flujo paso a paso y progreso visual
+﻿/* ============================================================
+   MATIOS UI â€” matios-ui-stepper.js
+   MTS.Stepper â€” Flujo paso a paso y progreso visual
    
    Modos:
-     'wizard'   — pasos con contenido/paneles (formularios, tablas, etc.)
-     'progress' — solo indicador visual, sin paneles
+     'wizard'   â€” pasos con contenido/paneles (formularios, tablas, etc.)
+     'progress' â€” solo indicador visual, sin paneles
 
    Variantes (mode:'progress'):
-     'default'  — indicador + label + descripción
-     'compact'  — indicador pequeño + label
-     'dots'     — puntos minimalistas con barra de progreso
+     'default'  â€” indicador + label + descripciÃ³n
+     'compact'  â€” indicador pequeÃ±o + label
+     'dots'     â€” puntos minimalistas con barra de progreso
 
    Eventos DOM:
-     mts:stepper:change       — cambio de paso
-     mts:stepper:complete     — llegó al último paso
-     mts:stepper:stepclick    — click manual en un paso
-     mts:stepper:statuschange — cambio de estado de un paso
+     mts:stepper:change       â€” cambio de paso
+     mts:stepper:complete     â€” llegÃ³ al Ãºltimo paso
+     mts:stepper:stepclick    â€” click manual en un paso
+     mts:stepper:statuschange â€” cambio de estado de un paso
 
    Version: 2.0.0
    ============================================================ */
@@ -38,13 +38,13 @@ MTS.Stepper = class MtsStepper {
     // Variante (solo modo progress)
     this.variant = options.variant || 'default';
 
-    // Steps array — each item is a step definition / Arreglo de pasos
+    // Steps array â€” each item is a step definition / Arreglo de pasos
     this.steps = (options.steps || []).map(s => ({ ...s }));
 
-    // Initially active step index / Índice del paso activo inicial
+    // Initially active step index / Ãndice del paso activo inicial
     this.active = options.active ?? 0;
 
-    // Layout direction: 'horizontal' | 'vertical' / Dirección del layout
+    // Layout direction: 'horizontal' | 'vertical' / DirecciÃ³n del layout
     this.direction = options.direction || 'horizontal';
 
     // Allow clicking steps to navigate / Permitir navegar haciendo click en los pasos
@@ -56,7 +56,7 @@ MTS.Stepper = class MtsStepper {
     // Fires when active step changes / Se dispara al cambiar el paso activo
     if (options.onChange)       this.on('change',       options.onChange);
 
-    // Fires when the last step is reached / Se dispara al llegar al último paso
+    // Fires when the last step is reached / Se dispara al llegar al Ãºltimo paso
     if (options.onComplete)     this.on('complete',     options.onComplete);
 
     // Fires when user clicks a step (clickable mode) / Se dispara al hacer click en un paso
@@ -68,7 +68,7 @@ MTS.Stepper = class MtsStepper {
     this._build();
   }
 
-  /* ── API ── */
+  /* â”€â”€ API â”€â”€ */
   next() {
     if (this.active < this.steps.length - 1) {
       this.goTo(this.active + 1, 'next');
@@ -132,7 +132,7 @@ MTS.Stepper = class MtsStepper {
   }
   destroy()  { this._el.innerHTML = ''; this._panelEls = {}; }
 
-  /* ── Build ── */
+  /* â”€â”€ Build â”€â”€ */
   _build() {
     this._el.innerHTML = '';
     this._panelEls    = {};
@@ -141,7 +141,7 @@ MTS.Stepper = class MtsStepper {
     var modeClass    = 'mts-stepper--' + this.mode;
     var variantClass = this.mode === 'progress' ? ' mts-stepper--' + this.variant : '';
     var dirClass     = 'mts-stepper--' + this.direction;
-    this._el.className = 'mts-stepper ' + modeClass + variantClass + ' ' + dirClass;
+    this._syncClasses(['mts-stepper', modeClass, dirClass].concat(variantClass.trim() ? [variantClass.trim()] : []));
 
     /* Track de indicadores */
     this._trackEl = document.createElement('div');
@@ -149,7 +149,7 @@ MTS.Stepper = class MtsStepper {
     this._el.appendChild(this._trackEl);
     this._renderIndicators();
 
-    /* Paneles — solo wizard */
+    /* Paneles â€” solo wizard */
     if (this.mode === 'wizard') {
       this._panelsEl = document.createElement('div');
       this._panelsEl.className = 'mts-stepper__panels';
@@ -158,7 +158,7 @@ MTS.Stepper = class MtsStepper {
       this._showPanel(this.active);
     }
 
-    /* Barra de progreso — solo dots */
+    /* Barra de progreso â€” solo dots */
     if (this.mode === 'progress' && this.variant === 'dots') {
       this._progressBar = document.createElement('div');
       this._progressBar.className = 'mts-stepper__progress-bar';
@@ -170,7 +170,7 @@ MTS.Stepper = class MtsStepper {
     }
   }
 
-  /* ── Indicadores ── */
+  /* â”€â”€ Indicadores â”€â”€ */
   _renderIndicators() {
     if (!this._trackEl) return;
     this._trackEl.innerHTML = '';
@@ -212,7 +212,7 @@ MTS.Stepper = class MtsStepper {
       }
       item.appendChild(indicator);
 
-      /* Texto — no en dots */
+      /* Texto â€” no en dots */
       if (self.variant !== 'dots') {
         var textWrap = document.createElement('div');
         textWrap.className = 'mts-stepper__text';
@@ -231,7 +231,7 @@ MTS.Stepper = class MtsStepper {
         item.appendChild(textWrap);
       }
 
-      /* Línea conectora — no en el último */
+      /* LÃ­nea conectora â€” no en el Ãºltimo */
       if (idx < self.steps.length - 1) {
         var line = document.createElement('div');
         line.className = 'mts-stepper__line' + (isDone ? ' mts-stepper__line--done' : '');
@@ -244,7 +244,7 @@ MTS.Stepper = class MtsStepper {
     if (this._progressBar) this._updateProgressBar();
   }
 
-  /* ── Paneles (wizard) ── */
+  /* â”€â”€ Paneles (wizard) â”€â”€ */
   _buildPanels() {
     var self = this;
     this.steps.forEach(function(step, idx) {
@@ -263,7 +263,7 @@ MTS.Stepper = class MtsStepper {
     var panel = this._panelEls[index];
     if (!panel) return;
 
-    /* Lazy render — solo la primera vez */
+    /* Lazy render â€” solo la primera vez */
     if (!panel.dataset.rendered) {
       var step     = this.steps[index];
       var content  = step.content;
@@ -281,7 +281,7 @@ MTS.Stepper = class MtsStepper {
     panel.style.display = '';
   }
 
-  /* ── Barra progreso (dots) ── */
+  /* â”€â”€ Barra progreso (dots) â”€â”€ */
   _updateProgressBar() {
     if (!this._progressBar) return;
     var fill = this._progressBar.querySelector('.mts-stepper__progress-fill');
@@ -292,10 +292,19 @@ MTS.Stepper = class MtsStepper {
     fill.style.width = pct + '%';
   }
 
-  /* ── Emit ── */
+  /* â”€â”€ Emit â”€â”€ */
   _emit(event, detail) {
     var self = this;
     (this._listeners[event] || []).forEach(function(fn){ fn({ type: event, detail: detail }); });
     this._el.dispatchEvent(new CustomEvent('mts:stepper:' + event, { bubbles: true, detail: detail }));
   }
+
+  _syncClasses(classes) {
+    var previousMatiosClasses = Array.from(this._el.classList).filter(function(cls) {
+      return cls === 'mts-stepper' || cls.indexOf('mts-stepper--') === 0;
+    });
+    if (previousMatiosClasses.length) this._el.classList.remove.apply(this._el.classList, previousMatiosClasses);
+    this._el.classList.add.apply(this._el.classList, classes.filter(Boolean));
+  }
 };
+

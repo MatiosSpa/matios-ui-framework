@@ -53,7 +53,7 @@ MTS.EmptyState = class MtsEmptyState {
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   _build() {
-    this._el.className = `mts-emptystate mts-emptystate--${this.size}`;
+    this._syncClasses([`mts-emptystate`, `mts-emptystate--${this.size}`]);
     this._el.innerHTML = '';
 
     const icon = document.createElement('div');
@@ -80,6 +80,14 @@ MTS.EmptyState = class MtsEmptyState {
       btn.addEventListener('click', () => this._emit('action', {}));
       this._el.appendChild(btn);
     }
+  }
+
+  _syncClasses(classes) {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-emptystate' || cls.startsWith('mts-emptystate--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add(...classes.filter(Boolean));
   }
 
   _defaultTitle() {

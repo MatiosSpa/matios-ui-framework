@@ -72,6 +72,12 @@ MTS.Slider = class MtsSlider {
     return this;
   }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-slider-wrap'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-slider-wrap');
+  }
+
   _clamp(v) { return Math.min(this.max, Math.max(this.min, Number(v))); }
 
   _snap(v) {
@@ -83,7 +89,8 @@ MTS.Slider = class MtsSlider {
   _pct(v) { return ((v - this.min) / (this.max - this.min)) * 100; }
 
   _build() {
-    this._el.className = 'mts-slider-wrap';
+    this._syncClasses();
+    this._el.innerHTML = '';
 
     // Header: label + value display / Cabecera: label + display del valor
     if (this.label || this.showValue) {

@@ -68,6 +68,12 @@ MTS.Countdown = class MtsCountdown {
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-countdown'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-countdown', `mts-countdown--${this.variant}`);
+  }
+
   setTarget(t) {
     this._target = t instanceof Date ? t : new Date(t);
     this._tick();
@@ -90,7 +96,7 @@ MTS.Countdown = class MtsCountdown {
 
   _build() {
     this._el.innerHTML = '';
-    this._el.className = 'mts-countdown mts-countdown--' + this.variant;
+    this._syncClasses();
     this._units = {};
     const units = [
       { key:'days',  show:this.showDays,  label:this.labels.days  },

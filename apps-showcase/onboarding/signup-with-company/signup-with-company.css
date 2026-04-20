@@ -1,0 +1,393 @@
+html,body{
+  min-height:100%;
+}
+
+body{
+  margin:0;
+  font-family:'DM Sans',sans-serif;
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--mts-color-primary) 16%, transparent), transparent 30%),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--mts-color-primary) 10%, transparent), transparent 35%),
+    var(--mts-bg-body);
+  color:var(--mts-text-primary);
+}
+
+.signup-company-page{
+  min-height:100vh;
+  padding:24px;
+  box-sizing:border-box;
+}
+
+.signup-company-page__topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:18px 22px;
+  border:1px solid var(--mts-border-color);
+  border-radius:24px;
+  backdrop-filter:blur(18px);
+  background:color-mix(in srgb, var(--mts-bg-surface) 88%, transparent);
+}
+
+.signup-company-page__brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.signup-company-page__logo{
+  width:46px;
+  height:46px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  font-size:20px;
+  font-weight:800;
+  color:var(--mts-text-inverse);
+  background:linear-gradient(135deg, var(--mts-color-primary), color-mix(in srgb, var(--mts-color-primary) 48%, #ffffff));
+  box-shadow:0 16px 40px color-mix(in srgb, var(--mts-color-primary) 30%, transparent);
+}
+
+.signup-company-page__title{
+  font-size:1rem;
+  font-weight:700;
+  letter-spacing:.02em;
+}
+
+.signup-company-page__subtitle{
+  font-size:.92rem;
+  color:var(--mts-text-muted);
+}
+
+.signup-company-page__main{
+  margin-top:20px;
+  align-items:stretch;
+}
+
+.signup-company-page__hero,
+.signup-company-page__panel{
+  height:100%;
+  border:1px solid var(--mts-border-color);
+  border-radius:28px;
+  background:color-mix(in srgb, var(--mts-bg-surface) 92%, transparent);
+  backdrop-filter:blur(20px);
+}
+
+.signup-company-page__hero{
+  padding:32px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:28px;
+}
+
+.signup-company-page__eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  width:max-content;
+  padding:10px 14px;
+  border-radius:999px;
+  background:color-mix(in srgb, var(--mts-color-primary) 16%, transparent);
+  color:var(--mts-text-primary);
+  font-size:.88rem;
+  font-weight:600;
+}
+
+.signup-company-page__eyebrow-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--mts-color-primary);
+  box-shadow:0 0 0 6px color-mix(in srgb, var(--mts-color-primary) 22%, transparent);
+}
+
+.signup-company-page__hero-title{
+  margin:0;
+  max-width:12ch;
+  font-size:clamp(2.4rem,4vw,4.2rem);
+  line-height:.98;
+  letter-spacing:-.05em;
+}
+
+.signup-company-page__hero-copy{
+  margin:0;
+  max-width:58ch;
+  font-size:1.02rem;
+  line-height:1.7;
+  color:var(--mts-text-secondary);
+}
+
+.signup-company-page__feature-list{
+  display:grid;
+  gap:14px;
+}
+
+.signup-company-page__feature{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:14px;
+  padding:18px;
+  border-radius:20px;
+  background:var(--mts-bg-surface-2);
+  border:1px solid var(--mts-border-color);
+}
+
+.signup-company-page__feature h2{
+  margin:0 0 4px;
+  font-size:1rem;
+}
+
+.signup-company-page__feature p{
+  margin:0;
+  color:var(--mts-text-muted);
+  line-height:1.55;
+}
+
+.signup-company-page__feature-icon{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:color-mix(in srgb, var(--mts-color-primary) 18%, transparent);
+  color:var(--mts-color-primary);
+}
+
+.signup-company-page__trust-strip{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+
+.signup-company-page__trust-item{
+  padding:16px;
+  border-radius:20px;
+  background:linear-gradient(180deg, color-mix(in srgb, var(--mts-bg-surface) 92%, transparent), color-mix(in srgb, var(--mts-color-primary) 10%, transparent));
+  border:1px solid var(--mts-border-color);
+}
+
+.signup-company-page__trust-item strong,
+.signup-company-page__trust-item span{
+  display:block;
+}
+
+.signup-company-page__trust-item strong{
+  font-size:1.15rem;
+}
+
+.signup-company-page__trust-item span{
+  margin-top:6px;
+  color:var(--mts-text-muted);
+  font-size:.92rem;
+}
+
+.signup-company-page__panel{
+  padding:28px;
+}
+
+.signup-company-page__grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.signup-company-page__field-span{
+  grid-column:1 / -1;
+}
+
+.signup-company-page__password-box,
+.signup-company-page__inline-note,
+.signup-company-page__success-summary{
+  margin-top:18px;
+  padding:16px 18px;
+  border-radius:20px;
+  border:1px solid var(--mts-border-color);
+  background:var(--mts-bg-surface-2);
+}
+
+.signup-company-page__password-head{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.signup-company-page__password-title{
+  font-weight:700;
+}
+
+.signup-company-page__password-score{
+  font-size:.85rem;
+  color:var(--mts-text-muted);
+}
+
+.signup-company-page__password-rules{
+  display:grid;
+  gap:10px;
+}
+
+.signup-company-page__rule{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--mts-text-muted);
+}
+
+.signup-company-page__rule.is-valid{
+  color:var(--mts-color-primary);
+}
+
+.signup-company-page__checks{
+  margin-top:18px;
+  display:grid;
+  gap:12px;
+}
+
+.signup-company-page__inline-note{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.signup-company-page__inline-note p{
+  margin:0;
+  line-height:1.55;
+  color:var(--mts-text-secondary);
+}
+
+.signup-company-page__inline-icon{
+  width:34px;
+  height:34px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  flex:0 0 auto;
+  background:color-mix(in srgb, var(--mts-color-primary) 16%, transparent);
+  color:var(--mts-color-primary);
+}
+
+.signup-company-page__footer{
+  margin-top:22px;
+  gap:14px;
+  align-items:center;
+}
+
+.signup-company-page__submit{
+  min-width:min(100%,260px);
+}
+
+.signup-company-page__success-view{
+  min-height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:18px;
+  text-align:center;
+}
+
+.signup-company-page__success-icon{
+  width:76px;
+  height:76px;
+  margin:0 auto;
+  border-radius:24px;
+  display:grid;
+  place-items:center;
+  font-size:1.8rem;
+  color:var(--mts-text-inverse);
+  background:linear-gradient(135deg, var(--mts-color-primary), color-mix(in srgb, var(--mts-color-primary) 40%, #ffffff));
+  box-shadow:0 20px 48px color-mix(in srgb, var(--mts-color-primary) 28%, transparent);
+}
+
+.signup-company-page__success-title{
+  margin:0;
+  font-size:2rem;
+  letter-spacing:-.04em;
+}
+
+.signup-company-page__success-copy{
+  margin:0 auto;
+  max-width:42ch;
+  color:var(--mts-text-secondary);
+  line-height:1.65;
+}
+
+.signup-company-page__success-summary{
+  text-align:left;
+}
+
+.signup-company-page__success-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:10px 0;
+  border-bottom:1px solid var(--mts-border-color);
+}
+
+.signup-company-page__success-row:last-child{
+  border-bottom:0;
+}
+
+.signup-company-page__success-row span{
+  color:var(--mts-text-muted);
+}
+
+.signup-company-page__success-actions{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.signup-company-page__field-error{
+  border-radius:18px;
+  outline:1px solid var(--mts-color-danger,#ef4444);
+  outline-offset:4px;
+}
+
+[hidden]{
+  display:none !important;
+}
+
+@media (max-width: 1080px){
+  .signup-company-page__hero-title{
+    max-width:none;
+  }
+}
+
+@media (max-width: 720px){
+  .signup-company-page{
+    padding:16px;
+  }
+
+  .signup-company-page__topbar{
+    padding:16px;
+    border-radius:20px;
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .signup-company-page__hero,
+  .signup-company-page__panel{
+    padding:22px;
+    border-radius:24px;
+  }
+
+  .signup-company-page__grid,
+  .signup-company-page__trust-strip,
+  .signup-company-page__success-actions{
+    grid-template-columns:1fr;
+  }
+
+  .signup-company-page__footer{
+    flex-direction:column-reverse;
+    align-items:stretch;
+  }
+
+  .signup-company-page__submit{
+    width:100%;
+    min-width:0;
+  }
+}

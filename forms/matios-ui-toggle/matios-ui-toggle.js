@@ -58,7 +58,8 @@ MTS.Toggle = class MtsToggle {
   }
 
   _build() {
-    this._el.className = `mts-toggle-wrap mts-toggle-wrap--${this.size}`;
+    this._syncClasses();
+    this._el.innerHTML = '';
     const track = document.createElement('label');
     track.className = 'mts-toggle';
 
@@ -82,6 +83,14 @@ MTS.Toggle = class MtsToggle {
       lbl.textContent = this.label;
       this._el.appendChild(lbl);
     }
+  }
+
+  _syncClasses() {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-toggle-wrap' || cls.startsWith('mts-toggle-wrap--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add('mts-toggle-wrap', `mts-toggle-wrap--${this.size}`);
   }
 
   _emit(event, detail) {

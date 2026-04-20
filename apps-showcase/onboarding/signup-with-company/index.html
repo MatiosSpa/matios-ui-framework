@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Registro con Empresa - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="signup-with-company.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="signup-company-page">
+    <header class="signup-company-page__topbar mts-surface">
+      <div class="signup-company-page__brand">
+        <div class="signup-company-page__logo">M</div>
+        <div>
+          <div class="signup-company-page__title">Matios</div>
+          <div class="signup-company-page__subtitle">Crea tu cuenta y tu primera empresa</div>
+        </div>
+      </div>
+      <div class="signup-company-page__topbar-actions">
+        <div id="signup-company-login-top"></div>
+      </div>
+    </header>
+
+    <main class="signup-company-page__main mts-grid mts-grid--gap-md">
+      <section class="signup-company-page__hero mts-g-col-12 mts-g-col-lg-6 mts-surface">
+        <div class="signup-company-page__eyebrow">
+          <span class="signup-company-page__eyebrow-dot"></span>
+          <span>Registro multiempresa</span>
+        </div>
+
+        <h1 class="signup-company-page__hero-title">Activa tu espacio de trabajo con tu equipo desde el primer minuto.</h1>
+        <p class="signup-company-page__hero-copy">
+          Registra tu usuario principal, define el nombre de la empresa y deja lista la base
+          para operar varios clientes, sucursales o unidades bajo una misma plataforma.
+        </p>
+
+        <div class="signup-company-page__feature-list">
+          <article class="signup-company-page__feature">
+            <div class="signup-company-page__feature-icon"><i class="mts-icon mts-icon-briefcase"></i></div>
+            <div>
+              <h2>Empresa lista para crecer</h2>
+              <p>Nombre comercial, industria y tamano del equipo en un solo paso.</p>
+            </div>
+          </article>
+          <article class="signup-company-page__feature">
+            <div class="signup-company-page__feature-icon"><i class="mts-icon mts-icon-shield-check"></i></div>
+            <div>
+              <h2>Cuenta administradora inicial</h2>
+              <p>El primer usuario queda preparado para administrar configuracion y acceso.</p>
+            </div>
+          </article>
+          <article class="signup-company-page__feature">
+            <div class="signup-company-page__feature-icon"><i class="mts-icon mts-icon-layers"></i></div>
+            <div>
+              <h2>Base pensada para multiempresa</h2>
+              <p>La experiencia deja claro el contexto de workspace sin sobrecargar la UI.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="signup-company-page__trust-strip">
+          <div class="signup-company-page__trust-item">
+            <strong>1 cuenta</strong>
+            <span>Administrador principal</span>
+          </div>
+          <div class="signup-company-page__trust-item">
+            <strong>1 empresa</strong>
+            <span>Workspace inicial</span>
+          </div>
+          <div class="signup-company-page__trust-item">
+            <strong>0 backend</strong>
+            <span>Validacion visual</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="signup-company-page__panel-wrap mts-g-col-12 mts-g-col-lg-6">
+        <div class="mts-form-card signup-company-page__panel">
+          <div class="signup-company-page__form-view" id="signup-company-form-view">
+            <div class="mts-form-card__header">
+              <h2 class="mts-form-card__title">Abrir nueva empresa</h2>
+              <p class="mts-form-card__subtitle">
+                Completa tus datos de acceso y los datos base de la compania.
+              </p>
+            </div>
+
+            <div id="signup-company-alert"></div>
+
+            <div class="mts-form">
+              <div class="signup-company-page__grid">
+                <div id="signup-company-first-name"></div>
+                <div id="signup-company-last-name"></div>
+                <div id="signup-company-email"></div>
+                <div id="signup-company-phone"></div>
+                <div class="signup-company-page__field-span" id="signup-company-name"></div>
+                <div id="signup-company-industry"></div>
+                <div id="signup-company-team-size"></div>
+                <div id="signup-company-password"></div>
+                <div id="signup-company-password-confirm"></div>
+              </div>
+
+              <div class="signup-company-page__password-box mts-surface">
+                <div class="signup-company-page__password-head">
+                  <span class="signup-company-page__password-title">Revision rapida de clave</span>
+                  <span class="signup-company-page__password-score" id="signup-company-password-score">Pendiente</span>
+                </div>
+                <div class="signup-company-page__password-rules">
+                <div class="signup-company-page__rule" id="rule-length">
+                    <i class="mts-icon mts-icon-minus"></i>
+                    <span>Minimo 8 caracteres</span>
+                  </div>
+                  <div class="signup-company-page__rule" id="rule-letter">
+                    <i class="mts-icon mts-icon-minus"></i>
+                    <span>Incluye al menos una letra</span>
+                  </div>
+                  <div class="signup-company-page__rule" id="rule-number">
+                    <i class="mts-icon mts-icon-minus"></i>
+                    <span>Incluye al menos un numero</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="signup-company-page__checks">
+                <div id="signup-company-terms"></div>
+                <div id="signup-company-updates"></div>
+              </div>
+
+              <div class="signup-company-page__inline-note mts-surface">
+                <div class="signup-company-page__inline-icon"><i class="mts-icon mts-icon-star"></i></div>
+                <p>Al crear la cuenta se simulara el alta del usuario administrador y la empresa inicial.</p>
+              </div>
+
+              <div class="mts-form-footer mts-form-footer--between signup-company-page__footer">
+                <div id="signup-company-login-bottom"></div>
+                <div class="signup-company-page__submit" id="signup-company-submit"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="signup-company-page__success-view" id="signup-company-success-view" hidden>
+            <div class="signup-company-page__success-icon">
+              <i class="mts-icon mts-icon-check"></i>
+            </div>
+            <h2 class="signup-company-page__success-title">Empresa creada visualmente</h2>
+            <p class="signup-company-page__success-copy">
+              La simulacion quedo lista con una cuenta administradora inicial y un workspace base.
+            </p>
+
+            <div class="signup-company-page__success-summary mts-surface">
+              <div class="signup-company-page__success-row">
+                <span>Responsable</span>
+                <strong id="summary-owner">-</strong>
+              </div>
+              <div class="signup-company-page__success-row">
+                <span>Email</span>
+                <strong id="summary-email">-</strong>
+              </div>
+              <div class="signup-company-page__success-row">
+                <span>Empresa</span>
+                <strong id="summary-company">-</strong>
+              </div>
+              <div class="signup-company-page__success-row">
+                <span>Industria</span>
+                <strong id="summary-industry">-</strong>
+              </div>
+              <div class="signup-company-page__success-row">
+                <span>Equipo</span>
+                <strong id="summary-team">-</strong>
+              </div>
+            </div>
+
+            <div id="signup-company-success-alert"></div>
+
+            <div class="signup-company-page__success-actions">
+              <div id="signup-company-create-another"></div>
+              <div id="signup-company-go-login"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+window.addEventListener('message',function(e){
+  if(!e.data) return;
+  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+  if(e.data.type==='setAccent'){
+    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
+function openScreen(path){
+  var params=location.search||'';
+  window.location.href=path+params;
+}
+</script>
+<script>
+var state={
+  firstName:'',
+  lastName:'',
+  email:'',
+  phone:'',
+  companyName:'',
+  industryLabel:'',
+  teamSizeLabel:''
+};
+
+var firstNameInput=new MTS.Input('#signup-company-first-name',{
+  type:'text',
+  label:'Nombre',
+  placeholder:'Paula',
+  iconLeft:MTS.Icon.get('user')
+});
+
+var lastNameInput=new MTS.Input('#signup-company-last-name',{
+  type:'text',
+  label:'Apellido',
+  placeholder:'Suarez',
+  iconLeft:MTS.Icon.get('user')
+});
+
+var emailInput=new MTS.Input('#signup-company-email',{
+  type:'email',
+  label:'Email de trabajo',
+  placeholder:'paula@empresa.com',
+  iconLeft:MTS.Icon.get('mail')
+});
+
+var phoneInput=new MTS.Input('#signup-company-phone',{
+  type:'text',
+  label:'Telefono',
+  placeholder:'+56 9 1234 5678',
+  iconLeft:MTS.Icon.get('phone')
+});
+
+var companyNameInput=new MTS.Input('#signup-company-name',{
+  type:'text',
+  label:'Nombre de empresa',
+  placeholder:'Matios Logistics SpA',
+  iconLeft:MTS.Icon.get('briefcase')
+});
+
+var industrySelect=new MTS.Select('#signup-company-industry',{
+  label:'Industria',
+  placeholder:'Selecciona una industria',
+  options:[
+    {value:'saas',label:'Software y SaaS'},
+    {value:'services',label:'Servicios profesionales'},
+    {value:'retail',label:'Retail y eCommerce'},
+    {value:'finance',label:'Finanzas y seguros'},
+    {value:'logistics',label:'Logistica y operaciones'}
+  ]
+});
+
+var teamSizeSelect=new MTS.Select('#signup-company-team-size',{
+  label:'Tamano del equipo',
+  placeholder:'Selecciona un rango',
+  options:[
+    {value:'1-10',label:'1 a 10 personas'},
+    {value:'11-50',label:'11 a 50 personas'},
+    {value:'51-200',label:'51 a 200 personas'},
+    {value:'200+',label:'Mas de 200 personas'}
+  ]
+});
+
+var passwordInput=new MTS.Input('#signup-company-password',{
+  type:'password',
+  label:'Contrasena',
+  placeholder:'Crea una contrasena segura',
+  showPassword:true
+});
+
+var confirmPasswordInput=new MTS.Input('#signup-company-password-confirm',{
+  type:'password',
+  label:'Confirmar contrasena',
+  placeholder:'Repite la contrasena',
+  showPassword:true
+});
+
+new MTS.Checkbox('#signup-company-terms',{
+  label:'Acepto los terminos y la politica de tratamiento de datos'
+});
+
+new MTS.Checkbox('#signup-company-updates',{
+  label:'Quiero recibir novedades de producto y mejores practicas'
+});
+
+new MTS.Button('#signup-company-login-top',{
+  label:'Ya tengo cuenta',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-left'),
+  onClick:function(){openScreen('../../login/login/index.html');}
+});
+
+new MTS.Button('#signup-company-login-bottom',{
+  label:'Iniciar sesion',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-left'),
+  onClick:function(){openScreen('../../login/login/index.html');}
+});
+
+var submitButton=new MTS.Button('#signup-company-submit',{
+  label:'Crear empresa',
+  variant:'primary',
+  block:true,
+  iconLeft:MTS.Icon.get('briefcase'),
+  onClick:function(e,inst){submitSignup(inst);}
+});
+
+var createAnotherButton=new MTS.Button('#signup-company-create-another',{
+  label:'Crear otra empresa',
+  variant:'secondary',
+  block:true,
+  onClick:function(){resetFlow();}
+});
+
+var goLoginButton=new MTS.Button('#signup-company-go-login',{
+  label:'Ir al login',
+  variant:'primary',
+  block:true,
+  iconLeft:MTS.Icon.get('arrow-right'),
+  onClick:function(){openScreen('../../login/login/index.html');}
+});
+
+function clearAlerts(){
+  document.getElementById('signup-company-alert').innerHTML='';
+  document.getElementById('signup-company-success-alert').innerHTML='';
+}
+
+function showAlert(target,options){
+  document.getElementById(target.replace('#','')).innerHTML='';
+  MTS.Alert.show(target,options);
+}
+
+function clearErrors(){
+  firstNameInput.clearError();
+  lastNameInput.clearError();
+  emailInput.clearError();
+  phoneInput.clearError();
+  companyNameInput.clearError();
+  passwordInput.clearError();
+  confirmPasswordInput.clearError();
+  clearSelectError('#signup-company-industry');
+  clearSelectError('#signup-company-team-size');
+}
+
+function clearSelectError(selector){
+  var root=document.querySelector(selector);
+  if(!root) return;
+  root.classList.remove('signup-company-page__field-error');
+}
+
+function setSelectError(selector){
+  var root=document.querySelector(selector);
+  if(!root) return;
+  root.classList.add('signup-company-page__field-error');
+}
+
+function getCheckboxValue(selector){
+  var checkbox=document.querySelector(selector+' input[type="checkbox"]');
+  return !!(checkbox&&checkbox.checked);
+}
+
+function updatePasswordStatus(){
+  var password=passwordInput.getValue().trim();
+  var checks=[
+    {id:'rule-length',ok:password.length>=8},
+    {id:'rule-letter',ok:/[A-Za-z]/.test(password)},
+    {id:'rule-number',ok:/\d/.test(password)}
+  ];
+  var passed=0;
+
+  checks.forEach(function(check){
+    var item=document.getElementById(check.id);
+    if(!item) return;
+    item.classList.toggle('is-valid',check.ok);
+    item.querySelector('i').innerHTML=MTS.Icon.get(check.ok?'check':'minus');
+    if(check.ok) passed++;
+  });
+
+  var scoreLabel='Pendiente';
+  if(password){
+    scoreLabel=passed===3?'Fuerte':(passed===2?'Media':'Basica');
+  }
+  document.getElementById('signup-company-password-score').textContent=scoreLabel;
+}
+
+function submitSignup(inst){
+  clearAlerts();
+  clearErrors();
+
+  var firstName=firstNameInput.getValue().trim();
+  var lastName=lastNameInput.getValue().trim();
+  var email=emailInput.getValue().trim();
+  var phone=phoneInput.getValue().trim();
+  var companyName=companyNameInput.getValue().trim();
+  var industryValue=industrySelect.getValue();
+  var teamSizeValue=teamSizeSelect.getValue();
+  var password=passwordInput.getValue().trim();
+  var confirmPassword=confirmPasswordInput.getValue().trim();
+  var acceptedTerms=getCheckboxValue('#signup-company-terms');
+
+  if(!firstName){
+    firstNameInput.setError('Ingresa tu nombre');
+    return;
+  }
+
+  if(!lastName){
+    lastNameInput.setError('Ingresa tu apellido');
+    return;
+  }
+
+  if(!email){
+    emailInput.setError('Ingresa tu email de trabajo');
+    return;
+  }
+
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    emailInput.setError('Ingresa un email valido');
+    return;
+  }
+
+  if(phone && !/^[+\d\s()-]{8,}$/.test(phone)){
+    phoneInput.setError('Ingresa un telefono valido o dejalo vacio');
+    return;
+  }
+
+  if(!companyName){
+    companyNameInput.setError('Ingresa el nombre de tu empresa');
+    return;
+  }
+
+  if(!industryValue){
+    setSelectError('#signup-company-industry');
+    showAlert('#signup-company-alert',{
+      variant:'warning',
+      title:'Falta contexto de empresa',
+      message:'Selecciona la industria para continuar con la configuracion inicial.',
+      closable:true
+    });
+    return;
+  }
+
+  if(!teamSizeValue){
+    setSelectError('#signup-company-team-size');
+    showAlert('#signup-company-alert',{
+      variant:'warning',
+      title:'Falta tamano de equipo',
+      message:'Selecciona el rango de equipo para completar el alta inicial.',
+      closable:true
+    });
+    return;
+  }
+
+  if(!password){
+    passwordInput.setError('Crea una contrasena');
+    return;
+  }
+
+  if(password.length<8 || !/[A-Za-z]/.test(password) || !/\d/.test(password)){
+    passwordInput.setError('La contrasena debe tener al menos 8 caracteres, letras y numeros');
+    return;
+  }
+
+  if(!confirmPassword){
+    confirmPasswordInput.setError('Confirma tu contrasena');
+    return;
+  }
+
+  if(password!==confirmPassword){
+    confirmPasswordInput.setError('Las contrasenas no coinciden');
+    return;
+  }
+
+  if(!acceptedTerms){
+    showAlert('#signup-company-alert',{
+      variant:'warning',
+      title:'Acepta los terminos',
+      message:'Necesitamos tu confirmacion para crear la cuenta y la empresa inicial.',
+      closable:true
+    });
+    return;
+  }
+
+  state.firstName=firstName;
+  state.lastName=lastName;
+  state.email=email;
+  state.phone=phone||'-';
+  state.companyName=companyName;
+  state.industryLabel=getSelectedLabel(industrySelect,industryValue);
+  state.teamSizeLabel=getSelectedLabel(teamSizeSelect,teamSizeValue);
+
+  inst.setLoading(true);
+  inst.setLabel('Creando empresa...');
+
+  setTimeout(function(){
+    inst.setLoading(false);
+    inst.setLabel('Crear empresa');
+    showSuccessState();
+  },1100);
+}
+
+function getSelectedLabel(selectInstance,value){
+  var options=(selectInstance&&selectInstance.options)||[];
+  for(var i=0;i<options.length;i++){
+    if(options[i].value===value) return options[i].label;
+  }
+  return value||'-';
+}
+
+function showSuccessState(){
+  document.getElementById('signup-company-form-view').hidden=true;
+  document.getElementById('signup-company-success-view').hidden=false;
+  document.querySelector('.signup-company-page').classList.add('is-success');
+
+  document.getElementById('summary-owner').textContent=state.firstName+' '+state.lastName;
+  document.getElementById('summary-email').textContent=state.email;
+  document.getElementById('summary-company').textContent=state.companyName;
+  document.getElementById('summary-industry').textContent=state.industryLabel;
+  document.getElementById('summary-team').textContent=state.teamSizeLabel;
+
+  showAlert('#signup-company-success-alert',{
+    variant:'success',
+    title:'Alta simulada correctamente',
+    message:'Se preparo el workspace <strong>'+escapeHtml(state.companyName)+'</strong> con <strong>'+escapeHtml(state.firstName+' '+state.lastName)+'</strong> como administrador inicial.',
+    closable:true
+  });
+}
+
+function resetFlow(){
+  clearAlerts();
+  clearErrors();
+  document.getElementById('signup-company-form-view').hidden=false;
+  document.getElementById('signup-company-success-view').hidden=true;
+  document.querySelector('.signup-company-page').classList.remove('is-success');
+  setNativeValue('#signup-company-first-name input','');
+  setNativeValue('#signup-company-last-name input','');
+  setNativeValue('#signup-company-email input','');
+  setNativeValue('#signup-company-phone input','');
+  setNativeValue('#signup-company-name input','');
+  setNativeValue('#signup-company-password input','');
+  setNativeValue('#signup-company-password-confirm input','');
+  resetSelect('#signup-company-industry');
+  resetSelect('#signup-company-team-size');
+  resetCheckbox('#signup-company-terms');
+  resetCheckbox('#signup-company-updates');
+  updatePasswordStatus();
+}
+
+function setNativeValue(selector,value){
+  var input=document.querySelector(selector);
+  if(!input) return;
+  input.value=value;
+  input.dispatchEvent(new Event('input',{bubbles:true}));
+  input.dispatchEvent(new Event('change',{bubbles:true}));
+}
+
+function resetSelect(selector){
+  var selectInstance=selector==='#signup-company-industry'?industrySelect:teamSizeSelect;
+  if(!selectInstance) return;
+  selectInstance.clear();
+  clearSelectError(selector);
+}
+
+function resetCheckbox(selector){
+  var el=document.querySelector(selector+' input[type="checkbox"]');
+  if(!el) return;
+  el.checked=false;
+  el.dispatchEvent(new Event('change',{bubbles:true}));
+}
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+
+function wireFieldEvents(){
+  [
+    '#signup-company-password input',
+    '#signup-company-password-confirm input'
+  ].forEach(function(selector){
+    var node=document.querySelector(selector);
+    if(!node) return;
+    node.addEventListener('input',updatePasswordStatus);
+  });
+
+  industrySelect.on('change',function(){clearSelectError('#signup-company-industry');});
+  teamSizeSelect.on('change',function(){clearSelectError('#signup-company-team-size');});
+}
+
+wireFieldEvents();
+MTS.Icon.initAll();
+updatePasswordStatus();
+</script>
+</body>
+</html>

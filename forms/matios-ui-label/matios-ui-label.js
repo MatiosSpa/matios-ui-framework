@@ -76,14 +76,7 @@ MTS.Label = class MtsLabel {
   /* ── Build / Construcción ───────────────────────────── */
 
   _build() {
-    const classes = ['mts-label'];
-    if (this.required)  classes.push('mts-label--required');
-    if (this.optional)  classes.push('mts-label--optional');
-    if (this.hidden)    classes.push('mts-label--hidden');
-    if (this.size)      classes.push('mts-label--' + this.size);
-    if (this.className) this.className.split(' ').forEach(c => c && classes.push(c));
-
-    this._el.className = classes.join(' ');
+    this._syncClasses();
     if (this.forId) this._el.setAttribute('for', this.forId);
 
     // Inner text span / Span interno del texto
@@ -102,6 +95,22 @@ MTS.Label = class MtsLabel {
     }
 
     this._renderFeedback();
+  }
+
+  _syncClasses() {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-label' || cls.startsWith('mts-label--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+
+    const classes = ['mts-label'];
+    if (this.required)  classes.push('mts-label--required');
+    if (this.optional)  classes.push('mts-label--optional');
+    if (this.hidden)    classes.push('mts-label--hidden');
+    if (this.size)      classes.push('mts-label--' + this.size);
+    if (this.className) this.className.split(' ').forEach(c => c && classes.push(c));
+
+    this._el.classList.add(...classes);
   }
 
   _renderFeedback() {

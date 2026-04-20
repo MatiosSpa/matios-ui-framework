@@ -107,7 +107,7 @@ MTS.Pagination = class MtsPagination {
 
   _build() {
     this._el.innerHTML = '';
-    this._el.className = 'mts-pagination mts-pagination--' + this.size;
+    this._syncClasses(['mts-pagination', 'mts-pagination--' + this.size]);
     const tp = this._totalPages();
 
     /* Info "Mostrando X-Y de Z" */
@@ -192,5 +192,13 @@ MTS.Pagination = class MtsPagination {
     }
 
     this._el.appendChild(right);
+  }
+
+  _syncClasses(classes) {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-pagination' || cls.startsWith('mts-pagination--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add(...classes.filter(Boolean));
   }
 };

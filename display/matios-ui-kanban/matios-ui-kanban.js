@@ -60,7 +60,7 @@ MTS.Kanban = class MtsKanban {
   destroy()        { this._el.innerHTML = ''; }
 
   _build() {
-    this._el.className = 'mts-kanban';
+    this._syncClasses(['mts-kanban']);
     this._el.innerHTML = '';
     this.columns.forEach(col => {
       const colEl = this._buildColumn(col);
@@ -227,6 +227,14 @@ MTS.Kanban = class MtsKanban {
       const offset = y - box.top - box.height / 2;
       return offset < 0 && offset > closest.offset ? { offset, element: child } : closest;
     }, { offset: Number.NEGATIVE_INFINITY }).element;
+  }
+
+  _syncClasses(classes) {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-kanban' || cls.startsWith('mts-kanban--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add(...classes.filter(Boolean));
   }
 
   _showInlineAddForm(colEl, colId, list, addBtn) {

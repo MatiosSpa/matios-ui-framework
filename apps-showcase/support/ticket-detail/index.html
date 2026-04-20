@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ticket Detail - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-timeline/matios-ui-timeline.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="ticket-detail.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../display/matios-ui-timeline/matios-ui-timeline.js"></script>
+</head>
+<body>
+  <div class="ticket-detail-page">
+    <header class="ticket-detail-page__topbar mts-surface">
+      <div class="ticket-detail-page__brand">
+        <div class="ticket-detail-page__logo">M</div>
+        <div>
+          <div class="ticket-detail-page__title">Ticket Detail</div>
+          <div class="ticket-detail-page__subtitle">Caso activo con trazabilidad y respuesta</div>
+        </div>
+      </div>
+      <div class="ticket-detail-page__topbar-actions">
+        <div id="ticket-detail-back"></div>
+      </div>
+    </header>
+
+    <main class="ticket-detail-page__main mts-grid mts-grid--gap-md">
+      <section class="ticket-detail-page__hero mts-g-col-12 mts-g-col-lg-8 mts-surface">
+        <div class="ticket-detail-page__eyebrow">
+          <span class="ticket-detail-page__eyebrow-dot"></span>
+          <span>Ticket HD-201</span>
+        </div>
+
+        <h1 class="ticket-detail-page__hero-title">Factura duplicada enviada al cliente final</h1>
+        <p class="ticket-detail-page__hero-copy">
+          El detalle del caso concentra contexto, proxima accion y la linea completa de actividad para
+          que el analista no pierda el hilo entre diagnostico y respuesta.
+        </p>
+
+        <div id="ticket-detail-alert"></div>
+
+        <div class="ticket-detail-page__meta">
+          <span class="ticket-detail-page__chip ticket-detail-page__chip--high">Prioridad alta</span>
+          <span class="ticket-detail-page__chip">Northwind Retail</span>
+          <span class="ticket-detail-page__chip">SLA 1h</span>
+        </div>
+      </section>
+
+      <section class="ticket-detail-page__aside mts-g-col-12 mts-g-col-lg-4">
+        <div class="ticket-detail-page__aside-grid mts-grid mts-grid--gap-md">
+          <div class="mts-g-col-12">
+            <div id="ticket-detail-summary-card"></div>
+          </div>
+          <div class="mts-g-col-12">
+            <div class="mts-form-card ticket-detail-page__action-panel">
+              <div class="ticket-detail-page__action-grid">
+                <div id="ticket-detail-owner"></div>
+                <div id="ticket-detail-status"></div>
+                <div class="ticket-detail-page__reply" id="ticket-detail-reply"></div>
+              </div>
+              <div class="ticket-detail-page__action-footer">
+                <div id="ticket-detail-save"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ticket-detail-page__timeline-wrap mts-g-col-12">
+        <div class="mts-form-card ticket-detail-page__timeline-card">
+          <div class="ticket-detail-page__timeline-head">
+            <h2 class="ticket-detail-page__timeline-title">Actividad del caso</h2>
+            <div id="ticket-detail-open-inbox"></div>
+          </div>
+          <div id="ticket-detail-timeline"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+window.addEventListener('message',function(e){
+  if(!e.data) return;
+  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+  if(e.data.type==='setAccent'){
+    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+function openScreen(path){
+  var params=location.search||'';
+  window.location.href=path+params;
+}
+</script>
+<script>
+var ownerSelect=new MTS.Select('#ticket-detail-owner',{
+  label:'Responsable',
+  placeholder:'Selecciona responsable',
+  options:[
+    {value:'camila',label:'Camila Rojas'},
+    {value:'diego',label:'Diego Paredes'},
+    {value:'andres',label:'Andres Soto'}
+  ],
+  value:'camila'
+});
+
+var statusSelect=new MTS.Select('#ticket-detail-status',{
+  label:'Estado',
+  placeholder:'Selecciona estado',
+  options:[
+    {value:'open',label:'Abierto'},
+    {value:'investigating',label:'Investigando'},
+    {value:'pending',label:'Pendiente cliente'},
+    {value:'resolved',label:'Resuelto'}
+  ],
+  value:'investigating'
+});
+
+var replyInput=new MTS.Input('#ticket-detail-reply',{
+  type:'text',
+  label:'Proxima respuesta',
+  placeholder:'Indica la accion que enviarias al cliente',
+  iconLeft:MTS.Icon.get('message')
+});
+
+new MTS.Button('#ticket-detail-back',{
+  label:'Volver a bandeja',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-left'),
+  onClick:function(){openScreen('../ticket-inbox/index.html');}
+});
+
+new MTS.Button('#ticket-detail-open-inbox',{
+  label:'Abrir bandeja',
+  variant:'secondary',
+  size:'sm',
+  iconLeft:MTS.Icon.get('arrow-left'),
+  onClick:function(){openScreen('../ticket-inbox/index.html');}
+});
+
+new MTS.Button('#ticket-detail-save',{
+  label:'Guardar avance',
+  variant:'primary',
+  block:true,
+  iconLeft:MTS.Icon.get('save'),
+  onClick:function(e,inst){
+    var reply=replyInput.getValue().trim();
+    replyInput.clearError();
+    if(!reply){
+      replyInput.setError('Escribe la proxima accion antes de guardar');
+      return;
+    }
+    inst.setLoading(true);
+    inst.setLabel('Guardando...');
+    setTimeout(function(){
+      inst.setLoading(false);
+      inst.setLabel('Guardar avance');
+      MTS.Alert.show('#ticket-detail-alert',{
+        variant:'success',
+        title:'Caso actualizado',
+        message:'Se simulo el guardado del ticket con nuevo responsable, estado y respuesta sugerida.',
+        closable:true
+      });
+    },900);
+  }
+});
+
+new MTS.Card('#ticket-detail-summary-card',{
+  title:'Resumen operativo',
+  subtitle:'Contexto del caso',
+  variant:'elevated',
+  size:'lg',
+  body:
+    '<div class="ticket-detail-page__summary-body">'+
+      '<div><span>Cliente</span><strong>Northwind Retail</strong></div>'+
+      '<div><span>Origen</span><strong>Email automatizado</strong></div>'+
+      '<div><span>Impacto</span><strong>Riesgo de cobro duplicado</strong></div>'+
+      '<div><span>Ultima actualizacion</span><strong>Hace 8 minutos</strong></div>'+
+    '</div>'
+});
+
+new MTS.Timeline('#ticket-detail-timeline',{
+  events:[
+    {
+      id:'created',
+      title:'Ticket creado por regla automatica',
+      description:'El motor detecto dos facturas con el mismo folio y disparo el caso para revision.',
+      date:'08:14',
+      badge:{label:'Nuevo',variant:'info'},
+      color:'var(--mts-color-primary)'
+    },
+    {
+      id:'assigned',
+      title:'Asignado a Camila Rojas',
+      description:'El caso quedo en cola de facturacion por impacto directo en cliente final.',
+      date:'08:19',
+      badge:{label:'Owner',variant:'primary'}
+    },
+    {
+      id:'customer',
+      title:'Cliente confirma recepcion duplicada',
+      description:'Se recibio respuesta indicando que el documento llego dos veces al mismo destinatario.',
+      date:'08:27',
+      badge:{label:'Cliente',variant:'warning'}
+    },
+    {
+      id:'pending',
+      title:'Analisis en curso',
+      description:'Pendiente validar si el duplicado salio desde automatizacion o reproceso manual.',
+      date:'08:35',
+      badge:{label:'Investigando',variant:'default'}
+    }
+  ]
+});
+
+MTS.Alert.show('#ticket-detail-alert',{
+  variant:'warning',
+  title:'SLA comprometido',
+  message:'El caso aun esta dentro de ventana, pero requiere respuesta hoy para evitar escalamiento.',
+  closable:false
+});
+
+MTS.Icon.initAll();
+</script>
+</body>
+</html>

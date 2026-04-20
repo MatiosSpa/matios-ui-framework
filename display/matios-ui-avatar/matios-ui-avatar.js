@@ -52,8 +52,15 @@ MTS.Avatar = class MtsAvatar {
   setStatus(status) { this.status = status; this._build(); return this; }
   setSrc(src)       { this.src = src; this._build(); return this; }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-avatar'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-avatar', `mts-avatar--${this.size}`);
+    if (this.square) this._el.classList.add('mts-avatar--square');
+  }
+
   _build() {
-    this._el.className = `mts-avatar mts-avatar--${this.size}${this.square ? ' mts-avatar--square' : ''}`;
+    this._syncClasses();
     this._el.setAttribute('aria-label', this.name || 'Avatar');
     this._el.innerHTML = '';
 
@@ -126,8 +133,14 @@ MTS.AvatarGroup = class MtsAvatarGroup {
     this._build();
   }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-avatar-group'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-avatar-group');
+  }
+
   _build() {
-    this._el.className = 'mts-avatar-group';
+    this._syncClasses();
     this._el.innerHTML = '';
     const visible = this.avatars.slice(0, this.max);
     const rest    = this.avatars.length - this.max;

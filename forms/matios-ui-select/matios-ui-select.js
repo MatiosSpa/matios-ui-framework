@@ -78,6 +78,7 @@ MTS.Select = class MtsSelect {
     // Async search function: (query) => items[] | Promise<items[]>
     // Función de búsqueda async — proveedor de datos, no un evento
     this._onSearch = options.onSearch || null;
+    this.renderMode = options.renderMode || 'auto';
 
     // Fires when selection changes / Se dispara al cambiar la selección
     if (options.onChange) this.on('change', options.onChange);
@@ -220,18 +221,21 @@ MTS.Select = class MtsSelect {
   /* ── Build / Construcción ───────────────────────────────── */
 
   _build() {
+    const explicitFieldOnly = this.renderMode === 'field-only';
+    const explicitStandalone = this.renderMode === 'standalone';
     const parentIsGroup = this._container.parentElement?.classList.contains('mts-form-group');
-    if (parentIsGroup) {
-      this._container.className = 'mts-select';
-      this._container.innerHTML = '';
+    const fieldOnly = explicitFieldOnly || (!explicitStandalone && parentIsGroup);
+
+    this._container.innerHTML = '';
+
+    if (fieldOnly) {
+      this._container.classList.add('mts-select');
       this._buildSelectInner(this._container);
       this._renderOptions();
       this._updateTrigger();
       this._syncHidden();
       return;
     }
-
-    this._container.className = 'mts-form-group';
 
     if (this.label) {
       const lbl = document.createElement('label');

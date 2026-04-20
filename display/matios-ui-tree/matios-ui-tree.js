@@ -65,7 +65,7 @@ MTS.Tree = class MtsTree {
 
   _build() {
     this._el.innerHTML = '';
-    this._el.className = 'mts-tree' + (this.showLines ? ' mts-tree--lines' : '');
+    this._syncClasses(['mts-tree'].concat(this.showLines ? ['mts-tree--lines'] : []));
     const ul = this._buildLevel(this.nodes, 0);
     this._el.appendChild(ul);
   }
@@ -213,6 +213,15 @@ MTS.Tree = class MtsTree {
     }
     return null;
   }
+
+  _syncClasses(classes) {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-tree' || cls.startsWith('mts-tree--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add(...classes.filter(Boolean));
+  }
+
   _emit(event, detail) {
     (this._listeners[event]||[]).forEach(fn=>fn({type:event,detail}));
     this._el.dispatchEvent(new CustomEvent('mts:tree:'+event, {bubbles:true,detail}));

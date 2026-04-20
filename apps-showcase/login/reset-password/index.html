@@ -1,0 +1,259 @@
+﻿<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nueva Contrasena - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-formlayout/matios-ui-formlayout.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../layout/matios-ui-grid/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="reset-password.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="reset-page">
+    <header class="reset-page__topbar mts-surface">
+      <div class="reset-page__brand">
+        <div class="reset-page__logo">M</div>
+        <div>
+          <div class="reset-page__title">Nueva Contrasena</div>
+          <div class="reset-page__subtitle">Showcase / Autenticacion</div>
+        </div>
+      </div>
+      <div class="reset-page__topbar-actions">
+        <div id="reset-back-btn"></div>
+      </div>
+    </header>
+
+    <main class="reset-page__main mts-grid mts-grid--gap-md">
+      <section class="reset-page__hero mts-g-col-12 mts-g-col-lg-7 mts-surface">
+        <p class="reset-page__kicker">Pantalla activa</p>
+        <h1 class="reset-page__hero-title">Cierre del flujo de recuperacion</h1>
+        <p class="reset-page__hero-copy">
+          Esta pantalla representa el momento en que el usuario llega con un enlace o token
+          valido y define una nueva contrasena. La UI prioriza claridad, validacion visual y
+          continuidad con el resto del grupo de autenticacion.
+        </p>
+
+        <div class="reset-page__cards mts-grid mts-grid--gap-md">
+          <div class="mts-g-col-12 mts-g-col-md-6"><div id="reset-card-context"></div></div>
+          <div class="mts-g-col-12 mts-g-col-md-6"><div id="reset-card-rules"></div></div>
+        </div>
+      </section>
+
+      <section class="reset-page__form-wrap mts-g-col-12 mts-g-col-lg-5">
+        <div class="mts-form-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Define tu nueva clave</h2>
+            <p class="mts-form-card__subtitle">
+              Ingresa y confirma tu contrasena para completar la simulacion de recuperacion.
+            </p>
+          </div>
+
+          <div id="reset-alert"></div>
+
+          <div class="mts-form">
+            <div class="mts-form-section">
+              <div id="reset-password"></div>
+              <div id="reset-confirm"></div>
+
+              <div class="reset-page__rules mts-surface">
+                <p class="reset-page__rules-title">Reglas de la clave</p>
+                <div class="reset-page__rule-list">
+                  <div class="reset-page__rule" id="rule-length">
+                    <i class="mts-icon mts-icon-circle"></i>
+                    <span>Al menos 8 caracteres</span>
+                  </div>
+                  <div class="reset-page__rule" id="rule-number">
+                    <i class="mts-icon mts-icon-circle"></i>
+                    <span>Incluye al menos un numero</span>
+                  </div>
+                  <div class="reset-page__rule" id="rule-match">
+                    <i class="mts-icon mts-icon-circle"></i>
+                    <span>Ambos campos deben coincidir</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mts-form-footer mts-form-footer--between reset-page__footer">
+              <div id="reset-forgot-btn"></div>
+              <div class="reset-page__submit" id="reset-submit"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+window.addEventListener('message',function(e){
+  if(!e.data) return;
+  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+  if(e.data.type==='setAccent'){
+    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
+function openScreen(path){
+  var params=location.search||'';
+  window.location.href=path+params;
+}
+</script>
+<script>
+new MTS.Button('#reset-back-btn',{
+  label:'Volver al grupo',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-left'),
+  onClick:function(){goBack();}
+});
+
+new MTS.Card('#reset-card-context',{
+  title:'Token valido',
+  subtitle:'Contexto de entrada',
+  variant:'outlined',
+  body:'<p class="reset-card-copy">La pantalla asume que el usuario ya llego desde un enlace de recuperacion valido y puede definir una nueva clave.</p>'
+});
+
+new MTS.Card('#reset-card-rules',{
+  title:'Validacion visible',
+  subtitle:'Feedback inmediato',
+  variant:'outlined',
+  body:'<p class="reset-card-copy">Las reglas se muestran dentro de la misma vista para que el usuario entienda rapido por que una clave aun no esta lista.</p>'
+});
+
+var passwordInput=new MTS.Input('#reset-password',{
+  type:'password',
+  label:'Nueva contrasena',
+  placeholder:'Ingresa tu nueva contrasena',
+  showPassword:true
+});
+
+var confirmInput=new MTS.Input('#reset-confirm',{
+  type:'password',
+  label:'Confirmar contrasena',
+  placeholder:'Repite la nueva contrasena',
+  showPassword:true
+});
+
+new MTS.Button('#reset-forgot-btn',{
+  label:'Volver a recuperar',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-left'),
+  onClick:function(){openScreen('../forgot-password/index.html');}
+});
+
+var submitButton=new MTS.Button('#reset-submit',{
+  label:'Guardar nueva clave',
+  variant:'primary',
+  block:true,
+  iconLeft:MTS.Icon.get('shield-check'),
+  onClick:function(e,inst){submitReset(inst);}
+});
+
+function clearAlert(){
+  document.getElementById('reset-alert').innerHTML='';
+}
+
+function showAlert(options){
+  clearAlert();
+  MTS.Alert.show('#reset-alert',options);
+}
+
+function passwordRules(password,confirmPassword){
+  return {
+    length: password.length >= 8,
+    number: /\d/.test(password),
+    match: password.length > 0 && password === confirmPassword
+  };
+}
+
+function renderRules(){
+  var password=passwordInput.getValue();
+  var confirmPassword=confirmInput.getValue();
+  var rules=passwordRules(password,confirmPassword);
+
+  renderRule('rule-length',rules.length);
+  renderRule('rule-number',rules.number);
+  renderRule('rule-match',rules.match);
+}
+
+function renderRule(id,ok){
+  var el=document.getElementById(id);
+  el.classList.toggle('reset-page__rule--ok',ok);
+  var icon=el.querySelector('i');
+  icon.className='mts-icon mts-icon-'+(ok?'check-circle':'circle');
+}
+
+function submitReset(inst){
+  var password=passwordInput.getValue().trim();
+  var confirmPassword=confirmInput.getValue().trim();
+  var rules=passwordRules(password,confirmPassword);
+
+  clearAlert();
+  passwordInput.clearError();
+  confirmInput.clearError();
+  renderRules();
+
+  if(!password){
+    passwordInput.setError('Debes ingresar una nueva contrasena');
+    return;
+  }
+
+  if(!rules.length || !rules.number){
+    passwordInput.setError('La contrasena aun no cumple las reglas minimas');
+    return;
+  }
+
+  if(!confirmPassword){
+    confirmInput.setError('Debes confirmar la contrasena');
+    return;
+  }
+
+  if(!rules.match){
+    confirmInput.setError('Las contrasenas no coinciden');
+    return;
+  }
+
+  inst.setLoading(true);
+  inst.setLabel('Guardando nueva clave...');
+
+  setTimeout(function(){
+    inst.setLoading(false);
+    inst.setLabel('Guardar nueva clave');
+    showAlert({
+      variant:'success',
+      title:'Clave actualizada',
+      message:'Simulacion UI: la nueva contrasena quedaria registrada y el siguiente paso natural seria volver al <strong>login</strong>.',
+      closable:true
+    });
+  },900);
+}
+
+passwordInput._el.addEventListener('input',renderRules);
+confirmInput._el.addEventListener('input',renderRules);
+renderRules();
+</script>
+</body>
+</html>
+

@@ -56,6 +56,12 @@ MTS.Skeleton = class MtsSkeleton {
   hide()    { this._el.style.display = 'none'; return this; }
   destroy() { this._el.innerHTML = ''; }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-skeleton'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-skeleton');
+  }
+
   _bone(w = '100%', h = '16px', br = '4px') {
     const el = document.createElement('div');
     el.className = `mts-skeleton__bone mts-skeleton__bone--${this.animation}`;
@@ -65,7 +71,7 @@ MTS.Skeleton = class MtsSkeleton {
 
   _build() {
     this._el.innerHTML = '';
-    this._el.className = 'mts-skeleton';
+    this._syncClasses();
     if (this.width)  this._el.style.width  = this.width;
     if (this.height) this._el.style.height = this.height;
 

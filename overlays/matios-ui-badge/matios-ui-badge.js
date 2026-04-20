@@ -164,21 +164,26 @@ MTS.Badge = class MtsBadge {
     this._el?.remove();
   }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-badge'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add(
+      'mts-badge',
+      `mts-badge--${this.variant}`,
+      `mts-badge--${this.shape}`,
+      `mts-badge--${this.size}`
+    );
+    if (this.dot) this._el.classList.add('mts-badge--dot');
+    if (this.pulse) this._el.classList.add('mts-badge--pulse');
+    if (this.removable) this._el.classList.add('mts-badge--removable');
+  }
+
   /* ============================================================
      RENDER
      ============================================================ */
 
   _render() {
-    // Clases base
-    this._el.className = [
-      'mts-badge',
-      `mts-badge--${this.variant}`,
-      `mts-badge--${this.shape}`,
-      `mts-badge--${this.size}`,
-      this.dot      ? 'mts-badge--dot'    : '',
-      this.pulse    ? 'mts-badge--pulse'  : '',
-      this.removable ? 'mts-badge--removable' : '',
-    ].filter(Boolean).join(' ');
+    this._syncClasses();
 
     this._el.innerHTML = '';
 

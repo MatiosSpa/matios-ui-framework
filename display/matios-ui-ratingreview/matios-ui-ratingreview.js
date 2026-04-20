@@ -65,7 +65,7 @@ MTS.RatingReview = class MtsRatingReview {
 
   _build() {
     this._el.innerHTML = '';
-    this._el.className = 'mts-ratingreview mts-ratingreview--' + this.size;
+    this._syncClasses(['mts-ratingreview', 'mts-ratingreview--' + this.size]);
 
     /* Columna izquierda: score grande */
     const left = document.createElement('div');
@@ -142,6 +142,15 @@ MTS.RatingReview = class MtsRatingReview {
       btn.classList.toggle('mts-ratingreview__star-btn--active', i < active);
     });
   }
+
+  _syncClasses(classes) {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-ratingreview' || cls.startsWith('mts-ratingreview--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add(...classes.filter(Boolean));
+  }
+
   _emit(event, detail) {
     (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
     this._el?.dispatchEvent(new CustomEvent(`mts:ratingreview:${event}`, { bubbles: true, detail }));

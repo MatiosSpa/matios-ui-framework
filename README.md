@@ -1,5 +1,5 @@
-<p align="center">
-  <img src="./logos/Matios-UI-logo-768w.png" alt="Matios UI Framework" width="560">
+﻿<p align="center">
+  <img src="./logos/Matios-UI-logo-768w.png" alt="Matios UI Framework"/>
 </p>
 
 <h1 align="center">Matios UI Framework</h1>
@@ -80,19 +80,19 @@ Open `index.html` in your browser to explore the framework.
 
 ```text
 matios-ui-framework/
-├─ index.html
-├─ base/
-├─ forms/
-├─ navigation/
-├─ overlays/
-├─ display/
-├─ layout/
-├─ data/
-├─ icons/
-├─ shared/
-├─ themes/
-├─ calendar/
-└─ apps-showcase/
+â”œâ”€ index.html
+â”œâ”€ base/
+â”œâ”€ forms/
+â”œâ”€ navigation/
+â”œâ”€ overlays/
+â”œâ”€ display/
+â”œâ”€ layout/
+â”œâ”€ data/
+â”œâ”€ icons/
+â”œâ”€ shared/
+â”œâ”€ themes/
+â”œâ”€ calendar/
+â””â”€ apps-showcase/
 ```
 
 ### Minimal Usage
@@ -168,10 +168,10 @@ Every component follows the same structure:
 
 ```text
 matios-ui-xxx/
-├─ matios-ui-xxx.css
-├─ matios-ui-xxx.js
-├─ matios-ui-xxx.md
-└─ demo.html
+â”œâ”€ matios-ui-xxx.css
+â”œâ”€ matios-ui-xxx.js
+â”œâ”€ matios-ui-xxx.md
+â””â”€ demo.html
 ```
 
 This makes the framework:
@@ -186,6 +186,7 @@ This makes the framework:
 ## Component Groups
 
 ### Forms
+
 - Button
 - Input
 - Select
@@ -208,6 +209,7 @@ This makes the framework:
 - Label
 
 ### Navigation
+
 - Tabs
 - Accordion
 - Breadcrumb
@@ -223,6 +225,7 @@ This makes the framework:
 - Intersection Reveal
 
 ### Overlays
+
 - Alert
 - Badge
 - Tooltip
@@ -235,6 +238,7 @@ This makes the framework:
 - Lightbox
 
 ### Display
+
 - Avatar
 - Card
 - KPI Card
@@ -250,21 +254,25 @@ This makes the framework:
 - Splitter
 
 ### Layout
+
 - Grid
 - ScrollSpy
 - Intersection Reveal
 - Splitter
 
 ### Data
+
 - Table
 - Infinite utilities
 - data-oriented demos and helpers
 
 ### Shared
+
 - HttpClient
 - shared demo support
 
 ### Icons
+
 - **278 icons**
 - outline / filled
 - semantic colors
@@ -280,19 +288,742 @@ Example:
 ```
 
 ### Themes
+
 - mode switching
 - accent switching
 - high-contrast preview
 - CSS variable inspection
 
 ### Calendar
+
 - calendar demos
 - schedule-oriented UI examples
 
 ### Showcase
+
 - higher-level demo pages
 - more realistic app-like screens
 - shell validation for components in context
+
+---
+
+## Showcase Screens
+
+The `apps-showcase/` module is evolving into a catalog of complete user interfaces built with Matios UI components.
+
+Rules for showcase screens:
+
+- build inside `apps-showcase/`
+- organize screens by group using `apps-showcase/<group>/<screen>/`
+- use Matios UI components first
+- avoid ad-hoc visual inventions
+- document every screen as the catalog grows
+- keep a group index before growing individual screens
+- when a screen is not implemented yet, keep a visible `In construction` placeholder from the showcase index
+
+### Authentication
+
+File: `apps-showcase/index.html`
+
+Initial screens in the group:
+
+- `login`
+- `forgot-password`
+- `reset-password`
+- `verify-email`
+- `workspace-selector`
+- `session-expired`
+- `access-denied`
+- `accept-invitation`
+
+#### `login`
+
+File: `apps-showcase/login/login/index.html`
+
+Purpose:
+
+- unified access screen for `email`, `username`, or `phone`
+- supports `password` and `OTP` modes in the same UI
+- demonstrates conditional rendering using existing Matios UI components
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Toggle`
+- `MTS.Checkbox`
+- `MTS.Button`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- password access
+- OTP request
+- loading
+- inline validation
+- informational success feedback
+
+#### `forgot-password`
+
+File: `apps-showcase/login/forgot-password/index.html`
+
+Purpose:
+
+- request account recovery from a single identity field
+- simulate recovery link delivery without backend behavior
+- keep the flow aligned with `login` and the future `reset-password`
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- empty validation
+- loading while preparing the recovery link
+- success feedback with destination confirmation
+- return path back to `login`
+
+#### `reset-password`
+
+File: `apps-showcase/login/reset-password/index.html`
+
+Purpose:
+
+- define a new password after the recovery step
+- validate the new password and confirmation inline
+- represent the final step before returning to `login`
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- empty validation
+- password rule validation
+- confirmation mismatch validation
+- loading while saving the new password
+- success feedback for the end of the recovery flow
+
+#### `verify-email`
+
+File: `apps-showcase/login/verify-email/index.html`
+
+Purpose:
+
+- represent the pending email verification state after signup or invitation
+- allow resending the verification email in a clear way
+- keep a direct path back to `login`
+
+Components used:
+
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- pending verification
+- resend loading
+- informational confirmation after resending
+- return path back to `login`
+
+#### `workspace-selector`
+
+File: `apps-showcase/login/workspace-selector/index.html`
+
+Purpose:
+
+- choose the right organization or workspace after authentication
+- summarize role, environment, and membership in a single selection step
+- simulate continuity toward the next app context without backend behavior
+
+Components used:
+
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- default preselected workspace
+- switching active workspace visually
+- CTA label updated from the current selection
+- informational confirmation for the chosen workspace
+
+#### `session-expired`
+
+File: `apps-showcase/login/session-expired/index.html`
+
+Purpose:
+
+- explain clearly when a session has been closed for security reasons
+- offer a controlled re-entry path without confusion
+- represent an interruption state with calm, explicit messaging
+
+Components used:
+
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- initial warning state
+- loading while preparing re-entry
+- success feedback before returning to `login`
+- return path back to the group and to `login`
+
+#### `access-denied`
+
+File: `apps-showcase/login/access-denied/index.html`
+
+Purpose:
+
+- explain when an authenticated user cannot continue because the current context lacks permissions
+- reduce confusion with a calm message and a clear next step
+- route the user back to login or to a different company context
+
+Components used:
+
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- initial denied state
+- informational redirect toward context change
+- return path back to `login`
+- return path toward a different active company context
+
+#### `accept-invitation`
+
+File: `apps-showcase/login/accept-invitation/index.html`
+
+Purpose:
+
+- guide a newly invited user into an existing company context
+- summarize company, effective role, and included profiles before acceptance
+- simulate the confirmation step before joining the platform
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Checkbox`
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- required-name validation
+- invitation confirmation validation
+- loading while accepting the invitation
+- success feedback after joining the company context
+
+### Onboarding
+
+Initial screens in the group:
+
+- `signup-basic`
+- `signup-with-company`
+- `invite-team`
+- `onboarding-complete`
+
+#### `signup-basic`
+
+File: `apps-showcase/onboarding/signup-basic/index.html`
+
+Purpose:
+
+- create a personal account with minimal data
+- support single-company products or invitation-based flows
+- keep the initial account creation fast and clean
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Checkbox`
+- `MTS.Button`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- required field validation
+- password confirmation validation
+- loading while creating the account
+- success feedback for the new personal account
+
+#### `signup-with-company`
+
+File: `apps-showcase/onboarding/signup-with-company/index.html`
+
+Purpose:
+
+- create a personal account and the first company in a single public flow
+- support multi-company onboarding from the start
+- capture the basic organization context together with the admin user
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Select`
+- `MTS.Checkbox`
+- `MTS.Button`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- personal data validation
+- company data validation
+- password validation
+- loading while creating the first company
+- success feedback with account and company summary
+
+#### `invite-team`
+
+File: `apps-showcase/onboarding/invite-team/index.html`
+
+Purpose:
+
+- invite the initial team right after creating the account or first company
+- assign a default access package before the first login
+- keep onboarding moving even if invitations are sent later
+
+Components used:
+
+- `MTS.TagInput`
+- `MTS.Select`
+- `MTS.Input`
+- `MTS.Checkbox`
+- `MTS.Button`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- validation for empty invitation batch
+- validation for invalid email entries
+- validation for missing default role
+- loading while preparing the invitation batch
+- success feedback with invitation summary
+
+#### `onboarding-complete`
+
+File: `apps-showcase/onboarding/onboarding-complete/index.html`
+
+Purpose:
+
+- close the initial onboarding with a clear success state
+- summarize the account, company, and team setup already prepared
+- route the user toward login or the next operational step
+
+Components used:
+
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- success completion banner
+- account/company/team summary cards
+- next-step CTA toward login
+- alternate CTA toward team invitations
+
+### Support
+
+Initial screens in the group:
+
+- `ticket-inbox`
+- `ticket-detail`
+- `ticket-resolution`
+
+#### `ticket-inbox`
+
+File: `apps-showcase/support/ticket-inbox/index.html`
+
+Purpose:
+
+- centralize first-line support triage in a single operational view
+- filter tickets by query, owner, and status without leaving the inbox
+- open the case detail or simulate quick reassignment directly from the list
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Select`
+- `MTS.Button`
+- `MTS.Alert`
+- `MTS.Card`
+- `MTS.Icon`
+
+States covered:
+
+- query filtering
+- owner and status filtering
+- empty state when no tickets match
+- quick reassignment feedback
+- route toward the ticket detail view
+
+#### `ticket-detail`
+
+File: `apps-showcase/support/ticket-detail/index.html`
+
+Purpose:
+
+- show the active case context, ownership, and next action in a single screen
+- let the analyst update owner, status, and response draft
+- keep the timeline of events visible while progressing the case
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Select`
+- `MTS.Button`
+- `MTS.Alert`
+- `MTS.Card`
+- `MTS.Timeline`
+- `MTS.Icon`
+
+States covered:
+
+- initial SLA warning
+- response validation before save
+- success feedback after simulated update
+- timeline rendering for case activity
+- return path back to the inbox
+
+#### `ticket-resolution`
+
+File: `apps-showcase/support/ticket-resolution/index.html`
+
+Purpose:
+
+- close the case with a final reason, resolution summary, and customer-facing message
+- keep support closure visible in a single reusable screen without relying on tables
+- make the final state traceable before the team leaves the support flow
+- give products a ready-made pattern for operational case closure
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Select`
+- `MTS.Button`
+- `MTS.Alert`
+- `MTS.Card`
+- `MTS.Icon`
+
+States covered:
+
+- final-status selection
+- resolution reason selection
+- validation for summary and customer message
+- success feedback after closure
+- return path back to ticket detail
+
+### Productivity
+
+Initial screens in the group:
+
+- `task-board`
+- `calendar-planner`
+- `task-detail`
+
+#### `task-board`
+
+File: `apps-showcase/productivity/task-board/index.html`
+
+Purpose:
+
+- organize daily execution by task status instead of by date
+- combine quick KPIs, filters, and a kanban board in one operational screen
+- let the team review movement, priorities, and ownership without opening a second module
+- allow task creation from the board and enrich the card through a modal workflow
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Select`
+- `MTS.Button`
+- `MTS.Alert`
+- `MTS.KPICard`
+- `MTS.Kanban`
+- `MTS.Icon`
+
+States covered:
+
+- query filtering
+- owner and priority filtering
+- empty filtered state
+- simulated card movement feedback
+- card selection feedback from the board
+- task creation and edit modal flow
+
+#### `calendar-planner`
+
+File: `apps-showcase/productivity/calendar-planner/index.html`
+
+Purpose:
+
+- organize work by time using `MTS.Calendar` in `schedule` mode as the center of the screen
+- combine agenda visibility with summary cards and KPI indicators
+- let the team jump between the weekly planner and the task board naturally
+- support event creation and editing through modal forms
+
+Components used:
+
+- `MTS.Button`
+- `MTS.Alert`
+- `MTS.Card`
+- `MTS.KPICard`
+- `MTS.Calendar`
+- `MTS.Icon`
+
+States covered:
+
+- agenda planner initialization
+- route to today
+- event click feedback
+- event creation modal
+- event edit modal
+- side summary of near-term work
+
+#### `task-detail`
+
+File: `apps-showcase/productivity/task-detail/index.html`
+
+Purpose:
+
+- expand a task into a focused operational detail view
+- combine priority, owner, state, and checklist in a single screen
+- connect execution detail with the planner context without forcing a dashboard
+- provide a clean reusable base for task editing outside the board
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Select`
+- `MTS.Checkbox`
+- `MTS.Button`
+- `MTS.Alert`
+- `MTS.Card`
+- `MTS.Icon`
+
+States covered:
+
+- validation for title and description
+- checklist rendering
+- context card and planner relation summary
+- success feedback after saving
+- return path back to the task board
+
+### Account
+
+Initial screens in the group:
+
+- `profile-overview`
+- `security-settings`
+
+#### `profile-overview`
+
+File: `apps-showcase/account/profile-overview/index.html`
+
+Purpose:
+
+- centralize the base personal data the user edits most often
+- expose language, timezone, and date format without sending the user into advanced settings
+- keep notification preferences close to the profile itself
+- reflect the active company and access context as part of the account view
+
+Components used:
+
+- `MTS.Avatar`
+- `MTS.Input`
+- `MTS.Select`
+- `MTS.Checkbox`
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- profile validation for required fields
+- reset flow to the sample baseline
+- success feedback after save
+- visible summary of active workspace context
+
+#### `security-settings`
+
+File: `apps-showcase/account/security-settings/index.html`
+
+Purpose:
+
+- keep password change and personal access controls in one operational screen
+- make second-factor and login alert controls visible without leaving the account group
+- expose a clean path for closing other active sessions
+- provide a reusable base for personal security flows across products
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Toggle`
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- password validation
+- mismatch handling for confirmation
+- session close feedback
+- success feedback after saving security controls
+
+### Settings
+
+Initial screens in the group:
+
+- `workspace-settings`
+- `security-policies`
+
+#### `workspace-settings`
+
+File: `apps-showcase/settings/workspace-settings/index.html`
+
+Purpose:
+
+- centralize the general configuration of the active workspace
+- expose name, slug, language, timezone, and weekly defaults in one reusable screen
+- keep operational toggles close to the main workspace identity
+- provide a simple base for products that need settings before deeper administration modules
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Select`
+- `MTS.Toggle`
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- required-field validation
+- invalid slug handling
+- invalid support email handling
+- reset flow back to workspace baseline
+- success feedback after save
+
+#### `security-policies`
+
+File: `apps-showcase/settings/security-policies/index.html`
+
+Purpose:
+
+- define shared session and credential rules for the workspace
+- keep OTP, login alerts, and device verification in the same operational view
+- expose password minimums and lockout thresholds without needing a table-driven admin module
+- provide a reusable policy screen for products that need workspace-level security controls early
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Select`
+- `MTS.Toggle`
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- validation for password minimum
+- validation for failed-attempt threshold
+- reset flow back to baseline policies
+- success feedback after saving policies
+
+### Notifications
+
+Initial screens in the group:
+
+- `notification-center`
+- `activity-feed`
+
+#### `notification-center`
+
+File: `apps-showcase/notifications/notification-center/index.html`
+
+Purpose:
+
+- centralize product alerts, mentions, and operational notices in one reusable screen
+- keep quick filtering and read-state actions visible without needing a table
+- let products reuse a notification tray that already includes prioritization and archive actions
+- expose a clean pattern for alert density and badge-based emphasis
+
+Components used:
+
+- `MTS.Input`
+- `MTS.Button`
+- `MTS.Badge`
+- `MTS.Card`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- search filtering
+- unread-only filtering
+- critical-only filtering
+- mark-all-as-read flow
+- archive feedback
+- empty filtered state
+
+#### `activity-feed`
+
+File: `apps-showcase/notifications/activity-feed/index.html`
+
+Purpose:
+
+- show chronological activity across modules without forcing a dashboard
+- connect support, settings, onboarding, and productivity events in a single timeline
+- provide a reusable pattern for “what changed recently” views
+- keep a direct path back to the notification center for action-focused follow-up
+
+Components used:
+
+- `MTS.Button`
+- `MTS.Card`
+- `MTS.Timeline`
+- `MTS.Alert`
+- `MTS.Icon`
+
+States covered:
+
+- timeline rendering
+- refresh feedback
+- summary card of recent events
+- direct route back to notification center
 
 ---
 
@@ -375,11 +1106,11 @@ It is a real framework with its own technical and visual identity.
 
 ## Recommended Entry Points
 
-- `index.html` → main framework shell
-- `themes/demo.html` → theming preview
-- `icons/demo.html` → icon system
-- group `demo.html` files → grouped navigation
-- per-component `demo.html` files → isolated examples
+- `index.html` â†’ main framework shell
+- `themes/demo.html` â†’ theming preview
+- `icons/demo.html` â†’ icon system
+- group `demo.html` files â†’ grouped navigation
+- per-component `demo.html` files â†’ isolated examples
 
 ---
 
@@ -395,3 +1126,4 @@ Matios UI Framework is being built to be practical, understandable, and genuinel
   <strong>Matios UI Framework</strong><br>
   Pure CSS. Pure JavaScript. Real structure.
 </p>
+

@@ -1,6 +1,6 @@
-/* ============================================================
-   MATIOS UI — matios-ui-kpicard.js
-   MTS.KPICard — Tarjeta de métrica con tendencia y sparkline
+﻿/* ============================================================
+   MATIOS UI â€” matios-ui-kpicard.js
+   MTS.KPICard â€” Tarjeta de mÃ©trica con tendencia y sparkline
    Version: 1.0.0
    ============================================================ */
 
@@ -10,20 +10,20 @@ MTS.KPICard = class MtsKPICard {
   /**
    * @param {string|Element} selector
    * @param {object} options
-   * @param {string}   options.label       Etiqueta de la métrica
+   * @param {string}   options.label       Etiqueta de la mÃ©trica
    * @param {string|number} options.value  Valor principal
    * @param {string}   options.unit        Unidad (%, $, km, etc.)
    * @param {number}   options.trend       % de cambio (positivo/negativo)
    * @param {string}   options.trendLabel  Texto junto a la tendencia
-   * @param {Array}    options.sparkline   Datos para mini gráfico [n, n, n...]
+   * @param {Array}    options.sparkline   Datos para mini grÃ¡fico [n, n, n...]
    * @param {string}   options.variant     'default'|'primary'|'success'|'warning'|'danger'
-   * @param {string}   options.icon        SVG string del ícono
+   * @param {string}   options.icon        SVG string del Ã­cono
    * @param {function} options.onClick
    */
   constructor(selector, options = {}) {
     this._el     = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    // Metric label / Etiqueta de la métrica
+    // Metric label / Etiqueta de la mÃ©trica
     this.label = options.label || '';
 
     // Main value / Valor principal
@@ -38,14 +38,14 @@ MTS.KPICard = class MtsKPICard {
     // Label next to the trend / Texto junto a la tendencia
     this.trendLabel = options.trendLabel || '';
 
-    // Sparkline data array / Array de datos para el mini gráfico
+    // Sparkline data array / Array de datos para el mini grÃ¡fico
     this.sparkline = options.sparkline || [];
 
     // Color variant: 'default' | 'primary' | 'success' | 'warning' | 'danger'
     // Variante de color
     this.variant = options.variant || 'default';
 
-    // SVG icon string / String SVG del ícono
+    // SVG icon string / String SVG del Ã­cono
     this.icon = options.icon || null;
 
     this._listeners = {};
@@ -66,9 +66,17 @@ MTS.KPICard = class MtsKPICard {
   }
 
   _build() {
-    this._el.className = `mts-kpicard mts-kpicard--${this.variant}${this._listeners['click']?.length ? ' mts-kpicard--clickable' : ''}`;
+    this._syncClasses();
     this._el.innerHTML = '';
-    if (this._listeners['click']?.length) { this._el.style.cursor = 'pointer'; this._el.addEventListener('click', () => this._emit('click', { kpi: this })); }
+    if (this._listeners['click']?.length) {
+      this._el.style.cursor = 'pointer';
+      if (!this._handleClick) this._handleClick = () => this._emit('click', { kpi: this });
+      this._el.removeEventListener('click', this._handleClick);
+      this._el.addEventListener('click', this._handleClick);
+    } else {
+      this._el.style.cursor = '';
+      if (this._handleClick) this._el.removeEventListener('click', this._handleClick);
+    }
 
     const header = document.createElement('div');
     header.className = 'mts-kpicard__header';
@@ -106,13 +114,24 @@ MTS.KPICard = class MtsKPICard {
       const trendEl = document.createElement('div');
       const up = this.trend >= 0;
       trendEl.className = `mts-kpicard__trend mts-kpicard__trend--${up ? 'up' : 'down'}`;
-      trendEl.innerHTML = `<span class="mts-kpicard__trend-arrow">${up ? '↑' : '↓'}</span><span>${Math.abs(this.trend)}%</span>${this.trendLabel ? `<span class="mts-kpicard__trend-label">${this.trendLabel}</span>` : ''}`;
+      trendEl.innerHTML = `<span class="mts-kpicard__trend-arrow">${up ? 'â†‘' : 'â†“'}</span><span>${Math.abs(this.trend)}%</span>${this.trendLabel ? `<span class="mts-kpicard__trend-label">${this.trendLabel}</span>` : ''}`;
       this._el.appendChild(trendEl);
     }
 
     if (this.sparkline.length > 1) {
       this._el.appendChild(this._buildSparkline());
     }
+  }
+
+  _syncClasses() {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-kpicard' || cls.startsWith('mts-kpicard--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+
+    const classes = ['mts-kpicard', 'mts-kpicard--' + this.variant];
+    if (this._listeners['click']?.length) classes.push('mts-kpicard--clickable');
+    this._el.classList.add(...classes);
   }
 
   _buildSparkline() {
@@ -151,3 +170,4 @@ MTS.KPICard = class MtsKPICard {
     this._el?.dispatchEvent(new CustomEvent(`mts:kpicard:${event}`, { bubbles: true, detail }));
   }
 };
+

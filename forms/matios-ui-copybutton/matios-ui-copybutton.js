@@ -1,6 +1,6 @@
-/* ============================================================
-   MATIOS UI — matios-ui-copybutton.js
-   MTS.CopyButton — Copy-to-clipboard button with visual feedback
+﻿/* ============================================================
+   MATIOS UI â€” matios-ui-copybutton.js
+   MTS.CopyButton â€” Copy-to-clipboard button with visual feedback
    Version: 1.1.0
    ============================================================ */
 
@@ -13,7 +13,7 @@ MTS.CopyButton = class MtsCopyButton {
     if (!this._el) { console.error('[MTS.CopyButton] Not found / No encontrado:', selector); return; }
 
     // Read data-* for declarative HTML initialization
-    // Lee data-* para inicialización HTML declarativa
+    // Lee data-* para inicializaciÃ³n HTML declarativa
     const _ds = this._el?.dataset || {};
     const _fromHTML = {};
     if (_ds.text        !== undefined) _fromHTML.text        = _ds.text;
@@ -26,32 +26,32 @@ MTS.CopyButton = class MtsCopyButton {
     if (_ds.resetDelay  !== undefined) _fromHTML.resetDelay  = parseInt(_ds.resetDelay);
     options = { ..._fromHTML, ...options };
 
-    // Static text to copy / Texto estático a copiar
+    // Static text to copy / Texto estÃ¡tico a copiar
     this.text = options.text ?? null;
 
     // Selector/element whose value or textContent to copy
     // Selector/elemento cuyo value o textContent copiar
     this.target = options.target ?? null;
 
-    // Button label / Label del botón
+    // Button label / Label del botÃ³n
     this.label = options.label ?? 'Copiar';
 
     // Label shown after copying / Label mostrado tras copiar
-    this.labelCopied = options.labelCopied ?? '¡Copiado!';
+    this.labelCopied = options.labelCopied ?? 'Â¡Copiado!';
 
-    // Default icon SVG / SVG del ícono por defecto
+    // Default icon SVG / SVG del Ã­cono por defecto
     this.icon = options.icon ?? this._defaultIcon();
 
-    // Icon shown after copying / Ícono mostrado tras copiar
+    // Icon shown after copying / Ãcono mostrado tras copiar
     this.iconCopied = options.iconCopied ?? this._checkIcon();
 
-    // Button variant / Variante del botón
+    // Button variant / Variante del botÃ³n
     this.variant = options.variant ?? 'secondary';
 
-    // Size: 'sm' | '' | 'lg' / Tamaño
+    // Size: 'sm' | '' | 'lg' / TamaÃ±o
     this.size = options.size ?? '';
 
-    // Icon only mode / Modo solo ícono
+    // Icon only mode / Modo solo Ã­cono
     this.iconOnly = options.iconOnly ?? false;
 
     // Delay in ms before resetting to initial state / Delay en ms antes de resetear
@@ -69,7 +69,7 @@ MTS.CopyButton = class MtsCopyButton {
   // Change the text to copy / Cambiar el texto a copiar
   setText(text) { this.text = text; return this; }
 
-  // Trigger copy programmatically / Disparar copia programáticamente
+  // Trigger copy programmatically / Disparar copia programÃ¡ticamente
   copy() { this._doCopy(); return this; }
 
   // Destroy the component / Destruir el componente
@@ -78,13 +78,24 @@ MTS.CopyButton = class MtsCopyButton {
   destroy()  { this._el.innerHTML = ''; }
 
   _build() {
+    this._syncClasses();
+    this._el.setAttribute('type', 'button');
+    this._renderState(false);
+    if (!this._handleClick) this._handleClick = () => this._doCopy();
+    this._el.removeEventListener('click', this._handleClick);
+    this._el.addEventListener('click', this._handleClick);
+  }
+
+  _syncClasses() {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-btn' || cls.startsWith('mts-btn--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+
     const classes = ['mts-btn', 'mts-btn--' + this.variant];
     if (this.size)     classes.push('mts-btn--' + this.size);
     if (this.iconOnly) classes.push('mts-btn--icon');
-    this._el.className = classes.join(' ');
-    this._el.setAttribute('type', 'button');
-    this._renderState(false);
-    this._el.addEventListener('click', () => this._doCopy());
+    this._el.classList.add(...classes);
   }
 
   _renderState(copied) {
@@ -154,3 +165,4 @@ MTS.CopyButton = class MtsCopyButton {
     this._el?.dispatchEvent(new CustomEvent(`mts:copybutton:${event}`, { bubbles: true, detail }));
   }
 };
+

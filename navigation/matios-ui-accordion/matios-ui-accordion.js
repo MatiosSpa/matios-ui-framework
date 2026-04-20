@@ -53,7 +53,7 @@ MTS.Accordion = class MtsAccordion {
   destroy()   { this._el.innerHTML = ''; }
 
   _build() {
-    this._el.className = 'mts-accordion' + (this.flush ? ' mts-accordion--flush' : '');
+    this._syncClasses(['mts-accordion'].concat(this.flush ? ['mts-accordion--flush'] : []));
     this._el.innerHTML = '';
     this.items.forEach(item => this._buildItem(item));
   }
@@ -120,5 +120,13 @@ MTS.Accordion = class MtsAccordion {
   _emit(event, detail) {
     (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
     this._el.dispatchEvent(new CustomEvent(`mts:accordion:${event}`, { bubbles: true, detail }));
+  }
+
+  _syncClasses(classes) {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-accordion' || cls.startsWith('mts-accordion--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add(...classes.filter(Boolean));
   }
 };

@@ -78,7 +78,7 @@ MTS.SideNav = class MtsSideNav {
 
   _build() {
     this._el.innerHTML = '';
-    this._el.className = 'mts-sidenav' + (this.collapsed ? ' mts-sidenav--collapsed' : '');
+    this._syncClasses(['mts-sidenav'].concat(this.collapsed ? ['mts-sidenav--collapsed'] : []));
 
     /* Logo */
     if (this.logo) {
@@ -248,6 +248,15 @@ MTS.SideNav = class MtsSideNav {
     }
     return null;
   }
+
+  _syncClasses(classes) {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-sidenav' || cls.startsWith('mts-sidenav--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add(...classes.filter(Boolean));
+  }
+
   _emit(event, detail) {
     (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
     this._el?.dispatchEvent(new CustomEvent(`mts:sidenav:${event}`, { bubbles: true, detail }));

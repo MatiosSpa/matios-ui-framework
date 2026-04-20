@@ -47,8 +47,16 @@ MTS.Radio = class MtsRadio {
   // Registers an event listener / Registra un listener de evento
   on(e, cb) { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-radio-group'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-radio-group');
+    if (this.horizontal) this._el.classList.add('mts-radio-group--horizontal');
+  }
+
   _build() {
-    this._el.className = 'mts-radio-group' + (this.horizontal ? ' mts-radio-group--horizontal' : '');
+    this._syncClasses();
+    this._el.innerHTML = '';
     this.options.forEach(opt => {
       const wrap  = document.createElement('div');
       wrap.className = 'mts-radio-wrap';

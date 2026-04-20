@@ -71,9 +71,15 @@ MTS.ConfirmButton = class MtsConfirmButton {
   // Enable all buttons / Habilitar todos los botones
   enable()  { this._el.querySelectorAll('button').forEach(b => b.disabled = false); return this; }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-confirmbutton'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-confirmbutton');
+  }
+
   _build() {
     this._el.innerHTML = '';
-    this._el.className = 'mts-confirmbutton';
+    this._syncClasses();
 
     this._btnMain = document.createElement('button');
     this._btnMain.type      = 'button';

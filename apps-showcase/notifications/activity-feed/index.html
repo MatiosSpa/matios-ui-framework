@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Activity Feed - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-timeline/matios-ui-timeline.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="activity-feed.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../display/matios-ui-timeline/matios-ui-timeline.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="activity-feed-page">
+    <header class="activity-feed-page__topbar mts-surface">
+      <div class="activity-feed-page__brand">
+        <div class="activity-feed-page__logo">A</div>
+        <div>
+          <div class="activity-feed-page__title">Activity Feed</div>
+          <div class="activity-feed-page__subtitle">Rastro cronológico de cambios, decisiones y eventos visibles para el equipo</div>
+        </div>
+      </div>
+      <div class="activity-feed-page__topbar-actions">
+        <div id="activity-refresh"></div>
+      </div>
+    </header>
+
+    <main class="activity-feed-page__main mts-grid mts-grid--gap-md">
+      <section class="activity-feed-page__hero mts-surface mts-g-col-12">
+        <div class="activity-feed-page__eyebrow">Actividad transversal</div>
+        <h1 class="activity-feed-page__hero-title">Sigue el pulso del producto con un feed que prioriza contexto antes que ruido.</h1>
+        <p class="activity-feed-page__hero-text">
+          Esta pantalla junta cambios de producto, soporte y configuración para que equipos operativos entiendan qué pasó, cuándo y con qué impacto.
+        </p>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="mts-form-card activity-feed-page__timeline-card">
+          <div id="activity-feedback"></div>
+          <div class="activity-feed-page__timeline-head">
+            <h2 class="activity-feed-page__timeline-title">Actividad reciente</h2>
+            <div id="activity-open-center"></div>
+          </div>
+          <div id="activity-feed-timeline"></div>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4 activity-feed-page__sidebar">
+        <div id="activity-summary-card"></div>
+        <div id="activity-stream-card"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message',function(e){
+      if(!e.data) return;
+      if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+      if(e.data.type==='setAccent'){
+        if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+    function openScreen(path){
+      var params=location.search||'';
+      window.location.href=path+params;
+    }
+  </script>
+  <script>
+    new MTS.Button('#activity-refresh',{
+      label:'Actualizar feed',
+      variant:'secondary',
+      iconLeft:MTS.Icon.get('refresh-cw'),
+      onClick:function(){
+        MTS.Alert.show('#activity-feedback',{
+          variant:'success',
+          title:'Feed actualizado',
+          message:'La línea de tiempo quedó sincronizada con la actividad más reciente del ejemplo.',
+          closable:true
+        });
+      }
+    });
+
+    new MTS.Button('#activity-open-center',{
+      label:'Abrir notificaciones',
+      variant:'secondary',
+      size:'sm',
+      iconLeft:MTS.Icon.get('bell'),
+      onClick:function(){openScreen('../notification-center/index.html');}
+    });
+
+    new MTS.Timeline('#activity-feed-timeline',{
+      events:[
+        {
+          id:'ac-1',
+          title:'Se ajustó política de sesión del workspace',
+          description:'El workspace Matios Studio redujo inactividad máxima a 30 minutos para cuentas con acceso sensible.',
+          date:'09:10',
+          badge:{label:'Settings',variant:'warning'},
+          color:'var(--mts-color-warning)'
+        },
+        {
+          id:'ac-2',
+          title:'Ticket HD-201 pasó a resolución',
+          description:'Soporte dejó la salida final lista para el cliente y la trazabilidad quedó cerrada.',
+          date:'08:41',
+          badge:{label:'Support',variant:'info'},
+          color:'var(--mts-color-primary)'
+        },
+        {
+          id:'ac-3',
+          title:'Task board movió caso crítico a review',
+          description:'La tarea TK-390 cambió de estado para validación final antes del cierre operativo.',
+          date:'08:25',
+          badge:{label:'Productivity',variant:'success'},
+          color:'var(--mts-color-success)'
+        },
+        {
+          id:'ac-4',
+          title:'Onboarding completó signup con empresa',
+          description:'La variante multiempresa quedó lista con idioma, tema y estructura limpia para copiar.',
+          date:'Ayer',
+          badge:{label:'Onboarding',variant:'default'}
+        }
+      ]
+    });
+
+    new MTS.Card('#activity-summary-card',{
+      title:'Resumen del stream',
+      subtitle:'Últimas 24 horas',
+      variant:'elevated',
+      size:'lg',
+      body:
+        '<div class="activity-feed-page__meta-list">'+
+          '<div><span>Eventos críticos</span><strong>1</strong></div>'+
+          '<div><span>Cambios de settings</span><strong>2</strong></div>'+
+          '<div><span>Actividad de soporte</span><strong>3</strong></div>'+
+        '</div>'
+    });
+
+    new MTS.Card('#activity-stream-card',{
+      title:'Lectura sugerida',
+      subtitle:'Cómo usar el feed',
+      variant:'outlined',
+      size:'lg',
+      body:
+        '<div class="activity-feed-page__rules">'+
+          '<div><span class="activity-feed-page__dot"></span><span>Leer por bloques de contexto, no por ruido cronológico.</span></div>'+
+          '<div><span class="activity-feed-page__dot"></span><span>Destacar primero eventos que cambian permisos, estados o entregas.</span></div>'+
+          '<div><span class="activity-feed-page__dot"></span><span>Dar acceso rápido al centro de notificaciones para acciones puntuales.</span></div>'+
+        '</div>'
+    });
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

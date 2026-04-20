@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ticket Inbox - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="ticket-inbox.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+</head>
+<body>
+  <div class="ticket-inbox-page">
+    <header class="ticket-inbox-page__topbar mts-surface">
+      <div class="ticket-inbox-page__brand">
+        <div class="ticket-inbox-page__logo">M</div>
+        <div>
+          <div class="ticket-inbox-page__title">Support Inbox</div>
+          <div class="ticket-inbox-page__subtitle">Bandeja operativa para triage inicial</div>
+        </div>
+      </div>
+      <div class="ticket-inbox-page__topbar-actions">
+        <div id="ticket-inbox-open-detail"></div>
+      </div>
+    </header>
+
+    <main class="ticket-inbox-page__main mts-grid mts-grid--gap-md">
+      <section class="ticket-inbox-page__hero mts-g-col-12 mts-g-col-lg-4 mts-surface">
+        <div class="ticket-inbox-page__eyebrow">
+          <span class="ticket-inbox-page__eyebrow-dot"></span>
+          <span>Operacion diaria</span>
+        </div>
+
+        <h1 class="ticket-inbox-page__hero-title">Ordena prioridades, responsables y casos calientes en una sola vista.</h1>
+        <p class="ticket-inbox-page__hero-copy">
+          Esta bandeja ayuda a tomar control rapido del soporte: identifica urgencias, mueve tickets
+          al analista correcto y deja claro que requiere respuesta hoy.
+        </p>
+
+        <div id="ticket-inbox-alert"></div>
+
+        <div class="ticket-inbox-page__summary-list">
+          <article class="ticket-inbox-page__summary-item">
+            <strong>14</strong>
+            <span>Tickets abiertos</span>
+          </article>
+          <article class="ticket-inbox-page__summary-item">
+            <strong>3</strong>
+            <span>Prioridad alta</span>
+          </article>
+          <article class="ticket-inbox-page__summary-item">
+            <strong>2</strong>
+            <span>SLA en riesgo</span>
+          </article>
+        </div>
+      </section>
+
+      <section class="ticket-inbox-page__workspace mts-g-col-12 mts-g-col-lg-8">
+        <div class="mts-form-card ticket-inbox-page__filters">
+          <div class="ticket-inbox-page__filters-grid">
+            <div class="ticket-inbox-page__search" id="ticket-inbox-search"></div>
+            <div id="ticket-inbox-status"></div>
+            <div id="ticket-inbox-owner"></div>
+          </div>
+          <div class="ticket-inbox-page__filter-actions">
+            <div id="ticket-inbox-clear"></div>
+          </div>
+        </div>
+
+        <div class="ticket-inbox-page__cards mts-grid mts-grid--gap-md" id="ticket-inbox-cards"></div>
+      </section>
+    </main>
+  </div>
+
+<script>
+window.addEventListener('message',function(e){
+  if(!e.data) return;
+  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+  if(e.data.type==='setAccent'){
+    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+function openScreen(path){
+  var params=location.search||'';
+  window.location.href=path+params;
+}
+</script>
+<script>
+var inboxTickets=[
+  {id:'HD-201',title:'Factura duplicada enviada al cliente',company:'Northwind Retail',priority:'high',priorityLabel:'Alta',status:'open',statusLabel:'Abierto',owner:'camila',ownerLabel:'Camila Rojas',channel:'Email',age:'Hace 12 min'},
+  {id:'HD-198',title:'Usuario no puede firmar documento',company:'Acme Legal',priority:'high',priorityLabel:'Alta',status:'investigating',statusLabel:'Investigando',owner:'diego',ownerLabel:'Diego Paredes',channel:'Portal',age:'Hace 28 min'},
+  {id:'HD-193',title:'Solicitud de acceso a modulo de documentos',company:'Grupo Marea',priority:'medium',priorityLabel:'Media',status:'pending',statusLabel:'Pendiente cliente',owner:'camila',ownerLabel:'Camila Rojas',channel:'Chat',age:'Hace 42 min'},
+  {id:'HD-188',title:'Cambio de datos tributarios',company:'Linea Sur',priority:'low',priorityLabel:'Baja',status:'open',statusLabel:'Abierto',owner:'andres',ownerLabel:'Andres Soto',channel:'Email',age:'Hace 1 h'},
+  {id:'HD-181',title:'Error intermitente al generar PDF',company:'Atlas Ops',priority:'medium',priorityLabel:'Media',status:'investigating',statusLabel:'Investigando',owner:'diego',ownerLabel:'Diego Paredes',channel:'Portal',age:'Hace 2 h'}
+];
+
+var inboxState={
+  query:'',
+  status:'',
+  owner:''
+};
+
+var searchInput=new MTS.Input('#ticket-inbox-search',{
+  type:'text',
+  label:'Buscar ticket',
+  placeholder:'ID, cliente o asunto',
+  iconLeft:MTS.Icon.get('search')
+});
+
+var statusSelect=new MTS.Select('#ticket-inbox-status',{
+  label:'Estado',
+  placeholder:'Todos',
+  clearable:true,
+  options:[
+    {value:'open',label:'Abierto'},
+    {value:'investigating',label:'Investigando'},
+    {value:'pending',label:'Pendiente cliente'}
+  ]
+});
+
+var ownerSelect=new MTS.Select('#ticket-inbox-owner',{
+  label:'Responsable',
+  placeholder:'Todos',
+  clearable:true,
+  options:[
+    {value:'camila',label:'Camila Rojas'},
+    {value:'diego',label:'Diego Paredes'},
+    {value:'andres',label:'Andres Soto'}
+  ]
+});
+
+new MTS.Button('#ticket-inbox-open-detail',{
+  label:'Ver ticket ejemplo',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-right'),
+  onClick:function(){openScreen('../ticket-detail/index.html');}
+});
+
+new MTS.Button('#ticket-inbox-clear',{
+  label:'Limpiar filtros',
+  variant:'secondary',
+  iconLeft:MTS.Icon.get('refresh-cw'),
+  onClick:function(){
+    inboxState.query='';
+    inboxState.status='';
+    inboxState.owner='';
+    setNativeValue('#ticket-inbox-search input','');
+    statusSelect.clear();
+    ownerSelect.clear();
+    renderInbox();
+  }
+});
+
+MTS.Alert.show('#ticket-inbox-alert',{
+  variant:'info',
+  title:'Bandeja de triage',
+  message:'La lista esta pensada para reasignar, priorizar y abrir el detalle del caso sin salir del flujo operativo.',
+  closable:false
+});
+
+function renderInbox(){
+  var host=document.getElementById('ticket-inbox-cards');
+  host.innerHTML='';
+
+  var visible=inboxTickets.filter(function(ticket){
+    var q=inboxState.query.toLowerCase();
+    var matchesQuery=!q || [ticket.id,ticket.title,ticket.company].join(' ').toLowerCase().indexOf(q)!==-1;
+    var matchesStatus=!inboxState.status || ticket.status===inboxState.status;
+    var matchesOwner=!inboxState.owner || ticket.owner===inboxState.owner;
+    return matchesQuery && matchesStatus && matchesOwner;
+  });
+
+  if(!visible.length){
+    var emptyWrap=document.createElement('div');
+    emptyWrap.className='mts-g-col-12';
+    host.appendChild(emptyWrap);
+    var emptyHost=document.createElement('div');
+    emptyWrap.appendChild(emptyHost);
+    new MTS.Card(emptyHost,{
+      title:'Sin resultados',
+      subtitle:'Ajusta los filtros',
+      variant:'outlined',
+      size:'lg',
+      body:'<p class="ticket-inbox-page__empty">No hay tickets que coincidan con la combinacion actual.</p>'
+    });
+    return;
+  }
+
+  visible.forEach(function(ticket,index){
+    var wrap=document.createElement('div');
+    wrap.className='mts-g-col-12';
+    host.appendChild(wrap);
+    var cardHost=document.createElement('div');
+    wrap.appendChild(cardHost);
+
+    new MTS.Card(cardHost,{
+      title:ticket.id+' · '+ticket.title,
+      subtitle:ticket.company,
+      variant:index===0?'elevated':'outlined',
+      size:'lg',
+      hoverable:true,
+      body:
+        '<div class="ticket-inbox-page__ticket-body">'+
+          '<div class="ticket-inbox-page__ticket-meta">'+
+            '<span class="ticket-inbox-page__chip ticket-inbox-page__chip--'+ticket.priority+'">'+ticket.priorityLabel+'</span>'+
+            '<span class="ticket-inbox-page__chip">'+ticket.statusLabel+'</span>'+
+            '<span class="ticket-inbox-page__chip">'+ticket.channel+'</span>'+
+          '</div>'+
+          '<div class="ticket-inbox-page__ticket-grid">'+
+            '<div><span>Responsable</span><strong>'+ticket.ownerLabel+'</strong></div>'+
+            '<div><span>Actividad</span><strong>'+ticket.age+'</strong></div>'+
+          '</div>'+
+        '</div>',
+      footerAlign:'between',
+      footer:[
+        {
+          label:'Abrir detalle',
+          variant:'primary',
+          icon:MTS.Icon.get('arrow-right'),
+          onClick:function(){openScreen('../ticket-detail/index.html');}
+        },
+        {
+          label:'Reasignar',
+          variant:'ghost',
+          icon:MTS.Icon.get('refresh'),
+          onClick:function(){
+            MTS.Alert.show('#ticket-inbox-alert',{
+              variant:'success',
+              title:'Ticket actualizado',
+              message:'Se simulo la reasignacion rapida de <strong>'+ticket.id+'</strong> sin salir de la bandeja.',
+              closable:true
+            });
+          }
+        }
+      ]
+    });
+  });
+
+  MTS.Icon.initAll();
+}
+
+function setNativeValue(selector,value){
+  var input=document.querySelector(selector);
+  if(!input) return;
+  input.value=value;
+  input.dispatchEvent(new Event('input',{bubbles:true}));
+  input.dispatchEvent(new Event('change',{bubbles:true}));
+}
+
+var searchNode=document.querySelector('#ticket-inbox-search input');
+if(searchNode){
+  searchNode.addEventListener('input',function(e){
+    inboxState.query=e.target.value||'';
+    renderInbox();
+  });
+}
+
+statusSelect.on('change',function(e){
+  inboxState.status=e.detail.value||'';
+  renderInbox();
+});
+
+ownerSelect.on('change',function(e){
+  inboxState.owner=e.detail.value||'';
+  renderInbox();
+});
+
+renderInbox();
+MTS.Icon.initAll();
+</script>
+</body>
+</html>

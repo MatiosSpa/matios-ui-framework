@@ -55,8 +55,15 @@ MTS.Checkbox = class MtsCheckbox {
   // Registers an event listener / Registra un listener de evento
   on(e, cb) { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-checkbox-wrap'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-checkbox-wrap');
+  }
+
   _build() {
-    this._el.className = 'mts-checkbox-wrap';
+    this._syncClasses();
+    this._el.innerHTML = '';
     this._inputEl = document.createElement('input');
     this._inputEl.type          = 'checkbox';
     this._inputEl.className     = 'mts-checkbox';
@@ -116,8 +123,16 @@ MTS.CheckboxGroup = class MtsCheckboxGroup {
   // Registers an event listener / Registra un listener de evento
   on(e, cb) { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-checkbox-group'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-checkbox-group');
+    if (this.horizontal) this._el.classList.add('mts-checkbox-group--horizontal');
+  }
+
   _build() {
-    this._el.className = 'mts-checkbox-group' + (this.horizontal ? ' mts-checkbox-group--horizontal' : '');
+    this._syncClasses();
+    this._el.innerHTML = '';
     this.options.forEach(opt => {
       const wrap  = document.createElement('div');
       wrap.className = 'mts-checkbox-wrap';

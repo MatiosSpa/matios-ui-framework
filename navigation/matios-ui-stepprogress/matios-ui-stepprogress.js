@@ -71,7 +71,7 @@ window.MTS = window.MTS || {};
 
     _build() {
       this._el.innerHTML = '';
-      this._el.className = 'mts-stepprogress mts-stepprogress--' + this.variant;
+      this._syncClasses(['mts-stepprogress', 'mts-stepprogress--' + this.variant]);
 
       var total = this.steps.length;
       var self = this;
@@ -146,6 +146,14 @@ window.MTS = window.MTS || {};
 
       bar.appendChild(fill);
       this._el.appendChild(bar);
+    }
+
+    _syncClasses(classes) {
+      var previousMatiosClasses = Array.from(this._el.classList).filter(function (cls) {
+        return cls === 'mts-stepprogress' || cls.indexOf('mts-stepprogress--') === 0;
+      });
+      if (previousMatiosClasses.length) this._el.classList.remove.apply(this._el.classList, previousMatiosClasses);
+      this._el.classList.add.apply(this._el.classList, classes.filter(Boolean));
     }
 
     _emit(event, detail) {

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Calendar Planner - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-modal/matios-ui-modal.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-kpicard/matios-ui-kpicard.css">
+  <link rel="stylesheet" href="../../../calendar_v2/matios-ui-calendar.css">
+  <link rel="stylesheet" href="../../../calendar_v2/matios-ui-calendar-colors.css">
+  <link rel="stylesheet" href="calendar-planner.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-modal/matios-ui-modal.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../display/matios-ui-kpicard/matios-ui-kpicard.js"></script>
+  <script src="../../../calendar_v2/matios-ui-calendar-shared.js"></script>
+  <script src="../../../calendar_v2/matios-ui-calendar-week.js"></script>
+  <script src="../../../calendar_v2/matios-ui-calendar-day.js"></script>
+  <script src="../../../calendar_v2/matios-ui-calendar-month.js"></script>
+  <script src="../../../calendar_v2/matios-ui-calendar-schedule.js"></script>
+  <script src="../../../calendar_v2/matios-ui-calendar.js"></script>
+  <script src="../../../calendar_v2/matios-ui-calendar-i18n.js"></script>
+</head>
+<body>
+  <div class="calendar-planner-page">
+    <header class="calendar-planner-page__topbar mts-surface">
+      <div class="calendar-planner-page__brand">
+        <div class="calendar-planner-page__logo">M</div>
+        <div>
+          <div class="calendar-planner-page__title">Calendar Planner</div>
+          <div class="calendar-planner-page__subtitle">Planificacion semanal con agenda y proximos hitos</div>
+        </div>
+      </div>
+      <div class="calendar-planner-page__topbar-actions">
+        <div id="calendar-planner-open-board"></div>
+      </div>
+    </header>
+
+    <main class="calendar-planner-page__main mts-grid mts-grid--gap-md">
+      <section class="calendar-planner-page__hero mts-g-col-12 mts-surface">
+        <div class="calendar-planner-page__hero-copy">
+          <div class="calendar-planner-page__eyebrow">
+            <span class="calendar-planner-page__eyebrow-dot"></span>
+            <span>Tiempo y carga</span>
+          </div>
+          <h1 class="calendar-planner-page__hero-title">Convierte tareas, reuniones y focos de ejecucion en una agenda clara.</h1>
+          <p class="calendar-planner-page__hero-text">
+            La vista mezcla `MTS.Calendar` con un resumen operativo para priorizar reuniones, bloques
+            de foco y entregas sin perder la semana completa.
+          </p>
+        </div>
+        <div class="calendar-planner-page__hero-actions">
+          <div id="calendar-planner-today"></div>
+          <div id="calendar-planner-new-event"></div>
+        </div>
+      </section>
+
+      <section class="calendar-planner-page__kpis mts-g-col-12">
+        <div class="mts-grid mts-grid--gap-md">
+          <div class="mts-g-col-12 mts-g-col-md-4"><div id="planner-kpi-meetings"></div></div>
+          <div class="mts-g-col-12 mts-g-col-md-4"><div id="planner-kpi-focus"></div></div>
+          <div class="mts-g-col-12 mts-g-col-md-4"><div id="planner-kpi-deadlines"></div></div>
+        </div>
+      </section>
+
+      <section class="calendar-planner-page__calendar-wrap mts-g-col-12 mts-g-col-lg-8">
+        <div class="mts-form-card calendar-planner-page__calendar-card">
+          <div id="calendar-planner-alert"></div>
+          <div id="calendar-planner-calendar" class="calendar-planner-page__calendar"></div>
+        </div>
+      </section>
+
+      <section class="calendar-planner-page__side mts-g-col-12 mts-g-col-lg-4">
+        <div class="calendar-planner-page__side-grid mts-grid mts-grid--gap-md">
+          <div class="mts-g-col-12"><div id="planner-card-next"></div></div>
+          <div class="mts-g-col-12"><div id="planner-card-deadline"></div></div>
+          <div class="mts-g-col-12"><div id="planner-card-routine"></div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+window.addEventListener('message',function(e){
+  if(!e.data) return;
+  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+  if(e.data.type==='setAccent'){
+    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+function openScreen(path){
+  var params=location.search||'';
+  window.location.href=path+params;
+}
+</script>
+<script>
+var plannerEventsRaw=[
+  {uid:'ev-1',title:'Kickoff onboarding clientes',description:'Revision semanal del flujo publico.',startDate:'2026-04-20',endDate:'2026-04-20',startHour:'09:00',endHour:'10:00',color:'#2563eb',data:{responsable:'Camila',tipo:'Reunion',lugar:'Sala Norte'}},
+  {uid:'ev-2',title:'Bloque foco · permisos',description:'Definir ajustes del modelo role/profile.',startDate:'2026-04-20',endDate:'2026-04-20',startHour:'11:00',endHour:'13:00',color:'#16a34a',data:{responsable:'Diego',tipo:'Foco'}},
+  {uid:'ev-3',title:'Review ticket HD-201',description:'Analisis final y mensaje al cliente.',startDate:'2026-04-21',endDate:'2026-04-21',startHour:'15:00',endHour:'16:00',color:'#f59e0b',data:{responsable:'Paula',tipo:'Soporte'}},
+  {uid:'ev-4',title:'Entrega task-board',description:'Revision final del showcase de productividad.',startDate:'2026-04-22',endDate:'2026-04-22',startHour:'10:30',endHour:'11:30',color:'#ef4444',data:{responsable:'Andres',tipo:'Entrega'}},
+  {uid:'ev-5',title:'Plan semanal de documentos',description:'Aterrizar vistas futuras para biblioteca documental.',startDate:'2026-04-24',endDate:'2026-04-24',startHour:'09:30',endHour:'10:30',color:'#7c3aed',data:{responsable:'Camila',tipo:'Planificacion'}}
+];
+var calendarInstance=null;
+
+new MTS.Button('#calendar-planner-open-board',{
+  label:'Abrir task board',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('layout'),
+  onClick:function(){openScreen('../task-board/index.html');}
+});
+
+new MTS.Button('#calendar-planner-today',{
+  label:'Ir a hoy',
+  variant:'primary',
+  iconLeft:MTS.Icon.get('calendar'),
+  onClick:function(){ if(calendarInstance) calendarInstance.today(); }
+});
+
+new MTS.Button('#calendar-planner-new-event',{
+  label:'Nuevo evento',
+  variant:'secondary',
+  iconLeft:MTS.Icon.get('plus'),
+  onClick:function(){ openEventModal(null); }
+});
+
+new MTS.KPICard('#planner-kpi-meetings',{
+  label:'Reuniones hoy',
+  value:2,
+  trend:8,
+  trendLabel:'vs ayer',
+  variant:'primary',
+  icon:MTS.Icon.get('users')
+});
+
+new MTS.KPICard('#planner-kpi-focus',{
+  label:'Horas foco',
+  value:'4.5',
+  unit:'h',
+  trend:10,
+  trendLabel:'reservadas',
+  variant:'success',
+  icon:MTS.Icon.get('target')
+});
+
+new MTS.KPICard('#planner-kpi-deadlines',{
+  label:'Entregas cercanas',
+  value:3,
+  trend:2,
+  trendLabel:'esta semana',
+  variant:'warning',
+  icon:MTS.Icon.get('flag')
+});
+
+MTS.Alert.show('#calendar-planner-alert',{
+  variant:'info',
+  title:'Planner semanal',
+  message:'El calendario queda configurado en semana laboral para coordinar reuniones, bloques de foco y entregas del equipo.',
+  closable:false
+});
+
+new MTS.Card('#planner-card-next',{
+  title:'Proximo hito',
+  subtitle:'Hoy 15:00',
+  variant:'elevated',
+  size:'lg',
+  body:'<div class="calendar-planner-page__card-body"><div class="calendar-planner-page__card-icon"><i class="mts-icon mts-icon-message-circle"></i></div><p>Review del ticket HD-201 con Paula y traspaso de proxima respuesta al cliente.</p></div>'
+});
+
+new MTS.Card('#planner-card-deadline',{
+  title:'Entrega visible',
+  subtitle:'Miercoles',
+  variant:'outlined',
+  size:'lg',
+  body:'<div class="calendar-planner-page__card-body"><div class="calendar-planner-page__card-icon"><i class="mts-icon mts-icon-flag"></i></div><p>La pantalla `task-board` entra a revision final antes de pasar al siguiente grupo del showcase.</p></div>'
+});
+
+new MTS.Card('#planner-card-routine',{
+  title:'Rutina sugerida',
+  subtitle:'Bloques fijos',
+  variant:'outlined',
+  size:'lg',
+  body:'<div class="calendar-planner-page__card-body"><div class="calendar-planner-page__card-icon"><i class="mts-icon mts-icon-refresh"></i></div><p>Reserva manana y cierre de jornada para triage, foco y seguimiento del trabajo operativo.</p></div>'
+});
+
+calendarInstance=new MTS.Calendar('#calendar-planner-calendar',{
+  view:'schedule',
+  views:['schedule','week','day'],
+  days:MTS.Calendar.DAYS_MON_FRI,
+  startTime:'08:00',
+  endTime:'19:00',
+  slotSize:60,
+  showTooltips:true,
+  datasource:plannerEventsRaw,
+  datasourceParser:function(raw){
+    return raw.map(function(item){
+      return MTS.CalendarEvent.fromAPI(item, calendarInstance).toJSON();
+    });
+  },
+  onEventClick:function(e){
+    openEventModal(findPlannerEvent(e.detail.event.uid || e.detail.event.id));
+  }
+});
+
+calendarInstance.refresh();
+MTS.Icon.initAll();
+
+function findPlannerEvent(id){
+  for(var i=0;i<plannerEventsRaw.length;i++){
+    if(plannerEventsRaw[i].uid===id || plannerEventsRaw[i].id===id) return plannerEventsRaw[i];
+  }
+  return null;
+}
+
+function openEventModal(eventItem){
+  var isNew=!eventItem;
+  var body=document.createElement('div');
+  body.className='calendar-planner-page__modal-form';
+  body.innerHTML='' +
+    '<div class="calendar-planner-page__modal-grid">' +
+      '<div id="planner-modal-title"></div>' +
+      '<div id="planner-modal-date"></div>' +
+      '<div id="planner-modal-start"></div>' +
+      '<div id="planner-modal-end"></div>' +
+      '<div id="planner-modal-type"></div>' +
+      '<div id="planner-modal-owner"></div>' +
+      '<div class="calendar-planner-page__modal-span" id="planner-modal-description"></div>' +
+      '<div id="planner-modal-alert"></div>' +
+    '</div>';
+
+  var modal=new MTS.Modal({
+    title:isNew ? 'Nuevo evento' : 'Detalle del evento',
+    body:body,
+    size:'lg',
+    scrollable:true,
+    buttons:[
+      { id:'planner-modal-cancel', label:'Cerrar', variant:'ghost', close:true },
+      {
+        id:'planner-modal-save',
+        label:isNew ? 'Crear evento' : 'Guardar cambios',
+        variant:'primary',
+        onClick:function(){
+          var title=titleInput.getValue().trim();
+          var date=dateInput.getValue().trim();
+          var start=startInput.getValue().trim();
+          var end=endInput.getValue().trim();
+          var type=typeField.getValue();
+          var owner=ownerField.getValue();
+          var description=descriptionInput.getValue().trim();
+
+          titleInput.clearError();
+          dateInput.clearError();
+          startInput.clearError();
+          endInput.clearError();
+
+          if(!title){
+            titleInput.setError('Ingresa un titulo para el evento');
+            return;
+          }
+          if(!date){
+            dateInput.setError('Ingresa la fecha del evento');
+            return;
+          }
+          if(!start || !end){
+            if(!start) startInput.setError('Define hora de inicio');
+            if(!end) endInput.setError('Define hora de termino');
+            return;
+          }
+          if(!type || !owner){
+            MTS.Alert.show('#planner-modal-alert',{
+              variant:'warning',
+              title:'Falta contexto del evento',
+              message:'Completa tipo de evento y responsable antes de guardar.',
+              closable:true
+            });
+            return;
+          }
+
+          var item=isNew ? { uid:'ev-'+Date.now(), color:'#2563eb' } : eventItem;
+          item.title=title;
+          item.startDate=date;
+          item.endDate=date;
+          item.startHour=start;
+          item.endHour=end;
+          item.description=description;
+          item.data=item.data||{};
+          item.data.tipo=type;
+          item.data.responsable=owner;
+
+          if(isNew) plannerEventsRaw.push(item);
+
+          calendarInstance.refresh();
+          modal.hide();
+          MTS.Alert.show('#calendar-planner-alert',{
+            variant:'success',
+            title:isNew ? 'Evento creado' : 'Evento actualizado',
+            message:'La agenda ya refleja el cambio y queda disponible para seguir planificando.',
+            closable:true
+          });
+        }
+      }
+    ],
+    onShown:function(){
+      titleInput=new MTS.Input('#planner-modal-title',{ type:'text', label:'Titulo', placeholder:'Nombre del evento', value:(eventItem&&eventItem.title)||'' });
+      dateInput=new MTS.Input('#planner-modal-date',{ type:'text', label:'Fecha', placeholder:'2026-04-20', value:(eventItem&&eventItem.startDate)||'2026-04-20' });
+      startInput=new MTS.Input('#planner-modal-start',{ type:'text', label:'Inicio', placeholder:'09:00', value:(eventItem&&eventItem.startHour)||'09:00' });
+      endInput=new MTS.Input('#planner-modal-end',{ type:'text', label:'Termino', placeholder:'10:00', value:(eventItem&&eventItem.endHour)||'10:00' });
+      typeField=new MTS.Select('#planner-modal-type',{
+        label:'Tipo',
+        options:[
+          { value:'Reunion', label:'Reunion' },
+          { value:'Foco', label:'Bloque de foco' },
+          { value:'Entrega', label:'Entrega' },
+          { value:'Soporte', label:'Soporte' }
+        ],
+        value:(eventItem&&eventItem.data&&eventItem.data.tipo)||''
+      });
+      ownerField=new MTS.Select('#planner-modal-owner',{
+        label:'Responsable',
+        options:[
+          { value:'Camila', label:'Camila' },
+          { value:'Paula', label:'Paula' },
+          { value:'Diego', label:'Diego' },
+          { value:'Andres', label:'Andres' }
+        ],
+        value:(eventItem&&eventItem.data&&eventItem.data.responsable)||''
+      });
+      descriptionInput=new MTS.Input('#planner-modal-description',{ type:'text', label:'Descripcion', placeholder:'Contexto breve del evento', value:(eventItem&&eventItem.description)||'' });
+    },
+    onHidden:function(){ modal.destroy(); }
+  });
+  var titleInput, dateInput, startInput, endInput, typeField, ownerField, descriptionInput;
+  modal.show();
+}
+</script>
+</body>
+</html>

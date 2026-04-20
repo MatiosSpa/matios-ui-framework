@@ -84,7 +84,7 @@ MTS.SortableList = class MtsSortableList {
 
   _build() {
     this._el.innerHTML = '';
-    this._el.className = `mts-sortable mts-sortable--${this.variant}${this.locked ? ' mts-sortable--locked' : ''}`;
+    this._syncClasses(['mts-sortable', `mts-sortable--${this.variant}`].concat(this.locked ? ['mts-sortable--locked'] : []));
 
     this.items.forEach((item, idx) => {
       this._el.appendChild(this._buildItem(item, idx));
@@ -260,7 +260,15 @@ MTS.SortableList = class MtsSortableList {
         : (toIdx < this._dragFromIdx ? toIdx : toIdx - 1);
 
       this._move(this._dragFromIdx, Math.max(0, Math.min(finalIdx, this.items.length - 1)));
-    });
+      });
+  }
+
+  _syncClasses(classes) {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-sortable' || cls.startsWith('mts-sortable--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add(...classes.filter(Boolean));
   }
 
   /* ── Mover item de fromIdx a toIdx ──────────────────── */

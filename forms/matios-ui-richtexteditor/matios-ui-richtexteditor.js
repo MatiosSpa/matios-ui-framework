@@ -77,10 +77,17 @@ MTS.RichTextEditor = class MtsRichTextEditor {
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   destroy()  { this._el.innerHTML = ''; }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-rte'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-rte');
+    if (this.disabled) this._el.classList.add('mts-rte--disabled');
+  }
+
   /* ── Build ── */
   _build() {
     this._el.innerHTML = '';
-    this._el.className = 'mts-rte' + (this.disabled ? ' mts-rte--disabled' : '');
+    this._syncClasses();
 
     /* Toolbar */
     const tb = document.createElement('div');

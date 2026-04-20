@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Invitar Equipo - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-taginput/matios-ui-taginput.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="invite-team.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-taginput/matios-ui-taginput.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="invite-team-page">
+    <header class="invite-team-page__topbar mts-surface">
+      <div class="invite-team-page__brand">
+        <div class="invite-team-page__logo">M</div>
+        <div>
+          <div class="invite-team-page__title">Matios</div>
+          <div class="invite-team-page__subtitle">Invita a tu equipo inicial</div>
+        </div>
+      </div>
+      <div class="invite-team-page__topbar-actions">
+        <div id="invite-team-skip-top"></div>
+      </div>
+    </header>
+
+    <main class="invite-team-page__main mts-grid mts-grid--gap-md">
+      <section class="invite-team-page__hero mts-g-col-12 mts-g-col-lg-6 mts-surface">
+        <div class="invite-team-page__eyebrow">
+          <span class="invite-team-page__eyebrow-dot"></span>
+          <span>Colaboracion inicial</span>
+        </div>
+
+        <h1 class="invite-team-page__hero-title">Activa el workspace con las personas correctas desde el dia uno.</h1>
+        <p class="invite-team-page__hero-copy">
+          Invita a quienes necesitan entrar primero, asigna un paquete de acceso inicial y deja el
+          onboarding listo para continuar sin depender de configuraciones posteriores.
+        </p>
+
+        <div class="invite-team-page__feature-list">
+          <article class="invite-team-page__feature">
+            <div class="invite-team-page__feature-icon"><i class="mts-icon mts-icon-users"></i></div>
+            <div>
+              <h2>Invitaciones por lote</h2>
+              <p>Agrega varios correos en una sola pasada sin repetir formularios.</p>
+            </div>
+          </article>
+          <article class="invite-team-page__feature">
+            <div class="invite-team-page__feature-icon"><i class="mts-icon mts-icon-shield-check"></i></div>
+            <div>
+              <h2>Acceso inicial consistente</h2>
+              <p>Define un rol base para que el equipo entre con el contexto correcto.</p>
+            </div>
+          </article>
+          <article class="invite-team-page__feature">
+            <div class="invite-team-page__feature-icon"><i class="mts-icon mts-icon-send"></i></div>
+            <div>
+              <h2>Mensaje de bienvenida</h2>
+              <p>Acompana el alta con una nota corta y alineada con la invitacion.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="invite-team-page__panel-wrap mts-g-col-12 mts-g-col-lg-6">
+        <div class="mts-form-card invite-team-page__panel">
+          <div class="invite-team-page__form-view" id="invite-team-form-view">
+            <div class="mts-form-card__header">
+              <h2 class="mts-form-card__title">Invitar personas</h2>
+              <p class="mts-form-card__subtitle">
+                Agrega los correos y deja listo el acceso inicial del equipo.
+              </p>
+            </div>
+
+            <div id="invite-team-alert"></div>
+
+            <div class="mts-form">
+              <div id="invite-team-members"></div>
+
+              <div class="invite-team-page__grid">
+                <div id="invite-team-role"></div>
+                <div id="invite-team-message"></div>
+              </div>
+
+              <div class="invite-team-page__checks">
+                <div id="invite-team-copy"></div>
+                <div id="invite-team-later"></div>
+              </div>
+
+              <div class="mts-form-footer mts-form-footer--between invite-team-page__footer">
+                <div id="invite-team-skip-bottom"></div>
+                <div class="invite-team-page__submit" id="invite-team-submit"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="invite-team-page__success-view" id="invite-team-success-view" hidden>
+            <div class="invite-team-page__success-icon">
+              <i class="mts-icon mts-icon-check"></i>
+            </div>
+            <h2 class="invite-team-page__success-title">Invitaciones listas visualmente</h2>
+            <p class="invite-team-page__success-copy">
+              El lote inicial quedo preparado con el acceso base y el mensaje de bienvenida.
+            </p>
+
+            <div class="invite-team-page__success-summary mts-surface">
+              <div class="invite-team-page__success-row">
+                <span>Invitados</span>
+                <strong id="invite-team-summary-total">-</strong>
+              </div>
+              <div class="invite-team-page__success-row">
+                <span>Rol inicial</span>
+                <strong id="invite-team-summary-role">-</strong>
+              </div>
+              <div class="invite-team-page__success-list" id="invite-team-summary-list"></div>
+            </div>
+
+            <div id="invite-team-success-alert"></div>
+
+            <div class="invite-team-page__success-actions">
+              <div id="invite-team-edit"></div>
+              <div id="invite-team-continue"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+window.addEventListener('message',function(e){
+  if(!e.data) return;
+  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+  if(e.data.type==='setAccent'){
+    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+function openScreen(path){
+  var params=location.search||'';
+  window.location.href=path+params;
+}
+</script>
+<script>
+var inviteState={tags:[],roleLabel:'',message:''};
+
+var teamMembersInput=new MTS.TagInput('#invite-team-members',{
+  label:'Correos del equipo',
+  placeholder:'Agrega un correo y presiona Enter',
+  allowCustom:true,
+  suggestions:[
+    {uid:'ana@acme.com',name:'ana@acme.com'},
+    {uid:'carlos@acme.com',name:'carlos@acme.com'},
+    {uid:'sofia@acme.com',name:'sofia@acme.com'},
+    {uid:'diego@acme.com',name:'diego@acme.com'}
+  ]
+});
+
+var roleSelect=new MTS.Select('#invite-team-role',{
+  label:'Rol inicial',
+  placeholder:'Selecciona un rol base',
+  options:[
+    {value:'general',label:'General'},
+    {value:'operations',label:'Operations'},
+    {value:'document-viewer',label:'Document Viewer'},
+    {value:'billing-editor',label:'Billing Editor'}
+  ]
+});
+
+var messageInput=new MTS.Input('#invite-team-message',{
+  type:'text',
+  label:'Mensaje de bienvenida',
+  placeholder:'Te compartimos acceso para que empieces hoy mismo',
+  iconLeft:MTS.Icon.get('mail')
+});
+
+new MTS.Checkbox('#invite-team-copy',{
+  label:'Quiero recibir una copia del resumen de invitaciones'
+});
+
+new MTS.Checkbox('#invite-team-later',{
+  label:'Si alguien no entra ahora, podra aceptar la invitacion mas tarde'
+});
+
+new MTS.Button('#invite-team-skip-top',{
+  label:'Omitir por ahora',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-right'),
+  onClick:function(){openScreen('../onboarding-complete/index.html');}
+});
+
+new MTS.Button('#invite-team-skip-bottom',{
+  label:'Continuar sin invitar',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-right'),
+  onClick:function(){openScreen('../onboarding-complete/index.html');}
+});
+
+var submitButton=new MTS.Button('#invite-team-submit',{
+  label:'Enviar invitaciones',
+  variant:'primary',
+  block:true,
+  iconLeft:MTS.Icon.get('send'),
+  onClick:function(e,inst){submitInvites(inst);}
+});
+
+new MTS.Button('#invite-team-edit',{
+  label:'Editar lote',
+  variant:'secondary',
+  block:true,
+  onClick:function(){resetFlow();}
+});
+
+new MTS.Button('#invite-team-continue',{
+  label:'Continuar onboarding',
+  variant:'primary',
+  block:true,
+  iconLeft:MTS.Icon.get('arrow-right'),
+  onClick:function(){openScreen('../onboarding-complete/index.html');}
+});
+
+function clearAlerts(){
+  document.getElementById('invite-team-alert').innerHTML='';
+  document.getElementById('invite-team-success-alert').innerHTML='';
+}
+
+function showAlert(target,options){
+  document.querySelector(target).innerHTML='';
+  MTS.Alert.show(target,options);
+}
+
+function setSelectError(selector){
+  var root=document.querySelector(selector);
+  if(root) root.classList.add('invite-team-page__field-error');
+}
+
+function clearSelectError(selector){
+  var root=document.querySelector(selector);
+  if(root) root.classList.remove('invite-team-page__field-error');
+}
+
+function setTagError(selector){
+  var root=document.querySelector(selector);
+  if(root) root.classList.add('invite-team-page__field-error');
+}
+
+function clearTagError(selector){
+  var root=document.querySelector(selector);
+  if(root) root.classList.remove('invite-team-page__field-error');
+}
+
+function clearErrors(){
+  messageInput.clearError();
+  clearSelectError('#invite-team-role');
+  clearTagError('#invite-team-members');
+}
+
+function getRoleLabel(value){
+  var options=roleSelect.options||[];
+  for(var i=0;i<options.length;i++){
+    if(options[i].value===value) return options[i].label;
+  }
+  return value||'-';
+}
+
+function isValidEmail(value){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function submitInvites(inst){
+  clearAlerts();
+  clearErrors();
+
+  var tags=teamMembersInput.getTags();
+  var roleValue=roleSelect.getValue();
+  var message=messageInput.getValue().trim();
+
+  if(!tags.length){
+    setTagError('#invite-team-members');
+    showAlert('#invite-team-alert',{
+      variant:'warning',
+      title:'Agrega al menos un correo',
+      message:'Necesitamos por lo menos una persona en el lote inicial para preparar las invitaciones.',
+      closable:true
+    });
+    return;
+  }
+
+  for(var i=0;i<tags.length;i++){
+    if(!isValidEmail(tags[i].uid)){
+      setTagError('#invite-team-members');
+      showAlert('#invite-team-alert',{
+        variant:'warning',
+        title:'Hay correos invalidos',
+        message:'Revisa las invitaciones y deja solo correos validos antes de continuar.',
+        closable:true
+      });
+      return;
+    }
+  }
+
+  if(!roleValue){
+    setSelectError('#invite-team-role');
+    showAlert('#invite-team-alert',{
+      variant:'warning',
+      title:'Falta el rol inicial',
+      message:'Selecciona el paquete de acceso base para el equipo invitado.',
+      closable:true
+    });
+    return;
+  }
+
+  if(message && message.length>96){
+    messageInput.setError('Mantiene el mensaje bajo 96 caracteres');
+    return;
+  }
+
+  inviteState.tags=tags;
+  inviteState.roleLabel=getRoleLabel(roleValue);
+  inviteState.message=message||'Bienvenidos al nuevo workspace.';
+
+  inst.setLoading(true);
+  inst.setLabel('Preparando invitaciones...');
+
+  setTimeout(function(){
+    inst.setLoading(false);
+    inst.setLabel('Enviar invitaciones');
+    showSuccessState();
+  },1050);
+}
+
+function showSuccessState(){
+  document.getElementById('invite-team-form-view').hidden=true;
+  document.getElementById('invite-team-success-view').hidden=false;
+  document.getElementById('invite-team-summary-total').textContent=inviteState.tags.length+' personas';
+  document.getElementById('invite-team-summary-role').textContent=inviteState.roleLabel;
+  document.getElementById('invite-team-summary-list').innerHTML=inviteState.tags.map(function(tag){
+    return '<div class="invite-team-page__invitee"><i class="mts-icon mts-icon-mail"></i><span>'+escapeHtml(tag.uid)+'</span></div>';
+  }).join('');
+
+  showAlert('#invite-team-success-alert',{
+    variant:'success',
+    title:'Lote preparado',
+    message:'Se simulo el envio para <strong>'+inviteState.tags.length+' personas</strong> con el rol <strong>'+escapeHtml(inviteState.roleLabel)+'</strong>.',
+    closable:true
+  });
+}
+
+function resetFlow(){
+  clearAlerts();
+  clearErrors();
+  document.getElementById('invite-team-form-view').hidden=false;
+  document.getElementById('invite-team-success-view').hidden=true;
+  teamMembersInput.setTags([]);
+  roleSelect.clear();
+  setNativeValue('#invite-team-message input','');
+}
+
+function setNativeValue(selector,value){
+  var input=document.querySelector(selector);
+  if(!input) return;
+  input.value=value;
+  input.dispatchEvent(new Event('input',{bubbles:true}));
+  input.dispatchEvent(new Event('change',{bubbles:true}));
+}
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+
+teamMembersInput.on('change',function(){clearTagError('#invite-team-members');});
+roleSelect.on('change',function(){clearSelectError('#invite-team-role');});
+MTS.Icon.initAll();
+</script>
+</body>
+</html>

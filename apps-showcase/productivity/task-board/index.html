@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Task Board - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-modal/matios-ui-modal.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-kpicard/matios-ui-kpicard.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-kanban/matios-ui-kanban.css">
+  <link rel="stylesheet" href="task-board.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-modal/matios-ui-modal.js"></script>
+  <script src="../../../display/matios-ui-kpicard/matios-ui-kpicard.js"></script>
+  <script src="../../../display/matios-ui-kanban/matios-ui-kanban.js"></script>
+</head>
+<body>
+  <div class="task-board-page">
+    <header class="task-board-page__topbar mts-surface">
+      <div class="task-board-page__brand">
+        <div class="task-board-page__logo">M</div>
+        <div>
+          <div class="task-board-page__title">Task Board</div>
+          <div class="task-board-page__subtitle">Trabajo activo por estado, prioridad y responsable</div>
+        </div>
+      </div>
+      <div class="task-board-page__topbar-actions">
+        <div id="task-board-open-planner"></div>
+      </div>
+    </header>
+
+    <main class="task-board-page__main mts-grid mts-grid--gap-md">
+      <section class="task-board-page__hero mts-g-col-12 mts-surface">
+        <div class="task-board-page__hero-copy">
+          <div class="task-board-page__eyebrow">
+            <span class="task-board-page__eyebrow-dot"></span>
+            <span>Operacion diaria</span>
+          </div>
+          <h1 class="task-board-page__hero-title">Ordena backlog, ejecucion y cierre sin perder contexto del equipo.</h1>
+          <p class="task-board-page__hero-text">
+            El tablero concentra estado, prioridad y responsables para que el equipo vea rapido que
+            se esta moviendo hoy, que esta bloqueado y que ya puede cerrarse.
+          </p>
+        </div>
+
+        <div class="task-board-page__hero-actions">
+          <div id="task-board-new-task"></div>
+          <div id="task-board-focus-me"></div>
+        </div>
+      </section>
+
+      <section class="task-board-page__kpis mts-g-col-12">
+        <div class="mts-grid mts-grid--gap-md">
+          <div class="mts-g-col-12 mts-g-col-md-4"><div id="task-kpi-open"></div></div>
+          <div class="mts-g-col-12 mts-g-col-md-4"><div id="task-kpi-today"></div></div>
+          <div class="mts-g-col-12 mts-g-col-md-4"><div id="task-kpi-blocked"></div></div>
+        </div>
+      </section>
+
+      <section class="task-board-page__filters mts-g-col-12">
+        <div class="mts-form-card task-board-page__filters-card">
+          <div id="task-board-alert"></div>
+          <div class="mts-grid mts-grid--gap-md task-board-page__filters-grid">
+            <div class="mts-g-col-12 mts-g-col-lg-4">
+              <div id="task-board-search"></div>
+            </div>
+            <div class="mts-g-col-12 mts-g-col-md-6 mts-g-col-lg-3">
+              <div id="task-board-priority"></div>
+            </div>
+            <div class="mts-g-col-12 mts-g-col-md-6 mts-g-col-lg-3">
+              <div id="task-board-owner"></div>
+            </div>
+            <div class="mts-g-col-12 mts-g-col-lg-2 task-board-page__filters-action">
+              <button id="task-board-clear" type="button"></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="task-board-page__board-wrap mts-g-col-12">
+        <div class="mts-form-card task-board-page__board-card">
+          <div id="task-board-empty" hidden></div>
+          <div id="task-board-kanban"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+window.addEventListener('message',function(e){
+  if(!e.data) return;
+  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+  if(e.data.type==='setAccent'){
+    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+function openScreen(path){
+  var params=location.search||'';
+  window.location.href=path+params;
+}
+</script>
+<script>
+var TASKS=[
+  {id:'TK-401',title:'Definir permisos para modulo Invoice',description:'Alinear perfiles efectivos antes del despliegue.',priority:'high',tags:['security','invoice'],assignee:'Camila',dueDate:'Hoy',owner:'camila',state:'backlog'},
+  {id:'TK-398',title:'Revisar copy de invitacion inicial',description:'Ajustar mensaje del onboarding para clientes nuevos.',priority:'medium',tags:['onboarding'],assignee:'Paula',dueDate:'Hoy',owner:'paula',state:'backlog'},
+  {id:'TK-390',title:'Corregir alta de empresa hija',description:'Flujo interno de nueva compania desde workspace activo.',priority:'critical',tags:['company','bug'],assignee:'Diego',dueDate:'Vence hoy',owner:'diego',state:'in-progress'},
+  {id:'TK-384',title:'Pulir selector de workspace',description:'Ajustar copy y estados de organizacion activa.',priority:'medium',tags:['login'],assignee:'Camila',dueDate:'Manana',owner:'camila',state:'in-progress'},
+  {id:'TK-372',title:'Validar permisos por boton en documents',description:'Revisar permiso fino para accion de aprobar.',priority:'high',tags:['documents','acl'],assignee:'Andres',dueDate:'Manana',owner:'andres',state:'review'},
+  {id:'TK-361',title:'Cerrar caso de soporte HD-201',description:'Documentar resolucion final y comunicar al cliente.',priority:'low',tags:['support'],assignee:'Paula',dueDate:'Viernes',owner:'paula',state:'done'}
+];
+
+var boardState={query:'',priority:'',owner:''};
+var boardInstance=null;
+
+new MTS.Button('#task-board-open-planner',{
+  label:'Abrir planner',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('calendar'),
+  onClick:function(){openScreen('../calendar-planner/index.html');}
+});
+
+new MTS.Button('#task-board-new-task',{
+  label:'Nueva tarea',
+  variant:'primary',
+  iconLeft:MTS.Icon.get('plus'),
+  onClick:function(){
+    openTaskModal(null,'backlog');
+  }
+});
+
+new MTS.Button('#task-board-focus-me',{
+  label:'Ver solo lo mio',
+  variant:'secondary',
+  iconLeft:MTS.Icon.get('user'),
+  onClick:function(){
+    boardState.owner='camila';
+    ownerSelect.setValue('camila');
+    renderBoard();
+  }
+});
+
+new MTS.KPICard('#task-kpi-open',{
+  label:'Abiertas',
+  value:5,
+  trend:12,
+  trendLabel:'vs ayer',
+  variant:'primary',
+  icon:MTS.Icon.get('layout')
+});
+
+new MTS.KPICard('#task-kpi-today',{
+  label:'Vencen hoy',
+  value:3,
+  trend:4,
+  trendLabel:'requieren foco',
+  variant:'warning',
+  icon:MTS.Icon.get('clock')
+});
+
+new MTS.KPICard('#task-kpi-blocked',{
+  label:'Bloqueadas',
+  value:1,
+  trend:-2,
+  trendLabel:'vs semana pasada',
+  variant:'danger',
+  icon:MTS.Icon.get('slash')
+});
+
+var searchInput=new MTS.Input('#task-board-search',{
+  type:'text',
+  label:'Buscar tarea',
+  placeholder:'ID, titulo o tag',
+  iconLeft:MTS.Icon.get('search')
+});
+
+var prioritySelect=new MTS.Select('#task-board-priority',{
+  label:'Prioridad',
+  placeholder:'Todas',
+  clearable:true,
+  options:[
+    {value:'critical',label:'Critica'},
+    {value:'high',label:'Alta'},
+    {value:'medium',label:'Media'},
+    {value:'low',label:'Baja'}
+  ]
+});
+
+var ownerSelect=new MTS.Select('#task-board-owner',{
+  label:'Responsable',
+  placeholder:'Todos',
+  clearable:true,
+  options:[
+    {value:'camila',label:'Camila'},
+    {value:'paula',label:'Paula'},
+    {value:'diego',label:'Diego'},
+    {value:'andres',label:'Andres'}
+  ]
+});
+
+new MTS.Button('#task-board-clear',{
+  label:'Limpiar filtros',
+  variant:'secondary',
+  iconLeft:MTS.Icon.get('refresh-cw'),
+  onClick:function(){
+    boardState.query='';
+    boardState.priority='';
+    boardState.owner='';
+    setNativeValue('#task-board-search input','');
+    prioritySelect.clear();
+    ownerSelect.clear();
+    renderBoard();
+  }
+});
+
+MTS.Alert.show('#task-board-alert',{
+  variant:'info',
+  title:'Board del equipo',
+  message:'La vista esta preparada para revisar carga, priorizar tarjetas y saltar a la planificacion temporal cuando haga falta.',
+  closable:false
+});
+
+function getFilteredTasks(){
+  return TASKS.filter(function(task){
+    var q=boardState.query.toLowerCase();
+    var haystack=[task.id,task.title,task.description].concat(task.tags||[]).join(' ').toLowerCase();
+    var matchesQuery=!q || haystack.indexOf(q)!==-1;
+    var matchesPriority=!boardState.priority || task.priority===boardState.priority;
+    var matchesOwner=!boardState.owner || task.owner===boardState.owner;
+    return matchesQuery && matchesPriority && matchesOwner;
+  });
+}
+
+function renderBoard(){
+  var visible=getFilteredTasks();
+  var emptyHost=document.getElementById('task-board-empty');
+  var boardHost=document.getElementById('task-board-kanban');
+  boardHost.innerHTML='';
+
+  if(!visible.length){
+    emptyHost.hidden=false;
+    emptyHost.innerHTML='';
+    new MTS.Alert('#task-board-empty',{
+      variant:'warning',
+      title:'Sin tareas visibles',
+      message:'La combinacion actual de filtros dejo el tablero sin tarjetas.',
+      closable:false
+    });
+    return;
+  }
+
+  emptyHost.hidden=true;
+  emptyHost.innerHTML='';
+
+  boardInstance=new MTS.Kanban('#task-board-kanban',{
+    addCards:true,
+    columns:[
+      {id:'backlog',title:'Backlog',color:'#64748b',wip:6,cards:visible.filter(function(t){return t.state==='backlog';})},
+      {id:'in-progress',title:'In Progress',color:'#2563eb',wip:4,cards:visible.filter(function(t){return t.state==='in-progress';})},
+      {id:'review',title:'Review',color:'#f59e0b',wip:3,cards:visible.filter(function(t){return t.state==='review';})},
+      {id:'done',title:'Done',color:'#16a34a',wip:99,cards:visible.filter(function(t){return t.state==='done';})}
+    ],
+    onCardClick:function(e){
+      openTaskModal(findTaskById(e.detail.card.id), e.detail.colId);
+    },
+    onMove:function(e){
+      var moved=findTaskById(e.detail.card.id);
+      if(moved) moved.state=e.detail.toColId;
+      MTS.Alert.show('#task-board-alert',{
+        variant:'success',
+        title:'Estado actualizado',
+        message:'La tarea <strong>'+e.detail.card.id+'</strong> se movio a <strong>'+e.detail.toColId+'</strong> dentro del board.',
+        closable:true
+      });
+    },
+    onAddCard:function(e){
+      var added=e.detail.card;
+      TASKS.push({
+        id:added.id,
+        title:added.title,
+        description:added.description||'',
+        tags:added.tags||[],
+        priority:added.priority||'medium',
+        assignee:added.assignee||'',
+        owner:ownerValueFromName(added.assignee||'') || '',
+        dueDate:'Por definir',
+        state:e.detail.colId
+      });
+      openTaskModal(findTaskById(added.id), e.detail.colId);
+    }
+  });
+}
+
+function findTaskById(id){
+  for(var i=0;i<TASKS.length;i++){
+    if(TASKS[i].id===id) return TASKS[i];
+  }
+  return null;
+}
+
+function ownerValueFromName(name){
+  var map={Camila:'camila',Paula:'paula',Diego:'diego',Andres:'andres'};
+  return map[name]||'';
+}
+
+function ownerNameFromValue(value){
+  var map={camila:'Camila',paula:'Paula',diego:'Diego',andres:'Andres'};
+  return map[value]||'';
+}
+
+function openTaskModal(task,colId){
+  var isNew=!task;
+  var stateValue=(task&&task.state)||colId||'backlog';
+  var body=document.createElement('div');
+  body.className='task-board-page__modal-form';
+  body.innerHTML='' +
+    '<div class="task-board-page__modal-grid">' +
+      '<div id="task-modal-title"></div>' +
+      '<div id="task-modal-state"></div>' +
+      '<div id="task-modal-owner"></div>' +
+      '<div id="task-modal-priority"></div>' +
+      '<div id="task-modal-due"></div>' +
+      '<div id="task-modal-tags"></div>' +
+      '<div class="task-board-page__modal-span" id="task-modal-description"></div>' +
+      '<div id="task-modal-alert"></div>' +
+    '</div>';
+
+  var modal=new MTS.Modal({
+    title:isNew ? 'Nueva tarea' : 'Detalle de tarea',
+    body:body,
+    size:'lg',
+    scrollable:true,
+    buttons:[
+      { id:'task-modal-cancel', label:'Cerrar', variant:'ghost', close:true },
+      {
+        id:'task-modal-save',
+        label:isNew ? 'Crear tarea' : 'Guardar cambios',
+        variant:'primary',
+        onClick:function(){
+          var title=titleInput.getValue().trim();
+          var description=descriptionInput.getValue().trim();
+          var owner=ownerField.getValue();
+          var priority=priorityField.getValue();
+          var state=stateField.getValue();
+          var due=dueInput.getValue().trim();
+          var tags=(tagsInput.getValue().trim()||'').split(',').map(function(item){ return item.trim(); }).filter(Boolean);
+
+          titleInput.clearError();
+          dueInput.clearError();
+          if(!title){
+            titleInput.setError('Ingresa un titulo para la tarea');
+            return;
+          }
+          if(!due){
+            dueInput.setError('Ingresa una fecha o referencia de vencimiento');
+            return;
+          }
+          if(!owner || !priority || !state){
+            MTS.Alert.show('#task-modal-alert',{
+              variant:'warning',
+              title:'Completa el contexto',
+              message:'Necesitamos responsable, prioridad y estado antes de guardar la tarea.',
+              closable:true
+            });
+            return;
+          }
+
+          if(isNew){
+            TASKS.push({
+              id:'TK-'+String(Date.now()).slice(-3),
+              title:title,
+              description:description,
+              owner:owner,
+              assignee:ownerNameFromValue(owner),
+              priority:priority,
+              dueDate:due,
+              tags:tags,
+              state:state
+            });
+          } else {
+            task.title=title;
+            task.description=description;
+            task.owner=owner;
+            task.assignee=ownerNameFromValue(owner);
+            task.priority=priority;
+            task.dueDate=due;
+            task.tags=tags;
+            task.state=state;
+          }
+
+          renderBoard();
+          modal.hide();
+          MTS.Alert.show('#task-board-alert',{
+            variant:'success',
+            title:isNew ? 'Tarea creada' : 'Tarea actualizada',
+            message:'La tarea ya quedo disponible dentro del board operativo.',
+            closable:true
+          });
+        }
+      }
+    ],
+    onShown:function(){
+      titleInput=new MTS.Input('#task-modal-title',{
+        type:'text',
+        label:'Titulo',
+        placeholder:'Define la tarea',
+        value:(task&&task.title)||''
+      });
+      stateField=new MTS.Select('#task-modal-state',{
+        label:'Estado',
+        options:[
+          {value:'backlog',label:'Backlog'},
+          {value:'in-progress',label:'In Progress'},
+          {value:'review',label:'Review'},
+          {value:'done',label:'Done'}
+        ],
+        value:stateValue
+      });
+      ownerField=new MTS.Select('#task-modal-owner',{
+        label:'Responsable',
+        options:[
+          {value:'camila',label:'Camila'},
+          {value:'paula',label:'Paula'},
+          {value:'diego',label:'Diego'},
+          {value:'andres',label:'Andres'}
+        ],
+        value:(task&&task.owner)||''
+      });
+      priorityField=new MTS.Select('#task-modal-priority',{
+        label:'Prioridad',
+        options:[
+          {value:'critical',label:'Critica'},
+          {value:'high',label:'Alta'},
+          {value:'medium',label:'Media'},
+          {value:'low',label:'Baja'}
+        ],
+        value:(task&&task.priority)||'medium'
+      });
+      dueInput=new MTS.Input('#task-modal-due',{
+        type:'text',
+        label:'Vencimiento',
+        placeholder:'Hoy, manana o fecha concreta',
+        value:(task&&task.dueDate)||''
+      });
+      tagsInput=new MTS.Input('#task-modal-tags',{
+        type:'text',
+        label:'Tags',
+        placeholder:'onboarding, invoice, support',
+        value:(task&&task.tags||[]).join(', ')
+      });
+      descriptionInput=new MTS.Input('#task-modal-description',{
+        type:'text',
+        label:'Descripcion',
+        placeholder:'Contexto y siguiente accion',
+        value:(task&&task.description)||''
+      });
+    },
+    onHidden:function(){ modal.destroy(); }
+  });
+  var titleInput, stateField, ownerField, priorityField, dueInput, tagsInput, descriptionInput;
+  modal.show();
+}
+
+function setNativeValue(selector,value){
+  var input=document.querySelector(selector);
+  if(!input) return;
+  input.value=value;
+  input.dispatchEvent(new Event('input',{bubbles:true}));
+  input.dispatchEvent(new Event('change',{bubbles:true}));
+}
+
+var searchNode=document.querySelector('#task-board-search input');
+if(searchNode){
+  searchNode.addEventListener('input',function(e){
+    boardState.query=e.target.value||'';
+    renderBoard();
+  });
+}
+prioritySelect.on('change',function(e){
+  boardState.priority=e.detail.value||'';
+  renderBoard();
+});
+ownerSelect.on('change',function(e){
+  boardState.owner=e.detail.value||'';
+  renderBoard();
+});
+
+renderBoard();
+MTS.Icon.initAll();
+</script>
+</body>
+</html>

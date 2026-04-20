@@ -135,7 +135,7 @@ MTS.Infinite = class MtsInfinite {
      ============================================================ */
 
   _build() {
-    this._el.className = 'mts-infinite';
+    this._syncClasses(['mts-infinite']);
 
     /* Lista */
     this._listEl = document.createElement('div');
@@ -178,6 +178,14 @@ MTS.Infinite = class MtsInfinite {
     this._errorEl = document.createElement('div');
     this._errorEl.className = 'mts-infinite__error';
     this._el.appendChild(this._errorEl);
+  }
+
+  _syncClasses(classes) {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-infinite' || cls.startsWith('mts-infinite--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add(...classes.filter(Boolean));
   }
 
   /* ============================================================

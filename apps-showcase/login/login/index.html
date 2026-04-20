@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Acceso Unificado - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-toggle/matios-ui-toggle.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-formlayout/matios-ui-formlayout.css">
+  <link rel="stylesheet" href="../../../layout/matios-ui-grid/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="login.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-toggle/matios-ui-toggle.js"></script>
+  <script src="../../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="login-page">
+    <header class="login-page__topbar mts-surface">
+      <div class="login-page__brand">
+        <div class="login-page__logo">M</div>
+        <div>
+          <div class="login-page__title">Acceso Unificado</div>
+          <div class="login-page__subtitle">Showcase / Autenticacion</div>
+        </div>
+      </div>
+      <div class="login-page__topbar-actions">
+        <div id="login-back-btn"></div>
+      </div>
+    </header>
+
+    <main class="login-page__main mts-grid mts-grid--gap-md">
+      <section class="login-page__panel mts-g-col-12 mts-g-col-lg-7 mts-surface">
+        <p class="login-page__kicker">Pantalla activa</p>
+        <h1 class="login-page__hero-title">Un solo acceso, dos metodos</h1>
+        <p class="login-page__hero-copy">Esta interfaz combina ingreso por contrasena y solicitud de OTP en la misma vista. El objetivo es reducir friccion usando solo componentes Matios UI y layout del sistema.</p>
+
+        <div class="login-page__bullet-list">
+          <div class="login-page__bullet">
+            <i class="mts-icon mts-icon-user"></i>
+            <span>Identidad unica: correo, usuario o telefono.</span>
+          </div>
+          <div class="login-page__bullet">
+            <i class="mts-icon mts-icon-lock"></i>
+            <span>Modo contrasena para acceso tradicional.</span>
+          </div>
+          <div class="login-page__bullet">
+            <i class="mts-icon mts-icon-key"></i>
+            <span>Modo OTP para envio simulado del codigo al destino correcto.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="login-page__form-wrap mts-g-col-12 mts-g-col-lg-5">
+        <div class="mts-form-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Bienvenido</h2>
+            <p class="mts-form-card__subtitle">Selecciona el metodo de acceso y continua con la simulacion UI.</p>
+          </div>
+
+          <div id="login-alert"></div>
+
+          <div class="mts-form">
+            <div class="mts-form-section">
+              <div id="login-identity"></div>
+
+              <div class="login-mode mts-surface">
+                <div class="login-mode__copy">
+                  <p class="login-mode__title">Metodo de acceso</p>
+                  <p class="login-mode__desc" id="login-method-desc">Usa tu contrasena para iniciar sesion de inmediato.</p>
+                </div>
+                <div class="login-mode__switch">
+                  <span class="login-mode__label" id="login-method-label">Clave</span>
+                  <div id="login-method-toggle"></div>
+                </div>
+              </div>
+
+              <div id="login-password-wrap">
+                <div id="login-password"></div>
+              </div>
+
+              <div class="login-otp-help mts-surface login-otp-help--hidden" id="login-otp-help">
+                <div class="login-otp-help__icon"><i class="mts-icon mts-icon-key"></i></div>
+                <p id="login-otp-message">Te enviaremos un codigo al correo o telefono asociado a esta cuenta.</p>
+              </div>
+            </div>
+
+            <div class="mts-form-section">
+              <div class="login-page__meta">
+                <div id="login-remember"></div>
+                <div id="login-forgot-btn"></div>
+              </div>
+            </div>
+
+            <div class="mts-form-footer mts-form-footer--end">
+              <div class="login-page__submit" id="login-submit"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+window.addEventListener('message',function(e){
+  if(!e.data) return;
+  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+  if(e.data.type==='setAccent'){
+    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
+function openScreen(path){
+  var params=location.search||'';
+  window.location.href=path+params;
+}
+</script>
+<script>
+var mode='password';
+
+new MTS.Button('#login-back-btn',{
+  label:'Volver al grupo',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-left'),
+  onClick:function(){goBack();}
+});
+
+var identityInput=new MTS.Input('#login-identity',{
+  type:'text',
+  label:'Correo, usuario o telefono',
+  placeholder:'nombre@empresa.com / usuario / +56 9 1234 5678',
+  iconLeft:MTS.Icon.get('user')
+});
+
+var passwordInput=new MTS.Input('#login-password',{
+  type:'password',
+  label:'Contrasena',
+  placeholder:'Ingresa tu contrasena',
+  showPassword:true
+});
+
+var methodToggle=new MTS.Toggle('#login-method-toggle',{
+  checked:false,
+  onChange:function(e){
+    mode=e.detail.checked?'otp':'password';
+    renderMode();
+  }
+});
+
+new MTS.Checkbox('#login-remember',{label:'Recordarme'});
+
+new MTS.Button('#login-forgot-btn',{
+  label:'Olvide mi contrasena',
+  variant:'link',
+  onClick:function(){openScreen('../forgot-password/index.html');}
+});
+
+var submitButton=new MTS.Button('#login-submit',{
+  label:'Iniciar sesion',
+  variant:'primary',
+  block:true,
+  iconLeft:MTS.Icon.get('lock'),
+  onClick:function(e,inst){submitLogin(inst);}
+});
+
+function clearAlert(){
+  document.getElementById('login-alert').innerHTML='';
+}
+
+function showAlert(options){
+  clearAlert();
+  MTS.Alert.show('#login-alert',options);
+}
+
+function renderMode(){
+  var isOtp=mode==='otp';
+  document.getElementById('login-password-wrap').classList.toggle('login-panel-hidden',isOtp);
+  document.getElementById('login-otp-help').classList.toggle('login-otp-help--hidden',!isOtp);
+  document.getElementById('login-method-label').textContent=isOtp?'OTP':'Clave';
+  document.getElementById('login-method-desc').textContent=isOtp
+    ? 'Desactiva la contrasena y prepara el envio del codigo al destino correcto.'
+    : 'Usa tu contrasena para iniciar sesion de inmediato.';
+  document.getElementById('login-otp-message').textContent='Te enviaremos un codigo al correo o telefono asociado a esta cuenta.';
+  submitButton.setLabel(isOtp?'Enviar codigo':'Iniciar sesion');
+  setButtonIcon(submitButton,isOtp?MTS.Icon.get('key'):MTS.Icon.get('lock'));
+  clearAlert();
+  identityInput.clearError();
+  passwordInput.clearError();
+}
+
+function submitLogin(inst){
+  var identity=identityInput.getValue().trim();
+  var password=passwordInput.getValue().trim();
+  clearAlert();
+
+  if(!identity){
+    identityInput.setError('Debes ingresar correo, usuario o telefono');
+    return;
+  }
+
+  if(mode==='password'&&!password){
+    passwordInput.setError('Debes ingresar tu contrasena');
+    return;
+  }
+
+  inst.setLoading(true);
+  inst.setLabel(mode==='otp'?'Enviando codigo...':'Validando acceso...');
+
+  setTimeout(function(){
+    inst.setLoading(false);
+    renderMode();
+    if(mode==='otp'){
+      showAlert({
+        variant:'success',
+        title:'Codigo OTP preparado',
+        message:'Simulacion UI: el codigo se enviaria al destino asociado a <strong>'+escapeHtml(identity)+'</strong>.',
+        closable:true
+      });
+    } else {
+      showAlert({
+        variant:'info',
+        title:'Acceso validado',
+        message:'Simulacion UI: el usuario <strong>'+escapeHtml(identity)+'</strong> iniciaria sesion con contrasena.',
+        closable:true
+      });
+    }
+  },900);
+}
+
+function setButtonIcon(button,iconHtml){
+  var iconEl=button._el.querySelector('.mts-btn__icon-left');
+  if(!iconEl){
+    iconEl=document.createElement('span');
+    iconEl.className='mts-btn__icon-left';
+    button._el.insertBefore(iconEl,button._el.firstChild);
+  }
+  iconEl.innerHTML=iconHtml||'';
+}
+
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+
+renderMode();
+</script>
+</body>
+</html>
+

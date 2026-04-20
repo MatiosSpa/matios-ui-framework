@@ -1,0 +1,129 @@
+.security-policies-page {
+  min-height: 100vh;
+  padding: var(--mts-space-6);
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--mts-color-primary) 10%, transparent), transparent 30%),
+    var(--mts-bg-body);
+}
+
+.security-policies-page__topbar,
+.security-policies-page__hero,
+.security-policies-page__form-card {
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-xl);
+}
+
+.security-policies-page__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mts-space-5);
+  padding: var(--mts-space-5);
+  margin-bottom: var(--mts-space-5);
+}
+
+.security-policies-page__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-4);
+}
+
+.security-policies-page__logo {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--mts-radius-lg);
+  background: color-mix(in srgb, var(--mts-color-primary) 16%, var(--mts-bg-surface));
+  color: var(--mts-color-primary);
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+.security-policies-page__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--mts-text-primary);
+}
+
+.security-policies-page__subtitle,
+.security-policies-page__hero-text,
+.security-policies-page__summary-list span,
+.security-policies-page__impact-list span {
+  color: var(--mts-text-secondary);
+}
+
+.security-policies-page__topbar-actions {
+  display: flex;
+  gap: var(--mts-space-3);
+  flex-wrap: wrap;
+}
+
+.security-policies-page__hero {
+  padding: var(--mts-space-6);
+}
+
+.security-policies-page__eyebrow {
+  margin-bottom: var(--mts-space-2);
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--mts-color-primary);
+}
+
+.security-policies-page__hero-title {
+  margin: 0 0 var(--mts-space-3);
+  font-size: clamp(1.6rem, 2vw, 2.3rem);
+  line-height: 1.1;
+  color: var(--mts-text-primary);
+}
+
+.security-policies-page__hero-text {
+  max-width: 70ch;
+  margin: 0;
+}
+
+.security-policies-page__form-card {
+  padding: var(--mts-space-5);
+}
+
+.security-policies-page__toggles {
+  display: grid;
+  gap: var(--mts-space-3);
+  margin-top: var(--mts-space-5);
+}
+
+.security-policies-page__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-4);
+}
+
+.security-policies-page__summary-list,
+.security-policies-page__impact-list {
+  display: grid;
+  gap: var(--mts-space-3);
+}
+
+.security-policies-page__summary-list div,
+.security-policies-page__impact-list div {
+  display: grid;
+  gap: 2px;
+}
+
+.security-policies-page__summary-list strong,
+.security-policies-page__impact-list strong {
+  color: var(--mts-text-primary);
+}
+
+@media (max-width: 920px) {
+  .security-policies-page {
+    padding: var(--mts-space-4);
+  }
+
+  .security-policies-page__topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

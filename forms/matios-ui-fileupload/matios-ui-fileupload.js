@@ -69,10 +69,16 @@ MTS.FileUpload = class MtsFileUpload {
   // Register an event listener / Registrar un listener de evento
   on(e, fn) { (this._listeners[e] = this._listeners[e] || []).push(fn); return this; }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-fileupload'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-fileupload');
+  }
+
   /* ── Build / Construcción ───────────────────────────── */
 
   _build() {
-    this._el.className = 'mts-fileupload';
+    this._syncClasses();
     this._el.innerHTML = '';
 
     // Drop zone / Zona de drop

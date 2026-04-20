@@ -1,11 +1,11 @@
-/* ============================================================
-   MATIOS UI — matios-ui-taginput.js
-   MTS.TagInput — Tags with suggestions, debounce and object support
+﻿/* ============================================================
+   MATIOS UI â€” matios-ui-taginput.js
+   MTS.TagInput â€” Tags with suggestions, debounce and object support
    Version: 2.0.0
 
    Tags are stored as objects: { uid, name }
-     uid  — unique identifier (email, id, uuid, etc.)
-     name — display text shown in the chip
+     uid  â€” unique identifier (email, id, uuid, etc.)
+     name â€” display text shown in the chip
 
    Usage:
      const ti = new MTS.TagInput('#el', {
@@ -17,8 +17,8 @@
        onChange: (e) => console.log(e.detail.tags), // [{ uid, name }, ...]
      });
 
-     ti.getTags();           // → [{ uid, name }, ...]
-     ti.setTags([{ uid: 'abc@x.com', name: 'Ana López' }]);
+     ti.getTags();           // â†’ [{ uid, name }, ...]
+     ti.setTags([{ uid: 'abc@x.com', name: 'Ana LÃ³pez' }]);
    ============================================================ */
 
 window.MTS = window.MTS || {};
@@ -39,7 +39,7 @@ MTS.TagInput = class MtsTagInput {
     options = { ..._fromHTML, ...options };
 
     /* Tags: siempre array de { uid, name }
-       Acepta strings legacy → se normaliza a { uid: str, name: str } */
+       Acepta strings legacy â†’ se normaliza a { uid: str, name: str } */
     this.tags = (options.tags || []).map(t => this._normalize(t));
 
     /* Sugerencias: [{ uid, name }] o strings */
@@ -50,10 +50,11 @@ MTS.TagInput = class MtsTagInput {
     this.maxTags         = options.maxTags        || null;
     this.allowDuplicates = options.allowDuplicates ?? false;
     this.allowCustom     = options.allowCustom    ?? true;
+    this.renderMode      = options.renderMode     || 'auto';
     this.debounceMs      = options.debounce       ?? 300;
 
     /* onSearch: async (query: string) => { uid, name }[]
-       Si se provee, reemplaza las suggestions estáticas */
+       Si se provee, reemplaza las suggestions estÃ¡ticas */
     this.onSearch = options.onSearch || null;
 
     this._listeners     = {};
@@ -67,7 +68,7 @@ MTS.TagInput = class MtsTagInput {
     this._bindEvents();
   }
 
-  /* ── Normalización interna ──────────────────────────────── */
+  /* â”€â”€ NormalizaciÃ³n interna â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   _normalize(tag) {
     if (typeof tag === 'string') return { uid: tag, name: tag };
     /* Acepta { uid, name } o { value, label } (compatibilidad con Select) */
@@ -77,7 +78,7 @@ MTS.TagInput = class MtsTagInput {
     };
   }
 
-  /* ── API pública ────────────────────────────────────────── */
+  /* â”€â”€ API pÃºblica â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   /* Retorna [{ uid, name }, ...] */
   getTags() { return this.tags.map(t => ({ ...t })); }
@@ -89,7 +90,7 @@ MTS.TagInput = class MtsTagInput {
     return this;
   }
 
-  /* Agrega un tag — acepta { uid, name } o string */
+  /* Agrega un tag â€” acepta { uid, name } o string */
   addTag(tag) { this._addTag(this._normalize(tag)); return this; }
 
   /* Elimina un tag por uid o por objeto { uid } */
@@ -110,18 +111,16 @@ MTS.TagInput = class MtsTagInput {
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   destroy()  { this._el.innerHTML = ''; }
 
-  /* ── Build ──────────────────────────────────────────────── */
+  /* â”€â”€ Build â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   _build() {
+    const explicitFieldOnly = this.renderMode === 'field-only';
+    const explicitStandalone = this.renderMode === 'standalone';
     const parentIsGroup = this._el.parentElement?.classList.contains('mts-form-group');
-    if (parentIsGroup) {
-      this._el.className = 'mts-taginput';
-      this._el.innerHTML = '';
-      this._buildTagInputContent();
-      return;
-    }
+    const fieldOnly = explicitFieldOnly || (!explicitStandalone && parentIsGroup);
 
-    this._el.className = 'mts-form-group';
-    if (this.label) {
+    this._el.innerHTML = '';
+
+    if (!fieldOnly && this.label) {
       const lbl = document.createElement('label');
       lbl.className   = 'mts-label';
       lbl.textContent = this.label;
@@ -132,12 +131,11 @@ MTS.TagInput = class MtsTagInput {
     this._wrapEl.className = 'mts-taginput';
     this._buildTagInputContent();
     this._el.appendChild(this._wrapEl);
-    this._el.appendChild(this._dropdownEl);
     this._renderTags();
   }
 
   _buildTagInputContent() {
-    const target = this._el.classList.contains('mts-taginput') ? this._el : this._wrapEl;
+    const target = this._wrapEl;
     if (!target) return;
 
     this._tagsEl = document.createElement('div');
@@ -153,12 +151,12 @@ MTS.TagInput = class MtsTagInput {
 
     this._dropdownEl = document.createElement('div');
     this._dropdownEl.className = 'mts-taginput__dropdown';
-    target.after(this._dropdownEl);
+    target.appendChild(this._dropdownEl);
 
     this._renderTags();
   }
 
-  /* ── Eventos ─────────────────────────────────────────────── */
+  /* â”€â”€ Eventos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   _bindEvents() {
     this._inputEl.addEventListener('keydown', (e) => {
       if ((e.key === 'Enter' || e.key === ',') && this._inputEl.value.trim()) {
@@ -193,11 +191,11 @@ MTS.TagInput = class MtsTagInput {
     (this._wrapEl || this._el).addEventListener('click', () => this._inputEl.focus());
   }
 
-  /* ── Internos ────────────────────────────────────────────── */
+  /* â”€â”€ Internos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   _addTag(tag) {
     if (this.maxTags && this.tags.length >= this.maxTags) return;
     if (!tag?.name) return;
-    /* Deduplicación por uid */
+    /* DeduplicaciÃ³n por uid */
     if (!this.allowDuplicates && this.tags.some(t => t.uid === tag.uid)) return;
     this.tags.push(tag);
     this._inputEl.value = '';
@@ -280,3 +278,4 @@ MTS.TagInput = class MtsTagInput {
     this._el.dispatchEvent(new CustomEvent(`mts:taginput:${event}`, { bubbles: true, detail }));
   }
 };
+

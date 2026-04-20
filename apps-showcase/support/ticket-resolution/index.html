@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ticket Resolution - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="ticket-resolution.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="ticket-resolution-page">
+    <header class="ticket-resolution-page__topbar mts-surface">
+      <div class="ticket-resolution-page__brand">
+        <div class="ticket-resolution-page__logo">R</div>
+        <div>
+          <div class="ticket-resolution-page__title">Ticket Resolution</div>
+          <div class="ticket-resolution-page__subtitle">Cierre del caso con motivo, confirmación al cliente y siguiente rastro operativo</div>
+        </div>
+      </div>
+      <div class="ticket-resolution-page__topbar-actions">
+        <div id="ticket-resolution-back"></div>
+      </div>
+    </header>
+
+    <main class="ticket-resolution-page__main mts-grid mts-grid--gap-md">
+      <section class="ticket-resolution-page__hero mts-g-col-12 mts-surface">
+        <div class="ticket-resolution-page__eyebrow">
+          <span class="ticket-resolution-page__eyebrow-dot"></span>
+          <span>Resolución final · HD-201</span>
+        </div>
+        <h1 class="ticket-resolution-page__hero-title">Cierra el caso sin perder el contexto de soporte y la comunicación final al cliente.</h1>
+        <p class="ticket-resolution-page__hero-text">
+          La pantalla concentra resolución, severidad final y confirmación de salida para que el analista deje el caso cerrado y trazable en un solo paso.
+        </p>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="mts-form-card ticket-resolution-page__form-card">
+          <div id="ticket-resolution-feedback"></div>
+          <div class="mts-grid mts-grid--gap-md">
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="ticket-resolution-status"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="ticket-resolution-reason"></div></div>
+            <div class="mts-g-col-12"><div id="ticket-resolution-summary"></div></div>
+            <div class="mts-g-col-12"><div id="ticket-resolution-message"></div></div>
+          </div>
+
+          <div class="ticket-resolution-page__footer">
+            <div id="ticket-resolution-save"></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4 ticket-resolution-page__sidebar">
+        <div id="ticket-resolution-context-card"></div>
+        <div id="ticket-resolution-checklist-card"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message',function(e){
+      if(!e.data) return;
+      if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+      if(e.data.type==='setAccent'){
+        if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+    function openScreen(path){
+      var params=location.search||'';
+      window.location.href=path+params;
+    }
+  </script>
+  <script>
+    var resolutionStatus = new MTS.Select('#ticket-resolution-status',{
+      label:'Estado final',
+      options:[
+        {value:'resolved',label:'Resuelto'},
+        {value:'closed',label:'Cerrado'},
+        {value:'pending-monitoring',label:'Monitoreo'}
+      ],
+      value:'resolved'
+    });
+
+    var resolutionReason = new MTS.Select('#ticket-resolution-reason',{
+      label:'Motivo de cierre',
+      options:[
+        {value:'duplicate-email',label:'Duplicado por envío automático'},
+        {value:'manual-reprocess',label:'Reproceso manual'},
+        {value:'customer-confirmed',label:'Cliente confirma normalización'}
+      ],
+      value:'duplicate-email'
+    });
+
+    var resolutionSummary = new MTS.Input('#ticket-resolution-summary',{
+      type:'text',
+      label:'Resumen interno',
+      placeholder:'Resume la causa y la decisión tomada'
+    });
+
+    var resolutionMessage = new MTS.Input('#ticket-resolution-message',{
+      type:'text',
+      label:'Mensaje final al cliente',
+      placeholder:'Texto breve de cierre y confirmación'
+    });
+
+    new MTS.Button('#ticket-resolution-back',{
+      label:'Volver a detalle',
+      variant:'ghost',
+      iconLeft:MTS.Icon.get('arrow-left'),
+      onClick:function(){openScreen('../ticket-detail/index.html');}
+    });
+
+    new MTS.Button('#ticket-resolution-save',{
+      label:'Cerrar ticket',
+      variant:'primary',
+      iconLeft:MTS.Icon.get('check-circle'),
+      onClick:function(e,inst){
+        var summary = resolutionSummary.getValue().trim();
+        var message = resolutionMessage.getValue().trim();
+        resolutionSummary.clearError();
+        resolutionMessage.clearError();
+        if(!summary){
+          resolutionSummary.setError('Ingresa el resumen final del caso');
+          return;
+        }
+        if(!message){
+          resolutionMessage.setError('Escribe el mensaje de salida al cliente');
+          return;
+        }
+        inst.setLoading(true);
+        inst.setLabel('Cerrando...');
+        setTimeout(function(){
+          inst.setLoading(false);
+          inst.setLabel('Cerrar ticket');
+          MTS.Alert.show('#ticket-resolution-feedback',{
+            variant:'success',
+            title:'Caso cerrado',
+            message:'El ticket quedó resuelto y con confirmación final lista para el cliente.',
+            closable:true
+          });
+        },900);
+      }
+    });
+
+    new MTS.Card('#ticket-resolution-context-card',{
+      title:'Contexto final',
+      subtitle:'Resumen del caso',
+      variant:'elevated',
+      size:'lg',
+      body:
+        '<div class="ticket-resolution-page__meta-list">'+
+          '<div><span>Cliente</span><strong>Northwind Retail</strong></div>'+
+          '<div><span>Canal</span><strong>Email automatizado</strong></div>'+
+          '<div><span>SLA cumplido</span><strong>Si · 42 min</strong></div>'+
+        '</div>'
+    });
+
+    new MTS.Card('#ticket-resolution-checklist-card',{
+      title:'Checklist de salida',
+      subtitle:'Antes del cierre',
+      variant:'outlined',
+      size:'lg',
+      body:
+        '<div class="ticket-resolution-page__checklist">'+
+          '<div><i class="mts-icon mts-icon-check"></i><span>Se validó la causa raíz del duplicado.</span></div>'+
+          '<div><i class="mts-icon mts-icon-check"></i><span>Se notificó al cliente con mensaje final.</span></div>'+
+          '<div><i class="mts-icon mts-icon-check"></i><span>Se dejó siguiente acción documentada para soporte.</span></div>'+
+        '</div>'
+    });
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Security Settings - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-toggle/matios-ui-toggle.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="security-settings.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-toggle/matios-ui-toggle.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="security-settings-page">
+    <header class="security-settings-page__topbar mts-surface">
+      <div class="security-settings-page__brand">
+        <div class="security-settings-page__logo">S</div>
+        <div>
+          <div class="security-settings-page__title">Security Settings</div>
+          <div class="security-settings-page__subtitle">Controles personales para acceso, alertas y sesiones activas</div>
+        </div>
+      </div>
+      <div class="security-settings-page__topbar-actions">
+        <div id="security-close-sessions"></div>
+        <div id="security-save"></div>
+      </div>
+    </header>
+
+    <main class="security-settings-page__main mts-grid mts-grid--gap-md">
+      <section class="security-settings-page__hero mts-surface mts-g-col-12">
+        <div class="security-settings-page__eyebrow">Seguridad personal</div>
+        <h1 class="security-settings-page__hero-title">Refuerza el acceso de la cuenta sin salir del flujo principal del producto.</h1>
+        <p class="security-settings-page__hero-text">
+          Esta pantalla concentra cambio de contraseña, segundo factor y alertas de acceso para que la seguridad básica no quede escondida en settings secundarios.
+        </p>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="mts-form-card security-settings-page__form-card">
+          <div id="security-feedback"></div>
+          <div class="mts-grid mts-grid--gap-md">
+            <div class="mts-g-col-12"><div id="security-current-password"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="security-new-password"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="security-confirm-password"></div></div>
+          </div>
+
+          <div class="security-settings-page__rules">
+            <div class="security-settings-page__rules-title">Reglas base de la clave</div>
+            <ul>
+              <li>Minimo 8 caracteres</li>
+              <li>Al menos una mayuscula y un numero</li>
+              <li>Debe ser distinta a la clave anterior</li>
+            </ul>
+          </div>
+
+          <div class="security-settings-page__toggles">
+            <div id="security-toggle-email-2fa"></div>
+            <div id="security-toggle-login-alerts"></div>
+            <div id="security-toggle-device-check"></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4 security-settings-page__sidebar">
+        <div id="security-summary-card"></div>
+        <div id="security-session-card"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var currentPasswordInput;
+    var newPasswordInput;
+    var confirmPasswordInput;
+    var email2faToggle;
+    var loginAlertsToggle;
+    var deviceCheckToggle;
+
+    new MTS.Button('#security-save', {
+      label: 'Guardar seguridad',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('shield'),
+      onClick: saveSecurity
+    });
+
+    new MTS.Button('#security-close-sessions', {
+      label: 'Cerrar otras sesiones',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('log-out'),
+      onClick: function () {
+        MTS.Alert.show('#security-feedback', {
+          variant: 'warning',
+          title: 'Sesiones cerradas',
+          message: 'Se simulo el cierre de las otras sesiones activas del usuario.',
+          closable: true
+        });
+      }
+    });
+
+    currentPasswordInput = new MTS.Input('#security-current-password', {
+      label: 'Contraseña actual',
+      type: 'password',
+      placeholder: 'Ingresa tu clave actual'
+    });
+
+    newPasswordInput = new MTS.Input('#security-new-password', {
+      label: 'Nueva contraseña',
+      type: 'password',
+      placeholder: 'Define una nueva clave'
+    });
+
+    confirmPasswordInput = new MTS.Input('#security-confirm-password', {
+      label: 'Confirmar nueva contraseña',
+      type: 'password',
+      placeholder: 'Repite la nueva clave'
+    });
+
+    email2faToggle = new MTS.Toggle('#security-toggle-email-2fa', {
+      label: 'Segundo factor por correo',
+      checked: true
+    });
+
+    loginAlertsToggle = new MTS.Toggle('#security-toggle-login-alerts', {
+      label: 'Alertas por inicio de sesión',
+      checked: true
+    });
+
+    deviceCheckToggle = new MTS.Toggle('#security-toggle-device-check', {
+      label: 'Verificación de dispositivo nuevo',
+      checked: false
+    });
+
+    new MTS.Card('#security-summary-card', {
+      title: 'Estado actual',
+      subtitle: 'Resumen de seguridad',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="security-settings-page__summary-list">' +
+          '<div><span>2FA</span><strong>Correo activo</strong></div>' +
+          '<div><span>Ultimo cambio de clave</span><strong>Hace 36 dias</strong></div>' +
+          '<div><span>Alertas de acceso</span><strong>Encendidas</strong></div>' +
+        '</div>'
+    });
+
+    new MTS.Card('#security-session-card', {
+      title: 'Sesiones activas',
+      subtitle: 'Actividad reciente',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="security-settings-page__sessions">' +
+          '<div><strong>MacBook Pro · Chrome</strong><span>Ahora · Santiago</span></div>' +
+          '<div><strong>iPhone 15 · Safari</strong><span>Hoy · 08:15</span></div>' +
+          '<div><strong>Windows · Edge</strong><span>Ayer · 19:42</span></div>' +
+        '</div>'
+    });
+
+    MTS.Icon.initAll();
+
+    function saveSecurity() {
+      var currentPassword = currentPasswordInput.getValue().trim();
+      var newPassword = newPasswordInput.getValue().trim();
+      var confirmPassword = confirmPasswordInput.getValue().trim();
+
+      currentPasswordInput.clearError();
+      newPasswordInput.clearError();
+      confirmPasswordInput.clearError();
+
+      if (!currentPassword) {
+        currentPasswordInput.setError('Ingresa la contraseña actual');
+        return;
+      }
+
+      if (newPassword.length < 8) {
+        newPasswordInput.setError('La nueva clave debe tener al menos 8 caracteres');
+        return;
+      }
+
+      if (newPassword === currentPassword) {
+        newPasswordInput.setError('La nueva clave debe ser distinta a la actual');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        confirmPasswordInput.setError('La confirmación no coincide con la nueva clave');
+        return;
+      }
+
+      MTS.Alert.show('#security-feedback', {
+        variant: 'success',
+        title: 'Seguridad actualizada',
+        message: 'La cuenta quedo lista con nueva clave y controles de acceso personales guardados.',
+        closable: true
+      });
+    }
+  </script>
+</body>
+</html>

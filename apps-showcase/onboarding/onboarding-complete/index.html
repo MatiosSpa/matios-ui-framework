@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Onboarding Complete - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="onboarding-complete.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="onboarding-complete-page">
+    <header class="onboarding-complete-page__topbar mts-surface">
+      <div class="onboarding-complete-page__brand">
+        <div class="onboarding-complete-page__logo">M</div>
+        <div>
+          <div class="onboarding-complete-page__title">Matios</div>
+          <div class="onboarding-complete-page__subtitle">Workspace listo para comenzar</div>
+        </div>
+      </div>
+      <div id="onboarding-complete-login"></div>
+    </header>
+
+    <main class="onboarding-complete-page__main mts-grid mts-grid--gap-md">
+      <section class="onboarding-complete-page__hero mts-g-col-12 mts-g-col-lg-5 mts-surface">
+        <div class="onboarding-complete-page__eyebrow">
+          <span class="onboarding-complete-page__eyebrow-dot"></span>
+          <span>Onboarding terminado</span>
+        </div>
+
+        <div class="onboarding-complete-page__hero-copy">
+          <h1 class="onboarding-complete-page__hero-title">Tu espacio ya esta armado y listo para despegar.</h1>
+          <p class="onboarding-complete-page__hero-text">
+            La cuenta administradora, la empresa inicial y el primer flujo de invitaciones ya quedaron
+            listos. Ahora toca entrar, revisar el contexto activo y empezar a trabajar.
+          </p>
+        </div>
+
+        <div id="onboarding-complete-alert"></div>
+
+        <div class="onboarding-complete-page__actions">
+          <div id="onboarding-complete-primary"></div>
+          <div id="onboarding-complete-secondary"></div>
+        </div>
+      </section>
+
+      <section class="onboarding-complete-page__summary mts-g-col-12 mts-g-col-lg-7">
+        <div class="onboarding-complete-page__grid mts-grid mts-grid--gap-md">
+          <div class="mts-g-col-12 mts-g-col-md-6">
+            <div id="complete-card-account"></div>
+          </div>
+          <div class="mts-g-col-12 mts-g-col-md-6">
+            <div id="complete-card-company"></div>
+          </div>
+          <div class="mts-g-col-12 mts-g-col-md-6">
+            <div id="complete-card-team"></div>
+          </div>
+          <div class="mts-g-col-12 mts-g-col-md-6">
+            <div id="complete-card-next"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+window.addEventListener('message',function(e){
+  if(!e.data) return;
+  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+  if(e.data.type==='setAccent'){
+    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+function openScreen(path){
+  var params=location.search||'';
+  window.location.href=path+params;
+}
+
+new MTS.Button('#onboarding-complete-login',{
+  label:'Ir al login',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-right'),
+  onClick:function(){openScreen('../../login/login/index.html');}
+});
+
+new MTS.Button('#onboarding-complete-primary',{
+  label:'Entrar al login',
+  variant:'primary',
+  block:true,
+  iconLeft:MTS.Icon.get('arrow-right'),
+  onClick:function(){openScreen('../../login/login/index.html');}
+});
+
+new MTS.Button('#onboarding-complete-secondary',{
+  label:'Invitar equipo',
+  variant:'secondary',
+  block:true,
+  iconLeft:MTS.Icon.get('users'),
+  onClick:function(){openScreen('../invite-team/index.html');}
+});
+
+MTS.Alert.show('#onboarding-complete-alert',{
+  variant:'success',
+  title:'Configuracion inicial finalizada',
+  message:'La organizacion ya puede pasar al flujo de acceso, seleccion de empresa y trabajo diario.',
+  closable:false
+});
+
+new MTS.Card('#complete-card-account',{
+  title:'Cuenta administradora',
+  subtitle:'Acceso inicial listo',
+  variant:'elevated',
+  size:'lg',
+  body:
+    '<div class="onboarding-complete-page__card-body">'+
+      '<div class="onboarding-complete-page__card-icon"><i class="mts-icon mts-icon-user"></i></div>'+
+      '<p>El primer usuario ya quedo preparado para autenticarse y administrar el workspace.</p>'+
+    '</div>'
+});
+
+new MTS.Card('#complete-card-company',{
+  title:'Empresa inicial',
+  subtitle:'Contexto principal creado',
+  variant:'elevated',
+  size:'lg',
+  body:
+    '<div class="onboarding-complete-page__card-body">'+
+      '<div class="onboarding-complete-page__card-icon"><i class="mts-icon mts-icon-briefcase"></i></div>'+
+      '<p>El contexto de empresa o workspace ya existe y puede convertirse en el activo al entrar.</p>'+
+    '</div>'
+});
+
+new MTS.Card('#complete-card-team',{
+  title:'Equipo',
+  subtitle:'Invitaciones opcionales',
+  variant:'outlined',
+  size:'lg',
+  body:
+    '<div class="onboarding-complete-page__card-body">'+
+      '<div class="onboarding-complete-page__card-icon"><i class="mts-icon mts-icon-users"></i></div>'+
+      '<p>Las invitaciones pueden enviarse ahora o mas tarde sin bloquear el arranque del producto.</p>'+
+    '</div>'
+});
+
+new MTS.Card('#complete-card-next',{
+  title:'Siguiente paso',
+  subtitle:'Acceso y contexto',
+  variant:'outlined',
+  size:'lg',
+  body:
+    '<div class="onboarding-complete-page__card-body">'+
+      '<div class="onboarding-complete-page__card-icon"><i class="mts-icon mts-icon-arrow-right"></i></div>'+
+      '<p>El siguiente punto natural es autenticarse, verificar el correo y entrar al workspace correcto.</p>'+
+    '</div>'
+});
+
+MTS.Icon.initAll();
+</script>
+</body>
+</html>

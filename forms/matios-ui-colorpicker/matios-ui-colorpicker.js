@@ -1,7 +1,7 @@
-/* ============================================================
-   MATIOS UI — matios-ui-colorpicker.js
-   MTS.ColorPicker — Selector de color standalone
-                     Hex, RGB, HSL — sliders H/S/L — paleta
+﻿/* ============================================================
+   MATIOS UI â€” matios-ui-colorpicker.js
+   MTS.ColorPicker â€” Selector de color standalone
+                     Hex, RGB, HSL â€” sliders H/S/L â€” paleta
    0 dependencias.
    Version: 1.0.0
    ============================================================ */
@@ -11,16 +11,16 @@ MTS.ColorPicker = class MtsColorPicker {
   /**
    * @param {string|Element} selector
    * @param {object} options
-   * @param {string}   options.value       Color inicial (hex) — default: '#4f8eff'
+   * @param {string}   options.value       Color inicial (hex) â€” default: '#4f8eff'
    * @param {string}   options.label       Etiqueta
-   * @param {string}   options.format      'hex'|'rgb'|'hsl' — default: 'hex'
-   * @param {Array}    options.presets     Colores de la paleta — default: 14 colores
-   * @param {boolean}  options.showPresets Muestra paleta — default: true
-   * @param {boolean}  options.showSliders Muestra sliders HSL — default: true
-   * @param {boolean}  options.showInput         Muestra input de texto — default: true
-   * @param {boolean}  options.showFormatSwitch  Muestra botón para cambiar hex/rgb/hsl — default: true
-   * @param {boolean}  options.inline      Siempre visible (sin trigger) — default: false
-   * @param {string}   options.size        'sm'|'md'|'lg' — default: 'md'
+   * @param {string}   options.format      'hex'|'rgb'|'hsl' â€” default: 'hex'
+   * @param {Array}    options.presets     Colores de la paleta â€” default: 14 colores
+   * @param {boolean}  options.showPresets Muestra paleta â€” default: true
+   * @param {boolean}  options.showSliders Muestra sliders HSL â€” default: true
+   * @param {boolean}  options.showInput         Muestra input de texto â€” default: true
+   * @param {boolean}  options.showFormatSwitch  Muestra botÃ³n para cambiar hex/rgb/hsl â€” default: true
+   * @param {boolean}  options.inline      Siempre visible (sin trigger) â€” default: false
+   * @param {string}   options.size        'sm'|'md'|'lg' â€” default: 'md'
    * @param {boolean}  options.disabled
    * @param {function} options.onChange    ({ hex, value, formatted }) => {}
    * @param {function} options.onOpen
@@ -29,7 +29,7 @@ MTS.ColorPicker = class MtsColorPicker {
   constructor(selector, options = {}) {
     this._el      = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    /* ── data-* → inicialización HTML declarativa ── */
+    /* â”€â”€ data-* â†’ inicializaciÃ³n HTML declarativa â”€â”€ */
     const _ds = this._el?.dataset || {};
     const _fromHTML = {};
     if (_ds.value !== undefined) _fromHTML.value = _ds.value;
@@ -65,16 +65,20 @@ MTS.ColorPicker = class MtsColorPicker {
     // Show hex input / Mostrar input hex
     this.showInput = options.showInput ?? true;
 
-    // Show format switch button (hex/rgb/hsl) / Mostrar botón de formato
+    // Show format switch button (hex/rgb/hsl) / Mostrar botÃ³n de formato
     this.showFormatSwitch = options.showFormatSwitch ?? true;
 
-    // Always visible, no trigger button / Siempre visible, sin botón trigger
+    // Always visible, no trigger button / Siempre visible, sin botÃ³n trigger
     this.inline = options.inline ?? false;
 
-    // Size: 'sm' | 'md' | 'lg' / Tamaño
+    // Size: 'sm' | 'md' | 'lg' / TamaÃ±o
     this.size = options.size || 'md';
 
-    // Disables interaction / Deshabilita la interacción
+    // Render mode: 'auto' | 'field-only' | 'standalone'
+    // Modo de render: 'auto' | 'field-only' | 'standalone'
+    this.renderMode = options.renderMode || 'auto';
+
+    // Disables interaction / Deshabilita la interacciÃ³n
     this.disabled = options.disabled ?? false;
 
     // Fires when color changes / Se dispara al cambiar el color
@@ -96,7 +100,7 @@ MTS.ColorPicker = class MtsColorPicker {
     this._build();
   }
 
-  /* ── API ── */
+  /* â”€â”€ API â”€â”€ */
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   getValue()       { return this._formatOutput(); }
@@ -109,16 +113,17 @@ MTS.ColorPicker = class MtsColorPicker {
   enable()         { this.disabled = false; this._build(); return this; }
   destroy()        { this._closePop(); this._el.innerHTML = ''; }
 
-  /* ── Build ── */
+  /* â”€â”€ Build â”€â”€ */
   _build() {
-    this._el.innerHTML = '';
-    this._el.className = 'mts-colorpicker';
-    /* Heredar ancho completo si está dentro de un form-group */
-    if (this._el.parentElement?.classList.contains('mts-form-group')) {
-      this._el.style.width = '100%';
-    }
+    const explicitFieldOnly = this.renderMode === 'field-only';
+    const explicitStandalone = this.renderMode === 'standalone';
+    const parentIsGroup = this._el.parentElement?.classList.contains('mts-form-group');
+    const fieldOnly = explicitFieldOnly || (!explicitStandalone && parentIsGroup);
 
-    if (this.label) {
+    this._el.innerHTML = '';
+    this._el.classList.add('mts-colorpicker');
+
+    if (!fieldOnly && this.label) {
       const lbl = document.createElement('label');
       lbl.className = 'mts-colorpicker__label';
       lbl.textContent = this.label;
@@ -126,14 +131,14 @@ MTS.ColorPicker = class MtsColorPicker {
     }
 
     if (this.inline) {
-      /* Modo inline — popup siempre visible dentro del contenedor */
+      /* Modo inline â€” popup siempre visible dentro del contenedor */
       const pop = document.createElement('div');
       pop.className = 'mts-colorpicker__pop mts-colorpicker__pop--inline';
       this._el.appendChild(pop);
       this._popEl = pop;
       this._renderPop();
     } else {
-      /* Modo trigger — botón que abre popup */
+      /* Modo trigger â€” botÃ³n que abre popup */
       const triggerWrap = document.createElement('div');
       triggerWrap.className = 'mts-colorpicker__trigger-wrap mts-colorpicker__trigger-wrap--' + this.size;
 
@@ -215,7 +220,7 @@ MTS.ColorPicker = class MtsColorPicker {
     this._popEl.innerHTML = '';
     const [h, s, l] = this._hexToHSL(this._hex);
 
-    /* ── Preview + hex input ── */
+    /* â”€â”€ Preview + hex input â”€â”€ */
     if (this.showInput) {
       const topRow = document.createElement('div');
       topRow.className = 'mts-colorpicker__top';
@@ -241,7 +246,7 @@ MTS.ColorPicker = class MtsColorPicker {
       this._popEl.appendChild(topRow);
     }
 
-    /* ── Sliders H, S, L ── */
+    /* â”€â”€ Sliders H, S, L â”€â”€ */
     if (this.showSliders) {
       const sliders = document.createElement('div');
       sliders.className = 'mts-colorpicker__sliders';
@@ -277,7 +282,7 @@ MTS.ColorPicker = class MtsColorPicker {
       this._popEl.appendChild(sliders);
     }
 
-    /* ── Paleta de presets ── */
+    /* â”€â”€ Paleta de presets â”€â”€ */
     if (this.showPresets && this.presets.length) {
       const palette = document.createElement('div');
       palette.className = 'mts-colorpicker__palette';
@@ -297,7 +302,7 @@ MTS.ColorPicker = class MtsColorPicker {
       this._popEl.appendChild(palette);
     }
 
-    /* ── Footer — only in popup mode (not inline) ── */
+    /* â”€â”€ Footer â€” only in popup mode (not inline) â”€â”€ */
     if (!this.inline) {
       const footer = document.createElement('div');
       footer.className = 'mts-colorpicker__footer';
@@ -345,7 +350,7 @@ MTS.ColorPicker = class MtsColorPicker {
     this._emit('change', detail);
   }
 
-  /* ── Formatos ── */
+  /* â”€â”€ Formatos â”€â”€ */
   _formatOutput() {
     if (this.format === 'rgb') return this._hexToRGB(this._hex);
     if (this.format === 'hsl') {
@@ -355,7 +360,7 @@ MTS.ColorPicker = class MtsColorPicker {
     return this._hex;
   }
 
-  /* ── Color helpers ── */
+  /* â”€â”€ Color helpers â”€â”€ */
   _toHex(color) {
     if (!color) return null;
     if (/^#[0-9A-Fa-f]{6}$/.test(color)) return color;
@@ -389,3 +394,4 @@ MTS.ColorPicker = class MtsColorPicker {
     this._el?.dispatchEvent(new CustomEvent(`mts:colorpicker:${event}`, { bubbles: true, detail }));
   }
 };
+

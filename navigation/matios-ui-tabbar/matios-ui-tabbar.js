@@ -1,6 +1,6 @@
-/* ============================================================
-   MATIOS UI — matios-ui-tabbar.js
-   MTS.TabBar — Navegación estilo app mobile (bottom bar)
+﻿/* ============================================================
+   MATIOS UI â€” matios-ui-tabbar.js
+   MTS.TabBar â€” NavegaciÃ³n estilo app mobile (bottom bar)
    Version: 1.0.0
    ============================================================ */
 window.MTS = window.MTS || {};
@@ -11,14 +11,14 @@ MTS.TabBar = class MtsTabBar {
    * @param {object} options
    * @param {Array}    options.tabs       [{ id, label, icon, badge? }]
    * @param {string}   options.active     id del tab activo inicial
-   * @param {string}   options.variant    'default'|'pill'|'floating' — default: 'default'
-   * @param {boolean}  options.showLabels Muestra labels — default: true
+   * @param {string}   options.variant    'default'|'pill'|'floating' â€” default: 'default'
+   * @param {boolean}  options.showLabels Muestra labels â€” default: true
    * @param {function} options.onChange   ({ id, tab }) => {}
    */
   constructor(selector, options = {}) {
     this._el       = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    /* ── data-* → inicialización HTML declarativa ── */
+    /* â”€â”€ data-* â†’ inicializaciÃ³n HTML declarativa â”€â”€ */
     const _ds = this._el?.dataset || {};
     const _fromHTML = {};
     if (_ds.active !== undefined) _fromHTML.active = _ds.active;
@@ -26,7 +26,7 @@ MTS.TabBar = class MtsTabBar {
     if (_ds.showLabels !== undefined) _fromHTML.showLabels = true;
     options = { ..._fromHTML, ...options };
 
-    // Tab items: [{ id, label, icon, badge? }] / Ítems del tab bar
+    // Tab items: [{ id, label, icon, badge? }] / Ãtems del tab bar
     this.tabs = options.tabs || [];
 
     // Initially active tab ID / ID del tab activo inicial
@@ -35,7 +35,7 @@ MTS.TabBar = class MtsTabBar {
     // Visual variant: 'default' | 'pill' | 'floating' / Variante visual
     this.variant = options.variant || 'default';
 
-    // Show labels below icons / Mostrar labels bajo los íconos
+    // Show labels below icons / Mostrar labels bajo los Ã­conos
     this.showLabels = options.showLabels ?? true;
 
     this._listeners = {};
@@ -62,7 +62,7 @@ MTS.TabBar = class MtsTabBar {
 
   _build() {
     this._el.innerHTML = '';
-    this._el.className = 'mts-tabbar mts-tabbar--' + this.variant + (this.showLabels ? '' : ' mts-tabbar--no-labels');
+    this._syncClasses(['mts-tabbar', 'mts-tabbar--' + this.variant].concat(this.showLabels ? [] : ['mts-tabbar--no-labels']));
     const self = this;
     this.tabs.forEach(function(tab) {
       const item = document.createElement('button');
@@ -102,4 +102,13 @@ MTS.TabBar = class MtsTabBar {
       self._el.appendChild(item);
     });
   }
+
+  _syncClasses(classes) {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-tabbar' || cls.startsWith('mts-tabbar--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add(...classes.filter(Boolean));
+  }
 };
+

@@ -43,7 +43,7 @@ MTS.Timeline = class MtsTimeline {
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
   _build() {
-    this._el.className = `mts-timeline mts-timeline--${this.direction} mts-timeline--${this.align}`;
+    this._syncClasses([`mts-timeline`, `mts-timeline--${this.direction}`, `mts-timeline--${this.align}`]);
     this._el.innerHTML = '';
 
     this.events.forEach((ev, idx) => {
@@ -89,6 +89,15 @@ MTS.Timeline = class MtsTimeline {
       this._el.appendChild(item);
     });
   }
+
+  _syncClasses(classes) {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-timeline' || cls.startsWith('mts-timeline--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+    this._el.classList.add(...classes.filter(Boolean));
+  }
+
   _emit(event, detail) {
     (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
     this._el?.dispatchEvent(new CustomEvent(`mts:timeline:${event}`, { bubbles: true, detail }));

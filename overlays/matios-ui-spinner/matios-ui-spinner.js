@@ -54,9 +54,16 @@ MTS.Spinner = class MtsSpinner {
   hide()    { this._el.style.display = 'none'; return this; }
   destroy() { this._el.innerHTML = ''; }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-spinner'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-spinner', `mts-spinner--${this.size}`);
+    if (this.overlay) this._el.classList.add('mts-spinner--overlay');
+  }
+
   _build() {
     this._el.innerHTML = '';
-    this._el.className = `mts-spinner mts-spinner--${this.size}${this.overlay ? ' mts-spinner--overlay' : ''}`;
+    this._syncClasses();
     if (this.color) this._el.style.setProperty('--mts-spinner-color', this.color);
 
     const inner = document.createElement('div');

@@ -1,6 +1,6 @@
-/* ============================================================
-   MATIOS UI — matios-ui-numberinput.js
-   MTS.NumberInput — Input numérico con +/-, min/max, step,
+﻿/* ============================================================
+   MATIOS UI â€” matios-ui-numberinput.js
+   MTS.NumberInput â€” Input numÃ©rico con +/-, min/max, step,
                      formato moneda/porcentaje/personalizado
    Version: 1.0.0
    ============================================================ */
@@ -11,22 +11,22 @@ MTS.NumberInput = class MtsNumberInput {
   /**
    * @param {string|Element} selector
    * @param {object} options
-   * @param {number}   options.value        Valor inicial — default: 0
-   * @param {number}   options.min          Mínimo — default: null
-   * @param {number}   options.max          Máximo — default: null
-   * @param {number}   options.step         Paso de incremento — default: 1
-   * @param {number}   options.decimals     Decimales a mostrar — default: 0
+   * @param {number}   options.value        Valor inicial â€” default: 0
+   * @param {number}   options.min          MÃ­nimo â€” default: null
+   * @param {number}   options.max          MÃ¡ximo â€” default: null
+   * @param {number}   options.step         Paso de incremento â€” default: 1
+   * @param {number}   options.decimals     Decimales a mostrar â€” default: 0
    * @param {string}   options.label        Etiqueta
    * @param {string}   options.placeholder  Placeholder
    * @param {string}   options.hint         Texto de ayuda
    * @param {string}   options.prefix       Prefijo visible (ej: '$')
    * @param {string}   options.suffix       Sufijo visible (ej: '%', 'kg')
-   * @param {string}   options.format       'plain'|'currency'|'percent' — default: 'plain'
-   * @param {string}   options.locale       Locale para formato — default: 'es-CL'
-   * @param {string}   options.currency     Moneda para format currency — default: 'CLP'
-   * @param {boolean}  options.disabled     — default: false
-   * @param {boolean}  options.readonly     — default: false
-   * @param {string}   options.size         'sm'|'md'|'lg' — default: 'md'
+   * @param {string}   options.format       'plain'|'currency'|'percent' â€” default: 'plain'
+   * @param {string}   options.locale       Locale para formato â€” default: 'es-CL'
+   * @param {string}   options.currency     Moneda para format currency â€” default: 'CLP'
+   * @param {boolean}  options.disabled     â€” default: false
+   * @param {boolean}  options.readonly     â€” default: false
+   * @param {string}   options.size         'sm'|'md'|'lg' â€” default: 'md'
    * @param {function} options.onChange     (value, formattedValue) => {}
    * @param {function} options.onFocus
    * @param {function} options.onBlur
@@ -36,7 +36,7 @@ MTS.NumberInput = class MtsNumberInput {
       ? document.querySelector(selector)
       : selector;
     if (!this._el) { console.error('[MTS.NumberInput] No encontrado:', selector); return; }
-    /* ── data-* → inicialización HTML declarativa ── */
+    /* â”€â”€ data-* â†’ inicializaciÃ³n HTML declarativa â”€â”€ */
     const _ds = this._el?.dataset || {};
     const _fromHTML = {};
     if (_ds.label !== undefined) _fromHTML.label = _ds.label;
@@ -71,6 +71,7 @@ MTS.NumberInput = class MtsNumberInput {
     this.disabled    = options.disabled    ?? false;
     this.readonly    = options.readonly    ?? false;
     this.size        = options.size        || 'md';
+    this.renderMode  = options.renderMode  || 'auto';
     this._error        = '';
     this._holdTimer    = null;
     this._holdInterval = null;
@@ -89,7 +90,7 @@ MTS.NumberInput = class MtsNumberInput {
     this._build();
   }
 
-  /* ── API pública ── */
+  /* â”€â”€ API pÃºblica â”€â”€ */
   getValue()       { return this.value; }
   setValue(v, silent = false) {
     this.value = this._clamp(Number(v));
@@ -108,17 +109,18 @@ MTS.NumberInput = class MtsNumberInput {
   enable()         { this.disabled = false; this._build(); return this; }
   focus()          { this._input?.focus(); return this; }
 
-  /* ── Build ── */
+  /* â”€â”€ Build â”€â”€ */
   _build() {
+    const explicitFieldOnly = this.renderMode === 'field-only';
+    const explicitStandalone = this.renderMode === 'standalone';
+    const parentIsGroup = this._el.parentElement?.classList.contains('mts-form-group');
+    const fieldOnly = explicitFieldOnly || (!explicitStandalone && parentIsGroup);
+
     this._el.innerHTML = '';
-    this._el.className = 'mts-numberinput';
-    /* Heredar ancho completo si está dentro de un form-group */
-    if (this._el.parentElement?.classList.contains('mts-form-group')) {
-      this._el.style.width = '100%';
-    }
+    this._el.classList.add('mts-numberinput');
 
     /* Label */
-    if (this.label) {
+    if (!fieldOnly && this.label) {
       const lbl = document.createElement('label');
       lbl.className = 'mts-numberinput__label';
       lbl.textContent = this.label;
@@ -129,7 +131,7 @@ MTS.NumberInput = class MtsNumberInput {
     const wrap = document.createElement('div');
     wrap.className = `mts-numberinput__wrap mts-numberinput__wrap--${this.size}${this.disabled ? ' mts-numberinput__wrap--disabled' : ''}`;
 
-    /* Botón − */
+    /* BotÃ³n âˆ’ */
     const btnDec = document.createElement('button');
     btnDec.type = 'button';
     btnDec.className = 'mts-numberinput__btn mts-numberinput__btn--dec';
@@ -157,7 +159,7 @@ MTS.NumberInput = class MtsNumberInput {
     this._input = input;
 
     input.addEventListener('focus', (e) => {
-      /* Mostrar valor numérico puro al editar */
+      /* Mostrar valor numÃ©rico puro al editar */
       input.value = this.value === 0 ? '' : String(this.value);
       input.select();
       wrap.classList.add('mts-numberinput__wrap--focus');
@@ -178,7 +180,7 @@ MTS.NumberInput = class MtsNumberInput {
       if (e.key === 'Enter')     { input.blur(); }
     });
 
-    /* Botón + */
+    /* BotÃ³n + */
     const btnInc = document.createElement('button');
     btnInc.type = 'button';
     btnInc.className = 'mts-numberinput__btn mts-numberinput__btn--inc';
@@ -274,7 +276,7 @@ MTS.NumberInput = class MtsNumberInput {
     this._wrap?.classList.toggle('mts-numberinput__wrap--error', !!this._error);
   }
 
-  /* Hold — mantener presionado acelera */
+  /* Hold â€” mantener presionado acelera */
   _bindHold(btn, fn) {
     const start = () => {
       fn();
@@ -296,3 +298,4 @@ MTS.NumberInput = class MtsNumberInput {
     this._el?.dispatchEvent(new CustomEvent(`mts:numberinput:${event}`, { bubbles: true, detail }));
   }
 };
+

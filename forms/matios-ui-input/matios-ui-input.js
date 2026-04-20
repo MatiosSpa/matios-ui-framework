@@ -1,6 +1,6 @@
-/* ============================================================
-   MATIOS UI — matios-ui-input.js
-   MTS.Input — Input, Textarea con validación y estados
+﻿/* ============================================================
+   MATIOS UI â€” matios-ui-input.js
+   MTS.Input â€” Input, Textarea con validaciÃ³n y estados
    Eventos DOM: mts:input:change | mts:input:focus | mts:input:blur | mts:input:validate
    Version: 1.0.0
    ============================================================ */
@@ -11,7 +11,7 @@ MTS.Input = class MtsInput {
   /**
    * @param {string|Element} selector
    * @param {object} options
-   * @param {string}   options.type        'text'|'email'|'password'|'number'|'textarea' — default: 'text'
+   * @param {string}   options.type        'text'|'email'|'password'|'number'|'textarea' â€” default: 'text'
    * @param {string}   options.label       Label del campo
    * @param {string}   options.placeholder
    * @param {string}   options.hint        Texto de ayuda debajo del input
@@ -19,14 +19,14 @@ MTS.Input = class MtsInput {
    * @param {boolean}  options.required    Campo obligatorio
    * @param {boolean}  options.disabled
    * @param {boolean}  options.readonly
-   * @param {string}   options.iconLeft    SVG string del ícono izquierdo
-   * @param {string}   options.iconRight   SVG string del ícono derecho
-   * @param {boolean}  options.clearable   Botón × para limpiar
-   * @param {boolean}  options.showPassword Toggle para mostrar contraseña
+   * @param {string}   options.iconLeft    SVG string del Ã­cono izquierdo
+   * @param {string}   options.iconRight   SVG string del Ã­cono derecho
+   * @param {boolean}  options.clearable   BotÃ³n Ã— para limpiar
+   * @param {boolean}  options.showPassword Toggle para mostrar contraseÃ±a
    * @param {number}   options.maxLength
    * @param {boolean}  options.showCount   Muestra contador de caracteres
-   * @param {number}   options.rows        Para textarea — default: 4
-   * @param {object}   options.rules       Reglas de validación { required, min, max, minLength, maxLength, pattern, custom }
+   * @param {number}   options.rows        Para textarea â€” default: 4
+   * @param {object}   options.rules       Reglas de validaciÃ³n { required, min, max, minLength, maxLength, pattern, custom }
    * @param {boolean}  options.validateOnBlur
    * @param {boolean}  options.validateOnInput
    * @param {function} options.onChange
@@ -38,7 +38,7 @@ MTS.Input = class MtsInput {
       ? document.querySelector(selector)
       : selector;
     if (!this._container) { console.error('[MTS.Input] No encontrado:', selector); return; }
-    /* ── data-* → inicialización HTML declarativa ── */
+    /* â”€â”€ data-* â†’ inicializaciÃ³n HTML declarativa â”€â”€ */
     const _ds = this._container?.dataset || {};
     const _fromHTML = {};
     if (_ds.type !== undefined) _fromHTML.type = _ds.type;
@@ -76,6 +76,7 @@ MTS.Input = class MtsInput {
     this.name            = options.name           || null;
     this.autocomplete    = options.autocomplete   ?? null;
     this.rules           = options.rules          || {};
+    this.renderMode      = options.renderMode     || 'auto';
     this.validateOnBlur  = options.validateOnBlur  ?? true;
     this.validateOnInput = options.validateOnInput ?? false;
     this._listeners      = {};
@@ -96,8 +97,8 @@ MTS.Input = class MtsInput {
   setValue(val)       { if (this._inputEl) { this._inputEl.value = val; this._updateCount(); } return this; }
   clear()             { this.setValue(''); this.clearError(); return this; }
   focus()             { this._inputEl?.focus(); return this; }
-  disable()           { this._inputEl && (this._inputEl.disabled = true); this._container.classList.add('mts-input-wrap--disabled'); return this; }
-  enable()            { this._inputEl && (this._inputEl.disabled = false); this._container.classList.remove('mts-input-wrap--disabled'); return this; }
+  disable()           { this._inputEl && (this._inputEl.disabled = true); this._wrapEl?.classList.add('mts-input-wrap--disabled'); return this; }
+  enable()            { this._inputEl && (this._inputEl.disabled = false); this._wrapEl?.classList.remove('mts-input-wrap--disabled'); return this; }
   isValid()           { return this._isValid; }
 
   validate() {
@@ -106,12 +107,12 @@ MTS.Input = class MtsInput {
     const r      = this.rules;
 
     if ((this.required || r.required) && !val.trim()) this._errors.push('Este campo es obligatorio');
-    if (r.minLength && val.length < r.minLength) this._errors.push(`Mínimo ${r.minLength} caracteres`);
-    if (r.maxLength && val.length > r.maxLength) this._errors.push(`Máximo ${r.maxLength} caracteres`);
-    if (r.min !== undefined && Number(val) < r.min) this._errors.push(`Valor mínimo: ${r.min}`);
-    if (r.max !== undefined && Number(val) > r.max) this._errors.push(`Valor máximo: ${r.max}`);
-    if (r.pattern && val && !r.pattern.test(val)) this._errors.push(r.patternMessage || 'Formato inválido');
-    if (r.email && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) this._errors.push('Email inválido');
+    if (r.minLength && val.length < r.minLength) this._errors.push(`MÃ­nimo ${r.minLength} caracteres`);
+    if (r.maxLength && val.length > r.maxLength) this._errors.push(`MÃ¡ximo ${r.maxLength} caracteres`);
+    if (r.min !== undefined && Number(val) < r.min) this._errors.push(`Valor mÃ­nimo: ${r.min}`);
+    if (r.max !== undefined && Number(val) > r.max) this._errors.push(`Valor mÃ¡ximo: ${r.max}`);
+    if (r.pattern && val && !r.pattern.test(val)) this._errors.push(r.patternMessage || 'Formato invÃ¡lido');
+    if (r.email && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) this._errors.push('Email invÃ¡lido');
     if (r.custom) { const msg = r.custom(val); if (msg) this._errors.push(msg); }
 
     this._isValid = this._errors.length === 0;
@@ -140,14 +141,14 @@ MTS.Input = class MtsInput {
 
   /* Build */
   _build() {
+    const explicitFieldOnly = this.renderMode === 'field-only';
+    const explicitStandalone = this.renderMode === 'standalone';
     /* Si el padre ya es mts-form-group (layout HTML), este elemento
-       actúa solo como wrapper del campo — no crea otro mts-form-group */
+       actÃºa solo como wrapper del campo â€” no crea otro mts-form-group */
     const parentIsGroup = this._container.parentElement?.classList.contains('mts-form-group');
-    if (parentIsGroup) {
-      this._container.className = 'mts-input-wrap' +
-        (this.iconLeft   ? ' mts-input-wrap--icon-left'  : '') +
-        (this.iconRight || this.clearable || this.showPassword ? ' mts-input-wrap--icon-right' : '') +
-        (this.disabled   ? ' mts-input-wrap--disabled' : '');
+    const fieldOnly = explicitFieldOnly || (!explicitStandalone && parentIsGroup);
+    if (fieldOnly) {
+      this._container.classList.add(...this._getWrapClasses());
       this._container.innerHTML = '';
       const tag = this.type === 'textarea' ? 'textarea' : 'input';
       this._inputEl = document.createElement(tag);
@@ -167,11 +168,10 @@ MTS.Input = class MtsInput {
       this._feedbackEl.className = 'mts-form-hint';
       if (this.hint) this._feedbackEl.textContent = this.hint;
       this._container.after(this._feedbackEl);
-      this._bindEvents();
       return;
     }
 
-    this._container.className = 'mts-form-group';
+    this._container.innerHTML = '';
 
     if (this.label) {
       const lbl = document.createElement('label');
@@ -181,10 +181,7 @@ MTS.Input = class MtsInput {
     }
 
     const wrap = document.createElement('div');
-    wrap.className = 'mts-input-wrap' +
-      (this.iconLeft   ? ' mts-input-wrap--icon-left'  : '') +
-      (this.iconRight || this.clearable || this.showPassword ? ' mts-input-wrap--icon-right' : '') +
-      (this.disabled   ? ' mts-input-wrap--disabled' : '');
+    wrap.classList.add(...this._getWrapClasses());
 
     if (this.iconLeft) {
       const ic = document.createElement('span');
@@ -220,8 +217,8 @@ MTS.Input = class MtsInput {
     if (this.type === 'password' && this.showPassword) {
       this._eyeBtn = document.createElement('button');
       this._eyeBtn.className = 'mts-input__icon mts-input__icon--right mts-input__eye';
-      this._eyeBtn.setAttribute('aria-label', 'Mostrar contraseña');
-      // TODO: reemplazar con MTS.Icons cuando estén listos
+      this._eyeBtn.setAttribute('aria-label', 'Mostrar contraseÃ±a');
+      // TODO: reemplazar con MTS.Icons cuando estÃ©n listos
       this._eyeBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
       this._eyeBtn.addEventListener('click', () => {
         const show = this._inputEl.type === 'password';
@@ -255,6 +252,14 @@ MTS.Input = class MtsInput {
 
     /* Registrar instancia en el elemento para que MTS.Validate pueda detectarla */
     if (this._inputEl) this._inputEl.__mtsInput = this;
+  }
+
+  _getWrapClasses() {
+    const classes = ['mts-input-wrap'];
+    if (this.iconLeft) classes.push('mts-input-wrap--icon-left');
+    if (this.iconRight || this.clearable || this.showPassword) classes.push('mts-input-wrap--icon-right');
+    if (this.disabled) classes.push('mts-input-wrap--disabled');
+    return classes;
   }
 
   _bindEvents() {
@@ -293,3 +298,4 @@ MTS.Input = class MtsInput {
     this._inputEl?.dispatchEvent(new CustomEvent(`mts:input:${event}`, { bubbles: true, detail: { input: this, ...detail } }));
   }
 };
+

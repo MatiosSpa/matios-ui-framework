@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Workspace Settings - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-toggle/matios-ui-toggle.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="workspace-settings.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-toggle/matios-ui-toggle.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="workspace-settings-page">
+    <header class="workspace-settings-page__topbar mts-surface">
+      <div class="workspace-settings-page__brand">
+        <div class="workspace-settings-page__logo">W</div>
+        <div>
+          <div class="workspace-settings-page__title">Workspace Settings</div>
+          <div class="workspace-settings-page__subtitle">Nombre, idioma, comportamiento base y preferencias del entorno compartido</div>
+        </div>
+      </div>
+      <div class="workspace-settings-page__topbar-actions">
+        <div id="workspace-reset"></div>
+        <div id="workspace-save"></div>
+      </div>
+    </header>
+
+    <main class="workspace-settings-page__main mts-grid mts-grid--gap-md">
+      <section class="workspace-settings-page__hero mts-surface mts-g-col-12">
+        <div class="workspace-settings-page__eyebrow">Configuracion general</div>
+        <h1 class="workspace-settings-page__hero-title">Ajusta el contexto operativo del workspace sin abrir pantallas auxiliares.</h1>
+        <p class="workspace-settings-page__hero-text">
+          Esta vista deja listos nombre visible, idioma, zona horaria y preferencias compartidas para que el producto arranque con una configuracion clara y reusable.
+        </p>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="mts-form-card workspace-settings-page__form-card">
+          <div id="workspace-feedback"></div>
+          <div class="mts-grid mts-grid--gap-md">
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="workspace-name"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="workspace-slug"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="workspace-support-email"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="workspace-timezone"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="workspace-language"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="workspace-week-start"></div></div>
+          </div>
+
+          <div class="workspace-settings-page__toggles">
+            <div id="workspace-toggle-public-signup"></div>
+            <div id="workspace-toggle-compact-ui"></div>
+            <div id="workspace-toggle-announcements"></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4 workspace-settings-page__sidebar">
+        <div id="workspace-summary-card"></div>
+        <div id="workspace-brand-card"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var workspaceDefaults = {
+      name: 'Matios Studio',
+      slug: 'matios-studio',
+      supportEmail: 'soporte@matios.dev',
+      timezone: 'America/Santiago',
+      language: 'es-CL',
+      weekStart: 'monday'
+    };
+
+    var workspaceNameInput;
+    var workspaceSlugInput;
+    var workspaceSupportEmailInput;
+    var workspaceTimezoneSelect;
+    var workspaceLanguageSelect;
+    var workspaceWeekStartSelect;
+
+    new MTS.Button('#workspace-save', {
+      label: 'Guardar workspace',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('save'),
+      onClick: saveWorkspace
+    });
+
+    new MTS.Button('#workspace-reset', {
+      label: 'Restablecer',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: resetWorkspace
+    });
+
+    workspaceNameInput = new MTS.Input('#workspace-name', {
+      label: 'Nombre del workspace',
+      type: 'text',
+      value: workspaceDefaults.name,
+      placeholder: 'Nombre visible del entorno'
+    });
+
+    workspaceSlugInput = new MTS.Input('#workspace-slug', {
+      label: 'Slug',
+      type: 'text',
+      value: workspaceDefaults.slug,
+      placeholder: 'slug-del-workspace'
+    });
+
+    workspaceSupportEmailInput = new MTS.Input('#workspace-support-email', {
+      label: 'Correo de soporte',
+      type: 'email',
+      value: workspaceDefaults.supportEmail,
+      placeholder: 'soporte@empresa.com'
+    });
+
+    workspaceTimezoneSelect = new MTS.Select('#workspace-timezone', {
+      label: 'Zona horaria',
+      options: [
+        { value: 'America/Santiago', label: 'America/Santiago' },
+        { value: 'America/Bogota', label: 'America/Bogota' },
+        { value: 'America/Mexico_City', label: 'America/Mexico_City' },
+        { value: 'Europe/Madrid', label: 'Europe/Madrid' }
+      ],
+      value: workspaceDefaults.timezone
+    });
+
+    workspaceLanguageSelect = new MTS.Select('#workspace-language', {
+      label: 'Idioma base',
+      options: [
+        { value: 'es-CL', label: 'Español (Chile)' },
+        { value: 'es-MX', label: 'Español (Mexico)' },
+        { value: 'en-US', label: 'English (US)' }
+      ],
+      value: workspaceDefaults.language
+    });
+
+    workspaceWeekStartSelect = new MTS.Select('#workspace-week-start', {
+      label: 'Inicio de semana',
+      options: [
+        { value: 'monday', label: 'Lunes' },
+        { value: 'sunday', label: 'Domingo' }
+      ],
+      value: workspaceDefaults.weekStart
+    });
+
+    new MTS.Toggle('#workspace-toggle-public-signup', {
+      label: 'Permitir signup publico',
+      checked: true
+    });
+
+    new MTS.Toggle('#workspace-toggle-compact-ui', {
+      label: 'Usar densidad compacta por defecto',
+      checked: false
+    });
+
+    new MTS.Toggle('#workspace-toggle-announcements', {
+      label: 'Mostrar avisos del sistema al iniciar',
+      checked: true
+    });
+
+    new MTS.Card('#workspace-summary-card', {
+      title: 'Resumen actual',
+      subtitle: 'Contexto del tenant',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="workspace-settings-page__summary-list">' +
+          '<div><span>Plan activo</span><strong>Business</strong></div>' +
+          '<div><span>Usuarios activos</span><strong>28</strong></div>' +
+          '<div><span>Modulo principal</span><strong>Documents + Invoice</strong></div>' +
+        '</div>'
+    });
+
+    new MTS.Card('#workspace-brand-card', {
+      title: 'Branding base',
+      subtitle: 'Referencia operacional',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="workspace-settings-page__brand-preview">' +
+          '<div class="workspace-settings-page__brand-mark">MS</div>' +
+          '<div>' +
+            '<strong>Matios Studio</strong>' +
+            '<p>El logo, favicon y dominio personalizado pueden colgar despues sobre este mismo flujo.</p>' +
+          '</div>' +
+        '</div>'
+    });
+
+    MTS.Icon.initAll();
+
+    function resetWorkspace() {
+      workspaceNameInput.setValue(workspaceDefaults.name).clearError();
+      workspaceSlugInput.setValue(workspaceDefaults.slug).clearError();
+      workspaceSupportEmailInput.setValue(workspaceDefaults.supportEmail).clearError();
+      workspaceTimezoneSelect.setValue(workspaceDefaults.timezone);
+      workspaceLanguageSelect.setValue(workspaceDefaults.language);
+      workspaceWeekStartSelect.setValue(workspaceDefaults.weekStart);
+
+      MTS.Alert.show('#workspace-feedback', {
+        variant: 'info',
+        title: 'Valores restablecidos',
+        message: 'La configuracion volvió al baseline del workspace de ejemplo.',
+        closable: true
+      });
+    }
+
+    function saveWorkspace() {
+      var name = workspaceNameInput.getValue().trim();
+      var slug = workspaceSlugInput.getValue().trim();
+      var supportEmail = workspaceSupportEmailInput.getValue().trim();
+
+      workspaceNameInput.clearError();
+      workspaceSlugInput.clearError();
+      workspaceSupportEmailInput.clearError();
+
+      if (!name) {
+        workspaceNameInput.setError('Ingresa el nombre visible del workspace');
+        return;
+      }
+
+      if (!slug || slug.indexOf(' ') !== -1) {
+        workspaceSlugInput.setError('El slug debe existir y no puede tener espacios');
+        return;
+      }
+
+      if (!supportEmail || supportEmail.indexOf('@') === -1) {
+        workspaceSupportEmailInput.setError('Ingresa un correo de soporte valido');
+        return;
+      }
+
+      MTS.Alert.show('#workspace-feedback', {
+        variant: 'success',
+        title: 'Workspace actualizado',
+        message: 'La configuracion general del tenant ya quedó guardada para el ejemplo.',
+        closable: true
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Verificar Correo - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../layout/matios-ui-grid/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="verify-email.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="verify-page">
+    <header class="verify-page__topbar mts-surface">
+      <div class="verify-page__brand">
+        <div class="verify-page__logo">M</div>
+        <div>
+          <div class="verify-page__title">Verificar Correo</div>
+          <div class="verify-page__subtitle">Showcase / Autenticacion</div>
+        </div>
+      </div>
+      <div class="verify-page__topbar-actions">
+        <div id="verify-back-btn"></div>
+      </div>
+    </header>
+
+    <main class="verify-page__main mts-grid mts-grid--gap-md">
+      <section class="verify-page__hero mts-g-col-12 mts-g-col-lg-7 mts-surface">
+        <p class="verify-page__kicker">Pantalla activa</p>
+        <h1 class="verify-page__hero-title">Confirma tu cuenta y sigue el flujo</h1>
+        <p class="verify-page__hero-copy">
+          Esta vista representa la espera y confirmacion de email despues del registro o una invitacion.
+          Mantiene la UI ligera y clara, con estado principal, reenvio del correo y camino de regreso.
+        </p>
+
+        <div class="verify-page__cards mts-grid mts-grid--gap-md">
+          <div class="mts-g-col-12 mts-g-col-md-6"><div id="verify-card-status"></div></div>
+          <div class="mts-g-col-12 mts-g-col-md-6"><div id="verify-card-next"></div></div>
+        </div>
+      </section>
+
+      <section class="verify-page__panel-wrap mts-g-col-12 mts-g-col-lg-5">
+        <div class="verify-page__panel mts-surface">
+          <div class="verify-page__panel-icon">
+            <i class="mts-icon mts-icon-mail"></i>
+          </div>
+          <h2 class="verify-page__panel-title">Revisa tu bandeja de entrada</h2>
+          <p class="verify-page__panel-copy">
+            Enviamos un correo de verificacion a <strong id="verify-email-target">equipo@matios.dev</strong>.
+            Una vez confirmado, el siguiente paso natural es entrar al sistema o continuar al workspace correspondiente.
+          </p>
+
+          <div id="verify-alert"></div>
+
+          <div class="verify-page__actions">
+            <div id="verify-resend-btn"></div>
+            <div id="verify-open-login-btn"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+<script>
+window.addEventListener('message',function(e){
+  if(!e.data) return;
+  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
+  if(e.data.type==='setAccent'){
+    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
+function openScreen(path){
+  var params=location.search||'';
+  window.location.href=path+params;
+}
+</script>
+<script>
+new MTS.Button('#verify-back-btn',{
+  label:'Volver al grupo',
+  variant:'ghost',
+  iconLeft:MTS.Icon.get('arrow-left'),
+  onClick:function(){goBack();}
+});
+
+new MTS.Card('#verify-card-status',{
+  title:'Estado actual',
+  subtitle:'Pendiente de verificacion',
+  variant:'outlined',
+  body:'<p class="verify-card-copy">La cuenta aun no confirma su correo. Esta vista debe dejar claro que el sistema esta esperando una accion del usuario.</p>'
+});
+
+new MTS.Card('#verify-card-next',{
+  title:'Paso siguiente',
+  subtitle:'Continuidad del acceso',
+  variant:'outlined',
+  body:'<p class="verify-card-copy">Una vez verificado el correo, el recorrido puede volver al <strong>login</strong> o continuar directamente a un <strong>workspace-selector</strong>.</p>'
+});
+
+new MTS.Button('#verify-resend-btn',{
+  label:'Reenviar correo',
+  variant:'primary',
+  block:true,
+  iconLeft:MTS.Icon.get('send'),
+  onClick:function(e,inst){resendVerification(inst);}
+});
+
+new MTS.Button('#verify-open-login-btn',{
+  label:'Volver al login',
+  variant:'ghost',
+  block:true,
+  iconLeft:MTS.Icon.get('arrow-left'),
+  onClick:function(){openScreen('../login/index.html');}
+});
+
+function clearAlert(){
+  document.getElementById('verify-alert').innerHTML='';
+}
+
+function showAlert(options){
+  clearAlert();
+  MTS.Alert.show('#verify-alert',options);
+}
+
+function resendVerification(inst){
+  inst.setLoading(true);
+  inst.setLabel('Reenviando correo...');
+
+  setTimeout(function(){
+    inst.setLoading(false);
+    inst.setLabel('Reenviar correo');
+    showAlert({
+      variant:'info',
+      title:'Correo reenviado',
+      message:'Simulacion UI: se prepararia un nuevo correo de verificacion para <strong>'+document.getElementById('verify-email-target').textContent+'</strong>.',
+      closable:true
+    });
+  },900);
+}
+</script>
+</body>
+</html>
+

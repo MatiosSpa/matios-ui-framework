@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Profile Overview - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-avatar/matios-ui-avatar.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="profile-overview.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../display/matios-ui-avatar/matios-ui-avatar.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="account-profile-page">
+    <header class="account-profile-page__topbar mts-surface">
+      <div class="account-profile-page__brand">
+        <div class="account-profile-page__logo">M</div>
+        <div>
+          <div class="account-profile-page__title">Profile Overview</div>
+          <div class="account-profile-page__subtitle">Datos personales, preferencias base y contexto activo de la cuenta</div>
+        </div>
+      </div>
+      <div class="account-profile-page__topbar-actions">
+        <div id="profile-reset-button"></div>
+        <div id="profile-save-button"></div>
+      </div>
+    </header>
+
+    <main class="account-profile-page__main mts-grid mts-grid--gap-md">
+      <section class="account-profile-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="account-profile-page__eyebrow">Cuenta personal</div>
+          <h1 class="account-profile-page__hero-title">Mantén tu perfil listo para trabajar entre empresas y módulos sin perder consistencia.</h1>
+          <p class="account-profile-page__hero-text">
+            Esta vista concentra datos base, lenguaje operativo y notificaciones personales para que el usuario final ajuste su cuenta sin entrar a configuración avanzada.
+          </p>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="mts-form-card account-profile-page__form-card">
+          <div id="profile-feedback"></div>
+          <div class="mts-grid mts-grid--gap-md">
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="profile-full-name"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="profile-display-name"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="profile-email"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="profile-phone"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="profile-role"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="profile-timezone"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="profile-language"></div></div>
+            <div class="mts-g-col-12 mts-g-col-md-6"><div id="profile-date-format"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4 account-profile-page__sidebar">
+        <div id="profile-summary-card"></div>
+        <div id="profile-preferences-card"></div>
+        <div id="profile-context-card"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var profileState = {
+      fullName: 'Camila Soto',
+      displayName: 'Camila',
+      email: 'camila@matios.dev',
+      phone: '+56 9 6123 8891',
+      role: 'Product Designer',
+      timezone: 'America/Santiago',
+      language: 'es-CL',
+      dateFormat: 'dd-mm-yyyy'
+    };
+
+    var fullNameInput;
+    var displayNameInput;
+    var emailInput;
+    var phoneInput;
+    var roleInput;
+    var timezoneSelect;
+    var languageSelect;
+    var dateFormatSelect;
+    var digestCheckbox;
+    var mentionsCheckbox;
+    var launchesCheckbox;
+
+    new MTS.Button('#profile-save-button', {
+      label: 'Guardar cambios',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('save'),
+      onClick: saveProfile
+    });
+
+    new MTS.Button('#profile-reset-button', {
+      label: 'Restablecer',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: resetProfile
+    });
+
+    fullNameInput = new MTS.Input('#profile-full-name', {
+      label: 'Nombre completo',
+      type: 'text',
+      value: profileState.fullName,
+      placeholder: 'Nombre y apellido'
+    });
+
+    displayNameInput = new MTS.Input('#profile-display-name', {
+      label: 'Nombre visible',
+      type: 'text',
+      value: profileState.displayName,
+      placeholder: 'Como apareces en la app'
+    });
+
+    emailInput = new MTS.Input('#profile-email', {
+      label: 'Correo',
+      type: 'email',
+      value: profileState.email,
+      placeholder: 'correo@empresa.com'
+    });
+
+    phoneInput = new MTS.Input('#profile-phone', {
+      label: 'Telefono',
+      type: 'text',
+      value: profileState.phone,
+      placeholder: '+56 9 0000 0000'
+    });
+
+    roleInput = new MTS.Input('#profile-role', {
+      label: 'Cargo o foco',
+      type: 'text',
+      value: profileState.role,
+      placeholder: 'Product Designer'
+    });
+
+    timezoneSelect = new MTS.Select('#profile-timezone', {
+      label: 'Zona horaria',
+      options: [
+        { value: 'America/Santiago', label: 'America/Santiago' },
+        { value: 'America/Bogota', label: 'America/Bogota' },
+        { value: 'America/Mexico_City', label: 'America/Mexico_City' },
+        { value: 'Europe/Madrid', label: 'Europe/Madrid' }
+      ],
+      value: profileState.timezone
+    });
+
+    languageSelect = new MTS.Select('#profile-language', {
+      label: 'Idioma',
+      options: [
+        { value: 'es-CL', label: 'Español (Chile)' },
+        { value: 'es-MX', label: 'Español (Mexico)' },
+        { value: 'en-US', label: 'English (US)' }
+      ],
+      value: profileState.language
+    });
+
+    dateFormatSelect = new MTS.Select('#profile-date-format', {
+      label: 'Formato de fecha',
+      options: [
+        { value: 'dd-mm-yyyy', label: 'DD-MM-YYYY' },
+        { value: 'yyyy-mm-dd', label: 'YYYY-MM-DD' },
+        { value: 'mm-dd-yyyy', label: 'MM-DD-YYYY' }
+      ],
+      value: profileState.dateFormat
+    });
+
+    new MTS.Card('#profile-summary-card', {
+      title: 'Identidad activa',
+      subtitle: 'Cuenta personal',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="account-profile-page__summary">' +
+          '<div id="profile-avatar"></div>' +
+          '<div>' +
+            '<div class="account-profile-page__summary-name">Camila Soto</div>' +
+            '<div class="account-profile-page__summary-mail">camila@matios.dev</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="account-profile-page__summary-meta">' +
+          '<div><span>Workspace activo</span><strong>Matios Studio</strong></div>' +
+          '<div><span>Rol efectivo</span><strong>General</strong></div>' +
+          '<div><span>Perfiles</span><strong>Config Admin · Document View · Invoice Edit</strong></div>' +
+        '</div>'
+    });
+
+    new MTS.Card('#profile-preferences-card', {
+      title: 'Preferencias',
+      subtitle: 'Notificaciones personales',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="account-profile-page__preferences">' +
+          '<div id="profile-pref-digest"></div>' +
+          '<div id="profile-pref-mentions"></div>' +
+          '<div id="profile-pref-launches"></div>' +
+        '</div>'
+    });
+
+    new MTS.Card('#profile-context-card', {
+      title: 'Contexto de acceso',
+      subtitle: 'Resumen de cuenta',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="account-profile-page__context-list">' +
+          '<div><span>Empresas disponibles</span><strong>3</strong></div>' +
+          '<div><span>Ultima actividad</span><strong>Hoy · 09:10</strong></div>' +
+          '<div><span>Seguridad base</span><strong>2FA por correo activo</strong></div>' +
+        '</div>'
+    });
+
+    new MTS.Avatar('#profile-avatar', {
+      name: 'Camila Soto',
+      size: 'xl',
+      status: 'online'
+    });
+
+    digestCheckbox = new MTS.Checkbox('#profile-pref-digest', {
+      label: 'Resumen diario al inicio de jornada',
+      checked: true
+    });
+
+    mentionsCheckbox = new MTS.Checkbox('#profile-pref-mentions', {
+      label: 'Avisos inmediatos por menciones',
+      checked: true
+    });
+
+    launchesCheckbox = new MTS.Checkbox('#profile-pref-launches', {
+      label: 'Novedades de modulos y cambios mayores',
+      checked: false
+    });
+
+    MTS.Icon.initAll();
+
+    function resetProfile() {
+      fullNameInput.setValue(profileState.fullName).clearError();
+      displayNameInput.setValue(profileState.displayName).clearError();
+      emailInput.setValue(profileState.email).clearError();
+      phoneInput.setValue(profileState.phone).clearError();
+      roleInput.setValue(profileState.role).clearError();
+      timezoneSelect.setValue(profileState.timezone);
+      languageSelect.setValue(profileState.language);
+      dateFormatSelect.setValue(profileState.dateFormat);
+
+      MTS.Alert.show('#profile-feedback', {
+        variant: 'info',
+        title: 'Valores restablecidos',
+        message: 'La vista volvió al perfil base del ejemplo.',
+        closable: true
+      });
+    }
+
+    function saveProfile() {
+      var fullName = fullNameInput.getValue().trim();
+      var displayName = displayNameInput.getValue().trim();
+      var email = emailInput.getValue().trim();
+
+      fullNameInput.clearError();
+      displayNameInput.clearError();
+      emailInput.clearError();
+
+      if (!fullName) {
+        fullNameInput.setError('Ingresa el nombre completo del usuario');
+        return;
+      }
+
+      if (!displayName) {
+        displayNameInput.setError('Define el nombre visible para la cuenta');
+        return;
+      }
+
+      if (!email || email.indexOf('@') === -1) {
+        emailInput.setError('Ingresa un correo valido');
+        return;
+      }
+
+      MTS.Alert.show('#profile-feedback', {
+        variant: 'success',
+        title: 'Perfil actualizado',
+        message: 'La cuenta quedo lista con idioma, zona horaria y preferencias personales guardadas.',
+        closable: true
+      });
+    }
+  </script>
+</body>
+</html>

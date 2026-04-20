@@ -91,10 +91,16 @@ MTS.Progress = class MtsProgress {
   on(event, fn) { (this._listeners[event] = this._listeners[event] || []).push(fn); return this; }
   destroy()     { this._el.innerHTML = ''; }
 
+  _syncClasses() {
+    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-progress-wrap'));
+    this._el.className = keep.join(' ');
+    this._el.classList.add('mts-progress-wrap', `mts-progress-wrap--${this.type}`);
+  }
+
   /* ── Build ── */
   _build() {
     this._el.innerHTML = '';
-    this._el.className = `mts-progress-wrap mts-progress-wrap--${this.type}`;
+    this._syncClasses();
 
     if (this.type === 'circle') {
       this._buildCircle();
@@ -201,7 +207,9 @@ MTS.Progress = class MtsProgress {
       lbl.className = 'mts-progress__circle-name';
       lbl.textContent = this.label;
       lbl.style.cssText = 'font-size:11px;color:var(--mts-text-muted);margin-top:4px;text-align:center;';
-      this._el.style.cssText = 'display:inline-flex;flex-direction:column;align-items:center;';
+      this._el.style.display = 'inline-flex';
+      this._el.style.flexDirection = 'column';
+      this._el.style.alignItems = 'center';
       this._el.appendChild(wrap);
       this._el.appendChild(lbl);
     } else {

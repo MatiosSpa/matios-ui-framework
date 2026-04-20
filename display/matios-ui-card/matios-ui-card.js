@@ -1,6 +1,6 @@
-/* ============================================================
-   MATIOS UI — matios-ui-card.js  v1.0.0
-   MTS.Card — Card genérica con header, body, footer
+﻿/* ============================================================
+   MATIOS UI â€” matios-ui-card.js  v1.0.0
+   MTS.Card â€” Card genÃ©rica con header, body, footer
    ============================================================ */
 
 window.MTS = window.MTS || {};
@@ -21,8 +21,8 @@ MTS.Card = class MtsCard {
    * @param {boolean} options.clickable
    * @param {boolean} options.selected
    * @param {boolean} options.horizontal
-   * @param {Array}   options.actions       [{ label, icon, variant, onClick }] — en el header
-   * @param {Array}   options.footer        [{ label, icon, variant, onClick }] — en el footer
+   * @param {Array}   options.actions       [{ label, icon, variant, onClick }] â€” en el header
+   * @param {Array}   options.footer        [{ label, icon, variant, onClick }] â€” en el footer
    * @param {string}  options.footerAlign   'start'|'end'|'between'|'center'
    * @param {function} options.onClick      Callback si clickable
    */
@@ -32,10 +32,10 @@ MTS.Card = class MtsCard {
       : selector;
     if (!this._el) { console.error('[MTS.Card] No encontrado:', selector); return; }
 
-    // Card header title / Título del header
+    // Card header title / TÃ­tulo del header
     this.title = options.title ?? null;
 
-    // Card subtitle / Subtítulo
+    // Card subtitle / SubtÃ­tulo
     this.subtitle = options.subtitle ?? null;
 
     // Body HTML content / Contenido HTML del cuerpo
@@ -47,14 +47,14 @@ MTS.Card = class MtsCard {
     // Image alt text / Texto alternativo de la imagen
     this.imageAlt = options.imageAlt ?? '';
 
-    // Image aspect ratio: 'default' | 'square' | 'wide' / Relación de aspecto de la imagen
+    // Image aspect ratio: 'default' | 'square' | 'wide' / RelaciÃ³n de aspecto de la imagen
     this.imageRatio = options.imageRatio ?? 'default';
 
     // Color variant: 'flat' | 'elevated' | 'outlined' | 'primary' | 'success' | 'warning' | 'danger'
     // Variante de color
     this.variant = options.variant ?? null;
 
-    // Size modifier: '' | 'sm' | 'lg' / Modificador de tamaño
+    // Size modifier: '' | 'sm' | 'lg' / Modificador de tamaÃ±o
     this.size = options.size ?? '';
 
     // Show hover effect / Mostrar efecto hover
@@ -69,13 +69,13 @@ MTS.Card = class MtsCard {
     // Horizontal layout / Layout horizontal
     this.horizontal = options.horizontal ?? false;
 
-    // Header action buttons: [{ label, icon, variant, onClick }] / Botones de acción en el header
+    // Header action buttons: [{ label, icon, variant, onClick }] / Botones de acciÃ³n en el header
     this.actions = options.actions ?? [];
 
     // Footer buttons: [{ label, icon, variant, onClick }] / Botones del footer
     this.footer = options.footer ?? [];
 
-    // Footer alignment: 'start' | 'end' | 'between' | 'center' / Alineación del footer
+    // Footer alignment: 'start' | 'end' | 'between' | 'center' / AlineaciÃ³n del footer
     this.footerAlign = options.footerAlign ?? 'start';
 
     this._listeners = {};
@@ -86,7 +86,7 @@ MTS.Card = class MtsCard {
     this._build();
   }
 
-  /* ── API ──────────────────────────────────────────────── */
+  /* â”€â”€ API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
@@ -115,19 +115,12 @@ MTS.Card = class MtsCard {
     return this;
   }
 
-  destroy() { this._el.innerHTML = ''; this._el.className = ''; }
+  destroy() { this._el.innerHTML = ''; }
 
-  /* ── Build ────────────────────────────────────────────── */
+  /* â”€â”€ Build â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   _build() {
-    const classes = ['mts-card'];
-    if (this.variant)    classes.push('mts-card--' + this.variant);
-    if (this.size)       classes.push('mts-card--' + this.size);
-    if (this.hoverable)  classes.push('mts-card--hoverable');
-    if (this.clickable)  classes.push('mts-card--clickable');
-    if (this.selected)   classes.push('mts-card--selected');
-    if (this.horizontal) classes.push('mts-card--horizontal');
-    this._el.className = classes.join(' ');
+    this._syncClasses();
     this._el.innerHTML = '';
 
     /* Imagen */
@@ -209,8 +202,26 @@ MTS.Card = class MtsCard {
       this._el.addEventListener('click', (e) => this._emit('click', { event: e, card: this }));
     }
   }
+
+  _syncClasses() {
+    const previousMatiosClasses = [...this._el.classList].filter(cls =>
+      cls === 'mts-card' || cls.startsWith('mts-card--')
+    );
+    if (previousMatiosClasses.length) this._el.classList.remove(...previousMatiosClasses);
+
+    const classes = ['mts-card'];
+    if (this.variant)    classes.push('mts-card--' + this.variant);
+    if (this.size)       classes.push('mts-card--' + this.size);
+    if (this.hoverable)  classes.push('mts-card--hoverable');
+    if (this.clickable)  classes.push('mts-card--clickable');
+    if (this.selected)   classes.push('mts-card--selected');
+    if (this.horizontal) classes.push('mts-card--horizontal');
+    this._el.classList.add(...classes);
+  }
+
   _emit(event, detail) {
     (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
     this._el?.dispatchEvent(new CustomEvent(`mts:card:${event}`, { bubbles: true, detail }));
   }
 };
+

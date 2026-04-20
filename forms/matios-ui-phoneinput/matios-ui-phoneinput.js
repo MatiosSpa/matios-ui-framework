@@ -1,53 +1,53 @@
-/* ============================================================
-   MATIOS UI — matios-ui-phoneinput.js
-   MTS.PhoneInput — Input de teléfono con selector de país
-                    y formato automático. 0 dependencias.
+﻿/* ============================================================
+   MATIOS UI â€” matios-ui-phoneinput.js
+   MTS.PhoneInput â€” Input de telÃ©fono con selector de paÃ­s
+                    y formato automÃ¡tico. 0 dependencias.
    Version: 1.0.0
    ============================================================ */
 window.MTS = window.MTS || {};
 
 MTS.PhoneInput = class MtsPhoneInput {
-  /* Catálogo de países con código, bandera emoji y formato */
+  /* CatÃ¡logo de paÃ­ses con cÃ³digo, bandera emoji y formato */
   static COUNTRIES = [
-    { code:'CL', dial:'+56',  flag:'🇨🇱', name:'Chile',          fmt:'# #### ####'      },
-    { code:'AR', dial:'+54',  flag:'🇦🇷', name:'Argentina',      fmt:'## ####-####'     },
-    { code:'MX', dial:'+52',  flag:'🇲🇽', name:'México',         fmt:'## #### ####'     },
-    { code:'CO', dial:'+57',  flag:'🇨🇴', name:'Colombia',       fmt:'### ### ####'     },
-    { code:'PE', dial:'+51',  flag:'🇵🇪', name:'Perú',           fmt:'### ### ###'      },
-    { code:'VE', dial:'+58',  flag:'🇻🇪', name:'Venezuela',      fmt:'### ### ####'     },
-    { code:'EC', dial:'+593', flag:'🇪🇨', name:'Ecuador',        fmt:'## ### ####'      },
-    { code:'BO', dial:'+591', flag:'🇧🇴', name:'Bolivia',        fmt:'# ### ####'       },
-    { code:'PY', dial:'+595', flag:'🇵🇾', name:'Paraguay',       fmt:'### ### ###'      },
-    { code:'UY', dial:'+598', flag:'🇺🇾', name:'Uruguay',        fmt:'# ### ## ##'      },
-    { code:'BR', dial:'+55',  flag:'🇧🇷', name:'Brasil',         fmt:'## #####-####'    },
-    { code:'US', dial:'+1',   flag:'🇺🇸', name:'Estados Unidos', fmt:'(###) ###-####'   },
-    { code:'ES', dial:'+34',  flag:'🇪🇸', name:'España',         fmt:'### ### ###'      },
-    { code:'GB', dial:'+44',  flag:'🇬🇧', name:'Reino Unido',    fmt:'#### ### ####'    },
-    { code:'DE', dial:'+49',  flag:'🇩🇪', name:'Alemania',       fmt:'#### ########'    },
-    { code:'FR', dial:'+33',  flag:'🇫🇷', name:'Francia',        fmt:'# ## ## ## ##'    },
-    { code:'IT', dial:'+39',  flag:'🇮🇹', name:'Italia',         fmt:'### ### ####'     },
-    { code:'PT', dial:'+351', flag:'🇵🇹', name:'Portugal',       fmt:'### ### ###'      },
-    { code:'CN', dial:'+86',  flag:'🇨🇳', name:'China',          fmt:'### #### ####'    },
-    { code:'JP', dial:'+81',  flag:'🇯🇵', name:'Japón',          fmt:'## #### ####'     },
+    { code:'CL', dial:'+56',  flag:'ðŸ‡¨ðŸ‡±', name:'Chile',          fmt:'# #### ####'      },
+    { code:'AR', dial:'+54',  flag:'ðŸ‡¦ðŸ‡·', name:'Argentina',      fmt:'## ####-####'     },
+    { code:'MX', dial:'+52',  flag:'ðŸ‡²ðŸ‡½', name:'MÃ©xico',         fmt:'## #### ####'     },
+    { code:'CO', dial:'+57',  flag:'ðŸ‡¨ðŸ‡´', name:'Colombia',       fmt:'### ### ####'     },
+    { code:'PE', dial:'+51',  flag:'ðŸ‡µðŸ‡ª', name:'PerÃº',           fmt:'### ### ###'      },
+    { code:'VE', dial:'+58',  flag:'ðŸ‡»ðŸ‡ª', name:'Venezuela',      fmt:'### ### ####'     },
+    { code:'EC', dial:'+593', flag:'ðŸ‡ªðŸ‡¨', name:'Ecuador',        fmt:'## ### ####'      },
+    { code:'BO', dial:'+591', flag:'ðŸ‡§ðŸ‡´', name:'Bolivia',        fmt:'# ### ####'       },
+    { code:'PY', dial:'+595', flag:'ðŸ‡µðŸ‡¾', name:'Paraguay',       fmt:'### ### ###'      },
+    { code:'UY', dial:'+598', flag:'ðŸ‡ºðŸ‡¾', name:'Uruguay',        fmt:'# ### ## ##'      },
+    { code:'BR', dial:'+55',  flag:'ðŸ‡§ðŸ‡·', name:'Brasil',         fmt:'## #####-####'    },
+    { code:'US', dial:'+1',   flag:'ðŸ‡ºðŸ‡¸', name:'Estados Unidos', fmt:'(###) ###-####'   },
+    { code:'ES', dial:'+34',  flag:'ðŸ‡ªðŸ‡¸', name:'EspaÃ±a',         fmt:'### ### ###'      },
+    { code:'GB', dial:'+44',  flag:'ðŸ‡¬ðŸ‡§', name:'Reino Unido',    fmt:'#### ### ####'    },
+    { code:'DE', dial:'+49',  flag:'ðŸ‡©ðŸ‡ª', name:'Alemania',       fmt:'#### ########'    },
+    { code:'FR', dial:'+33',  flag:'ðŸ‡«ðŸ‡·', name:'Francia',        fmt:'# ## ## ## ##'    },
+    { code:'IT', dial:'+39',  flag:'ðŸ‡®ðŸ‡¹', name:'Italia',         fmt:'### ### ####'     },
+    { code:'PT', dial:'+351', flag:'ðŸ‡µðŸ‡¹', name:'Portugal',       fmt:'### ### ###'      },
+    { code:'CN', dial:'+86',  flag:'ðŸ‡¨ðŸ‡³', name:'China',          fmt:'### #### ####'    },
+    { code:'JP', dial:'+81',  flag:'ðŸ‡¯ðŸ‡µ', name:'JapÃ³n',          fmt:'## #### ####'     },
   ];
 
   /**
    * @param {string|Element} selector
    * @param {object} options
-   * @param {string}   options.country     Código ISO inicial — default: 'CL'
-   * @param {string}   options.value       Valor inicial (solo dígitos)
+   * @param {string}   options.country     CÃ³digo ISO inicial â€” default: 'CL'
+   * @param {string}   options.value       Valor inicial (solo dÃ­gitos)
    * @param {string}   options.label       Etiqueta
-   * @param {string}   options.placeholder Placeholder — default: usa el formato del país
+   * @param {string}   options.placeholder Placeholder â€” default: usa el formato del paÃ­s
    * @param {string}   options.hint
    * @param {boolean}  options.disabled
-   * @param {string}   options.size        'sm'|'md'|'lg' — default: 'md'
+   * @param {string}   options.size        'sm'|'md'|'lg' â€” default: 'md'
    * @param {function} options.onChange    ({ raw, formatted, full, country }) => {}
    * @param {function} options.onCountryChange ({ country }) => {}
    */
   constructor(selector, options = {}) {
     this._el = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    /* ── data-* → inicialización HTML declarativa ── */
+    /* â”€â”€ data-* â†’ inicializaciÃ³n HTML declarativa â”€â”€ */
     const _ds = this._el?.dataset || {};
     const _fromHTML = {};
     if (_ds.label !== undefined) _fromHTML.label = _ds.label;
@@ -66,6 +66,7 @@ MTS.PhoneInput = class MtsPhoneInput {
     this.hint         = options.hint        || '';
     this.disabled     = options.disabled    ?? false;
     this.size         = options.size        || 'md';
+    this.renderMode   = options.renderMode  || 'auto';
     this._error     = '';
     this._listeners = {};
 
@@ -74,14 +75,14 @@ MTS.PhoneInput = class MtsPhoneInput {
     if (options.onChange)       this.on('change',  options.onChange);
 
     // Fires when country changes: ({ country }) => {}
-    // Se dispara al cambiar el país
+    // Se dispara al cambiar el paÃ­s
     if (options.onCountryChange) this.on('country', options.onCountryChange);
 
     this._ddOpen = false;
     this._build();
   }
 
-  /* ── API ── */
+  /* â”€â”€ API â”€â”€ */
   getValue()         { return { raw: this._raw, formatted: this._format(this._raw), full: this._country().dial + this._raw, country: this._country() }; }
   setValue(v)        { this._raw = v.replace(/\D/g,''); if(this._input) this._input.value = this._format(this._raw); return this; }
   setCountry(code)   { this._countryCode = code; this._build(); return this; }
@@ -112,15 +113,16 @@ MTS.PhoneInput = class MtsPhoneInput {
   }
 
   _build() {
+    const explicitFieldOnly = this.renderMode === 'field-only';
+    const explicitStandalone = this.renderMode === 'standalone';
+    const parentIsGroup = this._el.parentElement?.classList.contains('mts-form-group');
+    const fieldOnly = explicitFieldOnly || (!explicitStandalone && parentIsGroup);
+
     this._el.innerHTML = '';
-    this._el.className = 'mts-phoneinput';
-    /* Heredar ancho completo si está dentro de un form-group */
-    if (this._el.parentElement?.classList.contains('mts-form-group')) {
-      this._el.style.width = '100%';
-    }
+    this._el.classList.add('mts-phoneinput');
     const c = this._country();
 
-    if (this.label) {
+    if (!fieldOnly && this.label) {
       const lbl = document.createElement('label');
       lbl.className = 'mts-phoneinput__label';
       lbl.textContent = this.label;
@@ -130,12 +132,12 @@ MTS.PhoneInput = class MtsPhoneInput {
     const wrap = document.createElement('div');
     wrap.className = 'mts-phoneinput__wrap mts-phoneinput__wrap--' + this.size + (this.disabled ? ' mts-phoneinput__wrap--disabled' : '');
 
-    /* Selector de país */
+    /* Selector de paÃ­s */
     const trigger = document.createElement('button');
     trigger.type = 'button';
     trigger.className = 'mts-phoneinput__country';
     trigger.disabled = this.disabled;
-    trigger.innerHTML = '<span class="mts-phoneinput__flag">' + c.flag + '</span><span class="mts-phoneinput__dial">' + c.dial + '</span><span class="mts-phoneinput__chevron">▾</span>';
+    trigger.innerHTML = '<span class="mts-phoneinput__flag">' + c.flag + '</span><span class="mts-phoneinput__dial">' + c.dial + '</span><span class="mts-phoneinput__chevron">â–¾</span>';
     trigger.addEventListener('click', (e) => { e.stopPropagation(); this._toggleDd(); });
     wrap.appendChild(trigger);
     this._trigger = trigger;
@@ -169,16 +171,16 @@ MTS.PhoneInput = class MtsPhoneInput {
     input.addEventListener('keydown', (e) => { if (e.key === 'Escape') this._closeDd(); });
     wrap.appendChild(input);
 
-    /* Dropdown de países */
+    /* Dropdown de paÃ­ses */
     const dd = document.createElement('div');
     dd.className = 'mts-phoneinput__dd';
     dd.style.display = 'none';
 
-    /* Búsqueda */
+    /* BÃºsqueda */
     const search = document.createElement('input');
     search.type = 'text';
     search.className = 'mts-phoneinput__dd-search';
-    search.placeholder = 'Buscar país...';
+    search.placeholder = 'Buscar paÃ­s...';
     search.addEventListener('input', () => this._filterDd(search.value, list));
     search.addEventListener('click', e => e.stopPropagation());
     dd.appendChild(search);
@@ -257,3 +259,4 @@ MTS.PhoneInput = class MtsPhoneInput {
     this._el?.dispatchEvent(new CustomEvent(`mts:phoneinput:${event}`, { bubbles: true, detail }));
   }
 };
+
