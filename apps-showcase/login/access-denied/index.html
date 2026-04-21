@@ -4,10 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Acceso Denegado - Matios UI</title>
-  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (error) {}
+    })();
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
@@ -16,186 +36,132 @@
   <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
   <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
-  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
-  <link rel="stylesheet" href="../../../layout/matios-ui-grid/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
   <link rel="stylesheet" href="access-denied.css">
   <script src="../../../icons/matios-ui-icons.js"></script>
   <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
-  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
   <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
 </head>
 <body>
-  <div class="denied-page">
-    <header class="denied-page__topbar mts-surface">
-      <div class="denied-page__brand">
-        <div class="denied-page__logo">M</div>
-        <div>
-          <div class="denied-page__title">Acceso Denegado</div>
-          <div class="denied-page__subtitle">Showcase / Login</div>
-        </div>
-      </div>
-      <div class="denied-page__topbar-actions">
-        <div id="denied-back-btn"></div>
-      </div>
-    </header>
-
-    <main class="denied-page__main mts-grid mts-grid--gap-md">
-      <section class="denied-page__hero mts-g-col-12 mts-g-col-lg-7 mts-surface">
-        <p class="denied-page__kicker">Pantalla activa</p>
-        <h1 class="denied-page__hero-title">No tienes permisos para entrar aqui</h1>
-        <p class="denied-page__hero-copy">
-          Esta vista representa un bloqueo de acceso cuando el usuario esta autenticado pero no
-          cumple con el contexto, rol o permisos necesarios para continuar. La UI debe explicar el
-          motivo sin sonar agresiva y dejar un siguiente paso claro.
-        </p>
-
-        <div class="denied-page__cards mts-grid mts-grid--gap-md">
-          <div class="mts-g-col-12 mts-g-col-md-6"><div id="denied-card-reason"></div></div>
-          <div class="mts-g-col-12 mts-g-col-md-6"><div id="denied-card-next"></div></div>
-        </div>
-      </section>
-
-      <section class="denied-page__panel-wrap mts-g-col-12 mts-g-col-lg-5">
-        <div class="mts-form-card denied-page__panel">
-          <div class="mts-form-card__header denied-page__panel-header">
-            <div class="denied-page__panel-icon">
-              <i class="mts-icon mts-icon-slash"></i>
-            </div>
-            <div>
-              <h2 class="mts-form-card__title">Permisos insuficientes</h2>
-              <p class="mts-form-card__subtitle">
-                Tu cuenta esta activa, pero este modulo requiere otro contexto o permisos mas altos.
-              </p>
-            </div>
+  <main class="mts-d-flex mts-items-center mts-justify-center mts-p-4 mts-min-vh-100">
+    <section class="mts-card mts-card--elevated mts-w-full mts-max-w-lg">
+      <div class="mts-card__body mts-p-6">
+        <div class="mts-text-center mts-mb-4">
+          <div class="mts-mb-3">
+            <span class="mts-icon mts-icon--3xl" id="access-denied-icon"></span>
           </div>
+          <p class="mts-text-sm mts-text-muted mts-m-0">Matios UI</p>
+          <h1 class="mts-h1 mts-mt-2">Acceso denegado</h1>
+          <p class="mts-text-md mts-text-muted mts-mt-2 mts-mb-0">Tu cuenta está activa, pero este destino requiere otro contexto o más permisos.</p>
+        </div>
 
+        <div class="mts-d-flex mts-flex-col mts-gap-4">
           <div id="denied-alert"></div>
 
-          <div class="denied-page__status mts-surface">
-            <div class="denied-page__status-row">
-              <span class="denied-page__status-label">Empresa activa</span>
-              <span class="denied-page__status-value">Acme Chile</span>
-            </div>
-            <div class="denied-page__status-row">
-              <span class="denied-page__status-label">Rol efectivo</span>
-              <span class="denied-page__status-value">General</span>
-            </div>
-            <div class="denied-page__status-row">
-              <span class="denied-page__status-label">Intento</span>
-              <span class="denied-page__status-value">Invoice / Ajustes avanzados</span>
-            </div>
-          </div>
-
-          <div class="denied-page__help mts-surface">
-            <div class="denied-page__help-icon"><i class="mts-icon mts-icon-shield"></i></div>
+          <section class="mts-surface mts-d-flex mts-flex-col mts-gap-2">
             <div>
-              <p class="denied-page__help-title">Siguiente paso sugerido</p>
-              <p class="denied-page__help-copy">
-                Puedes volver al login, cambiar de empresa en el selector de contexto o solicitar
-                acceso a un administrador.
-              </p>
+              <p class="mts-text-sm mts-text-muted mts-mb-1 mts-mt-0">Empresa activa</p>
+              <p class="mts-text-md mts-text-primary mts-m-0">Acme Chile</p>
             </div>
-          </div>
+            <div>
+              <p class="mts-text-sm mts-text-muted mts-mb-1 mts-mt-0">Rol efectivo</p>
+              <p class="mts-text-md mts-text-primary mts-m-0">General</p>
+            </div>
+            <div>
+              <p class="mts-text-sm mts-text-muted mts-mb-1 mts-mt-0">Intento</p>
+              <p class="mts-text-md mts-text-primary mts-m-0">Invoice / Ajustes avanzados</p>
+            </div>
+          </section>
 
-          <div class="denied-page__actions">
-            <div id="denied-workspace-btn"></div>
-            <div id="denied-login-btn"></div>
-          </div>
+          <div id="denied-workspace-btn"></div>
         </div>
-      </section>
-    </main>
-  </div>
+      </div>
 
-<script>
-window.addEventListener('message',function(e){
-  if(!e.data) return;
-  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
-  if(e.data.type==='setAccent'){
-    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
-    else document.documentElement.removeAttribute('data-mts-accent');
-  }
-});
-function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
-function openScreen(path){
-  var params=location.search||'';
-  window.location.href=path+params;
-}
-</script>
-<script>
-new MTS.Button('#denied-back-btn',{
-  label:'Volver al grupo',
-  variant:'ghost',
-  iconLeft:MTS.Icon.get('arrow-left'),
-  onClick:function(){goBack();}
-});
+      <div class="mts-card__footer mts-card__footer--between">
+        <div id="denied-group-btn"></div>
+        <div id="denied-login-btn"></div>
+      </div>
+    </section>
+  </main>
 
-new MTS.Card('#denied-card-reason',{
-  title:'Por que pasa',
-  subtitle:'Contexto o permisos',
-  variant:'outlined',
-  body:'<p class="denied-card-copy">El usuario puede estar autenticado correctamente y aun asi no tener el <strong>perfil</strong> o el <strong>contexto de empresa</strong> requerido para este destino.</p>'
-});
-
-new MTS.Card('#denied-card-next',{
-  title:'Camino de salida',
-  subtitle:'Redireccion controlada',
-  variant:'outlined',
-  body:'<p class="denied-card-copy">La pantalla ofrece retorno claro al <strong>workspace-selector</strong> o al <strong>login</strong> sin dejar al usuario atrapado.</p>'
-});
-
-new MTS.Button('#denied-workspace-btn',{
-  label:'Cambiar empresa',
-  variant:'primary',
-  block:true,
-  iconLeft:MTS.Icon.get('home'),
-  onClick:function(e,inst){simulateContextChange(inst);}
-});
-
-new MTS.Button('#denied-login-btn',{
-  label:'Volver al login',
-  variant:'ghost',
-  block:true,
-  iconLeft:MTS.Icon.get('arrow-left'),
-  onClick:function(){openScreen('../login/index.html');}
-});
-
-function clearAlert(){
-  document.getElementById('denied-alert').innerHTML='';
-}
-
-function showAlert(options){
-  clearAlert();
-  MTS.Alert.show('#denied-alert',options);
-}
-
-function renderInitialAlert(){
-  showAlert({
-    variant:'danger',
-    title:'Acceso denegado',
-    message:'No tienes permisos suficientes para este destino con el contexto actual.',
-    closable:true
-  });
-}
-
-function simulateContextChange(inst){
-  inst.setLoading(true);
-  inst.setLabel('Preparando cambio...');
-
-  setTimeout(function(){
-    inst.setLoading(false);
-    inst.setLabel('Cambiar empresa');
-    showAlert({
-      variant:'info',
-      title:'Cambio de contexto sugerido',
-      message:'Simulacion UI: el siguiente paso seria abrir <strong>workspace-selector</strong> para intentar con otra empresa o contexto activo.',
-      closable:true
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
     });
-  },900);
-}
 
-renderInitialAlert();
-</script>
+    function goBack() {
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'closeApp' }, '*');
+          return;
+        }
+      } catch (error) {}
+      window.history.back();
+    }
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    MTS.Icon.render('ban', document.getElementById('access-denied-icon'));
+
+    MTS.Alert.show('#denied-alert', {
+      variant: 'danger',
+      title: 'Permisos insuficientes',
+      message: 'No tienes permisos suficientes para este destino con el contexto actual.',
+      closable: true
+    });
+
+    new MTS.Button('#denied-workspace-btn', {
+      label: 'Cambiar empresa',
+      variant: 'primary',
+      block: true,
+      onClick: function (event, instance) {
+        simulateContextChange(instance);
+      }
+    });
+
+    new MTS.Button('#denied-group-btn', {
+      label: 'Volver al grupo',
+      variant: 'link',
+      onClick: function () {
+        goBack();
+      }
+    });
+
+    new MTS.Button('#denied-login-btn', {
+      label: 'Volver al login',
+      variant: 'link',
+      onClick: function () {
+        openScreen('../login/index.html');
+      }
+    });
+
+    function simulateContextChange(button) {
+      button.setLoading(true);
+      button.setLabel('Preparando cambio...');
+
+      setTimeout(function () {
+        button.setLoading(false);
+        button.setLabel('Cambiar empresa');
+        MTS.Alert.show('#denied-alert', {
+          variant: 'info',
+          title: 'Cambio de contexto sugerido',
+          message: 'El siguiente paso sería abrir el selector de workspace para probar con otro contexto.',
+          closable: true
+        });
+      }, 800);
+    }
+
+    MTS.Icon.initAll();
+  </script>
 </body>
 </html>

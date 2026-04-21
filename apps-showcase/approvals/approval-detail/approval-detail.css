@@ -1,0 +1,167 @@
+.approval-detail-page {
+  min-height: 100vh;
+  padding: 24px 28px 40px;
+  background:
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.14), transparent 24%),
+    radial-gradient(circle at left top, rgba(59, 130, 246, 0.08), transparent 22%),
+    var(--mts-bg-body);
+  color: var(--mts-text-primary);
+}
+
+.approval-detail-page__topbar {
+  max-width: 1380px;
+  margin: 0 auto 24px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.approval-detail-page__brand,
+.approval-detail-page__actions,
+.approval-detail-page__hero-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.approval-detail-page__logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f59e0b, var(--mts-color-primary));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.approval-detail-page__title {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.approval-detail-page__subtitle {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--mts-text-muted);
+}
+
+.approval-detail-page__main {
+  max-width: 1380px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.approval-detail-page__hero {
+  padding: 34px 32px;
+}
+
+.approval-detail-page__eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--mts-text-muted);
+}
+
+.approval-detail-page__hero-title {
+  margin: 10px 0 12px;
+  max-width: 900px;
+  font-size: 30px;
+  line-height: 1.12;
+  font-weight: 800;
+}
+
+.approval-detail-page__hero-copy,
+.approval-detail-page__decision-copy,
+.approval-detail-page__impact p,
+.approval-detail-page__note-row p {
+  margin: 0;
+  color: var(--mts-text-secondary);
+  line-height: 1.7;
+}
+
+.approval-detail-page__stack,
+.approval-detail-page__sidebar,
+.approval-detail-page__impact,
+.approval-detail-page__notes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.approval-detail-page__summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.approval-detail-page__detail-cell,
+.approval-detail-page__note-row,
+.approval-detail-page__sla div {
+  padding: 14px 16px;
+  border-radius: var(--mts-radius-lg);
+  border: 1px solid var(--mts-border-color);
+  background: var(--mts-bg-surface-2);
+}
+
+.approval-detail-page__detail-cell span,
+.approval-detail-page__note-row span,
+.approval-detail-page__sla span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--mts-text-muted);
+}
+
+.approval-detail-page__pill-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.approval-detail-page__pill {
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--mts-border-color);
+  background: var(--mts-bg-surface-2);
+  font-size: 12px;
+  color: var(--mts-text-secondary);
+}
+
+.approval-detail-page__sla {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 980px) {
+  .approval-detail-page__topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 780px) {
+  .approval-detail-page {
+    padding: 16px 16px 28px;
+  }
+
+  .approval-detail-page__hero {
+    padding: 24px 20px;
+  }
+
+  .approval-detail-page__hero-title {
+    font-size: 24px;
+  }
+
+  .approval-detail-page__summary-grid {
+    grid-template-columns: 1fr;
+  }
+}

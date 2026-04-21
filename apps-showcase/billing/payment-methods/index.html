@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Payment Methods - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="payment-methods.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="payment-methods-page">
+    <header class="payment-methods-page__topbar mts-surface">
+      <div class="payment-methods-page__brand">
+        <div class="payment-methods-page__logo">M</div>
+        <div>
+          <div class="payment-methods-page__title">Payment Methods</div>
+          <div class="payment-methods-page__subtitle">Tarjetas, respaldo y datos de facturacion del workspace</div>
+        </div>
+      </div>
+      <div class="payment-methods-page__topbar-actions">
+        <div id="payment-methods-add"></div>
+      </div>
+    </header>
+
+    <main class="payment-methods-page__main mts-grid mts-grid--gap-md">
+      <section class="payment-methods-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="payment-methods-page__eyebrow">Billing operations</div>
+          <h1 class="payment-methods-page__hero-title">Administra el metodo principal y la informacion fiscal sin salir del flujo operativo.</h1>
+          <p class="payment-methods-page__hero-copy">
+            Esta pantalla agrupa lo que normalmente consulta finance o un owner: metodo activo,
+            respaldo, direccion de facturacion y contacto que recibe comprobantes.
+          </p>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-7">
+        <div id="payment-methods-feedback"></div>
+        <div class="mts-grid mts-grid--gap-md" id="payment-methods-list"></div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-5 payment-methods-page__sidebar">
+        <div class="mts-form-card payment-methods-page__form-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Datos de facturacion</h2>
+            <p class="mts-form-card__subtitle">Contacto visible en invoice, pais y direccion legal del workspace.</p>
+          </div>
+
+          <div class="payment-methods-page__form-grid">
+            <div id="payment-billing-name"></div>
+            <div id="payment-billing-email"></div>
+            <div id="payment-billing-country"></div>
+            <div id="payment-billing-tax-id"></div>
+            <div class="payment-methods-page__full-row" id="payment-billing-address"></div>
+          </div>
+
+          <div class="payment-methods-page__form-actions">
+            <div id="payment-billing-save"></div>
+          </div>
+        </div>
+
+        <div id="payment-methods-policy-card"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var paymentMethods = [
+      {
+        id: 'pm-1',
+        label: 'Visa terminada en 4242',
+        type: 'Principal',
+        typeVariant: 'success',
+        owner: 'Camila Soto',
+        expiry: '08/28',
+        status: 'Verificada'
+      },
+      {
+        id: 'pm-2',
+        label: 'Mastercard terminada en 1881',
+        type: 'Respaldo',
+        typeVariant: 'primary',
+        owner: 'Finance Team',
+        expiry: '11/27',
+        status: 'Lista para fallback'
+      }
+    ];
+
+    new MTS.Button('#payment-methods-add', {
+      label: 'Agregar metodo',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('plus-circle'),
+      onClick: function () {
+        notify('success', 'Metodo agregado', 'La UI deja planteado el alta de una nueva tarjeta o metodo alternativo.');
+      }
+    });
+
+    var billingName = new MTS.Input('#payment-billing-name', {
+      label: 'Nombre legal',
+      type: 'text',
+      value: 'Matios Studio LLC',
+      placeholder: 'Nombre legal'
+    });
+
+    var billingEmail = new MTS.Input('#payment-billing-email', {
+      label: 'Correo de facturacion',
+      type: 'email',
+      value: 'finance@matios.dev',
+      placeholder: 'finance@empresa.com'
+    });
+
+    var billingCountry = new MTS.Select('#payment-billing-country', {
+      label: 'Pais',
+      options: [
+        { value: 'cl', label: 'Chile' },
+        { value: 'us', label: 'United States' },
+        { value: 'mx', label: 'Mexico' }
+      ],
+      value: 'us'
+    });
+
+    var billingTaxId = new MTS.Input('#payment-billing-tax-id', {
+      label: 'Tax ID',
+      type: 'text',
+      value: '98-7654321',
+      placeholder: 'Tax ID'
+    });
+
+    var billingAddress = new MTS.Input('#payment-billing-address', {
+      label: 'Direccion legal',
+      type: 'text',
+      value: '500 Market St, Suite 200, San Francisco, CA',
+      placeholder: 'Direccion legal'
+    });
+
+    new MTS.Button('#payment-billing-save', {
+      label: 'Guardar datos',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('save'),
+      block: true,
+      onClick: function () {
+        notify('info', 'Datos actualizados', 'Se simulo el guardado del contacto y direccion de facturacion.');
+      }
+    });
+
+    new MTS.Card('#payment-methods-policy-card', {
+      title: 'Politica de cobro',
+      subtitle: 'Workspace billing',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="payment-methods-page__policy">' +
+          '<p>Los cargos automaticos usan el metodo principal. Si falla, se intenta una vez con el metodo de respaldo antes de pausar el workspace.</p>' +
+          '<ul class="payment-methods-page__policy-list">' +
+            '<li>Invoice al correo finance@matios.dev</li>' +
+            '<li>Reintento automatico cada 24 horas</li>' +
+            '<li>Notificacion al owner y billing contact</li>' +
+          '</ul>' +
+        '</div>'
+    });
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#payment-methods-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderMethods() {
+      var host = document.getElementById('payment-methods-list');
+      host.innerHTML = '';
+
+      paymentMethods.forEach(function (method, index) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12';
+        host.appendChild(wrap);
+
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: method.label,
+          subtitle: method.owner,
+          variant: index === 0 ? 'elevated' : 'outlined',
+          size: 'lg',
+          body:
+            '<div class="payment-methods-page__method-body">' +
+              '<div class="payment-methods-page__method-badges">' +
+                '<span id="payment-badge-' + method.id + '"></span>' +
+                '<span class="payment-methods-page__status">' + method.status + '</span>' +
+              '</div>' +
+              '<div class="payment-methods-page__method-grid">' +
+                '<div><span>Expira</span><strong>' + method.expiry + '</strong></div>' +
+                '<div><span>Uso</span><strong>' + method.type + '</strong></div>' +
+              '</div>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: method.type === 'Principal' ? 'Editar metodo' : 'Definir principal',
+              variant: 'primary',
+              icon: MTS.Icon.get(method.type === 'Principal' ? 'edit' : 'check-circle'),
+              onClick: function () {
+                if (method.type !== 'Principal') {
+                  paymentMethods.forEach(function (item) {
+                    item.type = item.id === method.id ? 'Principal' : 'Respaldo';
+                    item.typeVariant = item.id === method.id ? 'success' : 'primary';
+                  });
+                  renderMethods();
+                }
+                notify('success', 'Metodo actualizado', method.label + ' quedo listo para el flujo de cobro.');
+              }
+            },
+            {
+              label: 'Eliminar',
+              variant: 'ghost',
+              icon: MTS.Icon.get('trash'),
+              onClick: function () {
+                notify('warning', 'Accion simulada', 'Aqui normalmente pedirias confirmacion antes de remover un metodo.');
+              }
+            }
+          ]
+        });
+
+        new MTS.Badge('#payment-badge-' + method.id, {
+          label: method.type,
+          variant: method.typeVariant,
+          size: 'sm'
+        });
+      });
+
+      MTS.Icon.initAll();
+    }
+
+    renderMethods();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

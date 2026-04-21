@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Invoice History - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="invoice-history.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="invoice-history-page">
+    <header class="invoice-history-page__topbar mts-surface">
+      <div class="invoice-history-page__brand">
+        <div class="invoice-history-page__logo">M</div>
+        <div>
+          <div class="invoice-history-page__title">Invoice History</div>
+          <div class="invoice-history-page__subtitle">Facturas emitidas, estado de cobro y acciones para finance</div>
+        </div>
+      </div>
+      <div class="invoice-history-page__actions">
+        <div id="invoice-export-button"></div>
+      </div>
+    </header>
+
+    <main class="invoice-history-page__main mts-grid mts-grid--gap-md">
+      <section class="invoice-history-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="invoice-history-page__eyebrow">Finance operations</div>
+          <h1 class="invoice-history-page__hero-title">Revisa invoices emitidas, estados de pago y reenvios sin salir del flujo de billing.</h1>
+          <p class="invoice-history-page__hero-copy">
+            Esta vista prioriza consultas reales de equipos financieros: periodo, estado, monto,
+            descarga del PDF y reenvio del comprobante al contacto de facturacion.
+          </p>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4">
+        <div class="mts-form-card invoice-history-page__filters-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Filtros</h2>
+            <p class="mts-form-card__subtitle">Busca por numero, periodo o estado de cobro.</p>
+          </div>
+          <div id="invoice-feedback"></div>
+          <div class="invoice-history-page__filters">
+            <div id="invoice-search"></div>
+            <div id="invoice-status"></div>
+            <div id="invoice-period"></div>
+          </div>
+          <div id="invoice-clear"></div>
+        </div>
+      </aside>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="invoice-history-page__results-head">
+          <div>
+            <div class="invoice-history-page__results-label">Billing documents</div>
+            <h2 class="invoice-history-page__results-title">Historial de invoices</h2>
+          </div>
+          <div class="invoice-history-page__results-meta" id="invoice-results-meta">0 resultados</div>
+        </div>
+        <div class="mts-grid mts-grid--gap-md" id="invoice-results"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var invoiceState = { query: '', status: '', period: '' };
+    var invoices = [
+      { id: 'INV-2026-041', period: 'Abril 2026', amount: 'USD 1,240', status: 'paid', statusLabel: 'Pagada', due: '03 mayo 2026', contact: 'finance@matios.dev' },
+      { id: 'INV-2026-040', period: 'Marzo 2026', amount: 'USD 1,180', status: 'paid', statusLabel: 'Pagada', due: '03 abril 2026', contact: 'finance@matios.dev' },
+      { id: 'INV-2026-039', period: 'Febrero 2026', amount: 'USD 1,180', status: 'processing', statusLabel: 'Procesando', due: '03 marzo 2026', contact: 'finance@matios.dev' },
+      { id: 'INV-2026-038', period: 'Enero 2026', amount: 'USD 1,090', status: 'overdue', statusLabel: 'Vencida', due: '03 febrero 2026', contact: 'billing@matios.dev' }
+    ];
+
+    var statusSelect;
+    var periodSelect;
+
+    new MTS.Button('#invoice-export-button', {
+      label: 'Exportar ledger',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('download'),
+      onClick: function () {
+        notify('success', 'Export listo', 'Se simulo la exportacion del ledger de invoices del periodo actual.');
+      }
+    });
+
+    new MTS.Input('#invoice-search', {
+      type: 'text',
+      label: 'Buscar invoice',
+      placeholder: 'INV-2026-041 o Abril 2026',
+      iconLeft: MTS.Icon.get('search')
+    });
+
+    statusSelect = new MTS.Select('#invoice-status', {
+      label: 'Estado',
+      placeholder: 'Todos',
+      clearable: true,
+      options: [
+        { value: 'paid', label: 'Pagada' },
+        { value: 'processing', label: 'Procesando' },
+        { value: 'overdue', label: 'Vencida' }
+      ]
+    });
+
+    periodSelect = new MTS.Select('#invoice-period', {
+      label: 'Periodo',
+      placeholder: 'Todos',
+      clearable: true,
+      options: [
+        { value: 'Abril 2026', label: 'Abril 2026' },
+        { value: 'Marzo 2026', label: 'Marzo 2026' },
+        { value: 'Febrero 2026', label: 'Febrero 2026' },
+        { value: 'Enero 2026', label: 'Enero 2026' }
+      ]
+    });
+
+    new MTS.Button('#invoice-clear', {
+      label: 'Limpiar filtros',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        invoiceState.query = '';
+        invoiceState.status = '';
+        invoiceState.period = '';
+        setNativeValue('#invoice-search input', '');
+        statusSelect.clear();
+        periodSelect.clear();
+        renderInvoices();
+      }
+    });
+
+    statusSelect.on('change', function (e) {
+      invoiceState.status = e.detail.value || '';
+      renderInvoices();
+    });
+
+    periodSelect.on('change', function (e) {
+      invoiceState.period = e.detail.value || '';
+      renderInvoices();
+    });
+
+    var searchNode = document.querySelector('#invoice-search input');
+    if (searchNode) {
+      searchNode.addEventListener('input', function (e) {
+        invoiceState.query = e.target.value || '';
+        renderInvoices();
+      });
+    }
+
+    function statusVariant(status) {
+      if (status === 'paid') return 'success';
+      if (status === 'processing') return 'warning';
+      return 'danger';
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#invoice-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function setNativeValue(selector, value) {
+      var input = document.querySelector(selector);
+      if (!input) return;
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function renderInvoices() {
+      var host = document.getElementById('invoice-results');
+      var meta = document.getElementById('invoice-results-meta');
+      host.innerHTML = '';
+
+      var visible = invoices.filter(function (invoice) {
+        var haystack = [invoice.id, invoice.period, invoice.amount, invoice.contact].join(' ').toLowerCase();
+        var matchesQuery = !invoiceState.query || haystack.indexOf(invoiceState.query.toLowerCase()) !== -1;
+        var matchesStatus = !invoiceState.status || invoice.status === invoiceState.status;
+        var matchesPeriod = !invoiceState.period || invoice.period === invoiceState.period;
+        return matchesQuery && matchesStatus && matchesPeriod;
+      });
+
+      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+
+      if (!visible.length) {
+        var emptyWrap = document.createElement('div');
+        emptyWrap.className = 'mts-g-col-12';
+        host.appendChild(emptyWrap);
+        var emptyHost = document.createElement('div');
+        emptyWrap.appendChild(emptyHost);
+        new MTS.Card(emptyHost, {
+          title: 'Sin invoices',
+          subtitle: 'Ajusta filtros',
+          variant: 'outlined',
+          size: 'lg',
+          body: '<p class="invoice-history-page__empty">No hay invoices que coincidan con la consulta actual.</p>'
+        });
+        return;
+      }
+
+      visible.forEach(function (invoice, index) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12';
+        host.appendChild(wrap);
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: invoice.id,
+          subtitle: invoice.period,
+          variant: index === 0 ? 'elevated' : 'outlined',
+          size: 'lg',
+          body:
+            '<div class="invoice-history-page__invoice-body">' +
+              '<div class="invoice-history-page__invoice-meta">' +
+                '<span id="invoice-badge-' + invoice.id + '"></span>' +
+                '<span class="invoice-history-page__invoice-amount">' + invoice.amount + '</span>' +
+              '</div>' +
+              '<div class="invoice-history-page__invoice-grid">' +
+                '<div><span>Vencimiento</span><strong>' + invoice.due + '</strong></div>' +
+                '<div><span>Contacto</span><strong>' + invoice.contact + '</strong></div>' +
+              '</div>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: 'Descargar PDF',
+              variant: 'primary',
+              icon: MTS.Icon.get('download'),
+              onClick: function () {
+                notify('success', 'Descarga simulada', 'La invoice ' + invoice.id + ' quedo lista para descarga.');
+              }
+            },
+            {
+              label: 'Reenviar',
+              variant: 'ghost',
+              icon: MTS.Icon.get('mail'),
+              onClick: function () {
+                notify('info', 'Invoice reenviada', 'Se simulo el reenvio de ' + invoice.id + ' a ' + invoice.contact + '.');
+              }
+            }
+          ]
+        });
+
+        new MTS.Badge('#invoice-badge-' + invoice.id, {
+          label: invoice.statusLabel,
+          variant: statusVariant(invoice.status),
+          size: 'sm'
+        });
+      });
+
+      MTS.Icon.initAll();
+    }
+
+    renderInvoices();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

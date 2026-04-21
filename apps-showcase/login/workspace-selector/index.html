@@ -1,13 +1,33 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Seleccionar Workspace - Matios UI</title>
-  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (error) {}
+    })();
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
@@ -16,309 +36,238 @@
   <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
   <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
-  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
-  <link rel="stylesheet" href="../../../forms/matios-ui-formlayout/matios-ui-formlayout.css">
   <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
-  <link rel="stylesheet" href="../../../layout/matios-ui-grid/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
   <link rel="stylesheet" href="workspace-selector.css">
   <script src="../../../icons/matios-ui-icons.js"></script>
-  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
 </head>
 <body>
-  <div class="workspace-page">
-    <header class="workspace-page__topbar mts-surface">
-      <div class="workspace-page__brand">
-        <div class="workspace-page__logo">M</div>
-        <div>
-          <div class="workspace-page__title">Seleccion de Workspace</div>
-          <div class="workspace-page__subtitle">Showcase / Autenticacion</div>
-        </div>
-      </div>
-      <div class="workspace-page__topbar-actions">
-        <div id="workspace-back-btn"></div>
-      </div>
-    </header>
-
-    <main class="workspace-page__main mts-grid mts-grid--gap-md">
-      <section class="workspace-page__hero mts-g-col-12 mts-g-col-lg-7 mts-surface">
-        <p class="workspace-page__kicker">Pantalla activa</p>
-        <h1 class="workspace-page__hero-title">Elige el contexto correcto antes de entrar</h1>
-        <p class="workspace-page__hero-copy">
-          Esta vista simula el paso posterior a autenticacion cuando una misma identidad
-          participa en varias organizaciones o workspaces. La seleccion es visual y usa
-          solamente componentes Matios UI ya disponibles.
-        </p>
-
-        <div class="workspace-page__bullet-list">
-          <div class="workspace-page__bullet">
-            <i class="mts-icon mts-icon-briefcase"></i>
-            <span>Una misma cuenta puede tener multiples organizaciones y ambientes.</span>
-          </div>
-          <div class="workspace-page__bullet">
-            <i class="mts-icon mts-icon-shield-check"></i>
-            <span>La seleccion deja claro el rol, el acceso y el entorno que usaras.</span>
-          </div>
-          <div class="workspace-page__bullet">
-            <i class="mts-icon mts-icon-arrow-right"></i>
-            <span>El CTA principal avanza con el workspace elegido, sin depender de backend.</span>
-          </div>
+  <main class="mts-d-flex mts-items-center mts-justify-center mts-p-4 mts-min-vh-100">
+    <section class="mts-card mts-card--elevated mts-w-full mts-max-w-xl">
+      <div class="mts-card__body mts-p-6">
+        <div class="mts-text-center mts-mb-4">
+          <p class="mts-text-sm mts-text-muted mts-m-0">Matios UI</p>
+          <h1 class="mts-h1 mts-mt-2">Selecciona tu workspace</h1>
+          <p class="mts-text-md mts-text-muted mts-mt-2 mts-mb-0">Elige el contexto con el que quieres entrar.</p>
         </div>
 
-        <div class="workspace-page__hero-cards mts-grid mts-grid--gap-md">
-          <div class="mts-g-col-12 mts-g-col-md-6"><div id="workspace-card-guidance"></div></div>
-          <div class="mts-g-col-12 mts-g-col-md-6"><div id="workspace-card-context"></div></div>
-        </div>
-      </section>
-
-      <section class="workspace-page__selector-wrap mts-g-col-12 mts-g-col-lg-5">
-        <div class="mts-form-card">
-          <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Selecciona tu organizacion</h2>
-            <p class="mts-form-card__subtitle">
-              Revisa el nombre, rol y entorno. La primera opcion viene preseleccionada para
-              mantener un flujo rapido y claro.
-            </p>
-          </div>
-
+        <div class="mts-d-flex mts-flex-col mts-gap-4">
           <div id="workspace-info-alert"></div>
           <div id="workspace-feedback-alert"></div>
+          <div id="workspace-option-1"></div>
+          <div id="workspace-option-2"></div>
+          <div id="workspace-option-3"></div>
 
-          <div class="workspace-page__selection-list">
-            <div id="workspace-option-1"></div>
-            <div id="workspace-option-2"></div>
-            <div id="workspace-option-3"></div>
-          </div>
+          <section class="mts-surface mts-d-flex mts-flex-col mts-gap-2">
+            <p class="mts-text-sm mts-text-muted mts-mb-1 mts-mt-0">Workspace seleccionado</p>
+            <p class="mts-text-md mts-text-primary mts-m-0" id="workspace-current-name">Acme Chile / Operaciones</p>
+            <p class="mts-text-sm mts-text-muted mts-m-0" id="workspace-current-meta">Admin de plataforma • Produccion • 24 miembros</p>
+          </section>
 
-          <div class="workspace-page__current mts-surface">
-            <div class="workspace-page__current-icon"><i class="mts-icon mts-icon-check-circle"></i></div>
-            <div>
-              <p class="workspace-page__current-label">Workspace seleccionado</p>
-              <p class="workspace-page__current-name" id="workspace-current-name">Acme Chile / Operaciones</p>
-              <p class="workspace-page__current-meta" id="workspace-current-meta">Admin de plataforma ï¿½ Produccion ï¿½ 24 miembros</p>
-            </div>
-          </div>
-
-          <div class="mts-form-footer mts-form-footer--between workspace-page__footer">
-            <div id="workspace-login-btn"></div>
-            <div class="workspace-page__submit" id="workspace-submit"></div>
-          </div>
+          <div id="workspace-submit"></div>
         </div>
-      </section>
-    </main>
-  </div>
+      </div>
 
-<script>
-window.addEventListener('message',function(e){
-  if(!e.data) return;
-  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
-  if(e.data.type==='setAccent'){
-    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
-    else document.documentElement.removeAttribute('data-mts-accent');
-  }
-});
-function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
-function openScreen(path){
-  var params=location.search||'';
-  window.location.href=path+params;
-}
-</script>
-<script>
-var workspaces=[
-  {
-    id:'acme-ops',
-    org:'Acme Chile',
-    name:'Operaciones',
-    role:'Admin de plataforma',
-    env:'Produccion',
-    members:'24 miembros',
-    detail:'Ultimo acceso hace 18 min',
-    icon:'briefcase',
-    variant:'primary'
-  },
-  {
-    id:'acme-labs',
-    org:'Acme Labs',
-    name:'Sandbox de producto',
-    role:'Editor',
-    env:'Staging',
-    members:'11 miembros',
-    detail:'Feature flags y pruebas internas',
-    icon:'layers',
-    variant:'outlined'
-  },
-  {
-    id:'northwind',
-    org:'Northwind Group',
-    name:'Regional LATAM',
-    role:'Viewer',
-    env:'Produccion',
-    members:'39 miembros',
-    detail:'Tableros compartidos y lectura',
-    icon:'globe',
-    variant:'outlined'
-  }
-];
+      <div class="mts-card__footer mts-card__footer--between">
+        <div id="workspace-login-btn"></div>
+        <div id="workspace-back-btn"></div>
+      </div>
+    </section>
+  </main>
 
-var selectedWorkspaceId=workspaces[0].id;
-var cardsById={};
-
-new MTS.Button('#workspace-back-btn',{
-  label:'Volver al grupo',
-  variant:'ghost',
-  iconLeft:MTS.Icon.get('arrow-left'),
-  onClick:function(){goBack();}
-});
-
-new MTS.Card('#workspace-card-guidance',{
-  title:'Seleccion simple',
-  subtitle:'UI pensada para reducir dudas',
-  variant:'outlined',
-  body:'<p class="workspace-card-copy">Cada opcion concentra <strong>organizacion</strong>, <strong>workspace</strong>, <strong>rol</strong> y <strong>entorno</strong> en una sola pieza visual.</p>'
-});
-
-new MTS.Card('#workspace-card-context',{
-  title:'Paso posterior',
-  subtitle:'Continuidad del recorrido',
-  variant:'outlined',
-  body:'<p class="workspace-card-copy">Despues de elegir, el flujo natural continua hacia el <strong>dashboard</strong> o el modulo inicial del workspace seleccionado.</p>'
-});
-
-new MTS.Button('#workspace-login-btn',{
-  label:'Volver al login',
-  variant:'ghost',
-  iconLeft:MTS.Icon.get('arrow-left'),
-  onClick:function(){openScreen('../login/index.html');}
-});
-
-var submitButton=new MTS.Button('#workspace-submit',{
-  label:'Continuar con Operaciones',
-  variant:'primary',
-  block:true,
-  iconLeft:MTS.Icon.get('arrow-right'),
-  onClick:function(e,inst){submitSelection(inst);}
-});
-
-renderInfoAlert();
-renderWorkspaceCards();
-renderSelection();
-
-function renderInfoAlert(){
-  MTS.Alert.show('#workspace-info-alert',{
-    variant:'info',
-    title:'Simulacion visual',
-    message:'La pantalla no consulta backend. Solo representa el estado posterior a autenticacion para usuarios con multiples contextos.',
-    closable:false
-  });
-}
-
-function renderWorkspaceCards(){
-  workspaces.forEach(function(workspace,index){
-    cardsById[workspace.id]=new MTS.Card('#workspace-option-'+(index+1),{
-      title:workspace.org,
-      subtitle:workspace.name,
-      variant:workspace.variant,
-      clickable:true,
-      hoverable:true,
-      selected:workspace.id===selectedWorkspaceId,
-      body:getWorkspaceCardBody(workspace),
-      footer:[{
-        label:'Seleccionar',
-        variant:workspace.id===selectedWorkspaceId?'primary':'secondary',
-        icon:workspace.id===selectedWorkspaceId?MTS.Icon.get('check'):MTS.Icon.get('arrow-right'),
-        onClick:function(){selectWorkspace(workspace.id);}
-      }],
-      footerAlign:'end',
-      onClick:function(){selectWorkspace(workspace.id);}
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
     });
-  });
-}
 
-function getWorkspaceCardBody(workspace){
-  return ''
-    + '<div class="workspace-option-body">'
-    +   '<div class="workspace-option-body__row">'
-    +     '<span class="workspace-option-body__badge"><i class="mts-icon mts-icon-'+workspace.icon+'"></i>'+workspace.env+'</span>'
-    +     '<span class="workspace-option-body__badge workspace-option-body__badge--soft">'+workspace.members+'</span>'
-    +   '</div>'
-    +   '<div class="workspace-option-body__meta">'
-    +     '<div class="workspace-option-body__item"><i class="mts-icon mts-icon-user-check"></i><span>'+workspace.role+'</span></div>'
-    +     '<div class="workspace-option-body__item"><i class="mts-icon mts-icon-clock"></i><span>'+workspace.detail+'</span></div>'
-    +   '</div>'
-    + '</div>';
-}
-
-function selectWorkspace(workspaceId){
-  if(selectedWorkspaceId===workspaceId) return;
-  selectedWorkspaceId=workspaceId;
-  clearFeedbackAlert();
-  renderSelection();
-}
-
-function renderSelection(){
-  workspaces.forEach(function(workspace,index){
-    var isSelected=workspace.id===selectedWorkspaceId;
-    var host=document.querySelector('#workspace-option-'+(index+1));
-    if(cardsById[workspace.id]){
-      cardsById[workspace.id].setSelected(isSelected);
-      cardsById[workspace.id].setBody(getWorkspaceCardBody(workspace));
+    function goBack() {
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'closeApp' }, '*');
+          return;
+        }
+      } catch (error) {}
+      window.history.back();
     }
-    var footerButton=host.querySelector('.mts-card__footer .mts-btn');
-    if(footerButton){
-      footerButton.classList.remove('mts-btn--primary','mts-btn--secondary');
-      footerButton.classList.add(isSelected?'mts-btn--primary':'mts-btn--secondary');
-      var labelEl=footerButton.querySelector('span:last-child');
-      if(labelEl) labelEl.textContent=isSelected?'Seleccionado':'Seleccionar';
-      var iconEl=footerButton.querySelector('.mts-btn__icon');
-      if(iconEl) iconEl.innerHTML=isSelected?MTS.Icon.get('check'):MTS.Icon.get('arrow-right');
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
     }
-  });
 
-  var workspace=getSelectedWorkspace();
-  document.getElementById('workspace-current-name').textContent=workspace.org+' / '+workspace.name;
-  document.getElementById('workspace-current-meta').textContent=workspace.role+' ï¿½ '+workspace.env+' ï¿½ '+workspace.members;
-  submitButton.setLabel('Continuar con '+workspace.name);
-}
+    var workspaces = [
+      {
+        id: 'acme-ops',
+        org: 'Acme Chile',
+        name: 'Operaciones',
+        role: 'Admin de plataforma',
+        env: 'Produccion',
+        members: '24 miembros'
+      },
+      {
+        id: 'acme-labs',
+        org: 'Acme Labs',
+        name: 'Sandbox de producto',
+        role: 'Editor',
+        env: 'Staging',
+        members: '11 miembros'
+      },
+      {
+        id: 'northwind',
+        org: 'Northwind Group',
+        name: 'Regional LATAM',
+        role: 'Viewer',
+        env: 'Produccion',
+        members: '39 miembros'
+      }
+    ];
 
-function submitSelection(inst){
-  var workspace=getSelectedWorkspace();
-  clearFeedbackAlert();
-  inst.setLoading(true);
-  inst.setLabel('Abriendo '+workspace.name+'...');
+    var selectedWorkspaceId = workspaces[0].id;
+    var cardsById = {};
 
-  setTimeout(function(){
-    inst.setLoading(false);
-    inst.setLabel('Continuar con '+workspace.name);
-    MTS.Alert.show('#workspace-feedback-alert',{
-      variant:'success',
-      title:'Workspace listo',
-      message:'Simulacion UI: se abriria <strong>'+escapeHtml(workspace.org+' / '+workspace.name)+'</strong> con permisos de <strong>'+escapeHtml(workspace.role)+'</strong>.',
-      closable:true
+    new MTS.Button('#workspace-login-btn', {
+      label: 'Volver al login',
+      variant: 'link',
+      onClick: function () {
+        openScreen('../login/index.html');
+      }
     });
-  },900);
-}
 
-function getSelectedWorkspace(){
-  for(var i=0;i<workspaces.length;i++){
-    if(workspaces[i].id===selectedWorkspaceId) return workspaces[i];
-  }
-  return workspaces[0];
-}
+    new MTS.Button('#workspace-back-btn', {
+      label: 'Volver al grupo',
+      variant: 'link',
+      onClick: function () {
+        goBack();
+      }
+    });
 
-function clearFeedbackAlert(){
-  document.getElementById('workspace-feedback-alert').innerHTML='';
-}
+    var submitButton = new MTS.Button('#workspace-submit', {
+      label: 'Continuar con Operaciones',
+      variant: 'primary',
+      block: true,
+      onClick: function (event, instance) {
+        submitSelection(instance);
+      }
+    });
 
-function escapeHtml(str){
-  return String(str)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;');
-}
-</script>
+    MTS.Alert.show('#workspace-info-alert', {
+      variant: 'info',
+      title: 'Contextos disponibles',
+      message: 'Esta pantalla representa el paso posterior al login cuando una cuenta participa en varios workspaces.',
+      closable: false
+    });
+
+    renderWorkspaceCards();
+    renderSelection();
+
+    function renderWorkspaceCards() {
+      workspaces.forEach(function (workspace, index) {
+        cardsById[workspace.id] = new MTS.Card('#workspace-option-' + (index + 1), {
+          title: workspace.org,
+          subtitle: workspace.name,
+          variant: 'outlined',
+          clickable: true,
+          hoverable: true,
+          selected: workspace.id === selectedWorkspaceId,
+          body:
+            '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
+              '<p class="mts-text-sm mts-text-muted mts-m-0">' + workspace.role + '</p>' +
+              '<p class="mts-text-sm mts-text-muted mts-m-0">' + workspace.env + ' • ' + workspace.members + '</p>' +
+            '</div>',
+          footer: [{
+            label: workspace.id === selectedWorkspaceId ? 'Seleccionado' : 'Seleccionar',
+            variant: workspace.id === selectedWorkspaceId ? 'primary' : 'secondary',
+            icon: workspace.id === selectedWorkspaceId ? MTS.Icon.get('check') : MTS.Icon.get('arrow-right'),
+            onClick: function () {
+              selectWorkspace(workspace.id);
+            }
+          }],
+          footerAlign: 'end',
+          onClick: function () {
+            selectWorkspace(workspace.id);
+          }
+        });
+      });
+    }
+
+    function selectWorkspace(workspaceId) {
+      if (selectedWorkspaceId === workspaceId) return;
+      selectedWorkspaceId = workspaceId;
+      clearFeedbackAlert();
+      renderSelection();
+    }
+
+    function renderSelection() {
+      workspaces.forEach(function (workspace, index) {
+        var isSelected = workspace.id === selectedWorkspaceId;
+        var host = document.querySelector('#workspace-option-' + (index + 1));
+        if (cardsById[workspace.id]) cardsById[workspace.id].setSelected(isSelected);
+
+        var footerButton = host.querySelector('.mts-card__footer .mts-btn');
+        if (footerButton) {
+          footerButton.classList.remove('mts-btn--primary', 'mts-btn--secondary');
+          footerButton.classList.add(isSelected ? 'mts-btn--primary' : 'mts-btn--secondary');
+          var labelEl = footerButton.querySelector('.mts-btn__label');
+          if (labelEl) labelEl.textContent = isSelected ? 'Seleccionado' : 'Seleccionar';
+          var iconLeftEl = footerButton.querySelector('.mts-btn__icon-left');
+          if (iconLeftEl) iconLeftEl.innerHTML = isSelected ? MTS.Icon.get('check') : MTS.Icon.get('arrow-right');
+        }
+      });
+
+      var workspace = getSelectedWorkspace();
+      document.getElementById('workspace-current-name').textContent = workspace.org + ' / ' + workspace.name;
+      document.getElementById('workspace-current-meta').textContent = workspace.role + ' • ' + workspace.env + ' • ' + workspace.members;
+      submitButton.setLabel('Continuar con ' + workspace.name);
+    }
+
+    function submitSelection(button) {
+      var workspace = getSelectedWorkspace();
+      clearFeedbackAlert();
+      button.setLoading(true);
+      button.setLabel('Abriendo ' + workspace.name + '...');
+
+      setTimeout(function () {
+        button.setLoading(false);
+        button.setLabel('Continuar con ' + workspace.name);
+        MTS.Alert.show('#workspace-feedback-alert', {
+          variant: 'success',
+          title: 'Workspace listo',
+          message: 'El acceso continuaría con <strong>' + escapeHtml(workspace.org + ' / ' + workspace.name) + '</strong>.',
+          closable: true
+        });
+      }, 800);
+    }
+
+    function getSelectedWorkspace() {
+      for (var i = 0; i < workspaces.length; i++) {
+        if (workspaces[i].id === selectedWorkspaceId) return workspaces[i];
+      }
+      return workspaces[0];
+    }
+
+    function clearFeedbackAlert() {
+      document.getElementById('workspace-feedback-alert').innerHTML = '';
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    MTS.Icon.initAll();
+  </script>
 </body>
 </html>
-
-

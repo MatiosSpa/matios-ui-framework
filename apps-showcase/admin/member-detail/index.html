@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Member Detail - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-avatar/matios-ui-avatar.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="member-detail.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../display/matios-ui-avatar/matios-ui-avatar.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="member-detail-page">
+    <header class="member-detail-page__topbar mts-surface">
+      <div class="member-detail-page__brand">
+        <div class="member-detail-page__logo">M</div>
+        <div>
+          <div class="member-detail-page__title">Member Detail</div>
+          <div class="member-detail-page__subtitle">Acceso efectivo, sesiones y contexto operativo del miembro</div>
+        </div>
+      </div>
+      <div class="member-detail-page__actions">
+        <div id="member-detail-back"></div>
+        <div id="member-detail-edit"></div>
+      </div>
+    </header>
+
+    <main class="member-detail-page__main mts-grid mts-grid--gap-md">
+      <section class="member-detail-page__hero mts-surface mts-g-col-12">
+        <div class="member-detail-page__hero-main">
+          <div id="member-detail-avatar"></div>
+          <div>
+            <div class="member-detail-page__eyebrow">Admin member profile</div>
+            <h1 class="member-detail-page__hero-title">Camila Soto</h1>
+            <p class="member-detail-page__hero-copy">Owner del workspace con foco en operaciones, billing y coordinacion de acceso para equipos internos.</p>
+            <div class="member-detail-page__badges">
+              <span id="member-badge-role"></span>
+              <span id="member-badge-status"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8 member-detail-page__stack">
+        <div id="member-detail-summary-card"></div>
+        <div id="member-detail-access-card"></div>
+        <div id="member-detail-activity-card"></div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4 member-detail-page__sidebar">
+        <div id="member-detail-sessions-card"></div>
+        <div id="member-detail-teams-card"></div>
+        <div id="member-detail-feedback"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+  </script>
+  <script>
+    new MTS.Button('#member-detail-back', {
+      label: 'Volver a members',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('arrow-left'),
+      onClick: function () { openScreen('../members-list/index.html'); }
+    });
+
+    new MTS.Button('#member-detail-edit', {
+      label: 'Editar acceso',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('shield'),
+      onClick: function () {
+        notify('success', 'Acceso revisado', 'La ficha deja planteado el punto de partida para editar rol, estado o perfiles.');
+      }
+    });
+
+    new MTS.Avatar('#member-detail-avatar', {
+      name: 'Camila Soto',
+      size: 'xl',
+      status: 'online'
+    });
+
+    new MTS.Badge('#member-badge-role', {
+      label: 'Owner',
+      variant: 'primary',
+      size: 'sm'
+    });
+
+    new MTS.Badge('#member-badge-status', {
+      label: 'Activo',
+      variant: 'success',
+      size: 'sm'
+    });
+
+    new MTS.Card('#member-detail-summary-card', {
+      title: 'Resumen del miembro',
+      subtitle: 'Contexto base',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="member-detail-page__info-grid">' +
+          infoCell('Correo', 'camila@matios.dev') +
+          infoCell('Cargo', 'Operations Lead') +
+          infoCell('Workspace', 'Matios Studio') +
+          infoCell('Ultimo acceso', 'Hoy, 09:14') +
+          infoCell('Autenticacion', 'SSO + segundo factor') +
+          infoCell('Invitada por', 'Founder account') +
+        '</div>'
+    });
+
+    new MTS.Card('#member-detail-access-card', {
+      title: 'Acceso efectivo',
+      subtitle: 'Permisos y ownership',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="member-detail-page__access">' +
+          '<p>Camila mantiene ownership del workspace, billing, seguridad y configuracion compartida. El acceso fino a modulos operativos se reparte por equipos y perfiles.</p>' +
+          '<div class="member-detail-page__pill-list">' +
+            pill('Workspace owner') +
+            pill('Billing admin') +
+            pill('Security policies') +
+            pill('Support visibility') +
+            pill('Notifications config') +
+          '</div>' +
+        '</div>',
+      footerAlign: 'between',
+      footer: [
+        {
+          label: 'Forzar logout',
+          variant: 'secondary',
+          icon: MTS.Icon.get('refresh-cw'),
+          onClick: function () {
+            notify('warning', 'Sesion forzada', 'La accion simula un cierre remoto de sesiones activas.');
+          }
+        },
+        {
+          label: 'Pausar acceso',
+          variant: 'ghost',
+          icon: MTS.Icon.get('pause'),
+          onClick: function () {
+            notify('info', 'Accion simulada', 'Aqui entraria una confirmacion antes de pausar el acceso.');
+          }
+        }
+      ]
+    });
+
+    new MTS.Card('#member-detail-activity-card', {
+      title: 'Actividad administrativa',
+      subtitle: 'Ultimos eventos',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="member-detail-page__timeline">' +
+          timelineRow('Hoy, 09:14', 'Ingreso validado por SSO', 'Accedio desde MacBook Pro con segundo factor correcto.') +
+          timelineRow('Ayer, 17:42', 'Cambio de metodo de pago', 'Reviso el metodo principal de billing y dejo la tarjeta verificada.') +
+          timelineRow('18 abril', 'Invitacion aprobada', 'Autorizo el ingreso de dos perfiles para Finance.') +
+        '</div>'
+    });
+
+    new MTS.Card('#member-detail-sessions-card', {
+      title: 'Sesiones recientes',
+      subtitle: 'Dispositivos',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="member-detail-page__session-list">' +
+          sessionRow('MacBook Pro', 'Chrome · Santiago', 'Activa ahora') +
+          sessionRow('iPhone 15', 'Safari · Santiago', 'Hace 2 h') +
+          sessionRow('Windows workstation', 'Edge · Remote office', 'Hace 3 dias') +
+        '</div>'
+    });
+
+    new MTS.Card('#member-detail-teams-card', {
+      title: 'Equipos y perfiles',
+      subtitle: 'Asignacion',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="member-detail-page__team-stack">' +
+          teamRow('Operations', 'Owner operativo del flujo base') +
+          teamRow('Billing', 'Aprobacion y seguimiento de invoices') +
+          teamRow('Security council', 'Revision de politicas y sessions') +
+        '</div>'
+    });
+
+    function infoCell(label, value) {
+      return '<div class="member-detail-page__info-cell"><span>' + label + '</span><strong>' + value + '</strong></div>';
+    }
+
+    function pill(text) {
+      return '<span class="member-detail-page__pill">' + text + '</span>';
+    }
+
+    function timelineRow(date, title, body) {
+      return '<article class="member-detail-page__timeline-row"><span>' + date + '</span><div><strong>' + title + '</strong><p>' + body + '</p></div></article>';
+    }
+
+    function sessionRow(device, meta, status) {
+      return '<article class="member-detail-page__session-row"><div><strong>' + device + '</strong><p>' + meta + '</p></div><span>' + status + '</span></article>';
+    }
+
+    function teamRow(title, body) {
+      return '<article class="member-detail-page__team-row"><strong>' + title + '</strong><p>' + body + '</p></article>';
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#member-detail-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

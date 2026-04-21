@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Detalle de usuario - Matios UI</title>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (error) {}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-avatar/matios-ui-avatar.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-modal/matios-ui-modal.css">
+  <link rel="stylesheet" href="user-detail.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../display/matios-ui-avatar/matios-ui-avatar.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../overlays/matios-ui-modal/matios-ui-modal.js"></script>
+</head>
+<body>
+  <main class="mts-p-4">
+    <div id="user-detail-panel"></div>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    new MTS.Card('#user-detail-panel', {
+      title: 'Detalle de usuario',
+      subtitle: 'Ficha administrativa de cuenta interna',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+          '<div id="user-detail-alert"></div>' +
+          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-4">' +
+            '<div class="mts-d-flex mts-items-center mts-gap-3">' +
+              '<div id="user-detail-avatar"></div>' +
+              '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
+                '<p class="mts-text-sm mts-text-muted mts-m-0">Usuarios</p>' +
+                '<div class="mts-d-flex mts-items-center mts-gap-2 mts-flex-wrap">' +
+                  '<h1 class="mts-h1 mts-m-0">Camila Soto</h1>' +
+                  '<span id="user-detail-status-badge"></span>' +
+                  '<span id="user-detail-area-badge"></span>' +
+                '</div>' +
+                '<p class="mts-text-md mts-text-muted mts-m-0">Cuenta administrativa con foco en operaciones, documentos y trazabilidad interna.</p>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+            '<div>' +
+              '<strong class="mts-text-md mts-text-primary">Datos personales</strong>' +
+              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Identidad base del usuario dentro del sistema.</p>' +
+            '</div>' +
+            '<div class="mts-grid mts-grid--gap-md">' +
+              infoCell('Nombre', 'Camila') +
+              infoCell('Apellido', 'Soto') +
+              infoCell('Correo', 'camila.soto@matios.dev') +
+              infoCell('Username', 'csoto') +
+              infoCell('Telefono', '+56 9 8765 4321') +
+              infoCell('Codigo interno', 'USR-1024') +
+            '</div>' +
+          '</section>' +
+          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+            '<div>' +
+              '<strong class="mts-text-md mts-text-primary">Organizacion y acceso</strong>' +
+              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Contexto interno, rol asignado y estado operativo actual.</p>' +
+            '</div>' +
+            '<div class="mts-grid mts-grid--gap-md">' +
+              infoCell('Area', 'Operaciones') +
+              infoCell('Cargo', 'Operations Lead') +
+              infoCell('Rol', 'Supervisor Operacional') +
+              infoCell('Supervisor', 'Founder account') +
+              infoCell('Empresa', 'Matios Studio') +
+              infoCell('Estado actual', 'Activo') +
+              infoCell('Fecha de alta', '12 marzo 2026') +
+              infoCell('Ultimo acceso', 'Hoy, 09:14') +
+            '</div>' +
+          '</section>' +
+          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+            '<div>' +
+              '<strong class="mts-text-md mts-text-primary">Rol y perfiles asociados</strong>' +
+              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Los perfiles visibles se entienden como derivados del rol actual.</p>' +
+            '</div>' +
+            '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
+              '<div class="mts-d-flex mts-flex-col mts-gap-1">' +
+                '<span class="mts-text-sm mts-text-muted">Rol actual</span>' +
+                '<strong class="mts-text-md mts-text-primary">Supervisor Operacional</strong>' +
+              '</div>' +
+              '<div class="mts-d-flex mts-gap-2 mts-flex-wrap">' +
+                MTS.Badge.html('Workspace base', 'primary', 'sm') +
+                MTS.Badge.html('Operaciones', 'accent', 'sm') +
+                MTS.Badge.html('Documentos', 'info', 'sm') +
+              '</div>' +
+            '</div>' +
+          '</section>' +
+          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+            '<div>' +
+              '<strong class="mts-text-md mts-text-primary">Seguridad y actividad</strong>' +
+              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Control de acceso, sesiones recientes y eventos relevantes.</p>' +
+            '</div>' +
+            '<div class="mts-grid mts-grid--gap-md">' +
+              '<div class="mts-g-col-12 mts-g-col-xl-4">' +
+                '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
+                  securityRow('MFA', 'Activo') +
+                  securityRow('Cambio obligatorio de clave', 'No') +
+                  securityRow('Sesion actual', 'Chrome · Santiago') +
+                '</div>' +
+              '</div>' +
+              '<div class="mts-g-col-12 mts-g-col-xl-8">' +
+                '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+                  timelineRow('Hoy, 09:14', 'Ingreso exitoso por OTP', 'Valido usuario, codigo y workspace principal.') +
+                  timelineRow('Ayer, 18:41', 'Actualizacion de perfiles', 'Se agrego el perfil de documentos para aprobaciones internas.') +
+                  timelineRow('18 abril, 16:22', 'Cambio de datos de contacto', 'Se normalizo telefono y supervisor del registro.') +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+          '</section>' +
+        '</div>',
+      footerAlign: 'between',
+      footer: [
+        {
+          label: 'Volver',
+          variant: 'ghost',
+          icon: MTS.Icon.get('arrow-left'),
+          onClick: function () {
+            openScreen('../user-list/index.html');
+          }
+        },
+        {
+          label: 'Editar',
+          variant: 'secondary',
+          icon: MTS.Icon.get('edit'),
+          onClick: function () {
+            openScreen('../user-edit/index.html');
+          }
+        },
+        {
+          label: 'Forzar cierre de sesion',
+          variant: 'secondary',
+          icon: MTS.Icon.get('refresh-cw'),
+          onClick: function () {
+            showAlert('warning', 'Sesion invalidada', 'Se simularia el cierre remoto de las sesiones activas del usuario.');
+          }
+        },
+        {
+          label: 'Bloquear usuario',
+          variant: 'ghost',
+          icon: MTS.Icon.get('slash'),
+          onClick: function () {
+            showAlert('warning', 'Usuario bloqueado', 'La accion se simularia sobre Camila Soto y quedaria registrada en auditoria.');
+          }
+        },
+        {
+          label: 'Cambiar clave',
+          variant: 'primary',
+          icon: MTS.Icon.get('key'),
+          onClick: function () {
+            openPasswordModal('admin');
+          }
+        }
+      ]
+    });
+
+    new MTS.Avatar('#user-detail-avatar', {
+      name: 'Camila Soto',
+      size: 'lg',
+      status: 'online'
+    });
+
+    new MTS.Badge('#user-detail-status-badge', {
+      label: 'Activo',
+      variant: 'success',
+      size: 'sm'
+    });
+
+    new MTS.Badge('#user-detail-area-badge', {
+      label: 'Operaciones',
+      variant: 'accent',
+      size: 'sm'
+    });
+
+    function showAlert(variant, title, message) {
+      document.getElementById('user-detail-alert').innerHTML = '';
+      MTS.Alert.show('#user-detail-alert', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function openPasswordModal(initialMode) {
+      var body = document.createElement('div');
+      body.className = 'mts-d-flex mts-flex-col mts-gap-4';
+      body.innerHTML =
+        '<div id="change-password-alert"></div>' +
+        '<div id="change-password-mode"></div>' +
+        '<div id="change-password-current"></div>' +
+        '<div id="change-password-next"></div>' +
+        '<div id="change-password-confirm"></div>' +
+        '<div id="change-password-force"></div>';
+
+      var modeSelect;
+      var currentPasswordInput;
+      var nextPasswordInput;
+      var confirmPasswordInput;
+      var forceChangeCheckbox;
+
+      var modal = new MTS.Modal({
+        title: 'Cambiar clave',
+        body: body,
+        size: 'md',
+        scrollable: true,
+        buttons: [
+          { label: 'Cancelar', variant: 'ghost', close: true },
+          {
+            label: 'Guardar clave',
+            variant: 'primary',
+            onClick: function () {
+              submitPasswordChange();
+            }
+          }
+        ],
+        onShown: function () {
+          modeSelect = new MTS.Select('#change-password-mode', {
+            label: 'Contexto',
+            value: initialMode,
+            options: [
+              { value: 'admin', label: 'Administrador cambia clave' },
+              { value: 'user', label: 'Usuario cambia su propia clave' }
+            ],
+            onChange: function () {
+              syncPasswordMode();
+            }
+          });
+
+          currentPasswordInput = new MTS.Input('#change-password-current', {
+            type: 'password',
+            label: 'Clave actual',
+            placeholder: 'Ingresa la clave actual',
+            iconLeft: MTS.Icon.get('lock'),
+            showPassword: true
+          });
+
+          nextPasswordInput = new MTS.Input('#change-password-next', {
+            type: 'password',
+            label: 'Nueva clave',
+            placeholder: 'Ingresa la nueva clave',
+            iconLeft: MTS.Icon.get('lock'),
+            showPassword: true
+          });
+
+          confirmPasswordInput = new MTS.Input('#change-password-confirm', {
+            type: 'password',
+            label: 'Confirmar nueva clave',
+            placeholder: 'Repite la nueva clave',
+            iconLeft: MTS.Icon.get('lock'),
+            showPassword: true
+          });
+
+          forceChangeCheckbox = new MTS.Checkbox('#change-password-force', {
+            label: 'Forzar cambio de clave al proximo inicio'
+          });
+
+          syncPasswordMode();
+        },
+        onHidden: function () {
+          modal.destroy();
+        }
+      });
+
+      modal.show();
+
+      function syncPasswordMode() {
+        var currentField = document.getElementById('change-password-current');
+        var forceField = document.getElementById('change-password-force');
+        var isUserMode = modeSelect.getValue() === 'user';
+
+        currentField.classList.toggle('mts-d-none', !isUserMode);
+        forceField.classList.toggle('mts-d-none', isUserMode);
+        clearPasswordErrors();
+      }
+
+      function clearPasswordErrors() {
+        if (currentPasswordInput) currentPasswordInput.clearError();
+        if (nextPasswordInput) nextPasswordInput.clearError();
+        if (confirmPasswordInput) confirmPasswordInput.clearError();
+      }
+
+      function submitPasswordChange() {
+        var mode = modeSelect.getValue();
+        var currentPassword = currentPasswordInput.getValue().trim();
+        var nextPassword = nextPasswordInput.getValue().trim();
+        var confirmPassword = confirmPasswordInput.getValue().trim();
+
+        clearPasswordErrors();
+
+        if (mode === 'user' && !currentPassword) {
+          currentPasswordInput.setError('Ingresa la clave actual');
+          return;
+        }
+
+        if (!nextPassword) {
+          nextPasswordInput.setError('Ingresa la nueva clave');
+          return;
+        }
+
+        if (nextPassword.length < 8) {
+          nextPasswordInput.setError('La clave debe tener al menos 8 caracteres');
+          return;
+        }
+
+        if (!confirmPassword) {
+          confirmPasswordInput.setError('Confirma la nueva clave');
+          return;
+        }
+
+        if (nextPassword !== confirmPassword) {
+          confirmPasswordInput.setError('Las claves no coinciden');
+          return;
+        }
+
+        modal.hide();
+        showAlert(
+          'success',
+          'Clave actualizada',
+          mode === 'user'
+            ? 'Se simularia el cambio de clave validando la clave actual del usuario.'
+            : 'Se simularia el cambio de clave administrativo' + (forceChangeCheckbox.isChecked() ? ' forzando renovacion en el proximo acceso.' : '.')
+        );
+      }
+    }
+
+    function infoCell(label, value) {
+      return '' +
+        '<div class="mts-g-col-12 mts-g-col-md-6">' +
+          '<div class="mts-d-flex mts-flex-col mts-gap-1">' +
+            '<span class="mts-text-sm mts-text-muted">' + escapeHtml(label) + '</span>' +
+            '<strong class="mts-text-sm mts-text-primary">' + escapeHtml(value) + '</strong>' +
+          '</div>' +
+        '</div>';
+    }
+
+    function timelineRow(date, title, copy) {
+      return '' +
+        '<div class="mts-surface mts-d-flex mts-flex-col mts-gap-1">' +
+          '<span class="mts-text-sm mts-text-muted">' + escapeHtml(date) + '</span>' +
+          '<strong class="mts-text-md mts-text-primary">' + escapeHtml(title) + '</strong>' +
+          '<span class="mts-text-sm mts-text-muted">' + escapeHtml(copy) + '</span>' +
+        '</div>';
+    }
+
+    function securityRow(label, value) {
+      return '' +
+        '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3">' +
+          '<span class="mts-text-sm mts-text-muted">' + escapeHtml(label) + '</span>' +
+          '<strong class="mts-text-sm mts-text-primary">' + escapeHtml(value) + '</strong>' +
+        '</div>';
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

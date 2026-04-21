@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Editar perfil - Matios UI</title>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (error) {}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="profile-edit.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <main class="mts-p-4">
+    <div id="profile-edit-panel"></div>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    var MODULE_PERMISSIONS = {
+      users: [
+        { value: 'users.view', label: 'Ver listado de usuarios' },
+        { value: 'users.create', label: 'Crear usuarios' },
+        { value: 'users.edit', label: 'Editar usuarios' },
+        { value: 'users.block', label: 'Bloquear o desbloquear usuarios' },
+        { value: 'users.password', label: 'Cambiar claves de usuarios' }
+      ],
+      documents: [
+        { value: 'documents.view', label: 'Ver documentos' },
+        { value: 'documents.upload', label: 'Subir documentos' },
+        { value: 'documents.edit', label: 'Editar metadata de documentos' },
+        { value: 'documents.download', label: 'Descargar documentos' },
+        { value: 'documents.share', label: 'Compartir documentos' }
+      ],
+      billing: [
+        { value: 'billing.plan', label: 'Ver plan actual' },
+        { value: 'billing.invoices', label: 'Ver historial de facturas' },
+        { value: 'billing.methods', label: 'Gestionar medios de pago' },
+        { value: 'billing.usage', label: 'Revisar consumo y limites' }
+      ],
+      support: [
+        { value: 'support.inbox', label: 'Ver bandeja de tickets' },
+        { value: 'support.assign', label: 'Asignar tickets' },
+        { value: 'support.resolve', label: 'Resolver tickets' },
+        { value: 'support.export', label: 'Exportar casos' }
+      ]
+    };
+
+    var permissionGroup = null;
+
+    new MTS.Card('#profile-edit-panel', {
+      title: 'Editar perfil',
+      subtitle: 'Ajuste de perfil por modulo',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+          '<div id="profile-edit-alert"></div>' +
+          '<p class="mts-text-md mts-text-muted mts-m-0">La edicion conserva el mismo formato: nombre, descripcion, modulo y permisos detallados del modulo seleccionado.</p>' +
+          '<div class="mts-grid mts-grid--gap-md">' +
+            '<div class="mts-g-col-12 mts-g-col-md-6"><div id="profile-edit-name"></div></div>' +
+            '<div class="mts-g-col-12 mts-g-col-md-6"><div id="profile-edit-module"></div></div>' +
+            '<div class="mts-g-col-12"><div id="profile-edit-description"></div></div>' +
+          '</div>' +
+          '<div class="mts-surface mts-p-4">' +
+            '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+              '<div>' +
+                '<h3 class="mts-h4 mts-m-0">Permisos del modulo</h3>' +
+                '<p id="profile-edit-permissions-copy" class="mts-text-sm mts-text-muted mts-mt-2 mts-mb-0">Permisos cargados segun el modulo del perfil.</p>' +
+              '</div>' +
+              '<div id="profile-edit-permissions"></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>',
+      footerAlign: 'between',
+      footer: [
+        {
+          label: 'Volver a perfiles',
+          variant: 'ghost',
+          icon: MTS.Icon.get('arrow-left'),
+          onClick: function () {
+            openScreen('../profile-list/index.html');
+          }
+        },
+        {
+          label: 'Guardar cambios',
+          variant: 'primary',
+          icon: MTS.Icon.get('save'),
+          onClick: function () {
+            submitEdit();
+          }
+        }
+      ]
+    });
+
+    var nameInput = new MTS.Input('#profile-edit-name', {
+      type: 'text',
+      label: 'Nombre',
+      value: 'Operaciones documental',
+      iconLeft: MTS.Icon.get('layers')
+    });
+
+    var moduleSelect = new MTS.Select('#profile-edit-module', {
+      label: 'Modulo',
+      value: 'users',
+      options: [
+        { value: 'users', label: 'Usuarios' },
+        { value: 'documents', label: 'Documentos' },
+        { value: 'billing', label: 'Billing' },
+        { value: 'support', label: 'Soporte' }
+      ],
+      onChange: function (event) {
+        renderPermissionGroup(event.detail.value, []);
+      }
+    });
+
+    var descriptionInput = new MTS.Input('#profile-edit-description', {
+      type: 'text',
+      label: 'Descripcion',
+      value: 'Gestiona usuarios, documentos y trazabilidad para operaciones internas.',
+      iconLeft: MTS.Icon.get('file-text')
+    });
+
+    function clearAlerts() {
+      document.getElementById('profile-edit-alert').innerHTML = '';
+    }
+
+    function showAlert(variant, title, message) {
+      clearAlerts();
+      MTS.Alert.show('#profile-edit-alert', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function clearFieldErrors() {
+      nameInput.clearError();
+      descriptionInput.clearError();
+    }
+
+    function renderPermissionGroup(moduleValue, selectedValues) {
+      var host = document.getElementById('profile-edit-permissions');
+      var copy = document.getElementById('profile-edit-permissions-copy');
+      var options = MODULE_PERMISSIONS[moduleValue] || [];
+      host.innerHTML = '';
+      permissionGroup = null;
+
+      if (!moduleValue) {
+        copy.textContent = 'Selecciona un modulo para cargar sus permisos.';
+        return;
+      }
+
+      copy.textContent = 'Permisos disponibles para el modulo ' + getModuleLabel(moduleValue) + '.';
+      permissionGroup = new MTS.CheckboxGroup('#profile-edit-permissions', {
+        options: options,
+        value: selectedValues || []
+      });
+    }
+
+    function submitEdit() {
+      var name = nameInput.getValue().trim();
+      var description = descriptionInput.getValue().trim();
+      var moduleValue = moduleSelect.getValue();
+      var permissions = permissionGroup ? permissionGroup.getValue() : [];
+
+      clearFieldErrors();
+      clearAlerts();
+
+      if (!name) {
+        nameInput.setError('Ingresa el nombre del perfil');
+        return;
+      }
+
+      if (!description) {
+        descriptionInput.setError('Ingresa la descripcion del perfil');
+        return;
+      }
+
+      if (!moduleValue) {
+        showAlert('warning', 'Falta el modulo', 'Selecciona el modulo del perfil antes de guardar.');
+        return;
+      }
+
+      if (!permissions.length) {
+        showAlert('warning', 'Faltan permisos', 'Selecciona al menos un permiso del modulo antes de guardar.');
+        return;
+      }
+
+      showAlert(
+        'success',
+        'Perfil actualizado',
+        'Se guardarian cambios sobre <strong>' + escapeHtml(name) + '</strong> en el modulo <strong>' + escapeHtml(getModuleLabel(moduleValue)) + '</strong> con <strong>' + permissions.length + '</strong> permisos activos.'
+      );
+    }
+
+    function getModuleLabel(value) {
+      var options = moduleSelect.options || [];
+      for (var i = 0; i < options.length; i++) {
+        if (options[i].value === value) return options[i].label;
+      }
+      return value || '-';
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    renderPermissionGroup('users', ['users.view', 'users.edit', 'users.block']);
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

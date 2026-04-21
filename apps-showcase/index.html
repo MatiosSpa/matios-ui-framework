@@ -78,10 +78,9 @@
         <p class="showcase-kicker">Root Index</p>
         <h1 class="showcase-title">Catalogo maestro del showcase</h1>
         <p class="showcase-copy">
-          Este indice es el punto de entrada del modulo completo. Cada grupo vive dentro de
-          <code>apps-showcase/</code>, las pantallas listas se abren en un modal fullscreen con
-          vista previa y codigo copiable, y lo que aun no exista queda publicado como
-          <code>In construction</code>.
+          Este indice es el punto de entrada del modulo completo. Por ahora solo muestra grupos
+          revisados dentro de <code>apps-showcase/</code>; cada pantalla lista se abre en un modal
+          fullscreen con vista previa y codigo copiable.
         </p>
       </section>
 
@@ -90,10 +89,10 @@
           <div>
             <h2 class="showcase-section-title">Grupos del showcase</h2>
             <p class="showcase-section-copy">
-              Hoy ya tenemos <strong>Autenticacion</strong>, <strong>Onboarding</strong>,
-              <strong>Support</strong>, <strong>Productivity</strong>, <strong>Account</strong>,
-              <strong>Settings</strong> y <strong>Notifications</strong> como grupos activos. Los
-              demas quedan visibles para mantener el mapa completo del modulo.
+              Hoy quedan visibles solo <strong>Autenticacion</strong>, <strong>Onboarding</strong>,
+              <strong>Usuarios</strong>, <strong>Perfiles</strong> y <strong>Roles</strong>. Lo no
+              revisado se oculta del root hasta que lo retomemos y quede listo para entrar al
+              catalogo.
             </p>
           </div>
         </div>
@@ -125,6 +124,45 @@
         <div class="showcase-screens mts-grid mts-grid--gap-md" id="onboarding-screen-list"></div>
       </section>
 
+      <section class="mts-surface mts-g-col-12" id="group-users">
+        <div class="showcase-section-head">
+          <div>
+            <h2 class="showcase-section-title">Usuarios</h2>
+            <p class="showcase-section-copy">
+              Gestion operativa de cuentas internas: listado, alta, edicion, detalle y cambio de
+              clave desde una superficie administrativa simple.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-screens mts-grid mts-grid--gap-md" id="users-screen-list"></div>
+      </section>
+
+      <section class="mts-surface mts-g-col-12" id="group-profiles">
+        <div class="showcase-section-head">
+          <div>
+            <h2 class="showcase-section-title">Perfiles</h2>
+            <p class="showcase-section-copy">
+              Perfiles por modulo con permisos finos chequeables. Sirven como base para que luego
+              los roles agrupen un perfil por modulo.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-screens mts-grid mts-grid--gap-md" id="profiles-screen-list"></div>
+      </section>
+
+      <section class="mts-surface mts-g-col-12" id="group-roles">
+        <div class="showcase-section-head">
+          <div>
+            <h2 class="showcase-section-title">Roles</h2>
+            <p class="showcase-section-copy">
+              Roles como agrupacion de perfiles por modulo. Cada modulo admite un unico perfil
+              seleccionado dentro del rol.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-screens mts-grid mts-grid--gap-md" id="roles-screen-list"></div>
+      </section>
+
       <section class="mts-surface mts-g-col-12" id="group-support">
         <div class="showcase-section-head">
           <div>
@@ -151,6 +189,32 @@
         <div class="showcase-screens mts-grid mts-grid--gap-md" id="productivity-screen-list"></div>
       </section>
 
+      <section class="mts-surface mts-g-col-12" id="group-documents">
+        <div class="showcase-section-head">
+          <div>
+            <h2 class="showcase-section-title">Documents</h2>
+            <p class="showcase-section-copy">
+              Vistas ligeras para archivos y contenido operativo. El foco es dejar experiencias
+              copiables que no dependan de tablas densas ni gestores documentales complejos.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-screens mts-grid mts-grid--gap-md" id="documents-screen-list"></div>
+      </section>
+
+      <section class="mts-surface mts-g-col-12" id="group-search">
+        <div class="showcase-section-head">
+          <div>
+            <h2 class="showcase-section-title">Search</h2>
+            <p class="showcase-section-copy">
+              Busqueda transversal, refinamiento y discovery para productos que necesitan encontrar
+              personas, contenido y settings sin depender de vistas aisladas.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-screens mts-grid mts-grid--gap-md" id="search-screen-list"></div>
+      </section>
+
       <section class="mts-surface mts-g-col-12" id="group-account">
         <div class="showcase-section-head">
           <div>
@@ -175,6 +239,97 @@
           </div>
         </div>
         <div class="showcase-screens mts-grid mts-grid--gap-md" id="settings-screen-list"></div>
+      </section>
+
+      <section class="mts-surface mts-g-col-12" id="group-admin">
+        <div class="showcase-section-head">
+          <div>
+            <h2 class="showcase-section-title">Admin</h2>
+            <p class="showcase-section-copy">
+              Gestion operativa de miembros, invitaciones y acceso inicial al workspace. El foco es
+              dejar vistas reales para productos B2B y plataformas internas.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-screens mts-grid mts-grid--gap-md" id="admin-screen-list"></div>
+      </section>
+
+      <section class="mts-surface mts-g-col-12" id="group-billing">
+        <div class="showcase-section-head">
+          <div>
+            <h2 class="showcase-section-title">Billing</h2>
+            <p class="showcase-section-copy">
+              Plan, cobros y medios de pago para productos SaaS. Son pantallas listas para copiar en
+              contextos reales sin depender de dashboards.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-screens mts-grid mts-grid--gap-md" id="billing-screen-list"></div>
+      </section>
+
+      <section class="mts-surface mts-g-col-12" id="group-integrations">
+        <div class="showcase-section-head">
+          <div>
+            <h2 class="showcase-section-title">Integrations</h2>
+            <p class="showcase-section-copy">
+              Catalogo y configuracion de conexiones externas para productos B2B. Son vistas utiles
+              para catalogar providers, estado de sync y acciones de soporte sin caer en mockups.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-screens mts-grid mts-grid--gap-md" id="integrations-screen-list"></div>
+      </section>
+
+      <section class="mts-surface mts-g-col-12" id="group-security">
+        <div class="showcase-section-head">
+          <div>
+            <h2 class="showcase-section-title">Security</h2>
+            <p class="showcase-section-copy">
+              Sesiones, auditoria y trazabilidad para productos que necesitan visibilidad real sobre
+              acceso, actividad sensible y control operativo.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-screens mts-grid mts-grid--gap-md" id="security-screen-list"></div>
+      </section>
+
+      <section class="mts-surface mts-g-col-12" id="group-developers">
+        <div class="showcase-section-head">
+          <div>
+            <h2 class="showcase-section-title">Developers</h2>
+            <p class="showcase-section-copy">
+              Herramientas para integradores y equipos tecnicos: credenciales, control de acceso y
+              puntos de contacto con APIs o automatizaciones.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-screens mts-grid mts-grid--gap-md" id="developers-screen-list"></div>
+      </section>
+
+      <section class="mts-surface mts-g-col-12" id="group-approvals">
+        <div class="showcase-section-head">
+          <div>
+            <h2 class="showcase-section-title">Approvals</h2>
+            <p class="showcase-section-copy">
+              Bandejas y flujos de aprobacion para solicitudes internas, cambios sensibles y
+              decisiones operativas con seguimiento claro.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-screens mts-grid mts-grid--gap-md" id="approvals-screen-list"></div>
+      </section>
+
+      <section class="mts-surface mts-g-col-12" id="group-system">
+        <div class="showcase-section-head">
+          <div>
+            <h2 class="showcase-section-title">System</h2>
+            <p class="showcase-section-copy">
+              Estados vacios, mantenimiento y errores operativos listos para copiar en productos
+              reales. Son pantallas base que suelen quedar para el final y aqui ya quedan resueltas.
+            </p>
+          </div>
+        </div>
+        <div class="showcase-screens mts-grid mts-grid--gap-md" id="system-screen-list"></div>
       </section>
 
       <section class="mts-surface mts-g-col-12" id="group-notifications">
@@ -204,8 +359,8 @@
         icon: 'lock',
         status: 'ready',
         desc: 'Acceso, OTP, recuperacion, verificacion e invitaciones.',
-        detail: 'Primer grupo activo del showcase.',
-        screens: 8
+        detail: 'Base de acceso y recuperacion.',
+        screens: 10
       },
       {
         id: 'onboarding',
@@ -213,8 +368,35 @@
         icon: 'compass',
         status: 'ready',
         desc: 'Registro, activacion de workspace, invitacion de equipo y primeros pasos.',
-        detail: 'Segundo grupo activo del showcase.',
+        detail: 'Alta inicial y activacion.',
+        screens: 5
+      },
+      {
+        id: 'users',
+        title: 'Usuarios',
+        icon: 'users',
+        status: 'ready',
+        desc: 'Alta, edicion, detalle y control administrativo de cuentas internas.',
+        detail: 'Gestion operativa de usuarios.',
         screens: 4
+      },
+      {
+        id: 'profiles',
+        title: 'Perfiles',
+        icon: 'layers',
+        status: 'ready',
+        desc: 'Perfiles por modulo con permisos detallados y edicion operativa simple.',
+        detail: 'Permisos finos por modulo.',
+        screens: 3
+      },
+      {
+        id: 'roles',
+        title: 'Roles',
+        icon: 'shield',
+        status: 'ready',
+        desc: 'Roles como agrupacion de perfiles, con un perfil maximo por modulo.',
+        detail: 'Agrupacion de perfiles por modulo.',
+        screens: 3
       },
       {
         id: 'dashboard',
@@ -231,7 +413,7 @@
         icon: 'layout',
         status: 'ready',
         desc: 'Proyectos, tareas, agenda y seguimiento de trabajo.',
-        detail: 'Cuarto grupo activo del showcase.',
+        detail: 'Trabajo operativo diario.',
         screens: 6
       },
       {
@@ -240,17 +422,26 @@
         icon: 'help',
         status: 'ready',
         desc: 'Helpdesk, tickets, bandejas operativas y detalle de casos.',
-        detail: 'Tercer grupo activo del showcase.',
+        detail: 'Ciclo base de soporte.',
         screens: 3
       },
       {
         id: 'documents',
         title: 'Documentos',
         icon: 'folder',
-        status: 'construction',
-        desc: 'Bibliotecas, carga de archivos, gestion documental y contenido.',
-        detail: 'Pendiente de definicion.',
+        status: 'ready',
+        desc: 'Preview de archivos, acciones de compartir y contexto operativo de documentos.',
+        detail: 'Flujos ligeros de documentos.',
         screens: 3
+      },
+      {
+        id: 'search',
+        title: 'Search',
+        icon: 'search',
+        status: 'ready',
+        desc: 'Busqueda global y resultados refinados para discovery transversal dentro del producto.',
+        detail: 'Discovery y refinamiento.',
+        screens: 2
       },
       {
         id: 'notifications',
@@ -258,7 +449,7 @@
         icon: 'bell',
         status: 'ready',
         desc: 'Centro de avisos, actividad reciente y seguimiento transversal.',
-        detail: 'Septimo grupo activo del showcase.',
+        detail: 'Eventos y seguimiento transversal.',
         screens: 2
       },
       {
@@ -267,7 +458,7 @@
         icon: 'user',
         status: 'ready',
         desc: 'Perfil, seguridad personal, sesiones y preferencias.',
-        detail: 'Quinto grupo activo del showcase.',
+        detail: 'Perfil y controles personales.',
         screens: 2
       },
       {
@@ -276,10 +467,102 @@
         icon: 'settings',
         status: 'ready',
         desc: 'Workspace, permisos, idioma, auditoria e integraciones.',
-        detail: 'Sexto grupo activo del showcase.',
+        detail: 'Configuracion compartida del workspace.',
         screens: 2
+      },
+      {
+        id: 'admin',
+        title: 'Admin',
+        icon: 'users',
+        status: 'ready',
+        desc: 'Miembros, invitaciones, acceso operativo y ownership del workspace.',
+        detail: 'Gestion de miembros y acceso.',
+        screens: 5
+      },
+      {
+        id: 'billing',
+        title: 'Billing',
+        icon: 'credit-card',
+        status: 'ready',
+        desc: 'Plan actual, consumo, cobros y medios de pago para productos SaaS.',
+        detail: 'Plan y operaciones de pago.',
+        screens: 5
+      },
+      {
+        id: 'integrations',
+        title: 'Integrations',
+        icon: 'link',
+        status: 'ready',
+        desc: 'Catalogo de integraciones, estado de conexion y configuracion operativa de proveedores.',
+        detail: 'Conexiones externas y sync.',
+        screens: 4
+      },
+      {
+        id: 'security',
+        title: 'Security',
+        icon: 'shield-check',
+        status: 'ready',
+        desc: 'Sesiones activas, auditoria sensible y trazabilidad operativa del acceso.',
+        detail: 'Control y observabilidad del acceso.',
+        screens: 3
+      },
+      {
+        id: 'developers',
+        title: 'Developers',
+        icon: 'terminal',
+        status: 'ready',
+        desc: 'Credenciales tecnicas, claves y superficies utiles para integradores.',
+        detail: 'Herramientas para APIs e integraciones.',
+        screens: 2
+      },
+      {
+        id: 'approvals',
+        title: 'Approvals',
+        icon: 'check-circle',
+        status: 'ready',
+        desc: 'Solicitudes pendientes, prioridad y decision operativa sin perder contexto.',
+        detail: 'Bandeja inicial de aprobaciones.',
+        screens: 2
+      },
+      {
+        id: 'system',
+        title: 'System',
+        icon: 'server',
+        status: 'ready',
+        desc: 'Estados vacios, mantenimiento y errores reutilizables para productos y paneles internos.',
+        detail: 'Estados base de producto.',
+        screens: 5
       }
     ];
+
+    var ACTIVE_GROUP_IDS = ['auth', 'onboarding', 'users', 'profiles', 'roles'];
+
+    function getGroupAccent(groupId) {
+      var accents = {
+        auth: '#2563eb',
+        onboarding: '#6b8e23',
+        users: '#0f766e',
+        profiles: '#7c3aed',
+        roles: '#9333ea',
+        dashboard: '#64748b',
+        productivity: '#0f766e',
+        support: '#7c3aed',
+        documents: '#2563eb',
+        search: '#8b5cf6',
+        notifications: '#9333ea',
+        account: '#0891b2',
+        settings: '#475569',
+        admin: '#dc2626',
+        billing: '#0f766e',
+        integrations: '#1d4ed8',
+        security: '#b91c1c',
+        developers: '#4f46e5',
+        approvals: '#15803d',
+        system: '#6b7280'
+      };
+
+      return accents[groupId] || 'var(--mts-color-primary)';
+    }
 
     var AUTH_SCREENS = [
       {
@@ -301,7 +584,7 @@
         icon: 'mail',
         status: 'ready',
         description: 'Solicitud de recuperacion y confirmacion visual del envio del enlace.',
-        components: ['MTS.Input', 'MTS.Button', 'MTS.Card', 'MTS.Alert', 'MTS.Icon'],
+        components: ['MTS.Input', 'MTS.Button', 'MTS.Alert'],
         path: 'login/forgot-password/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/forgot-password/index.html', language: 'html' },
@@ -314,11 +597,24 @@
         icon: 'key',
         status: 'ready',
         description: 'Definicion de nueva clave con validaciones y confirmacion final.',
-        components: ['MTS.Input', 'MTS.Button', 'MTS.Card', 'MTS.Alert', 'MTS.Icon'],
+        components: ['MTS.Input', 'MTS.Button', 'MTS.Alert'],
         path: 'login/reset-password/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/reset-password/index.html', language: 'html' },
           { id: 'css', label: 'CSS', path: 'login/reset-password/reset-password.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'reset-password-success',
+        title: 'Clave actualizada',
+        icon: 'check-circle',
+        status: 'ready',
+        description: 'Confirmacion final del cambio de clave con acceso directo al login.',
+        components: ['MTS.Button', 'MTS.Card', 'MTS.Icon'],
+        path: 'login/reset-password-success/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'login/reset-password-success/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'login/reset-password-success/reset-password-success.css', language: 'css' }
         ]
       },
       {
@@ -327,11 +623,24 @@
         icon: 'check-circle',
         status: 'ready',
         description: 'Pantalla de confirmacion de cuenta y reenvio de verificacion.',
-        components: ['MTS.Button', 'MTS.Card', 'MTS.Alert', 'MTS.Icon'],
+        components: ['MTS.Button', 'MTS.Alert'],
         path: 'login/verify-email/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/verify-email/index.html', language: 'html' },
           { id: 'css', label: 'CSS', path: 'login/verify-email/verify-email.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'otp-verify',
+        title: 'Verificar OTP',
+        icon: 'key',
+        status: 'ready',
+        description: 'Ingreso del codigo enviado por correo para completar el acceso.',
+        components: ['MTS.Input', 'MTS.Button', 'MTS.Alert'],
+        path: 'login/otp-verify/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'login/otp-verify/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'login/otp-verify/otp-verify.css', language: 'css' }
         ]
       },
       {
@@ -390,25 +699,25 @@
 
     var ONBOARDING_SCREENS = [
       {
-        id: 'signup-basic',
-        title: 'Signup Basic',
+        id: 'signup',
+        title: 'Crear cuenta',
         icon: 'user-plus',
         status: 'ready',
-        description: 'Registro basico con datos personales, ideal para escenarios uniempresa o alta por invitacion.',
-        components: ['MTS.Input', 'MTS.Checkbox', 'MTS.Button', 'MTS.Alert', 'MTS.Icon'],
-        path: 'onboarding/signup-basic/index.html',
+        description: 'Registro base de cuenta con datos personales y aceptacion de terminos.',
+        components: ['MTS.Input', 'MTS.Toggle', 'MTS.Checkbox', 'MTS.Button', 'MTS.Alert', 'MTS.Icon'],
+        path: 'login/signup/index.html',
         assets: [
-          { id: 'html', label: 'HTML', path: 'onboarding/signup-basic/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'onboarding/signup-basic/signup-basic.css', language: 'css' }
+          { id: 'html', label: 'HTML', path: 'login/signup/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'login/signup/signup.css', language: 'css' }
         ]
       },
       {
         id: 'signup-with-company',
-        title: 'Signup With Company',
+        title: 'Crear cuenta + empresa',
         icon: 'briefcase',
         status: 'ready',
         description: 'Registro publico con datos personales y nombre de empresa para arranque multiempresa.',
-        components: ['MTS.Input', 'MTS.Select', 'MTS.Checkbox', 'MTS.Button', 'MTS.Alert', 'MTS.Icon'],
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Toggle', 'MTS.Checkbox', 'MTS.Button', 'MTS.Alert', 'MTS.Icon'],
         path: 'onboarding/signup-with-company/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'onboarding/signup-with-company/index.html', language: 'html' },
@@ -439,6 +748,158 @@
         assets: [
           { id: 'html', label: 'HTML', path: 'onboarding/onboarding-complete/index.html', language: 'html' },
           { id: 'css', label: 'CSS', path: 'onboarding/onboarding-complete/onboarding-complete.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'join-workspace',
+        title: 'Join Workspace',
+        icon: 'link',
+        status: 'ready',
+        description: 'Ingreso por codigo o enlace para unirse a un workspace existente.',
+        components: ['MTS.Input', 'MTS.Button', 'MTS.Alert', 'MTS.Icon'],
+        path: 'onboarding/join-workspace/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'onboarding/join-workspace/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'onboarding/join-workspace/join-workspace.css', language: 'css' }
+        ]
+      }
+    ];
+
+    var USERS_SCREENS = [
+      {
+        id: 'user-list',
+        title: 'Lista de usuarios',
+        icon: 'users',
+        status: 'ready',
+        description: 'Panel administrativo con filtros base, tabla operativa y columna de acciones para gestionar cuentas internas.',
+        components: ['MTS.Table', 'MTS.Input', 'MTS.Select', 'MTS.Button', 'MTS.Card', 'MTS.Alert', 'MTS.Icon'],
+        path: 'users/user-list/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'users/user-list/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'users/user-list/user-list.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'user-create',
+        title: 'Crear usuario',
+        icon: 'user-plus',
+        status: 'ready',
+        description: 'Alta de usuario con datos obligatorios, contexto organizacional y seleccion de rol base.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Checkbox', 'MTS.Button', 'MTS.Card', 'MTS.Alert', 'MTS.Icon'],
+        path: 'users/user-create/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'users/user-create/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'users/user-create/user-create.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'user-edit',
+        title: 'Editar usuario',
+        icon: 'edit',
+        status: 'ready',
+        description: 'Edicion de datos personales y organizacionales, con ajuste de rol y cambio de clave por modal reutilizable.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Checkbox', 'MTS.Button', 'MTS.Card', 'MTS.Modal', 'MTS.Alert', 'MTS.Icon'],
+        path: 'users/user-edit/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'users/user-edit/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'users/user-edit/user-edit.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'user-detail',
+        title: 'Detalle de usuario',
+        icon: 'user-check',
+        status: 'ready',
+        description: 'Ficha administrativa con identidad, organizacion, rol asignado, perfiles asociados y acciones de soporte.',
+        components: ['MTS.Avatar', 'MTS.Badge', 'MTS.Input', 'MTS.Select', 'MTS.Checkbox', 'MTS.Button', 'MTS.Card', 'MTS.Modal', 'MTS.Alert', 'MTS.Icon'],
+        path: 'users/user-detail/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'users/user-detail/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'users/user-detail/user-detail.css', language: 'css' }
+        ]
+      }
+    ];
+
+    var PROFILES_SCREENS = [
+      {
+        id: 'profile-list',
+        title: 'Lista de perfiles',
+        icon: 'layers',
+        status: 'ready',
+        description: 'Tabla simple de perfiles con nombre, descripcion y acciones de administracion.',
+        components: ['MTS.Table', 'MTS.Button', 'MTS.Card', 'MTS.Alert', 'MTS.Icon'],
+        path: 'profiles/profile-list/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'profiles/profile-list/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'profiles/profile-list/profile-list.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'profile-create',
+        title: 'Crear perfil',
+        icon: 'plus-circle',
+        status: 'ready',
+        description: 'Alta de perfil con nombre, descripcion, modulo y permisos detallados chequeables.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.CheckboxGroup', 'MTS.Button', 'MTS.Card', 'MTS.Alert', 'MTS.Icon'],
+        path: 'profiles/profile-create/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'profiles/profile-create/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'profiles/profile-create/profile-create.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'profile-edit',
+        title: 'Editar perfil',
+        icon: 'edit',
+        status: 'ready',
+        description: 'Edicion de perfil por modulo con ajuste de descripcion y permisos finos.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.CheckboxGroup', 'MTS.Button', 'MTS.Card', 'MTS.Alert', 'MTS.Icon'],
+        path: 'profiles/profile-edit/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'profiles/profile-edit/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'profiles/profile-edit/profile-edit.css', language: 'css' }
+        ]
+      }
+    ];
+
+    var ROLES_SCREENS = [
+      {
+        id: 'role-list',
+        title: 'Lista de roles',
+        icon: 'shield',
+        status: 'ready',
+        description: 'Tabla simple de roles con nombre, descripcion y acciones de administracion.',
+        components: ['MTS.Table', 'MTS.Button', 'MTS.Card', 'MTS.Alert', 'MTS.Icon'],
+        path: 'roles/role-list/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'roles/role-list/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'roles/role-list/role-list.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'role-create',
+        title: 'Crear rol',
+        icon: 'plus-circle',
+        status: 'ready',
+        description: 'Alta de rol con nombre, descripcion y perfiles seleccionados por modulo.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Button', 'MTS.Card', 'MTS.Alert', 'MTS.Icon'],
+        path: 'roles/role-create/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'roles/role-create/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'roles/role-create/role-create.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'role-edit',
+        title: 'Editar rol',
+        icon: 'edit',
+        status: 'ready',
+        description: 'Edicion de rol reemplazando o quitando perfiles por modulo dentro del mismo rol.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Button', 'MTS.Card', 'MTS.Alert', 'MTS.Icon'],
+        path: 'roles/role-edit/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'roles/role-edit/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'roles/role-edit/role-edit.css', language: 'css' }
         ]
       }
     ];
@@ -527,6 +988,77 @@
       }
     ];
 
+    var DOCUMENTS_SCREENS = [
+      {
+        id: 'file-preview',
+        title: 'File Preview',
+        icon: 'file-text',
+        status: 'ready',
+        description: 'Vista previa de documento con metadata, actividad y acciones comunes como compartir o descargar.',
+        components: ['MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'documents/file-preview/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'documents/file-preview/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'documents/file-preview/file-preview.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'share-dialog',
+        title: 'Share Dialog',
+        icon: 'share-2',
+        status: 'ready',
+        description: 'Permisos de compartir por persona o link con expiracion, alcance y trazabilidad basica.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Button', 'MTS.Card', 'MTS.Badge', 'MTS.Alert'],
+        path: 'documents/share-dialog/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'documents/share-dialog/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'documents/share-dialog/share-dialog.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'recent-files',
+        title: 'Recent Files',
+        icon: 'folder-open',
+        status: 'ready',
+        description: 'Listado reciente de archivos con filtros, propietarios, estado y acciones rapidas de seguimiento.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Button', 'MTS.Card', 'MTS.Badge', 'MTS.Alert'],
+        path: 'documents/recent-files/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'documents/recent-files/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'documents/recent-files/recent-files.css', language: 'css' }
+        ]
+      }
+    ];
+
+    var SEARCH_SCREENS = [
+      {
+        id: 'global-search',
+        title: 'Global Search',
+        icon: 'search',
+        status: 'ready',
+        description: 'Busqueda transversal con categorias visibles, atajos y resultados agrupados por tipo.',
+        components: ['MTS.Input', 'MTS.Tabs', 'MTS.Badge', 'MTS.Button', 'MTS.Card', 'MTS.Alert'],
+        path: 'search/global-search/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'search/global-search/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'search/global-search/global-search.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'search-results',
+        title: 'Search Results',
+        icon: 'file-text',
+        status: 'ready',
+        description: 'Resultados completos con filtros, estado vacio controlado y acciones rapidas por item.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Button', 'MTS.Card', 'MTS.Alert'],
+        path: 'search/search-results/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'search/search-results/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'search/search-results/search-results.css', language: 'css' }
+        ]
+      }
+    ];
+
     var ACCOUNT_SCREENS = [
       {
         id: 'profile-overview',
@@ -581,6 +1113,365 @@
         assets: [
           { id: 'html', label: 'HTML', path: 'settings/security-policies/index.html', language: 'html' },
           { id: 'css', label: 'CSS', path: 'settings/security-policies/security-policies.css', language: 'css' }
+        ]
+      }
+    ];
+
+    var ADMIN_SCREENS = [
+      {
+        id: 'members-list',
+        title: 'Members List',
+        icon: 'users',
+        status: 'ready',
+        description: 'Listado operativo de miembros con filtros por rol, estado, ultimo acceso y acciones rapidas de administracion.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Card', 'MTS.Avatar', 'MTS.KPICard', 'MTS.Button', 'MTS.Alert'],
+        path: 'admin/members-list/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'admin/members-list/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'admin/members-list/members-list.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'invite-member',
+        title: 'Invite Member',
+        icon: 'user-plus',
+        status: 'ready',
+        description: 'Invitacion de uno o varios usuarios con rol base, equipo de aterrizaje y mensaje de bienvenida listo para enviar.',
+        components: ['MTS.TagInput', 'MTS.Select', 'MTS.Input', 'MTS.Checkbox', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'admin/invite-member/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'admin/invite-member/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'admin/invite-member/invite-member.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'member-detail',
+        title: 'Member Detail',
+        icon: 'user-check',
+        status: 'ready',
+        description: 'Ficha operativa de un miembro con acceso efectivo, equipos, sesiones recientes y actividad administrativa.',
+        components: ['MTS.Avatar', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'admin/member-detail/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'admin/member-detail/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'admin/member-detail/member-detail.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'access-review',
+        title: 'Access Review',
+        icon: 'sliders',
+        status: 'ready',
+        description: 'Revision de acceso efectivo por usuario con modulos, perfiles heredados y acciones de ajuste rapido.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'admin/access-review/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'admin/access-review/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'admin/access-review/access-review.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'role-detail',
+        title: 'Role Detail',
+        icon: 'shield',
+        status: 'ready',
+        description: 'Detalle de un rol con permisos clave, alcance operativo y miembros asignados al perfil.',
+        components: ['MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'admin/role-detail/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'admin/role-detail/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'admin/role-detail/role-detail.css', language: 'css' }
+        ]
+      }
+    ];
+
+    var BILLING_SCREENS = [
+      {
+        id: 'current-plan',
+        title: 'Current Plan',
+        icon: 'wallet',
+        status: 'ready',
+        description: 'Resumen de plan, renovacion, consumo y proxima accion comercial sin depender de un dashboard ejecutivo.',
+        components: ['MTS.Card', 'MTS.KPICard', 'MTS.Badge', 'MTS.Button', 'MTS.Alert'],
+        path: 'billing/current-plan/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'billing/current-plan/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'billing/current-plan/current-plan.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'payment-methods',
+        title: 'Payment Methods',
+        icon: 'credit-card',
+        status: 'ready',
+        description: 'Gestion de metodo principal, respaldo y datos de facturacion para un workspace con pagos automaticos.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Card', 'MTS.Badge', 'MTS.Button', 'MTS.Alert'],
+        path: 'billing/payment-methods/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'billing/payment-methods/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'billing/payment-methods/payment-methods.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'invoice-history',
+        title: 'Invoice History',
+        icon: 'receipt',
+        status: 'ready',
+        description: 'Historial de facturas con estado, monto, periodo y acciones de descarga o reenvio para finance.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'billing/invoice-history/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'billing/invoice-history/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'billing/invoice-history/invoice-history.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'usage-and-limits',
+        title: 'Usage and Limits',
+        icon: 'layers',
+        status: 'ready',
+        description: 'Consumo real de seats, API, storage y automatizaciones con umbrales y proxima decision operativa.',
+        components: ['MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'billing/usage-and-limits/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'billing/usage-and-limits/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'billing/usage-and-limits/usage-and-limits.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'plan-change-preview',
+        title: 'Plan Change Preview',
+        icon: 'arrow-up-right',
+        status: 'ready',
+        description: 'Vista previa de upgrade o downgrade con impacto, prorrateo y fecha efectiva del cambio.',
+        components: ['MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'billing/plan-change-preview/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'billing/plan-change-preview/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'billing/plan-change-preview/plan-change-preview.css', language: 'css' }
+        ]
+      }
+    ];
+
+    var INTEGRATIONS_SCREENS = [
+      {
+        id: 'integrations-hub',
+        title: 'Integrations Hub',
+        icon: 'link',
+        status: 'ready',
+        description: 'Catalogo de integraciones disponibles y conectadas con estado de sync, categoria y accion principal.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'integrations/integrations-hub/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'integrations/integrations-hub/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'integrations/integrations-hub/integrations-hub.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'integration-detail',
+        title: 'Integration Detail',
+        icon: 'server',
+        status: 'ready',
+        description: 'Configuracion operativa de una integracion con credenciales base, sync y acciones de soporte.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'integrations/integration-detail/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'integrations/integration-detail/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'integrations/integration-detail/integration-detail.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'sync-history',
+        title: 'Sync History',
+        icon: 'activity',
+        status: 'ready',
+        description: 'Historial de sincronizaciones con estado, duracion, volumen de registros y ultima accion de soporte.',
+        components: ['MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'integrations/sync-history/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'integrations/sync-history/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'integrations/sync-history/sync-history.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'connect-provider',
+        title: 'Connect Provider',
+        icon: 'link',
+        status: 'ready',
+        description: 'Conexion inicial de un proveedor con owner, entorno, permisos y checklist previo a activar sync.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Button', 'MTS.Card', 'MTS.Badge', 'MTS.Alert'],
+        path: 'integrations/connect-provider/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'integrations/connect-provider/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'integrations/connect-provider/connect-provider.css', language: 'css' }
+        ]
+      }
+    ];
+
+    var SECURITY_SCREENS = [
+      {
+        id: 'session-history',
+        title: 'Session History',
+        icon: 'clock',
+        status: 'ready',
+        description: 'Historial y control de sesiones activas con dispositivo, ubicacion aproximada y cierre remoto.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'security/session-history/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'security/session-history/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'security/session-history/session-history.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'audit-log',
+        title: 'Audit Log',
+        icon: 'activity',
+        status: 'ready',
+        description: 'Eventos sensibles del workspace con actor, severidad, fecha y filtros por tipo de accion.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'security/audit-log/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'security/audit-log/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'security/audit-log/audit-log.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'security-alert-detail',
+        title: 'Security Alert Detail',
+        icon: 'alert',
+        status: 'ready',
+        description: 'Detalle de alerta con origen, riesgo, accion sugerida y cierre operativo del incidente.',
+        components: ['MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'security/security-alert-detail/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'security/security-alert-detail/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'security/security-alert-detail/security-alert-detail.css', language: 'css' }
+        ]
+      }
+    ];
+
+    var DEVELOPERS_SCREENS = [
+      {
+        id: 'api-keys',
+        title: 'API Keys',
+        icon: 'key',
+        status: 'ready',
+        description: 'Creacion, copiado, rotacion y revocacion de claves tecnicas para integraciones y automatizaciones.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.CopyButton', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'developers/api-keys/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'developers/api-keys/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'developers/api-keys/api-keys.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'webhooks',
+        title: 'Webhooks',
+        icon: 'wifi',
+        status: 'ready',
+        description: 'Endpoints, secretos, ultimos deliveries y reintentos para productos con eventos salientes.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'developers/webhooks/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'developers/webhooks/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'developers/webhooks/webhooks.css', language: 'css' }
+        ]
+      }
+    ];
+
+    var APPROVALS_SCREENS = [
+      {
+        id: 'approval-inbox',
+        title: 'Approval Inbox',
+        icon: 'flag',
+        status: 'ready',
+        description: 'Bandeja de solicitudes pendientes con prioridad, owner, SLA y acciones rapidas para aprobar o rechazar.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'approvals/approval-inbox/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'approvals/approval-inbox/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'approvals/approval-inbox/approval-inbox.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'approval-detail',
+        title: 'Approval Detail',
+        icon: 'file-text',
+        status: 'ready',
+        description: 'Detalle de una solicitud con contexto, impacto, decision sugerida y acciones finales para aprobar o rechazar.',
+        components: ['MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'approvals/approval-detail/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'approvals/approval-detail/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'approvals/approval-detail/approval-detail.css', language: 'css' }
+        ]
+      }
+    ];
+
+    var SYSTEM_SCREENS = [
+      {
+        id: 'empty-workspace',
+        title: 'Empty Workspace',
+        icon: 'folder-open',
+        status: 'ready',
+        description: 'Estado inicial cuando aun no existen proyectos, miembros o datos cargados en el workspace.',
+        components: ['MTS.Button', 'MTS.Card', 'MTS.Badge', 'MTS.Alert'],
+        path: 'system/empty-workspace/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'system/empty-workspace/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'system/empty-workspace/empty-workspace.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'maintenance-mode',
+        title: 'Maintenance Mode',
+        icon: 'tool',
+        status: 'ready',
+        description: 'Comunicacion clara de mantenimiento programado con ETA, impacto y siguientes pasos.',
+        components: ['MTS.Button', 'MTS.Card', 'MTS.Badge', 'MTS.Alert'],
+        path: 'system/maintenance-mode/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'system/maintenance-mode/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'system/maintenance-mode/maintenance-mode.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'error-403',
+        title: '403 Access Denied',
+        icon: 'shield',
+        status: 'ready',
+        description: 'Error de permisos para rutas protegidas con CTA de solicitud de acceso o salida segura.',
+        components: ['MTS.Button', 'MTS.Badge', 'MTS.Alert'],
+        path: 'system/error-403/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'system/error-403/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'system/error-403/error-403.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'error-404',
+        title: '404 Not Found',
+        icon: 'search',
+        status: 'ready',
+        description: 'Pantalla sobria para recursos inexistentes con busqueda de salida y rutas sugeridas.',
+        components: ['MTS.Button', 'MTS.Badge', 'MTS.Alert'],
+        path: 'system/error-404/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'system/error-404/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'system/error-404/error-404.css', language: 'css' }
+        ]
+      },
+      {
+        id: 'error-500',
+        title: '500 Service Issue',
+        icon: 'activity',
+        status: 'ready',
+        description: 'Falla inesperada del servicio con contexto operativo, reintento y enlace a estado.',
+        components: ['MTS.Button', 'MTS.Badge', 'MTS.Alert'],
+        path: 'system/error-500/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'system/error-500/index.html', language: 'html' },
+          { id: 'css', label: 'CSS', path: 'system/error-500/error-500.css', language: 'css' }
         ]
       }
     ];
@@ -718,7 +1609,9 @@
       var host = document.getElementById('showcase-groups');
       host.innerHTML = '';
 
-      GROUPS.forEach(function (group) {
+      GROUPS.filter(function (group) {
+        return ACTIVE_GROUP_IDS.indexOf(group.id) !== -1;
+      }).forEach(function (group) {
         var cardWrap = document.createElement('div');
         cardWrap.className = 'mts-g-col-12 mts-g-col-md-6 mts-g-col-lg-4';
         host.appendChild(cardWrap);
@@ -734,7 +1627,6 @@
           hoverable: true,
           body:
             '<div class="showcase-card-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + group.icon + '"></i></div>' +
               '<p class="showcase-card-desc">' + group.desc + '</p>' +
               '<p class="showcase-card-meta">' + group.screens + ' pantallas planificadas. ' + group.detail + '</p>' +
             '</div>',
@@ -762,6 +1654,88 @@
             }
           ]
         });
+
+        var cardEl = cardHost;
+        if (cardEl) {
+          cardEl.classList.add('showcase-group-card');
+          cardEl.style.setProperty('--showcase-group-accent', getGroupAccent(group.id));
+
+          var headerContent = cardEl.querySelector('.mts-card__header-content');
+          var title = cardEl.querySelector('.mts-card__title');
+          var subtitle = cardEl.querySelector('.mts-card__subtitle');
+
+          if (headerContent && title && !headerContent.querySelector('.showcase-card-head')) {
+            var head = document.createElement('div');
+            head.className = 'showcase-card-head';
+
+            var badge = document.createElement('div');
+            badge.className = 'showcase-card-icon';
+            badge.innerHTML = MTS.Icon.get(group.icon);
+
+            var copyWrap = document.createElement('div');
+            copyWrap.className = 'showcase-card-head__copy';
+
+            var titleEl = document.createElement('div');
+            titleEl.className = 'mts-card__title';
+            titleEl.textContent = title.textContent;
+            copyWrap.appendChild(titleEl);
+
+            if (subtitle) {
+              var subtitleEl = document.createElement('div');
+              subtitleEl.className = 'mts-card__subtitle';
+              subtitleEl.textContent = subtitle.textContent;
+              copyWrap.appendChild(subtitleEl);
+            }
+
+            head.appendChild(badge);
+            head.appendChild(copyWrap);
+
+            headerContent.innerHTML = '';
+            headerContent.appendChild(head);
+          }
+        }
+      });
+    }
+
+    function syncGroupSectionsVisibility() {
+      GROUPS.forEach(function (group) {
+        var section = document.getElementById('group-' + group.id);
+        if (!section) return;
+
+        var isActive = ACTIVE_GROUP_IDS.indexOf(group.id) !== -1;
+        section.hidden = !isActive;
+        section.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+      });
+    }
+
+    function decorateGroupSections() {
+      GROUPS.filter(function (group) {
+        return ACTIVE_GROUP_IDS.indexOf(group.id) !== -1;
+      }).forEach(function (group) {
+        var section = document.getElementById('group-' + group.id);
+        if (!section) return;
+
+        section.classList.add('showcase-group-section');
+        section.style.setProperty('--showcase-group-accent', getGroupAccent(group.id));
+
+        var head = section.querySelector('.showcase-section-head');
+        if (!head || head.querySelector('.showcase-section-badge')) return;
+
+        var title = head.querySelector('.showcase-section-title');
+        var copy = head.querySelector('.showcase-section-copy');
+        var copyWrap = document.createElement('div');
+        copyWrap.className = 'showcase-section-head__copy';
+
+        var badge = document.createElement('div');
+        badge.className = 'showcase-section-badge';
+        badge.innerHTML = MTS.Icon.get(group.icon);
+
+        if (title) copyWrap.appendChild(title);
+        if (copy) copyWrap.appendChild(copy);
+
+        head.innerHTML = '';
+        head.appendChild(badge);
+        head.appendChild(copyWrap);
       });
     }
 
@@ -824,6 +1798,168 @@
       host.innerHTML = '';
 
       ONBOARDING_SCREENS.forEach(function (screen) {
+        var cardWrap = document.createElement('div');
+        cardWrap.className = 'mts-g-col-12';
+        host.appendChild(cardWrap);
+
+        var cardHost = document.createElement('div');
+        cardWrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: screen.title,
+          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
+          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="showcase-screen-copy">' +
+              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
+              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+              buildTags(screen.components) +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
+              variant: screen.status === 'ready' ? 'primary' : 'secondary',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen);
+                else showConstruction(screen.title);
+              }
+            },
+            {
+              label: screen.status === 'ready' ? 'Codigo' : 'README',
+              variant: 'ghost',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen, 'code');
+                else {
+                  MTS.Modal.alert({
+                    title: 'README',
+                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
+                  });
+                }
+              }
+            }
+          ]
+        });
+      });
+    }
+
+    function buildUsersScreens() {
+      var host = document.getElementById('users-screen-list');
+      host.innerHTML = '';
+
+      USERS_SCREENS.forEach(function (screen) {
+        var cardWrap = document.createElement('div');
+        cardWrap.className = 'mts-g-col-12';
+        host.appendChild(cardWrap);
+
+        var cardHost = document.createElement('div');
+        cardWrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: screen.title,
+          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
+          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="showcase-screen-copy">' +
+              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
+              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+              buildTags(screen.components) +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
+              variant: screen.status === 'ready' ? 'primary' : 'secondary',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen);
+                else showConstruction(screen.title);
+              }
+            },
+            {
+              label: screen.status === 'ready' ? 'Codigo' : 'README',
+              variant: 'ghost',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen, 'code');
+                else {
+                  MTS.Modal.alert({
+                    title: 'README',
+                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
+                  });
+                }
+              }
+            }
+          ]
+        });
+      });
+    }
+
+    function buildProfilesScreens() {
+      var host = document.getElementById('profiles-screen-list');
+      host.innerHTML = '';
+
+      PROFILES_SCREENS.forEach(function (screen) {
+        var cardWrap = document.createElement('div');
+        cardWrap.className = 'mts-g-col-12';
+        host.appendChild(cardWrap);
+
+        var cardHost = document.createElement('div');
+        cardWrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: screen.title,
+          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
+          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="showcase-screen-copy">' +
+              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
+              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+              buildTags(screen.components) +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
+              variant: screen.status === 'ready' ? 'primary' : 'secondary',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen);
+                else showConstruction(screen.title);
+              }
+            },
+            {
+              label: screen.status === 'ready' ? 'Codigo' : 'README',
+              variant: 'ghost',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen, 'code');
+                else {
+                  MTS.Modal.alert({
+                    title: 'README',
+                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
+                  });
+                }
+              }
+            }
+          ]
+        });
+      });
+    }
+
+    function buildRolesScreens() {
+      var host = document.getElementById('roles-screen-list');
+      host.innerHTML = '';
+
+      ROLES_SCREENS.forEach(function (screen) {
         var cardWrap = document.createElement('div');
         cardWrap.className = 'mts-g-col-12';
         host.appendChild(cardWrap);
@@ -981,6 +2117,114 @@
       });
     }
 
+    function buildDocumentsScreens() {
+      var host = document.getElementById('documents-screen-list');
+      host.innerHTML = '';
+
+      DOCUMENTS_SCREENS.forEach(function (screen) {
+        var cardWrap = document.createElement('div');
+        cardWrap.className = 'mts-g-col-12';
+        host.appendChild(cardWrap);
+
+        var cardHost = document.createElement('div');
+        cardWrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: screen.title,
+          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
+          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="showcase-screen-copy">' +
+              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
+              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+              buildTags(screen.components) +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
+              variant: screen.status === 'ready' ? 'primary' : 'secondary',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen);
+                else showConstruction(screen.title);
+              }
+            },
+            {
+              label: screen.status === 'ready' ? 'Codigo' : 'README',
+              variant: 'ghost',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen, 'code');
+                else {
+                  MTS.Modal.alert({
+                    title: 'README',
+                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
+                  });
+                }
+              }
+            }
+          ]
+        });
+      });
+    }
+
+    function buildSearchScreens() {
+      var host = document.getElementById('search-screen-list');
+      host.innerHTML = '';
+
+      SEARCH_SCREENS.forEach(function (screen) {
+        var cardWrap = document.createElement('div');
+        cardWrap.className = 'mts-g-col-12';
+        host.appendChild(cardWrap);
+
+        var cardHost = document.createElement('div');
+        cardWrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: screen.title,
+          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
+          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="showcase-screen-copy">' +
+              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
+              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+              buildTags(screen.components) +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
+              variant: screen.status === 'ready' ? 'primary' : 'secondary',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen);
+                else showConstruction(screen.title);
+              }
+            },
+            {
+              label: screen.status === 'ready' ? 'Codigo' : 'README',
+              variant: 'ghost',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen, 'code');
+                else {
+                  MTS.Modal.alert({
+                    title: 'README',
+                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
+                  });
+                }
+              }
+            }
+          ]
+        });
+      });
+    }
+
     function buildAccountScreens() {
       var host = document.getElementById('account-screen-list');
       host.innerHTML = '';
@@ -1040,6 +2284,384 @@
       host.innerHTML = '';
 
       SETTINGS_SCREENS.forEach(function (screen) {
+        var cardWrap = document.createElement('div');
+        cardWrap.className = 'mts-g-col-12';
+        host.appendChild(cardWrap);
+
+        var cardHost = document.createElement('div');
+        cardWrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: screen.title,
+          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
+          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="showcase-screen-copy">' +
+              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
+              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+              buildTags(screen.components) +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
+              variant: screen.status === 'ready' ? 'primary' : 'secondary',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen);
+                else showConstruction(screen.title);
+              }
+            },
+            {
+              label: screen.status === 'ready' ? 'Codigo' : 'README',
+              variant: 'ghost',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen, 'code');
+                else {
+                  MTS.Modal.alert({
+                    title: 'README',
+                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
+                  });
+                }
+              }
+            }
+          ]
+        });
+      });
+    }
+
+    function buildAdminScreens() {
+      var host = document.getElementById('admin-screen-list');
+      host.innerHTML = '';
+
+      ADMIN_SCREENS.forEach(function (screen) {
+        var cardWrap = document.createElement('div');
+        cardWrap.className = 'mts-g-col-12';
+        host.appendChild(cardWrap);
+
+        var cardHost = document.createElement('div');
+        cardWrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: screen.title,
+          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
+          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="showcase-screen-copy">' +
+              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
+              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+              buildTags(screen.components) +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
+              variant: screen.status === 'ready' ? 'primary' : 'secondary',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen);
+                else showConstruction(screen.title);
+              }
+            },
+            {
+              label: screen.status === 'ready' ? 'Codigo' : 'README',
+              variant: 'ghost',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen, 'code');
+                else {
+                  MTS.Modal.alert({
+                    title: 'README',
+                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
+                  });
+                }
+              }
+            }
+          ]
+        });
+      });
+    }
+
+    function buildBillingScreens() {
+      var host = document.getElementById('billing-screen-list');
+      host.innerHTML = '';
+
+      BILLING_SCREENS.forEach(function (screen) {
+        var cardWrap = document.createElement('div');
+        cardWrap.className = 'mts-g-col-12';
+        host.appendChild(cardWrap);
+
+        var cardHost = document.createElement('div');
+        cardWrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: screen.title,
+          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
+          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="showcase-screen-copy">' +
+              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
+              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+              buildTags(screen.components) +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
+              variant: screen.status === 'ready' ? 'primary' : 'secondary',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen);
+                else showConstruction(screen.title);
+              }
+            },
+            {
+              label: screen.status === 'ready' ? 'Codigo' : 'README',
+              variant: 'ghost',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen, 'code');
+                else {
+                  MTS.Modal.alert({
+                    title: 'README',
+                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
+                  });
+                }
+              }
+            }
+          ]
+        });
+      });
+    }
+
+    function buildIntegrationsScreens() {
+      var host = document.getElementById('integrations-screen-list');
+      host.innerHTML = '';
+
+      INTEGRATIONS_SCREENS.forEach(function (screen) {
+        var cardWrap = document.createElement('div');
+        cardWrap.className = 'mts-g-col-12';
+        host.appendChild(cardWrap);
+
+        var cardHost = document.createElement('div');
+        cardWrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: screen.title,
+          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
+          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="showcase-screen-copy">' +
+              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
+              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+              buildTags(screen.components) +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
+              variant: screen.status === 'ready' ? 'primary' : 'secondary',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen);
+                else showConstruction(screen.title);
+              }
+            },
+            {
+              label: screen.status === 'ready' ? 'Codigo' : 'README',
+              variant: 'ghost',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen, 'code');
+                else {
+                  MTS.Modal.alert({
+                    title: 'README',
+                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
+                  });
+                }
+              }
+            }
+          ]
+        });
+      });
+    }
+
+    function buildSecurityScreens() {
+      var host = document.getElementById('security-screen-list');
+      host.innerHTML = '';
+
+      SECURITY_SCREENS.forEach(function (screen) {
+        var cardWrap = document.createElement('div');
+        cardWrap.className = 'mts-g-col-12';
+        host.appendChild(cardWrap);
+
+        var cardHost = document.createElement('div');
+        cardWrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: screen.title,
+          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
+          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="showcase-screen-copy">' +
+              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
+              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+              buildTags(screen.components) +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
+              variant: screen.status === 'ready' ? 'primary' : 'secondary',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen);
+                else showConstruction(screen.title);
+              }
+            },
+            {
+              label: screen.status === 'ready' ? 'Codigo' : 'README',
+              variant: 'ghost',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen, 'code');
+                else {
+                  MTS.Modal.alert({
+                    title: 'README',
+                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
+                  });
+                }
+              }
+            }
+          ]
+        });
+      });
+    }
+
+    function buildDevelopersScreens() {
+      var host = document.getElementById('developers-screen-list');
+      host.innerHTML = '';
+
+      DEVELOPERS_SCREENS.forEach(function (screen) {
+        var cardWrap = document.createElement('div');
+        cardWrap.className = 'mts-g-col-12';
+        host.appendChild(cardWrap);
+
+        var cardHost = document.createElement('div');
+        cardWrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: screen.title,
+          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
+          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="showcase-screen-copy">' +
+              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
+              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+              buildTags(screen.components) +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
+              variant: screen.status === 'ready' ? 'primary' : 'secondary',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen);
+                else showConstruction(screen.title);
+              }
+            },
+            {
+              label: screen.status === 'ready' ? 'Codigo' : 'README',
+              variant: 'ghost',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen, 'code');
+                else {
+                  MTS.Modal.alert({
+                    title: 'README',
+                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
+                  });
+                }
+              }
+            }
+          ]
+        });
+      });
+    }
+
+    function buildApprovalsScreens() {
+      var host = document.getElementById('approvals-screen-list');
+      host.innerHTML = '';
+
+      APPROVALS_SCREENS.forEach(function (screen) {
+        var cardWrap = document.createElement('div');
+        cardWrap.className = 'mts-g-col-12';
+        host.appendChild(cardWrap);
+
+        var cardHost = document.createElement('div');
+        cardWrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: screen.title,
+          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
+          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="showcase-screen-copy">' +
+              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
+              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+              buildTags(screen.components) +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
+              variant: screen.status === 'ready' ? 'primary' : 'secondary',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen);
+                else showConstruction(screen.title);
+              }
+            },
+            {
+              label: screen.status === 'ready' ? 'Codigo' : 'README',
+              variant: 'ghost',
+              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
+              onClick: function () {
+                if (screen.status === 'ready') openScreenModal(screen, 'code');
+                else {
+                  MTS.Modal.alert({
+                    title: 'README',
+                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
+                  });
+                }
+              }
+            }
+          ]
+        });
+      });
+    }
+
+    function buildSystemScreens() {
+      var host = document.getElementById('system-screen-list');
+      host.innerHTML = '';
+
+      SYSTEM_SCREENS.forEach(function (screen) {
         var cardWrap = document.createElement('div');
         cardWrap.className = 'mts-g-col-12';
         host.appendChild(cardWrap);
@@ -1345,14 +2967,14 @@
     });
 
     renderThemeButtons();
+    syncGroupSectionsVisibility();
     buildGroups();
+    decorateGroupSections();
     buildAuthScreens();
     buildOnboardingScreens();
-    buildSupportScreens();
-    buildProductivityScreens();
-    buildAccountScreens();
-    buildSettingsScreens();
-    buildNotificationsScreens();
+    buildUsersScreens();
+    buildProfilesScreens();
+    buildRolesScreens();
     MTS.Icon.initAll();
   </script>
 </body>

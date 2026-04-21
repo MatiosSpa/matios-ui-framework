@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Session History - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="session-history.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="session-history-page">
+    <header class="session-history-page__topbar mts-surface">
+      <div class="session-history-page__brand">
+        <div class="session-history-page__logo">M</div>
+        <div>
+          <div class="session-history-page__title">Session History</div>
+          <div class="session-history-page__subtitle">Dispositivos, ubicaciones y control remoto de sesiones</div>
+        </div>
+      </div>
+      <div class="session-history-page__actions">
+        <div id="sessions-signout-all"></div>
+      </div>
+    </header>
+
+    <main class="session-history-page__main mts-grid mts-grid--gap-md">
+      <section class="session-history-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="session-history-page__eyebrow">Access monitoring</div>
+          <h1 class="session-history-page__hero-title">Ten claridad sobre donde esta abierta una cuenta y que sesiones requieren intervencion.</h1>
+          <p class="session-history-page__hero-copy">
+            Esta pantalla esta pensada para seguridad operativa: revisar dispositivos, ultima
+            actividad, origen aproximado y ejecutar cierres remotos cuando haga falta.
+          </p>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4">
+        <div class="mts-form-card session-history-page__filters-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Filtros</h2>
+            <p class="mts-form-card__subtitle">Busca por dispositivo, ciudad o estado de la sesion.</p>
+          </div>
+          <div id="sessions-feedback"></div>
+          <div class="session-history-page__filters">
+            <div id="sessions-search"></div>
+            <div id="sessions-status"></div>
+          </div>
+          <div id="sessions-clear"></div>
+        </div>
+      </aside>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="session-history-page__results-head">
+          <div>
+            <div class="session-history-page__results-label">Active and recent sessions</div>
+            <h2 class="session-history-page__results-title">Historial de sesiones</h2>
+          </div>
+          <div class="session-history-page__results-meta" id="sessions-results-meta">0 resultados</div>
+        </div>
+        <div class="mts-grid mts-grid--gap-md" id="sessions-results"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var sessionState = { query: '', status: '' };
+    var statusSelect;
+    var sessions = [
+      { id: 's1', device: 'MacBook Pro', browser: 'Chrome', city: 'Santiago, CL', lastSeen: 'Activa ahora', status: 'active', statusLabel: 'Activa', risk: 'Reconocida', user: 'Camila Soto' },
+      { id: 's2', device: 'iPhone 15', browser: 'Safari', city: 'Santiago, CL', lastSeen: 'Hace 2 h', status: 'recent', statusLabel: 'Reciente', risk: 'Confiable', user: 'Camila Soto' },
+      { id: 's3', device: 'Windows Workstation', browser: 'Edge', city: 'Bogota, CO', lastSeen: 'Hace 3 dias', status: 'attention', statusLabel: 'Revisar', risk: 'Nueva ubicacion', user: 'Camila Soto' }
+    ];
+
+    new MTS.Button('#sessions-signout-all', {
+      label: 'Cerrar todo',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        notify('warning', 'Cierre remoto simulado', 'La UI deja planteado el flujo para invalidar todas las sesiones activas.');
+      }
+    });
+
+    new MTS.Input('#sessions-search', {
+      type: 'text',
+      label: 'Buscar sesion',
+      placeholder: 'MacBook, Santiago, Chrome...',
+      iconLeft: MTS.Icon.get('search')
+    });
+
+    statusSelect = new MTS.Select('#sessions-status', {
+      label: 'Estado',
+      placeholder: 'Todos',
+      clearable: true,
+      options: [
+        { value: 'active', label: 'Activa' },
+        { value: 'recent', label: 'Reciente' },
+        { value: 'attention', label: 'Revisar' }
+      ]
+    });
+
+    new MTS.Button('#sessions-clear', {
+      label: 'Limpiar filtros',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        sessionState.query = '';
+        sessionState.status = '';
+        setNativeValue('#sessions-search input', '');
+        statusSelect.clear();
+        renderSessions();
+      }
+    });
+
+    statusSelect.on('change', function (e) {
+      sessionState.status = e.detail.value || '';
+      renderSessions();
+    });
+
+    var searchNode = document.querySelector('#sessions-search input');
+    if (searchNode) {
+      searchNode.addEventListener('input', function (e) {
+        sessionState.query = e.target.value || '';
+        renderSessions();
+      });
+    }
+
+    function badgeVariant(status) {
+      if (status === 'active') return 'success';
+      if (status === 'recent') return 'warning';
+      return 'danger';
+    }
+
+    function setNativeValue(selector, value) {
+      var input = document.querySelector(selector);
+      if (!input) return;
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#sessions-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderSessions() {
+      var host = document.getElementById('sessions-results');
+      var meta = document.getElementById('sessions-results-meta');
+      host.innerHTML = '';
+
+      var visible = sessions.filter(function (session) {
+        var haystack = [session.device, session.browser, session.city, session.user, session.risk].join(' ').toLowerCase();
+        var matchesQuery = !sessionState.query || haystack.indexOf(sessionState.query.toLowerCase()) !== -1;
+        var matchesStatus = !sessionState.status || session.status === sessionState.status;
+        return matchesQuery && matchesStatus;
+      });
+
+      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+
+      visible.forEach(function (session, index) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12';
+        host.appendChild(wrap);
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: session.device,
+          subtitle: session.user,
+          variant: index === 0 ? 'elevated' : 'outlined',
+          size: 'lg',
+          body:
+            '<div class="session-history-page__session-body">' +
+              '<div class="session-history-page__session-meta">' +
+                '<span id="session-badge-' + session.id + '"></span>' +
+                '<span class="session-history-page__session-risk">' + session.risk + '</span>' +
+              '</div>' +
+              '<div class="session-history-page__session-grid">' +
+                '<div><span>Navegador</span><strong>' + session.browser + '</strong></div>' +
+                '<div><span>Ubicacion</span><strong>' + session.city + '</strong></div>' +
+                '<div><span>Ultima actividad</span><strong>' + session.lastSeen + '</strong></div>' +
+                '<div><span>Usuario</span><strong>' + session.user + '</strong></div>' +
+              '</div>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: 'Cerrar sesion',
+              variant: 'primary',
+              icon: MTS.Icon.get('refresh-cw'),
+              onClick: function () {
+                notify('success', 'Sesion invalidada', 'Se simulo el cierre remoto para ' + session.device + '.');
+              }
+            },
+            {
+              label: 'Marcar confiable',
+              variant: 'ghost',
+              icon: MTS.Icon.get('check-circle'),
+              onClick: function () {
+                notify('info', 'Origen reconocido', session.device + ' quedo marcado como origen conocido.');
+              }
+            }
+          ]
+        });
+
+        new MTS.Badge('#session-badge-' + session.id, {
+          label: session.statusLabel,
+          variant: badgeVariant(session.status),
+          size: 'sm'
+        });
+      });
+
+      MTS.Icon.initAll();
+    }
+
+    renderSessions();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

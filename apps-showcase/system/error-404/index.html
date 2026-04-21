@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>404 Not Found - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="error-404.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="system-error-page system-error-page--404">
+    <main class="system-error-page__panel mts-surface">
+      <div class="system-error-page__icon"><i class="mts-icon mts-icon-search"></i></div>
+      <div class="system-error-page__badge"><span id="error-404-badge"></span></div>
+      <h1>La pagina que buscas no existe.</h1>
+      <p>
+        Esta salida sirve para enlaces rotos, recursos borrados o rutas antiguas. La idea es dar
+        contexto y redirigir al usuario hacia algo util sin friccion.
+      </p>
+      <div class="system-error-page__actions">
+        <div id="error-404-search"></div>
+        <div id="error-404-home"></div>
+      </div>
+      <div id="error-404-feedback"></div>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    new MTS.Badge('#error-404-badge', {
+      label: '404 not found',
+      variant: 'warning',
+      size: 'sm'
+    });
+
+    new MTS.Button('#error-404-search', {
+      label: 'Ir a buscar',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('search'),
+      onClick: function () {
+        notify('info', 'Busqueda simulada', 'Aqui normalmente redirigirias a una busqueda global o al catalogo.');
+      }
+    });
+
+    new MTS.Button('#error-404-home', {
+      label: 'Volver al inicio',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('arrow-right'),
+      onClick: function () {
+        notify('success', 'Salida simulada', 'La UI deja cubierto el retorno a una pantalla segura.');
+      }
+    });
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#error-404-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

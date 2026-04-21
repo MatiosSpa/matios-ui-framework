@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Members List - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-avatar/matios-ui-avatar.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-kpicard/matios-ui-kpicard.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="members-list.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../display/matios-ui-avatar/matios-ui-avatar.js"></script>
+  <script src="../../../display/matios-ui-kpicard/matios-ui-kpicard.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="admin-members-page">
+    <header class="admin-members-page__topbar mts-surface">
+      <div class="admin-members-page__brand">
+        <div class="admin-members-page__logo">M</div>
+        <div>
+          <div class="admin-members-page__title">Members List</div>
+          <div class="admin-members-page__subtitle">Gestion real de usuarios, roles y acceso operativo del workspace</div>
+        </div>
+      </div>
+      <div class="admin-members-page__actions">
+        <div id="members-export-button"></div>
+        <div id="members-invite-button"></div>
+      </div>
+    </header>
+
+    <main class="admin-members-page__main mts-grid mts-grid--gap-md">
+      <section class="admin-members-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="admin-members-page__eyebrow">Workspace admin</div>
+          <h1 class="admin-members-page__hero-title">Controla quien entra, que rol opera y donde conviene intervenir antes de que el acceso se vuelva ruido.</h1>
+          <p class="admin-members-page__hero-copy">
+            Esta vista sirve para revisar miembros activos, pendientes e invitados con foco operativo:
+            ultimo acceso, equipos, permisos base y acciones de seguimiento sin salir del listado.
+          </p>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12">
+        <div class="admin-members-page__kpis mts-grid mts-grid--gap-md">
+          <div class="mts-g-col-12 mts-g-col-md-4"><div id="members-kpi-active"></div></div>
+          <div class="mts-g-col-12 mts-g-col-md-4"><div id="members-kpi-pending"></div></div>
+          <div class="mts-g-col-12 mts-g-col-md-4"><div id="members-kpi-owners"></div></div>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4">
+        <div class="mts-form-card admin-members-page__filters-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Filtros</h2>
+            <p class="mts-form-card__subtitle">Busca por nombre, cargo, rol o estado del acceso.</p>
+          </div>
+
+          <div id="members-feedback"></div>
+
+          <div class="admin-members-page__filters">
+            <div id="members-search"></div>
+            <div id="members-role-filter"></div>
+            <div id="members-status-filter"></div>
+          </div>
+
+          <div class="admin-members-page__filter-actions">
+            <div id="members-clear-button"></div>
+          </div>
+        </div>
+
+        <div id="members-sidebar-card"></div>
+      </aside>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="admin-members-page__results-head">
+          <div>
+            <div class="admin-members-page__results-label">Workspace members</div>
+            <h2 class="admin-members-page__results-title">Lista operativa</h2>
+          </div>
+          <div class="admin-members-page__results-meta" id="members-results-meta">0 resultados</div>
+        </div>
+
+        <div class="mts-grid mts-grid--gap-md" id="members-results"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+  </script>
+  <script>
+    var membersState = { query: '', role: '', status: '' };
+    var membersData = [
+      {
+        id: 'm1',
+        name: 'Camila Soto',
+        email: 'camila@matios.dev',
+        role: 'owner',
+        roleLabel: 'Owner',
+        status: 'active',
+        statusLabel: 'Activo',
+        job: 'Operations Lead',
+        team: 'Ops + Billing',
+        lastAccess: 'Hace 12 min',
+        permissions: 'Workspace, billing y security',
+        avatarStatus: 'online'
+      },
+      {
+        id: 'm2',
+        name: 'Diego Paredes',
+        email: 'diego@matios.dev',
+        role: 'admin',
+        roleLabel: 'Admin',
+        status: 'active',
+        statusLabel: 'Activo',
+        job: 'Support Manager',
+        team: 'Support',
+        lastAccess: 'Hace 1 h',
+        permissions: 'Triage, macros y team settings',
+        avatarStatus: 'busy'
+      },
+      {
+        id: 'm3',
+        name: 'Laura Herrera',
+        email: 'laura@matios.dev',
+        role: 'member',
+        roleLabel: 'Member',
+        status: 'active',
+        statusLabel: 'Activo',
+        job: 'Product Designer',
+        team: 'Product',
+        lastAccess: 'Ayer, 18:42',
+        permissions: 'Boards, comments y notifications',
+        avatarStatus: 'away'
+      },
+      {
+        id: 'm4',
+        name: 'Nicolas Vega',
+        email: 'nicolas@matios.dev',
+        role: 'billing',
+        roleLabel: 'Billing',
+        status: 'invited',
+        statusLabel: 'Invitado',
+        job: 'Finance Analyst',
+        team: 'Finance',
+        lastAccess: 'Invitado hace 2 h',
+        permissions: 'Invoices y payment methods',
+        avatarStatus: 'offline'
+      },
+      {
+        id: 'm5',
+        name: 'Ana Mella',
+        email: 'ana@matios.dev',
+        role: 'member',
+        roleLabel: 'Member',
+        status: 'paused',
+        statusLabel: 'Pausado',
+        job: 'QA Lead',
+        team: 'Platform',
+        lastAccess: 'Hace 14 dias',
+        permissions: 'Boards y release checklist',
+        avatarStatus: 'offline'
+      }
+    ];
+
+    var roleFilter;
+    var statusFilter;
+
+    new MTS.Button('#members-export-button', {
+      label: 'Exportar acceso',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('download'),
+      onClick: function () {
+        showFeedback('success', 'Export listo', 'Se simulo la exportacion del snapshot actual de miembros y roles.');
+      }
+    });
+
+    new MTS.Button('#members-invite-button', {
+      label: 'Invitar miembro',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('user-plus'),
+      onClick: function () { openScreen('../invite-member/index.html'); }
+    });
+
+    new MTS.KPICard('#members-kpi-active', {
+      label: 'Miembros activos',
+      value: '42',
+      trend: 9,
+      trendLabel: 'vs mes anterior',
+      variant: 'success',
+      sparkline: [28, 30, 32, 35, 36, 39, 41, 42]
+    });
+
+    new MTS.KPICard('#members-kpi-pending', {
+      label: 'Invitaciones pendientes',
+      value: '6',
+      trend: -2,
+      trendLabel: 'vs semana pasada',
+      variant: 'warning',
+      sparkline: [9, 8, 7, 7, 8, 6, 6, 6]
+    });
+
+    new MTS.KPICard('#members-kpi-owners', {
+      label: 'Owners + admins',
+      value: '5',
+      trend: 0,
+      trendLabel: 'sin cambios',
+      variant: 'primary',
+      sparkline: [5, 5, 5, 5, 5, 5, 5, 5]
+    });
+
+    new MTS.Input('#members-search', {
+      type: 'text',
+      label: 'Buscar miembro',
+      placeholder: 'Nombre, correo, cargo o equipo',
+      iconLeft: MTS.Icon.get('search')
+    });
+
+    roleFilter = new MTS.Select('#members-role-filter', {
+      label: 'Rol',
+      placeholder: 'Todos',
+      clearable: true,
+      options: [
+        { value: 'owner', label: 'Owner' },
+        { value: 'admin', label: 'Admin' },
+        { value: 'member', label: 'Member' },
+        { value: 'billing', label: 'Billing' }
+      ]
+    });
+
+    statusFilter = new MTS.Select('#members-status-filter', {
+      label: 'Estado',
+      placeholder: 'Todos',
+      clearable: true,
+      options: [
+        { value: 'active', label: 'Activo' },
+        { value: 'invited', label: 'Invitado' },
+        { value: 'paused', label: 'Pausado' }
+      ]
+    });
+
+    new MTS.Button('#members-clear-button', {
+      label: 'Limpiar filtros',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        membersState.query = '';
+        membersState.role = '';
+        membersState.status = '';
+        setNativeValue('#members-search input', '');
+        roleFilter.clear();
+        statusFilter.clear();
+        renderMembers();
+      }
+    });
+
+    new MTS.Card('#members-sidebar-card', {
+      title: 'Politica operativa',
+      subtitle: 'Acceso del workspace',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="admin-members-page__sidebar-copy">' +
+          '<p>Owners y admins mantienen acceso fuerte sobre billing, settings y politicas. Los perfiles con foco operativo quedan delegados por rol.</p>' +
+          '<ul class="admin-members-page__sidebar-list">' +
+            '<li>Invitaciones expiran en 7 dias.</li>' +
+            '<li>Las cuentas pausadas conservan historial, pero no acceden.</li>' +
+            '<li>Billing y support pueden operar sin ser admins completos.</li>' +
+          '</ul>' +
+        '</div>'
+    });
+
+    roleFilter.on('change', function (e) {
+      membersState.role = e.detail.value || '';
+      renderMembers();
+    });
+
+    statusFilter.on('change', function (e) {
+      membersState.status = e.detail.value || '';
+      renderMembers();
+    });
+
+    var searchNode = document.querySelector('#members-search input');
+    if (searchNode) {
+      searchNode.addEventListener('input', function (e) {
+        membersState.query = e.target.value || '';
+        renderMembers();
+      });
+    }
+
+    function showFeedback(variant, title, message) {
+      MTS.Alert.show('#members-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function setNativeValue(selector, value) {
+      var input = document.querySelector(selector);
+      if (!input) return;
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function getStatusVariant(status) {
+      if (status === 'active') return 'success';
+      if (status === 'invited') return 'warning';
+      return 'danger';
+    }
+
+    function getRoleVariant(role) {
+      if (role === 'owner') return 'primary';
+      if (role === 'admin') return 'accent';
+      if (role === 'billing') return 'info';
+      return 'default';
+    }
+
+    function renderMembers() {
+      var host = document.getElementById('members-results');
+      var meta = document.getElementById('members-results-meta');
+      host.innerHTML = '';
+
+      var visible = membersData.filter(function (member) {
+        var haystack = [member.name, member.email, member.job, member.team, member.permissions].join(' ').toLowerCase();
+        var matchesQuery = !membersState.query || haystack.indexOf(membersState.query.toLowerCase()) !== -1;
+        var matchesRole = !membersState.role || member.role === membersState.role;
+        var matchesStatus = !membersState.status || member.status === membersState.status;
+        return matchesQuery && matchesRole && matchesStatus;
+      });
+
+      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+
+      if (!visible.length) {
+        var emptyWrap = document.createElement('div');
+        emptyWrap.className = 'mts-g-col-12';
+        host.appendChild(emptyWrap);
+        var emptyHost = document.createElement('div');
+        emptyWrap.appendChild(emptyHost);
+        new MTS.Card(emptyHost, {
+          title: 'Sin resultados',
+          subtitle: 'Ajusta filtros o busca otro miembro',
+          variant: 'outlined',
+          size: 'lg',
+          body: '<p class="admin-members-page__empty">No hay miembros que coincidan con la combinacion actual.</p>'
+        });
+        return;
+      }
+
+      visible.forEach(function (member, index) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12';
+        host.appendChild(wrap);
+
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: member.name,
+          subtitle: member.email,
+          variant: index === 0 ? 'elevated' : 'outlined',
+          size: 'lg',
+          hoverable: true,
+          body:
+            '<div class="admin-members-page__member-body">' +
+              '<div class="admin-members-page__member-header">' +
+                '<div class="admin-members-page__member-avatar" id="member-avatar-' + member.id + '"></div>' +
+                '<div class="admin-members-page__member-summary">' +
+                  '<div class="admin-members-page__member-job">' + member.job + '</div>' +
+                  '<div class="admin-members-page__member-team">' + member.team + '</div>' +
+                '</div>' +
+              '</div>' +
+              '<div class="admin-members-page__member-badges">' +
+                '<span id="member-role-' + member.id + '"></span>' +
+                '<span id="member-status-' + member.id + '"></span>' +
+              '</div>' +
+              '<div class="admin-members-page__member-grid">' +
+                '<div><span>Ultimo acceso</span><strong>' + member.lastAccess + '</strong></div>' +
+                '<div><span>Permisos</span><strong>' + member.permissions + '</strong></div>' +
+              '</div>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: member.status === 'invited' ? 'Reenviar invitacion' : 'Editar acceso',
+              variant: 'primary',
+              icon: MTS.Icon.get(member.status === 'invited' ? 'send' : 'shield'),
+              onClick: function () {
+                showFeedback(
+                  'success',
+                  member.status === 'invited' ? 'Invitacion reenviada' : 'Acceso actualizado',
+                  member.name + ' quedo atendido desde el listado sin abrir un modal aparte.'
+                );
+              }
+            },
+            {
+              label: member.status === 'paused' ? 'Reactivar' : 'Pausar',
+              variant: 'ghost',
+              icon: MTS.Icon.get(member.status === 'paused' ? 'play' : 'pause'),
+              onClick: function () {
+                member.status = member.status === 'paused' ? 'active' : 'paused';
+                member.statusLabel = member.status === 'paused' ? 'Pausado' : 'Activo';
+                showFeedback('info', 'Estado ajustado', 'Se simulo el cambio de estado para ' + member.name + '.');
+                renderMembers();
+              }
+            }
+          ]
+        });
+
+        new MTS.Avatar('#member-avatar-' + member.id, {
+          name: member.name,
+          size: 'lg',
+          status: member.avatarStatus
+        });
+
+        new MTS.Badge('#member-role-' + member.id, {
+          label: member.roleLabel,
+          variant: getRoleVariant(member.role),
+          size: 'sm'
+        });
+
+        new MTS.Badge('#member-status-' + member.id, {
+          label: member.statusLabel,
+          variant: getStatusVariant(member.status),
+          size: 'sm'
+        });
+      });
+
+      MTS.Icon.initAll();
+    }
+
+    renderMembers();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

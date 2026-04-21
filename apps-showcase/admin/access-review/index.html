@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Access Review - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="access-review.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="access-review-page">
+    <header class="access-review-page__topbar mts-surface">
+      <div class="access-review-page__brand">
+        <div class="access-review-page__logo">M</div>
+        <div>
+          <div class="access-review-page__title">Access Review</div>
+          <div class="access-review-page__subtitle">Permisos efectivos, perfiles heredados y ajustes de acceso</div>
+        </div>
+      </div>
+      <div class="access-review-page__actions">
+        <div id="access-review-export"></div>
+      </div>
+    </header>
+
+    <main class="access-review-page__main mts-grid mts-grid--gap-md">
+      <section class="access-review-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="access-review-page__eyebrow">Permission review</div>
+          <h1 class="access-review-page__hero-title">Revisa acceso efectivo sin perder de vista de dónde viene cada permiso.</h1>
+          <p class="access-review-page__hero-copy">
+            La vista está pensada para detectar exceso de acceso, entender herencia por equipos y
+            hacer ajustes rápidos antes de que el permiso se convierta en deuda operativa.
+          </p>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4">
+        <div class="mts-form-card access-review-page__filters-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Filtros</h2>
+            <p class="mts-form-card__subtitle">Busca por usuario, equipo o modulo.</p>
+          </div>
+          <div id="access-feedback"></div>
+          <div class="access-review-page__filters">
+            <div id="access-search"></div>
+            <div id="access-module"></div>
+          </div>
+          <div id="access-clear"></div>
+        </div>
+      </aside>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="access-review-page__results-head">
+          <div>
+            <div class="access-review-page__results-label">Effective permissions</div>
+            <h2 class="access-review-page__results-title">Revision de acceso</h2>
+          </div>
+          <div class="access-review-page__results-meta" id="access-results-meta">0 resultados</div>
+        </div>
+        <div class="mts-grid mts-grid--gap-md" id="access-results"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+  </script>
+  <script>
+    var accessState = { query: '', module: '' };
+    var moduleSelect;
+    var reviews = [
+      { id: 'r1', user: 'Camila Soto', team: 'Operations', role: 'Owner', module: 'billing', moduleLabel: 'Billing', profile: 'billing-admin + owner', status: 'Completo', statusVariant: 'success', summary: 'Puede editar metodo de pago, invoices y plan del workspace.' },
+      { id: 'r2', user: 'Diego Paredes', team: 'Support', role: 'Admin', module: 'support', moduleLabel: 'Support', profile: 'support-triage + workspace-admin', status: 'Amplio', statusVariant: 'warning', summary: 'Mantiene visibilidad fuerte sobre tickets, macros y usuarios de soporte.' },
+      { id: 'r3', user: 'Laura Herrera', team: 'Product', role: 'Member', module: 'notifications', moduleLabel: 'Notifications', profile: 'product-member + notification-editor', status: 'Ajustado', statusVariant: 'info', summary: 'Edita flujos de notificaciones y tiene lectura de activity feed.' }
+    ];
+
+    new MTS.Button('#access-review-export', {
+      label: 'Exportar revision',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('download'),
+      onClick: function () {
+        notify('success', 'Revision exportada', 'Se simulo la exportacion del snapshot actual de permisos efectivos.');
+      }
+    });
+
+    new MTS.Input('#access-search', {
+      type: 'text',
+      label: 'Buscar acceso',
+      placeholder: 'Usuario, equipo o perfil',
+      iconLeft: MTS.Icon.get('search')
+    });
+
+    moduleSelect = new MTS.Select('#access-module', {
+      label: 'Modulo',
+      placeholder: 'Todos',
+      clearable: true,
+      options: [
+        { value: 'billing', label: 'Billing' },
+        { value: 'support', label: 'Support' },
+        { value: 'notifications', label: 'Notifications' }
+      ]
+    });
+
+    new MTS.Button('#access-clear', {
+      label: 'Limpiar filtros',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        accessState.query = '';
+        accessState.module = '';
+        setNativeValue('#access-search input', '');
+        moduleSelect.clear();
+        renderReviews();
+      }
+    });
+
+    moduleSelect.on('change', function (e) {
+      accessState.module = e.detail.value || '';
+      renderReviews();
+    });
+
+    var searchNode = document.querySelector('#access-search input');
+    if (searchNode) {
+      searchNode.addEventListener('input', function (e) {
+        accessState.query = e.target.value || '';
+        renderReviews();
+      });
+    }
+
+    function setNativeValue(selector, value) {
+      var input = document.querySelector(selector);
+      if (!input) return;
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#access-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderReviews() {
+      var host = document.getElementById('access-results');
+      var meta = document.getElementById('access-results-meta');
+      host.innerHTML = '';
+
+      var visible = reviews.filter(function (item) {
+        var haystack = [item.user, item.team, item.role, item.profile, item.summary].join(' ').toLowerCase();
+        var matchesQuery = !accessState.query || haystack.indexOf(accessState.query.toLowerCase()) !== -1;
+        var matchesModule = !accessState.module || item.module === accessState.module;
+        return matchesQuery && matchesModule;
+      });
+
+      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+
+      visible.forEach(function (item, index) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12';
+        host.appendChild(wrap);
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: item.user,
+          subtitle: item.team + ' · ' + item.role,
+          variant: index === 0 ? 'elevated' : 'outlined',
+          size: 'lg',
+          body:
+            '<div class="access-review-page__review-body">' +
+              '<div class="access-review-page__review-meta">' +
+                '<span id="access-status-' + item.id + '"></span>' +
+                '<span id="access-module-badge-' + item.id + '"></span>' +
+              '</div>' +
+              '<div class="access-review-page__review-profile">' + item.profile + '</div>' +
+              '<p class="access-review-page__review-copy">' + item.summary + '</p>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: 'Ajustar acceso',
+              variant: 'primary',
+              icon: MTS.Icon.get('sliders'),
+              onClick: function () {
+                notify('info', 'Ajuste simulado', 'La UI deja planteado el siguiente paso para recortar o ampliar permisos.');
+              }
+            },
+            {
+              label: 'Ver miembro',
+              variant: 'ghost',
+              icon: MTS.Icon.get('arrow-right'),
+              onClick: function () { openScreen('../member-detail/index.html'); }
+            }
+          ]
+        });
+
+        new MTS.Badge('#access-status-' + item.id, {
+          label: item.status,
+          variant: item.statusVariant,
+          size: 'sm'
+        });
+
+        new MTS.Badge('#access-module-badge-' + item.id, {
+          label: item.moduleLabel,
+          variant: 'default',
+          size: 'sm'
+        });
+      });
+
+      MTS.Icon.initAll();
+    }
+
+    renderReviews();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

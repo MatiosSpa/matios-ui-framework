@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Search Results - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="search-results.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="search-results-page">
+    <header class="search-results-page__topbar mts-surface">
+      <div class="search-results-page__brand">
+        <div class="search-results-page__logo">M</div>
+        <div>
+          <div class="search-results-page__title">Search Results</div>
+          <div class="search-results-page__subtitle">Resultados filtrables para vistas completas de busqueda</div>
+        </div>
+      </div>
+      <div id="search-results-save"></div>
+    </header>
+
+    <main class="search-results-page__main mts-grid mts-grid--gap-md">
+      <section class="search-results-page__hero mts-surface mts-g-col-12">
+        <div class="search-results-page__eyebrow">Refined discovery</div>
+        <h1 class="search-results-page__hero-title">Resultados para "workspace billing"</h1>
+        <p class="search-results-page__hero-copy">
+          Vista completa para revisar resultados por tipo, aplicar filtros y ejecutar acciones
+          rapidas sin abandonar el contexto de busqueda.
+        </p>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4">
+        <div class="mts-form-card search-results-page__filters-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Filtros</h2>
+            <p class="mts-form-card__subtitle">Refina por tipo de contenido y recencia.</p>
+          </div>
+          <div id="search-results-feedback"></div>
+          <div class="search-results-page__filters">
+            <div id="results-query"></div>
+            <div id="results-kind"></div>
+            <div id="results-time"></div>
+          </div>
+          <div id="results-clear"></div>
+        </div>
+      </aside>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="search-results-page__results-head">
+          <div>
+            <div class="search-results-page__results-label">Search index</div>
+            <h2 class="search-results-page__results-title">Coincidencias disponibles</h2>
+          </div>
+          <div class="search-results-page__results-meta" id="results-meta">0 resultados</div>
+        </div>
+        <div class="mts-grid mts-grid--gap-md" id="results-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var resultsState = { query: 'workspace billing', kind: '', time: '' };
+    var kindSelect;
+    var timeSelect;
+    var results = [
+      { id: 'sr1', title: 'Workspace billing owner', subtitle: 'Member profile', kind: 'people', kindLabel: 'People', time: 'today', status: 'Relevant', variant: 'success', summary: 'Camila Soto aparece como owner de billing y aprueba cambios de plan.' },
+      { id: 'sr2', title: 'Workspace billing policy', subtitle: 'Document', kind: 'files', kindLabel: 'Files', time: 'week', status: 'Updated', variant: 'info', summary: 'Politica interna para escalaciones de cobro y ownership operativo.' },
+      { id: 'sr3', title: 'Billing workspace settings', subtitle: 'Setting', kind: 'settings', kindLabel: 'Settings', time: 'month', status: 'Config', variant: 'default', summary: 'Configuracion de prorrateo, fallback de pago y recordatorios de facturas.' }
+    ];
+
+    new MTS.Button('#search-results-save', {
+      label: 'Guardar vista',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('check-circle'),
+      onClick: function () {
+        notify('success', 'Vista guardada', 'Se simulo guardar esta combinacion de filtros como acceso rapido.');
+      }
+    });
+
+    new MTS.Input('#results-query', {
+      label: 'Consulta',
+      type: 'text',
+      value: resultsState.query,
+      placeholder: 'Buscar por titulo o resumen',
+      iconLeft: MTS.Icon.get('search')
+    });
+
+    kindSelect = new MTS.Select('#results-kind', {
+      label: 'Tipo',
+      placeholder: 'Todos',
+      clearable: true,
+      options: [
+        { value: 'people', label: 'People' },
+        { value: 'files', label: 'Files' },
+        { value: 'settings', label: 'Settings' }
+      ]
+    });
+
+    timeSelect = new MTS.Select('#results-time', {
+      label: 'Recencia',
+      placeholder: 'Todo',
+      clearable: true,
+      options: [
+        { value: 'today', label: 'Hoy' },
+        { value: 'week', label: 'Ultimos 7 dias' },
+        { value: 'month', label: 'Ultimos 30 dias' }
+      ]
+    });
+
+    new MTS.Button('#results-clear', {
+      label: 'Limpiar filtros',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        resultsState = { query: '', kind: '', time: '' };
+        setInputValue('#results-query input', '');
+        kindSelect.clear();
+        timeSelect.clear();
+        renderResults();
+      }
+    });
+
+    kindSelect.on('change', function (e) {
+      resultsState.kind = e.detail.value || '';
+      renderResults();
+    });
+
+    timeSelect.on('change', function (e) {
+      resultsState.time = e.detail.value || '';
+      renderResults();
+    });
+
+    var queryNode = document.querySelector('#results-query input');
+    if (queryNode) {
+      queryNode.addEventListener('input', function (e) {
+        resultsState.query = e.target.value || '';
+        renderResults();
+      });
+    }
+
+    function setInputValue(selector, value) {
+      var input = document.querySelector(selector);
+      if (!input) return;
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#search-results-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderResults() {
+      var host = document.getElementById('results-list');
+      var meta = document.getElementById('results-meta');
+      host.innerHTML = '';
+
+      var visible = results.filter(function (item) {
+        var haystack = [item.title, item.subtitle, item.summary].join(' ').toLowerCase();
+        var matchesQuery = !resultsState.query || haystack.indexOf(resultsState.query.toLowerCase()) !== -1;
+        var matchesKind = !resultsState.kind || item.kind === resultsState.kind;
+        var matchesTime = !resultsState.time || item.time === resultsState.time;
+        return matchesQuery && matchesKind && matchesTime;
+      });
+
+      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+
+      if (!visible.length) {
+        host.innerHTML = '<div class="mts-g-col-12"><div class="search-results-page__empty mts-surface"><strong>Sin coincidencias</strong><p>Prueba con otro termino o quita filtros para recuperar resultados.</p></div></div>';
+        return;
+      }
+
+      visible.forEach(function (item, index) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12';
+        host.appendChild(wrap);
+
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: item.title,
+          subtitle: item.subtitle,
+          variant: index === 0 ? 'elevated' : 'outlined',
+          size: 'lg',
+          body:
+            '<div class="search-results-page__result-body">' +
+              '<div class="search-results-page__result-meta">' +
+                '<span id="result-kind-' + item.id + '"></span>' +
+                '<span id="result-status-' + item.id + '"></span>' +
+              '</div>' +
+              '<p class="search-results-page__result-copy">' + item.summary + '</p>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: 'Abrir',
+              variant: 'primary',
+              icon: MTS.Icon.get('arrow-right'),
+              onClick: function () {
+                notify('info', 'Accion simulada', 'Aqui el producto navegaria al recurso seleccionado.');
+              }
+            },
+            {
+              label: 'Guardar',
+              variant: 'ghost',
+              icon: MTS.Icon.get('check-circle'),
+              onClick: function () {
+                notify('success', 'Resultado guardado', 'El item quedo fijado dentro de una busqueda guardada.');
+              }
+            }
+          ]
+        });
+
+        new MTS.Badge('#result-kind-' + item.id, {
+          label: item.kindLabel,
+          variant: 'default',
+          size: 'sm'
+        });
+
+        new MTS.Badge('#result-status-' + item.id, {
+          label: item.status,
+          variant: item.variant,
+          size: 'sm'
+        });
+      });
+    }
+
+    renderResults();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

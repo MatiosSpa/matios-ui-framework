@@ -11,6 +11,7 @@ MTS.ReadmeModal = (() => {
     input:'matios-ui-input/matios-ui-input.md',
     select:'matios-ui-select/matios-ui-select.md',
     checkbox:'matios-ui-checkbox/matios-ui-checkbox.md',
+    transferlist:'matios-ui-transferlist/matios-ui-transferlist.md',
     picker:'matios-ui-picker/matios-ui-picker.md',
     rating:'matios-ui-rating/matios-ui-rating.md',
     taginput:'matios-ui-taginput/matios-ui-taginput.md',
@@ -43,7 +44,7 @@ MTS.ReadmeModal = (() => {
   };
 
   const GROUP_MAP = {
-    input:'forms',select:'forms',checkbox:'forms',picker:'forms',rating:'forms',
+    input:'forms',select:'forms',checkbox:'forms',transferlist:'forms',picker:'forms',rating:'forms',
     taginput:'forms',validation:'forms',fileupload:'forms',paging:'forms',
     tabs:'navigation',accordion:'navigation',breadcrumb:'navigation',
     stepper:'navigation',drawer:'navigation',dropdown:'navigation',

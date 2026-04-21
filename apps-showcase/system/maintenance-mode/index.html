@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Maintenance Mode - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="maintenance-mode.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="maintenance-page">
+    <main class="maintenance-page__main mts-grid mts-grid--gap-md">
+      <section class="maintenance-page__hero mts-surface mts-g-col-12">
+        <div class="maintenance-page__hero-grid">
+          <div>
+            <div class="maintenance-page__eyebrow">Scheduled maintenance</div>
+            <h1 class="maintenance-page__hero-title">Estamos aplicando una ventana de mantenimiento.</h1>
+            <p class="maintenance-page__hero-copy">
+              La UI entrega una salida clara para ventanas programadas: comunica impacto, tiempo
+              estimado y deja acciones utiles para usuarios o equipos internos.
+            </p>
+            <div class="maintenance-page__badges">
+              <span id="maintenance-badge-state"></span>
+              <span id="maintenance-badge-eta"></span>
+            </div>
+            <div class="maintenance-page__actions">
+              <div id="maintenance-status-button"></div>
+              <div id="maintenance-notify-button"></div>
+            </div>
+          </div>
+          <div id="maintenance-feedback"></div>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-lg-6">
+        <div id="maintenance-impact-card"></div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-lg-6">
+        <div id="maintenance-next-card"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    new MTS.Badge('#maintenance-badge-state', {
+      label: 'Maintenance in progress',
+      variant: 'warning',
+      size: 'sm'
+    });
+
+    new MTS.Badge('#maintenance-badge-eta', {
+      label: 'ETA 35 min',
+      variant: 'default',
+      size: 'sm'
+    });
+
+    new MTS.Button('#maintenance-status-button', {
+      label: 'Ver estado',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('activity'),
+      onClick: function () {
+        notify('info', 'Estado abierto', 'Aqui normalmente redirigirias a la pagina de status del servicio.');
+      }
+    });
+
+    new MTS.Button('#maintenance-notify-button', {
+      label: 'Avisar al equipo',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('send'),
+      onClick: function () {
+        notify('success', 'Aviso enviado', 'Se simulo el envio de una notificacion al equipo afectado.');
+      }
+    });
+
+    new MTS.Card('#maintenance-impact-card', {
+      title: 'Impacto esperado',
+      subtitle: 'Affected services',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="maintenance-page__detail-list">' +
+          detailRow('Auth', 'Sin impacto. Login y sesiones siguen activos.') +
+          detailRow('Billing', 'Lectura disponible, escritura pausada durante la migracion.') +
+          detailRow('Webhooks', 'Se encolan deliveries y se reprocesan al finalizar.') +
+        '</div>'
+    });
+
+    new MTS.Card('#maintenance-next-card', {
+      title: 'Siguientes pasos',
+      subtitle: 'What happens next',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="maintenance-page__detail-list">' +
+          detailRow('1', 'Finalizar migracion de datos y validar integridad.') +
+          detailRow('2', 'Reactivar trafico para operaciones de billing.') +
+          detailRow('3', 'Publicar cierre y validar backlog de eventos.') +
+        '</div>'
+    });
+
+    function detailRow(label, value) {
+      return '<article class="maintenance-page__detail-row"><span>' + label + '</span><p>' + value + '</p></article>';
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#maintenance-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

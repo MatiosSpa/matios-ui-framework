@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Approval Detail - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="approval-detail.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="approval-detail-page">
+    <header class="approval-detail-page__topbar mts-surface">
+      <div class="approval-detail-page__brand">
+        <div class="approval-detail-page__logo">M</div>
+        <div>
+          <div class="approval-detail-page__title">Approval Detail</div>
+          <div class="approval-detail-page__subtitle">Contexto completo para decidir una solicitud sensible</div>
+        </div>
+      </div>
+      <div class="approval-detail-page__actions">
+        <div id="approval-detail-back"></div>
+      </div>
+    </header>
+
+    <main class="approval-detail-page__main mts-grid mts-grid--gap-md">
+      <section class="approval-detail-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="approval-detail-page__eyebrow">Request detail</div>
+          <h1 class="approval-detail-page__hero-title">APR-401 · Aprobar acceso Billing Editor para Finance</h1>
+          <p class="approval-detail-page__hero-copy">
+            La solicitud viene desde Operations para habilitar edicion de invoices y metodo de pago
+            a un perfil de Finance durante el cierre de ciclo actual.
+          </p>
+          <div class="approval-detail-page__hero-badges">
+            <span id="approval-detail-priority"></span>
+            <span id="approval-detail-state"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8 approval-detail-page__stack">
+        <div id="approval-detail-summary-card"></div>
+        <div id="approval-detail-impact-card"></div>
+        <div id="approval-detail-notes-card"></div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4 approval-detail-page__sidebar">
+        <div id="approval-detail-decision-card"></div>
+        <div id="approval-detail-sla-card"></div>
+        <div id="approval-detail-feedback"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+  </script>
+  <script>
+    new MTS.Button('#approval-detail-back', {
+      label: 'Volver a inbox',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('arrow-left'),
+      onClick: function () { openScreen('../approval-inbox/index.html'); }
+    });
+
+    new MTS.Badge('#approval-detail-priority', {
+      label: 'Alta',
+      variant: 'danger',
+      size: 'sm'
+    });
+
+    new MTS.Badge('#approval-detail-state', {
+      label: 'Pendiente',
+      variant: 'warning',
+      size: 'sm'
+    });
+
+    new MTS.Card('#approval-detail-summary-card', {
+      title: 'Resumen de la solicitud',
+      subtitle: 'Contexto base',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="approval-detail-page__summary-grid">' +
+          detailCell('Solicitante', 'Camila Soto') +
+          detailCell('Equipo destino', 'Finance') +
+          detailCell('Rol solicitado', 'Billing Editor') +
+          detailCell('Ventana de uso', 'Cierre del ciclo mayo 2026') +
+          detailCell('Motivo', 'Gestión directa de invoices y cobros') +
+          detailCell('Estado actual', 'Pendiente de aprobación') +
+        '</div>'
+    });
+
+    new MTS.Card('#approval-detail-impact-card', {
+      title: 'Impacto del cambio',
+      subtitle: 'Permisos incluidos',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="approval-detail-page__impact">' +
+          '<p>Si se aprueba, el perfil podrá editar invoices, revisar pagos y actualizar el método principal del workspace durante el cierre de ciclo.</p>' +
+          '<div class="approval-detail-page__pill-list">' +
+            pill('Invoice edit') +
+            pill('Payment method access') +
+            pill('Billing visibility') +
+            pill('No access to security settings') +
+          '</div>' +
+        '</div>'
+    });
+
+    new MTS.Card('#approval-detail-notes-card', {
+      title: 'Notas y antecedentes',
+      subtitle: 'Contexto adicional',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="approval-detail-page__notes">' +
+          noteRow('Hoy, 08:10', 'Finance reportó bloqueo para reconciliar invoices pendientes del mes.') +
+          noteRow('Ayer, 19:40', 'Operations validó que el acceso puede acotarse a Billing Editor.') +
+          noteRow('18 abril', 'Security indicó que no se deben extender permisos a settings compartidos.') +
+        '</div>'
+    });
+
+    new MTS.Card('#approval-detail-decision-card', {
+      title: 'Decision',
+      subtitle: 'Accion final',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<p class="approval-detail-page__decision-copy">La recomendacion actual es aprobar con alcance acotado a Billing Editor y fecha de revision al cierre del ciclo.</p>',
+      footerAlign: 'between',
+      footer: [
+        {
+          label: 'Aprobar',
+          variant: 'primary',
+          icon: MTS.Icon.get('check-circle'),
+          onClick: function () {
+            notify('success', 'Solicitud aprobada', 'APR-401 quedó aprobada con alcance acotado al ejemplo.');
+          }
+        },
+        {
+          label: 'Rechazar',
+          variant: 'ghost',
+          icon: MTS.Icon.get('alert'),
+          onClick: function () {
+            notify('warning', 'Solicitud rechazada', 'APR-401 quedó rechazada dentro del flujo de ejemplo.');
+          }
+        }
+      ]
+    });
+
+    new MTS.Card('#approval-detail-sla-card', {
+      title: 'SLA y seguimiento',
+      subtitle: 'Prioridad operativa',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="approval-detail-page__sla">' +
+          '<div><span>SLA</span><strong>2 horas</strong></div>' +
+          '<div><span>Reviewer sugerido</span><strong>Owner de Billing</strong></div>' +
+          '<div><span>Revision posterior</span><strong>Cierre de ciclo</strong></div>' +
+        '</div>'
+    });
+
+    function detailCell(label, value) {
+      return '<div class="approval-detail-page__detail-cell"><span>' + label + '</span><strong>' + value + '</strong></div>';
+    }
+
+    function pill(text) {
+      return '<span class="approval-detail-page__pill">' + text + '</span>';
+    }
+
+    function noteRow(date, text) {
+      return '<article class="approval-detail-page__note-row"><span>' + date + '</span><p>' + text + '</p></article>';
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#approval-detail-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Approval Inbox - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="approval-inbox.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="approval-inbox-page">
+    <header class="approval-inbox-page__topbar mts-surface">
+      <div class="approval-inbox-page__brand">
+        <div class="approval-inbox-page__logo">M</div>
+        <div>
+          <div class="approval-inbox-page__title">Approval Inbox</div>
+          <div class="approval-inbox-page__subtitle">Solicitudes pendientes con prioridad, owner y decision rapida</div>
+        </div>
+      </div>
+      <div class="approval-inbox-page__actions">
+        <div id="approval-refresh"></div>
+      </div>
+    </header>
+
+    <main class="approval-inbox-page__main mts-grid mts-grid--gap-md">
+      <section class="approval-inbox-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="approval-inbox-page__eyebrow">Pending decisions</div>
+          <h1 class="approval-inbox-page__hero-title">Procesa solicitudes con contexto suficiente para decidir sin abrir cinco pantallas más.</h1>
+          <p class="approval-inbox-page__hero-copy">
+            La bandeja cubre escenarios comunes de productos internos: altas de acceso, cambios de
+            billing, excepciones de seguridad y aprobaciones con prioridad o SLA.
+          </p>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4">
+        <div class="mts-form-card approval-inbox-page__filters-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Filtros</h2>
+            <p class="mts-form-card__subtitle">Busca por solicitud, owner o prioridad.</p>
+          </div>
+          <div id="approval-feedback"></div>
+          <div class="approval-inbox-page__filters">
+            <div id="approval-search"></div>
+            <div id="approval-priority"></div>
+          </div>
+          <div id="approval-clear"></div>
+        </div>
+      </aside>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="approval-inbox-page__results-head">
+          <div>
+            <div class="approval-inbox-page__results-label">Requests awaiting decision</div>
+            <h2 class="approval-inbox-page__results-title">Bandeja de aprobaciones</h2>
+          </div>
+          <div class="approval-inbox-page__results-meta" id="approval-results-meta">0 resultados</div>
+        </div>
+        <div class="mts-grid mts-grid--gap-md" id="approval-results"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var approvalState = { query: '', priority: '' };
+    var prioritySelect;
+    var approvals = [
+      { id: 'APR-401', title: 'Aprobar acceso Billing Editor', owner: 'Camila Soto', priority: 'high', priorityLabel: 'Alta', due: 'SLA 2 h', summary: 'Finance solicita acceso de edicion para invoices y metodos de pago.' },
+      { id: 'APR-397', title: 'Excepcion temporal de seguridad', owner: 'Diego Paredes', priority: 'medium', priorityLabel: 'Media', due: 'SLA hoy', summary: 'Se pide omitir segundo factor por 24 h para una migracion controlada.' },
+      { id: 'APR-388', title: 'Upgrade de plan Scale Plus', owner: 'Finance Ops', priority: 'high', priorityLabel: 'Alta', due: 'SLA 4 h', summary: 'El workspace supero el umbral de seats y requiere aprobar upgrade comercial.' },
+      { id: 'APR-372', title: 'Canal de integracion Slack', owner: 'Laura Herrera', priority: 'low', priorityLabel: 'Baja', due: 'SLA 48 h', summary: 'Se propone mover alertas de soporte al canal #ops-alerts.' }
+    ];
+
+    new MTS.Button('#approval-refresh', {
+      label: 'Refrescar',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        notify('success', 'Bandeja actualizada', 'Se simulo la sincronizacion de solicitudes pendientes.');
+      }
+    });
+
+    new MTS.Input('#approval-search', {
+      type: 'text',
+      label: 'Buscar solicitud',
+      placeholder: 'APR-401, Billing, Camila...',
+      iconLeft: MTS.Icon.get('search')
+    });
+
+    prioritySelect = new MTS.Select('#approval-priority', {
+      label: 'Prioridad',
+      placeholder: 'Todas',
+      clearable: true,
+      options: [
+        { value: 'high', label: 'Alta' },
+        { value: 'medium', label: 'Media' },
+        { value: 'low', label: 'Baja' }
+      ]
+    });
+
+    new MTS.Button('#approval-clear', {
+      label: 'Limpiar filtros',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        approvalState.query = '';
+        approvalState.priority = '';
+        setNativeValue('#approval-search input', '');
+        prioritySelect.clear();
+        renderApprovals();
+      }
+    });
+
+    prioritySelect.on('change', function (e) {
+      approvalState.priority = e.detail.value || '';
+      renderApprovals();
+    });
+
+    var searchNode = document.querySelector('#approval-search input');
+    if (searchNode) {
+      searchNode.addEventListener('input', function (e) {
+        approvalState.query = e.target.value || '';
+        renderApprovals();
+      });
+    }
+
+    function setNativeValue(selector, value) {
+      var input = document.querySelector(selector);
+      if (!input) return;
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function badgeVariant(priority) {
+      if (priority === 'high') return 'danger';
+      if (priority === 'medium') return 'warning';
+      return 'info';
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#approval-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderApprovals() {
+      var host = document.getElementById('approval-results');
+      var meta = document.getElementById('approval-results-meta');
+      host.innerHTML = '';
+
+      var visible = approvals.filter(function (item) {
+        var haystack = [item.id, item.title, item.owner, item.summary].join(' ').toLowerCase();
+        var matchesQuery = !approvalState.query || haystack.indexOf(approvalState.query.toLowerCase()) !== -1;
+        var matchesPriority = !approvalState.priority || item.priority === approvalState.priority;
+        return matchesQuery && matchesPriority;
+      });
+
+      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+
+      visible.forEach(function (item, index) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12';
+        host.appendChild(wrap);
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: item.id + ' · ' + item.title,
+          subtitle: item.owner,
+          variant: index === 0 ? 'elevated' : 'outlined',
+          size: 'lg',
+          body:
+            '<div class="approval-inbox-page__approval-body">' +
+              '<div class="approval-inbox-page__approval-meta">' +
+                '<span id="approval-badge-' + item.id + '"></span>' +
+                '<span class="approval-inbox-page__approval-sla">' + item.due + '</span>' +
+              '</div>' +
+              '<p class="approval-inbox-page__approval-copy">' + item.summary + '</p>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: 'Aprobar',
+              variant: 'primary',
+              icon: MTS.Icon.get('check-circle'),
+              onClick: function () {
+                notify('success', 'Solicitud aprobada', item.id + ' quedo aprobada dentro del ejemplo.');
+              }
+            },
+            {
+              label: 'Rechazar',
+              variant: 'ghost',
+              icon: MTS.Icon.get('alert'),
+              onClick: function () {
+                notify('warning', 'Solicitud rechazada', item.id + ' quedo rechazada dentro del ejemplo.');
+              }
+            }
+          ]
+        });
+
+        new MTS.Badge('#approval-badge-' + item.id, {
+          label: item.priorityLabel,
+          variant: badgeVariant(item.priority),
+          size: 'sm'
+        });
+      });
+
+      MTS.Icon.initAll();
+    }
+
+    renderApprovals();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

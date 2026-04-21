@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lista de perfiles - Matios UI</title>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (error) {}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../data/matios-ui-table/matios-ui-table.css">
+  <link rel="stylesheet" href="profile-list.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <main class="mts-p-4">
+    <div id="profile-list-panel"></div>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    var profiles = [
+      {
+        id: 'PRF-001',
+        name: 'Operaciones documental',
+        description: 'Gestiona usuarios, documentos y trazabilidad para operaciones internas.'
+      },
+      {
+        id: 'PRF-002',
+        name: 'Cobranza y billing',
+        description: 'Consulta plan, facturas y medios de pago con alcance financiero.'
+      },
+      {
+        id: 'PRF-003',
+        name: 'Mesa de soporte',
+        description: 'Gestiona bandeja de tickets, reasignacion y resolucion de casos.'
+      }
+    ];
+
+    new MTS.Card('#profile-list-panel', {
+      title: 'Lista de perfiles',
+      subtitle: 'Catalogo operativo de perfiles por modulo',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+          '<div id="profile-list-alert"></div>' +
+          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3">' +
+            '<p class="mts-text-md mts-text-muted mts-m-0">Cada perfil concentra permisos detallados de un modulo especifico.</p>' +
+            '<span id="profile-list-count" class="mts-badge mts-badge--info mts-badge--sm">0 perfiles</span>' +
+          '</div>' +
+          '<div id="profile-list-table"></div>' +
+        '</div>',
+      actions: [
+        {
+          label: 'Nuevo perfil',
+          variant: 'primary',
+          icon: MTS.Icon.get('plus-circle'),
+          onClick: function () {
+            openScreen('../profile-create/index.html');
+          }
+        }
+      ]
+    });
+
+    document.getElementById('profile-list-panel').addEventListener('click', function (event) {
+      var actionButton = event.target.closest('[data-profile-action]');
+      if (!actionButton) return;
+
+      var action = actionButton.getAttribute('data-profile-action');
+      var profileId = actionButton.getAttribute('data-profile-id');
+      var profile = getProfileById(profileId);
+      if (!profile) return;
+
+      if (action === 'edit') openScreen('../profile-edit/index.html');
+      if (action === 'clone') {
+        showAlert(
+          'info',
+          'Perfil clonado',
+          'Se duplicaria el perfil <strong>' + escapeHtml(profile.name) + '</strong> para crear una nueva variante.'
+        );
+      }
+    });
+
+    function getProfileById(id) {
+      for (var i = 0; i < profiles.length; i++) {
+        if (profiles[i].id === id) return profiles[i];
+      }
+      return null;
+    }
+
+    function showAlert(variant, title, message) {
+      document.getElementById('profile-list-alert').innerHTML = '';
+      MTS.Alert.show('#profile-list-alert', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderTable() {
+      document.getElementById('profile-list-count').textContent = profiles.length + (profiles.length === 1 ? ' perfil' : ' perfiles');
+
+      document.getElementById('profile-list-table').innerHTML =
+        '<div class="mts-table-wrap">' +
+          '<table class="mts-table mts-table--hover mts-table--striped">' +
+            '<thead>' +
+              '<tr>' +
+                '<th class="mts-table__th">Nombre</th>' +
+                '<th class="mts-table__th">Descripcion</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+              profiles.map(function (profile) {
+                return '' +
+                  '<tr class="mts-table__row">' +
+                    '<td class="mts-table__td"><strong class="mts-text-sm mts-text-primary">' + escapeHtml(profile.name) + '</strong></td>' +
+                    '<td class="mts-table__td">' + escapeHtml(profile.description) + '</td>' +
+                    '<td class="mts-table__td mts-table__td--actions">' +
+                      actionButton('edit', profile.id, 'edit', 'Editar') +
+                      actionButton('clone', profile.id, 'copy', 'Duplicar') +
+                    '</td>' +
+                  '</tr>';
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>';
+
+      MTS.Icon.initAll();
+    }
+
+    function actionButton(action, profileId, icon, label) {
+      return '' +
+        '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-mr-1" data-profile-action="' + action + '" data-profile-id="' + profileId + '">' +
+          MTS.Icon.get(icon) + ' ' + escapeHtml(label) +
+        '</button>';
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    renderTable();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

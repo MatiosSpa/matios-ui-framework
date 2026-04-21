@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Webhooks - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="webhooks.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="webhooks-page">
+    <header class="webhooks-page__topbar mts-surface">
+      <div class="webhooks-page__brand">
+        <div class="webhooks-page__logo">M</div>
+        <div>
+          <div class="webhooks-page__title">Webhooks</div>
+          <div class="webhooks-page__subtitle">Endpoints, deliveries y reintentos para eventos salientes</div>
+        </div>
+      </div>
+      <div class="webhooks-page__actions">
+        <div id="webhooks-refresh"></div>
+      </div>
+    </header>
+
+    <main class="webhooks-page__main mts-grid mts-grid--gap-md">
+      <section class="webhooks-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="webhooks-page__eyebrow">Outgoing events</div>
+          <h1 class="webhooks-page__hero-title">Controla endpoints y deliveries sin necesitar una consola separada.</h1>
+          <p class="webhooks-page__hero-copy">
+            La pantalla cubre un caso muy real de integraciones: registrar un endpoint, revisar el
+            último delivery, ver el entorno activo y reintentar cuando algo falla.
+          </p>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-7">
+        <div id="webhooks-feedback"></div>
+        <div class="mts-grid mts-grid--gap-md" id="webhooks-list"></div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-5 webhooks-page__sidebar">
+        <div class="mts-form-card webhooks-page__form-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Nuevo endpoint</h2>
+            <p class="mts-form-card__subtitle">URL, entorno y eventos que recibira el consumidor.</p>
+          </div>
+          <div class="webhooks-page__form-grid">
+            <div class="webhooks-page__full-row" id="webhook-url"></div>
+            <div id="webhook-env"></div>
+            <div id="webhook-events"></div>
+          </div>
+          <div class="webhooks-page__form-actions">
+            <div id="webhook-save"></div>
+          </div>
+        </div>
+
+        <div id="webhooks-policy-card"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var hooks = [
+      { id: 'w1', name: 'billing-sync', url: 'https://ops.example.com/hooks/billing', env: 'Production', events: 'invoice.paid, plan.changed', last: '200 OK · Hace 5 min', status: 'Activo', variant: 'success' },
+      { id: 'w2', name: 'security-alerts', url: 'https://sec.example.com/hooks/alerts', env: 'Production', events: 'session.flagged, login.failed', last: '502 Bad Gateway · Hace 18 min', status: 'Con error', variant: 'danger' },
+      { id: 'w3', name: 'sandbox-ops', url: 'https://staging.example.com/hooks/ops', env: 'Staging', events: 'ticket.created, ticket.updated', last: '202 Accepted · Hace 2 h', status: 'Activo', variant: 'success' }
+    ];
+
+    new MTS.Button('#webhooks-refresh', {
+      label: 'Verificar deliveries',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        notify('success', 'Deliveries verificadas', 'Se simulo la comprobacion de estado de todos los endpoints activos.');
+      }
+    });
+
+    new MTS.Input('#webhook-url', {
+      label: 'Endpoint URL',
+      type: 'text',
+      value: 'https://api.example.com/hooks/matios',
+      placeholder: 'https://api.example.com/hooks/matios'
+    });
+
+    new MTS.Select('#webhook-env', {
+      label: 'Entorno',
+      options: [
+        { value: 'prod', label: 'Production' },
+        { value: 'staging', label: 'Staging' },
+        { value: 'sandbox', label: 'Sandbox' }
+      ],
+      value: 'staging'
+    });
+
+    new MTS.Input('#webhook-events', {
+      label: 'Eventos',
+      type: 'text',
+      value: 'invoice.paid, invoice.overdue',
+      placeholder: 'invoice.paid, invoice.overdue'
+    });
+
+    new MTS.Button('#webhook-save', {
+      label: 'Guardar endpoint',
+      variant: 'secondary',
+      block: true,
+      iconLeft: MTS.Icon.get('check-circle'),
+      onClick: function () {
+        notify('info', 'Endpoint simulado', 'La pantalla deja cubierto el alta de nuevos webhooks.');
+      }
+    });
+
+    new MTS.Card('#webhooks-policy-card', {
+      title: 'Buenas practicas',
+      subtitle: 'Webhook operations',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="webhooks-page__policy">' +
+          '<p>Los endpoints productivos deben responder rapido, validar firma y tener owner tecnico visible.</p>' +
+          '<ul class="webhooks-page__policy-list">' +
+            '<li>Usa entornos separados para staging y production.</li>' +
+            '<li>Reintenta solo cuando el endpoint sea idempotente.</li>' +
+            '<li>Monitorea secrets y rotacion por proveedor.</li>' +
+          '</ul>' +
+        '</div>'
+    });
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#webhooks-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderHooks() {
+      var host = document.getElementById('webhooks-list');
+      host.innerHTML = '';
+
+      hooks.forEach(function (item, index) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12';
+        host.appendChild(wrap);
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: item.name,
+          subtitle: item.env,
+          variant: index === 0 ? 'elevated' : 'outlined',
+          size: 'lg',
+          body:
+            '<div class="webhooks-page__hook-body">' +
+              '<div class="webhooks-page__hook-meta">' +
+                '<span id="webhook-status-' + item.id + '"></span>' +
+                '<span class="webhooks-page__hook-last">' + item.last + '</span>' +
+              '</div>' +
+              '<div class="webhooks-page__hook-url">' + item.url + '</div>' +
+              '<div class="webhooks-page__hook-events">' + item.events + '</div>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: 'Retry',
+              variant: 'primary',
+              icon: MTS.Icon.get('send'),
+              onClick: function () {
+                notify('success', 'Retry ejecutado', 'Se simulo el reintento del ultimo delivery para ' + item.name + '.');
+              }
+            },
+            {
+              label: 'Desactivar',
+              variant: 'ghost',
+              icon: MTS.Icon.get('alert'),
+              onClick: function () {
+                notify('warning', 'Accion simulada', 'Aqui normalmente pedirias confirmacion antes de desactivar el endpoint.');
+              }
+            }
+          ]
+        });
+
+        new MTS.Badge('#webhook-status-' + item.id, {
+          label: item.status,
+          variant: item.variant,
+          size: 'sm'
+        });
+      });
+
+      MTS.Icon.initAll();
+    }
+
+    renderHooks();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

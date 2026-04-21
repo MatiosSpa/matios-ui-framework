@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lista de roles - Matios UI</title>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (error) {}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../data/matios-ui-table/matios-ui-table.css">
+  <link rel="stylesheet" href="role-list.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <main class="mts-p-4">
+    <div id="role-list-panel"></div>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    var roles = [
+      { id: 'ROL-001', name: 'Operador integral', description: 'Agrupa perfiles de usuarios, documentos y soporte para operacion diaria.' },
+      { id: 'ROL-002', name: 'Coordinador financiero', description: 'Combina perfiles de billing y consulta transversal para control financiero.' },
+      { id: 'ROL-003', name: 'Backoffice documental', description: 'Agrupa perfiles documentales y de trazabilidad interna.' }
+    ];
+
+    new MTS.Card('#role-list-panel', {
+      title: 'Lista de roles',
+      subtitle: 'Catalogo operativo de roles',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+          '<div id="role-list-alert"></div>' +
+          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3">' +
+            '<p class="mts-text-md mts-text-muted mts-m-0">Cada rol agrupa perfiles y solo admite un perfil por modulo.</p>' +
+            '<span id="role-list-count" class="mts-badge mts-badge--info mts-badge--sm">0 roles</span>' +
+          '</div>' +
+          '<div id="role-list-table"></div>' +
+        '</div>',
+      actions: [
+        {
+          label: 'Nuevo rol',
+          variant: 'primary',
+          icon: MTS.Icon.get('plus-circle'),
+          onClick: function () {
+            openScreen('../role-create/index.html');
+          }
+        }
+      ]
+    });
+
+    document.getElementById('role-list-panel').addEventListener('click', function (event) {
+      var actionButton = event.target.closest('[data-role-action]');
+      if (!actionButton) return;
+
+      var action = actionButton.getAttribute('data-role-action');
+      var roleId = actionButton.getAttribute('data-role-id');
+      var role = getRoleById(roleId);
+      if (!role) return;
+
+      if (action === 'edit') openScreen('../role-edit/index.html');
+      if (action === 'clone') {
+        showAlert(
+          'info',
+          'Rol duplicado',
+          'Se duplicaria el rol <strong>' + escapeHtml(role.name) + '</strong> para crear una nueva variante.'
+        );
+      }
+    });
+
+    function getRoleById(id) {
+      for (var i = 0; i < roles.length; i++) {
+        if (roles[i].id === id) return roles[i];
+      }
+      return null;
+    }
+
+    function showAlert(variant, title, message) {
+      document.getElementById('role-list-alert').innerHTML = '';
+      MTS.Alert.show('#role-list-alert', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderTable() {
+      document.getElementById('role-list-count').textContent = roles.length + (roles.length === 1 ? ' rol' : ' roles');
+
+      document.getElementById('role-list-table').innerHTML =
+        '<div class="mts-table-wrap">' +
+          '<table class="mts-table mts-table--hover mts-table--striped">' +
+            '<thead>' +
+              '<tr>' +
+                '<th class="mts-table__th">Nombre</th>' +
+                '<th class="mts-table__th">Descripcion</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+              roles.map(function (role) {
+                return '' +
+                  '<tr class="mts-table__row">' +
+                    '<td class="mts-table__td"><strong class="mts-text-sm mts-text-primary">' + escapeHtml(role.name) + '</strong></td>' +
+                    '<td class="mts-table__td">' + escapeHtml(role.description) + '</td>' +
+                    '<td class="mts-table__td mts-table__td--actions">' +
+                      actionButton('edit', role.id, 'edit', 'Editar') +
+                      actionButton('clone', role.id, 'copy', 'Duplicar') +
+                    '</td>' +
+                  '</tr>';
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>';
+
+      MTS.Icon.initAll();
+    }
+
+    function actionButton(action, roleId, icon, label) {
+      return '' +
+        '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-mr-1" data-role-action="' + action + '" data-role-id="' + roleId + '">' +
+          MTS.Icon.get(icon) + ' ' + escapeHtml(label) +
+        '</button>';
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    renderTable();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

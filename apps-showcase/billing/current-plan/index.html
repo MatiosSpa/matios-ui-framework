@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Current Plan - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-kpicard/matios-ui-kpicard.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="current-plan.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../display/matios-ui-kpicard/matios-ui-kpicard.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="billing-plan-page">
+    <header class="billing-plan-page__topbar mts-surface">
+      <div class="billing-plan-page__brand">
+        <div class="billing-plan-page__logo">M</div>
+        <div>
+          <div class="billing-plan-page__title">Current Plan</div>
+          <div class="billing-plan-page__subtitle">Plan actual, consumo y siguiente accion comercial del workspace</div>
+        </div>
+      </div>
+      <div class="billing-plan-page__actions">
+        <div id="billing-plan-contact"></div>
+        <div id="billing-plan-upgrade"></div>
+      </div>
+    </header>
+
+    <main class="billing-plan-page__main mts-grid mts-grid--gap-md">
+      <section class="billing-plan-page__hero mts-surface mts-g-col-12">
+        <div class="billing-plan-page__hero-copy">
+          <div class="billing-plan-page__eyebrow">Billing overview</div>
+          <h1 class="billing-plan-page__hero-title">Ten visibilidad real del plan sin depender de un dashboard aparte.</h1>
+          <p class="billing-plan-page__hero-text">
+            Esta pantalla resume lo que un owner o finance lead necesita revisar rapido:
+            plan contratado, fecha de renovacion, consumo actual y recomendacion del siguiente paso.
+          </p>
+        </div>
+        <div class="billing-plan-page__hero-badges">
+          <span class="mts-badge mts-badge--success mts-badge--sm">Active</span>
+          <span class="mts-badge mts-badge--primary mts-badge--sm">Annual billing</span>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12">
+        <div class="mts-grid mts-grid--gap-md">
+          <div class="mts-g-col-12 mts-g-col-md-4"><div id="billing-plan-kpi-seats"></div></div>
+          <div class="mts-g-col-12 mts-g-col-md-4"><div id="billing-plan-kpi-api"></div></div>
+          <div class="mts-g-col-12 mts-g-col-md-4"><div id="billing-plan-kpi-storage"></div></div>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div id="billing-plan-summary-card"></div>
+        <div id="billing-plan-usage-card"></div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4 billing-plan-page__sidebar">
+        <div id="billing-plan-next-card"></div>
+        <div id="billing-plan-events-card"></div>
+        <div id="billing-plan-feedback"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    new MTS.Button('#billing-plan-contact', {
+      label: 'Hablar con ventas',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('message-circle'),
+      onClick: function () {
+        showInfo('Se simulo la apertura del flujo comercial para renegociar plan o volumen.');
+      }
+    });
+
+    new MTS.Button('#billing-plan-upgrade', {
+      label: 'Evaluar upgrade',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('arrow-up-right'),
+      onClick: function () {
+        showInfo('La UI deja planteado el CTA principal para mover de plan cuando crece el workspace.');
+      }
+    });
+
+    new MTS.KPICard('#billing-plan-kpi-seats', {
+      label: 'Seats activos',
+      value: '42 / 50',
+      trend: 14,
+      trendLabel: 'ultimo trimestre',
+      variant: 'primary',
+      sparkline: [24, 26, 28, 31, 34, 37, 40, 42]
+    });
+
+    new MTS.KPICard('#billing-plan-kpi-api', {
+      label: 'API requests',
+      value: '78%',
+      trend: 6,
+      trendLabel: 'vs mes pasado',
+      variant: 'warning',
+      sparkline: [42, 48, 50, 56, 60, 66, 71, 78]
+    });
+
+    new MTS.KPICard('#billing-plan-kpi-storage', {
+      label: 'Storage usado',
+      value: '186 GB',
+      trend: 9,
+      trendLabel: 'sobre cuota incluida',
+      variant: 'success',
+      sparkline: [98, 110, 122, 135, 150, 164, 172, 186]
+    });
+
+    new MTS.Card('#billing-plan-summary-card', {
+      title: 'Scale Annual',
+      subtitle: 'Renueva el 12 de mayo de 2026',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="billing-plan-page__plan-summary">' +
+          '<p>Plan pensado para equipos que ya operan con varias areas, automatizaciones y gobierno basico sobre acceso y billing.</p>' +
+          '<div class="billing-plan-page__plan-grid">' +
+            '<div><span>Workspace</span><strong>Matios Studio</strong></div>' +
+            '<div><span>Owner de contrato</span><strong>Camila Soto</strong></div>' +
+            '<div><span>Facturacion</span><strong>USD 1,240 / mes</strong></div>' +
+            '<div><span>Descuento anual</span><strong>12%</strong></div>' +
+          '</div>' +
+          '<div class="billing-plan-page__feature-list">' +
+            '<span class="billing-plan-page__feature">Unlimited projects</span>' +
+            '<span class="billing-plan-page__feature">SSO ready</span>' +
+            '<span class="billing-plan-page__feature">Audit retention 180d</span>' +
+            '<span class="billing-plan-page__feature">Priority support</span>' +
+          '</div>' +
+        '</div>'
+    });
+
+    new MTS.Card('#billing-plan-usage-card', {
+      title: 'Uso incluido',
+      subtitle: 'Consumo principal del ciclo actual',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="billing-plan-page__usage-stack">' +
+          usageRow('Seats', '42 de 50', 84) +
+          usageRow('API requests', '780k de 1M', 78) +
+          usageRow('Storage', '186 de 250 GB', 74) +
+          usageRow('Support hours', '6 de 8', 75) +
+        '</div>'
+    });
+
+    new MTS.Card('#billing-plan-next-card', {
+      title: 'Siguiente decision',
+      subtitle: 'Recomendacion',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="billing-plan-page__next-step">' +
+          '<p>Si el equipo sigue sumando seats y uso de API al ritmo actual, conviene preparar upgrade antes de la renovacion.</p>' +
+          '<div class="billing-plan-page__next-highlight">' +
+            '<span>Plan sugerido</span><strong>Scale Plus</strong>' +
+          '</div>' +
+          '<div class="billing-plan-page__next-highlight">' +
+            '<span>Motivo</span><strong>Mayor techo de seats, auditoria y API</strong>' +
+          '</div>' +
+        '</div>'
+    });
+
+    new MTS.Card('#billing-plan-events-card', {
+      title: 'Eventos de billing',
+      subtitle: 'Actividad reciente',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="billing-plan-page__events">' +
+          eventItem('03 mayo', 'Invoice emitida', 'Se genero la factura del ciclo anual en revision.') +
+          eventItem('28 abril', 'Seat agregado', 'Se sumo una licencia para Finance.') +
+          eventItem('20 abril', 'Metodo verificado', 'La tarjeta principal quedo validada para cargos automaticos.') +
+        '</div>'
+    });
+
+    function usageRow(label, value, percent) {
+      return (
+        '<div class="billing-plan-page__usage-row">' +
+          '<div class="billing-plan-page__usage-head">' +
+            '<span>' + label + '</span>' +
+            '<strong>' + value + '</strong>' +
+          '</div>' +
+          '<div class="billing-plan-page__usage-bar">' +
+            '<span style="width:' + percent + '%"></span>' +
+          '</div>' +
+        '</div>'
+      );
+    }
+
+    function eventItem(date, title, body) {
+      return (
+        '<article class="billing-plan-page__event">' +
+          '<span class="billing-plan-page__event-date">' + date + '</span>' +
+          '<div>' +
+            '<strong>' + title + '</strong>' +
+            '<p>' + body + '</p>' +
+          '</div>' +
+        '</article>'
+      );
+    }
+
+    function showInfo(message) {
+      MTS.Alert.show('#billing-plan-feedback', {
+        variant: 'info',
+        title: 'Accion simulada',
+        message: message,
+        closable: true
+      });
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

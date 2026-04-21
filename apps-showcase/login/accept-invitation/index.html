@@ -1,13 +1,33 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Aceptar Invitacion - Matios UI</title>
-  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (error) {}
+    })();
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
@@ -16,226 +36,195 @@
   <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
   <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
   <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
   <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
-  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
-  <link rel="stylesheet" href="../../../layout/matios-ui-grid/matios-ui-grid.css">
   <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
   <link rel="stylesheet" href="accept-invitation.css">
   <script src="../../../icons/matios-ui-icons.js"></script>
-  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
-  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
   <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
 </head>
 <body>
-  <div class="invite-page">
-    <header class="invite-page__topbar mts-surface">
-      <div class="invite-page__brand">
-        <div class="invite-page__logo">M</div>
-        <div>
-          <div class="invite-page__title">Aceptar Invitacion</div>
-          <div class="invite-page__subtitle">Showcase / Autenticacion</div>
+  <main class="mts-d-flex mts-items-center mts-justify-center mts-p-4 mts-min-vh-100">
+    <section class="mts-card mts-card--elevated mts-w-full mts-max-w-xl">
+      <div class="mts-card__body mts-p-6">
+        <div class="mts-text-center mts-mb-4">
+          <p class="mts-text-sm mts-text-muted mts-m-0">Matios UI</p>
+          <h1 class="mts-h1 mts-mt-2">Aceptar invitación</h1>
+          <p class="mts-text-md mts-text-muted mts-mt-2 mts-mb-0">Confirma tu acceso al workspace invitado.</p>
+        </div>
+
+        <div class="mts-d-flex mts-flex-col mts-gap-4">
+          <div id="invite-alert"></div>
+          <div id="invite-email"></div>
+          <div id="invite-name"></div>
+
+          <section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">
+            <div>
+              <p class="mts-text-sm mts-text-muted mts-mb-1 mts-mt-0">Empresa</p>
+              <p class="mts-text-md mts-text-primary mts-m-0">Acme Chile</p>
+            </div>
+            <div>
+              <p class="mts-text-sm mts-text-muted mts-mb-1 mts-mt-0">Rol efectivo</p>
+              <p class="mts-text-md mts-text-primary mts-m-0">General</p>
+            </div>
+            <div>
+              <p class="mts-text-sm mts-text-muted mts-mb-1 mts-mt-0">Perfiles incluidos</p>
+              <p class="mts-text-md mts-text-primary mts-m-0">ConfigSystem Admin, Document View, Invoice Edit</p>
+            </div>
+          </section>
+
+          <div id="invite-terms"></div>
+          <div id="invite-submit"></div>
         </div>
       </div>
-      <div class="invite-page__topbar-actions">
+
+      <div class="mts-card__footer mts-card__footer--between">
+        <div id="invite-login-btn"></div>
         <div id="invite-back-btn"></div>
       </div>
-    </header>
+    </section>
+  </main>
 
-    <main class="invite-page__main mts-grid mts-grid--gap-md">
-      <section class="invite-page__hero mts-g-col-12 mts-g-col-lg-7 mts-surface">
-        <p class="invite-page__kicker">Pantalla activa</p>
-        <h1 class="invite-page__hero-title">Entrada guiada a una empresa ya existente</h1>
-        <p class="invite-page__hero-copy">
-          Esta vista representa la aceptacion de una invitacion cuando una empresa incorpora a
-          un nuevo usuario. La UI resume empresa, rol efectivo esperado y el siguiente paso del
-          flujo sin depender de backend real.
-        </p>
-
-        <div class="invite-page__cards mts-grid mts-grid--gap-md">
-          <div class="mts-g-col-12 mts-g-col-md-6"><div id="invite-card-company"></div></div>
-          <div class="mts-g-col-12 mts-g-col-md-6"><div id="invite-card-access"></div></div>
-        </div>
-      </section>
-
-      <section class="invite-page__panel-wrap mts-g-col-12 mts-g-col-lg-5">
-        <div class="mts-form-card">
-          <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Confirma tu acceso</h2>
-            <p class="mts-form-card__subtitle">
-              Revisa la invitacion, completa tus datos base y acepta para continuar.
-            </p>
-          </div>
-
-          <div id="invite-alert"></div>
-
-          <div class="mts-form">
-            <div class="mts-form-section">
-              <div id="invite-email"></div>
-              <div id="invite-name"></div>
-
-              <div class="invite-page__summary mts-surface">
-                <div class="invite-page__summary-row">
-                  <span class="invite-page__summary-label">Empresa</span>
-                  <span class="invite-page__summary-value">Acme Chile</span>
-                </div>
-                <div class="invite-page__summary-row">
-                  <span class="invite-page__summary-label">Rol efectivo</span>
-                  <span class="invite-page__summary-value">General</span>
-                </div>
-                <div class="invite-page__summary-row">
-                  <span class="invite-page__summary-label">Perfiles incluidos</span>
-                  <span class="invite-page__summary-value">ConfigSystem Admin, Document View, Invoice Edit</span>
-                </div>
-              </div>
-
-              <div id="invite-terms"></div>
-            </div>
-
-            <div class="mts-form-footer mts-form-footer--between invite-page__footer">
-              <div id="invite-login-btn"></div>
-              <div class="invite-page__submit" id="invite-submit"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-<script>
-window.addEventListener('message',function(e){
-  if(!e.data) return;
-  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
-  if(e.data.type==='setAccent'){
-    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
-    else document.documentElement.removeAttribute('data-mts-accent');
-  }
-});
-function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
-function openScreen(path){
-  var params=location.search||'';
-  window.location.href=path+params;
-}
-</script>
-<script>
-new MTS.Button('#invite-back-btn',{
-  label:'Volver al grupo',
-  variant:'ghost',
-  iconLeft:MTS.Icon.get('arrow-left'),
-  onClick:function(){goBack();}
-});
-
-new MTS.Card('#invite-card-company',{
-  title:'Empresa invitante',
-  subtitle:'Contexto de entrada',
-  variant:'outlined',
-  body:'<p class="invite-card-copy">La invitacion ya viene asociada a una empresa concreta. El usuario no necesita buscarla: solo entender a donde esta entrando.</p>'
-});
-
-new MTS.Card('#invite-card-access',{
-  title:'Acceso esperado',
-  subtitle:'Rol y perfiles',
-  variant:'outlined',
-  body:'<p class="invite-card-copy">La UI resume el <strong>rol efectivo</strong> y los <strong>perfiles</strong> asociados para dejar claro el contexto operativo antes de aceptar.</p>'
-});
-
-var emailInput=new MTS.Input('#invite-email',{
-  type:'email',
-  label:'Correo invitado',
-  placeholder:'equipo@matios.dev',
-  value:'equipo@matios.dev',
-  iconLeft:MTS.Icon.get('mail')
-});
-
-var nameInput=new MTS.Input('#invite-name',{
-  type:'text',
-  label:'Nombre visible',
-  placeholder:'Ingresa tu nombre para esta cuenta',
-  iconLeft:MTS.Icon.get('user')
-});
-
-new MTS.Checkbox('#invite-terms',{
-  label:'Confirmo que acepto esta invitacion y el contexto de acceso asociado'
-});
-
-new MTS.Button('#invite-login-btn',{
-  label:'Volver al login',
-  variant:'ghost',
-  iconLeft:MTS.Icon.get('arrow-left'),
-  onClick:function(){openScreen('../login/index.html');}
-});
-
-var submitButton=new MTS.Button('#invite-submit',{
-  label:'Aceptar invitacion',
-  variant:'primary',
-  block:true,
-  iconLeft:MTS.Icon.get('user-plus'),
-  onClick:function(e,inst){acceptInvitation(inst);}
-});
-
-function clearAlert(){
-  document.getElementById('invite-alert').innerHTML='';
-}
-
-function showAlert(options){
-  clearAlert();
-  MTS.Alert.show('#invite-alert',options);
-}
-
-function acceptInvitation(inst){
-  var email=emailInput.getValue().trim();
-  var name=nameInput.getValue().trim();
-  var checkbox=document.querySelector('#invite-terms input[type="checkbox"]');
-
-  clearAlert();
-  emailInput.clearError();
-  nameInput.clearError();
-
-  if(!email){
-    emailInput.setError('Debe existir un correo asociado a la invitacion');
-    return;
-  }
-
-  if(!name){
-    nameInput.setError('Debes ingresar tu nombre visible');
-    return;
-  }
-
-  if(!checkbox || !checkbox.checked){
-    showAlert({
-      variant:'warning',
-      title:'Confirma la invitacion',
-      message:'Debes confirmar que aceptas la invitacion antes de continuar.',
-      closable:true
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
     });
-    return;
-  }
 
-  inst.setLoading(true);
-  inst.setLabel('Aceptando invitacion...');
+    function goBack() {
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'closeApp' }, '*');
+          return;
+        }
+      } catch (error) {}
+      window.history.back();
+    }
 
-  setTimeout(function(){
-    inst.setLoading(false);
-    inst.setLabel('Aceptar invitacion');
-    showAlert({
-      variant:'success',
-      title:'Invitacion aceptada',
-      message:'Simulacion UI: <strong>'+escapeHtml(name)+'</strong> quedaria incorporado a <strong>Acme Chile</strong> con el correo <strong>'+escapeHtml(email)+'</strong>.',
-      closable:true
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    var emailInput = new MTS.Input('#invite-email', {
+      type: 'email',
+      label: 'Correo invitado',
+      placeholder: 'equipo@matios.dev',
+      value: 'equipo@matios.dev',
+      iconLeft: MTS.Icon.get('mail')
     });
-  },900);
-}
 
-function escapeHtml(str){
-  return String(str)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;');
-}
-</script>
+    var nameInput = new MTS.Input('#invite-name', {
+      type: 'text',
+      label: 'Nombre visible',
+      placeholder: 'Ingresa tu nombre',
+      iconLeft: MTS.Icon.get('user')
+    });
+
+    var termsCheckbox = new MTS.Checkbox('#invite-terms', {
+      label: 'Confirmo que acepto esta invitación y el acceso asociado'
+    });
+
+    new MTS.Button('#invite-login-btn', {
+      label: 'Volver al login',
+      variant: 'link',
+      onClick: function () {
+        openScreen('../login/index.html');
+      }
+    });
+
+    new MTS.Button('#invite-back-btn', {
+      label: 'Volver al grupo',
+      variant: 'link',
+      onClick: function () {
+        goBack();
+      }
+    });
+
+    var submitButton = new MTS.Button('#invite-submit', {
+      label: 'Aceptar invitación',
+      variant: 'primary',
+      block: true,
+      onClick: function (event, instance) {
+        acceptInvitation(instance);
+      }
+    });
+
+    function clearAlert() {
+      document.getElementById('invite-alert').innerHTML = '';
+    }
+
+    function showAlert(options) {
+      clearAlert();
+      MTS.Alert.show('#invite-alert', options);
+    }
+
+    function isChecked(instance) {
+      return instance && typeof instance.isChecked === 'function' ? instance.isChecked() : false;
+    }
+
+    function acceptInvitation(button) {
+      var email = emailInput.getValue().trim();
+      var name = nameInput.getValue().trim();
+
+      clearAlert();
+      emailInput.clearError();
+      nameInput.clearError();
+
+      if (!email) {
+        emailInput.setError('Debe existir un correo asociado a la invitación');
+        return;
+      }
+
+      if (!name) {
+        nameInput.setError('Debes ingresar tu nombre visible');
+        return;
+      }
+
+      if (!isChecked(termsCheckbox)) {
+        showAlert({
+          variant: 'warning',
+          title: 'Confirma la invitación',
+          message: 'Debes confirmar que aceptas la invitación antes de continuar.',
+          closable: true
+        });
+        return;
+      }
+
+      button.setLoading(true);
+      button.setLabel('Aceptando...');
+
+      setTimeout(function () {
+        button.setLoading(false);
+        button.setLabel('Aceptar invitación');
+        showAlert({
+          variant: 'success',
+          title: 'Invitación aceptada',
+          message: 'El acceso quedaría listo para <strong>' + escapeHtml(name) + '</strong> en <strong>Acme Chile</strong>.',
+          closable: true
+        });
+      }, 800);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    MTS.Icon.initAll();
+  </script>
 </body>
 </html>
-

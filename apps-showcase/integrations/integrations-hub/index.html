@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Integrations Hub - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="integrations-hub.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="integrations-hub-page">
+    <header class="integrations-hub-page__topbar mts-surface">
+      <div class="integrations-hub-page__brand">
+        <div class="integrations-hub-page__logo">M</div>
+        <div>
+          <div class="integrations-hub-page__title">Integrations Hub</div>
+          <div class="integrations-hub-page__subtitle">Catalogo de conexiones externas y estado de sincronizacion</div>
+        </div>
+      </div>
+      <div class="integrations-hub-page__actions">
+        <div id="integrations-refresh-button"></div>
+      </div>
+    </header>
+
+    <main class="integrations-hub-page__main mts-grid mts-grid--gap-md">
+      <section class="integrations-hub-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="integrations-hub-page__eyebrow">External providers</div>
+          <h1 class="integrations-hub-page__hero-title">Conecta sistemas reales y entiende rapido cuales estan sanos, pendientes o requieren soporte.</h1>
+          <p class="integrations-hub-page__hero-copy">
+            El hub funciona como punto de entrada para proveedores de mensajeria, storage, CRM y
+            pagos, con foco en estado de sync, propietario y accion principal.
+          </p>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4">
+        <div class="mts-form-card integrations-hub-page__filters-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Filtros</h2>
+            <p class="mts-form-card__subtitle">Busca por proveedor o categoria de integracion.</p>
+          </div>
+          <div id="integrations-feedback"></div>
+          <div class="integrations-hub-page__filters">
+            <div id="integrations-search"></div>
+            <div id="integrations-category"></div>
+          </div>
+          <div id="integrations-clear"></div>
+        </div>
+      </aside>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="integrations-hub-page__results-head">
+          <div>
+            <div class="integrations-hub-page__results-label">Available providers</div>
+            <h2 class="integrations-hub-page__results-title">Integraciones del workspace</h2>
+          </div>
+          <div class="integrations-hub-page__results-meta" id="integrations-results-meta">0 resultados</div>
+        </div>
+        <div class="mts-grid mts-grid--gap-md" id="integrations-results"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+  </script>
+  <script>
+    var integrationState = { query: '', category: '' };
+    var categorySelect;
+    var integrations = [
+      { id: 'slack', title: 'Slack', category: 'messaging', categoryLabel: 'Messaging', owner: 'Support team', status: 'connected', statusLabel: 'Conectada', icon: 'message-circle', detail: 'Notificaciones, alertas y reacciones de soporte.' },
+      { id: 'drive', title: 'Google Drive', category: 'storage', categoryLabel: 'Storage', owner: 'Operations', status: 'connected', statusLabel: 'Conectada', icon: 'cloud', detail: 'Backup documental y adjuntos de procesos.' },
+      { id: 'hubspot', title: 'HubSpot', category: 'crm', categoryLabel: 'CRM', owner: 'Growth team', status: 'attention', statusLabel: 'Requiere atencion', icon: 'database', detail: 'Sync de contactos y etapas comerciales.' },
+      { id: 'stripe', title: 'Stripe', category: 'payments', categoryLabel: 'Payments', owner: 'Finance', status: 'pending', statusLabel: 'Pendiente', icon: 'credit-card', detail: 'Cobros recurrentes y eventos de billing.' }
+    ];
+
+    new MTS.Button('#integrations-refresh-button', {
+      label: 'Verificar conexiones',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        notify('success', 'Chequeo completado', 'Se simulo la verificacion del estado de todas las integraciones visibles.');
+      }
+    });
+
+    new MTS.Input('#integrations-search', {
+      type: 'text',
+      label: 'Buscar provider',
+      placeholder: 'Slack, Drive, Stripe...',
+      iconLeft: MTS.Icon.get('search')
+    });
+
+    categorySelect = new MTS.Select('#integrations-category', {
+      label: 'Categoria',
+      placeholder: 'Todas',
+      clearable: true,
+      options: [
+        { value: 'messaging', label: 'Messaging' },
+        { value: 'storage', label: 'Storage' },
+        { value: 'crm', label: 'CRM' },
+        { value: 'payments', label: 'Payments' }
+      ]
+    });
+
+    new MTS.Button('#integrations-clear', {
+      label: 'Limpiar filtros',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        integrationState.query = '';
+        integrationState.category = '';
+        setNativeValue('#integrations-search input', '');
+        categorySelect.clear();
+        renderIntegrations();
+      }
+    });
+
+    categorySelect.on('change', function (e) {
+      integrationState.category = e.detail.value || '';
+      renderIntegrations();
+    });
+
+    var searchNode = document.querySelector('#integrations-search input');
+    if (searchNode) {
+      searchNode.addEventListener('input', function (e) {
+        integrationState.query = e.target.value || '';
+        renderIntegrations();
+      });
+    }
+
+    function setNativeValue(selector, value) {
+      var input = document.querySelector(selector);
+      if (!input) return;
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function statusVariant(status) {
+      if (status === 'connected') return 'success';
+      if (status === 'pending') return 'warning';
+      return 'danger';
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#integrations-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderIntegrations() {
+      var host = document.getElementById('integrations-results');
+      var meta = document.getElementById('integrations-results-meta');
+      host.innerHTML = '';
+
+      var visible = integrations.filter(function (item) {
+        var haystack = [item.title, item.categoryLabel, item.owner, item.detail].join(' ').toLowerCase();
+        var matchesQuery = !integrationState.query || haystack.indexOf(integrationState.query.toLowerCase()) !== -1;
+        var matchesCategory = !integrationState.category || item.category === integrationState.category;
+        return matchesQuery && matchesCategory;
+      });
+
+      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+
+      visible.forEach(function (item) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12';
+        host.appendChild(wrap);
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: item.title,
+          subtitle: item.owner,
+          variant: item.status === 'connected' ? 'elevated' : 'outlined',
+          size: 'lg',
+          body:
+            '<div class="integrations-hub-page__card-body">' +
+              '<div class="integrations-hub-page__icon"><i class="mts-icon mts-icon-' + item.icon + '"></i></div>' +
+              '<p>' + item.detail + '</p>' +
+              '<div class="integrations-hub-page__meta">' +
+                '<span id="integration-status-' + item.id + '"></span>' +
+                '<span id="integration-category-' + item.id + '"></span>' +
+              '</div>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: item.status === 'pending' ? 'Conectar' : 'Abrir detalle',
+              variant: 'primary',
+              icon: MTS.Icon.get(item.status === 'pending' ? 'link' : 'arrow-right'),
+              onClick: function () {
+                openScreen('../integration-detail/index.html');
+              }
+            },
+            {
+              label: 'Verificar',
+              variant: 'ghost',
+              icon: MTS.Icon.get('refresh-cw'),
+              onClick: function () {
+                notify('info', 'Chequeo manual', 'Se simulo una verificacion puntual para ' + item.title + '.');
+              }
+            }
+          ]
+        });
+
+        new MTS.Badge('#integration-status-' + item.id, {
+          label: item.statusLabel,
+          variant: statusVariant(item.status),
+          size: 'sm'
+        });
+
+        new MTS.Badge('#integration-category-' + item.id, {
+          label: item.categoryLabel,
+          variant: 'default',
+          size: 'sm'
+        });
+      });
+
+      MTS.Icon.initAll();
+    }
+
+    renderIntegrations();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

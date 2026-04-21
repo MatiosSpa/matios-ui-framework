@@ -1,0 +1,150 @@
+.share-dialog-page {
+  min-height: 100vh;
+  padding: 24px 28px 40px;
+  background:
+    radial-gradient(circle at top left, rgba(14, 165, 233, 0.12), transparent 24%),
+    radial-gradient(circle at right top, rgba(16, 185, 129, 0.08), transparent 22%),
+    var(--mts-bg-body);
+  color: var(--mts-text-primary);
+}
+
+.share-dialog-page__topbar {
+  max-width: 1360px;
+  margin: 0 auto 24px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.share-dialog-page__brand,
+.share-dialog-page__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.share-dialog-page__logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--mts-color-primary), #0ea5e9);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.share-dialog-page__title {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.share-dialog-page__subtitle,
+.share-dialog-page__hero-copy,
+.share-dialog-page__person-row p {
+  margin: 0;
+  color: var(--mts-text-secondary);
+}
+
+.share-dialog-page__subtitle {
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.share-dialog-page__main {
+  max-width: 1360px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.share-dialog-page__hero,
+.share-dialog-page__form-card {
+  padding: 32px;
+}
+
+.share-dialog-page__eyebrow,
+.share-dialog-page__line strong,
+.share-dialog-page__person-row span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--mts-text-muted);
+}
+
+.share-dialog-page__hero-title {
+  margin: 10px 0 12px;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.share-dialog-page__hero-copy {
+  max-width: 760px;
+  line-height: 1.7;
+}
+
+.share-dialog-page__form-grid,
+.share-dialog-page__sidebar,
+.share-dialog-page__people {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.share-dialog-page__full-row {
+  grid-column: 1 / -1;
+}
+
+.share-dialog-page__form-actions {
+  margin-top: 18px;
+}
+
+.share-dialog-page__info-block,
+.share-dialog-page__people {
+  gap: 14px;
+}
+
+.share-dialog-page__line,
+.share-dialog-page__person-row {
+  padding: 14px 16px;
+  border-radius: var(--mts-radius-xl);
+  border: 1px solid var(--mts-border-color);
+  background: var(--mts-bg-surface-2);
+}
+
+.share-dialog-page__line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.share-dialog-page__person-row strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 980px) {
+  .share-dialog-page__topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 780px) {
+  .share-dialog-page {
+    padding: 16px;
+  }
+
+  .share-dialog-page__hero,
+  .share-dialog-page__form-card {
+    padding: 24px 20px;
+  }
+
+  .share-dialog-page__hero-title {
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,241 @@
+.admin-members-page {
+  min-height: 100vh;
+  padding: 24px 28px 40px;
+  background:
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.14), transparent 28%),
+    radial-gradient(circle at top left, rgba(16, 185, 129, 0.12), transparent 22%),
+    var(--mts-bg-body);
+  color: var(--mts-text-primary);
+}
+
+.admin-members-page__topbar,
+.admin-members-page__hero,
+.admin-members-page__filters-card {
+  box-shadow: none;
+}
+
+.admin-members-page__topbar {
+  max-width: 1380px;
+  margin: 0 auto 24px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.admin-members-page__brand,
+.admin-members-page__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-members-page__logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--mts-color-primary), rgba(16, 185, 129, 0.9));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.admin-members-page__title {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.admin-members-page__subtitle {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--mts-text-muted);
+}
+
+.admin-members-page__main {
+  max-width: 1380px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.admin-members-page__hero {
+  padding: 34px 32px;
+}
+
+.admin-members-page__eyebrow,
+.admin-members-page__results-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--mts-text-muted);
+}
+
+.admin-members-page__hero-title {
+  margin: 10px 0 12px;
+  max-width: 880px;
+  font-size: 30px;
+  line-height: 1.12;
+  font-weight: 800;
+}
+
+.admin-members-page__hero-copy {
+  margin: 0;
+  max-width: 780px;
+  line-height: 1.7;
+  color: var(--mts-text-secondary);
+}
+
+.admin-members-page__filters-card {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.admin-members-page__filters {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-members-page__filter-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.admin-members-page__sidebar-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--mts-text-secondary);
+  line-height: 1.7;
+}
+
+.admin-members-page__sidebar-copy p {
+  margin: 0;
+}
+
+.admin-members-page__sidebar-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.admin-members-page__sidebar-list li + li {
+  margin-top: 10px;
+}
+
+.admin-members-page__results-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.admin-members-page__results-title {
+  margin: 6px 0 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.admin-members-page__results-meta {
+  color: var(--mts-text-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin-members-page__member-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.admin-members-page__member-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-members-page__member-avatar {
+  flex-shrink: 0;
+}
+
+.admin-members-page__member-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-members-page__member-job {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mts-text-primary);
+}
+
+.admin-members-page__member-team {
+  font-size: 13px;
+  color: var(--mts-text-muted);
+}
+
+.admin-members-page__member-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-members-page__member-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin-members-page__member-grid span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--mts-text-muted);
+}
+
+.admin-members-page__member-grid strong {
+  display: block;
+  line-height: 1.6;
+  font-size: 14px;
+  color: var(--mts-text-primary);
+}
+
+.admin-members-page__empty {
+  margin: 0;
+  color: var(--mts-text-muted);
+  line-height: 1.7;
+}
+
+@media (max-width: 980px) {
+  .admin-members-page__topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 780px) {
+  .admin-members-page {
+    padding: 16px 16px 28px;
+  }
+
+  .admin-members-page__hero {
+    padding: 24px 20px;
+  }
+
+  .admin-members-page__hero-title {
+    font-size: 24px;
+  }
+
+  .admin-members-page__member-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Audit Log - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="audit-log.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="audit-log-page">
+    <header class="audit-log-page__topbar mts-surface">
+      <div class="audit-log-page__brand">
+        <div class="audit-log-page__logo">M</div>
+        <div>
+          <div class="audit-log-page__title">Audit Log</div>
+          <div class="audit-log-page__subtitle">Trazabilidad de eventos sensibles y actividad administrativa</div>
+        </div>
+      </div>
+      <div class="audit-log-page__actions">
+        <div id="audit-export-button"></div>
+      </div>
+    </header>
+
+    <main class="audit-log-page__main mts-grid mts-grid--gap-md">
+      <section class="audit-log-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="audit-log-page__eyebrow">Event traceability</div>
+          <h1 class="audit-log-page__hero-title">Observa cambios sensibles del workspace sin perder actor, contexto y severidad.</h1>
+          <p class="audit-log-page__hero-copy">
+            Este log responde a un caso real enterprise: revisar eventos de acceso, billing o
+            configuracion con filtros simples y acciones de seguimiento.
+          </p>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4">
+        <div class="mts-form-card audit-log-page__filters-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Filtros</h2>
+            <p class="mts-form-card__subtitle">Busca por actor, accion o severidad del evento.</p>
+          </div>
+          <div id="audit-feedback"></div>
+          <div class="audit-log-page__filters">
+            <div id="audit-search"></div>
+            <div id="audit-severity"></div>
+          </div>
+          <div id="audit-clear"></div>
+        </div>
+      </aside>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="audit-log-page__results-head">
+          <div>
+            <div class="audit-log-page__results-label">Sensitive events</div>
+            <h2 class="audit-log-page__results-title">Registro de auditoria</h2>
+          </div>
+          <div class="audit-log-page__results-meta" id="audit-results-meta">0 resultados</div>
+        </div>
+        <div class="mts-grid mts-grid--gap-md" id="audit-results"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var auditState = { query: '', severity: '' };
+    var severitySelect;
+    var events = [
+      { id: 'a1', actor: 'Camila Soto', action: 'Cambio de metodo de pago', target: 'Billing', severity: 'high', severityLabel: 'High', when: 'Hoy, 09:12', description: 'Se actualizo la tarjeta principal del workspace.' },
+      { id: 'a2', actor: 'Diego Paredes', action: 'Invitacion aprobada', target: 'Admin', severity: 'medium', severityLabel: 'Medium', when: 'Hoy, 08:22', description: 'Se habilito acceso a dos perfiles de soporte.' },
+      { id: 'a3', actor: 'System', action: 'Nueva ubicacion detectada', target: 'Security', severity: 'high', severityLabel: 'High', when: 'Ayer, 18:10', description: 'Una sesion ingreso desde Bogota, CO.' },
+      { id: 'a4', actor: 'Laura Herrera', action: 'Canal de integracion actualizado', target: 'Integrations', severity: 'low', severityLabel: 'Low', when: '18 abril', description: 'La integracion de Slack cambio al canal #ops-alerts.' }
+    ];
+
+    new MTS.Button('#audit-export-button', {
+      label: 'Exportar log',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('download'),
+      onClick: function () {
+        notify('success', 'Export listo', 'Se simulo la exportacion del log de auditoria del workspace.');
+      }
+    });
+
+    new MTS.Input('#audit-search', {
+      type: 'text',
+      label: 'Buscar evento',
+      placeholder: 'Actor, modulo o accion',
+      iconLeft: MTS.Icon.get('search')
+    });
+
+    severitySelect = new MTS.Select('#audit-severity', {
+      label: 'Severidad',
+      placeholder: 'Todas',
+      clearable: true,
+      options: [
+        { value: 'high', label: 'High' },
+        { value: 'medium', label: 'Medium' },
+        { value: 'low', label: 'Low' }
+      ]
+    });
+
+    new MTS.Button('#audit-clear', {
+      label: 'Limpiar filtros',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        auditState.query = '';
+        auditState.severity = '';
+        setNativeValue('#audit-search input', '');
+        severitySelect.clear();
+        renderEvents();
+      }
+    });
+
+    severitySelect.on('change', function (e) {
+      auditState.severity = e.detail.value || '';
+      renderEvents();
+    });
+
+    var searchNode = document.querySelector('#audit-search input');
+    if (searchNode) {
+      searchNode.addEventListener('input', function (e) {
+        auditState.query = e.target.value || '';
+        renderEvents();
+      });
+    }
+
+    function setNativeValue(selector, value) {
+      var input = document.querySelector(selector);
+      if (!input) return;
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function severityVariant(value) {
+      if (value === 'high') return 'danger';
+      if (value === 'medium') return 'warning';
+      return 'info';
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#audit-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderEvents() {
+      var host = document.getElementById('audit-results');
+      var meta = document.getElementById('audit-results-meta');
+      host.innerHTML = '';
+
+      var visible = events.filter(function (eventItem) {
+        var haystack = [eventItem.actor, eventItem.action, eventItem.target, eventItem.description].join(' ').toLowerCase();
+        var matchesQuery = !auditState.query || haystack.indexOf(auditState.query.toLowerCase()) !== -1;
+        var matchesSeverity = !auditState.severity || eventItem.severity === auditState.severity;
+        return matchesQuery && matchesSeverity;
+      });
+
+      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+
+      visible.forEach(function (eventItem, index) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12';
+        host.appendChild(wrap);
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: eventItem.action,
+          subtitle: eventItem.actor,
+          variant: index === 0 ? 'elevated' : 'outlined',
+          size: 'lg',
+          body:
+            '<div class="audit-log-page__event-body">' +
+              '<div class="audit-log-page__event-meta">' +
+                '<span id="audit-badge-' + eventItem.id + '"></span>' +
+                '<span class="audit-log-page__target">' + eventItem.target + '</span>' +
+              '</div>' +
+              '<p class="audit-log-page__event-copy">' + eventItem.description + '</p>' +
+              '<div class="audit-log-page__event-time">' + eventItem.when + '</div>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: 'Marcar revisado',
+              variant: 'primary',
+              icon: MTS.Icon.get('check-circle'),
+              onClick: function () {
+                notify('success', 'Evento revisado', 'El evento quedo marcado como atendido dentro del ejemplo.');
+              }
+            },
+            {
+              label: 'Ver contexto',
+              variant: 'ghost',
+              icon: MTS.Icon.get('file-text'),
+              onClick: function () {
+                notify('info', 'Contexto simulado', 'Aqui normalmente abririas el detalle completo del evento.');
+              }
+            }
+          ]
+        });
+
+        new MTS.Badge('#audit-badge-' + eventItem.id, {
+          label: eventItem.severityLabel,
+          variant: severityVariant(eventItem.severity),
+          size: 'sm'
+        });
+      });
+
+      MTS.Icon.initAll();
+    }
+
+    renderEvents();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

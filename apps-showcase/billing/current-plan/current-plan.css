@@ -1,0 +1,236 @@
+.billing-plan-page {
+  min-height: 100vh;
+  padding: 24px 28px 40px;
+  background:
+    radial-gradient(circle at top right, rgba(245, 158, 11, 0.14), transparent 24%),
+    radial-gradient(circle at left top, rgba(59, 130, 246, 0.1), transparent 26%),
+    var(--mts-bg-body);
+  color: var(--mts-text-primary);
+}
+
+.billing-plan-page__topbar {
+  max-width: 1380px;
+  margin: 0 auto 24px;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.billing-plan-page__brand,
+.billing-plan-page__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.billing-plan-page__logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f59e0b, var(--mts-color-primary));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.billing-plan-page__title {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.billing-plan-page__subtitle {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--mts-text-muted);
+}
+
+.billing-plan-page__main {
+  max-width: 1380px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.billing-plan-page__hero {
+  padding: 34px 32px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.billing-plan-page__eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--mts-text-muted);
+}
+
+.billing-plan-page__hero-title {
+  margin: 10px 0 12px;
+  max-width: 860px;
+  font-size: 30px;
+  line-height: 1.12;
+  font-weight: 800;
+}
+
+.billing-plan-page__hero-text {
+  margin: 0;
+  max-width: 760px;
+  line-height: 1.7;
+  color: var(--mts-text-secondary);
+}
+
+.billing-plan-page__hero-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.billing-plan-page__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.billing-plan-page__plan-summary,
+.billing-plan-page__next-step {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.billing-plan-page__plan-summary p,
+.billing-plan-page__next-step p,
+.billing-plan-page__event p {
+  margin: 0;
+  color: var(--mts-text-secondary);
+  line-height: 1.7;
+}
+
+.billing-plan-page__plan-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.billing-plan-page__plan-grid span,
+.billing-plan-page__next-highlight span,
+.billing-plan-page__usage-head span,
+.billing-plan-page__event-date {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--mts-text-muted);
+}
+
+.billing-plan-page__plan-grid strong,
+.billing-plan-page__next-highlight strong,
+.billing-plan-page__usage-head strong,
+.billing-plan-page__event strong {
+  font-size: 14px;
+  color: var(--mts-text-primary);
+}
+
+.billing-plan-page__feature-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.billing-plan-page__feature {
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: var(--mts-bg-surface-2);
+  border: 1px solid var(--mts-border-color);
+  font-size: 12px;
+  color: var(--mts-text-secondary);
+}
+
+.billing-plan-page__usage-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.billing-plan-page__usage-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.billing-plan-page__usage-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.billing-plan-page__usage-bar {
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--mts-bg-surface-2);
+}
+
+.billing-plan-page__usage-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--mts-color-primary), #10b981);
+}
+
+.billing-plan-page__next-highlight {
+  padding: 14px 16px;
+  border-radius: var(--mts-radius-lg);
+  border: 1px solid var(--mts-border-color);
+  background: var(--mts-bg-surface-2);
+}
+
+.billing-plan-page__events {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.billing-plan-page__event {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .billing-plan-page__topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 780px) {
+  .billing-plan-page {
+    padding: 16px 16px 28px;
+  }
+
+  .billing-plan-page__hero {
+    padding: 24px 20px;
+  }
+
+  .billing-plan-page__hero-title {
+    font-size: 24px;
+  }
+
+  .billing-plan-page__plan-grid,
+  .billing-plan-page__event {
+    grid-template-columns: 1fr;
+  }
+}

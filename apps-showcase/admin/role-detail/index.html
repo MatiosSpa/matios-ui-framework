@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Role Detail - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="role-detail.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="role-detail-page">
+    <header class="role-detail-page__topbar mts-surface">
+      <div class="role-detail-page__brand">
+        <div class="role-detail-page__logo">M</div>
+        <div>
+          <div class="role-detail-page__title">Role Detail</div>
+          <div class="role-detail-page__subtitle">Permisos, alcance y miembros asignados a un rol</div>
+        </div>
+      </div>
+      <div class="role-detail-page__actions">
+        <div id="role-edit-button"></div>
+      </div>
+    </header>
+
+    <main class="role-detail-page__main mts-grid mts-grid--gap-md">
+      <section class="role-detail-page__hero mts-surface mts-g-col-12">
+        <div class="role-detail-page__eyebrow">Role governance</div>
+        <h1 class="role-detail-page__hero-title">Billing Admin</h1>
+        <p class="role-detail-page__hero-copy">
+          Vista para entender de forma rapida que permite un rol, donde aplica y a quienes afecta
+          antes de modificar acceso dentro del workspace.
+        </p>
+        <div class="role-detail-page__badges">
+          <span id="role-scope-badge"></span>
+          <span id="role-risk-badge"></span>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-7">
+        <div class="mts-grid mts-grid--gap-md">
+          <div class="mts-g-col-12" id="role-permissions-card"></div>
+          <div class="mts-g-col-12" id="role-actions-card"></div>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-5 role-detail-page__sidebar">
+        <div id="role-members-card"></div>
+        <div id="role-feedback"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    new MTS.Button('#role-edit-button', {
+      label: 'Editar rol',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('shield'),
+      onClick: function () {
+        notify('info', 'Edicion simulada', 'Aqui partiria el flujo de editar permisos del rol.');
+      }
+    });
+
+    new MTS.Badge('#role-scope-badge', {
+      label: 'Billing workspace',
+      variant: 'info',
+      size: 'sm'
+    });
+
+    new MTS.Badge('#role-risk-badge', {
+      label: 'Elevated access',
+      variant: 'warning',
+      size: 'sm'
+    });
+
+    new MTS.Card('#role-permissions-card', {
+      title: 'Permisos clave',
+      subtitle: 'Effective access',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="role-detail-page__list">' +
+          permRow('Invoices', 'Puede ver, reenviar y descargar facturas emitidas.') +
+          permRow('Payment methods', 'Puede cambiar tarjeta principal y backup.') +
+          permRow('Plan changes', 'Puede previsualizar cambios y escalar aprobaciones.') +
+        '</div>'
+    });
+
+    new MTS.Card('#role-actions-card', {
+      title: 'Acciones recomendadas',
+      subtitle: 'Governance',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="role-detail-page__list">' +
+          permRow('Revision trimestral', 'Confirma que los miembros asignados siguen siendo dueños del proceso.') +
+          permRow('Separacion de funciones', 'Evita combinar este rol con permisos de security policy.') +
+          permRow('Alertas de cambio', 'Notifica cuando se agreguen permisos sensibles al rol.') +
+        '</div>',
+      footerAlign: 'between',
+      footer: [
+        {
+          label: 'Exportar snapshot',
+          variant: 'secondary',
+          icon: MTS.Icon.get('download'),
+          onClick: function () { notify('success', 'Snapshot listo', 'Se simulo la exportacion del rol con sus permisos actuales.'); }
+        },
+        {
+          label: 'Revisar acceso',
+          variant: 'ghost',
+          icon: MTS.Icon.get('arrow-right'),
+          onClick: function () { notify('info', 'Revision abierta', 'La pantalla se conecta bien con Access Review.'); }
+        }
+      ]
+    });
+
+    new MTS.Card('#role-members-card', {
+      title: 'Miembros asignados',
+      subtitle: 'Current assignees',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="role-detail-page__members">' +
+          memberRow('Camila Soto', 'Owner de billing y renovaciones') +
+          memberRow('Martin Perez', 'Finance ops con foco en cobro recurrente') +
+          memberRow('Laura Herrera', 'Cobertura temporal para auditoria de pagos') +
+        '</div>'
+    });
+
+    function permRow(title, text) {
+      return '<article class="role-detail-page__row"><strong>' + title + '</strong><p>' + text + '</p></article>';
+    }
+
+    function memberRow(name, text) {
+      return '<article class="role-detail-page__row"><strong>' + name + '</strong><p>' + text + '</p></article>';
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#role-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Empty Workspace - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="empty-workspace.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="empty-workspace-page">
+    <main class="empty-workspace-page__main mts-grid mts-grid--gap-md">
+      <section class="empty-workspace-page__hero mts-surface mts-g-col-12">
+        <div class="empty-workspace-page__eyebrow">First-run state</div>
+        <h1 class="empty-workspace-page__hero-title">Tu workspace todavia no tiene datos.</h1>
+        <p class="empty-workspace-page__hero-copy">
+          Este estado inicial ayuda a arrancar sin friccion: invita al equipo, importa contenido o
+          crea el primer espacio de trabajo sin dejar al usuario frente a una pantalla vacia.
+        </p>
+        <div class="empty-workspace-page__badges">
+          <span id="empty-badge-state"></span>
+          <span id="empty-badge-owner"></span>
+        </div>
+        <div class="empty-workspace-page__actions">
+          <div id="empty-create-button"></div>
+          <div id="empty-import-button"></div>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12">
+        <div id="empty-feedback"></div>
+      </section>
+
+      <section class="mts-g-col-12">
+        <div class="mts-grid mts-grid--gap-md" id="empty-cards"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var nextSteps = [
+      { id: 'ns1', title: 'Invitar equipo', subtitle: 'People', summary: 'Agrega owners, admins o miembros base para repartir el setup del workspace.' },
+      { id: 'ns2', title: 'Importar datos', subtitle: 'Migration', summary: 'Sube archivos, conecta una fuente externa o trae informacion desde otra herramienta.' },
+      { id: 'ns3', title: 'Crear primer espacio', subtitle: 'Operations', summary: 'Abre un proyecto, carpeta o modulo inicial para que el equipo empiece a trabajar.' }
+    ];
+
+    new MTS.Badge('#empty-badge-state', {
+      label: 'No data yet',
+      variant: 'warning',
+      size: 'sm'
+    });
+
+    new MTS.Badge('#empty-badge-owner', {
+      label: 'Owner setup required',
+      variant: 'default',
+      size: 'sm'
+    });
+
+    new MTS.Button('#empty-create-button', {
+      label: 'Crear espacio',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('folder-plus'),
+      onClick: function () {
+        notify('success', 'Accion simulada', 'Aqui normalmente partiria el flujo para crear el primer espacio del workspace.');
+      }
+    });
+
+    new MTS.Button('#empty-import-button', {
+      label: 'Importar datos',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('download'),
+      onClick: function () {
+        notify('info', 'Importacion simulada', 'La vista deja cubierto el CTA para traer datos iniciales.');
+      }
+    });
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#empty-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderCards() {
+      var host = document.getElementById('empty-cards');
+      host.innerHTML = '';
+
+      nextSteps.forEach(function (item, index) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12 mts-g-col-lg-4';
+        host.appendChild(wrap);
+
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: item.title,
+          subtitle: item.subtitle,
+          variant: index === 0 ? 'elevated' : 'outlined',
+          size: 'lg',
+          body: '<p class="empty-workspace-page__card-copy">' + item.summary + '</p>',
+          footerAlign: 'start',
+          footer: [{
+            label: 'Comenzar',
+            variant: 'ghost',
+            icon: MTS.Icon.get('arrow-right'),
+            onClick: function () {
+              notify('success', 'Paso simulado', 'Se activo el paso "' + item.title + '".');
+            }
+          }]
+        });
+      });
+    }
+
+    renderCards();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

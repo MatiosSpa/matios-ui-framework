@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Global Search - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="global-search.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="global-search-page">
+    <header class="global-search-page__topbar mts-surface">
+      <div class="global-search-page__brand">
+        <div class="global-search-page__logo">M</div>
+        <div>
+          <div class="global-search-page__title">Global Search</div>
+          <div class="global-search-page__subtitle">Discovery transversal para personas, archivos y settings</div>
+        </div>
+      </div>
+      <div class="global-search-page__actions">
+        <div id="search-save-button"></div>
+      </div>
+    </header>
+
+    <main class="global-search-page__main mts-grid mts-grid--gap-md">
+      <section class="global-search-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="global-search-page__eyebrow">Cross-product lookup</div>
+          <h1 class="global-search-page__hero-title">Busca una vez y entiende rapido donde seguir.</h1>
+          <p class="global-search-page__hero-copy">
+            Esta UI resuelve un caso muy real: discovery transversal sin depender de dashboards ni de
+            modulos aislados. Agrupa resultados por tipo y deja atajos utiles para continuar.
+          </p>
+          <div class="global-search-page__query" id="global-search-query"></div>
+          <div class="global-search-page__badges">
+            <span id="global-search-badge-scope"></span>
+            <span id="global-search-badge-state"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="mts-surface global-search-page__tabs-card">
+          <div id="global-search-tabs"></div>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4 global-search-page__sidebar">
+        <div id="global-search-feedback"></div>
+        <div id="global-search-insights"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    new MTS.Button('#search-save-button', {
+      label: 'Guardar busqueda',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('check-circle'),
+      onClick: function () {
+        notify('success', 'Busqueda guardada', 'La vista deja cubierto el patron de guardar una consulta frecuente.');
+      }
+    });
+
+    new MTS.Input('#global-search-query', {
+      label: 'Buscar',
+      type: 'text',
+      value: 'invoice overdue',
+      placeholder: 'Personas, tickets, archivos o settings',
+      iconLeft: MTS.Icon.get('search')
+    });
+
+    new MTS.Badge('#global-search-badge-scope', {
+      label: 'All sources',
+      variant: 'default',
+      size: 'sm'
+    });
+
+    new MTS.Badge('#global-search-badge-state', {
+      label: '24 results',
+      variant: 'info',
+      size: 'sm'
+    });
+
+    new MTS.Card('#global-search-insights', {
+      title: 'Atajos utiles',
+      subtitle: 'Search guidance',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="global-search-page__insights">' +
+          insightRow('Recientes', 'invoice history, pending approval, api keys') +
+          insightRow('Sugeridos', 'billing owner, webhook failures, session review') +
+          insightRow('Filtros rapidos', 'People, Files, Settings') +
+        '</div>'
+    });
+
+    new MTS.Tabs('#global-search-tabs', {
+      variant: 'card',
+      active: 'people',
+      tabs: [
+        { id: 'people', label: 'People', badge: '6', icon: MTS.Icon.get('users'), content: buildTab('Personas relacionadas', [
+          resultRow('Camila Soto', 'Billing owner - ultima accion hace 12 min', 'Abrir miembro'),
+          resultRow('Diego Paredes', 'Support admin - gestiona alerts de cobro', 'Ver acceso'),
+          resultRow('Laura Herrera', 'Product lead - ajusto notificaciones de invoices', 'Ver perfil')
+        ])},
+        { id: 'files', label: 'Files', badge: '9', icon: MTS.Icon.get('folder'), content: buildTab('Archivos y documentos', [
+          resultRow('Invoice-Overdue-Policy.pdf', 'Documento legal actualizado hoy a las 08:30', 'Preview'),
+          resultRow('Billing Escalation Playbook', 'Guia operativa compartida con soporte', 'Abrir guia'),
+          resultRow('Q2 renewal list.csv', 'Export reciente de cuentas con deuda', 'Descargar')
+        ])},
+        { id: 'settings', label: 'Settings', badge: '9', icon: MTS.Icon.get('settings'), content: buildTab('Configuraciones relacionadas', [
+          resultRow('Retry policy for webhooks', 'Developer settings - production', 'Ver ajuste'),
+          resultRow('Invoice reminder cadence', 'Notifications settings - workspace', 'Editar'),
+          resultRow('Payment method fallback', 'Billing settings - owner required', 'Abrir billing')
+        ])}
+      ]
+    });
+
+    function insightRow(label, value) {
+      return '<article class="global-search-page__insight-row"><span>' + label + '</span><strong>' + value + '</strong></article>';
+    }
+
+    function resultRow(title, meta, action) {
+      return '<article class="global-search-page__result-row">' +
+        '<div><strong>' + title + '</strong><p>' + meta + '</p></div>' +
+        '<button type="button">' + action + '</button>' +
+      '</article>';
+    }
+
+    function buildTab(title, rows) {
+      var container = document.createElement('div');
+      container.className = 'global-search-page__tab';
+      container.innerHTML =
+        '<div class="global-search-page__tab-head">' +
+          '<div class="global-search-page__tab-label">Results</div>' +
+          '<h2>' + title + '</h2>' +
+        '</div>' +
+        '<div class="global-search-page__result-list">' + rows.join('') + '</div>';
+      return container;
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#global-search-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

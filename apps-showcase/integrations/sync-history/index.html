@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sync History - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="sync-history.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="sync-history-page">
+    <header class="sync-history-page__topbar mts-surface">
+      <div class="sync-history-page__brand">
+        <div class="sync-history-page__logo">M</div>
+        <div>
+          <div class="sync-history-page__title">Sync History</div>
+          <div class="sync-history-page__subtitle">Ejecuciones recientes y estado de sincronización por proveedor</div>
+        </div>
+      </div>
+      <div class="sync-history-page__actions">
+        <div id="sync-run-button"></div>
+      </div>
+    </header>
+
+    <main class="sync-history-page__main mts-grid mts-grid--gap-md">
+      <section class="sync-history-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="sync-history-page__eyebrow">Sync operations</div>
+          <h1 class="sync-history-page__hero-title">Visibilidad operativa sobre lo que sí sincronizó, lo que falló y qué conviene reintentar.</h1>
+          <p class="sync-history-page__hero-copy">
+            Esta vista resume ejecuciones recientes sin caer en una consola técnica compleja:
+            duración, volumen de registros, resultado y acciones básicas de soporte.
+          </p>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12">
+        <div class="mts-grid mts-grid--gap-md" id="sync-results"></div>
+      </section>
+
+      <aside class="mts-g-col-12">
+        <div id="sync-feedback"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var syncRuns = [
+      { id: 'sr1', provider: 'Slack', result: 'Exitosa', variant: 'success', volume: '34 eventos', duration: '1.8 s', when: 'Hoy, 09:08' },
+      { id: 'sr2', provider: 'HubSpot', result: 'Parcial', variant: 'warning', volume: '210 contactos / 3 errores', duration: '9.2 s', when: 'Hoy, 08:42' },
+      { id: 'sr3', provider: 'Stripe', result: 'Fallida', variant: 'danger', volume: '0 eventos', duration: '0.8 s', when: 'Ayer, 22:10' }
+    ];
+
+    new MTS.Button('#sync-run-button', {
+      label: 'Ejecutar sync',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        notify('success', 'Sync lanzada', 'La UI deja cubierto el disparo manual de una sincronización.');
+      }
+    });
+
+    function renderRuns() {
+      var host = document.getElementById('sync-results');
+      host.innerHTML = '';
+
+      syncRuns.forEach(function (item) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12 mts-g-col-lg-4';
+        host.appendChild(wrap);
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: item.provider,
+          subtitle: item.when,
+          variant: item.variant === 'success' ? 'elevated' : 'outlined',
+          size: 'lg',
+          body:
+            '<div class="sync-history-page__run-body">' +
+              '<div class="sync-history-page__run-meta"><span id="sync-badge-' + item.id + '"></span></div>' +
+              '<div class="sync-history-page__run-grid">' +
+                '<div><span>Volumen</span><strong>' + item.volume + '</strong></div>' +
+                '<div><span>Duración</span><strong>' + item.duration + '</strong></div>' +
+              '</div>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: 'Retry',
+              variant: 'primary',
+              icon: MTS.Icon.get('send'),
+              onClick: function () {
+                notify('info', 'Retry simulado', 'Se simuló el reintento de la última sincronización de ' + item.provider + '.');
+              }
+            },
+            {
+              label: 'Ver detalle',
+              variant: 'ghost',
+              icon: MTS.Icon.get('arrow-right'),
+              onClick: function () {
+                notify('success', 'Detalle disponible', 'Aquí normalmente abrirías una vista más profunda del run.');
+              }
+            }
+          ]
+        });
+
+        new MTS.Badge('#sync-badge-' + item.id, {
+          label: item.result,
+          variant: item.variant,
+          size: 'sm'
+        });
+      });
+
+      MTS.Icon.initAll();
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#sync-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    renderRuns();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

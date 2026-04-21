@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Crear usuario - Matios UI</title>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (error) {}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="user-create.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <main class="mts-p-4">
+    <div id="user-create-panel"></div>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    new MTS.Card('#user-create-panel', {
+      title: 'Crear usuario',
+      subtitle: 'Alta base de cuenta interna',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+          '<div id="user-create-alert"></div>' +
+          '<p class="mts-text-md mts-text-muted mts-m-0">Nombre, apellido, correo y username son obligatorios. El rol define los perfiles asociados que despues administraremos por separado.</p>' +
+          '<div class="mts-grid mts-grid--gap-md">' +
+            '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-create-first-name"></div></div>' +
+            '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-create-last-name"></div></div>' +
+            '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-create-email"></div></div>' +
+            '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-create-username"></div></div>' +
+            '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-create-phone"></div></div>' +
+            '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-create-area"></div></div>' +
+            '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-create-role-name"></div></div>' +
+            '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-create-supervisor"></div></div>' +
+            '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-create-role"></div></div>' +
+            '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-create-status"></div></div>' +
+          '</div>' +
+          '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+            '<div id="user-create-generate-password"></div>' +
+            '<div id="user-create-send-access"></div>' +
+          '</div>' +
+        '</div>',
+      footerAlign: 'between',
+      footer: [
+        {
+          label: 'Volver a usuarios',
+          variant: 'ghost',
+          icon: MTS.Icon.get('arrow-left'),
+          onClick: function () {
+            openScreen('../user-list/index.html');
+          }
+        },
+        {
+          label: 'Crear usuario',
+          variant: 'primary',
+          icon: MTS.Icon.get('user-plus'),
+          onClick: function () {
+            submitCreate();
+          }
+        }
+      ]
+    });
+
+    var firstNameInput = new MTS.Input('#user-create-first-name', {
+      type: 'text',
+      label: 'Nombre',
+      placeholder: 'Ingresa el nombre',
+      iconLeft: MTS.Icon.get('user')
+    });
+
+    var lastNameInput = new MTS.Input('#user-create-last-name', {
+      type: 'text',
+      label: 'Apellido',
+      placeholder: 'Ingresa el apellido',
+      iconLeft: MTS.Icon.get('user')
+    });
+
+    var emailInput = new MTS.Input('#user-create-email', {
+      type: 'email',
+      label: 'Correo',
+      placeholder: 'nombre@empresa.cl',
+      iconLeft: MTS.Icon.get('mail')
+    });
+
+    var usernameInput = new MTS.Input('#user-create-username', {
+      type: 'text',
+      label: 'Username',
+      placeholder: 'usuario interno',
+      iconLeft: MTS.Icon.get('user')
+    });
+
+    var phoneInput = new MTS.Input('#user-create-phone', {
+      type: 'text',
+      label: 'Telefono',
+      placeholder: '+56 9 0000 0000',
+      iconLeft: MTS.Icon.get('phone')
+    });
+
+    var areaSelect = new MTS.Select('#user-create-area', {
+      label: 'Area',
+      placeholder: 'Selecciona un area',
+      options: [
+        { value: 'Operaciones', label: 'Operaciones' },
+        { value: 'Finanzas', label: 'Finanzas' },
+        { value: 'Soporte', label: 'Soporte' },
+        { value: 'Tecnologia', label: 'Tecnologia' }
+      ]
+    });
+
+    var roleNameInput = new MTS.Input('#user-create-role-name', {
+      type: 'text',
+      label: 'Cargo',
+      placeholder: 'Ej: Analista senior',
+      iconLeft: MTS.Icon.get('briefcase')
+    });
+
+    var supervisorInput = new MTS.Input('#user-create-supervisor', {
+      type: 'text',
+      label: 'Supervisor',
+      placeholder: 'Nombre del supervisor',
+      iconLeft: MTS.Icon.get('user')
+    });
+
+    var roleSelect = new MTS.Select('#user-create-role', {
+      label: 'Rol',
+      placeholder: 'Selecciona un rol',
+      hint: 'El rol define perfiles y permisos asociados.',
+      options: [
+        { value: 'workspace-user', label: 'Usuario workspace' },
+        { value: 'operations-lead', label: 'Supervisor Operacional' },
+        { value: 'finance-analyst', label: 'Analista Finance' },
+        { value: 'support-coordinator', label: 'Coordinador de Soporte' }
+      ]
+    });
+
+    var statusSelect = new MTS.Select('#user-create-status', {
+      label: 'Estado inicial',
+      value: 'active',
+      options: [
+        { value: 'active', label: 'Activo' },
+        { value: 'pending', label: 'Pendiente de acceso' },
+        { value: 'blocked', label: 'Bloqueado' }
+      ]
+    });
+
+    var generatePasswordCheckbox = new MTS.Checkbox('#user-create-generate-password', {
+      label: 'Generar clave automatica',
+      checked: true
+    });
+
+    var sendAccessCheckbox = new MTS.Checkbox('#user-create-send-access', {
+      label: 'Enviar acceso por correo al guardar',
+      checked: true
+    });
+
+    function clearAlerts() {
+      document.getElementById('user-create-alert').innerHTML = '';
+    }
+
+    function showAlert(variant, title, message) {
+      clearAlerts();
+      MTS.Alert.show('#user-create-alert', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function clearFieldErrors() {
+      firstNameInput.clearError();
+      lastNameInput.clearError();
+      emailInput.clearError();
+      usernameInput.clearError();
+    }
+
+    function submitCreate() {
+      var firstName = firstNameInput.getValue().trim();
+      var lastName = lastNameInput.getValue().trim();
+      var email = emailInput.getValue().trim();
+      var username = usernameInput.getValue().trim();
+      var role = roleSelect.getValue();
+      var status = statusSelect.getValue() || 'active';
+
+      clearFieldErrors();
+      clearAlerts();
+
+      if (!firstName) {
+        firstNameInput.setError('Ingresa el nombre');
+        return;
+      }
+
+      if (!lastName) {
+        lastNameInput.setError('Ingresa el apellido');
+        return;
+      }
+
+      if (!email) {
+        emailInput.setError('Ingresa el correo');
+        return;
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        emailInput.setError('Ingresa un correo valido');
+        return;
+      }
+
+      if (!username) {
+        usernameInput.setError('Ingresa el username');
+        return;
+      }
+
+      if (!role) {
+        showAlert('warning', 'Falta el rol', 'Selecciona un rol para determinar el acceso base del usuario.');
+        return;
+      }
+
+      showAlert(
+        'success',
+        'Usuario preparado',
+        'Se registraria a <strong>' + escapeHtml(firstName + ' ' + lastName) + '</strong> con username <strong>@' + escapeHtml(username) + '</strong>, rol <strong>' + escapeHtml(getRoleLabel(role)) + '</strong> y estado <strong>' + escapeHtml(getStatusLabel(status)) + '</strong>' +
+          (generatePasswordCheckbox.isChecked() ? ' con clave automatica.' : '.') +
+          (sendAccessCheckbox.isChecked() ? ' Tambien se enviaria el correo de acceso.' : '')
+      );
+    }
+
+    function getRoleLabel(value) {
+      var options = roleSelect.options || [];
+      for (var i = 0; i < options.length; i++) {
+        if (options[i].value === value) return options[i].label;
+      }
+      return value || '-';
+    }
+
+    function getStatusLabel(value) {
+      if (value === 'pending') return 'Pendiente de acceso';
+      if (value === 'blocked') return 'Bloqueado';
+      return 'Activo';
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

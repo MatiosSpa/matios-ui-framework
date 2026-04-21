@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>API Keys - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="api-keys.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="api-keys-page">
+    <header class="api-keys-page__topbar mts-surface">
+      <div class="api-keys-page__brand">
+        <div class="api-keys-page__logo">M</div>
+        <div>
+          <div class="api-keys-page__title">API Keys</div>
+          <div class="api-keys-page__subtitle">Credenciales tecnicas para integraciones y automatizaciones</div>
+        </div>
+      </div>
+      <div class="api-keys-page__actions">
+        <div id="api-keys-create"></div>
+      </div>
+    </header>
+
+    <main class="api-keys-page__main mts-grid mts-grid--gap-md">
+      <section class="api-keys-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="api-keys-page__eyebrow">Developer access</div>
+          <h1 class="api-keys-page__hero-title">Entrega claves tecnicas con contexto, control y rotacion sin improvisar una UI aparte.</h1>
+          <p class="api-keys-page__hero-copy">
+            Esta pantalla concentra los casos más comunes: crear una key, copiarla, definir entorno,
+            revisar último uso y ejecutar rotación o revocación.
+          </p>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-7">
+        <div id="api-keys-feedback"></div>
+        <div class="mts-grid mts-grid--gap-md" id="api-keys-list"></div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-5 api-keys-page__sidebar">
+        <div class="mts-form-card api-keys-page__form-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Nueva key</h2>
+            <p class="mts-form-card__subtitle">Nombre interno, entorno y scope inicial de la credencial.</p>
+          </div>
+          <div class="api-keys-page__form-grid">
+            <div id="api-key-name"></div>
+            <div id="api-key-env"></div>
+            <div class="api-keys-page__full-row" id="api-key-scope"></div>
+          </div>
+          <div class="api-keys-page__form-actions">
+            <div id="api-key-generate"></div>
+          </div>
+        </div>
+
+        <div id="api-keys-policy-card"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var apiKeys = [
+      { id: 'k1', name: 'billing-prod', key: 'sk_live_••••••A82Q', env: 'Production', scope: 'billing:read billing:write', lastUse: 'Hoy, 08:44', status: 'Activa', variant: 'success' },
+      { id: 'k2', name: 'support-bot', key: 'sk_live_••••••F91P', env: 'Production', scope: 'tickets:read tickets:write', lastUse: 'Ayer, 21:10', status: 'Activa', variant: 'success' },
+      { id: 'k3', name: 'sandbox-internal', key: 'sk_test_••••••M12Z', env: 'Sandbox', scope: 'workspace:read', lastUse: 'Hace 9 dias', status: 'Pendiente rotacion', variant: 'warning' }
+    ];
+
+    new MTS.Button('#api-keys-create', {
+      label: 'Crear key',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('key'),
+      onClick: function () {
+        notify('success', 'Formulario listo', 'La UI deja cubierto el punto de entrada para nuevas credenciales.');
+      }
+    });
+
+    new MTS.Input('#api-key-name', {
+      label: 'Nombre interno',
+      type: 'text',
+      value: 'notifications-worker',
+      placeholder: 'Nombre de la integracion'
+    });
+
+    new MTS.Select('#api-key-env', {
+      label: 'Entorno',
+      options: [
+        { value: 'prod', label: 'Production' },
+        { value: 'staging', label: 'Staging' },
+        { value: 'sandbox', label: 'Sandbox' }
+      ],
+      value: 'staging'
+    });
+
+    new MTS.Input('#api-key-scope', {
+      label: 'Scopes',
+      type: 'text',
+      value: 'notifications:read notifications:write',
+      placeholder: 'Scopes'
+    });
+
+    new MTS.Button('#api-key-generate', {
+      label: 'Generar credencial',
+      variant: 'secondary',
+      block: true,
+      iconLeft: MTS.Icon.get('check-circle'),
+      onClick: function () {
+        notify('info', 'Credencial simulada', 'Aqui normalmente mostrarías la key solo una vez para copiarla.');
+      }
+    });
+
+    new MTS.Card('#api-keys-policy-card', {
+      title: 'Politica de claves',
+      subtitle: 'Developer access',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="api-keys-page__policy">' +
+          '<p>Las claves productivas deben rotarse cada 90 dias y quedar asociadas a un owner tecnico claro.</p>' +
+          '<ul class="api-keys-page__policy-list">' +
+            '<li>Produccion y sandbox no comparten scopes.</li>' +
+            '<li>El ultimo uso ayuda a detectar credenciales huerfanas.</li>' +
+            '<li>Revocar siempre antes de borrar una integracion.</li>' +
+          '</ul>' +
+        '</div>'
+    });
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#api-keys-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderKeys() {
+      var host = document.getElementById('api-keys-list');
+      host.innerHTML = '';
+
+      apiKeys.forEach(function (item, index) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12';
+        host.appendChild(wrap);
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: item.name,
+          subtitle: item.env,
+          variant: index === 0 ? 'elevated' : 'outlined',
+          size: 'lg',
+          body:
+            '<div class="api-keys-page__key-body">' +
+              '<div class="api-keys-page__key-meta">' +
+                '<span id="api-key-badge-' + item.id + '"></span>' +
+                '<span class="api-keys-page__key-lastuse">' + item.lastUse + '</span>' +
+              '</div>' +
+              '<div class="api-keys-page__key-row">' +
+                '<input id="api-key-input-' + item.id + '" class="api-keys-page__secret" readonly value="' + item.key + '">' +
+                '<button id="api-key-copy-' + item.id + '"></button>' +
+              '</div>' +
+              '<div class="api-keys-page__scope">' + item.scope + '</div>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: 'Rotar',
+              variant: 'primary',
+              icon: MTS.Icon.get('refresh-cw'),
+              onClick: function () {
+                notify('warning', 'Rotacion simulada', 'La key ' + item.name + ' quedo marcada para rotacion.');
+              }
+            },
+            {
+              label: 'Revocar',
+              variant: 'ghost',
+              icon: MTS.Icon.get('alert'),
+              onClick: function () {
+                notify('info', 'Revocacion simulada', 'Aqui normalmente pedirias confirmacion fuerte antes de revocar.');
+              }
+            }
+          ]
+        });
+
+        new MTS.Badge('#api-key-badge-' + item.id, {
+          label: item.status,
+          variant: item.variant,
+          size: 'sm'
+        });
+
+        new MTS.CopyButton('#api-key-copy-' + item.id, {
+          target: '#api-key-input-' + item.id,
+          iconOnly: true,
+          variant: 'secondary'
+        });
+      });
+
+      MTS.Icon.initAll();
+    }
+
+    renderKeys();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

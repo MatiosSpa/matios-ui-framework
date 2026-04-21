@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Invite Member - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-taginput/matios-ui-taginput.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="invite-member.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../../forms/matios-ui-taginput/matios-ui-taginput.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <div class="invite-member-page">
+    <header class="invite-member-page__topbar mts-surface">
+      <div class="invite-member-page__brand">
+        <div class="invite-member-page__logo">M</div>
+        <div>
+          <div class="invite-member-page__title">Invite Member</div>
+          <div class="invite-member-page__subtitle">Alta real de usuarios con rol base y contexto inicial de acceso</div>
+        </div>
+      </div>
+      <div class="invite-member-page__topbar-actions">
+        <div id="invite-member-back"></div>
+        <div id="invite-member-submit-top"></div>
+      </div>
+    </header>
+
+    <main class="invite-member-page__main mts-grid mts-grid--gap-md">
+      <section class="invite-member-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="invite-member-page__eyebrow">Access onboarding</div>
+          <h1 class="invite-member-page__hero-title">Invita personas sin perder control del rol, el equipo de aterrizaje y la experiencia de entrada.</h1>
+          <p class="invite-member-page__hero-copy">
+            La idea de esta pantalla es resolver el caso real de invitar uno o varios miembros desde
+            admin, dejando claro que acceso base reciben y que mensaje acompana el ingreso.
+          </p>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-7">
+        <div class="mts-form-card invite-member-page__form-card">
+          <div class="invite-member-page__form-view" id="invite-member-form-view">
+            <div class="mts-form-card__header">
+              <h2 class="mts-form-card__title">Nuevo lote de invitaciones</h2>
+              <p class="mts-form-card__subtitle">Carga correos, define el rol base y deja claro a que equipo llegan.</p>
+            </div>
+
+            <div id="invite-member-alert"></div>
+
+            <div class="invite-member-page__form-grid">
+              <div class="invite-member-page__full-row" id="invite-member-emails"></div>
+              <div id="invite-member-role"></div>
+              <div id="invite-member-team"></div>
+              <div class="invite-member-page__full-row" id="invite-member-profile"></div>
+              <div class="invite-member-page__full-row" id="invite-member-message"></div>
+            </div>
+
+            <div class="invite-member-page__checks">
+              <div id="invite-member-copy"></div>
+              <div id="invite-member-2fa"></div>
+            </div>
+
+            <div class="invite-member-page__footer">
+              <div id="invite-member-submit-bottom"></div>
+            </div>
+          </div>
+
+          <div class="invite-member-page__success-view" id="invite-member-success-view" hidden>
+            <div class="invite-member-page__success-icon">
+              <i class="mts-icon mts-icon-check-circle"></i>
+            </div>
+            <h2 class="invite-member-page__success-title">Invitaciones preparadas</h2>
+            <p class="invite-member-page__success-copy">
+              El lote quedo listo con el rol base y una nota de contexto para el primer acceso.
+            </p>
+
+            <div class="invite-member-page__success-summary">
+              <div class="invite-member-page__summary-row">
+                <span>Correos</span>
+                <strong id="invite-member-summary-total">-</strong>
+              </div>
+              <div class="invite-member-page__summary-row">
+                <span>Rol base</span>
+                <strong id="invite-member-summary-role">-</strong>
+              </div>
+              <div class="invite-member-page__summary-row">
+                <span>Equipo</span>
+                <strong id="invite-member-summary-team">-</strong>
+              </div>
+              <div class="invite-member-page__summary-list" id="invite-member-summary-list"></div>
+            </div>
+
+            <div id="invite-member-success-alert"></div>
+
+            <div class="invite-member-page__success-actions">
+              <div id="invite-member-edit"></div>
+              <div id="invite-member-go-members"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-5 invite-member-page__sidebar">
+        <div id="invite-member-guidelines"></div>
+        <div id="invite-member-preview-card"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+  </script>
+  <script>
+    var inviteState = {
+      tags: [],
+      roleLabel: '',
+      teamLabel: '',
+      profileLabel: ''
+    };
+
+    var emailsInput = new MTS.TagInput('#invite-member-emails', {
+      label: 'Correos',
+      placeholder: 'Agrega un correo y presiona Enter',
+      allowCustom: true,
+      suggestions: [
+        { uid: 'ana@northwind.io', name: 'ana@northwind.io' },
+        { uid: 'pedro@northwind.io', name: 'pedro@northwind.io' },
+        { uid: 'lucia@northwind.io', name: 'lucia@northwind.io' },
+        { uid: 'bruno@northwind.io', name: 'bruno@northwind.io' }
+      ],
+      onChange: function (e) {
+        inviteState.tags = e.detail.tags || [];
+        syncPreviewCard();
+      }
+    });
+
+    var roleSelect = new MTS.Select('#invite-member-role', {
+      label: 'Rol base',
+      placeholder: 'Selecciona un rol',
+      options: [
+        { value: 'member', label: 'Member' },
+        { value: 'support', label: 'Support' },
+        { value: 'billing', label: 'Billing' },
+        { value: 'admin', label: 'Admin' }
+      ]
+    });
+
+    var teamSelect = new MTS.Select('#invite-member-team', {
+      label: 'Equipo de aterrizaje',
+      placeholder: 'Selecciona un equipo',
+      options: [
+        { value: 'operations', label: 'Operations' },
+        { value: 'support', label: 'Support' },
+        { value: 'finance', label: 'Finance' },
+        { value: 'product', label: 'Product' }
+      ]
+    });
+
+    var profileSelect = new MTS.Select('#invite-member-profile', {
+      label: 'Perfil de acceso',
+      placeholder: 'Selecciona un perfil',
+      options: [
+        { value: 'workspace-general', label: 'Workspace General' },
+        { value: 'support-triage', label: 'Support Triage' },
+        { value: 'billing-ops', label: 'Billing Ops' },
+        { value: 'read-only', label: 'Read only' }
+      ]
+    });
+
+    var messageInput = new MTS.Input('#invite-member-message', {
+      type: 'text',
+      label: 'Mensaje de bienvenida',
+      placeholder: 'Te dejamos acceso inicial para que puedas partir hoy',
+      iconLeft: MTS.Icon.get('mail')
+    });
+
+    new MTS.Checkbox('#invite-member-copy', {
+      label: 'Quiero recibir copia del resumen de invitaciones'
+    });
+
+    new MTS.Checkbox('#invite-member-2fa', {
+      label: 'Forzar enrolamiento de segundo factor al primer ingreso'
+    });
+
+    new MTS.Button('#invite-member-back', {
+      label: 'Volver a miembros',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('arrow-left'),
+      onClick: function () { openScreen('../members-list/index.html'); }
+    });
+
+    new MTS.Button('#invite-member-submit-top', {
+      label: 'Preparar invitacion',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('send'),
+      onClick: submitInvites
+    });
+
+    new MTS.Button('#invite-member-submit-bottom', {
+      label: 'Preparar invitacion',
+      variant: 'primary',
+      block: true,
+      iconLeft: MTS.Icon.get('send'),
+      onClick: submitInvites
+    });
+
+    new MTS.Button('#invite-member-edit', {
+      label: 'Editar lote',
+      variant: 'secondary',
+      block: true,
+      onClick: resetFlow
+    });
+
+    new MTS.Button('#invite-member-go-members', {
+      label: 'Ir a members list',
+      variant: 'primary',
+      block: true,
+      iconLeft: MTS.Icon.get('arrow-right'),
+      onClick: function () { openScreen('../members-list/index.html'); }
+    });
+
+    new MTS.Card('#invite-member-guidelines', {
+      title: 'Lineamientos',
+      subtitle: 'Acceso inicial',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="invite-member-page__sidebar-copy">' +
+          '<p>La invitacion define un rol base, pero el acceso fino puede ajustarse cuando la persona ya este dentro del workspace.</p>' +
+          '<ul class="invite-member-page__sidebar-list">' +
+            '<li>Usa perfiles cortos y entendibles.</li>' +
+            '<li>No conviertas todos los ingresos en admin.</li>' +
+            '<li>Billing y support suelen vivir mejor como perfiles operativos.</li>' +
+          '</ul>' +
+        '</div>'
+    });
+
+    function previewBody() {
+      return (
+        '<div class="invite-member-page__preview">' +
+          '<div class="invite-member-page__preview-item"><span>Rol</span><strong id="invite-preview-role">Aun sin definir</strong></div>' +
+          '<div class="invite-member-page__preview-item"><span>Equipo</span><strong id="invite-preview-team">Aun sin definir</strong></div>' +
+          '<div class="invite-member-page__preview-item"><span>Perfil</span><strong id="invite-preview-profile">Aun sin definir</strong></div>' +
+          '<div class="invite-member-page__preview-item"><span>Invitados</span><strong id="invite-preview-total">0 correos</strong></div>' +
+        '</div>'
+      );
+    }
+
+    new MTS.Card('#invite-member-preview-card', {
+      title: 'Resumen del lote',
+      subtitle: 'Preview operativo',
+      variant: 'elevated',
+      size: 'lg',
+      body: previewBody()
+    });
+
+    roleSelect.on('change', function (e) {
+      inviteState.roleLabel = e.detail.text || e.detail.value || '';
+      syncPreviewCard();
+    });
+
+    teamSelect.on('change', function (e) {
+      inviteState.teamLabel = e.detail.text || e.detail.value || '';
+      syncPreviewCard();
+    });
+
+    profileSelect.on('change', function (e) {
+      inviteState.profileLabel = e.detail.text || e.detail.value || '';
+      syncPreviewCard();
+    });
+
+    function syncPreviewCard() {
+      updateText('invite-preview-role', inviteState.roleLabel || 'Aun sin definir');
+      updateText('invite-preview-team', inviteState.teamLabel || 'Aun sin definir');
+      updateText('invite-preview-profile', inviteState.profileLabel || 'Aun sin definir');
+      updateText('invite-preview-total', inviteState.tags.length + (inviteState.tags.length === 1 ? ' correo' : ' correos'));
+    }
+
+    function updateText(id, text) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
+
+    function showAlert(target, variant, title, message) {
+      MTS.Alert.show(target, {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function submitInvites() {
+      var tags = emailsInput.getTags();
+      var role = roleSelect.getValue ? roleSelect.getValue() : '';
+      var team = teamSelect.getValue ? teamSelect.getValue() : '';
+
+      if (!tags.length) {
+        showAlert('#invite-member-alert', 'danger', 'Faltan correos', 'Agrega al menos una persona antes de preparar la invitacion.');
+        return;
+      }
+
+      if (!role) {
+        showAlert('#invite-member-alert', 'warning', 'Falta rol base', 'Selecciona el rol inicial que recibira este lote.');
+        return;
+      }
+
+      if (!team) {
+        showAlert('#invite-member-alert', 'warning', 'Falta equipo', 'Selecciona el equipo donde aterrizara el usuario al primer ingreso.');
+        return;
+      }
+
+      document.getElementById('invite-member-form-view').hidden = true;
+      document.getElementById('invite-member-success-view').hidden = false;
+      updateText('invite-member-summary-total', String(tags.length));
+      updateText('invite-member-summary-role', inviteState.roleLabel || role);
+      updateText('invite-member-summary-team', inviteState.teamLabel || team);
+      document.getElementById('invite-member-summary-list').innerHTML = tags.map(function (tag) {
+        return '<span class="invite-member-page__summary-chip">' + tag.name + '</span>';
+      }).join('');
+
+      showAlert('#invite-member-success-alert', 'success', 'Lote visualmente listo', 'La preparacion simula el envio del mail y el acceso base para cada invitado.');
+    }
+
+    function resetFlow() {
+      document.getElementById('invite-member-form-view').hidden = false;
+      document.getElementById('invite-member-success-view').hidden = true;
+      showAlert('#invite-member-alert', 'info', 'Puedes seguir ajustando', 'Modifica rol, equipo o correos antes del siguiente envio.');
+    }
+
+    syncPreviewCard();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

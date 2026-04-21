@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Usage and Limits - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="usage-and-limits.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="usage-limits-page">
+    <header class="usage-limits-page__topbar mts-surface">
+      <div class="usage-limits-page__brand">
+        <div class="usage-limits-page__logo">M</div>
+        <div>
+          <div class="usage-limits-page__title">Usage and Limits</div>
+          <div class="usage-limits-page__subtitle">Consumo real de recursos y umbrales del plan actual</div>
+        </div>
+      </div>
+      <div class="usage-limits-page__actions">
+        <div id="usage-export-button"></div>
+        <div id="usage-upgrade-button"></div>
+      </div>
+    </header>
+
+    <main class="usage-limits-page__main mts-grid mts-grid--gap-md">
+      <section class="usage-limits-page__hero mts-surface mts-g-col-12">
+        <div>
+          <div class="usage-limits-page__eyebrow">Operational consumption</div>
+          <h1 class="usage-limits-page__hero-title">Entiende rápido dónde se acerca el límite antes de que el plan se vuelva fricción.</h1>
+          <p class="usage-limits-page__hero-copy">
+            Esta pantalla separa uso ejecutivo de dashboard: muestra umbrales concretos, recursos
+            con riesgo y la próxima decisión de negocio u operación.
+          </p>
+        </div>
+      </section>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="usage-limits-page__stack">
+          <div id="usage-overview-card"></div>
+          <div id="usage-risk-card"></div>
+        </div>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4 usage-limits-page__sidebar">
+        <div id="usage-next-step-card"></div>
+        <div id="usage-feedback"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    new MTS.Button('#usage-export-button', {
+      label: 'Exportar uso',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('download'),
+      onClick: function () {
+        notify('success', 'Uso exportado', 'Se simulo la exportacion de consumo y limites del ciclo actual.');
+      }
+    });
+
+    new MTS.Button('#usage-upgrade-button', {
+      label: 'Evaluar cambio',
+      variant: 'primary',
+      iconLeft: MTS.Icon.get('arrow-up-right'),
+      onClick: function () {
+        notify('info', 'Cambio de plan', 'La UI deja claro el siguiente paso para ampliar limites o mover de plan.');
+      }
+    });
+
+    new MTS.Card('#usage-overview-card', {
+      title: 'Uso actual del ciclo',
+      subtitle: 'Scale Annual',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="usage-limits-page__usage-stack">' +
+          usageRow('Seats', '42 de 50', 84) +
+          usageRow('API requests', '780k de 1M', 78) +
+          usageRow('Storage', '186 de 250 GB', 74) +
+          usageRow('Automations', '138 de 150', 92) +
+        '</div>'
+    });
+
+    new MTS.Card('#usage-risk-card', {
+      title: 'Recursos en vigilancia',
+      subtitle: 'Prioridad operativa',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="usage-limits-page__risk-list">' +
+          riskRow('Automations', 'Quedan 12 ejecuciones antes del limite del plan.', 'Alta') +
+          riskRow('Seats', 'Finance y Support proyectan 5 altas durante la semana.', 'Media') +
+          riskRow('API requests', 'El ritmo actual se mantiene dentro del umbral, pero ya consume 78%.', 'Media') +
+        '</div>'
+    });
+
+    new MTS.Card('#usage-next-step-card', {
+      title: 'Siguiente paso sugerido',
+      subtitle: 'Decision recomendada',
+      variant: 'outlined',
+      size: 'lg',
+      body:
+        '<div class="usage-limits-page__next-step">' +
+          '<p>Si se aprueba una nueva tanda de automatizaciones y el equipo suma seats, conviene preparar ampliacion de plan antes del cierre del ciclo.</p>' +
+          '<div class="usage-limits-page__next-chip">Plan sugerido: Scale Plus</div>' +
+          '<div class="usage-limits-page__next-chip">Riesgo inmediato: automations</div>' +
+        '</div>'
+    });
+
+    function usageRow(label, value, percent) {
+      return (
+        '<div class="usage-limits-page__usage-row">' +
+          '<div class="usage-limits-page__usage-head">' +
+            '<span>' + label + '</span>' +
+            '<strong>' + value + '</strong>' +
+          '</div>' +
+          '<div class="usage-limits-page__usage-bar"><span style="width:' + percent + '%"></span></div>' +
+        '</div>'
+      );
+    }
+
+    function riskRow(title, body, priority) {
+      return (
+        '<article class="usage-limits-page__risk-row">' +
+          '<div class="usage-limits-page__risk-head"><strong>' + title + '</strong><span>' + priority + '</span></div>' +
+          '<p>' + body + '</p>' +
+        '</article>'
+      );
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#usage-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

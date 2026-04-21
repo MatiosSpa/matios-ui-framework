@@ -1,13 +1,33 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Sesion Expirada - Matios UI</title>
-  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (error) {}
+    })();
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
@@ -16,187 +36,132 @@
   <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
   <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
-  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
-  <link rel="stylesheet" href="../../../forms/matios-ui-formlayout/matios-ui-formlayout.css">
   <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
-  <link rel="stylesheet" href="../../../layout/matios-ui-grid/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
   <link rel="stylesheet" href="session-expired.css">
   <script src="../../../icons/matios-ui-icons.js"></script>
   <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
-  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
   <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
 </head>
 <body>
-  <div class="session-page">
-    <header class="session-page__topbar mts-surface">
-      <div class="session-page__brand">
-        <div class="session-page__logo">M</div>
-        <div>
-          <div class="session-page__title">Sesion Expirada</div>
-          <div class="session-page__subtitle">Showcase / Autenticacion</div>
-        </div>
-      </div>
-      <div class="session-page__topbar-actions">
-        <div id="session-back-btn"></div>
-      </div>
-    </header>
-
-    <main class="session-page__main mts-grid mts-grid--gap-md">
-      <section class="session-page__hero mts-g-col-12 mts-g-col-lg-7 mts-surface">
-        <p class="session-page__kicker">Pantalla activa</p>
-        <h1 class="session-page__hero-title">Tu sesion se cerro por seguridad</h1>
-        <p class="session-page__hero-copy">
-          Esta vista representa un corte controlado de sesion por inactividad, cambio de contexto
-          o vencimiento del token. La UI debe explicar el motivo, bajar la ansiedad del usuario y
-          ofrecer un regreso claro al flujo de acceso.
-        </p>
-
-        <div class="session-page__cards mts-grid mts-grid--gap-md">
-          <div class="mts-g-col-12 mts-g-col-md-6"><div id="session-card-reason"></div></div>
-          <div class="mts-g-col-12 mts-g-col-md-6"><div id="session-card-next"></div></div>
-        </div>
-      </section>
-
-      <section class="session-page__panel-wrap mts-g-col-12 mts-g-col-lg-5">
-        <div class="mts-form-card session-page__panel">
-          <div class="mts-form-card__header session-page__panel-header">
-            <div class="session-page__panel-icon">
-              <i class="mts-icon mts-icon-clock mts-icon--warning"></i>
-            </div>
-            <div>
-              <h2 class="mts-form-card__title">Necesitas volver a ingresar</h2>
-              <p class="mts-form-card__subtitle">
-                Cerramos esta sesion para proteger tu cuenta. No se requiere backend: todo es simulacion visual.
-              </p>
-            </div>
+  <main class="mts-d-flex mts-items-center mts-justify-center mts-p-4 mts-min-vh-100">
+    <section class="mts-card mts-card--elevated mts-w-full mts-max-w-lg">
+      <div class="mts-card__body mts-p-6">
+        <div class="mts-text-center mts-mb-4">
+          <div class="mts-mb-3">
+            <span class="mts-icon mts-icon--3xl" id="session-expired-icon"></span>
           </div>
+          <p class="mts-text-sm mts-text-muted mts-m-0">Matios UI</p>
+          <h1 class="mts-h1 mts-mt-2">Sesión expirada</h1>
+          <p class="mts-text-md mts-text-muted mts-mt-2 mts-mb-0">Necesitas volver a ingresar para continuar.</p>
+        </div>
 
+        <div class="mts-d-flex mts-flex-col mts-gap-4">
           <div id="session-alert"></div>
 
-          <div class="session-page__status mts-surface">
-            <div class="session-page__status-row">
-              <span class="session-page__status-label">Estado</span>
-              <span class="session-page__status-value">Sesion cerrada</span>
-            </div>
-            <div class="session-page__status-row">
-              <span class="session-page__status-label">Motivo</span>
-              <span class="session-page__status-value">Inactividad prolongada</span>
-            </div>
-            <div class="session-page__status-row">
-              <span class="session-page__status-label">Siguiente paso</span>
-              <span class="session-page__status-value">Reingresar y retomar el flujo</span>
-            </div>
-          </div>
-
-          <div class="session-page__help mts-surface">
-            <div class="session-page__help-icon"><i class="mts-icon mts-icon-shield"></i></div>
+          <section class="mts-surface mts-d-flex mts-flex-col mts-gap-2">
             <div>
-              <p class="session-page__help-title">Reingreso controlado</p>
-              <p class="session-page__help-copy">
-                Al continuar, la simulacion te devuelve al login para restablecer la sesion sin perder claridad del recorrido.
-              </p>
+              <p class="mts-text-sm mts-text-muted mts-mb-1 mts-mt-0">Estado</p>
+              <p class="mts-text-md mts-text-primary mts-m-0">Sesión cerrada</p>
             </div>
-          </div>
+            <div>
+              <p class="mts-text-sm mts-text-muted mts-mb-1 mts-mt-0">Motivo</p>
+              <p class="mts-text-md mts-text-primary mts-m-0">Inactividad prolongada</p>
+            </div>
+            <div>
+              <p class="mts-text-sm mts-text-muted mts-mb-1 mts-mt-0">Siguiente paso</p>
+              <p class="mts-text-md mts-text-primary mts-m-0">Volver al login y retomar el flujo</p>
+            </div>
+          </section>
 
-          <div class="session-page__actions">
-            <div id="session-login-btn"></div>
-            <div id="session-return-btn"></div>
-          </div>
+          <div id="session-login-btn"></div>
         </div>
-      </section>
-    </main>
-  </div>
+      </div>
 
-<script>
-window.addEventListener('message',function(e){
-  if(!e.data) return;
-  if(e.data.type==='setMode') document.documentElement.setAttribute('data-mts-mode',e.data.mode);
-  if(e.data.type==='setAccent'){
-    if(e.data.accent) document.documentElement.setAttribute('data-mts-accent',e.data.accent);
-    else document.documentElement.removeAttribute('data-mts-accent');
-  }
-});
-function goBack(){try{if(window.parent&&window.parent!==window){window.parent.postMessage({type:'closeApp'},'*');return;}}catch(e){}window.history.back();}
-function openScreen(path){
-  var params=location.search||'';
-  window.location.href=path+params;
-}
-</script>
-<script>
-new MTS.Button('#session-back-btn',{
-  label:'Volver al grupo',
-  variant:'ghost',
-  iconLeft:MTS.Icon.get('arrow-left'),
-  onClick:function(){goBack();}
-});
+      <div class="mts-card__footer mts-card__footer--between">
+        <div id="session-group-btn"></div>
+        <div id="session-return-btn"></div>
+      </div>
+    </section>
+  </main>
 
-new MTS.Card('#session-card-reason',{
-  title:'Por que ocurre',
-  subtitle:'Expiracion prevista',
-  variant:'outlined',
-  body:'<p class="session-card-copy">La sesion puede cerrarse por <strong>inactividad</strong>, renovacion pendiente del token o una validacion de seguridad que obliga a volver al punto de acceso.</p>'
-});
-
-new MTS.Card('#session-card-next',{
-  title:'Paso siguiente',
-  subtitle:'Retorno guiado',
-  variant:'outlined',
-  body:'<p class="session-card-copy">El CTA principal conduce al <strong>login</strong> y la accion secundaria permite volver al grupo del showcase sin romper el flujo visual.</p>'
-});
-
-var reloginButton=new MTS.Button('#session-login-btn',{
-  label:'Volver a iniciar sesion',
-  variant:'primary',
-  block:true,
-  iconLeft:MTS.Icon.get('lock'),
-  onClick:function(e,inst){simulateRelogin(inst);}
-});
-
-new MTS.Button('#session-return-btn',{
-  label:'Volver al login',
-  variant:'ghost',
-  block:true,
-  iconLeft:MTS.Icon.get('arrow-left'),
-  onClick:function(){openScreen('../login/index.html');}
-});
-
-function clearAlert(){
-  document.getElementById('session-alert').innerHTML='';
-}
-
-function showAlert(options){
-  clearAlert();
-  MTS.Alert.show('#session-alert',options);
-}
-
-function renderInitialAlert(){
-  showAlert({
-    variant:'warning',
-    title:'Sesion expirada',
-    message:'Por seguridad, debes autenticarte nuevamente para continuar con la simulacion.',
-    closable:true
-  });
-}
-
-function simulateRelogin(inst){
-  inst.setLoading(true);
-  inst.setLabel('Preparando reingreso...');
-
-  setTimeout(function(){
-    inst.setLoading(false);
-    inst.setLabel('Volver a iniciar sesion');
-    showAlert({
-      variant:'success',
-      title:'Reingreso listo',
-      message:'Simulacion UI: el siguiente paso seria redirigir al usuario al <strong>login</strong> para recuperar una sesion valida.',
-      closable:true
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
     });
-  },900);
-}
 
-renderInitialAlert();
-</script>
+    function goBack() {
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'closeApp' }, '*');
+          return;
+        }
+      } catch (error) {}
+      window.history.back();
+    }
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    MTS.Icon.render('clock', document.getElementById('session-expired-icon'));
+
+    MTS.Alert.show('#session-alert', {
+      variant: 'warning',
+      title: 'Sesión expirada',
+      message: 'Por seguridad, debes autenticarte nuevamente antes de continuar.',
+      closable: true
+    });
+
+    var reloginButton = new MTS.Button('#session-login-btn', {
+      label: 'Volver a iniciar sesión',
+      variant: 'primary',
+      block: true,
+      onClick: function (event, instance) {
+        simulateRelogin(instance);
+      }
+    });
+
+    new MTS.Button('#session-group-btn', {
+      label: 'Volver al grupo',
+      variant: 'link',
+      onClick: function () {
+        goBack();
+      }
+    });
+
+    new MTS.Button('#session-return-btn', {
+      label: 'Ir al login',
+      variant: 'link',
+      onClick: function () {
+        openScreen('../login/index.html');
+      }
+    });
+
+    function simulateRelogin(button) {
+      button.setLoading(true);
+      button.setLabel('Preparando reingreso...');
+
+      setTimeout(function () {
+        button.setLoading(false);
+        button.setLabel('Volver a iniciar sesión');
+        MTS.Alert.show('#session-alert', {
+          variant: 'success',
+          title: 'Reingreso listo',
+          message: 'El siguiente paso sería abrir el login con una sesión nueva.',
+          closable: true
+        });
+      }, 800);
+    }
+
+    MTS.Icon.initAll();
+  </script>
 </body>
 </html>
-

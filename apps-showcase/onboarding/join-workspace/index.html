@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Join Workspace - Matios UI</title>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (error) {}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="join-workspace.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <main class="mts-d-flex mts-items-center mts-justify-center mts-p-4 mts-min-vh-100">
+    <section class="mts-card mts-card--elevated mts-w-full mts-max-w-lg">
+      <div class="mts-card__body mts-p-6">
+        <div class="mts-text-center mts-mb-4">
+          <p class="mts-text-sm mts-text-muted mts-m-0">Matios UI</p>
+          <h1 class="mts-h1 mts-mt-2">Unirme a un workspace</h1>
+          <p class="mts-text-md mts-text-muted mts-mt-2 mts-mb-0">Ingresa el código o enlace que te compartieron para entrar.</p>
+        </div>
+
+        <div class="mts-d-flex mts-flex-col mts-gap-4">
+          <div id="join-workspace-alert"></div>
+          <div id="join-workspace-code"></div>
+          <div id="join-workspace-email"></div>
+          <div id="join-workspace-submit"></div>
+        </div>
+      </div>
+
+      <div class="mts-card__footer mts-card__footer--between">
+        <div id="join-workspace-back"></div>
+        <div id="join-workspace-login"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    var codeInput = new MTS.Input('#join-workspace-code', {
+      type: 'text',
+      label: 'Código o enlace',
+      placeholder: 'WKSP-ACME-2026 o enlace de invitación',
+      iconLeft: MTS.Icon.get('link')
+    });
+
+    var emailInput = new MTS.Input('#join-workspace-email', {
+      type: 'email',
+      label: 'Correo',
+      placeholder: 'equipo@matios.dev',
+      iconLeft: MTS.Icon.get('mail')
+    });
+
+    new MTS.Button('#join-workspace-back', {
+      label: 'Volver al onboarding',
+      variant: 'link',
+      onClick: function () {
+        openScreen('../onboarding-complete/index.html');
+      }
+    });
+
+    new MTS.Button('#join-workspace-login', {
+      label: 'Ir al login',
+      variant: 'link',
+      onClick: function () {
+        openScreen('../../login/login/index.html');
+      }
+    });
+
+    var submitButton = new MTS.Button('#join-workspace-submit', {
+      label: 'Unirme al workspace',
+      variant: 'primary',
+      block: true,
+      onClick: function (event, instance) {
+        submitJoin(instance);
+      }
+    });
+
+    function clearAlerts() {
+      document.getElementById('join-workspace-alert').innerHTML = '';
+    }
+
+    function showAlert(variant, title, message) {
+      clearAlerts();
+      MTS.Alert.show('#join-workspace-alert', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function submitJoin(button) {
+      var code = codeInput.getValue().trim();
+      var email = emailInput.getValue().trim();
+
+      codeInput.clearError();
+      emailInput.clearError();
+      clearAlerts();
+
+      if (!code) {
+        codeInput.setError('Ingresa el código o enlace del workspace');
+        return;
+      }
+
+      if (!email) {
+        emailInput.setError('Ingresa tu correo');
+        return;
+      }
+
+      button.setLoading(true);
+      button.setLabel('Validando...');
+
+      setTimeout(function () {
+        button.setLoading(false);
+        button.setLabel('Unirme al workspace');
+        showAlert('success', 'Acceso listo', 'El acceso se validaría para <strong>' + escapeHtml(email) + '</strong> usando el código ingresado.');
+      }, 800);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

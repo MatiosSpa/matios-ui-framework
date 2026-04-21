@@ -1,0 +1,198 @@
+/* ============================================================
+   MATIOS UI - matios-ui-transferlist.css
+   Version: 1.0.0
+   ============================================================ */
+
+.mts-transferlist {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: var(--mts-space-4);
+  align-items: stretch;
+  padding: var(--mts-space-3);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-xl);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--mts-bg-surface) 90%, var(--mts-color-primary) 10%) 0%,
+      var(--mts-bg-surface) 100%);
+  box-shadow: var(--mts-shadow-sm);
+}
+
+.mts-transferlist--disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.mts-transferlist__column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-lg);
+  background: var(--mts-bg-surface-2);
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 8%, transparent);
+}
+
+.mts-transferlist__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-3) var(--mts-space-4);
+  border-bottom: 1px solid var(--mts-border-color);
+  background: color-mix(in srgb, var(--mts-bg-surface) 80%, var(--mts-color-primary) 20%);
+}
+
+.mts-transferlist__title {
+  font-size: var(--mts-font-size-md);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+}
+
+.mts-transferlist__count {
+  min-width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--mts-space-2);
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-color-primary);
+  background: var(--mts-color-primary-light);
+}
+
+.mts-transferlist__list {
+  min-height: 280px;
+  max-height: 420px;
+  overflow: auto;
+  padding: var(--mts-space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-2);
+  background: var(--mts-bg-surface);
+}
+
+.mts-transferlist__list--over {
+  outline: 2px dashed var(--mts-color-primary);
+  outline-offset: -6px;
+  background: color-mix(in srgb, var(--mts-bg-surface) 88%, var(--mts-color-primary) 12%);
+}
+
+.mts-transferlist__item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-3);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  background: var(--mts-bg-surface-2);
+  cursor: pointer;
+  transition: border-color var(--mts-transition-fast), background var(--mts-transition-fast), transform var(--mts-transition-fast);
+}
+
+.mts-transferlist__item:hover {
+  border-color: var(--mts-color-primary);
+}
+
+.mts-transferlist__item--active {
+  border-color: var(--mts-color-primary);
+  box-shadow: 0 0 0 3px var(--mts-color-primary-light);
+  background: color-mix(in srgb, var(--mts-bg-surface-2) 84%, var(--mts-color-primary) 16%);
+}
+
+.mts-transferlist__item--dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+}
+
+.mts-transferlist__item-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mts-transferlist__item-label {
+  font-size: var(--mts-font-size-md);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+}
+
+.mts-transferlist__item-desc {
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-muted);
+  line-height: 1.45;
+}
+
+.mts-transferlist__item-meta {
+  flex-shrink: 0;
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  border: 1px solid var(--mts-border-color);
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: var(--mts-bg-surface);
+}
+
+.mts-transferlist__controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--mts-space-2);
+  padding: 0 var(--mts-space-1);
+}
+
+.mts-transferlist__control {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--mts-radius-md);
+  border: 1px solid var(--mts-border-color-strong);
+  background: var(--mts-bg-surface);
+  color: var(--mts-text-primary);
+  font-size: 20px;
+  font-weight: var(--mts-font-weight-bold);
+  cursor: pointer;
+  box-shadow: var(--mts-shadow-xs);
+  transition: border-color var(--mts-transition-fast), background var(--mts-transition-fast), color var(--mts-transition-fast), transform var(--mts-transition-fast);
+}
+
+.mts-transferlist__control:hover {
+  border-color: var(--mts-color-primary);
+  color: var(--mts-color-primary);
+  background: color-mix(in srgb, var(--mts-bg-surface) 82%, var(--mts-color-primary) 18%);
+  transform: translateY(-1px);
+}
+
+.mts-transferlist__control:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--mts-color-primary-light);
+}
+
+.mts-transferlist__empty {
+  height: 100%;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--mts-text-muted);
+  font-size: var(--mts-font-size-sm);
+  border: 1px dashed var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  background: color-mix(in srgb, var(--mts-bg-surface) 92%, var(--mts-color-primary) 8%);
+}
+
+@media (max-width: 900px) {
+  .mts-transferlist {
+    grid-template-columns: 1fr;
+  }
+
+  .mts-transferlist__controls {
+    flex-direction: row;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lista de usuarios - Matios UI</title>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (error) {}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../data/matios-ui-table/matios-ui-table.css">
+  <link rel="stylesheet" href="user-list.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <main class="mts-p-4">
+    <div id="user-list-panel"></div>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    var users = [
+      { id: 'USR-1024', firstName: 'Camila', lastName: 'Soto', email: 'camila.soto@matios.dev', username: 'csoto', area: 'Operaciones', role: 'Supervisor Operacional', status: 'active', statusLabel: 'Activo', statusClass: 'mts-badge--success', lastAccess: 'Hoy, 09:14' },
+      { id: 'USR-1058', firstName: 'Martin', lastName: 'Rojas', email: 'martin.rojas@matios.dev', username: 'mrojas', area: 'Finanzas', role: 'Analista Finance', status: 'blocked', statusLabel: 'Bloqueado', statusClass: 'mts-badge--danger', lastAccess: '18 abril, 16:22' },
+      { id: 'USR-1083', firstName: 'Paula', lastName: 'Garrido', email: 'paula.garrido@matios.dev', username: 'pgarrido', area: 'Soporte', role: 'Coordinadora de Mesa', status: 'pending', statusLabel: 'Pendiente', statusClass: 'mts-badge--warning', lastAccess: 'Sin acceso aun' },
+      { id: 'USR-1091', firstName: 'Diego', lastName: 'Araya', email: 'diego.araya@matios.dev', username: 'daraya', area: 'Tecnologia', role: 'Integraciones', status: 'active', statusLabel: 'Activo', statusClass: 'mts-badge--success', lastAccess: 'Ayer, 18:41' }
+    ];
+
+    new MTS.Card('#user-list-panel', {
+      title: 'Lista de usuarios',
+      subtitle: 'Gestion operativa de cuentas internas',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+          '<div id="user-list-alert"></div>' +
+          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3">' +
+            '<p class="mts-text-md mts-text-muted mts-m-0">Tabla operativa de cuentas internas con acciones administrativas directas.</p>' +
+            '<span id="user-list-count" class="mts-badge mts-badge--info mts-badge--sm">0 usuarios</span>' +
+          '</div>' +
+          '<div id="user-list-table"></div>' +
+        '</div>',
+      actions: [
+        {
+          label: 'Nuevo usuario',
+          variant: 'primary',
+          icon: MTS.Icon.get('user-plus'),
+          onClick: function () {
+            openScreen('../user-create/index.html');
+          }
+        }
+      ]
+    });
+
+    document.getElementById('user-list-panel').addEventListener('click', function (event) {
+      var actionButton = event.target.closest('[data-user-action]');
+      if (!actionButton) return;
+
+      var action = actionButton.getAttribute('data-user-action');
+      var userId = actionButton.getAttribute('data-user-id');
+      var user = getUserById(userId);
+      if (!user) return;
+
+      if (action === 'detail') openScreen('../user-detail/index.html');
+      if (action === 'edit') openScreen('../user-edit/index.html');
+      if (action === 'block') {
+        showAlert(
+          user.status === 'blocked' ? 'success' : 'warning',
+          user.status === 'blocked' ? 'Usuario desbloqueado' : 'Usuario bloqueado',
+          'La accion se simularia sobre <strong>' + escapeHtml(user.firstName + ' ' + user.lastName) + '</strong>.'
+        );
+      }
+    });
+
+    function getUserById(id) {
+      for (var i = 0; i < users.length; i++) {
+        if (users[i].id === id) return users[i];
+      }
+      return null;
+    }
+
+    function showAlert(variant, title, message) {
+      document.getElementById('user-list-alert').innerHTML = '';
+      MTS.Alert.show('#user-list-alert', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderTable() {
+      document.getElementById('user-list-count').textContent = users.length + (users.length === 1 ? ' usuario' : ' usuarios');
+
+      document.getElementById('user-list-table').innerHTML =
+        '<div class="mts-table-wrap">' +
+          '<table class="mts-table mts-table--hover mts-table--striped">' +
+            '<thead>' +
+              '<tr>' +
+                '<th class="mts-table__th">Nombre</th>' +
+                '<th class="mts-table__th">Correo</th>' +
+                '<th class="mts-table__th">Username</th>' +
+                '<th class="mts-table__th">Rol</th>' +
+                '<th class="mts-table__th">Area</th>' +
+                '<th class="mts-table__th">Ultimo acceso</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+              users.map(function (user) {
+                return '' +
+                  '<tr class="mts-table__row">' +
+                    '<td class="mts-table__td">' +
+                      '<div class="mts-d-flex mts-flex-col mts-gap-1">' +
+                        '<strong class="mts-text-sm mts-text-primary">' + escapeHtml(user.firstName + ' ' + user.lastName) + '</strong>' +
+                        '<span class="mts-text-sm mts-text-muted"><span class="mts-badge ' + user.statusClass + ' mts-badge--sm">' + escapeHtml(user.statusLabel) + '</span></span>' +
+                      '</div>' +
+                    '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(user.email) + '</td>' +
+                    '<td class="mts-table__td">@' + escapeHtml(user.username) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(user.role) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(user.area) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(user.lastAccess) + '</td>' +
+                    '<td class="mts-table__td mts-table__td--actions">' +
+                      actionButton('detail', user.id, 'arrow-right', 'Ver') +
+                      actionButton('edit', user.id, 'edit', 'Editar') +
+                      actionButton('block', user.id, user.status === 'blocked' ? 'check-circle' : 'slash', user.status === 'blocked' ? 'Desbloquear' : 'Bloquear') +
+                    '</td>' +
+                  '</tr>';
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>';
+
+      MTS.Icon.initAll();
+    }
+
+    function actionButton(action, userId, icon, label) {
+      return '' +
+        '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-mr-1" data-user-action="' + action + '" data-user-id="' + userId + '">' +
+          MTS.Icon.get(icon) + ' ' + escapeHtml(label) +
+        '</button>';
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    renderTable();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

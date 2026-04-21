@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Recent Files - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="recent-files.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+</head>
+<body>
+  <div class="recent-files-page">
+    <header class="recent-files-page__topbar mts-surface">
+      <div class="recent-files-page__brand">
+        <div class="recent-files-page__logo">M</div>
+        <div>
+          <div class="recent-files-page__title">Recent Files</div>
+          <div class="recent-files-page__subtitle">Archivos recientes con owner, estado y accion siguiente</div>
+        </div>
+      </div>
+      <div id="recent-upload-button"></div>
+    </header>
+
+    <main class="recent-files-page__main mts-grid mts-grid--gap-md">
+      <section class="recent-files-page__hero mts-surface mts-g-col-12">
+        <div class="recent-files-page__eyebrow">Recent activity</div>
+        <h1 class="recent-files-page__hero-title">Lo ultimo que toco el equipo.</h1>
+        <p class="recent-files-page__hero-copy">
+          Esta UI sirve para aterrizar actividad documental real sin depender de un gestor pesado:
+          ver que se movio, quien es owner y que hacer despues.
+        </p>
+      </section>
+
+      <aside class="mts-g-col-12 mts-g-col-xl-4">
+        <div class="mts-form-card recent-files-page__filters-card">
+          <div class="mts-form-card__header">
+            <h2 class="mts-form-card__title">Filtros</h2>
+            <p class="mts-form-card__subtitle">Recorta por nombre, tipo y estado.</p>
+          </div>
+          <div id="recent-feedback"></div>
+          <div class="recent-files-page__filters">
+            <div id="recent-search"></div>
+            <div id="recent-type"></div>
+            <div id="recent-state"></div>
+          </div>
+          <div id="recent-clear"></div>
+        </div>
+      </aside>
+
+      <section class="mts-g-col-12 mts-g-col-xl-8">
+        <div class="recent-files-page__results-head">
+          <div>
+            <div class="recent-files-page__results-label">File activity</div>
+            <h2 class="recent-files-page__results-title">Archivos recientes</h2>
+          </div>
+          <div class="recent-files-page__results-meta" id="recent-results-meta">0 archivos</div>
+        </div>
+        <div class="mts-grid mts-grid--gap-md" id="recent-results"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+  </script>
+  <script>
+    var recentState = { query: '', type: '', state: '' };
+    var typeSelect;
+    var stateSelect;
+    var files = [
+      { id: 'rf1', title: 'Contract-Renewal-Q2.pdf', owner: 'Finance Ops', type: 'pdf', typeLabel: 'PDF', state: 'review', stateLabel: 'In review', variant: 'warning', summary: 'Actualizado hoy a las 08:30 por Camila Soto.' },
+      { id: 'rf2', title: 'Customer-escalation-playbook.docx', owner: 'Support', type: 'doc', typeLabel: 'DOCX', state: 'ready', stateLabel: 'Ready', variant: 'success', summary: 'Compartido ayer con leadership para feedback.' },
+      { id: 'rf3', title: 'April-renewals.csv', owner: 'Billing', type: 'csv', typeLabel: 'CSV', state: 'draft', stateLabel: 'Draft', variant: 'default', summary: 'Export generado para seguimiento de pagos.' }
+    ];
+
+    new MTS.Button('#recent-upload-button', {
+      label: 'Subir archivo',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('upload'),
+      onClick: function () {
+        notify('info', 'Carga simulada', 'El grupo Documents ya tiene cubierto el CTA de subir archivo.');
+      }
+    });
+
+    new MTS.Input('#recent-search', {
+      label: 'Buscar archivo',
+      type: 'text',
+      placeholder: 'nombre, owner o nota',
+      iconLeft: MTS.Icon.get('search')
+    });
+
+    typeSelect = new MTS.Select('#recent-type', {
+      label: 'Tipo',
+      placeholder: 'Todos',
+      clearable: true,
+      options: [
+        { value: 'pdf', label: 'PDF' },
+        { value: 'doc', label: 'DOCX' },
+        { value: 'csv', label: 'CSV' }
+      ]
+    });
+
+    stateSelect = new MTS.Select('#recent-state', {
+      label: 'Estado',
+      placeholder: 'Todos',
+      clearable: true,
+      options: [
+        { value: 'review', label: 'In review' },
+        { value: 'ready', label: 'Ready' },
+        { value: 'draft', label: 'Draft' }
+      ]
+    });
+
+    new MTS.Button('#recent-clear', {
+      label: 'Limpiar filtros',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('refresh-cw'),
+      onClick: function () {
+        recentState = { query: '', type: '', state: '' };
+        setInputValue('#recent-search input', '');
+        typeSelect.clear();
+        stateSelect.clear();
+        renderFiles();
+      }
+    });
+
+    typeSelect.on('change', function (e) {
+      recentState.type = e.detail.value || '';
+      renderFiles();
+    });
+
+    stateSelect.on('change', function (e) {
+      recentState.state = e.detail.value || '';
+      renderFiles();
+    });
+
+    var queryNode = document.querySelector('#recent-search input');
+    if (queryNode) {
+      queryNode.addEventListener('input', function (e) {
+        recentState.query = e.target.value || '';
+        renderFiles();
+      });
+    }
+
+    function setInputValue(selector, value) {
+      var input = document.querySelector(selector);
+      if (!input) return;
+      input.value = value;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    function notify(variant, title, message) {
+      MTS.Alert.show('#recent-feedback', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function renderFiles() {
+      var host = document.getElementById('recent-results');
+      var meta = document.getElementById('recent-results-meta');
+      host.innerHTML = '';
+
+      var visible = files.filter(function (item) {
+        var haystack = [item.title, item.owner, item.summary].join(' ').toLowerCase();
+        var matchesQuery = !recentState.query || haystack.indexOf(recentState.query.toLowerCase()) !== -1;
+        var matchesType = !recentState.type || item.type === recentState.type;
+        var matchesState = !recentState.state || item.state === recentState.state;
+        return matchesQuery && matchesType && matchesState;
+      });
+
+      meta.textContent = visible.length + (visible.length === 1 ? ' archivo' : ' archivos');
+
+      visible.forEach(function (item, index) {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-g-col-12';
+        host.appendChild(wrap);
+
+        var cardHost = document.createElement('div');
+        wrap.appendChild(cardHost);
+
+        new MTS.Card(cardHost, {
+          title: item.title,
+          subtitle: item.owner,
+          variant: index === 0 ? 'elevated' : 'outlined',
+          size: 'lg',
+          body:
+            '<div class="recent-files-page__file-body">' +
+              '<div class="recent-files-page__file-meta">' +
+                '<span id="recent-type-' + item.id + '"></span>' +
+                '<span id="recent-state-' + item.id + '"></span>' +
+              '</div>' +
+              '<p class="recent-files-page__file-copy">' + item.summary + '</p>' +
+            '</div>',
+          footerAlign: 'between',
+          footer: [
+            {
+              label: 'Abrir',
+              variant: 'primary',
+              icon: MTS.Icon.get('arrow-right'),
+              onClick: function () { notify('info', 'Accion simulada', 'Aqui normalmente abririas el preview del archivo.'); }
+            },
+            {
+              label: 'Compartir',
+              variant: 'ghost',
+              icon: MTS.Icon.get('share-2'),
+              onClick: function () { notify('success', 'Share listo', 'El archivo puede pasar al flujo de compartir.'); }
+            }
+          ]
+        });
+
+        new MTS.Badge('#recent-type-' + item.id, {
+          label: item.typeLabel,
+          variant: 'default',
+          size: 'sm'
+        });
+
+        new MTS.Badge('#recent-state-' + item.id, {
+          label: item.stateLabel,
+          variant: item.variant,
+          size: 'sm'
+        });
+      });
+    }
+
+    renderFiles();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>
