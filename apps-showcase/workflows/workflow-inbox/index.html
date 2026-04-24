@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bandeja de workflows - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-toast/matios-ui-toast.css">
+  <link rel="stylesheet" href="../../../data/matios-ui-table/matios-ui-table.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+</head>
+<body>
+  <main class="mts-p-4">
+    <div id="workflow-inbox-panel"></div>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    var tasks = [
+      {
+        id: 'WF-104',
+        title: 'Billing close access exception',
+        requester: 'Camila Soto',
+        origin: 'Roles',
+        stage: 'Security review',
+        workflowTypeLabel: 'Access',
+        priority: 'high',
+        priorityLabel: 'Alta',
+        due: 'SLA 2 h'
+      },
+      {
+        id: 'WF-097',
+        title: 'Policy publication workflow',
+        requester: 'Legal Ops',
+        origin: 'Documents',
+        stage: 'Parallel review',
+        workflowTypeLabel: 'Document',
+        priority: 'medium',
+        priorityLabel: 'Media',
+        due: 'SLA hoy'
+      },
+      {
+        id: 'WF-082',
+        title: 'Extended security audit budget',
+        requester: 'Finance Ops',
+        origin: 'Billing',
+        stage: 'Finance owner approval',
+        workflowTypeLabel: 'Budget',
+        priority: 'high',
+        priorityLabel: 'Alta',
+        due: 'Expirada 45 m'
+      },
+      {
+        id: 'WF-061',
+        title: 'Vendor onboarding package',
+        requester: 'Laura Herrera',
+        origin: 'Admin',
+        stage: 'Final confirmation',
+        workflowTypeLabel: 'Vendor',
+        priority: 'low',
+        priorityLabel: 'Baja',
+        due: 'SLA 48 h'
+      }
+    ];
+
+    new MTS.Card('#workflow-inbox-panel', {
+      title: 'Bandeja de workflows',
+      subtitle: 'Tareas pendientes',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3 mts-flex-wrap">' +
+            '<p class="mts-text-sm mts-text-muted mts-m-0">Tabla operativa de tareas pendientes con prioridad, modulo y etapa actual.</p>' +
+            '<span id="workflow-inbox-count" class="mts-badge mts-badge--info mts-badge--sm">0 tareas</span>' +
+          '</div>' +
+          '<div id="workflow-inbox-table"></div>' +
+        '</div>',
+      actions: [
+        {
+          label: 'Refrescar',
+          variant: 'secondary',
+          icon: MTS.Icon.get('refresh-cw'),
+          onClick: function () {
+            showToast('success', 'La lista se sincronizo con el ultimo estado de tareas pendientes.');
+          }
+        }
+      ]
+    });
+
+    document.getElementById('workflow-inbox-panel').addEventListener('click', function (event) {
+      var actionButton = event.target.closest('[data-task-action]');
+      if (!actionButton) return;
+
+      var action = actionButton.getAttribute('data-task-action');
+      var taskId = actionButton.getAttribute('data-task-id');
+      var task = getTaskById(taskId);
+      if (!task) return;
+
+      if (action === 'detail') openScreen('../workflow-task-detail/index.html');
+      if (action === 'approve') {
+        showToast('success', 'La accion se simularia sobre ' + task.title + '.');
+      }
+    });
+
+    function getTaskById(id) {
+      for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === id) return tasks[i];
+      }
+      return null;
+    }
+
+    function showToast(variant, message) {
+      MTS.Toast.show({
+        variant: variant,
+        message: message,
+        position: 'bottom-right'
+      });
+    }
+
+    function actionButton(action, taskId, icon, label) {
+      return '' +
+        '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-mr-1" data-task-action="' + action + '" data-task-id="' + taskId + '">' +
+          MTS.Icon.get(icon) + ' ' + escapeHtml(label) +
+        '</button>';
+    }
+
+    function priorityBadgeClass(priority) {
+      if (priority === 'high') return 'mts-badge--danger';
+      if (priority === 'medium') return 'mts-badge--warning';
+      return 'mts-badge--info';
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function renderTable() {
+      document.getElementById('workflow-inbox-count').textContent = tasks.length + (tasks.length === 1 ? ' tarea' : ' tareas');
+
+      document.getElementById('workflow-inbox-table').innerHTML =
+        '<div class="mts-table-wrap">' +
+          '<table class="mts-table mts-table--hover mts-table--striped">' +
+            '<thead>' +
+              '<tr>' +
+                '<th class="mts-table__th">Workflow</th>' +
+                '<th class="mts-table__th">Solicitante</th>' +
+                '<th class="mts-table__th">Modulo</th>' +
+                '<th class="mts-table__th">Etapa</th>' +
+                '<th class="mts-table__th">Tipo</th>' +
+                '<th class="mts-table__th">Prioridad</th>' +
+                '<th class="mts-table__th">SLA</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+              tasks.map(function (task) {
+                return '' +
+                  '<tr class="mts-table__row">' +
+                    '<td class="mts-table__td">' +
+                      '<div class="mts-d-flex mts-flex-col mts-gap-1">' +
+                        '<strong class="mts-text-sm mts-text-primary">' + escapeHtml(task.title) + '</strong>' +
+                        '<span class="mts-text-sm mts-text-muted">' + escapeHtml(task.id) + '</span>' +
+                      '</div>' +
+                    '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(task.requester) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(task.origin) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(task.stage) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(task.workflowTypeLabel) + '</td>' +
+                    '<td class="mts-table__td"><span class="mts-badge ' + priorityBadgeClass(task.priority) + ' mts-badge--sm">' + escapeHtml(task.priorityLabel) + '</span></td>' +
+                    '<td class="mts-table__td">' + escapeHtml(task.due) + '</td>' +
+                    '<td class="mts-table__td mts-table__td--actions">' +
+                      actionButton('detail', task.id, 'arrow-right', 'Ver') +
+                      actionButton('approve', task.id, 'check-circle', 'Aprobar') +
+                    '</td>' +
+                  '</tr>';
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>';
+
+      MTS.Icon.initAll();
+    }
+
+    renderTable();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

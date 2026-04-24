@@ -32,7 +32,7 @@ Matios UI includes:
 - **High-contrast mode**
 - **Standalone demos per component**
 - **Component-level Markdown documentation**
-- **Shared utilities and showcase pages**
+- **Utilities, support assets, and showcase pages**
 
 ---
 
@@ -89,7 +89,8 @@ matios-ui-framework/
 â”œâ”€ layout/
 â”œâ”€ data/
 â”œâ”€ icons/
-â”œâ”€ shared/
+â”œâ”€ utilities/
+â”œâ”€ support/
 â”œâ”€ themes/
 â”œâ”€ calendar/
 â””â”€ apps-showcase/
@@ -266,10 +267,15 @@ This makes the framework:
 - Infinite utilities
 - data-oriented demos and helpers
 
-### Shared
+### Utilities
 
 - HttpClient
-- shared demo support
+- CodeBlock
+- DevPanel
+
+### Support
+
+- demo support assets
 
 ### Icons
 

@@ -1,4 +1,4 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
@@ -39,313 +39,206 @@
   <link rel="stylesheet" href="../icons/matios-ui-icons.css">
   <link rel="stylesheet" href="../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
   <link rel="stylesheet" href="../display/matios-ui-card/matios-ui-card.css">
   <link rel="stylesheet" href="../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="../overlays/matios-ui-modal/matios-ui-modal.css">
+  <link rel="stylesheet" href="../overlays/matios-ui-badge/matios-ui-badge.css">
   <link rel="stylesheet" href="index.css">
   <script src="../icons/matios-ui-icons.js"></script>
   <script src="../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../display/matios-ui-card/matios-ui-card.js"></script>
   <script src="../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../overlays/matios-ui-modal/matios-ui-modal.js"></script>
 </head>
-<body>
-  <div class="showcase-shell">
-    <header class="showcase-topbar mts-surface">
-      <div class="showcase-topbar__brand">
-        <div class="showcase-topbar__logo">M</div>
-        <div>
-          <div class="showcase-topbar__title">Matios UI Showcase</div>
-          <div class="showcase-topbar__subtitle">Hub raiz de interfaces completas construidas con componentes Matios UI</div>
+<body class="mts-p-4">
+  <main class="mts-grid mts-grid--gap-md">
+    <section class="mts-surface mts-p-4 mts-g-col-12">
+      <div class="mts-d-flex mts-flex-wrap mts-justify-between mts-items-end mts-gap-4">
+        <div class="mts-d-flex mts-flex-col mts-gap-2">
+          <p class="mts-text-sm mts-text-semibold mts-text-muted mts-m-0">Matios UI Showcase</p>
+          <h1 class="mts-h3 mts-m-0">Catalogo maestro del showcase</h1>
+          <p class="mts-text-sm mts-text-muted mts-m-0">
+            Hub raiz de interfaces completas construidas con componentes Matios UI. Cada pantalla se abre en modal con vista previa y codigo copiable.
+          </p>
+        </div>
+        <div class="mts-d-flex mts-flex-wrap mts-gap-4">
+          <div class="mts-d-flex mts-flex-col mts-gap-2">
+            <span class="mts-text-xs mts-text-semibold mts-text-muted">Modo</span>
+            <div class="mts-d-flex mts-flex-wrap mts-gap-2" id="mode-switcher"></div>
+          </div>
+          <div class="mts-d-flex mts-flex-col mts-gap-2">
+            <span class="mts-text-xs mts-text-semibold mts-text-muted">Acento</span>
+            <div class="mts-d-flex mts-flex-wrap mts-gap-2" id="accent-switcher"></div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div class="showcase-topbar__controls">
-        <div class="showcase-control-group">
-          <span class="showcase-control-group__label">Modo</span>
-          <div class="showcase-button-row" id="mode-switcher"></div>
-        </div>
-        <div class="showcase-control-group">
-          <span class="showcase-control-group__label">Acento</span>
-          <div class="showcase-button-row" id="accent-switcher"></div>
-        </div>
-      </div>
-    </header>
-
-    <main class="showcase-main mts-grid mts-grid--gap-md">
-      <section class="showcase-hero mts-surface mts-g-col-12">
-        <p class="showcase-kicker">Root Index</p>
-        <h1 class="showcase-title">Catalogo maestro del showcase</h1>
-        <p class="showcase-copy">
-          Este indice es el punto de entrada del modulo completo. Por ahora solo muestra grupos
-          revisados dentro de <code>apps-showcase/</code>; cada pantalla lista se abre en un modal
-          fullscreen con vista previa y codigo copiable.
+    <section class="mts-surface mts-p-4 mts-g-col-12">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Grupos del showcase</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">
+          Hoy quedan visibles solo <strong>Autenticacion</strong>, <strong>Onboarding</strong>, <strong>Usuarios</strong>, <strong>Perfiles</strong>, <strong>Roles</strong>, <strong>Workflows</strong> y <strong>Security</strong>.
         </p>
-      </section>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="group-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Grupos del showcase</h2>
-            <p class="showcase-section-copy">
-              Hoy quedan visibles solo <strong>Autenticacion</strong>, <strong>Onboarding</strong>,
-              <strong>Usuarios</strong>, <strong>Perfiles</strong> y <strong>Roles</strong>. Lo no
-              revisado se oculta del root hasta que lo retomemos y quede listo para entrar al
-              catalogo.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-groups mts-grid mts-grid--gap-md" id="showcase-groups"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-auth">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Autenticacion</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Familia inicial del showcase. Contiene el acceso unificado listo y el resto del flujo como placeholders controlados.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="auth-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-auth">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Autenticacion</h2>
-            <p class="showcase-section-copy">
-              Familia inicial del showcase. Contiene el acceso unificado listo y el resto del flujo
-              como placeholders controlados.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="auth-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-onboarding">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Onboarding</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Inicio del flujo de registro y puesta en marcha. El grupo parte con variantes de signup para productos uniempresa y multiempresa.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="onboarding-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-onboarding">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Onboarding</h2>
-            <p class="showcase-section-copy">
-              Inicio del flujo de registro y puesta en marcha. El grupo parte con variantes de signup para productos uniempresa y multiempresa.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="onboarding-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-users">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Usuarios</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Gestion operativa de cuentas internas: listado, alta, edicion, detalle y cambio de clave desde una superficie administrativa simple.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="users-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-users">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Usuarios</h2>
-            <p class="showcase-section-copy">
-              Gestion operativa de cuentas internas: listado, alta, edicion, detalle y cambio de
-              clave desde una superficie administrativa simple.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="users-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-profiles">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Perfiles</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Perfiles por modulo con permisos finos chequeables. Sirven como base para que luego los roles agrupen un perfil por modulo.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="profiles-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-profiles">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Perfiles</h2>
-            <p class="showcase-section-copy">
-              Perfiles por modulo con permisos finos chequeables. Sirven como base para que luego
-              los roles agrupen un perfil por modulo.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="profiles-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-roles">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Roles</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Roles como agrupacion de perfiles por modulo. Cada modulo admite un unico perfil seleccionado dentro del rol.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="roles-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-roles">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Roles</h2>
-            <p class="showcase-section-copy">
-              Roles como agrupacion de perfiles por modulo. Cada modulo admite un unico perfil
-              seleccionado dentro del rol.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="roles-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-support">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Support</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Flujos base para helpdesk operativo: bandeja de triage, detalle del caso y siguientes estados del ciclo de soporte.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="support-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-support">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Support</h2>
-            <p class="showcase-section-copy">
-              Flujos base para helpdesk operativo: bandeja de triage, detalle del caso y siguientes
-              estados del ciclo de soporte.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="support-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-productivity">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Productivity</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Flujos para gestionar trabajo y tiempo: tablero de tareas, planificacion semanal y siguientes vistas operativas del equipo.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="productivity-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-productivity">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Productivity</h2>
-            <p class="showcase-section-copy">
-              Flujos para gestionar trabajo y tiempo: tablero de tareas, planificacion semanal y
-              siguientes vistas operativas del equipo.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="productivity-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-documents">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Documents</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Vistas ligeras para archivos y contenido operativo. El foco es dejar experiencias copiables que no dependan de tablas densas ni gestores documentales complejos.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="documents-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-documents">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Documents</h2>
-            <p class="showcase-section-copy">
-              Vistas ligeras para archivos y contenido operativo. El foco es dejar experiencias
-              copiables que no dependan de tablas densas ni gestores documentales complejos.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="documents-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-search">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Search</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Busqueda transversal, refinamiento y discovery para productos que necesitan encontrar personas, contenido y settings sin depender de vistas aisladas.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="search-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-search">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Search</h2>
-            <p class="showcase-section-copy">
-              Busqueda transversal, refinamiento y discovery para productos que necesitan encontrar
-              personas, contenido y settings sin depender de vistas aisladas.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="search-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-account">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Account</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Pantallas para perfil personal, seguridad y preferencias de cuenta. El foco es dejar vistas copiables para que un producto real pueda arrancar rapido sin inventar UI nueva.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="account-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-account">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Account</h2>
-            <p class="showcase-section-copy">
-              Pantallas para perfil personal, seguridad y preferencias de cuenta. El foco es dejar
-              vistas copiables para que un producto real pueda arrancar rapido sin inventar UI nueva.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="account-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-settings">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Settings</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Ajustes de workspace y politicas compartidas. El objetivo es dejar vistas reutilizables para productos reales que necesitan configuracion sin depender de tablas ni dashboards.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="settings-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-settings">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Settings</h2>
-            <p class="showcase-section-copy">
-              Ajustes de workspace y politicas compartidas. El objetivo es dejar vistas reutilizables
-              para productos reales que necesitan configuracion sin depender de tablas ni dashboards.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="settings-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-admin">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Admin</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Gestion operativa de miembros, invitaciones y acceso inicial al workspace. El foco es dejar vistas reales para productos B2B y plataformas internas.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="admin-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-admin">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Admin</h2>
-            <p class="showcase-section-copy">
-              Gestion operativa de miembros, invitaciones y acceso inicial al workspace. El foco es
-              dejar vistas reales para productos B2B y plataformas internas.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="admin-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-billing">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Billing</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Plan, cobros y medios de pago para productos SaaS. Son pantallas listas para copiar en contextos reales sin depender de dashboards.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="billing-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-billing">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Billing</h2>
-            <p class="showcase-section-copy">
-              Plan, cobros y medios de pago para productos SaaS. Son pantallas listas para copiar en
-              contextos reales sin depender de dashboards.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="billing-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-integrations">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Integrations</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Catalogo y configuracion de conexiones externas para productos B2B. Son vistas utiles para catalogar providers, estado de sync y acciones de soporte sin caer en mockups.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="integrations-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-integrations">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Integrations</h2>
-            <p class="showcase-section-copy">
-              Catalogo y configuracion de conexiones externas para productos B2B. Son vistas utiles
-              para catalogar providers, estado de sync y acciones de soporte sin caer en mockups.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="integrations-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-security">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Security</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Sesiones, auditoria y trazabilidad para productos que necesitan visibilidad real sobre acceso, actividad sensible y control operativo.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="security-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-security">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Security</h2>
-            <p class="showcase-section-copy">
-              Sesiones, auditoria y trazabilidad para productos que necesitan visibilidad real sobre
-              acceso, actividad sensible y control operativo.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="security-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-developers">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Developers</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Herramientas para integradores y equipos tecnicos: credenciales, control de acceso y puntos de contacto con APIs o automatizaciones.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="developers-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-developers">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Developers</h2>
-            <p class="showcase-section-copy">
-              Herramientas para integradores y equipos tecnicos: credenciales, control de acceso y
-              puntos de contacto con APIs o automatizaciones.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="developers-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-workflows">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Workflows</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Bandejas, tareas y definiciones de workflow para permisos, documentos, presupuestos y cualquier otro requerimiento que necesite etapas, routing y trazabilidad.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="workflows-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-approvals">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Approvals</h2>
-            <p class="showcase-section-copy">
-              Bandejas y flujos de aprobacion para solicitudes internas, cambios sensibles y
-              decisiones operativas con seguimiento claro.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="approvals-screen-list"></div>
-      </section>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-system">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">System</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Estados vacios, mantenimiento y errores operativos listos para copiar en productos reales. Son pantallas base que suelen quedar para el final y aqui ya quedan resueltas.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="system-screen-list"></div>
+    </section>
 
-      <section class="mts-surface mts-g-col-12" id="group-system">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">System</h2>
-            <p class="showcase-section-copy">
-              Estados vacios, mantenimiento y errores operativos listos para copiar en productos
-              reales. Son pantallas base que suelen quedar para el final y aqui ya quedan resueltas.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="system-screen-list"></div>
-      </section>
-
-      <section class="mts-surface mts-g-col-12" id="group-notifications">
-        <div class="showcase-section-head">
-          <div>
-            <h2 class="showcase-section-title">Notifications</h2>
-            <p class="showcase-section-copy">
-              Centro de alertas, actividad reciente y seguimiento transversal del producto. El foco
-              es dejar patrones copiables para avisos y feed sin depender de tablas.
-            </p>
-          </div>
-        </div>
-        <div class="showcase-screens mts-grid mts-grid--gap-md" id="notifications-screen-list"></div>
-      </section>
-    </main>
-  </div>
+    <section class="mts-surface mts-p-4 mts-g-col-12" id="group-notifications">
+      <div class="mts-mb-4">
+        <h2 class="mts-h4 mts-mb-1">Notifications</h2>
+        <p class="mts-text-sm mts-text-muted mts-m-0">Centro de alertas, actividad reciente y seguimiento transversal del producto. El foco es dejar patrones copiables para avisos y feed sin depender de tablas.</p>
+      </div>
+      <div class="mts-grid mts-grid--gap-md" id="notifications-screen-list"></div>
+    </section>
+  </main>
 
   <script>
     var currentMode = document.documentElement.getAttribute('data-mts-mode') || 'dark';
@@ -516,13 +409,13 @@
         screens: 2
       },
       {
-        id: 'approvals',
-        title: 'Approvals',
-        icon: 'check-circle',
+        id: 'workflows',
+        title: 'Workflows',
+        icon: 'git-branch',
         status: 'ready',
-        desc: 'Solicitudes pendientes, prioridad y decision operativa sin perder contexto.',
-        detail: 'Bandeja inicial de aprobaciones.',
-        screens: 2
+        desc: 'Inbox de tareas, detalle estandar y definicion de workflows para permisos, documentos, presupuestos y excepciones.',
+        detail: 'Tareas, instancias y definiciones de workflow.',
+        screens: 4
       },
       {
         id: 'system',
@@ -535,7 +428,7 @@
       }
     ];
 
-    var ACTIVE_GROUP_IDS = ['auth', 'onboarding', 'users', 'profiles', 'roles'];
+    var ACTIVE_GROUP_IDS = ['auth', 'onboarding', 'users', 'profiles', 'roles', 'workflows', 'security'];
 
     function getGroupAccent(groupId) {
       var accents = {
@@ -557,7 +450,7 @@
         integrations: '#1d4ed8',
         security: '#b91c1c',
         developers: '#4f46e5',
-        approvals: '#15803d',
+        workflows: '#15803d',
         system: '#6b7280'
       };
 
@@ -575,7 +468,6 @@
         path: 'login/login/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/login/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'login/login/login.css', language: 'css' }
         ]
       },
       {
@@ -588,7 +480,6 @@
         path: 'login/forgot-password/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/forgot-password/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'login/forgot-password/forgot-password.css', language: 'css' }
         ]
       },
       {
@@ -601,7 +492,6 @@
         path: 'login/reset-password/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/reset-password/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'login/reset-password/reset-password.css', language: 'css' }
         ]
       },
       {
@@ -614,7 +504,6 @@
         path: 'login/reset-password-success/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/reset-password-success/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'login/reset-password-success/reset-password-success.css', language: 'css' }
         ]
       },
       {
@@ -627,7 +516,6 @@
         path: 'login/verify-email/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/verify-email/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'login/verify-email/verify-email.css', language: 'css' }
         ]
       },
       {
@@ -640,7 +528,6 @@
         path: 'login/otp-verify/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/otp-verify/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'login/otp-verify/otp-verify.css', language: 'css' }
         ]
       },
       {
@@ -653,7 +540,6 @@
         path: 'login/workspace-selector/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/workspace-selector/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'login/workspace-selector/workspace-selector.css', language: 'css' }
         ]
       },
       {
@@ -666,7 +552,6 @@
         path: 'login/session-expired/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/session-expired/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'login/session-expired/session-expired.css', language: 'css' }
         ]
       },
       {
@@ -679,7 +564,6 @@
         path: 'login/access-denied/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/access-denied/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'login/access-denied/access-denied.css', language: 'css' }
         ]
       },
       {
@@ -692,7 +576,6 @@
         path: 'login/accept-invitation/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/accept-invitation/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'login/accept-invitation/accept-invitation.css', language: 'css' }
         ]
       }
     ];
@@ -708,7 +591,6 @@
         path: 'login/signup/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'login/signup/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'login/signup/signup.css', language: 'css' }
         ]
       },
       {
@@ -721,7 +603,6 @@
         path: 'onboarding/signup-with-company/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'onboarding/signup-with-company/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'onboarding/signup-with-company/signup-with-company.css', language: 'css' }
         ]
       },
       {
@@ -734,7 +615,6 @@
         path: 'onboarding/invite-team/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'onboarding/invite-team/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'onboarding/invite-team/invite-team.css', language: 'css' }
         ]
       },
       {
@@ -747,7 +627,6 @@
         path: 'onboarding/onboarding-complete/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'onboarding/onboarding-complete/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'onboarding/onboarding-complete/onboarding-complete.css', language: 'css' }
         ]
       },
       {
@@ -760,7 +639,6 @@
         path: 'onboarding/join-workspace/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'onboarding/join-workspace/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'onboarding/join-workspace/join-workspace.css', language: 'css' }
         ]
       }
     ];
@@ -776,7 +654,6 @@
         path: 'users/user-list/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'users/user-list/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'users/user-list/user-list.css', language: 'css' }
         ]
       },
       {
@@ -789,7 +666,6 @@
         path: 'users/user-create/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'users/user-create/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'users/user-create/user-create.css', language: 'css' }
         ]
       },
       {
@@ -802,7 +678,6 @@
         path: 'users/user-edit/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'users/user-edit/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'users/user-edit/user-edit.css', language: 'css' }
         ]
       },
       {
@@ -815,7 +690,6 @@
         path: 'users/user-detail/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'users/user-detail/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'users/user-detail/user-detail.css', language: 'css' }
         ]
       }
     ];
@@ -831,7 +705,6 @@
         path: 'profiles/profile-list/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'profiles/profile-list/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'profiles/profile-list/profile-list.css', language: 'css' }
         ]
       },
       {
@@ -844,7 +717,6 @@
         path: 'profiles/profile-create/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'profiles/profile-create/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'profiles/profile-create/profile-create.css', language: 'css' }
         ]
       },
       {
@@ -857,7 +729,6 @@
         path: 'profiles/profile-edit/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'profiles/profile-edit/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'profiles/profile-edit/profile-edit.css', language: 'css' }
         ]
       }
     ];
@@ -873,7 +744,6 @@
         path: 'roles/role-list/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'roles/role-list/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'roles/role-list/role-list.css', language: 'css' }
         ]
       },
       {
@@ -886,7 +756,6 @@
         path: 'roles/role-create/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'roles/role-create/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'roles/role-create/role-create.css', language: 'css' }
         ]
       },
       {
@@ -899,7 +768,6 @@
         path: 'roles/role-edit/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'roles/role-edit/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'roles/role-edit/role-edit.css', language: 'css' }
         ]
       }
     ];
@@ -1319,7 +1187,6 @@
         path: 'security/session-history/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'security/session-history/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'security/session-history/session-history.css', language: 'css' }
         ]
       },
       {
@@ -1332,7 +1199,6 @@
         path: 'security/audit-log/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'security/audit-log/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'security/audit-log/audit-log.css', language: 'css' }
         ]
       },
       {
@@ -1345,7 +1211,6 @@
         path: 'security/security-alert-detail/index.html',
         assets: [
           { id: 'html', label: 'HTML', path: 'security/security-alert-detail/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'security/security-alert-detail/security-alert-detail.css', language: 'css' }
         ]
       }
     ];
@@ -1379,31 +1244,53 @@
       }
     ];
 
-    var APPROVALS_SCREENS = [
+    var WORKFLOWS_SCREENS = [
       {
-        id: 'approval-inbox',
-        title: 'Approval Inbox',
-        icon: 'flag',
+        id: 'workflow-inbox',
+        title: 'Workflow Inbox',
+        icon: 'inbox',
         status: 'ready',
-        description: 'Bandeja de solicitudes pendientes con prioridad, owner, SLA y acciones rapidas para aprobar o rechazar.',
+        description: 'Bandeja tipo correo para tareas pendientes dentro de workflows de acceso, presupuesto, documento o excepcion operativa.',
         components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
-        path: 'approvals/approval-inbox/index.html',
+        path: 'workflows/workflow-inbox/index.html',
         assets: [
-          { id: 'html', label: 'HTML', path: 'approvals/approval-inbox/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'approvals/approval-inbox/approval-inbox.css', language: 'css' }
+          { id: 'html', label: 'HTML', path: 'workflows/workflow-inbox/index.html', language: 'html' },
         ]
       },
       {
-        id: 'approval-detail',
-        title: 'Approval Detail',
+        id: 'workflow-task-detail',
+        title: 'Workflow Task Detail',
         icon: 'file-text',
         status: 'ready',
-        description: 'Detalle de una solicitud con contexto, impacto, decision sugerida y acciones finales para aprobar o rechazar.',
+        description: 'Pantalla estandar para revisar una tarea, ver contexto, historial, aprobadores y decidir sin perder el hilo del workflow.',
         components: ['MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
-        path: 'approvals/approval-detail/index.html',
+        path: 'workflows/workflow-task-detail/index.html',
         assets: [
-          { id: 'html', label: 'HTML', path: 'approvals/approval-detail/index.html', language: 'html' },
-          { id: 'css', label: 'CSS', path: 'approvals/approval-detail/approval-detail.css', language: 'css' }
+          { id: 'html', label: 'HTML', path: 'workflows/workflow-task-detail/index.html', language: 'html' },
+        ]
+      },
+      {
+        id: 'workflow-list',
+        title: 'Workflow List',
+        icon: 'layers',
+        status: 'ready',
+        description: 'Catalogo de definiciones activas y borradores con tipo, version, owner y resumen del routing de cada workflow.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'workflows/workflow-list/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'workflows/workflow-list/index.html', language: 'html' },
+        ]
+      },
+      {
+        id: 'workflow-builder',
+        title: 'Workflow Builder',
+        icon: 'git-branch',
+        status: 'ready',
+        description: 'Builder para definir etapas, aprobadores, reglas de decision y escalamiento dentro de un workflow reusable.',
+        components: ['MTS.Input', 'MTS.Select', 'MTS.Badge', 'MTS.Card', 'MTS.Button', 'MTS.Alert'],
+        path: 'workflows/workflow-builder/index.html',
+        assets: [
+          { id: 'html', label: 'HTML', path: 'workflows/workflow-builder/index.html', language: 'html' },
         ]
       }
     ];
@@ -1482,7 +1369,7 @@
         title: 'Notification Center',
         icon: 'bell',
         status: 'ready',
-        description: 'Bandeja de notificaciones con filtros r√°pidos, acciones de lectura y prioridad visual.',
+        description: 'Bandeja de notificaciones con filtros r·pidos, acciones de lectura y prioridad visual.',
         components: ['MTS.Input', 'MTS.Button', 'MTS.Badge', 'MTS.Card', 'MTS.Alert', 'MTS.Icon'],
         path: 'notifications/notification-center/index.html',
         assets: [
@@ -1495,7 +1382,7 @@
         title: 'Activity Feed',
         icon: 'activity',
         status: 'ready',
-        description: 'Feed cronol√≥gico de actividad del producto para seguimiento de cambios, eventos y decisiones.',
+        description: 'Feed cronolÛgico de actividad del producto para seguimiento de cambios, eventos y decisiones.',
         components: ['MTS.Button', 'MTS.Badge', 'MTS.Card', 'MTS.Timeline', 'MTS.Alert', 'MTS.Icon'],
         path: 'notifications/activity-feed/index.html',
         assets: [
@@ -1600,13 +1487,13 @@
     }
 
     function buildTags(items) {
-      return '<div class="showcase-tags">' + items.map(function (item) {
-        return '<span class="showcase-tag">' + item + '</span>';
+      return '<div class="mts-d-flex mts-flex-wrap mts-gap-2">' + items.map(function (item) {
+        return '<span class="mts-badge mts-badge--info mts-badge--sm">' + item + '</span>';
       }).join('') + '</div>';
     }
 
     function buildGroups() {
-      var host = document.getElementById('showcase-groups');
+      var host = document.getElementById('group-list');
       host.innerHTML = '';
 
       GROUPS.filter(function (group) {
@@ -1623,12 +1510,11 @@
           title: group.title,
           subtitle: group.status === 'ready' ? 'Ready' : 'In construction',
           variant: 'outlined',
-          size: 'lg',
           hoverable: true,
           body:
-            '<div class="showcase-card-copy">' +
-              '<p class="showcase-card-desc">' + group.desc + '</p>' +
-              '<p class="showcase-card-meta">' + group.screens + ' pantallas planificadas. ' + group.detail + '</p>' +
+            '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+              '<p class="mts-text-sm mts-text-secondary mts-m-0">' + group.desc + '</p>' +
+              '<p class="mts-text-sm mts-text-muted mts-m-0">' + group.screens + ' pantallas planificadas. ' + group.detail + '</p>' +
             '</div>',
           footerAlign: 'between',
           footer: [
@@ -1655,44 +1541,40 @@
           ]
         });
 
-        var cardEl = cardHost;
-        if (cardEl) {
-          cardEl.classList.add('showcase-group-card');
-          cardEl.style.setProperty('--showcase-group-accent', getGroupAccent(group.id));
+        cardHost.classList.add('showcase-group-card');
+        cardHost.style.setProperty('--showcase-group-accent', getGroupAccent(group.id));
 
-          var headerContent = cardEl.querySelector('.mts-card__header-content');
-          var title = cardEl.querySelector('.mts-card__title');
-          var subtitle = cardEl.querySelector('.mts-card__subtitle');
+        var headerContent = cardHost.querySelector('.mts-card__header-content');
+        var title = cardHost.querySelector('.mts-card__title');
+        var subtitle = cardHost.querySelector('.mts-card__subtitle');
 
-          if (headerContent && title && !headerContent.querySelector('.showcase-card-head')) {
-            var head = document.createElement('div');
-            head.className = 'showcase-card-head';
+        if (headerContent && title && !headerContent.querySelector('.showcase-group-head')) {
+          var head = document.createElement('div');
+          head.className = 'showcase-group-head';
 
-            var badge = document.createElement('div');
-            badge.className = 'showcase-card-icon';
-            badge.innerHTML = MTS.Icon.get(group.icon);
+          var icon = document.createElement('div');
+          icon.className = 'showcase-group-icon';
+          icon.innerHTML = MTS.Icon.get(group.icon);
 
-            var copyWrap = document.createElement('div');
-            copyWrap.className = 'showcase-card-head__copy';
+          var copy = document.createElement('div');
+          copy.className = 'showcase-group-head__copy';
 
-            var titleEl = document.createElement('div');
-            titleEl.className = 'mts-card__title';
-            titleEl.textContent = title.textContent;
-            copyWrap.appendChild(titleEl);
+          var titleEl = document.createElement('div');
+          titleEl.className = 'mts-card__title';
+          titleEl.textContent = title.textContent;
+          copy.appendChild(titleEl);
 
-            if (subtitle) {
-              var subtitleEl = document.createElement('div');
-              subtitleEl.className = 'mts-card__subtitle';
-              subtitleEl.textContent = subtitle.textContent;
-              copyWrap.appendChild(subtitleEl);
-            }
-
-            head.appendChild(badge);
-            head.appendChild(copyWrap);
-
-            headerContent.innerHTML = '';
-            headerContent.appendChild(head);
+          if (subtitle) {
+            var subtitleEl = document.createElement('div');
+            subtitleEl.className = 'mts-card__subtitle';
+            subtitleEl.textContent = subtitle.textContent;
+            copy.appendChild(subtitleEl);
           }
+
+          head.appendChild(icon);
+          head.appendChild(copy);
+          headerContent.innerHTML = '';
+          headerContent.appendChild(head);
         }
       });
     }
@@ -1718,32 +1600,34 @@
         section.classList.add('showcase-group-section');
         section.style.setProperty('--showcase-group-accent', getGroupAccent(group.id));
 
-        var head = section.querySelector('.showcase-section-head');
-        if (!head || head.querySelector('.showcase-section-badge')) return;
+        var head = section.querySelector('.mts-mb-4');
+        if (!head || head.querySelector('.showcase-group-icon')) return;
 
-        var title = head.querySelector('.showcase-section-title');
-        var copy = head.querySelector('.showcase-section-copy');
+        var title = head.querySelector('h2');
+        var copy = head.querySelector('p');
+        if (!title || !copy) return;
+
         var copyWrap = document.createElement('div');
-        copyWrap.className = 'showcase-section-head__copy';
+        copyWrap.className = 'showcase-group-head__copy';
+        copyWrap.appendChild(title);
+        copyWrap.appendChild(copy);
 
-        var badge = document.createElement('div');
-        badge.className = 'showcase-section-badge';
-        badge.innerHTML = MTS.Icon.get(group.icon);
+        var icon = document.createElement('div');
+        icon.className = 'showcase-group-icon';
+        icon.innerHTML = MTS.Icon.get(group.icon);
 
-        if (title) copyWrap.appendChild(title);
-        if (copy) copyWrap.appendChild(copy);
-
+        head.classList.add('showcase-group-head');
         head.innerHTML = '';
-        head.appendChild(badge);
+        head.appendChild(icon);
         head.appendChild(copyWrap);
       });
     }
 
-    function buildAuthScreens() {
-      var host = document.getElementById('auth-screen-list');
+    function renderScreenCards(hostId, screens) {
+      var host = document.getElementById(hostId);
       host.innerHTML = '';
 
-      AUTH_SCREENS.forEach(function (screen) {
+      screens.forEach(function (screen) {
         var cardWrap = document.createElement('div');
         cardWrap.className = 'mts-g-col-12';
         host.appendChild(cardWrap);
@@ -1755,12 +1639,10 @@
           title: screen.title,
           subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
           variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
           hoverable: true,
           body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
+            '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+              '<p class="mts-text-sm mts-text-secondary mts-m-0">' + screen.description + '</p>' +
               buildTags(screen.components) +
             '</div>',
           footerAlign: 'between',
@@ -1793,977 +1675,25 @@
       });
     }
 
-    function buildOnboardingScreens() {
-      var host = document.getElementById('onboarding-screen-list');
-      host.innerHTML = '';
-
-      ONBOARDING_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildUsersScreens() {
-      var host = document.getElementById('users-screen-list');
-      host.innerHTML = '';
-
-      USERS_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildProfilesScreens() {
-      var host = document.getElementById('profiles-screen-list');
-      host.innerHTML = '';
-
-      PROFILES_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildRolesScreens() {
-      var host = document.getElementById('roles-screen-list');
-      host.innerHTML = '';
-
-      ROLES_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildSupportScreens() {
-      var host = document.getElementById('support-screen-list');
-      host.innerHTML = '';
-
-      SUPPORT_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildProductivityScreens() {
-      var host = document.getElementById('productivity-screen-list');
-      host.innerHTML = '';
-
-      PRODUCTIVITY_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildDocumentsScreens() {
-      var host = document.getElementById('documents-screen-list');
-      host.innerHTML = '';
-
-      DOCUMENTS_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildSearchScreens() {
-      var host = document.getElementById('search-screen-list');
-      host.innerHTML = '';
-
-      SEARCH_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildAccountScreens() {
-      var host = document.getElementById('account-screen-list');
-      host.innerHTML = '';
-
-      ACCOUNT_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildSettingsScreens() {
-      var host = document.getElementById('settings-screen-list');
-      host.innerHTML = '';
-
-      SETTINGS_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildAdminScreens() {
-      var host = document.getElementById('admin-screen-list');
-      host.innerHTML = '';
-
-      ADMIN_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildBillingScreens() {
-      var host = document.getElementById('billing-screen-list');
-      host.innerHTML = '';
-
-      BILLING_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildIntegrationsScreens() {
-      var host = document.getElementById('integrations-screen-list');
-      host.innerHTML = '';
-
-      INTEGRATIONS_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildSecurityScreens() {
-      var host = document.getElementById('security-screen-list');
-      host.innerHTML = '';
-
-      SECURITY_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildDevelopersScreens() {
-      var host = document.getElementById('developers-screen-list');
-      host.innerHTML = '';
-
-      DEVELOPERS_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildApprovalsScreens() {
-      var host = document.getElementById('approvals-screen-list');
-      host.innerHTML = '';
-
-      APPROVALS_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildSystemScreens() {
-      var host = document.getElementById('system-screen-list');
-      host.innerHTML = '';
-
-      SYSTEM_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
-
-    function buildNotificationsScreens() {
-      var host = document.getElementById('notifications-screen-list');
-      host.innerHTML = '';
-
-      NOTIFICATIONS_SCREENS.forEach(function (screen) {
-        var cardWrap = document.createElement('div');
-        cardWrap.className = 'mts-g-col-12';
-        host.appendChild(cardWrap);
-
-        var cardHost = document.createElement('div');
-        cardWrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: screen.title,
-          subtitle: screen.status === 'ready' ? 'Ready' : 'In construction',
-          variant: screen.status === 'ready' ? 'elevated' : 'outlined',
-          size: 'lg',
-          hoverable: true,
-          body:
-            '<div class="showcase-screen-copy">' +
-              '<div class="showcase-card-icon"><i class="mts-icon mts-icon-' + screen.icon + '"></i></div>' +
-              '<p class="showcase-card-desc">' + screen.description + '</p>' +
-              buildTags(screen.components) +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: screen.status === 'ready' ? 'Abrir fullscreen' : 'Ver placeholder',
-              variant: screen.status === 'ready' ? 'primary' : 'secondary',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'maximize' : 'tool'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen);
-                else showConstruction(screen.title);
-              }
-            },
-            {
-              label: screen.status === 'ready' ? 'Codigo' : 'README',
-              variant: 'ghost',
-              icon: MTS.Icon.get(screen.status === 'ready' ? 'code' : 'file-text'),
-              onClick: function () {
-                if (screen.status === 'ready') openScreenModal(screen, 'code');
-                else {
-                  MTS.Modal.alert({
-                    title: 'README',
-                    message: screen.title + ' quedara descrita cuando entremos a implementarla.'
-                  });
-                }
-              }
-            }
-          ]
-        });
-      });
-    }
+    function buildAuthScreens() { renderScreenCards('auth-screen-list', AUTH_SCREENS); }
+    function buildOnboardingScreens() { renderScreenCards('onboarding-screen-list', ONBOARDING_SCREENS); }
+    function buildUsersScreens() { renderScreenCards('users-screen-list', USERS_SCREENS); }
+    function buildProfilesScreens() { renderScreenCards('profiles-screen-list', PROFILES_SCREENS); }
+    function buildRolesScreens() { renderScreenCards('roles-screen-list', ROLES_SCREENS); }
+    function buildSupportScreens() { renderScreenCards('support-screen-list', SUPPORT_SCREENS); }
+    function buildProductivityScreens() { renderScreenCards('productivity-screen-list', PRODUCTIVITY_SCREENS); }
+    function buildDocumentsScreens() { renderScreenCards('documents-screen-list', DOCUMENTS_SCREENS); }
+    function buildSearchScreens() { renderScreenCards('search-screen-list', SEARCH_SCREENS); }
+    function buildAccountScreens() { renderScreenCards('account-screen-list', ACCOUNT_SCREENS); }
+    function buildSettingsScreens() { renderScreenCards('settings-screen-list', SETTINGS_SCREENS); }
+    function buildAdminScreens() { renderScreenCards('admin-screen-list', ADMIN_SCREENS); }
+    function buildBillingScreens() { renderScreenCards('billing-screen-list', BILLING_SCREENS); }
+    function buildIntegrationsScreens() { renderScreenCards('integrations-screen-list', INTEGRATIONS_SCREENS); }
+    function buildSecurityScreens() { renderScreenCards('security-screen-list', SECURITY_SCREENS); }
+    function buildDevelopersScreens() { renderScreenCards('developers-screen-list', DEVELOPERS_SCREENS); }
+    function buildWorkflowsScreens() { renderScreenCards('workflows-screen-list', WORKFLOWS_SCREENS); }
+    function buildSystemScreens() { renderScreenCards('system-screen-list', SYSTEM_SCREENS); }
+    function buildNotificationsScreens() { renderScreenCards('notifications-screen-list', NOTIFICATIONS_SCREENS); }
 
     function escapeHtml(value) {
       return value
@@ -2776,33 +1706,18 @@
 
     function createCodePanel(asset) {
       var wrapper = document.createElement('section');
-      wrapper.className = 'showcase-code-panel';
+      wrapper.className = 'mts-surface mts-p-4 mts-d-flex mts-flex-col mts-gap-4 mts-h-full';
+      var blockHost = document.createElement('div');
+      blockHost.className = 'mts-flex-1 mts-min-h-0';
+      wrapper.appendChild(blockHost);
 
-      var toolbar = document.createElement('div');
-      toolbar.className = 'showcase-code-toolbar';
-      wrapper.appendChild(toolbar);
-
-      var meta = document.createElement('div');
-      meta.className = 'showcase-code-meta';
-      meta.innerHTML =
-        '<div class="showcase-code-title">' + asset.label + '</div>' +
-        '<div class="showcase-code-path">' + asset.path + '</div>';
-      toolbar.appendChild(meta);
-
-      var copyHost = document.createElement('button');
-      toolbar.appendChild(copyHost);
-
-      var pre = document.createElement('pre');
-      pre.className = 'showcase-code-block';
-      pre.textContent = 'Cargando ' + asset.path + '...';
-      wrapper.appendChild(pre);
-
-      var copyButton = new MTS.CopyButton(copyHost, {
-        label: 'Copiar ' + asset.label,
-        labelCopied: 'Copiado',
-        variant: 'secondary',
-        size: 'sm',
-        text: ''
+      new MTS.CodeBlock(blockHost, {
+        title: asset.label,
+        subtitle: asset.path,
+        language: asset.language,
+        code: 'Cargando ' + asset.path + '...',
+        copyable: true,
+        height: '100%'
       });
 
       fetch(resolveShowcasePath(asset.path))
@@ -2811,15 +1726,27 @@
           return response.text();
         })
         .then(function (text) {
-          pre.innerHTML = '<code class="language-' + asset.language + '">' + escapeHtml(text) + '</code>';
-          copyButton.setText(text);
+          new MTS.CodeBlock(blockHost, {
+            title: asset.label,
+            subtitle: asset.path,
+            language: asset.language,
+            code: text,
+            copyable: true,
+            height: '100%'
+          });
         })
         .catch(function () {
           var fallback =
             'No se pudo cargar automaticamente ' + asset.path + '.\n' +
             'Abre el archivo directamente desde el workspace para copiarlo.';
-          pre.textContent = fallback;
-          copyButton.setText(asset.path);
+          new MTS.CodeBlock(blockHost, {
+            title: asset.label,
+            subtitle: asset.path,
+            language: 'text',
+            code: fallback,
+            copyable: true,
+            height: '100%'
+          });
         });
 
       return wrapper;
@@ -2827,56 +1754,68 @@
 
     function buildPreviewBody(screen, initialTab) {
       var shell = document.createElement('div');
-      shell.className = 'showcase-preview-shell';
+      shell.className = 'mts-p-4 mts-d-flex mts-flex-col';
+      shell.style.flex = '1 1 auto';
+      shell.style.minHeight = '0';
 
       var tabsHost = document.createElement('div');
-      tabsHost.className = 'showcase-preview-tabs';
+      tabsHost.className = 'mts-flex-1 mts-overflow-hidden';
+      tabsHost.style.minHeight = '0';
       shell.appendChild(tabsHost);
 
       var previewPanel = document.createElement('section');
-      previewPanel.className = 'showcase-preview-panel';
+      previewPanel.className = 'mts-d-flex mts-flex-col mts-gap-4';
+      previewPanel.style.height = '100%';
+      previewPanel.style.minHeight = '0';
 
       var previewMeta = document.createElement('div');
-      previewMeta.className = 'showcase-preview-meta';
+      previewMeta.className = 'mts-surface mts-p-4 mts-d-flex mts-flex-col mts-gap-1';
       previewMeta.innerHTML =
-        '<div>' +
-          '<div class="showcase-preview-meta__title">Vista previa</div>' +
-          '<div class="showcase-preview-meta__path">' + screen.path + '</div>' +
-        '</div>';
+        '<div class="mts-text-sm mts-text-semibold">Vista previa</div>' +
+        '<div class="mts-text-sm mts-text-muted">' + screen.path + '</div>';
       previewPanel.appendChild(previewMeta);
 
+      var previewFrameHost = document.createElement('div');
+      previewFrameHost.className = 'mts-surface mts-p-3 mts-overflow-hidden mts-flex-1';
+      previewFrameHost.style.minHeight = '0';
+      previewPanel.appendChild(previewFrameHost);
+
       var iframe = document.createElement('iframe');
-      iframe.className = 'showcase-preview-frame';
+      iframe.className = 'mts-w-full mts-h-full mts-border mts-rounded-lg';
       iframe.title = screen.title;
       iframe.dataset.baseSrc = resolveShowcasePath(screen.path);
       iframe.src = iframe.dataset.baseSrc + buildThemeParams();
-      previewPanel.appendChild(iframe);
+      previewFrameHost.appendChild(iframe);
 
       var codeRoot = document.createElement('section');
-      codeRoot.className = 'showcase-code-root';
+      codeRoot.className = 'mts-d-flex mts-flex-col mts-gap-4 mts-h-full';
       var nestedTabsInstance = null;
 
-      if (screen.assets && screen.assets.length > 1) {
-        var nestedTabsHost = document.createElement('div');
-        codeRoot.appendChild(nestedTabsHost);
+      if (screen.assets && screen.assets.length) {
+        if (screen.assets.length > 1) {
+          var nestedTabsHost = document.createElement('div');
+          nestedTabsHost.className = 'mts-flex-1 mts-overflow-hidden';
+          codeRoot.appendChild(nestedTabsHost);
 
-        nestedTabsInstance = new MTS.Tabs(nestedTabsHost, {
-          variant: 'card',
-          active: screen.assets[0].id,
-          tabs: screen.assets.map(function (asset) {
-            return {
-              id: asset.id,
-              label: asset.label,
-              icon: MTS.Icon.get('file-text'),
-              content: createCodePanel(asset)
-            };
-          })
-        });
-      } else if (screen.assets && screen.assets.length === 1) {
-        codeRoot.appendChild(createCodePanel(screen.assets[0]));
+          nestedTabsInstance = new MTS.Tabs(nestedTabsHost, {
+            variant: 'card',
+            active: screen.assets[0].id,
+            stretch: true,
+            tabs: screen.assets.map(function (asset) {
+              return {
+                id: asset.id,
+                label: asset.label,
+                icon: MTS.Icon.get('file-text'),
+                content: createCodePanel(asset)
+              };
+            })
+          });
+        } else {
+          codeRoot.appendChild(createCodePanel(screen.assets[0]));
+        }
       } else {
         var emptyState = document.createElement('div');
-        emptyState.className = 'showcase-code-empty';
+        emptyState.className = 'mts-surface mts-p-4 mts-text-sm mts-text-muted';
         emptyState.textContent = 'Esta pantalla aun no expone archivos para copia directa.';
         codeRoot.appendChild(emptyState);
       }
@@ -2884,10 +1823,11 @@
       var outerTabs = new MTS.Tabs(tabsHost, {
         variant: 'underline',
         active: initialTab === 'code' ? 'code' : 'preview',
+        stretch: true,
         tabs: [
           {
             id: 'preview',
-            label: 'Vista previa',
+            label: 'Preview',
             icon: MTS.Icon.get('monitor'),
             content: previewPanel
           },
@@ -2908,9 +1848,40 @@
       });
 
       shell._previewFrame = iframe;
+      shell._previewFrameHost = previewFrameHost;
+      shell._previewMeta = previewMeta;
+      shell._tabsHost = tabsHost;
       shell._outerTabs = outerTabs;
       shell._nestedTabs = nestedTabsInstance;
       return shell;
+    }
+
+    function syncPreviewFrameLayout(modal, body) {
+      if (!modal || !modal.element || !body || !body._previewFrameHost || !body._previewMeta || !body._tabsHost) return;
+
+      var modalBody = modal.element.querySelector('.mts-modal__body');
+      var tabsNav = body._tabsHost.querySelector('.mts-tabs__nav');
+      if (!modalBody || !tabsNav) return;
+
+      var available = modalBody.clientHeight;
+      var shellStyle = window.getComputedStyle(body);
+      var panelStyle = window.getComputedStyle(body._previewFrameHost.parentElement);
+      var navHeight = tabsNav.offsetHeight || 0;
+      var metaHeight = body._previewMeta.offsetHeight || 0;
+      var shellPadding =
+        (parseFloat(shellStyle.paddingTop) || 0) +
+        (parseFloat(shellStyle.paddingBottom) || 0);
+      var panelGap = parseFloat(panelStyle.rowGap || panelStyle.gap) || 0;
+      var hostStyle = window.getComputedStyle(body._previewFrameHost);
+      var framePadding =
+        (parseFloat(hostStyle.paddingTop) || 0) +
+        (parseFloat(hostStyle.paddingBottom) || 0);
+
+      var height = Math.max(220, available - navHeight - metaHeight - shellPadding - panelGap - framePadding);
+      body._previewFrameHost.style.height = height + 'px';
+      body._previewFrame.style.height = height + 'px';
+      body._previewFrame.style.minHeight = height + 'px';
+      body._previewFrame.style.maxHeight = height + 'px';
     }
 
     function openScreenModal(screen, initialTab) {
@@ -2927,7 +1898,7 @@
         scrollable: false,
         buttons: [
           {
-            id: 'showcase-open-standalone',
+            id: 'preview-open-standalone',
             label: 'Abrir standalone',
             variant: 'ghost',
             onClick: function () {
@@ -2935,7 +1906,7 @@
             }
           },
           {
-            id: 'showcase-close-preview',
+            id: 'preview-close',
             label: 'Cerrar',
             variant: 'primary',
             close: true
@@ -2943,18 +1914,37 @@
         ],
         onShown: function () {
           modal._previewFrame = body._previewFrame;
+          modal._syncPreviewLayout = function () {
+            syncPreviewFrameLayout(modal, body);
+          };
+          requestAnimationFrame(function () {
+            modal._syncPreviewLayout();
+          });
           if (body._outerTabs && body._outerTabs.active === 'code' && body._nestedTabs) {
             requestAnimationFrame(function () {
               body._nestedTabs.setActive(body._nestedTabs.active || screen.assets[0].id);
             });
           }
+          if (body._outerTabs) {
+            body._outerTabs.on('change', function () {
+              requestAnimationFrame(function () {
+                if (modal._syncPreviewLayout) modal._syncPreviewLayout();
+              });
+            });
+          }
         },
         onHidden: function () {
+          delete modal._syncPreviewLayout;
           modal.destroy();
           if (currentPreviewModal === modal) currentPreviewModal = null;
         }
       });
 
+      var modalBody = modal.element.querySelector('.mts-modal__body');
+      modalBody.classList.add('mts-modal__body--flush');
+      modalBody.style.display = 'flex';
+      modalBody.style.flexDirection = 'column';
+      modalBody.style.minHeight = '0';
       currentPreviewModal = modal;
       modal.show();
       MTS.Icon.initAll();
@@ -2966,6 +1956,12 @@
       if (event.data && event.data.type === 'closeApp' && currentPreviewModal) currentPreviewModal.hide();
     });
 
+    window.addEventListener('resize', function () {
+      if (currentPreviewModal && currentPreviewModal._syncPreviewLayout) {
+        currentPreviewModal._syncPreviewLayout();
+      }
+    });
+
     renderThemeButtons();
     syncGroupSectionsVisibility();
     buildGroups();
@@ -2975,6 +1971,8 @@
     buildUsersScreens();
     buildProfilesScreens();
     buildRolesScreens();
+    buildWorkflowsScreens();
+    buildSecurityScreens();
     MTS.Icon.initAll();
   </script>
 </body>

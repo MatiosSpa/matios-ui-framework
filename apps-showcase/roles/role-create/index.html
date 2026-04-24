@@ -41,15 +41,15 @@
   <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
   <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
   <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-transferlist/matios-ui-transferlist.css">
   <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
   <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
-  <link rel="stylesheet" href="../../../data/matios-ui-table/matios-ui-table.css">
-  <link rel="stylesheet" href="role-create.css">
   <script src="../../../icons/matios-ui-icons.js"></script>
   <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
   <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
   <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
   <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-transferlist/matios-ui-transferlist.js"></script>
   <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
 </head>
 <body>
@@ -74,28 +74,106 @@
 
     var MODULE_PROFILES = {
       users: [
-        { value: 'workspace-base', label: 'Workspace base' },
-        { value: 'supervisor-operacional', label: 'Supervisor operacional' },
-        { value: 'auditor-usuarios', label: 'Auditor de usuarios' }
+        {
+          id: 'users-workspace-base',
+          name: 'Workspace base',
+          description: 'Acceso operativo base para la administracion diaria de usuarios.',
+          moduleId: 'users',
+          moduleName: 'Usuarios'
+        },
+        {
+          id: 'users-supervisor-operacional',
+          name: 'Supervisor operacional',
+          description: 'Gestion avanzada de usuarios, trazabilidad y aprobaciones internas.',
+          moduleId: 'users',
+          moduleName: 'Usuarios'
+        },
+        {
+          id: 'users-auditor-usuarios',
+          name: 'Auditor de usuarios',
+          description: 'Consulta historica, revision de cambios y evidencia de auditoria.',
+          moduleId: 'users',
+          moduleName: 'Usuarios'
+        }
       ],
       documents: [
-        { value: 'lector-documental', label: 'Lector documental' },
-        { value: 'editor-documental', label: 'Editor documental' },
-        { value: 'aprobador-documental', label: 'Aprobador documental' }
+        {
+          id: 'documents-lector-documental',
+          name: 'Lector documental',
+          description: 'Consulta documentos y seguimiento del flujo sin capacidad de edicion.',
+          moduleId: 'documents',
+          moduleName: 'Documentos'
+        },
+        {
+          id: 'documents-editor-documental',
+          name: 'Editor documental',
+          description: 'Edicion de contenido, metadatos y gestion de versiones activas.',
+          moduleId: 'documents',
+          moduleName: 'Documentos'
+        },
+        {
+          id: 'documents-aprobador-documental',
+          name: 'Aprobador documental',
+          description: 'Validacion final del circuito documental y autorizacion de cambios.',
+          moduleId: 'documents',
+          moduleName: 'Documentos'
+        }
       ],
       billing: [
-        { value: 'consulta-financiera', label: 'Consulta financiera' },
-        { value: 'administrador-cobros', label: 'Administrador de cobros' },
-        { value: 'auditor-billing', label: 'Auditor billing' }
+        {
+          id: 'billing-consulta-financiera',
+          name: 'Consulta financiera',
+          description: 'Lectura de indicadores de billing, conciliacion y seguimiento basico.',
+          moduleId: 'billing',
+          moduleName: 'Billing'
+        },
+        {
+          id: 'billing-administrador-cobros',
+          name: 'Administrador de cobros',
+          description: 'Operacion de cobranzas, regularizaciones y excepciones de facturacion.',
+          moduleId: 'billing',
+          moduleName: 'Billing'
+        },
+        {
+          id: 'billing-auditor-billing',
+          name: 'Auditor billing',
+          description: 'Revision de movimientos, desvios y consistencia operativa del modulo.',
+          moduleId: 'billing',
+          moduleName: 'Billing'
+        }
       ],
       support: [
-        { value: 'agente-mesa', label: 'Agente de mesa' },
-        { value: 'coordinador-soporte', label: 'Coordinador de soporte' },
-        { value: 'qa-soporte', label: 'QA soporte' }
+        {
+          id: 'support-agente-mesa',
+          name: 'Agente de mesa',
+          description: 'Gestion de tickets entrantes, seguimiento y atencion de primer nivel.',
+          moduleId: 'support',
+          moduleName: 'Soporte'
+        },
+        {
+          id: 'support-coordinador-soporte',
+          name: 'Coordinador de soporte',
+          description: 'Priorizacion operativa, escalamiento y control del backlog del modulo.',
+          moduleId: 'support',
+          moduleName: 'Soporte'
+        },
+        {
+          id: 'support-qa-soporte',
+          name: 'QA soporte',
+          description: 'Revision de cierres, calidad de respuesta y mejora del flujo de soporte.',
+          moduleId: 'support',
+          moduleName: 'Soporte'
+        }
       ]
     };
 
+    var ALL_PROFILES = Object.keys(MODULE_PROFILES).reduce(function (list, moduleId) {
+      return list.concat(MODULE_PROFILES[moduleId]);
+    }, []);
+
     var selectedProfiles = {};
+    var roleProfilesTransfer = null;
+    var moduleFilterSelect = null;
 
     new MTS.Card('#role-create-panel', {
       title: 'Crear rol',
@@ -105,30 +183,46 @@
       body:
         '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
           '<div id="role-create-alert"></div>' +
-          '<p class="mts-text-md mts-text-muted mts-m-0">Cada rol puede tener un unico perfil por modulo. Si vuelves a agregar el mismo modulo, el perfil anterior se reemplaza.</p>' +
+          '<section class="mts-surface mts-p-4 mts-d-flex mts-justify-between mts-gap-4 mts-flex-wrap">' +
+            '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
+              '<p class="mts-text-md mts-m-0">Construye el rol seleccionando perfiles operativos desde una sola interaccion. Cada modulo puede tener un unico perfil activo dentro del rol.</p>' +
+              '<p class="mts-text-sm mts-text-muted mts-m-0">Arrastra entre listas o usa los controles centrales. Si intentas repetir modulo, la transferencia se bloquea y el item vuelve visualmente a su origen.</p>' +
+            '</div>' +
+            '<div>' +
+              '<span id="role-create-status" class="mts-badge mts-badge--info mts-badge--sm">Sin perfiles asignados</span>' +
+            '</div>' +
+          '</section>' +
           '<div class="mts-grid mts-grid--gap-md">' +
             '<div class="mts-g-col-12 mts-g-col-md-6"><div id="role-create-name"></div></div>' +
             '<div class="mts-g-col-12"><div id="role-create-description"></div></div>' +
           '</div>' +
-          '<div class="mts-surface mts-p-4">' +
-            '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
-              '<h3 class="mts-h4 mts-m-0">Agregar perfil al rol</h3>' +
-              '<div class="mts-grid mts-grid--gap-md">' +
-                '<div class="mts-g-col-12 mts-g-col-md-5"><div id="role-create-module"></div></div>' +
-                '<div class="mts-g-col-12 mts-g-col-md-5"><div id="role-create-profile"></div></div>' +
-                '<div class="mts-g-col-12 mts-g-col-md-2 mts-d-flex mts-items-end"><button id="role-create-add" type="button"></button></div>' +
+          '<section class="mts-surface mts-p-4 mts-d-flex mts-flex-col mts-gap-4">' +
+            '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3 mts-flex-wrap">' +
+              '<div>' +
+                '<h3 class="mts-h4 mts-m-0">Asignacion de perfiles</h3>' +
+                '<p class="mts-text-sm mts-text-muted mts-m-0">Caso real del showcase para validar `MTS.TransferList` en el flujo de roles.</p>' +
               '</div>' +
             '</div>' +
-          '</div>' +
-          '<div class="mts-surface mts-p-4">' +
-            '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
-              '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3">' +
-                '<h3 class="mts-h4 mts-m-0">Perfiles seleccionados</h3>' +
-                '<span id="role-create-count" class="mts-badge mts-badge--info mts-badge--sm">0 modulos</span>' +
+            '<div class="mts-grid mts-grid--gap-md mts-grid--center">' +
+              '<div class="mts-g-col-12 mts-g-col-md-6">' +
+                '<div id="role-create-module-filter"></div>' +
               '</div>' +
-              '<div id="role-create-selected"></div>' +
+              '<div class="mts-g-col-12 mts-g-col-md-6 mts-d-flex mts-items-center mts-justify-between">' +
+                '<span id="role-create-filter-count" class="mts-badge mts-badge--neutral mts-badge--sm">0 perfiles visibles</span>' +
+              '</div>' +
             '</div>' +
-          '</div>' +
+            '<div id="role-create-transfer"></div>' +
+          '</section>' +
+          '<section class="mts-surface mts-p-4">' +
+            '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3 mts-flex-wrap">' +
+              '<div>' +
+                '<h3 class="mts-h4 mts-m-0">Resumen del rol</h3>' +
+                '<p class="mts-text-sm mts-text-muted mts-m-0">Vista rapida de los modulos que ya quedaron cubiertos.</p>' +
+              '</div>' +
+              '<span id="role-create-count" class="mts-badge mts-badge--info mts-badge--sm">0 modulos</span>' +
+            '</div>' +
+            '<div id="role-create-summary" class="mts-grid mts-grid--gap-md mts-mt-4"></div>' +
+          '</section>' +
         '</div>',
       footerAlign: 'between',
       footer: [
@@ -165,115 +259,137 @@
       iconLeft: MTS.Icon.get('file-text')
     });
 
-    var moduleSelect = new MTS.Select('#role-create-module', {
-      label: 'Modulo',
-      placeholder: 'Selecciona un modulo',
+    moduleFilterSelect = new MTS.Select('#role-create-module-filter', {
+      label: 'Filtrar disponibles por modulo',
+      value: 'all',
       options: [
+        { value: 'all', label: 'Todos los modulos' },
         { value: 'users', label: 'Usuarios' },
         { value: 'documents', label: 'Documentos' },
         { value: 'billing', label: 'Billing' },
         { value: 'support', label: 'Soporte' }
       ],
-      onChange: function (event) {
-        syncProfileOptions(event.detail.value);
+      onChange: function () {
+        applyProfileFilter();
       }
     });
 
-    var profileSelect = new MTS.Select('#role-create-profile', {
-      label: 'Perfil',
-      placeholder: 'Selecciona un perfil',
-      hint: 'Se listan solo perfiles del modulo seleccionado.',
-      options: [],
-      disabled: true
-    });
-
-    new MTS.Button('#role-create-add', {
-      label: 'Agregar',
-      variant: 'secondary',
-      icon: MTS.Icon.get('plus-circle'),
-      onClick: function () {
-        addSelectedProfile();
+    roleProfilesTransfer = new MTS.TransferList('#role-create-transfer', {
+      label: 'Perfiles del rol',
+      hint: 'No se permite repetir modulo en la lista derecha. Usa el filtro para acotar la lista disponible cuando crece el catalogo.',
+      originTitle: 'Perfiles disponibles',
+      selectedTitle: 'Perfiles del rol',
+      originEmptyText: 'No quedan perfiles disponibles.',
+      selectedEmptyText: 'Aun no hay perfiles dentro del rol.',
+      originDataSource: ALL_PROFILES,
+      selectedDataSource: [],
+      validateUnique: true,
+      validateKey: 'moduleId',
+      duplicateMessage: 'Ya existe un perfil asignado para este modulo.',
+      renderItem: function (item) {
+        return '' +
+          '<div class="mts-transferlist__item-main">' +
+            '<div class="mts-transferlist__item-label">' + escapeHtml(item.name) + '</div>' +
+            '<div class="mts-transferlist__item-desc">' + escapeHtml(item.description) + '</div>' +
+          '</div>' +
+          '<span class="mts-transferlist__item-meta">' + escapeHtml(item.moduleName) + '</span>';
       }
     });
 
-    document.getElementById('role-create-selected').addEventListener('click', function (event) {
-      var actionButton = event.target.closest('[data-role-selected-module]');
-      if (!actionButton) return;
+    roleProfilesTransfer.on('change', function (event) {
+      var detail = event.detail;
+      var item = detail.item;
 
-      var moduleValue = actionButton.getAttribute('data-role-selected-module');
-      delete selectedProfiles[moduleValue];
-      renderSelectedProfiles();
-      showAlert('info', 'Perfil quitado', 'Se elimino el perfil asignado al modulo <strong>' + escapeHtml(getModuleLabel(moduleValue)) + '</strong>.');
-    });
+      syncSelectedProfiles();
+      applyProfileFilter();
 
-    function syncProfileOptions(moduleValue) {
-      var options = MODULE_PROFILES[moduleValue] || [];
-      profileSelect.setOptions(options, !!moduleValue);
-      profileSelect.clear();
-    }
-
-    function addSelectedProfile() {
-      var moduleValue = moduleSelect.getValue();
-      var profileValue = profileSelect.getValue();
-
-      clearAlerts();
-
-      if (!moduleValue) {
-        showAlert('warning', 'Falta el modulo', 'Selecciona un modulo antes de agregar un perfil al rol.');
+      if (detail.to === 'selected') {
+        showAlert(
+          'success',
+          'Perfil agregado',
+          'El rol ahora usa <strong>' + escapeHtml(item.name) + '</strong> para el modulo <strong>' + escapeHtml(item.moduleName) + '</strong>.'
+        );
         return;
       }
-
-      if (!profileValue) {
-        showAlert('warning', 'Falta el perfil', 'Selecciona el perfil que quieres asociar al modulo.');
-        return;
-      }
-
-      var replacing = !!selectedProfiles[moduleValue];
-      selectedProfiles[moduleValue] = profileValue;
-      renderSelectedProfiles();
 
       showAlert(
-        replacing ? 'info' : 'success',
-        replacing ? 'Perfil reemplazado' : 'Perfil agregado',
-        'El rol ahora usa <strong>' + escapeHtml(getProfileLabel(moduleValue, profileValue)) + '</strong> para el modulo <strong>' + escapeHtml(getModuleLabel(moduleValue)) + '</strong>.'
+        'info',
+        'Perfil quitado',
+        'Se retiro <strong>' + escapeHtml(item.name) + '</strong> del modulo <strong>' + escapeHtml(item.moduleName) + '</strong>.'
       );
+    });
+
+    roleProfilesTransfer.on('invalid-transfer', function (event) {
+      var item = event.detail.item;
+
+      showAlert(
+        'warning',
+        'Transferencia bloqueada',
+        'El rol ya tiene un perfil para <strong>' + escapeHtml(item.moduleName) + '</strong>. Quita el actual antes de mover <strong>' + escapeHtml(item.name) + '</strong>.'
+      );
+    });
+
+    function syncSelectedProfiles() {
+      selectedProfiles = {};
+
+      roleProfilesTransfer.getSelectedItems().forEach(function (item) {
+        selectedProfiles[item.moduleId] = item;
+      });
+
+      renderSelectedProfilesSummary();
     }
 
-    function renderSelectedProfiles() {
-      var modules = Object.keys(selectedProfiles);
-      document.getElementById('role-create-count').textContent = modules.length + (modules.length === 1 ? ' modulo' : ' modulos');
+    function applyProfileFilter() {
+      var selectedItems = roleProfilesTransfer.getSelectedItems();
+      var selectedIds = selectedItems.reduce(function (map, item) {
+        map[item.id] = true;
+        return map;
+      }, {});
+      var moduleFilterValue = moduleFilterSelect ? moduleFilterSelect.getValue() : 'all';
+      var filteredOriginProfiles = ALL_PROFILES.filter(function (item) {
+        if (selectedIds[item.id]) return false;
+        if (!moduleFilterValue || moduleFilterValue === 'all') return true;
+        return item.moduleId === moduleFilterValue;
+      });
 
-      if (!modules.length) {
-        document.getElementById('role-create-selected').innerHTML = '<p class="mts-text-sm mts-text-muted mts-m-0">Aun no hay perfiles seleccionados para este rol.</p>';
+      roleProfilesTransfer.setItems({
+        originDataSource: filteredOriginProfiles,
+        selectedDataSource: selectedItems
+      });
+
+      document.getElementById('role-create-filter-count').textContent =
+        filteredOriginProfiles.length + (filteredOriginProfiles.length === 1 ? ' perfil visible' : ' perfiles visibles');
+    }
+
+    function renderSelectedProfilesSummary() {
+      var items = Object.keys(selectedProfiles)
+        .map(function (moduleId) { return selectedProfiles[moduleId]; })
+        .sort(function (a, b) { return a.moduleName.localeCompare(b.moduleName); });
+
+      document.getElementById('role-create-count').textContent = items.length + (items.length === 1 ? ' modulo' : ' modulos');
+      document.getElementById('role-create-status').textContent = items.length
+        ? items.length + (items.length === 1 ? ' perfil activo' : ' perfiles activos')
+        : 'Sin perfiles asignados';
+
+      if (!items.length) {
+        document.getElementById('role-create-summary').innerHTML =
+          '<div class="mts-g-col-12">' +
+            '<div class="mts-surface mts-p-4 mts-d-flex mts-flex-col mts-gap-2 mts-items-center mts-justify-center mts-text-center">' +
+            '<strong>El rol esta vacio.</strong>' +
+            '<span>Empieza moviendo perfiles desde la lista izquierda para armar la cobertura por modulo.</span>' +
+            '</div>' +
+          '</div>';
         return;
       }
 
-      document.getElementById('role-create-selected').innerHTML =
-        '<div class="mts-table-wrap">' +
-          '<table class="mts-table mts-table--striped">' +
-            '<thead>' +
-              '<tr>' +
-                '<th class="mts-table__th">Modulo</th>' +
-                '<th class="mts-table__th">Perfil</th>' +
-                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
-              '</tr>' +
-            '</thead>' +
-            '<tbody>' +
-              modules.map(function (moduleValue) {
-                return '' +
-                  '<tr class="mts-table__row">' +
-                    '<td class="mts-table__td">' + escapeHtml(getModuleLabel(moduleValue)) + '</td>' +
-                    '<td class="mts-table__td">' + escapeHtml(getProfileLabel(moduleValue, selectedProfiles[moduleValue])) + '</td>' +
-                    '<td class="mts-table__td mts-table__td--actions">' +
-                      '<button class="mts-btn mts-btn--ghost mts-btn--sm" data-role-selected-module="' + escapeHtml(moduleValue) + '">' + MTS.Icon.get('trash') + ' Quitar</button>' +
-                    '</td>' +
-                  '</tr>';
-              }).join('') +
-            '</tbody>' +
-          '</table>' +
-        '</div>';
-
-      MTS.Icon.initAll();
+      document.getElementById('role-create-summary').innerHTML = items.map(function (item) {
+        return '' +
+          '<article class="mts-surface mts-p-4 mts-d-flex mts-flex-col mts-gap-2 mts-g-col-12 mts-g-col-md-6 mts-g-col-xl-3">' +
+            '<span class="mts-text-xs mts-text-semibold mts-text-accent">' + escapeHtml(item.moduleName) + '</span>' +
+            '<h4 class="mts-h4 mts-m-0">' + escapeHtml(item.name) + '</h4>' +
+            '<p class="mts-text-sm mts-text-muted mts-m-0">' + escapeHtml(item.description) + '</p>' +
+          '</article>';
+      }).join('');
     }
 
     function clearAlerts() {
@@ -325,22 +441,6 @@
       );
     }
 
-    function getModuleLabel(value) {
-      var options = moduleSelect.options || [];
-      for (var i = 0; i < options.length; i++) {
-        if (options[i].value === value) return options[i].label;
-      }
-      return value || '-';
-    }
-
-    function getProfileLabel(moduleValue, profileValue) {
-      var options = MODULE_PROFILES[moduleValue] || [];
-      for (var i = 0; i < options.length; i++) {
-        if (options[i].value === profileValue) return options[i].label;
-      }
-      return profileValue || '-';
-    }
-
     function escapeHtml(value) {
       return String(value)
         .replace(/&/g, '&amp;')
@@ -350,7 +450,8 @@
         .replace(/'/g, '&#039;');
     }
 
-    renderSelectedProfiles();
+    syncSelectedProfiles();
+    applyProfileFilter();
     MTS.Icon.initAll();
   </script>
 </body>

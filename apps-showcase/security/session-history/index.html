@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Session History - Matios UI</title>
+  <title>Historial de sesiones - Matios UI</title>
   <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../base/matios-ui-base.css">
-  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
@@ -16,75 +15,21 @@
   <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
   <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
-  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
-  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
-  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
-  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
-  <link rel="stylesheet" href="session-history.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-toast/matios-ui-toast.css">
+  <link rel="stylesheet" href="../../../data/matios-ui-table/matios-ui-table.css">
   <script src="../../../icons/matios-ui-icons.js"></script>
-  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
-  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
-  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
-  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
 </head>
 <body>
-  <div class="session-history-page">
-    <header class="session-history-page__topbar mts-surface">
-      <div class="session-history-page__brand">
-        <div class="session-history-page__logo">M</div>
-        <div>
-          <div class="session-history-page__title">Session History</div>
-          <div class="session-history-page__subtitle">Dispositivos, ubicaciones y control remoto de sesiones</div>
-        </div>
-      </div>
-      <div class="session-history-page__actions">
-        <div id="sessions-signout-all"></div>
-      </div>
-    </header>
-
-    <main class="session-history-page__main mts-grid mts-grid--gap-md">
-      <section class="session-history-page__hero mts-surface mts-g-col-12">
-        <div>
-          <div class="session-history-page__eyebrow">Access monitoring</div>
-          <h1 class="session-history-page__hero-title">Ten claridad sobre donde esta abierta una cuenta y que sesiones requieren intervencion.</h1>
-          <p class="session-history-page__hero-copy">
-            Esta pantalla esta pensada para seguridad operativa: revisar dispositivos, ultima
-            actividad, origen aproximado y ejecutar cierres remotos cuando haga falta.
-          </p>
-        </div>
-      </section>
-
-      <aside class="mts-g-col-12 mts-g-col-xl-4">
-        <div class="mts-form-card session-history-page__filters-card">
-          <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Filtros</h2>
-            <p class="mts-form-card__subtitle">Busca por dispositivo, ciudad o estado de la sesion.</p>
-          </div>
-          <div id="sessions-feedback"></div>
-          <div class="session-history-page__filters">
-            <div id="sessions-search"></div>
-            <div id="sessions-status"></div>
-          </div>
-          <div id="sessions-clear"></div>
-        </div>
-      </aside>
-
-      <section class="mts-g-col-12 mts-g-col-xl-8">
-        <div class="session-history-page__results-head">
-          <div>
-            <div class="session-history-page__results-label">Active and recent sessions</div>
-            <h2 class="session-history-page__results-title">Historial de sesiones</h2>
-          </div>
-          <div class="session-history-page__results-meta" id="sessions-results-meta">0 resultados</div>
-        </div>
-        <div class="mts-grid mts-grid--gap-md" id="sessions-results"></div>
-      </section>
-    </main>
-  </div>
+  <main class="mts-p-4">
+    <div id="session-history-panel"></div>
+  </main>
 
   <script>
     window.addEventListener('message', function (e) {
@@ -95,67 +40,62 @@
         else document.documentElement.removeAttribute('data-mts-accent');
       }
     });
-  </script>
-  <script>
-    var sessionState = { query: '', status: '' };
-    var statusSelect;
+
     var sessions = [
-      { id: 's1', device: 'MacBook Pro', browser: 'Chrome', city: 'Santiago, CL', lastSeen: 'Activa ahora', status: 'active', statusLabel: 'Activa', risk: 'Reconocida', user: 'Camila Soto' },
-      { id: 's2', device: 'iPhone 15', browser: 'Safari', city: 'Santiago, CL', lastSeen: 'Hace 2 h', status: 'recent', statusLabel: 'Reciente', risk: 'Confiable', user: 'Camila Soto' },
-      { id: 's3', device: 'Windows Workstation', browser: 'Edge', city: 'Bogota, CO', lastSeen: 'Hace 3 dias', status: 'attention', statusLabel: 'Revisar', risk: 'Nueva ubicacion', user: 'Camila Soto' }
+      { id: 'SES-201', device: 'MacBook Pro', browser: 'Chrome', city: 'Santiago, CL', lastSeen: 'Activa ahora', status: 'active', statusLabel: 'Activa', risk: 'Reconocida', user: 'Camila Soto' },
+      { id: 'SES-184', device: 'iPhone 15', browser: 'Safari', city: 'Santiago, CL', lastSeen: 'Hace 2 h', status: 'recent', statusLabel: 'Reciente', risk: 'Confiable', user: 'Camila Soto' },
+      { id: 'SES-173', device: 'Windows Workstation', browser: 'Edge', city: 'Bogota, CO', lastSeen: 'Hace 3 dias', status: 'attention', statusLabel: 'Revisar', risk: 'Nueva ubicacion', user: 'Camila Soto' },
+      { id: 'SES-165', device: 'iPad Air', browser: 'Safari', city: 'Lima, PE', lastSeen: 'Hace 5 dias', status: 'recent', statusLabel: 'Reciente', risk: 'Viaje declarado', user: 'Camila Soto' }
     ];
+
+    new MTS.Card('#session-history-panel', {
+      title: 'Historial de sesiones',
+      subtitle: 'Monitoreo de acceso',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+          '<p class="mts-text-md mts-text-muted mts-m-0">Revisa sesiones activas y recientes por dispositivo, ubicacion y riesgo, con acciones directas sobre cada fila.</p>' +
+          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3 mts-flex-wrap">' +
+            '<span id="sessions-results-meta" class="mts-badge mts-badge--info mts-badge--sm">0 resultados</span>' +
+            '<div id="sessions-signout-all"></div>' +
+          '</div>' +
+          '<div id="sessions-results"></div>' +
+        '</div>'
+    });
 
     new MTS.Button('#sessions-signout-all', {
       label: 'Cerrar todo',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
-        notify('warning', 'Cierre remoto simulado', 'La UI deja planteado el flujo para invalidar todas las sesiones activas.');
+        notify('warning', 'Se simulo el cierre remoto de todas las sesiones activas.');
       }
     });
 
-    new MTS.Input('#sessions-search', {
-      type: 'text',
-      label: 'Buscar sesion',
-      placeholder: 'MacBook, Santiago, Chrome...',
-      iconLeft: MTS.Icon.get('search')
-    });
+    document.getElementById('session-history-panel').addEventListener('click', function (event) {
+      var button = event.target.closest('[data-session-action]');
+      if (!button) return;
 
-    statusSelect = new MTS.Select('#sessions-status', {
-      label: 'Estado',
-      placeholder: 'Todos',
-      clearable: true,
-      options: [
-        { value: 'active', label: 'Activa' },
-        { value: 'recent', label: 'Reciente' },
-        { value: 'attention', label: 'Revisar' }
-      ]
-    });
+      var action = button.getAttribute('data-session-action');
+      var id = button.getAttribute('data-session-id');
+      var session = getSessionById(id);
+      if (!session) return;
 
-    new MTS.Button('#sessions-clear', {
-      label: 'Limpiar filtros',
-      variant: 'ghost',
-      iconLeft: MTS.Icon.get('refresh-cw'),
-      onClick: function () {
-        sessionState.query = '';
-        sessionState.status = '';
-        setNativeValue('#sessions-search input', '');
-        statusSelect.clear();
-        renderSessions();
+      if (action === 'close') {
+        notify('success', 'Se simulo el cierre de la sesion en ' + session.device + '.');
+      }
+
+      if (action === 'trust') {
+        notify('info', session.device + ' quedo marcado como origen conocido.');
       }
     });
 
-    statusSelect.on('change', function (e) {
-      sessionState.status = e.detail.value || '';
-      renderSessions();
-    });
-
-    var searchNode = document.querySelector('#sessions-search input');
-    if (searchNode) {
-      searchNode.addEventListener('input', function (e) {
-        sessionState.query = e.target.value || '';
-        renderSessions();
-      });
+    function getSessionById(id) {
+      for (var i = 0; i < sessions.length; i++) {
+        if (sessions[i].id === id) return sessions[i];
+      }
+      return null;
     }
 
     function badgeVariant(status) {
@@ -164,89 +104,77 @@
       return 'danger';
     }
 
-    function setNativeValue(selector, value) {
-      var input = document.querySelector(selector);
-      if (!input) return;
-      input.value = value;
-      input.dispatchEvent(new Event('input', { bubbles: true }));
-      input.dispatchEvent(new Event('change', { bubbles: true }));
+    function notify(variant, message) {
+      MTS.Toast.show({
+        variant: variant,
+        message: message,
+        position: 'bottom-right'
+      });
     }
 
-    function notify(variant, title, message) {
-      MTS.Alert.show('#sessions-feedback', {
-        variant: variant,
-        title: title,
-        message: message,
-        closable: true
-      });
+    function actionButton(action, sessionId, icon, label) {
+      return '' +
+        '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-mr-1" data-session-action="' + action + '" data-session-id="' + sessionId + '">' +
+          MTS.Icon.get(icon) + ' ' + escapeHtml(label) +
+        '</button>';
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
 
     function renderSessions() {
       var host = document.getElementById('sessions-results');
       var meta = document.getElementById('sessions-results-meta');
-      host.innerHTML = '';
-
-      var visible = sessions.filter(function (session) {
-        var haystack = [session.device, session.browser, session.city, session.user, session.risk].join(' ').toLowerCase();
-        var matchesQuery = !sessionState.query || haystack.indexOf(sessionState.query.toLowerCase()) !== -1;
-        var matchesStatus = !sessionState.status || session.status === sessionState.status;
-        return matchesQuery && matchesStatus;
-      });
+      var visible = sessions.slice();
 
       meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
 
-      visible.forEach(function (session, index) {
-        var wrap = document.createElement('div');
-        wrap.className = 'mts-g-col-12';
-        host.appendChild(wrap);
-        var cardHost = document.createElement('div');
-        wrap.appendChild(cardHost);
-
-        new MTS.Card(cardHost, {
-          title: session.device,
-          subtitle: session.user,
-          variant: index === 0 ? 'elevated' : 'outlined',
-          size: 'lg',
-          body:
-            '<div class="session-history-page__session-body">' +
-              '<div class="session-history-page__session-meta">' +
-                '<span id="session-badge-' + session.id + '"></span>' +
-                '<span class="session-history-page__session-risk">' + session.risk + '</span>' +
-              '</div>' +
-              '<div class="session-history-page__session-grid">' +
-                '<div><span>Navegador</span><strong>' + session.browser + '</strong></div>' +
-                '<div><span>Ubicacion</span><strong>' + session.city + '</strong></div>' +
-                '<div><span>Ultima actividad</span><strong>' + session.lastSeen + '</strong></div>' +
-                '<div><span>Usuario</span><strong>' + session.user + '</strong></div>' +
-              '</div>' +
-            '</div>',
-          footerAlign: 'between',
-          footer: [
-            {
-              label: 'Cerrar sesion',
-              variant: 'primary',
-              icon: MTS.Icon.get('refresh-cw'),
-              onClick: function () {
-                notify('success', 'Sesion invalidada', 'Se simulo el cierre remoto para ' + session.device + '.');
-              }
-            },
-            {
-              label: 'Marcar confiable',
-              variant: 'ghost',
-              icon: MTS.Icon.get('check-circle'),
-              onClick: function () {
-                notify('info', 'Origen reconocido', session.device + ' quedo marcado como origen conocido.');
-              }
-            }
-          ]
-        });
-
-        new MTS.Badge('#session-badge-' + session.id, {
-          label: session.statusLabel,
-          variant: badgeVariant(session.status),
-          size: 'sm'
-        });
-      });
+      host.innerHTML =
+        '<div class="mts-table-wrap">' +
+          '<table class="mts-table mts-table--hover mts-table--striped">' +
+            '<thead>' +
+              '<tr>' +
+                '<th class="mts-table__th">Dispositivo</th>' +
+                '<th class="mts-table__th">Navegador</th>' +
+                '<th class="mts-table__th">Ubicacion</th>' +
+                '<th class="mts-table__th">Usuario</th>' +
+                '<th class="mts-table__th">Ultima actividad</th>' +
+                '<th class="mts-table__th">Riesgo</th>' +
+                '<th class="mts-table__th">Estado</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+              visible.map(function (session) {
+                return '' +
+                  '<tr class="mts-table__row">' +
+                    '<td class="mts-table__td">' +
+                      '<div class="mts-d-flex mts-flex-col mts-gap-1">' +
+                        '<strong class="mts-text-sm mts-text-primary">' + escapeHtml(session.device) + '</strong>' +
+                        '<span class="mts-text-sm mts-text-muted">' + escapeHtml(session.id) + '</span>' +
+                      '</div>' +
+                    '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(session.browser) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(session.city) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(session.user) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(session.lastSeen) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(session.risk) + '</td>' +
+                    '<td class="mts-table__td"><span class="mts-badge mts-badge--' + badgeVariant(session.status) + ' mts-badge--sm">' + escapeHtml(session.statusLabel) + '</span></td>' +
+                    '<td class="mts-table__td mts-table__td--actions">' +
+                      actionButton('close', session.id, 'refresh-cw', 'Cerrar') +
+                      actionButton('trust', session.id, 'check-circle', 'Confiable') +
+                    '</td>' +
+                  '</tr>';
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>';
 
       MTS.Icon.initAll();
     }

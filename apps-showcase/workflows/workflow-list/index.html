@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Workflow List - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-toast/matios-ui-toast.css">
+  <link rel="stylesheet" href="../../../data/matios-ui-table/matios-ui-table.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+</head>
+<body>
+  <main class="mts-p-4 workflow-list-page">
+    <div id="workflow-list-panel"></div>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+  </script>
+  <script>
+    var workflowListState = { query: '', type: '', status: '' };
+    var workflowDefinitions = [
+      {
+        id: 'WFD-031',
+        name: 'Billing close access exception',
+        type: 'access',
+        typeLabel: 'Access',
+        status: 'active',
+        statusLabel: 'Active',
+        version: 'v3',
+        stages: 3,
+        owner: 'Security Ops',
+        module: 'Roles',
+        summary: 'Permite acceso temporal de Billing Editor durante cierres operativos con expiracion automatica.'
+      },
+      {
+        id: 'WFD-026',
+        name: 'Policy publication workflow',
+        type: 'document',
+        typeLabel: 'Document',
+        status: 'draft',
+        statusLabel: 'Draft',
+        version: 'v2',
+        stages: 4,
+        owner: 'Legal Ops',
+        module: 'Documents',
+        summary: 'Coordina revision legal, aprobacion final y publicacion escalonada en el knowledge hub.'
+      },
+      {
+        id: 'WFD-019',
+        name: 'Extended security audit budget',
+        type: 'budget',
+        typeLabel: 'Budget',
+        status: 'active',
+        statusLabel: 'Active',
+        version: 'v5',
+        stages: 4,
+        owner: 'Finance Governance',
+        module: 'Billing',
+        summary: 'Activa doble aprobacion financiera cuando el monto supera el umbral del plan base.'
+      },
+      {
+        id: 'WFD-014',
+        name: 'Vendor onboarding package',
+        type: 'vendor',
+        typeLabel: 'Vendor',
+        status: 'paused',
+        statusLabel: 'Paused',
+        version: 'v1',
+        stages: 3,
+        owner: 'Admin Ops',
+        module: 'Admin',
+        summary: 'Agrupa revision contractual, acceso inicial y confirmacion de data-processing antes del alta.'
+      }
+    ];
+
+    new MTS.Card('#workflow-list-panel', {
+      title: 'Workflow List',
+      subtitle: 'Catalogo de definiciones',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3 mts-flex-wrap">' +
+            '<p class="mts-text-sm mts-text-muted mts-m-0">Tabla base de definiciones publicadas y borradores activos.</p>' +
+            '<span id="workflow-list-results-meta" class="mts-badge mts-badge--info mts-badge--sm">0 workflows</span>' +
+          '</div>' +
+          '<div id="workflow-list-table"></div>' +
+        '</div>'
+      ,
+      actions: [
+        {
+          label: 'Nuevo workflow',
+          variant: 'primary',
+          icon: MTS.Icon.get('plus'),
+          onClick: function () { openScreen('../workflow-builder/index.html'); }
+        }
+      ]
+    });
+
+    function badgeVariant(status) {
+      if (status === 'active') return 'success';
+      if (status === 'draft') return 'warning';
+      return 'info';
+    }
+
+    function notify(variant, message) {
+      MTS.Toast.show({
+        variant: variant,
+        message: message,
+        position: 'bottom-right'
+      });
+    }
+
+    function renderWorkflowDefinitions() {
+      var host = document.getElementById('workflow-list-table');
+      var meta = document.getElementById('workflow-list-results-meta');
+      var visible = workflowDefinitions.slice();
+
+      meta.textContent = visible.length + (visible.length === 1 ? ' workflow' : ' workflows');
+
+      host.innerHTML =
+        '<div class="mts-table-wrap">' +
+          '<table class="mts-table mts-table--hover mts-table--striped">' +
+            '<thead>' +
+              '<tr>' +
+                '<th class="mts-table__th">Workflow</th>' +
+                '<th class="mts-table__th">Tipo</th>' +
+                '<th class="mts-table__th">Modulo</th>' +
+                '<th class="mts-table__th">Owner</th>' +
+                '<th class="mts-table__th">Version</th>' +
+                '<th class="mts-table__th">Etapas</th>' +
+                '<th class="mts-table__th">Estado</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+              '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+              visible.map(function (item) {
+                return '' +
+                  '<tr class="mts-table__row">' +
+                    '<td class="mts-table__td">' +
+                      '<div class="mts-d-flex mts-flex-col mts-gap-1">' +
+                        '<strong class="mts-text-sm mts-text-primary">' + escapeHtml(item.name) + '</strong>' +
+                        '<span class="mts-text-sm mts-text-muted">' + escapeHtml(item.id) + '</span>' +
+                      '</div>' +
+                    '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(item.typeLabel) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(item.module) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(item.owner) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(item.version) + '</td>' +
+                    '<td class="mts-table__td">' + escapeHtml(String(item.stages)) + '</td>' +
+                    '<td class="mts-table__td"><span class="mts-badge mts-badge--' + badgeVariant(item.status) + ' mts-badge--sm">' + escapeHtml(item.statusLabel) + '</span></td>' +
+                    '<td class="mts-table__td mts-table__td--actions">' +
+                      actionButton('edit', item.id, 'edit', 'Editar') +
+                      actionButton('publish', item.id, 'git-branch', 'Publicar') +
+                    '</td>' +
+                  '</tr>';
+              }).join('') +
+            '</tbody>' +
+          '</table>' +
+        '</div>';
+
+      MTS.Icon.initAll();
+    }
+
+    document.getElementById('workflow-list-panel').addEventListener('click', function (event) {
+      var button = event.target.closest('[data-workflow-action]');
+      if (!button) return;
+
+      var action = button.getAttribute('data-workflow-action');
+      var workflowId = button.getAttribute('data-workflow-id');
+      var workflow = getWorkflowById(workflowId);
+      if (!workflow) return;
+
+      if (action === 'edit') {
+        openScreen('../workflow-builder/index.html');
+      }
+
+      if (action === 'publish') {
+        notify('success', workflow.id + ' quedo lista para una nueva iteracion dentro del ejemplo.');
+      }
+    });
+
+    function actionButton(action, workflowId, icon, label) {
+      return '' +
+        '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-mr-1" data-workflow-action="' + action + '" data-workflow-id="' + workflowId + '">' +
+          MTS.Icon.get(icon) + ' ' + escapeHtml(label) +
+        '</button>';
+    }
+
+    function getWorkflowById(id) {
+      for (var i = 0; i < workflowDefinitions.length; i++) {
+        if (workflowDefinitions[i].id === id) return workflowDefinitions[i];
+      }
+      return null;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    renderWorkflowDefinitions();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

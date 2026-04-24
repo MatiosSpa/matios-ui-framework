@@ -47,7 +47,7 @@ MTS.Tabs = class MtsTabs {
 
     // Panel height: 'auto' | 'stretch' | '200px' | etc.
     // Alto del panel
-    this.height = options.height || 'auto';
+    this.height = options.height || '360px';
 
     // Stretch panels to fill container height (alias for height:'stretch')
     // Estirar paneles para llenar el alto del contenedor
@@ -84,7 +84,12 @@ MTS.Tabs = class MtsTabs {
   _build() {
     this._el.innerHTML = '';
     // Resetear clase limpia â€” quitar modificadores del build anterior
-    this._syncClasses([`mts-tabs`, `mts-tabs--${this.variant}`, `mts-tabs--${this.direction}`]);
+    this._syncClasses([
+      `mts-tabs`,
+      `mts-tabs--${this.variant}`,
+      `mts-tabs--${this.direction}`,
+      !this.stretch && this.height !== 'auto' && this.height !== 'stretch' ? 'mts-tabs--fixed-panels' : ''
+    ]);
     this._el.style.cssText = '';
     /* Altura stretch */
     if (this.stretch || this.height === 'stretch') {
@@ -138,10 +143,14 @@ MTS.Tabs = class MtsTabs {
     this._panelsEl.className = 'mts-tabs__panels';
     /* Altura del panel */
     if (this.stretch || this.height === 'stretch') {
-      this._panelsEl.style.cssText = 'flex:1;overflow:auto;min-height:0;';
+      this._panelsEl.style.cssText = 'flex:1;overflow:hidden;min-height:0;';
     } else if (this.height && this.height !== 'auto') {
       this._panelsEl.style.height   = this.height;
       this._panelsEl.style.overflow = 'hidden';
+      this._panelsEl.style.minHeight = '0';
+    } else {
+      this._panelsEl.style.height = 'auto';
+      this._panelsEl.style.overflow = 'visible';
     }
 
     this.tabs.forEach(tab => {

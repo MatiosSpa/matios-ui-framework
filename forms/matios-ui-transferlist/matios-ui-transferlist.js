@@ -1,7 +1,7 @@
 /* ============================================================
    MATIOS UI - matios-ui-transferlist.js
    MTS.TransferList
-   Version: 1.0.0
+   Version: 2.0.0
    ============================================================ */
 
 window.MTS = window.MTS || {};
@@ -15,28 +15,42 @@ MTS.TransferList = class MtsTransferList {
 
     this.label = options.label || '';
     this.hint = options.hint || '';
-    this.availableTitle = options.availableTitle || 'Disponibles';
-    this.selectedTitle = options.selectedTitle || 'Seleccionados';
-    this.availableEmptyText = options.availableEmptyText || 'Sin elementos disponibles';
-    this.selectedEmptyText = options.selectedEmptyText || 'Sin elementos seleccionados';
-    this.availableItems = Array.isArray(options.availableItems || options.options) ? [...(options.availableItems || options.options || [])] : [];
-    this.selectedItems = Array.isArray(options.selectedItems || options.value) ? [...(options.selectedItems || options.value || [])] : [];
-    this.itemKey = options.itemKey || null;
+
+    this.originTitle = options.originTitle || options.availableTitle || 'Origin';
+    this.selectedTitle = options.selectedTitle || options.targetTitle || 'Selected';
+
+    this.originEmptyText = options.originEmptyText || options.availableEmptyText || 'No items available';
+    this.selectedEmptyText = options.selectedEmptyText || 'No items selected';
+
     this.itemLabel = options.itemLabel || 'label';
     this.itemDescription = options.itemDescription || 'description';
-    this.itemMeta = options.itemMeta || null;
     this.renderItem = typeof options.renderItem === 'function' ? options.renderItem : null;
+
+    this.showMoveButtons = options.showMoveButtons !== false;
     this.draggable = options.draggable !== false;
     this.disabled = options.disabled === true;
-    this.beforeTransfer = typeof options.beforeTransfer === 'function' ? options.beforeTransfer : null;
+
+    this.validateUnique = options.validateUnique === true;
+    this.validateKey = options.validateKey || null;
+    this.duplicateMessage = options.duplicateMessage || 'Duplicate item';
+
+    this._onRequestItem = typeof options.onRequestItem === 'function' ? options.onRequestItem : null;
+    this._onSelectionChange = typeof options.onSelectionChange === 'function' ? options.onSelectionChange : null;
+
+    this._legacyOnChange = typeof options.onChange === 'function' ? options.onChange : null;
+    this._legacyOnInvalidTransfer = typeof options.onInvalidTransfer === 'function' ? options.onInvalidTransfer : null;
 
     this._listeners = {};
-    this._activeAvailableKey = null;
+    this._activeOriginKey = null;
     this._activeSelectedKey = null;
     this._dragContext = null;
 
-    if (options.onChange) this.on('change', options.onChange);
-    if (options.onInvalidTransfer) this.on('invalid-transfer', options.onInvalidTransfer);
+    this.originDataSource = this._normalizeItems(
+      options.originDataSource || options.availableItems || options.options || []
+    );
+    this.selectedDataSource = this._normalizeItems(
+      options.selectedDataSource || options.selectedItems || options.value || []
+    );
 
     this._build();
     this._bindEvents();
@@ -55,51 +69,69 @@ MTS.TransferList = class MtsTransferList {
   }
 
   getValue() {
-    return this.selectedItems.slice();
+    return this.getSelectedItems();
   }
 
   getSelectedItems() {
-    return this.selectedItems.slice();
+    return this.selectedDataSource.map(function (entry) { return entry.item; });
+  }
+
+  getOriginItems() {
+    return this.originDataSource.map(function (entry) { return entry.item; });
   }
 
   getAvailableItems() {
-    return this.availableItems.slice();
+    return this.getOriginItems();
   }
 
   setItems(payload) {
-    this.availableItems = Array.isArray(payload.availableItems) ? payload.availableItems.slice() : [];
-    this.selectedItems = Array.isArray(payload.selectedItems) ? payload.selectedItems.slice() : [];
-    this._activeAvailableKey = null;
+    this.originDataSource = this._normalizeItems(
+      payload.originDataSource || payload.availableItems || payload.options || []
+    );
+    this.selectedDataSource = this._normalizeItems(
+      payload.selectedDataSource || payload.selectedItems || payload.value || []
+    );
+    this._activeOriginKey = null;
     this._activeSelectedKey = null;
+    this._clearDropState();
     this._render();
     return this;
   }
 
   setValue(items) {
-    this.selectedItems = Array.isArray(items) ? items.slice() : [];
+    this.selectedDataSource = this._normalizeItems(items || []);
     this._activeSelectedKey = null;
+    this._clearDropState();
     this._render();
     return this;
   }
 
   moveToSelected(key) {
-    return this._moveItem(key, 'available', 'selected');
+    return this._attemptMove(key, 'origin', 'selected', 'button');
+  }
+
+  moveToOrigin(key) {
+    return this._attemptMove(key, 'selected', 'origin', 'button');
   }
 
   moveToAvailable(key) {
-    return this._moveItem(key, 'selected', 'available');
+    return this.moveToOrigin(key);
   }
 
   moveAllToSelected() {
-    return this._moveAll('available', 'selected');
+    return this._moveAll('origin', 'selected', 'bulk');
+  }
+
+  moveAllToOrigin() {
+    return this._moveAll('selected', 'origin', 'bulk');
   }
 
   moveAllToAvailable() {
-    return this._moveAll('selected', 'available');
+    return this.moveAllToOrigin();
   }
 
   clear() {
-    return this.moveAllToAvailable();
+    return this.moveAllToOrigin();
   }
 
   enable() {
@@ -131,20 +163,21 @@ MTS.TransferList = class MtsTransferList {
     this._root = document.createElement('div');
     this._root.className = 'mts-transferlist';
     if (this.disabled) this._root.classList.add('mts-transferlist--disabled');
+    if (!this.showMoveButtons) this._root.classList.add('mts-transferlist--no-controls');
 
     this._root.innerHTML =
       '<div class="mts-transferlist__column">' +
         '<div class="mts-transferlist__header">' +
-          '<span class="mts-transferlist__title">' + this._escapeHtml(this.availableTitle) + '</span>' +
-          '<span class="mts-transferlist__count" data-transfer-count="available">0</span>' +
+          '<span class="mts-transferlist__title">' + this._escapeHtml(this.originTitle) + '</span>' +
+          '<span class="mts-transferlist__count" data-transfer-count="origin">0</span>' +
         '</div>' +
-        '<div class="mts-transferlist__list" data-transfer-list="available"></div>' +
+        '<div class="mts-transferlist__list" data-transfer-list="origin"></div>' +
       '</div>' +
       '<div class="mts-transferlist__controls">' +
-        '<button type="button" class="mts-transferlist__control" data-transfer-action="all-to-selected" aria-label="Mover todos a seleccionados">&raquo;</button>' +
-        '<button type="button" class="mts-transferlist__control" data-transfer-action="to-selected" aria-label="Mover a seleccionados">&rsaquo;</button>' +
-        '<button type="button" class="mts-transferlist__control" data-transfer-action="to-available" aria-label="Mover a disponibles">&lsaquo;</button>' +
-        '<button type="button" class="mts-transferlist__control" data-transfer-action="all-to-available" aria-label="Mover todos a disponibles">&laquo;</button>' +
+        '<button type="button" class="mts-transferlist__control" data-transfer-action="all-to-selected" aria-label="Move all to selected">&raquo;</button>' +
+        '<button type="button" class="mts-transferlist__control" data-transfer-action="to-selected" aria-label="Move to selected">&rsaquo;</button>' +
+        '<button type="button" class="mts-transferlist__control" data-transfer-action="to-origin" aria-label="Move to origin">&lsaquo;</button>' +
+        '<button type="button" class="mts-transferlist__control" data-transfer-action="all-to-origin" aria-label="Move all to origin">&laquo;</button>' +
       '</div>' +
       '<div class="mts-transferlist__column">' +
         '<div class="mts-transferlist__header">' +
@@ -163,9 +196,9 @@ MTS.TransferList = class MtsTransferList {
       this._el.appendChild(hint);
     }
 
-    this._availableListEl = this._root.querySelector('[data-transfer-list="available"]');
+    this._originListEl = this._root.querySelector('[data-transfer-list="origin"]');
     this._selectedListEl = this._root.querySelector('[data-transfer-list="selected"]');
-    this._availableCountEl = this._root.querySelector('[data-transfer-count="available"]');
+    this._originCountEl = this._root.querySelector('[data-transfer-count="origin"]');
     this._selectedCountEl = this._root.querySelector('[data-transfer-count="selected"]');
   }
 
@@ -176,80 +209,104 @@ MTS.TransferList = class MtsTransferList {
       var actionBtn = event.target.closest('[data-transfer-action]');
       if (actionBtn) {
         if (self.disabled) return;
+
         var action = actionBtn.getAttribute('data-transfer-action');
-        if (action === 'to-selected' && self._activeAvailableKey != null) self.moveToSelected(self._activeAvailableKey);
-        if (action === 'to-available' && self._activeSelectedKey != null) self.moveToAvailable(self._activeSelectedKey);
+        if (action === 'to-selected' && self._activeOriginKey != null) self.moveToSelected(self._activeOriginKey);
+        if (action === 'to-origin' && self._activeSelectedKey != null) self.moveToOrigin(self._activeSelectedKey);
         if (action === 'all-to-selected') self.moveAllToSelected();
-        if (action === 'all-to-available') self.moveAllToAvailable();
+        if (action === 'all-to-origin') self.moveAllToOrigin();
         return;
       }
 
-      var itemEl = event.target.closest('[data-transfer-item-key]');
+      var itemEl = event.target.closest('[data-mts-item-key]');
       if (!itemEl || self.disabled) return;
 
       var side = itemEl.getAttribute('data-transfer-side');
-      var key = itemEl.getAttribute('data-transfer-item-key');
-      if (side === 'available') self._activeAvailableKey = key;
-      if (side === 'selected') self._activeSelectedKey = key;
+      var key = itemEl.getAttribute('data-mts-item-key');
+      var changed = false;
+
+      if (side === 'origin' && String(self._activeOriginKey) !== String(key)) {
+        self._activeOriginKey = key;
+        changed = true;
+      }
+
+      if (side === 'selected' && String(self._activeSelectedKey) !== String(key)) {
+        self._activeSelectedKey = key;
+        changed = true;
+      }
+
       self._render();
+      if (changed) self._notifySelectionChange(side, key);
     });
 
     if (!this.draggable) return;
 
     this._root.addEventListener('dragstart', function (event) {
-      var itemEl = event.target.closest('[data-transfer-item-key]');
+      var itemEl = event.target.closest('[data-mts-item-key]');
       if (!itemEl || self.disabled) return;
 
       self._dragContext = {
-        key: itemEl.getAttribute('data-transfer-item-key'),
-        from: itemEl.getAttribute('data-transfer-side')
+        key: itemEl.getAttribute('data-mts-item-key'),
+        from: itemEl.getAttribute('data-transfer-side'),
+        el: itemEl
       };
 
       itemEl.classList.add('mts-transferlist__item--dragging');
       try {
         event.dataTransfer.effectAllowed = 'move';
-        event.dataTransfer.setData('text/plain', JSON.stringify(self._dragContext));
+        event.dataTransfer.setData('text/plain', self._dragContext.key);
       } catch (error) {}
     });
 
-    this._root.addEventListener('dragend', function (event) {
-      var itemEl = event.target.closest('[data-transfer-item-key]');
-      if (itemEl) itemEl.classList.remove('mts-transferlist__item--dragging');
-      self._availableListEl.classList.remove('mts-transferlist__list--over');
-      self._selectedListEl.classList.remove('mts-transferlist__list--over');
+    this._root.addEventListener('dragend', function () {
       self._dragContext = null;
+      self._root.querySelectorAll('.mts-transferlist__item--dragging').forEach(function (el) {
+        el.classList.remove('mts-transferlist__item--dragging');
+      });
+      self._clearDropState();
     });
 
-    [this._availableListEl, this._selectedListEl].forEach(function (listEl) {
+    [this._originListEl, this._selectedListEl].forEach(function (listEl) {
       listEl.addEventListener('dragover', function (event) {
         if (self.disabled || !self._dragContext) return;
+
+        var targetSide = listEl.getAttribute('data-transfer-list');
+        if (targetSide === self._dragContext.from) return;
+
+        var entry = self._findEntryByKey(
+          self._dragContext.from === 'origin' ? self.originDataSource : self.selectedDataSource,
+          self._dragContext.key
+        );
+        if (!entry) return;
+
         event.preventDefault();
-        listEl.classList.add('mts-transferlist__list--over');
+        self._applyDropState(listEl, self._evaluateMove(entry, self._dragContext.from, targetSide));
       });
 
-      listEl.addEventListener('dragleave', function () {
-        listEl.classList.remove('mts-transferlist__list--over');
+      listEl.addEventListener('dragleave', function (event) {
+        if (!event.relatedTarget || !listEl.contains(event.relatedTarget)) {
+          listEl.classList.remove('mts-transferlist__list--over');
+          listEl.classList.remove('mts-transferlist__list--blocked');
+          listEl.removeAttribute('data-drop-message');
+          listEl.removeAttribute('title');
+        }
       });
 
       listEl.addEventListener('drop', function (event) {
-        if (self.disabled) return;
+        if (self.disabled || !self._dragContext) return;
+
         event.preventDefault();
-        listEl.classList.remove('mts-transferlist__list--over');
-
         var targetSide = listEl.getAttribute('data-transfer-list');
-        var drag = self._dragContext;
-        if (!drag || drag.from === targetSide) return;
-
-        self._moveItem(drag.key, drag.from, targetSide);
+        self._attemptMoveByKey(self._dragContext.key, self._dragContext.from, targetSide, 'drag');
       });
     });
   }
 
   _render() {
-    this._renderList('available', this.availableItems, this._activeAvailableKey, this._availableListEl, this.availableEmptyText);
-    this._renderList('selected', this.selectedItems, this._activeSelectedKey, this._selectedListEl, this.selectedEmptyText);
-    this._availableCountEl.textContent = String(this.availableItems.length);
-    this._selectedCountEl.textContent = String(this.selectedItems.length);
+    this._renderList('origin', this.originDataSource, this._activeOriginKey, this._originListEl, this.originEmptyText);
+    this._renderList('selected', this.selectedDataSource, this._activeSelectedKey, this._selectedListEl, this.selectedEmptyText);
+    this._originCountEl.textContent = String(this.originDataSource.length);
+    this._selectedCountEl.textContent = String(this.selectedDataSource.length);
   }
 
   _renderList(side, items, activeKey, host, emptyText) {
@@ -261,181 +318,309 @@ MTS.TransferList = class MtsTransferList {
     }
 
     var self = this;
-    items.forEach(function (item) {
-      var key = self._getItemKey(item);
-      var isActive = String(activeKey) === String(key);
+    items.forEach(function (entry) {
+      var isActive = String(activeKey) === String(entry.key);
       var itemEl = document.createElement('div');
       itemEl.className = 'mts-transferlist__item' + (isActive ? ' mts-transferlist__item--active' : '');
-      itemEl.setAttribute('data-transfer-item-key', key);
+      itemEl.setAttribute('data-mts-item-key', entry.key);
       itemEl.setAttribute('data-transfer-side', side);
       if (self.draggable && !self.disabled) itemEl.setAttribute('draggable', 'true');
 
+      self._applyItemDataset(itemEl, entry.item);
+
       if (self.renderItem) {
-        itemEl.innerHTML = self.renderItem(item, side, self) || '';
+        itemEl.innerHTML = self.renderItem(entry.item, side, self) || '';
       } else {
-        var label = self._getFieldValue(item, self.itemLabel);
-        var description = self._getFieldValue(item, self.itemDescription);
-        var meta = self._getFieldValue(item, self.itemMeta);
+        var label = self._resolveDisplayValue(entry.item, self.itemLabel);
+        var description = self._resolveDisplayValue(entry.item, self.itemDescription);
 
         itemEl.innerHTML =
           '<div class="mts-transferlist__item-main">' +
             '<div class="mts-transferlist__item-label">' + self._escapeHtml(label || '-') + '</div>' +
             (description ? '<div class="mts-transferlist__item-desc">' + self._escapeHtml(description) + '</div>' : '') +
-          '</div>' +
-          (meta ? '<div class="mts-transferlist__item-meta">' + self._escapeHtml(meta) + '</div>' : '');
+          '</div>';
       }
 
       host.appendChild(itemEl);
     });
   }
 
-  _moveItem(key, from, to) {
+  _moveAll(from, to, trigger) {
     if (from === to) return false;
 
-    var source = from === 'available' ? this.availableItems : this.selectedItems;
-    var target = to === 'selected' ? this.selectedItems : this.availableItems;
-    var item = this._findItemByKey(source, key);
-    if (!item) return false;
+    var source = from === 'origin' ? this.originDataSource : this.selectedDataSource;
+    if (!source.length) return false;
 
-    var validation = this._validateTransfer(item, from, to);
-    if (validation !== true) {
-      this._emit('invalid-transfer', {
-        item: item,
+    var moved = false;
+    var keys = source.map(function (entry) { return entry.key; });
+    for (var i = 0; i < keys.length; i++) {
+      moved = this._attemptMoveByKey(keys[i], from, to, trigger) || moved;
+    }
+    return moved;
+  }
+
+  _attemptMoveByKey(key, from, to, trigger) {
+    if (from === to) return false;
+
+    return this._attemptMove(key, from, to, trigger);
+  }
+
+  _attemptMove(itemOrKey, from, to, trigger) {
+    var source = from === 'origin' ? this.originDataSource : this.selectedDataSource;
+    var entry = this._findEntry(source, itemOrKey);
+    if (!entry) return false;
+
+    var evaluation = this._evaluateMove(entry, from, to);
+    if (!evaluation.allowed) {
+      this._animateReject(entry.key, from);
+      this._notifyRequestItem(entry.item, false);
+
+      if (this._legacyOnInvalidTransfer) {
+        this._legacyOnInvalidTransfer({
+          type: 'invalid-transfer',
+          detail: {
+            item: entry.item,
+            from: from,
+            to: to,
+            message: evaluation.message,
+            originItems: this.getOriginItems(),
+            selectedItems: this.getSelectedItems()
+          }
+        });
+      }
+
+      this._emit('request-item', {
+        item: entry.item,
+        moved: false,
         from: from,
         to: to,
-        message: typeof validation === 'string' ? validation : 'Transferencia no permitida.',
-        availableItems: this.getAvailableItems(),
-        selectedItems: this.getSelectedItems()
+        trigger: trigger,
+        message: evaluation.message
       });
+      this._emit('invalid-transfer', {
+        item: entry.item,
+        from: from,
+        to: to,
+        trigger: trigger,
+        message: evaluation.message
+      });
+      this._clearDropState();
       return false;
     }
 
-    this._removeItemByKey(source, key);
-    target.push(item);
+    this._commitMove(entry, from, to, trigger);
+    return true;
+  }
 
-    if (from === 'available') this._activeAvailableKey = null;
+  _commitMove(entry, from, to, trigger) {
+    var source = from === 'origin' ? this.originDataSource : this.selectedDataSource;
+    var target = to === 'selected' ? this.selectedDataSource : this.originDataSource;
+    var index = source.indexOf(entry);
+
+    if (index === -1) return;
+
+    source.splice(index, 1);
+    target.push(entry);
+
+    if (from === 'origin') this._activeOriginKey = null;
     if (from === 'selected') this._activeSelectedKey = null;
-    if (to === 'available') this._activeAvailableKey = String(key);
-    if (to === 'selected') this._activeSelectedKey = String(key);
+    if (to === 'origin') this._activeOriginKey = entry.key;
+    if (to === 'selected') this._activeSelectedKey = entry.key;
 
+    this._clearDropState();
     this._render();
-    this._emit('change', {
-      item: item,
+
+    this._notifyRequestItem(entry.item, true);
+
+    if (this._legacyOnChange) {
+      this._legacyOnChange({
+        type: 'change',
+        detail: {
+          item: entry.item,
+          from: from,
+          to: to,
+          trigger: trigger,
+          originItems: this.getOriginItems(),
+          selectedItems: this.getSelectedItems()
+        }
+      });
+    }
+
+    this._emit('request-item', {
+      item: entry.item,
+      moved: true,
       from: from,
       to: to,
-      mode: 'single',
-      availableItems: this.getAvailableItems(),
+      trigger: trigger,
+      originItems: this.getOriginItems(),
       selectedItems: this.getSelectedItems()
     });
-    return true;
-  }
-
-  _moveAll(from, to) {
-    if (from === to) return false;
-
-    var source = from === 'available' ? this.availableItems : this.selectedItems;
-    if (!source.length) return false;
-
-    var moved = [];
-    var blocked = [];
-    var keys = source.map(this._getItemKey.bind(this));
-
-    for (var i = 0; i < keys.length; i++) {
-      var key = keys[i];
-      var currentSource = from === 'available' ? this.availableItems : this.selectedItems;
-      var item = this._findItemByKey(currentSource, key);
-      if (!item) continue;
-
-      var validation = this._validateTransfer(item, from, to);
-      if (validation !== true) {
-        blocked.push({
-          item: item,
-          message: typeof validation === 'string' ? validation : 'Transferencia no permitida.'
-        });
-        continue;
-      }
-
-      this._removeItemByKey(currentSource, key);
-      if (to === 'selected') this.selectedItems.push(item);
-      else this.availableItems.push(item);
-      moved.push(item);
-    }
-
-    this._activeAvailableKey = null;
-    this._activeSelectedKey = null;
-    this._render();
-
-    if (moved.length) {
-      this._emit('change', {
-        item: null,
-        items: moved,
-        blocked: blocked,
-        from: from,
-        to: to,
-        mode: 'bulk',
-        availableItems: this.getAvailableItems(),
-        selectedItems: this.getSelectedItems()
-      });
-    }
-
-    for (var j = 0; j < blocked.length; j++) {
-      this._emit('invalid-transfer', {
-        item: blocked[j].item,
-        from: from,
-        to: to,
-        message: blocked[j].message,
-        availableItems: this.getAvailableItems(),
-        selectedItems: this.getSelectedItems()
-      });
-    }
-
-    return moved.length > 0;
-  }
-
-  _validateTransfer(item, from, to) {
-    if (!this.beforeTransfer) return true;
-    var result = this.beforeTransfer({
-      item: item,
+    this._emit('change', {
+      item: entry.item,
       from: from,
       to: to,
-      availableItems: this.getAvailableItems(),
-      selectedItems: this.getSelectedItems(),
-      instance: this
+      trigger: trigger,
+      originItems: this.getOriginItems(),
+      selectedItems: this.getSelectedItems()
     });
-    if (result === false) return false;
-    if (typeof result === 'string') return result;
-    return true;
   }
 
-  _getItemKey(item) {
-    if (typeof this.itemKey === 'function') return this.itemKey(item);
-    if (typeof this.itemKey === 'string' && item && item[this.itemKey] != null) return item[this.itemKey];
-    if (item && item.value != null) return item.value;
-    if (item && item.id != null) return item.id;
-    return this._getFieldValue(item, this.itemLabel);
+  _evaluateMove(entry, from, to) {
+    if (from === to) {
+      return { allowed: false, message: 'Same side move' };
+    }
+
+    if (!this.validateUnique || to !== 'selected') {
+      return { allowed: true, message: '' };
+    }
+
+    var candidateValue = this._resolveValidateValue(entry.item);
+    var duplicated = this.selectedDataSource.some(function (selectedEntry) {
+      return String(this._resolveValidateValue(selectedEntry.item)) === String(candidateValue);
+    }, this);
+
+    if (duplicated) {
+      return {
+        allowed: false,
+        message: this.duplicateMessage || 'Duplicate item'
+      };
+    }
+
+    return { allowed: true, message: '' };
   }
 
-  _getFieldValue(item, config) {
+  _notifyRequestItem(item, moved) {
+    if (this._onRequestItem) this._onRequestItem(item, moved);
+  }
+
+  _notifySelectionChange(side, key) {
+    var source = side === 'origin' ? this.originDataSource : this.selectedDataSource;
+    var entry = this._findEntryByKey(source, key);
+    if (!entry) return;
+
+    if (this._onSelectionChange) this._onSelectionChange(entry.item, side);
+    this._emit('selection-change', {
+      item: entry.item,
+      side: side,
+      originItems: this.getOriginItems(),
+      selectedItems: this.getSelectedItems()
+    });
+  }
+
+  _applyDropState(listEl, evaluation) {
+    this._clearDropState();
+
+    if (evaluation.allowed) {
+      listEl.classList.add('mts-transferlist__list--over');
+      listEl.removeAttribute('data-drop-message');
+      listEl.removeAttribute('title');
+      return;
+    }
+
+    listEl.classList.add('mts-transferlist__list--blocked');
+    listEl.setAttribute('data-drop-message', evaluation.message || 'Blocked');
+    listEl.setAttribute('title', evaluation.message || 'Blocked');
+  }
+
+  _clearDropState() {
+    [this._originListEl, this._selectedListEl].forEach(function (listEl) {
+      listEl.classList.remove('mts-transferlist__list--over');
+      listEl.classList.remove('mts-transferlist__list--blocked');
+      listEl.removeAttribute('data-drop-message');
+      listEl.removeAttribute('title');
+    });
+  }
+
+  _animateReject(key, side) {
+    var selector = '[data-transfer-side="' + side + '"][data-mts-item-key="' + key + '"]';
+    var itemEl = this._root.querySelector(selector);
+    if (!itemEl) return;
+
+    itemEl.classList.remove('mts-transferlist__item--reject');
+    void itemEl.offsetWidth;
+    itemEl.classList.add('mts-transferlist__item--reject');
+    setTimeout(function () {
+      itemEl.classList.remove('mts-transferlist__item--reject');
+    }, 360);
+  }
+
+  _normalizeItems(items) {
+    var list = Array.isArray(items) ? items : [];
+    var self = this;
+
+    return list.map(function (item) {
+      var normalizedItem = item;
+      if (!normalizedItem || typeof normalizedItem !== 'object' || Array.isArray(normalizedItem)) {
+        normalizedItem = { value: item, label: String(item) };
+      }
+
+      return {
+        key: self._createInternalKey(),
+        item: normalizedItem
+      };
+    });
+  }
+
+  _findEntryByKey(list, key) {
+    for (var i = 0; i < list.length; i++) {
+      if (String(list[i].key) === String(key)) return list[i];
+    }
+    return null;
+  }
+
+  _resolveDisplayValue(item, config) {
     if (config == null) return '';
     if (typeof config === 'function') return config(item);
     return item && item[config] != null ? item[config] : '';
   }
 
-  _findItemByKey(list, key) {
+  _resolveValidateValue(item) {
+    if (typeof this.validateKey === 'function') return this.validateKey(item);
+    if (typeof this.validateKey === 'string' && item && item[this.validateKey] != null) return item[this.validateKey];
+    return JSON.stringify(item);
+  }
+
+  _applyItemDataset(itemEl, item) {
+    Object.entries(item).forEach(function (entry) {
+      var key = entry[0];
+      var value = entry[1];
+      itemEl.setAttribute('data-' + this._toDataAttributeName(key), this._serializeDatasetValue(value));
+    }, this);
+  }
+
+  _findEntry(list, itemOrKey) {
+    var entry = this._findEntryByKey(list, itemOrKey);
+    if (entry) return entry;
+
     for (var i = 0; i < list.length; i++) {
-      if (String(this._getItemKey(list[i])) === String(key)) return list[i];
+      if (list[i].item === itemOrKey) return list[i];
     }
     return null;
   }
 
-  _removeItemByKey(list, key) {
-    for (var i = 0; i < list.length; i++) {
-      if (String(this._getItemKey(list[i])) === String(key)) {
-        list.splice(i, 1);
-        return true;
-      }
-    }
-    return false;
+  _serializeDatasetValue(value) {
+    if (value === null || value === undefined) return 'null';
+    if (typeof value === 'object') return JSON.stringify(value);
+    return String(value);
+  }
+
+  _toDataAttributeName(key) {
+    return String(key)
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .replace(/[_\s]+/g, '-')
+      .replace(/[^a-zA-Z0-9-]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+      .toLowerCase();
+  }
+
+  _createInternalKey() {
+    var timestamp = Date.now();
+    var guid = (window.crypto && typeof window.crypto.randomUUID === 'function')
+      ? window.crypto.randomUUID().replace(/-/g, '').slice(0, 8)
+      : Math.random().toString(36).slice(2, 10);
+    var random = Math.floor(Math.random() * 1000000000);
+    return 'mts_itemKey_' + timestamp + '_' + guid + '_' + random;
   }
 
   _emit(event, detail) {

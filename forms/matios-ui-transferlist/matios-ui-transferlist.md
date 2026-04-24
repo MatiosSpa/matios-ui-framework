@@ -10,8 +10,8 @@ Sirve para patrones tipo:
 
 Ideal para casos como:
 - asignar perfiles a un rol
-- mover elementos entre disponibles y seleccionados
-- validar reglas antes del traslado
+- mover elementos entre origen y seleccionados
+- bloquear duplicados por una llave de validacion
 
 ---
 
@@ -28,53 +28,49 @@ Ideal para casos como:
 ## Uso basico
 
 ```js
-const transfer = new MTS.TransferList('#my-transfer', {
+new MTS.TransferList('#my-transfer', {
   label: 'Perfiles',
-  availableTitle: 'Disponibles',
+  originTitle: 'Disponibles',
   selectedTitle: 'Seleccionados',
-  availableItems: [
-    { id: 'a', label: 'Perfil A', description: 'Modulo usuarios' },
-    { id: 'b', label: 'Perfil B', description: 'Modulo documentos' }
+  originDataSource: [
+    { nombre: 'Perfil A', detalle: 'Modulo usuarios' },
+    { nombre: 'Perfil B', detalle: 'Modulo documentos' }
   ],
-  selectedItems: [],
-  itemKey: 'id',
-  itemLabel: 'label',
-  itemDescription: 'description'
+  selectedDataSource: [],
+  itemLabel: 'nombre',
+  itemDescription: 'detalle'
 });
 ```
 
 ---
 
-## Validacion antes de mover
+## Validacion unica en destino
 
-`beforeTransfer` permite bloquear una transferencia.
-
-Puede devolver:
-- `true`: permite mover
-- `false`: bloquea
-- `string`: bloquea y usa el string como mensaje
+`validateUnique` permite impedir duplicados en la lista de seleccionados.
 
 ```js
 new MTS.TransferList('#profiles-transfer', {
-  availableItems: profiles,
-  selectedItems: [],
-  itemKey: 'id',
+  originDataSource: profiles,
+  selectedDataSource: [],
   itemLabel: 'name',
   itemDescription: 'description',
-  beforeTransfer: ({ item, to, selectedItems }) => {
-    if (to !== 'selected') return true;
-
-    const duplicatedModule = selectedItems.some((selected) =>
-      selected.moduleId === item.moduleId
-    );
-
-    if (duplicatedModule) {
-      return 'Ya existe un perfil seleccionado para ese modulo.';
-    }
-
-    return true;
+  validateUnique: true,
+  validateKey: 'moduleId',
+  duplicateMessage: 'Ya existe un perfil para ese modulo.',
+  onRequestItem: function (item, moved) {
+    console.log(item, moved);
   }
 });
+```
+
+`validateKey` puede ser:
+- `string`: usa una propiedad del item
+- `function`: devuelve el valor a comparar
+
+```js
+validateKey: function (item) {
+  return item.id + '_' + item.creationDate;
+}
 ```
 
 ---
@@ -85,22 +81,22 @@ new MTS.TransferList('#profiles-transfer', {
 |-----------|------|---------|-------------|
 | `label` | `string` | `''` | Label superior |
 | `hint` | `string` | `''` | Texto de ayuda |
-| `availableTitle` | `string` | `'Disponibles'` | Titulo lista izquierda |
-| `selectedTitle` | `string` | `'Seleccionados'` | Titulo lista derecha |
-| `availableItems` | `array` | `[]` | Items disponibles |
-| `selectedItems` | `array` | `[]` | Items seleccionados |
-| `value` | `array` | `[]` | Alias de `selectedItems` |
-| `options` | `array` | `[]` | Alias de `availableItems` |
-| `itemKey` | `string|function` | `value/id/label` | Clave unica por item |
-| `itemLabel` | `string|function` | `'label'` | Texto principal |
-| `itemDescription` | `string|function` | `'description'` | Texto secundario |
-| `itemMeta` | `string|function` | `null` | Meta a la derecha |
+| `originTitle` | `string` | `'Origin'` | Titulo lista origen |
+| `selectedTitle` | `string` | `'Selected'` | Titulo lista seleccionada |
+| `originEmptyText` | `string` | `'No items available'` | Texto vacio lista origen |
+| `selectedEmptyText` | `string` | `'No items selected'` | Texto vacio lista seleccionada |
+| `originDataSource` | `array` | `[]` | Data source inicial del origen |
+| `selectedDataSource` | `array` | `[]` | Data source inicial de seleccionados |
+| `itemLabel` | `string\|function` | `'label'` | Texto principal visible |
+| `itemDescription` | `string\|function` | `'description'` | Texto secundario visible |
 | `renderItem` | `function` | `null` | Render custom del item |
-| `draggable` | `boolean` | `true` | Permite drag & drop |
-| `disabled` | `boolean` | `false` | Deshabilita toda la interaccion |
-| `beforeTransfer` | `function` | `null` | Hook de validacion antes del traslado |
-| `onChange` | `function` | - | Evento de cambio |
-| `onInvalidTransfer` | `function` | - | Evento cuando se bloquea un traslado |
+| `showMoveButtons` | `boolean` | `true` | Muestra u oculta los botones laterales |
+| `draggable` | `boolean` | `true` | Permite drag and drop |
+| `disabled` | `boolean` | `false` | Deshabilita la interaccion |
+| `validateUnique` | `boolean` | `false` | Activa validacion unica en destino |
+| `validateKey` | `string\|function` | `null` | Llave usada para comparar duplicados |
+| `duplicateMessage` | `string` | `'Duplicate item'` | Mensaje visual cuando el drop esta bloqueado |
+| `onRequestItem` | `function` | `null` | Callback unico: recibe `(item, moved)` |
 
 ---
 
@@ -111,12 +107,15 @@ const transfer = new MTS.TransferList('#transfer', { ... });
 
 transfer.getValue();
 transfer.getSelectedItems();
+transfer.getOriginItems();
 transfer.getAvailableItems();
-transfer.setItems({ availableItems: [], selectedItems: [] });
+transfer.setItems({ originDataSource: [], selectedDataSource: [] });
 transfer.setValue([]);
-transfer.moveToSelected('item-id');
-transfer.moveToAvailable('item-id');
+transfer.moveToSelected(itemOrInternalKey);
+transfer.moveToOrigin(itemOrInternalKey);
+transfer.moveToAvailable(itemOrInternalKey);
 transfer.moveAllToSelected();
+transfer.moveAllToOrigin();
 transfer.moveAllToAvailable();
 transfer.clear();
 transfer.enable();
@@ -126,22 +125,25 @@ transfer.destroy();
 
 ---
 
-## Eventos
+## Data attributes automáticos
 
-```js
-transfer.on('change', (e) => {
-  console.log(e.detail.selectedItems);
-});
+Cada item renderizado recibe:
 
-transfer.on('invalid-transfer', (e) => {
-  console.log(e.detail.message);
-});
-```
+- `data-mts-item-key` con una llave interna automatica
+- todos los campos del registro convertidos automaticamente a `data-*`
 
-Tambien emite eventos DOM:
+La componente no impone nombres fijos de negocio. Toma el datasource real y lo baja al `div` raiz del item.
 
+---
+
+## Eventos DOM
+
+- `mts:transferlist:request-item`
 - `mts:transferlist:change`
 - `mts:transferlist:invalid-transfer`
+- `mts:transferlist:selection-change`
+
+`onRequestItem(item, moved)` es la API principal recomendada para integracion.
 
 ---
 
@@ -149,4 +151,5 @@ Tambien emite eventos DOM:
 
 | Version | Descripcion |
 |---------|-------------|
+| 2.0.0 | Nueva API con `originDataSource`, `selectedDataSource`, validacion unica y llave interna automatica |
 | 1.0.0 | Release inicial de TransferList |

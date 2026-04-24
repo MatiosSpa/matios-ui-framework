@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.HttpClient — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-fileupload/matios-ui-fileupload.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-toast/matios-ui-toast.css">
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-fileupload/matios-ui-fileupload.js"></script>
+  <script src="../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+  <script src="./matios-ui-httpclient.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      async function _initSW() {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for (const r of regs) {
+          if (r.scriptURL?.includes('sw-http-samples') && !r.scriptURL?.includes('/utilities/matios-ui-httpclient/')) {
+            await r.unregister();
+          }
+        }
+        const reg = await navigator.serviceWorker.register('./sw-http-samples.js', { scope: './' });
+        console.log('[sw-http-samples] Registrado — scope:', reg.scope);
+      }
+      _initSW().catch(err => console.warn('[sw-http-samples] No disponible:', err.message));
+    }
+  </script>
+</head>
+<body>
+<div class="demo-theme">
+  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
+  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
+  <button class="demo-btn-sm" onclick="setMode('high-contrast')">HC</button>
+  <button class="demo-btn-sm demo-btn-sep">—</button>
+  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
+  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
+  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
+  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
+</div>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.HttpClient</h1>
+    <p>HTTP client con contrato consistente, timeout, retry, interceptores, upload y download usando el patrón estándar de demo.</p>
+    <div class="demo-header-actions">
+      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-httpclient.md')">
+        <i class="mts-icon mts-icon-file-text mts-icon--sm"></i> Docs
+      </button>
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <div class="demo-section"><div class="demo-section-title">1 — GET request</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — POST request</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Error handling</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Retry automático</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Interceptores</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Instancia global</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title">7 — Upload con progreso</div><div id="tabs-s7"></div></div>
+  <div class="demo-section"><div class="demo-section-title">8 — Download</div><div id="tabs-s8"></div></div>
+  <div class="demo-section"><div class="demo-section-title">9 — Callbacks por request</div><div id="tabs-s9"></div></div>
+</div>
+
+<script>
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function indentHtml(html) {
+  var indent = 0;
+  var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function htmlTab(previewHtml) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(indentHtml(previewHtml)) +
+  '</pre>';
+}
+
+function jsTab(code) {
+  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
+    esc(code) +
+  '</pre>';
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '320px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview', content: previewHtml },
+      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
+      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+    ]
+  });
+
+  if (typeof initFn === 'function') initFn();
+}
+
+function setResult(id, payload, ok) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  if (typeof payload === 'string') {
+    el.textContent = payload;
+  } else {
+    el.textContent = JSON.stringify(payload, null, 2);
+  }
+  el.style.color = ok === true ? 'var(--mts-color-success)' : (ok === false ? 'var(--mts-color-danger)' : '');
+}
+
+const http = new MTS.HttpClient({
+  baseUrl: '/utilities/matios-ui-httpclient/api',
+  timeout: 8000,
+  debug: true,
+});
+
+var preview_s1 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<button id="btn-get"></button>' +
+    '</div>' +
+    '<div class="result-box" id="res-get">— presiona el botón —</div>' +
+  '</div>';
+
+var js_s1 =
+  "const http = new MTS.HttpClient({\n" +
+  "  baseUrl: '/utilities/matios-ui-httpclient/api',\n" +
+  "  timeout: 8000,\n" +
+  "  debug:   true,\n" +
+  "});\n\n" +
+  "const res = await http.get('/users/1');\n\n" +
+  "if (res.success) {\n" +
+  "  console.log(res.data.name);\n" +
+  "} else {\n" +
+  "  console.error(res.message);\n" +
+  "}";
+
+var preview_s2 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<button id="btn-post"></button>' +
+    '</div>' +
+    '<div class="result-box" id="res-post">— presiona el botón —</div>' +
+  '</div>';
+
+var js_s2 =
+  "const http = new MTS.HttpClient({\n" +
+  "  baseUrl: '/utilities/matios-ui-httpclient/api',\n" +
+  "  timeout: 8000,\n" +
+  "  debug:   true,\n" +
+  "});\n\n" +
+  "const res = await http.post('/posts', {\n" +
+  "  title:  'Mi post',\n" +
+  "  body:   'Contenido del post',\n" +
+  "  userId: 1,\n" +
+  "});\n\n" +
+  "// res = { success: true, status: 201, message: null, data: { id: 101, ... } }";
+
+var preview_s3 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<button id="btn-error"></button>' +
+      '<button id="btn-timeout"></button>' +
+    '</div>' +
+    '<div class="result-box" id="res-error">— presiona un botón —</div>' +
+  '</div>';
+
+var js_s3 =
+  "const http = new MTS.HttpClient({\n" +
+  "  baseUrl: '/utilities/matios-ui-httpclient/api',\n" +
+  "  timeout: 8000,\n" +
+  "  debug:   true,\n" +
+  "});\n\n" +
+  "const res = await http.get('/esto-no-existe');\n\n" +
+  "if (!res.success) {\n" +
+  "  MTS.Toast.show({ message: res.message, variant: 'danger' });\n" +
+  "}\n\n" +
+  "const httpTimeout = new MTS.HttpClient({\n" +
+  "  baseUrl: '/utilities/matios-ui-httpclient/api',\n" +
+  "  timeout: 1000,\n" +
+  "});\n" +
+  "const timeoutRes = await httpTimeout.get('/slow');";
+
+var preview_s4 = '<div class="result-box">Ejemplo conceptual. Revisa el código JavaScript para la configuración de retry automático y backoff.</div>';
+var js_s4 =
+  "const http = new MTS.HttpClient({\n" +
+  "  baseUrl: 'https://api.miapp.com',\n" +
+  "  retry:   3,\n" +
+  "  onRetry: (res) => console.log('Reintentando...', res.attempt),\n" +
+  "});\n\n" +
+  "const res = await http.get('/endpoint-inestable');";
+
+var preview_s5 = '<div class="result-box">Ejemplo conceptual. Los interceptores permiten agregar headers, auth y manejo global de respuestas sin repetir lógica.</div>';
+var js_s5 =
+  "const http = new MTS.HttpClient({ baseUrl: 'https://api.miapp.com' });\n\n" +
+  "http.before((req) => {\n" +
+  "  req.headers['Authorization'] = 'Bearer ' + getTokenActual();\n" +
+  "  req.headers['X-App-Version'] = '2.0.0';\n" +
+  "  return req;\n" +
+  "});\n\n" +
+  "http.after((res) => {\n" +
+  "  if (res.status === 401) redirectToLogin();\n" +
+  "  return res;\n" +
+  "});";
+
+var preview_s6 = '<div class="result-box">Ejemplo conceptual. Puedes crear una instancia global una vez y reutilizarla en toda la aplicación.</div>';
+var js_s6 =
+  "MTS.HttpClient.create({\n" +
+  "  baseUrl:   'https://api.miapp.com',\n" +
+  "  timeout:   10000,\n" +
+  "  retry:     2,\n" +
+  "  debug:     true,\n" +
+  "  headers:   { 'X-App': 'MiApp' },\n" +
+  "});\n\n" +
+  "const users = await MTS.HttpClient.instance.get('/users');";
+
+var preview_s7 =
+  '<div class="demo-stack">' +
+    '<div id="fu-upload"></div>' +
+    '<div class="demo-row">' +
+      '<button id="btn-upload"></button>' +
+    '</div>' +
+    '<div class="result-box" id="res-upload">— selecciona un archivo y presiona Subir —</div>' +
+  '</div>';
+
+var js_s7 =
+  "const http = new MTS.HttpClient({\n" +
+  "  baseUrl: '/utilities/matios-ui-httpclient/api',\n" +
+  "  timeout: 8000,\n" +
+  "  debug:   true,\n" +
+  "});\n\n" +
+  "const fu = new MTS.FileUpload('#fu-upload', {\n" +
+  "  accept:   'image/*,.pdf',\n" +
+  "  multiple: false,\n" +
+  "  maxSize:  10,\n" +
+  "  preview:  true,\n" +
+  "});\n\n" +
+  "const res = await http.upload('/upload', file, {\n" +
+  "  fieldName:  'archivo',\n" +
+  "  onProgress: (pct) => console.log('Progreso:', pct),\n" +
+  "});";
+
+var preview_s8 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<button id="btn-download"></button>' +
+    '</div>' +
+    '<div class="result-box" id="res-download">— presiona el botón —</div>' +
+  '</div>';
+
+var js_s8 =
+  "const http = new MTS.HttpClient({\n" +
+  "  baseUrl: '/utilities/matios-ui-httpclient/api',\n" +
+  "  timeout: 8000,\n" +
+  "  debug:   true,\n" +
+  "});\n\n" +
+  "const res = await http.download('/download', 'export.json');\n\n" +
+  "if (res.success) {\n" +
+  "  const a = document.createElement('a');\n" +
+  "  a.href = res.data.url;\n" +
+  "  a.download = res.data.filename;\n" +
+  "  a.click();\n" +
+  "  URL.revokeObjectURL(res.data.url);\n" +
+  "}";
+
+var preview_s9 = '<div class="result-box">Ejemplo conceptual. Cada request puede definir callbacks específicos además de los callbacks globales.</div>';
+var js_s9 =
+  "const http = new MTS.HttpClient({\n" +
+  "  baseUrl: '/utilities/matios-ui-httpclient/api',\n" +
+  "  timeout: 8000,\n" +
+  "  debug:   true,\n" +
+  "});\n\n" +
+  "const res = await http.get('/users', {\n" +
+  "  onSuccess: (res) => MTS.Toast.show({ message: 'OK', variant: 'success' }),\n" +
+  "  onError:   (res) => MTS.Toast.show({ message: res.message, variant: 'danger' }),\n" +
+  "});\n\n" +
+  "http.on('error', (res) => console.error(res));";
+
+makeSection('tabs-s1', preview_s1, js_s1, function(){
+  new MTS.Button('#btn-get', {
+    label: 'Ejecutar GET',
+    variant: 'primary',
+    iconLeft: MTS.Icon.get('download')
+  });
+  document.getElementById('btn-get').addEventListener('click', async function(){
+    setResult('res-get', 'Cargando...');
+    const res = await http.get('/users/1');
+    setResult('res-get', res, res.success);
+  });
+});
+
+makeSection('tabs-s2', preview_s2, js_s2, function(){
+  new MTS.Button('#btn-post', {
+    label: 'Ejecutar POST',
+    variant: 'success',
+    iconLeft: MTS.Icon.get('upload')
+  });
+  document.getElementById('btn-post').addEventListener('click', async function(){
+    setResult('res-post', 'Enviando...');
+    const res = await http.post('/posts', { title: 'Mi post', body: 'Contenido', userId: 1 });
+    setResult('res-post', res, res.success);
+  });
+});
+
+makeSection('tabs-s3', preview_s3, js_s3, function(){
+  new MTS.Button('#btn-error', {
+    label: 'Forzar 404',
+    variant: 'danger',
+    iconLeft: MTS.Icon.get('warning')
+  });
+  new MTS.Button('#btn-timeout', {
+    label: 'Forzar timeout',
+    variant: 'secondary',
+    iconLeft: MTS.Icon.get('clock')
+  });
+  document.getElementById('btn-error').addEventListener('click', async function(){
+    setResult('res-error', 'Ejecutando...');
+    const res = await http.get('/error');
+    setResult('res-error', res, res.success);
+  });
+  document.getElementById('btn-timeout').addEventListener('click', async function(){
+    setResult('res-error', 'Esperando timeout (1s)...');
+    const httpTimeout = new MTS.HttpClient({ baseUrl: '/utilities/matios-ui-httpclient/api', timeout: 1000 });
+    const res = await httpTimeout.get('/slow');
+    setResult('res-error', res, res.success);
+  });
+});
+
+makeSection('tabs-s4', preview_s4, js_s4, null, '240px');
+makeSection('tabs-s5', preview_s5, js_s5, null, '260px');
+makeSection('tabs-s6', preview_s6, js_s6, null, '240px');
+
+const fuUpload = { instance: null };
+makeSection('tabs-s7', preview_s7, js_s7, function(){
+  new MTS.Button('#btn-upload', {
+    label: 'Subir archivo',
+    variant: 'primary',
+    iconLeft: MTS.Icon.get('upload')
+  });
+  fuUpload.instance = new MTS.FileUpload('#fu-upload', {
+    accept: 'image/*,.pdf',
+    multiple: false,
+    maxSize: 10,
+    hint: 'PNG, JPG o PDF hasta 10MB',
+    preview: true,
+  });
+  document.getElementById('btn-upload').addEventListener('click', async function(){
+    const files = fuUpload.instance.getFiles();
+    if (!files.length) {
+      setResult('res-upload', 'Selecciona un archivo primero', false);
+      return;
+    }
+    setResult('res-upload', 'Subiendo... 0%');
+    const res = await http.upload('/upload', files[0], {
+      fieldName: 'archivo',
+      onProgress: function(pct){ setResult('res-upload', 'Subiendo... ' + pct + '%'); }
+    });
+    setResult('res-upload', res, res.success);
+    if (res.success) MTS.Toast?.show({ message: 'Archivo subido correctamente', variant: 'success', duration: 3000 });
+  });
+}, '420px');
+
+makeSection('tabs-s8', preview_s8, js_s8, function(){
+  new MTS.Button('#btn-download', {
+    label: 'Descargar archivo',
+    variant: 'secondary',
+    iconLeft: MTS.Icon.get('download')
+  });
+  document.getElementById('btn-download').addEventListener('click', async function(){
+    setResult('res-download', 'Descargando...');
+    const res = await http.download('/download', 'export.json');
+    if (res.success) {
+      const a = document.createElement('a');
+      a.href = res.data.url;
+      a.download = res.data.filename;
+      a.click();
+      URL.revokeObjectURL(res.data.url);
+      setResult('res-download', '✓ Descarga iniciada — ' + res.data.filename, true);
+    } else {
+      setResult('res-download', res, false);
+    }
+  });
+});
+
+makeSection('tabs-s9', preview_s9, js_s9, null, '240px');
+</script>
+</body>
+</html>

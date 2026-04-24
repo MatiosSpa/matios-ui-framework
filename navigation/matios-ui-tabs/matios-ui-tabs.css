@@ -3,7 +3,7 @@
    Version: 1.0.0
    ============================================================ */
 
-.mts-tabs { display: flex; flex-direction: column; width: 100%; }
+.mts-tabs { display: flex; flex-direction: column; width: 100%; min-height: 0; }
 .mts-tabs--vertical { flex-direction: row; }
 
 /* NAV */
@@ -53,17 +53,21 @@
 .mts-tabs--card .mts-tabs__tab--active { background: var(--mts-bg-surface); border-color: var(--mts-border-color); color: var(--mts-text-primary); }
 
 /* PANELS */
-.mts-tabs__panels { flex: 1; }
-.mts-tabs__panel { display: none; padding: var(--mts-space-4) 0; }
+.mts-tabs__panels { flex: 1; min-height: 0; }
+.mts-tabs__panel { display: none; padding: var(--mts-space-4) 0; min-height: 0; box-sizing: border-box; }
 .mts-tabs--vertical .mts-tabs__panel { padding: 0 var(--mts-space-4); }
 .mts-tabs__panel--active { display: block; }
 
-/* Cuando el contenedor tiene height fijo, el panel activo ocupa
-   todo ese espacio y maneja su propio scroll interno */
-.mts-tabs__panels[style*="height"] .mts-tabs__panel--active {
+/* Alto fijo por defecto para mantener orden visual.
+   El contenido desborda con scroll interno en el panel activo. */
+.mts-tabs--fixed-panels .mts-tabs__panels {
+  height: var(--mts-tabs-panel-height, 360px);
+  overflow: hidden;
+}
+.mts-tabs--fixed-panels .mts-tabs__panel--active {
   height: 100%;
-  overflow-y: auto;
-  box-sizing: border-box;
+  overflow: auto;
+  scrollbar-gutter: stable;
 }
 
 /* ── Fix borde izquierdo del panel en vertical (todos los tabs) ── */
@@ -90,11 +94,12 @@
 }
 .mts-tabs--stretch .mts-tabs__panels {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
 }
 .mts-tabs--stretch .mts-tabs__panel--active {
   height: 100%;
   overflow: auto;
+  scrollbar-gutter: stable;
 }
 
 /* El borde izquierdo lo maneja el container .mts-tabs__panels,

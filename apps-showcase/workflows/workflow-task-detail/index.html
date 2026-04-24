@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Detalle de tarea - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-toast/matios-ui-toast.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+</head>
+<body>
+  <main class="mts-p-4">
+    <div id="workflow-task-detail-panel"></div>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    new MTS.Card('#workflow-task-detail-panel', {
+      title: 'Detalle de tarea',
+      subtitle: 'Revision de workflow',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+          '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
+            '<div class="mts-d-flex mts-items-center mts-gap-2 mts-flex-wrap">' +
+              MTS.Badge.html('Alta prioridad', 'danger', 'sm') +
+              MTS.Badge.html('Pendiente', 'warning', 'sm') +
+              MTS.Badge.html('Acceso temporal', 'info', 'sm') +
+            '</div>' +
+            '<p class="mts-text-md mts-text-muted mts-m-0">WF-104 llega desde Roles y hoy espera tu revision de seguridad para habilitar Billing Editor solo durante el cierre operativo.</p>' +
+          '</div>' +
+          '<div class="mts-grid mts-grid--gap-md">' +
+            '<section class="mts-surface mts-g-col-12 mts-g-col-xl-8 mts-d-flex mts-flex-col mts-gap-3">' +
+              '<div>' +
+                '<strong class="mts-text-md mts-text-primary">Resumen</strong>' +
+                '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Datos base de la tarea que llega a la bandeja.</p>' +
+              '</div>' +
+              '<div class="mts-grid mts-grid--gap-md">' +
+                infoCell('Workflow', 'Billing close exception') +
+                infoCell('Solicitante', 'Camila Soto') +
+                infoCell('Modulo origen', 'Roles') +
+                infoCell('Etapa actual', 'Security review') +
+                infoCell('Modo de decision', 'Any 1 of 2 approvers') +
+                infoCell('SLA', '2 horas') +
+              '</div>' +
+            '</section>' +
+            '<section class="mts-surface mts-g-col-12 mts-g-col-xl-4 mts-d-flex mts-flex-col mts-gap-3">' +
+              '<div>' +
+                '<strong class="mts-text-md mts-text-primary">Routing actual</strong>' +
+                '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Como cae esta tarea en tu bandeja.</p>' +
+              '</div>' +
+              '<div class="mts-grid mts-grid--gap-md">' +
+                routeCell('Aprobadores', 'Tu usuario y Security lead') +
+                routeCell('Escalacion', 'Security lead despues de 45 min') +
+                routeCell('Siguiente paso', 'Revocacion automatica y audit log') +
+              '</div>' +
+            '</section>' +
+          '</div>' +
+          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+            '<div>' +
+              '<strong class="mts-text-md mts-text-primary">Contexto para decidir</strong>' +
+              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Lo minimo necesario para aprobar, rechazar o pedir cambios sin salir del detalle.</p>' +
+            '</div>' +
+            '<p class="mts-text-sm mts-text-muted mts-m-0">Finance necesita editar invoices y revisar el metodo principal del workspace durante una ventana acotada al cierre. El permiso pedido no abre settings globales ni cambios de seguridad.</p>' +
+            '<ul class="mts-d-flex mts-flex-col mts-gap-2 mts-p-0 mts-m-0">' +
+              '<li class="mts-text-sm mts-text-secondary">Alcance: invoice edit y payment method review.</li>' +
+              '<li class="mts-text-sm mts-text-secondary">Restriccion: sin acceso a security settings.</li>' +
+              '<li class="mts-text-sm mts-text-secondary">Control: expiracion automatica al cierre del ciclo.</li>' +
+            '</ul>' +
+            '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+              noteRow('Hoy 08:10', 'Finance reporto bloqueo para reconciliar invoices pendientes del mes.') +
+              noteRow('Hoy 08:22', 'Ops confirmo que Billing Editor cubre el caso sin ampliar el alcance.') +
+              noteRow('Ayer 19:40', 'Security pidio expiracion automatica si la tarea se aprueba.') +
+            '</div>' +
+          '</section>' +
+          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+            '<div>' +
+              '<strong class="mts-text-md mts-text-primary">Etapas del workflow</strong>' +
+              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Secuencia de la instancia actual.</p>' +
+            '</div>' +
+            '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+              timelineRow('completed', 'Solicitud creada', 'Camila Soto', 'Hoy 08:00', 'La solicitud se abrio desde Roles con motivo y alcance temporal.') +
+              timelineRow('completed', 'Validacion manager', 'Laura Herrera', 'Hoy 08:07', 'Manager valido la necesidad operativa para el cierre actual.') +
+              timelineRow('current', 'Security review', 'Tu tarea', 'Ahora', 'La instancia espera tu decision o una derivacion al segundo reviewer.') +
+              timelineRow('pending', 'Revocar y cerrar', 'Politica automatica', 'Post cierre', 'Si se aprueba, el acceso vence y deja registro en auditoria.') +
+            '</div>' +
+          '</section>' +
+          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+            '<div>' +
+              '<strong class="mts-text-md mts-text-primary">Decision</strong>' +
+              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">La recomendacion operativa es aprobar con expiracion automatica y sin ampliar el permiso fuera de Billing Editor.</p>' +
+            '</div>' +
+            '<ul class="mts-d-flex mts-flex-col mts-gap-2 mts-p-0 mts-m-0">' +
+              '<li class="mts-text-sm mts-text-secondary">Aprueba si el acceso temporal alcanza para el cierre sin tocar settings globales.</li>' +
+              '<li class="mts-text-sm mts-text-secondary">Pide cambios si falta acotar vigencia o justificar mejor el alcance.</li>' +
+              '<li class="mts-text-sm mts-text-secondary">Rechaza si el requester necesita un permiso mas amplio que el acordado.</li>' +
+            '</ul>' +
+          '</section>' +
+        '</div>',
+      footerAlign: 'between',
+      footer: [
+        {
+          label: 'Volver a inbox',
+          variant: 'ghost',
+          icon: MTS.Icon.get('arrow-left'),
+          onClick: function () { openScreen('../workflow-inbox/index.html'); }
+        },
+        {
+          label: 'Abrir modulo origen',
+          variant: 'secondary',
+          icon: MTS.Icon.get('external-link'),
+          onClick: function () { openScreen('../../roles/role-edit/index.html'); }
+        },
+        {
+          label: 'Solicitar cambios',
+          variant: 'secondary',
+          icon: MTS.Icon.get('edit-3'),
+          onClick: function () {
+            notify('info', 'Se solicitaron cambios para WF-104.');
+          }
+        },
+        {
+          label: 'Rechazar',
+          variant: 'ghost',
+          icon: MTS.Icon.get('alert'),
+          onClick: function () {
+            notify('danger', 'WF-104 quedo rechazada en el ejemplo.');
+          }
+        },
+        {
+          label: 'Aprobar',
+          variant: 'primary',
+          icon: MTS.Icon.get('check-circle'),
+          onClick: function () {
+            notify('success', 'WF-104 quedo aprobada con expiracion automatica.');
+          }
+        }
+      ]
+    });
+
+    function infoCell(label, value) {
+      return '<div class="mts-g-col-12 mts-g-col-md-6 mts-g-col-xl-4"><div class="mts-surface mts-p-3 mts-d-flex mts-flex-col mts-gap-1"><span class="mts-text-xs mts-text-muted">' + label + '</span><strong class="mts-text-sm mts-text-primary">' + value + '</strong></div></div>';
+    }
+
+    function noteRow(date, text) {
+      return '<article class="mts-surface mts-p-3 mts-d-flex mts-flex-col mts-gap-1"><span class="mts-text-xs mts-text-muted">' + date + '</span><p class="mts-text-sm mts-text-secondary mts-m-0">' + text + '</p></article>';
+    }
+
+    function timelineRow(state, title, owner, when, copy) {
+      var badge = state === 'completed' ? 'success' : state === 'current' ? 'warning' : 'neutral';
+      return '' +
+        '<article class="mts-surface mts-p-3 mts-d-flex mts-flex-col mts-gap-2">' +
+          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3 mts-flex-wrap">' +
+            '<strong class="mts-text-sm mts-text-primary">' + title + '</strong>' +
+            '<span class="mts-badge mts-badge--' + badge + ' mts-badge--sm">' + when + '</span>' +
+          '</div>' +
+          '<span class="mts-text-xs mts-text-muted">' + owner + '</span>' +
+          '<p class="mts-text-sm mts-text-secondary mts-m-0">' + copy + '</p>' +
+        '</article>';
+    }
+
+    function routeCell(label, value) {
+      return '<div class="mts-g-col-12"><div class="mts-surface mts-p-3 mts-d-flex mts-flex-col mts-gap-1"><span class="mts-text-xs mts-text-muted">' + label + '</span><strong class="mts-text-sm mts-text-primary">' + value + '</strong></div></div>';
+    }
+
+    function notify(variant, message) {
+      MTS.Toast.show({
+        variant: variant,
+        message: message,
+        position: 'bottom-right'
+      });
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

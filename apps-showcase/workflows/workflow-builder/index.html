@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Workflow Builder - Matios UI</title>
+  <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-sortablelist/matios-ui-sortablelist.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-toast/matios-ui-toast.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../display/matios-ui-sortablelist/matios-ui-sortablelist.js"></script>
+  <script src="../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+</head>
+<body>
+  <main class="mts-p-4">
+    <div id="workflow-builder-panel"></div>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    var ASSIGNMENT_TYPE_OPTIONS = [
+      { value: 'user', label: 'Usuario' },
+      { value: 'group', label: 'Grupo' },
+      { value: 'role', label: 'Rol' },
+      { value: 'manager', label: 'Manager' },
+      { value: 'owner', label: 'Owner' },
+      { value: 'policy', label: 'Politica automatica' }
+    ];
+
+    var APPROVAL_RULE_OPTIONS = [
+      { value: 'single', label: 'Uno aprueba' },
+      { value: 'all', label: 'Todos aprueban' },
+      { value: 'majority', label: 'Mayoria' },
+      { value: 'sequential', label: 'Secuencial' },
+      { value: 'parallel', label: 'Paralelo' },
+      { value: 'automatic', label: 'Automatica' }
+    ];
+
+    var APPROVER_OPTIONS_BY_TYPE = {
+      user: [
+        { value: 'camila-soto', label: 'Camila Soto' },
+        { value: 'laura-herrera', label: 'Laura Herrera' },
+        { value: 'diego-araya', label: 'Diego Araya' },
+        { value: 'matias-gomez', label: 'Matias Gomez' }
+      ],
+      group: [
+        { value: 'security-reviewers', label: 'Security Reviewers' },
+        { value: 'finance-approvers', label: 'Finance Approvers' },
+        { value: 'legal-ops', label: 'Legal Ops' },
+        { value: 'workspace-admins', label: 'Workspace Admins' }
+      ],
+      role: [
+        { value: 'billing-owner', label: 'Billing Owner' },
+        { value: 'security-admin', label: 'Security Admin' },
+        { value: 'legal-lead', label: 'Legal Lead' },
+        { value: 'ops-manager', label: 'Ops Manager' }
+      ],
+      manager: [
+        { value: 'manager-requester', label: 'Manager del solicitante' }
+      ],
+      owner: [
+        { value: 'module-owner', label: 'Owner del modulo' },
+        { value: 'workspace-owner', label: 'Owner del workspace' }
+      ],
+      policy: [
+        { value: 'auto-policy', label: 'Politica automatica' }
+      ]
+    };
+
+    var builderState = {
+      name: 'Billing close access exception',
+      type: 'access',
+      origin: 'roles',
+      description: 'Workflow para acceso temporal de Billing Editor durante cierres operativos, con expiracion automatica y audit log.',
+      stages: [
+        {
+          id: 'stage-requester',
+          title: 'Requester validation',
+          assignmentType: 'manager',
+          approvers: ['manager-requester'],
+          approvalRule: 'single',
+          sla: '30 min',
+          note: 'Confirma necesidad operativa y ventana del permiso.'
+        },
+        {
+          id: 'stage-security',
+          title: 'Security review',
+          assignmentType: 'group',
+          approvers: ['security-reviewers'],
+          approvalRule: 'parallel',
+          sla: '2 h',
+          note: 'Valida alcance del permiso, expiracion y riesgo.'
+        },
+        {
+          id: 'stage-close',
+          title: 'Close and revoke',
+          assignmentType: 'policy',
+          approvers: ['auto-policy'],
+          approvalRule: 'automatic',
+          sla: 'Post close',
+          note: 'Revoca el permiso y registra la accion en audit log.'
+        }
+      ]
+    };
+
+    var selectedStageIndex = 0;
+    var stageList;
+    var workflowNameInput;
+    var workflowTypeSelect;
+    var workflowOriginSelect;
+    var workflowDescriptionInput;
+    var stageTitleInput;
+    var stageAssignmentTypeSelect;
+    var stageApproversSelect;
+    var stageApprovalRuleSelect;
+    var stageSlaInput;
+    var stageNoteInput;
+
+    new MTS.Card('#workflow-builder-panel', {
+      title: 'Workflow Builder',
+      subtitle: 'Definicion de workflow',
+      variant: 'elevated',
+      size: 'lg',
+      body:
+        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+          '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
+            '<div class="mts-d-flex mts-items-center mts-gap-2 mts-flex-wrap">' +
+              '<span id="workflow-builder-badge-status"></span>' +
+              '<span id="workflow-builder-badge-stages"></span>' +
+            '</div>' +
+            '<p class="mts-text-md mts-text-muted mts-m-0">Define el flujo base, ordena las etapas y luego publica una version lista para generar tareas en la bandeja.</p>' +
+          '</div>' +
+          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+            '<div>' +
+              '<strong class="mts-text-md mts-text-primary">Datos base</strong>' +
+              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Nombre, tipo, modulo origen y resumen general del workflow.</p>' +
+            '</div>' +
+            '<div class="mts-grid mts-grid--gap-md">' +
+              '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-name"></div></div>' +
+              '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-type"></div></div>' +
+              '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-origin"></div></div>' +
+              '<div class="mts-g-col-12"><div id="workflow-builder-description"></div></div>' +
+            '</div>' +
+          '</section>' +
+          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+            '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3 mts-flex-wrap">' +
+              '<div>' +
+                '<strong class="mts-text-md mts-text-primary">Etapas</strong>' +
+                '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Ordena la secuencia y luego edita la etapa seleccionada.</p>' +
+              '</div>' +
+              '<div id="workflow-builder-add-stage"></div>' +
+            '</div>' +
+            '<div id="workflow-builder-stages"></div>' +
+          '</section>' +
+          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+            '<div>' +
+              '<strong class="mts-text-md mts-text-primary">Editar etapa seleccionada</strong>' +
+              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0" id="workflow-builder-stage-caption">Selecciona una etapa para ajustar asignacion, aprobadores, regla y SLA.</p>' +
+            '</div>' +
+            '<div class="mts-grid mts-grid--gap-md">' +
+              '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-stage-title"></div></div>' +
+              '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-stage-assignment-type"></div></div>' +
+              '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-stage-approvers"></div></div>' +
+              '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-stage-approval-rule"></div></div>' +
+              '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-stage-sla"></div></div>' +
+              '<div class="mts-g-col-12"><div id="workflow-builder-stage-note"></div></div>' +
+            '</div>' +
+            '<div class="mts-d-flex mts-gap-2 mts-flex-wrap">' +
+              '<div id="workflow-builder-save-stage"></div>' +
+              '<div id="workflow-builder-remove-stage"></div>' +
+            '</div>' +
+          '</section>' +
+          '<div class="mts-grid mts-grid--gap-md">' +
+            '<section class="mts-surface mts-g-col-12 mts-g-col-xl-7 mts-d-flex mts-flex-col mts-gap-3">' +
+              '<div>' +
+                '<strong class="mts-text-md mts-text-primary">Reglas base</strong>' +
+                '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Condiciones que modifican la definicion antes de publicar.</p>' +
+              '</div>' +
+              '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+                ruleRow('Monto mayor a 5000 USD', 'Agrega una revision financiera extra antes del cierre final.') +
+                ruleRow('Permiso sensible', 'Fuerza aprobador de Security en modo any-1-of-2.') +
+                ruleRow('Owner del workspace es requester', 'Salta manager review para no duplicar la decision.') +
+              '</div>' +
+            '</section>' +
+            '<section class="mts-surface mts-g-col-12 mts-g-col-xl-5 mts-d-flex mts-flex-col mts-gap-3">' +
+              '<div>' +
+                '<strong class="mts-text-md mts-text-primary">Resumen</strong>' +
+                '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Estado del borrador listo para guardar o publicar.</p>' +
+              '</div>' +
+              '<div class="mts-grid mts-grid--gap-md">' +
+                summaryCell('Tipo', 'Access') +
+                summaryCell('Etapas', String(builderState.stages.length)) +
+                summaryCell('Patron', 'Secuencial + paralelo') +
+                summaryCell('Fallback', 'Security lead') +
+              '</div>' +
+            '</section>' +
+          '</div>' +
+        '</div>',
+      footerAlign: 'between',
+      footer: [
+        {
+          label: 'Volver a lista',
+          variant: 'ghost',
+          icon: MTS.Icon.get('arrow-left'),
+          onClick: function () { openScreen('../workflow-list/index.html'); }
+        },
+        {
+          label: 'Ver task detail',
+          variant: 'secondary',
+          icon: MTS.Icon.get('layout'),
+          onClick: function () { openScreen('../workflow-task-detail/index.html'); }
+        },
+        {
+          label: 'Guardar borrador',
+          variant: 'secondary',
+          icon: MTS.Icon.get('save'),
+          onClick: function () {
+            syncBuilderState();
+            if (saveSelectedStage(true)) {
+              notify('success', 'La definicion quedo guardada como borrador.');
+            }
+          }
+        },
+        {
+          label: 'Publicar',
+          variant: 'primary',
+          icon: MTS.Icon.get('check-circle'),
+          onClick: function () {
+            syncBuilderState();
+            if (saveSelectedStage(true)) {
+              notify('success', 'El workflow quedo listo para generar tareas.');
+            }
+          }
+        }
+      ]
+    });
+
+    new MTS.Badge('#workflow-builder-badge-status', {
+      label: 'Borrador',
+      variant: 'warning',
+      size: 'sm'
+    });
+
+    new MTS.Badge('#workflow-builder-badge-stages', {
+      label: builderState.stages.length + ' etapas',
+      variant: 'info',
+      size: 'sm'
+    });
+
+    workflowNameInput = new MTS.Input('#workflow-builder-name', {
+      type: 'text',
+      label: 'Workflow name',
+      value: builderState.name,
+      placeholder: 'Billing close access exception',
+      iconLeft: MTS.Icon.get('git-branch')
+    });
+
+    workflowTypeSelect = new MTS.Select('#workflow-builder-type', {
+      label: 'Workflow type',
+      value: builderState.type,
+      options: [
+        { value: 'access', label: 'Access' },
+        { value: 'document', label: 'Document' },
+        { value: 'budget', label: 'Budget' },
+        { value: 'vendor', label: 'Vendor' }
+      ]
+    });
+
+    workflowOriginSelect = new MTS.Select('#workflow-builder-origin', {
+      label: 'Origin module',
+      value: builderState.origin,
+      options: [
+        { value: 'roles', label: 'Roles' },
+        { value: 'documents', label: 'Documents' },
+        { value: 'billing', label: 'Billing' },
+        { value: 'admin', label: 'Admin' }
+      ]
+    });
+
+    workflowDescriptionInput = new MTS.Input('#workflow-builder-description', {
+      type: 'textarea',
+      label: 'Definition summary',
+      rows: 4,
+      value: builderState.description,
+      placeholder: 'Describe objetivo, alcance y reglas generales...',
+      showCount: true,
+      maxLength: 280
+    });
+
+    new MTS.Button('#workflow-builder-add-stage', {
+      label: 'Agregar etapa',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('plus'),
+      onClick: function () {
+        builderState.stages.push({
+          id: 'stage-' + Date.now(),
+          title: 'New review stage',
+          assignmentType: 'user',
+          approvers: ['camila-soto'],
+          approvalRule: 'single',
+          sla: '4 h',
+          note: 'Nueva etapa agregada al ejemplo.'
+        });
+        selectedStageIndex = builderState.stages.length - 1;
+        renderStages();
+        syncStageEditor();
+        notify('info', 'Se agrego una nueva etapa al workflow.');
+      }
+    });
+
+    stageTitleInput = new MTS.Input('#workflow-builder-stage-title', {
+      type: 'text',
+      label: 'Stage title',
+      value: '',
+      placeholder: 'Security review'
+    });
+
+    stageAssignmentTypeSelect = new MTS.Select('#workflow-builder-stage-assignment-type', {
+      label: 'Tipo de asignacion',
+      value: 'user',
+      options: ASSIGNMENT_TYPE_OPTIONS,
+      onChange: function (e) {
+        if (e.detail.value === 'policy') {
+          stageApprovalRuleSelect.setValue('automatic');
+        } else if (stageApprovalRuleSelect.getValue && stageApprovalRuleSelect.getValue() === 'automatic') {
+          stageApprovalRuleSelect.setValue('single');
+        }
+        syncApproverOptions(e.detail.value, stageApproversSelect ? stageApproversSelect.getValue() : []);
+      }
+    });
+
+    stageApproversSelect = new MTS.Select('#workflow-builder-stage-approvers', {
+      label: 'Aprobador(es)',
+      value: [],
+      multiple: true,
+      searchable: true,
+      clearable: true,
+      maxSelect: 3,
+      options: APPROVER_OPTIONS_BY_TYPE.user,
+      hint: 'Selecciona uno o mas aprobadores segun el tipo de asignacion.'
+    });
+
+    stageApprovalRuleSelect = new MTS.Select('#workflow-builder-stage-approval-rule', {
+      label: 'Regla de aprobacion',
+      value: 'single',
+      options: APPROVAL_RULE_OPTIONS
+    });
+
+    stageSlaInput = new MTS.Input('#workflow-builder-stage-sla', {
+      type: 'text',
+      label: 'SLA',
+      value: '',
+      placeholder: '2 h'
+    });
+
+    stageNoteInput = new MTS.Input('#workflow-builder-stage-note', {
+      type: 'textarea',
+      label: 'Stage note',
+      rows: 3,
+      value: '',
+      placeholder: 'Describe objetivo, alcance y salida de la etapa...'
+    });
+
+    new MTS.Button('#workflow-builder-save-stage', {
+      label: 'Aplicar cambios',
+      variant: 'secondary',
+      iconLeft: MTS.Icon.get('save'),
+      onClick: function () {
+        saveSelectedStage(false);
+      }
+    });
+
+    new MTS.Button('#workflow-builder-remove-stage', {
+      label: 'Eliminar etapa',
+      variant: 'ghost',
+      iconLeft: MTS.Icon.get('trash'),
+      onClick: function () {
+        removeSelectedStage();
+      }
+    });
+
+    function summaryCell(label, value) {
+      return '<div class="mts-g-col-12 mts-g-col-md-6"><div class="mts-surface mts-p-3 mts-d-flex mts-flex-col mts-gap-1"><span class="mts-text-xs mts-text-muted">' + label + '</span><strong class="mts-text-sm mts-text-primary">' + value + '</strong></div></div>';
+    }
+
+    function ruleRow(title, copy) {
+      return '' +
+        '<article class="mts-surface mts-p-3 mts-d-flex mts-flex-col mts-gap-1">' +
+          '<strong class="mts-text-sm mts-text-primary">' + title + '</strong>' +
+          '<p class="mts-text-sm mts-text-secondary mts-m-0">' + copy + '</p>' +
+        '</article>';
+    }
+
+    function renderStages() {
+      syncBuilderState();
+
+      if (!stageList) {
+        stageList = new MTS.SortableList('#workflow-builder-stages', {
+          variant: 'compact',
+          numbered: true,
+          moveButtons: true,
+          items: buildStageItems(),
+          onReorder: function (e) {
+            var selectedId = getSelectedStage() ? getSelectedStage().id : null;
+            builderState.stages = e.detail.items.map(sortableItemToStage);
+            selectedStageIndex = Math.max(0, builderState.stages.findIndex(function (stage) {
+              return stage.id === selectedId;
+            }));
+            if (selectedStageIndex < 0) selectedStageIndex = 0;
+            renderStages();
+            syncStageEditor();
+            notify('info', 'Se actualizo el orden de las etapas.');
+          },
+          onItemClick: function (e) {
+            selectedStageIndex = e.detail.index;
+            syncStageEditor();
+            highlightSelectedStage();
+          }
+        });
+      } else {
+        stageList.setItems(buildStageItems());
+      }
+
+      renderStageCount();
+      highlightSelectedStage();
+    }
+
+    function syncBuilderState() {
+      builderState.name = workflowNameInput.getValue();
+      builderState.type = workflowTypeSelect.getValue ? workflowTypeSelect.getValue() : builderState.type;
+      builderState.origin = workflowOriginSelect.getValue ? workflowOriginSelect.getValue() : builderState.origin;
+      builderState.description = workflowDescriptionInput.getValue();
+    }
+
+    function buildStageItems() {
+      return builderState.stages.map(function (stage) {
+        return {
+          id: stage.id,
+          title: stage.title,
+          description: summarizeApprovers(stage),
+          meta: stage.sla,
+          badge: { label: assignmentTypeLabel(stage.assignmentType), variant: assignmentTypeVariant(stage.assignmentType) },
+          assignmentType: stage.assignmentType,
+          approvers: stage.approvers,
+          approvalRule: stage.approvalRule,
+          sla: stage.sla,
+          note: stage.note
+        };
+      });
+    }
+
+    function sortableItemToStage(item) {
+      return {
+        id: item.id,
+        title: item.title,
+        assignmentType: item.assignmentType || 'user',
+        approvers: Array.isArray(item.approvers) ? item.approvers : [],
+        approvalRule: item.approvalRule || 'single',
+        sla: item.sla || item.meta || '',
+        note: item.note || ''
+      };
+    }
+
+    function renderStageCount() {
+      var countBadgeHost = document.getElementById('workflow-builder-badge-stages');
+      if (!countBadgeHost) return;
+      countBadgeHost.innerHTML = '';
+      new MTS.Badge('#workflow-builder-badge-stages', {
+        label: builderState.stages.length + ' etapas',
+        variant: 'info',
+        size: 'sm'
+      });
+    }
+
+    function getSelectedStage() {
+      return builderState.stages[selectedStageIndex] || null;
+    }
+
+    function syncStageEditor() {
+      var stage = getSelectedStage();
+      if (!stage) return;
+      stageTitleInput.setValue(stage.title);
+      stageTitleInput.clearError();
+      stageAssignmentTypeSelect.setValue(stage.assignmentType);
+      syncApproverOptions(stage.assignmentType, stage.approvers);
+      stageApprovalRuleSelect.setValue(stage.approvalRule);
+      stageSlaInput.setValue(stage.sla);
+      stageNoteInput.setValue(stage.note);
+
+      var caption = document.getElementById('workflow-builder-stage-caption');
+      if (caption) {
+        caption.textContent = 'Editando la etapa ' + (selectedStageIndex + 1) + ': ' + stage.title + '. Aqui defines quien aprueba y bajo que regla.';
+      }
+    }
+
+    function saveSelectedStage(silent) {
+      var stage = getSelectedStage();
+      if (!stage) return false;
+
+      var title = stageTitleInput.getValue().trim();
+      if (!title) {
+        stageTitleInput.setError('Ingresa el titulo de la etapa');
+        return false;
+      }
+
+      stageTitleInput.clearError();
+      var assignmentType = stageAssignmentTypeSelect.getValue ? stageAssignmentTypeSelect.getValue() : 'user';
+      var approvalRule = stageApprovalRuleSelect.getValue ? stageApprovalRuleSelect.getValue() : 'single';
+      var approvers = stageApproversSelect.getValue ? stageApproversSelect.getValue() : [];
+      approvers = Array.isArray(approvers) ? approvers : (approvers ? [approvers] : []);
+
+      if (!approvers.length) {
+        approvers = autoApproversForType(assignmentType);
+      }
+
+      if (assignmentType !== 'policy' && !approvers.length) {
+        notify('warning', 'Selecciona al menos un aprobador para esta etapa.');
+        return false;
+      }
+
+      stage.title = title;
+      stage.assignmentType = assignmentType;
+      stage.approvers = approvers;
+      stage.approvalRule = approvalRule;
+      stage.sla = stageSlaInput.getValue().trim() || '4 h';
+      stage.note = stageNoteInput.getValue().trim() || 'Sin nota adicional.';
+
+      renderStages();
+      syncStageEditor();
+
+      if (!silent) {
+        notify('success', 'La etapa seleccionada fue actualizada.');
+      }
+
+      return true;
+    }
+
+    function removeSelectedStage() {
+      if (builderState.stages.length === 1) {
+        notify('warning', 'El workflow debe conservar al menos una etapa.');
+        return;
+      }
+
+      builderState.stages.splice(selectedStageIndex, 1);
+      selectedStageIndex = Math.max(0, selectedStageIndex - 1);
+      renderStages();
+      syncStageEditor();
+      notify('warning', 'La etapa seleccionada fue eliminada.');
+    }
+
+    function highlightSelectedStage() {
+      var selectedStage = getSelectedStage();
+      var host = document.getElementById('workflow-builder-stages');
+      if (!host || !selectedStage) return;
+      host.querySelectorAll('.mts-sortable__item').forEach(function (item) {
+        item.classList.toggle('mts-sortable__item--selected', item.getAttribute('data-id') === selectedStage.id);
+      });
+    }
+
+    function syncApproverOptions(type, values) {
+      var options = APPROVER_OPTIONS_BY_TYPE[type] || [];
+      var selected = Array.isArray(values) ? values.slice() : [];
+      var validValues = selected.filter(function (value) {
+        return options.some(function (option) { return option.value === value; });
+      });
+
+      if (!validValues.length) {
+        validValues = autoApproversForType(type);
+      }
+
+      stageApproversSelect.setOptions(options, true);
+      stageApproversSelect.setValue(validValues);
+
+      if (type === 'policy') {
+        stageApproversSelect.disable();
+      } else {
+        stageApproversSelect.enable();
+      }
+    }
+
+    function autoApproversForType(type) {
+      var options = APPROVER_OPTIONS_BY_TYPE[type] || [];
+      if (type === 'policy' || type === 'manager') {
+        return options.length ? [options[0].value] : [];
+      }
+      return [];
+    }
+
+    function summarizeApprovers(stage) {
+      var options = APPROVER_OPTIONS_BY_TYPE[stage.assignmentType] || [];
+      var labels = (stage.approvers || []).map(function (value) {
+        var match = options.find(function (option) { return option.value === value; });
+        return match ? match.label : value;
+      });
+
+      if (!labels.length) {
+        return approvalRuleLabel(stage.approvalRule);
+      }
+
+      return labels.join(', ') + ' · ' + approvalRuleLabel(stage.approvalRule);
+    }
+
+    function assignmentTypeLabel(type) {
+      var match = ASSIGNMENT_TYPE_OPTIONS.find(function (option) { return option.value === type; });
+      return match ? match.label : type;
+    }
+
+    function approvalRuleLabel(rule) {
+      var match = APPROVAL_RULE_OPTIONS.find(function (option) { return option.value === rule; });
+      return match ? match.label : rule;
+    }
+
+    function assignmentTypeVariant(type) {
+      if (type === 'policy') return 'info';
+      if (type === 'group' || type === 'role') return 'primary';
+      return 'warning';
+    }
+
+    function notify(variant, message) {
+      MTS.Toast.show({
+        variant: variant,
+        message: message,
+        position: 'bottom-right'
+      });
+    }
+
+    renderStages();
+    syncStageEditor();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

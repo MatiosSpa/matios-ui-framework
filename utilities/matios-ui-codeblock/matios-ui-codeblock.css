@@ -1,0 +1,175 @@
+/* ============================================================
+   MATIOS UI — matios-ui-codeblock.css
+   MTS.CodeBlock — bloque de código con syntax highlighting
+   Requiere: matios-ui-base.css
+   ============================================================ */
+
+.mts-codeblock {
+  --mts-codeblock-height: auto;
+  --mts-codeblock-bg: color-mix(in srgb, var(--mts-bg-surface-2) 82%, var(--mts-bg-surface));
+  --mts-codeblock-toolbar-bg: color-mix(in srgb, var(--mts-bg-surface) 72%, var(--mts-bg-surface-2));
+  --mts-codeblock-border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  --mts-codeblock-radius: var(--mts-radius-lg);
+  --mts-codeblock-font: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, "Courier New", monospace;
+  --mts-codeblock-token-keyword: #8b5cf6;
+  --mts-codeblock-token-string: #22c55e;
+  --mts-codeblock-token-number: #f59e0b;
+  --mts-codeblock-token-comment: color-mix(in srgb, var(--mts-text-muted) 88%, transparent);
+  --mts-codeblock-token-tag: #38bdf8;
+  --mts-codeblock-token-attr: #f97316;
+  --mts-codeblock-token-type: #60a5fa;
+  --mts-codeblock-token-meta: #e879f9;
+  --mts-codeblock-token-fn: #facc15;
+  --mts-codeblock-token-var: #fb7185;
+  --mts-codeblock-token-selector: #2dd4bf;
+  --mts-codeblock-token-property: #93c5fd;
+  --mts-codeblock-token-annotation: #c084fc;
+  --mts-codeblock-token-operator: color-mix(in srgb, var(--mts-text-primary) 84%, transparent);
+  --mts-codeblock-token-punct: color-mix(in srgb, var(--mts-text-primary) 72%, transparent);
+  border: var(--mts-codeblock-border);
+  border-radius: var(--mts-codeblock-radius);
+  background: var(--mts-codeblock-bg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  height: var(--mts-codeblock-height);
+}
+
+.mts-codeblock__toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-3) var(--mts-space-4);
+  border-bottom: var(--mts-codeblock-border);
+  background: var(--mts-codeblock-toolbar-bg);
+}
+
+.mts-codeblock__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-1);
+  min-width: 0;
+}
+
+.mts-codeblock__title {
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+  margin: 0;
+}
+
+.mts-codeblock__subtitle {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  margin: 0;
+  word-break: break-word;
+}
+
+.mts-codeblock__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+  flex-shrink: 0;
+}
+
+.mts-codeblock__lang {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--mts-radius-full);
+  padding: 0.2rem 0.6rem;
+  background: color-mix(in srgb, var(--mts-color-primary) 16%, transparent);
+  color: var(--mts-color-primary);
+  font-size: 11px;
+  font-weight: var(--mts-font-weight-semibold);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.mts-codeblock__pre {
+  flex: 1;
+  margin: 0;
+  padding: var(--mts-space-4);
+  overflow: auto;
+  min-width: 0;
+  min-height: 0;
+  color: var(--mts-text-primary);
+  font-family: var(--mts-codeblock-font);
+  font-size: 13px;
+  line-height: 1.7;
+  background: transparent;
+  white-space: pre;
+  tab-size: 2;
+}
+
+.mts-codeblock--wrap .mts-codeblock__pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.mts-codeblock__code {
+  display: block;
+  min-width: 100%;
+  font-family: inherit;
+}
+
+.mts-codeblock__token--comment {
+  color: var(--mts-codeblock-token-comment);
+  font-style: italic;
+}
+
+.mts-codeblock__token--keyword { color: var(--mts-codeblock-token-keyword); }
+.mts-codeblock__token--string { color: var(--mts-codeblock-token-string); }
+.mts-codeblock__token--number { color: var(--mts-codeblock-token-number); }
+.mts-codeblock__token--tag { color: var(--mts-codeblock-token-tag); }
+.mts-codeblock__token--attr { color: var(--mts-codeblock-token-attr); }
+.mts-codeblock__token--type { color: var(--mts-codeblock-token-type); }
+.mts-codeblock__token--meta { color: var(--mts-codeblock-token-meta); }
+.mts-codeblock__token--fn { color: var(--mts-codeblock-token-fn); }
+.mts-codeblock__token--var { color: var(--mts-codeblock-token-var); }
+.mts-codeblock__token--selector { color: var(--mts-codeblock-token-selector); }
+.mts-codeblock__token--property { color: var(--mts-codeblock-token-property); }
+.mts-codeblock__token--annotation { color: var(--mts-codeblock-token-annotation); }
+.mts-codeblock__token--operator { color: var(--mts-codeblock-token-operator); }
+.mts-codeblock__token--punct { color: var(--mts-codeblock-token-punct); }
+
+[data-mts-mode="light"] .mts-codeblock {
+  --mts-codeblock-bg: #f7f9fc;
+  --mts-codeblock-toolbar-bg: #ffffff;
+  --mts-codeblock-token-keyword: #7c3aed;
+  --mts-codeblock-token-string: #15803d;
+  --mts-codeblock-token-number: #b45309;
+  --mts-codeblock-token-comment: #64748b;
+  --mts-codeblock-token-tag: #0369a1;
+  --mts-codeblock-token-attr: #c2410c;
+  --mts-codeblock-token-type: #1d4ed8;
+  --mts-codeblock-token-meta: #a21caf;
+  --mts-codeblock-token-fn: #a16207;
+  --mts-codeblock-token-var: #be123c;
+  --mts-codeblock-token-selector: #0f766e;
+  --mts-codeblock-token-property: #2563eb;
+  --mts-codeblock-token-annotation: #7e22ce;
+}
+
+[data-mts-mode="high-contrast"] .mts-codeblock {
+  --mts-codeblock-bg: #000;
+  --mts-codeblock-toolbar-bg: #111;
+  --mts-codeblock-token-keyword: #fff34d;
+  --mts-codeblock-token-string: #7cff7c;
+  --mts-codeblock-token-number: #ffb347;
+  --mts-codeblock-token-comment: #bfbfbf;
+  --mts-codeblock-token-tag: #7cdfff;
+  --mts-codeblock-token-attr: #ffa94d;
+  --mts-codeblock-token-type: #9ec5ff;
+  --mts-codeblock-token-meta: #ff9cff;
+  --mts-codeblock-token-fn: #ffe066;
+  --mts-codeblock-token-var: #ff8fab;
+  --mts-codeblock-token-selector: #7df9d0;
+  --mts-codeblock-token-property: #9ec5ff;
+  --mts-codeblock-token-annotation: #ff9cff;
+  --mts-codeblock-token-operator: #fff;
+  --mts-codeblock-token-punct: #fff;
+}

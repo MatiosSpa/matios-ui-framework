@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTS.DiagnosticsPanel — Calendar App</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../../layout/matios-ui-splitter/matios-ui-splitter.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-drawer/matios-ui-drawer.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-taginput/matios-ui-taginput.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-picker/matios-ui-date-picker.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-popover/matios-ui-popover.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-modal/matios-ui-modal.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-colorpicker/matios-ui-colorpicker.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-toast/matios-ui-toast.css">
+  <link rel="stylesheet" href="../../../../calendar_v2/matios-ui-calendar.css">
+  <link rel="stylesheet" href="../../../../calendar_v2/matios-ui-calendar-colors.css">
+  <link rel="stylesheet" href="../../matios-ui-jsonviewer.css">
+  <link rel="stylesheet" href="../../matios-ui-diagnosticspanel.css">
+  <script src="../../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../../navigation/matios-ui-drawer/matios-ui-drawer.js"></script>
+  <script src="../../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../../../calendar_v2/matios-ui-calendar-shared.js"></script>
+  <script src="../../../../calendar_v2/matios-ui-calendar-week.js"></script>
+  <script src="../../../../calendar_v2/matios-ui-calendar-day.js"></script>
+  <script src="../../../../calendar_v2/matios-ui-calendar-month.js"></script>
+  <script src="../../../../calendar_v2/matios-ui-calendar-schedule.js"></script>
+  <script src="../../../../calendar_v2/matios-ui-calendar.js"></script>
+  <script src="../../../../calendar_v2/matios-ui-calendar-i18n.js"></script>
+  <script src="../../../../calendar_v2/matios-ui-calendar-ui.js"></script>
+  <script src="../../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../../forms/matios-ui-taginput/matios-ui-taginput.js"></script>
+  <script src="../../../../forms/matios-ui-picker/matios-ui-date-picker-base.js"></script>
+  <script src="../../../../forms/matios-ui-picker/matios-ui-date-picker-date.js"></script>
+  <script src="../../../../forms/matios-ui-picker/matios-ui-date-picker-time.js"></script>
+  <script src="../../../../forms/matios-ui-picker/matios-ui-date-picker-datetime.js"></script>
+  <script src="../../../../forms/matios-ui-picker/matios-ui-date-picker-daterange.js"></script>
+  <script src="../../../../forms/matios-ui-picker/matios-ui-date-picker-month.js"></script>
+  <script src="../../../../forms/matios-ui-picker/matios-ui-date-picker-week.js"></script>
+  <script src="../../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../../overlays/matios-ui-popover/matios-ui-popover.js"></script>
+  <script src="../../../../overlays/matios-ui-modal/matios-ui-modal.js"></script>
+  <script src="../../../../forms/matios-ui-colorpicker/matios-ui-colorpicker.js"></script>
+  <script src="../../../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+  <script src="../../matios-ui-jsonviewer.js"></script>
+  <script src="../../matios-ui-diagnosticspanel.js"></script>
+  <style>
+    html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+    body { position: relative; }
+    #calendario { height: 100%; }
+  </style>
+</head>
+<body>
+  <div id="calendario"></div>
+  <script src="./diagnostics-bootstrap.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

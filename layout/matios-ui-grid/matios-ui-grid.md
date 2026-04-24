@@ -166,4 +166,4 @@ The JavaScript helper renders the same native CSS classes. It does not create a 
 
 - `MTS.Grid` is for general page distribution.
 - `MTS.FormLayout` stays focused on form structure.
-- The demo may use shared dotted-outline helpers from `./shared/demo-shared.css` only to make grid boundaries easier to read.
+- The demo may use shared dotted-outline helpers from `./support/demo-shared.css` only to make grid boundaries easier to read.
