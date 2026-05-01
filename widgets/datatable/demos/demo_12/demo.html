@@ -154,11 +154,13 @@ const dmPreview = new MTS.DocumentManagerPreviewPlugin({
   // Navegación entre archivos de la carpeta actual.
   // El dev controla la lógica: llama a dmPreview.show(otroItem) para cargar el siguiente.
   onPrev: function(currentItem) {
+    console.log('[dmPreview.onPrev]', currentItem);
     const files = dm.getItems().filter(function(i) { return i.type === 'file'; });
     const idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
     if (idx > 0) dmPreview.show(files[idx - 1]);
   },
   onNext: function(currentItem) {
+    console.log('[dmPreview.onNext]', currentItem);
     const files = dm.getItems().filter(function(i) { return i.type === 'file'; });
     const idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
     if (idx < files.length - 1) dmPreview.show(files[idx + 1]);
@@ -262,11 +264,13 @@ function initTables() {
         console.log('[dmPreview.onDownload]', item);
       },
       onPrev: function(currentItem) {
+        console.log('[dmPreview.onPrev]', currentItem);
         var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
         var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
         if (idx > 0) dmPreview.show(files[idx - 1]);
       },
       onNext: function(currentItem) {
+        console.log('[dmPreview.onNext]', currentItem);
         var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
         var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
         if (idx < files.length - 1) dmPreview.show(files[idx + 1]);
