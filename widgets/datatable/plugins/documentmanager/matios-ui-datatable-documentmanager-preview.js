@@ -1,5 +1,5 @@
 /* ============================================================
-   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.1.0
+   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.2.0
    Sub-plugin de vista previa para MTS.DocumentManagerPlugin.
 
    Muestra un modal fullscreen con:
@@ -21,6 +21,16 @@
        },
        onDownload: function(item) {
          window.open('/api/documents/' + item.id + '/download');
+       },
+       onPrev: function(currentItem) {
+         var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
+         var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
+         if (idx > 0) dmPreview.show(files[idx - 1]);
+       },
+       onNext: function(currentItem) {
+         var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
+         var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
+         if (idx < files.length - 1) dmPreview.show(files[idx + 1]);
        },
      });
 
@@ -49,11 +59,13 @@
    Opciones:
      panels        Array   — sub-paneles del acordeón lateral
      urlResolver   fn      — function(item) → string | null  (URL del iframe)
-     onDownload    fn      — function(item)  (dispara al hacer clic en Descargar)
+     onDownload    fn      — function(item)  (botón "Descargar" en el header)
+     onPrev        fn      — function(currentItem)  (botón ← en el header)
+     onNext        fn      — function(currentItem)  (botón → en el header)
      panelVisible  bool    — panel lateral visible al abrir (default: true)
      panelWidth    string  — ancho del panel lateral abierto (default: '340px')
 
-   Dependencias: MTS.DocumentManagerPlugin, MTS.Modal, MTS.Accordion, MTS.Icon
+   Dependencias: MTS.DocumentManagerPlugin, MTS.Modal, MTS.Accordion, MTS.Button, MTS.Icon
    ============================================================ */
 
 window.MTS = window.MTS || {};
@@ -62,7 +74,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
   static descriptor = {
     name:     'MTS.DocumentManagerPreviewPlugin',
-    version:  '1.1.0',
+    version:  '1.2.0',
     type:     'documentManagerPreview',
     requires: ['MTS.DocumentManagerPlugin', 'MTS.Modal', 'MTS.Accordion'],
     provides: 'documentManagerPreview',
@@ -79,6 +91,8 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       panels:       options.panels       || [],
       urlResolver:  options.urlResolver  || null,
       onDownload:   options.onDownload   || null,
+      onPrev:       options.onPrev       || null,
+      onNext:       options.onNext       || null,
       panelVisible: options.panelVisible !== false,
       panelWidth:   options.panelWidth   || '340px',
     };
@@ -197,39 +211,65 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       this._modal._titleEl.style.overflow   = 'hidden';
     }
 
-    // Agregar botón de descarga en el header del modal (si onDownload está definido)
-    if (this._options.onDownload) {
-      this._injectDownloadButton();
-    }
+    // Inyectar botones en el header: ← prev, → next, Descargar
+    this._injectHeaderButtons();
   }
 
-  _injectDownloadButton() {
+  _injectHeaderButtons() {
     var self      = this;
     var headerEl  = this._modal._headerEl;
+    var titleEl   = this._modal._titleEl;
     var closeBtnEl = headerEl.querySelector('.mts-modal__close');
 
-    var btn = document.createElement('button');
-    btn.type      = 'button';
-    btn.className = 'dm-preview__download-btn';
-    btn.setAttribute('aria-label', 'Descargar documento');
-    btn.setAttribute('title', 'Descargar');
-
-    var iconSvg = (window.MTS && MTS.Icon) ? MTS.Icon.get('download') : '';
-    btn.innerHTML = iconSvg + '<span>Descargar</span>';
-
-    btn.addEventListener('click', function() {
-      if (self._currentItem) {
-        self._options.onDownload(self._currentItem);
-      }
-    });
-
-    if (closeBtnEl) {
-      headerEl.insertBefore(btn, closeBtnEl);
-    } else {
-      headerEl.appendChild(btn);
+    // — Botones de navegación: se insertan antes del título —
+    // insertBefore(X, title) dos veces produce: [prev][next][title]
+    if (this._options.onPrev) {
+      var prevEl = document.createElement('button');
+      prevEl.type = 'button';
+      new MTS.Button(prevEl, {
+        iconLeft: MTS.Icon ? MTS.Icon.get('arrow-left') : '←',
+        iconOnly: true,
+        size:     'sm',
+        variant:  'ghost',
+      }).on('click', function() {
+        if (self._currentItem) self._options.onPrev(self._currentItem);
+      });
+      prevEl.setAttribute('title', 'Documento anterior');
+      prevEl.setAttribute('aria-label', 'Documento anterior');
+      headerEl.insertBefore(prevEl, titleEl);
     }
 
-    this._downloadBtn = btn;
+    if (this._options.onNext) {
+      var nextEl = document.createElement('button');
+      nextEl.type = 'button';
+      new MTS.Button(nextEl, {
+        iconLeft: MTS.Icon ? MTS.Icon.get('arrow-right') : '→',
+        iconOnly: true,
+        size:     'sm',
+        variant:  'ghost',
+      }).on('click', function() {
+        if (self._currentItem) self._options.onNext(self._currentItem);
+      });
+      nextEl.setAttribute('title', 'Documento siguiente');
+      nextEl.setAttribute('aria-label', 'Documento siguiente');
+      headerEl.insertBefore(nextEl, titleEl);
+    }
+
+    // — Botón de descarga: se inserta antes del botón × —
+    if (this._options.onDownload) {
+      var dlEl = document.createElement('button');
+      dlEl.type = 'button';
+      new MTS.Button(dlEl, {
+        label:    'Descargar',
+        iconLeft: MTS.Icon ? MTS.Icon.get('download') : '',
+        size:     'sm',
+        variant:  'ghost',
+      }).on('click', function() {
+        if (self._currentItem) self._options.onDownload(self._currentItem);
+      });
+      if (closeBtnEl) headerEl.insertBefore(dlEl, closeBtnEl);
+      else headerEl.appendChild(dlEl);
+    }
   }
 
   _buildBody() {

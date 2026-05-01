@@ -128,7 +128,8 @@ const PDF_DEMO_URL = 'https://docs.google.com/viewer'
 
 // ── Plugin 1: PreviewPlugin ─────────────────────────────────────────────────
 // Se instancia antes que DocumentManagerPlugin para poder
-// pasarlo como plugin Y usarlo en onFileClick.
+// pasarlo como plugin Y usarlo en onFileClick / onPrev / onNext.
+// (dm se declara después; los callbacks lo cierran por referencia: ok.)
 const dmPreview = new MTS.DocumentManagerPreviewPlugin({
 
   // Sub-paneles del acordeón lateral.
@@ -148,6 +149,19 @@ const dmPreview = new MTS.DocumentManagerPreviewPlugin({
   onDownload: function(item) {
     console.log('[dmPreview.onDownload]', item);
     // window.open('/api/documents/' + item.id + '/download');
+  },
+
+  // Navegación entre archivos de la carpeta actual.
+  // El dev controla la lógica: llama a dmPreview.show(otroItem) para cargar el siguiente.
+  onPrev: function(currentItem) {
+    const files = dm.getItems().filter(function(i) { return i.type === 'file'; });
+    const idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
+    if (idx > 0) dmPreview.show(files[idx - 1]);
+  },
+  onNext: function(currentItem) {
+    const files = dm.getItems().filter(function(i) { return i.type === 'file'; });
+    const idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
+    if (idx < files.length - 1) dmPreview.show(files[idx + 1]);
   },
 
   panelVisible: true,    // panel lateral abierto al inicio (default: true)
@@ -246,6 +260,16 @@ function initTables() {
       },
       onDownload: function(item) {
         console.log('[dmPreview.onDownload]', item);
+      },
+      onPrev: function(currentItem) {
+        var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
+        var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
+        if (idx > 0) dmPreview.show(files[idx - 1]);
+      },
+      onNext: function(currentItem) {
+        var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
+        var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
+        if (idx < files.length - 1) dmPreview.show(files[idx + 1]);
       },
       panelVisible: true,
       panelWidth:   '340px',
