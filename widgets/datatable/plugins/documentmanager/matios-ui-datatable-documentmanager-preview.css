@@ -1,0 +1,194 @@
+/* ============================================================
+   MATIOS UI — DocumentManagerPreviewPlugin  v1.0.0
+   Estilos del plugin de vista previa de documentos.
+
+   Requiere: matios-ui-base.css, matios-ui-modal.css,
+             matios-ui-accordion.css
+   ============================================================ */
+
+
+/* ============================================================
+   1. WRAPPER PRINCIPAL — layout flex row
+   ============================================================ */
+
+.dm-preview__wrap {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--mts-bg-surface);
+}
+
+
+/* ============================================================
+   2. ÁREA DEL IFRAME
+   ============================================================ */
+
+.dm-preview__iframe-area {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--mts-bg-surface-2);
+}
+
+.dm-preview__iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background: var(--mts-bg-surface);
+}
+
+
+/* ============================================================
+   3. SPINNER — overlay sobre el iframe durante la carga
+   ============================================================ */
+
+.dm-preview__spinner-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mts-bg-surface);
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--mts-transition-base);
+}
+
+.dm-preview__spinner-wrap--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* ============================================================
+   4. BOTÓN TOGGLE — abre y cierra el panel lateral
+   ============================================================ */
+
+.dm-preview__toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 48px;
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-right: none;
+  border-radius: var(--mts-radius-md) 0 0 var(--mts-radius-md);
+  color: var(--mts-text-muted);
+  cursor: pointer;
+  z-index: 2;
+  flex-shrink: 0;
+  transition:
+    color var(--mts-transition-fast),
+    background var(--mts-transition-fast);
+}
+
+.dm-preview__toggle-btn:hover {
+  color: var(--mts-text-primary);
+  background: var(--mts-bg-surface-2);
+}
+
+.dm-preview__toggle-btn svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   5. PANEL LATERAL COLAPSIBLE
+   ============================================================ */
+
+.dm-preview__panel {
+  width: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-left: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  background: var(--mts-bg-surface);
+  transition: width 0.25s ease;
+}
+
+.dm-preview__panel--open {
+  width: var(--dm-preview-panel-width, 340px);
+}
+
+.dm-preview__panel-inner {
+  /* Ancho fijo para que el contenido no colapse durante la transición */
+  width: var(--dm-preview-panel-width, 340px);
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+/* ============================================================
+   6. CONTENIDO DE CADA ÍTEM DEL ACORDEÓN
+   ============================================================ */
+
+/* El acordeón ya aplica padding en .mts-accordion__content.
+   Esta clase es solo un anchor para la selección en JS. */
+.dm-preview__acc-content {
+  /* sin estilos adicionales: usa el padding del acordeón */
+}
+
+
+/* ============================================================
+   7. PANEL — INFORMACIÓN BÁSICA
+   ============================================================ */
+
+.dm-preview__basic-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-4);
+}
+
+.dm-preview__info-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-1);
+}
+
+.dm-preview__info-label {
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dm-preview__info-value {
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-primary);
+  word-break: break-word;
+}
+
+
+/* ============================================================
+   8. SKELETON — estado de carga del panel básico
+   ============================================================ */
+
+.dm-preview__basic-info--loading {
+  gap: var(--mts-space-3);
+}
+
+.dm-preview__info-skeleton-row {
+  height: 44px;
+  background: var(--mts-bg-surface-2);
+  border-radius: var(--mts-radius-sm);
+  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes dm-preview-shimmer {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.4; }
+  100% { opacity: 1; }
+}

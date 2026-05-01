@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Vista previa</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #f8f9fa;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #333;
+    }
+    .doc-placeholder {
+      text-align: center;
+      padding: 48px 32px;
+    }
+    .doc-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      color: #6c757d;
+    }
+    .doc-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #212529;
+      margin-bottom: 8px;
+      word-break: break-word;
+      max-width: 480px;
+    }
+    .doc-sub {
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
+    .doc-badge {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 4px 12px;
+      background: #e8f4fd;
+      color: #1976d2;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="doc-placeholder">
+    <svg class="doc-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="6" width="36" height="52" rx="4" fill="#e9ecef" stroke="#adb5bd" stroke-width="2"/>
+      <rect x="10" y="6" width="36" height="52" rx="4" fill="none" stroke="#adb5bd" stroke-width="2"/>
+      <path d="M36 6v12h10" stroke="#adb5bd" stroke-width="2" stroke-linecap="round"/>
+      <line x1="18" y1="28" x2="42" y2="28" stroke="#adb5bd" stroke-width="2" stroke-linecap="round"/>
+      <line x1="18" y1="36" x2="42" y2="36" stroke="#adb5bd" stroke-width="2" stroke-linecap="round"/>
+      <line x1="18" y1="44" x2="34" y2="44" stroke="#adb5bd" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div class="doc-name" id="doc-name">Documento</div>
+    <div class="doc-sub">Vista previa simulada · demo local</div>
+    <div class="doc-badge">En producción aquí se renderizaría el archivo real</div>
+  </div>
+
+  <script>
+    var params   = new URLSearchParams(location.search);
+    var docName  = params.get('name') || 'Documento';
+    document.getElementById('doc-name').textContent = docName;
+    document.title = docName + ' — Vista previa';
+  </script>
+</body>
+</html>
