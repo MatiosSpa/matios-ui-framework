@@ -1,11 +1,13 @@
 /* ============================================================
-   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.0.0
+   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.1.0
    Sub-plugin de vista previa para MTS.DocumentManagerPlugin.
 
    Muestra un modal fullscreen con:
      - Iframe para renderizar el documento
      - Panel lateral colapsible con acordeón de sub-paneles
      - Sistema de sub-paneles extensible (workflow, tags, versiones, etc.)
+     - Botón de descarga en el header del modal
+     - Icono del tipo de archivo en el título
 
    El plugin NO intercepta onFileClick automáticamente.
    El dev conecta explícitamente:
@@ -17,10 +19,16 @@
        urlResolver: function(item) {
          return '/api/documents/' + item.id + '/retrieve';
        },
+       onDownload: function(item) {
+         window.open('/api/documents/' + item.id + '/download');
+       },
      });
 
      new MTS.DocumentManagerPlugin({
        onFileClick: function(item) {
+         console.log('[dm.onFileClick]', item);
+         // La URL puede resolverse externamente y pasarse como segundo argumento:
+         // dmPreview.show(item, 'https://servidor.com/preview/' + item.id);
          dmPreview.show(item);
        },
        plugins: [dmPreview, dmContextMenu, dmWorkflow],
@@ -41,10 +49,11 @@
    Opciones:
      panels        Array   — sub-paneles del acordeón lateral
      urlResolver   fn      — function(item) → string | null  (URL del iframe)
+     onDownload    fn      — function(item)  (dispara al hacer clic en Descargar)
      panelVisible  bool    — panel lateral visible al abrir (default: true)
      panelWidth    string  — ancho del panel lateral abierto (default: '340px')
 
-   Dependencias: MTS.DocumentManagerPlugin, MTS.Modal, MTS.Accordion
+   Dependencias: MTS.DocumentManagerPlugin, MTS.Modal, MTS.Accordion, MTS.Icon
    ============================================================ */
 
 window.MTS = window.MTS || {};
@@ -53,7 +62,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
   static descriptor = {
     name:     'MTS.DocumentManagerPreviewPlugin',
-    version:  '1.0.0',
+    version:  '1.1.0',
     type:     'documentManagerPreview',
     requires: ['MTS.DocumentManagerPlugin', 'MTS.Modal', 'MTS.Accordion'],
     provides: 'documentManagerPreview',
@@ -69,6 +78,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     this._options = {
       panels:       options.panels       || [],
       urlResolver:  options.urlResolver  || null,
+      onDownload:   options.onDownload   || null,
       panelVisible: options.panelVisible !== false,
       panelWidth:   options.panelWidth   || '340px',
     };
@@ -85,6 +95,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     this._currentItem = null;
     this._panelLoaded = {};
     this._panelOpen   = this._options.panelVisible;
+    this._overrideUrl = null;  // URL opcional pasada en show(item, url)
   }
 
   /* ----------------------------------------------------------
@@ -116,6 +127,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     }
     this._dm          = null;
     this._currentItem = null;
+    this._overrideUrl = null;
   }
 
   /* ----------------------------------------------------------
@@ -125,9 +137,14 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   /**
    * Abre el modal de vista previa para el item dado.
    * @param {object} item — ítem del DocumentManagerPlugin (archivo)
+   * @param {string} [url] — URL opcional del documento para el iframe.
+   *   Si se omite, se usa urlResolver(item).
+   *   Permite resolver la URL externamente antes de llamar a show():
+   *     dmPreview.show(item, 'https://servidor.com/preview/' + item.id);
    */
-  show(item) {
+  show(item, url) {
     this._currentItem = item;
+    this._overrideUrl = url || null;
     this._panelLoaded = {};
 
     if (!this._modal) {
@@ -167,9 +184,52 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       },
     });
 
-    // Flush: sin padding y sin overflow en el body del modal para controlar
-    // el layout internamente con flex row.
+    // Flush: sin padding y sin overflow en el body del modal —
+    // el layout lo controla el wrap interno con flex row.
     this._modal._bodyEl.classList.add('mts-modal__body--flush');
+
+    // El título del modal necesita display:flex para mostrar el ícono inline.
+    // (Por defecto h5.mts-modal__title tiene white-space:nowrap y overflow:hidden)
+    if (this._modal._titleEl) {
+      this._modal._titleEl.style.display    = 'flex';
+      this._modal._titleEl.style.alignItems = 'center';
+      this._modal._titleEl.style.gap        = '6px';
+      this._modal._titleEl.style.overflow   = 'hidden';
+    }
+
+    // Agregar botón de descarga en el header del modal (si onDownload está definido)
+    if (this._options.onDownload) {
+      this._injectDownloadButton();
+    }
+  }
+
+  _injectDownloadButton() {
+    var self      = this;
+    var headerEl  = this._modal._headerEl;
+    var closeBtnEl = headerEl.querySelector('.mts-modal__close');
+
+    var btn = document.createElement('button');
+    btn.type      = 'button';
+    btn.className = 'dm-preview__download-btn';
+    btn.setAttribute('aria-label', 'Descargar documento');
+    btn.setAttribute('title', 'Descargar');
+
+    var iconSvg = (window.MTS && MTS.Icon) ? MTS.Icon.get('download') : '';
+    btn.innerHTML = iconSvg + '<span>Descargar</span>';
+
+    btn.addEventListener('click', function() {
+      if (self._currentItem) {
+        self._options.onDownload(self._currentItem);
+      }
+    });
+
+    if (closeBtnEl) {
+      headerEl.insertBefore(btn, closeBtnEl);
+    } else {
+      headerEl.appendChild(btn);
+    }
+
+    this._downloadBtn = btn;
   }
 
   _buildBody() {
@@ -341,7 +401,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     if (!this._accEl) return;
     var body = this._accEl.querySelector('#mts-acc-body-' + key);
     if (!body || !body.classList.contains('mts-accordion__body--open')) return;
-    // Usar RAF para asegurar que el DOM está actualizado antes de medir
+    // RAF para asegurar que el DOM está actualizado antes de medir
     requestAnimationFrame(function() {
       body.style.maxHeight = body.scrollHeight + 'px';
     });
@@ -357,8 +417,11 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   ---------------------------------------------------------- */
 
   _loadIframe(item) {
-    if (!this._options.urlResolver || !item) return;
-    var url = this._options.urlResolver(item);
+    // Prioridad: URL pasada en show(item, url) > urlResolver(item)
+    var url = this._overrideUrl;
+    if (!url && this._options.urlResolver && item) {
+      url = this._options.urlResolver(item);
+    }
     if (!url) return;
 
     var self = this;
@@ -366,7 +429,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     this._iframe.onload = function() {
       self._spinnerWrap.classList.remove('dm-preview__spinner-wrap--visible');
     };
-    // Asignar src fuera del hilo principal para evitar bloqueo durante la animación de entrada
+    // Asignar src fuera del hilo principal para no bloquear la animación de entrada
     setTimeout(function() {
       self._iframe.src = url;
     }, 1);
@@ -408,13 +471,70 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   }
 
   /* ----------------------------------------------------------
-     UTILIDADES
+     TÍTULO DEL MODAL — con icono del tipo de archivo
   ---------------------------------------------------------- */
 
   _updateTitle(item) {
     if (!this._modal || !item) return;
-    var name = item.name || '';
-    this._modal.setTitle(name);
+
+    var iconName = this._fileIconName(item);
+    var iconHtml = '';
+
+    if (window.MTS && MTS.Icon) {
+      var svg = MTS.Icon.get(iconName);
+      if (svg) {
+        iconHtml = '<span class="dm-preview__title-icon">' + svg + '</span>';
+      }
+    }
+
+    var name = this._escHtml(item.name || '');
+    this._modal.setTitle(
+      iconHtml + '<span class="dm-preview__title-text">' + name + '</span>'
+    );
+  }
+
+  /* ----------------------------------------------------------
+     UTILIDADES
+  ---------------------------------------------------------- */
+
+  /**
+   * Mapea extensión o mimeType del ítem al nombre del ícono de MTS.Icon.
+   */
+  _fileIconName(item) {
+    var ext  = ((item.ext  || item.extension || '')).toLowerCase();
+    var mime = ((item.mimeType || item.contentType || '')).toLowerCase();
+
+    if (ext === 'pdf' || mime === 'application/pdf')                              return 'file-pdf';
+    if (ext === 'doc'  || ext === 'docx' || mime.indexOf('word') !== -1)          return 'file-word';
+    if (ext === 'xls'  || ext === 'xlsx' || mime.indexOf('excel') !== -1
+        || mime.indexOf('spreadsheet') !== -1)                                    return 'file-excel';
+    if (ext === 'ppt'  || ext === 'pptx' || mime.indexOf('powerpoint') !== -1
+        || mime.indexOf('presentation') !== -1)                                   return 'file-powerpoint';
+    if (ext === 'mpp'  || mime.indexOf('project') !== -1)                         return 'file-project';
+    if (ext === 'vsd'  || ext === 'vsdx' || mime.indexOf('visio') !== -1)         return 'file-visio';
+    if (ext === 'one'  || mime.indexOf('onenote') !== -1)                         return 'file-onenote';
+    if (ext === 'msg'  || mime.indexOf('outlook') !== -1
+        || mime.indexOf('message') !== -1)                                        return 'file-outlook';
+    if (ext === 'jpg'  || ext === 'jpeg' || ext === 'png' || ext === 'gif'
+        || ext === 'webp' || ext === 'svg' || ext === 'bmp' || ext === 'tiff'
+        || mime.indexOf('image/') === 0)                                           return 'file-image';
+    if (ext === 'mp4'  || ext === 'avi'  || ext === 'mov' || ext === 'mkv'
+        || ext === 'webm' || mime.indexOf('video/') === 0)                        return 'file-video';
+    if (ext === 'mp3'  || ext === 'wav'  || ext === 'ogg' || ext === 'aac'
+        || ext === 'flac' || mime.indexOf('audio/') === 0)                        return 'file-audio';
+    if (ext === 'zip'  || ext === 'rar'  || ext === '7z'  || ext === 'tar'
+        || ext === 'gz'  || mime.indexOf('zip') !== -1
+        || mime.indexOf('compressed') !== -1)                                     return 'file-zip';
+    if (ext === 'csv'  || mime.indexOf('csv') !== -1)                             return 'file-csv';
+    if (ext === 'js'   || ext === 'ts'   || ext === 'html' || ext === 'css'
+        || ext === 'json' || ext === 'xml' || ext === 'py' || ext === 'java'
+        || ext === 'cs'  || ext === 'php' || ext === 'sql'
+        || mime.indexOf('javascript') !== -1 || mime.indexOf('json') !== -1
+        || mime.indexOf('/html') !== -1  || mime.indexOf('/xml') !== -1)          return 'file-code';
+    if (ext === 'txt'  || ext === 'md'   || ext === 'rtf'
+        || mime.indexOf('text/') === 0)                                           return 'file-text';
+    if (item.type === 'folder')                                                   return 'folder';
+    return 'file';
   }
 
   _findPanel(key) {
@@ -423,6 +543,15 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       if (panels[i].key === key) return panels[i];
     }
     return null;
+  }
+
+  /** Escapa caracteres HTML especiales para insertar texto en innerHTML */
+  _escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
   // Panel abierto → flecha apunta a la derecha (clic = colapsar)
@@ -442,10 +571,19 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
 
 /* ============================================================
-   MTS.DocumentManagerPreviewBasicInfoPanel  v1.0.0
+   MTS.DocumentManagerPreviewBasicInfoPanel  v1.1.0
    Panel de información básica — built-in.
 
-   Muestra los metadatos del ítem: nombre, tipo, tamaño, fechas, estado.
+   Muestra los metadatos del ítem en layout compacto inline:
+     Nombre:     Política de Privacidad.pdf
+     Tipo:       application/pdf
+     Tamaño:     500 KB
+     Versión:    3.1
+     Creado:     2024-06-01
+     Modificado: 2025-01-15
+     Estado:     active
+     Propietario: Área Legal
+
    Puede usarse tal cual o como referencia para crear paneles personalizados.
    ============================================================ */
 
@@ -463,11 +601,11 @@ MTS.DocumentManagerPreviewBasicInfoPanel = class DocumentManagerPreviewBasicInfo
     this._preview = null;
   }
 
-  /** Retorna un skeleton mientras se carga el contenido real */
+  /** Skeleton de carga */
   render(item) {
     var wrap = document.createElement('div');
     wrap.className = 'dm-preview__basic-info dm-preview__basic-info--loading';
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 6; i++) {
       var row = document.createElement('div');
       row.className = 'dm-preview__info-skeleton-row';
       wrap.appendChild(row);
@@ -475,10 +613,8 @@ MTS.DocumentManagerPreviewBasicInfoPanel = class DocumentManagerPreviewBasicInfo
     return wrap;
   }
 
-  /** Retorna el contenido real (acepta async) */
+  /** Contenido real — acepta async; en producción haría un fetch */
   load(item) {
-    // En producción, aquí irías a buscar datos al servidor.
-    // Por ahora construye con los datos que vienen en el ítem.
     return new Promise(function(resolve) {
       setTimeout(function() {
         resolve(MTS.DocumentManagerPreviewBasicInfoPanel._buildContent(item));
@@ -487,14 +623,21 @@ MTS.DocumentManagerPreviewBasicInfoPanel = class DocumentManagerPreviewBasicInfo
   }
 
   static _buildContent(item) {
+    // "Tipo" muestra mimeType si está disponible, si no ext, si no el campo type.
+    var tipo = item.mimeType || item.contentType
+            || (item.ext ? '.' + item.ext : null)
+            || item.type
+            || '—';
+
     var fields = [
-      { label: 'Nombre',     value: item.name          || '—' },
-      { label: 'Tipo',       value: item.type           || item.extension || '—' },
-      { label: 'Tamaño',     value: item.size           || '—' },
-      { label: 'Creado',     value: item.createdAt      || '—' },
-      { label: 'Modificado', value: item.updatedAt      || item.modifiedAt || '—' },
-      { label: 'Estado',     value: item.status         || '—' },
-      { label: 'Propietario',value: item.owner          || item.author || '—' },
+      { label: 'Nombre',      value: item.name          || '—' },
+      { label: 'Tipo',        value: tipo                       },
+      { label: 'Tamaño',      value: item.sizeFormatted  || (item.size ? String(item.size) : '—') },
+      { label: 'Versión',     value: item.version        || '—' },
+      { label: 'Creado',      value: item.createdAt      || '—' },
+      { label: 'Modificado',  value: item.modifiedAt     || item.updatedAt || '—' },
+      { label: 'Estado',      value: item.status         || '—' },
+      { label: 'Propietario', value: item.owner          || item.author || '—' },
     ];
 
     var wrap = document.createElement('div');
@@ -506,11 +649,12 @@ MTS.DocumentManagerPreviewBasicInfoPanel = class DocumentManagerPreviewBasicInfo
 
       var label = document.createElement('span');
       label.className   = 'dm-preview__info-label';
-      label.textContent = field.label;
+      label.textContent = field.label + ':';
 
       var value = document.createElement('span');
       value.className   = 'dm-preview__info-value';
       value.textContent = field.value;
+      value.title       = field.value;   // tooltip para valores truncados
 
       row.appendChild(label);
       row.appendChild(value);

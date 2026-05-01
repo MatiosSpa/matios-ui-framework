@@ -1,5 +1,5 @@
 /* ============================================================
-   MATIOS UI — DocumentManagerPreviewPlugin  v1.0.0
+   MATIOS UI — DocumentManagerPreviewPlugin  v1.1.0
    Estilos del plugin de vista previa de documentos.
 
    Requiere: matios-ui-base.css, matios-ui-modal.css,
@@ -142,19 +142,93 @@
 
 
 /* ============================================================
-   7. PANEL — INFORMACIÓN BÁSICA
+   7. TÍTULO DEL MODAL — icono + texto del nombre del archivo
+   ============================================================ */
+
+/* El título del modal tiene display:flex aplicado por JS en _buildModal()
+   para permitir el ícono inline. Aquí definimos los estilos de los hijos. */
+.dm-preview__title-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--mts-text-muted);
+}
+
+.dm-preview__title-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.dm-preview__title-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+
+/* ============================================================
+   8. BOTÓN DE DESCARGA — en el header del modal
+   ============================================================ */
+
+.dm-preview__download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mts-space-1-5);
+  height: 32px;
+  padding: 0 var(--mts-space-3);
+  background: transparent;
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  color: var(--mts-text-secondary);
+  font-size: var(--mts-font-size-sm);
+  font-family: var(--mts-font-family);
+  font-weight: var(--mts-font-weight-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition:
+    color var(--mts-transition-fast),
+    background var(--mts-transition-fast),
+    border-color var(--mts-transition-fast);
+}
+
+.dm-preview__download-btn:hover {
+  color: var(--mts-text-primary);
+  background: var(--mts-bg-surface-2);
+  border-color: var(--mts-border-color-strong, var(--mts-border-color));
+}
+
+.dm-preview__download-btn svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  stroke-width: 1.8;
+}
+
+.dm-preview__download-btn span {
+  line-height: 1;
+}
+
+
+/* ============================================================
+   9. PANEL — INFORMACIÓN BÁSICA (layout inline)
    ============================================================ */
 
 .dm-preview__basic-info {
   display: flex;
   flex-direction: column;
-  gap: var(--mts-space-4);
+  gap: var(--mts-space-2);
 }
 
+/* Fila: label + value en la misma línea */
 .dm-preview__info-row {
   display: flex;
-  flex-direction: column;
-  gap: var(--mts-space-1);
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--mts-space-2);
+  min-width: 0;
 }
 
 .dm-preview__info-label {
@@ -163,25 +237,32 @@
   color: var(--mts-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  flex-shrink: 0;
+  white-space: nowrap;
+  /* Alineación por columna: ancho mínimo para que los valores queden alineados */
+  min-width: 80px;
 }
 
 .dm-preview__info-value {
   font-size: var(--mts-font-size-sm);
   color: var(--mts-text-primary);
-  word-break: break-word;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 
 /* ============================================================
-   8. SKELETON — estado de carga del panel básico
+   10. SKELETON — estado de carga del panel básico
    ============================================================ */
 
 .dm-preview__basic-info--loading {
-  gap: var(--mts-space-3);
+  gap: var(--mts-space-2);
 }
 
 .dm-preview__info-skeleton-row {
-  height: 44px;
+  height: 20px;
   background: var(--mts-bg-surface-2);
   border-radius: var(--mts-radius-sm);
   animation: dm-preview-shimmer 1.5s ease-in-out infinite;

@@ -117,31 +117,44 @@ function makeSection(id, previewHtml, jsCode, initFn) {
 const preview_s12 = '<div id="table12"></div>';
 
 const js_s12 =
-`// ── HttpClient ─────────────────────────────────────────────
+`// ── HttpClient ─────────────────────────────────────────────────────────────
 const http = new MTS.HttpClient({ baseUrl: '', debug: true });
 
-// ── Plugin 1: PreviewPlugin ─────────────────────────────────
-// Se instancia antes que el DocumentManagerPlugin para poder
-// pasarlo como plugin y también usarlo en onFileClick.
+// ── URL de un PDF público para demostrar la vista previa real ───────────────
+// Se usa Google Docs Viewer como visor universal de PDFs en iframe.
+const PDF_DEMO_URL = 'https://docs.google.com/viewer'
+  + '?url=' + encodeURIComponent('https://www.africau.edu/images/default/sample.pdf')
+  + '&embedded=true';
+
+// ── Plugin 1: PreviewPlugin ─────────────────────────────────────────────────
+// Se instancia antes que DocumentManagerPlugin para poder
+// pasarlo como plugin Y usarlo en onFileClick.
 const dmPreview = new MTS.DocumentManagerPreviewPlugin({
 
-  // Sub-paneles del acordeón lateral
+  // Sub-paneles del acordeón lateral.
+  // Cada panel es independiente y puede cargar datos async.
   panels: [
     new MTS.DocumentManagerPreviewBasicInfoPanel(),
   ],
 
-  // Resuelve la URL que se mostrará en el iframe.
-  // Recibe el ítem (archivo) y retorna string | null.
-  // null → no carga el iframe.
+  // Fallback: URL resuelta a partir del ítem cuando show() no recibe URL explícita.
+  // En producción apuntaría a tu endpoint de previsualización.
   urlResolver: function(item) {
     return 'preview.html?name=' + encodeURIComponent(item.name || '');
   },
 
-  panelVisible: true,   // panel lateral abierto al inicio (default: true)
+  // Botón "Descargar" en el header del modal.
+  // Recibe el ítem completo — el dev decide el destino.
+  onDownload: function(item) {
+    console.log('[dmPreview.onDownload]', item);
+    // window.open('/api/documents/' + item.id + '/download');
+  },
+
+  panelVisible: true,    // panel lateral abierto al inicio (default: true)
   panelWidth:   '340px',
 });
 
-// ── Plugin 2: Toolbar ───────────────────────────────────────
+// ── Plugin 2: Toolbar ───────────────────────────────────────────────────────
 const toolbar = new MTS.DataTableToolbarPlugin({
   buttons: [
     { label: 'Nueva carpeta', icon: 'folder-plus',
@@ -149,17 +162,27 @@ const toolbar = new MTS.DataTableToolbarPlugin({
   ],
 });
 
-// ── Plugin 3: DocumentManager ───────────────────────────────
+// ── Plugin 3: DocumentManager ───────────────────────────────────────────────
 const dm = new MTS.DocumentManagerPlugin({
   rootLabel:  'Documentos',
   breadcrumb: true,
   dragDrop:   true,
 
-  // El evento onFileClick conecta explícitamente el dm con el preview.
-  // Esto permite al dev reemplazar el preview por su propia lógica
-  // (modal personalizado, navegación, etc.) sin tocar el plugin.
+  // onFileClick conecta explícitamente el dm con el preview.
+  // Esto permite al dev usar su propio modal, navegación, etc.
   onFileClick: function(item) {
-    dmPreview.show(item);
+    console.log('[dm.onFileClick]', item);
+
+    // show(item) — usa urlResolver
+    // show(item, url) — url sobreescribe urlResolver para esta apertura
+    //
+    // Para archivos PDF en la demo usamos un visor externo (Google Docs Viewer)
+    // para mostrar un documento real en el iframe:
+    if (item.ext === 'pdf') {
+      dmPreview.show(item, PDF_DEMO_URL);
+    } else {
+      dmPreview.show(item);
+    }
   },
 
   onDrop: function(items, folder) {
@@ -170,22 +193,21 @@ const dm = new MTS.DocumentManagerPlugin({
     dmPreview,
     new MTS.DocumentManagerContextMenuPlugin({
       onView:     function(item)  { dmPreview.show(item); },
-      onDownload: function(items) { console.log('[dm.onDownload]', items); },
-      onRename:   function(item)  { console.log('[dm.onRename]',   item);  },
-      onDelete:   function(items) { console.log('[dm.onDelete]',   items); },
+      onDownload: function(items) { console.log('[dm.ctx.onDownload]', items); },
+      onRename:   function(item)  { console.log('[dm.ctx.onRename]',   item);  },
+      onDelete:   function(items) { console.log('[dm.ctx.onDelete]',   items); },
     }),
   ],
 });
 
-// ── DataTable ───────────────────────────────────────────────
+// ── DataTable ───────────────────────────────────────────────────────────────
 new MTS.DataTable({
   elementId: 'table12',
   columns: [
     { field: 'name',     label: 'Nombre',     sortable: true, alwaysVisible: true,
       render: function(v, row) { return MTS.DocumentManagerPlugin.renderName(v, row); } },
-    { field: 'size',     label: 'Tamaño',     align: 'end',    width: '100px',
-      render: MTS.DocumentManagerPlugin.renderSize },
-    { field: 'modified', label: 'Modificado', sortable: true,  align: 'end', width: '130px' },
+    { field: 'sizeFormatted', label: 'Tamaño', align: 'end', width: '100px' },
+    { field: 'modifiedAt', label: 'Modificado', sortable: true, align: 'end', width: '130px' },
     { field: 'status',   label: 'Estado',     align: 'center', width: '110px',
       render: MTS.DocumentManagerPlugin.renderStatus },
   ],
@@ -209,33 +231,45 @@ new MTS.DataTable({
 function initTables() {
   makeSection('tabs-s12', preview_s12, js_s12, function() {
 
-    const http = new MTS.HttpClient({ baseUrl: '', debug: true });
+    var http = new MTS.HttpClient({ baseUrl: '', debug: true });
 
-    const dmPreview = new MTS.DocumentManagerPreviewPlugin({
+    var PDF_DEMO_URL = 'https://docs.google.com/viewer'
+      + '?url=' + encodeURIComponent('https://www.africau.edu/images/default/sample.pdf')
+      + '&embedded=true';
+
+    var dmPreview = new MTS.DocumentManagerPreviewPlugin({
       panels: [
         new MTS.DocumentManagerPreviewBasicInfoPanel(),
       ],
       urlResolver: function(item) {
         return 'preview.html?name=' + encodeURIComponent(item.name || '');
       },
+      onDownload: function(item) {
+        console.log('[dmPreview.onDownload]', item);
+      },
       panelVisible: true,
       panelWidth:   '340px',
     });
 
-    const toolbar = new MTS.DataTableToolbarPlugin({
+    var toolbar = new MTS.DataTableToolbarPlugin({
       buttons: [
         { label: 'Nueva carpeta', icon: 'folder-plus',
           action: function() { console.log('[dm.onNuevaCarpeta]'); } },
       ],
     });
 
-    const dm = new MTS.DocumentManagerPlugin({
+    var dm = new MTS.DocumentManagerPlugin({
       rootLabel:  'Documentos',
       breadcrumb: true,
       dragDrop:   true,
 
       onFileClick: function(item) {
-        dmPreview.show(item);
+        console.log('[dm.onFileClick]', item);
+        if (item.ext === 'pdf') {
+          dmPreview.show(item, PDF_DEMO_URL);
+        } else {
+          dmPreview.show(item);
+        }
       },
 
       onDrop: function(items, folder) {
@@ -246,9 +280,9 @@ function initTables() {
         dmPreview,
         new MTS.DocumentManagerContextMenuPlugin({
           onView:     function(item)  { dmPreview.show(item); },
-          onDownload: function(items) { console.log('[dm.onDownload]', items); },
-          onRename:   function(item)  { console.log('[dm.onRename]',   item);  },
-          onDelete:   function(items) { console.log('[dm.onDelete]',   items); },
+          onDownload: function(items) { console.log('[dm.ctx.onDownload]', items); },
+          onRename:   function(item)  { console.log('[dm.ctx.onRename]',   item);  },
+          onDelete:   function(items) { console.log('[dm.ctx.onDelete]',   items); },
         }),
       ],
     });
@@ -256,12 +290,11 @@ function initTables() {
     new MTS.DataTable({
       elementId: 'table12',
       columns: [
-        { field: 'name',     label: 'Nombre',     sortable: true, alwaysVisible: true,
+        { field: 'name',         label: 'Nombre',     sortable: true, alwaysVisible: true,
           render: function(v, row) { return MTS.DocumentManagerPlugin.renderName(v, row); } },
-        { field: 'size',     label: 'Tamaño',     align: 'end',    width: '100px',
-          render: MTS.DocumentManagerPlugin.renderSize },
-        { field: 'modified', label: 'Modificado', sortable: true,  align: 'end', width: '130px' },
-        { field: 'status',   label: 'Estado',     align: 'center', width: '110px',
+        { field: 'sizeFormatted', label: 'Tamaño',    align: 'end',    width: '100px' },
+        { field: 'modifiedAt',   label: 'Modificado', sortable: true,  align: 'end', width: '130px' },
+        { field: 'status',       label: 'Estado',     align: 'center', width: '110px',
           render: MTS.DocumentManagerPlugin.renderStatus },
       ],
       dataSource: function(query) {
