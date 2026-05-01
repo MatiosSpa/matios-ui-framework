@@ -1,12 +1,12 @@
 /* ============================================================
-   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.2.0
+   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.3.0
    Sub-plugin de vista previa para MTS.DocumentManagerPlugin.
 
    Muestra un modal fullscreen con:
      - Iframe para renderizar el documento
      - Panel lateral colapsible con acordeón de sub-paneles
      - Sistema de sub-paneles extensible (workflow, tags, versiones, etc.)
-     - Botón de descarga en el header del modal
+     - Botones en el header: ← prev, → next, versión, Reemplazar, Descargar
      - Icono del tipo de archivo en el título
 
    El plugin NO intercepta onFileClick automáticamente.
@@ -22,6 +22,10 @@
        onDownload: function(item) {
          window.open('/api/documents/' + item.id + '/download');
        },
+       onReplace: function(item, file, version) {
+         console.log('[dmPreview.onReplace]', item, file, version);
+         // http.post('/api/documents/' + item.id + '/replace', { file, version });
+       },
        onPrev: function(currentItem) {
          var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
          var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
@@ -35,10 +39,9 @@
      });
 
      new MTS.DocumentManagerPlugin({
+       accept:  '.pdf,.docx,.xlsx',   // ← el preview lo hereda para onReplace
        onFileClick: function(item) {
          console.log('[dm.onFileClick]', item);
-         // La URL puede resolverse externamente y pasarse como segundo argumento:
-         // dmPreview.show(item, 'https://servidor.com/preview/' + item.id);
          dmPreview.show(item);
        },
        plugins: [dmPreview, dmContextMenu, dmWorkflow],
@@ -60,6 +63,10 @@
      panels        Array   — sub-paneles del acordeón lateral
      urlResolver   fn      — function(item) → string | null  (URL del iframe)
      onDownload    fn      — function(item)  (botón "Descargar" en el header)
+     onReplace     fn      — function(item, file, version)  (botón "Reemplazar" en el header)
+                              file: File seleccionado por el usuario
+                              version: número del input de versión (decimal)
+                              accept: heredado de dm._options.accept
      onPrev        fn      — function(currentItem)  (botón ← en el header)
      onNext        fn      — function(currentItem)  (botón → en el header)
      panelVisible  bool    — panel lateral visible al abrir (default: true)
@@ -74,7 +81,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
   static descriptor = {
     name:     'MTS.DocumentManagerPreviewPlugin',
-    version:  '1.2.0',
+    version:  '1.3.0',
     type:     'documentManagerPreview',
     requires: ['MTS.DocumentManagerPlugin', 'MTS.Modal', 'MTS.Accordion'],
     provides: 'documentManagerPreview',
@@ -91,25 +98,28 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       panels:       options.panels       || [],
       urlResolver:  options.urlResolver  || null,
       onDownload:   options.onDownload   || null,
+      onReplace:    options.onReplace    || null,
       onPrev:       options.onPrev       || null,
       onNext:       options.onNext       || null,
       panelVisible: options.panelVisible !== false,
       panelWidth:   options.panelWidth   || '340px',
     };
 
-    this._dm          = null;
-    this._modal       = null;
-    this._accordion   = null;
-    this._iframe      = null;
-    this._spinnerWrap = null;
-    this._panelEl     = null;
-    this._panelInner  = null;
-    this._toggleBtn   = null;
-    this._accEl       = null;
-    this._currentItem = null;
-    this._panelLoaded = {};
-    this._panelOpen   = this._options.panelVisible;
-    this._overrideUrl = null;  // URL opcional pasada en show(item, url)
+    this._dm             = null;
+    this._modal          = null;
+    this._accordion      = null;
+    this._iframe         = null;
+    this._spinnerWrap    = null;
+    this._panelEl        = null;
+    this._panelInner     = null;
+    this._toggleBtn      = null;
+    this._accEl          = null;
+    this._currentItem    = null;
+    this._panelLoaded    = {};
+    this._panelOpen      = this._options.panelVisible;
+    this._overrideUrl    = null;   // URL opcional pasada en show(item, url)
+    this._replaceInput   = null;   // <input type="file"> oculto para onReplace
+    this._versionInputEl = null;   // <input type="number"> de versión en el header
   }
 
   /* ----------------------------------------------------------
@@ -130,14 +140,16 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     });
     if (this._modal) {
       this._modal.destroy();
-      this._modal       = null;
-      this._accordion   = null;
-      this._iframe      = null;
-      this._spinnerWrap = null;
-      this._panelEl     = null;
-      this._panelInner  = null;
-      this._toggleBtn   = null;
-      this._accEl       = null;
+      this._modal          = null;
+      this._accordion      = null;
+      this._iframe         = null;
+      this._spinnerWrap    = null;
+      this._panelEl        = null;
+      this._panelInner     = null;
+      this._toggleBtn      = null;
+      this._accEl          = null;
+      this._replaceInput   = null;
+      this._versionInputEl = null;
     }
     this._dm          = null;
     this._currentItem = null;
@@ -166,6 +178,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     }
 
     this._updateTitle(item);
+    this._updateReplaceState(item);
     this._resetIframe();
     this._refreshPanels(item);
     this._modal.show();
@@ -255,6 +268,41 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       headerEl.insertBefore(nextEl, titleEl);
     }
 
+    // — Botón "Reemplazar" + input de versión: se insertan antes del botón × —
+    // Orden de inserción: primero versión, luego Reemplazar → [v input][Reemplazar][×]
+    // (Descargar se inserta después, quedando entre Reemplazar y ×)
+    if (this._options.onReplace) {
+      // Input de versión
+      var verEl = document.createElement('input');
+      verEl.type      = 'number';
+      verEl.min       = '0';
+      verEl.step      = 'any';
+      verEl.className = 'dm-preview__version-input';
+      verEl.title     = 'Versión del documento';
+      verEl.setAttribute('aria-label', 'Versión del documento');
+      this._versionInputEl = verEl;
+
+      // Botón Reemplazar
+      var replaceEl = document.createElement('button');
+      replaceEl.type = 'button';
+      new MTS.Button(replaceEl, {
+        label:    'Reemplazar',
+        iconLeft: MTS.Icon ? MTS.Icon.get('upload') : '',
+        size:     'sm',
+        variant:  'ghost',
+      }).on('click', function() {
+        if (self._replaceInput) self._replaceInput.click();
+      });
+
+      if (closeBtnEl) {
+        headerEl.insertBefore(verEl, closeBtnEl);
+        headerEl.insertBefore(replaceEl, closeBtnEl);
+      } else {
+        headerEl.appendChild(verEl);
+        headerEl.appendChild(replaceEl);
+      }
+    }
+
     // — Botón de descarga: se inserta antes del botón × —
     if (this._options.onDownload) {
       var dlEl = document.createElement('button');
@@ -336,6 +384,25 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     } else {
       // Sin paneles: ocultar botón de toggle
       toggleBtn.hidden = true;
+    }
+
+    // — File input oculto para "Reemplazar" —
+    if (this._options.onReplace) {
+      var replaceInput = document.createElement('input');
+      replaceInput.type   = 'file';
+      replaceInput.hidden = true;
+      replaceInput.addEventListener('change', function() {
+        var file = replaceInput.files && replaceInput.files[0];
+        if (!file) return;
+        var version = self._versionInputEl
+          ? (parseFloat(self._versionInputEl.value) || 0)
+          : 0;
+        self._options.onReplace(self._currentItem, file, version);
+        // Reset para permitir seleccionar el mismo archivo dos veces seguidas
+        replaceInput.value = '';
+      });
+      wrap.appendChild(replaceInput);
+      this._replaceInput = replaceInput;
     }
 
     return wrap;
@@ -531,6 +598,35 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     this._modal.setTitle(
       iconHtml + '<span class="dm-preview__title-text">' + name + '</span>'
     );
+  }
+
+  /* ----------------------------------------------------------
+     REEMPLAZAR — sincronización del estado con el ítem actual
+  ---------------------------------------------------------- */
+
+  /**
+   * Actualiza el input de versión y el accept del file picker
+   * con los datos del ítem que se acaba de abrir.
+   * Se llama en cada show(item).
+   */
+  _updateReplaceState(item) {
+    if (!this._options.onReplace) return;
+
+    // Versión sugerida: versión actual + 0.1, redondeada a 1 decimal
+    if (this._versionInputEl && item) {
+      var current = parseFloat(item.version) || 1;
+      var next    = Math.round((current + 0.1) * 10) / 10;
+      this._versionInputEl.value = next;
+    }
+
+    // accept: heredado de DocumentManagerPlugin para que el file picker
+    // filtre los mismos tipos que acepta el gestor de documentos.
+    if (this._replaceInput) {
+      var accept = (this._dm && this._dm._options && this._dm._options.accept)
+                 ? this._dm._options.accept
+                 : '*';
+      this._replaceInput.accept = (accept === '*') ? '' : accept;
+    }
   }
 
   /* ----------------------------------------------------------

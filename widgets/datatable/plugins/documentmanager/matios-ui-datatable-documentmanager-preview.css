@@ -1,5 +1,5 @@
 /* ============================================================
-   MATIOS UI — DocumentManagerPreviewPlugin  v1.2.0
+   MATIOS UI — DocumentManagerPreviewPlugin  v1.3.0
    Estilos del plugin de vista previa de documentos.
 
    Requiere: matios-ui-base.css, matios-ui-modal.css,
@@ -228,4 +228,27 @@
   0%   { opacity: 1; }
   50%  { opacity: 0.4; }
   100% { opacity: 1; }
+}
+
+
+/* ============================================================
+   10. INPUT DE VERSIÓN — en el header del modal (junto a Reemplazar)
+   ============================================================ */
+
+.dm-preview__version-input {
+  width: 64px;
+  padding: var(--mts-space-1) var(--mts-space-2);
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-primary);
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-sm);
+  text-align: center;
+  outline: none;
+  flex-shrink: 0;
+  transition: border-color var(--mts-transition-fast);
+}
+
+.dm-preview__version-input:focus {
+  border-color: var(--mts-color-primary);
 }
