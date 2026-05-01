@@ -1,0 +1,399 @@
+/* ============================================================
+   MATIOS UI — matios-ui-datatable-documentmanager-upload.css  v1.0.0
+   Estilos del body del MTS.DocumentManagerUploadPlugin.
+   El contenedor modal lo provee MTS.Modal (matios-ui-modal.css).
+   Sin colores hardcodeados — usa CSS variables del tema activo.
+   ============================================================ */
+
+
+/* ============================================================
+   1. WRAPPER DEL BODY
+   ============================================================ */
+
+
+.mts-dm-upload-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+/* ============================================================
+   2. DROP ZONE INTERNA DEL MODAL
+   ============================================================ */
+
+.mts-dm-upload-dz {
+  border: 2px dashed var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: var(--mts-surface-subtle);
+  transition:
+    border-color var(--mts-transition-fast),
+    background   var(--mts-transition-fast);
+  cursor: default;
+  user-select: none;
+}
+
+.mts-dm-upload-dz--active {
+  border-color: var(--mts-color-primary);
+  background: color-mix(in srgb, var(--mts-color-primary) 8%, transparent);
+}
+
+.mts-dm-upload-dz--disabled {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.mts-dm-upload-dz__icon {
+  color: var(--mts-text-muted);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.mts-dm-upload-dz--active .mts-dm-upload-dz__icon {
+  color: var(--mts-color-primary);
+}
+
+.mts-dm-upload-dz__icon svg {
+  width: 28px;
+  height: 28px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.mts-dm-upload-dz__hint {
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-muted);
+  text-align: center;
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   3. LISTA DE ARCHIVOS
+   ============================================================ */
+
+.mts-dm-upload-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 235px;   /* ~5 archivos antes de hacer scroll */
+  overflow-y: auto;
+}
+
+.mts-dm-upload-list__empty {
+  text-align: center;
+  padding: 16px 0;
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-muted);
+}
+
+
+/* ============================================================
+   4. ITEM DE ARCHIVO
+   ============================================================ */
+
+.mts-dm-upload-item {
+  display: grid;
+  grid-template-columns: 22px 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: var(--mts-radius-sm);
+  background: var(--mts-surface-subtle);
+  border: 1px solid var(--mts-border-color);
+  transition: border-color var(--mts-transition-fast), background var(--mts-transition-fast);
+}
+
+.mts-dm-upload-item[data-state="done"] {
+  border-color: color-mix(in srgb, var(--mts-color-success) 50%, transparent);
+  background: color-mix(in srgb, var(--mts-color-success) 6%, transparent);
+}
+
+.mts-dm-upload-item[data-state="error"] {
+  border-color: color-mix(in srgb, var(--mts-color-danger) 50%, transparent);
+  background: color-mix(in srgb, var(--mts-color-danger) 6%, transparent);
+}
+
+.mts-dm-upload-item[data-state="exists"] {
+  border-color: color-mix(in srgb, var(--mts-color-warning) 50%, transparent);
+  background: color-mix(in srgb, var(--mts-color-warning) 6%, transparent);
+}
+
+.mts-dm-upload-item__icon {
+  color: var(--mts-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mts-dm-upload-item__icon svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mts-dm-upload-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.mts-dm-upload-item__name {
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-medium);
+  color: var(--mts-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mts-dm-upload-item__meta {
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+}
+
+.mts-dm-upload-item__status {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.mts-dm-upload-item__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: var(--mts-radius-sm);
+  background: transparent;
+  color: var(--mts-text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--mts-transition-fast), color var(--mts-transition-fast);
+}
+
+.mts-dm-upload-item__remove:hover:not(:disabled) {
+  background: var(--mts-surface-hover);
+  color: var(--mts-color-danger);
+}
+
+.mts-dm-upload-item__remove:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.mts-dm-upload-item__remove svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+/* ============================================================
+   5. ESTADO DEL ARCHIVO
+   ============================================================ */
+
+.mts-dm-upload-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-medium);
+  white-space: nowrap;
+}
+
+.mts-dm-upload-status svg {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.mts-dm-upload-status--pending   { color: var(--mts-text-muted); }
+.mts-dm-upload-status--checking  { color: var(--mts-text-muted); }
+.mts-dm-upload-status--exists    { color: var(--mts-color-warning); }
+.mts-dm-upload-status--ready     { color: var(--mts-color-success); }
+.mts-dm-upload-status--uploading { color: var(--mts-color-primary); }
+.mts-dm-upload-status--done      { color: var(--mts-color-success); }
+.mts-dm-upload-status--error     { color: var(--mts-color-danger);  }
+.mts-dm-upload-status--skipped   { color: var(--mts-text-muted);    }
+
+
+/* ============================================================
+   6. SPINNER DE CARGA
+   ============================================================ */
+
+.mts-dm-upload-spin {
+  display: inline-flex;
+  align-items: center;
+  animation: mts-dm-upload-spin 1s linear infinite;
+}
+
+.mts-dm-upload-spin svg {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@keyframes mts-dm-upload-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+
+/* ============================================================
+   7. BARRA DE PROGRESO INDETERMINADA
+   ============================================================ */
+
+.mts-dm-upload-progress {
+  width: 100px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--mts-border-color);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.mts-dm-upload-progress__bar {
+  height: 100%;
+  width: 40%;
+  background: var(--mts-color-primary);
+  border-radius: 2px;
+  animation: mts-dm-upload-progress 1.4s ease-in-out infinite;
+}
+
+@keyframes mts-dm-upload-progress {
+  0%   { transform: translateX(-100%); }
+  50%  { transform: translateX(150%); }
+  100% { transform: translateX(350%); }
+}
+
+
+/* ============================================================
+   8. CONFLICTO DE VERSIÓN
+   ============================================================ */
+
+/* Item en modo conflicto (exists + ask): alinear status arriba */
+.mts-dm-upload-item--conflict .mts-dm-upload-item__status {
+  align-items: flex-start;
+}
+
+/* Status en modo conflicto: layout vertical */
+.mts-dm-upload-status--conflict {
+  flex-direction: column;
+  align-items: flex-start;
+  white-space: normal;
+  gap: 6px;
+}
+
+/* Primera línea del status: ⚠ icono + texto + badge */
+.mts-dm-upload-status__line {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Badge de versión actual: [v1] */
+.mts-dm-upload-version {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  background: color-mix(in srgb, var(--mts-color-warning) 15%, transparent);
+  color: var(--mts-color-warning);
+  border: 1px solid color-mix(in srgb, var(--mts-color-warning) 40%, transparent);
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* Fila de botones de acción */
+.mts-dm-upload-item__actions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+/* Botón de acción individual */
+.mts-dm-upload-action {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--mts-radius-sm);
+  font-family: var(--mts-font-family);
+  font-size: 0.7rem;
+  font-weight: var(--mts-font-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid var(--mts-border-color);
+  background: var(--mts-bg-surface);
+  color: var(--mts-text-muted);
+  transition:
+    background var(--mts-transition-fast),
+    border-color var(--mts-transition-fast),
+    color var(--mts-transition-fast);
+}
+
+.mts-dm-upload-action:hover:not(:disabled):not(.mts-dm-upload-action--auto) {
+  border-color: var(--mts-color-primary);
+  color: var(--mts-color-primary);
+  background: color-mix(in srgb, var(--mts-color-primary) 6%, transparent);
+}
+
+/* Botón activo (acción seleccionada) */
+.mts-dm-upload-action--active {
+  background: var(--mts-color-primary);
+  border-color: var(--mts-color-primary);
+  color: #fff;
+}
+
+/* Etiqueta auto (no es botón, es solo texto) */
+.mts-dm-upload-action--auto {
+  border: none;
+  background: transparent;
+  padding-left: 0;
+  font-style: italic;
+  cursor: default;
+}
+
+.mts-dm-upload-action:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

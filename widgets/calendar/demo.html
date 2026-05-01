@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <script>
+    /* Registrar Mock API Service Worker */
+    if ('serviceWorker' in navigator) {
+      /* SW encapsulado en la carpeta del componente.
+         Archivo: widgets/calendar/sw-calendar.js
+         Scope:   ./ (relativo = /widgets/calendar/) */
+      async function _initSW() {
+        /* 1. Limpiar SWs viejos con scope o ruta distinta */
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for (const r of regs) {
+          if (r.scope.includes('widgets/calendar') || r.scope.includes('mock-api')) {
+            if (!r.scope.endsWith('/widgets/calendar/') && !r.scriptURL?.includes('widgets/calendar/sw-calendar')) {
+              console.log('[sw-calendar] Desregistrando SW viejo:', r.scope);
+              await r.unregister();
+            }
+          }
+        }
+        /* 2. Registrar SW desde la carpeta del componente */
+        const reg = await navigator.serviceWorker.register('./sw-calendar.js', { scope: './' });
+        console.log('[sw-calendar] Registrado — scope:', reg.scope);
+        if (reg.active) {
+          _markSwReady();
+        } else {
+          /* Esperar activación */
+          const sw = reg.installing || reg.waiting;
+          if (sw) {
+            sw.addEventListener('statechange', e => {
+              if (e.target.state === 'activated') _markSwReady();
+            });
+          }
+          /* También escuchar controllerchange */
+          navigator.serviceWorker.addEventListener('controllerchange', _markSwReady, { once: true });
+        }
+      }
+      _initSW().catch(err => console.warn('[sw-calendar] No disponible (necesita servidor HTTP):', err.message));
+    }
+    function _markSwReady() {
+      const opt = document.querySelector('#cfgMockApi option[value="events"]');
+      if (opt) opt.textContent = '⚡ sw-calendar ✓ (activo)';
+      console.log('[sw-calendar] ✓ Activo — interceptando /widgets/calendar/mock-api/*');
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTS Calendar v2 — App Completa</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-high-contrast.css">
+  
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+
+
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="matios-ui-calendar.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-taginput/matios-ui-taginput.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-picker/matios-ui-date-picker.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-popover/matios-ui-popover.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-modal/matios-ui-modal.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-colorpicker/matios-ui-colorpicker.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-toast/matios-ui-toast.css">
+
+  <link rel="stylesheet" href="./matios-ui-calendar-colors.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="matios-ui-calendar-shared.js"></script>
+  <script src="matios-ui-calendar-week.js"></script>
+  <script src="matios-ui-calendar-day.js"></script>
+  <script src="matios-ui-calendar-month.js"></script>
+  <script src="matios-ui-calendar-schedule.js"></script>
+  <script src="matios-ui-calendar.js"></script>
+  <script src="matios-ui-calendar-i18n.js"></script>
+  <script src="matios-ui-calendar-ui.js"></script>
+  <script src="../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../forms/matios-ui-taginput/matios-ui-taginput.js"></script>
+  <script src="../../forms/matios-ui-picker/matios-ui-date-picker-base.js"></script>
+  <script src="../../forms/matios-ui-picker/matios-ui-date-picker-date.js"></script>
+  <script src="../../forms/matios-ui-picker/matios-ui-date-picker-time.js"></script>
+  <script src="../../forms/matios-ui-picker/matios-ui-date-picker-datetime.js"></script>
+  <script src="../../forms/matios-ui-picker/matios-ui-date-picker-daterange.js"></script>
+  <script src="../../forms/matios-ui-picker/matios-ui-date-picker-month.js"></script>
+  <script src="../../forms/matios-ui-picker/matios-ui-date-picker-week.js"></script>
+  <script src="../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../overlays/matios-ui-popover/matios-ui-popover.js"></script>
+  <script src="../../overlays/matios-ui-modal/matios-ui-modal.js"></script>
+  <script src="../../forms/matios-ui-colorpicker/matios-ui-colorpicker.js"></script>
+  <script src="../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+
+  <link rel="stylesheet" href="../../utilities/matios-ui-devpanel/matios-ui-devpanel.css">
+  <link rel="stylesheet" href="../../layout/matios-ui-splitter/matios-ui-splitter.css">
+  <script src="../../layout/matios-ui-splitter/matios-ui-splitter.js"></script>
+  <script src="../../utilities/matios-ui-devpanel/matios-ui-devpanel.js"></script>
+</head>
+<style>
+  html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+  #calendario { height: 100%; }
+</style>
+<body style="margin:0;padding:0;">
+
+
+<!-- Calendar container -->
+<div id="calendario"></div>
+
+<!-- Toast inline -->
+
+<script src="app.js"></script>
+<!-- ══════════════════════════════════════════════════════════
+     EJEMPLO DE USO — copiar, descomentar y adaptar
+     ══════════════════════════════════════════════════════════
+
+<div id="mi-calendario" style="height:100vh"></div>
+
+<script>
+(async () => {
+
+  // Uso minimo - modales por defecto del CalendarUI
+  const ui = new MTS.CalendarUI('#mi-calendario', {
+    calendarOptions: {
+      view:      'week',
+      days:      MTS.Calendar.DAYS_MON_FRI,
+      startTime: '08:00',
+      endTime:   '19:00',
+    },
+
+    // onEvent - se llama DESPUES de que el modal confirma
+    // action: 'create' | 'update' | 'delete' | 'drop' | 'resize'
+    // event:  datos del evento ya con los cambios
+    // cal:    instancia MTS.Calendar
+    onEvent: async (action, event, cal) => {
+      switch (action) {
+        case 'create':
+          const res   = await fetch('/api/events', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(event) });
+          const saved = await res.json();
+          cal.updateEvent(event.id, { id:saved.id, uid:saved.id });
+          break;
+        case 'update':
+          await fetch('/api/events/' + (event.uid ?? event.id), { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(event) });
+          break;
+        case 'delete':
+          await fetch('/api/events/' + (event.uid ?? event.id), { method:'DELETE' });
+          cal.removeEvent(event.uid ?? event.id);
+          break;
+        case 'drop':
+        case 'resize':
+          await fetch('/api/events/' + (event.uid ?? event.id), { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(event) });
+          break;
+      }
+    },
+  });
+  await ui.init();
+
+
+  // Uso avanzado - modales propios
+  // renderXXXEventModal recibe (cal, event) y debe retornar:
+  //   el evento modificado si confirma  -> CalendarUI llama onEvent automaticamente
+  //   null / undefined si cancela       -> CalendarUI no hace nada
+
+  const uiCustom = new MTS.CalendarUI('#mi-calendario', {
+
+    renderNewEventModal: async (cal, event) => {
+      // event contiene: date, dayNumber, startH, endH (datos de la celda clickeada)
+      return new Promise((resolve) => {
+        const modal = new MTS.Modal({
+          title: 'Nuevo evento',
+          body:  document.getElementById('mi-form-nuevo'), // tu HTML
+          buttons: [
+            { label:'Cancelar', variant:'ghost',  onClick: () => { modal.hide(); resolve(null); } },
+            { label:'Guardar',  variant:'primary', onClick: () => {
+                const titulo = document.getElementById('mi-titulo').value.trim();
+                if (!titulo) return;
+                modal.hide();
+                resolve({ ...event, title: titulo }); // CalendarUI llamara onEvent('create', result, cal)
+            }},
+          ],
+        });
+        modal.show();
+      });
+    },
+
+    renderEventDeleteModal: async (cal, event) => {
+      return new Promise((resolve) => {
+        resolve(confirm('Eliminar "' + event.title + '"?') ? event : null);
+      });
+    },
+
+    onEvent: async (action, event, cal) => {
+      // Solo llega aqui si el modal retorno datos (usuario no cancelo)
+      if (action === 'create') {
+        const res = await fetch('/api/events', { method:'POST', body:JSON.stringify(event) });
+        const saved = await res.json();
+        cal.addEvent({ ...event, id:saved.id });
+      }
+      if (action === 'delete') {
+        await fetch('/api/events/' + event.id, { method:'DELETE' });
+        cal.removeEvent(event.id);
+      }
+    },
+  });
+  await uiCustom.init();
+
+})();
+</script>
+-->
+
+</body>
+</html>

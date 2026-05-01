@@ -1,0 +1,187 @@
+/* ============================================================
+   MATIOS UI — matios-ui-datatable.css  v1.1.0
+
+   Estilos exclusivos del DataTable: contenedor, toolbar layout,
+   fixed-header wrapper, overlay de carga y estado de error.
+
+   Dependencias CSS requeridas:
+     - matios-ui-table.css       (tabla base)
+     - matios-ui-input.css       (buscador)
+     - matios-ui-pagination.css  (paginación + entries selector)
+   ============================================================ */
+
+
+/* ============================================================
+   1. ROOT
+   ============================================================ */
+
+.mts-dt {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+/* ============================================================
+   2. FOOTER (fila de paginación — layout propio del datatable)
+   ============================================================ */
+
+.mts-dt-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--mts-control-height-md);
+}
+
+.mts-dt-footer__info {
+  flex: 1;
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  white-space: nowrap;
+}
+
+.mts-dt-footer__controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mts-dt-footer__label {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  white-space: nowrap;
+}
+
+.mts-dt-footer__nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Select de filas — misma altura que los botones de página */
+.mts-dt-footer .mts-select__trigger {
+  height: var(--mts-control-height-md);
+  min-height: unset;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+
+/* ============================================================
+   3. TOOLBAR
+   ============================================================ */
+
+.mts-dt-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Toolbar de dos filas: cuando DM (breadcrumb) y ToolbarPlugin (botones) coexisten.
+   Fila 1: breadcrumb a ancho completo.
+   Fila 2: botones · filtro · spacer · búsqueda · acciones. */
+.mts-dt-toolbar--two-row {
+  flex-direction: column;
+  align-items:    stretch;
+  gap:            6px;
+}
+
+.mts-dt-toolbar__row {
+  display:     flex;
+  align-items: center;
+  gap:         10px;
+}
+
+.mts-dt-toolbar__spacer { flex: 1; }
+
+/* mts-select compacto para el selector de filas en la paginación */
+.mts-dt-size-select { width: 80px; }
+
+/* mts-input compacto dentro del toolbar del datatable */
+.mts-dt-toolbar .mts-input {
+  padding-top:    5px;
+  padding-bottom: 5px;
+  font-size: var(--mts-font-size-sm);
+}
+
+
+/* ============================================================
+   4. OVERLAY — loading
+   ============================================================ */
+
+.mts-dt-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--mts-bg-body);
+  opacity: 0.88;
+  z-index: 10;
+  border-radius: var(--mts-radius-lg);
+  min-height: 80px;
+}
+
+.mts-dt-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--mts-border-color);
+  border-top-color: var(--mts-color-primary);
+  border-radius: 50%;
+  animation: mts-dt-spin 0.7s linear infinite;
+}
+
+@keyframes mts-dt-spin {
+  to { transform: rotate(360deg); }
+}
+
+.mts-dt-overlay__text {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+}
+
+
+/* ============================================================
+   5. ERROR
+   ============================================================ */
+
+.mts-dt-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 20px;
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-color-danger-light);
+  border-radius: var(--mts-radius-lg);
+  background: var(--mts-color-danger-light);
+}
+
+.mts-dt-error__msg {
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-color-danger);
+  text-align: center;
+}
+
+.mts-dt-error__retry {
+  padding: 6px 16px;
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-color-danger);
+  border-radius: var(--mts-radius-md);
+  background: transparent;
+  color: var(--mts-color-danger);
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-sm);
+  cursor: pointer;
+  transition: all var(--mts-transition-fast);
+}
+
+.mts-dt-error__retry:hover {
+  background: var(--mts-color-danger);
+  color: #fff;
+}
+
+

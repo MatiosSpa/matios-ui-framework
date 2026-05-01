@@ -1,0 +1,206 @@
+/* ============================================================
+   MATIOS UI — matios-ui-datatable-menu.css  v1.0.0
+   Estilos compartidos del sistema de menús del DataTable.
+
+   Usados por:
+     MTS.DataTableContextMenuPlugin
+     MTS.DocumentManagerContextMenuPlugin
+     MTS.DataTableColumnActionsPlugin
+
+   100% variables del tema — sin colores hardcodeados.
+   ============================================================ */
+
+
+/* ============================================================
+   1. BOTÓN TRIGGER — "Acciones ∨"
+   Renderizado por MTS.DataTableMenu.renderTrigger()
+   ============================================================ */
+
+.mts-dt-trigger {
+  display:        inline-flex;
+  align-items:    center;
+  gap:            5px;
+  padding:        4px 10px;
+  font-family:    var(--mts-font-family);
+  font-size:      var(--mts-font-size-sm);
+  font-weight:    400;
+  line-height:    1;
+  color:          var(--mts-text-secondary);
+  background:     transparent;
+  border:         var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius:  var(--mts-radius-sm);
+  cursor:         pointer;
+  white-space:    nowrap;
+  user-select:    none;
+  transition:
+    background    var(--mts-transition-fast),
+    color         var(--mts-transition-fast),
+    border-color  var(--mts-transition-fast);
+}
+
+.mts-dt-trigger:hover,
+.mts-dt-trigger:focus-visible {
+  background:   var(--mts-color-primary-light);
+  color:        var(--mts-color-primary);
+  border-color: var(--mts-color-primary);
+  outline:      none;
+}
+
+.mts-dt-trigger svg {
+  width:              13px;
+  height:             13px;
+  stroke:             currentColor;
+  fill:               none;
+  stroke-width:       2;
+  stroke-linecap:     round;
+  stroke-linejoin:    round;
+  flex-shrink:        0;
+  transition:         color var(--mts-transition-fast);
+}
+
+/* La celda que contiene el trigger no selecciona la fila */
+.mts-table__td:has(.mts-dt-trigger) {
+  cursor: default;
+}
+
+
+/* ============================================================
+   2. MENÚ FLOTANTE
+   ============================================================ */
+
+.mts-dt-menu {
+  position:      absolute;
+  z-index:       9999;
+  min-width:     180px;
+  max-width:     300px;
+  padding:       4px 0;
+  margin:        0;
+  list-style:    none;
+  background:    var(--mts-bg-surface);
+  border:        var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  box-shadow:    0 8px 24px rgba(0, 0, 0, 0.12);
+  outline:       none;
+  animation:     mts-dt-menu-in 0.1s ease-out both;
+}
+
+@keyframes mts-dt-menu-in {
+  from { opacity: 0; transform: scale(0.97) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+
+/* ============================================================
+   3. ÍTEM
+   ============================================================ */
+
+.mts-dt-menu__item {
+  display:        flex;
+  align-items:    center;
+  gap:            8px;
+  padding:        7px 14px;
+  font-family:    var(--mts-font-family);
+  font-size:      var(--mts-font-size-sm);
+  color:          var(--mts-text-primary);
+  cursor:         pointer;
+  user-select:    none;
+  outline:        none;
+  transition:
+    background  var(--mts-transition-fast),
+    color       var(--mts-transition-fast);
+}
+
+.mts-dt-menu__item:hover,
+.mts-dt-menu__item:focus {
+  background: var(--mts-color-primary-light);
+  color:      var(--mts-color-primary);
+}
+
+.mts-dt-menu__item:hover .mts-dt-menu__icon,
+.mts-dt-menu__item:focus .mts-dt-menu__icon {
+  color: var(--mts-color-primary);
+}
+
+
+/* ============================================================
+   4. VARIANTE — danger
+   ============================================================ */
+
+.mts-dt-menu__item--danger {
+  color: var(--mts-color-danger);
+}
+
+.mts-dt-menu__item--danger:hover,
+.mts-dt-menu__item--danger:focus {
+  background: var(--mts-color-danger-light);
+  color:      var(--mts-color-danger);
+}
+
+.mts-dt-menu__item--danger .mts-dt-menu__icon {
+  color: var(--mts-color-danger);
+}
+
+
+/* ============================================================
+   5. VARIANTE — disabled
+   ============================================================ */
+
+.mts-dt-menu__item--disabled {
+  opacity:    0.45;
+  cursor:     not-allowed;
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   6. ICON / LABEL / SHORTCUT
+   ============================================================ */
+
+.mts-dt-menu__icon {
+  flex-shrink:     0;
+  width:           16px;
+  height:          16px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       14px;
+  color:           var(--mts-text-muted);
+  transition:      color var(--mts-transition-fast);
+}
+
+.mts-dt-menu__icon svg {
+  width:           16px;
+  height:          16px;
+  stroke:          currentColor;
+  fill:            none;
+  stroke-width:    2;
+  stroke-linecap:  round;
+  stroke-linejoin: round;
+  flex-shrink:     0;
+}
+
+.mts-dt-menu__label {
+  flex:          1;
+  white-space:   nowrap;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+}
+
+.mts-dt-menu__shortcut {
+  flex-shrink:  0;
+  font-size:    var(--mts-font-size-xs);
+  color:        var(--mts-text-muted);
+  margin-left:  12px;
+}
+
+
+/* ============================================================
+   7. SEPARADOR
+   ============================================================ */
+
+.mts-dt-menu__separator {
+  height:     1px;
+  margin:     4px 10px;
+  background: var(--mts-border-color);
+  list-style: none;
+}

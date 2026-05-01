@@ -373,6 +373,7 @@ function showSelOutput(id, v, t) {
 
   function processPanel(panel) {
     if (!panel) return;
+    if (panel.querySelector('.mts-codeblock')) return;
     var type = detectPanelType(panel);
     var target = findCodeTarget(panel);
     var raw = (target.textContent || '').trim();

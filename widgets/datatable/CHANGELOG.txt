@@ -1,0 +1,261 @@
+MTS.DataTable — Historial de desarrollo
+========================================
+Orden cronológico ascendente (lo más antiguo primero)
+
+
+── COMPLETADO ─────────────────────────────────────────────────────────────────
+
+
+[01] Core MTS.DataTable v1.0
+     Paginación server-side, búsqueda con debounce, sort por columna,
+     selección simple y múltiple con checkboxes, custom render por celda,
+     fixed header, sistema de plugins (install/uninstall), eventos
+     (onAfterLoad, onSelectionChange, onRowSelect, onRowDeselect, onReady).
+     Archivos: matios-ui-datatable.js · matios-ui-datatable.css
+
+[02] MTS.DataTableMenu (utility compartido)
+     Dropdown base reutilizable por todos los plugins que necesiten menús.
+     Archivos: plugins/shared/matios-ui-datatable-menu.js
+               plugins/shared/matios-ui-datatable-menu.css
+
+[03] MTS.DataTableContextMenuPlugin
+     Menú contextual al hacer clic derecho sobre una fila.
+     Inyecta columna de acciones automáticamente si actionColumn: true.
+     Items con label, icon, shortcut, condition (por fila), danger, separator.
+     Archivos: plugins/contextmenu/matios-ui-datatable-contextmenu.js
+
+[04] MTS.DataTableColumnActionsPlugin
+     Columna de acciones standalone (sin clic derecho).
+     Mismo contrato de items que ContextMenuPlugin.
+     Soporte para selección múltiple: action recibe array de items.
+     Archivos: plugins/rowactions/matios-ui-datatable-rowactions.js
+
+[05] MTS.DocumentManagerPlugin
+     Navegación por carpetas con breadcrumb en el toolbar.
+     Drag & drop de archivos/carpetas entre directorios.
+     Íconos por tipo de archivo (.pdf, .docx, .xlsx, .pptx, etc.).
+     Render de tamaño, estado (active/archived) y workflow status.
+     Sistema de sub-plugins (install sobre el DM, no sobre el DataTable).
+     Archivos: plugins/documentmanager/matios-ui-datatable-documentmanager.js
+               plugins/documentmanager/matios-ui-datatable-documentmanager.css
+
+[06] MTS.DocumentManagerContextMenuPlugin
+     Sub-plugin del DM. Context menu con acciones base:
+     ver, abrir carpeta, descargar, renombrar, mover, eliminar.
+     Selección múltiple para descargar, mover y eliminar.
+     Archivos: plugins/documentmanager/matios-ui-datatable-documentmanager-contextmenu.js
+
+[07] MTS.DocumentManagerWorkflowPlugin
+     Sub-plugin del DM. Ciclo de vida documental completo:
+     draft → pending → in_review → signed / rejected.
+     Acciones: iniciar, enviar a aprobación, aprobar, firmar, rechazar, reiniciar.
+     Se integra en el context menu del DM automáticamente.
+     Archivos: plugins/documentmanager/matios-ui-datatable-documentmanager-workflow.js
+
+[08] FIX — Render sin parpadeo (flicker)
+     Problema: el toolbar se destruía y reconstruía en cada render, causando
+     un flash visible al paginar o buscar.
+     Solución: toolbar se monta una vez y permanece (isConnected check).
+     Contenido y footer se actualizan con replaceWith() atómico.
+     _hideLoading() se llama DESPUÉS de que el nuevo contenido está en el DOM.
+
+[09] FIX — Alto fijo del table wrapper
+     Problema: al pasar a la última página (menos filas), el footer subía.
+     Solución: se mide offsetHeight tras el primer render con página completa
+     y se aplica como min-height antes de cada insert posterior.
+     Se resetea al cambiar pageSize.
+
+[10] FIX — fixedHeader con height fijo
+     Problema: con maxHeight, el wrapper se encogía en páginas con pocas filas.
+     Solución: usar height en lugar de maxHeight — el contenedor siempre
+     ocupa exactamente fixedHeaderHeight.
+
+[11] FIX — Select de pageSize con valor inicial correcto
+     Problema: MTS.Select se inicializaba con requestAnimationFrame, lo que
+     causaba que el select mostrara "Selecciona..." hasta el siguiente tick.
+     Solución: inicializar MTS.Select de forma síncrona, sin rAF.
+
+[12] MTS.DataTableToolbarPlugin v1.1.0
+     Botones de acción en el slot izquierdo del toolbar.
+     Usa MTS.Button internamente para consistencia visual total con el
+     ecosistema MTS (mismos estilos que inputs y selects).
+     Soporte: label, icon, iconOnly, tooltip, variant, danger, disabled,
+     condition (evaluada dinámicamente), separator entre grupos.
+     API pública: plugin.update() re-evalúa conditions sin re-render.
+     Grupos usan mts-btn-group de MTS.Button.
+     Archivos: plugins/toolbar/matios-ui-datatable-toolbar.js
+               plugins/toolbar/matios-ui-datatable-toolbar.css
+     Dependencias adicionales: matios-ui-button.css · matios-ui-button.js
+
+[13] Mock API — datos adicionales para paginación DM
+     Agregados 15 documentos en la raíz (parentId: null) al archivo
+     documents.json. Total raíz: 21 ítems → 3 páginas a pageSize 10.
+     Incluye 2 carpetas nuevas y 13 archivos con variedad de extensiones,
+     estados y workflow statuses.
+
+[14] Mock API — endpoints /departments y /roles
+     Nuevos archivos de datos: departments.json (40 áreas) · roles.json (18 roles).
+     Nuevos endpoints en el Service Worker:
+       GET /departments?search=eng&limit=20 → { data: [...], total: N }
+       GET /roles?search=dev&limit=20       → { data: [...], total: N }
+     Función applyLookupQuery: búsqueda por nombre + limit, sin paginación.
+
+[15] SW — filtros por campo arbitrario en applyQuery
+     Cualquier query param no reservado (search, orderBy, orderDir,
+     pageSize, pageNumber) se aplica como filtro exacto por campo.
+     Ejemplo: GET /items?department=Engineering&status=active
+     Permite que FilterPlugin envíe parámetros y el mock los procese.
+
+[16] MTS.DataTableFilterPlugin v1.1.0
+     Filtros por columna con chips removibles en el toolbar (slot central).
+     type: 'select' — opciones estáticas hardcodeadas (ideal para enums).
+     type: 'async'  — opciones dinámicas desde un endpoint con:
+       · Input de búsqueda dentro del dropdown (searchable)
+       · Debounce configurable (ms) antes de llamar al API
+       · Spinner de carga mientras espera respuesta
+       · Mapeo configurable: valueField / labelField
+       · Limit de resultados por búsqueda
+     Chips activos: label campo + label opción, botón ✕ individual.
+     Botón "Limpiar todo" visible cuando hay filtros activos.
+     API pública: plugin.clearAll()
+     Archivos: plugins/filter/matios-ui-datatable-filter.js
+               plugins/filter/matios-ui-datatable-filter.css
+
+[17] MTS.DataTableColumnVisibilityPlugin v1.1.0
+     Toggle para mostrar/ocultar columnas en tiempo real.
+     Botón [|||] en el slot derecho del toolbar usando MTS.Button
+     (variant: secondary, size: sm, iconOnly) — consistencia visual total.
+     Estado activo: aria-pressed="true" + CSS sobre .mts-btn.
+     Dropdown checklist: columnas togueables con mts-checkbox.
+     Excluye columnas con alwaysVisible: true y __mts_actions__.
+     Snapshot de columnas al momento del install (después de otros plugins).
+     redraw() — re-renderiza sin llamar al API.
+     Archivos: plugins/columnvisibility/matios-ui-datatable-columnvisibility.js
+               plugins/columnvisibility/matios-ui-datatable-columnvisibility.css
+     Dependencias adicionales: matios-ui-button.css · matios-ui-button.js
+
+[18] Core — nuevos slots y APIs del toolbar
+     _toolbarBreadcrumbEl: slot dedicado al breadcrumb del DM.
+     setToolbarBreadcrumb(el): API para plugins de navegación.
+     setToolbarFilter(el): API para FilterPlugin.
+     setToolbarActions(el): API para ColumnVisibilityPlugin.
+     clearParams(...keys): elimina keys específicas de _params.
+     redraw(): re-renderiza con _lastResult sin llamar al API.
+
+[19] DM + Toolbar coexistencia (COMPLETADO)
+     Problema: DocumentManagerPlugin y DataTableToolbarPlugin ambos
+     usaban setToolbarLeft() — se pisaban en el mismo slot.
+     Solución completa:
+       · DocumentManagerPlugin migrado a setToolbarBreadcrumb()
+       · Core actualizado: nuevo slot _toolbarBreadcrumbEl
+       · _buildToolbar() detecta si hay breadcrumb + left simultáneos
+         y genera layout de dos filas:
+           Fila 1: [ breadcrumb — ancho completo ]
+           Fila 2: [ botones · filtro · spacer · búsqueda · acciones ]
+       · CSS: mts-dt-toolbar--two-row (flex-direction column, align stretch)
+              mts-dt-toolbar__row (flex, align-items center, gap 10px)
+       · Demo tabla 10: DM + Toolbar + Filter + ColumnVisibility juntos
+
+[20] Demo tabla 10 — coexistencia completa de plugins
+     DataTable con los cuatro plugins mayores activos simultáneamente:
+       · MTS.DocumentManagerPlugin (breadcrumb, drag&drop, context menu, workflow)
+       · MTS.DataTableToolbarPlugin (Subir, Recargar, Eliminar con condition)
+       · MTS.DataTableFilterPlugin (Estado: select, Workflow: select)
+       · MTS.DataTableColumnVisibilityPlugin (toggle de columnas)
+     Reutiliza docsHttp de tabla 5. toolbar10.update() en onSelectionChange.
+     Archivos: demo.html · matios-ui-datatable.css
+
+
+[21] MTS.DataTable i18n v1.0.0 — sistema de multilenguaje
+     Nuevo archivo: matios-ui-datatable-i18n.js
+     Locales incluidos: 'es' (default) y 'en'.
+     Uso: new MTS.DataTable({ locale: 'en', ... })
+     Locale custom: MTS.DataTable.registerLocale('pt', { ... })
+     Orden de precedencia: defaults → locale → texts del dev (el dev siempre gana).
+     Cubre todos los strings del framework — ninguno quedó hardcodeado:
+       · Core: search, noData, loading, error, retry, showing, perPage, previous, next
+       · FilterPlugin: botón, clearAll, searchHint, noResults, loadError, removeChip
+       · ColumnVisibilityPlugin: toggle, empty
+       · DocumentManagerPlugin: nav (breadcrumb aria-label), renderStatus, renderWorkflowStatus
+       · DMContextMenuPlugin: ver, descargar, renombrar, mover, eliminar, abrir
+       · DMWorkflowPlugin: iniciar, enviar, aprobar, firmar, rechazar, reiniciar
+     Renders estáticos (renderStatus, renderWorkflowStatus) leen MTS.DataTable._activeLocale
+     (se actualiza en cada construcción de DataTable).
+     Archivos: matios-ui-datatable-i18n.js (nuevo)
+               matios-ui-datatable.js · plugins/filter · plugins/columnvisibility
+               plugins/documentmanager (3 archivos)
+
+
+── PENDIENTE ───────────────────────────────────────────────────────────────────
+
+
+[P1] Sweep tablas 1–9 del demo
+     Revisión de consistencia y posibles bugs menores acumulados
+     en las tablas existentes tras todos los cambios del core.
+
+[P2] DataTableBulkActionsPlugin (backlog, baja prioridad)
+     Barra contextual que aparece al seleccionar filas.
+     Muestra contador + botones de operaciones en lote.
+     Descartado por ahora — cubrir cuando haya caso de uso real.
+
+[P3] DocumentManager — UploadPlugin (backlog)
+     Zona drag & drop para subir archivos a la carpeta actual.
+     Integra con breadcrumb para conocer el parentId destino.
+
+[P4] DocumentManager — PreviewPlugin (backlog)
+     Panel lateral o modal de vista previa al hacer clic en un archivo.
+     Soporta PDF, imágenes, texto plano.
+
+[P5] DocumentManager — VersionPlugin (backlog)
+     Historial de versiones por documento.
+     Lista versiones con fecha, autor y opción de restaurar.
+
+[P6] DocumentManager — TagsPlugin (backlog)
+     Etiquetas por documento. Agregar/quitar tags, filtrar por ellos.
+
+[P7] DocumentManager — SharePlugin (backlog)
+     Gestión de permisos de acceso por documento o carpeta.
+     Define quién puede ver, editar o descargar.
+
+
+── ARCHIVOS DEL PROYECTO ───────────────────────────────────────────────────────
+
+
+Core
+  matios-ui-datatable.js
+  matios-ui-datatable.css
+  matios-ui-datatable-i18n.js
+
+Mock API
+  sw-datatable.js
+  mock-api/data/items.json
+  mock-api/data/documents.json
+  mock-api/data/departments.json
+  mock-api/data/roles.json
+
+Plugins compartidos
+  plugins/shared/matios-ui-datatable-menu.js
+  plugins/shared/matios-ui-datatable-menu.css
+
+Plugins DataTable
+  plugins/contextmenu/matios-ui-datatable-contextmenu.js
+  plugins/rowactions/matios-ui-datatable-rowactions.js
+  plugins/toolbar/matios-ui-datatable-toolbar.js
+  plugins/toolbar/matios-ui-datatable-toolbar.css
+  plugins/filter/matios-ui-datatable-filter.js
+  plugins/filter/matios-ui-datatable-filter.css
+  plugins/columnvisibility/matios-ui-datatable-columnvisibility.js
+  plugins/columnvisibility/matios-ui-datatable-columnvisibility.css
+
+Plugins DocumentManager
+  plugins/documentmanager/matios-ui-datatable-documentmanager.js
+  plugins/documentmanager/matios-ui-datatable-documentmanager.css
+  plugins/documentmanager/matios-ui-datatable-documentmanager-contextmenu.js
+  plugins/documentmanager/matios-ui-datatable-documentmanager-workflow.js
+
+Demo
+  demo.html
+
+Documentación
+  roadmap_datatable.md
+  CHANGELOG.txt  ← este archivo

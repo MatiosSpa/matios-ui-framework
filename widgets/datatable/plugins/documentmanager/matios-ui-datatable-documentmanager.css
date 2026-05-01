@@ -1,0 +1,173 @@
+/* ============================================================
+   MATIOS UI — matios-ui-datatable-documentmanager.css  v1.0.0
+   Sin colores hardcodeados — usa CSS variables del tema activo.
+   ============================================================ */
+
+
+/* ============================================================
+   1. BREADCRUMB  (vive dentro del toolbar del datatable)
+   ============================================================ */
+
+.mts-dm-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+  /* Sin padding propio — el toolbar maneja el espaciado vertical */
+}
+
+.mts-dm-breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border: none;
+  border-radius: var(--mts-radius-md);
+  background: transparent;
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-color-primary);
+  cursor: pointer;
+  transition: background var(--mts-transition-fast), color var(--mts-transition-fast);
+  user-select: none;
+}
+
+.mts-dm-breadcrumb__item:hover:not(:disabled) {
+  background: var(--mts-color-primary-light);
+}
+
+.mts-dm-breadcrumb__item--active {
+  color: var(--mts-text-primary);
+  font-weight: var(--mts-font-weight-semibold);
+  cursor: default;
+}
+
+.mts-dm-breadcrumb__item svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.mts-dm-breadcrumb__sep {
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-muted);
+  padding: 0 2px;
+  user-select: none;
+}
+
+
+/* ============================================================
+   3. CELDAS — nombre de archivo/carpeta
+   ============================================================ */
+
+.mts-dm-cell-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.mts-dm-cell-name--folder {
+  color: var(--mts-color-primary);
+  cursor: pointer;
+  font-weight: var(--mts-font-weight-medium);
+}
+
+.mts-dm-cell-name--folder:hover span {
+  text-decoration: underline;
+}
+
+.mts-dm-cell-name svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+  color: var(--mts-text-muted);
+}
+
+.mts-dm-cell-name--folder svg {
+  color: var(--mts-color-primary);
+}
+
+
+/* ============================================================
+   4. FILA — estados drag & drop
+   ============================================================ */
+
+/* Fila siendo arrastrada */
+.mts-dm-row--dragging {
+  opacity: 0.4;
+}
+
+/* Carpeta destino al hacer drag over */
+.mts-dm-row--drop-target {
+  outline: 2px dashed var(--mts-color-primary);
+  outline-offset: -1px;
+}
+.mts-dm-row--drop-target .mts-table__td {
+  background: var(--mts-color-primary-light) !important;
+}
+
+
+/* ============================================================
+   5. CELDAS — valores vacíos / muted
+   ============================================================ */
+
+.mts-dm-cell--muted {
+  color: var(--mts-text-muted);
+}
+
+
+/* ============================================================
+   6. DROPZONE EXTERNO — overlay al arrastrar archivos del OS
+   ============================================================ */
+
+.mts-dm-dropzone-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--mts-radius-md);
+  background: color-mix(in srgb, var(--mts-color-primary) 12%, transparent);
+  border: 2px dashed var(--mts-color-primary);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--mts-transition-fast);
+}
+
+.mts-dm-dropzone-overlay--visible {
+  opacity: 1;
+  pointer-events: none;
+}
+
+.mts-dm-dropzone-overlay__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--mts-color-primary);
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-md);
+  font-weight: var(--mts-font-weight-medium);
+  user-select: none;
+}
+
+.mts-dm-dropzone-overlay__inner svg {
+  width: 40px;
+  height: 40px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

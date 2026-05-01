@@ -17,6 +17,7 @@ MTS.CodeBlock = class MtsCodeBlock {
     this.title = options.title ?? ds.title ?? '';
     this.subtitle = options.subtitle ?? ds.subtitle ?? '';
     this.copyable = options.copyable ?? ds.copyable !== 'false';
+    this.toolbar  = options.toolbar  ?? ds.toolbar  !== 'false';
     this.wrap = options.wrap ?? ds.wrap === 'true';
     this.height = options.height ?? ds.height ?? 'auto';
 
@@ -118,7 +119,7 @@ MTS.CodeBlock = class MtsCodeBlock {
     }
 
     this._toolbar.appendChild(actions);
-    this._toolbar.hidden = !(shouldShowMeta || this.copyable || this.language);
+    this._toolbar.hidden = !this.toolbar || !(shouldShowMeta || this.copyable || this.language);
     this._syncCopyButton();
   }
 
@@ -137,10 +138,9 @@ MTS.CodeBlock = class MtsCodeBlock {
     if (window.MTS && MTS.CopyButton) {
       this._copyInstance = new MTS.CopyButton(this._copyHost, {
         text: this.code,
-        label: 'Copiar',
-        labelCopied: 'Copiado',
         variant: 'secondary',
-        size: 'sm'
+        size: 'sm',
+        iconOnly: true
       });
       return;
     }

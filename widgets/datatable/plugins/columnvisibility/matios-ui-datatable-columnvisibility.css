@@ -1,0 +1,90 @@
+/* ============================================================
+   MATIOS UI — matios-ui-datatable-columnvisibility.css  v1.1.0
+   Estilos del MTS.DataTableColumnVisibilityPlugin.
+   100% variables del tema — sin colores hardcodeados.
+
+   El botón toggle usa MTS.Button (matios-ui-button.css).
+   Este archivo solo añade: contenedor, estado activo (aria-pressed)
+   y el dropdown con su checklist.
+   ============================================================ */
+
+
+/* ============================================================
+   1. CONTENEDOR
+   ============================================================ */
+
+.mts-dt-colvis {
+  display:     inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   2. ESTADO ACTIVO DEL BOTÓN (columnas ocultas)
+      MTS.Button produce .mts-btn — aplicamos color primario
+      cuando aria-pressed="true".
+   ============================================================ */
+
+.mts-dt-colvis .mts-btn[aria-pressed="true"] {
+  background:   var(--mts-color-primary-light);
+  color:        var(--mts-color-primary);
+  border-color: var(--mts-color-primary);
+}
+
+
+/* ============================================================
+   3. DROPDOWN
+   ============================================================ */
+
+.mts-dt-colvis__dropdown {
+  position:      absolute;
+  z-index:       9999;
+  min-width:     180px;
+  padding:       6px 0;
+  background:    var(--mts-bg-surface);
+  border:        var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  box-shadow:    0 8px 24px rgba(0, 0, 0, 0.12);
+  animation:     mts-dt-colvis-in 0.1s ease-out both;
+}
+
+@keyframes mts-dt-colvis-in {
+  from { opacity: 0; transform: scale(0.97) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+.mts-dt-colvis__empty {
+  padding:     8px 14px;
+  font-family: var(--mts-font-family);
+  font-size:   var(--mts-font-size-sm);
+  color:       var(--mts-text-muted);
+}
+
+
+/* ============================================================
+   4. ÍTEM — label con checkbox
+   ============================================================ */
+
+.mts-dt-colvis__item {
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+  padding:     6px 14px;
+  cursor:      pointer;
+  user-select: none;
+  transition:  background var(--mts-transition-fast);
+  font-family: var(--mts-font-family);
+  font-size:   var(--mts-font-size-sm);
+  color:       var(--mts-text-primary);
+}
+
+.mts-dt-colvis__item:hover {
+  background: var(--mts-color-primary-light);
+  color:      var(--mts-color-primary);
+}
+
+.mts-dt-colvis__item .mts-checkbox {
+  flex-shrink:    0;
+  pointer-events: none;   /* el click lo maneja el label */
+}

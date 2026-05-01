@@ -1,0 +1,202 @@
+/* ============================================================
+   MATIOS UI — matios-ui-datatable-contextmenu.css  v1.0.0
+   Sin colores hardcodeados — usa CSS variables del tema activo.
+   ============================================================ */
+
+
+/* ============================================================
+   1. MENÚ FLOTANTE
+   ============================================================ */
+
+.mts-ctx-menu {
+  position: absolute;
+  z-index: 9999;
+  min-width: 180px;
+  max-width: 300px;
+  padding: 4px 0;
+  margin: 0;
+  list-style: none;
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  outline: none;
+  animation: mts-ctx-in 0.1s ease-out both;
+}
+
+@keyframes mts-ctx-in {
+  from { opacity: 0; transform: scale(0.97) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+
+/* ============================================================
+   2. ÍTEM
+   ============================================================ */
+
+.mts-ctx-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-primary);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  border-radius: 0;
+  transition: background var(--mts-transition-fast), color var(--mts-transition-fast);
+}
+
+.mts-ctx-menu__item:hover,
+.mts-ctx-menu__item:focus {
+  background: var(--mts-color-primary-light);
+  color: var(--mts-color-primary);
+}
+
+.mts-ctx-menu__item:hover .mts-ctx-menu__icon,
+.mts-ctx-menu__item:focus .mts-ctx-menu__icon {
+  color: var(--mts-color-primary);
+}
+
+
+/* ============================================================
+   3. VARIANTE — danger
+   ============================================================ */
+
+.mts-ctx-menu__item--danger {
+  color: var(--mts-color-danger);
+}
+
+.mts-ctx-menu__item--danger:hover,
+.mts-ctx-menu__item--danger:focus {
+  background: var(--mts-color-danger-light);
+  color: var(--mts-color-danger);
+}
+
+.mts-ctx-menu__item--danger .mts-ctx-menu__icon {
+  color: var(--mts-color-danger);
+}
+
+
+/* ============================================================
+   4. VARIANTE — disabled
+   ============================================================ */
+
+.mts-ctx-menu__item--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.mts-ctx-menu__item--disabled:hover,
+.mts-ctx-menu__item--disabled:focus {
+  background: none;
+  color: var(--mts-text-primary);
+}
+
+
+/* ============================================================
+   5. ICON / LABEL / SHORTCUT
+   ============================================================ */
+
+.mts-ctx-menu__icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 14px;
+  color: var(--mts-text-muted);
+  transition: color var(--mts-transition-fast);
+}
+
+.mts-ctx-menu__icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.mts-ctx-menu__label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mts-ctx-menu__shortcut {
+  flex-shrink: 0;
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  margin-left: 12px;
+}
+
+
+/* ============================================================
+   6. SEPARADOR
+   ============================================================ */
+
+.mts-ctx-menu__separator {
+  height: 1px;
+  margin: 4px 10px;
+  background: var(--mts-border-color);
+  list-style: none;
+}
+
+
+/* ============================================================
+   7. BOTÓN DE COLUMNA DE ACCIONES
+   Usado por ContextMenuPlugin (actionColumn: true),
+   DocumentManagerBaseContextMenuPlugin y DataTableRowActionsPlugin.
+   ============================================================ */
+
+.mts-action-col-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-secondary);
+  background: transparent;
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: 1;
+  transition:
+    background var(--mts-transition-fast),
+    color      var(--mts-transition-fast),
+    border-color var(--mts-transition-fast);
+}
+
+.mts-action-col-btn:hover {
+  background:   var(--mts-color-primary-light);
+  color:        var(--mts-color-primary);
+  border-color: var(--mts-color-primary);
+}
+
+.mts-action-col-btn svg {
+  width:  13px;
+  height: 13px;
+  stroke: currentColor;
+  fill:   none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+  transition: color var(--mts-transition-fast);
+}
+
+/* La columna de acciones no debe activar la selección de fila
+   al hacer clic en la celda — el botón usa stopPropagation */
+.mts-table__td:has(.mts-action-col-btn) {
+  cursor: default;
+}

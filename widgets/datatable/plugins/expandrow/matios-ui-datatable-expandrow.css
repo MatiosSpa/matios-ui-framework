@@ -1,0 +1,70 @@
+/* ============================================================
+   MTS.DataTableExpandRowPlugin — Estilos
+   ============================================================ */
+
+/* ── Botón toggle ── */
+.mts-expand-btn {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  width:           28px;
+  height:          28px;
+  padding:         0;
+  border:          none;
+  border-radius:   var(--mts-radius-sm);
+  background:      transparent;
+  color:           var(--mts-text-secondary);
+  cursor:          pointer;
+  transition:
+    color      var(--mts-transition-fast),
+    background var(--mts-transition-fast);
+}
+
+.mts-expand-btn:hover {
+  background: var(--mts-bg-surface-2);
+  color:      var(--mts-text-primary);
+}
+
+/* Rotación del ícono al expandir */
+.mts-expand-btn .mts-icon,
+.mts-expand-btn svg {
+  transition: transform var(--mts-transition-fast);
+}
+
+.mts-expand-btn--open .mts-icon,
+.mts-expand-btn--open svg {
+  transform: rotate(90deg);
+}
+
+/* Fallback CSS cuando no hay sistema de íconos */
+.mts-expand-btn:not(:has(.mts-icon)):not(:has(svg))::before {
+  content:      '';
+  display:      block;
+  width:        0;
+  height:       0;
+  border-top:   5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left:  7px solid currentColor;
+  transition:   transform var(--mts-transition-fast);
+}
+
+.mts-expand-btn--open:not(:has(.mts-icon)):not(:has(svg))::before {
+  transform: rotate(90deg);
+}
+
+/* ── Fila de detalle ── */
+.mts-table__row-detail .mts-table__td-detail {
+  padding:    0;
+  background: var(--mts-bg-surface-2);
+  border-bottom: 1px solid var(--mts-border-color);
+}
+
+/* Contenedor interno — el dev puede aplicar padding propio o usar esta clase */
+.mts-expand-detail {
+  padding: var(--mts-space-4);
+}
+
+/* Separador visual: la fila padre queda marcada cuando está abierta */
+.mts-table__row:has(+ .mts-table__row-detail) .mts-table__td {
+  border-bottom-color: transparent;
+}

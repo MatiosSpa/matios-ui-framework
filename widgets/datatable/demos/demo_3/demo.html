@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="light">
+<head>
+  <script>
+    (function(){
+      const sp=location.search||location.hash||'';
+      const mm=sp.match(/mts-mode=([a-z-]+)/);
+      const ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        const p=window.parent;
+        if(p&&p!==window){
+          const pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          const pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataTable — 3 — Custom render + fixed header + rowClass</title>
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../../data/matios-ui-table/matios-ui-table.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-pagination/matios-ui-pagination.css">
+  <link rel="stylesheet" href="../../matios-ui-datatable.css">
+  <link rel="stylesheet" href="../../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <script src="../../../../support/demo-shared.js"></script>
+  <script src="../../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../../../forms/matios-ui-select/matios-ui-select.js"></script>
+</head>
+<body>
+
+<div class="demo-page">
+  <div class="demo-section">
+    <div id="tabs-s3"></div>
+  </div>
+</div>
+
+<script src="../../matios-ui-datatable.js"></script>
+<script src="../../matios-ui-datatable-i18n.js"></script>
+<script>
+
+function makeSection(id, previewHtml, jsCode, initFn) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height:  '460px',
+    lazy:    false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cbhtml" style="height:100%"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cbjs"   style="height:100%"></div>' },
+    ],
+  });
+  new MTS.CodeBlock('#' + id + '-cbhtml', { code: previewHtml, language: 'html',       height: '100%' });
+  new MTS.CodeBlock('#' + id + '-cbjs',   { code: jsCode,      language: 'javascript', height: '100%' });
+  if (typeof initFn === 'function') initFn();
+}
+
+const preview_s3 = '<div id="table3"></div>';
+
+const js_s3 =
+`new MTS.DataTable({
+  elementId: 'table3',
+  columns: [
+    { field: 'id',   label: '#',      sortable: true, align: 'end', width: '60px' },
+    { field: 'name', label: 'Nombre', sortable: true },
+    {
+      field: 'status',
+      label: 'Estado',
+      sortable: true,
+      align: 'center',
+      width: '120px',
+      render: (value) => {
+        const cls = value === 'active' ? 'mts-badge--success' : 'mts-badge--danger';
+        const lbl = value === 'active' ? 'Activo' : 'Inactivo';
+        return \`<span class="mts-badge \${cls}">\${lbl}</span>\`;
+      },
+    },
+    { field: 'joinDate',   label: 'Fecha ingreso', sortable: true, align: 'end', width: '140px' },
+    { field: 'department', label: 'Área',          sortable: true },
+  ],
+  dataSource:        { url: '/widgets/datatable/mock-api/items', method: 'GET' },
+  rowId:             'id',
+  pageSize:          6,
+  fixedHeader:       true,
+  fixedHeaderHeight: '280px',
+  sort:              { column: 'joinDate', direction: 'desc' },
+  search:            { enabled: true, minChars: 1, width: '220px' },
+  hover:             true,
+  rowClass:          (item) => item.status === 'inactive' ? 'mts-table__row--muted' : '',
+});`;
+
+function initTables() {
+  makeSection('tabs-s3', preview_s3, js_s3, () => {
+    new MTS.DataTable({
+      elementId: 'table3',
+      columns: [
+        { field: 'id',   label: '#',      sortable: true, align: 'end', width: '60px' },
+        { field: 'name', label: 'Nombre', sortable: true },
+        {
+          field: 'status',
+          label: 'Estado',
+          sortable: true,
+          align: 'center',
+          width: '120px',
+          render: (value) => {
+            const cls = value === 'active' ? 'mts-badge--success' : 'mts-badge--danger';
+            const lbl = value === 'active' ? 'Activo' : 'Inactivo';
+            return `<span class="mts-badge ${cls}">${lbl}</span>`;
+          },
+        },
+        { field: 'joinDate',   label: 'Fecha ingreso', sortable: true, align: 'end', width: '140px' },
+        { field: 'department', label: 'Área',          sortable: true },
+      ],
+      dataSource:        { url: '/widgets/datatable/mock-api/items', method: 'GET' },
+      rowId:             'id',
+      pageSize:          6,
+      fixedHeader:       true,
+      fixedHeaderHeight: '280px',
+      sort:              { column: 'joinDate', direction: 'desc' },
+      search:            { enabled: true, minChars: 1, width: '220px' },
+      hover:             true,
+      rowClass:          (item) => item.status === 'inactive' ? 'mts-table__row--muted' : '',
+    });
+  });
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('../../sw-datatable.js', { scope: '/widgets/datatable/' })
+    .then(reg => {
+      if (reg.active) { initTables(); return; }
+      const sw = reg.installing || reg.waiting;
+      sw.addEventListener('statechange', () => { if (sw.state === 'activated') initTables(); });
+      navigator.serviceWorker.addEventListener('controllerchange', initTables, { once: true });
+    })
+    .catch(err => console.warn('[Demo] SW error:', err));
+}
+</script>
+</body>
+</html>
