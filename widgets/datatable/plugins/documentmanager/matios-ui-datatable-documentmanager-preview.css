@@ -279,15 +279,19 @@
    12. OVERLAY DE CONFIRMACIÓN DE REEMPLAZO
    ============================================================ */
 
-/* Fondo semitransparente que cubre el wrap completo */
+/* Fondo semitransparente que cubre el wrap completo.
+   display:flex solo cuando NO tiene [hidden] — evita que sobreescriba display:none */
 .dm-preview__confirm-overlay {
   position: absolute;
   inset: 0;
-  display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.45);
   z-index: 10;
+}
+
+.dm-preview__confirm-overlay:not([hidden]) {
+  display: flex;
 }
 
 /* Tarjeta central */
