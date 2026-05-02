@@ -1,5 +1,5 @@
 /* ============================================================
-   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.3.0
+   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.4.0
    Sub-plugin de vista previa para MTS.DocumentManagerPlugin.
 
    Muestra un modal fullscreen con:
@@ -25,6 +25,7 @@
        onReplace: function(item, file, version) {
          console.log('[dmPreview.onReplace]', item, file, version);
          // http.post('/api/documents/' + item.id + '/replace', { file, version });
+         // version: valor ingresado en el modal de confirmación (decimal: 1.1, 2.3, etc.)
        },
        onPrev: function(currentItem) {
          var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
@@ -64,9 +65,11 @@
      urlResolver   fn      — function(item) → string | null  (URL del iframe)
      onDownload    fn      — function(item)  (botón "Descargar" en el header)
      onReplace     fn      — function(item, file, version)  (botón "Reemplazar" en el header)
+                              Flujo: clic "Reemplazar" → file picker → modal de confirmación
+                              (muestra archivo + input de versión) → clic "Subir" → callback
                               file: File seleccionado por el usuario
-                              version: número del input de versión (decimal)
-                              accept: heredado de dm._options.accept
+                              version: valor del input de versión en el modal de confirmación (decimal)
+                              accept del file picker: heredado de dm._options.accept
      onPrev        fn      — function(currentItem)  (botón ← en el header)
      onNext        fn      — function(currentItem)  (botón → en el header)
      panelVisible  bool    — panel lateral visible al abrir (default: true)
@@ -81,7 +84,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
   static descriptor = {
     name:     'MTS.DocumentManagerPreviewPlugin',
-    version:  '1.3.0',
+    version:  '1.4.0',
     type:     'documentManagerPreview',
     requires: ['MTS.DocumentManagerPlugin', 'MTS.Modal', 'MTS.Accordion'],
     provides: 'documentManagerPreview',
@@ -105,21 +108,26 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       panelWidth:   options.panelWidth   || '340px',
     };
 
-    this._dm             = null;
-    this._modal          = null;
-    this._accordion      = null;
-    this._iframe         = null;
-    this._spinnerWrap    = null;
-    this._panelEl        = null;
-    this._panelInner     = null;
-    this._toggleBtn      = null;
-    this._accEl          = null;
-    this._currentItem    = null;
-    this._panelLoaded    = {};
-    this._panelOpen      = this._options.panelVisible;
-    this._overrideUrl    = null;   // URL opcional pasada en show(item, url)
-    this._replaceInput   = null;   // <input type="file"> oculto para onReplace
-    this._versionInputEl = null;   // <input type="number"> de versión en el header
+    this._dm                = null;
+    this._modal             = null;
+    this._accordion         = null;
+    this._iframe            = null;
+    this._spinnerWrap       = null;
+    this._panelEl           = null;
+    this._panelInner        = null;
+    this._toggleBtn         = null;
+    this._accEl             = null;
+    this._wrapEl            = null;   // contenedor flex principal (iframe + panel)
+    this._currentItem       = null;
+    this._panelLoaded       = {};
+    this._panelOpen         = this._options.panelVisible;
+    this._overrideUrl       = null;   // URL opcional pasada en show(item, url)
+    this._replaceInput      = null;   // <input type="file"> oculto para onReplace
+    this._versionBadgeEl    = null;   // badge read-only "V.x.x" en el header
+    this._versionInputEl    = null;   // <input type="number"> en el modal de confirmación
+    this._confirmFile       = null;   // File pendiente de confirmar
+    this._confirmOverlayEl  = null;   // overlay de confirmación (position:absolute en wrap)
+    this._confirmFileEl     = null;   // zona de info del archivo en el overlay
   }
 
   /* ----------------------------------------------------------
@@ -140,16 +148,21 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     });
     if (this._modal) {
       this._modal.destroy();
-      this._modal          = null;
-      this._accordion      = null;
-      this._iframe         = null;
-      this._spinnerWrap    = null;
-      this._panelEl        = null;
-      this._panelInner     = null;
-      this._toggleBtn      = null;
-      this._accEl          = null;
-      this._replaceInput   = null;
-      this._versionInputEl = null;
+      this._modal            = null;
+      this._accordion        = null;
+      this._iframe           = null;
+      this._spinnerWrap      = null;
+      this._panelEl          = null;
+      this._panelInner       = null;
+      this._toggleBtn        = null;
+      this._accEl            = null;
+      this._wrapEl           = null;
+      this._replaceInput     = null;
+      this._versionBadgeEl   = null;
+      this._versionInputEl   = null;
+      this._confirmFile      = null;
+      this._confirmOverlayEl = null;
+      this._confirmFileEl    = null;
     }
     this._dm          = null;
     this._currentItem = null;
@@ -178,7 +191,9 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     }
 
     this._updateTitle(item);
+    this._updateVersionBadge(item);
     this._updateReplaceState(item);
+    this._hideConfirm();
     this._resetIframe();
     this._refreshPanels(item);
     this._modal.show();
@@ -224,8 +239,13 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       this._modal._titleEl.style.overflow   = 'hidden';
     }
 
-    // Inyectar botones en el header: ← prev, → next, Descargar
+    // Inyectar botones en el header: ← prev, → next, badge versión, Reemplazar, Descargar
     this._injectHeaderButtons();
+
+    // Overlay de confirmación de reemplazo (sobre el wrap, position:absolute)
+    if (this._options.onReplace) {
+      this._buildConfirmOverlay();
+    }
   }
 
   _injectHeaderButtons() {
@@ -268,21 +288,16 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       headerEl.insertBefore(nextEl, titleEl);
     }
 
-    // — Botón "Reemplazar" + input de versión: se insertan antes del botón × —
-    // Orden de inserción: primero versión, luego Reemplazar → [v input][Reemplazar][×]
-    // (Descargar se inserta después, quedando entre Reemplazar y ×)
-    if (this._options.onReplace) {
-      // Input de versión
-      var verEl = document.createElement('input');
-      verEl.type      = 'number';
-      verEl.min       = '0';
-      verEl.step      = 'any';
-      verEl.className = 'dm-preview__version-input';
-      verEl.title     = 'Versión del documento';
-      verEl.setAttribute('aria-label', 'Versión del documento');
-      this._versionInputEl = verEl;
+    // — Badge de versión (read-only): siempre presente, visible si item tiene versión —
+    var badgeEl = document.createElement('span');
+    badgeEl.className = 'dm-preview__version-badge';
+    badgeEl.hidden    = true;
+    this._versionBadgeEl = badgeEl;
+    if (closeBtnEl) headerEl.insertBefore(badgeEl, closeBtnEl);
+    else headerEl.appendChild(badgeEl);
 
-      // Botón Reemplazar
+    // — Botón "Reemplazar": abre file picker → modal de confirmación —
+    if (this._options.onReplace) {
       var replaceEl = document.createElement('button');
       replaceEl.type = 'button';
       new MTS.Button(replaceEl, {
@@ -293,14 +308,8 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       }).on('click', function() {
         if (self._replaceInput) self._replaceInput.click();
       });
-
-      if (closeBtnEl) {
-        headerEl.insertBefore(verEl, closeBtnEl);
-        headerEl.insertBefore(replaceEl, closeBtnEl);
-      } else {
-        headerEl.appendChild(verEl);
-        headerEl.appendChild(replaceEl);
-      }
+      if (closeBtnEl) headerEl.insertBefore(replaceEl, closeBtnEl);
+      else headerEl.appendChild(replaceEl);
     }
 
     // — Botón de descarga: se inserta antes del botón × —
@@ -325,6 +334,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
     var wrap = document.createElement('div');
     wrap.className = 'dm-preview__wrap';
+    this._wrapEl = wrap;
 
     // — Área del iframe —
     var iframeArea = document.createElement('div');
@@ -394,11 +404,9 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       replaceInput.addEventListener('change', function() {
         var file = replaceInput.files && replaceInput.files[0];
         if (!file) return;
-        var version = self._versionInputEl
-          ? (parseFloat(self._versionInputEl.value) || 0)
-          : 0;
-        self._options.onReplace(self._currentItem, file, version);
-        // Reset para permitir seleccionar el mismo archivo dos veces seguidas
+        // No dispara onReplace inmediatamente — abre el modal de confirmación
+        self._showConfirm(file);
+        // Reset aquí para que el mismo archivo pueda seleccionarse de nuevo si cancela
         replaceInput.value = '';
       });
       wrap.appendChild(replaceInput);
@@ -601,32 +609,197 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   }
 
   /* ----------------------------------------------------------
-     REEMPLAZAR — sincronización del estado con el ítem actual
+     REEMPLAZAR — overlay de confirmación + badge de versión
   ---------------------------------------------------------- */
 
   /**
-   * Actualiza el input de versión y el accept del file picker
-   * con los datos del ítem que se acaba de abrir.
-   * Se llama en cada show(item).
+   * Construye el overlay de confirmación (position:absolute sobre el wrap).
+   * Se llama una sola vez desde _buildModal().
    */
-  _updateReplaceState(item) {
-    if (!this._options.onReplace) return;
+  _buildConfirmOverlay() {
+    var self = this;
 
-    // Versión sugerida: versión actual + 0.1, redondeada a 1 decimal
-    if (this._versionInputEl && item) {
-      var current = parseFloat(item.version) || 1;
+    var overlay = document.createElement('div');
+    overlay.className = 'dm-preview__confirm-overlay';
+    overlay.hidden    = true;
+
+    var card = document.createElement('div');
+    card.className = 'dm-preview__confirm-card';
+
+    // — Título de la card —
+    var titleEl = document.createElement('p');
+    titleEl.className   = 'dm-preview__confirm-card-title';
+    titleEl.textContent = 'Reemplazar documento';
+
+    // — Info del archivo seleccionado (poblada en _showConfirm) —
+    var fileEl = document.createElement('div');
+    fileEl.className = 'dm-preview__confirm-file';
+    this._confirmFileEl = fileEl;
+
+    // — Fila de versión —
+    var verRow = document.createElement('div');
+    verRow.className = 'dm-preview__confirm-version';
+
+    var verLabel = document.createElement('label');
+    verLabel.className   = 'dm-preview__confirm-version-label';
+    verLabel.textContent = 'Nueva versión:';
+    verLabel.setAttribute('for', 'dm-preview-ver-input');
+
+    var verInput = document.createElement('input');
+    verInput.type      = 'number';
+    verInput.id        = 'dm-preview-ver-input';
+    verInput.min       = '0';
+    verInput.step      = 'any';
+    verInput.className = 'dm-preview__version-input';
+    verInput.setAttribute('aria-label', 'Nueva versión del documento');
+    this._versionInputEl = verInput;
+
+    verRow.appendChild(verLabel);
+    verRow.appendChild(verInput);
+
+    // — Acciones —
+    var actionsEl = document.createElement('div');
+    actionsEl.className = 'dm-preview__confirm-actions';
+
+    var cancelEl = document.createElement('button');
+    cancelEl.type = 'button';
+    new MTS.Button(cancelEl, {
+      label:   'Cancelar',
+      size:    'sm',
+      variant: 'ghost',
+    }).on('click', function() {
+      self._hideConfirm();
+    });
+
+    var submitEl = document.createElement('button');
+    submitEl.type = 'button';
+    new MTS.Button(submitEl, {
+      label:    'Subir',
+      iconLeft: MTS.Icon ? MTS.Icon.get('upload') : '',
+      size:     'sm',
+      variant:  'primary',
+    }).on('click', function() {
+      if (!self._confirmFile) return;
+      var version = parseFloat(self._versionInputEl.value) || 0;
+      self._options.onReplace(self._currentItem, self._confirmFile, version);
+      self._hideConfirm();
+    });
+
+    actionsEl.appendChild(cancelEl);
+    actionsEl.appendChild(submitEl);
+
+    card.appendChild(titleEl);
+    card.appendChild(fileEl);
+    card.appendChild(verRow);
+    card.appendChild(actionsEl);
+    overlay.appendChild(card);
+    this._wrapEl.appendChild(overlay);
+
+    this._confirmOverlayEl = overlay;
+  }
+
+  /**
+   * Muestra el overlay de confirmación con los datos del archivo seleccionado.
+   */
+  _showConfirm(file) {
+    this._confirmFile = file;
+
+    // Versión sugerida: actual + 0.1, redondeada a 1 decimal
+    if (this._versionInputEl) {
+      var current = parseFloat(this._currentItem && this._currentItem.version) || 1;
       var next    = Math.round((current + 0.1) * 10) / 10;
       this._versionInputEl.value = next;
     }
 
-    // accept: heredado de DocumentManagerPlugin para que el file picker
-    // filtre los mismos tipos que acepta el gestor de documentos.
-    if (this._replaceInput) {
-      var accept = (this._dm && this._dm._options && this._dm._options.accept)
-                 ? this._dm._options.accept
-                 : '*';
-      this._replaceInput.accept = (accept === '*') ? '' : accept;
+    // Poblar info del archivo
+    this._renderConfirmFile(file);
+
+    if (this._confirmOverlayEl) {
+      this._confirmOverlayEl.hidden = false;
     }
+  }
+
+  /**
+   * Oculta el overlay de confirmación y limpia el estado pendiente.
+   */
+  _hideConfirm() {
+    if (this._confirmOverlayEl) {
+      this._confirmOverlayEl.hidden = true;
+    }
+    this._confirmFile = null;
+  }
+
+  /**
+   * Rellena la zona de info del archivo en el overlay de confirmación.
+   */
+  _renderConfirmFile(file) {
+    var fileEl = this._confirmFileEl;
+    if (!fileEl) return;
+    fileEl.replaceChildren();
+
+    // Ícono del tipo de archivo
+    var iconEl = document.createElement('span');
+    iconEl.className = 'dm-preview__confirm-file-icon';
+    var dotIdx   = file.name.lastIndexOf('.');
+    var ext      = dotIdx !== -1 ? file.name.slice(dotIdx + 1) : '';
+    var iconName = this._fileIconName({ ext: ext, mimeType: file.type });
+    if (window.MTS && MTS.Icon) {
+      iconEl.innerHTML = MTS.Icon.get(iconName) || '';
+    }
+
+    // Info: nombre + tamaño
+    var infoEl = document.createElement('div');
+    infoEl.className = 'dm-preview__confirm-file-info';
+
+    var nameEl = document.createElement('span');
+    nameEl.className   = 'dm-preview__confirm-file-name';
+    nameEl.textContent = file.name;
+    nameEl.title       = file.name;
+
+    var sizeEl = document.createElement('span');
+    sizeEl.className   = 'dm-preview__confirm-file-size';
+    sizeEl.textContent = this._formatBytes(file.size);
+
+    infoEl.appendChild(nameEl);
+    infoEl.appendChild(sizeEl);
+    fileEl.appendChild(iconEl);
+    fileEl.appendChild(infoEl);
+  }
+
+  /**
+   * Actualiza el badge de versión en el header del modal.
+   * Se llama en cada show(item).
+   */
+  _updateVersionBadge(item) {
+    if (!this._versionBadgeEl) return;
+    if (item && item.version != null && item.version !== '') {
+      this._versionBadgeEl.textContent = 'v' + item.version;
+      this._versionBadgeEl.hidden      = false;
+    } else {
+      this._versionBadgeEl.hidden = true;
+    }
+  }
+
+  /**
+   * Actualiza el accept del file picker con los tipos del DocumentManagerPlugin.
+   * Se llama en cada show(item).
+   */
+  _updateReplaceState(item) {
+    if (!this._options.onReplace || !this._replaceInput) return;
+    var accept = (this._dm && this._dm._options && this._dm._options.accept)
+               ? this._dm._options.accept
+               : '*';
+    this._replaceInput.accept = (accept === '*') ? '' : accept;
+  }
+
+  /**
+   * Formatea un tamaño en bytes a una cadena legible (B / KB / MB).
+   */
+  _formatBytes(bytes) {
+    if (bytes == null || isNaN(bytes)) return '';
+    if (bytes < 1024)             return bytes + ' B';
+    if (bytes < 1024 * 1024)      return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   }
 
   /* ----------------------------------------------------------

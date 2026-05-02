@@ -1,5 +1,5 @@
 /* ============================================================
-   MATIOS UI — DocumentManagerPreviewPlugin  v1.3.0
+   MATIOS UI — DocumentManagerPreviewPlugin  v1.4.0
    Estilos del plugin de vista previa de documentos.
 
    Requiere: matios-ui-base.css, matios-ui-modal.css,
@@ -12,6 +12,7 @@
    ============================================================ */
 
 .dm-preview__wrap {
+  position: relative;   /* necesario para el overlay de confirmación */
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -232,11 +233,31 @@
 
 
 /* ============================================================
-   10. INPUT DE VERSIÓN — en el header del modal (junto a Reemplazar)
+   10. BADGE DE VERSIÓN — header del modal (read-only)
+   ============================================================ */
+
+.dm-preview__version-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-muted);
+  background: var(--mts-bg-surface-2);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-sm);
+  padding: 2px 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+
+/* ============================================================
+   11. INPUT DE VERSIÓN — en el modal de confirmación de reemplazo
    ============================================================ */
 
 .dm-preview__version-input {
-  width: 64px;
+  width: 80px;
   padding: var(--mts-space-1) var(--mts-space-2);
   font-size: var(--mts-font-size-sm);
   color: var(--mts-text-primary);
@@ -251,4 +272,108 @@
 
 .dm-preview__version-input:focus {
   border-color: var(--mts-color-primary);
+}
+
+
+/* ============================================================
+   12. OVERLAY DE CONFIRMACIÓN DE REEMPLAZO
+   ============================================================ */
+
+/* Fondo semitransparente que cubre el wrap completo */
+.dm-preview__confirm-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 10;
+}
+
+/* Tarjeta central */
+.dm-preview__confirm-card {
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  box-shadow: var(--mts-shadow-lg);
+  padding: var(--mts-space-6);
+  width: 360px;
+  max-width: calc(100% - var(--mts-space-8));
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-4);
+}
+
+/* Título de la card */
+.dm-preview__confirm-card-title {
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+  margin: 0;
+}
+
+/* Zona de info del archivo */
+.dm-preview__confirm-file {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-3);
+  background: var(--mts-bg-surface-2);
+  border-radius: var(--mts-radius-sm);
+  min-width: 0;
+}
+
+.dm-preview__confirm-file-icon {
+  flex-shrink: 0;
+  color: var(--mts-text-muted);
+  display: flex;
+  align-items: center;
+}
+
+.dm-preview__confirm-file-icon svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.dm-preview__confirm-file-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dm-preview__confirm-file-name {
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dm-preview__confirm-file-size {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+}
+
+/* Fila de versión */
+.dm-preview__confirm-version {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-3);
+}
+
+.dm-preview__confirm-version-label {
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Acciones: Cancelar | Subir */
+.dm-preview__confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--mts-space-2);
 }
