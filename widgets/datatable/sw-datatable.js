@@ -78,6 +78,31 @@ async function handleRequest(request, url) {
       });
     }
 
+    /* ── POST /documents/:id/replace ── */
+    if (/^documents\/[^/]+\/replace$/.test(path) && method === 'POST') {
+      let filename = 'archivo';
+      let filesize = 0;
+      let version  = null;
+      try {
+        const fd = await request.formData();
+        const file = fd.get('file');
+        if (file) { filename = file.name; filesize = file.size; }
+        version = fd.get('version') || null;
+      } catch { /* ignorar si no es FormData */ }
+
+      await delay(600 + Math.random() * 800); // simula latencia de subida
+
+      return jsonResponse({
+        success: true,
+        data: {
+          name:     filename,
+          size:     filesize,
+          version:  version ? parseInt(version, 10) : null,
+          modified: new Date().toLocaleDateString('es-CL'),
+        },
+      });
+    }
+
     /* ── GET /departments ── */
     if (path === 'departments' && method === 'GET') {
       const data   = await loadJson('departments.json');

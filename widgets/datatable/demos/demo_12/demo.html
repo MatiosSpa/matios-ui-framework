@@ -153,20 +153,14 @@ const dmPreview = new MTS.DocumentManagerPreviewPlugin({
 
   // Botón "Reemplazar" en el header del modal.
   // El file picker filtra por los mismos tipos que dm.accept.
-  // Debe retornar una Promise. reportProgress(0-100) actualiza la barra de progreso.
+  // reportProgress(0-100): se pasa directamente a http.upload onProgress.
   onReplace: function(item, file, version, reportProgress) {
     console.log('[dmPreview.onReplace]', item, file, version);
-    // Simulación de subida con progreso — en producción usar XHR:
-    // xhr.upload.onprogress = function(e) {
-    //   if (e.lengthComputable) reportProgress(Math.round(e.loaded / e.total * 100));
-    // };
-    return new Promise(function(resolve) {
-      var pct = 0;
-      var iv = setInterval(function() {
-        pct = Math.min(pct + 12, 100);
-        reportProgress(pct);
-        if (pct >= 100) { clearInterval(iv); setTimeout(resolve, 300); }
-      }, 200);
+    return http.upload('/widgets/datatable/mock-api/documents/' + item.id + '/replace', file, {
+      data:       { version: version },
+      onProgress: reportProgress,
+    }).then(function(res) {
+      if (!res.success) throw new Error(res.message);
     });
   },
 
@@ -285,13 +279,11 @@ function initTables() {
       },
       onReplace: function(item, file, version, reportProgress) {
         console.log('[dmPreview.onReplace]', item, file, version);
-        return new Promise(function(resolve) {
-          var pct = 0;
-          var iv = setInterval(function() {
-            pct = Math.min(pct + 12, 100);
-            reportProgress(pct);
-            if (pct >= 100) { clearInterval(iv); setTimeout(resolve, 300); }
-          }, 200);
+        return http.upload('/widgets/datatable/mock-api/documents/' + item.id + '/replace', file, {
+          data:       { version: version },
+          onProgress: reportProgress,
+        }).then(function(res) {
+          if (!res.success) throw new Error(res.message);
         });
       },
       onPrev: function(currentItem) {
