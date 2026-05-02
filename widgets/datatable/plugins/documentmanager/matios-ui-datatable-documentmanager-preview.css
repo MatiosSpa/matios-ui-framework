@@ -1,5 +1,5 @@
 /* ============================================================
-   MATIOS UI — DocumentManagerPreviewPlugin  v1.4.0
+   MATIOS UI — DocumentManagerPreviewPlugin  v1.5.0
    Estilos del plugin de vista previa de documentos.
 
    Requiere: matios-ui-base.css, matios-ui-modal.css,
@@ -375,9 +375,50 @@
   flex-shrink: 0;
 }
 
-/* Acciones: Cancelar | Subir */
+/* Zona dinámica: versión / spinner / éxito / error */
+.dm-preview__confirm-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-3);
+}
+
+/* Fila de estado: spinner+texto, check+texto, error+texto */
+.dm-preview__confirm-status {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-secondary);
+}
+
+.dm-preview__confirm-status--success {
+  color: var(--mts-color-success, #22c55e);
+}
+
+.dm-preview__confirm-status--error {
+  color: var(--mts-color-danger, #ef4444);
+}
+
+.dm-preview__confirm-status-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.dm-preview__confirm-status-icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.dm-preview__confirm-status-text {
+  min-width: 0;
+}
+
+/* Acciones: Cancelar | Subir  /  Reintentar | Cerrar */
 .dm-preview__confirm-actions {
   display: flex;
   justify-content: flex-end;
   gap: var(--mts-space-2);
+  min-height: 32px;  /* evita que el card salte de altura cuando las acciones están vacías */
 }

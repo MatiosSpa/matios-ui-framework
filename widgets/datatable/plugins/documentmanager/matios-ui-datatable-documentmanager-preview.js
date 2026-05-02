@@ -1,5 +1,5 @@
 /* ============================================================
-   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.4.0
+   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.5.0
    Sub-plugin de vista previa para MTS.DocumentManagerPlugin.
 
    Muestra un modal fullscreen con:
@@ -84,7 +84,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
   static descriptor = {
     name:     'MTS.DocumentManagerPreviewPlugin',
-    version:  '1.4.0',
+    version:  '1.5.0',
     type:     'documentManagerPreview',
     requires: ['MTS.DocumentManagerPlugin', 'MTS.Modal', 'MTS.Accordion'],
     provides: 'documentManagerPreview',
@@ -128,6 +128,11 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     this._confirmFile       = null;   // File pendiente de confirmar
     this._confirmOverlayEl  = null;   // overlay de confirmación (position:absolute en wrap)
     this._confirmFileEl     = null;   // zona de info del archivo en el overlay
+    this._confirmContentEl  = null;   // zona dinámica: versión / spinner / estado
+    this._confirmActionsEl  = null;   // zona de botones del overlay
+    this._confirmVerRowEl   = null;   // fila de versión (reutilizada entre estados)
+    this._confirmCancelEl   = null;   // botón Cancelar (reutilizado)
+    this._confirmSubmitEl   = null;   // botón Subir (reutilizado)
   }
 
   /* ----------------------------------------------------------
@@ -163,6 +168,11 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       this._confirmFile      = null;
       this._confirmOverlayEl = null;
       this._confirmFileEl    = null;
+      this._confirmContentEl = null;
+      this._confirmActionsEl = null;
+      this._confirmVerRowEl  = null;
+      this._confirmCancelEl  = null;
+      this._confirmSubmitEl  = null;
     }
     this._dm          = null;
     this._currentItem = null;
@@ -615,6 +625,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   /**
    * Construye el overlay de confirmación (position:absolute sobre el wrap).
    * Se llama una sola vez desde _buildModal().
+   * Pre-construye los elementos reutilizables entre estados (file info, ver row, botones).
    */
   _buildConfirmOverlay() {
     var self = this;
@@ -626,50 +637,51 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     var card = document.createElement('div');
     card.className = 'dm-preview__confirm-card';
 
-    // — Título de la card —
+    // — Título —
     var titleEl = document.createElement('p');
     titleEl.className   = 'dm-preview__confirm-card-title';
     titleEl.textContent = 'Reemplazar documento';
 
-    // — Info del archivo seleccionado (poblada en _showConfirm) —
+    // — Info del archivo (siempre en el card; se oculta en estado success) —
     var fileEl = document.createElement('div');
     fileEl.className = 'dm-preview__confirm-file';
     this._confirmFileEl = fileEl;
 
-    // — Fila de versión —
+    // — Zona dinámica: versión / spinner / éxito / error —
+    var contentEl = document.createElement('div');
+    contentEl.className = 'dm-preview__confirm-content';
+    this._confirmContentEl = contentEl;
+
+    // — Acciones (se reemplaza según el estado) —
+    var actionsEl = document.createElement('div');
+    actionsEl.className = 'dm-preview__confirm-actions';
+    this._confirmActionsEl = actionsEl;
+
+    // Pre-construir fila de versión (reutilizada en estados idle y error→retry)
     var verRow = document.createElement('div');
     verRow.className = 'dm-preview__confirm-version';
-
     var verLabel = document.createElement('label');
     verLabel.className   = 'dm-preview__confirm-version-label';
     verLabel.textContent = 'Nueva versión:';
     verLabel.setAttribute('for', 'dm-preview-ver-input');
-
     var verInput = document.createElement('input');
     verInput.type      = 'number';
     verInput.id        = 'dm-preview-ver-input';
-    verInput.min       = '0';
-    verInput.step      = 'any';
+    verInput.min       = '1';
+    verInput.step      = '1';
     verInput.className = 'dm-preview__version-input';
     verInput.setAttribute('aria-label', 'Nueva versión del documento');
-    this._versionInputEl = verInput;
-
     verRow.appendChild(verLabel);
     verRow.appendChild(verInput);
+    this._confirmVerRowEl = verRow;
+    this._versionInputEl  = verInput;
 
-    // — Acciones —
-    var actionsEl = document.createElement('div');
-    actionsEl.className = 'dm-preview__confirm-actions';
-
+    // Pre-construir botones Cancelar y Subir
     var cancelEl = document.createElement('button');
     cancelEl.type = 'button';
-    new MTS.Button(cancelEl, {
-      label:   'Cancelar',
-      size:    'sm',
-      variant: 'ghost',
-    }).on('click', function() {
-      self._hideConfirm();
-    });
+    new MTS.Button(cancelEl, { label: 'Cancelar', size: 'sm', variant: 'ghost' })
+      .on('click', function() { self._hideConfirm(); });
+    this._confirmCancelEl = cancelEl;
 
     var submitEl = document.createElement('button');
     submitEl.type = 'button';
@@ -678,41 +690,32 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       iconLeft: MTS.Icon ? MTS.Icon.get('upload') : '',
       size:     'sm',
       variant:  'primary',
-    }).on('click', function() {
-      if (!self._confirmFile) return;
-      var version = parseFloat(self._versionInputEl.value) || 0;
-      self._options.onReplace(self._currentItem, self._confirmFile, version);
-      self._hideConfirm();
-    });
-
-    actionsEl.appendChild(cancelEl);
-    actionsEl.appendChild(submitEl);
+    }).on('click', function() { self._submitReplace(); });
+    this._confirmSubmitEl = submitEl;
 
     card.appendChild(titleEl);
     card.appendChild(fileEl);
-    card.appendChild(verRow);
+    card.appendChild(contentEl);
     card.appendChild(actionsEl);
     overlay.appendChild(card);
     this._wrapEl.appendChild(overlay);
-
     this._confirmOverlayEl = overlay;
   }
 
   /**
-   * Muestra el overlay de confirmación con los datos del archivo seleccionado.
+   * Muestra el overlay con los datos del archivo seleccionado, en estado idle.
    */
   _showConfirm(file) {
     this._confirmFile = file;
 
-    // Versión sugerida: actual + 0.1, redondeada a 1 decimal
+    // Versión sugerida: versión actual (entero) + 1
     if (this._versionInputEl) {
-      var current = parseFloat(this._currentItem && this._currentItem.version) || 1;
-      var next    = Math.round((current + 0.1) * 10) / 10;
-      this._versionInputEl.value = next;
+      var current = parseInt(this._currentItem && this._currentItem.version, 10) || 1;
+      this._versionInputEl.value = current + 1;
     }
 
-    // Poblar info del archivo
     this._renderConfirmFile(file);
+    this._setConfirmState('idle');
 
     if (this._confirmOverlayEl) {
       this._confirmOverlayEl.hidden = false;
@@ -720,13 +723,123 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   }
 
   /**
-   * Oculta el overlay de confirmación y limpia el estado pendiente.
+   * Oculta el overlay y limpia el archivo pendiente.
    */
   _hideConfirm() {
     if (this._confirmOverlayEl) {
       this._confirmOverlayEl.hidden = true;
     }
     this._confirmFile = null;
+  }
+
+  /**
+   * Llama a onReplace. Si retorna Promise muestra spinner → éxito/error.
+   * Si no retorna Promise, cierra inmediatamente (sin feedback).
+   */
+  _submitReplace() {
+    var self = this;
+    if (!this._confirmFile) return;
+
+    var version = parseInt(this._versionInputEl.value, 10) || 1;
+    var result  = this._options.onReplace(this._currentItem, this._confirmFile, version);
+
+    if (result && typeof result.then === 'function') {
+      this._setConfirmState('loading');
+      result.then(function() {
+        self._setConfirmState('success');
+        setTimeout(function() {
+          self._hideConfirm();
+          // Recargar el iframe con el documento actualizado
+          self._loadIframe(self._currentItem);
+        }, 1500);
+      }).catch(function(err) {
+        var msg = (err && err.message) ? err.message : 'Error al subir el archivo.';
+        self._setConfirmState('error', msg);
+      });
+    } else {
+      // Sin Promise — cierre inmediato (comportamiento básico)
+      this._hideConfirm();
+    }
+  }
+
+  /**
+   * Actualiza la zona dinámica y los botones del overlay según el estado.
+   *   'idle'    — versión + Cancelar/Subir
+   *   'loading' — spinner + "Subiendo..."
+   *   'success' — ícono check + "Documento reemplazado." (auto-cierra)
+   *   'error'   — mensaje de error + Reintentar/Cerrar
+   */
+  _setConfirmState(state, message) {
+    var self      = this;
+    var contentEl = this._confirmContentEl;
+    var actionsEl = this._confirmActionsEl;
+    var fileEl    = this._confirmFileEl;
+
+    if (!contentEl || !actionsEl) return;
+    contentEl.replaceChildren();
+    actionsEl.replaceChildren();
+
+    if (state === 'idle') {
+      if (fileEl) fileEl.hidden = false;
+      contentEl.appendChild(this._confirmVerRowEl);
+      actionsEl.appendChild(this._confirmCancelEl);
+      actionsEl.appendChild(this._confirmSubmitEl);
+
+    } else if (state === 'loading') {
+      if (fileEl) fileEl.hidden = false;
+      var loadingEl = document.createElement('div');
+      loadingEl.className = 'dm-preview__confirm-status';
+      var spinnerEl = document.createElement('span');
+      spinnerEl.className = 'mts-spinner';
+      var loadingText = document.createElement('span');
+      loadingText.className   = 'dm-preview__confirm-status-text';
+      loadingText.textContent = 'Subiendo...';
+      loadingEl.appendChild(spinnerEl);
+      loadingEl.appendChild(loadingText);
+      contentEl.appendChild(loadingEl);
+      // Sin botones — no se puede cancelar una subida en curso
+
+    } else if (state === 'success') {
+      if (fileEl) fileEl.hidden = true;
+      var successEl = document.createElement('div');
+      successEl.className = 'dm-preview__confirm-status dm-preview__confirm-status--success';
+      var successIcon = document.createElement('span');
+      successIcon.className = 'dm-preview__confirm-status-icon';
+      if (window.MTS && MTS.Icon) successIcon.innerHTML = MTS.Icon.get('check-circle') || '✓';
+      var successText = document.createElement('span');
+      successText.className   = 'dm-preview__confirm-status-text';
+      successText.textContent = 'Documento reemplazado.';
+      successEl.appendChild(successIcon);
+      successEl.appendChild(successText);
+      contentEl.appendChild(successEl);
+
+    } else if (state === 'error') {
+      if (fileEl) fileEl.hidden = false;
+      var errorEl = document.createElement('div');
+      errorEl.className = 'dm-preview__confirm-status dm-preview__confirm-status--error';
+      var errorIcon = document.createElement('span');
+      errorIcon.className = 'dm-preview__confirm-status-icon';
+      if (window.MTS && MTS.Icon) errorIcon.innerHTML = MTS.Icon.get('alert-circle') || '✕';
+      var errorText = document.createElement('span');
+      errorText.className   = 'dm-preview__confirm-status-text';
+      errorText.textContent = message || 'Error al subir el archivo.';
+      errorEl.appendChild(errorIcon);
+      errorEl.appendChild(errorText);
+      contentEl.appendChild(errorEl);
+
+      var retryEl = document.createElement('button');
+      retryEl.type = 'button';
+      new MTS.Button(retryEl, { label: 'Reintentar', size: 'sm', variant: 'ghost' })
+        .on('click', function() { self._setConfirmState('idle'); });
+
+      var closeEl = document.createElement('button');
+      closeEl.type = 'button';
+      new MTS.Button(closeEl, { label: 'Cerrar', size: 'sm', variant: 'ghost' })
+        .on('click', function() { self._hideConfirm(); });
+
+      actionsEl.appendChild(retryEl);
+      actionsEl.appendChild(closeEl);
+    }
   }
 
   /**
