@@ -1,5 +1,5 @@
 /* ============================================================
-   MATIOS UI — DocumentManagerPreviewPlugin  v1.5.0
+   MATIOS UI — DocumentManagerPreviewPlugin  v1.6.0
    Estilos del plugin de vista previa de documentos.
 
    Requiere: matios-ui-base.css, matios-ui-modal.css,
@@ -375,11 +375,29 @@
   flex-shrink: 0;
 }
 
-/* Zona dinámica: versión / spinner / éxito / error */
+/* Zona dinámica: versión / progreso / éxito / error */
 .dm-preview__confirm-content {
   display: flex;
   flex-direction: column;
   gap: var(--mts-space-3);
+}
+
+/* Barra de progreso de subida */
+.dm-preview__confirm-progress {
+  height: 6px;
+  background: var(--mts-bg-surface-2);
+  border-radius: 9999px;
+  overflow: hidden;
+  /* Shimmer mientras la barra no recibe progreso real */
+  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
+}
+
+.dm-preview__confirm-progress-fill {
+  height: 100%;
+  background: var(--mts-color-primary);
+  border-radius: 9999px;
+  transition: width 0.25s ease;
+  animation: none;  /* el fill no parpadea */
 }
 
 /* Fila de estado: spinner+texto, check+texto, error+texto */

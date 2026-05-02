@@ -1,5 +1,5 @@
 /* ============================================================
-   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.5.0
+   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.6.0
    Sub-plugin de vista previa para MTS.DocumentManagerPlugin.
 
    Muestra un modal fullscreen con:
@@ -22,10 +22,22 @@
        onDownload: function(item) {
          window.open('/api/documents/' + item.id + '/download');
        },
-       onReplace: function(item, file, version) {
-         console.log('[dmPreview.onReplace]', item, file, version);
-         // http.post('/api/documents/' + item.id + '/replace', { file, version });
-         // version: valor ingresado en el modal de confirmación (decimal: 1.1, 2.3, etc.)
+       onReplace: function(item, file, version, reportProgress) {
+         // reportProgress(n): llama con 0-100 para actualizar la barra de progreso.
+         // En producción usa XHR para tener acceso a upload.onprogress:
+         return new Promise(function(resolve, reject) {
+           var xhr = new XMLHttpRequest();
+           xhr.upload.onprogress = function(e) {
+             if (e.lengthComputable) reportProgress(Math.round(e.loaded / e.total * 100));
+           };
+           xhr.onload  = function() { resolve(); };
+           xhr.onerror = function() { reject(new Error('Error de red.')); };
+           xhr.open('POST', '/api/documents/' + item.id + '/replace');
+           var form = new FormData();
+           form.append('file', file);
+           form.append('version', String(version));
+           xhr.send(form);
+         });
        },
        onPrev: function(currentItem) {
          var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
@@ -64,11 +76,13 @@
      panels        Array   — sub-paneles del acordeón lateral
      urlResolver   fn      — function(item) → string | null  (URL del iframe)
      onDownload    fn      — function(item)  (botón "Descargar" en el header)
-     onReplace     fn      — function(item, file, version)  (botón "Reemplazar" en el header)
+     onReplace     fn      — function(item, file, version, reportProgress)
                               Flujo: clic "Reemplazar" → file picker → modal de confirmación
-                              (muestra archivo + input de versión) → clic "Subir" → callback
-                              file: File seleccionado por el usuario
-                              version: valor del input de versión en el modal de confirmación (decimal)
+                              (archivo + versión) → clic "Subir" → callback
+                              file: File seleccionado
+                              version: entero del input de versión
+                              reportProgress(n): llama con 0-100 para actualizar la barra
+                              Debe retornar Promise para activar spinner/progreso/éxito/error
                               accept del file picker: heredado de dm._options.accept
      onPrev        fn      — function(currentItem)  (botón ← en el header)
      onNext        fn      — function(currentItem)  (botón → en el header)
@@ -84,7 +98,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
   static descriptor = {
     name:     'MTS.DocumentManagerPreviewPlugin',
-    version:  '1.5.0',
+    version:  '1.6.0',
     type:     'documentManagerPreview',
     requires: ['MTS.DocumentManagerPlugin', 'MTS.Modal', 'MTS.Accordion'],
     provides: 'documentManagerPreview',
@@ -131,8 +145,9 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     this._confirmContentEl  = null;   // zona dinámica: versión / spinner / estado
     this._confirmActionsEl  = null;   // zona de botones del overlay
     this._confirmVerRowEl   = null;   // fila de versión (reutilizada entre estados)
-    this._confirmCancelEl   = null;   // botón Cancelar (reutilizado)
-    this._confirmSubmitEl   = null;   // botón Subir (reutilizado)
+    this._confirmCancelEl       = null;   // botón Cancelar (reutilizado)
+    this._confirmSubmitEl       = null;   // botón Subir (reutilizado)
+    this._confirmProgressFillEl = null;   // fill de la barra de progreso
   }
 
   /* ----------------------------------------------------------
@@ -171,8 +186,9 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       this._confirmContentEl = null;
       this._confirmActionsEl = null;
       this._confirmVerRowEl  = null;
-      this._confirmCancelEl  = null;
-      this._confirmSubmitEl  = null;
+      this._confirmCancelEl       = null;
+      this._confirmSubmitEl       = null;
+      this._confirmProgressFillEl = null;
     }
     this._dm          = null;
     this._currentItem = null;
@@ -741,7 +757,20 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     if (!this._confirmFile) return;
 
     var version = parseInt(this._versionInputEl.value, 10) || 1;
-    var result  = this._options.onReplace(this._currentItem, this._confirmFile, version);
+
+    // reportProgress(n): función que el dev llama con 0-100 desde su XHR.onprogress.
+    // Se crea antes de llamar al callback para que el dev la capture en su closure.
+    // _confirmProgressFillEl se asigna en _setConfirmState('loading') justo después.
+    var reportProgress = function(percent) {
+      if (self._confirmProgressFillEl) {
+        self._confirmProgressFillEl.style.width =
+          Math.min(100, Math.max(0, percent)) + '%';
+      }
+    };
+
+    var result = this._options.onReplace(
+      this._currentItem, this._confirmFile, version, reportProgress
+    );
 
     if (result && typeof result.then === 'function') {
       this._setConfirmState('loading');
@@ -787,16 +816,23 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
     } else if (state === 'loading') {
       if (fileEl) fileEl.hidden = false;
-      var loadingEl = document.createElement('div');
-      loadingEl.className = 'dm-preview__confirm-status';
-      var spinnerEl = document.createElement('span');
-      spinnerEl.className = 'mts-spinner';
+
+      // Barra de progreso
+      var progressWrap = document.createElement('div');
+      progressWrap.className = 'dm-preview__confirm-progress';
+      var progressFill = document.createElement('div');
+      progressFill.className    = 'dm-preview__confirm-progress-fill';
+      progressFill.style.width  = '0%';
+      progressWrap.appendChild(progressFill);
+      this._confirmProgressFillEl = progressFill;
+
+      // Texto "Subiendo..."
       var loadingText = document.createElement('span');
       loadingText.className   = 'dm-preview__confirm-status-text';
       loadingText.textContent = 'Subiendo...';
-      loadingEl.appendChild(spinnerEl);
-      loadingEl.appendChild(loadingText);
-      contentEl.appendChild(loadingEl);
+
+      contentEl.appendChild(progressWrap);
+      contentEl.appendChild(loadingText);
       // Sin botones — no se puede cancelar una subida en curso
 
     } else if (state === 'success') {

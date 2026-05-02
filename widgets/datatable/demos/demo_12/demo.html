@@ -153,13 +153,20 @@ const dmPreview = new MTS.DocumentManagerPreviewPlugin({
 
   // Botón "Reemplazar" en el header del modal.
   // El file picker filtra por los mismos tipos que dm.accept.
-  // Debe retornar una Promise para activar spinner → éxito/error en el overlay.
-  onReplace: function(item, file, version) {
+  // Debe retornar una Promise. reportProgress(0-100) actualiza la barra de progreso.
+  onReplace: function(item, file, version, reportProgress) {
     console.log('[dmPreview.onReplace]', item, file, version);
-    // Simulación de subida async — en producción:
-    // return http.post('/api/documents/' + item.id + '/replace', { file, version });
+    // Simulación de subida con progreso — en producción usar XHR:
+    // xhr.upload.onprogress = function(e) {
+    //   if (e.lengthComputable) reportProgress(Math.round(e.loaded / e.total * 100));
+    // };
     return new Promise(function(resolve) {
-      setTimeout(resolve, 2000);
+      var pct = 0;
+      var iv = setInterval(function() {
+        pct = Math.min(pct + 12, 100);
+        reportProgress(pct);
+        if (pct >= 100) { clearInterval(iv); setTimeout(resolve, 300); }
+      }, 200);
     });
   },
 
@@ -276,10 +283,15 @@ function initTables() {
       onDownload: function(item) {
         console.log('[dmPreview.onDownload]', item);
       },
-      onReplace: function(item, file, version) {
+      onReplace: function(item, file, version, reportProgress) {
         console.log('[dmPreview.onReplace]', item, file, version);
         return new Promise(function(resolve) {
-          setTimeout(resolve, 2000);
+          var pct = 0;
+          var iv = setInterval(function() {
+            pct = Math.min(pct + 12, 100);
+            reportProgress(pct);
+            if (pct >= 100) { clearInterval(iv); setTimeout(resolve, 300); }
+          }, 200);
         });
       },
       onPrev: function(currentItem) {
