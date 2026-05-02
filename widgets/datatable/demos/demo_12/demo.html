@@ -153,10 +153,14 @@ const dmPreview = new MTS.DocumentManagerPreviewPlugin({
 
   // Botón "Reemplazar" en el header del modal.
   // El file picker filtra por los mismos tipos que dm.accept.
-  // version: valor del input de versión (decimal: 1.1, 2.3, etc.)
+  // Debe retornar una Promise para activar spinner → éxito/error en el overlay.
   onReplace: function(item, file, version) {
     console.log('[dmPreview.onReplace]', item, file, version);
-    // http.post('/api/documents/' + item.id + '/replace', { file, version });
+    // Simulación de subida async — en producción:
+    // return http.post('/api/documents/' + item.id + '/replace', { file, version });
+    return new Promise(function(resolve) {
+      setTimeout(resolve, 2000);
+    });
   },
 
   // Navegación entre archivos de la carpeta actual.
@@ -274,6 +278,9 @@ function initTables() {
       },
       onReplace: function(item, file, version) {
         console.log('[dmPreview.onReplace]', item, file, version);
+        return new Promise(function(resolve) {
+          setTimeout(resolve, 2000);
+        });
       },
       onPrev: function(currentItem) {
         console.log('[dmPreview.onPrev]', currentItem);
