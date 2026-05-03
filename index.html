@@ -4,39 +4,50 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matios UI Framework</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base/matios-ui-base.css">
 <link rel="stylesheet" href="themes/matios-ui-mode-dark.css">
 <link rel="stylesheet" href="themes/matios-ui-mode-light.css">
 <link rel="stylesheet" href="themes/matios-ui-mode-high-contrast.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-violet.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-olive.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-blue.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-corporate.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-navy.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-emerald.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-petrol.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-high-contrast.css">
 <link rel="stylesheet" href="icons/matios-ui-icons.css">
 <link rel="stylesheet" href="forms/matios-ui-button/matios-ui-button.css">
+<link rel="stylesheet" href="forms/matios-ui-copybutton/matios-ui-copybutton.css">
+<link rel="stylesheet" href="navigation/matios-ui-drawer/matios-ui-drawer.css">
+<link rel="stylesheet" href="navigation/matios-ui-sidenav/matios-ui-sidenav.css">
+<link rel="stylesheet" href="navigation/matios-ui-topbar/matios-ui-topbar.css">
+<link rel="stylesheet" href="navigation/matios-ui-menu/matios-ui-menu.css">
+<link rel="stylesheet" href="overlays/matios-ui-spinner/matios-ui-spinner.css">
+<link rel="stylesheet" href="utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+<link rel="stylesheet" href="layout/matios-ui-scroll/matios-ui-scroll.css">
+<link rel="stylesheet" href="navigation/matios-ui-statusbar/matios-ui-statusbar.css">
+<link rel="stylesheet" href="layout/matios-ui-shell/matios-ui-shell.css">
 <script src="icons/matios-ui-icons.js"></script>
 <script src="forms/matios-ui-button/matios-ui-button.js"></script>
+<script src="forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+<script src="navigation/matios-ui-drawer/matios-ui-drawer.js"></script>
+<script src="navigation/matios-ui-sidenav/matios-ui-sidenav.js"></script>
+<script src="navigation/matios-ui-topbar/matios-ui-topbar.js"></script>
+<script src="navigation/matios-ui-menu/matios-ui-menu.js"></script>
+<script src="overlays/matios-ui-spinner/matios-ui-spinner.js"></script>
+<script src="utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+<script src="layout/matios-ui-scroll/matios-ui-scroll.js"></script>
+<script src="navigation/matios-ui-statusbar/matios-ui-statusbar.js"></script>
+<script src="layout/matios-ui-shell/matios-ui-shell.js"></script>
 <style>
-:root {
-  --sw: 224px;
-  --th: 50px;
-}
-
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:'DM Sans',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:'DM Sans',sans-serif;}
 
-/* ── TOPBAR ───────────────────────────────────────── */
-.topbar{height:var(--th);background:var(--mts-bg-surface);border-bottom:1px solid var(--mts-border-color);display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.05);}
-.topbar__brand{display:flex;align-items:center;gap:9px;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--mts-text-primary);cursor:pointer;flex-shrink:0;}
-.topbar__logo{width:28px;height:28px;background:linear-gradient(135deg,var(--mts-color-primary),var(--mts-color-accent));border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex-shrink:0;}
-.topbar__brand span{color:var(--mts-color-primary);}
-.topbar__version{font-size:10px;font-weight:700;background:rgba(22,163,74,.1);color:var(--mts-color-success);padding:2px 7px;border-radius:4px;}
-.topbar__spacer{flex:1;}
+/* ── TOPBAR — override de fuente para brand ─────── */
+#mainTopbar .mts-topbar__title{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;}
 
-.docs-btn{display:none;align-items:center;gap:6px;padding:5px 12px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface-2);color:var(--mts-text-muted);transition:all .12s;}
-.docs-btn:hover{border-color:var(--mts-color-primary);color:var(--mts-color-primary);background:var(--mts-color-primary-light);}
-.docs-btn.visible{display:flex;}
-
-/* ── Theme picker — ButtonGroup ───────────────────── */
+/* ── Theme picker ─────────────────────────────────── */
 .theme-picker{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 .theme-picker__group{display:flex;align-items:center;gap:6px;}
 .theme-picker__label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mts-text-muted);}
@@ -48,28 +59,14 @@ body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:'DM
 .theme-picker .mts-btn-group .mts-btn--ghost:not(.mts-btn--active),
 .theme-picker .mts-btn-group .mts-btn--secondary:not(.mts-btn--active){border-color:transparent !important;}
 
-/* ── LAYOUT ───────────────────────────────────────── */
-.body{display:flex;flex:1;overflow:hidden;}
-
-/* ── SIDEBAR ──────────────────────────────────────── */
-.sidebar{width:var(--sw);background:var(--mts-bg-surface);border-right:1px solid var(--mts-border-color);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
-.sidebar__scroll{flex:1;overflow-y:auto;padding:8px 0 16px;scrollbar-width:thin;scrollbar-color:var(--mts-border-color) transparent;}
-.sidebar__scroll::-webkit-scrollbar{width:3px;}
-.sidebar__scroll::-webkit-scrollbar-thumb{background:var(--mts-border-color);border-radius:3px;}
-
-.nav-group__label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--mts-text-muted);padding:12px 16px 4px;display:block;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:7px 12px;margin:1px 6px;border-radius:7px;color:var(--mts-text-muted);font-size:13px;cursor:pointer;border:none;background:none;width:calc(100% - 12px);font-family:'DM Sans',sans-serif;transition:background .1s,color .1s;white-space:nowrap;text-align:left;}
-.nav-item:hover{background:var(--mts-bg-surface-2);color:var(--mts-text-primary);}
-.nav-item.active{background:var(--mts-color-primary-light);color:var(--mts-color-primary);font-weight:600;}
-.nav-item__icon{width:18px;height:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:inherit;}
-.nav-item__badge{font-size:9px;font-weight:700;padding:1px 6px;border-radius:99px;background:linear-gradient(135deg,var(--mts-color-primary),var(--mts-color-accent));color:#fff;flex-shrink:0;margin-left:auto;}
-.nav-divider{height:1px;background:var(--mts-border-color);margin:6px 12px;}
-.sidebar__footer{padding:8px 14px;border-top:1px solid var(--mts-border-color);font-size:10px;color:var(--mts-text-muted);flex-shrink:0;}
-
-/* ── CONTENT ──────────────────────────────────────── */
-.content{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;}
-.content iframe{width:100%;flex:1;border:none;display:none;}
-.content iframe.active{display:block;}
+/* ── CONTENT — implementación específica de este index ───────
+   Shell gestiona overflow/position del slot main.
+   Acá solo está lo propio de esta app: flex-column para apilar
+   el welcome screen y el frame de contenido cargado dinámicamente.
+   Otro dev podría usar JS puro, web components, un router, etc.
+   ──────────────────────────────────────────────────────────── */
+.content { display: flex; flex-direction: column; }
+#mainFrame { width: 100%; flex: 1; border: none; display: none; }
 
 /* ── WELCOME ──────────────────────────────────────── */
 .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:16px;text-align:center;padding:40px;}
@@ -86,27 +83,7 @@ body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:'DM
 .welcome__cta{padding:10px 24px;border-radius:9px;background:var(--mts-color-primary);color:#fff;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:8px;transition:opacity .12s;}
 .welcome__cta:hover{opacity:.88;}
 
-/* ── README PANEL ─────────────────────────────────── */
-.rm-overlay{position:fixed;inset:0;z-index:9000;pointer-events:none;}
-.rm-overlay.open{pointer-events:auto;}
-.rm-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .25s;}
-.rm-overlay.open .rm-backdrop{background:rgba(0,0,0,.3);}
-.rm-panel{position:absolute;top:0;right:0;bottom:0;width:min(660px,92vw);background:var(--mts-bg-surface);border-left:1px solid var(--mts-border-color);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.1);}
-.rm-overlay.open .rm-panel{transform:translateX(0);}
-.rm-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--mts-border-color);flex-shrink:0;}
-.rm-hdr-info{flex:1;display:flex;align-items:center;gap:8px;}
-.rm-hdr-title{font-size:18px;font-weight:700;color:var(--mts-text-primary);}
-.rm-hdr-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:4px;background:var(--mts-color-primary-light);color:var(--mts-color-primary);}
-.rm-cp-btn{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface-2);color:var(--mts-text-muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s;}
-.rm-cp-btn:hover{border-color:var(--mts-color-primary);color:var(--mts-color-primary);}
-.rm-close{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);cursor:pointer;color:var(--mts-text-muted);font-size:16px;line-height:1;transition:all .12s;}
-.rm-close:hover{background:rgba(248,113,113,.1);color:#ef4444;}
-.rm-body{flex:1;overflow-y:auto;padding:22px 24px 32px;scrollbar-width:thin;scrollbar-color:var(--mts-border-color) transparent;}
-.rm-body::-webkit-scrollbar{width:4px;}
-.rm-body::-webkit-scrollbar-thumb{background:var(--mts-border-color);border-radius:3px;}
-.rm-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:60px 0;color:var(--mts-text-muted);font-size:13px;}
-.rm-spin{width:18px;height:18px;border-radius:50%;border:2px solid var(--mts-border-color);border-top-color:var(--mts-color-primary);animation:rm-spin .7s linear infinite;}
-@keyframes rm-spin{to{transform:rotate(360deg);}}
+/* ── README Prose (estilos de markdown renderizado) ── */
 .rm-md{font-size:13.5px;line-height:1.75;color:var(--mts-text-muted);}
 .rm-md h1{font-size:18px;font-weight:800;color:var(--mts-text-primary);margin:0 0 14px;}
 .rm-md h2{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--mts-border-color);}
@@ -118,112 +95,76 @@ body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:'DM
 .rm-md strong{color:var(--mts-text-primary);font-weight:700;}
 .rm-md a{color:var(--mts-color-primary);text-decoration:none;}
 .rm-md code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:12px;padding:1px 6px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:4px;color:var(--mts-color-primary);}
-.rm-md pre{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:9px;overflow:hidden;margin:0 0 14px;}
-.rm-pre-top{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:rgba(0,0,0,.03);border-bottom:1px solid var(--mts-border-color);}
-.rm-pre-lang{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--mts-text-muted);}
-.rm-pre-cp{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:transparent;border:1px solid var(--mts-border-color);color:var(--mts-text-muted);cursor:pointer;font-family:'DM Sans',sans-serif;}
-.rm-pre-cp:hover{color:var(--mts-color-primary);border-color:var(--mts-color-primary);}
-.rm-md pre code{display:block;padding:12px 14px;overflow-x:auto;background:none;border:none;border-radius:0;font-size:12px;color:var(--mts-text-primary);line-height:1.65;}
+.rm-md pre{margin:0 0 14px;}
 .rm-md table{width:100%;border-collapse:collapse;margin:0 0 14px;font-size:12.5px;}
 .rm-md th{padding:6px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
 .rm-md td{padding:7px 12px;border-bottom:1px solid var(--mts-border-color);}
 .rm-md tr:last-child td{border-bottom:none;}
 .rm-md tr:hover td{background:rgba(0,0,0,.02);}
 .rm-md blockquote{border-left:3px solid var(--mts-color-primary);padding:8px 14px;margin:0 0 12px;background:var(--mts-color-primary-light);border-radius:0 6px 6px 0;}
-/* Syntax highlighting */
-.hl-kw{color:var(--mts-color-primary);}.hl-str{color:var(--mts-color-success);}.hl-num{color:var(--mts-color-warning);}.hl-cmt{color:var(--mts-text-muted);font-style:italic;}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="topbar__brand" onclick="goWelcome()">
-    <div class="topbar__logo">M</div>
-    Matios<span>UI</span>
-  </div>
-  <span class="topbar__version">v1.0.0</span>
-  <div class="topbar__spacer"></div>
-  <button class="docs-btn" id="docsBtn" onclick="openDocs()">
-    <i class="mts-icon mts-icon-file-text mts-icon--sm"></i>
-    Ver docs
-  </button>
-  <div class="theme-picker">
-    <div class="theme-picker__group">
-      <span class="theme-picker__label">Mode</span>
-      <div id="themeModeGroup"></div>
-    </div>
-    <div class="theme-picker__group">
-      <span class="theme-picker__label">Accent</span>
-      <div id="themeAccentGroup"></div>
-    </div>
-  </div>
+<!-- SHELL: topbar · sidenav · main · statusbar -->
+<div id="mainTopbar"></div>
+<nav id="sideNav"></nav>
+<div class="content" id="mainContent">
+  <div class="welcome" id="welcomeScreen"></div>
+  <iframe id="mainFrame" src=""></iframe>
 </div>
-
-<!-- BODY -->
-<div class="body">
-  <nav class="sidebar">
-    <div class="sidebar__scroll" id="sidebarScroll"></div>
-    <div class="sidebar__footer">Matios UI · v1.0.0</div>
-  </nav>
-  <div class="content" id="content">
-    <div class="welcome" id="welcomeScreen"></div>
-    <iframe id="mainFrame" src="" style="width:100%;height:100%;border:none;display:none;"></iframe>
-  </div>
-</div>
-
-<!-- README PANEL -->
-<div class="rm-overlay" id="rmOverlay">
-  <div class="rm-backdrop" onclick="closeDocs()"></div>
-  <div class="rm-panel">
-    <div class="rm-hdr">
-      <div class="rm-hdr-info">
-        <span class="rm-hdr-title" id="rmTitle">Documentación</span>
-        <span class="rm-hdr-tag">README</span>
-      </div>
-      <button class="rm-cp-btn" id="rmCpBtn">Copiar MD</button>
-      <button class="rm-close" onclick="closeDocs()">✕</button>
-    </div>
-    <div class="rm-body" id="rmBody"></div>
-  </div>
-</div>
+<div id="mainStatusBar"></div>
 
 <script>
 /* ══════════════════════════════════════════════
    ESTRUCTURA
    ══════════════════════════════════════════════ */
-const GROUPS = [
-  { label: null, items: [
-    { id:'showcase', label:'Showcase', icon:'activity', badge:'NEW', src:'apps-showcase/index.html' },
+// Árbol de navegación — formato MTS.Menu nativo
+// Los ítems con children son acordeones; los leaf tienen src/action
+const NAV_ITEMS = [
+  { key:'showcase', label:'Showcase', icon:'mts-icon-activity', badge:'NEW',
+    src:'apps-showcase/index.html' },
+
+  { divider: true },
+
+  { key:'componentes', label:'Componentes', icon:'mts-icon-package', children: [
+    { key:'forms',      label:'Formularios', icon:'mts-icon-form',     src:'forms/demo.html',      md:'forms' },
+    { key:'navigation', label:'Navegación',  icon:'mts-icon-compass',  src:'navigation/demo.html', md:'navigation' },
+    { key:'overlays',   label:'Overlays',    icon:'mts-icon-layers',   src:'overlays/demo.html',   md:'overlays' },
+    { key:'display',    label:'Display',     icon:'mts-icon-grid',     src:'display/demo.html',    md:'display' },
+    { key:'layout',     label:'Layout',      icon:'mts-icon-layout',   src:'layout/demo.html',     md:'layout' },
+    { key:'data',       label:'Data',        icon:'mts-icon-database', src:'data/demo.html',       md:'data' },
   ]},
-  { label: 'Componentes', items: [
-    { id:'forms',      label:'Formularios', icon:'form',     src:'forms/demo.html',      md:'forms' },
-    { id:'navigation', label:'Navegación',  icon:'compass',  src:'navigation/demo.html', md:'navigation' },
-    { id:'overlays',   label:'Overlays',    icon:'layers',   src:'overlays/demo.html',   md:'overlays' },
-    { id:'display',    label:'Display',     icon:'grid',     src:'display/demo.html',    md:'display' },
-    { id:'layout',     label:'Layout',      icon:'layout',   src:'layout/demo.html',     md:'layout' },
-    { id:'data',       label:'Data',        icon:'database', src:'data/demo.html',       md:'data' },
+
+  { key:'sc-apps', label:'Widgets', icon:'mts-icon-bar-chart-2', children: [
+    { key:'sc-dashboard', label:'Dashboard',  icon:'mts-icon-bar-chart-2', src:null,                                      action:'wip' },
+    { key:'sc-calendar',  label:'Calendario', icon:'mts-icon-calendar',    src:'widgets/calendar/demo.html',              md:'sc-calendar' },
+    { key:'sc-datatable', label:'DataTable',  icon:'mts-icon-table',       src:'widgets/datatable/demo.html' },
+    { key:'sc-charts',    label:'Charts',     icon:'mts-icon-pie-chart',   src:null,                                      action:'wip' },
   ]},
-  { label: 'Showcase', items: [
-    { id:'sc-dashboard', label:'Dashboard',  icon:'bar-chart-2', src:null,                      action:'wip' },
-    { id:'sc-calendar',  label:'Calendario', icon:'calendar',    src:'calendar_v2/demo.html', md:'sc-calendar' },
-    { id:'sc-datatable', label:'DataTable',  icon:'table',       src:'matios-ui-datatable/demo.html' },
-    { id:'sc-charts',    label:'Charts',     icon:'pie-chart',   src:null,                      action:'wip' },
+
+  { key:'utilities', label:'Utilities', icon:'mts-icon-tool', children: [
+    { key:'httpclient',       label:'HttpClient',      icon:'mts-icon-globe',     src:'utilities/matios-ui-httpclient/demo.html',      md:'httpclient' },
+    { key:'codeblock',        label:'CodeBlock',       icon:'mts-icon-file-text', src:'utilities/matios-ui-codeblock/demo.html',       md:'codeblock',       badge:'NEW' },
+    { key:'jsonviewer',       label:'JsonViewer',      icon:'mts-icon-code',      src:'utilities/matios-ui-jsonviewer/demo.html',      md:'jsonviewer',       badge:'NEW' },
+    { key:'diagnosticspanel', label:'DiagnosticsPanel',icon:'mts-icon-activity',  src:'utilities/matios-ui-diagnosticspanel/demo.html',md:'diagnosticspanel', badge:'NEW' },
+    { key:'browser',          label:'Browser',         icon:'mts-icon-monitor',   src:'utilities/matios-ui-browser/demo.html',             md:'browser',          badge:'NEW' },
+    { key:'devpanel',         label:'DevPanel',        icon:'mts-icon-terminal',  src:null,                                               action:'wip' },
+    { key:'pageloader',       label:'PageLoader',      icon:'mts-icon-loader',    src:'utilities/matios-ui-pageloader/demo.html',          md:'pageloader',       badge:'NEW' },
+    { key:'sessiontimeout',   label:'SessionTimeout',  icon:'mts-icon-clock',     src:'utilities/matios-ui-sessiontimeout/demo.html',      md:'sessiontimeout',   badge:'NEW' },
+    { key:'sanitize',         label:'Sanitize',        icon:'mts-icon-shield',    src:'utilities/matios-ui-sanitize/demo.html',             md:'sanitize',         badge:'NEW' },
   ]},
-  { label: 'Utilities', items: [
-    { id:'httpclient', label:'HttpClient', icon:'globe', src:'utilities/matios-ui-httpclient/demo.html', md:'httpclient' },
-    { id:'codeblock',  label:'CodeBlock', icon:'file-text', src:'utilities/matios-ui-codeblock/demo.html', md:'codeblock', badge:'NEW' },
-    { id:'jsonviewer', label:'JsonViewer', icon:'code', src:'utilities/matios-ui-jsonviewer/demo.html', md:'jsonviewer', badge:'NEW' },
-    { id:'diagnosticspanel', label:'DiagnosticsPanel', icon:'activity', src:'utilities/matios-ui-diagnosticspanel/demo.html', md:'diagnosticspanel', badge:'NEW' },
-    { id:'devpanel',   label:'DevPanel',   icon:'terminal', src:null, action:'wip' },
+
+  { divider: true },
+
+  { key:'sistema', label:'Sistema', icon:'mts-icon-settings', children: [
+    { key:'themes',      label:'Temas',       icon:'mts-icon-sun',  src:'themes/demo.html',      md:null },
+    { key:'icons',       label:'Íconos',      icon:'mts-icon-star', src:'icons/demo.html',       md:'icons' },
+    { key:'css-helpers', label:'CSS Helpers', icon:'mts-icon-code', src:'css-helpers/demo.html', md:'css-helpers' },
   ]},
-  { label: 'Sistema', items: [
-    { id:'themes', label:'Temas',  icon:'sun',  src:'themes/demo.html', md:null },
-    { id:'icons',  label:'Íconos', icon:'star', src:'icons/demo.html',  md:'icons' },
-  ]},
-  { label: 'Cliente', items: [
-    { id:'cal-x', label:'Cal. Académico', icon:'award', src:'/index.html', md:null },
-  ]},
+
+  { key:'cal-x', label:'Cal. Académico', icon:'mts-icon-award',
+    src:'/index.html' },
 ];
 
 const MD_MAP = {
@@ -232,7 +173,7 @@ const MD_MAP = {
   'checkbox':'forms/matios-ui-checkbox/matios-ui-checkbox.md','radio':'forms/matios-ui-radio/matios-ui-radio.md',
   'toggle':'forms/matios-ui-toggle/matios-ui-toggle.md','slider':'forms/matios-ui-slider/matios-ui-slider.md',
   'taginput':'forms/matios-ui-taginput/matios-ui-taginput.md','rating':'forms/matios-ui-rating/matios-ui-rating.md',
-  'picker':'forms/matios-ui-picker/matios-ui-date-picker.md','fileupload':'forms/matios-ui-fileupload/matios-ui-fileupload.md',
+  'picker':'forms/matios-ui-date-picker/matios-ui-date-picker.md','fileupload':'forms/matios-ui-fileupload/matios-ui-fileupload.md',
   'validation':'forms/matios-ui-validation/matios-ui-validation.md',
   'numberinput':'forms/matios-ui-numberinput/matios-ui-numberinput.md',
   'phoneinput':'forms/matios-ui-phoneinput/matios-ui-phoneinput.md',
@@ -242,7 +183,7 @@ const MD_MAP = {
   'formlayout':'forms/matios-ui-formlayout/matios-ui-formlayout.md',
   'label':'forms/matios-ui-label/matios-ui-label.md',
   'copybutton':'forms/matios-ui-copybutton/matios-ui-copybutton.md',
-  'navigation':['navigation/matios-ui-tabs/matios-ui-tabs.md','navigation/matios-ui-accordion/matios-ui-accordion.md',
+  'navigation':['navigation/matios-ui-topbar/matios-ui-topbar.md','navigation/matios-ui-tabs/matios-ui-tabs.md','navigation/matios-ui-accordion/matios-ui-accordion.md',
     'navigation/matios-ui-breadcrumb/matios-ui-breadcrumb.md','navigation/matios-ui-stepper/matios-ui-stepper.md',
     'navigation/matios-ui-drawer/matios-ui-drawer.md','navigation/matios-ui-dropdown/matios-ui-dropdown.md',
     'navigation/matios-ui-tabbar/matios-ui-tabbar.md','navigation/matios-ui-pagination/matios-ui-pagination.md',
@@ -264,58 +205,71 @@ const MD_MAP = {
     'display/matios-ui-imagegallery/matios-ui-imagegallery.md','display/matios-ui-virtuallist/matios-ui-virtuallist.md',
     'display/matios-ui-splitter/matios-ui-splitter.md'],
   'layout':['layout/matios-ui-grid/matios-ui-grid.md','layout/matios-ui-scrollspy/matios-ui-scrollspy.md',
-    'layout/matios-ui-intersectionreveal/matios-ui-intersectionreveal.md','layout/matios-ui-splitter/matios-ui-splitter.md'],
+    'layout/matios-ui-intersectionreveal/matios-ui-intersectionreveal.md','layout/matios-ui-splitter/matios-ui-splitter.md',
+    'layout/matios-ui-scroll/matios-ui-scroll.md'],
   'grid':'layout/matios-ui-grid/matios-ui-grid.md',
   'scrollspy':'layout/matios-ui-scrollspy/matios-ui-scrollspy.md',
   'intersectionreveal':'layout/matios-ui-intersectionreveal/matios-ui-intersectionreveal.md',
   'splitter':'layout/matios-ui-splitter/matios-ui-splitter.md',
+  'scroll':'layout/matios-ui-scroll/matios-ui-scroll.md',
   'data':['data/matios-ui-table/matios-ui-table.md','data/matios-ui-paging/matios-ui-paging.md',
     'data/matios-ui-datatable/matios-ui-datatable.md','data/matios-ui-infinite/matios-ui-infinite.md',
     'data/matios-ui-chart/matios-ui-chart.md'],
   'icons':'icons/matios-ui-icons.md',
-  'sc-calendar':'calendar_v2/matios-ui-calendar.md',
+  'css-helpers':'css-helpers/README.md',
+  'sc-calendar':'widgets/calendar/matios-ui-calendar.md',
   'httpclient':'utilities/matios-ui-httpclient/matios-ui-httpclient.md',
   'codeblock':'utilities/matios-ui-codeblock/matios-ui-codeblock.md',
   'jsonviewer':'utilities/matios-ui-jsonviewer/matios-ui-jsonviewer.md',
   'diagnosticspanel':'utilities/matios-ui-diagnosticspanel/matios-ui-diagnosticspanel.md',
+  'browser':'utilities/matios-ui-browser/matios-ui-browser.md',
+  'pageloader':'utilities/matios-ui-pageloader/matios-ui-pageloader.md',
+  'sessiontimeout':'utilities/matios-ui-sessiontimeout/matios-ui-sessiontimeout.md',
+  'sanitize':'utilities/matios-ui-sanitize/matios-ui-sanitize.md',
+  'topbar':'navigation/matios-ui-topbar/matios-ui-topbar.md',
+  'menu':'navigation/matios-ui-menu/matios-ui-menu.md',
 };
 
 /* ── State ───────────────────────────────────────── */
 let currentMode   = 'light';
-let currentAccent = null;   // null = default (no accent attr)
-let modeGroup      = null;
-let accentGroup    = null;
-
-const MODE_OPTIONS = [
-  { id:'dark', label:'Dark' },
-  { id:'light', label:'Light' },
-  { id:'high-contrast', label:'HC' },
-];
-
-const ACCENT_OPTIONS = [
-  { id:null, label:'—' },
-  { id:'high-contrast', label:'HC' },
-  { id:'violet', label:'Violet' },
-  { id:'olive', label:'Olive' },
-  { id:'blue', label:'Blue' },
-];
+let currentAccent = null;
+let modeGroup     = null;
+let accentGroup   = null;
 let currentItem   = null;
 let currentActiveMd = null;
 let mdCache       = {};
 let currentMdRaw  = '';
 
 // Expose to iframes
-Object.defineProperty(window, 'currentModeVal',   { get(){ return currentMode; },   set(v){ currentMode = v; } });
-Object.defineProperty(window, 'currentAccentVal',  { get(){ return currentAccent; }, set(v){ currentAccent = v; } });
+Object.defineProperty(window, 'currentModeVal',  { get(){ return currentMode;   }, set(v){ currentMode = v; } });
+Object.defineProperty(window, 'currentAccentVal', { get(){ return currentAccent; }, set(v){ currentAccent = v; } });
 
 /* ── Mode + Accent ───────────────────────────────── */
+const MODE_OPTIONS = [
+  { id:'dark',          label:'Dark'  },
+  { id:'light',         label:'Light' },
+  { id:'high-contrast', label:'HC'    },
+];
+
+const ACCENT_OPTIONS = [
+  { id:null,             label:'—'      },
+  { id:'high-contrast',  label:'HC'     },
+  { id:'corporate',      label:'Corp'   },
+  { id:'navy',           label:'Navy'   },
+  { id:'emerald',        label:'Emer'   },
+  { id:'petrol',         label:'Petrol' },
+  { id:'violet',         label:'Violet' },
+  { id:'olive',          label:'Olive'  },
+  { id:'blue',           label:'Blue'   },
+];
+
 function syncThemePicker() {
   if (modeGroup) {
-    const idx = MODE_OPTIONS.findIndex(function (item) { return item.id === currentMode; });
+    const idx = MODE_OPTIONS.findIndex(function(item) { return item.id === currentMode; });
     if (idx >= 0) modeGroup.setActive(idx);
   }
   if (accentGroup) {
-    const idx = ACCENT_OPTIONS.findIndex(function (item) { return (item.id || '') === (currentAccent || ''); });
+    const idx = ACCENT_OPTIONS.findIndex(function(item) { return (item.id || '') === (currentAccent || ''); });
     if (idx >= 0) accentGroup.setActive(idx);
   }
 }
@@ -324,23 +278,15 @@ function initThemePicker() {
   if (!(window.MTS && MTS.ButtonGroup)) return;
 
   modeGroup = new MTS.ButtonGroup('#themeModeGroup',
-    MODE_OPTIONS.map(function (item) {
-      return {
-        label: item.label,
-        variant: 'ghost',
-        onClick: function () { setMode(item.id); }
-      };
+    MODE_OPTIONS.map(function(item) {
+      return { label: item.label, variant: 'ghost', onClick: function() { setMode(item.id); } };
     }),
     { size: 'sm', activeOnClick: false }
   );
 
   accentGroup = new MTS.ButtonGroup('#themeAccentGroup',
-    ACCENT_OPTIONS.map(function (item) {
-      return {
-        label: item.label,
-        variant: 'ghost',
-        onClick: function () { setAccent(item.id); }
-      };
+    ACCENT_OPTIONS.map(function(item) {
+      return { label: item.label, variant: 'ghost', onClick: function() { setAccent(item.id); } };
     }),
     { size: 'sm', activeOnClick: false }
   );
@@ -351,7 +297,6 @@ function initThemePicker() {
 function setMode(m) {
   currentMode = m;
   document.documentElement.setAttribute('data-mts-mode', m);
-
   if (m === 'high-contrast') {
     currentAccent = 'high-contrast';
     document.documentElement.setAttribute('data-mts-accent', 'high-contrast');
@@ -359,7 +304,6 @@ function setMode(m) {
     currentAccent = null;
     document.documentElement.removeAttribute('data-mts-accent');
   }
-
   syncThemePicker();
   _reloadFrame();
   _broadcast();
@@ -384,11 +328,7 @@ function _buildParams() {
 function _reloadFrame() {
   if (!currentItem?.src) return;
   const frame = document.getElementById('mainFrame');
-  // If already loaded with same base, broadcast in-place (no reload)
-  if (frame.src && frame.src.includes(currentItem.src.split('?')[0])) {
-    _broadcast();
-    return;
-  }
+  if (frame.src && frame.src.includes(currentItem.src.split('?')[0])) { _broadcast(); return; }
   frame.src = currentItem.src + '?' + _buildParams();
 }
 
@@ -401,55 +341,105 @@ function _broadcast() {
   } catch(e) {}
 }
 
-/* ── Sidebar ─────────────────────────────────────── */
-function buildSidebar() {
-  const scroll = document.getElementById('sidebarScroll');
-  GROUPS.forEach((group, gi) => {
-    if (gi > 0) {
-      const div = document.createElement('div');
-      div.className = 'nav-divider';
-      scroll.appendChild(div);
-    }
-    if (group.label) {
-      const lbl = document.createElement('span');
-      lbl.className = 'nav-group__label';
-      lbl.textContent = group.label;
-      scroll.appendChild(lbl);
-    }
-    group.items.forEach(item => {
-      const btn = document.createElement('button');
-      btn.className = 'nav-item';
-      btn.id = 'nav-' + item.id;
-      btn.innerHTML =
-        `<span class="nav-item__icon"><i class="mts-icon mts-icon-${item.icon}"></i></span>` +
-        `<span>${item.label}</span>` +
-        (item.badge ? `<span class="nav-item__badge">${item.badge}</span>` : '');
-      btn.addEventListener('click', () => loadItem(item));
-      scroll.appendChild(btn);
-    });
+/* ── Topbar ──────────────────────────────────────── */
+var LOGO_HTML = '<div style="width:28px;height:28px;background:linear-gradient(135deg,var(--mts-color-primary),var(--mts-color-accent));border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex-shrink:0">M</div>';
+
+var END_HTML =
+  '<button id="docsBtn" class="mts-btn mts-btn--secondary mts-btn--sm" onclick="openDocs()" style="display:none">' +
+    '<i class="mts-icon mts-icon-file-text mts-icon--sm"></i>' +
+    '<span class="mts-btn__label">Ver docs</span>' +
+  '</button>' +
+  '<div class="theme-picker">' +
+    '<div class="theme-picker__group">' +
+      '<span class="theme-picker__label">Mode</span>' +
+      '<div id="themeModeGroup"></div>' +
+    '</div>' +
+    '<div class="theme-picker__group">' +
+      '<span class="theme-picker__label">Accent</span>' +
+      '<div id="themeAccentGroup"></div>' +
+    '</div>' +
+  '</div>';
+
+var mainTopbar = new MTS.Topbar('#mainTopbar', {
+  shadow: false,  /* en layout dashboard la sombra se superpone al sidenav — border-bottom es suficiente */
+  brand: {
+    logo: LOGO_HTML,
+    title: 'Matios<span style="color:var(--mts-color-primary)">UI</span>',
+    subtitle: 'v1.0.0',
+    onClick: function() { goWelcome(); }
+  },
+  end: END_HTML
+});
+
+initThemePicker();
+if (window.MTS && MTS.Icon) MTS.Icon.initAll();
+
+/* ── Sidebar (MTS.Menu + MTS.SideNav) ───────────────────────── */
+
+// Mapa plano key → item (incluyendo hojas dentro de children)
+var itemMap = {};
+function buildItemMap(items) {
+  items.forEach(function(item) {
+    if (item.key) itemMap[item.key] = item;
+    if (item.children) buildItemMap(item.children);
   });
-  if (window.MTS && MTS.Icon) MTS.Icon.initAll();
 }
+buildItemMap(NAV_ITEMS);
+
+var mainMenu = new MTS.Menu({
+  items: NAV_ITEMS,
+  onClick: function(item) { loadContent(item); }
+});
+
+var mainSideNav = new MTS.SideNav('#sideNav', {
+  menu:   mainMenu,
+  footer: '<span style="font-size:10px;color:var(--mts-text-muted)">Matios UI · v1.0.0</span>'
+});
+
+var mainStatusBar = new MTS.StatusBar('#mainStatusBar', {
+  start:
+    '<span class="mts-statusbar__item">' +
+      '<span class="mts-statusbar__dot mts-statusbar__dot--success"></span>' +
+      'Matios UI Framework' +
+    '</span>' +
+    '<span class="mts-statusbar__sep"></span>' +
+    '<span class="mts-statusbar__tag mts-statusbar__tag--primary">v1.0.0</span>',
+  end:
+    '<span class="mts-statusbar__item">60+ componentes</span>' +
+    '<span class="mts-statusbar__sep"></span>' +
+    '<span class="mts-statusbar__item">278 íconos</span>'
+});
+
+new MTS.Shell(document.body, {
+  topbar:    mainTopbar,
+  sidenav:   mainSideNav,
+  statusbar: mainStatusBar,
+  main:      '#mainContent'
+});
 
 /* ── Navigation ──────────────────────────────────── */
-function loadItem(item) {
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('nav-' + item.id)?.classList.add('active');
-  currentItem     = item;
+// Carga contenido — solo para ítems hoja (con src o action)
+function loadContent(item) {
+  currentItem = item;
   currentActiveMd = null;
 
-  const docsBtn = document.getElementById('docsBtn');
-  docsBtn.classList.toggle('visible', !!(item.md && MD_MAP[item.md]));
+  var mdKey = item.md || item.key;
+  var docsBtn = document.getElementById('docsBtn');
+  if (docsBtn) docsBtn.style.display = !!(mdKey && MD_MAP[mdKey]) ? '' : 'none';
 
   if (item.action === 'wip') { showWip(item); return; }
 
   document.getElementById('welcomeScreen').style.display = 'none';
-  const frame = document.getElementById('mainFrame');
+  var frame = document.getElementById('mainFrame');
   frame.style.display = 'block';
-
   frame.src = item.src + '?' + _buildParams();
+}
 
-
+// Carga programática (desde welcome chips, loadById, etc.)
+// setActive auto-abre los ancestros si el ítem está anidado
+function loadItem(item) {
+  mainMenu.setActive(item.key);
+  loadContent(item);
 }
 
 function showWip(item) {
@@ -457,31 +447,29 @@ function showWip(item) {
   document.getElementById('mainFrame').style.display = 'none';
   document.getElementById('mainFrame').src = '';
   const ws = document.getElementById('welcomeScreen');
-  ws.innerHTML = `
-    <div style="width:56px;height:56px;border-radius:14px;background:var(--mts-color-primary-light);display:flex;align-items:center;justify-content:center;font-size:26px;">🚧</div>
-    <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--mts-text-primary);margin-bottom:8px;">${item.label}</div>
-    <p style="font-size:13px;color:var(--mts-text-muted);line-height:1.7;margin-bottom:22px;">Esta demo de interfaz completa está en el roadmap.<br>Llegará como parte de la sección <strong style="color:var(--mts-color-primary)">Showcase</strong>.</p>
-    <div style="display:inline-flex;align-items:center;gap:7px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:99px;padding:6px 16px;font-size:12px;color:var(--mts-text-muted);">
-      <i class="mts-icon mts-icon-clock mts-icon--sm"></i> Próximamente
-    </div>`;
+  ws.innerHTML =
+    '<div style="width:56px;height:56px;border-radius:14px;background:var(--mts-color-primary-light);display:flex;align-items:center;justify-content:center;font-size:26px;">🚧</div>' +
+    '<div style="font-family:\'Syne\',sans-serif;font-size:22px;font-weight:800;color:var(--mts-text-primary);margin-bottom:8px;">' + item.label + '</div>' +
+    '<p style="font-size:13px;color:var(--mts-text-muted);line-height:1.7;margin-bottom:22px;">Esta demo de interfaz completa está en el roadmap.<br>Llegará como parte de la sección <strong style="color:var(--mts-color-primary)">Showcase</strong>.</p>' +
+    '<div style="display:inline-flex;align-items:center;gap:7px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:99px;padding:6px 16px;font-size:12px;color:var(--mts-text-muted);">' +
+    '<i class="mts-icon mts-icon-clock mts-icon--sm"></i> Próximamente</div>';
   if (window.MTS && MTS.Icon) MTS.Icon.initAll();
 }
 
 function goWelcome() {
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   currentItem = null;
+  mainMenu.setActive('');
   document.getElementById('mainFrame').style.display = 'none';
   document.getElementById('mainFrame').src = '';
-  document.getElementById('docsBtn').classList.remove('visible');
-  const ws = document.getElementById('welcomeScreen');
-  ws.style.display = 'flex';
+  var docsBtn = document.getElementById('docsBtn');
+  if (docsBtn) docsBtn.style.display = 'none';
+  document.getElementById('welcomeScreen').style.display = 'flex';
   showWelcome();
 }
 
-function loadById(id) {
-  let found = null;
-  GROUPS.forEach(g => g.items.forEach(i => { if (i.id === id) found = i; }));
-  if (found) loadItem(found);
+function loadById(key) {
+  var item = itemMap[key];
+  if (item) loadItem(item);
 }
 
 /* ── Messages from iframe ────────────────────────── */
@@ -491,7 +479,6 @@ window.addEventListener('message', function(e) {
   if (e.data.type === 'setMode') {
     currentMode = e.data.mode;
     document.documentElement.setAttribute('data-mts-mode', e.data.mode);
-
     if (e.data.mode === 'high-contrast' && !currentAccent) {
       currentAccent = 'high-contrast';
       document.documentElement.setAttribute('data-mts-accent', 'high-contrast');
@@ -499,7 +486,6 @@ window.addEventListener('message', function(e) {
       currentAccent = null;
       document.documentElement.removeAttribute('data-mts-accent');
     }
-
     syncThemePicker();
   }
 
@@ -514,23 +500,45 @@ window.addEventListener('message', function(e) {
   if (e.data.type === 'mts:accActive') {
     const component = e.data.component;
     currentActiveMd = (component && MD_MAP[component]) ? component : null;
-    const mdKey = currentActiveMd || currentItem?.md;
-    document.getElementById('docsBtn').classList.toggle('visible', !!(mdKey && MD_MAP[mdKey]));
+    const mdKey = currentActiveMd || currentItem?.md || currentItem?.key || currentItem?.id;
+    var docsBtn = document.getElementById('docsBtn');
+    if (docsBtn) docsBtn.style.display = !!(mdKey && MD_MAP[mdKey]) ? '' : 'none';
     if (currentActiveMd) delete mdCache[currentActiveMd];
   }
 });
 
-/* ── Docs panel ──────────────────────────────────── */
+/* ── README Drawer ───────────────────────────────── */
+var rmDrawer = new MTS.Drawer({
+  title: 'Documentación',
+  position: 'right',
+  size: 'lg',
+  content: '',
+  footer: '<div id="rmCpBtnHost"></div>'
+});
+
+var rmCopyBtn = new MTS.CopyButton('#rmCpBtnHost', {
+  label: 'Copiar MD',
+  labelCopied: '¡Copiado!',
+  variant: 'secondary',
+  size: 'sm'
+});
+
 async function openDocs() {
-  const mdKey = currentActiveMd || currentItem?.md;
+  const mdKey = currentActiveMd || currentItem?.md || currentItem?.key || currentItem?.id;
   if (!mdKey) return;
   const entry = MD_MAP[mdKey];
   if (!entry) return;
 
-  document.getElementById('rmTitle').textContent = currentItem.label;
-  document.getElementById('rmBody').innerHTML = '<div class="rm-loading"><div class="rm-spin"></div> Cargando...</div>';
-  document.getElementById('rmOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  rmDrawer.setTitle(currentItem.label);
+
+  if (!mdCache[mdKey]) {
+    var spinHost = document.createElement('div');
+    spinHost.style.cssText = 'display:flex;align-items:center;justify-content:center;padding:60px 0';
+    rmDrawer.setContent(spinHost);
+    new MTS.Spinner(spinHost, { size: 'sm', label: 'Cargando...' });
+  }
+
+  rmDrawer.show();
 
   if (mdCache[mdKey]) { renderMd(mdCache[mdKey]); return; }
 
@@ -543,23 +551,16 @@ async function openDocs() {
     mdCache[mdKey] = combined;
     renderMd(combined);
   } catch(e) {
-    document.getElementById('rmBody').innerHTML =
-      '<div class="rm-loading" style="flex-direction:column;gap:10px"><span style="font-size:28px">📄</span><span>README no encontrado</span></div>';
+    rmDrawer.setContent(
+      '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:60px 0;color:var(--mts-text-muted)">' +
+      '<span style="font-size:28px">📄</span><span>README no encontrado</span></div>'
+    );
   }
 }
 
 function closeDocs() {
-  document.getElementById('rmOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+  rmDrawer.hide();
 }
-
-document.getElementById('rmCpBtn').addEventListener('click', () => {
-  navigator.clipboard?.writeText(currentMdRaw || '');
-  const b = document.getElementById('rmCpBtn');
-  b.textContent = '✅ Copiado';
-  setTimeout(() => b.textContent = 'Copiar MD', 2000);
-});
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDocs(); });
 
 /* ── Markdown → HTML ─────────────────────────────── */
 function escapeHtml(str) {
@@ -571,82 +572,71 @@ function escapeHtml(str) {
 
 function renderMd(md) {
   currentMdRaw = md;
+  rmCopyBtn.setText(md);
+
   const blocks = [];
-  /* Extraer bloques de código ANTES de escapar HTML */
   let h = md
-    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code)=>{blocks.push({lang:lang||'js',code:code.trim()});return '\x00B'+(blocks.length-1)+'\x00';})
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, function(_,lang,code){ blocks.push({lang:lang||'js',code:code.trim()}); return '\x00B'+(blocks.length-1)+'\x00'; })
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>')
     .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank">$1</a>')
     .replace(/^&gt; (.+)$/gm,'<blockquote>$1</blockquote>')
-    .replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,(_,hdr,rows)=>{
-      const ths=hdr.split('|').filter(c=>c.trim()).map(c=>'<th>'+c.trim()+'</th>').join('');
-      const trs=rows.trim().split('\n').map(r=>'<tr>'+r.split('|').filter(c=>c.trim()).map(c=>'<td>'+c.trim()+'</td>').join('')+'</tr>').join('');
+    .replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,function(_,hdr,rows){
+      const ths=hdr.split('|').filter(function(c){return c.trim();}).map(function(c){return '<th>'+c.trim()+'</th>';}).join('');
+      const trs=rows.trim().split('\n').map(function(r){return '<tr>'+r.split('|').filter(function(c){return c.trim();}).map(function(c){return '<td>'+c.trim()+'</td>';}).join('')+'</tr>';}).join('');
       return '<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';})
     .replace(/^[\*\-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>')
     .replace(/^(?!<)(.+)$/gm,'<p>$1</p>');
 
-  h = h.replace(/\x00B(\d+)\x00/g,(_,i)=>{
-    const{lang,code}=blocks[+i];
-    return '<pre><div class="rm-pre-top"><span class="rm-pre-lang">'+lang+'</span><button class="rm-pre-cp" onclick="cpBlock(this)">Copiar</button></div><code class="lang-'+lang+'">'+escapeHtml(code)+'</code></pre>';
+  // Reemplazar placeholders de código con divs host para MTS.CodeBlock
+  h = h.replace(/\x00B(\d+)\x00/g, function(_,i) {
+    return '<div id="rm-cb-' + i + '" style="margin:0 0 14px"></div>';
   });
 
-  document.getElementById('rmBody').innerHTML = '<div class="rm-md">'+h+'</div>';
-  const h1El = document.querySelector('#rmBody h1');
-  if (h1El) { document.getElementById('rmTitle').textContent = h1El.textContent; h1El.style.display = 'none'; }
-  hlCode();
-}
+  rmDrawer.setContent('<div class="rm-md">' + h + '</div>');
 
-function hlCode() {
-  document.querySelectorAll('#rmBody pre code').forEach(el => {
-    var lines = el.textContent.split('\n');
-    var out = lines.map(function(line) {
-      var s = line.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      s = s.replace(/(\/\/[^\n]*)$/,'<span class="hl-cmt">$1</span>');
-      s = s.replace(/\b(const|let|var|new|return|if|else|for|of|in|function|async|await|class|this|true|false|null|undefined|import|export|from|default)\b/g,'<span class="hl-kw">$1</span>');
-      s = s.replace(/\b(\d+\.?\d*)\b/g,'<span class="hl-num">$1</span>');
-      return s;
-    });
-    el.innerHTML = out.join('\n');
+  // Extraer h1 como título del drawer si existe
+  const h1El = rmDrawer._bodyEl.querySelector('h1');
+  if (h1El) { rmDrawer.setTitle(h1El.textContent); h1El.style.display = 'none'; }
+
+  // Inicializar MTS.CodeBlock en cada placeholder
+  blocks.forEach(function(block, i) {
+    var el = document.getElementById('rm-cb-' + i);
+    if (el && window.MTS && MTS.CodeBlock) {
+      new MTS.CodeBlock(el, { code: block.code, language: block.lang, copyable: true });
+    }
   });
-}
-
-function cpBlock(btn) {
-  navigator.clipboard?.writeText(btn.closest('pre').querySelector('code').textContent||'');
-  const o=btn.textContent; btn.textContent='✅'; setTimeout(()=>btn.textContent=o,1500);
 }
 
 /* ── Welcome ─────────────────────────────────────── */
 function showWelcome() {
   const el = document.getElementById('welcomeScreen');
-  el.innerHTML = `
-    <div class="welcome__logo">M</div>
-    <div class="welcome__title">Matios <span>UI</span></div>
-    <p class="welcome__sub">Framework CSS/JS · 0 dependencias · temas via CSS Variables · 60+ componentes.</p>
-    <div class="welcome__stats">
-      <div class="welcome__stat"><div class="welcome__stat-val">60+</div><div class="welcome__stat-lbl">Componentes</div></div>
-      <div class="welcome__stat"><div class="welcome__stat-val">278</div><div class="welcome__stat-lbl">Íconos</div></div>
-      <div class="welcome__stat"><div class="welcome__stat-val">3×4</div><div class="welcome__stat-lbl">Modes × accents</div></div>
-    </div>
-    <div class="welcome__chips">
-      <div class="welcome__chip" onclick="loadById('forms')"><i class="mts-icon mts-icon-form"></i>Formularios</div>
-      <div class="welcome__chip" onclick="loadById('navigation')"><i class="mts-icon mts-icon-compass"></i>Navegación</div>
-      <div class="welcome__chip" onclick="loadById('overlays')"><i class="mts-icon mts-icon-layers"></i>Overlays</div>
-      <div class="welcome__chip" onclick="loadById('display')"><i class="mts-icon mts-icon-grid"></i>Display</div>
-      <div class="welcome__chip" onclick="loadById('layout')"><i class="mts-icon mts-icon-layout"></i>Layout</div>
-      <div class="welcome__chip" onclick="loadById('data')"><i class="mts-icon mts-icon-database"></i>Data</div>
-      <div class="welcome__chip" onclick="loadById('icons')"><i class="mts-icon mts-icon-star"></i>Íconos</div>
-    </div>
-    <button class="welcome__cta" onclick="loadById('showcase')">
-      <i class="mts-icon mts-icon-activity mts-icon--sm"></i>
-      Abrir Showcase
-    </button>`;
+  el.innerHTML =
+    '<div class="welcome__logo">M</div>' +
+    '<div class="welcome__title">Matios <span>UI</span></div>' +
+    '<p class="welcome__sub">Framework CSS/JS · 0 dependencias · temas via CSS Variables · 60+ componentes.</p>' +
+    '<div class="welcome__stats">' +
+      '<div class="welcome__stat"><div class="welcome__stat-val">60+</div><div class="welcome__stat-lbl">Componentes</div></div>' +
+      '<div class="welcome__stat"><div class="welcome__stat-val">278</div><div class="welcome__stat-lbl">Íconos</div></div>' +
+      '<div class="welcome__stat"><div class="welcome__stat-val">3×8</div><div class="welcome__stat-lbl">Modes × accents</div></div>' +
+    '</div>' +
+    '<div class="welcome__chips">' +
+      '<div class="welcome__chip" onclick="loadById(\'forms\')"><i class="mts-icon mts-icon-form"></i>Formularios</div>' +
+      '<div class="welcome__chip" onclick="loadById(\'navigation\')"><i class="mts-icon mts-icon-compass"></i>Navegación</div>' +
+      '<div class="welcome__chip" onclick="loadById(\'overlays\')"><i class="mts-icon mts-icon-layers"></i>Overlays</div>' +
+      '<div class="welcome__chip" onclick="loadById(\'display\')"><i class="mts-icon mts-icon-grid"></i>Display</div>' +
+      '<div class="welcome__chip" onclick="loadById(\'layout\')"><i class="mts-icon mts-icon-layout"></i>Layout</div>' +
+      '<div class="welcome__chip" onclick="loadById(\'data\')"><i class="mts-icon mts-icon-database"></i>Data</div>' +
+      '<div class="welcome__chip" onclick="loadById(\'icons\')"><i class="mts-icon mts-icon-star"></i>Íconos</div>' +
+    '</div>' +
+    '<button class="welcome__cta" onclick="loadById(\'showcase\')">' +
+      '<i class="mts-icon mts-icon-activity mts-icon--sm"></i>Abrir Showcase' +
+    '</button>';
   if (window.MTS && MTS.Icon) MTS.Icon.initAll();
 }
 
-initThemePicker();
-buildSidebar();
+/* ── Init ────────────────────────────────────────── */
 showWelcome();
 </script>
 </body>

@@ -1,5 +1,5 @@
 /* ============================================================
-   MATIOS UI — DocumentManagerPreviewPlugin  v1.6.0
+   MATIOS UI — DocumentManagerPreviewPlugin  v1.7.0
    Estilos del plugin de vista previa de documentos.
 
    Requiere: matios-ui-base.css, matios-ui-modal.css,
@@ -162,6 +162,7 @@
 }
 
 .dm-preview__title-text {
+  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -214,42 +215,44 @@
    9. SKELETON — estado de carga del panel básico
    ============================================================ */
 
-.dm-preview__basic-info--loading {
-  gap: var(--mts-space-2);
-}
-
-.dm-preview__info-skeleton-row {
-  height: 20px;
-  background: var(--mts-bg-surface-2);
-  border-radius: var(--mts-radius-sm);
-  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
-}
-
 @keyframes dm-preview-shimmer {
   0%   { opacity: 1; }
   50%  { opacity: 0.4; }
   100% { opacity: 1; }
 }
 
+/* Bloque de label — ancho fijo igual al min-width real */
+.dm-preview__info-skeleton-label {
+  height: 12px;
+  flex-shrink: 0;
+  width: 80px;
+  border-radius: var(--mts-radius-sm);
+  background: var(--mts-bg-surface-2);
+  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
+}
+
+/* Bloque de valor — flex pero con max-width variable */
+.dm-preview__info-skeleton-value {
+  height: 12px;
+  flex: 1;
+  border-radius: var(--mts-radius-sm);
+  background: var(--mts-bg-surface-2);
+  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
+  animation-delay: 0.1s;
+  max-width: 60%;
+}
+
+/* Variación de ancho por módulo para que no sean todos iguales */
+.dm-preview__info-skeleton-value--w0 { max-width: 60%; }
+.dm-preview__info-skeleton-value--w1 { max-width: 42%; }
+.dm-preview__info-skeleton-value--w2 { max-width: 75%; }
+.dm-preview__info-skeleton-value--w3 { max-width: 50%; }
+
 
 /* ============================================================
    10. BADGE DE VERSIÓN — header del modal (read-only)
+   Usa MTS.Badge — no se necesitan estilos propios.
    ============================================================ */
-
-.dm-preview__version-badge {
-  display: inline-flex;
-  align-items: center;
-  font-size: var(--mts-font-size-xs);
-  font-weight: var(--mts-font-weight-semibold);
-  color: var(--mts-text-muted);
-  background: var(--mts-bg-surface-2);
-  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
-  border-radius: var(--mts-radius-sm);
-  padding: 2px 6px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  user-select: none;
-}
 
 
 /* ============================================================
@@ -382,22 +385,25 @@
   gap: var(--mts-space-3);
 }
 
-/* Barra de progreso de subida */
+/* Barra de progreso indeterminada (igual que upload plugin) */
 .dm-preview__confirm-progress {
-  height: 6px;
-  background: var(--mts-bg-surface-2);
-  border-radius: 9999px;
+  height: 4px;
+  background: var(--mts-border-color);
+  border-radius: 2px;
   overflow: hidden;
-  /* Shimmer mientras la barra no recibe progreso real */
-  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
 }
 
-.dm-preview__confirm-progress-fill {
+.dm-preview__confirm-progress-bar {
   height: 100%;
+  width: 40%;
   background: var(--mts-color-primary);
-  border-radius: 9999px;
-  transition: width 0.25s ease;
-  animation: none;  /* el fill no parpadea */
+  animation: dm-preview-confirm-progress 1.4s ease-in-out infinite;
+}
+
+@keyframes dm-preview-confirm-progress {
+  0%   { transform: translateX(-100%); }
+  50%  { transform: translateX(150%); }
+  100% { transform: translateX(350%); }
 }
 
 /* Fila de estado: spinner+texto, check+texto, error+texto */
@@ -440,3 +446,36 @@
   gap: var(--mts-space-2);
   min-height: 32px;  /* evita que el card salte de altura cuando las acciones están vacías */
 }
+
+
+/* ============================================================
+   13. ADVERTENCIA DE EXTENSIÓN DIFERENTE
+   ============================================================ */
+
+.dm-preview__confirm-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mts-space-2);
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-color-warning, #f59e0b);
+  background: rgba(245, 158, 11, 0.08);
+  border-radius: var(--mts-radius-sm);
+  padding: var(--mts-space-2) var(--mts-space-3);
+}
+
+.dm-preview__confirm-warning-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding-top: 1px;
+}
+
+.dm-preview__confirm-warning-icon svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+
+/* Estilos de participantes → matios-ui-datatable-documentmanager-workflow.css    */
+/* Estilos de versiones     → matios-ui-datatable-documentmanager-preview-versions.css */

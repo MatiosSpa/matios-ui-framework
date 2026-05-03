@@ -1,0 +1,80 @@
+/* ============================================================
+   MATIOS UI — MTS.DocumentManagerWorkflowPlugin
+   Estilos del panel de participantes del workflow.
+
+   Requiere: matios-ui-datatable-documentmanager-preview.css
+             (usa la animación dm-preview-shimmer definida ahí)
+   ============================================================ */
+
+
+/* ============================================================
+   1. PANEL DE PARTICIPANTES — dm-participants
+   ============================================================ */
+
+.dm-participants {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Lista SortableList */
+.dm-participants__list {
+  padding: 4px 0;
+}
+
+/* Estado vacío */
+.dm-participants__empty {
+  margin: 16px;
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-muted);
+}
+
+/* Botones de acción — fondo del panel */
+.dm-participants__actions {
+  display: flex;
+  gap: var(--mts-space-2);
+  padding: var(--mts-space-3) var(--mts-space-4);
+  border-top: var(--mts-border-width) var(--mts-border-style) var(--mts-border-subtle);
+}
+
+.dm-participants__actions > * {
+  flex: 1;
+}
+
+/* ── Skeleton ───────────────────────────────────────────── */
+
+.dm-participants--loading {
+  padding: 4px 0;
+}
+
+.dm-participants__skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-2) var(--mts-space-4);
+}
+
+.dm-participants__skeleton-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--mts-bg-surface-2);
+  flex-shrink: 0;
+  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
+}
+
+.dm-participants__skeleton-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dm-participants__skeleton-line {
+  height: 10px;
+  border-radius: var(--mts-radius-sm);
+  background: var(--mts-bg-surface-2);
+  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
+}
+
+.dm-participants__skeleton-line--title { width: 65%; }
+.dm-participants__skeleton-line--sub   { width: 40%; }

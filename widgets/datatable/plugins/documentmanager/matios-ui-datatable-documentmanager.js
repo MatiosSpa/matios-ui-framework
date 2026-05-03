@@ -123,7 +123,7 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
     if (this._options.breadcrumb) {
       this._breadcrumbEl = document.createElement('nav')
       this._breadcrumbEl.className = 'mts-dm-breadcrumb'
-      this._breadcrumbEl.setAttribute('aria-label', table._cfg?.locale?.dm?.nav ?? 'Navegación de carpetas')
+      this._breadcrumbEl.setAttribute('aria-label', table._cfg?.locale?.['MTS.DocumentManagerPlugin']?.nav ?? 'Navegación de carpetas')
       table.setToolbarBreadcrumb(this._breadcrumbEl)
       this._renderBreadcrumb()
     }
@@ -150,8 +150,8 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
     table.setParams({ parentId: 'null' })
 
     /* Parchamos columnas que usen renders estáticos para aislar el locale de esta tabla */
-    const locStatus = table._cfg?.locale?.dm?.status         ?? {}
-    const locWf     = table._cfg?.locale?.dm?.workflowStatus ?? {}
+    const locStatus = table._cfg?.locale?.['MTS.DocumentManagerPlugin']?.status         ?? {}
+    const locWf     = table._cfg?.locale?.['MTS.DocumentManagerPlugin']?.workflowStatus ?? {}
     ;(table._cfg?.columns ?? []).forEach(col => {
       if (col.render === MTS.DocumentManagerPlugin.renderStatus) {
         const original = col.render
@@ -463,7 +463,7 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
     iconWrap.innerHTML = this._icon('upload-cloud')
 
     const label = document.createElement('span')
-    label.textContent = this._table?._cfg?.locale?.dm?.dropzoneLabel ?? 'Suelta los archivos aquí'
+    label.textContent = this._table?._cfg?.locale?.['MTS.DocumentManagerPlugin']?.dropzone ?? 'Suelta los archivos aquí'
 
     inner.appendChild(iconWrap)
     inner.appendChild(label)
@@ -519,7 +519,15 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
       : MTS.DocumentManagerPlugin._extToIcon(row.ext || '')
     const icon = typeof MTS?.Icon?.get === 'function' ? MTS.Icon.get(iconName) : ''
     const cls  = row.type === 'folder' ? 'mts-dm-cell-name mts-dm-cell-name--folder' : 'mts-dm-cell-name'
-    return `<span class="${cls}">${icon}<span>${value}</span></span>`
+    const esc  = MTS.DocumentManagerPlugin._escHtml
+
+    // Badge de versión: solo en archivos con versión definida
+    let versionBadge = ''
+    if (row.type === 'file' && row.version != null && row.version !== '') {
+      versionBadge = '<span class="mts-badge mts-badge--primary mts-badge--xs mts-badge--pill mts-dm-name-version">v' + esc(row.version) + '</span>'
+    }
+
+    return `<span class="${cls}">${icon}${versionBadge}<span>${esc(value)}</span></span>`
   }
 
   static renderSize(value) {
@@ -532,11 +540,11 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
   }
 
   static renderStatus(value) {
-    return MTS.DocumentManagerPlugin._statusHtml(value, MTS.DataTable?._activeLocale?.dm?.status ?? {})
+    return MTS.DocumentManagerPlugin._statusHtml(value, MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPlugin']?.status ?? {})
   }
 
   static renderWorkflowStatus(value) {
-    return MTS.DocumentManagerPlugin._workflowStatusHtml(value, MTS.DataTable?._activeLocale?.dm?.workflowStatus ?? {})
+    return MTS.DocumentManagerPlugin._workflowStatusHtml(value, MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPlugin']?.workflowStatus ?? {})
   }
 
   static _statusHtml(value, loc = {}) {
@@ -547,7 +555,7 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
       archived: ['mts-badge--secondary', loc.archived ?? 'Archivado'],
       deleted:  ['mts-badge--danger',    loc.deleted  ?? 'Eliminado'],
     }
-    const [cls, label] = map[value] || ['mts-badge--secondary', value]
+    const [cls, label] = map[value] || ['mts-badge--secondary', MTS.DocumentManagerPlugin._escHtml(value)]
     return `<span class="mts-badge ${cls}">${label}</span>`
   }
 
@@ -562,7 +570,7 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
       rejected: ['mts-badge--danger',    loc.rejected ?? 'Rechazado'],
       signed:   ['mts-badge--primary',   loc.signed   ?? 'Firmado'],
     }
-    const [cls, label] = map[value] || ['mts-badge--secondary', value]
+    const [cls, label] = map[value] || ['mts-badge--secondary', MTS.DocumentManagerPlugin._escHtml(value)]
     return `<span class="mts-badge ${cls}">${label}</span>`
   }
 
@@ -583,6 +591,13 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
       if (p.startsWith('.')) return ext === p                          // '.pdf'
       return mime === p                                                 // 'application/pdf'
     })
+  }
+
+  /** Escapa caracteres HTML especiales — delega a MTS.Sanitize si está disponible */
+  static _escHtml(str) {
+    return typeof MTS.Sanitize !== 'undefined'
+      ? MTS.Sanitize.html(str)
+      : String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
   static _extToIcon(ext) {

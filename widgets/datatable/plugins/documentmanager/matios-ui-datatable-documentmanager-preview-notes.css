@@ -1,0 +1,219 @@
+/* ============================================================
+   MATIOS UI — MTS.DocumentManagerPreviewNotesPanel
+   Estilos del panel lateral de notas y comentarios.
+
+   Requiere: matios-ui-datatable-documentmanager-preview.css
+             (usa la animación dm-preview-shimmer definida ahí)
+   ============================================================ */
+
+
+/* ============================================================
+   1. CONTENEDOR PRINCIPAL
+   ============================================================ */
+
+.dm-notes {
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* ============================================================
+   2. CABECERA — botón Agregar
+   ============================================================ */
+
+.dm-notes__header-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--mts-space-2) var(--mts-space-4) 0;
+}
+
+
+/* ============================================================
+   3. LISTA DE NOTAS
+   ============================================================ */
+
+.dm-notes__list {
+  padding: var(--mts-space-2) 0;
+  max-height: var(--dm-notes-list-height, 300px);
+  overflow-y: auto;
+}
+
+.dm-notes__empty {
+  margin: 16px;
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-muted);
+}
+
+
+/* ============================================================
+   4. FILA DE NOTA
+   ============================================================ */
+
+.dm-notes__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-3) var(--mts-space-4);
+}
+
+.dm-notes__item + .dm-notes__item {
+  border-top: var(--mts-border-width) var(--mts-border-style) var(--mts-border-subtle);
+}
+
+/* Notas propias — borde izquierdo sutil */
+.dm-notes__item--own {
+  border-left: 2px solid var(--mts-color-primary);
+  padding-left: calc(var(--mts-space-4) - 2px);
+}
+
+/* Avatar circular con iniciales */
+.dm-notes__avatar {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--mts-color-primary);
+  color: #fff;
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-semibold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.dm-notes__item--own .dm-notes__avatar {
+  order: 1; /* empuja el avatar a la derecha */
+}
+
+.dm-notes__item--own .dm-notes__content {
+  order: 0;
+}
+
+/* Contenido */
+.dm-notes__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-1);
+}
+
+/* Header: nombre + fecha + botón eliminar */
+.dm-notes__header {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+  flex-wrap: wrap;
+}
+
+.dm-notes__author {
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+}
+
+.dm-notes__date {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+}
+
+.dm-notes__delete-wrap {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Texto */
+.dm-notes__text {
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-primary);
+  line-height: 1.5;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+
+/* ============================================================
+   5. TEXTAREA — usada dentro del modal de nueva nota
+   ============================================================ */
+
+.dm-notes__textarea {
+  width: 100%;
+  resize: none;
+  padding: var(--mts-space-2) var(--mts-space-3);
+  font-size: var(--mts-font-size-sm);
+  font-family: inherit;
+  color: var(--mts-text-primary);
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-sm);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color var(--mts-transition-fast);
+  line-height: 1.5;
+}
+
+.dm-notes__textarea::placeholder {
+  color: var(--mts-text-muted);
+}
+
+.dm-notes__textarea:focus {
+  border-color: var(--mts-color-primary);
+}
+
+.dm-notes__textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dm-notes__error {
+  display: block;
+  margin-top: var(--mts-space-2);
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-color-danger, #ef4444);
+}
+
+
+/* ============================================================
+   6. SKELETON
+   ============================================================ */
+
+.dm-notes__skeleton-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-3) var(--mts-space-4);
+}
+
+.dm-notes__skeleton-item + .dm-notes__skeleton-item {
+  border-top: var(--mts-border-width) var(--mts-border-style) var(--mts-border-subtle);
+}
+
+.dm-notes__skeleton-avatar {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--mts-bg-surface-2);
+  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
+}
+
+.dm-notes__skeleton-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 4px;
+}
+
+.dm-notes__skeleton-line {
+  height: 10px;
+  border-radius: var(--mts-radius-sm);
+  background: var(--mts-bg-surface-2);
+  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
+}
+
+.dm-notes__skeleton-line--header     { width: 55%; }
+.dm-notes__skeleton-line--text       { width: 90%; animation-delay: 0.1s; }
+.dm-notes__skeleton-line--text-short { width: 70%; animation-delay: 0.15s; }

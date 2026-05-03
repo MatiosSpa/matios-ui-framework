@@ -13,7 +13,8 @@
      - Integración automática con los eventos del DocumentManagerPlugin
 
    Opciones propias del plugin (comportamiento del modal):
-     uploadProgress:  'bar' | 'spinner'  — indicador de progreso (default: 'bar')
+     uploadProgress:  'bar' | 'spinner'                — indicador de progreso (default: 'bar')
+     modalPosition:   'top' | 'center' | 'bottom'      — posición vertical del modal (default: 'top')
 
    Restricciones leídas desde DocumentManagerPlugin (el host):
      accept        — extensiones/MIME aceptados, ej: '.pdf,.docx,image/*'
@@ -91,6 +92,7 @@ MTS.DocumentManagerUploadPlugin = class DocumentManagerUploadPlugin {
   constructor(options = {}) {
     this._options = {
       uploadProgress: options.uploadProgress ?? 'bar',
+      modalPosition:  options.modalPosition  ?? 'top',
       uploadCheck:    options.uploadCheck    ?? null,
       /* accept, multiple, maxFiles, maxFileSizeMB → se leen de dm._options (el host) */
     }
@@ -160,7 +162,7 @@ MTS.DocumentManagerUploadPlugin = class DocumentManagerUploadPlugin {
       title:      this._t('title'),
       body:       bodyEl,
       size:       'md',
-      position:   'center',
+      position:   this._options.modalPosition,
       scrollable: true,
       closable:   true,
       static:     false,
@@ -494,7 +496,8 @@ MTS.DocumentManagerUploadPlugin = class DocumentManagerUploadPlugin {
 
       case 'error':
         wrap.className = 'mts-dm-upload-status mts-dm-upload-status--error'
-        wrap.innerHTML = this._icon('alert') + ' ' + (entry.error || this._t('statusError'))
+        wrap.innerHTML = this._icon('alert')
+        wrap.appendChild(document.createTextNode(' ' + (entry.error || this._t('statusError'))))
         break
 
       case 'skipped':
@@ -733,7 +736,7 @@ MTS.DocumentManagerUploadPlugin = class DocumentManagerUploadPlugin {
   }
 
   _t(key) {
-    const locale   = this._dm?._table?._cfg?.locale?.dmUpload ?? {}
+    const locale   = this._dm?._table?._cfg?.locale?.['MTS.DocumentManagerUploadPlugin'] ?? {}
     const defaults = {
       title:          'Subir archivos',
       cancel:         'Cancelar',

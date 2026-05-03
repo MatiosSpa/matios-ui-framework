@@ -22,7 +22,7 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DataTable — DocumentManager Plugin</title>
+  <title>DataTable — DocumentManager (completo)</title>
 
   <!-- Temas y base -->
   <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
@@ -52,14 +52,21 @@
   <!-- Dependencias CSS de plugins (orden: básico → avanzado) -->
   <link rel="stylesheet" href="../../../../overlays/matios-ui-modal/matios-ui-modal.css">
   <link rel="stylesheet" href="../../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-accordion/matios-ui-accordion.css">
   <link rel="stylesheet" href="../../plugins/toolbar/matios-ui-datatable-toolbar.css">
   <link rel="stylesheet" href="../../plugins/filter/matios-ui-datatable-filter.css">
   <link rel="stylesheet" href="../../plugins/columnvisibility/matios-ui-datatable-columnvisibility.css">
   <link rel="stylesheet" href="../../plugins/shared/matios-ui-datatable-menu.css">
   <link rel="stylesheet" href="../../plugins/documentmanager/matios-ui-datatable-documentmanager.css">
   <link rel="stylesheet" href="../../plugins/documentmanager/matios-ui-datatable-documentmanager-upload.css">
+  <link rel="stylesheet" href="../../plugins/documentmanager/matios-ui-datatable-documentmanager-preview.css">
+  <link rel="stylesheet" href="../../plugins/documentmanager/matios-ui-datatable-documentmanager-workflow.css">
+  <link rel="stylesheet" href="../../plugins/documentmanager/matios-ui-datatable-documentmanager-preview-versions.css">
+  <link rel="stylesheet" href="../../plugins/documentmanager/matios-ui-datatable-documentmanager-preview-notes.css">
+  <link rel="stylesheet" href="../../plugins/documentmanager/matios-ui-datatable-documentmanager-preview-metadata.css">
+  <link rel="stylesheet" href="../../../../display/matios-ui-sortablelist/matios-ui-sortablelist.css">
 
-  <!-- Tabs -->
+  <!-- Tabs + CodeBlock -->
   <link rel="stylesheet" href="../../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
 
@@ -69,8 +76,10 @@
   <script src="../../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../../../forms/matios-ui-button/matios-ui-button.js"></script>
-  <script src="../../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../../forms/matios-ui-input/matios-ui-input.js"></script>
+<script src="../../../../forms/matios-ui-select/matios-ui-select.js"></script>
   <script src="../../../../utilities/matios-ui-httpclient/matios-ui-httpclient.js"></script>
+  <script src="../../../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
 </head>
 <body>
 
@@ -80,12 +89,18 @@
   </div>
 </div>
 
-<!-- MTS.Modal -->
+<!-- MTS.Badge — usado por PreviewPlugin (badge de versión) -->
+<script src="../../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+
+<!-- MTS.Modal — usado por PreviewPlugin -->
 <script src="../../../../overlays/matios-ui-modal/matios-ui-modal.js"></script>
+
+<!-- MTS.Accordion — usado por PreviewPlugin (panel lateral) -->
+<script src="../../../../navigation/matios-ui-accordion/matios-ui-accordion.js"></script>
 
 <!-- DataTable core -->
 <script src="../../matios-ui-datatable.js"></script>
-<script src="../../matios-ui-datatable-i18n.js"></script>
+<script src="../../../../base/matios-ui-i18n.js"></script>
 
 <!-- Plugins (orden: básico → avanzado) -->
 <script src="../../plugins/toolbar/matios-ui-datatable-toolbar.js"></script>
@@ -96,6 +111,11 @@
 <script src="../../plugins/documentmanager/matios-ui-datatable-documentmanager-contextmenu.js"></script>
 <script src="../../plugins/documentmanager/matios-ui-datatable-documentmanager-workflow.js"></script>
 <script src="../../plugins/documentmanager/matios-ui-datatable-documentmanager-upload.js"></script>
+<script src="../../../../display/matios-ui-sortablelist/matios-ui-sortablelist.js"></script>
+<script src="../../plugins/documentmanager/matios-ui-datatable-documentmanager-preview.js"></script>
+<script src="../../plugins/documentmanager/matios-ui-datatable-documentmanager-preview-versions.js"></script>
+<script src="../../plugins/documentmanager/matios-ui-datatable-documentmanager-preview-notes.js"></script>
+<script src="../../plugins/documentmanager/matios-ui-datatable-documentmanager-preview-metadata.js"></script>
 
 <script>
 
@@ -119,17 +139,22 @@ const preview_s11 = '<div id="table11"></div>';
 
 const js_s11 =
 `// ── HttpClient ────────────────────────────────────────────────────────────
-// headers base, interceptor before() para token JWT, after() para errores globales
 const http = new MTS.HttpClient({
   baseUrl: '',
   debug:   true,
   headers: { 'X-App-Name': 'matios-ui-demo' },
 });
 
+// URL de un PDF público para demostrar la vista previa real en el iframe.
+// Se usa Google Docs Viewer como visor universal.
+const PDF_DEMO_URL = 'https://docs.google.com/viewer'
+  + '?url=' + encodeURIComponent('https://www.africau.edu/images/default/sample.pdf')
+  + '&embedded=true';
+
 // ── Plugin 1: Toolbar ─────────────────────────────────────────────────────
 const toolbar = new MTS.DataTableToolbarPlugin({
   buttons: [
-    { label: 'Subir',        icon: 'upload',      tooltip: 'Subir archivo a la carpeta actual',
+    { label: 'Subir',         icon: 'upload',      tooltip: 'Subir archivo a la carpeta actual',
       action: () => dmUpload.open() },
     { label: 'Nueva carpeta', icon: 'folder-plus', tooltip: 'Crear una nueva carpeta aquí',
       action: () => console.log('[dm.onNuevaCarpeta]') },
@@ -171,8 +196,6 @@ const filter = new MTS.DataTableFilterPlugin({
 const colVis = new MTS.DataTableColumnVisibilityPlugin();
 
 // ── Plugin 4: Upload ──────────────────────────────────────────────────────
-// Las restricciones (accept, multiple, maxFiles, maxFileSizeMB, onFileExists)
-// se configuran en DocumentManagerPlugin — el upload las lee desde dm._options.*
 const dmUpload = new MTS.DocumentManagerUploadPlugin({
   uploadProgress: 'bar',
   uploadCheck: {
@@ -184,25 +207,67 @@ const dmUpload = new MTS.DocumentManagerUploadPlugin({
   },
 });
 
-// ── Plugin 5: DocumentManager ─────────────────────────────────────────────
+// ── Plugin 5: Preview ─────────────────────────────────────────────────────
+// Se instancia antes de dm para poder pasarlo como plugin y usarlo en
+// onFileClick / onPrev / onNext. dm se declara después; los callbacks lo
+// cierran por referencia (seguro en runtime).
+const dmPreview = new MTS.DocumentManagerPreviewPlugin({
+
+  panels: [
+    new MTS.DocumentManagerPreviewBasicInfoPanel(),
+  ],
+
+  // Fallback cuando show() no recibe URL explícita.
+  urlResolver: (item) => 'preview.html?name=' + encodeURIComponent(item.name || ''),
+
+  onDownload: (item) => {
+    console.log('[dmPreview.onDownload]', item);
+    // window.open('/api/documents/' + item.id + '/download');
+  },
+
+  // Reemplazar documento: retornar Promise activa la barra indeterminada.
+  onReplace: (item, file, version) => {
+    console.log('[dmPreview.onReplace]', item, file, version);
+    return http.upload('/widgets/datatable/mock-api/documents/' + item.id + '/replace', file, {
+      data: { version: version },
+    }).then((res) => {
+      if (!res.success) throw new Error(res.message);
+    });
+  },
+
+  // Navegación entre archivos de la carpeta actual.
+  onPrev: (currentItem) => {
+    console.log('[dmPreview.onPrev]', currentItem);
+    const files = dm.getItems().filter((i) => i.type === 'file');
+    const idx   = files.findIndex((i) => i.id === currentItem.id);
+    if (idx > 0) dmPreview.show(files[idx - 1]);
+  },
+  onNext: (currentItem) => {
+    console.log('[dmPreview.onNext]', currentItem);
+    const files = dm.getItems().filter((i) => i.type === 'file');
+    const idx   = files.findIndex((i) => i.id === currentItem.id);
+    if (idx < files.length - 1) dmPreview.show(files[idx + 1]);
+  },
+
+  panelVisible: true,
+  panelWidth:   '340px',
+});
+
+// ── Plugin 6: DocumentManager ─────────────────────────────────────────────
 const dm = new MTS.DocumentManagerPlugin({
   rootLabel:   'Documentos',
   breadcrumb:  true,
   dragDrop:    true,
 
-  // Restricciones de archivo — aplicadas en dropzone Y en el modal de upload
   accept:        '.pdf,.docx,.xlsx,.html,.pptx,image/*',
   multiple:      true,
   maxFiles:      10,
   maxFileSizeMB: 25,
-
-  // 'ask' → botones por archivo: Reemplazar / Nueva versión / Omitir
-  onFileExists: 'ask',
+  onFileExists:  'ask',
 
   dropzone:   true,
   onFileDrop: (files, folder) => dmUpload.open(files, folder),
 
-  // action: 'replace' | 'version' | null  /  currentVersion: string | null
   onUpload: async (file, folder, { action, currentVersion } = {}) => {
     const fd = new FormData();
     fd.append('file',           file);
@@ -214,13 +279,25 @@ const dm = new MTS.DocumentManagerPlugin({
   },
   onUploaded: (files, folder) => console.log('[dm.onUploaded]', { files, folder }),
   onError:    (err, file, folder) => console.log('[dm.onError]', { err, file, folder }),
-  onFileClick: (item)          => console.log('[dm.onFileClick]', item),
-  onDrop:      (items, folder) => console.log('[dm.onDrop]', { items, folder }),
+
+  // onFileClick conecta explícitamente con el preview.
+  onFileClick: (item) => {
+    console.log('[dm.onFileClick]', item);
+    // Los PDFs usan Google Docs Viewer para mostrar un documento real en el iframe.
+    if (item.ext === 'pdf') {
+      dmPreview.show(item, PDF_DEMO_URL);
+    } else {
+      dmPreview.show(item);
+    }
+  },
+
+  onDrop: (items, folder) => console.log('[dm.onDrop]', { items, folder }),
 
   plugins: [
     dmUpload,
+    dmPreview,
     new MTS.DocumentManagerContextMenuPlugin({
-      onView:     (item)  => console.log('[dm.onView]',     item),
+      onView:     (item)  => dmPreview.show(item),
       onDownload: (items) => console.log('[dm.onDownload]', items),
       onOpen:     (item)  => console.log('[dm.onOpen]',     item),
       onRename:   (item)  => console.log('[dm.onRename]',   item),
@@ -246,12 +323,14 @@ const dm = new MTS.DocumentManagerPlugin({
 new MTS.DataTable({
   elementId: 'table11',
   columns: [
-    { field: 'name',     label: 'Nombre',    sortable: true, alwaysVisible: true,
+    { field: 'name',           label: 'Nombre',     sortable: true, alwaysVisible: true,
       render: (v, row) => MTS.DocumentManagerPlugin.renderName(v, row) },
-    { field: 'size',     label: 'Tamaño',    align: 'end',    width: '100px', render: MTS.DocumentManagerPlugin.renderSize },
-    { field: 'modified', label: 'Modificado', sortable: true, align: 'end',   width: '130px' },
-    { field: 'status',         label: 'Estado',   align: 'center', width: '110px', render: MTS.DocumentManagerPlugin.renderStatus },
-    { field: 'workflowStatus', label: 'Workflow',  align: 'center', width: '130px', render: MTS.DocumentManagerPlugin.renderWorkflowStatus },
+    { field: 'sizeFormatted',  label: 'Tamaño',     align: 'end',    width: '100px' },
+    { field: 'modifiedAt',     label: 'Modificado', sortable: true,  align: 'end', width: '130px' },
+    { field: 'status',         label: 'Estado',     align: 'center', width: '110px',
+      render: MTS.DocumentManagerPlugin.renderStatus },
+    { field: 'workflowStatus', label: 'Workflow',   align: 'center', width: '130px',
+      render: MTS.DocumentManagerPlugin.renderWorkflowStatus },
   ],
   dataSource: async (query) => {
     const res = await http.get('/widgets/datatable/mock-api/documents', { params: query });
@@ -277,80 +356,69 @@ new MTS.DataTable({
 });`;
 
 function initTables() {
-  makeSection('tabs-s11', preview_s11, js_s11, () => {
+  makeSection('tabs-s11', preview_s11, js_s11, function() {
 
-    // ── HttpClient ────────────────────────────────────────────────────────────
-    const http = new MTS.HttpClient({
+    // ── HttpClient ────────────────────────────────────────────────────────
+    var http = new MTS.HttpClient({
       baseUrl: '',
       debug:   true,
       headers: { 'X-App-Name': 'matios-ui-demo' },
     });
 
-    // ── Plugin 1: Toolbar ─────────────────────────────────────────────────────
-    const toolbar = new MTS.DataTableToolbarPlugin({
+    var PDF_DEMO_URL = 'https://docs.google.com/viewer'
+      + '?url=' + encodeURIComponent('https://www.africau.edu/images/default/sample.pdf')
+      + '&embedded=true';
+
+    // ── Plugin 1: Toolbar ─────────────────────────────────────────────────
+    var toolbar = new MTS.DataTableToolbarPlugin({
       buttons: [
         {
           label:   'Subir',
           icon:    'upload',
           tooltip: 'Subir archivo a la carpeta actual',
-          action:  () => dmUpload.open(),
+          action:  function() { dmUpload.open(); },
         },
         {
           label:   'Nueva carpeta',
           icon:    'folder-plus',
           tooltip: 'Crear una nueva carpeta aquí',
-          action:  () => {
-            console.log('[dm.onNuevaCarpeta]')
-            console.log(dm.getItem())
-          },
+          action:  function() { console.log('[dm.onNuevaCarpeta]'); },
         },
         { separator: true },
         {
           label:     'Descargar',
           icon:      'download',
           tooltip:   'Descargar los archivos seleccionados',
-          condition: (table) => table.getSelection().length > 0,
-          action:    (table) => {
-            console.log('[dm.onDescargar]')
-            console.log(table.getSelection())
-          },
+          condition: function(table) { return table.getSelection().length > 0; },
+          action:    function(table) { console.log('[dm.onDescargar]', table.getSelection()); },
         },
         {
           label:     'Renombrar',
           icon:      'edit',
           tooltip:   'Renombrar el elemento seleccionado',
-          condition: (table) => table.getSelection().length === 1,
-          action:    (table) => {
-            console.log('[dm.onRenombrar]')
-            console.log(table.getSelection()[0])
-          },
+          condition: function(table) { return table.getSelection().length === 1; },
+          action:    function(table) { console.log('[dm.onRenombrar]', table.getSelection()[0]); },
         },
         {
           label:     'Mover',
           icon:      'move',
           tooltip:   'Mover los elementos seleccionados',
-          condition: (table) => table.getSelection().length > 0,
-          action:    (table) => {
-            console.log('[dm.onMover]')
-            console.log(table.getSelection())
-          },
+          condition: function(table) { return table.getSelection().length > 0; },
+          action:    function(table) { console.log('[dm.onMover]', table.getSelection()); },
         },
         {
           label:     'Eliminar',
           icon:      'trash',
           danger:    true,
           tooltip:   'Eliminar los elementos seleccionados',
-          condition: (table) => table.getSelection().length > 0,
-          action:    (table) => {
-            console.log('[dm.onEliminar]')
-            console.log(table.getSelection())
-          },
+          condition: function(table) { return table.getSelection().length > 0; },
+          action:    function(table) { console.log('[dm.onEliminar]', table.getSelection()); },
         },
       ],
     });
 
-    // ── Plugin 2: Filter ──────────────────────────────────────────────────────
-    const filter = new MTS.DataTableFilterPlugin({
+    // ── Plugin 2: Filter ──────────────────────────────────────────────────
+    var filter = new MTS.DataTableFilterPlugin({
       filters: [
         {
           field:   'status',
@@ -377,23 +445,135 @@ function initTables() {
       ],
     });
 
-    // ── Plugin 3: ColumnVisibility ────────────────────────────────────────────
-    const colVis = new MTS.DataTableColumnVisibilityPlugin();
+    // ── Plugin 3: ColumnVisibility ────────────────────────────────────────
+    var colVis = new MTS.DataTableColumnVisibilityPlugin();
 
-    // ── Plugin 4: Upload ──────────────────────────────────────────────────────
-    const dmUpload = new MTS.DocumentManagerUploadPlugin({
+    // ── Plugin 4: Upload ──────────────────────────────────────────────────
+    var dmUpload = new MTS.DocumentManagerUploadPlugin({
       uploadProgress: 'bar',
       uploadCheck: {
-        onCheckFileExists: (file, folder) => {
-          const items = dmUpload._dm?.getItems() ?? []
-          const found = items.find(i => i.type === 'file' && i.name === file.name)
-          return found ? { version: found.version ?? 'v1' } : false
+        onCheckFileExists: function(file, folder) {
+          var items = (dmUpload._dm && dmUpload._dm.getItems()) ? dmUpload._dm.getItems() : [];
+          var found = items.find(function(i) { return i.type === 'file' && i.name === file.name; });
+          return found ? { version: found.version || 'v1' } : false;
         },
       },
     });
 
-    // ── Plugin 5: DocumentManager ─────────────────────────────────────────────
-    const dm = new MTS.DocumentManagerPlugin({
+    // ── Plugin 5: Workflow (variable nombrada para acceder a participantsPanel) ─
+    var dmWorkflow = new MTS.DocumentManagerWorkflowPlugin({
+      statusField:   'workflowStatus',
+      showInToolbar: true,
+      currentUser:   'crojas',   // usuario logueado — es su turno en el mock
+
+      onLoadParticipants: function(item) {
+        return http.get('/widgets/datatable/mock-api/documents/' + item.id + '/participants')
+          .then(function(res) { return res.data && res.data.data ? res.data.data : []; });
+      },
+      onReorder: function(participants, item) {
+        console.log('[dm.onReorder] nuevo orden:', participants.map(function(p) { return { order: p.order, user: p.user, status: p.status }; }));
+        return http.post(
+          '/widgets/datatable/mock-api/documents/' + item.id + '/participants/reorder',
+          { order: participants.map(function(p) { return p.id; }) }
+        );
+      },
+
+      onStart:           function(items) { console.log('[dm.onStart]',           items); },
+      onSendForApproval: function(items) { console.log('[dm.onSendForApproval]', items); },
+      onApprove:         function(items, participant) { console.log('[dm.onApprove]', items, 'participant:', participant); },
+      onSign:            function(items) { console.log('[dm.onSign]',            items); },
+      onReject:          function(items, participant) { console.log('[dm.onReject]',  items, 'participant:', participant); },
+      onRestart:         function(items) { console.log('[dm.onRestart]',         items); },
+    });
+
+    // ── Plugin 6: Preview ─────────────────────────────────────────────────
+    var dmMetadata = new MTS.DocumentManagerPreviewMetadataPanel({
+      onLoad: function(item) {
+        return http.get('/widgets/datatable/mock-api/documents/' + item.id + '/metadata')
+          .then(function(res) { return res.data && res.data.data ? res.data.data : []; });
+      },
+      onSave: function(item, fields) {
+        console.log('[dmMetadata.onSave] item:', item, '| fields:', fields);
+        return http.put('/widgets/datatable/mock-api/documents/' + item.id + '/metadata', {
+          fields:   fields,
+          document: item,
+        }).then(function(res) {
+          if (!res.data || !res.data.success) throw new Error('Error al guardar');
+        });
+      },
+    });
+
+    var dmNotes = new MTS.DocumentManagerPreviewNotesPanel({
+      onLoad: function(item) {
+        return http.get('/widgets/datatable/mock-api/documents/' + item.id + '/notes')
+          .then(function(res) { return res.data && res.data.data ? res.data.data : []; });
+      },
+      onSave: function(item, text) {
+        console.log('[dmNotes.onSave] item:', item, '| text:', text);
+        return http.post('/widgets/datatable/mock-api/documents/' + item.id + '/notes', {
+          text:     text,
+          document: item,
+        }).then(function(res) {
+          if (!res.data || !res.data.data) throw new Error('Sin respuesta');
+          return res.data.data;
+        });
+      },
+      onDelete: function(note, item) {
+        console.log('[dmNotes.onDelete]', note.id, item.id);
+        return Promise.resolve();
+      },
+    });
+
+    var dmVersions = new MTS.DocumentManagerPreviewVersionsPanel({
+      onLoad: function(item) {
+        return http.get('/widgets/datatable/mock-api/documents/' + item.id + '/versions')
+          .then(function(res) { return res.data && res.data.data ? res.data.data : []; });
+      },
+      onVersionSelect: function(version, item) {
+        console.log('[dmVersions.onVersionSelect]', { version: version.version, name: version.name }, item.id);
+      },
+    });
+
+    var dmPreview = new MTS.DocumentManagerPreviewPlugin({
+      panels: [
+        new MTS.DocumentManagerPreviewBasicInfoPanel(),
+        dmMetadata,
+        dmVersions,
+        dmNotes,
+        dmWorkflow.participantsPanel,
+      ],
+      urlResolver: function(item) {
+        return 'preview.html?name=' + encodeURIComponent(item.name || '');
+      },
+      onDownload: function(item) {
+        console.log('[dmPreview.onDownload]', item);
+      },
+      onReplace: function(item, file, version) {
+        console.log('[dmPreview.onReplace]', item, file, version);
+        return http.upload('/widgets/datatable/mock-api/documents/' + item.id + '/replace', file, {
+          data: { version: version },
+        }).then(function(res) {
+          if (!res.success) throw new Error(res.message);
+        });
+      },
+      onPrev: function(currentItem) {
+        console.log('[dmPreview.onPrev]', currentItem);
+        var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
+        var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
+        if (idx > 0) dmPreview.show(files[idx - 1]);
+      },
+      onNext: function(currentItem) {
+        console.log('[dmPreview.onNext]', currentItem);
+        var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
+        var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
+        if (idx < files.length - 1) dmPreview.show(files[idx + 1]);
+      },
+      panelVisible: true,
+      panelWidth:   '340px',
+    });
+
+    // ── Plugin 6: DocumentManager ─────────────────────────────────────────
+    var dm = new MTS.DocumentManagerPlugin({
       rootLabel:   'Documentos',
       breadcrumb:  true,
       dragDrop:    true,
@@ -404,180 +584,83 @@ function initTables() {
       maxFileSizeMB: 25,
       onFileExists:  'ask',
 
-      dropzone:    true,
-      onFileDrop:  (files, folder) => {
-        console.log('[dm.onFileDrop]')
-        console.log({ files, folder })
-        dmUpload.open(files, folder)
-      },
+      dropzone:   true,
+      onFileDrop: function(files, folder) { dmUpload.open(files, folder); },
 
-      onUpload: async (file, folder, { action, currentVersion } = {}) => {
-        console.log('[dm.onUpload]', { action, currentVersion })
-        const fd = new FormData()
-        fd.append('file',           file)
-        fd.append('folderId',       folder?.id ?? '')
-        fd.append('action',         action         ?? '')
-        fd.append('currentVersion', currentVersion ?? '')
-        const res = await http.post('/widgets/datatable/mock-api/documents/upload', fd)
-        if (!res.success) throw new Error(res.message ?? 'Error al subir el archivo')
+      onUpload: async function(file, folder, opts) {
+        var action         = (opts && opts.action)         || '';
+        var currentVersion = (opts && opts.currentVersion) || '';
+        var fd = new FormData();
+        fd.append('file',           file);
+        fd.append('folderId',       folder ? folder.id : '');
+        fd.append('action',         action);
+        fd.append('currentVersion', currentVersion);
+        var res = await http.post('/widgets/datatable/mock-api/documents/upload', fd);
+        if (!res.success) throw new Error(res.message || 'Error al subir el archivo');
       },
-      onUploaded: (files, folder) => {
-        console.log('[dm.onUploaded]')
-        console.log({ files, folder })
-      },
-      onError: (err, file, folder) => {
-        console.log('[dm.onError]')
-        console.log({ err, file, folder })
-      },
+      onUploaded: function(files, folder) { console.log('[dm.onUploaded]', { files: files, folder: folder }); },
+      onError:    function(err, file, folder) { console.log('[dm.onError]', { err: err, file: file, folder: folder }); },
 
-      onFileClick: (item) => {
-        console.log('[dm.onFileClick]')
-        console.log(item)
+      onFileClick: function(item) {
+        console.log('[dm.onFileClick]', item);
+        if (item.ext === 'pdf') {
+          dmPreview.show(item, PDF_DEMO_URL);
+        } else {
+          dmPreview.show(item);
+        }
       },
-      onDrop: (items, folder) => {
-        console.log('[dm.onDrop]')
-        console.log({ items, folder })
-      },
+      onDrop: function(items, folder) { console.log('[dm.onDrop]', { items: items, folder: folder }); },
 
       plugins: [
-
-        // ── Sub-plugin 5.1: Upload ─────────────────────────────────────────────
         dmUpload,
-
-        // ── Sub-plugin 5.2: ContextMenu ────────────────────────────────────────
+        dmPreview,
         new MTS.DocumentManagerContextMenuPlugin({
-          onView: (item) => {
-            console.log('[dm.onView]')
-            console.log(item)
-          },
-          onDownload: (items) => {
-            console.log('[dm.onDownload]')
-            console.log(items)
-          },
-          onOpen: (item) => {
-            console.log('[dm.onOpen]')
-            console.log(item)
-          },
-          onRename: (item) => {
-            console.log('[dm.onRename]')
-            console.log(item)
-          },
-          onMove: (items) => {
-            console.log('[dm.onMove]')
-            console.log(items)
-          },
-          onDelete: (items) => {
-            console.log('[dm.onDelete]')
-            console.log(items)
-          },
-
+          onView:     function(item)  { dmPreview.show(item); },
+          onDownload: function(items) { console.log('[dm.onDownload]', items); },
+          onOpen:     function(item)  { console.log('[dm.onOpen]',     item);  },
+          onRename:   function(item)  { console.log('[dm.onRename]',   item);  },
+          onMove:     function(items) { console.log('[dm.onMove]',     items); },
+          onDelete:   function(items) { console.log('[dm.onDelete]',   items); },
           plugins: [
-
-            // ── Sub-plugin 5.2.1: Workflow ──────────────────────────────────────
-            new MTS.DocumentManagerWorkflowPlugin({
-              statusField:   'workflowStatus',
-              showInToolbar: true,
-              onStart: (items) => {
-                console.log('[dm.onStart]')
-                console.log(items)
-              },
-              onSendForApproval: (items) => {
-                console.log('[dm.onSendForApproval]')
-                console.log(items)
-              },
-              onApprove: (items) => {
-                console.log('[dm.onApprove]')
-                console.log(items)
-              },
-              onSign: (items) => {
-                console.log('[dm.onSign]')
-                console.log(items)
-              },
-              onReject: (items) => {
-                console.log('[dm.onReject]')
-                console.log(items)
-              },
-              onRestart: (items) => {
-                console.log('[dm.onRestart]')
-                console.log(items)
-              },
-            }),
-
+            dmWorkflow,
           ],
         }),
-
       ],
     });
 
-    // ── DataTable ─────────────────────────────────────────────────────────────
+    // ── DataTable ─────────────────────────────────────────────────────────
     new MTS.DataTable({
       elementId: 'table11',
-
       columns: [
-        {
-          field:         'name',
-          label:         'Nombre',
-          sortable:      true,
-          alwaysVisible: true,
-          render: (v, row) => MTS.DocumentManagerPlugin.renderName(v, row),
-        },
-        {
-          field:  'size',
-          label:  'Tamaño',
-          align:  'end',
-          width:  '100px',
-          render: MTS.DocumentManagerPlugin.renderSize,
-        },
-        {
-          field:    'modified',
-          label:    'Modificado',
-          sortable: true,
-          align:    'end',
-          width:    '130px',
-        },
-        {
-          field:  'status',
-          label:  'Estado',
-          align:  'center',
-          width:  '110px',
-          render: MTS.DocumentManagerPlugin.renderStatus,
-        },
-        {
-          field:  'workflowStatus',
-          label:  'Workflow',
-          align:  'center',
-          width:  '130px',
-          render: MTS.DocumentManagerPlugin.renderWorkflowStatus,
-        },
+        { field: 'name',           label: 'Nombre',     sortable: true, alwaysVisible: true,
+          render: function(v, row) { return MTS.DocumentManagerPlugin.renderName(v, row); } },
+        { field: 'sizeFormatted',  label: 'Tamaño',     align: 'end',    width: '100px' },
+        { field: 'modifiedAt',     label: 'Modificado', sortable: true,  align: 'end', width: '130px' },
+        { field: 'status',         label: 'Estado',     align: 'center', width: '110px',
+          render: MTS.DocumentManagerPlugin.renderStatus },
+        { field: 'workflowStatus', label: 'Workflow',   align: 'center', width: '130px',
+          render: MTS.DocumentManagerPlugin.renderWorkflowStatus },
       ],
-
-      dataSource: async (query) => {
-        const res = await http.get('/widgets/datatable/mock-api/documents', { params: query });
+      dataSource: async function(query) {
+        var res = await http.get('/widgets/datatable/mock-api/documents', { params: query });
         if (!res.success) throw new Error(res.message);
         return res.data;
       },
-
-      rowId:    'id',
-      pageSize: 5,
-      hover:    true,
-      locale:   'es',
-
+      rowId:             'id',
+      pageSize:          5,
+      hover:             true,
+      locale:            'es',
       fixedHeader:       true,
       fixedHeaderHeight: '480px',
-
       sort:      { column: 'name', direction: 'asc' },
       search:    { enabled: true, minChars: 1, width: '260px' },
       selection: { mode: 'single' },
       pagination: { pageSizeOptions: [5, 10, 20, 50, 100] },
-
       actionColumn: true,
-
       plugins: [toolbar, filter, colVis, dm],
-
-      onSelectionChange: (items) => {
-        toolbar.update()
-        console.log('[table.onSelectionChange]')
-        console.log(items)
+      onSelectionChange: function(items) {
+        toolbar.update();
+        console.log('[table.onSelectionChange]', items);
       },
     });
 
@@ -586,15 +669,14 @@ function initTables() {
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('../../sw-datatable.js', { scope: '/widgets/datatable/' })
-    .then(reg => {
+    .then(function(reg) {
       if (reg.active) { initTables(); return; }
-      const sw = reg.installing || reg.waiting;
-      sw.addEventListener('statechange', () => { if (sw.state === 'activated') initTables(); });
+      var sw = reg.installing || reg.waiting;
+      sw.addEventListener('statechange', function() { if (sw.state === 'activated') initTables(); });
       navigator.serviceWorker.addEventListener('controllerchange', initTables, { once: true });
     })
-    .catch(err => console.warn('[Demo] SW error:', err));
+    .catch(function(err) { console.warn('[Demo] SW error:', err); });
 }
-
 </script>
 </body>
 </html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Sanitize — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="./matios-ui-sanitize.js"></script>
+  <style>
+    .san-card {
+      background: var(--mts-bg-surface);
+      border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+      border-radius: var(--mts-radius-md);
+      padding: var(--mts-space-5);
+      display: flex;
+      flex-direction: column;
+      gap: var(--mts-space-4);
+    }
+    .san-card-title {
+      font-size: var(--mts-font-size-base);
+      font-weight: var(--mts-font-weight-semibold);
+      color: var(--mts-text-primary);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: var(--mts-space-2);
+      flex-wrap: wrap;
+    }
+    .san-card-title code {
+      font-size: var(--mts-font-size-sm);
+      font-family: 'DM Mono', 'Fira Code', monospace;
+      background: var(--mts-bg-surface-2);
+      padding: 2px 8px;
+      border-radius: var(--mts-radius-sm);
+    }
+    .san-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: var(--mts-font-size-xs);
+      font-weight: var(--mts-font-weight-semibold);
+      background: color-mix(in srgb, var(--mts-color-success, #22c55e) 15%, transparent);
+      color: var(--mts-color-success, #22c55e);
+    }
+    .san-card-desc {
+      font-size: var(--mts-font-size-sm);
+      color: var(--mts-text-muted);
+      margin: 0;
+    }
+    .san-playground {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--mts-space-3);
+      align-items: start;
+    }
+    .san-field-label {
+      font-size: var(--mts-font-size-xs);
+      font-weight: var(--mts-font-weight-semibold);
+      color: var(--mts-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--mts-space-1);
+    }
+    .san-input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: var(--mts-space-2) var(--mts-space-3);
+      font-size: var(--mts-font-size-sm);
+      font-family: 'DM Mono', 'Fira Code', monospace;
+      color: var(--mts-text-primary);
+      background: var(--mts-bg-surface-2);
+      border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+      border-radius: var(--mts-radius-sm);
+      outline: none;
+      transition: border-color var(--mts-transition-fast);
+    }
+    .san-input:focus { border-color: var(--mts-color-primary); }
+    .san-output {
+      padding: var(--mts-space-2) var(--mts-space-3);
+      font-size: var(--mts-font-size-sm);
+      font-family: 'DM Mono', 'Fira Code', monospace;
+      color: var(--mts-color-success, #22c55e);
+      background: var(--mts-bg-surface-2);
+      border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-subtle);
+      border-radius: var(--mts-radius-sm);
+      min-height: 38px;
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
+    .san-divider {
+      border: none;
+      border-top: var(--mts-border-width) var(--mts-border-style) var(--mts-border-subtle);
+      margin: 0;
+    }
+    .san-url-table {
+      display: flex;
+      flex-direction: column;
+      gap: var(--mts-space-2);
+    }
+    .san-url-row {
+      display: grid;
+      grid-template-columns: 1fr 20px 1fr;
+      align-items: center;
+      gap: var(--mts-space-3);
+      font-size: var(--mts-font-size-sm);
+      font-family: 'DM Mono', 'Fira Code', monospace;
+    }
+    .san-url-in  { color: var(--mts-text-muted); }
+    .san-url-arr { color: var(--mts-text-muted); text-align: center; }
+    .san-url-ok      { color: var(--mts-color-success, #22c55e); }
+    .san-url-blocked { color: var(--mts-color-danger, #ef4444);  }
+    .san-text-table {
+      display: flex;
+      flex-direction: column;
+      gap: var(--mts-space-1);
+      font-size: var(--mts-font-size-sm);
+      font-family: 'DM Mono', 'Fira Code', monospace;
+    }
+    .san-text-row {
+      display: grid;
+      grid-template-columns: 160px 20px 1fr;
+      gap: var(--mts-space-2);
+      align-items: center;
+    }
+    .san-text-in  { color: var(--mts-text-muted); }
+    .san-text-arr { color: var(--mts-text-muted); text-align: center; }
+    .san-text-out { color: var(--mts-color-success, #22c55e); }
+  </style>
+</head>
+<body>
+<main class="mts-demo-wrap">
+
+  <header class="mts-demo-header">
+    <h1 class="mts-demo-title">MTS.Sanitize <span class="mts-badge mts-badge--primary mts-badge--sm">v1.0</span></h1>
+    <p class="mts-demo-subtitle">Utilidad de escape y sanitización para prevención de XSS. Sin dependencias.</p>
+  </header>
+
+  <div style="display:flex;flex-direction:column;gap:var(--mts-space-5);">
+
+    <!-- html() -->
+    <div class="san-card">
+      <h2 class="san-card-title">
+        <code>MTS.Sanitize.html(str)</code>
+        <span class="san-badge">Seguro para innerHTML</span>
+      </h2>
+      <p class="san-card-desc">Escapa los 5 caracteres especiales HTML: <code>&amp; &lt; &gt; " '</code> — usar cuando el valor va dentro de una template string asignada a <code>innerHTML</code>.</p>
+      <div class="san-playground">
+        <div>
+          <div class="san-field-label">Entrada — escribe algo</div>
+          <input id="html-input" class="san-input" type="text" placeholder="Ej: &lt;script&gt;alert(1)&lt;/script&gt;" />
+        </div>
+        <div>
+          <div class="san-field-label">Salida escapada</div>
+          <div id="html-output" class="san-output"></div>
+        </div>
+      </div>
+      <hr class="san-divider">
+      <div id="cb-html"></div>
+    </div>
+
+    <!-- attr() -->
+    <div class="san-card">
+      <h2 class="san-card-title">
+        <code>MTS.Sanitize.attr(str)</code>
+        <span class="san-badge">Seguro para atributos</span>
+      </h2>
+      <p class="san-card-desc">Como <code>html()</code> pero además escapa el backtick. Usar en <code>title</code>, <code>aria-label</code>, <code>data-*</code>, etc.</p>
+      <div class="san-playground">
+        <div>
+          <div class="san-field-label">Entrada — escribe algo</div>
+          <input id="attr-input" class="san-input" type="text" placeholder='Ej: He said "hi" &amp; bye' />
+        </div>
+        <div>
+          <div class="san-field-label">Salida escapada</div>
+          <div id="attr-output" class="san-output"></div>
+        </div>
+      </div>
+      <hr class="san-divider">
+      <div id="cb-attr"></div>
+    </div>
+
+    <!-- url() -->
+    <div class="san-card">
+      <h2 class="san-card-title">
+        <code>MTS.Sanitize.url(str)</code>
+        <span class="san-badge">Bloquea javascript: data: vbscript:</span>
+      </h2>
+      <p class="san-card-desc">Permite <code>https://</code>, <code>http://</code>, rutas relativas y protocolo relativo <code>//</code>. Retorna <code>''</code> si la URL es peligrosa.</p>
+      <div class="san-url-table" id="url-table"></div>
+      <hr class="san-divider">
+      <div id="cb-url"></div>
+    </div>
+
+    <!-- text() -->
+    <div class="san-card">
+      <h2 class="san-card-title">
+        <code>MTS.Sanitize.text(str)</code>
+        <span class="san-badge">Para textContent</span>
+      </h2>
+      <p class="san-card-desc">Convierte cualquier valor a string, manejando <code>null</code> y <code>undefined</code> como cadena vacía. Semánticamente indica que el valor irá a <code>textContent</code>.</p>
+      <div class="san-text-table" id="text-table"></div>
+      <hr class="san-divider">
+      <div id="cb-text"></div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  /* ── html() ─────────────────────────────────────────── */
+  var htmlInput  = document.getElementById('html-input');
+  var htmlOutput = document.getElementById('html-output');
+  htmlInput.addEventListener('input', function() {
+    htmlOutput.textContent = MTS.Sanitize.html(htmlInput.value);
+  });
+
+  /* ── attr() ─────────────────────────────────────────── */
+  var attrInput  = document.getElementById('attr-input');
+  var attrOutput = document.getElementById('attr-output');
+  attrInput.addEventListener('input', function() {
+    attrOutput.textContent = MTS.Sanitize.attr(attrInput.value);
+  });
+
+  /* ── url() tabla ─────────────────────────────────────── */
+  var urlCases = [
+    'https://ejemplo.com/doc.pdf',
+    '/documentos/archivo.xlsx',
+    './relativo/ruta.html',
+    'javascript:alert(1)',
+    'data:text/html,<b>hola</b>',
+    '  JAVASCRIPT:alert(1)',
+    'vbscript:msgbox(1)',
+  ];
+  var urlTable = document.getElementById('url-table');
+  urlCases.forEach(function(url) {
+    var result = MTS.Sanitize.url(url);
+    var row = document.createElement('div');
+    row.className = 'san-url-row';
+
+    var inEl = document.createElement('span');
+    inEl.className = 'san-url-in';
+    inEl.textContent = '"' + url + '"';
+
+    var arrEl = document.createElement('span');
+    arrEl.className = 'san-url-arr';
+    arrEl.textContent = '→';
+
+    var outEl = document.createElement('span');
+    if (result === '') {
+      outEl.className = 'san-url-blocked';
+      outEl.textContent = '(bloqueada — retorna "")';
+    } else {
+      outEl.className = 'san-url-ok';
+      outEl.textContent = '"' + result + '"';
+    }
+
+    row.appendChild(inEl);
+    row.appendChild(arrEl);
+    row.appendChild(outEl);
+    urlTable.appendChild(row);
+  });
+
+  /* ── text() tabla ────────────────────────────────────── */
+  var textCases = [
+    { label: 'null',              val: null },
+    { label: 'undefined',         val: undefined },
+    { label: '0',                 val: 0 },
+    { label: '42',                val: 42 },
+    { label: '"<b>texto</b>"',    val: '<b>texto</b>' },
+    { label: '"  espacios  "',    val: '  espacios  ' },
+  ];
+  var textTable = document.getElementById('text-table');
+  textCases.forEach(function(c) {
+    var row = document.createElement('div');
+    row.className = 'san-text-row';
+
+    var inEl = document.createElement('span');
+    inEl.className = 'san-text-in';
+    inEl.textContent = c.label;
+
+    var arrEl = document.createElement('span');
+    arrEl.className = 'san-text-arr';
+    arrEl.textContent = '→';
+
+    var outEl = document.createElement('span');
+    outEl.className = 'san-text-out';
+    outEl.textContent = '"' + MTS.Sanitize.text(c.val) + '"';
+
+    row.appendChild(inEl);
+    row.appendChild(arrEl);
+    row.appendChild(outEl);
+    textTable.appendChild(row);
+  });
+
+  /* ── Codeblocks ──────────────────────────────────────── */
+  var codes = [
+    {
+      id: 'cb-html',
+      lang: 'js',
+      code: [
+        '// ❌ Vulnerable',
+        'el.innerHTML = `<span>${nombreServidor}</span>`',
+        '',
+        '// ✅ Seguro',
+        'el.innerHTML = `<span>${MTS.Sanitize.html(nombreServidor)}</span>`',
+      ].join('\n'),
+    },
+    {
+      id: 'cb-attr',
+      lang: 'js',
+      code: [
+        '// ❌ Vulnerable',
+        "el.setAttribute('title', userInput)",
+        '',
+        '// ✅ Seguro',
+        "el.setAttribute('title', MTS.Sanitize.attr(userInput))",
+      ].join('\n'),
+    },
+    {
+      id: 'cb-url',
+      lang: 'js',
+      code: [
+        '// ❌ Vulnerable',
+        'anchor.href = row.downloadUrl',
+        '',
+        "// ✅ Seguro — si la URL es peligrosa retorna '' y el fallback '#' evita el void",
+        "anchor.href = MTS.Sanitize.url(row.downloadUrl) || '#'",
+      ].join('\n'),
+    },
+    {
+      id: 'cb-text',
+      lang: 'js',
+      code: [
+        '// textContent ya es seguro por naturaleza.',
+        '// .text() lo hace explícito y maneja null/undefined.',
+        'el.textContent = MTS.Sanitize.text(item.name)',
+        'el.textContent = MTS.Sanitize.text(null) // → ""',
+      ].join('\n'),
+    },
+  ];
+
+  if (typeof MTS.CodeBlock !== 'undefined') {
+    codes.forEach(function(c) {
+      var host = document.getElementById(c.id);
+      if (!host) return;
+      new MTS.CodeBlock(host, { language: c.lang, code: c.code });
+    });
+  }
+</script>
+</body>
+</html>

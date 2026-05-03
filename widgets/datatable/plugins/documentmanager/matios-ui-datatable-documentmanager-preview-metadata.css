@@ -1,0 +1,168 @@
+/* ============================================================
+   MATIOS UI — MTS.DocumentManagerPreviewMetadataPanel
+   Estilos del panel lateral de metadatos editables.
+
+   Requiere: matios-ui-datatable-documentmanager-preview.css
+             (usa la animación dm-preview-shimmer definida ahí)
+   ============================================================ */
+
+
+/* ============================================================
+   1. CONTENEDOR PRINCIPAL
+   ============================================================ */
+
+.dm-metadata {
+  display: flex;
+  flex-direction: column;
+}
+
+.dm-metadata__empty {
+  margin: 16px;
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-muted);
+}
+
+
+/* ============================================================
+   2. HEADER — botón Editar
+   ============================================================ */
+
+.dm-metadata__header {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--mts-space-2) var(--mts-space-4) 0;
+}
+
+
+/* ============================================================
+   3. MODO LECTURA — lista de campos
+   ============================================================ */
+
+.dm-metadata__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-2);
+  padding: var(--mts-space-3) var(--mts-space-4);
+  max-height: var(--dm-metadata-list-height, 280px);
+  overflow-y: auto;
+}
+
+.dm-metadata__row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--mts-space-2);
+  min-width: 0;
+}
+
+.dm-metadata__label {
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.dm-metadata__value {
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-primary);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   4. MODO EDICIÓN — formulario (dentro del modal)
+   ============================================================ */
+
+.dm-metadata__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-4);
+}
+
+.dm-metadata__field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-1);
+}
+
+.dm-metadata__field-label {
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dm-metadata__field-control {
+  width: 100%;
+}
+
+.dm-metadata__textarea {
+  width: 100%;
+  resize: vertical;
+  padding: var(--mts-space-2) var(--mts-space-3);
+  font-size: var(--mts-font-size-sm);
+  font-family: inherit;
+  color: var(--mts-text-primary);
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-sm);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color var(--mts-transition-fast);
+  line-height: 1.5;
+}
+
+.dm-metadata__textarea:focus {
+  border-color: var(--mts-color-primary);
+}
+
+.dm-metadata__error {
+  display: block;
+  margin-top: var(--mts-space-2);
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-color-danger, #ef4444);
+}
+
+
+/* ============================================================
+   5. SKELETON
+   ============================================================ */
+
+.dm-metadata__skeleton-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--mts-space-2);
+  padding: var(--mts-space-1) var(--mts-space-4);
+}
+
+.dm-metadata__skeleton-label {
+  height: 12px;
+  flex-shrink: 0;
+  width: 80px;
+  border-radius: var(--mts-radius-sm);
+  background: var(--mts-bg-surface-2);
+  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
+}
+
+.dm-metadata__skeleton-value {
+  height: 12px;
+  flex: 1;
+  border-radius: var(--mts-radius-sm);
+  background: var(--mts-bg-surface-2);
+  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
+  animation-delay: 0.1s;
+}
+
+.dm-metadata__skeleton-value--w0 { max-width: 60%; }
+.dm-metadata__skeleton-value--w1 { max-width: 40%; }
+.dm-metadata__skeleton-value--w2 { max-width: 70%; }
+.dm-metadata__skeleton-value--w3 { max-width: 50%; }

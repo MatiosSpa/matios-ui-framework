@@ -1,5 +1,5 @@
 /* ============================================================
-   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.6.0
+   MATIOS UI — MTS.DocumentManagerPreviewPlugin  v1.7.0
    Sub-plugin de vista previa para MTS.DocumentManagerPlugin.
 
    Muestra un modal fullscreen con:
@@ -22,21 +22,13 @@
        onDownload: function(item) {
          window.open('/api/documents/' + item.id + '/download');
        },
-       onReplace: function(item, file, version, reportProgress) {
-         // reportProgress(n): llama con 0-100 para actualizar la barra de progreso.
-         // En producción usa XHR para tener acceso a upload.onprogress:
-         return new Promise(function(resolve, reject) {
-           var xhr = new XMLHttpRequest();
-           xhr.upload.onprogress = function(e) {
-             if (e.lengthComputable) reportProgress(Math.round(e.loaded / e.total * 100));
-           };
-           xhr.onload  = function() { resolve(); };
-           xhr.onerror = function() { reject(new Error('Error de red.')); };
-           xhr.open('POST', '/api/documents/' + item.id + '/replace');
-           var form = new FormData();
-           form.append('file', file);
-           form.append('version', String(version));
-           xhr.send(form);
+       onReplace: function(item, file, version) {
+         // Debe retornar Promise para activar la barra de progreso indeterminada.
+         // En producción usa MTS.HttpClient.upload():
+         return http.upload('/api/documents/' + item.id + '/replace', file, {
+           data: { version: version },
+         }).then(function(res) {
+           if (!res.success) throw new Error(res.message || 'Error al subir.');
          });
        },
        onPrev: function(currentItem) {
@@ -76,20 +68,50 @@
      panels        Array   — sub-paneles del acordeón lateral
      urlResolver   fn      — function(item) → string | null  (URL del iframe)
      onDownload    fn      — function(item)  (botón "Descargar" en el header)
-     onReplace     fn      — function(item, file, version, reportProgress)
+     onReplace     fn      — function(item, file, version)
                               Flujo: clic "Reemplazar" → file picker → modal de confirmación
                               (archivo + versión) → clic "Subir" → callback
                               file: File seleccionado
                               version: entero del input de versión
-                              reportProgress(n): llama con 0-100 para actualizar la barra
-                              Debe retornar Promise para activar spinner/progreso/éxito/error
+                              Debe retornar Promise para activar barra indeterminada/éxito/error
                               accept del file picker: heredado de dm._options.accept
      onPrev        fn      — function(currentItem)  (botón ← en el header)
      onNext        fn      — function(currentItem)  (botón → en el header)
      panelVisible  bool    — panel lateral visible al abrir (default: true)
      panelWidth    string  — ancho del panel lateral abierto (default: '340px')
 
-   Dependencias: MTS.DocumentManagerPlugin, MTS.Modal, MTS.Accordion, MTS.Button, MTS.Icon
+   Dependencias: MTS.DocumentManagerPlugin, MTS.Modal, MTS.Accordion, MTS.Button, MTS.Badge, MTS.Icon
+
+
+   ── CONTRATO DE CAMPOS (item) ───────────────────────────────
+   Los paneles y features del plugin leen los siguientes campos
+   del objeto `item` recibido de MTS.DocumentManagerPlugin.
+   El dev es libre de incluir solo los que necesite; los campos
+   ausentes se omiten o muestran '—'.
+
+   Campo          Tipo          Usado por
+   ─────────────────────────────────────────────────────────────
+   id             string|num    urlResolver, onDownload, onReplace
+   name           string        Título del modal, BasicInfoPanel
+   type           'file'|'folder'  Ícono del modal, BasicInfoPanel (Tipo)
+   ext            string        Ícono del modal, mismatch warning, BasicInfoPanel (Tipo)
+   mimeType       string        Ícono del modal, BasicInfoPanel (Tipo)
+   contentType    string        Ícono del modal, BasicInfoPanel (Tipo)
+   version        string|num    Badge de versión en header, BasicInfoPanel (Versión)
+                                  El input de nueva versión sugiere parseInt(version)+1
+   sizeFormatted  string        BasicInfoPanel (Tamaño)  ← preferido
+   size           number        BasicInfoPanel (Tamaño)  ← fallback (se convierte a string)
+   createdAt      string        BasicInfoPanel (Creado)
+   modifiedAt     string        BasicInfoPanel (Modificado)  ← preferido
+   updatedAt      string        BasicInfoPanel (Modificado)  ← fallback
+   status         string        BasicInfoPanel (Estado)
+   owner          string        BasicInfoPanel (Propietario)  ← preferido
+   author         string        BasicInfoPanel (Propietario)  ← fallback
+
+   Los paneles personalizados pueden leer cualquier campo adicional
+   que el dev incluya en sus objetos de datos. El contrato anterior
+   aplica solo a los paneles built-in.
+   ─────────────────────────────────────────────────────────────
    ============================================================ */
 
 window.MTS = window.MTS || {};
@@ -98,7 +120,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
   static descriptor = {
     name:     'MTS.DocumentManagerPreviewPlugin',
-    version:  '1.6.0',
+    version:  '1.7.0',
     type:     'documentManagerPreview',
     requires: ['MTS.DocumentManagerPlugin', 'MTS.Modal', 'MTS.Accordion'],
     provides: 'documentManagerPreview',
@@ -137,17 +159,18 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     this._panelOpen         = this._options.panelVisible;
     this._overrideUrl       = null;   // URL opcional pasada en show(item, url)
     this._replaceInput      = null;   // <input type="file"> oculto para onReplace
-    this._versionBadgeEl    = null;   // badge read-only "V.x.x" en el header
+    this._versionBadgeEl    = null;   // elemento del badge read-only en el header
+    this._versionBadgeApi   = null;   // instancia MTS.Badge del badge de versión
     this._versionInputEl    = null;   // <input type="number"> en el modal de confirmación
     this._confirmFile       = null;   // File pendiente de confirmar
+    this._extMismatch       = false;  // true si la extensión del archivo no coincide
     this._confirmOverlayEl  = null;   // overlay de confirmación (position:absolute en wrap)
     this._confirmFileEl     = null;   // zona de info del archivo en el overlay
     this._confirmContentEl  = null;   // zona dinámica: versión / spinner / estado
     this._confirmActionsEl  = null;   // zona de botones del overlay
     this._confirmVerRowEl   = null;   // fila de versión (reutilizada entre estados)
-    this._confirmCancelEl       = null;   // botón Cancelar (reutilizado)
-    this._confirmSubmitEl       = null;   // botón Subir (reutilizado)
-    this._confirmProgressFillEl = null;   // fill de la barra de progreso
+    this._confirmCancelEl   = null;   // botón Cancelar (reutilizado)
+    this._confirmSubmitEl   = null;   // botón Subir (reutilizado)
   }
 
   /* ----------------------------------------------------------
@@ -179,16 +202,17 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       this._wrapEl           = null;
       this._replaceInput     = null;
       this._versionBadgeEl   = null;
+      this._versionBadgeApi  = null;
       this._versionInputEl   = null;
       this._confirmFile      = null;
+      this._extMismatch      = false;
       this._confirmOverlayEl = null;
       this._confirmFileEl    = null;
       this._confirmContentEl = null;
       this._confirmActionsEl = null;
       this._confirmVerRowEl  = null;
-      this._confirmCancelEl       = null;
-      this._confirmSubmitEl       = null;
-      this._confirmProgressFillEl = null;
+      this._confirmCancelEl  = null;
+      this._confirmSubmitEl  = null;
     }
     this._dm          = null;
     this._currentItem = null;
@@ -293,8 +317,8 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       }).on('click', function() {
         if (self._currentItem) self._options.onPrev(self._currentItem);
       });
-      prevEl.setAttribute('title', 'Documento anterior');
-      prevEl.setAttribute('aria-label', 'Documento anterior');
+      prevEl.setAttribute('title',      this._t('prevDoc', 'Documento anterior'));
+      prevEl.setAttribute('aria-label', this._t('prevDoc', 'Documento anterior'));
       headerEl.insertBefore(prevEl, titleEl);
     }
 
@@ -309,25 +333,29 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       }).on('click', function() {
         if (self._currentItem) self._options.onNext(self._currentItem);
       });
-      nextEl.setAttribute('title', 'Documento siguiente');
-      nextEl.setAttribute('aria-label', 'Documento siguiente');
+      nextEl.setAttribute('title',      this._t('nextDoc', 'Documento siguiente'));
+      nextEl.setAttribute('aria-label', this._t('nextDoc', 'Documento siguiente'));
       headerEl.insertBefore(nextEl, titleEl);
     }
 
-    // — Badge de versión (read-only): siempre presente, visible si item tiene versión —
+    // — Badge de versión (read-only): MTS.Badge, hidden al inicio.
+    //   No se inserta aquí — _updateTitle() lo adjunta al span del nombre. —
     var badgeEl = document.createElement('span');
-    badgeEl.className = 'dm-preview__version-badge';
-    badgeEl.hidden    = true;
-    this._versionBadgeEl = badgeEl;
-    if (closeBtnEl) headerEl.insertBefore(badgeEl, closeBtnEl);
-    else headerEl.appendChild(badgeEl);
+    this._versionBadgeEl  = badgeEl;
+    this._versionBadgeApi = new MTS.Badge(badgeEl, {
+      label:   '',
+      variant: 'primary',
+      size:    'xs',
+      shape:   'pill',
+    });
+    this._versionBadgeApi.hide();
 
     // — Botón "Reemplazar": abre file picker → modal de confirmación —
     if (this._options.onReplace) {
       var replaceEl = document.createElement('button');
       replaceEl.type = 'button';
       new MTS.Button(replaceEl, {
-        label:    'Reemplazar',
+        label:    this._t('replace', 'Reemplazar'),
         iconLeft: MTS.Icon ? MTS.Icon.get('upload') : '',
         size:     'sm',
         variant:  'ghost',
@@ -343,7 +371,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       var dlEl = document.createElement('button');
       dlEl.type = 'button';
       new MTS.Button(dlEl, {
-        label:    'Descargar',
+        label:    this._t('download', 'Descargar'),
         iconLeft: MTS.Icon ? MTS.Icon.get('download') : '',
         size:     'sm',
         variant:  'ghost',
@@ -378,13 +406,13 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     this._iframe = document.createElement('iframe');
     this._iframe.className = 'dm-preview__iframe';
     this._iframe.setAttribute('frameborder', '0');
-    this._iframe.setAttribute('title', 'Vista previa del documento');
+    this._iframe.setAttribute('title', this._t('iframeTitle', 'Vista previa del documento'));
 
     // Botón toggle del panel lateral
     var toggleBtn = document.createElement('button');
     toggleBtn.className = 'dm-preview__toggle-btn';
     toggleBtn.setAttribute('type', 'button');
-    toggleBtn.setAttribute('aria-label', 'Mostrar u ocultar panel lateral');
+    toggleBtn.setAttribute('aria-label', this._t('panelToggle', 'Mostrar u ocultar panel lateral'));
     toggleBtn.innerHTML = this._panelOpen ? this._chevronRight() : this._chevronLeft();
     toggleBtn.addEventListener('click', function() {
       self._togglePanel();
@@ -464,7 +492,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     this._accordion = new MTS.Accordion(container, {
       items:    items,
       flush:    true,
-      multiple: true,
+      multiple: false,
       onOpen: function(e) {
         var key   = e.detail.id;
         var panel = self._findPanel(key);
@@ -557,6 +585,16 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
      IFRAME
   ---------------------------------------------------------- */
 
+  /**
+   * Carga una URL arbitraria en el iframe del preview sin cambiar el item activo.
+   * Usado por paneles laterales (ej. VersionsPanel) para navegar entre versiones.
+   * @param {string} url
+   */
+  loadUrl(url) {
+    this._overrideUrl = url;
+    this._loadIframe(this._currentItem);
+  }
+
   _loadIframe(item) {
     // Prioridad: URL pasada en show(item, url) > urlResolver(item)
     var url = this._overrideUrl;
@@ -632,6 +670,12 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     this._modal.setTitle(
       iconHtml + '<span class="dm-preview__title-text">' + name + '</span>'
     );
+
+    // Re-adjuntar el badge al span del nombre (setTitle reconstruye el innerHTML)
+    if (this._versionBadgeEl && this._modal._titleEl) {
+      var textEl = this._modal._titleEl.querySelector('.dm-preview__title-text');
+      if (textEl) textEl.insertAdjacentElement('afterend', this._versionBadgeEl);
+    }
   }
 
   /* ----------------------------------------------------------
@@ -656,7 +700,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     // — Título —
     var titleEl = document.createElement('p');
     titleEl.className   = 'dm-preview__confirm-card-title';
-    titleEl.textContent = 'Reemplazar documento';
+    titleEl.textContent = this._t('confirmTitle', 'Reemplazar documento');
 
     // — Info del archivo (siempre en el card; se oculta en estado success) —
     var fileEl = document.createElement('div');
@@ -678,7 +722,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     verRow.className = 'dm-preview__confirm-version';
     var verLabel = document.createElement('label');
     verLabel.className   = 'dm-preview__confirm-version-label';
-    verLabel.textContent = 'Nueva versión:';
+    verLabel.textContent = this._t('confirmVersionLabel', 'Nueva versión:');
     verLabel.setAttribute('for', 'dm-preview-ver-input');
     var verInput = document.createElement('input');
     verInput.type      = 'number';
@@ -686,7 +730,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     verInput.min       = '1';
     verInput.step      = '1';
     verInput.className = 'dm-preview__version-input';
-    verInput.setAttribute('aria-label', 'Nueva versión del documento');
+    verInput.setAttribute('aria-label', this._t('confirmVersionAriaLabel', 'Nueva versión del documento'));
     verRow.appendChild(verLabel);
     verRow.appendChild(verInput);
     this._confirmVerRowEl = verRow;
@@ -695,14 +739,14 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     // Pre-construir botones Cancelar y Subir
     var cancelEl = document.createElement('button');
     cancelEl.type = 'button';
-    new MTS.Button(cancelEl, { label: 'Cancelar', size: 'sm', variant: 'ghost' })
+    new MTS.Button(cancelEl, { label: this._t('confirmCancel', 'Cancelar'), size: 'sm', variant: 'ghost' })
       .on('click', function() { self._hideConfirm(); });
     this._confirmCancelEl = cancelEl;
 
     var submitEl = document.createElement('button');
     submitEl.type = 'button';
     new MTS.Button(submitEl, {
-      label:    'Subir',
+      label:    this._t('confirmUpload', 'Subir'),
       iconLeft: MTS.Icon ? MTS.Icon.get('upload') : '',
       size:     'sm',
       variant:  'primary',
@@ -730,6 +774,12 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       this._versionInputEl.value = current + 1;
     }
 
+    // Detectar si la extensión del archivo seleccionado difiere del documento actual
+    var dotIdx  = file.name.lastIndexOf('.');
+    var newExt  = dotIdx !== -1 ? file.name.slice(dotIdx + 1).toLowerCase() : '';
+    var currExt = ((this._currentItem && this._currentItem.ext) || '').toLowerCase();
+    this._extMismatch = (newExt !== '' && currExt !== '' && newExt !== currExt);
+
     this._renderConfirmFile(file);
     this._setConfirmState('idle');
 
@@ -749,7 +799,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   }
 
   /**
-   * Llama a onReplace. Si retorna Promise muestra spinner → éxito/error.
+   * Llama a onReplace. Si retorna Promise muestra barra indeterminada → éxito/error.
    * Si no retorna Promise, cierra inmediatamente (sin feedback).
    */
   _submitReplace() {
@@ -758,18 +808,8 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
     var version = parseInt(this._versionInputEl.value, 10) || 1;
 
-    // reportProgress(n): función que el dev llama con 0-100 desde su XHR.onprogress.
-    // Se crea antes de llamar al callback para que el dev la capture en su closure.
-    // _confirmProgressFillEl se asigna en _setConfirmState('loading') justo después.
-    var reportProgress = function(percent) {
-      if (self._confirmProgressFillEl) {
-        self._confirmProgressFillEl.style.width =
-          Math.min(100, Math.max(0, percent)) + '%';
-      }
-    };
-
     var result = this._options.onReplace(
-      this._currentItem, this._confirmFile, version, reportProgress
+      this._currentItem, this._confirmFile, version
     );
 
     if (result && typeof result.then === 'function') {
@@ -782,7 +822,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
           self._loadIframe(self._currentItem);
         }, 1500);
       }).catch(function(err) {
-        var msg = (err && err.message) ? err.message : 'Error al subir el archivo.';
+        var msg = (err && err.message) ? err.message : self._t('confirmError', 'Error al subir el archivo.');
         self._setConfirmState('error', msg);
       });
     } else {
@@ -793,8 +833,8 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
   /**
    * Actualiza la zona dinámica y los botones del overlay según el estado.
-   *   'idle'    — versión + Cancelar/Subir
-   *   'loading' — spinner + "Subiendo..."
+   *   'idle'    — versión (+ advertencia extensión si _extMismatch) + Cancelar/Subir
+   *   'loading' — barra indeterminada + "Subiendo..."
    *   'success' — ícono check + "Documento reemplazado." (auto-cierra)
    *   'error'   — mensaje de error + Reintentar/Cerrar
    */
@@ -811,25 +851,38 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     if (state === 'idle') {
       if (fileEl) fileEl.hidden = false;
       contentEl.appendChild(this._confirmVerRowEl);
+
+      // Advertencia si la extensión del nuevo archivo no coincide con el documento actual
+      if (this._extMismatch) {
+        var warnEl = document.createElement('div');
+        warnEl.className = 'dm-preview__confirm-warning';
+        var warnIcon = document.createElement('span');
+        warnIcon.className = 'dm-preview__confirm-warning-icon';
+        if (window.MTS && MTS.Icon) warnIcon.innerHTML = MTS.Icon.get('alert-triangle') || '';
+        var warnText = document.createElement('span');
+        warnText.textContent = this._t('confirmExtWarning', 'El archivo seleccionado tiene una extensión diferente al documento actual.');
+        warnEl.appendChild(warnIcon);
+        warnEl.appendChild(warnText);
+        contentEl.appendChild(warnEl);
+      }
+
       actionsEl.appendChild(this._confirmCancelEl);
       actionsEl.appendChild(this._confirmSubmitEl);
 
     } else if (state === 'loading') {
       if (fileEl) fileEl.hidden = false;
 
-      // Barra de progreso
+      // Barra de progreso indeterminada
       var progressWrap = document.createElement('div');
       progressWrap.className = 'dm-preview__confirm-progress';
-      var progressFill = document.createElement('div');
-      progressFill.className    = 'dm-preview__confirm-progress-fill';
-      progressFill.style.width  = '0%';
-      progressWrap.appendChild(progressFill);
-      this._confirmProgressFillEl = progressFill;
+      var progressBar = document.createElement('div');
+      progressBar.className = 'dm-preview__confirm-progress-bar';
+      progressWrap.appendChild(progressBar);
 
       // Texto "Subiendo..."
       var loadingText = document.createElement('span');
       loadingText.className   = 'dm-preview__confirm-status-text';
-      loadingText.textContent = 'Subiendo...';
+      loadingText.textContent = this._t('confirmUploading', 'Subiendo...');
 
       contentEl.appendChild(progressWrap);
       contentEl.appendChild(loadingText);
@@ -844,7 +897,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       if (window.MTS && MTS.Icon) successIcon.innerHTML = MTS.Icon.get('check-circle') || '✓';
       var successText = document.createElement('span');
       successText.className   = 'dm-preview__confirm-status-text';
-      successText.textContent = 'Documento reemplazado.';
+      successText.textContent = this._t('confirmSuccess', 'Documento reemplazado.');
       successEl.appendChild(successIcon);
       successEl.appendChild(successText);
       contentEl.appendChild(successEl);
@@ -858,19 +911,19 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       if (window.MTS && MTS.Icon) errorIcon.innerHTML = MTS.Icon.get('alert-circle') || '✕';
       var errorText = document.createElement('span');
       errorText.className   = 'dm-preview__confirm-status-text';
-      errorText.textContent = message || 'Error al subir el archivo.';
+      errorText.textContent = message || this._t('confirmError', 'Error al subir el archivo.');
       errorEl.appendChild(errorIcon);
       errorEl.appendChild(errorText);
       contentEl.appendChild(errorEl);
 
       var retryEl = document.createElement('button');
       retryEl.type = 'button';
-      new MTS.Button(retryEl, { label: 'Reintentar', size: 'sm', variant: 'ghost' })
+      new MTS.Button(retryEl, { label: self._t('confirmRetry', 'Reintentar'), size: 'sm', variant: 'ghost' })
         .on('click', function() { self._setConfirmState('idle'); });
 
       var closeEl = document.createElement('button');
       closeEl.type = 'button';
-      new MTS.Button(closeEl, { label: 'Cerrar', size: 'sm', variant: 'ghost' })
+      new MTS.Button(closeEl, { label: self._t('confirmClose', 'Cerrar'), size: 'sm', variant: 'ghost' })
         .on('click', function() { self._hideConfirm(); });
 
       actionsEl.appendChild(retryEl);
@@ -920,12 +973,12 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
    * Se llama en cada show(item).
    */
   _updateVersionBadge(item) {
-    if (!this._versionBadgeEl) return;
+    if (!this._versionBadgeApi) return;
     if (item && item.version != null && item.version !== '') {
-      this._versionBadgeEl.textContent = 'v' + item.version;
-      this._versionBadgeEl.hidden      = false;
+      this._versionBadgeApi.setLabel('v' + item.version);
+      this._versionBadgeApi.show();
     } else {
-      this._versionBadgeEl.hidden = true;
+      this._versionBadgeApi.hide();
     }
   }
 
@@ -995,6 +1048,16 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     return 'file';
   }
 
+  /**
+   * Retorna el string del locale para la key dada.
+   * Lee la sección 'MTS.DocumentManagerPreviewPlugin' del locale activo.
+   * Si no encuentra la key, retorna el fallback hardcodeado (siempre en español).
+   */
+  _t(key, fallback) {
+    var loc = this._dm?._table?._cfg?.locale?.['MTS.DocumentManagerPreviewPlugin'] ?? {};
+    return loc[key] !== undefined ? loc[key] : (fallback !== undefined ? fallback : key);
+  }
+
   _findPanel(key) {
     var panels = this._options.panels;
     for (var i = 0; i < panels.length; i++) {
@@ -1003,13 +1066,11 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     return null;
   }
 
-  /** Escapa caracteres HTML especiales para insertar texto en innerHTML */
+  /** Escapa caracteres HTML especiales — delega a MTS.Sanitize si está disponible */
   _escHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+    return typeof MTS.Sanitize !== 'undefined'
+      ? MTS.Sanitize.html(str)
+      : String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
   // Panel abierto → flecha apunta a la derecha (clic = colapsar)
@@ -1029,7 +1090,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
 
 /* ============================================================
-   MTS.DocumentManagerPreviewBasicInfoPanel  v1.1.0
+   MTS.DocumentManagerPreviewBasicInfoPanel  v1.2.0
    Panel de información básica — built-in.
 
    Muestra los metadatos del ítem en layout compacto inline:
@@ -1042,14 +1103,92 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
      Estado:     active
      Propietario: Área Legal
 
+   Uso básico (campos por defecto):
+     new MTS.DocumentManagerPreviewBasicInfoPanel()
+
+   Uso con campos personalizados:
+     new MTS.DocumentManagerPreviewBasicInfoPanel({
+       fields: [
+         { label: 'Nombre',     field: 'name'      },
+         { label: 'Versión',    field: 'version'   },
+         { label: 'Modificado', field: 'modifiedAt'},
+         { label: 'Área',       resolve: function(item) { return item.department || '—'; } },
+       ]
+     })
+
+   Cada entrada del array `fields` puede ser:
+     { label, field   }  — lee item[field] directamente
+     { label, resolve }  — llama resolve(item) para obtener el valor
+
+   Si `fields` no se pasa, usa DEFAULT_FIELDS (comportamiento anterior, retrocompatible).
+
    Puede usarse tal cual o como referencia para crear paneles personalizados.
    ============================================================ */
 
 MTS.DocumentManagerPreviewBasicInfoPanel = class DocumentManagerPreviewBasicInfoPanel {
 
   get key()   { return 'dm-basic-info'; }
-  get label() { return 'Información básica'; }
-  get icon()  { return null; }
+  get label() {
+    var loc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewBasicInfoPanel'] ?? {};
+    return loc.panelLabel || 'Información básica';
+  }
+  get icon()  { return typeof MTS.Icon !== 'undefined' ? MTS.Icon.get('info') : null; }
+
+  constructor(options) {
+    options = options || {};
+    this._fields = Array.isArray(options.fields) && options.fields.length > 0
+      ? options.fields
+      : MTS.DocumentManagerPreviewBasicInfoPanel.DEFAULT_FIELDS;
+    this._preview = null;
+  }
+
+  /**
+   * Campos por defecto — equivale al comportamiento de v1.1.0.
+   * El dev puede clonar y modificar este array como punto de partida.
+   */
+  static get DEFAULT_FIELDS() {
+    return [
+      {
+        labelKey: 'fieldName',   label: 'Nombre',
+        resolve: function(item) { return item.name || '—'; },
+      },
+      {
+        labelKey: 'fieldType',   label: 'Tipo',
+        resolve: function(item) {
+          return item.mimeType || item.contentType
+              || (item.ext ? '.' + item.ext : null)
+              || item.type
+              || '—';
+        },
+      },
+      {
+        labelKey: 'fieldSize',   label: 'Tamaño',
+        resolve: function(item) {
+          return item.sizeFormatted || (item.size != null ? String(item.size) : '—');
+        },
+      },
+      {
+        labelKey: 'fieldVersion', label: 'Versión',
+        resolve: function(item) { return item.version != null ? String(item.version) : '—'; },
+      },
+      {
+        labelKey: 'fieldCreatedAt',  label: 'Creado',
+        resolve: function(item) { return item.createdAt || '—'; },
+      },
+      {
+        labelKey: 'fieldModifiedAt', label: 'Modificado',
+        resolve: function(item) { return item.modifiedAt || item.updatedAt || '—'; },
+      },
+      {
+        labelKey: 'fieldStatus',  label: 'Estado',
+        resolve: function(item) { return item.status || '—'; },
+      },
+      {
+        labelKey: 'fieldOwner',   label: 'Propietario',
+        resolve: function(item) { return item.owner || item.author || '—'; },
+      },
+    ];
+  }
 
   install(preview) {
     this._preview = preview;
@@ -1059,13 +1198,22 @@ MTS.DocumentManagerPreviewBasicInfoPanel = class DocumentManagerPreviewBasicInfo
     this._preview = null;
   }
 
-  /** Skeleton de carga */
+  /** Skeleton de carga — tantas filas como campos configurados */
   render(item) {
     var wrap = document.createElement('div');
     wrap.className = 'dm-preview__basic-info dm-preview__basic-info--loading';
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < this._fields.length; i++) {
       var row = document.createElement('div');
-      row.className = 'dm-preview__info-skeleton-row';
+      row.className = 'dm-preview__info-row';
+
+      var labelSk = document.createElement('div');
+      labelSk.className = 'dm-preview__info-skeleton-label';
+
+      var valueSk = document.createElement('div');
+      valueSk.className = 'dm-preview__info-skeleton-value dm-preview__info-skeleton-value--w' + (i % 4);
+
+      row.appendChild(labelSk);
+      row.appendChild(valueSk);
       wrap.appendChild(row);
     }
     return wrap;
@@ -1073,49 +1221,60 @@ MTS.DocumentManagerPreviewBasicInfoPanel = class DocumentManagerPreviewBasicInfo
 
   /** Contenido real — acepta async; en producción haría un fetch */
   load(item) {
+    var fields  = this._fields;
+    var loc     = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewBasicInfoPanel'] ?? {};
     return new Promise(function(resolve) {
       setTimeout(function() {
-        resolve(MTS.DocumentManagerPreviewBasicInfoPanel._buildContent(item));
+        resolve(MTS.DocumentManagerPreviewBasicInfoPanel._buildContent(item, fields, loc));
       }, 0);
     });
   }
 
-  static _buildContent(item) {
-    // "Tipo" muestra mimeType si está disponible, si no ext, si no el campo type.
-    var tipo = item.mimeType || item.contentType
-            || (item.ext ? '.' + item.ext : null)
-            || item.type
-            || '—';
-
-    var fields = [
-      { label: 'Nombre',      value: item.name          || '—' },
-      { label: 'Tipo',        value: tipo                       },
-      { label: 'Tamaño',      value: item.sizeFormatted  || (item.size ? String(item.size) : '—') },
-      { label: 'Versión',     value: item.version        || '—' },
-      { label: 'Creado',      value: item.createdAt      || '—' },
-      { label: 'Modificado',  value: item.modifiedAt     || item.updatedAt || '—' },
-      { label: 'Estado',      value: item.status         || '—' },
-      { label: 'Propietario', value: item.owner          || item.author || '—' },
-    ];
-
+  /**
+   * Construye el DOM de la lista de campos a partir de `item`, `fields` y `loc`.
+   * Cada entrada puede tener:
+   *   { label, field }              — lee item[field]; label hardcodeado
+   *   { labelKey, label, resolve }  — labelKey resuelve el texto desde `loc`; label es fallback
+   *   { label, resolve }            — llama resolve(item); label hardcodeado
+   * @param {object} item
+   * @param {Array}  fields
+   * @param {object} [loc] — sección del locale 'MTS.DocumentManagerPreviewBasicInfoPanel'
+   */
+  static _buildContent(item, fields, loc) {
+    loc = loc || {};
     var wrap = document.createElement('div');
     wrap.className = 'dm-preview__basic-info';
 
-    fields.forEach(function(field) {
+    fields.forEach(function(fieldDef) {
+      var rawValue;
+      if (typeof fieldDef.resolve === 'function') {
+        try { rawValue = fieldDef.resolve(item); } catch (e) { rawValue = '—'; }
+      } else if (fieldDef.field != null) {
+        rawValue = item[fieldDef.field];
+      }
+
+      var displayValue = (rawValue != null && rawValue !== '') ? String(rawValue) : '—';
+
+      /* Resolver label: localizado > labelKey > label hardcodeado */
+      var labelText = (fieldDef.labelKey && loc[fieldDef.labelKey])
+        || fieldDef.label
+        || fieldDef.labelKey
+        || '';
+
       var row = document.createElement('div');
       row.className = 'dm-preview__info-row';
 
-      var label = document.createElement('span');
-      label.className   = 'dm-preview__info-label';
-      label.textContent = field.label + ':';
+      var labelEl = document.createElement('span');
+      labelEl.className   = 'dm-preview__info-label';
+      labelEl.textContent = labelText + ':';
 
-      var value = document.createElement('span');
-      value.className   = 'dm-preview__info-value';
-      value.textContent = field.value;
-      value.title       = field.value;   // tooltip para valores truncados
+      var valueEl = document.createElement('span');
+      valueEl.className   = 'dm-preview__info-value';
+      valueEl.textContent = displayValue;
+      valueEl.title       = displayValue;   // tooltip para valores truncados
 
-      row.appendChild(label);
-      row.appendChild(value);
+      row.appendChild(labelEl);
+      row.appendChild(valueEl);
       wrap.appendChild(row);
     });
 

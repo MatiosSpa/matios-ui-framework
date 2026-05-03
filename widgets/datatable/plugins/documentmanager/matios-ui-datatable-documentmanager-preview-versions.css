@@ -1,0 +1,125 @@
+/* ============================================================
+   MATIOS UI — MTS.DocumentManagerPreviewVersionsPanel
+   Estilos del panel lateral de versiones del documento.
+
+   Requiere: matios-ui-datatable-documentmanager-preview.css
+             (usa la animación dm-preview-shimmer definida ahí)
+   ============================================================ */
+
+
+/* ============================================================
+   1. CONTENEDOR PRINCIPAL — dm-versions
+   ============================================================ */
+
+.dm-versions {
+  display: flex;
+  flex-direction: column;
+}
+
+.dm-versions__list {
+  padding: 4px 0;
+}
+
+.dm-versions__empty {
+  margin: 16px;
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-muted);
+}
+
+
+/* ============================================================
+   2. FILA DE VERSIÓN
+   ============================================================ */
+
+.dm-versions__item {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-2) var(--mts-space-4);
+  cursor: pointer;
+  transition: background var(--mts-transition-fast);
+}
+
+.dm-versions__item:hover {
+  background: var(--mts-bg-surface-2);
+}
+
+.dm-versions__item--active {
+  background: color-mix(in srgb, var(--mts-color-primary) 8%, transparent);
+}
+
+.dm-versions__item:focus-visible {
+  outline: 2px solid var(--mts-color-primary);
+  outline-offset: -2px;
+}
+
+.dm-versions__badge-wrap {
+  flex-shrink: 0;
+}
+
+.dm-versions__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dm-versions__name {
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-medium);
+  color: var(--mts-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dm-versions__meta {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dm-versions__current-wrap {
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   3. SKELETON
+   ============================================================ */
+
+.dm-versions__skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-2) var(--mts-space-4);
+}
+
+.dm-versions__skeleton-badge {
+  width: 34px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: var(--mts-radius-sm);
+  background: var(--mts-bg-surface-2);
+  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
+}
+
+.dm-versions__skeleton-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dm-versions__skeleton-line {
+  height: 10px;
+  border-radius: var(--mts-radius-sm);
+  background: var(--mts-bg-surface-2);
+  animation: dm-preview-shimmer 1.5s ease-in-out infinite;
+}
+
+.dm-versions__skeleton-line--name { width: 70%; }
+.dm-versions__skeleton-line--meta { width: 48%; animation-delay: 0.1s; }

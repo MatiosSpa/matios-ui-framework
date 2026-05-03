@@ -227,7 +227,7 @@ MTS.DocumentManagerContextMenuPlugin = class DocumentManagerContextMenuPlugin {
      ITEMS BASE — archivo
   ---------------------------------------------------------- */
   _fileItems(contextItem, items) {
-    const loc       = this._dm?._table?._cfg?.locale?.dm?.ctx ?? {}
+    const loc       = this._dm?._table?._cfg?.locale?.['MTS.DocumentManagerContextMenuPlugin'] ?? {}
     const allLocked = items.every(i => i.locked)
     return [
       { label: loc.view     ?? 'Ver',       icon: 'eye',      action: () => this._emit('onView',          contextItem) },
@@ -244,7 +244,7 @@ MTS.DocumentManagerContextMenuPlugin = class DocumentManagerContextMenuPlugin {
      ITEMS BASE — carpeta
   ---------------------------------------------------------- */
   _folderItems(contextItem, items) {
-    const loc = this._dm?._table?._cfg?.locale?.dm?.ctx ?? {}
+    const loc = this._dm?._table?._cfg?.locale?.['MTS.DocumentManagerContextMenuPlugin'] ?? {}
     return [
       { label: loc.open   ?? 'Abrir',     icon: 'folder-open', action: () => {
           this._dm._navigateTo(contextItem.id, contextItem.name)
