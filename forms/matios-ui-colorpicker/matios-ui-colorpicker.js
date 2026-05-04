@@ -18,8 +18,9 @@ MTS.ColorPicker = class MtsColorPicker {
    * @param {boolean}  options.showPresets Muestra paleta â€” default: true
    * @param {boolean}  options.showSliders Muestra sliders HSL â€” default: true
    * @param {boolean}  options.showInput         Muestra input de texto â€” default: true
-   * @param {boolean}  options.showFormatSwitch  Muestra botÃ³n para cambiar hex/rgb/hsl â€” default: true
-   * @param {boolean}  options.inline      Siempre visible (sin trigger) â€” default: false
+   * @param {boolean}  options.showFormatSwitch  Muestra botón para cambiar hex/rgb/hsl — default: true
+   * @param {boolean}  options.showTriggerText   Muestra el valor hex/rgb/hsl en el trigger — default: true
+   * @param {boolean}  options.inline      Siempre visible (sin trigger) — default: false
    * @param {string}   options.size        'sm'|'md'|'lg' â€” default: 'md'
    * @param {boolean}  options.disabled
    * @param {function} options.onChange    ({ hex, value, formatted }) => {}
@@ -70,10 +71,13 @@ MTS.ColorPicker = class MtsColorPicker {
     // Show hex input / Mostrar input hex
     this.showInput = options.showInput ?? true;
 
-    // Show format switch button (hex/rgb/hsl) / Mostrar botÃ³n de formato
+    // Show format switch button (hex/rgb/hsl) / Mostrar botón de formato
     this.showFormatSwitch = options.showFormatSwitch ?? true;
 
-    // Always visible, no trigger button / Siempre visible, sin botÃ³n trigger
+    // Show hex/rgb/hsl text in trigger / Muestra el valor en el trigger
+    this.showTriggerText = options.showTriggerText ?? true;
+
+    // Always visible, no trigger button / Siempre visible, sin botón trigger
     this.inline = options.inline ?? false;
 
     // Size: 'sm' | 'md' | 'lg' / TamaÃ±o
@@ -151,17 +155,18 @@ MTS.ColorPicker = class MtsColorPicker {
       swatch.className = 'mts-colorpicker__swatch';
       swatch.style.background = this._hex;
 
-      const valText = document.createElement('span');
-      valText.className = 'mts-colorpicker__val';
-      valText.textContent = this._formatOutput();
-      this._valText = valText;
-
       const chevron = document.createElement('span');
       chevron.className = 'mts-colorpicker__chevron';
       chevron.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
 
       triggerWrap.appendChild(swatch);
-      triggerWrap.appendChild(valText);
+      if (this.showTriggerText) {
+        const valText = document.createElement('span');
+        valText.className = 'mts-colorpicker__val';
+        valText.textContent = this._formatOutput();
+        this._valText = valText;
+        triggerWrap.appendChild(valText);
+      }
       triggerWrap.appendChild(chevron);
 
       if (!this.disabled) {
