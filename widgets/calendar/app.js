@@ -620,6 +620,7 @@ function buildEventForm(){
     showInput:        true,
     showPresets:      true,
     showFormatSwitch: false,
+    showTriggerText:  false,
     format:           'hex',
     value:            se.color || '#3b82f6',
     presets: [
