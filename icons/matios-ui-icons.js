@@ -250,6 +250,7 @@ const ICONS = {
   'toggle-left':  { o: `<rect x="1" y="5" width="22" height="14" rx="7"/><circle cx="8" cy="12" r="3" fill="currentColor" stroke="none"/>` },
   'toggle-right': { o: `<rect x="1" y="5" width="22" height="14" rx="7"/><circle cx="16" cy="12" r="3" fill="currentColor" stroke="none"/>` },
   'tool':         { o: `<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>` },
+  'palette':      { o: `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8z"/><circle cx="6.5" cy="11.5" r="1.25" fill="currentColor" stroke="none"/><circle cx="9.5" cy="7.5" r="1.25" fill="currentColor" stroke="none"/><circle cx="14.5" cy="7.5" r="1.25" fill="currentColor" stroke="none"/><circle cx="17.5" cy="11.5" r="1.25" fill="currentColor" stroke="none"/>` },
 
   /* ── EDICIÓN / TEXTO ─────────────────────────────────── */
   'bold':         { o: `<path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>` },
