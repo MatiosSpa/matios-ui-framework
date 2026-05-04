@@ -32,6 +32,7 @@
 <link rel="stylesheet" href="../../navigation/matios-ui-menu/matios-ui-menu.css">
 <link rel="stylesheet" href="../../navigation/matios-ui-statusbar/matios-ui-statusbar.css">
 <link rel="stylesheet" href="../../navigation/matios-ui-breadcrumb/matios-ui-breadcrumb.css">
+<link rel="stylesheet" href="../../navigation/matios-ui-dropdown/matios-ui-dropdown.css">
 
 <!-- Display -->
 <link rel="stylesheet" href="../../display/matios-ui-kpicard/matios-ui-kpicard.css">
@@ -118,6 +119,7 @@
 <script src="../../navigation/matios-ui-menu/matios-ui-menu.js"></script>
 <script src="../../navigation/matios-ui-statusbar/matios-ui-statusbar.js"></script>
 <script src="../../navigation/matios-ui-breadcrumb/matios-ui-breadcrumb.js"></script>
+<script src="../../navigation/matios-ui-dropdown/matios-ui-dropdown.js"></script>
 <script src="../../display/matios-ui-kpicard/matios-ui-kpicard.js"></script>
 <script src="../../display/matios-ui-card/matios-ui-card.js"></script>
 <script src="../../display/matios-ui-timeline/matios-ui-timeline.js"></script>
@@ -137,22 +139,22 @@
    DATOS FALSOS
    ============================================================ */
 
-var CLIENTES = [
+const CLIENTES = [
   'Ana Torres','Luis Herrera','María Gómez','Carlos Ríos','Paula Vargas',
   'Diego Morales','Sofía Castro','Andrés Ruiz','Valentina Ortiz','Matías Peña',
   'Camila Soto','Sebastián Díaz','Isabella Flores','Emilio Reyes','Natalia Vega',
   'Rodrigo Campos','Fernanda Luna','Javier Mendoza','Daniela Aguirre','Tomás Silva',
 ];
 
-var PRODUCTOS = [
+const PRODUCTOS = [
   'Laptop Pro 15"','Monitor UltraWide','Teclado Mecánico','Mouse Inalámbrico','Auriculares BT',
   'Webcam HD','Hub USB-C','SSD 1TB','RAM 32GB','Silla Ergonómica',
   'Escritorio Ajustable','Micrófono Condensador','Luz de Ring','Cable HDMI 4K','Impresora Láser',
 ];
 
-var ESTADOS = ['Pendiente','En proceso','Entregado','Cancelado'];
+const ESTADOS = ['Pendiente','En proceso','Entregado','Cancelado'];
 
-var ESTADO_VARIANT = {
+const ESTADO_VARIANT = {
   'Pendiente':   'warning',
   'En proceso':  'primary',
   'Entregado':   'success',
@@ -160,44 +162,38 @@ var ESTADO_VARIANT = {
 };
 
 function seededRand(seed) {
-  var x = Math.sin(seed + 1) * 10000;
+  const x = Math.sin(seed + 1) * 10000;
   return x - Math.floor(x);
 }
 
 function buildOrders() {
-  var rows  = [];
-  var base  = new Date(2026, 3, 1);
-  var i, r, r2, r3, r4, r5, d, mm, dd, fecha;
-  for (i = 0; i < 80; i++) {
-    r  = seededRand(i * 7  + 3);
-    r2 = seededRand(i * 11 + 5);
-    r3 = seededRand(i * 13 + 7);
-    r4 = seededRand(i * 17 + 9);
-    r5 = seededRand(i * 19 + 11);
-    d  = new Date(base.getTime() + Math.floor(r5 * 32) * 86400000);
-    mm = String(d.getMonth() + 1).padStart(2, '0');
-    dd = String(d.getDate()).padStart(2, '0');
-    fecha = dd + '/' + mm + '/' + d.getFullYear();
+  const rows = [];
+  const base = new Date(2026, 3, 1);
+  for (let i = 0; i < 80; i++) {
+    const r5   = seededRand(i * 19 + 11);
+    const d    = new Date(base.getTime() + Math.floor(r5 * 32) * 86400000);
+    const mm   = String(d.getMonth() + 1).padStart(2, '0');
+    const dd   = String(d.getDate()).padStart(2, '0');
     rows.push({
       id:       '#' + String(1000 + i).padStart(4, '0'),
-      cliente:  CLIENTES[Math.floor(r  * CLIENTES.length)],
-      producto: PRODUCTOS[Math.floor(r2 * PRODUCTOS.length)],
-      total:    '$' + (Math.floor(r3 * 9800) + 200).toLocaleString('es-CL'),
-      estado:   ESTADOS[Math.floor(r4 * ESTADOS.length)],
-      fecha:    fecha,
+      cliente:  CLIENTES[Math.floor(seededRand(i * 7  + 3) * CLIENTES.length)],
+      producto: PRODUCTOS[Math.floor(seededRand(i * 11 + 5) * PRODUCTOS.length)],
+      total:    '$' + (Math.floor(seededRand(i * 13 + 7) * 9800) + 200).toLocaleString('es-CL'),
+      estado:   ESTADOS[Math.floor(seededRand(i * 17 + 9) * ESTADOS.length)],
+      fecha:    dd + '/' + mm + '/' + d.getFullYear(),
     });
   }
   return rows;
 }
 
-var ORDERS = buildOrders();
+const ORDERS = buildOrders();
 
 /* ============================================================
    SIDENAV + MENU
    (antes que Shell para que _syncClasses no borre grid-area)
    ============================================================ */
 
-var navMenu = new MTS.Menu({
+const navMenu = new MTS.Menu({
   active: 'dashboard',
   items: [
     { key: 'dashboard',     label: 'Dashboard',     icon: 'mts-icon-bar-chart-2' },
@@ -222,49 +218,50 @@ new MTS.SideNav('#nav', {
 });
 
 /* ============================================================
-   TOPBAR
+   TOPBAR — slot end con MTS.Button + MTS.Badge + MTS.Avatar
    (antes que Shell — _build() reemplaza className)
    ============================================================ */
 
-var topbarEndEl = document.createElement('div');
+const topbarEndEl = document.createElement('div');
 topbarEndEl.className = 'mts-d-flex mts-align-items--center mts-gap-2';
 
 /* Botón modo */
-var modeBtn = document.createElement('button');
-modeBtn.id = 'btn-mode-toggle';
-modeBtn.className = 'mts-btn mts-btn--ghost mts-btn--icon';
-modeBtn.title = 'Cambiar modo';
-var modeIcon = document.createElement('i');
-modeIcon.id = 'mode-icon';
-modeIcon.className = 'mts-icon mts-icon-sun';
-modeBtn.appendChild(modeIcon);
-topbarEndEl.appendChild(modeBtn);
+const modeBtnEl = document.createElement('button');
+modeBtnEl.id    = 'btn-mode-toggle';
+modeBtnEl.title = 'Cambiar modo';
+new MTS.Button(modeBtnEl, {
+  variant:  'ghost',
+  iconOnly: true,
+  iconLeft: '<i class="mts-icon mts-icon-sun"></i>',
+});
+topbarEndEl.appendChild(modeBtnEl);
 
 /* Notificaciones */
-var notifWrap = document.createElement('div');
-notifWrap.className = 'mts-d-inline-flex mts-align-items--center';
+const notifWrap = document.createElement('div');
+notifWrap.className    = 'mts-d-inline-flex mts-align-items--center';
 notifWrap.style.position = 'relative';
 
-var notifBtn = document.createElement('button');
-notifBtn.id = 'btn-notifications';
-notifBtn.className = 'mts-btn mts-btn--ghost mts-btn--icon';
-notifBtn.title = 'Notificaciones';
-var bellIcon = document.createElement('i');
-bellIcon.className = 'mts-icon mts-icon-bell';
-notifBtn.appendChild(bellIcon);
-notifWrap.appendChild(notifBtn);
+const notifBtnEl = document.createElement('button');
+notifBtnEl.id    = 'btn-notifications';
+notifBtnEl.title = 'Notificaciones';
+new MTS.Button(notifBtnEl, {
+  variant:  'ghost',
+  iconOnly: true,
+  iconLeft: '<i class="mts-icon mts-icon-bell"></i>',
+});
+notifWrap.appendChild(notifBtnEl);
 
-var notifDot = document.createElement('span');
-notifDot.className = 'mts-badge mts-badge--dot mts-badge--danger';
-notifDot.style.cssText = 'position:absolute;top:6px;right:6px;border:2px solid var(--mts-bg-surface);pointer-events:none';
-notifWrap.appendChild(notifDot);
+const notifDotEl = document.createElement('span');
+new MTS.Badge(notifDotEl, { dot: true, variant: 'danger' });
+notifDotEl.style.cssText = 'position:absolute;top:6px;right:6px;border:2px solid var(--mts-bg-surface);pointer-events:none';
+notifWrap.appendChild(notifDotEl);
 topbarEndEl.appendChild(notifWrap);
 
-/* Avatar */
-var avatarTrigger = document.createElement('div');
-avatarTrigger.id = 'topbar-avatar-wrap';
+/* Avatar trigger */
+const avatarTrigger = document.createElement('div');
+avatarTrigger.id         = 'topbar-avatar-wrap';
 avatarTrigger.style.cssText = 'cursor:pointer;border-radius:50%';
-avatarTrigger.title = 'Mi cuenta';
+avatarTrigger.title      = 'Mi cuenta';
 topbarEndEl.appendChild(avatarTrigger);
 
 new MTS.Topbar('#tb', {
@@ -273,9 +270,9 @@ new MTS.Topbar('#tb', {
 });
 
 /* Avatar en el slot end */
-var avatarWrap = document.getElementById('topbar-avatar-wrap');
+const avatarWrap = document.getElementById('topbar-avatar-wrap');
 if (avatarWrap) {
-  var avatarEl = document.createElement('div');
+  const avatarEl = document.createElement('div');
   avatarWrap.appendChild(avatarEl);
   new MTS.Avatar(avatarEl, {
     name:   'Carlos Méndez',
@@ -310,264 +307,104 @@ new MTS.Shell('#shell', {
 });
 
 /* ============================================================
-   DROPDOWNS — usuario y notificaciones
+   DROPDOWNS — MTS.Dropdown
+   (después de Shell para que los triggers estén en el DOM)
    ============================================================ */
 
-var _activeDd = null;
+new MTS.Dropdown(notifBtnEl, {
+  position: 'bottom-end',
+  items: [
+    {
+      id:    'n1',
+      label: 'Pedido #1047 entregado',
+      icon:  '<i class="mts-icon mts-icon-check-circle"></i>',
+      onClick: function() { MTS.Toast.show({ message: 'Pedido #1047 entregado', variant: 'success', duration: 2000 }); },
+    },
+    {
+      id:    'n2',
+      label: 'Nuevo usuario: Rodrigo Campos',
+      icon:  '<i class="mts-icon mts-icon-user-plus"></i>',
+      onClick: function() { MTS.Toast.show({ message: 'Nuevo usuario registrado', variant: 'info', duration: 2000 }); },
+    },
+    {
+      id:    'n3',
+      label: 'Pedido #1044 cancelado',
+      icon:  '<i class="mts-icon mts-icon-x-circle"></i>',
+      onClick: function() { MTS.Toast.show({ message: 'Pedido #1044 cancelado', variant: 'danger', duration: 2000 }); },
+    },
+    {
+      id:    'n4',
+      label: 'Pago recibido de Luis Herrera',
+      icon:  '<i class="mts-icon mts-icon-dollar-sign"></i>',
+      onClick: function() { MTS.Toast.show({ message: 'Pago procesado correctamente', variant: 'success', duration: 2000 }); },
+    },
+    {
+      id:    'n5',
+      label: 'Reporte mensual generado',
+      icon:  '<i class="mts-icon mts-icon-file-text"></i>',
+      onClick: function() { MTS.Toast.show({ message: 'Reporte listo para descargar', variant: 'info', duration: 2000 }); },
+    },
+    { divider: true },
+    {
+      id:    'ver-todas',
+      label: 'Ver todas las notificaciones',
+      onClick: function() { MTS.Toast.show({ message: 'Centro de notificaciones en construcción.', variant: 'info', duration: 2500 }); },
+    },
+  ],
+});
 
-function closeDd() {
-  if (_activeDd && _activeDd.parentNode) {
-    _activeDd.parentNode.removeChild(_activeDd);
-  }
-  _activeDd = null;
-}
+new MTS.Dropdown(avatarTrigger, {
+  position: 'bottom-end',
+  items: [
+    {
+      id:    'perfil',
+      label: 'Mi perfil',
+      icon:  '<i class="mts-icon mts-icon-user"></i>',
+      onClick: function() { MTS.Toast.show({ message: 'Mi perfil — en construcción.', variant: 'info', duration: 2000 }); },
+    },
+    {
+      id:    'config',
+      label: 'Configuración',
+      icon:  '<i class="mts-icon mts-icon-settings"></i>',
+      onClick: function() { MTS.Toast.show({ message: 'Configuración — en construcción.', variant: 'info', duration: 2000 }); },
+    },
+    {
+      id:    'ayuda',
+      label: 'Ayuda',
+      icon:  '<i class="mts-icon mts-icon-help-circle"></i>',
+      onClick: function() { MTS.Toast.show({ message: 'Ayuda — en construcción.', variant: 'info', duration: 2000 }); },
+    },
+    { divider: true },
+    {
+      id:    'logout',
+      label: 'Cerrar sesión',
+      icon:  '<i class="mts-icon mts-icon-log-out"></i>',
+      danger: true,
+      onClick: function() { MTS.Toast.show({ message: 'Sesión cerrada.', variant: 'warning', duration: 2500 }); },
+    },
+  ],
+});
 
-function positionDd(dd, triggerEl) {
-  var rect = triggerEl.getBoundingClientRect();
-  var ddW  = dd.offsetWidth || 240;
-  var left = rect.right - ddW;
-  if (left < 8) left = 8;
-  if (left + ddW > window.innerWidth - 8) left = window.innerWidth - ddW - 8;
-  dd.style.top  = (rect.bottom + 6) + 'px';
-  dd.style.left = left + 'px';
-}
+/* ── Toggle modo oscuro/claro ───────────────────────────── */
 
-function openDd(dd, triggerEl) {
-  if (_activeDd === dd) { closeDd(); return; }
-  closeDd();
-  document.body.appendChild(dd);
-  _activeDd = dd;
-  positionDd(dd, triggerEl);
-}
-
-/* Cierra al hacer click fuera */
 document.addEventListener('click', function(e) {
-  if (!_activeDd) return;
-  var trigger = document.getElementById('topbar-avatar-wrap');
-  var bell    = document.getElementById('btn-notifications');
-  if (
-    _activeDd.contains(e.target) ||
-    (trigger && trigger.contains(e.target)) ||
-    (bell    && bell.contains(e.target))
-  ) return;
-  closeDd();
-}, true);
-
-/* ── Estilos inline compartidos para los dropdowns ─── */
-var DD_PANEL_CSS = 'position:fixed;z-index:9999;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg,12px);box-shadow:0 8px 32px rgba(0,0,0,.14);overflow:hidden';
-var DD_ITEM_CSS  = 'padding:10px 16px;font-size:13px;cursor:pointer;transition:background .12s';
-
-function ddHover(el) {
-  el.addEventListener('mouseenter', function() { el.style.background = 'var(--mts-bg-surface-2)'; });
-  el.addEventListener('mouseleave', function() { el.style.background = ''; });
-}
-
-/* ── Usuario dropdown ───────────────────────────────── */
-
-function buildUserDd() {
-  var dd = document.createElement('div');
-  dd.style.cssText = DD_PANEL_CSS + ';width:230px';
-
-  /* Header */
-  var head = document.createElement('div');
-  head.className = 'mts-d-flex mts-align-items--center mts-gap-2 mts-p-4';
-  head.style.borderBottom = '1px solid var(--mts-border-color)';
-
-  var avatarInner = document.createElement('div');
-  new MTS.Avatar(avatarInner, { name: 'Carlos Méndez', size: 'sm' });
-  head.appendChild(avatarInner);
-
-  var info = document.createElement('div');
-  info.className = 'mts-flex--1';
-  info.style.minWidth = '0';
-
-  var nameEl = document.createElement('div');
-  nameEl.style.cssText = 'font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
-  nameEl.textContent = 'Carlos Méndez';
-
-  var emailEl = document.createElement('div');
-  emailEl.style.cssText = 'font-size:11px;color:var(--mts-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
-  emailEl.textContent = 'carlos@acmecorp.com';
-
-  info.appendChild(nameEl);
-  info.appendChild(emailEl);
-  head.appendChild(info);
-  dd.appendChild(head);
-
-  /* Ítems */
-  var USER_ITEMS = [
-    { icon: 'mts-icon-user',        label: 'Mi perfil' },
-    { icon: 'mts-icon-settings',    label: 'Configuración' },
-    { icon: 'mts-icon-help-circle', label: 'Ayuda' },
-  ];
-
-  USER_ITEMS.forEach(function(it) {
-    var item = document.createElement('div');
-    item.className = 'mts-d-flex mts-align-items--center mts-gap-2';
-    item.style.cssText = DD_ITEM_CSS + ';color:var(--mts-text-primary)';
-    ddHover(item);
-
-    var icon = document.createElement('i');
-    icon.className = 'mts-icon ' + it.icon;
-    icon.style.cssText = 'font-size:16px;color:var(--mts-text-muted);flex-shrink:0';
-
-    var label = document.createElement('span');
-    label.textContent = it.label;
-
-    item.appendChild(icon);
-    item.appendChild(label);
-    item.addEventListener('click', function() {
-      closeDd();
-      MTS.Toast.show({ message: it.label + ' — en construcción.', variant: 'info', duration: 2000 });
-    });
-    dd.appendChild(item);
-  });
-
-  /* Divider */
-  var divider = document.createElement('div');
-  divider.style.cssText = 'height:1px;background:var(--mts-border-color);margin:4px 0';
-  dd.appendChild(divider);
-
-  /* Cerrar sesión */
-  var logout = document.createElement('div');
-  logout.className = 'mts-d-flex mts-align-items--center mts-gap-2';
-  logout.style.cssText = DD_ITEM_CSS + ';color:var(--mts-color-danger,#ef4444)';
-  ddHover(logout);
-
-  var logoutIcon = document.createElement('i');
-  logoutIcon.className = 'mts-icon mts-icon-log-out';
-  logoutIcon.style.cssText = 'font-size:16px;color:var(--mts-color-danger,#ef4444);flex-shrink:0';
-  var logoutLabel = document.createElement('span');
-  logoutLabel.textContent = 'Cerrar sesión';
-  logout.appendChild(logoutIcon);
-  logout.appendChild(logoutLabel);
-  logout.addEventListener('click', function() {
-    closeDd();
-    MTS.Toast.show({ message: 'Sesión cerrada.', variant: 'warning', duration: 2500 });
-  });
-  dd.appendChild(logout);
-
-  MTS.Icon.initAll(dd);
-  return dd;
-}
-
-/* ── Notificaciones dropdown ────────────────────────── */
-
-var NOTIFS = [
-  { color: 'var(--mts-color-success,#22c55e)', msg: 'Pedido #1047 entregado',          time: 'Hace 5 min'   },
-  { color: 'var(--mts-color-primary,#6366f1)', msg: 'Nuevo usuario: Rodrigo Campos',   time: 'Hace 18 min'  },
-  { color: 'var(--mts-color-danger,#ef4444)',  msg: 'Pedido #1044 cancelado',          time: 'Hace 42 min'  },
-  { color: 'var(--mts-color-warning,#f59e0b)', msg: 'Pago recibido de Luis Herrera',   time: 'Hace 1 hora'  },
-  { color: 'var(--mts-color-info,#0ea5e9)',    msg: 'Reporte mensual generado',        time: 'Hace 2 horas' },
-];
-
-function buildNotifDd() {
-  var dd = document.createElement('div');
-  dd.style.cssText = DD_PANEL_CSS + ';width:300px';
-
-  /* Header */
-  var head = document.createElement('div');
-  head.className = 'mts-d-flex mts-align-items--center mts-justify-content--between';
-  head.style.cssText = 'padding:12px 16px;border-bottom:1px solid var(--mts-border-color)';
-
-  var title = document.createElement('span');
-  title.style.cssText = 'font-weight:600;font-size:14px;color:var(--mts-text-primary)';
-  title.textContent = 'Notificaciones';
-
-  var clearBtn = document.createElement('button');
-  clearBtn.className = 'mts-btn mts-btn--ghost mts-btn--xs';
-  clearBtn.textContent = 'Limpiar';
-
-  head.appendChild(title);
-  head.appendChild(clearBtn);
-  dd.appendChild(head);
-
-  /* Items */
-  NOTIFS.forEach(function(n) {
-    var item = document.createElement('div');
-    item.className = 'mts-d-flex mts-align-items--start mts-gap-2';
-    item.style.cssText = 'padding:11px 16px;border-bottom:1px solid var(--mts-border-color);cursor:pointer;transition:background .12s';
-    ddHover(item);
-
-    var dot = document.createElement('span');
-    dot.style.cssText = 'width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;background:' + n.color;
-
-    var body = document.createElement('div');
-    body.className = 'mts-flex--1';
-    body.style.minWidth = '0';
-
-    var msg = document.createElement('div');
-    msg.style.cssText = 'font-size:13px;font-weight:500;color:var(--mts-text-primary)';
-    msg.textContent = n.msg;
-
-    var time = document.createElement('div');
-    time.style.cssText = 'font-size:11px;color:var(--mts-text-muted);margin-top:2px';
-    time.textContent = n.time;
-
-    body.appendChild(msg);
-    body.appendChild(time);
-    item.appendChild(dot);
-    item.appendChild(body);
-    item.addEventListener('click', function() {
-      closeDd();
-      MTS.Toast.show({ message: n.msg, variant: 'info', duration: 2500 });
-    });
-    dd.appendChild(item);
-  });
-
-  /* Footer */
-  var footer = document.createElement('div');
-  footer.style.cssText = 'padding:10px 16px;text-align:center;border-top:1px solid var(--mts-border-color)';
-
-  var verTodas = document.createElement('button');
-  verTodas.className = 'mts-btn mts-btn--ghost mts-btn--sm';
-  verTodas.textContent = 'Ver todas las notificaciones';
-  verTodas.addEventListener('click', function() {
-    closeDd();
-    MTS.Toast.show({ message: 'Centro de notificaciones en construcción.', variant: 'info', duration: 2500 });
-  });
-  footer.appendChild(verTodas);
-  dd.appendChild(footer);
-
-  return dd;
-}
-
-/* ── Listeners ──────────────────────────────────────── */
-
-/* Toggle de modo oscuro/claro */
-document.addEventListener('click', function(e) {
-  var btn = e.target.closest('#btn-mode-toggle');
-  if (!btn) return;
-  var html   = document.documentElement;
-  var isDark = html.getAttribute('data-mts-mode') === 'dark';
+  if (!e.target.closest('#btn-mode-toggle')) return;
+  const html   = document.documentElement;
+  const isDark = html.getAttribute('data-mts-mode') === 'dark';
   html.setAttribute('data-mts-mode', isDark ? 'light' : 'dark');
-  var icon = document.getElementById('mode-icon');
-  if (icon) {
-    icon.className = isDark ? 'mts-icon mts-icon-sun' : 'mts-icon mts-icon-moon';
-  }
+  const icon = modeBtnEl.querySelector('.mts-icon');
+  if (icon) icon.className = 'mts-icon ' + (isDark ? 'mts-icon-sun' : 'mts-icon-moon');
 });
 
-/* Avatar → user dropdown */
-document.addEventListener('click', function(e) {
-  var wrap = e.target.closest('#topbar-avatar-wrap');
-  if (!wrap) return;
-  openDd(buildUserDd(), wrap);
-});
+/* ── Botón Exportar ─────────────────────────────────────── */
 
-/* Bell → notifications dropdown */
-document.addEventListener('click', function(e) {
-  var btn = e.target.closest('#btn-notifications');
-  if (!btn) return;
-  openDd(buildNotifDd(), btn);
-});
-
-/* Botón Exportar */
 document.addEventListener('click', function(e) {
   if (!e.target.closest('#btn-export')) return;
   MTS.Toast.show({ message: 'Exportando datos...', variant: 'success', duration: 2500 });
 });
 
-/* Botón Nuevo pedido */
+/* ── Botón Nuevo pedido ─────────────────────────────────── */
+
 document.addEventListener('click', function(e) {
   if (!e.target.closest('#btn-new-order')) return;
   MTS.Toast.show({ message: 'Formulario de nuevo pedido en construcción.', variant: 'info', duration: 3000 });
@@ -647,17 +484,17 @@ new MTS.DataTable({
       sortable: true,
       width:    '130px',
       render:   function(v) {
-        var variant = ESTADO_VARIANT[v] || 'default';
+        const variant = ESTADO_VARIANT[v] || 'default';
         return MTS.Badge.html(v, variant, 'sm', 'pill');
       },
     },
     { field: 'fecha', label: 'Fecha', sortable: true, width: '110px' },
   ],
   dataSource: function(query) {
-    var src = ORDERS.slice();
+    let src = ORDERS.slice();
 
     if (query.search) {
-      var s = query.search.toLowerCase();
+      const s = query.search.toLowerCase();
       src = src.filter(function(row) {
         return (
           row.id.toLowerCase().indexOf(s) >= 0      ||
@@ -669,17 +506,17 @@ new MTS.DataTable({
     }
 
     if (query.orderBy) {
-      var dir = query.orderDir === 'desc' ? -1 : 1;
+      const dir = query.orderDir === 'desc' ? -1 : 1;
       src.sort(function(a, b) {
-        var av = (a[query.orderBy] || '').toString();
-        var bv = (b[query.orderBy] || '').toString();
+        const av = (a[query.orderBy] || '').toString();
+        const bv = (b[query.orderBy] || '').toString();
         return dir * av.localeCompare(bv, 'es');
       });
     }
 
-    var total = src.length;
-    var start = (query.pageNumber - 1) * query.pageSize;
-    var page  = src.slice(start, start + query.pageSize);
+    const total = src.length;
+    const start = (query.pageNumber - 1) * query.pageSize;
+    const page  = src.slice(start, start + query.pageSize);
 
     return Promise.resolve({ data: page, total: total });
   },
@@ -695,7 +532,7 @@ new MTS.DataTable({
    CARD TOP PRODUCTOS
    ============================================================ */
 
-var TOP_PRODUCTS = [
+const TOP_PRODUCTS = [
   { name: 'Laptop Pro 15"',    units: 34, pct: 100 },
   { name: 'Monitor UltraWide', units: 28, pct: 82  },
   { name: 'Teclado Mecánico',  units: 22, pct: 65  },
@@ -703,29 +540,29 @@ var TOP_PRODUCTS = [
   { name: 'Auriculares BT',    units: 15, pct: 44  },
 ];
 
-var PROGRESS_VARIANTS = ['primary', 'success', 'info', 'warning', 'danger'];
+const PROGRESS_VARIANTS = ['primary', 'success', 'info', 'warning', 'danger'];
 
-var productBodyEl = document.createElement('div');
+const productBodyEl = document.createElement('div');
 TOP_PRODUCTS.forEach(function(p, idx) {
-  var row = document.createElement('div');
+  const row = document.createElement('div');
   if (idx < TOP_PRODUCTS.length - 1) row.className = 'mts-mb-3';
 
-  var labelRow = document.createElement('div');
+  const labelRow = document.createElement('div');
   labelRow.className = 'mts-d-flex mts-justify-content--between mts-mb-1';
   labelRow.style.cssText = 'font-size:13px;color:var(--mts-text-secondary)';
 
-  var nameSpan = document.createElement('span');
+  const nameSpan = document.createElement('span');
   nameSpan.style.cssText = 'font-weight:500;color:var(--mts-text-primary)';
   nameSpan.textContent = p.name;
 
-  var unitSpan = document.createElement('span');
+  const unitSpan = document.createElement('span');
   unitSpan.textContent = p.units + ' uds.';
 
   labelRow.appendChild(nameSpan);
   labelRow.appendChild(unitSpan);
   row.appendChild(labelRow);
 
-  var progressContainer = document.createElement('div');
+  const progressContainer = document.createElement('div');
   new MTS.Progress(progressContainer, {
     type:    'bar',
     value:   p.pct,
@@ -751,7 +588,7 @@ document.querySelector('#card-products .mts-card__body').appendChild(productBody
    CARD ACTIVIDAD RECIENTE
    ============================================================ */
 
-var activityBodyEl = document.createElement('div');
+const activityBodyEl = document.createElement('div');
 new MTS.Timeline(activityBodyEl, {
   direction: 'vertical',
   align:     'left',
@@ -774,7 +611,7 @@ new MTS.Card('#card-activity', {
 });
 document.querySelector('#card-activity .mts-card__body').appendChild(activityBodyEl);
 
-/* ── Iconos finales ─────────────────────────────────── */
+/* ── Iconos finales ─────────────────────────────────────── */
 MTS.Icon.initAll();
 
 </script>
