@@ -51,6 +51,7 @@ function ts() {
   return `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
 }
 function fmt(n) { return String(n??0).padStart(2,'0'); }
+function _esc(s) { return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 function buildSlots(startTime, endTime, slotMin) {
   const [sh,sm]=startTime.split(':').map(Number),[eh,em]=endTime.split(':').map(Number);
   const startM=sh*60+(sm||0),endM=eh*60+(em||0);
@@ -264,10 +265,10 @@ function openMoreEventsModal(detail) {
       <span style="width:10px;height:10px;border-radius:50%;background:${ev.color||'var(--mts-color-primary)'};flex-shrink:0"></span>
       <div style="flex:1;min-width:0">
         <div style="font-size:13px;font-weight:600;color:var(--mts-text-primary);
-          white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${ev.title}</div>
+          white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${_esc(ev.title)}</div>
         <div style="font-size:11px;color:var(--mts-text-muted);margin-top:1px">${hora}</div>
       </div>
-      ${ev.data?.tipo?`<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;background:var(--mts-bg-surface-2);color:var(--mts-text-muted)">${ev.data.tipo}</span>`:''}`;
+      ${ev.data?.tipo?`<span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;background:var(--mts-bg-surface-2);color:var(--mts-text-muted)">${_esc(ev.data.tipo)}</span>`:''}`;
 
     row.addEventListener('click', () => { modal.hide(); openEventDetail(ev); });
     body.appendChild(row);
@@ -790,16 +791,16 @@ function openEventDetail(event){
   body.innerHTML=`
     <div class="event-detail__color-bar" style="background:${colorInfo.hex}"></div>
     ${event.allDay?`<div style="padding:6px 10px;background:var(--mts-color-primary-light);border-radius:6px;font-size:12px;color:var(--mts-color-primary);font-weight:600;display:flex;align-items:center;gap:6px">${ic('calendar')} Todo el día</div>`:''}
-    <div class="event-detail__row">${ic('calendar')}<div><div class="event-detail__key">Día</div><div class="event-detail__val">${dayName}${event.date && event.date!=='0000-00-00' ? ` <span style="color:var(--mts-text-muted);font-size:12px">${event.date}</span>` : ''}</div></div></div>
-    ${!event.allDay?`<div class="event-detail__row">${ic('clock')}<div><div class="event-detail__key">Horario</div><div class="event-detail__val">${startStr} – ${endStr} <span style="color:var(--mts-text-muted);font-size:12px">(${durStr})</span></div></div></div>`:''}
-    ${event.data?.tipo?`<div class="event-detail__row">${ic('tag')}<div><div class="event-detail__key">Tipo</div><div class="event-detail__val">${event.data.tipo}</div></div></div>`:''}
-    ${event.data?.responsable?`<div class="event-detail__row">${ic('user')}<div><div class="event-detail__key">Responsable</div><div class="event-detail__val">${event.data.responsable}</div></div></div>`:''}
-    ${(event.data?.invitados?.length)?`<div class="event-detail__row">${ic('users')}<div><div class="event-detail__key">Invitados</div><div class="event-detail__val">${event.data.invitados.map(function(i){return i.name;}).join(', ')}</div></div></div>`:''}
-    ${(event.data?.sala||event.data?.lugar)?`<div class="event-detail__row">${ic('map-pin')}<div><div class="event-detail__key">Lugar</div><div class="event-detail__val">${event.data.sala||event.data.lugar}</div></div></div>`:''}
-    ${event.data?.asistentes?`<div class="event-detail__row">${ic('users')}<div><div class="event-detail__key">Asistentes</div><div class="event-detail__val">${event.data.asistentes}</div></div></div>`:''}
-    ${event.data?.notas?`<div class="event-detail__row">${ic('file-text')}<div><div class="event-detail__key">Notas</div><div class="event-detail__val">${event.data.notas}</div></div></div>`:''}
+    <div class="event-detail__row">${ic('calendar')}<div><div class="event-detail__key">Día</div><div class="event-detail__val">${_esc(dayName)}${event.date && event.date!=='0000-00-00' ? ` <span style="color:var(--mts-text-muted);font-size:12px">${_esc(event.date)}</span>` : ''}</div></div></div>
+    ${!event.allDay?`<div class="event-detail__row">${ic('clock')}<div><div class="event-detail__key">Horario</div><div class="event-detail__val">${_esc(startStr)} – ${_esc(endStr)} <span style="color:var(--mts-text-muted);font-size:12px">(${_esc(durStr)})</span></div></div></div>`:''}
+    ${event.data?.tipo?`<div class="event-detail__row">${ic('tag')}<div><div class="event-detail__key">Tipo</div><div class="event-detail__val">${_esc(event.data.tipo)}</div></div></div>`:''}
+    ${event.data?.responsable?`<div class="event-detail__row">${ic('user')}<div><div class="event-detail__key">Responsable</div><div class="event-detail__val">${_esc(event.data.responsable)}</div></div></div>`:''}
+    ${(event.data?.invitados?.length)?`<div class="event-detail__row">${ic('users')}<div><div class="event-detail__key">Invitados</div><div class="event-detail__val">${event.data.invitados.map(function(i){return _esc(i.name);}).join(', ')}</div></div></div>`:''}
+    ${(event.data?.sala||event.data?.lugar)?`<div class="event-detail__row">${ic('map-pin')}<div><div class="event-detail__key">Lugar</div><div class="event-detail__val">${_esc(event.data.sala||event.data.lugar)}</div></div></div>`:''}
+    ${event.data?.asistentes?`<div class="event-detail__row">${ic('users')}<div><div class="event-detail__key">Asistentes</div><div class="event-detail__val">${_esc(String(event.data.asistentes))}</div></div></div>`:''}
+    ${event.data?.notas?`<div class="event-detail__row">${ic('file-text')}<div><div class="event-detail__key">Notas</div><div class="event-detail__val">${_esc(event.data.notas)}</div></div></div>`:''}
     ${event.locked?`<div style="padding:8px 12px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:6px;font-size:12px;color:var(--mts-color-warning);display:flex;align-items:center;gap:6px">${ic('lock')} Evento bloqueado — solo lectura</div>`:''}
-    <div style="font-size:11px;color:var(--mts-text-muted);margin-top:4px">ID: ${event.id}</div>`;
+    <div style="font-size:11px;color:var(--mts-text-muted);margin-top:4px">ID: ${_esc(String(event.id))}</div>`;
   const modal=new MTS.Modal({title:event.title,size:'sm',body,
     buttons:event.locked?[
       {label:'Cerrar', icon:MTS.Icon.get('close',14), variant:'ghost', onClick:()=>modal.hide()},

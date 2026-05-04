@@ -240,7 +240,7 @@ MTS.RichTextEditor = class MtsRichTextEditor {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'mts-rte__btn';
-          btn.innerHTML = item.icon;
+          btn.innerHTML = (typeof MTS !== 'undefined' && MTS.Sanitize) ? MTS.Sanitize.html(item.icon) : item.icon;
           btn.title = item.title || '';
           btn.addEventListener('mousedown', (e) => { e.preventDefault(); this._saveRange(); });
           btn.addEventListener('click', (e) => { e.preventDefault(); item.exec(); this._updateToolbarState(); this._updateStatus(); });
