@@ -616,13 +616,12 @@ function buildEventForm(){
   /* Color picker — MTS.ColorPicker inline, solo paleta */
   const _colorPicker = new MTS.ColorPicker(c.querySelector('#ef-col'), {
     inline:           true,
-    showSliders:      true,
+    showSliders:      false,
     showInput:        true,
     showPresets:      true,
     showFormatSwitch: false,
     format:           'hex',
     value:            se.color || '#3b82f6',
-    presets:          COLOR_OPTIONS.map(o=>o.hex),
   });
   return {container:c, colorPicker:_colorPicker};
 }
