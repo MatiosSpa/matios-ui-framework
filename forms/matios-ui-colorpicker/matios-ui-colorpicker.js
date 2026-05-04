@@ -14,7 +14,7 @@ MTS.ColorPicker = class MtsColorPicker {
    * @param {string}   options.value       Color inicial (hex) â€” default: '#4f8eff'
    * @param {string}   options.label       Etiqueta
    * @param {string}   options.format      'hex'|'rgb'|'hsl' â€” default: 'hex'
-   * @param {Array}    options.presets     Colores de la paleta â€” default: 14 colores
+   * @param {Array}    options.presets     Colores de la paleta (máx. 20) — default: 20 colores
    * @param {boolean}  options.showPresets Muestra paleta â€” default: true
    * @param {boolean}  options.showSliders Muestra sliders HSL â€” default: true
    * @param {boolean}  options.showInput         Muestra input de texto â€” default: true
@@ -50,14 +50,16 @@ MTS.ColorPicker = class MtsColorPicker {
     this.format = options.format || 'hex';
 
     // Preset color palette / Paleta de colores preset
-    // Default: 25 colors — 5 families × 5 tones (navy→sky, petrol→mint, crimson→blush, amber, violet)
-    this.presets = options.presets || [
-      '#0a1628','#0d2b6b','#1d4ed8','#3b82f6','#93c5fd',
-      '#0c2a35','#115e59','#0f766e','#10b981','#6ee7b7',
-      '#3b0000','#7f0000','#cc0000','#e53935','#ffcdd2',
-      '#451a00','#92400e','#f59e0b','#ffb737','#fde68a',
-      '#2e1065','#4c1d95','#7c3aed','#a78bfa','#ddd6fe',
+    // Max 20 colors (4 rows × 5 cols). Excess colors are silently trimmed.
+    // Default: 20 colors — 5 families × 4 tones (navy→sky, petrol→mint, crimson, amber, violet)
+    const _rawPresets = options.presets || [
+      '#0a1628','#0d2b6b','#1d4ed8','#3b82f6',
+      '#0c2a35','#115e59','#0f766e','#10b981',
+      '#3b0000','#7f0000','#cc0000','#e53935',
+      '#451a00','#92400e','#f59e0b','#ffb737',
+      '#2e1065','#4c1d95','#7c3aed','#a78bfa',
     ];
+    this.presets = _rawPresets.slice(0, 20);
 
     // Show preset palette / Mostrar paleta de presets
     this.showPresets = options.showPresets ?? true;
