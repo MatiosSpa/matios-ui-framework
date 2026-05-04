@@ -416,10 +416,9 @@ async function buildCalendar(events){
       log('click',`RightClick celda: ${detail.day}`,detail.beginTime||'');
     },
 
-    /* Rango */
+    /* Rango — solo log; addEventRequest se dispara automáticamente después */
     onRangeSelect: ({detail})=>{
       log('click',`Rango: módulo ${detail.startSlotIndex+1}–${detail.endSlotIndex+1}`,`día ${detail.dayNumber}`);
-      openNewEventModal();
     },
 
     /* Drag & drop */
