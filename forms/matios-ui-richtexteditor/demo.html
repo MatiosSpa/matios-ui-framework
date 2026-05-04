@@ -108,7 +108,34 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
 }
 
 makeSection("tabs-s1", "<div id=\"rte-full\"></div><div class=\"result-box\" id=\"rte-result\" style=\"min-height:40px;max-height:80px;overflow:auto;font-family:var(--mts-font-mono);font-size:11px;white-space:pre-wrap\">\u2014 el HTML aparece aqu\u00ed al escribir \u2014</div>", "<div id=\"my-editor\"></div>\n\n<script>\n  new MTS.RichTextEditor('#my-editor', {\n    placeholder: 'Start writing...',\n    height:      '240px',\n    // Fires on every content change / Se dispara al cambiar el contenido\n    onChange: (html) => console.log(html),\n    onFocus:  ()     => console.log('focused'),\n    onBlur:   (html) => console.log('blurred'),\n  });\n<\/script>", "const rte = new MTS.RichTextEditor('#my-editor', {\n  // Initial HTML / HTML inicial\n  value: '<p>Hello <strong>world</strong></p>',\n\n  placeholder: 'Start writing...',\n  height:      '240px',\n  minHeight:   '120px',\n\n  // All toolbar groups / Todos los grupos de toolbar\n  toolbar: ['format', 'lists', 'align', 'insert', 'clean'],\n\n  // Fires on every change / Se dispara en cada cambio\n  onChange: (html) => console.log(html),\n  onFocus:  ()     => console.log('focused'),\n  onBlur:   (html) => console.log('blurred'),\n});");
-makeSection("tabs-s2", "<div class=\"demo-grid\">\n<div>\n<div class=\"demo-label\" style=\"margin-bottom:6px\">Solo formato / Format only</div>\n<div id=\"rte-format\"></div>\n</div>\n<div>\n<div class=\"demo-label\" style=\"margin-bottom:6px\">Formato + listas / Format + lists</div>\n<div id=\"rte-lists\"></div>\n</div>\n</div>", "<div id=\"editor-format\"></div>\n\n<script>\n  new MTS.RichTextEditor('#editor-format', {\n    toolbar: ['format', 'clean'],\n    height:  '160px',\n  });\n<\/script>", "// Toolbar groups: 'format' | 'lists' | 'align' | 'insert' | 'clean' | 'table'\n// Grupos de toolbar\n\n// Format only / Solo formato\nnew MTS.RichTextEditor('#editor-format', {\n  toolbar: ['format', 'clean'],\n  height:  '160px',\n});\n\n// Format + lists / Formato + listas\nnew MTS.RichTextEditor('#editor-lists', {\n  toolbar: ['format', 'lists', 'clean'],\n  height:  '160px',\n});");
+var preview_s2 =
+  '<div style="height:100%;display:flex;flex-direction:column">' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;min-height:0">' +
+      '<div style="display:flex;flex-direction:column">' +
+        '<div class="demo-label" style="margin-bottom:6px">Solo formato / Format only</div>' +
+        '<div id="rte-format" style="flex:1;min-height:0"></div>' +
+      '</div>' +
+      '<div style="display:flex;flex-direction:column">' +
+        '<div class="demo-label" style="margin-bottom:6px">Formato + listas / Format + lists</div>' +
+        '<div id="rte-lists" style="flex:1;min-height:0"></div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+var js_s2 =
+  "// Toolbar groups: 'format' | 'lists' | 'align' | 'insert' | 'clean' | 'table'\n\n" +
+  "// Format only / Solo formato\n" +
+  "new MTS.RichTextEditor('#editor-format', {\n" +
+  "  toolbar: ['format', 'clean'],\n" +
+  "  height:  '100%',\n" +
+  "});\n\n" +
+  "// Format + lists / Formato + listas\n" +
+  "new MTS.RichTextEditor('#editor-lists', {\n" +
+  "  toolbar: ['format', 'lists', 'clean'],\n" +
+  "  height:  '100%',\n" +
+  "});";
+
+makeSection("tabs-s2", preview_s2, js_s2, null, '420px');
 makeSection("tabs-s3", "<div id=\"rte-api\"></div><div class=\"demo-row\" style=\"margin-top:8px;flex-wrap:wrap\">\n<button class=\"demo-btn-sm\" onclick=\"document.getElementById('rte-api-res').textContent = 'getValue() \u2192 ' + rteApi.getValue()\">getValue()</button>\n<button class=\"demo-btn-sm\" onclick=\"document.getElementById('rte-api-res').textContent = 'getText() \u2192 ' + rteApi.getText()\">getText()</button>\n<button class=\"demo-btn-sm\" onclick=\"rteApi.setValue('&lt;p&gt;Set via &lt;strong&gt;setValue()&lt;/strong&gt;&lt;/p&gt;'); document.getElementById('rte-api-res').textContent = 'setValue() \u2713'\">setValue()</button>\n<button class=\"demo-btn-sm\" onclick=\"rteApi.clear(); document.getElementById('rte-api-res').textContent = 'clear() \u2713'\">clear()</button>\n<button class=\"demo-btn-sm\" onclick=\"rteApi.disable(); document.getElementById('rte-api-res').textContent = 'disable() \u2713'\">disable()</button>\n<button class=\"demo-btn-sm\" onclick=\"rteApi.enable(); document.getElementById('rte-api-res').textContent = 'enable() \u2713'\">enable()</button>\n<button class=\"demo-btn-sm\" onclick=\"rteApi.focus()\">focus()</button>\n</div><div class=\"result-box\" id=\"rte-api-res\">\u2014 usa los botones \u2014</div>", "<div id=\"my-editor\"></div>\n\n<script>\n  const rte = new MTS.RichTextEditor('#my-editor', {\n    value: '<p>Initial content</p>',\n  });\n  rte.getValue()    // \u2192 HTML string\n  rte.getText()     // \u2192 plain text\n  rte.setValue('<p>New content</p>')\n  rte.clear()\n  rte.disable()\n  rte.enable()\n  rte.focus()\n  rte.insertHTML('<strong>inserted</strong>')\n<\/script>", "const rte = new MTS.RichTextEditor('#my-editor', {\n  value: '<p>Initial <em>content</em></p>',\n  onChange: (html) => console.log(html),\n});\n\n// Get HTML / Obtener HTML\nrte.getValue()     // \u2192 '<p>Initial <em>content</em></p>'\n\n// Get plain text / Obtener texto plano\nrte.getText()      // \u2192 'Initial content'\n\n// Set HTML / Establecer HTML\nrte.setValue('<p>New <strong>content</strong></p>')\n\n// Clear / Limpiar\nrte.clear()\n\n// Disable / enable / Deshabilitar / habilitar\nrte.disable()\nrte.enable()\n\n// Insert HTML at cursor / Insertar HTML en el cursor\nrte.insertHTML('<mark>highlighted</mark>')");
 
 var rte1 = new MTS.RichTextEditor('#rte-full', {
@@ -119,10 +146,16 @@ var rte1 = new MTS.RichTextEditor('#rte-full', {
   onChange: function(html){ document.getElementById('rte-result').textContent = html; },
 });
 new MTS.RichTextEditor('#rte-format', {
-  toolbar: ['format','clean'], height: '140px', placeholder: 'Solo formato...', value: '<p>Texto con <strong>negrita</strong> e <em>itálica</em>.</p>',
+  toolbar: ['format', 'clean'],
+  height: '100%',
+  placeholder: 'Solo formato...',
+  value: '<p>Texto con <strong>negrita</strong> e <em>itálica</em>.</p>',
 });
 new MTS.RichTextEditor('#rte-lists', {
-  toolbar: ['format','lists','clean'], height: '140px', placeholder: 'Con listas...', value: '<ul><li>Elemento uno</li><li>Elemento dos</li></ul>',
+  toolbar: ['format', 'lists', 'clean'],
+  height: '100%',
+  placeholder: 'Con listas...',
+  value: '<ul><li>Elemento uno</li><li>Elemento dos</li></ul>',
 });
 var rteApi = new MTS.RichTextEditor('#rte-api', {
   value: '<p>Contenido inicial para probar la <strong>API</strong>.</p>',
