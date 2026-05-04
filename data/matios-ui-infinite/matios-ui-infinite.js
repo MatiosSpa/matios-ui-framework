@@ -150,22 +150,31 @@ MTS.Infinite = class MtsInfinite {
     /* Loader */
     this._loaderEl = document.createElement('div');
     this._loaderEl.className = 'mts-infinite__loader';
-    this._loaderEl.innerHTML = `
-      <span class="mts-infinite__loader-spinner"></span>
-      <span>${this.loaderText}</span>
-    `;
+    const _loaderSpinner = document.createElement('span');
+    _loaderSpinner.className = 'mts-infinite__loader-spinner';
+    const _loaderText = document.createElement('span');
+    _loaderText.textContent = this.loaderText;
+    this._loaderEl.appendChild(_loaderSpinner);
+    this._loaderEl.appendChild(_loaderText);
     this._el.appendChild(this._loaderEl);
 
     /* Empty state */
     this._emptyEl = document.createElement('div');
     this._emptyEl.className = 'mts-infinite__empty';
-    this._emptyEl.innerHTML = `
-      <span class="mts-infinite__empty-icon">${this.emptyState.icon || '📭'}</span>
-      <span class="mts-infinite__empty-title">${this.emptyState.title || 'Sin resultados'}</span>
-      ${this.emptyState.message
-        ? `<span class="mts-infinite__empty-msg">${this.emptyState.message}</span>`
-        : ''}
-    `;
+    const _emptyIcon = document.createElement('span');
+    _emptyIcon.className = 'mts-infinite__empty-icon';
+    _emptyIcon.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.emptyState.icon || '📭') : (this.emptyState.icon || '📭');
+    const _emptyTitle = document.createElement('span');
+    _emptyTitle.className = 'mts-infinite__empty-title';
+    _emptyTitle.textContent = this.emptyState.title || 'Sin resultados';
+    this._emptyEl.appendChild(_emptyIcon);
+    this._emptyEl.appendChild(_emptyTitle);
+    if (this.emptyState.message) {
+      const _emptyMsg = document.createElement('span');
+      _emptyMsg.className = 'mts-infinite__empty-msg';
+      _emptyMsg.textContent = this.emptyState.message;
+      this._emptyEl.appendChild(_emptyMsg);
+    }
     this._el.appendChild(this._emptyEl);
 
     /* End */
@@ -271,7 +280,7 @@ MTS.Infinite = class MtsInfinite {
       if (typeof result === 'string') {
         const wrap = document.createElement('div');
         wrap.className = 'mts-infinite__item';
-        wrap.innerHTML = result;
+        wrap.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(result) : result;
         el = wrap;
       } else if (result instanceof HTMLElement) {
         el = result;
@@ -304,12 +313,17 @@ MTS.Infinite = class MtsInfinite {
   _hideEnd()     { this._endEl.classList.remove('mts-infinite__end--visible'); }
 
   _showError(msg) {
-    this._errorEl.innerHTML = `
-      <span>⚠️ ${msg}</span>
-      <button class="mts-btn mts-btn--ghost mts-btn--xs" onclick="this.closest('.mts-infinite__error').dispatchEvent(new CustomEvent('retry'))">
-        Reintentar
-      </button>
-    `;
+    this._errorEl.innerHTML = '';
+    const _errMsg = document.createElement('span');
+    _errMsg.textContent = '⚠️ ' + msg;
+    const _retryBtn = document.createElement('button');
+    _retryBtn.className = 'mts-btn mts-btn--ghost mts-btn--xs';
+    _retryBtn.textContent = 'Reintentar';
+    _retryBtn.addEventListener('click', function () {
+      _retryBtn.closest('.mts-infinite__error').dispatchEvent(new CustomEvent('retry'));
+    });
+    this._errorEl.appendChild(_errMsg);
+    this._errorEl.appendChild(_retryBtn);
     this._errorEl.classList.add('mts-infinite__error--visible');
     this._errorEl.addEventListener('retry', () => {
       this._hideError();

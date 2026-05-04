@@ -1,1 +1,882 @@
-﻿
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Acme Corp</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- MTS Base & Grid -->
+<link rel="stylesheet" href="../../base/matios-ui-base.css">
+<link rel="stylesheet" href="../../base/matios-ui-grid.css">
+
+<!-- Themes -->
+<link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+<link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+<link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+
+<!-- Icons -->
+<link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+
+<!-- Layout -->
+<link rel="stylesheet" href="../../layout/matios-ui-shell/matios-ui-shell.css">
+
+<!-- Navigation -->
+<link rel="stylesheet" href="../../navigation/matios-ui-topbar/matios-ui-topbar.css">
+<link rel="stylesheet" href="../../navigation/matios-ui-sidenav/matios-ui-sidenav.css">
+<link rel="stylesheet" href="../../navigation/matios-ui-menu/matios-ui-menu.css">
+<link rel="stylesheet" href="../../navigation/matios-ui-statusbar/matios-ui-statusbar.css">
+<link rel="stylesheet" href="../../navigation/matios-ui-breadcrumb/matios-ui-breadcrumb.css">
+
+<!-- Display -->
+<link rel="stylesheet" href="../../display/matios-ui-kpicard/matios-ui-kpicard.css">
+<link rel="stylesheet" href="../../display/matios-ui-card/matios-ui-card.css">
+<link rel="stylesheet" href="../../display/matios-ui-timeline/matios-ui-timeline.css">
+<link rel="stylesheet" href="../../display/matios-ui-avatar/matios-ui-avatar.css">
+
+<!-- Overlays -->
+<link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+<link rel="stylesheet" href="../../overlays/matios-ui-progress/matios-ui-progress.css">
+<link rel="stylesheet" href="../../overlays/matios-ui-toast/matios-ui-toast.css">
+
+<!-- Forms -->
+<link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+
+<!-- DataTable y sus dependencias CSS -->
+<link rel="stylesheet" href="../../data/matios-ui-table/matios-ui-table.css">
+<link rel="stylesheet" href="../../forms/matios-ui-input/matios-ui-input.css">
+<link rel="stylesheet" href="../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+<link rel="stylesheet" href="../../forms/matios-ui-select/matios-ui-select.css">
+<link rel="stylesheet" href="../../navigation/matios-ui-pagination/matios-ui-pagination.css">
+<link rel="stylesheet" href="../../widgets/datatable/matios-ui-datatable.css">
+
+<style>
+/* ── Reset ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: var(--mts-bg-body); color: var(--mts-text-primary); }
+
+/* ── Shell fill ─────────────────────────────────────── */
+#shell { height: 100vh; }
+
+/* ── Main inner ─────────────────────────────────────── */
+.dash-inner {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* ── Page header ────────────────────────────────────── */
+.dash-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.dash-page-title    { font-size: 22px; font-weight: 700; color: var(--mts-text-primary); line-height: 1.2; }
+.dash-page-subtitle { font-size: 13px; color: var(--mts-text-muted); margin-top: 3px; }
+.dash-page-actions  { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+/* ── Content grid ───────────────────────────────────── */
+.dash-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  align-items: start;
+  min-width: 0;
+}
+
+/* ── Side section ───────────────────────────────────── */
+.dash-side-section { display: flex; flex-direction: column; gap: 16px; }
+
+/* ── Top products ───────────────────────────────────── */
+.dash-product-row { margin-bottom: 12px; }
+.dash-product-row:last-child { margin-bottom: 0; }
+.dash-product-row__label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--mts-text-secondary);
+  margin-bottom: 5px;
+}
+.dash-product-row__name { font-weight: 500; color: var(--mts-text-primary); }
+
+/* ── Topbar end ─────────────────────────────────────── */
+.dash-topbar-end  { display: flex; align-items: center; gap: 6px; }
+.dash-notif-wrap  { position: relative; display: inline-flex; align-items: center; }
+.dash-notif-dot   {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--mts-color-danger, #ef4444);
+  border: 2px solid var(--mts-bg-surface, #fff);
+  pointer-events: none;
+}
+.dash-avatar-btn {
+  cursor: pointer;
+  border-radius: 50%;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition: outline-color 0.15s;
+}
+.dash-avatar-btn:hover { outline-color: var(--mts-color-primary, #6366f1); }
+
+/* ── Dropdowns ──────────────────────────────────────── */
+.dash-dd {
+  position: fixed;
+  z-index: 9999;
+  background: var(--mts-bg-surface);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-lg, 12px);
+  box-shadow: 0 8px 32px rgba(0,0,0,.14);
+  overflow: hidden;
+  min-width: 220px;
+  animation: dash-dd-in .12s ease;
+}
+@keyframes dash-dd-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* User dropdown */
+.dash-dd__user-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--mts-border-color);
+}
+.dash-dd__user-info { flex: 1; min-width: 0; }
+.dash-dd__user-name  { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dash-dd__user-email { font-size: 11px; color: var(--mts-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.dash-dd__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--mts-text-primary);
+  cursor: pointer;
+  transition: background .12s;
+}
+.dash-dd__item:hover { background: var(--mts-bg-surface-2, var(--mts-bg-body)); }
+.dash-dd__item .mts-icon { font-size: 16px; color: var(--mts-text-muted); flex-shrink: 0; }
+.dash-dd__item--danger { color: var(--mts-color-danger, #ef4444); }
+.dash-dd__item--danger .mts-icon { color: var(--mts-color-danger, #ef4444); }
+.dash-dd__divider { height: 1px; background: var(--mts-border-color); margin: 4px 0; }
+
+/* Notifications dropdown */
+.dash-dd--notif { min-width: 300px; }
+.dash-dd__notif-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--mts-border-color);
+}
+.dash-dd__notif-title { font-weight: 600; font-size: 14px; }
+.dash-dd__notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--mts-border-color);
+  cursor: pointer;
+  transition: background .12s;
+}
+.dash-dd__notif-item:hover { background: var(--mts-bg-surface-2, var(--mts-bg-body)); }
+.dash-dd__notif-item:last-of-type { border-bottom: none; }
+.dash-dd__notif-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.dash-dd__notif-body { flex: 1; min-width: 0; }
+.dash-dd__notif-msg  { font-size: 13px; font-weight: 500; color: var(--mts-text-primary); }
+.dash-dd__notif-time { font-size: 11px; color: var(--mts-text-muted); margin-top: 2px; }
+.dash-dd__notif-footer {
+  padding: 10px 16px;
+  text-align: center;
+  border-top: 1px solid var(--mts-border-color);
+}
+</style>
+</head>
+<body>
+
+<!-- ── Shell root ──────────────────────────────────────── -->
+<div id="shell">
+  <div id="tb"></div>
+  <div id="nav"></div>
+  <div id="main" class="mts-shell__main--scroll">
+    <div class="dash-inner">
+
+      <!-- Breadcrumb -->
+      <div id="breadcrumb-el"></div>
+
+      <!-- Page header -->
+      <div class="dash-page-header">
+        <div>
+          <div class="dash-page-title">Dashboard</div>
+          <div class="dash-page-subtitle">Resumen de actividad — mayo 2026</div>
+        </div>
+        <div class="dash-page-actions">
+          <button id="btn-export" class="mts-btn mts-btn--ghost mts-btn--sm">
+            <i class="mts-icon mts-icon-download"></i> Exportar
+          </button>
+          <button id="btn-new-order" class="mts-btn mts-btn--primary mts-btn--sm">
+            <i class="mts-icon mts-icon-plus"></i> Nuevo pedido
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI cards — 4 columnas (3/12 cada una) -->
+      <div class="mts-grid mts-grid--gap-md">
+        <div class="mts-g-col-3" id="kpi-revenue"></div>
+        <div class="mts-g-col-3" id="kpi-users"></div>
+        <div class="mts-g-col-3" id="kpi-orders"></div>
+        <div class="mts-g-col-3" id="kpi-conversion"></div>
+      </div>
+
+      <!-- Contenido: tabla + panel lateral -->
+      <div class="dash-content-grid">
+
+        <!-- Tabla de pedidos -->
+        <div id="orders-table"></div>
+
+        <!-- Panel lateral -->
+        <div class="dash-side-section">
+          <div id="card-products"></div>
+          <div id="card-activity"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div id="sb"></div>
+</div>
+
+<!-- ── Scripts ─────────────────────────────────────────── -->
+<script src="../../icons/matios-ui-icons.js"></script>
+<script src="../../layout/matios-ui-shell/matios-ui-shell.js"></script>
+<script src="../../navigation/matios-ui-topbar/matios-ui-topbar.js"></script>
+<script src="../../navigation/matios-ui-sidenav/matios-ui-sidenav.js"></script>
+<script src="../../navigation/matios-ui-menu/matios-ui-menu.js"></script>
+<script src="../../navigation/matios-ui-statusbar/matios-ui-statusbar.js"></script>
+<script src="../../navigation/matios-ui-breadcrumb/matios-ui-breadcrumb.js"></script>
+<script src="../../display/matios-ui-kpicard/matios-ui-kpicard.js"></script>
+<script src="../../display/matios-ui-card/matios-ui-card.js"></script>
+<script src="../../display/matios-ui-timeline/matios-ui-timeline.js"></script>
+<script src="../../display/matios-ui-avatar/matios-ui-avatar.js"></script>
+<script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+<script src="../../overlays/matios-ui-progress/matios-ui-progress.js"></script>
+<script src="../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+<script src="../../forms/matios-ui-input/matios-ui-input.js"></script>
+<script src="../../forms/matios-ui-select/matios-ui-select.js"></script>
+<script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+<script src="../../widgets/datatable/matios-ui-datatable.js"></script>
+<script src="../../widgets/datatable/matios-ui-datatable-i18n.js"></script>
+
+<script>
+
+/* ============================================================
+   DATOS FALSOS
+   ============================================================ */
+
+var CLIENTES = [
+  'Ana Torres','Luis Herrera','María Gómez','Carlos Ríos','Paula Vargas',
+  'Diego Morales','Sofía Castro','Andrés Ruiz','Valentina Ortiz','Matías Peña',
+  'Camila Soto','Sebastián Díaz','Isabella Flores','Emilio Reyes','Natalia Vega',
+  'Rodrigo Campos','Fernanda Luna','Javier Mendoza','Daniela Aguirre','Tomás Silva',
+];
+
+var PRODUCTOS = [
+  'Laptop Pro 15"','Monitor UltraWide','Teclado Mecánico','Mouse Inalámbrico','Auriculares BT',
+  'Webcam HD','Hub USB-C','SSD 1TB','RAM 32GB','Silla Ergonómica',
+  'Escritorio Ajustable','Micrófono Condensador','Luz de Ring','Cable HDMI 4K','Impresora Láser',
+];
+
+var ESTADOS = ['Pendiente','En proceso','Entregado','Cancelado'];
+
+var ESTADO_VARIANT = {
+  'Pendiente':   'warning',
+  'En proceso':  'primary',
+  'Entregado':   'success',
+  'Cancelado':   'danger',
+};
+
+function seededRand(seed) {
+  var x = Math.sin(seed + 1) * 10000;
+  return x - Math.floor(x);
+}
+
+function buildOrders() {
+  var rows  = [];
+  var base  = new Date(2026, 3, 1);
+  var i, r, r2, r3, r4, r5, d, mm, dd, fecha;
+  for (i = 0; i < 80; i++) {
+    r  = seededRand(i * 7  + 3);
+    r2 = seededRand(i * 11 + 5);
+    r3 = seededRand(i * 13 + 7);
+    r4 = seededRand(i * 17 + 9);
+    r5 = seededRand(i * 19 + 11);
+    d  = new Date(base.getTime() + Math.floor(r5 * 32) * 86400000);
+    mm = String(d.getMonth() + 1).padStart(2, '0');
+    dd = String(d.getDate()).padStart(2, '0');
+    fecha = dd + '/' + mm + '/' + d.getFullYear();
+    rows.push({
+      id:       '#' + String(1000 + i).padStart(4, '0'),
+      cliente:  CLIENTES[Math.floor(r  * CLIENTES.length)],
+      producto: PRODUCTOS[Math.floor(r2 * PRODUCTOS.length)],
+      total:    '$' + (Math.floor(r3 * 9800) + 200).toLocaleString('es-CL'),
+      estado:   ESTADOS[Math.floor(r4 * ESTADOS.length)],
+      fecha:    fecha,
+    });
+  }
+  return rows;
+}
+
+var ORDERS = buildOrders();
+
+/* ============================================================
+   SIDENAV + MENU
+   (antes que Shell para que _syncClasses no borre grid-area)
+   ============================================================ */
+
+var navMenu = new MTS.Menu({
+  active: 'dashboard',
+  items: [
+    { key: 'dashboard',     label: 'Dashboard',     icon: 'mts-icon-bar-chart-2' },
+    { key: 'usuarios',      label: 'Usuarios',      icon: 'mts-icon-users' },
+    { key: 'productos',     label: 'Productos',      icon: 'mts-icon-package' },
+    { key: 'pedidos',       label: 'Pedidos',        icon: 'mts-icon-shopping-cart', badge: '48' },
+    { key: 'reportes',      label: 'Reportes',       icon: 'mts-icon-file-text' },
+    { key: 'sep-1',         divider: true },
+    { key: 'configuracion', label: 'Configuración',  icon: 'mts-icon-settings' },
+  ],
+  onClick: function(item) {
+    MTS.Toast.show({ message: 'Navegando a: ' + item.label, variant: 'info', duration: 2000 });
+  },
+});
+
+new MTS.SideNav('#nav', {
+  menu: navMenu,
+  brand: {
+    title:    'Acme Corp',
+    subtitle: 'Plataforma Admin',
+  },
+});
+
+/* ============================================================
+   TOPBAR
+   (antes que Shell — _build() reemplaza className)
+   ============================================================ */
+
+var topbarEndEl = document.createElement('div');
+topbarEndEl.className = 'dash-topbar-end';
+topbarEndEl.innerHTML =
+  '<button id="btn-mode-toggle" class="mts-btn mts-btn--ghost mts-btn--icon" title="Cambiar modo">' +
+    '<i id="mode-icon" class="mts-icon mts-icon-sun"></i>' +
+  '</button>' +
+  '<div class="dash-notif-wrap">' +
+    '<button id="btn-notifications" class="mts-btn mts-btn--ghost mts-btn--icon" title="Notificaciones">' +
+      '<i class="mts-icon mts-icon-bell"></i>' +
+    '</button>' +
+    '<span class="dash-notif-dot"></span>' +
+  '</div>' +
+  '<div id="topbar-avatar-wrap" class="dash-avatar-btn" title="Mi cuenta"></div>';
+
+new MTS.Topbar('#tb', {
+  brand:  { title: 'Acme Corp' },
+  end:    topbarEndEl,
+  shadow: false,
+});
+
+/* Avatar en el slot end */
+var avatarWrap = document.getElementById('topbar-avatar-wrap');
+if (avatarWrap) {
+  var avatarEl = document.createElement('div');
+  avatarWrap.appendChild(avatarEl);
+  new MTS.Avatar(avatarEl, {
+    name:   'Carlos Méndez',
+    size:   'sm',
+    status: 'online',
+  });
+}
+
+/* ============================================================
+   STATUSBAR
+   (antes que Shell — _syncClasses() reemplaza className)
+   ============================================================ */
+
+new MTS.StatusBar('#sb', {
+  variant: 'default',
+  start:   '<i class="mts-icon mts-icon-git-branch"></i>&nbsp;production',
+  center:  '<span class="mts-badge mts-badge--success mts-badge--xs mts-badge--dot"></span>&nbsp;En línea',
+  end:     '<span class="mts-badge mts-badge--primary mts-badge--xs mts-badge--square">PROD</span>&nbsp;&nbsp;v1.0.0',
+});
+
+/* ============================================================
+   SHELL — siempre al último para que classList.add()
+   no sea pisado por las inicializaciones anteriores
+   ============================================================ */
+
+new MTS.Shell('#shell', {
+  topbar:    '#tb',
+  sidenav:   '#nav',
+  main:      '#main',
+  statusbar: '#sb',
+  height:    '100vh',
+});
+
+/* ============================================================
+   DROPDOWNS — usuario y notificaciones
+   ============================================================ */
+
+var _activeDd = null;
+
+function closeDd() {
+  if (_activeDd && _activeDd.parentNode) {
+    _activeDd.parentNode.removeChild(_activeDd);
+  }
+  _activeDd = null;
+}
+
+function positionDd(dd, triggerEl) {
+  var rect  = triggerEl.getBoundingClientRect();
+  var ddW   = dd.offsetWidth || 240;
+  var left  = rect.right - ddW;
+  if (left < 8) left = 8;
+  if (left + ddW > window.innerWidth - 8) left = window.innerWidth - ddW - 8;
+  dd.style.top  = (rect.bottom + 6) + 'px';
+  dd.style.left = left + 'px';
+}
+
+function openDd(dd, triggerEl) {
+  if (_activeDd === dd) { closeDd(); return; }
+  closeDd();
+  document.body.appendChild(dd);
+  _activeDd = dd;
+  positionDd(dd, triggerEl);
+}
+
+/* Cierra al hacer click fuera */
+document.addEventListener('click', function(e) {
+  if (!_activeDd) return;
+  var trigger = document.getElementById('topbar-avatar-wrap');
+  var bell    = document.getElementById('btn-notifications');
+  if (
+    _activeDd.contains(e.target) ||
+    (trigger && trigger.contains(e.target)) ||
+    (bell    && bell.contains(e.target))
+  ) return;
+  closeDd();
+}, true);
+
+/* ── Usuario dropdown ───────────────────────────────── */
+
+function buildUserDd() {
+  var dd = document.createElement('div');
+  dd.className = 'dash-dd';
+  dd.style.width = '230px';
+
+  /* Header con avatar + nombre */
+  var head = document.createElement('div');
+  head.className = 'dash-dd__user-head';
+
+  var avatarInner = document.createElement('div');
+  new MTS.Avatar(avatarInner, { name: 'Carlos Méndez', size: 'sm' });
+  head.appendChild(avatarInner);
+
+  var info = document.createElement('div');
+  info.className = 'dash-dd__user-info';
+  info.innerHTML =
+    '<div class="dash-dd__user-name">Carlos Méndez</div>' +
+    '<div class="dash-dd__user-email">carlos@acmecorp.com</div>';
+  head.appendChild(info);
+  dd.appendChild(head);
+
+  /* Ítems */
+  var USER_ITEMS = [
+    { icon: 'mts-icon-user',      label: 'Mi perfil' },
+    { icon: 'mts-icon-settings',  label: 'Configuración' },
+    { icon: 'mts-icon-help-circle', label: 'Ayuda' },
+  ];
+
+  USER_ITEMS.forEach(function(it) {
+    var item = document.createElement('div');
+    item.className = 'dash-dd__item';
+    item.innerHTML =
+      '<i class="mts-icon ' + it.icon + '"></i>' +
+      '<span>' + it.label + '</span>';
+    item.addEventListener('click', function() {
+      closeDd();
+      MTS.Toast.show({ message: it.label + ' — en construcción.', variant: 'info', duration: 2000 });
+    });
+    dd.appendChild(item);
+  });
+
+  /* Divider + logout */
+  var divider = document.createElement('div');
+  divider.className = 'dash-dd__divider';
+  dd.appendChild(divider);
+
+  var logout = document.createElement('div');
+  logout.className = 'dash-dd__item dash-dd__item--danger';
+  logout.innerHTML = '<i class="mts-icon mts-icon-log-out"></i><span>Cerrar sesión</span>';
+  logout.addEventListener('click', function() {
+    closeDd();
+    MTS.Toast.show({ message: 'Sesión cerrada.', variant: 'warning', duration: 2500 });
+  });
+  dd.appendChild(logout);
+
+  MTS.Icon.initAll(dd);
+  return dd;
+}
+
+/* ── Notificaciones dropdown ────────────────────────── */
+
+var NOTIFS = [
+  { color: 'var(--mts-color-success,#22c55e)', msg: 'Pedido #1047 entregado',          time: 'Hace 5 min'    },
+  { color: 'var(--mts-color-primary,#6366f1)', msg: 'Nuevo usuario: Rodrigo Campos',    time: 'Hace 18 min'   },
+  { color: 'var(--mts-color-danger,#ef4444)',  msg: 'Pedido #1044 cancelado',           time: 'Hace 42 min'   },
+  { color: 'var(--mts-color-warning,#f59e0b)', msg: 'Pago recibido de Luis Herrera',    time: 'Hace 1 hora'   },
+  { color: 'var(--mts-color-info,#0ea5e9)',    msg: 'Reporte mensual generado',         time: 'Hace 2 horas'  },
+];
+
+function buildNotifDd() {
+  var dd = document.createElement('div');
+  dd.className = 'dash-dd dash-dd--notif';
+
+  /* Header */
+  var head = document.createElement('div');
+  head.className = 'dash-dd__notif-head';
+  head.innerHTML =
+    '<span class="dash-dd__notif-title">Notificaciones</span>' +
+    '<button id="btn-clear-notifs" class="mts-btn mts-btn--ghost mts-btn--xs">Limpiar</button>';
+  dd.appendChild(head);
+
+  /* Items */
+  NOTIFS.forEach(function(n) {
+    var item = document.createElement('div');
+    item.className = 'dash-dd__notif-item';
+
+    var dot = document.createElement('span');
+    dot.className = 'dash-dd__notif-dot';
+    dot.style.background = n.color;
+
+    var body = document.createElement('div');
+    body.className = 'dash-dd__notif-body';
+    body.innerHTML =
+      '<div class="dash-dd__notif-msg">'  + n.msg  + '</div>' +
+      '<div class="dash-dd__notif-time">' + n.time + '</div>';
+
+    item.appendChild(dot);
+    item.appendChild(body);
+    item.addEventListener('click', function() {
+      closeDd();
+      MTS.Toast.show({ message: n.msg, variant: 'info', duration: 2500 });
+    });
+    dd.appendChild(item);
+  });
+
+  /* Footer */
+  var footer = document.createElement('div');
+  footer.className = 'dash-dd__notif-footer';
+  var verTodas = document.createElement('button');
+  verTodas.className = 'mts-btn mts-btn--ghost mts-btn--sm';
+  verTodas.textContent = 'Ver todas las notificaciones';
+  verTodas.addEventListener('click', function() {
+    closeDd();
+    MTS.Toast.show({ message: 'Centro de notificaciones en construcción.', variant: 'info', duration: 2500 });
+  });
+  footer.appendChild(verTodas);
+  dd.appendChild(footer);
+
+  return dd;
+}
+
+/* ── Listeners ──────────────────────────────────────── */
+
+/* Toggle de modo oscuro/claro */
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('#btn-mode-toggle');
+  if (!btn) return;
+  var html   = document.documentElement;
+  var isDark = html.getAttribute('data-mts-mode') === 'dark';
+  html.setAttribute('data-mts-mode', isDark ? 'light' : 'dark');
+  var icon = document.getElementById('mode-icon');
+  if (icon) {
+    icon.className = isDark ? 'mts-icon mts-icon-sun' : 'mts-icon mts-icon-moon';
+  }
+});
+
+/* Avatar → user dropdown */
+document.addEventListener('click', function(e) {
+  var wrap = e.target.closest('#topbar-avatar-wrap');
+  if (!wrap) return;
+  openDd(buildUserDd(), wrap);
+});
+
+/* Bell → notifications dropdown */
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('#btn-notifications');
+  if (!btn) return;
+  openDd(buildNotifDd(), btn);
+});
+
+/* Botón Exportar */
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#btn-export')) return;
+  MTS.Toast.show({ message: 'Exportando datos...', variant: 'success', duration: 2500 });
+});
+
+/* Botón Nuevo pedido */
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#btn-new-order')) return;
+  MTS.Toast.show({ message: 'Formulario de nuevo pedido en construcción.', variant: 'info', duration: 3000 });
+});
+
+MTS.Icon.initAll();
+
+/* ============================================================
+   BREADCRUMB
+   ============================================================ */
+
+new MTS.Breadcrumb('#breadcrumb-el', {
+  items: [
+    { label: 'Inicio' },
+    { label: 'Dashboard' },
+  ],
+});
+
+/* ============================================================
+   KPI CARDS
+   ============================================================ */
+
+new MTS.KPICard('#kpi-revenue', {
+  label:      'Ingresos del mes',
+  value:      '$24.580',
+  trend:      12.4,
+  trendLabel: 'vs mes anterior',
+  sparkline:  [14200, 16800, 15400, 18200, 19600, 21000, 20400, 22800, 24580],
+  variant:    'default',
+  icon:       '<i class="mts-icon mts-icon-trending-up"></i>',
+});
+
+new MTS.KPICard('#kpi-users', {
+  label:      'Usuarios activos',
+  value:      '1.284',
+  trend:      8.2,
+  trendLabel: 'vs mes anterior',
+  sparkline:  [980, 1020, 1080, 1100, 1150, 1200, 1180, 1240, 1284],
+  variant:    'default',
+  icon:       '<i class="mts-icon mts-icon-users"></i>',
+});
+
+new MTS.KPICard('#kpi-orders', {
+  label:      'Pedidos hoy',
+  value:      '48',
+  trend:      -3.1,
+  trendLabel: 'vs ayer',
+  sparkline:  [55, 62, 58, 49, 51, 60, 57, 50, 48],
+  variant:    'default',
+  icon:       '<i class="mts-icon mts-icon-shopping-cart"></i>',
+});
+
+new MTS.KPICard('#kpi-conversion', {
+  label:      'Tasa de conversión',
+  value:      '3.24%',
+  trend:      0.8,
+  trendLabel: 'vs semana anterior',
+  sparkline:  [2.8, 2.9, 3.0, 2.95, 3.1, 3.15, 3.08, 3.20, 3.24],
+  variant:    'default',
+  icon:       '<i class="mts-icon mts-icon-percent"></i>',
+});
+
+/* ============================================================
+   DATA TABLE — PEDIDOS
+   ============================================================ */
+
+new MTS.DataTable({
+  elementId: 'orders-table',
+  columns: [
+    { field: 'id',       label: 'ID',       sortable: true,  align: 'end', width: '90px'  },
+    { field: 'cliente',  label: 'Cliente',  sortable: true                                 },
+    { field: 'producto', label: 'Producto', sortable: true                                 },
+    { field: 'total',    label: 'Total',    sortable: false,               width: '110px'  },
+    {
+      field:   'estado',
+      label:   'Estado',
+      sortable: true,
+      width:   '130px',
+      render:  function(v) {
+        var variant = ESTADO_VARIANT[v] || 'default';
+        return MTS.Badge.html(v, variant, 'sm', 'pill');
+      },
+    },
+    { field: 'fecha', label: 'Fecha', sortable: true, width: '110px' },
+  ],
+  dataSource: function(query) {
+    var src = ORDERS.slice();
+
+    /* Búsqueda */
+    if (query.search) {
+      var s = query.search.toLowerCase();
+      src = src.filter(function(row) {
+        return (
+          row.id.toLowerCase().indexOf(s) >= 0      ||
+          row.cliente.toLowerCase().indexOf(s) >= 0  ||
+          row.producto.toLowerCase().indexOf(s) >= 0 ||
+          row.estado.toLowerCase().indexOf(s) >= 0
+        );
+      });
+    }
+
+    /* Ordenamiento */
+    if (query.orderBy) {
+      var dir = query.orderDir === 'desc' ? -1 : 1;
+      src.sort(function(a, b) {
+        var av = (a[query.orderBy] || '').toString();
+        var bv = (b[query.orderBy] || '').toString();
+        return dir * av.localeCompare(bv, 'es');
+      });
+    }
+
+    /* Paginación */
+    var total = src.length;
+    var start = (query.pageNumber - 1) * query.pageSize;
+    var page  = src.slice(start, start + query.pageSize);
+
+    return Promise.resolve({ data: page, total: total });
+  },
+  rowId:    'id',
+  pageSize: 10,
+  hover:    true,
+  striped:  true,
+  search:   { enabled: true, minChars: 1 },
+  locale:   'es',
+});
+
+/* ============================================================
+   CARD TOP PRODUCTOS
+   ============================================================ */
+
+var TOP_PRODUCTS = [
+  { name: 'Laptop Pro 15"',    units: 34, pct: 100 },
+  { name: 'Monitor UltraWide', units: 28, pct: 82  },
+  { name: 'Teclado Mecánico',  units: 22, pct: 65  },
+  { name: 'Mouse Inalámbrico', units: 19, pct: 56  },
+  { name: 'Auriculares BT',    units: 15, pct: 44  },
+];
+
+var PROGRESS_VARIANTS = ['primary', 'success', 'info', 'warning', 'danger'];
+
+var productBodyEl = document.createElement('div');
+TOP_PRODUCTS.forEach(function(p, idx) {
+  var row = document.createElement('div');
+  row.className = 'dash-product-row';
+
+  var labelRow = document.createElement('div');
+  labelRow.className = 'dash-product-row__label';
+
+  var nameSpan = document.createElement('span');
+  nameSpan.className = 'dash-product-row__name';
+  nameSpan.textContent = p.name;
+
+  var unitSpan = document.createElement('span');
+  unitSpan.textContent = p.units + ' uds.';
+
+  labelRow.appendChild(nameSpan);
+  labelRow.appendChild(unitSpan);
+  row.appendChild(labelRow);
+
+  var progressContainer = document.createElement('div');
+  new MTS.Progress(progressContainer, {
+    type:    'bar',
+    value:   p.pct,
+    variant: PROGRESS_VARIANTS[idx] || 'primary',
+    size:    'sm',
+    rounded: true,
+  });
+  row.appendChild(progressContainer);
+  productBodyEl.appendChild(row);
+});
+
+new MTS.Card('#card-products', {
+  title:   'Top productos',
+  body:    '',
+  variant: 'outlined',
+  actions: [{ label: 'Ver todos', variant: 'ghost', onClick: function() {
+    MTS.Toast.show({ message: 'Sección de productos en construcción.', variant: 'info', duration: 2000 });
+  }}],
+});
+document.querySelector('#card-products .mts-card__body').appendChild(productBodyEl);
+
+/* ============================================================
+   CARD ACTIVIDAD RECIENTE
+   ============================================================ */
+
+var activityBodyEl = document.createElement('div');
+new MTS.Timeline(activityBodyEl, {
+  direction: 'vertical',
+  align:     'left',
+  events: [
+    {
+      id:          'a1',
+      title:       'Pedido #1047 entregado',
+      description: 'Ana Torres recibió su pedido.',
+      date:        'Hace 5 min',
+      color:       'var(--mts-color-success, #22c55e)',
+    },
+    {
+      id:          'a2',
+      title:       'Nuevo usuario registrado',
+      description: 'Rodrigo Campos se registró.',
+      date:        'Hace 18 min',
+      color:       'var(--mts-color-primary, #6366f1)',
+    },
+    {
+      id:          'a3',
+      title:       'Pedido #1044 cancelado',
+      description: 'Sofía Castro canceló el pedido.',
+      date:        'Hace 42 min',
+      color:       'var(--mts-color-danger, #ef4444)',
+    },
+    {
+      id:          'a4',
+      title:       'Pago procesado',
+      description: '$4.200 recibidos de Luis Herrera.',
+      date:        'Hace 1 hora',
+      color:       'var(--mts-color-warning, #f59e0b)',
+    },
+    {
+      id:          'a5',
+      title:       'Reporte mensual generado',
+      description: 'Reporte de abril listo para descargar.',
+      date:        'Hace 2 horas',
+      color:       'var(--mts-color-info, #0ea5e9)',
+    },
+  ],
+});
+
+new MTS.Card('#card-activity', {
+  title:   'Actividad reciente',
+  body:    '',
+  variant: 'outlined',
+  actions: [{ label: 'Ver todo', variant: 'ghost', onClick: function() {
+    MTS.Toast.show({ message: 'Log de actividad en construcción.', variant: 'info', duration: 2000 });
+  }}],
+});
+document.querySelector('#card-activity .mts-card__body').appendChild(activityBodyEl);
+
+/* ── Iconos finales ─────────────────────────────────── */
+MTS.Icon.initAll();
+
+</script>
+</body>
+</html>

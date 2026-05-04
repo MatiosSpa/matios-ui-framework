@@ -1,7 +1,7 @@
 # MTS.Countdown
 
-[EN] Animated countdown timer with three variants, configurable units, custom labels and pause/resume control.
-[ES] Contador regresivo animado con tres variantes, unidades configurables, labels personalizados y control de pause/resume.
+🇬🇧 Animated countdown timer with three variants, configurable units, custom labels and pause/resume control.
+🇪🇸 Contador regresivo animado con tres variantes, unidades configurables, labels personalizados y control de pause/resume.
 
 ---
 
@@ -17,18 +17,18 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `target` | `Date\|string\|number` | — | [EN] Target date (required) / [ES] Fecha objetivo (requerido) |
+| `target` | `Date\|string\|number` | — | 🇬🇧 Target date (required) / 🇪🇸 Fecha objetivo (requerido) |
 | `variant` | `string` | `'blocks'` | `'blocks'` · `'compact'` · `'minimal'` |
-| `showDays` | `boolean` | `true` | [EN] Show days unit / [ES] Mostrar días |
-| `showHours` | `boolean` | `true` | [EN] Show hours unit / [ES] Mostrar horas |
-| `showMins` | `boolean` | `true` | [EN] Show minutes unit / [ES] Mostrar minutos |
-| `showSecs` | `boolean` | `true` | [EN] Show seconds unit / [ES] Mostrar segundos |
-| `separator` | `string` | `':'` | [EN] Separator between blocks / [ES] Separador entre bloques |
-| `labels` | `object` | `{ days, hours, mins, secs }` | [EN] Custom unit labels / [ES] Labels de unidades |
-| `onTick` | `function` | — | [EN] `({ days, hours, mins, secs, total }) => {}` Fires every second / [ES] Se dispara cada segundo |
-| `onComplete` | `function` | — | [EN] Fires when countdown reaches zero / [ES] Se dispara al llegar a cero |
+| `showDays` | `boolean` | `true` | 🇬🇧 Show days unit / 🇪🇸 Mostrar días |
+| `showHours` | `boolean` | `true` | 🇬🇧 Show hours unit / 🇪🇸 Mostrar horas |
+| `showMins` | `boolean` | `true` | 🇬🇧 Show minutes unit / 🇪🇸 Mostrar minutos |
+| `showSecs` | `boolean` | `true` | 🇬🇧 Show seconds unit / 🇪🇸 Mostrar segundos |
+| `separator` | `string` | `':'` | 🇬🇧 Separator between blocks / 🇪🇸 Separador entre bloques |
+| `labels` | `object` | `{ days, hours, mins, secs }` | 🇬🇧 Custom unit labels / 🇪🇸 Labels de unidades |
+| `onTick` | `function` | — | 🇬🇧 `({ days, hours, mins, secs, total }) => {}` Fires every second / 🇪🇸 Se dispara cada segundo |
+| `onComplete` | `function` | — | 🇬🇧 Fires when countdown reaches zero / 🇪🇸 Se dispara al llegar a cero |
 
 ---
 
@@ -119,10 +119,3 @@ el.addEventListener('mts:countdown:complete',  () => console.log('done'));
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] `onTick`/`onComplete` normalized to `.on()`, bilingual docs / [ES] Normalizados a `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release — blocks/compact/minimal, pause/resume / [ES] Versión inicial |

@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
+  <script>
+    (function(){
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else    document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS Navigation — Demo</title>
@@ -14,6 +33,10 @@
   <link rel="stylesheet" href="../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-petrol.css">
   <link rel="stylesheet" href="matios-ui-accordion/matios-ui-accordion.css">
   <link rel="stylesheet" href="../support/demo-shared.css">
   <script src="../support/demo-shared.js"></script>
@@ -23,7 +46,7 @@
   <div class="demo-page demo-page--launcher">
     <div class="demo-header">
       <h1>MTS <span>Navigation</span></h1>
-      <p>tabs · accordion · breadcrumb · stepper · drawer · dropdown · tabbar · pagination · contextmenu · commandpalette · sidenav</p>
+      <p>topbar · tabs · accordion · breadcrumb · stepper · drawer · dropdown · tabbar · pagination · contextmenu · commandpalette · sidenav · statusbar</p>
     </div>
 
     <div id="navigation-launcher" class="demo-launcher"></div>
@@ -31,6 +54,8 @@
 
   <script>
     initGroupLauncher('#navigation-launcher', [
+      { id: 'topbar', component: 'topbar', title: 'MTS.Topbar', subtitle: 'Barra superior para dashboards y apps — brand, slots y sticky', src: 'matios-ui-topbar/demo.html' },
+      { id: 'menu', component: 'menu', title: 'MTS.Menu', subtitle: 'Menú de navegación con n niveles — horizontal en Topbar, árbol en SideNav', src: 'matios-ui-menu/demo.html' },
       { id: 'tabs', component: 'tabs', title: 'MTS.Tabs', subtitle: 'Pestañas underline, pill, card y bordered — horizontal y vertical', src: 'matios-ui-tabs/demo.html' },
       { id: 'accordion', component: 'accordion', title: 'MTS.Accordion', subtitle: 'Secciones expandibles — individual o múltiple', src: 'matios-ui-accordion/demo.html' },
       { id: 'breadcrumb', component: 'breadcrumb', title: 'MTS.Breadcrumb', subtitle: 'Ruta de navegación con separadores, íconos y colapso', src: 'matios-ui-breadcrumb/demo.html' },
@@ -42,7 +67,8 @@
       { id: 'pagination', component: 'pagination', title: 'MTS.Pagination', subtitle: 'Paginación con resumen, page size y salto a página', src: 'matios-ui-pagination/demo.html' },
       { id: 'contextmenu', component: 'contextmenu', title: 'MTS.ContextMenu', subtitle: 'Menú contextual con click derecho y long press', src: 'matios-ui-contextmenu/demo.html' },
       { id: 'commandpalette', component: 'commandpalette', title: 'MTS.CommandPalette', subtitle: 'Paleta de comandos con búsqueda, grupos y shortcuts', src: 'matios-ui-commandpalette/demo.html' },
-      { id: 'sidenav', component: 'sidenav', title: 'MTS.SideNav', subtitle: 'Navegación lateral colapsable con submenús y badges', src: 'matios-ui-sidenav/demo.html' }
+      { id: 'sidenav', component: 'sidenav', title: 'MTS.SideNav', subtitle: 'Navegación lateral colapsable con submenús y badges', src: 'matios-ui-sidenav/demo.html' },
+      { id: 'statusbar', component: 'statusbar', title: 'MTS.StatusBar', subtitle: 'Barra de estado inferior con slots libres — dots, tags, items', src: 'matios-ui-statusbar/demo.html' }
     ]);
   </script>
 </body>

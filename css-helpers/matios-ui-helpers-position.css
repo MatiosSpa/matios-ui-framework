@@ -1,0 +1,56 @@
+/* ============================================================
+   MATIOS UI — CSS Helpers: Position
+   Versión: 1.0.0
+
+   BEM:
+   - bloque=mts-position,  modificador=valor
+   - bloque=mts-top / mts-bottom / mts-start / mts-end, modificador=valor
+   ============================================================ */
+
+/* ── Position ───────────────────────────────────────────── */
+.mts-position--static   { position: static !important; }
+.mts-position--relative { position: relative !important; }
+.mts-position--absolute { position: absolute !important; }
+.mts-position--fixed    { position: fixed !important; }
+.mts-position--sticky   { position: sticky !important; }
+
+/* ── Top ────────────────────────────────────────────────── */
+.mts-top--0   { top: 0 !important; }
+.mts-top--50  { top: 50% !important; }
+.mts-top--100 { top: 100% !important; }
+.mts-top--auto { top: auto !important; }
+
+/* ── Bottom ─────────────────────────────────────────────── */
+.mts-bottom--0   { bottom: 0 !important; }
+.mts-bottom--50  { bottom: 50% !important; }
+.mts-bottom--100 { bottom: 100% !important; }
+.mts-bottom--auto { bottom: auto !important; }
+
+/* ── Start (inline-start / left en LTR) ─────────────────── */
+.mts-start--0   { left: 0 !important; }
+.mts-start--50  { left: 50% !important; }
+.mts-start--100 { left: 100% !important; }
+.mts-start--auto { left: auto !important; }
+
+/* ── End (inline-end / right en LTR) ───────────────────── */
+.mts-end--0   { right: 0 !important; }
+.mts-end--50  { right: 50% !important; }
+.mts-end--100 { right: 100% !important; }
+.mts-end--auto { right: auto !important; }
+
+/* ── Inset ──────────────────────────────────────────────── */
+.mts-inset--0 { inset: 0 !important; }
+
+/* ── Translate — centrado absoluto ─────────────────────── */
+.mts-translate-middle   { transform: translate(-50%, -50%) !important; }
+.mts-translate-middle-x { transform: translateX(-50%) !important; }
+.mts-translate-middle-y { transform: translateY(-50%) !important; }
+
+/* ── Z-index — usando tokens del framework ──────────────── */
+.mts-z--base     { z-index: var(--mts-z-base) !important; }
+.mts-z--dropdown { z-index: var(--mts-z-dropdown) !important; }
+.mts-z--sticky   { z-index: var(--mts-z-sticky) !important; }
+.mts-z--overlay  { z-index: var(--mts-z-overlay) !important; }
+.mts-z--modal    { z-index: var(--mts-z-modal) !important; }
+.mts-z--toast    { z-index: var(--mts-z-toast) !important; }
+.mts-z--tooltip  { z-index: var(--mts-z-tooltip) !important; }

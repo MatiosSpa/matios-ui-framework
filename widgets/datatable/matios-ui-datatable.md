@@ -330,10 +330,3 @@ table.unregisterHook('onReady', onReady)
 | `MTS.DocumentManagerPlugin` | `plugins/documentmanager/` | Gestor de documentos con breadcrumb y drag & drop. |
 
 ---
-
-## Changelog
-
-| Versión | Cambios |
-|---|---|
-| 1.1.0 | Hook system (`registerHook`/`unregisterHook`), `getPlugin()`, `window.MTS` namespace |
-| 1.0.0 | Versión inicial |

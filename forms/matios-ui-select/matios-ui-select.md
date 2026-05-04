@@ -1,7 +1,7 @@
 # MTS.Select
 
-[EN] Select component with search, multi-select, option groups, icons and external async search.
-[ES] Componente select con búsqueda, multi-selección, grupos de opciones, íconos y búsqueda asíncrona externa.
+🇬🇧 Select component with search, multi-select, option groups, icons and external async search.
+🇪🇸 Componente select con búsqueda, multi-selección, grupos de opciones, íconos y búsqueda asíncrona externa.
 
 ---
 
@@ -17,29 +17,29 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `options` | `array` | `[]` | [EN] `[{ value, label, group?, icon?, disabled? }]` |
-| `value` | `any` | `null` | [EN] Initial selected value / [ES] Valor seleccionado inicialmente |
-| `label` | `string` | `''` | [EN] Field label / [ES] Etiqueta del campo |
-| `placeholder` | `string` | `'Selecciona...'` | |
-| `hint` | `string` | `''` | [EN] Helper text / [ES] Texto de ayuda |
-| `multiple` | `boolean` | `false` | [EN] Allow multiple selection / [ES] Permitir selección múltiple |
-| `searchable` | `boolean` | `false` | [EN] Enable search inside list / [ES] Habilitar búsqueda en la lista |
-| `clearable` | `boolean` | `false` | [EN] Show clear button / [ES] Mostrar botón limpiar |
-| `disabled` | `boolean` | `false` | [EN] Disables interaction / [ES] Deshabilita la interacción |
-| `maxSelect` | `number` | `null` | [EN] Max selections in multi mode / [ES] Máximo de selecciones en modo multi |
-| `debounce` | `number` | `300` | [EN] Debounce delay for `onSearch` in ms / [ES] Delay debounce para `onSearch` en ms |
-| `minChars` | `number` | `1` | [EN] Min chars to trigger `onSearch` / [ES] Mínimo de caracteres para disparar `onSearch` |
-| `onSearch` | `function` | — | [EN] Async search: `async (query) => [{value, label}]` / [ES] Búsqueda asíncrona |
-| `onChange` | `function` | — | [EN] Fires on selection change / [ES] Se dispara al cambiar la selección |
+| `options` | `array` | `[]` | 🇬🇧 `[{ value, label, group?, icon?, disabled? }]` |
+| `value` | `any` | `null` | 🇬🇧 Initial selected value / 🇪🇸 Valor seleccionado inicialmente |
+| `label` | `string` | `''` | 🇬🇧 Field label / 🇪🇸 Etiqueta del campo |
+| `placeholder` | `string` | `'Selecciona...'` | 🇬🇧 Placeholder text / 🇪🇸 Texto de marcador |
+| `hint` | `string` | `''` | 🇬🇧 Helper text / 🇪🇸 Texto de ayuda |
+| `multiple` | `boolean` | `false` | 🇬🇧 Allow multiple selection / 🇪🇸 Permitir selección múltiple |
+| `searchable` | `boolean` | `false` | 🇬🇧 Enable search inside list / 🇪🇸 Habilitar búsqueda en la lista |
+| `clearable` | `boolean` | `false` | 🇬🇧 Show clear button / 🇪🇸 Mostrar botón limpiar |
+| `disabled` | `boolean` | `false` | 🇬🇧 Disables interaction / 🇪🇸 Deshabilita la interacción |
+| `maxSelect` | `number` | `null` | 🇬🇧 Max selections in multi mode / 🇪🇸 Máximo de selecciones en modo multi |
+| `debounce` | `number` | `300` | 🇬🇧 Debounce delay for `onSearch` in ms / 🇪🇸 Delay debounce para `onSearch` en ms |
+| `minChars` | `number` | `1` | 🇬🇧 Min chars to trigger `onSearch` / 🇪🇸 Mínimo de caracteres para disparar `onSearch` |
+| `onSearch` | `function` | — | 🇬🇧 Async search: `async (query) => [{value, label}]` / 🇪🇸 Búsqueda asíncrona |
+| `onChange` | `function` | — | 🇬🇧 Fires on selection change / 🇪🇸 Se dispara al cambiar la selección |
 
 ---
 
 ## Events / Eventos
 
-[EN] Use `onChange` in the constructor. This is the recommended approach.
-[ES] Usa `onChange` en el constructor. Este es el enfoque recomendado.
+🇬🇧 Use `onChange` in the constructor. This is the recommended approach.
+🇪🇸 Usa `onChange` en el constructor. Este es el enfoque recomendado.
 
 ```js
 new MTS.Select('#my-select', {
@@ -53,8 +53,8 @@ new MTS.Select('#my-select', {
 });
 ```
 
-[EN] For multi-select, the event detail contains:
-[ES] Para multi-select, el detalle del evento contiene:
+🇬🇧 For multi-select, the event detail contains:
+🇪🇸 Para multi-select, el detalle del evento contiene:
 
 ```js
 onChange: (e) => {
@@ -208,11 +208,3 @@ document.getElementById('my-select')
 | — | `mts:select:close` |
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 2.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 2.0.0 | [EN] Portal dropdown, async search, multi-select, groups / [ES] Dropdown portal, búsqueda asíncrona, multi-selección, grupos |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

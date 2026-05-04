@@ -1,7 +1,7 @@
 # MTS.VirtualList
 
-[EN] Virtualized list that renders only visible items — handles 100,000+ rows with minimal DOM. Supports infinite scroll via `onEndReached`.
-[ES] Lista virtualizada que solo renderiza los ítems visibles — maneja 100,000+ filas con DOM mínimo. Soporta scroll infinito con `onEndReached`.
+🇬🇧 Virtualized list that renders only visible items — handles 100,000+ rows with minimal DOM. Supports infinite scroll via `onEndReached`.
+🇪🇸 Lista virtualizada que solo renderiza los ítems visibles — maneja 100,000+ filas con DOM mínimo. Soporta scroll infinito con `onEndReached`.
 
 ---
 
@@ -16,16 +16,16 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `items` | `array` | `[]` | [EN] Data array / [ES] Array de datos |
-| `renderItem` | `function` | — | [EN] `(item, index) => HTMLElement\|string` Item renderer / [ES] Renderizador de ítems |
-| `itemHeight` | `number` | `48` | [EN] Fixed item height in px / [ES] Altura fija del ítem en px |
-| `height` | `number` | `400` | [EN] Container height in px / [ES] Altura del contenedor en px |
-| `buffer` | `number` | `5` | [EN] Extra items to render above/below / [ES] Ítems extra a renderizar arriba/abajo |
-| `endThreshold` | `number` | `100` | [EN] px from bottom to fire `onEndReached` / [ES] px desde el fondo para disparar `onEndReached` |
-| `onScroll` | `function` | — | [EN] `({ scrollTop, firstVisible, lastVisible }) => {}` / [ES] Se dispara al hacer scroll |
-| `onEndReached` | `function` | — | [EN] `({ total }) => {}` Fires near scroll end / [ES] Se dispara cerca del final del scroll |
+| `items` | `array` | `[]` | 🇬🇧 Data array / 🇪🇸 Array de datos |
+| `renderItem` | `function` | — | 🇬🇧 `(item, index) => HTMLElement\|string` Item renderer / 🇪🇸 Renderizador de ítems |
+| `itemHeight` | `number` | `48` | 🇬🇧 Fixed item height in px / 🇪🇸 Altura fija del ítem en px |
+| `height` | `number` | `400` | 🇬🇧 Container height in px / 🇪🇸 Altura del contenedor en px |
+| `buffer` | `number` | `5` | 🇬🇧 Extra items to render above/below / 🇪🇸 Ítems extra a renderizar arriba/abajo |
+| `endThreshold` | `number` | `100` | 🇬🇧 px from bottom to fire `onEndReached` / 🇪🇸 px desde el fondo para disparar `onEndReached` |
+| `onScroll` | `function` | — | 🇬🇧 `({ scrollTop, firstVisible, lastVisible }) => {}` / 🇪🇸 Se dispara al hacer scroll |
+| `onEndReached` | `function` | — | 🇬🇧 `({ total }) => {}` Fires near scroll end / 🇪🇸 Se dispara cerca del final del scroll |
 
 ---
 
@@ -118,10 +118,3 @@ el.addEventListener('mts:virtuallist:endReached',  (e) => console.log(e.detail.t
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Normalized to `.on()`, bilingual docs / [ES] Normalizado a `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release — virtualization, infinite scroll, scrollToIndex / [ES] Versión inicial |

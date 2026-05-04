@@ -132,7 +132,7 @@ MTS.Tree = class MtsTree {
       const ico = document.createElement('span');
       ico.className = 'mts-tree__icon';
       if (node.icon) {
-        ico.innerHTML = node.icon;
+        ico.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(node.icon) : node.icon;
       } else if (hasChildren) {
         ico.innerHTML = node.expanded
           ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>'

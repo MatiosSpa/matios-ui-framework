@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
@@ -83,26 +83,26 @@
       variant: 'elevated',
       size: 'lg',
       body:
-        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+        '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div id="user-detail-alert"></div>' +
-          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-4">' +
-            '<div class="mts-d-flex mts-items-center mts-gap-3">' +
+          '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-4">' +
+            '<div class="mts-d-flex mts-align-items--center mts-gap-3">' +
               '<div id="user-detail-avatar"></div>' +
-              '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
-                '<p class="mts-text-sm mts-text-muted mts-m-0">Usuarios</p>' +
-                '<div class="mts-d-flex mts-items-center mts-gap-2 mts-flex-wrap">' +
+              '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
+                '<p class="mts-text--sm mts-text-color--muted mts-m-0">Usuarios</p>' +
+                '<div class="mts-d-flex mts-align-items--center mts-gap-2 mts-flex--wrap">' +
                   '<h1 class="mts-h1 mts-m-0">Camila Soto</h1>' +
                   '<span id="user-detail-status-badge"></span>' +
                   '<span id="user-detail-area-badge"></span>' +
                 '</div>' +
-                '<p class="mts-text-md mts-text-muted mts-m-0">Cuenta administrativa con foco en operaciones, documentos y trazabilidad interna.</p>' +
+                '<p class="mts-text--md mts-text-color--muted mts-m-0">Cuenta administrativa con foco en operaciones, documentos y trazabilidad interna.</p>' +
               '</div>' +
             '</div>' +
           '</div>' +
-          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+          '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text-md mts-text-primary">Datos personales</strong>' +
-              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Identidad base del usuario dentro del sistema.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Datos personales</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Identidad base del usuario dentro del sistema.</p>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md">' +
               infoCell('Nombre', 'Camila') +
@@ -113,10 +113,10 @@
               infoCell('Codigo interno', 'USR-1024') +
             '</div>' +
           '</section>' +
-          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+          '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text-md mts-text-primary">Organizacion y acceso</strong>' +
-              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Contexto interno, rol asignado y estado operativo actual.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Organizacion y acceso</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Contexto interno, rol asignado y estado operativo actual.</p>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md">' +
               infoCell('Area', 'Operaciones') +
@@ -129,38 +129,38 @@
               infoCell('Ultimo acceso', 'Hoy, 09:14') +
             '</div>' +
           '</section>' +
-          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+          '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text-md mts-text-primary">Rol y perfiles asociados</strong>' +
-              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Los perfiles visibles se entienden como derivados del rol actual.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Rol y perfiles asociados</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Los perfiles visibles se entienden como derivados del rol actual.</p>' +
             '</div>' +
-            '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
-              '<div class="mts-d-flex mts-flex-col mts-gap-1">' +
-                '<span class="mts-text-sm mts-text-muted">Rol actual</span>' +
-                '<strong class="mts-text-md mts-text-primary">Supervisor Operacional</strong>' +
+            '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
+              '<div class="mts-d-flex mts-flex--column mts-gap-1">' +
+                '<span class="mts-text--sm mts-text-color--muted">Rol actual</span>' +
+                '<strong class="mts-text--md mts-text-color--primary">Supervisor Operacional</strong>' +
               '</div>' +
-              '<div class="mts-d-flex mts-gap-2 mts-flex-wrap">' +
+              '<div class="mts-d-flex mts-gap-2 mts-flex--wrap">' +
                 MTS.Badge.html('Workspace base', 'primary', 'sm') +
                 MTS.Badge.html('Operaciones', 'accent', 'sm') +
                 MTS.Badge.html('Documentos', 'info', 'sm') +
               '</div>' +
             '</div>' +
           '</section>' +
-          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+          '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text-md mts-text-primary">Seguridad y actividad</strong>' +
-              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Control de acceso, sesiones recientes y eventos relevantes.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Seguridad y actividad</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Control de acceso, sesiones recientes y eventos relevantes.</p>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md">' +
               '<div class="mts-g-col-12 mts-g-col-xl-4">' +
-                '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
+                '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
                   securityRow('MFA', 'Activo') +
                   securityRow('Cambio obligatorio de clave', 'No') +
                   securityRow('Sesion actual', 'Chrome · Santiago') +
                 '</div>' +
               '</div>' +
               '<div class="mts-g-col-12 mts-g-col-xl-8">' +
-                '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+                '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
                   timelineRow('Hoy, 09:14', 'Ingreso exitoso por OTP', 'Valido usuario, codigo y workspace principal.') +
                   timelineRow('Ayer, 18:41', 'Actualizacion de perfiles', 'Se agrego el perfil de documentos para aprobaciones internas.') +
                   timelineRow('18 abril, 16:22', 'Cambio de datos de contacto', 'Se normalizo telefono y supervisor del registro.') +
@@ -244,7 +244,7 @@
 
     function openPasswordModal(initialMode) {
       var body = document.createElement('div');
-      body.className = 'mts-d-flex mts-flex-col mts-gap-4';
+      body.className = 'mts-d-flex mts-flex--column mts-gap-4';
       body.innerHTML =
         '<div id="change-password-alert"></div>' +
         '<div id="change-password-mode"></div>' +
@@ -387,27 +387,27 @@
     function infoCell(label, value) {
       return '' +
         '<div class="mts-g-col-12 mts-g-col-md-6">' +
-          '<div class="mts-d-flex mts-flex-col mts-gap-1">' +
-            '<span class="mts-text-sm mts-text-muted">' + escapeHtml(label) + '</span>' +
-            '<strong class="mts-text-sm mts-text-primary">' + escapeHtml(value) + '</strong>' +
+          '<div class="mts-d-flex mts-flex--column mts-gap-1">' +
+            '<span class="mts-text--sm mts-text-color--muted">' + escapeHtml(label) + '</span>' +
+            '<strong class="mts-text--sm mts-text-color--primary">' + escapeHtml(value) + '</strong>' +
           '</div>' +
         '</div>';
     }
 
     function timelineRow(date, title, copy) {
       return '' +
-        '<div class="mts-surface mts-d-flex mts-flex-col mts-gap-1">' +
-          '<span class="mts-text-sm mts-text-muted">' + escapeHtml(date) + '</span>' +
-          '<strong class="mts-text-md mts-text-primary">' + escapeHtml(title) + '</strong>' +
-          '<span class="mts-text-sm mts-text-muted">' + escapeHtml(copy) + '</span>' +
+        '<div class="mts-surface mts-d-flex mts-flex--column mts-gap-1">' +
+          '<span class="mts-text--sm mts-text-color--muted">' + escapeHtml(date) + '</span>' +
+          '<strong class="mts-text--md mts-text-color--primary">' + escapeHtml(title) + '</strong>' +
+          '<span class="mts-text--sm mts-text-color--muted">' + escapeHtml(copy) + '</span>' +
         '</div>';
     }
 
     function securityRow(label, value) {
       return '' +
-        '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3">' +
-          '<span class="mts-text-sm mts-text-muted">' + escapeHtml(label) + '</span>' +
-          '<strong class="mts-text-sm mts-text-primary">' + escapeHtml(value) + '</strong>' +
+        '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3">' +
+          '<span class="mts-text--sm mts-text-color--muted">' + escapeHtml(label) + '</span>' +
+          '<strong class="mts-text--sm mts-text-color--primary">' + escapeHtml(value) + '</strong>' +
         '</div>';
     }
 

@@ -1,7 +1,7 @@
 # MTS.Skeleton
 
-[EN] Animated loading placeholder with multiple layout variants: text, circle, rect, card, list and table.
-[ES] Placeholder animado de carga con múltiples variantes de layout: text, circle, rect, card, list y table.
+🇬🇧 Animated loading placeholder with multiple layout variants: text, circle, rect, card, list and table.
+🇪🇸 Placeholder animado de carga con múltiples variantes de layout: text, circle, rect, card, list y table.
 
 ---
 
@@ -17,15 +17,15 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
 | `variant` | `string` | `'text'` | `'text'` · `'circle'` · `'rect'` · `'card'` · `'table'` · `'list'` |
-| `lines` | `number` | `3` | [EN] Text lines (variant `'text'`) / [ES] Líneas de texto |
-| `rows` | `number` | `4` | [EN] Table rows (variant `'table'`) / [ES] Filas de tabla |
-| `cols` | `number` | `4` | [EN] Table columns (variant `'table'`) / [ES] Columnas de tabla |
-| `items` | `number` | `3` | [EN] List items (variant `'list'`) / [ES] Ítems de lista |
-| `width` | `string` | `'100%'` | [EN] Container width / [ES] Ancho del contenedor |
-| `height` | `string` | `null` | [EN] Container height / [ES] Alto del contenedor |
+| `lines` | `number` | `3` | 🇬🇧 Text lines (variant `'text'`) / 🇪🇸 Líneas de texto |
+| `rows` | `number` | `4` | 🇬🇧 Table rows (variant `'table'`) / 🇪🇸 Filas de tabla |
+| `cols` | `number` | `4` | 🇬🇧 Table columns (variant `'table'`) / 🇪🇸 Columnas de tabla |
+| `items` | `number` | `3` | 🇬🇧 List items (variant `'list'`) / 🇪🇸 Ítems de lista |
+| `width` | `string` | `'100%'` | 🇬🇧 Container width / 🇪🇸 Ancho del contenedor |
+| `height` | `string` | `null` | 🇬🇧 Container height / 🇪🇸 Alto del contenedor |
 | `animation` | `string` | `'pulse'` | `'pulse'` · `'wave'` · `'none'` |
 
 ---
@@ -125,10 +125,3 @@ sk.destroy()
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingüe, docs estandarizados |
-| 1.0.0 | [EN] Initial release — text/circle/rect/card/list/table, pulse/wave / [ES] Versión inicial |

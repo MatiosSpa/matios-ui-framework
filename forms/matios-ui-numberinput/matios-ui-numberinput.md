@@ -1,7 +1,7 @@
 # MTS.NumberInput
 
-[EN] Numeric input with +/− buttons, min/max/step, currency, percentage and prefix/suffix formats.
-[ES] Input numérico con botones +/−, min/max/step, formatos de moneda, porcentaje y prefix/suffix.
+🇬🇧 Numeric input with +/− buttons, min/max/step, currency, percentage and prefix/suffix formats.
+🇪🇸 Input numérico con botones +/−, min/max/step, formatos de moneda, porcentaje y prefix/suffix.
 
 ---
 
@@ -17,34 +17,34 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `value` | `number` | `0` | [EN] Initial value / [ES] Valor inicial |
-| `min` | `number` | `null` | [EN] Minimum value / [ES] Valor mínimo |
-| `max` | `number` | `null` | [EN] Maximum value / [ES] Valor máximo |
-| `step` | `number` | `1` | [EN] Increment/decrement step / [ES] Paso de incremento/decremento |
-| `decimals` | `number` | `0` | [EN] Decimal places to display / [ES] Decimales a mostrar |
-| `label` | `string` | `''` | [EN] Field label / [ES] Etiqueta del campo |
-| `placeholder` | `string` | `''` | |
-| `hint` | `string` | `''` | [EN] Helper text / [ES] Texto de ayuda |
-| `prefix` | `string` | `''` | [EN] Visible prefix (e.g. `$`) / [ES] Prefijo visible |
-| `suffix` | `string` | `''` | [EN] Visible suffix (e.g. `kg`) / [ES] Sufijo visible |
+| `value` | `number` | `0` | 🇬🇧 Initial value / 🇪🇸 Valor inicial |
+| `min` | `number` | `null` | 🇬🇧 Minimum value / 🇪🇸 Valor mínimo |
+| `max` | `number` | `null` | 🇬🇧 Maximum value / 🇪🇸 Valor máximo |
+| `step` | `number` | `1` | 🇬🇧 Increment/decrement step / 🇪🇸 Paso de incremento/decremento |
+| `decimals` | `number` | `0` | 🇬🇧 Decimal places to display / 🇪🇸 Decimales a mostrar |
+| `label` | `string` | `''` | 🇬🇧 Field label / 🇪🇸 Etiqueta del campo |
+| `placeholder` | `string` | `''` | 🇬🇧 Placeholder text / 🇪🇸 Texto de marcador |
+| `hint` | `string` | `''` | 🇬🇧 Helper text / 🇪🇸 Texto de ayuda |
+| `prefix` | `string` | `''` | 🇬🇧 Visible prefix (e.g. `$`) / 🇪🇸 Prefijo visible |
+| `suffix` | `string` | `''` | 🇬🇧 Visible suffix (e.g. `kg`) / 🇪🇸 Sufijo visible |
 | `format` | `string` | `'plain'` | `'plain'` · `'currency'` · `'percent'` |
-| `locale` | `string` | `'es-CL'` | [EN] Locale for Intl.NumberFormat / [ES] Locale para Intl.NumberFormat |
-| `currency` | `string` | `'CLP'` | [EN] ISO 4217 currency code / [ES] Código de moneda ISO 4217 |
+| `locale` | `string` | `'es-CL'` | 🇬🇧 Locale for Intl.NumberFormat / 🇪🇸 Locale para Intl.NumberFormat |
+| `currency` | `string` | `'CLP'` | 🇬🇧 ISO 4217 currency code / 🇪🇸 Código de moneda ISO 4217 |
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
-| `disabled` | `boolean` | `false` | [EN] Disables interaction / [ES] Deshabilita la interacción |
-| `readonly` | `boolean` | `false` | [EN] Read only / [ES] Solo lectura |
-| `onChange` | `function` | — | [EN] `(value, formatted) => {}` / [ES] Se dispara al cambiar |
-| `onFocus` | `function` | — | [EN] Fires on focus / [ES] Se dispara al enfocar |
-| `onBlur` | `function` | — | [EN] Fires on blur / [ES] Se dispara al perder foco |
+| `disabled` | `boolean` | `false` | 🇬🇧 Disables interaction / 🇪🇸 Deshabilita la interacción |
+| `readonly` | `boolean` | `false` | 🇬🇧 Read only / 🇪🇸 Solo lectura |
+| `onChange` | `function` | — | 🇬🇧 `(value, formatted) => {}` / 🇪🇸 Se dispara al cambiar |
+| `onFocus` | `function` | — | 🇬🇧 Fires on focus / 🇪🇸 Se dispara al enfocar |
+| `onBlur` | `function` | — | 🇬🇧 Fires on blur / 🇪🇸 Se dispara al perder foco |
 
 ---
 
 ## Events / Eventos
 
-[EN] Use `onChange`, `onFocus` and `onBlur` in the constructor. This is the recommended approach.
-[ES] Usa `onChange`, `onFocus` y `onBlur` en el constructor. Este es el enfoque recomendado.
+🇬🇧 Use `onChange`, `onFocus` and `onBlur` in the constructor. This is the recommended approach.
+🇪🇸 Usa `onChange`, `onFocus` y `onBlur` en el constructor. Este es el enfoque recomendado.
 
 ```js
 new MTS.NumberInput('#my-input', {
@@ -192,10 +192,3 @@ document.getElementById('my-input')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual docs, standardized structure / [ES] Docs bilingüe, estructura estandarizada |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

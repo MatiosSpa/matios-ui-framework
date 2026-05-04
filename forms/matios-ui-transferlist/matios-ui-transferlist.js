@@ -329,7 +329,8 @@ MTS.TransferList = class MtsTransferList {
       self._applyItemDataset(itemEl, entry.item);
 
       if (self.renderItem) {
-        itemEl.innerHTML = self.renderItem(entry.item, side, self) || '';
+        var _rendered = self.renderItem(entry.item, side, self) || '';
+        itemEl.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(_rendered) : _rendered;
       } else {
         var label = self._resolveDisplayValue(entry.item, self.itemLabel);
         var description = self._resolveDisplayValue(entry.item, self.itemDescription);

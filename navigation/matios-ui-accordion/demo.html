@@ -30,229 +30,199 @@
 <link href="../../themes/matios-ui-accent-violet.css" rel="stylesheet"/>
 <link href="../../themes/matios-ui-accent-olive.css" rel="stylesheet"/>
 <link href="../../themes/matios-ui-accent-blue.css" rel="stylesheet"/>
+<link href="../../themes/matios-ui-accent-high-contrast.css" rel="stylesheet"/>
+<link href="../../themes/matios-ui-accent-corporate.css" rel="stylesheet"/>
+<link href="../../themes/matios-ui-accent-navy.css" rel="stylesheet"/>
+<link href="../../themes/matios-ui-accent-emerald.css" rel="stylesheet"/>
+<link href="../../themes/matios-ui-accent-petrol.css" rel="stylesheet"/>
 <link href="../../support/demo-shared.css" rel="stylesheet"/>
+<link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css"/>
+<link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css"/>
+<link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css"/>
 <link href="../matios-ui-tabs/matios-ui-tabs.css" rel="stylesheet"/><link href="./matios-ui-accordion.css" rel="stylesheet"/>
-<script src="../../support/demo-shared.js"></script><script src="../matios-ui-tabs/matios-ui-tabs.js"></script>
+<script src="../../support/demo-shared.js"></script>
+<script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+<script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+<script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+<script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+<script src="../matios-ui-tabs/matios-ui-tabs.js"></script>
 <script src="./matios-ui-accordion.js"></script>
 </head>
 <body>
-<div class="demo-theme">
-<button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
-<button class="demo-btn-sm" onclick="setMode('light')">Light</button>
-<button class="demo-btn-sm demo-btn-sep">—</button>
-<button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
-<button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
-<button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
-<button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
-</div>
 <div class="demo-page">
 <div class="demo-header">
 <h1><span>MTS</span>.Accordion</h1>
 <p>Expandable sections — single or multiple open, flush mode, icons, programmatic control.</p>
 <div class="demo-header-actions">
-<button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-accordion.md')">📄 Docs</button>
 </div>
 <div class="demo-docs-panel" id="docs-panel"></div>
 </div>
 <!-- 1. Básico -->
-<div class="demo-section"><div class="demo-section-title">1 — Básico — un panel abierto / Single open (default)</div><div id="tabs-s1"></div><div hidden="" id="src-s1-preview"><div id="acc-basic"></div><div class="result-box" id="acc-result">— abre o cierra un panel —</div></div><div hidden="" id="src-s1-html">&lt;div id="my-accordion"&gt;&lt;/div&gt;
-
-&lt;script&gt;
-  new MTS.Accordion('#my-accordion', {
-    items: [
-      { id: 'q1', title: 'What is Matios UI?', content: '&lt;p&gt;A zero-dependency library.&lt;/p&gt;', open: true },
-      { id: 'q2', title: 'How do I install it?', content: '&lt;p&gt;Add CSS and JS files.&lt;/p&gt;' },
-      { id: 'q3', title: 'Is it free?', content: '&lt;p&gt;Yes, MIT licensed.&lt;/p&gt;' },
-    ],
-    // Fires when a panel opens / Se dispara al abrir un panel
-    onOpen:  (e) =&gt; console.log('opened:', e.detail.id),
-    // Fires when a panel closes / Se dispara al cerrar un panel
-    onClose: (e) =&gt; console.log('closed:', e.detail.id),
-  });
-&lt;/script&gt;</div><div hidden="" id="src-s1-js">new MTS.Accordion('#my-accordion', {
-  // Single open mode (default) / Modo un panel abierto
-  multiple: false,
-
-  items: [
-    {
-      id:      'q1',
-      title:   'What is Matios UI?',
-      content: '&lt;p&gt;A zero-dependency component library for modern UIs.&lt;/p&gt;',
-      open:    true,  // open by default / abierto por defecto
-    },
-    {
-      id:      'q2',
-      title:   'How do I install it?',
-      content: '&lt;p&gt;Add the CSS and JS files to your project.&lt;/p&gt;',
-    },
-    {
-      id:       'q3',
-      title:    'Premium features',
-      content:  '&lt;p&gt;Coming soon.&lt;/p&gt;',
-      disabled: true,  // cannot be opened / no se puede abrir
-    },
-  ],
-
-  // Fires when a panel opens / Se dispara al abrir un panel
-  onOpen:  (e) =&gt; console.log('opened:', e.detail.id),
-
-  // Fires when a panel closes / Se dispara al cerrar un panel
-  onClose: (e) =&gt; console.log('closed:', e.detail.id),
-});</div></div>
+<div class="demo-section"><div class="demo-section-title">1 — Básico — un panel abierto / Single open (default)</div><div id="tabs-s1"></div></div>
 <!-- 2. Multiple + Flush -->
-<div class="demo-section"><div class="demo-section-title">2 — Multiple + Flush (sin bordes card)</div><div id="tabs-s2"></div><div hidden="" id="src-s2-preview"><div id="acc-multi"></div></div><div hidden="" id="src-s2-html">&lt;!-- multiple: true — several panels can be open at once / varios paneles pueden estar abiertos --&gt;
-&lt;!-- flush: true — no card border / sin borde card --&gt;
-&lt;div id="my-accordion"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Accordion('#my-accordion', {
-    multiple: true,
-    flush:    true,
-    items: [...],
-  });
-&lt;/script&gt;</div><div hidden="" id="src-s2-js">// multiple: true — several panels open simultaneously
-// flush: true — flat style, no card border
-new MTS.Accordion('#acc-multi', {
-  multiple: true,
-  flush:    true,
-  items: [
-    { id: 'a', title: 'Section A', content: '&lt;p&gt;Content A — stays open while B opens&lt;/p&gt;', open: true },
-    { id: 'b', title: 'Section B', content: '&lt;p&gt;Content B&lt;/p&gt;', open: true },
-    { id: 'c', title: 'Section C', content: '&lt;p&gt;Content C&lt;/p&gt;' },
-  ],
-});</div></div>
+<div class="demo-section"><div class="demo-section-title">2 — Multiple + Flush (sin bordes card)</div><div id="tabs-s2"></div></div>
 <!-- 3. Con íconos -->
-<div class="demo-section"><div class="demo-section-title">3 — Con íconos / With icons</div><div id="tabs-s3"></div><div hidden="" id="src-s3-preview"><div id="acc-icons"></div></div><div hidden="" id="src-s3-html">&lt;div id="my-accordion"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Accordion('#my-accordion', {
-    items: [
-      { id: 'settings', icon: ICON_COG,  title: 'Settings', content: '...' },
-      { id: 'profile',  icon: ICON_USER, title: 'Profile',  content: '...' },
-    ],
-  });
-&lt;/script&gt;</div><div hidden="" id="src-s3-js">const ICON_COG  = '&lt;svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;circle cx="12" cy="12" r="3"/&gt;&lt;path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/&gt;&lt;/svg&gt;';
-const ICON_USER = '&lt;svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/&gt;&lt;circle cx="12" cy="7" r="4"/&gt;&lt;/svg&gt;';
-const ICON_BELL = '&lt;svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;&lt;path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/&gt;&lt;path d="M13.73 21a2 2 0 0 1-3.46 0"/&gt;&lt;/svg&gt;';
-
-new MTS.Accordion('#acc-icons', {
-  items: [
-    { id: 'settings', icon: ICON_COG,  title: 'Settings',      content: '&lt;p style="padding:12px"&gt;Application settings&lt;/p&gt;', open: true },
-    { id: 'profile',  icon: ICON_USER, title: 'Profile',       content: '&lt;p style="padding:12px"&gt;User profile&lt;/p&gt;' },
-    { id: 'notif',    icon: ICON_BELL, title: 'Notifications',  content: '&lt;p style="padding:12px"&gt;Notification preferences&lt;/p&gt;' },
-  ],
-});</div></div>
+<div class="demo-section"><div class="demo-section-title">3 — Con íconos / With icons</div><div id="tabs-s3"></div></div>
 <!-- 4. API -->
-<div class="demo-section"><div class="demo-section-title">4 — API — control programático</div><div id="tabs-s4"></div><div hidden="" id="src-s4-preview"><div id="acc-api"></div><div class="demo-row" style="margin-top:8px;flex-wrap:wrap">
-<button class="demo-btn-sm" onclick="accApi.open('p1');   document.getElementById('acc-api-res').textContent = 'open(p1) ✓'">open('p1')</button>
-<button class="demo-btn-sm" onclick="accApi.close('p1');  document.getElementById('acc-api-res').textContent = 'close(p1) ✓'">close('p1')</button>
-<button class="demo-btn-sm" onclick="accApi.toggle('p2'); document.getElementById('acc-api-res').textContent = 'toggle(p2) ✓'">toggle('p2')</button>
-<button class="demo-btn-sm" onclick="accApi.openAll();    document.getElementById('acc-api-res').textContent = 'openAll() ✓'">openAll()</button>
-<button class="demo-btn-sm" onclick="accApi.closeAll();   document.getElementById('acc-api-res').textContent = 'closeAll() ✓'">closeAll()</button>
-<button class="demo-btn-sm" onclick="document.getElementById('acc-api-res').textContent = 'isOpen(p1) → ' + accApi.isOpen('p1')">isOpen('p1')</button>
-</div><div class="result-box" id="acc-api-res">— usa los botones —</div></div><div hidden="" id="src-s4-html">&lt;div id="my-accordion"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const acc = new MTS.Accordion('#my-accordion', {
-    multiple: true,
-    items: [...],
-  });
-  acc.open('p1')
-  acc.close('p1')
-  acc.toggle('p2')
-  acc.openAll()
-  acc.closeAll()
-  acc.isOpen('p1')  // → boolean
-&lt;/script&gt;</div><div hidden="" id="src-s4-js">const acc = new MTS.Accordion('#my-accordion', {
-  multiple: true,
-  items: [
-    { id: 'p1', title: 'Panel 1', content: '...' },
-    { id: 'p2', title: 'Panel 2', content: '...' },
-    { id: 'p3', title: 'Panel 3', content: '...' },
-  ],
-  onOpen:  (e) =&gt; console.log('opened:', e.detail.id),
-  onClose: (e) =&gt; console.log('closed:', e.detail.id),
-});
-
-acc.open('p1')          // open panel / abrir panel
-acc.close('p1')         // close panel / cerrar panel
-acc.toggle('p2')        // toggle panel / alternar panel
-acc.openAll()           // open all / abrir todos
-acc.closeAll()          // close all / cerrar todos
-acc.isOpen('p1')        // → true | false</div></div>
+<div class="demo-section"><div class="demo-section-title">4 — API — control programático</div><div id="tabs-s4"></div></div>
 </div>
 <script>
-new MTS.Accordion('#acc-basic', {
-  items: [
-    { id:'q1', title:'¿Qué es Matios UI?',    content:'<div style="padding:12px 16px"><p>Una librería de componentes sin dependencias para UIs modernas.</p></div>', open:true },
-    { id:'q2', title:'¿Cómo se instala?',     content:'<div style="padding:12px 16px"><p>Agrega los archivos CSS y JS a tu proyecto.</p></div>' },
-    { id:'q3', title:'¿Es gratuito?',         content:'<div style="padding:12px 16px"><p>Sí, licencia MIT.</p></div>' },
-    { id:'q4', title:'Funciones premium',     content:'<div style="padding:12px 16px"><p>Próximamente.</p></div>', disabled:true },
-  ],
-  onOpen:  function(e){ document.getElementById('acc-result').textContent = 'onOpen → ' + e.detail.id; },
-  onClose: function(e){ document.getElementById('acc-result').textContent = 'onClose → ' + e.detail.id; },
-});
-new MTS.Accordion('#acc-multi', {
-  multiple:true, flush:true,
-  items: [
-    { id:'a', title:'Section A — stays open', content:'<div style="padding:12px 16px"><p>Content A — múltiples pueden estar abiertos.</p></div>', open:true },
-    { id:'b', title:'Section B',              content:'<div style="padding:12px 16px"><p>Content B.</p></div>', open:true },
-    { id:'c', title:'Section C',              content:'<div style="padding:12px 16px"><p>Content C.</p></div>' },
-  ],
-});
+function indentHtml(html) {
+  var indent = 0, step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) { indent = Math.max(0, indent - step); result += ' '.repeat(indent) + t + '\n'; }
+    else if (/^<[^!]/.test(t)) { result += ' '.repeat(indent) + t + '\n'; var tag = (t.match(/^<([a-z][a-z0-9-]*)/i)||[])[1]||''; if (!voids.test(tag) && !/\/>$/.test(t)) indent += step; }
+    else { var text = t.replace(/\s+/g,' '); if (text) result += ' '.repeat(indent) + text + '\n'; }
+  });
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' }
+    ]
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
 var IC = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
 var IU = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
 var IB = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>';
-new MTS.Accordion('#acc-icons', {
-  items: [
-    { id:'settings', icon:IC, title:'Settings',      content:'<div style="padding:12px 16px">Configuración de la aplicación.</div>', open:true },
-    { id:'profile',  icon:IU, title:'Profile',       content:'<div style="padding:12px 16px">Perfil del usuario.</div>' },
-    { id:'notif',    icon:IB, title:'Notifications', content:'<div style="padding:12px 16px">Preferencias de notificaciones.</div>' },
-  ],
-});
-var accApi = new MTS.Accordion('#acc-api', {
-  multiple:true,
-  items: [
-    { id:'p1', title:'Panel 1', content:'<div style="padding:12px 16px">Contenido del panel 1.</div>', open:true },
-    { id:'p2', title:'Panel 2', content:'<div style="padding:12px 16px">Contenido del panel 2.</div>' },
-    { id:'p3', title:'Panel 3', content:'<div style="padding:12px 16px">Contenido del panel 3.</div>' },
-  ],
-  onOpen:  function(e){ document.getElementById('acc-api-res').textContent = 'onOpen → ' + e.detail.id; },
-  onClose: function(e){ document.getElementById('acc-api-res').textContent = 'onClose → ' + e.detail.id; },
-});
-</script>
-<script data-nav-tabs-helper="true">(function(){
-  function preTab(sourceId) {
-    var src = document.getElementById(sourceId);
-    return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
-      (src ? src.innerHTML : '') +
-    '</pre>';
-  }
+var accApi;
 
-  function mountPreview(sourceId, panelId) {
-    var src = document.getElementById(sourceId);
-    var panel = document.getElementById(panelId);
-    if (!src || !panel) return;
-    while (src.firstChild) panel.appendChild(src.firstChild);
-  }
+var preview_s1 =
+  '<div id="acc-basic"></div>' +
+  '<div class="result-box" id="acc-result">— abre o cierra un panel —</div>';
 
-  function makeSection(id, sourceBase) {
-    new MTS.Tabs('#' + id, {
-      variant: 'card',
-      height: '340px',
-      lazy: false,
-      tabs: [
-        { id: id + '-preview', label: 'Preview', content: '<div></div>' },
-        { id: id + '-html', label: 'HTML', content: preTab(sourceBase + '-html') },
-        { id: id + '-js', label: 'JavaScript', content: preTab(sourceBase + '-js') }
-      ]
-    });
-    mountPreview(sourceBase + '-preview', 'mts-panel-' + id + '-preview');
-  }
+var js_s1 =
+  "new MTS.Accordion('#my-accordion', {\n" +
+  "  items: [\n" +
+  "    { id: 'q1', title: '¿Qué es Matios UI?',  content: '<div style=\"padding:12px 16px\"><p>Una librería sin dependencias.</p></div>', open: true },\n" +
+  "    { id: 'q2', title: '¿Cómo se instala?',   content: '<div style=\"padding:12px 16px\"><p>Agrega los archivos CSS y JS.</p></div>' },\n" +
+  "    { id: 'q3', title: '¿Es gratuito?',       content: '<div style=\"padding:12px 16px\"><p>Sí, licencia MIT.</p></div>' },\n" +
+  "    { id: 'q4', title: 'Funciones premium',   content: '<div style=\"padding:12px 16px\"><p>Próximamente.</p></div>', disabled: true }\n" +
+  "  ],\n" +
+  "  onOpen:  function(e){ console.log('opened:', e.detail.id); },\n" +
+  "  onClose: function(e){ console.log('closed:', e.detail.id); }\n" +
+  "});";
 
-  document.addEventListener('DOMContentLoaded', function(){
-    var tabs = document.querySelectorAll('[id^="tabs-s"]');
-    tabs.forEach(function(el){
-      var num = el.id.replace('tabs-s','');
-      makeSection(el.id, 'src-s' + num);
-    });
+var preview_s2 =
+  '<div id="acc-multi"></div>';
+
+var js_s2 =
+  "// multiple: true — several panels open simultaneously\n" +
+  "// flush: true — flat style, no card border\n" +
+  "new MTS.Accordion('#acc-multi', {\n" +
+  "  multiple: true,\n" +
+  "  flush:    true,\n" +
+  "  items: [\n" +
+  "    { id: 'a', title: 'Section A — stays open', content: '<div style=\"padding:12px 16px\"><p>Content A.</p></div>', open: true },\n" +
+  "    { id: 'b', title: 'Section B',              content: '<div style=\"padding:12px 16px\"><p>Content B.</p></div>', open: true },\n" +
+  "    { id: 'c', title: 'Section C',              content: '<div style=\"padding:12px 16px\"><p>Content C.</p></div>' }\n" +
+  "  ]\n" +
+  "});";
+
+var preview_s3 =
+  '<div id="acc-icons"></div>';
+
+var js_s3 =
+  "new MTS.Accordion('#acc-icons', {\n" +
+  "  items: [\n" +
+  "    { id: 'settings', icon: ICON_COG,  title: 'Settings',      content: '<div style=\"padding:12px 16px\">Configuración.</div>', open: true },\n" +
+  "    { id: 'profile',  icon: ICON_USER, title: 'Profile',       content: '<div style=\"padding:12px 16px\">Perfil del usuario.</div>' },\n" +
+  "    { id: 'notif',    icon: ICON_BELL, title: 'Notifications',  content: '<div style=\"padding:12px 16px\">Preferencias de notificaciones.</div>' }\n" +
+  "  ]\n" +
+  "});";
+
+var preview_s4 =
+  '<div id="acc-api"></div>' +
+  '<div class="demo-row" style="margin-top:8px;flex-wrap:wrap">' +
+    '<button class="demo-btn-sm" onclick="accApi.open(\'p1\');   document.getElementById(\'acc-api-res\').textContent = \'open(p1) ✓\'">open(\'p1\')</button>' +
+    '<button class="demo-btn-sm" onclick="accApi.close(\'p1\');  document.getElementById(\'acc-api-res\').textContent = \'close(p1) ✓\'">close(\'p1\')</button>' +
+    '<button class="demo-btn-sm" onclick="accApi.toggle(\'p2\'); document.getElementById(\'acc-api-res\').textContent = \'toggle(p2) ✓\'">toggle(\'p2\')</button>' +
+    '<button class="demo-btn-sm" onclick="accApi.openAll();    document.getElementById(\'acc-api-res\').textContent = \'openAll() ✓\'">openAll()</button>' +
+    '<button class="demo-btn-sm" onclick="accApi.closeAll();   document.getElementById(\'acc-api-res\').textContent = \'closeAll() ✓\'">closeAll()</button>' +
+    '<button class="demo-btn-sm" onclick="document.getElementById(\'acc-api-res\').textContent = \'isOpen(p1) → \' + accApi.isOpen(\'p1\')">isOpen(\'p1\')</button>' +
+  '</div>' +
+  '<div class="result-box" id="acc-api-res">— usa los botones —</div>';
+
+var js_s4 =
+  "accApi = new MTS.Accordion('#my-accordion', {\n" +
+  "  multiple: true,\n" +
+  "  items: [\n" +
+  "    { id: 'p1', title: 'Panel 1', content: '...' },\n" +
+  "    { id: 'p2', title: 'Panel 2', content: '...' },\n" +
+  "    { id: 'p3', title: 'Panel 3', content: '...' }\n" +
+  "  ],\n" +
+  "  onOpen:  function(e){ console.log('opened:', e.detail.id); },\n" +
+  "  onClose: function(e){ console.log('closed:', e.detail.id); }\n" +
+  "});\n\n" +
+  "accApi.open('p1')    // abrir panel\n" +
+  "accApi.close('p1')   // cerrar panel\n" +
+  "accApi.toggle('p2')  // alternar panel\n" +
+  "accApi.openAll()     // abrir todos\n" +
+  "accApi.closeAll()    // cerrar todos\n" +
+  "accApi.isOpen('p1')  // → true | false";
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.Accordion('#acc-basic', {
+    items: [
+      { id:'q1', title:'¿Qué es Matios UI?',    content:'<div style="padding:12px 16px"><p>Una librería de componentes sin dependencias para UIs modernas.</p></div>', open:true },
+      { id:'q2', title:'¿Cómo se instala?',     content:'<div style="padding:12px 16px"><p>Agrega los archivos CSS y JS a tu proyecto.</p></div>' },
+      { id:'q3', title:'¿Es gratuito?',         content:'<div style="padding:12px 16px"><p>Sí, licencia MIT.</p></div>' },
+      { id:'q4', title:'Funciones premium',     content:'<div style="padding:12px 16px"><p>Próximamente.</p></div>', disabled:true },
+    ],
+    onOpen:  function(e){ document.getElementById('acc-result').textContent = 'onOpen → ' + e.detail.id; },
+    onClose: function(e){ document.getElementById('acc-result').textContent = 'onClose → ' + e.detail.id; },
   });
-})();</script></body>
+}, '340px');
+
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  new MTS.Accordion('#acc-multi', {
+    multiple:true, flush:true,
+    items: [
+      { id:'a', title:'Section A — stays open', content:'<div style="padding:12px 16px"><p>Content A — múltiples pueden estar abiertos.</p></div>', open:true },
+      { id:'b', title:'Section B',              content:'<div style="padding:12px 16px"><p>Content B.</p></div>', open:true },
+      { id:'c', title:'Section C',              content:'<div style="padding:12px 16px"><p>Content C.</p></div>' },
+    ],
+  });
+}, '340px');
+
+makeSection('tabs-s3', preview_s3, js_s3, function() {
+  new MTS.Accordion('#acc-icons', {
+    items: [
+      { id:'settings', icon:IC, title:'Settings',      content:'<div style="padding:12px 16px">Configuración de la aplicación.</div>', open:true },
+      { id:'profile',  icon:IU, title:'Profile',       content:'<div style="padding:12px 16px">Perfil del usuario.</div>' },
+      { id:'notif',    icon:IB, title:'Notifications', content:'<div style="padding:12px 16px">Preferencias de notificaciones.</div>' },
+    ],
+  });
+}, '340px');
+
+makeSection('tabs-s4', preview_s4, js_s4, function() {
+  accApi = new MTS.Accordion('#acc-api', {
+    multiple:true,
+    items: [
+      { id:'p1', title:'Panel 1', content:'<div style="padding:12px 16px">Contenido del panel 1.</div>', open:true },
+      { id:'p2', title:'Panel 2', content:'<div style="padding:12px 16px">Contenido del panel 2.</div>' },
+      { id:'p3', title:'Panel 3', content:'<div style="padding:12px 16px">Contenido del panel 3.</div>' },
+    ],
+    onOpen:  function(e){ document.getElementById('acc-api-res').textContent = 'onOpen → ' + e.detail.id; },
+    onClose: function(e){ document.getElementById('acc-api-res').textContent = 'onClose → ' + e.detail.id; },
+  });
+}, '380px');
+</script>
+</body>
 </html>

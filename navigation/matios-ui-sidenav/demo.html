@@ -30,83 +30,62 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
   <link rel="stylesheet" href="../../support/demo-shared.css">
   <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
   <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-menu/matios-ui-menu.css">
   <link rel="stylesheet" href="./matios-ui-sidenav.css">
   <script src="../../support/demo-shared.js"></script>
   <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../navigation/matios-ui-menu/matios-ui-menu.js"></script>
   <script src="./matios-ui-sidenav.js"></script>
 </head>
 <body>
-<div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
-  <button class="demo-btn-sm demo-btn-sep">—</button>
-  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
-</div>
 
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.SideNav</h1>
-    <p>Navegación lateral colapsable con grupos, submenús y badges.</p>
+    <p>Navegación lateral colapsable. Requiere una instancia de <code>MTS.Menu</code> en modo <code>tree</code>.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-sidenav.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Básico</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">1 — Con MTS.Menu</div><div id="tabs-s1"></div></div>
   <div class="demo-section"><div class="demo-section-title">2 — Colapsable</div><div id="tabs-s2"></div></div>
 </div>
 
 <script>
 
-function esc(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
+/* ── Logo helper ── */
+var LOGO_HTML = '<div style="width:28px;height:28px;background:linear-gradient(135deg,var(--mts-color-primary),var(--mts-color-accent,var(--mts-color-primary)));border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex-shrink:0">M</div>';
 
 function indentHtml(html) {
-  var indent = 0;
-  var step = 2;
+  var indent = 0, step = 2;
   var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
   var result = '';
   var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
   tokens.forEach(function(tok) {
     var t = tok.trim();
     if (!t) return;
-    if (/^<\//.test(t)) {
-      indent = Math.max(0, indent - step);
-      result += ' '.repeat(indent) + t + '\n';
-    } else if (/^<[^!]/.test(t)) {
-      result += ' '.repeat(indent) + t + '\n';
-      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
-      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
-    } else {
-      var text = t.replace(/\s+/g, ' ');
-      if (text) result += ' '.repeat(indent) + text + '\n';
-    }
+    if (/^<\//.test(t)) { indent = Math.max(0, indent - step); result += ' '.repeat(indent) + t + '\n'; }
+    else if (/^<[^!]/.test(t)) { result += ' '.repeat(indent) + t + '\n'; var tag = (t.match(/^<([a-z][a-z0-9-]*)/i)||[])[1]||''; if (!voids.test(tag) && !/\/>$/.test(t)) indent += step; }
+    else { var text = t.replace(/\s+/g,' '); if (text) result += ' '.repeat(indent) + text + '\n'; }
   });
   return result.trimEnd();
-}
-
-function htmlTab(previewHtml) {
-  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
-    esc(indentHtml(previewHtml)) +
-  '</pre>';
-}
-
-function jsTab(code) {
-  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
-    esc(code) +
-  '</pre>';
 }
 
 function makeSection(id, previewHtml, jsCode, initFn, height) {
@@ -115,11 +94,13 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
     height: height || '360px',
     lazy: false,
     tabs: [
-      { id: id + '-preview', label: 'Preview', content: previewHtml },
-      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
-      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' }
     ]
   });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
 
@@ -128,83 +109,132 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
-var sidenavApi;
-var preview_s1 =
+/* ════════════════════════════════════
+   1 — CON MTS.MENU
+   ════════════════════════════════════ */
+var js_s1 =
+"var navMenu = new MTS.Menu({\n" +
+"  items: [\n" +
+"    { group: 'Principal' },\n" +
+"    { key: 'dashboard', label: 'Dashboard',  icon: 'mts-icon-home' },\n" +
+"    { key: 'analytics', label: 'Analytics',  icon: 'mts-icon-bar-chart-2', badge: 'NEW' },\n" +
+"    { key: 'products',  label: 'Products',   icon: 'mts-icon-package', children: [\n" +
+"      { key: 'all-products', label: 'Todos los productos' },\n" +
+"      { key: 'add-product',  label: 'Agregar producto' }\n" +
+"    ]},\n" +
+"    { divider: true },\n" +
+"    { group: 'Ajustes' },\n" +
+"    { key: 'settings', label: 'Settings', icon: 'mts-icon-settings' }\n" +
+"  ],\n" +
+"  active: 'dashboard',\n" +
+"  onClick: function(item) { /* tu lógica aquí */ }\n" +
+"});\n\n" +
+"new MTS.SideNav('#sidenav-basic', {\n" +
+"  brand: {\n" +
+"    logo:  '<!-- logo html -->',\n" +
+"    title: 'MiApp',\n" +
+"    onClick: function() { navMenu.setActive(''); }\n" +
+"  },\n" +
+"  menu:   navMenu,\n" +
+"  footer: '<span>Matios UI · v2.0</span>'\n" +
+"});";
+
+makeSection('tabs-s1',
   '<div class="demo-stack">' +
     '<div class="demo-grid-outline demo-grid-outline--tall"><div id="sidenav-basic"></div></div>' +
     '<div class="result-box" id="sidenav-result">— selecciona un item —</div>' +
-  '</div>';
+  '</div>',
+  js_s1,
+  function() {
+    var navMenu = new MTS.Menu({
+      items: [
+        { group: 'Principal' },
+        { key: 'dashboard', label: 'Dashboard',  icon: 'mts-icon-home' },
+        { key: 'analytics', label: 'Analytics',  icon: 'mts-icon-bar-chart-2', badge: 'NEW' },
+        { key: 'products',  label: 'Products',   icon: 'mts-icon-package', children: [
+          { key: 'all-products', label: 'Todos los productos' },
+          { key: 'add-product',  label: 'Agregar producto' }
+        ]},
+        { divider: true },
+        { group: 'Ajustes' },
+        { key: 'settings', label: 'Settings', icon: 'mts-icon-settings' }
+      ],
+      active: 'dashboard',
+      onClick: function(item) { setResult('sidenav-result', 'active → ' + item.key); }
+    });
 
-var js_s1 =
-  "new MTS.SideNav('#sidenav-basic', {\n" +
-  "  active: 'dashboard',\n" +
-  "  items: [\n" +
-  "    { group: 'Main' },\n" +
-  "    { id: 'dashboard', label: 'Dashboard', icon: MTS.Icon.get('grid') },\n" +
-  "    { id: 'analytics', label: 'Analytics', icon: MTS.Icon.get('analytics'), badge: 'NEW' },\n" +
-  "    { id: 'products', label: 'Products', icon: MTS.Icon.get('package'), children: [\n" +
-  "      { id: 'all-products', label: 'All products' },\n" +
-  "      { id: 'add-product', label: 'Add product' }\n" +
-  "    ] },\n" +
-  "    { divider: true },\n" +
-  "    { group: 'Settings' },\n" +
-  "    { id: 'settings', label: 'Settings', icon: MTS.Icon.get('cog') }\n" +
-  "  ],\n" +
-  "  onChange: function(e) { setResult('sidenav-result', 'active → ' + e.detail.item.id); }\n" +
-  "});";
+    new MTS.SideNav('#sidenav-basic', {
+      brand: {
+        logo:  LOGO_HTML,
+        title: 'MiApp',
+        onClick: function() { navMenu.setActive(''); }
+      },
+      menu:   navMenu,
+      footer: '<span style="font-size:10px;color:var(--mts-text-muted)">Matios UI · v2.0</span>'
+    });
+  },
+'440px');
 
-var preview_s2 =
+/* ════════════════════════════════════
+   2 — COLAPSABLE
+   ════════════════════════════════════ */
+var sidenavApi;
+var menuApi;
+
+var js_s2 =
+"var menuApi = new MTS.Menu({\n" +
+"  items: [\n" +
+"    { key: 'home',     label: 'Inicio',    icon: 'mts-icon-home' },\n" +
+"    { key: 'messages', label: 'Mensajes',  icon: 'mts-icon-message-circle', badge: '5' },\n" +
+"    { key: 'settings', label: 'Settings',  icon: 'mts-icon-settings' }\n" +
+"  ],\n" +
+"  active: 'home',\n" +
+"  onClick: function(item) { /* tu lógica */ }\n" +
+"});\n\n" +
+"var sidenavApi = new MTS.SideNav('#sidenav-api', {\n" +
+"  brand:     { logo: '<!-- logo -->', title: 'MiApp' },\n" +
+"  menu:      menuApi,\n" +
+"  collapsed: true,\n" +
+"  onCollapse: function(e) { console.log('collapsed:', e.detail.collapsed); }\n" +
+"});\n\n" +
+"// Hover sobre los íconos para ver el tooltip de label\n" +
+"// API de colapso:\n" +
+"sidenavApi.collapse();\n" +
+"sidenavApi.expand();\n" +
+"sidenavApi.toggleCollapse();\n" +
+"menuApi.setActive('settings');";
+
+makeSection('tabs-s2',
   '<div class="demo-stack">' +
     '<div class="demo-grid-outline demo-grid-outline--tall"><div id="sidenav-api"></div></div>' +
     '<div class="demo-row">' +
       '<button class="demo-btn-sm" onclick="sidenavApi.collapse()">collapse()</button>' +
       '<button class="demo-btn-sm" onclick="sidenavApi.expand()">expand()</button>' +
-      '<button class="demo-btn-sm" onclick="sidenavApi.setActive(\'settings\')">setActive(\'settings\')</button>' +
+      '<button class="demo-btn-sm" onclick="sidenavApi.toggleCollapse()">toggleCollapse()</button>' +
+      '<button class="demo-btn-sm" onclick="menuApi.setActive(\'settings\')">menu.setActive(\'settings\')</button>' +
     '</div>' +
     '<div class="result-box" id="sidenav-api-result">— usa la API —</div>' +
-  '</div>';
+  '</div>',
+  js_s2,
+  function() {
+    menuApi = new MTS.Menu({
+      items: [
+        { key: 'home',     label: 'Inicio',   icon: 'mts-icon-home' },
+        { key: 'messages', label: 'Mensajes', icon: 'mts-icon-message-circle', badge: '5' },
+        { key: 'settings', label: 'Settings', icon: 'mts-icon-settings' }
+      ],
+      active: 'home',
+      onClick: function(item) { setResult('sidenav-api-result', 'active → ' + item.key); }
+    });
 
-var js_s2 =
-  "var sidenavApi = new MTS.SideNav('#sidenav-api', {\n" +
-  "  active: 'dashboard',\n" +
-  "  items: [\n" +
-  "    { id: 'dashboard', label: 'Dashboard', icon: MTS.Icon.get('grid') },\n" +
-  "    { id: 'messages', label: 'Messages', icon: MTS.Icon.get('message-circle') },\n" +
-  "    { id: 'settings', label: 'Settings', icon: MTS.Icon.get('cog') }\n" +
-  "  ],\n" +
-  "  onChange: function(e) { setResult('sidenav-api-result', 'active → ' + e.detail.item.id); }\n" +
-  "});";
-
-makeSection('tabs-s1', preview_s1, js_s1, function() {
-  new MTS.SideNav('#sidenav-basic', {
-    active: 'dashboard',
-    items: [
-      { group: 'Main' },
-      { id: 'dashboard', label: 'Dashboard', icon: MTS.Icon.get('grid') },
-      { id: 'analytics', label: 'Analytics', icon: MTS.Icon.get('analytics'), badge: 'NEW' },
-      { id: 'products', label: 'Products', icon: MTS.Icon.get('package'), children: [
-        { id: 'all-products', label: 'All products' },
-        { id: 'add-product', label: 'Add product' }
-      ] },
-      { divider: true },
-      { group: 'Settings' },
-      { id: 'settings', label: 'Settings', icon: MTS.Icon.get('cog') }
-    ],
-    onChange: function(e) { setResult('sidenav-result', 'active → ' + e.detail.item.id); }
-  });
-}, '420px');
-
-makeSection('tabs-s2', preview_s2, js_s2, function() {
-  sidenavApi = new MTS.SideNav('#sidenav-api', {
-    active: 'dashboard',
-    items: [
-      { id: 'dashboard', label: 'Dashboard', icon: MTS.Icon.get('grid') },
-      { id: 'messages', label: 'Messages', icon: MTS.Icon.get('message-circle') },
-      { id: 'settings', label: 'Settings', icon: MTS.Icon.get('cog') }
-    ],
-    onChange: function(e) { setResult('sidenav-api-result', 'active → ' + e.detail.item.id); }
-  });
-}, '420px');
+    sidenavApi = new MTS.SideNav('#sidenav-api', {
+      brand:     { logo: LOGO_HTML, title: 'MiApp' },
+      menu:      menuApi,
+      collapsed: true,
+      onCollapse: function(e) { setResult('sidenav-api-result', 'collapsed: ' + e.detail.collapsed); }
+    });
+  },
+'440px');
 
 </script>
 </body>

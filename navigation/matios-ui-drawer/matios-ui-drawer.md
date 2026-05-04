@@ -1,7 +1,7 @@
 # MTS.Drawer
 
-[EN] Sliding side panel with backdrop, four positions, four sizes, static mode and programmatic control.
-[ES] Panel lateral deslizante con backdrop, cuatro posiciones, cuatro tamaños, modo estático y control programático.
+🇬🇧 Sliding side panel with backdrop, four positions, four sizes, static mode and programmatic control.
+🇪🇸 Panel lateral deslizante con backdrop, cuatro posiciones, cuatro tamaños, modo estático y control programático.
 
 ---
 
@@ -17,21 +17,21 @@
 
 ## Options / Opciones
 
-[EN] `MTS.Drawer` does not take a selector — it appends itself to `document.body`.
-[ES] `MTS.Drawer` no recibe un selector — se agrega a `document.body`.
+🇬🇧 `MTS.Drawer` does not take a selector — it appends itself to `document.body`.
+🇪🇸 `MTS.Drawer` no recibe un selector — se agrega a `document.body`.
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `title` | `string` | `''` | [EN] Drawer header title / [ES] Título del header |
-| `content` | `string\|Element` | `''` | [EN] Body content / [ES] Contenido del cuerpo |
-| `footer` | `string\|Element` | `null` | [EN] Footer content / [ES] Contenido del pie |
+| `title` | `string` | `''` | 🇬🇧 Drawer header title / 🇪🇸 Título del header |
+| `content` | `string\|Element` | `''` | 🇬🇧 Body content / 🇪🇸 Contenido del cuerpo |
+| `footer` | `string\|Element` | `null` | 🇬🇧 Footer content / 🇪🇸 Contenido del pie |
 | `position` | `string` | `'right'` | `'left'` · `'right'` · `'top'` · `'bottom'` |
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` · `'full'` |
-| `backdrop` | `boolean` | `true` | [EN] Show backdrop overlay / [ES] Mostrar fondo oscuro |
-| `closable` | `boolean` | `true` | [EN] Show close button / [ES] Mostrar botón de cierre |
-| `static` | `boolean` | `false` | [EN] Does not close on Esc or backdrop click / [ES] No cierra con Esc ni click en backdrop |
-| `onOpen` | `function` | — | [EN] Fires when drawer opens / [ES] Se dispara al abrir |
-| `onClose` | `function` | — | [EN] Fires when drawer closes / [ES] Se dispara al cerrar |
+| `backdrop` | `boolean` | `true` | 🇬🇧 Show backdrop overlay / 🇪🇸 Mostrar fondo oscuro |
+| `closable` | `boolean` | `true` | 🇬🇧 Show close button / 🇪🇸 Mostrar botón de cierre |
+| `static` | `boolean` | `false` | 🇬🇧 Does not close on Esc or backdrop click / 🇪🇸 No cierra con Esc ni click en backdrop |
+| `onOpen` | `function` | — | 🇬🇧 Fires when drawer opens / 🇪🇸 Se dispara al abrir |
+| `onClose` | `function` | — | 🇬🇧 Fires when drawer closes / 🇪🇸 Se dispara al cerrar |
 
 ---
 
@@ -124,10 +124,3 @@ document.addEventListener('mts:drawer:close', (e) => {});
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 1.0.0 | [EN] Initial release — left/right/top/bottom, sm/md/lg/full, static mode / [ES] Versión inicial |

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-mode="light">
 <head>
   <script>
@@ -33,6 +33,7 @@
   <link rel="stylesheet" href="../../../../themes/matios-ui-accent-navy.css">
   <link rel="stylesheet" href="../../../../themes/matios-ui-accent-emerald.css">
   <link rel="stylesheet" href="../../../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-high-contrast.css">
   <link rel="stylesheet" href="../../../../base/matios-ui-base.css">
   <link rel="stylesheet" href="../../../../support/demo-shared.css">
   <link rel="stylesheet" href="../../../../overlays/matios-ui-alert/matios-ui-alert.css">
@@ -45,10 +46,14 @@
   <link rel="stylesheet" href="../../../../icons/matios-ui-icons.css">
   <link rel="stylesheet" href="../../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
   <script src="../../../../support/demo-shared.js"></script>
   <script src="../../../../icons/matios-ui-icons.js"></script>
   <script src="../../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
   <script src="../../../../forms/matios-ui-select/matios-ui-select.js"></script>
 </head>
 <body>
@@ -74,8 +79,8 @@ function makeSection(id, previewHtml, jsCode, initFn) {
       { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cbjs"   style="height:100%"></div>' },
     ],
   });
-  new MTS.CodeBlock('#' + id + '-cbhtml', { code: previewHtml, language: 'html',       height: '100%' });
-  new MTS.CodeBlock('#' + id + '-cbjs',   { code: jsCode,      language: 'javascript', height: '100%' });
+  new MTS.CodeBlock('#' + id + '-cbhtml', { code: previewHtml, language: 'html',       height: '100%', copyable: true });
+  new MTS.CodeBlock('#' + id + '-cbjs',   { code: jsCode,      language: 'javascript', height: '100%', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
 

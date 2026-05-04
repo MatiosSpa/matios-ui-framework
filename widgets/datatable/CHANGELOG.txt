@@ -186,6 +186,120 @@ Orden cronológico ascendente (lo más antiguo primero)
                plugins/documentmanager (3 archivos)
 
 
+[22] MTS.DocumentManagerPreviewPlugin v1.0.0 → v1.7.0
+     Modal fullscreen de vista previa de documentos para MTS.DocumentManagerPlugin.
+
+     v1.0.0 — Base del plugin:
+       · Modal fullscreen (MTS.Modal, backdrop:false) con iframe de documento.
+       · Panel lateral colapsible (width CSS transition) con acordeón (MTS.Accordion flush/multiple).
+       · Sistema de sub-paneles extensible: interfaz key/label/icon/install/uninstall/render/load.
+       · MTS.DocumentManagerPreviewBasicInfoPanel — panel built-in con metadatos del ítem.
+       · Botón toggle ← / → del panel lateral.
+       · Spinner overlay durante la carga del iframe.
+       · show(item) / show(item, url) — url sobreescribe urlResolver para esa apertura.
+       · Wiring explícito via onFileClick: function(item) { dmPreview.show(item); }
+       · Demo 11 / preview.html: widgets/datatable/demos/demo_11/preview.html
+         (demo_12 fue consolidada en demo_11 y eliminada — ver [24])
+
+     v1.2.0 — Navegación prev/next + botones con MTS.Button:
+       · Botones ← prev y → next en el header del modal (MTS.Button ghost/sm).
+       · Opciones onPrev(currentItem) y onNext(currentItem).
+       · Botón Descargar (onDownload) también con MTS.Button ghost/sm.
+       · Título del modal con ícono del tipo de archivo (_fileIconName) + _escHtml.
+
+     v1.3.0 → v1.6.0 — Flujo de reemplazo de documentos:
+       · Botón "Reemplazar" en el header → file picker oculto (<input type="file">).
+       · accept del file picker heredado de dm._options.accept automáticamente.
+       · Overlay de confirmación (position:absolute en .dm-preview__wrap) con:
+           — Info del archivo seleccionado (ícono + nombre + tamaño).
+           — Input de versión entero sugerida (versión actual + 1).
+           — Botones Cancelar / Subir (MTS.Button).
+           — Estados: idle → loading → success (auto-cierra + recarga iframe) / error + retry.
+       · Badge de versión read-only en el header del modal.
+       · Callback onReplace(item, file, version) — retornar Promise activa los estados.
+       · Mock API: POST /documents/:id/replace agregado a sw-datatable.js.
+       · Demo usa MTS.HttpClient.upload() en onReplace.
+       · Fix CSS: .dm-preview__confirm-overlay:not([hidden]) { display: flex }
+         para que hidden attribute no sea sobreescrito por display:flex.
+
+     v1.7.0 — Tres correcciones de calidad:
+       · Barra de progreso indeterminada (igual que upload plugin):
+         .dm-preview__confirm-progress-bar con translateX(-100% → 150% → 350%) en 1.4s.
+         Eliminado _confirmProgressFillEl y reportProgress — el Service Worker
+         responde instantáneamente y XHR onprogress no se dispara.
+       · Badge de versión migrado a MTS.Badge (variant:default, size:xs, shape:pill).
+         Eliminada clase .dm-preview__version-badge del CSS.
+         matios-ui-badge.js agregado a demos/demo_11/preview.html.
+       · Advertencia de extensión diferente: si el archivo seleccionado tiene una
+         extensión distinta al documento actual, se muestra un bloque
+         .dm-preview__confirm-warning con ícono alert-triangle en el estado idle.
+
+     Archivos: plugins/documentmanager/matios-ui-datatable-documentmanager-preview.js
+               plugins/documentmanager/matios-ui-datatable-documentmanager-preview.css
+               demos/demo_11/preview.html  (demo_12 consolidada en demo_11 — ver [24])
+     Dependencias: MTS.Modal · MTS.Accordion · MTS.Button · MTS.Badge · MTS.Icon
+                   MTS.HttpClient (en demo)
+
+
+[23] MTS.DocumentManagerPlugin — Badge de versión inline en tabla
+     renderName() muestra el número de versión como badge inline antes del nombre.
+     · Implementado con clases directas de MTS.Badge:
+       mts-badge--primary mts-badge--xs mts-badge--pill (sin instanciar componente JS).
+     · CSS: .mts-dm-name-version { flex-shrink: 0 } para que el badge no se comprima.
+     · Wrapper .mts-dm-name-wrap con display:flex y gap:0.375rem.
+     Archivos: plugins/documentmanager/matios-ui-datatable-documentmanager.js
+               plugins/documentmanager/matios-ui-datatable-documentmanager.css
+
+
+[24] Consolidación de demos DocumentManager + limpieza de artefactos
+     Demo 11 reescrita como demo integral de DocumentManagerPlugin:
+     · Integra todos los plugins: Upload + Preview + ContextMenu + Workflow + Filter + ColVis.
+     · preview.html creado dentro de demos/demo_11/ (iframe destino para PreviewPlugin).
+     · Corregidos campos erróneos en los datos mock: modified → modifiedAt,
+       size → sizeFormatted (con fallback a size).
+     Eliminados:
+     · plugins/document-manager-OLD/ — implementación anterior abandonada.
+     · demos/demo_12/ — consolidada en demo_11/preview.html.
+     · demos/demo_5/ — demo obsoleta sin referencias activas.
+     Archivos: demos/demo_11/demo.html · demos/demo_11/preview.html
+
+
+[25] MTS.DocumentManagerPreviewBasicInfoPanel v1.2.0 + matios-ui-i18n.js v1.0.0
+
+     BasicInfoPanel v1.2.0 — campos configurables:
+     · constructor(options) acepta options.fields: Array para elegir qué mostrar.
+     · Cada entrada: { label, field } (lee item[field]) o { label, resolve: fn(item) }.
+     · DEFAULT_FIELDS static getter — 8 campos por defecto, 100% retrocompatible.
+     · Skeleton dinámico: tantas filas como this._fields.length.
+     · labelKey en cada entrada de DEFAULT_FIELDS para resolución i18n en runtime.
+     · _buildContent(item, fields, loc) resuelve labelKey desde locale en cada render.
+
+     matios-ui-i18n.js v1.0.0 — fuente única de verdad (base/matios-ui-i18n.js):
+     · MTS.Locales — registro central por locale, agrupado por nombre de componente.
+     · MTS.setLocale(key) / MTS.getLocale(key?) / MTS.registerLocale(key, overrides).
+     · MTS._deepMerge() — deep merge para registerLocale (preserva keys existentes).
+     · 9 componentes cubiertos en es + en:
+         MTS.DataTable · MTS.DataTableFilterPlugin · MTS.DataTableColumnVisibilityPlugin
+         MTS.DocumentManagerPlugin · MTS.DocumentManagerContextMenuPlugin
+         MTS.DocumentManagerWorkflowPlugin · MTS.DocumentManagerUploadPlugin
+         MTS.DocumentManagerPreviewPlugin (16 strings) · MTS.DocumentManagerPreviewBasicInfoPanel
+     · Todos los plugins migrados a nuevas rutas locale?.['MTS.NombreComponente'].
+     · matios-ui-datatable-i18n.js convertido en shim de retrocompatibilidad
+       (MTS.DataTableLocales → alias de MTS.Locales).
+     · Opt-in — sin el archivo todos los componentes funcionan en español.
+
+     Archivos: base/matios-ui-i18n.js (nuevo)
+               widgets/datatable/matios-ui-datatable-i18n.js (shim)
+               matios-ui-datatable.js
+               plugins/filter/matios-ui-datatable-filter.js
+               plugins/columnvisibility/matios-ui-datatable-columnvisibility.js
+               plugins/documentmanager/matios-ui-datatable-documentmanager.js
+               plugins/documentmanager/matios-ui-datatable-documentmanager-contextmenu.js
+               plugins/documentmanager/matios-ui-datatable-documentmanager-workflow.js
+               plugins/documentmanager/matios-ui-datatable-documentmanager-upload.js
+               plugins/documentmanager/matios-ui-datatable-documentmanager-preview.js
+
+
 ── PENDIENTE ───────────────────────────────────────────────────────────────────
 
 
@@ -197,14 +311,6 @@ Orden cronológico ascendente (lo más antiguo primero)
      Barra contextual que aparece al seleccionar filas.
      Muestra contador + botones de operaciones en lote.
      Descartado por ahora — cubrir cuando haya caso de uso real.
-
-[P3] DocumentManager — UploadPlugin (backlog)
-     Zona drag & drop para subir archivos a la carpeta actual.
-     Integra con breadcrumb para conocer el parentId destino.
-
-[P4] DocumentManager — PreviewPlugin (backlog)
-     Panel lateral o modal de vista previa al hacer clic en un archivo.
-     Soporta PDF, imágenes, texto plano.
 
 [P5] DocumentManager — VersionPlugin (backlog)
      Historial de versiones por documento.

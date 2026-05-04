@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-theme="dark">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -29,11 +29,11 @@
   <script src="../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
 <style>
 *{box-sizing:border-box}
-body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;min-height:100vh;}
+body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-family:var(--mts-font-family);margin:0;min-height:100vh;}
 .app-topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:50px;background:var(--mts-bg-surface);border-bottom:1px solid var(--mts-border-color);position:sticky;top:0;z-index:100;}
-.app-topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mts-text-muted);cursor:pointer;padding:4px 8px;border-radius:var(--mts-radius-md);border:none;background:none;transition:color .15s,background .15s;font-family:var(--mts-font-family);}
-.app-topbar-back:hover{color:var(--mts-text-primary);background:var(--mts-bg-surface-2);}
-.app-topbar-title{font-size:14px;font-weight:700;color:var(--mts-text-primary);flex:1;}
+.app-topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mts-text-color--muted);cursor:pointer;padding:4px 8px;border-radius:var(--mts-radius-md);border:none;background:none;transition:color .15s,background .15s;font-family:var(--mts-font-family);}
+.app-topbar-back:hover{color:var(--mts-text-color--primary);background:var(--mts-bg-surface-2);}
+.app-topbar-title{font-size:14px;font-weight:700;color:var(--mts-text-color--primary);flex:1;}
 .app-topbar-badge{font-size:10px;padding:2px 8px;border-radius:var(--mts-radius-full);background:var(--mts-color-primary-light);color:var(--mts-color-primary);font-weight:700;}
 .app-content{padding:24px;max-width:1100px;margin:0 auto;}
 .app-card{background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:24px;}
@@ -44,12 +44,12 @@ body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var
 .app-grid-4{grid-template-columns:repeat(4,1fr);}
 .app-h2{font-size:18px;font-weight:800;margin:0 0 4px;}
 .app-h2 span{color:var(--mts-color-primary);}
-.app-sub{font-size:13px;color:var(--mts-text-muted);margin:0 0 20px;}
+.app-sub{font-size:13px;color:var(--mts-text-color--muted);margin:0 0 20px;}
 .app-divider{border:none;border-top:1px solid var(--mts-border-color);margin:20px 0;}
-.app-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);margin-bottom:6px;}
+.app-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-color--muted);margin-bottom:6px;}
 .app-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
 .app-theme{position:fixed;bottom:16px;right:16px;display:flex;gap:4px;z-index:999;}
-.app-theme-btn{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+.app-theme-btn{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-color--secondary);}
 .app-theme-btn:hover{background:var(--mts-bg-surface-2);}
 @media(max-width:640px){.app-grid-2,.app-grid-3,.app-grid-4{grid-template-columns:1fr;}}
 </style>
@@ -61,7 +61,7 @@ body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var
 .cfg-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--mts-border-color);}
 .cfg-row:last-child{border-bottom:none;}
 .cfg-row-info h4{margin:0 0 2px;font-size:14px;font-weight:600;}
-.cfg-row-info p{margin:0;font-size:12px;color:var(--mts-text-muted);}
+.cfg-row-info p{margin:0;font-size:12px;color:var(--mts-text-color--muted);}
 .cfg-danger-zone{border:1px solid var(--mts-color-danger,#f87171);border-radius:var(--mts-radius-lg);padding:20px;}
 </style>
 <div class="cfg-content">
@@ -125,13 +125,13 @@ function buildPlan(){
   d.innerHTML='<div style="padding:4px 0;display:flex;flex-direction:column;gap:16px;">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;padding:16px;background:var(--mts-color-primary-light);border:1px solid var(--mts-color-primary);border-radius:var(--mts-radius-lg);">'
     +'<div><div style="font-size:16px;font-weight:800;color:var(--mts-color-primary);">Plan Pro</div>'
-    +'<div style="font-size:12px;color:var(--mts-text-muted);margin-top:2px;">$29/mes · Facturación anual · Próximo cobro: 1 May 2026</div></div>'
+    +'<div style="font-size:12px;color:var(--mts-text-color--muted);margin-top:2px;">$29/mes · Facturación anual · Próximo cobro: 1 May 2026</div></div>'
     +'<span class="mts-badge mts-badge--primary">Activo</span></div>'
     +'<div><div class="app-label" style="margin-bottom:12px;">Uso del plan</div>'
     +'<div style="display:flex;flex-direction:column;gap:10px;">'
-    +'<div style="display:flex;justify-content:space-between;font-size:13px;"><span>Usuarios</span><span style="color:var(--mts-text-muted);">8 / 25</span></div>'
+    +'<div style="display:flex;justify-content:space-between;font-size:13px;"><span>Usuarios</span><span style="color:var(--mts-text-color--muted);">8 / 25</span></div>'
     +'<div style="height:6px;background:var(--mts-border-color);border-radius:3px;"><div style="width:32%;height:100%;background:var(--mts-color-primary);border-radius:3px;"></div></div>'
-    +'<div style="display:flex;justify-content:space-between;font-size:13px;"><span>Almacenamiento</span><span style="color:var(--mts-text-muted);">4.2 GB / 50 GB</span></div>'
+    +'<div style="display:flex;justify-content:space-between;font-size:13px;"><span>Almacenamiento</span><span style="color:var(--mts-text-color--muted);">4.2 GB / 50 GB</span></div>'
     +'<div style="height:6px;background:var(--mts-border-color);border-radius:3px;"><div style="width:8%;height:100%;background:var(--mts-color-success,#22c55e);border-radius:3px;"></div></div>'
     +'</div></div>'
     +'<div id="cfg-plan-btn"></div></div>';
@@ -163,13 +163,13 @@ function buildDanger(){
   d.innerHTML='<div style="padding:4px 0;display:flex;flex-direction:column;gap:16px;">'
     +'<div class="cfg-danger-zone">'
     +'<h4 style="margin:0 0 4px;color:var(--mts-color-danger);">⚠️ Zona de peligro</h4>'
-    +'<p style="margin:0 0 16px;font-size:13px;color:var(--mts-text-muted);">Las siguientes acciones son irreversibles. Procede con precaución.</p>'
+    +'<p style="margin:0 0 16px;font-size:13px;color:var(--mts-text-color--muted);">Las siguientes acciones son irreversibles. Procede con precaución.</p>'
     +'<div style="display:flex;flex-direction:column;gap:12px;">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">'
-    +'<div><div style="font-size:13px;font-weight:600;">Exportar todos los datos</div><div style="font-size:12px;color:var(--mts-text-muted);">Descarga todos tus datos en formato JSON</div></div>'
+    +'<div><div style="font-size:13px;font-weight:600;">Exportar todos los datos</div><div style="font-size:12px;color:var(--mts-text-color--muted);">Descarga todos tus datos en formato JSON</div></div>'
     +'<div id="cfg-export-btn"></div></div>'
     +'<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">'
-    +'<div><div style="font-size:13px;font-weight:600;">Eliminar cuenta</div><div style="font-size:12px;color:var(--mts-text-muted);">Elimina permanentemente tu cuenta y todos sus datos</div></div>'
+    +'<div><div style="font-size:13px;font-weight:600;">Eliminar cuenta</div><div style="font-size:12px;color:var(--mts-text-color--muted);">Elimina permanentemente tu cuenta y todos sus datos</div></div>'
     +'<div id="cfg-delete-btn"></div></div>'
     +'</div></div></div>';
   setTimeout(function(){

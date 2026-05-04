@@ -1,7 +1,7 @@
 # MTS.Dropdown
 
-[EN] Dropdown menu with groups, icons, keyboard shortcuts, dividers, submenus (up to 4 levels) and hover mode.
-[ES] Menú desplegable con grupos, íconos, atajos de teclado, divisores, submenús (hasta 4 niveles) y modo hover.
+🇬🇧 Dropdown menu with groups, icons, keyboard shortcuts, dividers, submenus (up to 4 levels) and hover mode.
+🇪🇸 Menú desplegable con grupos, íconos, atajos de teclado, divisores, submenús (hasta 4 niveles) y modo hover.
 
 ---
 
@@ -17,31 +17,31 @@
 
 ## Options / Opciones
 
-[EN] First argument is the trigger element (button, link, etc.). The dropdown appends itself to `document.body`.
-[ES] El primer argumento es el elemento trigger (botón, enlace, etc.). El dropdown se agrega a `document.body`.
+🇬🇧 First argument is the trigger element (button, link, etc.). The dropdown appends itself to `document.body`.
+🇪🇸 El primer argumento es el elemento trigger (botón, enlace, etc.). El dropdown se agrega a `document.body`.
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `items` | `array` | `[]` | [EN] Menu items — see schema below / [ES] Ítems del menú |
+| `items` | `array` | `[]` | 🇬🇧 Menu items — see schema below / 🇪🇸 Ítems del menú |
 | `position` | `string` | `'bottom-start'` | `'bottom-start'` · `'bottom-end'` · `'top-start'` · `'top-end'` |
 | `trigger` | `string` | `'click'` | `'click'` · `'hover'` |
-| `offset` | `number` | `4` | [EN] Gap in px between trigger and menu / [ES] Separación en px |
-| `onSelect` | `function` | — | [EN] Fires when an item is selected / [ES] Se dispara al seleccionar un ítem |
-| `onOpen` | `function` | — | [EN] Fires when menu opens / [ES] Se dispara al abrir |
-| `onClose` | `function` | — | [EN] Fires when menu closes / [ES] Se dispara al cerrar |
+| `offset` | `number` | `4` | 🇬🇧 Gap in px between trigger and menu / 🇪🇸 Separación en px |
+| `onSelect` | `function` | — | 🇬🇧 Fires when an item is selected / 🇪🇸 Se dispara al seleccionar un ítem |
+| `onOpen` | `function` | — | 🇬🇧 Fires when menu opens / 🇪🇸 Se dispara al abrir |
+| `onClose` | `function` | — | 🇬🇧 Fires when menu closes / 🇪🇸 Se dispara al cerrar |
 
 ### Item schema / Esquema de ítem
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `label` | `string` | [EN] Display text / [ES] Texto visible |
-| `icon` | `string` | [EN] Icon HTML (optional) / [ES] HTML del ícono |
-| `shortcut` | `string` | [EN] Keyboard shortcut hint (optional) / [ES] Atajo de teclado (opcional) |
-| `disabled` | `boolean` | [EN] Disables the item / [ES] Deshabilita el ítem |
-| `divider` | `boolean` | [EN] Renders a separator line / [ES] Renderiza una línea separadora |
-| `group` | `string` | [EN] Group label above item / [ES] Label de grupo sobre el ítem |
-| `items` | `array` | [EN] Submenu items (recursive) / [ES] Ítems del submenú (recursivo) |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `label` | `string` | 🇬🇧 Display text / 🇪🇸 Texto visible |
+| `icon` | `string` | 🇬🇧 Icon HTML (optional) / 🇪🇸 HTML del ícono |
+| `shortcut` | `string` | 🇬🇧 Keyboard shortcut hint (optional) / 🇪🇸 Atajo de teclado (opcional) |
+| `disabled` | `boolean` | 🇬🇧 Disables the item / 🇪🇸 Deshabilita el ítem |
+| `divider` | `boolean` | 🇬🇧 Renders a separator line / 🇪🇸 Renderiza una línea separadora |
+| `group` | `string` | 🇬🇧 Group label above item / 🇪🇸 Label de grupo sobre el ítem |
+| `items` | `array` | 🇬🇧 Submenu items (recursive) / 🇪🇸 Ítems del submenú (recursivo) |
 
 ---
 
@@ -149,10 +149,3 @@ document.addEventListener('mts:dropdown:close',  () => {});
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 1.0.0 | [EN] Initial release — groups, icons, shortcuts, submenus, hover / [ES] Versión inicial |

@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-
-<html data-mts-mode="dark" lang="es">
+<html lang="es" data-mts-mode="dark">
 <head>
-<script>
+  <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      const sp=location.search||location.hash||'';
+      const mm=sp.match(/mts-mode=([a-z-]+)/);
+      const ma=sp.match(/mts-accent=([a-z-]+)/);
       if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
       if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
       try{
-        var p=window.parent;
+        const p=window.parent;
         if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          const pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          const pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
           if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
           if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
           else   document.documentElement.removeAttribute('data-mts-accent');
@@ -21,225 +20,305 @@
       }catch(e){}
     })();
   </script>
-<meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>MTS.Pagination — Demo</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="../../base/matios-ui-base.css" rel="stylesheet"/>
-<link href="../../themes/matios-ui-mode-dark.css" rel="stylesheet"/>
-<link href="../../themes/matios-ui-mode-light.css" rel="stylesheet"/>
-<link href="../../themes/matios-ui-accent-violet.css" rel="stylesheet"/>
-<link href="../../themes/matios-ui-accent-olive.css" rel="stylesheet"/>
-<link href="../../themes/matios-ui-accent-blue.css" rel="stylesheet"/>
-<link href="../../support/demo-shared.css" rel="stylesheet"/>
-<link href="../matios-ui-tabs/matios-ui-tabs.css" rel="stylesheet"/><link href="./matios-ui-pagination.css" rel="stylesheet"/>
-<script src="../../support/demo-shared.js"></script><script src="../matios-ui-tabs/matios-ui-tabs.js"></script>
-<script src="./matios-ui-pagination.js"></script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Pagination — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="./matios-ui-pagination.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="./matios-ui-pagination.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
 </head>
 <body>
-<div class="demo-theme">
-<button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
-<button class="demo-btn-sm" onclick="setMode('light')">Light</button>
-<button class="demo-btn-sm demo-btn-sep">—</button>
-<button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
-<button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
-<button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
-<button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
-</div>
+
 <div class="demo-page">
-<div class="demo-header">
-<h1><span>MTS</span>.Pagination</h1>
-<p>Full pagination — page size selector, record summary, jump-to-page, size variants.</p>
-<div class="demo-header-actions">
-<button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-pagination.md')">📄 Docs</button>
-</div>
-<div class="demo-docs-panel" id="docs-panel"></div>
-</div>
-<!-- 1. Básico -->
-<div class="demo-section"><div class="demo-section-title">1 — Básico con onChange / Basic with onChange</div><div id="tabs-s1"></div><div hidden="" id="src-s1-preview"><div id="pag-basic"></div><div class="result-box" id="pag-result">— cambia de página —</div></div><div hidden="" id="src-s1-html">&lt;div id="my-pagination"
-  data-total="250"
-  data-page="1"
-  data-page-size="25"&gt;
-&lt;/div&gt;
+  <div class="demo-header">
+    <h1><span>MTS</span>.Pagination</h1>
+    <p>Full pagination — page size selector, record summary, jump-to-page, size variants.</p>
+    <div class="demo-header-actions">
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
 
-&lt;script&gt;
-  new MTS.Pagination('#my-pagination', {
-    // Fires on page or page size change / Se dispara al cambiar página o page size
-    onChange: (e) =&gt; {
-      console.log(e.detail.page);     // → 3
-      console.log(e.detail.pageSize); // → 25
-      console.log(e.detail.from);     // → 51
-      console.log(e.detail.to);       // → 75
-      fetchData(e.detail.page, e.detail.pageSize);
-    },
-  });
-&lt;/script&gt;</div><div hidden="" id="src-s1-js">new MTS.Pagination('#my-pagination', {
-  total:    250,
-  page:     1,
-  pageSize: 25,
-  showSizes: true,  // page size selector / selector de page size
-  showInfo:  true,  // "Showing 1-25 of 250"
-  // Fires on page or page size change / Se dispara al cambiar página o page size
-  onChange: (e) =&gt; {
-    console.log(e.detail.page);     // → current page
-    console.log(e.detail.pageSize); // → current page size
-    console.log(e.detail.from);     // → first record
-    console.log(e.detail.to);       // → last record
-    console.log(e.detail.total);    // → total records
-    fetchData(e.detail.page, e.detail.pageSize);
-  },
-});</div></div>
-<!-- 2. Jump + variantes de tamaño -->
-<div class="demo-section"><div class="demo-section-title">2 — Con jump + tamaños / With jump + sizes</div><div id="tabs-s2"></div><div hidden="" id="src-s2-preview"><div class="demo-stack" style="gap:20px">
-<div>
-<div class="demo-label" style="margin-bottom:6px">size: sm + showJump</div>
-<div id="pag-sm"></div>
+  <div class="demo-section"><div class="demo-section-title">1 — Básico con onChange / Basic with onChange</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Con jump + tamaños / With jump + sizes</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — API — setPage, setTotal, setPageSize</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — siblings — páginas visibles a cada lado</div><div id="tabs-s4"></div></div>
 </div>
-<div>
-<div class="demo-label" style="margin-bottom:6px">size: md (default)</div>
-<div id="pag-md"></div>
-</div>
-<div>
-<div class="demo-label" style="margin-bottom:6px">size: lg</div>
-<div id="pag-lg"></div>
-</div>
-</div></div><div hidden="" id="src-s2-html">&lt;div id="pag-sm" data-total="500" data-size="sm"&gt;&lt;/div&gt;
-&lt;div id="pag-md" data-total="500" data-size="md"&gt;&lt;/div&gt;
-&lt;div id="pag-lg" data-total="500" data-size="lg"&gt;&lt;/div&gt;
-&lt;script&gt;
-  ['sm','md','lg'].forEach(s =&gt;
-    new MTS.Pagination('#pag-' + s, {
-      total: 500, size: s,
-      showJump: s === 'sm',
-    })
-  );
-&lt;/script&gt;</div><div hidden="" id="src-s2-js">// Small with jump-to-page / Pequeño con ir a página
-new MTS.Pagination('#pag-sm', {
-  total:    500,
-  size:     'sm',
-  showJump: true,  // input to jump to any page / input para ir a cualquier página
-});
 
-// Medium (default) / Mediano
-new MTS.Pagination('#pag-md', { total: 500, size: 'md' });
-
-// Large / Grande
-new MTS.Pagination('#pag-lg', { total: 500, size: 'lg' });</div></div>
-<!-- 3. API -->
-<div class="demo-section"><div class="demo-section-title">3 — API — setPage, setTotal, setPageSize</div><div id="tabs-s3"></div><div hidden="" id="src-s3-preview"><div id="pag-api"></div><div class="demo-row" style="margin-top:8px;flex-wrap:wrap">
-<button class="demo-btn-sm" onclick="pagApi.setPage(1)">setPage(1)</button>
-<button class="demo-btn-sm" onclick="pagApi.setPage(5)">setPage(5)</button>
-<button class="demo-btn-sm" onclick="pagApi.setTotal(500); document.getElementById('pag-api-res').textContent = 'setTotal(500) ✓'">setTotal(500)</button>
-<button class="demo-btn-sm" onclick="pagApi.setPageSize(50); document.getElementById('pag-api-res').textContent = 'setPageSize(50) ✓'">setPageSize(50)</button>
-<button class="demo-btn-sm" onclick="document.getElementById('pag-api-res').textContent = JSON.stringify(pagApi.getState())">getState()</button>
-</div><div class="result-box" id="pag-api-res">— usa los botones —</div></div><div hidden="" id="src-s3-html">&lt;div id="my-pagination" data-total="250"&gt;&lt;/div&gt;
-&lt;script&gt;
-  const pag = new MTS.Pagination('#my-pagination', {
-    onChange: (e) =&gt; fetchData(e.detail.page, e.detail.pageSize),
-  });
-  pag.setPage(3)
-  pag.setTotal(500)
-  pag.setPageSize(50)
-  pag.getState() // → { page, pageSize, total, from, to }
-&lt;/script&gt;</div><div hidden="" id="src-s3-js">const pag = new MTS.Pagination('#my-pagination', {
-  total:    250,
-  pageSize: 25,
-  onChange: (e) =&gt; fetchData(e.detail.page, e.detail.pageSize),
-});
-
-// Navigate / Navegar
-pag.setPage(3)
-
-// Update total after data load / Actualizar total tras cargar datos
-pag.setTotal(500)
-
-// Change page size (resets to page 1) / Cambiar page size (resetea a página 1)
-pag.setPageSize(50)
-
-// Get current state / Obtener estado actual
-pag.getState()
-// → { page: 1, pageSize: 50, total: 500, from: 1, to: 50 }</div></div>
-<!-- 4. siblings personalizado -->
-<div class="demo-section"><div class="demo-section-title">4 — siblings — páginas visibles a cada lado</div><div id="tabs-s4"></div><div hidden="" id="src-s4-preview"><div class="demo-stack" style="gap:16px">
-<div>
-<div class="demo-label" style="margin-bottom:6px">siblings: 1 (default)</div>
-<div id="pag-sib1"></div>
-</div>
-<div>
-<div class="demo-label" style="margin-bottom:6px">siblings: 2</div>
-<div id="pag-sib2"></div>
-</div>
-</div></div><div hidden="" id="src-s4-html">&lt;div id="pag-sib1" data-total="500"&gt;&lt;/div&gt;
-&lt;div id="pag-sib2" data-total="500"&gt;&lt;/div&gt;
-&lt;script&gt;
-  new MTS.Pagination('#pag-sib1', { total:500, page:5, showSizes:false, showInfo:false, siblings:1 });
-  new MTS.Pagination('#pag-sib2', { total:500, page:5, showSizes:false, showInfo:false, siblings:2 });
-&lt;/script&gt;</div><div hidden="" id="src-s4-js">// siblings: pages shown on each side of the active page
-// siblings: páginas mostradas a cada lado de la activa
-new MTS.Pagination('#pag-sib1', {
-  total: 500, page: 5,
-  siblings:  1,  // default: «1 2 3 [4] 5 6 7»
-  showSizes: false, showInfo: false,
-});
-
-new MTS.Pagination('#pag-sib2', {
-  total: 500, page: 5,
-  siblings:  2,  // «1 2 3 4 [5] 6 7 8 9»
-  showSizes: false, showInfo: false,
-});</div></div>
-</div>
 <script>
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+
+function indentHtml(html) {
+  let indent   = 0;
+  const step   = 2;
+  const voids  = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  let result   = '';
+  const tokens = String(html).match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    const t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      const tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      const text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+/*
+ * makeSection — crea las 3 tabs: Preview, HTML y JavaScript.
+ * Con lazy:false todos los paneles están en el DOM al salir de esta función.
+ *
+ * @param {string} id          — id del contenedor de tabs
+ * @param {string} previewHtml — HTML del preview
+ * @param {string} jsCode      — código JS de ejemplo
+ * @param {string} [htmlCode]  — snippet HTML representativo (opcional)
+ */
+function makeSection(id, previewHtml, jsCode, htmlCode) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height:  '320px',
+    lazy:    false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',        content: '<div id="cb-html-' + id + '" style="height:100%"></div>' },
+      { id: id + '-js',      label: 'JavaScript',  content: '<div id="cb-js-'   + id + '" style="height:100%"></div>' },
+    ],
+  });
+
+  new MTS.CodeBlock(document.getElementById('cb-html-' + id), {
+    language: 'html',
+    code:     htmlCode || indentHtml(previewHtml),
+    copyable: true,
+  });
+
+  new MTS.CodeBlock(document.getElementById('cb-js-' + id), {
+    language: 'javascript',
+    code:     jsCode,
+    copyable: true,
+  });
+}
+
+/* ============================================================
+   S1 — Básico con onChange
+   ============================================================ */
+
+const preview_s1 =
+  '<div id="pag-basic"></div>' +
+  '<div class="result-box" id="pag-result" style="margin-top:12px">— cambia de página —</div>';
+
+const html_s1 =
+  '<div id="my-pagination"\n' +
+  '  data-total="250"\n' +
+  '  data-page="1"\n' +
+  '  data-page-size="25">\n' +
+  '</div>\n\n' +
+  '<script>\n' +
+  '  new MTS.Pagination(\'#my-pagination\', {\n' +
+  '    onChange: (e) => fetchData(e.detail.page, e.detail.pageSize),\n' +
+  '  });\n' +
+  '<\/script>';
+
+const js_s1 =
+  'new MTS.Pagination(\'#my-pagination\', {\n' +
+  '  total:     250,\n' +
+  '  page:      1,\n' +
+  '  pageSize:  25,\n' +
+  '  showSizes: true,   // page size selector / selector de page size\n' +
+  '  showInfo:  true,   // "Showing 1-25 of 250"\n' +
+  '  // Fires on page or page size change / Se dispara al cambiar página o page size\n' +
+  '  onChange: (e) => {\n' +
+  '    console.log(e.detail.page);      // → current page\n' +
+  '    console.log(e.detail.pageSize);  // → current page size\n' +
+  '    console.log(e.detail.from);      // → first record\n' +
+  '    console.log(e.detail.to);        // → last record\n' +
+  '    console.log(e.detail.total);     // → total records\n' +
+  '  },\n' +
+  '});';
+
+makeSection('tabs-s1', preview_s1, js_s1, html_s1);
+
 new MTS.Pagination('#pag-basic', {
-  total:250, page:1, pageSize:25,
-  onChange: function(e){
+  total: 250, page: 1, pageSize: 25,
+  onChange: function(e) {
     document.getElementById('pag-result').textContent =
-      'onChange → page:' + e.detail.page + ' | pageSize:' + e.detail.pageSize + ' | from:' + e.detail.from + ' to:' + e.detail.to;
+      'onChange → page: ' + e.detail.page +
+      ' | pageSize: ' + e.detail.pageSize +
+      ' | from: ' + e.detail.from +
+      ' to: ' + e.detail.to;
   },
 });
-new MTS.Pagination('#pag-sm', { total:500, size:'sm', showJump:true });
-new MTS.Pagination('#pag-md', { total:500, size:'md' });
-new MTS.Pagination('#pag-lg', { total:500, size:'lg' });
-var pagApi = new MTS.Pagination('#pag-api', {
-  total:250, pageSize:25,
-  onChange: function(e){ document.getElementById('pag-api-res').textContent = 'onChange → page:' + e.detail.page; },
+
+/* ============================================================
+   S2 — Con jump + tamaños
+   ============================================================ */
+
+const preview_s2 =
+  '<div class="demo-stack" style="gap:20px">' +
+    '<div>' +
+      '<div class="demo-label" style="margin-bottom:6px">size: sm + showJump</div>' +
+      '<div id="pag-sm"></div>' +
+    '</div>' +
+    '<div>' +
+      '<div class="demo-label" style="margin-bottom:6px">size: md (default)</div>' +
+      '<div id="pag-md"></div>' +
+    '</div>' +
+    '<div>' +
+      '<div class="demo-label" style="margin-bottom:6px">size: lg</div>' +
+      '<div id="pag-lg"></div>' +
+    '</div>' +
+  '</div>';
+
+const html_s2 =
+  '<div id="pag-sm" data-total="500" data-size="sm"></div>\n' +
+  '<div id="pag-md" data-total="500" data-size="md"></div>\n' +
+  '<div id="pag-lg" data-total="500" data-size="lg"></div>';
+
+const js_s2 =
+  '// Small with jump-to-page / Pequeño con ir a página\n' +
+  'new MTS.Pagination(\'#pag-sm\', {\n' +
+  '  total:    500,\n' +
+  '  size:     \'sm\',\n' +
+  '  showJump: true,  // input to jump to any page / input para ir a cualquier página\n' +
+  '});\n\n' +
+  '// Medium (default) / Mediano\n' +
+  'new MTS.Pagination(\'#pag-md\', { total: 500, size: \'md\' });\n\n' +
+  '// Large / Grande\n' +
+  'new MTS.Pagination(\'#pag-lg\', { total: 500, size: \'lg\' });';
+
+makeSection('tabs-s2', preview_s2, js_s2, html_s2);
+
+new MTS.Pagination('#pag-sm', { total: 500, size: 'sm', showJump: true });
+new MTS.Pagination('#pag-md', { total: 500, size: 'md' });
+new MTS.Pagination('#pag-lg', { total: 500, size: 'lg' });
+
+/* ============================================================
+   S3 — API programática
+   ============================================================ */
+
+const preview_s3 =
+  '<div id="pag-api"></div>' +
+  '<div class="demo-row" style="margin-top:8px;flex-wrap:wrap">' +
+    '<button type="button" class="mts-btn mts-btn--secondary mts-btn--sm" id="btn-page1">setPage(1)</button>' +
+    '<button type="button" class="mts-btn mts-btn--secondary mts-btn--sm" id="btn-page5">setPage(5)</button>' +
+    '<button type="button" class="mts-btn mts-btn--secondary mts-btn--sm" id="btn-total500">setTotal(500)</button>' +
+    '<button type="button" class="mts-btn mts-btn--secondary mts-btn--sm" id="btn-size50">setPageSize(50)</button>' +
+    '<button type="button" class="mts-btn mts-btn--secondary mts-btn--sm" id="btn-state">getState()</button>' +
+  '</div>' +
+  '<div class="result-box" id="pag-api-res" style="margin-top:12px">— usa los botones —</div>';
+
+const html_s3 =
+  '<div id="my-pagination" data-total="250"></div>';
+
+const js_s3 =
+  'const pag = new MTS.Pagination(\'#my-pagination\', {\n' +
+  '  total:    250,\n' +
+  '  pageSize: 25,\n' +
+  '  onChange: (e) => fetchData(e.detail.page, e.detail.pageSize),\n' +
+  '});\n\n' +
+  '// Navigate / Navegar\n' +
+  'pag.setPage(3);\n\n' +
+  '// Update total after data load / Actualizar total tras cargar datos\n' +
+  'pag.setTotal(500);\n\n' +
+  '// Change page size (resets to page 1) / Cambiar page size (resetea a página 1)\n' +
+  'pag.setPageSize(50);\n\n' +
+  '// Get current state / Obtener estado actual\n' +
+  'pag.getState();\n' +
+  '// → { page: 1, pageSize: 50, total: 500, from: 1, to: 50 }';
+
+makeSection('tabs-s3', preview_s3, js_s3, html_s3);
+
+const pagApi = new MTS.Pagination('#pag-api', {
+  total: 250, pageSize: 25,
+  onChange: function(e) {
+    document.getElementById('pag-api-res').textContent = 'onChange → page: ' + e.detail.page;
+  },
 });
-new MTS.Pagination('#pag-sib1', { total:500, page:5, showSizes:false, showInfo:false, siblings:1 });
-new MTS.Pagination('#pag-sib2', { total:500, page:5, showSizes:false, showInfo:false, siblings:2 });
+
+document.getElementById('btn-page1').addEventListener('click', function() {
+  pagApi.setPage(1);
+});
+document.getElementById('btn-page5').addEventListener('click', function() {
+  pagApi.setPage(5);
+});
+document.getElementById('btn-total500').addEventListener('click', function() {
+  pagApi.setTotal(500);
+  document.getElementById('pag-api-res').textContent = 'setTotal(500) ✓';
+});
+document.getElementById('btn-size50').addEventListener('click', function() {
+  pagApi.setPageSize(50);
+  document.getElementById('pag-api-res').textContent = 'setPageSize(50) ✓';
+});
+document.getElementById('btn-state').addEventListener('click', function() {
+  document.getElementById('pag-api-res').textContent = JSON.stringify(pagApi.getState());
+});
+
+/* ============================================================
+   S4 — siblings
+   ============================================================ */
+
+const preview_s4 =
+  '<div class="demo-stack" style="gap:16px">' +
+    '<div>' +
+      '<div class="demo-label" style="margin-bottom:6px">siblings: 1 (default)</div>' +
+      '<div id="pag-sib1"></div>' +
+    '</div>' +
+    '<div>' +
+      '<div class="demo-label" style="margin-bottom:6px">siblings: 2</div>' +
+      '<div id="pag-sib2"></div>' +
+    '</div>' +
+  '</div>';
+
+const html_s4 =
+  '<div id="pag-sib1" data-total="500"></div>\n' +
+  '<div id="pag-sib2" data-total="500"></div>';
+
+const js_s4 =
+  '// siblings: pages shown on each side of the active page\n' +
+  '// siblings: páginas mostradas a cada lado de la activa\n' +
+  'new MTS.Pagination(\'#pag-sib1\', {\n' +
+  '  total: 500, page: 5,\n' +
+  '  siblings:  1,  // default — «... 4 [5] 6 ...»\n' +
+  '  showSizes: false, showInfo: false,\n' +
+  '});\n\n' +
+  'new MTS.Pagination(\'#pag-sib2\', {\n' +
+  '  total: 500, page: 5,\n' +
+  '  siblings:  2,  // «... 3 4 [5] 6 7 ...»\n' +
+  '  showSizes: false, showInfo: false,\n' +
+  '});';
+
+makeSection('tabs-s4', preview_s4, js_s4, html_s4);
+
+new MTS.Pagination('#pag-sib1', { total: 500, page: 5, showSizes: false, showInfo: false, siblings: 1 });
+new MTS.Pagination('#pag-sib2', { total: 500, page: 5, showSizes: false, showInfo: false, siblings: 2 });
 </script>
-<script data-nav-tabs-helper="true">(function(){
-  function preTab(sourceId) {
-    var src = document.getElementById(sourceId);
-    return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
-      (src ? src.innerHTML : '') +
-    '</pre>';
-  }
-
-  function mountPreview(sourceId, panelId) {
-    var src = document.getElementById(sourceId);
-    var panel = document.getElementById(panelId);
-    if (!src || !panel) return;
-    while (src.firstChild) panel.appendChild(src.firstChild);
-  }
-
-  function makeSection(id, sourceBase) {
-    new MTS.Tabs('#' + id, {
-      variant: 'card',
-      height: '340px',
-      lazy: false,
-      tabs: [
-        { id: id + '-preview', label: 'Preview', content: '<div></div>' },
-        { id: id + '-html', label: 'HTML', content: preTab(sourceBase + '-html') },
-        { id: id + '-js', label: 'JavaScript', content: preTab(sourceBase + '-js') }
-      ]
-    });
-    mountPreview(sourceBase + '-preview', 'mts-panel-' + id + '-preview');
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    var tabs = document.querySelectorAll('[id^="tabs-s"]');
-    tabs.forEach(function(el){
-      var num = el.id.replace('tabs-s','');
-      makeSection(el.id, 'src-s' + num);
-    });
-  });
-})();</script></body>
+</body>
 </html>

@@ -1,7 +1,7 @@
 # MTS.Modal
 
-[EN] Full-featured dialog modal with sizes, scrollable body, footer buttons, focus trap and convenience helpers (confirm, alert, prompt).
-[ES] Modal de diálogo completo con tamaños, body scrolleable, botones del footer, trampa de foco y helpers de conveniencia (confirm, alert, prompt).
+🇬🇧 Full-featured dialog modal with sizes, scrollable body, footer buttons, focus trap and convenience helpers (confirm, alert, prompt).
+🇪🇸 Modal de diálogo completo con tamaños, body scrolleable, botones del footer, trampa de foco y helpers de conveniencia (confirm, alert, prompt).
 
 ---
 
@@ -17,32 +17,33 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `title` | `string` | `''` | [EN] Modal header title / [ES] Título del header |
-| `body` | `string\|Element` | `''` | [EN] Body content / [ES] Contenido del body |
-| `footer` | `string\|Element` | `null` | [EN] Footer HTML (overrides buttons) / [ES] HTML del footer (sobreescribe buttons) |
-| `buttons` | `array` | `[]` | [EN] Footer buttons (see schema) / [ES] Botones del footer |
+| `title` | `string` | `''` | 🇬🇧 Modal header title / 🇪🇸 Título del header |
+| `body` | `string\|Element` | `''` | 🇬🇧 Body content / 🇪🇸 Contenido del body |
+| `footer` | `string\|Element` | `null` | 🇬🇧 Footer HTML (overrides buttons) / 🇪🇸 HTML del footer (sobreescribe buttons) |
+| `buttons` | `array` | `[]` | 🇬🇧 Footer buttons (see schema) / 🇪🇸 Botones del footer |
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` · `'xl'` · `'fullscreen'` |
-| `closable` | `boolean` | `true` | [EN] Show × button and allow Esc / [ES] Mostrar botón × y permitir Esc |
-| `backdrop` | `boolean` | `true` | [EN] Click outside closes modal / [ES] Click fuera cierra el modal |
-| `scrollable` | `boolean` | `false` | [EN] Scrollable body / [ES] Body scrolleable |
-| `centered` | `boolean` | `true` | [EN] Vertically centered / [ES] Centrado verticalmente |
-| `static` | `boolean` | `false` | [EN] No close on Esc or backdrop / [ES] No cierra con Esc ni backdrop |
-| `onShow` | `function` | — | [EN] Fires before modal shows (return false to cancel) / [ES] Se dispara antes de mostrar |
-| `onShown` | `function` | — | [EN] Fires after modal is fully visible / [ES] Se dispara al estar completamente visible |
-| `onHide` | `function` | — | [EN] Fires before modal hides (return false to cancel) / [ES] Se dispara antes de ocultar |
-| `onHidden` | `function` | — | [EN] Fires after modal is fully hidden / [ES] Se dispara al estar completamente oculto |
+| `radius` | `string` | `'none'` | 🇬🇧 Panel border-radius / 🇪🇸 Radio de bordes del panel — `'none'` · `'sm'` · `'md'` · `'lg'` · `'xl'` |
+| `closable` | `boolean` | `true` | 🇬🇧 Show × button and allow Esc / 🇪🇸 Mostrar botón × y permitir Esc |
+| `backdrop` | `boolean` | `true` | 🇬🇧 Click outside closes modal / 🇪🇸 Click fuera cierra el modal |
+| `scrollable` | `boolean` | `false` | 🇬🇧 Scrollable body / 🇪🇸 Body scrolleable |
+| `centered` | `boolean` | `true` | 🇬🇧 Vertically centered / 🇪🇸 Centrado verticalmente |
+| `static` | `boolean` | `false` | 🇬🇧 No close on Esc or backdrop / 🇪🇸 No cierra con Esc ni backdrop |
+| `onShow` | `function` | — | 🇬🇧 Fires before modal shows (return false to cancel) / 🇪🇸 Se dispara antes de mostrar |
+| `onShown` | `function` | — | 🇬🇧 Fires after modal is fully visible / 🇪🇸 Se dispara al estar completamente visible |
+| `onHide` | `function` | — | 🇬🇧 Fires before modal hides (return false to cancel) / 🇪🇸 Se dispara antes de ocultar |
+| `onHidden` | `function` | — | 🇬🇧 Fires after modal is fully hidden / 🇪🇸 Se dispara al estar completamente oculto |
 
 ### Button schema / Esquema de botón
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `label` | `string` | [EN] Button text / [ES] Texto del botón |
+| `label` | `string` | 🇬🇧 Button text / 🇪🇸 Texto del botón |
 | `variant` | `string` | `'primary'` · `'secondary'` · `'ghost'` · `'danger'` |
-| `close` | `boolean` | [EN] Close modal on click / [ES] Cerrar modal al hacer click |
-| `disabled` | `boolean` | [EN] Disables the button / [ES] Deshabilita el botón |
-| `onClick` | `function` | [EN] Click handler / [ES] Handler de click |
+| `close` | `boolean` | 🇬🇧 Close modal on click / 🇪🇸 Cerrar modal al hacer click |
+| `disabled` | `boolean` | 🇬🇧 Disables the button / 🇪🇸 Deshabilita el botón |
+| `onClick` | `function` | 🇬🇧 Click handler / 🇪🇸 Handler de click |
 
 ---
 
@@ -176,10 +177,3 @@ document.addEventListener('mts:modal:hidden', (e) => {});
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingüe, docs estandarizados |
-| 1.0.0 | [EN] Initial release — sizes, buttons, confirm/alert/prompt helpers, focus trap / [ES] Versión inicial |

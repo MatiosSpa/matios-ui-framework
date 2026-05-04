@@ -1,7 +1,7 @@
 # MTS.TabBar
 
-[EN] Mobile-style bottom navigation bar with icons, labels, badges and three visual variants.
-[ES] Barra de navegación inferior estilo móvil con íconos, labels, badges y tres variantes visuales.
+🇬🇧 Mobile-style bottom navigation bar with icons, labels, badges and three visual variants.
+🇪🇸 Barra de navegación inferior estilo móvil con íconos, labels, badges y tres variantes visuales.
 
 ---
 
@@ -17,22 +17,22 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `tabs` | `array` | `[]` | [EN] Tab items (see schema below) / [ES] Ítems del tab bar |
-| `active` | `string` | first tab | [EN] Initially active tab ID / [ES] ID del tab activo inicial |
+| `tabs` | `array` | `[]` | 🇬🇧 Tab items (see schema below) / 🇪🇸 Ítems del tab bar |
+| `active` | `string` | first tab | 🇬🇧 Initially active tab ID / 🇪🇸 ID del tab activo inicial |
 | `variant` | `string` | `'default'` | `'default'` · `'pill'` · `'floating'` |
-| `showLabels` | `boolean` | `true` | [EN] Show labels below icons / [ES] Mostrar labels bajo los íconos |
-| `onChange` | `function` | — | [EN] Fires when active tab changes / [ES] Se dispara al cambiar el tab activo |
+| `showLabels` | `boolean` | `true` | 🇬🇧 Show labels below icons / 🇪🇸 Mostrar labels bajo los íconos |
+| `onChange` | `function` | — | 🇬🇧 Fires when active tab changes / 🇪🇸 Se dispara al cambiar el tab activo |
 
 ### Tab item schema / Esquema de ítem
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `label` | `string` | [EN] Tab label / [ES] Texto del tab |
-| `icon` | `string` | [EN] Icon HTML / [ES] HTML del ícono |
-| `badge` | `string\|number` | [EN] Badge count or text / [ES] Contador o texto del badge |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `label` | `string` | 🇬🇧 Tab label / 🇪🇸 Texto del tab |
+| `icon` | `string` | 🇬🇧 Icon HTML / 🇪🇸 HTML del ícono |
+| `badge` | `string\|number` | 🇬🇧 Badge count or text / 🇪🇸 Contador o texto del badge |
 
 ---
 
@@ -135,10 +135,3 @@ document.getElementById('my-tabbar')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 1.0.0 | [EN] Initial release — default/pill/floating, badges, labels / [ES] Versión inicial |

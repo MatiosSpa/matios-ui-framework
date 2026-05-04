@@ -130,7 +130,7 @@ MTS.VirtualList = class MtsVirtualList {
       let el = this.renderItem(item, i);
       if (typeof el === 'string') {
         const wrap = document.createElement('div');
-        wrap.innerHTML = el;
+        wrap.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(el) : el;
         el = wrap.firstElementChild || wrap;
       }
       el.style.height    = this.itemHeight + 'px';

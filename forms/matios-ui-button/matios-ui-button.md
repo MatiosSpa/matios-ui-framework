@@ -1,7 +1,7 @@
 # MTS.Button
 
-[EN] Button component with variants, sizes, icons, loading state, groups and custom styles.
-[ES] Componente botón con variantes, tamaños, íconos, estado loading, grupos y estilos custom.
+🇬🇧 Button component with variants, sizes, icons, loading state, groups and custom styles.
+🇪🇸 Componente botón con variantes, tamaños, íconos, estado loading, grupos y estilos custom.
 
 ---
 
@@ -17,33 +17,33 @@
 
 ## Options / Opciones
 
-[EN] All options are passed as the second argument to the constructor.
-[ES] Todas las opciones se pasan como segundo argumento al constructor.
+🇬🇧 All options are passed as the second argument to the constructor.
+🇪🇸 Todas las opciones se pasan como segundo argumento al constructor.
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `label` | `string` | button text | [EN] Visible text / [ES] Texto visible |
+| `label` | `string` | button text | 🇬🇧 Visible text / 🇪🇸 Texto visible |
 | `variant` | `string` | `'primary'` | `'primary'` · `'secondary'` · `'ghost'` · `'danger'` · `'success'` · `'warning'` · `'link'` |
 | `size` | `string` | `''` | `'xs'` · `'sm'` · `''` · `'lg'` · `'xl'` |
-| `block` | `boolean` | `false` | [EN] Full width / [ES] Ancho completo |
-| `round` | `boolean` | `false` | [EN] Pill border-radius / [ES] Border-radius pill |
-| `iconOnly` | `boolean` | `false` | [EN] Square padding, no text / [ES] Padding cuadrado, sin texto |
-| `iconLeft` | `string` | `null` | [EN] Left icon HTML / [ES] HTML del ícono izquierdo |
-| `iconRight` | `string` | `null` | [EN] Right icon HTML / [ES] HTML del ícono derecho |
-| `disabled` | `boolean` | `false` | [EN] Disables interaction / [ES] Deshabilita la interacción |
-| `loading` | `boolean` | `false` | [EN] Shows spinner / [ES] Muestra spinner |
-| `shadow` | `boolean` | `false` | [EN] Colored shadow / [ES] Sombra de color |
-| `ring` | `boolean` | `false` | [EN] Semitransparent ring / [ES] Ring semitransparente |
-| `className` | `string` | `''` | [EN] Extra CSS classes / [ES] Clases CSS adicionales |
-| `style` | `object` | `null` | [EN] Inline styles / [ES] Estilos inline |
-| `onClick` | `function` | — | [EN] Fires on click / [ES] Se dispara al hacer click |
+| `block` | `boolean` | `false` | 🇬🇧 Full width / 🇪🇸 Ancho completo |
+| `round` | `boolean` | `false` | 🇬🇧 Pill border-radius / 🇪🇸 Border-radius pill |
+| `iconOnly` | `boolean` | `false` | 🇬🇧 Square padding, no text / 🇪🇸 Padding cuadrado, sin texto |
+| `iconLeft` | `string` | `null` | 🇬🇧 Left icon HTML / 🇪🇸 HTML del ícono izquierdo |
+| `iconRight` | `string` | `null` | 🇬🇧 Right icon HTML / 🇪🇸 HTML del ícono derecho |
+| `disabled` | `boolean` | `false` | 🇬🇧 Disables interaction / 🇪🇸 Deshabilita la interacción |
+| `loading` | `boolean` | `false` | 🇬🇧 Shows spinner / 🇪🇸 Muestra spinner |
+| `shadow` | `boolean` | `false` | 🇬🇧 Colored shadow / 🇪🇸 Sombra de color |
+| `ring` | `boolean` | `false` | 🇬🇧 Semitransparent ring / 🇪🇸 Ring semitransparente |
+| `className` | `string` | `''` | 🇬🇧 Extra CSS classes / 🇪🇸 Clases CSS adicionales |
+| `style` | `object` | `null` | 🇬🇧 Inline styles / 🇪🇸 Estilos inline |
+| `onClick` | `function` | — | 🇬🇧 Fires on click / 🇪🇸 Se dispara al hacer click |
 
 ---
 
 ## Events / Eventos
 
-[EN] Use `onClick` in the constructor. This is the recommended approach — no need for `addEventListener`.
-[ES] Usa `onClick` en el constructor. Este es el enfoque recomendado — no necesitas `addEventListener`.
+🇬🇧 Use `onClick` in the constructor. This is the recommended approach — no need for `addEventListener`.
+🇪🇸 Usa `onClick` en el constructor. Este es el enfoque recomendado — no necesitas `addEventListener`.
 
 ```js
 new MTS.Button('#my-btn', {
@@ -60,20 +60,20 @@ new MTS.Button('#my-btn', {
 });
 ```
 
-[EN] The callback receives:
-[ES] El callback recibe:
+🇬🇧 The callback receives:
+🇪🇸 El callback recibe:
 
 | Parameter | Type | Description / Descripción |
 |-----------|------|---------------------------|
-| `event` | `MouseEvent` | [EN] Native DOM click event / [ES] Evento click DOM nativo |
-| `instance` | `MTS.Button` | [EN] The button instance / [ES] La instancia del botón |
+| `event` | `MouseEvent` | 🇬🇧 Native DOM click event / 🇪🇸 Evento click DOM nativo |
+| `instance` | `MTS.Button` | 🇬🇧 The button instance / 🇪🇸 La instancia del botón |
 
 ---
 
 ## HTML Usage / Uso HTML
 
-[EN] Declare the button in HTML using `data-*` attributes, then instantiate with JavaScript.
-[ES] Declara el botón en HTML usando atributos `data-*`, luego instancia con JavaScript.
+🇬🇧 Declare the button in HTML using `data-*` attributes, then instantiate with JavaScript.
+🇪🇸 Declara el botón en HTML usando atributos `data-*`, luego instancia con JavaScript.
 
 ```html
 <button id="btn-save"
@@ -93,28 +93,28 @@ new MTS.Button('#my-btn', {
 </script>
 ```
 
-[EN] Available `data-*` attributes:
-[ES] Atributos `data-*` disponibles:
+🇬🇧 Available `data-*` attributes:
+🇪🇸 Atributos `data-*` disponibles:
 
 | Attribute / Atributo | JS Option | Description / Descripción |
 |----------------------|-----------|---------------------------|
-| `data-label` | `label` | [EN] Button text / [ES] Texto del botón |
+| `data-label` | `label` | 🇬🇧 Button text / 🇪🇸 Texto del botón |
 | `data-variant` | `variant` | `primary` · `secondary` · `ghost` · `danger` · `success` · `warning` · `link` |
 | `data-size` | `size` | `xs` · `sm` · `lg` · `xl` |
-| `data-disabled` | `disabled` | [EN] Presence activates / [ES] Presencia activa |
-| `data-loading` | `loading` | [EN] Presence activates / [ES] Presencia activa |
-| `data-block` | `block` | [EN] Full width / [ES] Ancho completo |
-| `data-round` | `round` | [EN] Pill shape / [ES] Forma pill |
-| `data-icon-only` | `iconOnly` | [EN] Square padding / [ES] Padding cuadrado |
-| `data-shadow` | `shadow` | [EN] Colored shadow / [ES] Sombra de color |
-| `data-ring` | `ring` | [EN] Semitransparent ring / [ES] Ring semitransparente |
+| `data-disabled` | `disabled` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
+| `data-loading` | `loading` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
+| `data-block` | `block` | 🇬🇧 Full width / 🇪🇸 Ancho completo |
+| `data-round` | `round` | 🇬🇧 Pill shape / 🇪🇸 Forma pill |
+| `data-icon-only` | `iconOnly` | 🇬🇧 Square padding / 🇪🇸 Padding cuadrado |
+| `data-shadow` | `shadow` | 🇬🇧 Colored shadow / 🇪🇸 Sombra de color |
+| `data-ring` | `ring` | 🇬🇧 Semitransparent ring / 🇪🇸 Ring semitransparente |
 
 ---
 
 ## JavaScript Usage / Uso JavaScript
 
-[EN] Create the component entirely from JavaScript — the container only needs to exist in the DOM.
-[ES] Crea el componente completamente desde JavaScript — el contenedor solo necesita existir en el DOM.
+🇬🇧 Create the component entirely from JavaScript — the container only needs to exist in the DOM.
+🇪🇸 Crea el componente completamente desde JavaScript — el contenedor solo necesita existir en el DOM.
 
 ```js
 const btn = new MTS.Button('#my-btn', {
@@ -141,8 +141,8 @@ const btn = new MTS.Button('#my-btn', {
 
 ## API
 
-[EN] Methods available on the instance after creation.
-[ES] Métodos disponibles en la instancia después de crearla.
+🇬🇧 Methods available on the instance after creation.
+🇪🇸 Métodos disponibles en la instancia después de crearla.
 
 ```js
 const btn = new MTS.Button('#my-btn', { ... });
@@ -177,8 +177,8 @@ btn.destroy()
 
 ## MTS.ButtonGroup
 
-[EN] Groups buttons visually — shared borders, no gap, border-radius only on the edges.
-[ES] Agrupa botones visualmente — bordes compartidos, sin gap, border-radius solo en los extremos.
+🇬🇧 Groups buttons visually — shared borders, no gap, border-radius only on the edges.
+🇪🇸 Agrupa botones visualmente — bordes compartidos, sin gap, border-radius solo en los extremos.
 
 ```js
 const group = new MTS.ButtonGroup('#my-group', [
@@ -202,8 +202,8 @@ group.getButtons()   // → [MTS.Button, MTS.Button, ...]
 
 ## DOM Event / Evento DOM
 
-[EN] If you need to listen from outside the component instance, use the native DOM event.
-[ES] Si necesitas escuchar desde fuera de la instancia, usa el evento DOM nativo.
+🇬🇧 If you need to listen from outside the component instance, use the native DOM event.
+🇪🇸 Si necesitas escuchar desde fuera de la instancia, usa el evento DOM nativo.
 
 ```js
 document.getElementById('my-btn')
@@ -213,10 +213,3 @@ document.getElementById('my-btn')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 1.0.0 | [EN] Initial release — variants, ButtonGroup, loading, onClick / [ES] Versión inicial |

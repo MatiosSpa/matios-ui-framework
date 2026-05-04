@@ -73,10 +73,11 @@ MTS.ScheduleView = class MtsScheduleView {
           const time    = ev.startH != null ? `${p(ev.startH)}:${p(ev.startM)} – ${p(ev.endH)}:${p(ev.endM)}` : '';
           const evColor = ev.color || '#3b82f6';
           row.style.cssText = `border-left-color:${evColor};background:color-mix(in srgb,${evColor} 10%,transparent);`;
+          const _S = MTS._CalendarShared;
           row.innerHTML = `
             <span class="mts-calendar__schedule-event-time">${time}</span>
-            <span class="mts-calendar__schedule-event-title">${ev.title||''}</span>
-            ${(ev.description||ev.data?.subtitle)?`<span class="mts-calendar__schedule-event-sub">${ev.description||ev.data.subtitle}</span>`:''}`;
+            <span class="mts-calendar__schedule-event-title">${_S._esc(ev.title||'')}</span>
+            ${(ev.description||ev.data?.subtitle)?`<span class="mts-calendar__schedule-event-sub">${_S._esc(ev.description||ev.data?.subtitle||'')}</span>`:''}`;
 
           row.addEventListener('click', e => {
             e.stopPropagation();

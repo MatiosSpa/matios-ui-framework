@@ -230,7 +230,11 @@ MTS.Progress = class MtsProgress {
         this._circleEl.setAttribute('stroke-dashoffset', offset);
       }
       if (this._centerLabelEl) {
-        this._centerLabelEl.innerHTML = `<span style="font-size:${this.radius > 35 ? 18 : 14}px;font-weight:800;color:var(--mts-text-primary)">${labelText}</span>`;
+        this._centerLabelEl.innerHTML = '';
+        const labelSpan = document.createElement('span');
+        labelSpan.style.cssText = `font-size:${this.radius > 35 ? 18 : 14}px;font-weight:800;color:var(--mts-text-primary)`;
+        labelSpan.textContent = labelText;
+        this._centerLabelEl.appendChild(labelSpan);
       }
     } else {
       if (this._fillEl) {

@@ -124,7 +124,7 @@ MTS.SortableList = class MtsSortableList {
       const iconWrap = document.createElement('div');
       iconWrap.className = 'mts-sortable__icon';
       if (item.icon) {
-        iconWrap.innerHTML = item.icon;
+        iconWrap.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(item.icon) : item.icon;
       } else if (item.avatar) {
         const av = document.createElement('span');
         av.className = 'mts-sortable__avatar';

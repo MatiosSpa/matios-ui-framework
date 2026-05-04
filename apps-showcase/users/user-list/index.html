@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
@@ -83,10 +83,10 @@
       variant: 'elevated',
       size: 'lg',
       body:
-        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+        '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div id="user-list-alert"></div>' +
-          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3">' +
-            '<p class="mts-text-md mts-text-muted mts-m-0">Tabla operativa de cuentas internas con acciones administrativas directas.</p>' +
+          '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3">' +
+            '<p class="mts-text--md mts-text-color--muted mts-m-0">Tabla operativa de cuentas internas con acciones administrativas directas.</p>' +
             '<span id="user-list-count" class="mts-badge mts-badge--info mts-badge--sm">0 usuarios</span>' +
           '</div>' +
           '<div id="user-list-table"></div>' +
@@ -162,9 +162,9 @@
                 return '' +
                   '<tr class="mts-table__row">' +
                     '<td class="mts-table__td">' +
-                      '<div class="mts-d-flex mts-flex-col mts-gap-1">' +
-                        '<strong class="mts-text-sm mts-text-primary">' + escapeHtml(user.firstName + ' ' + user.lastName) + '</strong>' +
-                        '<span class="mts-text-sm mts-text-muted"><span class="mts-badge ' + user.statusClass + ' mts-badge--sm">' + escapeHtml(user.statusLabel) + '</span></span>' +
+                      '<div class="mts-d-flex mts-flex--column mts-gap-1">' +
+                        '<strong class="mts-text--sm mts-text-color--primary">' + escapeHtml(user.firstName + ' ' + user.lastName) + '</strong>' +
+                        '<span class="mts-text--sm mts-text-color--muted"><span class="mts-badge ' + user.statusClass + ' mts-badge--sm">' + escapeHtml(user.statusLabel) + '</span></span>' +
                       '</div>' +
                     '</td>' +
                     '<td class="mts-table__td">' + escapeHtml(user.email) + '</td>' +

@@ -1,104 +1,141 @@
 /* ============================================================
    MATIOS UI — matios-ui-spinner.js
    MTS.Spinner — Indicadores de carga animados
-   Version: 1.0.0
+   Version: 3.0.0
    ============================================================ */
-
 window.MTS = window.MTS || {};
 
 MTS.Spinner = class MtsSpinner {
   /**
    * @param {string|Element} selector
-   * @param {object} options
-   * @param {string}   options.variant  'circle'|'dots'|'bars'|'pulse'|'ring' — default: 'circle'
-   * @param {string}   options.size     'xs'|'sm'|'md'|'lg'|'xl' — default: 'md'
-   * @param {string}   options.color    Color CSS override
-   * @param {string}   options.label    Texto debajo del spinner
-   * @param {boolean}  options.overlay  Modo overlay pantalla completa — default: false
+   * @param {object}  options
+   * @param {string}  options.variant  Tipo de spinner — obligatorio
+   * @param {string}  options.size     'xs'|'sm'|'md'|'lg'|'xl'        default: 'md'
+   * @param {string}  options.color    Tone ('warning'|'danger'|'success'|'muted')
+   *                                   o valor CSS ('#hex', 'var(...)')  default: primary
+   * @param {string}  options.color2   Color secundario — orbital y triple
+   * @param {string}  options.color3   Color terciario  — solo triple
+   * @param {string}  options.label    Texto debajo del spinner
+   * @param {boolean} options.overlay  Overlay pantalla completa         default: false
    */
-  constructor(selector, options = {}) {
+  constructor(selector, options) {
+    options = options || {};
+
     this._el = typeof selector === 'string'
       ? document.querySelector(selector)
       : selector;
     if (!this._el) return;
-    /* ── data-* → inicialización HTML declarativa ── */
-    const _ds = this._el?.dataset || {};
-    const _fromHTML = {};
-    if (_ds.variant !== undefined) _fromHTML.variant = _ds.variant;
-    if (_ds.size !== undefined) _fromHTML.size = _ds.size;
-    if (_ds.label !== undefined) _fromHTML.label = _ds.label;
-    if (_ds.overlay !== undefined) _fromHTML.overlay = true;
-    if (_ds.color !== undefined) _fromHTML.color = _ds.color;
-    options = { ..._fromHTML, ...options };
 
-    // Spinner variant: 'circle' | 'dots' | 'bars' | 'pulse' | 'ring'
-    // Variante del spinner
-    this.variant = options.variant || 'circle';
+    /* Inicialización declarativa via data-* */
+    var ds = this._el.dataset || {};
+    var fromHTML = {}, k;
+    if (ds.variant  !== undefined) fromHTML.variant  = ds.variant;
+    if (ds.size     !== undefined) fromHTML.size     = ds.size;
+    if (ds.color    !== undefined) fromHTML.color    = ds.color;
+    if (ds.color2   !== undefined) fromHTML.color2   = ds.color2;
+    if (ds.color3   !== undefined) fromHTML.color3   = ds.color3;
+    if (ds.label    !== undefined) fromHTML.label    = ds.label;
+    if (ds.overlay  !== undefined) fromHTML.overlay  = true;
 
-    // Size: 'xs' | 'sm' | 'md' | 'lg' | 'xl' / Tamaño
-    this.size = options.size || 'md';
+    /* data-* como base, options como override */
+    var merged = {};
+    for (k in fromHTML) { merged[k] = fromHTML[k]; }
+    for (k in options)  { merged[k] = options[k];  }
 
-    // Custom CSS color override / Override de color CSS
-    this.color = options.color || null;
-
-    // Text label below the spinner / Texto debajo del spinner
-    this.label = options.label || '';
-
-    // Full-screen overlay mode / Modo overlay pantalla completa
-    this.overlay = options.overlay ?? false;
+    this.variant = merged.variant || 'ring';
+    this.size    = merged.size    || 'md';
+    this.color   = merged.color   || null;
+    this.color2  = merged.color2  || null;
+    this.color3  = merged.color3  || null;
+    this.label   = merged.label   || '';
+    this.overlay = merged.overlay || false;
 
     this._build();
   }
 
+  /* ════════════════════════════════════════════════════
+     API PÚBLICA
+     ════════════════════════════════════════════════════ */
+
   show()    { this._el.style.display = ''; return this; }
   hide()    { this._el.style.display = 'none'; return this; }
-  destroy() { this._el.innerHTML = ''; }
+  destroy() { this._el.innerHTML = ''; this._el.className = ''; }
+
+  /* ════════════════════════════════════════════════════
+     PRIVADOS
+     ════════════════════════════════════════════════════ */
 
   _syncClasses() {
-    const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-spinner'));
+    var keep = [], list = this._el.classList, i;
+    for (i = 0; i < list.length; i++) {
+      if (!list[i].startsWith('mts-spinner')) keep.push(list[i]);
+    }
     this._el.className = keep.join(' ');
-    this._el.classList.add('mts-spinner', `mts-spinner--${this.size}`);
+    this._el.classList.add('mts-spinner', 'mts-spinner--' + this.size);
     if (this.overlay) this._el.classList.add('mts-spinner--overlay');
+  }
+
+  _applyColor() {
+    var tones = { warning: 1, danger: 1, success: 1, muted: 1 };
+    var el = this._el;
+
+    if (this.color) {
+      if (tones[this.color]) {
+        el.classList.add('mts-spinner--' + this.color);
+      } else {
+        el.style.setProperty('--mts-spinner-color', this.color);
+      }
+    }
+
+    if (this.color2) {
+      el.style.setProperty('--mts-spinner-color-2', this.color2);
+      el.style.setProperty('--mts-spinner-bounce-color-2', this.color2);
+    }
+    if (this.color3) el.style.setProperty('--mts-spinner-color-3', this.color3);
+  }
+
+  _createElement(cls) {
+    var el = document.createElement('div');
+    if (cls) el.className = cls;
+    return el;
   }
 
   _build() {
     this._el.innerHTML = '';
     this._syncClasses();
-    if (this.color) this._el.style.setProperty('--mts-spinner-color', this.color);
+    this._applyColor();
 
-    const inner = document.createElement('div');
-    inner.className = `mts-spinner__inner mts-spinner__inner--${this.variant}`;
+    var inner = document.createElement('div');
+    inner.className = 'mts-spinner__inner--' + this.variant;
+
+    var i;
 
     switch (this.variant) {
-      case 'circle':
-        inner.innerHTML = `<svg viewBox="0 0 50 50" class="mts-spinner__svg"><circle class="mts-spinner__track" cx="25" cy="25" r="20" fill="none" stroke-width="4"/><circle class="mts-spinner__arc" cx="25" cy="25" r="20" fill="none" stroke-width="4" stroke-linecap="round"/></svg>`;
-        break;
-      case 'ring':
-        inner.innerHTML = `<div class="mts-spinner__ring"></div>`;
-        break;
-      case 'dots':
-        for (let i = 0; i < 3; i++) {
-          const d = document.createElement('div');
-          d.className = 'mts-spinner__dot';
-          inner.appendChild(d);
-        }
-        break;
-      case 'bars':
-        for (let i = 0; i < 4; i++) {
-          const b = document.createElement('div');
-          b.className = 'mts-spinner__bar';
-          inner.appendChild(b);
-        }
-        break;
-      case 'pulse':
-        inner.innerHTML = `<div class="mts-spinner__pulse"></div>`;
-        break;
+
+      case 'dual':    /* sin hijos — ::after en CSS */          break;
+      case 'triple':  /* sin hijos — ::before/::after en CSS */ break;
+      case 'orbital': /* sin hijos — ::before/::after en CSS */ break;
+      case 'dots':    /* sin hijos — ::after en CSS */          break;
+
+      case 'ring':     for (i = 0; i < 4;  i++) inner.appendChild(this._createElement()); break;
+      case 'bars':     for (i = 0; i < 3;  i++) inner.appendChild(this._createElement()); break;
+      case 'roller':   for (i = 0; i < 8;  i++) inner.appendChild(this._createElement()); break;
+      case 'clock':    for (i = 0; i < 12; i++) inner.appendChild(this._createElement()); break;
+      case 'ellipsis': for (i = 0; i < 4;  i++) inner.appendChild(this._createElement()); break;
+      case 'grid':     for (i = 0; i < 9;  i++) inner.appendChild(this._createElement()); break;
+      case 'ripple':   for (i = 0; i < 2;  i++) inner.appendChild(this._createElement()); break;
+      case 'activity': for (i = 0; i < 12; i++) inner.appendChild(this._createElement()); break;
+      case 'bounce':   for (i = 0; i < 5;  i++) inner.appendChild(this._createElement()); break;
+
+      default: break;
     }
 
-    this._el.appendChild(inner);
+    var body = this._createElement('mts-spinner__body');
+    body.appendChild(inner);
+    this._el.appendChild(body);
+
     if (this.label) {
-      const lbl = document.createElement('div');
-      lbl.className = 'mts-spinner__label';
+      var lbl = this._createElement('mts-spinner__label');
       lbl.textContent = this.label;
       this._el.appendChild(lbl);
     }

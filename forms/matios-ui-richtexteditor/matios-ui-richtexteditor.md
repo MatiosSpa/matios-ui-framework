@@ -1,7 +1,7 @@
 # MTS.RichTextEditor
 
-[EN] WYSIWYG rich text editor based on `contentEditable`. No dependencies, no iframe, no external libraries.
-[ES] Editor de texto enriquecido WYSIWYG basado en `contentEditable`. 0 dependencias, sin iframe, sin librerías externas.
+🇬🇧 WYSIWYG rich text editor based on `contentEditable`. No dependencies, no iframe, no external libraries.
+🇪🇸 Editor de texto enriquecido WYSIWYG basado en `contentEditable`. 0 dependencias, sin iframe, sin librerías externas.
 
 ---
 
@@ -17,18 +17,18 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `value` | `string` | `''` | [EN] Initial HTML content / [ES] Contenido HTML inicial |
-| `placeholder` | `string` | `'Escribe aquí...'` | |
-| `height` | `string` | `'240px'` | [EN] Editor area height / [ES] Alto del área del editor |
-| `minHeight` | `string` | `'120px'` | [EN] Minimum height / [ES] Alto mínimo |
-| `toolbar` | `array` | `['format','lists','align','insert','clean']` | [EN] Toolbar groups / [ES] Grupos de toolbar |
-| `disabled` | `boolean` | `false` | [EN] Disables editing / [ES] Deshabilita la edición |
-| `readonly` | `boolean` | `false` | [EN] Read-only mode / [ES] Modo solo lectura |
-| `onChange` | `function` | — | [EN] `(html) => {}` Fires on content change / [ES] Se dispara al cambiar el contenido |
-| `onFocus` | `function` | — | [EN] Fires on focus / [ES] Se dispara al enfocar |
-| `onBlur` | `function` | — | [EN] Fires on blur / [ES] Se dispara al perder foco |
+| `value` | `string` | `''` | 🇬🇧 Initial HTML content / 🇪🇸 Contenido HTML inicial |
+| `placeholder` | `string` | `'Escribe aquí...'` | 🇬🇧 Placeholder text shown when empty / 🇪🇸 Texto de marcador cuando está vacío |
+| `height` | `string` | `'240px'` | 🇬🇧 Editor area height / 🇪🇸 Alto del área del editor |
+| `minHeight` | `string` | `'120px'` | 🇬🇧 Minimum height / 🇪🇸 Alto mínimo |
+| `toolbar` | `array` | `['format','lists','align','insert','clean']` | 🇬🇧 Toolbar groups / 🇪🇸 Grupos de toolbar |
+| `disabled` | `boolean` | `false` | 🇬🇧 Disables editing / 🇪🇸 Deshabilita la edición |
+| `readonly` | `boolean` | `false` | 🇬🇧 Read-only mode / 🇪🇸 Modo solo lectura |
+| `onChange` | `function` | — | 🇬🇧 `(html) => {}` Fires on content change / 🇪🇸 Se dispara al cambiar el contenido |
+| `onFocus` | `function` | — | 🇬🇧 Fires on focus / 🇪🇸 Se dispara al enfocar |
+| `onBlur` | `function` | — | 🇬🇧 Fires on blur / 🇪🇸 Se dispara al perder foco |
 
 ---
 
@@ -47,8 +47,8 @@
 
 ## Events / Eventos
 
-[EN] Use `onChange`, `onFocus` and `onBlur` in the constructor.
-[ES] Usa `onChange`, `onFocus` y `onBlur` en el constructor.
+🇬🇧 Use `onChange`, `onFocus` and `onBlur` in the constructor.
+🇪🇸 Usa `onChange`, `onFocus` y `onBlur` en el constructor.
 
 ```js
 new MTS.RichTextEditor('#my-editor', {
@@ -149,10 +149,3 @@ rte.destroy()
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual docs, standardized structure / [ES] Docs bilingüe, estructura estandarizada |
-| 1.0.0 | [EN] Initial release — contentEditable, toolbar groups, no dependencies / [ES] Versión inicial |

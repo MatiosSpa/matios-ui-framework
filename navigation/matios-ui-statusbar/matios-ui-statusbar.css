@@ -1,0 +1,156 @@
+/* ============================================================
+   MATIOS UI — matios-ui-statusbar.css
+   MTS.StatusBar — Barra de estado inferior con slots libres
+   Requiere: matios-ui-base.css
+   ============================================================ */
+
+/* ── Shell ─────────────────────────────────────────── */
+.mts-statusbar {
+  --mts-statusbar-height:       28px;
+  --mts-statusbar-bg:           var(--mts-bg-surface);
+  --mts-statusbar-border-color: var(--mts-border-color);
+  --mts-statusbar-color:        var(--mts-text-muted);
+  --mts-statusbar-gap:          4px;
+
+  height: var(--mts-statusbar-height);
+  background: var(--mts-statusbar-bg);
+  border-top: var(--mts-border-width) var(--mts-border-style) var(--mts-statusbar-border-color);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-size: var(--mts-font-size-xs);
+  font-family: var(--mts-font-family);
+  color: var(--mts-statusbar-color);
+  overflow: hidden;
+  padding: 0;
+  gap: 0;
+}
+
+/* ── Variantes ─────────────────────────────────────── */
+.mts-statusbar--primary {
+  --mts-statusbar-bg:           var(--mts-color-primary);
+  --mts-statusbar-border-color: var(--mts-color-primary);
+  --mts-statusbar-color:        var(--mts-color-primary-text, #fff);
+}
+
+.mts-statusbar--inverse {
+  --mts-statusbar-bg:           var(--mts-bg-inverse, #1c1c1e);
+  --mts-statusbar-border-color: transparent;
+  --mts-statusbar-color:        var(--mts-text-inverse, #f5f5f7);
+}
+
+.mts-statusbar--no-border { border-top: none; }
+
+/* ── Slots ─────────────────────────────────────────── */
+.mts-statusbar__start,
+.mts-statusbar__end,
+.mts-statusbar__center {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-statusbar-gap);
+  height: 100%;
+  padding: 0 8px;
+}
+
+.mts-statusbar__spacer { flex: 1; }
+
+.mts-statusbar__center {
+  flex: 1;
+  justify-content: center;
+}
+
+/* ════════════════════════════════════════════════════
+   ELEMENTOS HELPER
+   Clases utilitarias para el contenido de los slots
+   ════════════════════════════════════════════════════ */
+
+/* ── Item (texto + ícono, con variante clickable) ── */
+.mts-statusbar__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px;
+  height: 100%;
+  white-space: nowrap;
+  cursor: default;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: var(--mts-font-size-xs);
+  color: inherit;
+  transition: background .1s;
+  user-select: none;
+}
+
+.mts-statusbar__item--clickable { cursor: pointer; }
+
+.mts-statusbar__item--clickable:hover {
+  background: rgba(0, 0, 0, .07);
+}
+.mts-statusbar--primary .mts-statusbar__item--clickable:hover,
+.mts-statusbar--inverse .mts-statusbar__item--clickable:hover {
+  background: rgba(255, 255, 255, .14);
+}
+
+/* ── Separador vertical ────────────────────────────── */
+.mts-statusbar__sep {
+  display: inline-block;
+  width: 1px;
+  height: 14px;
+  background: currentColor;
+  opacity: .2;
+  flex-shrink: 0;
+  margin: 0 2px;
+}
+
+/* ── Punto de estado ───────────────────────────────── */
+.mts-statusbar__dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: currentColor;
+}
+
+.mts-statusbar__dot--success { background: var(--mts-color-success, #22c55e); }
+.mts-statusbar__dot--warning { background: var(--mts-color-warning, #f59e0b); }
+.mts-statusbar__dot--danger  { background: var(--mts-color-danger,  #ef4444); }
+.mts-statusbar__dot--muted   { background: var(--mts-text-muted); }
+
+/* ── Tag / pill ────────────────────────────────────── */
+.mts-statusbar__tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: var(--mts-radius-sm);
+  font-size: 10px;
+  font-weight: var(--mts-font-weight-medium);
+  line-height: 1.4;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, .08);
+  color: inherit;
+}
+
+.mts-statusbar--primary .mts-statusbar__tag,
+.mts-statusbar--inverse .mts-statusbar__tag {
+  background: rgba(255, 255, 255, .15);
+}
+
+/* Tags con color semántico — solo sobre variante default */
+.mts-statusbar__tag--success {
+  background: var(--mts-color-success-light, rgba(34, 197, 94, .15));
+  color: var(--mts-color-success, #22c55e);
+}
+.mts-statusbar__tag--warning {
+  background: var(--mts-color-warning-light, rgba(245, 158, 11, .15));
+  color: var(--mts-color-warning, #f59e0b);
+}
+.mts-statusbar__tag--danger {
+  background: var(--mts-color-danger-light, rgba(239, 68, 68, .15));
+  color: var(--mts-color-danger, #ef4444);
+}
+.mts-statusbar__tag--primary {
+  background: var(--mts-color-primary-light);
+  color: var(--mts-color-primary);
+}

@@ -1,7 +1,7 @@
 # MTS.Toast
 
-[EN] Transient notification (snackbar) with variants, positions, action button, auto-dismiss and loading state. Static API — no instantiation required.
-[ES] Notificación fugaz (snackbar) con variantes, posiciones, botón de acción, auto-dismiss y estado de carga. API estática — no requiere instanciación.
+🇬🇧 Transient notification (snackbar) with variants, positions, action button, auto-dismiss and loading state. Static API — no instantiation required.
+🇪🇸 Notificación fugaz (snackbar) con variantes, posiciones, botón de acción, auto-dismiss y estado de carga. API estática — no requiere instanciación.
 
 ---
 
@@ -17,21 +17,21 @@
 
 ## Options / Opciones
 
-[EN] `MTS.Toast` is a static API — call `MTS.Toast.show(options)` directly.
-[ES] `MTS.Toast` es una API estática — llama `MTS.Toast.show(options)` directamente.
+🇬🇧 `MTS.Toast` is a static API — call `MTS.Toast.show(options)` directly.
+🇪🇸 `MTS.Toast` es una API estática — llama `MTS.Toast.show(options)` directamente.
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `message` | `string` | — | [EN] Toast message (required) / [ES] Mensaje del toast (requerido) |
-| `title` | `string` | `null` | [EN] Optional title / [ES] Título opcional |
+| `message` | `string` | — | 🇬🇧 Toast message (required) / 🇪🇸 Mensaje del toast (requerido) |
+| `title` | `string` | `null` | 🇬🇧 Optional title / 🇪🇸 Título opcional |
 | `variant` | `string` | `'default'` | `'default'` · `'success'` · `'warning'` · `'danger'` · `'info'` · `'loading'` |
 | `position` | `string` | `'bottom-right'` | `'top-right'` · `'top-left'` · `'top-center'` · `'bottom-right'` · `'bottom-left'` · `'bottom-center'` |
-| `duration` | `number` | `4000` | [EN] Auto-close after ms (0 = manual close) / [ES] Cerrar tras ms (0 = cierre manual) |
-| `closable` | `boolean` | `true` | [EN] Show × button / [ES] Mostrar botón × |
-| `action` | `string` | `null` | [EN] Action button label / [ES] Label del botón de acción |
-| `icon` | `string` | auto | [EN] Custom icon HTML / [ES] HTML del ícono personalizado |
-| `onAction` | `function` | — | [EN] Fires when action button is clicked / [ES] Se dispara al hacer click en la acción |
-| `onClose` | `function` | — | [EN] Fires when toast closes / [ES] Se dispara al cerrar el toast |
+| `duration` | `number` | `4000` | 🇬🇧 Auto-close after ms (0 = manual close) / 🇪🇸 Cerrar tras ms (0 = cierre manual) |
+| `closable` | `boolean` | `true` | 🇬🇧 Show × button / 🇪🇸 Mostrar botón × |
+| `action` | `string` | `null` | 🇬🇧 Action button label / 🇪🇸 Label del botón de acción |
+| `icon` | `string` | auto | 🇬🇧 Custom icon HTML / 🇪🇸 HTML del ícono personalizado |
+| `onAction` | `function` | — | 🇬🇧 Fires when action button is clicked / 🇪🇸 Se dispara al hacer click en la acción |
+| `onClose` | `function` | — | 🇬🇧 Fires when toast closes / 🇪🇸 Se dispara al cerrar el toast |
 
 ---
 
@@ -97,8 +97,8 @@ MTS.Toast.show({
 
 ## Return Value / Valor de retorno
 
-[EN] `MTS.Toast.show()` returns an object with a `close()` method to dismiss the toast programmatically.
-[ES] `MTS.Toast.show()` retorna un objeto con un método `close()` para cerrar el toast programáticamente.
+🇬🇧 `MTS.Toast.show()` returns an object with a `close()` method to dismiss the toast programmatically.
+🇪🇸 `MTS.Toast.show()` retorna un objeto con un método `close()` para cerrar el toast programáticamente.
 
 ```js
 const toast = MTS.Toast.show({
@@ -118,20 +118,13 @@ MTS.Toast.show({ variant: 'success', message: 'Done!' });
 
 ## Positions / Posiciones
 
-| Value | [EN] Location / [ES] Ubicación |
+| Value | 🇬🇧 Location / 🇪🇸 Ubicación |
 |-------|--------------------------------|
-| `'top-right'` | [EN] Top right corner / [ES] Esquina superior derecha |
-| `'top-left'` | [EN] Top left corner / [ES] Esquina superior izquierda |
-| `'top-center'` | [EN] Top center / [ES] Centro superior |
-| `'bottom-right'` | [EN] Bottom right (default) / [ES] Esquina inferior derecha (default) |
-| `'bottom-left'` | [EN] Bottom left corner / [ES] Esquina inferior izquierda |
-| `'bottom-center'` | [EN] Bottom center / [ES] Centro inferior |
+| `'top-right'` | 🇬🇧 Top right corner / 🇪🇸 Esquina superior derecha |
+| `'top-left'` | 🇬🇧 Top left corner / 🇪🇸 Esquina superior izquierda |
+| `'top-center'` | 🇬🇧 Top center / 🇪🇸 Centro superior |
+| `'bottom-right'` | 🇬🇧 Bottom right (default) / 🇪🇸 Esquina inferior derecha (default) |
+| `'bottom-left'` | 🇬🇧 Bottom left corner / 🇪🇸 Esquina inferior izquierda |
+| `'bottom-center'` | 🇬🇧 Bottom center / 🇪🇸 Centro inferior |
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingüe, docs estandarizados |
-| 1.0.0 | [EN] Initial release — variants, positions, action, loading / [ES] Versión inicial |

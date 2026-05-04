@@ -1,7 +1,7 @@
 # MTS.Kanban
 
-[EN] Kanban board with drag & drop, WIP limits, card priorities, assignees and programmatic API.
-[ES] Tablero Kanban con drag & drop, límites WIP, prioridades de tarjeta, asignados y API programática.
+🇬🇧 Kanban board with drag & drop, WIP limits, card priorities, assignees and programmatic API.
+🇪🇸 Tablero Kanban con drag & drop, límites WIP, prioridades de tarjeta, asignados y API programática.
 
 ---
 
@@ -17,36 +17,36 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `columns` | `array` | `[]` | [EN] Column definitions (see schema) / [ES] Definición de columnas |
-| `addCards` | `boolean` | `false` | [EN] Show "Add card" button per column / [ES] Mostrar botón "Agregar tarjeta" |
-| `onMove` | `function` | — | [EN] `({ card, fromColId, toColId, newIndex }) => {}` Fires on card move / [ES] Se dispara al mover una tarjeta |
-| `onCardClick` | `function` | — | [EN] `({ card, colId }) => {}` Fires on card click / [ES] Se dispara al hacer click en una tarjeta |
-| `onAddCard` | `function` | — | [EN] `({ card, colId }) => {}` Fires when a card is added / [ES] Se dispara al agregar una tarjeta |
-| `onSearchAssignee` | `function` | — | [EN] `(query) => items[]` Async assignee search / [ES] Búsqueda async de asignados |
+| `columns` | `array` | `[]` | 🇬🇧 Column definitions (see schema) / 🇪🇸 Definición de columnas |
+| `addCards` | `boolean` | `false` | 🇬🇧 Show "Add card" button per column / 🇪🇸 Mostrar botón "Agregar tarjeta" |
+| `onMove` | `function` | — | 🇬🇧 `({ card, fromColId, toColId, newIndex }) => {}` Fires on card move / 🇪🇸 Se dispara al mover una tarjeta |
+| `onCardClick` | `function` | — | 🇬🇧 `({ card, colId }) => {}` Fires on card click / 🇪🇸 Se dispara al hacer click en una tarjeta |
+| `onAddCard` | `function` | — | 🇬🇧 `({ card, colId }) => {}` Fires when a card is added / 🇪🇸 Se dispara al agregar una tarjeta |
+| `onSearchAssignee` | `function` | — | 🇬🇧 `(query) => items[]` Async assignee search / 🇪🇸 Búsqueda async de asignados |
 
 ### Column schema / Esquema de columna
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `title` | `string` | [EN] Column header title / [ES] Título del header |
-| `color` | `string` | [EN] Header accent color / [ES] Color de acento del header |
-| `wip` | `number` | [EN] Max cards (WIP limit) / [ES] Límite máximo de tarjetas |
-| `cards` | `array` | [EN] Initial cards / [ES] Tarjetas iniciales |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `title` | `string` | 🇬🇧 Column header title / 🇪🇸 Título del header |
+| `color` | `string` | 🇬🇧 Header accent color / 🇪🇸 Color de acento del header |
+| `wip` | `number` | 🇬🇧 Max cards (WIP limit) / 🇪🇸 Límite máximo de tarjetas |
+| `cards` | `array` | 🇬🇧 Initial cards / 🇪🇸 Tarjetas iniciales |
 
 ### Card schema / Esquema de tarjeta
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `title` | `string` | [EN] Card title / [ES] Título de la tarjeta |
-| `description` | `string` | [EN] Body text / [ES] Texto del cuerpo |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `title` | `string` | 🇬🇧 Card title / 🇪🇸 Título de la tarjeta |
+| `description` | `string` | 🇬🇧 Body text / 🇪🇸 Texto del cuerpo |
 | `priority` | `string` | `'low'` · `'medium'` · `'high'` · `'critical'` |
-| `tags` | `string[]` | [EN] Tag labels / [ES] Etiquetas |
+| `tags` | `string[]` | 🇬🇧 Tag labels / 🇪🇸 Etiquetas |
 | `assignees` | `array` | `[{ name, avatar? }]` |
-| `dueDate` | `string` | [EN] Due date label / [ES] Fecha límite |
+| `dueDate` | `string` | 🇬🇧 Due date label / 🇪🇸 Fecha límite |
 
 ---
 
@@ -145,10 +145,3 @@ el.addEventListener('mts:kanban:cardAdd',   (e) => console.log(e.detail));
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] `onMove/onCardClick/onAddCard` normalized to `.on()`, bilingual docs / [ES] Normalizados a `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release — drag & drop, WIP limits, priorities, assignees / [ES] Versión inicial |

@@ -1,0 +1,88 @@
+/* ============================================================
+   MATIOS UI — matios-ui-shell.css
+   MTS.Shell — Orquestador de layout: Topbar + SideNav + StatusBar + main
+   Requiere: matios-ui-base.css
+   ============================================================ */
+
+/* ── Root ──────────────────────────────────────────── */
+.mts-shell {
+  --mts-shell-height: 100vh;
+
+  display: grid;
+  height: var(--mts-shell-height);
+  overflow: hidden;
+
+  /* Sin modificadores: solo main */
+  grid-template:
+    "main" 1fr
+    / 1fr;
+}
+
+/* ── Slots — grid-area siempre definida ────────────── */
+.mts-shell__topbar    { grid-area: topbar;  }
+.mts-shell__sidenav   { grid-area: sidenav; }
+.mts-shell__main      { grid-area: main;    overflow: hidden; position: relative; }
+.mts-shell__main--scroll { overflow: auto; }   /* opt-in cuando el main necesita scroll propio */
+.mts-shell__statusbar { grid-area: status;  }
+
+/* ════════════════════════════════════════════════════
+   COMBINACIONES — CSS Grid templates
+   top (T) · side (S) · status (St)
+   ════════════════════════════════════════════════════ */
+
+/* T ─────────────────────────────────────────────────── */
+.mts-shell--top:not(.mts-shell--side):not(.mts-shell--status) {
+  grid-template:
+    "topbar" auto
+    "main  " 1fr
+    / 1fr;
+}
+
+/* S ─────────────────────────────────────────────────── */
+.mts-shell--side:not(.mts-shell--top):not(.mts-shell--status) {
+  grid-template:
+    "sidenav main" 1fr
+    / auto 1fr;
+}
+
+/* St ────────────────────────────────────────────────── */
+.mts-shell--status:not(.mts-shell--top):not(.mts-shell--side) {
+  grid-template:
+    "main  " 1fr
+    "status" auto
+    / 1fr;
+}
+
+/* T + S ─────────────────────────────────────────────── */
+.mts-shell--top.mts-shell--side:not(.mts-shell--status) {
+  grid-template:
+    "topbar  topbar" auto
+    "sidenav main  " 1fr
+    / auto 1fr;
+}
+
+/* T + St ────────────────────────────────────────────── */
+.mts-shell--top.mts-shell--status:not(.mts-shell--side) {
+  grid-template:
+    "topbar" auto
+    "main  " 1fr
+    "status" auto
+    / 1fr;
+}
+
+/* S + St ────────────────────────────────────────────── */
+.mts-shell--side.mts-shell--status:not(.mts-shell--top) {
+  grid-template:
+    "sidenav main  " 1fr
+    "sidenav status" auto
+    / auto 1fr;
+}
+
+/* T + S + St — shell completo ───────────────────────── */
+.mts-shell--top.mts-shell--side.mts-shell--status {
+  grid-template:
+    "topbar  topbar " auto
+    "sidenav main   " 1fr
+    "sidenav status " auto
+    / auto 1fr;
+}

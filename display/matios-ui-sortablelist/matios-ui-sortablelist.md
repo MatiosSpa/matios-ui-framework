@@ -1,7 +1,7 @@
 # MTS.SortableList
 
-[EN] Drag-and-drop sortable list with numbered items, move buttons, icons, avatars, badges and read-only mode.
-[ES] Lista reordenable con drag & drop, ítems numerados, botones de movimiento, íconos, avatares, badges y modo lectura.
+🇬🇧 Drag-and-drop sortable list with numbered items, move buttons, icons, avatars, badges and read-only mode.
+🇪🇸 Lista reordenable con drag & drop, ítems numerados, botones de movimiento, íconos, avatares, badges y modo lectura.
 
 ---
 
@@ -17,29 +17,29 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `items` | `array` | `[]` | [EN] Item list (see schema) / [ES] Lista de ítems |
+| `items` | `array` | `[]` | 🇬🇧 Item list (see schema) / 🇪🇸 Lista de ítems |
 | `variant` | `string` | `'default'` | `'default'` · `'flush'` · `'compact'` |
-| `numbered` | `boolean` | `false` | [EN] Show order numbers / [ES] Mostrar números de orden |
-| `showHandle` | `boolean` | `true` | [EN] Show drag handle / [ES] Mostrar asa de arrastre |
-| `locked` | `boolean` | `false` | [EN] Read-only — no drag / [ES] Modo lectura — sin drag |
-| `moveButtons` | `boolean` | `false` | [EN] Show ↑ ↓ move buttons / [ES] Mostrar botones ↑ ↓ |
-| `onReorder` | `function` | — | [EN] `({ items, fromIndex, toIndex }) => {}` Fires on reorder / [ES] Se dispara al reordenar |
-| `onItemClick` | `function` | — | [EN] `({ item, index }) => {}` Fires on item click / [ES] Se dispara al hacer click |
+| `numbered` | `boolean` | `false` | 🇬🇧 Show order numbers / 🇪🇸 Mostrar números de orden |
+| `showHandle` | `boolean` | `true` | 🇬🇧 Show drag handle / 🇪🇸 Mostrar asa de arrastre |
+| `locked` | `boolean` | `false` | 🇬🇧 Read-only — no drag / 🇪🇸 Modo lectura — sin drag |
+| `moveButtons` | `boolean` | `false` | 🇬🇧 Show ↑ ↓ move buttons / 🇪🇸 Mostrar botones ↑ ↓ |
+| `onReorder` | `function` | — | 🇬🇧 `({ items, fromIndex, toIndex }) => {}` Fires on reorder / 🇪🇸 Se dispara al reordenar |
+| `onItemClick` | `function` | — | 🇬🇧 `({ item, index }) => {}` Fires on item click / 🇪🇸 Se dispara al hacer click |
 
 ### Item schema / Esquema de ítem
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `title` | `string` | [EN] Item title / [ES] Título del ítem |
-| `description` | `string` | [EN] Subtitle text / [ES] Texto subtítulo |
-| `meta` | `string` | [EN] Right-side metadata / [ES] Metadata lado derecho |
-| `icon` | `string` | [EN] SVG icon HTML / [ES] HTML del ícono SVG |
-| `avatar` | `string` | [EN] Avatar initials / [ES] Iniciales del avatar |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `title` | `string` | 🇬🇧 Item title / 🇪🇸 Título del ítem |
+| `description` | `string` | 🇬🇧 Subtitle text / 🇪🇸 Texto subtítulo |
+| `meta` | `string` | 🇬🇧 Right-side metadata / 🇪🇸 Metadata lado derecho |
+| `icon` | `string` | 🇬🇧 SVG icon HTML / 🇪🇸 HTML del ícono SVG |
+| `avatar` | `string` | 🇬🇧 Avatar initials / 🇪🇸 Iniciales del avatar |
 | `badge` | `object` | `{ label, variant }` |
-| `disabled` | `boolean` | [EN] Disable drag for this item / [ES] Deshabilitar drag en este ítem |
+| `disabled` | `boolean` | 🇬🇧 Disable drag for this item / 🇪🇸 Deshabilitar drag en este ítem |
 
 ---
 
@@ -142,10 +142,3 @@ el.addEventListener('mts:sortable:itemclick', (e) => console.log(e.detail));
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingüe, docs estandarizados |
-| 1.0.0 | [EN] Initial release — drag & drop, numbered, move buttons, variants / [ES] Versión inicial |

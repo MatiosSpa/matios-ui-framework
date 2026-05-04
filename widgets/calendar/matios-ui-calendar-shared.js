@@ -7,6 +7,18 @@
 window.MTS = window.MTS || {};
 MTS._CalendarShared = {
 
+  /* ── Escape / Sanitize ──────────────────────────────────── */
+
+  _esc(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  },
+
+  _san(html) {
+    return typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(html) : html;
+  },
+
   /* ── Utils de fecha ─────────────────────────────────────── */
 
   todayLocal() {
@@ -251,8 +263,8 @@ MTS._CalendarShared = {
     items.forEach((item, idx) => {
       if (item.divider) { html += '<div class="mts-calendar__ctx-divider"></div>'; actions.push(null); return; }
       const danger   = item.danger ? ' mts-calendar__ctx-item--danger' : '';
-      const iconHtml = item.icon   ? `<span class="mts-calendar__ctx-icon">${item.icon}</span>` : '';
-      html += `<div class="mts-calendar__ctx-item${danger}" data-idx="${idx}">${iconHtml}<span class="mts-calendar__ctx-label">${item.label||''}</span></div>`;
+      const iconHtml = item.icon   ? `<span class="mts-calendar__ctx-icon">${MTS._CalendarShared._san(item.icon)}</span>` : '';
+      html += `<div class="mts-calendar__ctx-item${danger}" data-idx="${idx}">${iconHtml}<span class="mts-calendar__ctx-label">${MTS._CalendarShared._esc(item.label)}</span></div>`;
       actions.push(item.onClick || null);
     });
 

@@ -1,7 +1,7 @@
 # MTS.Input
 
-[EN] Input component — text, email, password, number and textarea with validation, icons, clearable and character counter.
-[ES] Componente input — texto, email, password, número y textarea con validación, íconos, clearable y contador de caracteres.
+🇬🇧 Input component — text, email, password, number and textarea with validation, icons, clearable and character counter.
+🇪🇸 Componente input — texto, email, password, número y textarea con validación, íconos, clearable y contador de caracteres.
 
 ---
 
@@ -17,33 +17,35 @@
 
 ## Options / Opciones
 
-[EN] All options are passed as the second argument to the constructor.
-[ES] Todas las opciones se pasan como segundo argumento al constructor.
+🇬🇧 All options are passed as the second argument to the constructor.
+🇪🇸 Todas las opciones se pasan como segundo argumento al constructor.
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
 | `type` | `string` | `'text'` | `'text'` · `'email'` · `'password'` · `'number'` · `'textarea'` |
-| `label` | `string` | `''` | [EN] Field label / [ES] Etiqueta del campo |
-| `placeholder` | `string` | `''` | [EN] Placeholder text / [ES] Texto placeholder |
-| `hint` | `string` | `''` | [EN] Helper text below field / [ES] Texto de ayuda debajo del campo |
-| `value` | `string` | `''` | [EN] Initial value / [ES] Valor inicial |
-| `required` | `boolean` | `false` | [EN] Marks field as required / [ES] Marca el campo como requerido |
-| `disabled` | `boolean` | `false` | [EN] Disables all interaction / [ES] Deshabilita toda interacción |
-| `readonly` | `boolean` | `false` | [EN] Read-only, not editable / [ES] Solo lectura, no editable |
-| `clearable` | `boolean` | `false` | [EN] Shows × button to clear / [ES] Muestra botón × para limpiar |
-| `showPassword` | `boolean` | `false` | [EN] Toggle to show password / [ES] Toggle para mostrar contraseña |
-| `iconLeft` | `string` | `null` | [EN] Left icon SVG string / [ES] SVG string del ícono izquierdo |
-| `iconRight` | `string` | `null` | [EN] Right icon SVG string / [ES] SVG string del ícono derecho |
-| `maxLength` | `number` | `null` | [EN] Maximum characters / [ES] Máximo de caracteres |
-| `showCount` | `boolean` | `false` | [EN] Shows character counter / [ES] Muestra contador de caracteres |
-| `rows` | `number` | `4` | [EN] Textarea rows / [ES] Filas del textarea |
-| `validateOnBlur` | `boolean` | `true` | [EN] Validate when field loses focus / [ES] Valida al perder foco |
-| `validateOnInput` | `boolean` | `false` | [EN] Validate on every keystroke / [ES] Valida en cada tecla |
-| `rules` | `object` | `{}` | [EN] Validation rules (see below) / [ES] Reglas de validación (ver abajo) |
-| `onChange` | `function` | — | [EN] Fires on value change / [ES] Se dispara al cambiar el valor |
-| `onFocus` | `function` | — | [EN] Fires on focus / [ES] Se dispara al enfocar |
-| `onBlur` | `function` | — | [EN] Fires on blur / [ES] Se dispara al perder foco |
-| `onValidate` | `function` | — | [EN] Fires after validation / [ES] Se dispara después de validar |
+| `label` | `string` | `''` | 🇬🇧 Field label / 🇪🇸 Etiqueta del campo |
+| `placeholder` | `string` | `''` | 🇬🇧 Placeholder text / 🇪🇸 Texto placeholder |
+| `hint` | `string` | `''` | 🇬🇧 Helper text below field / 🇪🇸 Texto de ayuda debajo del campo |
+| `value` | `string` | `''` | 🇬🇧 Initial value / 🇪🇸 Valor inicial |
+| `required` | `boolean` | `false` | 🇬🇧 Marks field as required / 🇪🇸 Marca el campo como requerido |
+| `disabled` | `boolean` | `false` | 🇬🇧 Disables all interaction / 🇪🇸 Deshabilita toda interacción |
+| `readonly` | `boolean` | `false` | 🇬🇧 Read-only, not editable / 🇪🇸 Solo lectura, no editable |
+| `clearable` | `boolean` | `false` | 🇬🇧 Shows × button to clear / 🇪🇸 Muestra botón × para limpiar |
+| `showPassword` | `boolean` | `false` | 🇬🇧 Toggle to show password / 🇪🇸 Toggle para mostrar contraseña |
+| `iconLeft` | `string` | `null` | 🇬🇧 Left icon SVG string / 🇪🇸 SVG string del ícono izquierdo |
+| `iconRight` | `string` | `null` | 🇬🇧 Right icon SVG string / 🇪🇸 SVG string del ícono derecho |
+| `maxLength` | `number` | `null` | 🇬🇧 Maximum characters / 🇪🇸 Máximo de caracteres |
+| `showCount` | `boolean` | `false` | 🇬🇧 Shows character counter / 🇪🇸 Muestra contador de caracteres |
+| `rows` | `number` | `4` | 🇬🇧 Textarea rows / 🇪🇸 Filas del textarea |
+| `selectOnFocus` | `boolean` | `false` | 🇬🇧 Selects all text when the field receives focus. Does not apply to `type="password"` / 🇪🇸 Selecciona todo el texto al recibir foco. No aplica a `type="password"` |
+| `nextOnEnter` | `boolean` | `false` | 🇬🇧 Pressing Enter moves focus to the next input in the DOM. Does not apply to `type="textarea"` / 🇪🇸 Enter mueve el foco al siguiente input en el DOM. No aplica a `type="textarea"` |
+| `validateOnBlur` | `boolean` | `true` | 🇬🇧 Validate when field loses focus / 🇪🇸 Valida al perder foco |
+| `validateOnInput` | `boolean` | `false` | 🇬🇧 Validate on every keystroke / 🇪🇸 Valida en cada tecla |
+| `rules` | `object` | `{}` | 🇬🇧 Validation rules (see below) / 🇪🇸 Reglas de validación (ver abajo) |
+| `onChange` | `function` | — | 🇬🇧 Fires on value change / 🇪🇸 Se dispara al cambiar el valor |
+| `onFocus` | `function` | — | 🇬🇧 Fires on focus / 🇪🇸 Se dispara al enfocar |
+| `onBlur` | `function` | — | 🇬🇧 Fires on blur / 🇪🇸 Se dispara al perder foco |
+| `onValidate` | `function` | — | 🇬🇧 Fires after validation / 🇪🇸 Se dispara después de validar |
 
 ---
 
@@ -51,22 +53,22 @@
 
 | Rule | Type | Description / Descripción |
 |------|------|---------------------------|
-| `required` | `boolean` | [EN] Field cannot be empty / [ES] Campo no puede estar vacío |
-| `minLength` | `number` | [EN] Minimum character count / [ES] Mínimo de caracteres |
-| `maxLength` | `number` | [EN] Maximum character count / [ES] Máximo de caracteres |
-| `min` | `number` | [EN] Minimum value (number type) / [ES] Valor mínimo (tipo number) |
-| `max` | `number` | [EN] Maximum value (number type) / [ES] Valor máximo (tipo number) |
-| `email` | `boolean` | [EN] Validates email format / [ES] Valida formato email |
-| `pattern` | `RegExp` | [EN] Custom regex pattern / [ES] Patrón regex personalizado |
-| `patternMessage` | `string` | [EN] Message if pattern fails / [ES] Mensaje si falla el patrón |
-| `custom` | `function` | [EN] `(value) => 'error msg' \| null` / [ES] `(valor) => 'mensaje error' \| null` |
+| `required` | `boolean` | 🇬🇧 Field cannot be empty / 🇪🇸 Campo no puede estar vacío |
+| `minLength` | `number` | 🇬🇧 Minimum character count / 🇪🇸 Mínimo de caracteres |
+| `maxLength` | `number` | 🇬🇧 Maximum character count / 🇪🇸 Máximo de caracteres |
+| `min` | `number` | 🇬🇧 Minimum value (number type) / 🇪🇸 Valor mínimo (tipo number) |
+| `max` | `number` | 🇬🇧 Maximum value (number type) / 🇪🇸 Valor máximo (tipo number) |
+| `email` | `boolean` | 🇬🇧 Validates email format / 🇪🇸 Valida formato email |
+| `pattern` | `RegExp` | 🇬🇧 Custom regex pattern / 🇪🇸 Patrón regex personalizado |
+| `patternMessage` | `string` | 🇬🇧 Message if pattern fails / 🇪🇸 Mensaje si falla el patrón |
+| `custom` | `function` | 🇬🇧 `(value) => 'error msg' \| null` / 🇪🇸 `(valor) => 'mensaje error' \| null` |
 
 ---
 
 ## Events / Eventos
 
-[EN] Use `onXxx` callbacks in the constructor. This is the recommended approach — no need for `addEventListener`.
-[ES] Usa los callbacks `onXxx` en el constructor. Este es el enfoque recomendado — no necesitas `addEventListener`.
+🇬🇧 Use `onXxx` callbacks in the constructor. This is the recommended approach — no need for `addEventListener`.
+🇪🇸 Usa los callbacks `onXxx` en el constructor. Este es el enfoque recomendado — no necesitas `addEventListener`.
 
 ```js
 new MTS.Input('#my-input', {
@@ -91,8 +93,8 @@ new MTS.Input('#my-input', {
 
 ## Disabled State / Estado Disabled
 
-[EN] A disabled input cannot be interacted with. The visual style adapts to each theme using `--mts-text-disabled`.
-[ES] Un input disabled no puede ser interactuado. El estilo visual se adapta a cada tema usando `--mts-text-disabled`.
+🇬🇧 A disabled input cannot be interacted with. The visual style adapts to each theme using `--mts-text-disabled`.
+🇪🇸 Un input disabled no puede ser interactuado. El estilo visual se adapta a cada tema usando `--mts-text-disabled`.
 
 ```html
 <!-- HTML declarativo / HTML declarative -->
@@ -123,8 +125,8 @@ inp.enable()
 
 ## Readonly State / Estado Readonly
 
-[EN] A readonly input shows its value but cannot be edited. Visually different from disabled.
-[ES] Un input readonly muestra su valor pero no puede editarse. Visualmente diferente al disabled.
+🇬🇧 A readonly input shows its value but cannot be edited. Visually different from disabled.
+🇪🇸 Un input readonly muestra su valor pero no puede editarse. Visualmente diferente al disabled.
 
 ```html
 <div id="inp-readonly"
@@ -141,8 +143,8 @@ inp.enable()
 
 ## HTML Usage / Uso HTML
 
-[EN] Declare the field in HTML using `data-*` attributes, then instantiate with JavaScript.
-[ES] Declara el campo en HTML usando atributos `data-*`, luego instancia con JavaScript.
+🇬🇧 Declare the field in HTML using `data-*` attributes, then instantiate with JavaScript.
+🇪🇸 Declara el campo en HTML usando atributos `data-*`, luego instancia con JavaScript.
 
 ```html
 <div id="inp-email"
@@ -162,32 +164,34 @@ inp.enable()
 </script>
 ```
 
-[EN] Available `data-*` attributes:
-[ES] Atributos `data-*` disponibles:
+🇬🇧 Available `data-*` attributes:
+🇪🇸 Atributos `data-*` disponibles:
 
 | Attribute / Atributo | JS Option | Description / Descripción |
 |----------------------|-----------|---------------------------|
 | `data-type` | `type` | `text` · `email` · `password` · `number` · `textarea` |
-| `data-label` | `label` | [EN] Field label / [ES] Etiqueta |
-| `data-placeholder` | `placeholder` | |
-| `data-hint` | `hint` | [EN] Helper text / [ES] Texto de ayuda |
-| `data-value` | `value` | [EN] Initial value / [ES] Valor inicial |
-| `data-name` | `name` | [EN] Field name / [ES] Nombre del campo |
-| `data-required` | `required` | [EN] Presence activates / [ES] Presencia activa |
-| `data-disabled` | `disabled` | [EN] Presence activates / [ES] Presencia activa |
-| `data-readonly` | `readonly` | [EN] Presence activates / [ES] Presencia activa |
-| `data-clearable` | `clearable` | [EN] Presence activates / [ES] Presencia activa |
-| `data-show-password` | `showPassword` | [EN] Presence activates / [ES] Presencia activa |
-| `data-show-count` | `showCount` | [EN] Presence activates / [ES] Presencia activa |
-| `data-max-length` | `maxLength` | [EN] Maximum characters / [ES] Máximo de caracteres |
-| `data-rows` | `rows` | [EN] Textarea rows / [ES] Filas del textarea |
+| `data-label` | `label` | 🇬🇧 Field label / 🇪🇸 Etiqueta |
+| `data-placeholder` | `placeholder` | 🇬🇧 Placeholder text / 🇪🇸 Texto de marcador |
+| `data-hint` | `hint` | 🇬🇧 Helper text / 🇪🇸 Texto de ayuda |
+| `data-value` | `value` | 🇬🇧 Initial value / 🇪🇸 Valor inicial |
+| `data-name` | `name` | 🇬🇧 Field name / 🇪🇸 Nombre del campo |
+| `data-required` | `required` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
+| `data-disabled` | `disabled` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
+| `data-readonly` | `readonly` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
+| `data-clearable` | `clearable` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
+| `data-show-password` | `showPassword` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
+| `data-show-count` | `showCount` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
+| `data-max-length` | `maxLength` | 🇬🇧 Maximum characters / 🇪🇸 Máximo de caracteres |
+| `data-rows` | `rows` | 🇬🇧 Textarea rows / 🇪🇸 Filas del textarea |
+| `data-select-on-focus` | `selectOnFocus` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
+| `data-next-on-enter` | `nextOnEnter` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
 
 ---
 
 ## JavaScript Usage / Uso JavaScript
 
-[EN] Create the component entirely from JavaScript.
-[ES] Crea el componente completamente desde JavaScript.
+🇬🇧 Create the component entirely from JavaScript.
+🇪🇸 Crea el componente completamente desde JavaScript.
 
 ```js
 const inp = new MTS.Input('#my-input', {
@@ -223,8 +227,8 @@ const inp = new MTS.Input('#my-input', {
 
 ## API
 
-[EN] Methods available on the instance after creation.
-[ES] Métodos disponibles en la instancia después de crearla.
+🇬🇧 Methods available on the instance after creation.
+🇪🇸 Métodos disponibles en la instancia después de crearla.
 
 ```js
 const inp = new MTS.Input('#my-input', { ... });
@@ -265,8 +269,8 @@ inp.destroy()
 
 ## DOM Event / Evento DOM
 
-[EN] If you need to listen from outside the component instance, use the native DOM events.
-[ES] Si necesitas escuchar desde fuera de la instancia, usa los eventos DOM nativos.
+🇬🇧 If you need to listen from outside the component instance, use the native DOM events.
+🇪🇸 Si necesitas escuchar desde fuera de la instancia, usa los eventos DOM nativos.
 
 ```js
 document.getElementById('my-input')
@@ -284,10 +288,3 @@ document.getElementById('my-input')
 | `onValidate` | `mts:input:validate` |
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 2.0.0 | [EN] Bilingual docs, improved disabled CSS using `--mts-text-disabled`, added `onValidate` / [ES] Docs bilingüe, CSS disabled mejorado usando `--mts-text-disabled`, agregado `onValidate` |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

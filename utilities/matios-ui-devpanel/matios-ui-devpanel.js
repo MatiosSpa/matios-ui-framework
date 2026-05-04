@@ -60,11 +60,11 @@ MTS.DevPanel = class MtsDevPanel {
     row.className = 'dp-log__row';
     const time = new Date().toLocaleTimeString('es-CL',
       { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-    row.innerHTML =
-      '<span class="dp-log__time">' + time + '</span>' +
-      '<span class="dp-log__badge dp-log__badge--' + badge + '">' + badge + '</span>' +
-      '<span class="dp-log__msg">'  + message + '</span>' +
-      (detail ? '<span class="dp-log__detail">' + detail + '</span>' : '');
+    var _timeEl = document.createElement('span'); _timeEl.className = 'dp-log__time'; _timeEl.textContent = time;
+    var _badgeEl = document.createElement('span'); _badgeEl.className = 'dp-log__badge dp-log__badge--' + badge; _badgeEl.textContent = badge;
+    var _msgEl = document.createElement('span'); _msgEl.className = 'dp-log__msg'; _msgEl.textContent = message;
+    row.appendChild(_timeEl); row.appendChild(_badgeEl); row.appendChild(_msgEl);
+    if (detail) { var _detailEl = document.createElement('span'); _detailEl.className = 'dp-log__detail'; _detailEl.textContent = detail; row.appendChild(_detailEl); }
     this._logBodyEl.prepend(row);
     const rows = this._logBodyEl.querySelectorAll('.dp-log__row');
     if (rows.length > 200) rows[rows.length - 1].remove();
@@ -244,7 +244,7 @@ MTS.DevPanel = class MtsDevPanel {
     Object.entries(groups).forEach(([groupName, groupItems]) => {
       const section = document.createElement('div');
       section.className = 'dp-cfg-group';
-      section.innerHTML = '<div class="dp-cfg-group__title">' + groupName + '</div>';
+      section.innerHTML = '<div class="dp-cfg-group__title">' + this._escape(groupName) + '</div>';
 
       groupItems.forEach(item => {
         const row = document.createElement('div');
@@ -252,8 +252,8 @@ MTS.DevPanel = class MtsDevPanel {
 
         if (item.type === 'toggle') {
           row.innerHTML =
-            '<div class="dp-cfg-toggle' + (item.value ? ' on' : '') + '" data-key="' + item.key + '">' +
-              '<span class="dp-cfg-toggle__label">' + item.label + '</span>' +
+            '<div class="dp-cfg-toggle' + (item.value ? ' on' : '') + '" data-key="' + this._escape(item.key) + '">' +
+              '<span class="dp-cfg-toggle__label">' + this._escape(item.label) + '</span>' +
               '<div class="dp-cfg-toggle__switch"></div>' +
             '</div>';
           const tog = row.querySelector('.dp-cfg-toggle');
@@ -265,10 +265,10 @@ MTS.DevPanel = class MtsDevPanel {
 
         } else if (item.type === 'select') {
           row.innerHTML =
-            '<label class="dp-cfg-label">' + item.label + '</label>' +
-            '<select class="dp-cfg-select" data-key="' + item.key + '">' +
+            '<label class="dp-cfg-label">' + this._escape(item.label) + '</label>' +
+            '<select class="dp-cfg-select" data-key="' + this._escape(item.key) + '">' +
               (item.options || []).map(o =>
-                '<option value="' + o.value + '"' + (String(o.value) === String(item.value) ? ' selected' : '') + '>' + o.label + '</option>'
+                '<option value="' + this._escape(o.value) + '"' + (String(o.value) === String(item.value) ? ' selected' : '') + '>' + this._escape(o.label) + '</option>'
               ).join('') +
             '</select>';
           row.querySelector('select').addEventListener('change', e => {
@@ -278,8 +278,8 @@ MTS.DevPanel = class MtsDevPanel {
 
         } else if (item.type === 'time') {
           row.innerHTML =
-            '<label class="dp-cfg-label">' + item.label + '</label>' +
-            '<input class="dp-cfg-input" type="text" value="' + (item.value||'') + '" data-key="' + item.key + '" placeholder="HH:MM">';
+            '<label class="dp-cfg-label">' + this._escape(item.label) + '</label>' +
+            '<input class="dp-cfg-input" type="text" value="' + this._escape(item.value||'') + '" data-key="' + this._escape(item.key) + '" placeholder="HH:MM">';
           row.querySelector('input').addEventListener('change', e => {
             item.apply(e.target.value, this.watch);
             this.refreshCode();
@@ -287,8 +287,8 @@ MTS.DevPanel = class MtsDevPanel {
 
         } else if (item.type === 'number') {
           row.innerHTML =
-            '<label class="dp-cfg-label">' + item.label + '</label>' +
-            '<input class="dp-cfg-input" type="number" value="' + (item.value||'') + '" data-key="' + item.key + '">';
+            '<label class="dp-cfg-label">' + this._escape(item.label) + '</label>' +
+            '<input class="dp-cfg-input" type="number" value="' + this._escape(item.value||'') + '" data-key="' + this._escape(item.key) + '">';
           row.querySelector('input').addEventListener('change', e => {
             item.apply(parseInt(e.target.value), this.watch);
             this.refreshCode();
@@ -365,5 +365,11 @@ MTS.DevPanel = class MtsDevPanel {
 
   _icon(name) {
     return MTS?.Icon?.get?.(name, 13) || '';
+  }
+
+  _escape(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 };

@@ -80,14 +80,14 @@ MTS.Breadcrumb = class MtsBreadcrumb {
         const span = document.createElement('span');
         span.className = 'mts-breadcrumb__current';
         span.setAttribute('aria-current', isLast ? 'page' : undefined);
-        if (item.icon) { const ic = document.createElement('span'); ic.innerHTML = item.icon; span.appendChild(ic); }
+        if (item.icon) { const ic = document.createElement('span'); ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(item.icon) : item.icon; span.appendChild(ic); }
         span.appendChild(document.createTextNode(item.label));
         li.appendChild(span);
       } else {
         const a = item.href ? document.createElement('a') : document.createElement('button');
         a.className = 'mts-breadcrumb__link';
         if (item.href) a.href = item.href;
-        if (item.icon) { const ic = document.createElement('span'); ic.innerHTML = item.icon; a.appendChild(ic); }
+        if (item.icon) { const ic = document.createElement('span'); ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(item.icon) : item.icon; a.appendChild(ic); }
         a.appendChild(document.createTextNode(item.label));
         a.addEventListener('click', (e) => {
           if (!item.href) e.preventDefault();
@@ -100,7 +100,7 @@ MTS.Breadcrumb = class MtsBreadcrumb {
       if (!isLast) {
         const sep = document.createElement('span');
         sep.className = 'mts-breadcrumb__separator';
-        sep.innerHTML = this.separator;
+        sep.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.separator) : this.separator;
         sep.setAttribute('aria-hidden', 'true');
         li.appendChild(sep);
       }

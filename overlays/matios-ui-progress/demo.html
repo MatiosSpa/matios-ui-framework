@@ -29,32 +29,33 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
   <link rel="stylesheet" href="../../support/demo-shared.css">
   <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-progress.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-progress.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
 </head>
 <body>
-<div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
-  <button class="demo-btn-sm demo-btn-sep">—</button>
-  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
-</div>
 
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Progress</h1>
     <p>Bar · circle · indeterminate — variants, striped, animated and API methods.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-progress.md')">📄 Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
@@ -66,13 +67,6 @@
 </div>
 
 <script>
-function esc(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
 function indentHtml(html) {
   var indent = 0;
   var step = 2;
@@ -97,26 +91,19 @@ function indentHtml(html) {
   return result.trim();
 }
 
-function htmlTab(previewHtml) {
-  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(indentHtml(previewHtml)) + '</pre>';
-}
-
-function jsTab(code) {
-  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' + esc(code).trim() + '</pre>';
-}
-
-function makeSection(id, previewHtml, jsCode, initFn) {
+function makeSection(id, previewHtml, jsCode, initFn, height) {
   new MTS.Tabs('#' + id, {
     variant: 'card',
-    height: '360px',
+    height: height || '360px',
     lazy: false,
     tabs: [
-      { id: id + '-preview', label: 'Preview', content: previewHtml },
-      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
-      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>'   }
     ]
   });
-
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
@@ -78,10 +78,10 @@
       variant: 'elevated',
       size: 'lg',
       body:
-        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+        '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div id="role-list-alert"></div>' +
-          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3">' +
-            '<p class="mts-text-md mts-text-muted mts-m-0">Cada rol agrupa perfiles y solo admite un perfil por modulo.</p>' +
+          '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3">' +
+            '<p class="mts-text--md mts-text-color--muted mts-m-0">Cada rol agrupa perfiles y solo admite un perfil por modulo.</p>' +
             '<span id="role-list-count" class="mts-badge mts-badge--info mts-badge--sm">0 roles</span>' +
           '</div>' +
           '<div id="role-list-table"></div>' +
@@ -151,7 +151,7 @@
               roles.map(function (role) {
                 return '' +
                   '<tr class="mts-table__row">' +
-                    '<td class="mts-table__td"><strong class="mts-text-sm mts-text-primary">' + escapeHtml(role.name) + '</strong></td>' +
+                    '<td class="mts-table__td"><strong class="mts-text--sm mts-text-color--primary">' + escapeHtml(role.name) + '</strong></td>' +
                     '<td class="mts-table__td">' + escapeHtml(role.description) + '</td>' +
                     '<td class="mts-table__td mts-table__td--actions">' +
                       actionButton('edit', role.id, 'edit', 'Editar') +

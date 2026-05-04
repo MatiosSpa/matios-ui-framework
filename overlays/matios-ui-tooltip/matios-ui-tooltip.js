@@ -78,7 +78,7 @@ MTS.Tooltip = class MtsTooltip {
       if (this._isVisible) return;
       this._isVisible = true;
       this._tooltipEl.removeAttribute('hidden');
-      this._tooltipEl.innerHTML = this.content;
+      this._tooltipEl.textContent = this.content;
       this._position();
       requestAnimationFrame(() => this._tooltipEl.classList.add('mts-tooltip--visible'));
       this._emit('show', {});
@@ -98,7 +98,7 @@ MTS.Tooltip = class MtsTooltip {
     return this;
   }
 
-  setContent(html) { this.content = html; if (this._isVisible) { this._tooltipEl.innerHTML = html; this._position(); } return this; }
+  setContent(html) { this.content = html; if (this._isVisible) { this._tooltipEl.textContent = html; this._position(); } return this; }
   destroy()        { this._tooltipEl?.remove(); this._unbindEvents(); }
   on(e, cb)        { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
 

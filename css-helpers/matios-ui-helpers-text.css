@@ -1,0 +1,70 @@
+/* ============================================================
+   MATIOS UI — CSS Helpers: Text
+   Versión: 1.0.0
+
+   BEM:
+   - bloque=mts-text,  modificador=alineación / tamaño / decoración / transform
+   - bloque=mts-fw,    modificador=peso de fuente
+   - bloque=mts-fst,   modificador=estilo de fuente
+   - bloque=mts-lh,    modificador=line-height
+   ============================================================ */
+
+/* ── Alineación ─────────────────────────────────────────── */
+.mts-text--left    { text-align: left !important; }
+.mts-text--center  { text-align: center !important; }
+.mts-text--right   { text-align: right !important; }
+.mts-text--justify { text-align: justify !important; }
+
+/* ── Tamaño de fuente ───────────────────────────────────── */
+.mts-text--xs  { font-size: var(--mts-font-size-xs) !important; }
+.mts-text--sm  { font-size: var(--mts-font-size-sm) !important; }
+.mts-text--md  { font-size: var(--mts-font-size-md) !important; }
+.mts-text--lg  { font-size: var(--mts-font-size-lg) !important; }
+.mts-text--xl  { font-size: var(--mts-font-size-xl) !important; }
+.mts-text--2xl { font-size: var(--mts-font-size-2xl) !important; }
+.mts-text--3xl { font-size: var(--mts-font-size-3xl) !important; }
+
+/* ── Peso de fuente — BEM: bloque=mts-fw ───────────────── */
+.mts-fw--lighter  { font-weight: 300 !important; }
+.mts-fw--normal   { font-weight: var(--mts-font-weight-normal) !important; }
+.mts-fw--medium   { font-weight: var(--mts-font-weight-medium) !important; }
+.mts-fw--semibold { font-weight: var(--mts-font-weight-semibold) !important; }
+.mts-fw--bold     { font-weight: var(--mts-font-weight-bold) !important; }
+.mts-fw--bolder   { font-weight: 800 !important; }
+
+/* ── Estilo de fuente — BEM: bloque=mts-fst ────────────── */
+.mts-fst--italic { font-style: italic !important; }
+.mts-fst--normal { font-style: normal !important; }
+
+/* ── Line height — BEM: bloque=mts-lh ──────────────────── */
+.mts-lh--1     { line-height: 1 !important; }
+.mts-lh--tight { line-height: var(--mts-line-height-tight) !important; }
+.mts-lh--base  { line-height: var(--mts-line-height-base) !important; }
+.mts-lh--loose { line-height: var(--mts-line-height-loose) !important; }
+
+/* ── Transformación de texto ────────────────────────────── */
+.mts-text--lowercase  { text-transform: lowercase !important; }
+.mts-text--uppercase  { text-transform: uppercase !important; }
+.mts-text--capitalize { text-transform: capitalize !important; }
+.mts-text--no-transform { text-transform: none !important; }
+
+/* ── Decoración de texto ────────────────────────────────── */
+.mts-text--underline     { text-decoration: underline !important; }
+.mts-text--line-through  { text-decoration: line-through !important; }
+.mts-text--no-decoration { text-decoration: none !important; }
+
+/* ── Overflow / Wrap ────────────────────────────────────── */
+.mts-text--wrap   { white-space: normal !important; }
+.mts-text--nowrap { white-space: nowrap !important; }
+.mts-text--break  { word-break: break-word !important; overflow-wrap: break-word !important; }
+.mts-text--truncate {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* ── Fuente mono ────────────────────────────────────────── */
+.mts-text--mono {
+  font-family: var(--mts-font-mono) !important;
+  font-size: var(--mts-font-size-sm) !important;
+}

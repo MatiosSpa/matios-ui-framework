@@ -3,16 +3,16 @@
 <head>
   <script>
     (function(){
-      var sp=location.search||location.hash||'';
-      var mm=sp.match(/mts-mode=([a-z-]+)/);
-      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      const sp=location.search||location.hash||'';
+      const mm=sp.match(/mts-mode=([a-z-]+)/);
+      const ma=sp.match(/mts-accent=([a-z-]+)/);
       if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
       if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
       try{
-        var p=window.parent;
+        const p=window.parent;
         if(p&&p!==window){
-          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
-          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          const pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          const pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
           if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
           if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
           else   document.documentElement.removeAttribute('data-mts-accent');
@@ -29,6 +29,11 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
   <link rel="stylesheet" href="../../support/demo-shared.css">
   <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
   <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
@@ -36,30 +41,22 @@
   <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
   <link rel="stylesheet" href="./matios-ui-table.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-skeleton/matios-ui-skeleton.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
   <script src="../../support/demo-shared.js"></script>
+  <script src="../../overlays/matios-ui-skeleton/matios-ui-skeleton.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
 </head>
 <body>
-<div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
-  <button class="demo-btn-sm demo-btn-sep">—</button>
-  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
-</div>
 
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Table</h1>
     <p>Componente de tabla CSS-only — sin JavaScript requerido. Variantes, estados de fila, cabeceras ordenables, columnas de acciones.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-table.md')">
-        <i class="mts-icon mts-icon-file-text mts-icon--sm"></i> Docs
-      </button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
@@ -76,6 +73,7 @@
   <div class="demo-section"><div class="demo-section-title">10 — Header fijo (scroll vertical)</div><div id="tabs-s10"></div></div>
   <div class="demo-section"><div class="demo-section-title">11 — Texto truncado</div><div id="tabs-s11"></div></div>
   <div class="demo-section"><div class="demo-section-title">12 — Responsive</div><div id="tabs-s12"></div></div>
+  <div class="demo-section"><div class="demo-section-title">13 — Loading skeleton</div><div id="tabs-s13"></div></div>
 </div>
 
 <script>
@@ -91,23 +89,23 @@ function esc(str) {
 }
 
 function indentHtml(html) {
-  var indent = 0;
-  var step   = 2;
-  var voids  = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
-  var result = '';
-  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  let indent      = 0;
+  const step      = 2;
+  const voids     = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  let result      = '';
+  const tokens    = html.match(/<[^>]+>|[^<]+/g) || [];
   tokens.forEach(function(tok) {
-    var t = tok.trim();
+    const t = tok.trim();
     if (!t) return;
     if (/^<\//.test(t)) {
       indent = Math.max(0, indent - step);
       result += ' '.repeat(indent) + t + '\n';
     } else if (/^<[^!]/.test(t)) {
       result += ' '.repeat(indent) + t + '\n';
-      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      const tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
       if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
     } else {
-      var text = t.replace(/\s+/g, ' ');
+      const text = t.replace(/\s+/g, ' ');
       if (text) result += ' '.repeat(indent) + text + '\n';
     }
   });
@@ -115,64 +113,44 @@ function indentHtml(html) {
 }
 
 /*
- * Tab HTML: wrapper relativo + botón CopyButton + <pre> con id único.
- * lazy:false garantiza que el panel está en el DOM al instanciar CopyButton.
+ * makeSection — crea las 3 tabs: Preview, HTML y JavaScript.
+ * Con lazy:false todos los paneles están en el DOM al salir de esta función,
+ * por lo que MTS.CodeBlock puede inicializarse directo sin setTimeout.
+ *
+ * @param {string} id          — id del contenedor de tabs
+ * @param {string} previewHtml — HTML del preview (string para el sistema de tabs)
+ * @param {string} jsCode      — código JS de ejemplo
+ * @param {string} [htmlCode]  — HTML alternativo para el tab HTML (opcional)
  */
-function htmlTab(sectionId, previewHtml) {
-  var preId = 'pre-' + sectionId;
-  return '<div style="position:relative;height:100%;box-sizing:border-box">' +
-    '<button id="copybtn-' + sectionId + '" ' +
-      'style="position:absolute;top:6px;right:6px;z-index:2"></button>' +
-    '<pre id="' + preId + '" class="demo-code" ' +
-      'style="display:block;height:100%;box-sizing:border-box;' +
-             'white-space:pre;overflow:auto;margin:0;padding-right:40px">' +
-      esc(indentHtml(previewHtml)) +
-    '</pre>' +
-  '</div>';
-}
-
-function jsTab(code) {
-  return '<pre class="demo-code" ' +
-    'style="display:block;height:100%;box-sizing:border-box;' +
-           'white-space:pre;overflow:auto;margin:0">' +
-    esc(code) +
-  '</pre>';
-}
-
-/*
- * Crea las tabs con height fijo y lazy:false.
- * Con lazy:false todos los paneles están en el DOM inmediatamente,
- * por lo que getElementById funciona sin setTimeout ni RAF.
- */
-function makeSection(id, previewHtml, jsCode) {
+function makeSection(id, previewHtml, jsCode, htmlCode) {
   new MTS.Tabs('#' + id, {
     variant: 'card',
     height:  '350px',
     lazy:    false,
     tabs: [
       { id: id + '-preview', label: 'Preview',    content: previewHtml },
-      { id: id + '-html',    label: 'HTML',        content: htmlTab(id, previewHtml) },
-      { id: id + '-js',      label: 'JavaScript',  content: jsTab(jsCode) },
+      { id: id + '-html',    label: 'HTML',        content: '<div id="cb-html-' + id + '" style="height:100%"></div>' },
+      { id: id + '-js',      label: 'JavaScript',  content: '<div id="cb-js-' + id + '" style="height:100%"></div>' },
     ],
   });
 
-  /* Con lazy:false el panel ya está en el DOM — getElementById funciona directo */
-  var btnEl = document.getElementById('copybtn-' + id);
-  var preEl = document.getElementById('pre-' + id);
-  if (btnEl && preEl) {
-    new MTS.CopyButton(btnEl, {
-      iconOnly: true,
-      variant:  'ghost',
-      size:     'sm',
-      target:   preEl,
-    });
-  }
+  new MTS.CodeBlock(document.getElementById('cb-html-' + id), {
+    language: 'html',
+    code:     htmlCode || indentHtml(previewHtml),
+    copyable: true,
+  });
+
+  new MTS.CodeBlock(document.getElementById('cb-js-' + id), {
+    language: 'javascript',
+    code:     jsCode,
+    copyable: true,
+  });
 }
 
 /* ============================================================
    DATOS MOCK
    ============================================================ */
-var USERS = [
+const USERS = [
   { id:1, name:'Ana García',     email:'ana@empresa.com',    role:'Admin',  status:'active',    date:'01 Dic 2024' },
   { id:2, name:'Pedro Martínez', email:'pedro@empresa.com',  role:'Editor', status:'pending',   date:'28 Nov 2024' },
   { id:3, name:'Laura Sánchez',  email:'laura@empresa.com',  role:'Viewer', status:'suspended', date:'15 Nov 2024' },
@@ -180,7 +158,7 @@ var USERS = [
   { id:5, name:'Sofía Torres',   email:'sofia@empresa.com',  role:'Editor', status:'active',    date:'20 Sep 2024' },
 ];
 
-var PRODUCTS = [
+const PRODUCTS = [
   { id:1, name:'Notebook Pro 15"',  sku:'NB-PRO-15',  category:'Computación', stock:42,  price:1299.00 },
   { id:2, name:'Mouse Inalámbrico', sku:'MS-WL-01',   category:'Periféricos',  stock:128, price:34.90  },
   { id:3, name:'Monitor 27" 4K',    sku:'MN-27-4K',   category:'Pantallas',    stock:15,  price:749.00 },
@@ -189,18 +167,48 @@ var PRODUCTS = [
   { id:6, name:'Hub USB-C 7 in 1',  sku:'HB-USBC-7',  category:'Accesorios',   stock:33,  price:54.90  },
 ];
 
-var BADGES = {
-  active:    '<span class="mts-badge mts-badge--success">Activo</span>',
-  pending:   '<span class="mts-badge mts-badge--primary">Pendiente</span>',
-  suspended: '<span class="mts-badge mts-badge--warning">Suspendido</span>',
-  inactive:  '<span class="mts-badge">Inactivo</span>',
+const BADGES = {
+  active:    'Activo',
+  pending:   'Pendiente',
+  suspended: 'Suspendido',
+  inactive:  'Inactivo',
+};
+
+const BADGE_VARIANTS = {
+  active:    'mts-badge--success',
+  pending:   'mts-badge--primary',
+  suspended: 'mts-badge--warning',
+  inactive:  '',
 };
 
 function fmtPrice(n) {
   return '$' + n.toLocaleString('es-CL', { minimumFractionDigits: 2 });
 }
 
-function iconBtn(icon) {
+/* ── Helpers DOM — para manipulación real del DOM ── */
+function makeBadge(status) {
+  const span = document.createElement('span');
+  span.className = 'mts-badge' + (BADGE_VARIANTS[status] ? ' ' + BADGE_VARIANTS[status] : '');
+  span.textContent = BADGES[status] || status;
+  return span;
+}
+
+function makeIconBtn(icon) {
+  const btn = document.createElement('button');
+  btn.className = 'mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon';
+  const i = document.createElement('i');
+  i.className = 'mts-icon mts-icon-' + icon + ' mts-icon--sm';
+  btn.appendChild(i);
+  return btn;
+}
+
+/* ── Helpers string — solo para preview strings de los tabs (excepción aceptada) ── */
+function badgeHtml(status) {
+  const cls = 'mts-badge' + (BADGE_VARIANTS[status] ? ' ' + BADGE_VARIANTS[status] : '');
+  return '<span class="' + cls + '">' + (BADGES[status] || status) + '</span>';
+}
+
+function iconBtnHtml(icon) {
   return '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">' +
     '<i class="mts-icon mts-icon-' + icon + ' mts-icon--sm"></i>' +
     '</button>';
@@ -209,7 +217,7 @@ function iconBtn(icon) {
 /* ============================================================
    S1 — Base
    ============================================================ */
-var preview_s1 =
+const preview_s1 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table">' +
       '<thead><tr>' +
@@ -225,7 +233,7 @@ var preview_s1 =
             '<td class="mts-table__td">' + u.name + '</td>' +
             '<td class="mts-table__td">' + u.email + '</td>' +
             '<td class="mts-table__td">' + u.role + '</td>' +
-            '<td class="mts-table__td mts-table__td--center">' + BADGES[u.status] + '</td>' +
+            '<td class="mts-table__td mts-table__td--center">' + badgeHtml(u.status) + '</td>' +
             '<td class="mts-table__td mts-table__td--end">' + u.date + '</td>' +
           '</tr>';
         }).join('') +
@@ -233,30 +241,58 @@ var preview_s1 =
     '</table>' +
   '</div>';
 
+const html_s1 =
+'<div class="mts-table-wrap">\n' +
+'  <table class="mts-table">\n' +
+'    <thead>\n' +
+'      <tr>\n' +
+'        <th class="mts-table__th">Nombre</th>\n' +
+'        <th class="mts-table__th">Email</th>\n' +
+'        <th class="mts-table__th mts-table__th--center">Estado</th>\n' +
+'        <th class="mts-table__th mts-table__th--end">Fecha</th>\n' +
+'      </tr>\n' +
+'    </thead>\n' +
+'    <tbody>\n' +
+'      <tr class="mts-table__row">\n' +
+'        <td class="mts-table__td">Ana García</td>\n' +
+'        <td class="mts-table__td">ana@empresa.com</td>\n' +
+'        <td class="mts-table__td mts-table__td--center">\n' +
+'          <span class="mts-badge mts-badge--success">Activo</span>\n' +
+'        </td>\n' +
+'        <td class="mts-table__td mts-table__td--end">01 Dic 2024</td>\n' +
+'      </tr>\n' +
+'    </tbody>\n' +
+'  </table>\n' +
+'</div>';
+
 makeSection('tabs-s1', preview_s1,
-'var users = [\n' +
-'  { name: "Ana García",  email: "ana@empresa.com",   role: "Admin",  status: "active",  date: "01 Dic 2024" },\n' +
-'  { name: "Pedro M.",    email: "pedro@empresa.com", role: "Editor", status: "pending", date: "28 Nov 2024" },\n' +
-'];\n' +
+'const tbody = document.querySelector(".mts-table tbody");\n' +
 '\n' +
-'var badges = {\n' +
-'  active:    \'<span class="mts-badge mts-badge--success">Activo</span>\',\n' +
-'  pending:   \'<span class="mts-badge mts-badge--primary">Pendiente</span>\',\n' +
-'  suspended: \'<span class="mts-badge mts-badge--warning">Suspendido</span>\',\n' +
-'  inactive:  \'<span class="mts-badge">Inactivo</span>\',\n' +
-'};\n' +
+'users.forEach(function(u) {\n' +
+'  const row = document.createElement("tr");\n' +
+'  row.className = "mts-table__row";\n' +
 '\n' +
-'var rows = users.map(function(u) {\n' +
-'  return \'<tr class="mts-table__row">\' +\n' +
-'    \'<td class="mts-table__td">\' + u.name  + \'</td>\' +\n' +
-'    \'<td class="mts-table__td">\' + u.email + \'</td>\' +\n' +
-'    \'<td class="mts-table__td">\' + u.role  + \'</td>\' +\n' +
-'    \'<td class="mts-table__td mts-table__td--center">\' + badges[u.status] + \'</td>\' +\n' +
-'    \'<td class="mts-table__td mts-table__td--end">\' + u.date + \'</td>\' +\n' +
-'  \'</tr>\';\n' +
-'}).join("");\n' +
+'  const tdName = document.createElement("td");\n' +
+'  tdName.className = "mts-table__td";\n' +
+'  tdName.textContent = u.name;\n' +
 '\n' +
-'document.querySelector("#mi-tabla tbody").innerHTML = rows;'
+'  const tdEmail = document.createElement("td");\n' +
+'  tdEmail.className = "mts-table__td";\n' +
+'  tdEmail.textContent = u.email;\n' +
+'\n' +
+'  const tdStatus = document.createElement("td");\n' +
+'  tdStatus.className = "mts-table__td mts-table__td--center";\n' +
+'  const badge = document.createElement("span");\n' +
+'  badge.className = "mts-badge mts-badge--success";\n' +
+'  badge.textContent = u.status;\n' +
+'  tdStatus.appendChild(badge);\n' +
+'\n' +
+'  row.appendChild(tdName);\n' +
+'  row.appendChild(tdEmail);\n' +
+'  row.appendChild(tdStatus);\n' +
+'  tbody.appendChild(row);\n' +
+'});',
+html_s1
 );
 
 /* ============================================================
@@ -285,27 +321,48 @@ function variantBlock(modifier, label) {
     '</div>';
 }
 
-var preview_s2 =
+const preview_s2 =
   variantBlock('mts-table--hover',    '.mts-table--hover') +
   variantBlock('mts-table--striped',  '.mts-table--striped') +
   variantBlock('mts-table--bordered', '.mts-table--bordered') +
   variantBlock('mts-table--compact',  '.mts-table--compact');
 
+const html_s2 =
+'<!-- Aplicar variante al elemento <table> -->\n' +
+'<table class="mts-table mts-table--hover">...</table>\n' +
+'<table class="mts-table mts-table--striped">...</table>\n' +
+'<table class="mts-table mts-table--bordered">...</table>\n' +
+'<table class="mts-table mts-table--compact">...</table>\n' +
+'\n' +
+'<!-- Variantes combinables entre sí -->\n' +
+'<table class="mts-table mts-table--striped mts-table--hover mts-table--compact">\n' +
+'  ...\n' +
+'</table>\n' +
+'\n' +
+'<!-- Sin padding lateral (dentro de un card o panel) -->\n' +
+'<table class="mts-table mts-table--compact mts-table--flush">\n' +
+'  ...\n' +
+'</table>';
+
 makeSection('tabs-s2', preview_s2,
-'var table = document.getElementById("mi-tabla");\n' +
+'const table = document.querySelector(".mts-table");\n' +
 '\n' +
 'table.classList.add("mts-table--striped");    // activar\n' +
 'table.classList.remove("mts-table--striped"); // desactivar\n' +
 'table.classList.toggle("mts-table--hover");   // toggle\n' +
 '\n' +
-'// Combinadas\n' +
-'table.classList.add("mts-table--striped", "mts-table--hover", "mts-table--compact");'
+'// Variantes combinadas\n' +
+'table.classList.add("mts-table--striped", "mts-table--hover", "mts-table--compact");\n' +
+'\n' +
+'// Compacto dentro de un modal o panel\n' +
+'table.classList.add("mts-table--compact", "mts-table--flush");',
+html_s2
 );
 
 /* ============================================================
    S3 — Combinadas (toggle interactivo)
    ============================================================ */
-var preview_s3 =
+const preview_s3 =
   '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">' +
     '<button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="toggleVariant(\'mts-table--striped\')">--striped</button>' +
     '<button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="toggleVariant(\'mts-table--hover\')">--hover</button>' +
@@ -335,16 +392,37 @@ var preview_s3 =
     '</table>' +
   '</div>';
 
+const html_s3 =
+'<!-- Los botones hacen toggle de cada variante sobre la misma tabla -->\n' +
+'<button onclick="toggleVariant(\'mts-table--striped\')">--striped</button>\n' +
+'<button onclick="toggleVariant(\'mts-table--hover\')">--hover</button>\n' +
+'\n' +
+'<div class="mts-table-wrap">\n' +
+'  <!-- Inicial: mts-table--hover (se puede combinar en tiempo real) -->\n' +
+'  <table class="mts-table mts-table--hover" id="demo-toggle-table">\n' +
+'    <thead>...</thead>\n' +
+'    <tbody>...</tbody>\n' +
+'  </table>\n' +
+'</div>';
+
 makeSection('tabs-s3', preview_s3,
+'// Cada botón llama a toggleVariant con la clase correspondiente\n' +
 'function toggleVariant(cls) {\n' +
-'  document.getElementById("demo-toggle-table").classList.toggle(cls);\n' +
-'}'
+'  document.querySelector(".mts-table").classList.toggle(cls);\n' +
+'}\n' +
+'\n' +
+'// Las variantes son combinables entre sí\n' +
+'// .mts-table--striped   → filas alternadas\n' +
+'// .mts-table--hover     → highlight al pasar el mouse\n' +
+'// .mts-table--bordered  → bordes en todas las celdas\n' +
+'// .mts-table--compact   → padding reducido',
+html_s3
 );
 
 /* ============================================================
    S4 — Row states
    ============================================================ */
-var ROW_STATES = [
+const ROW_STATES = [
   { user: USERS[0], cls: 'mts-table__row--selected', badge: '<span class="mts-badge mts-badge--primary">Seleccionado</span>' },
   { user: USERS[1], cls: 'mts-table__row--success',  badge: '<span class="mts-badge mts-badge--success">Éxito</span>'        },
   { user: USERS[2], cls: 'mts-table__row--warning',  badge: '<span class="mts-badge mts-badge--warning">Advertencia</span>'  },
@@ -352,7 +430,7 @@ var ROW_STATES = [
   { user: USERS[4], cls: 'mts-table__row--info',     badge: '<span class="mts-badge mts-badge--info">Info</span>'            },
 ];
 
-var preview_s4 =
+const preview_s4 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table">' +
       '<thead><tr>' +
@@ -372,8 +450,21 @@ var preview_s4 =
     '</table>' +
   '</div>';
 
+const html_s4 =
+'<!-- Estados de fila: agregar clase al <tr class="mts-table__row"> -->\n' +
+'<tr class="mts-table__row mts-table__row--selected">...</tr>\n' +
+'<tr class="mts-table__row mts-table__row--success">...</tr>\n' +
+'<tr class="mts-table__row mts-table__row--warning">...</tr>\n' +
+'<tr class="mts-table__row mts-table__row--danger">...</tr>\n' +
+'<tr class="mts-table__row mts-table__row--info">...</tr>\n' +
+'\n' +
+'<!-- Fila clickeable (cursor pointer + hover) -->\n' +
+'<tr class="mts-table__row mts-table__row--clickable">\n' +
+'  ...\n' +
+'</tr>';
+
 makeSection('tabs-s4', preview_s4,
-'var STATE_MAP = {\n' +
+'const STATE_MAP = {\n' +
 '  active:    "mts-table__row--success",\n' +
 '  suspended: "mts-table__row--warning",\n' +
 '  banned:    "mts-table__row--danger",\n' +
@@ -381,100 +472,163 @@ makeSection('tabs-s4', preview_s4,
 '  info:      "mts-table__row--info",\n' +
 '};\n' +
 '\n' +
-'var rows = users.map(function(u) {\n' +
-'  var stateClass = STATE_MAP[u.status] || "";\n' +
-'  return \'<tr class="mts-table__row \' + stateClass + \'">\' +\n' +
-'    \'<td class="mts-table__td">\' + u.name + \'</td>\' +\n' +
-'  \'</tr>\';\n' +
-'}).join("");'
+'users.forEach(function(u) {\n' +
+'  const row = document.createElement("tr");\n' +
+'  row.className = "mts-table__row" +\n' +
+'    (STATE_MAP[u.status] ? " " + STATE_MAP[u.status] : "");\n' +
+'\n' +
+'  const td = document.createElement("td");\n' +
+'  td.className = "mts-table__td";\n' +
+'  td.textContent = u.name;\n' +
+'  row.appendChild(td);\n' +
+'  tbody.appendChild(row);\n' +
+'});',
+html_s4
 );
 
 /* ============================================================
    S5 — Sortable headers
    ============================================================ */
-var sortData = PRODUCTS.slice();
-var sortCol  = 'name';
-var sortDir  = 'asc';
+const sortData = PRODUCTS.slice();
+let sortCol    = 'name';
+let sortDir    = 'asc';
 
-function sortIcon() {
-  return '<span class="mts-table__sort">' +
-    '<span class="mts-table__sort-up"></span>' +
-    '<span class="mts-table__sort-down"></span>' +
-  '</span>';
+function makeSortIcon() {
+  const wrap = document.createElement('span');
+  wrap.className = 'mts-table__sort';
+  const up = document.createElement('span');
+  up.className = 'mts-table__sort-up';
+  const down = document.createElement('span');
+  down.className = 'mts-table__sort-down';
+  wrap.appendChild(up);
+  wrap.appendChild(down);
+  return wrap;
 }
 
-function buildSortPreview() {
-  var sorted = sortData.slice().sort(function(a, b) {
-    var av = a[sortCol], bv = b[sortCol];
+function makeSortTh(col, label, extraClass) {
+  const th = document.createElement('th');
+  th.className = 'mts-table__th mts-table__th--sortable' +
+    (extraClass ? ' ' + extraClass : '') +
+    (col === sortCol ? ' mts-table__th--' + sortDir : '');
+  th.onclick = () => doSort(col);
+  th.appendChild(document.createTextNode(label));
+  th.appendChild(makeSortIcon());
+  return th;
+}
+
+function buildSortTable() {
+  const sorted = sortData.slice().sort(function(a, b) {
+    const av = a[sortCol], bv = b[sortCol];
     if (typeof av === 'number') return sortDir === 'asc' ? av - bv : bv - av;
     return sortDir === 'asc'
       ? String(av).localeCompare(String(bv))
       : String(bv).localeCompare(String(av));
   });
 
-  function thCls(col, extra) {
-    var c = 'mts-table__th mts-table__th--sortable' + (extra ? ' ' + extra : '');
-    if (col === sortCol) c += ' mts-table__th--' + sortDir;
-    return c;
-  }
+  const wrap  = document.createElement('div');
+  wrap.className = 'mts-table-wrap';
+  const table = document.createElement('table');
+  table.className = 'mts-table mts-table--hover';
+  table.id = 'sort-table';
 
-  return '<div class="mts-table-wrap">' +
-    '<table class="mts-table mts-table--hover" id="sort-table">' +
-      '<thead><tr>' +
-        '<th class="' + thCls('name')     + '" onclick="doSort(\'name\')"     style="cursor:pointer">Producto'  + sortIcon() + '</th>' +
-        '<th class="' + thCls('category') + '" onclick="doSort(\'category\')" style="cursor:pointer">Categoría' + sortIcon() + '</th>' +
-        '<th class="' + thCls('stock', 'mts-table__th--end') + '" onclick="doSort(\'stock\')" style="cursor:pointer">Stock'  + sortIcon() + '</th>' +
-        '<th class="' + thCls('price', 'mts-table__th--end') + '" onclick="doSort(\'price\')" style="cursor:pointer">Precio' + sortIcon() + '</th>' +
-      '</tr></thead>' +
-      '<tbody>' +
-        sorted.map(function(p) {
-          return '<tr class="mts-table__row">' +
-            '<td class="mts-table__td">' + p.name + '</td>' +
-            '<td class="mts-table__td">' + p.category + '</td>' +
-            '<td class="mts-table__td mts-table__td--end">' + p.stock + '</td>' +
-            '<td class="mts-table__td mts-table__td--end">' + fmtPrice(p.price) + '</td>' +
-          '</tr>';
-        }).join('') +
-      '</tbody>' +
-    '</table>' +
-  '</div>';
+  const thead = document.createElement('thead');
+  const tr    = document.createElement('tr');
+  tr.appendChild(makeSortTh('name',     'Producto',  ''));
+  tr.appendChild(makeSortTh('category', 'Categoría', ''));
+  tr.appendChild(makeSortTh('stock',    'Stock',     'mts-table__th--end'));
+  tr.appendChild(makeSortTh('price',    'Precio',    'mts-table__th--end'));
+  thead.appendChild(tr);
+
+  const tbody = document.createElement('tbody');
+  sorted.forEach(function(p) {
+    const row = document.createElement('tr');
+    row.className = 'mts-table__row';
+
+    const tdName = document.createElement('td');
+    tdName.className = 'mts-table__td';
+    tdName.textContent = p.name;
+
+    const tdCat = document.createElement('td');
+    tdCat.className = 'mts-table__td';
+    tdCat.textContent = p.category;
+
+    const tdStock = document.createElement('td');
+    tdStock.className = 'mts-table__td mts-table__td--end';
+    tdStock.textContent = p.stock;
+
+    const tdPrice = document.createElement('td');
+    tdPrice.className = 'mts-table__td mts-table__td--end';
+    tdPrice.textContent = fmtPrice(p.price);
+
+    row.appendChild(tdName);
+    row.appendChild(tdCat);
+    row.appendChild(tdStock);
+    row.appendChild(tdPrice);
+    tbody.appendChild(row);
+  });
+
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+  return wrap;
 }
 
 function doSort(col) {
-  if (sortCol === col) { sortDir = sortDir === 'asc' ? 'desc' : 'asc'; }
-  else { sortCol = col; sortDir = 'asc'; }
-  var panel = document.getElementById('mts-panel-tabs-s5-preview');
-  if (panel) panel.innerHTML = buildSortPreview();
+  if (sortCol === col) {
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortCol = col;
+    sortDir = 'asc';
+  }
+  const panel = document.getElementById('mts-panel-tabs-s5-preview');
+  if (!panel) return;
+  panel.replaceChildren();
+  panel.appendChild(buildSortTable());
 }
 
-makeSection('tabs-s5', buildSortPreview(),
-'var sortCol = "name";\n' +
-'var sortDir = "asc";\n' +
+const html_s5 =
+'<!-- --sortable habilita el cursor y estilos de orden -->\n' +
+'<!-- --asc / --desc indica la dirección activa -->\n' +
+'<th class="mts-table__th mts-table__th--sortable mts-table__th--asc">\n' +
+'  Nombre\n' +
+'  <span class="mts-table__sort">\n' +
+'    <span class="mts-table__sort-up"></span>\n' +
+'    <span class="mts-table__sort-down"></span>\n' +
+'  </span>\n' +
+'</th>\n' +
+'\n' +
+'<!-- Columna inactiva (sin dirección) -->\n' +
+'<th class="mts-table__th mts-table__th--sortable">\n' +
+'  Precio\n' +
+'  <span class="mts-table__sort">\n' +
+'    <span class="mts-table__sort-up"></span>\n' +
+'    <span class="mts-table__sort-down"></span>\n' +
+'  </span>\n' +
+'</th>';
+
+makeSection('tabs-s5', '<div id="sort-host"></div>',
+'let sortCol = "name";\n' +
+'let sortDir = "asc";\n' +
 '\n' +
 'function doSort(col) {\n' +
 '  sortDir = (sortCol === col && sortDir === "asc") ? "desc" : "asc";\n' +
 '  sortCol = col;\n' +
-'  renderTable();\n' +
-'}\n' +
-'\n' +
-'function renderTable() {\n' +
-'  document.querySelectorAll(".mts-table__th--sortable").forEach(function(th) {\n' +
-'    th.classList.remove("mts-table__th--asc", "mts-table__th--desc");\n' +
-'    if (th.dataset.col === sortCol) th.classList.add("mts-table__th--" + sortDir);\n' +
-'  });\n' +
-'  var sorted = data.slice().sort(function(a, b) {\n' +
-'    return sortDir === "asc"\n' +
-'      ? String(a[sortCol]).localeCompare(String(b[sortCol]))\n' +
-'      : String(b[sortCol]).localeCompare(String(a[sortCol]));\n' +
-'  });\n' +
-'  document.querySelector("#mi-tabla tbody").innerHTML = sorted.map(renderRow).join("");\n' +
-'}'
+'  const panel = document.getElementById("mts-panel-tabs-s5-preview");\n' +
+'  if (!panel) return;\n' +
+'  panel.replaceChildren();\n' +
+'  panel.appendChild(buildSortTable());\n' +
+'}',
+html_s5
 );
+
+/* lazy:false → el panel ya está en el DOM al salir de makeSection */
+const sortHost = document.getElementById('sort-host');
+if (sortHost) sortHost.appendChild(buildSortTable());
 
 /* ============================================================
    S6 — Checkbox + selección múltiple
    ============================================================ */
-var preview_s6 =
+const preview_s6 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table mts-table--hover" id="chk-table">' +
       '<thead><tr>' +
@@ -495,7 +649,7 @@ var preview_s6 =
             '<td class="mts-table__td">' + u.name + '</td>' +
             '<td class="mts-table__td">' + u.email + '</td>' +
             '<td class="mts-table__td">' + u.role + '</td>' +
-            '<td class="mts-table__td mts-table__td--center">' + BADGES[u.status] + '</td>' +
+            '<td class="mts-table__td mts-table__td--center">' + badgeHtml(u.status) + '</td>' +
           '</tr>';
         }).join('') +
       '</tbody>' +
@@ -503,30 +657,70 @@ var preview_s6 =
   '</div>' +
   '<div class="result-box" id="chk-result" style="margin-top:8px">— selecciona filas —</div>';
 
+const html_s6 =
+'<div class="mts-table-wrap">\n' +
+'  <table class="mts-table mts-table--hover">\n' +
+'    <thead>\n' +
+'      <tr>\n' +
+'        <!-- th--check: columna de ancho fijo para el checkbox -->\n' +
+'        <th class="mts-table__th mts-table__th--check">\n' +
+'          <input type="checkbox" class="mts-table__checkbox" id="chk-all">\n' +
+'        </th>\n' +
+'        <th class="mts-table__th">Nombre</th>\n' +
+'        <th class="mts-table__th">Email</th>\n' +
+'      </tr>\n' +
+'    </thead>\n' +
+'    <tbody>\n' +
+'      <!-- Fila normal -->\n' +
+'      <tr class="mts-table__row">\n' +
+'        <td class="mts-table__td mts-table__td--check">\n' +
+'          <input type="checkbox" class="mts-table__checkbox row-chk">\n' +
+'        </td>\n' +
+'        <td class="mts-table__td">Ana García</td>\n' +
+'        <td class="mts-table__td">ana@empresa.com</td>\n' +
+'      </tr>\n' +
+'      <!-- Fila seleccionada (clase --selected via JS) -->\n' +
+'      <tr class="mts-table__row mts-table__row--selected">\n' +
+'        <td class="mts-table__td mts-table__td--check">\n' +
+'          <input type="checkbox" class="mts-table__checkbox row-chk" checked>\n' +
+'        </td>\n' +
+'        <td class="mts-table__td">Pedro Martínez</td>\n' +
+'        <td class="mts-table__td">pedro@empresa.com</td>\n' +
+'      </tr>\n' +
+'    </tbody>\n' +
+'  </table>\n' +
+'</div>';
+
 makeSection('tabs-s6', preview_s6,
-'document.getElementById("chk-all").addEventListener("change", function() {\n' +
-'  document.querySelectorAll(".row-chk").forEach(function(chk) {\n' +
-'    chk.checked = this.checked;\n' +
-'    chk.closest("tr").classList.toggle("mts-table__row--selected", this.checked);\n' +
-'  }, this);\n' +
+'const checkAll  = document.getElementById("chk-all");\n' +
+'const rowChecks = document.querySelectorAll(".row-chk");\n' +
+'\n' +
+'function syncMaster() {\n' +
+'  const checked = document.querySelectorAll(".row-chk:checked").length;\n' +
+'  checkAll.indeterminate = checked > 0 && checked < rowChecks.length;\n' +
+'  checkAll.checked = checked === rowChecks.length;\n' +
+'}\n' +
+'\n' +
+'checkAll.addEventListener("change", function() {\n' +
+'  rowChecks.forEach(function(chk) {\n' +
+'    chk.checked = checkAll.checked;\n' +
+'    chk.closest("tr").classList.toggle("mts-table__row--selected", checkAll.checked);\n' +
+'  });\n' +
 '});\n' +
 '\n' +
-'document.querySelectorAll(".row-chk").forEach(function(chk) {\n' +
+'rowChecks.forEach(function(chk) {\n' +
 '  chk.addEventListener("change", function() {\n' +
-'    this.closest("tr").classList.toggle("mts-table__row--selected", this.checked);\n' +
-'    var total   = document.querySelectorAll(".row-chk").length;\n' +
-'    var checked = document.querySelectorAll(".row-chk:checked").length;\n' +
-'    var master  = document.getElementById("chk-all");\n' +
-'    master.indeterminate = checked > 0 && checked < total;\n' +
-'    master.checked = checked === total;\n' +
+'    chk.closest("tr").classList.toggle("mts-table__row--selected", chk.checked);\n' +
+'    syncMaster();\n' +
 '  });\n' +
-'});'
+'});',
+html_s6
 );
 
 /* ============================================================
    S7 — Columna de acciones
    ============================================================ */
-var preview_s7 =
+const preview_s7 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table mts-table--hover">' +
       '<thead><tr>' +
@@ -540,9 +734,9 @@ var preview_s7 =
           return '<tr class="mts-table__row mts-table__row--clickable">' +
             '<td class="mts-table__td">' + u.name + '</td>' +
             '<td class="mts-table__td">' + u.email + '</td>' +
-            '<td class="mts-table__td mts-table__td--center">' + BADGES[u.status] + '</td>' +
+            '<td class="mts-table__td mts-table__td--center">' + badgeHtml(u.status) + '</td>' +
             '<td class="mts-table__td mts-table__td--actions">' +
-              iconBtn('eye') + iconBtn('edit') + iconBtn('trash') +
+              iconBtnHtml('eye') + iconBtnHtml('edit') + iconBtnHtml('trash') +
             '</td>' +
           '</tr>';
         }).join('') +
@@ -550,23 +744,54 @@ var preview_s7 =
     '</table>' +
   '</div>';
 
+const html_s7 =
+'<!-- th--actions: columna de ancho automático, alineada a la derecha -->\n' +
+'<th class="mts-table__th mts-table__th--actions">Acciones</th>\n' +
+'\n' +
+'<!-- td--actions: contiene los botones icon-only -->\n' +
+'<td class="mts-table__td mts-table__td--actions">\n' +
+'  <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">\n' +
+'    <i class="mts-icon mts-icon-eye mts-icon--sm"></i>\n' +
+'  </button>\n' +
+'  <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">\n' +
+'    <i class="mts-icon mts-icon-edit mts-icon--sm"></i>\n' +
+'  </button>\n' +
+'  <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">\n' +
+'    <i class="mts-icon mts-icon-trash mts-icon--sm"></i>\n' +
+'  </button>\n' +
+'</td>';
+
 makeSection('tabs-s7', preview_s7,
-'function actionsCell(id) {\n' +
-'  return \'<td class="mts-table__td mts-table__td--actions">\' +\n' +
-'    \'<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" onclick="onView(\' + id + \')">\' +\n' +
-'      \'<i class="mts-icon mts-icon-eye mts-icon--sm"></i></button>\' +\n' +
-'    \'<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" onclick="onEdit(\' + id + \')">\' +\n' +
-'      \'<i class="mts-icon mts-icon-edit mts-icon--sm"></i></button>\' +\n' +
-'    \'<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" onclick="onDelete(\' + id + \')">\' +\n' +
-'      \'<i class="mts-icon mts-icon-trash mts-icon--sm"></i></button>\' +\n' +
-'  \'</td>\';\n' +
-'}'
+'function makeActionsCell(id) {\n' +
+'  const td = document.createElement("td");\n' +
+'  td.className = "mts-table__td mts-table__td--actions";\n' +
+'\n' +
+'  const actions = [\n' +
+'    { icon: "eye",   handler: onView  },\n' +
+'    { icon: "edit",  handler: onEdit  },\n' +
+'    { icon: "trash", handler: onDelete },\n' +
+'  ];\n' +
+'\n' +
+'  actions.forEach(function(action) {\n' +
+'    const btn = document.createElement("button");\n' +
+'    btn.className = "mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon";\n' +
+'    btn.addEventListener("click", function() { action.handler(id); });\n' +
+'\n' +
+'    const icon = document.createElement("i");\n' +
+'    icon.className = "mts-icon mts-icon-" + action.icon + " mts-icon--sm";\n' +
+'    btn.appendChild(icon);\n' +
+'    td.appendChild(btn);\n' +
+'  });\n' +
+'\n' +
+'  return td;\n' +
+'}',
+html_s7
 );
 
 /* ============================================================
    S8 — Empty state
    ============================================================ */
-var preview_s8 =
+const preview_s8 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table">' +
       '<thead><tr>' +
@@ -587,31 +812,58 @@ var preview_s8 =
     '</table>' +
   '</div>';
 
+const html_s8 =
+'<tbody>\n' +
+'  <tr>\n' +
+'    <!-- colspan = número de columnas de la tabla -->\n' +
+'    <td colspan="4" class="mts-table__empty">\n' +
+'      <i class="mts-icon mts-icon-inbox mts-icon--xl mts-table__empty-icon"></i>\n' +
+'      <div class="mts-table__empty-title">No se encontraron registros</div>\n' +
+'      <div class="mts-table__empty-msg">Intenta con otros filtros o agrega un nuevo elemento.</div>\n' +
+'    </td>\n' +
+'  </tr>\n' +
+'</tbody>';
+
 makeSection('tabs-s8', preview_s8,
-'function renderTable(data) {\n' +
-'  var tbody = document.querySelector("#mi-tabla tbody");\n' +
-'  var COLS  = 4;\n' +
+'function renderEmpty(tbody, cols) {\n' +
+'  const tr = document.createElement("tr");\n' +
+'  const td = document.createElement("td");\n' +
+'  td.colSpan = cols;\n' +
+'  td.className = "mts-table__empty";\n' +
 '\n' +
-'  if (!data || data.length === 0) {\n' +
-'    tbody.innerHTML =\n' +
-'      \'<tr><td colspan="\' + COLS + \'" class="mts-table__empty">\' +\n' +
-'      \'<i class="mts-icon mts-icon-inbox mts-icon--xl mts-table__empty-icon"></i>\' +\n' +
-'      \'<div class="mts-table__empty-title">Sin resultados</div>\' +\n' +
-'      \'<div class="mts-table__empty-msg">Intenta con otros filtros.</div>\' +\n' +
-'      \'</td></tr>\';\n' +
-'    return;\n' +
-'  }\n' +
-'  tbody.innerHTML = data.map(renderRow).join("");\n' +
-'}'
+'  const icon = document.createElement("i");\n' +
+'  icon.className = "mts-icon mts-icon-inbox mts-icon--xl mts-table__empty-icon";\n' +
+'\n' +
+'  const title = document.createElement("div");\n' +
+'  title.className = "mts-table__empty-title";\n' +
+'  title.textContent = "Sin resultados";\n' +
+'\n' +
+'  const msg = document.createElement("div");\n' +
+'  msg.className = "mts-table__empty-msg";\n' +
+'  msg.textContent = "Intenta con otros filtros.";\n' +
+'\n' +
+'  td.appendChild(icon);\n' +
+'  td.appendChild(title);\n' +
+'  td.appendChild(msg);\n' +
+'  tr.appendChild(td);\n' +
+'  tbody.replaceChildren(tr);\n' +
+'}\n' +
+'\n' +
+'function renderTable(data) {\n' +
+'  const tbody = document.querySelector("#mi-tabla tbody");\n' +
+'  if (!data || data.length === 0) { renderEmpty(tbody, 4); return; }\n' +
+'  tbody.replaceChildren(...data.map(renderRow));\n' +
+'}',
+html_s8
 );
 
 /* ============================================================
    S9 — Footer / tfoot
    ============================================================ */
-var totalPrice = PRODUCTS.reduce(function(s, p) { return s + p.price; }, 0);
-var totalStock = PRODUCTS.reduce(function(s, p) { return s + p.stock; }, 0);
+const totalPrice = PRODUCTS.reduce(function(s, p) { return s + p.price; }, 0);
+const totalStock = PRODUCTS.reduce(function(s, p) { return s + p.stock; }, 0);
 
-var preview_s9 =
+const preview_s9 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table mts-table--hover">' +
       '<thead><tr>' +
@@ -640,26 +892,55 @@ var preview_s9 =
     '</table>' +
   '</div>';
 
+const html_s9 =
+'<div class="mts-table-wrap">\n' +
+'  <table class="mts-table mts-table--hover">\n' +
+'    <thead>...</thead>\n' +
+'    <tbody>...</tbody>\n' +
+'    <!-- tfoot fuera del tbody, antes del cierre de table -->\n' +
+'    <tfoot>\n' +
+'      <tr class="mts-table__tfoot">\n' +
+'        <td class="mts-table__td" colspan="2"><strong>Total</strong></td>\n' +
+'        <td class="mts-table__td mts-table__td--end"><strong>286</strong></td>\n' +
+'        <td class="mts-table__td mts-table__td--end"><strong>$2.356,70</strong></td>\n' +
+'      </tr>\n' +
+'    </tfoot>\n' +
+'  </table>\n' +
+'</div>';
+
 makeSection('tabs-s9', preview_s9,
-'var total = data.reduce(function(acc, row) { return acc + row.price; }, 0);\n' +
+'const total = data.reduce(function(acc, row) { return acc + row.price; }, 0);\n' +
 '\n' +
-'var tfoot =\n' +
-'  \'<tfoot><tr class="mts-table__tfoot">\' +\n' +
-'  \'<td class="mts-table__td" colspan="2"><strong>Total</strong></td>\' +\n' +
-'  \'<td class="mts-table__td mts-table__td--end"><strong>\' +\n' +
-'    total.toLocaleString("es-CL", { minimumFractionDigits: 2 }) +\n' +
-'  \'</strong></td>\' +\n' +
-'  \'</tr></tfoot>\';\n' +
+'const tfoot = document.createElement("tfoot");\n' +
+'const tr    = document.createElement("tr");\n' +
+'tr.className = "mts-table__tfoot";\n' +
 '\n' +
-'document.getElementById("mi-tabla").insertAdjacentHTML("beforeend", tfoot);'
+'const tdLabel = document.createElement("td");\n' +
+'tdLabel.className = "mts-table__td";\n' +
+'tdLabel.colSpan = 2;\n' +
+'const strong1 = document.createElement("strong");\n' +
+'strong1.textContent = "Total";\n' +
+'tdLabel.appendChild(strong1);\n' +
+'\n' +
+'const tdTotal = document.createElement("td");\n' +
+'tdTotal.className = "mts-table__td mts-table__td--end";\n' +
+'const strong2 = document.createElement("strong");\n' +
+'strong2.textContent = total.toLocaleString("es-CL", { minimumFractionDigits: 2 });\n' +
+'tdTotal.appendChild(strong2);\n' +
+'\n' +
+'tr.appendChild(tdLabel);\n' +
+'tr.appendChild(tdTotal);\n' +
+'tfoot.appendChild(tr);\n' +
+'document.getElementById("mi-tabla").appendChild(tfoot);',
+html_s9
 );
 
 /* ============================================================
    S10 — Header fijo
    ============================================================ */
-var fixedRows = Array.from({ length: 12 }, function(_, i) { return USERS[i % USERS.length]; });
+const fixedRows = Array.from({ length: 12 }, function(_, i) { return USERS[i % USERS.length]; });
 
-var preview_s10 =
+const preview_s10 =
   '<div class="mts-table-wrap" style="max-height:260px;overflow-y:auto">' +
     '<table class="mts-table mts-table--hover mts-table--fixed">' +
       '<thead><tr>' +
@@ -676,40 +957,63 @@ var preview_s10 =
             '<td class="mts-table__td">' + u.name + '</td>' +
             '<td class="mts-table__td">' + u.email + '</td>' +
             '<td class="mts-table__td">' + u.role + '</td>' +
-            '<td class="mts-table__td mts-table__td--center">' + BADGES[u.status] + '</td>' +
+            '<td class="mts-table__td mts-table__td--center">' + badgeHtml(u.status) + '</td>' +
           '</tr>';
         }).join('') +
       '</tbody>' +
     '</table>' +
   '</div>';
 
+const html_s10 =
+'<!-- Requisitos:\n' +
+'     1. max-height + overflow-y: auto en el .mts-table-wrap\n' +
+'     2. .mts-table--fixed en la <table>           -->\n' +
+'<div class="mts-table-wrap" style="max-height: 260px; overflow-y: auto;">\n' +
+'  <table class="mts-table mts-table--hover mts-table--fixed">\n' +
+'    <thead>\n' +
+'      <!-- El thead queda sticky al hacer scroll -->\n' +
+'      <tr>\n' +
+'        <th class="mts-table__th">Nombre</th>\n' +
+'        <th class="mts-table__th">Email</th>\n' +
+'        <th class="mts-table__th mts-table__th--center">Estado</th>\n' +
+'      </tr>\n' +
+'    </thead>\n' +
+'    <tbody>\n' +
+'      <!-- muchas filas -->\n' +
+'    </tbody>\n' +
+'  </table>\n' +
+'</div>';
+
 makeSection('tabs-s10', preview_s10,
 '// Requisitos:\n' +
 '//   1. .mts-table--fixed en la <table>\n' +
 '//   2. max-height + overflow-y: auto en el .mts-table-wrap\n' +
 '\n' +
-'var wrap = document.createElement("div");\n' +
+'const wrap = document.createElement("div");\n' +
 'wrap.className = "mts-table-wrap";\n' +
 'wrap.style.maxHeight = "260px";\n' +
 'wrap.style.overflowY = "auto";\n' +
 '\n' +
-'var table = document.createElement("table");\n' +
+'const table = document.createElement("table");\n' +
 'table.className = "mts-table mts-table--hover mts-table--fixed";\n' +
 '\n' +
+'// thead + tbody igual que cualquier tabla MTS\n' +
+'// El header queda pegado al hacer scroll gracias a --fixed\n' +
 'wrap.appendChild(table);\n' +
-'container.appendChild(wrap);'
+'container.appendChild(wrap);',
+html_s10
 );
 
 /* ============================================================
    S11 — Texto truncado
    ============================================================ */
-var TRUNC_DATA = [
+const TRUNC_DATA = [
   { name: 'Notebook Pro 15"', desc: 'Procesador Intel Core i7 de 12ª generación, 16GB RAM DDR5, SSD NVMe 512GB, pantalla IPS 1920×1080 antirreflejo con cobertura sRGB 100%.', price: 1299.00 },
   { name: 'Monitor 27" 4K',   desc: 'Panel IPS Ultra HD 3840×2160, 144Hz, HDR400, cobertura DCI-P3 95%, puertos HDMI 2.1 y DisplayPort 1.4, ajuste de altura y rotación pivot.', price: 749.00  },
   { name: 'Teclado Mecánico', desc: 'Switches Cherry MX Red, retroiluminación RGB por zona, construcción aluminio CNC, cable USB-C desmontable, compatible Win/Mac/Linux.', price: 129.00  },
 ];
 
-var preview_s11 =
+const preview_s11 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table mts-table--hover">' +
       '<thead><tr>' +
@@ -729,22 +1033,37 @@ var preview_s11 =
     '</table>' +
   '</div>';
 
+const html_s11 =
+'<!-- max-width en el <th> y en el <td> (deben coincidir) -->\n' +
+'<th class="mts-table__th" style="max-width: 200px">Descripción</th>\n' +
+'\n' +
+'<!-- td--truncate aplica: white-space:nowrap + overflow:hidden + text-overflow:ellipsis -->\n' +
+'<!-- title muestra el texto completo como tooltip nativo del navegador               -->\n' +
+'<td class="mts-table__td mts-table__td--truncate"\n' +
+'    style="max-width: 200px"\n' +
+'    title="Procesador Intel Core i7 de 12ª generación, 16GB RAM DDR5...">\n' +
+'  Procesador Intel Core i7 de 12ª generación, 16GB RAM DDR5...\n' +
+'</td>';
+
 makeSection('tabs-s11', preview_s11,
-'function truncCell(text, maxWidth) {\n' +
-'  return \'<td class="mts-table__td mts-table__td--truncate"\' +\n' +
-'    \' style="max-width:\' + (maxWidth || "200px") + \'"\' +\n' +
-'    \' title="\' + text + \'">\' +\n' +
-'    text + \'</td>\';\n' +
+'function makeTruncCell(text, maxWidth) {\n' +
+'  const td = document.createElement("td");\n' +
+'  td.className = "mts-table__td mts-table__td--truncate";\n' +
+'  td.style.maxWidth = maxWidth || "200px";\n' +
+'  td.title = text;       // tooltip nativo con el texto completo\n' +
+'  td.textContent = text; // textContent escapa HTML automáticamente\n' +
+'  return td;\n' +
 '}\n' +
 '\n' +
 '// mts-table__td--truncate aplica:\n' +
-'//   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'
+'//   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;',
+html_s11
 );
 
 /* ============================================================
    S12 — Responsive
    ============================================================ */
-var preview_s12 =
+const preview_s12 =
   '<p style="font-size:11px;color:var(--mts-text-muted);margin:0 0 10px">' +
     'Reduce el ancho de la ventana para ver el colapso de columnas en móvil.' +
   '</p>' +
@@ -762,24 +1081,64 @@ var preview_s12 =
             '<td class="mts-table__td" data-label="Nombre">'  + u.name  + '</td>' +
             '<td class="mts-table__td" data-label="Email">'   + u.email + '</td>' +
             '<td class="mts-table__td" data-label="Rol">'     + u.role  + '</td>' +
-            '<td class="mts-table__td mts-table__td--center" data-label="Estado">' + BADGES[u.status] + '</td>' +
+            '<td class="mts-table__td mts-table__td--center" data-label="Estado">' + badgeHtml(u.status) + '</td>' +
           '</tr>';
         }).join('') +
       '</tbody>' +
     '</table>' +
   '</div>';
 
+const html_s12 =
+'<!-- .mts-table--responsive en la tabla -->\n' +
+'<!-- data-label en cada <td> (CSS lo usa como etiqueta en móvil) -->\n' +
+'<div class="mts-table-wrap">\n' +
+'  <table class="mts-table mts-table--hover mts-table--responsive">\n' +
+'    <thead>\n' +
+'      <tr>\n' +
+'        <th class="mts-table__th">Nombre</th>\n' +
+'        <th class="mts-table__th">Email</th>\n' +
+'        <th class="mts-table__th mts-table__th--center">Estado</th>\n' +
+'      </tr>\n' +
+'    </thead>\n' +
+'    <tbody>\n' +
+'      <tr class="mts-table__row">\n' +
+'        <td class="mts-table__td" data-label="Nombre">Ana García</td>\n' +
+'        <td class="mts-table__td" data-label="Email">ana@empresa.com</td>\n' +
+'        <td class="mts-table__td mts-table__td--center" data-label="Estado">\n' +
+'          <span class="mts-badge mts-badge--success">Activo</span>\n' +
+'        </td>\n' +
+'      </tr>\n' +
+'    </tbody>\n' +
+'  </table>\n' +
+'</div>';
+
 makeSection('tabs-s12', preview_s12,
-'var cols = ["Nombre", "Email", "Rol", "Estado"];\n' +
+'// .mts-table--responsive + data-label en cada <td>\n' +
+'// En móvil cada celda muestra su label como pseudo-elemento :before\n' +
 '\n' +
-'var rows = users.map(function(u) {\n' +
-'  return \'<tr class="mts-table__row">\' +\n' +
-'    \'<td class="mts-table__td" data-label="\' + cols[0] + \'">\' + u.name  + \'</td>\' +\n' +
-'    \'<td class="mts-table__td" data-label="\' + cols[1] + \'">\' + u.email + \'</td>\' +\n' +
-'    \'<td class="mts-table__td" data-label="\' + cols[2] + \'">\' + u.role  + \'</td>\' +\n' +
-'    \'<td class="mts-table__td" data-label="\' + cols[3] + \'">\' + badges[u.status] + \'</td>\' +\n' +
-'  \'</tr>\';\n' +
-'}).join("");'
+'const cols = ["Nombre", "Email", "Rol", "Estado"];\n' +
+'\n' +
+'users.forEach(function(u) {\n' +
+'  const row = document.createElement("tr");\n' +
+'  row.className = "mts-table__row";\n' +
+'\n' +
+'  [u.name, u.email, u.role].forEach(function(val, i) {\n' +
+'    const td = document.createElement("td");\n' +
+'    td.className = "mts-table__td";\n' +
+'    td.dataset.label = cols[i];\n' +
+'    td.textContent = val;\n' +
+'    row.appendChild(td);\n' +
+'  });\n' +
+'\n' +
+'  const tdStatus = document.createElement("td");\n' +
+'  tdStatus.className = "mts-table__td mts-table__td--center";\n' +
+'  tdStatus.dataset.label = cols[3];\n' +
+'  tdStatus.appendChild(makeBadge(u.status)); // retorna nodo DOM\n' +
+'  row.appendChild(tdStatus);\n' +
+'\n' +
+'  tbody.appendChild(row);\n' +
+'});',
+html_s12
 );
 
 /* ============================================================
@@ -795,9 +1154,9 @@ function toggleAll(master) {
 
 function toggleRow(chk, idx) {
   document.getElementById('chk-row-' + idx).classList.toggle('mts-table__row--selected', chk.checked);
-  var total   = document.querySelectorAll('.row-chk').length;
-  var checked = document.querySelectorAll('.row-chk:checked').length;
-  var master  = document.getElementById('chk-all');
+  const total   = document.querySelectorAll('.row-chk').length;
+  const checked = document.querySelectorAll('.row-chk:checked').length;
+  const master  = document.getElementById('chk-all');
   if (master) {
     master.indeterminate = checked > 0 && checked < total;
     master.checked = checked === total;
@@ -806,19 +1165,138 @@ function toggleRow(chk, idx) {
 }
 
 function updateChkResult() {
-  var n  = document.querySelectorAll('.row-chk:checked').length;
-  var el = document.getElementById('chk-result');
+  const n  = document.querySelectorAll('.row-chk:checked').length;
+  const el = document.getElementById('chk-result');
   if (el) el.textContent = n === 0
     ? '— selecciona filas —'
     : n + ' fila' + (n > 1 ? 's' : '') + ' seleccionada' + (n > 1 ? 's' : '');
 }
 
 function toggleVariant(cls) {
-  var t = document.getElementById('demo-toggle-table');
+  const t = document.getElementById('demo-toggle-table');
   if (t) t.classList.toggle(cls);
 }
 
 MTS.Icon.initAll();
+
+/* ============================================================
+   S13 — Loading skeleton
+   ============================================================ */
+function buildTable() {
+  const wrap  = document.createElement('div');
+  wrap.className = 'mts-table-wrap';
+
+  const table = document.createElement('table');
+  table.className = 'mts-table mts-table--hover';
+
+  const thead = document.createElement('thead');
+  const hRow  = document.createElement('tr');
+  [
+    { label: 'Nombre',  cls: '' },
+    { label: 'Email',   cls: '' },
+    { label: 'Rol',     cls: '' },
+    { label: 'Estado',  cls: 'mts-table__th--center' },
+    { label: 'Fecha',   cls: 'mts-table__th--end' },
+  ].forEach(function(col) {
+    const th = document.createElement('th');
+    th.className = 'mts-table__th' + (col.cls ? ' ' + col.cls : '');
+    th.textContent = col.label;
+    hRow.appendChild(th);
+  });
+  thead.appendChild(hRow);
+
+  const tbody = document.createElement('tbody');
+  USERS.forEach(function(u) {
+    const row = document.createElement('tr');
+    row.className = 'mts-table__row';
+
+    const tdName = document.createElement('td');
+    tdName.className = 'mts-table__td';
+    tdName.textContent = u.name;
+
+    const tdEmail = document.createElement('td');
+    tdEmail.className = 'mts-table__td';
+    tdEmail.textContent = u.email;
+
+    const tdRole = document.createElement('td');
+    tdRole.className = 'mts-table__td';
+    tdRole.textContent = u.role;
+
+    const tdStatus = document.createElement('td');
+    tdStatus.className = 'mts-table__td mts-table__td--center';
+    tdStatus.appendChild(makeBadge(u.status));
+
+    const tdDate = document.createElement('td');
+    tdDate.className = 'mts-table__td mts-table__td--end';
+    tdDate.textContent = u.date;
+
+    row.appendChild(tdName);
+    row.appendChild(tdEmail);
+    row.appendChild(tdRole);
+    row.appendChild(tdStatus);
+    row.appendChild(tdDate);
+    tbody.appendChild(row);
+  });
+
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+  return wrap;
+}
+
+const preview_s13 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row" style="margin-bottom:10px">' +
+      '<button class="mts-btn mts-btn--primary mts-btn--sm" onclick="reloadSkeleton()">↺ Simular carga</button>' +
+    '</div>' +
+    '<div id="skeleton-host"></div>' +
+  '</div>';
+
+const js_s13 =
+  "// 1. Mostrar skeleton mientras llegan los datos\n" +
+  "const sk = new MTS.Skeleton('#mi-tabla-host', {\n" +
+  "  variant:   'table',\n" +
+  "  rows:      5,\n" +
+  "  cols:      5,\n" +
+  "  animation: 'wave',\n" +
+  "});\n\n" +
+  "// 2. Simular fetch (reemplazar con fetch/axios real)\n" +
+  "setTimeout(function() {\n" +
+  "  sk.destroy(); // limpia el contenedor\n" +
+  "  const host = document.getElementById('mi-tabla-host');\n" +
+  "  host.appendChild(buildTable()); // buildTable() retorna un nodo DOM\n" +
+  "}, 2000);";
+
+const html_s13 =
+'<!-- Contenedor vacío: MTS.Skeleton lo llena mientras cargan los datos -->\n' +
+'<div id="mi-tabla-host"></div>\n' +
+'\n' +
+'<!-- MTS.Skeleton genera el placeholder de tabla -->\n' +
+'<!-- sk.destroy() limpia el contenedor -->\n' +
+'<!-- Luego se hace appendChild con la tabla real -->';
+
+makeSection('tabs-s13', preview_s13, js_s13, html_s13);
+
+function reloadSkeleton() {
+  const host = document.getElementById('skeleton-host');
+  if (!host) return;
+  host.replaceChildren();
+  const sk = new MTS.Skeleton(host, {
+    variant:   'table',
+    rows:      5,
+    cols:      5,
+    animation: 'wave',
+  });
+  setTimeout(function() {
+    sk.destroy();
+    host.appendChild(buildTable());
+  }, 2000);
+}
+
+/* Arrancar con skeleton al cargar */
+setTimeout(function() {
+  reloadSkeleton();
+}, 100);
 </script>
 </body>
 </html>

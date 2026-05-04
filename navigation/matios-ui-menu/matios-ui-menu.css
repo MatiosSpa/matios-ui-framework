@@ -1,0 +1,273 @@
+/* ============================================================
+   MATIOS UI — matios-ui-menu.css
+   MTS.Menu — Menú de navegación para MTS.Topbar y MTS.SideNav
+   Requiere: matios-ui-base.css
+   ============================================================ */
+
+/* ── Base ─────────────────────────────────────────── */
+.mts-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ════════════════════════════════════════════════════
+   HORIZONTAL — para MTS.Topbar
+   ════════════════════════════════════════════════════ */
+
+.mts-menu--horizontal {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--mts-space-1);
+  height: 100%;
+}
+
+/* Nodo (ítem + dropdown) */
+.mts-menu--horizontal .mts-menu__node {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Botón de nivel 1 */
+.mts-menu--horizontal .mts-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+  padding: 5px 10px;
+  height: 32px;
+  border-radius: var(--mts-radius-md);
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-medium);
+  font-family: var(--mts-font-family);
+  color: var(--mts-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .12s, color .12s;
+}
+.mts-menu--horizontal .mts-menu__item:hover:not(:disabled) {
+  background: var(--mts-bg-surface-2);
+  color: var(--mts-text-primary);
+}
+.mts-menu--horizontal .mts-menu__item--active {
+  background: var(--mts-color-primary-light);
+  color: var(--mts-color-primary);
+  font-weight: var(--mts-font-weight-semibold);
+}
+.mts-menu--horizontal .mts-menu__item--active:hover {
+  background: var(--mts-color-primary-light);
+}
+.mts-menu--horizontal .mts-menu__item--disabled {
+  opacity: .4;
+  pointer-events: none;
+}
+
+/* Divider vertical entre ítems de nivel 1 */
+.mts-menu--horizontal > .mts-menu__divider {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background: var(--mts-border-color);
+  flex-shrink: 0;
+  margin: 0 var(--mts-space-1);
+  align-self: center;
+}
+
+/* Dropdown panel */
+.mts-menu--horizontal .mts-menu__dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 180px;
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-lg);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  padding: var(--mts-space-1);
+  display: none;
+  z-index: var(--mts-z-dropdown, 200);
+  animation: mts-menu-drop .12s ease;
+}
+@keyframes mts-menu-drop {
+  from { opacity:0; transform:translateY(-4px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.mts-menu--horizontal .mts-menu__node--open > .mts-menu__dropdown {
+  display: block;
+}
+
+/* Sub-dropdown (aparece a la derecha) */
+.mts-menu--horizontal .mts-menu__dropdown--sub {
+  top: -4px;
+  left: calc(100% + 2px);
+}
+
+/* Ítems dentro del dropdown */
+.mts-menu--horizontal .mts-menu__item--dd {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+  height: 34px;
+  border-radius: var(--mts-radius-md);
+  padding: 5px 10px;
+}
+
+/* Divider horizontal dentro del dropdown */
+.mts-menu--horizontal .mts-menu__dropdown .mts-menu__divider {
+  display: block;
+  width: auto;
+  height: 1px;
+  background: var(--mts-border-color);
+  margin: var(--mts-space-1) 0;
+}
+
+/* ════════════════════════════════════════════════════
+   TREE — para MTS.SideNav
+   ════════════════════════════════════════════════════ */
+
+.mts-menu--tree {
+  flex-direction: column;
+  gap: 1px;
+  padding: var(--mts-space-2) var(--mts-space-1);
+  width: 100%;
+}
+
+.mts-menu--tree .mts-menu__item--tree {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--mts-radius-md);
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-medium);
+  font-family: var(--mts-font-family);
+  color: var(--mts-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: background .12s, color .12s;
+}
+.mts-menu--tree .mts-menu__item--tree:hover:not(:disabled) {
+  background: var(--mts-bg-surface-2);
+  color: var(--mts-text-primary);
+}
+.mts-menu--tree .mts-menu__item--active {
+  background: var(--mts-color-primary-light);
+  color: var(--mts-color-primary);
+  font-weight: var(--mts-font-weight-semibold);
+}
+.mts-menu--tree .mts-menu__item--active:hover {
+  background: var(--mts-color-primary-light);
+}
+.mts-menu--tree .mts-menu__item--disabled {
+  opacity: .4;
+  pointer-events: none;
+}
+
+/* Group label */
+.mts-menu--tree .mts-menu__group-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: var(--mts-text-muted);
+  padding: 10px 10px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity .2s;
+}
+
+/* Sub-árbol */
+.mts-menu--tree .mts-menu__sub {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  animation: mts-subtree-in .15s ease;
+  overflow: hidden;
+  /* Línea vertical — se alinea con el centro del ícono padre
+     padding del botón (10px) + centro del ícono (9px) = ~19px */
+  margin-left: 19px;
+  padding-left: 8px;
+  border-left: 1px solid var(--mts-border-color);
+}
+
+@keyframes mts-subtree-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Divider horizontal en tree */
+.mts-menu--tree .mts-menu__divider {
+  height: 1px;
+  background: var(--mts-border-color);
+  margin: var(--mts-space-1) 0;
+}
+
+/* ════════════════════════════════════════════════════
+   ELEMENTOS COMPARTIDOS
+   ════════════════════════════════════════════════════ */
+
+/* Ícono */
+.mts-menu__icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: inherit;
+}
+/* Placeholder — reserva el espacio del ícono sin mostrar nada */
+.mts-menu__icon--empty { opacity: 0; }
+
+/* Label */
+.mts-menu__label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badge */
+.mts-menu__badge {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: var(--mts-radius-full);
+  background: var(--mts-color-primary);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Chevron */
+.mts-menu__chevron {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--mts-text-muted);
+  margin-left: auto;
+}
+/* Chevron abierto: anima desde 0 → 180deg (reaparece en cada rebuild) */
+.mts-menu__chevron--open {
+  transform: rotate(180deg);
+  animation: mts-chevron-open .2s ease;
+}
+/* Chevron derecha (sub-dropdown horizontal): estático */
+.mts-menu__chevron--right { transform: rotate(-90deg); }
+
+@keyframes mts-chevron-open {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(180deg); }
+}

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.StatusBar — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../css-helpers/matios-ui-css-helpers.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="./matios-ui-statusbar.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="./matios-ui-statusbar.js"></script>
+  <style>
+    /* Marco simulado para mostrar la statusbar en contexto */
+    .demo-frame {
+      border: 1px solid var(--mts-border-color);
+      border-radius: var(--mts-radius-lg);
+      overflow: hidden;
+      background: var(--mts-bg-body);
+    }
+    .demo-frame__body {
+      height: 56px;
+      background: var(--mts-bg-surface-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--mts-font-size-xs);
+      color: var(--mts-text-muted);
+    }
+  </style>
+</head>
+<body>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.StatusBar</h1>
+    <p>Barra de estado inferior con slots libres (start, center, end). Ideal para información secundaria: conexión, versión, entorno, shortcuts, mensajes de estado. No es navegación — es contexto.</p>
+    <div class="demo-header-actions"></div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <div class="demo-section"><div class="demo-section-title">1 — Default</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Variante primary</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Variante inverse</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Slot center</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Elementos helper</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — API dinámica</div><div id="tabs-s6"></div></div>
+</div>
+
+<script>
+/* ── Helpers de contenido ─────────────────────────── */
+function buildStatus(label, dot) {
+  return '<span class="mts-statusbar__item">' +
+    '<span class="mts-statusbar__dot mts-statusbar__dot--' + dot + '"></span>' +
+    label +
+  '</span>';
+}
+
+function buildEnd(version) {
+  return '<span class="mts-statusbar__item">Matios UI</span>' +
+    '<span class="mts-statusbar__sep"></span>' +
+    '<span class="mts-statusbar__item">' + version + '</span>';
+}
+
+/* ── indentHtml ───────────────────────────────────── */
+function indentHtml(html) {
+  var indent = 0;
+  var tab = '  ';
+  var result = '';
+  var tokens = html.split(/(<[^>]+>)/g);
+  for (var i = 0; i < tokens.length; i++) {
+    var token = tokens[i].trim();
+    if (!token) continue;
+    if (/^<\//.test(token)) {
+      indent = Math.max(0, indent - 1);
+      result += tab.repeat(indent) + token + '\n';
+    } else if (/^<[^!][^>]*[^/]>$/.test(token) && !/^<(br|hr|img|input|link|meta|area|base|col|embed|param|source|track|wbr)/i.test(token)) {
+      result += tab.repeat(indent) + token + '\n';
+      indent++;
+    } else {
+      result += tab.repeat(indent) + token + '\n';
+    }
+  }
+  return result.trim();
+}
+
+/* ── makeSection ──────────────────────────────────── */
+function makeSection(id, previewHtml, jsCode, initFn) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' }
+    ]
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+/* ── S1 — Default ─────────────────────────────────── */
+var preview_s1 =
+  '<div class="demo-frame">' +
+    '<div class="demo-frame__body">contenido de la app</div>' +
+    '<div id="sb1"></div>' +
+  '</div>';
+
+var js_s1 =
+'new MTS.StatusBar(\'#sb\', {\n' +
+'  start:\n' +
+'    \'<span class="mts-statusbar__item">\' +\n' +
+'      \'<span class="mts-statusbar__dot mts-statusbar__dot--success"></span>\' +\n' +
+'      \'Conectado\' +\n' +
+'    \'</span>\' +\n' +
+'    \'<span class="mts-statusbar__sep"></span>\' +\n' +
+'    \'<span class="mts-statusbar__item">\' +\n' +
+'      \'<i class="mts-icon mts-icon-git-branch"></i> main\' +\n' +
+'    \'</span>\',\n' +
+'  end:\n' +
+'    \'<span class="mts-statusbar__tag mts-statusbar__tag--primary">DEV</span>\' +\n' +
+'    \'<span class="mts-statusbar__sep"></span>\' +\n' +
+'    \'<span class="mts-statusbar__item">v1.0.0</span>\'\n' +
+'});';
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  new MTS.StatusBar('#sb1', {
+    start:
+      '<span class="mts-statusbar__item">' +
+        '<span class="mts-statusbar__dot mts-statusbar__dot--success"></span>' +
+        'Conectado' +
+      '</span>' +
+      '<span class="mts-statusbar__sep"></span>' +
+      '<span class="mts-statusbar__item">' +
+        '<i class="mts-icon mts-icon-git-branch" style="font-size:11px"></i>' +
+        'main' +
+      '</span>',
+    end:
+      '<span class="mts-statusbar__tag mts-statusbar__tag--primary">DEV</span>' +
+      '<span class="mts-statusbar__sep"></span>' +
+      '<span class="mts-statusbar__item">v1.0.0</span>'
+  });
+});
+
+/* ── S2 — Primary ─────────────────────────────────── */
+var preview_s2 =
+  '<div class="demo-frame">' +
+    '<div class="demo-frame__body">contenido de la app</div>' +
+    '<div id="sb2"></div>' +
+  '</div>';
+
+var js_s2 =
+'new MTS.StatusBar(\'#sb\', {\n' +
+'  variant: \'primary\',\n' +
+'  start: \'...\',\n' +
+'  end: \'...\'\n' +
+'});';
+
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  new MTS.StatusBar('#sb2', {
+    variant: 'primary',
+    start:
+      '<span class="mts-statusbar__item">' +
+        '<i class="mts-icon mts-icon-zap" style="font-size:11px"></i>' +
+        'Matios UI' +
+      '</span>' +
+      '<span class="mts-statusbar__sep"></span>' +
+      '<span class="mts-statusbar__item mts-statusbar__item--clickable">' +
+        '<i class="mts-icon mts-icon-git-branch" style="font-size:11px"></i>' +
+        'main' +
+      '</span>',
+    end:
+      '<span class="mts-statusbar__item mts-statusbar__item--clickable">' +
+        '<i class="mts-icon mts-icon-alert-triangle" style="font-size:11px"></i>' +
+        '0 errores' +
+      '</span>' +
+      '<span class="mts-statusbar__tag">PROD</span>'
+  });
+});
+
+/* ── S3 — Inverse ─────────────────────────────────── */
+var preview_s3 =
+  '<div class="demo-frame">' +
+    '<div class="demo-frame__body">contenido de la app</div>' +
+    '<div id="sb3"></div>' +
+  '</div>';
+
+var js_s3 =
+'new MTS.StatusBar(\'#sb\', {\n' +
+'  variant: \'inverse\',\n' +
+'  start: \'...\',\n' +
+'  end: \'...\'\n' +
+'});';
+
+makeSection('tabs-s3', preview_s3, js_s3, function() {
+  new MTS.StatusBar('#sb3', {
+    variant: 'inverse',
+    start:
+      '<span class="mts-statusbar__item">' +
+        '<span class="mts-statusbar__dot mts-statusbar__dot--warning"></span>' +
+        'Modo mantenimiento' +
+      '</span>',
+    end:
+      '<span class="mts-statusbar__item">Ln 142, Col 18</span>' +
+      '<span class="mts-statusbar__sep"></span>' +
+      '<span class="mts-statusbar__item">UTF-8</span>'
+  });
+});
+
+/* ── S4 — Center ──────────────────────────────────── */
+var preview_s4 =
+  '<div class="demo-frame">' +
+    '<div class="demo-frame__body">contenido de la app</div>' +
+    '<div id="sb4"></div>' +
+  '</div>';
+
+var js_s4 =
+'new MTS.StatusBar(\'#sb\', {\n' +
+'  start: \'...\',\n' +
+'  center:\n' +
+'    \'<span class="mts-statusbar__item">\' +\n' +
+'      \'<i class="mts-icon mts-icon-clock"></i>\' +\n' +
+'      \'Última sincronización: hace 2 min\' +\n' +
+'    \'</span>\',\n' +
+'  end: \'...\'\n' +
+'});';
+
+makeSection('tabs-s4', preview_s4, js_s4, function() {
+  new MTS.StatusBar('#sb4', {
+    start:
+      '<span class="mts-statusbar__item">' +
+        '<span class="mts-statusbar__dot mts-statusbar__dot--success"></span>' +
+        'Online' +
+      '</span>',
+    center:
+      '<span class="mts-statusbar__item">' +
+        '<i class="mts-icon mts-icon-clock" style="font-size:11px"></i>' +
+        'Última sincronización: hace 2 min' +
+      '</span>',
+    end:
+      '<span class="mts-statusbar__item mts-statusbar__item--clickable">' +
+        '<i class="mts-icon mts-icon-help-circle" style="font-size:11px"></i>' +
+        'Ayuda' +
+      '</span>'
+  });
+});
+
+/* ── S5 — Elementos helper ────────────────────────── */
+var preview_s5 =
+  '<div class="demo-frame">' +
+    '<div class="demo-frame__body">contenido de la app</div>' +
+    '<div id="sb5"></div>' +
+  '</div>';
+
+var js_s5 =
+'<!-- Dots de estado -->\n' +
+'<span class="mts-statusbar__dot mts-statusbar__dot--success"></span>\n' +
+'<span class="mts-statusbar__dot mts-statusbar__dot--warning"></span>\n' +
+'<span class="mts-statusbar__dot mts-statusbar__dot--danger"></span>\n' +
+'<span class="mts-statusbar__dot mts-statusbar__dot--muted"></span>\n' +
+'\n' +
+'<!-- Tags / pills -->\n' +
+'<span class="mts-statusbar__tag mts-statusbar__tag--primary">primary</span>\n' +
+'<span class="mts-statusbar__tag mts-statusbar__tag--success">success</span>\n' +
+'<span class="mts-statusbar__tag mts-statusbar__tag--warning">warning</span>\n' +
+'<span class="mts-statusbar__tag mts-statusbar__tag--danger">danger</span>\n' +
+'\n' +
+'<!-- Separador vertical -->\n' +
+'<span class="mts-statusbar__sep"></span>\n' +
+'\n' +
+'<!-- Item clickeable -->\n' +
+'<button class="mts-statusbar__item mts-statusbar__item--clickable">\n' +
+'  <i class="mts-icon mts-icon-settings"></i> Ajustes\n' +
+'</button>';
+
+makeSection('tabs-s5', preview_s5, js_s5, function() {
+  new MTS.StatusBar('#sb5', {
+    start:
+      '<span class="mts-statusbar__item">' +
+        '<span class="mts-statusbar__dot mts-statusbar__dot--success"></span>success' +
+      '</span>' +
+      '<span class="mts-statusbar__item">' +
+        '<span class="mts-statusbar__dot mts-statusbar__dot--warning"></span>warning' +
+      '</span>' +
+      '<span class="mts-statusbar__item">' +
+        '<span class="mts-statusbar__dot mts-statusbar__dot--danger"></span>danger' +
+      '</span>' +
+      '<span class="mts-statusbar__item">' +
+        '<span class="mts-statusbar__dot mts-statusbar__dot--muted"></span>muted' +
+      '</span>',
+    end:
+      '<span class="mts-statusbar__tag mts-statusbar__tag--primary">primary</span>' +
+      '<span class="mts-statusbar__tag mts-statusbar__tag--success">success</span>' +
+      '<span class="mts-statusbar__tag mts-statusbar__tag--warning">warning</span>' +
+      '<span class="mts-statusbar__tag mts-statusbar__tag--danger">danger</span>'
+  });
+});
+
+/* ── S6 — API dinámica ────────────────────────────── */
+var preview_s6 =
+  '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">' +
+    '<button id="btn-s6-conectado" class="mts-btn mts-btn--secondary mts-btn--sm">Estado: Conectado</button>' +
+    '<button id="btn-s6-sinconexion" class="mts-btn mts-btn--secondary mts-btn--sm">Estado: Sin conexion</button>' +
+    '<button id="btn-s6-version" class="mts-btn mts-btn--secondary mts-btn--sm">End: v2.1.0</button>' +
+    '<button id="btn-s6-default" class="mts-btn mts-btn--secondary mts-btn--sm">Variante: default</button>' +
+    '<button id="btn-s6-primary" class="mts-btn mts-btn--secondary mts-btn--sm">Variante: primary</button>' +
+    '<button id="btn-s6-inverse" class="mts-btn mts-btn--secondary mts-btn--sm">Variante: inverse</button>' +
+  '</div>' +
+  '<div class="demo-frame">' +
+    '<div class="demo-frame__body">contenido de la app</div>' +
+    '<div id="sb6"></div>' +
+  '</div>';
+
+var js_s6 =
+'// Actualizar slots individualmente\n' +
+'sb.setStart(\'<span class="mts-statusbar__item">...</span>\');\n' +
+'sb.setCenter(\'<span class="mts-statusbar__item">...</span>\');\n' +
+'sb.setEnd(\'<span class="mts-statusbar__item">...</span>\');\n' +
+'\n' +
+'// Cambiar variante en caliente\n' +
+'sb.setVariant(\'primary\');   // \'default\' | \'primary\' | \'inverse\'\n' +
+'\n' +
+'// Referencia directa al elemento del slot\n' +
+'var el = sb.getSlot(\'start\');  // returns .mts-statusbar__start\n' +
+'\n' +
+'// Destruir\n' +
+'sb.destroy();';
+
+makeSection('tabs-s6', preview_s6, js_s6, function() {
+  var sb6 = new MTS.StatusBar('#sb6', {
+    start: buildStatus('Conectado', 'success'),
+    end:   buildEnd('v1.0.0')
+  });
+
+  document.getElementById('btn-s6-conectado').addEventListener('click', function() {
+    sb6.setStart(buildStatus('Conectado', 'success'));
+  });
+  document.getElementById('btn-s6-sinconexion').addEventListener('click', function() {
+    sb6.setStart(buildStatus('Sin conexion', 'danger'));
+  });
+  document.getElementById('btn-s6-version').addEventListener('click', function() {
+    sb6.setEnd(buildEnd('v2.1.0'));
+  });
+  document.getElementById('btn-s6-default').addEventListener('click', function() {
+    sb6.setVariant('default');
+  });
+  document.getElementById('btn-s6-primary').addEventListener('click', function() {
+    sb6.setVariant('primary');
+  });
+  document.getElementById('btn-s6-inverse').addEventListener('click', function() {
+    sb6.setVariant('inverse');
+  });
+});
+
+/* ── Icons ────────────────────────────────────────── */
+if (window.MTS && MTS.Icon) MTS.Icon.initAll();
+</script>
+</body>
+</html>

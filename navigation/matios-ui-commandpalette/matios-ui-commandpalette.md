@@ -1,7 +1,7 @@
 # MTS.CommandPalette
 
-[EN] ⌘K-style command palette with keyboard navigation, groups, icons, shortcuts, local and async search.
-[ES] Paleta de comandos estilo ⌘K con navegación por teclado, grupos, íconos, shortcuts y búsqueda local y async.
+🇬🇧 ⌘K-style command palette with keyboard navigation, groups, icons, shortcuts, local and async search.
+🇪🇸 Paleta de comandos estilo ⌘K con navegación por teclado, grupos, íconos, shortcuts y búsqueda local y async.
 
 ---
 
@@ -17,34 +17,34 @@
 
 ## Options / Opciones
 
-[EN] `MTS.CommandPalette` takes no selector — it appends itself to `document.body`.
-[ES] `MTS.CommandPalette` no recibe selector — se agrega a `document.body`.
+🇬🇧 `MTS.CommandPalette` takes no selector — it appends itself to `document.body`.
+🇪🇸 `MTS.CommandPalette` no recibe selector — se agrega a `document.body`.
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `commands` | `array` | `[]` | [EN] Command list (see schema below) / [ES] Lista de comandos |
-| `placeholder` | `string` | `'Buscar comando...'` | [EN] Input placeholder / [ES] Placeholder del input |
-| `hotkey` | `string` | `'k'` | [EN] Hotkey letter — triggers ⌘K / Ctrl+K / [ES] Tecla — activa ⌘K / Ctrl+K |
-| `overlay` | `boolean` | `true` | [EN] Show dark backdrop / [ES] Mostrar fondo oscuro |
-| `maxResults` | `number` | `8` | [EN] Max visible results / [ES] Máximo de resultados visibles |
-| `onOpen` | `function` | — | [EN] Fires when palette opens / [ES] Se dispara al abrir |
-| `onClose` | `function` | — | [EN] Fires when palette closes / [ES] Se dispara al cerrar |
-| `onSelect` | `function` | — | [EN] `({ id, command }) => {}` Fires on command selection / [ES] Se dispara al seleccionar |
-| `onSearch` | `function` | — | [EN] `(query) => commands[]` Async search override / [ES] Búsqueda async — reemplaza la búsqueda local |
+| `commands` | `array` | `[]` | 🇬🇧 Command list (see schema below) / 🇪🇸 Lista de comandos |
+| `placeholder` | `string` | `'Buscar comando...'` | 🇬🇧 Input placeholder / 🇪🇸 Placeholder del input |
+| `hotkey` | `string` | `'k'` | 🇬🇧 Hotkey letter — triggers ⌘K / Ctrl+K / 🇪🇸 Tecla — activa ⌘K / Ctrl+K |
+| `overlay` | `boolean` | `true` | 🇬🇧 Show dark backdrop / 🇪🇸 Mostrar fondo oscuro |
+| `maxResults` | `number` | `8` | 🇬🇧 Max visible results / 🇪🇸 Máximo de resultados visibles |
+| `onOpen` | `function` | — | 🇬🇧 Fires when palette opens / 🇪🇸 Se dispara al abrir |
+| `onClose` | `function` | — | 🇬🇧 Fires when palette closes / 🇪🇸 Se dispara al cerrar |
+| `onSelect` | `function` | — | 🇬🇧 `({ id, command }) => {}` Fires on command selection / 🇪🇸 Se dispara al seleccionar |
+| `onSearch` | `function` | — | 🇬🇧 `(query) => commands[]` Async search override / 🇪🇸 Búsqueda async — reemplaza la búsqueda local |
 
 ### Command schema / Esquema de comando
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `label` | `string` | [EN] Display text / [ES] Texto visible |
-| `description` | `string` | [EN] Subtitle / [ES] Subtítulo |
-| `group` | `string` | [EN] Group label / [ES] Etiqueta de grupo |
-| `icon` | `string` | [EN] Icon HTML / [ES] HTML del ícono |
-| `shortcut` | `string` | [EN] Keyboard shortcut hint / [ES] Atajo de teclado |
-| `keywords` | `string[]` | [EN] Extra search terms / [ES] Términos extra de búsqueda |
-| `action` | `function` | [EN] `(command) => {}` Executed on select / [ES] Se ejecuta al seleccionar |
-| `disabled` | `boolean` | [EN] Excludes from results / [ES] Excluye de resultados |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `label` | `string` | 🇬🇧 Display text / 🇪🇸 Texto visible |
+| `description` | `string` | 🇬🇧 Subtitle / 🇪🇸 Subtítulo |
+| `group` | `string` | 🇬🇧 Group label / 🇪🇸 Etiqueta de grupo |
+| `icon` | `string` | 🇬🇧 Icon HTML / 🇪🇸 HTML del ícono |
+| `shortcut` | `string` | 🇬🇧 Keyboard shortcut hint / 🇪🇸 Atajo de teclado |
+| `keywords` | `string[]` | 🇬🇧 Extra search terms / 🇪🇸 Términos extra de búsqueda |
+| `action` | `function` | 🇬🇧 `(command) => {}` Executed on select / 🇪🇸 Se ejecuta al seleccionar |
+| `disabled` | `boolean` | 🇬🇧 Excludes from results / 🇪🇸 Excluye de resultados |
 
 ---
 
@@ -114,8 +114,8 @@ const cp = new MTS.CommandPalette({
 
 ## Async Search / Búsqueda async
 
-[EN] When `onSearch` is registered, it replaces local search. Must return an array or a Promise.
-[ES] Cuando `onSearch` está registrado, reemplaza la búsqueda local. Debe retornar un arreglo o una Promesa.
+🇬🇧 When `onSearch` is registered, it replaces local search. Must return an array or a Promise.
+🇪🇸 Cuando `onSearch` está registrado, reemplaza la búsqueda local. Debe retornar un arreglo o una Promesa.
 
 ```js
 const cp = new MTS.CommandPalette({
@@ -169,10 +169,3 @@ document.addEventListener('mts:commandpalette:close', () => {});
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Normalized to `.on()` pattern, added `id` to select detail, bilingual docs / [ES] Normalizado al patrón `.on()`, `id` en detail de select, docs bilingüe |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

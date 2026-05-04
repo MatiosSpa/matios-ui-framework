@@ -33,6 +33,10 @@
   <link rel="stylesheet" href="matios-ui-accent-violet.css">
   <link rel="stylesheet" href="matios-ui-accent-olive.css">
   <link rel="stylesheet" href="matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="matios-ui-accent-petrol.css">
   <link rel="stylesheet" href="matios-ui-accent-high-contrast.css">
   <style>
     *{box-sizing:border-box}
@@ -439,6 +443,10 @@
   <div class="themes-toolbar__row">
     <span class="themes-toolbar__label">Accent</span>
     <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-accent="" onclick="applyAccent(null)">—</button>
+    <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-accent="corporate" onclick="applyAccent('corporate')">Corporate</button>
+    <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-accent="navy" onclick="applyAccent('navy')">Navy</button>
+    <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-accent="emerald" onclick="applyAccent('emerald')">Emerald</button>
+    <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-accent="petrol" onclick="applyAccent('petrol')">Petrol</button>
     <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-accent="violet" onclick="applyAccent('violet')">Violet</button>
     <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-accent="olive" onclick="applyAccent('olive')">Olive</button>
     <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-accent="blue" onclick="applyAccent('blue')">Blue</button>
@@ -448,7 +456,7 @@
 <div class="themes-page">
   <header class="themes-header">
     <h1>MTS <span>Temas</span></h1>
-    <p>Arquitectura <strong>modo + accent</strong>. <code>light</code> y <code>dark</code> usan accent opcional. <code>high-contrast</code> funciona completo por sí solo y el integrador decide si superpone un accent.</p>
+    <p>Arquitectura <strong>modo + accent</strong>. <code>light</code> y <code>dark</code> usan accent opcional. El accent redefine al menos la familia primaria y, si hace falta, puede ajustar tambien el accent decorativo. <code>high-contrast</code> funciona completo por sí solo y el integrador decide si superpone un accent.</p>
   </header>
 
   <section>
@@ -459,7 +467,7 @@
   <section class="theme-section">
     <div class="theme-section__header">Cómo usar / How to use</div>
     <div class="theme-section__body">
-      <p class="theme-section__desc">Aplica <code>data-mts-mode</code> en <code>&lt;html&gt;</code>. El accent es opcional y solo redefine el color primario.</p>
+      <p class="theme-section__desc">Aplica <code>data-mts-mode</code> en <code>&lt;html&gt;</code>. El accent es opcional y redefine como minimo la familia primaria; algunos accents tambien ajustan el color decorativo secundario.</p>
       <pre>&lt;!-- Solo modo / Mode only --&gt;
 &lt;html data-mts-mode="dark"&gt;
 &lt;html data-mts-mode="light"&gt;
@@ -476,6 +484,10 @@
 &lt;link rel="stylesheet" href="themes/matios-ui-mode-dark.css"&gt;
 &lt;link rel="stylesheet" href="themes/matios-ui-mode-light.css"&gt;
 &lt;link rel="stylesheet" href="themes/matios-ui-mode-high-contrast.css"&gt;
+&lt;link rel="stylesheet" href="themes/matios-ui-accent-corporate.css"&gt;
+&lt;link rel="stylesheet" href="themes/matios-ui-accent-navy.css"&gt;
+&lt;link rel="stylesheet" href="themes/matios-ui-accent-emerald.css"&gt;
+&lt;link rel="stylesheet" href="themes/matios-ui-accent-petrol.css"&gt;
 &lt;link rel="stylesheet" href="themes/matios-ui-accent-violet.css"&gt;
 &lt;link rel="stylesheet" href="themes/matios-ui-accent-olive.css"&gt;
 &lt;link rel="stylesheet" href="themes/matios-ui-accent-blue.css"&gt;</pre>
@@ -512,6 +524,9 @@
   --mts-btn-shadow-primary:   0 4px 14px rgba(230,57,70,.4);
   --mts-btn-ring-primary:     0 0 0 3px rgba(230,57,70,.25);
   --mts-border-color-focus:   #e63946;
+  --mts-color-accent:         #7c3aed;
+  --mts-color-accent-hover:   #6d28d9;
+  --mts-color-accent-text:    #ffffff;
 }</pre>
     </div>
   </section>
@@ -530,6 +545,10 @@
 
   var ACCENTS = [
     { id:null,     name:'Default', label:'azul default' },
+    { id:'corporate', name:'Corporate', label:'Corporate (amber + navy)' },
+    { id:'navy',      name:'Navy',      label:'Navy + amber' },
+    { id:'emerald',   name:'Emerald',   label:'Emerald + amber' },
+    { id:'petrol',    name:'Petrol',    label:'Petrol + amber' },
     { id:'violet', name:'Violet',  label:'Violet' },
     { id:'olive',  name:'Olive',   label:'Olive' },
     { id:'blue',   name:'Blue',    label:'Blue (cobalt)' }

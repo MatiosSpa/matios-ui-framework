@@ -1,0 +1,625 @@
+﻿<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CSS Helpers — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="./matios-ui-css-helpers.css">
+  <link rel="stylesheet" href="../support/demo-shared.css">
+  <link rel="stylesheet" href="../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <script src="../support/demo-shared.js"></script>
+  <script src="../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+</head>
+<body>
+
+
+<div class="demo-page">
+
+  <div class="demo-header">
+    <h1><span>CSS</span> Helpers</h1>
+    <p>Clases utilitarias CSS puras (sin JS) con convención BEM · Complementan <code>matios-ui-base.css</code></p>
+    <div class="demo-header-actions">
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <!-- ── 1 · SPACING ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Spacing · helpers-spacing.css</div>
+    <div class="demo-label">Padding</div>
+    <div id="s1a"></div>
+    <div class="demo-label">Margin</div>
+    <div id="s1b"></div>
+    <div class="demo-label">Gap</div>
+    <div id="s1c"></div>
+  </div>
+
+  <!-- ── 2 · DISPLAY ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Display · helpers-display.css</div>
+    <div class="demo-label">Valores principales</div>
+    <div id="s2a"></div>
+    <div class="demo-label">mts-d-none</div>
+    <div id="s2b"></div>
+  </div>
+
+  <!-- ── 3 · FLEX ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Flex · helpers-flex.css</div>
+    <div class="demo-label">Direction</div>
+    <div id="s3a"></div>
+    <div class="demo-label">Justify Content</div>
+    <div id="s3b"></div>
+    <div class="demo-label">Align Items</div>
+    <div id="s3c"></div>
+    <div class="demo-label">Grow · Shrink · Wrap</div>
+    <div id="s3d"></div>
+  </div>
+
+  <!-- ── 4 · SIZING ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">4 — Sizing · helpers-sizing.css</div>
+    <div class="demo-label">Width</div>
+    <div id="s4a"></div>
+    <div class="demo-label">Max Width</div>
+    <div id="s4b"></div>
+  </div>
+
+  <!-- ── 5 · TEXT ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">5 — Text · helpers-text.css</div>
+    <div class="demo-label">Alineación</div>
+    <div id="s5a"></div>
+    <div class="demo-label">Tamaño</div>
+    <div id="s5b"></div>
+    <div class="demo-label">Peso</div>
+    <div id="s5c"></div>
+    <div class="demo-label">Transform · Decoration · Truncate</div>
+    <div id="s5d"></div>
+  </div>
+
+  <!-- ── 6 · COLORS ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">6 — Colors · helpers-colors.css</div>
+    <div id="s6"></div>
+  </div>
+
+  <!-- ── 7 · BACKGROUND ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">7 — Background · helpers-background.css</div>
+    <div id="s7"></div>
+  </div>
+
+  <!-- ── 8 · BORDERS ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">8 — Borders · helpers-borders.css</div>
+    <div class="demo-label">Border</div>
+    <div id="s8a"></div>
+    <div class="demo-label">Border Radius</div>
+    <div id="s8b"></div>
+    <div class="demo-label">Border Color</div>
+    <div id="s8c"></div>
+  </div>
+
+  <!-- ── 9 · SHADOWS ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">9 — Shadows · helpers-shadows.css</div>
+    <div id="s9"></div>
+  </div>
+
+  <!-- ── 10 · POSITION ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">10 — Position · helpers-position.css</div>
+    <div class="demo-label">Position</div>
+    <div id="s10a"></div>
+    <div class="demo-label">Inset (top / bottom / start / end)</div>
+    <div id="s10b"></div>
+  </div>
+
+  <!-- ── 11 · OVERFLOW ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">11 — Overflow · helpers-overflow.css</div>
+    <div id="s11"></div>
+  </div>
+
+  <!-- ── 12 · INTERACTIONS ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">12 — Interactions · helpers-interactions.css</div>
+    <div class="demo-label">Cursor</div>
+    <div id="s12a"></div>
+    <div class="demo-label">Pointer Events · User Select</div>
+    <div id="s12b"></div>
+  </div>
+
+  <!-- ── 13 · VISIBILITY ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">13 — Visibility · helpers-visibility.css</div>
+    <div class="demo-label">Visible / Invisible</div>
+    <div id="s13a"></div>
+    <div class="demo-label">Opacity</div>
+    <div id="s13b"></div>
+  </div>
+
+  <!-- ── 14 · VERTICAL ALIGN ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">14 — Vertical Align · helpers-vertical-align.css</div>
+    <div id="s14"></div>
+  </div>
+
+  <!-- ── 15 · FLOAT ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">15 — Float · helpers-float.css</div>
+    <div id="s15"></div>
+  </div>
+
+</div><!-- /demo-page -->
+
+<script>
+/*
+  mk(id, html, height)
+  - Preview: envuelve html en <div class="mts-p-4"> (andamio visual, NO aparece en HTML tab)
+  - HTML tab: MTS.CodeBlock con syntax highlighting, scroll y botón de copia
+*/
+function mk(id, html, h) {
+  var cbId = id + '-cb';
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: h || '180px',
+    tabs: [
+      { id: id + '-p', label: 'Preview', content: '<div class="mts-p-4">' + html + '</div>' },
+      { id: id + '-h', label: 'HTML',    content: '<div id="' + cbId + '" style="height:100%"></div>' }
+    ]
+  });
+  new MTS.CodeBlock('#' + cbId, {
+    code: html.trim(),
+    language: 'html',
+    copyable: true,
+    height: '100%'
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 1 · SPACING                                                                */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s1a', `
+<div class="mts-d-flex mts-gap-2 mts-flex--wrap mts-align-items--center">
+  <div class="mts-border mts-p-1">mts-p-1</div>
+  <div class="mts-border mts-p-2">mts-p-2</div>
+  <div class="mts-border mts-p-3">mts-p-3</div>
+  <div class="mts-border mts-p-4">mts-p-4</div>
+  <div class="mts-border mts-p-5">mts-p-5</div>
+  <div class="mts-border mts-p-6">mts-p-6</div>
+</div>
+`, '120px');
+
+mk('s1b', `
+<div class="mts-d-flex mts-gap-2 mts-flex--wrap mts-align-items--end">
+  <div class="mts-border"><div class="mts-m-0 mts-border">m-0</div></div>
+  <div class="mts-border"><div class="mts-m-1 mts-border">m-1</div></div>
+  <div class="mts-border"><div class="mts-m-2 mts-border">m-2</div></div>
+  <div class="mts-border"><div class="mts-m-3 mts-border">m-3</div></div>
+  <div class="mts-border"><div class="mts-m-4 mts-border">m-4</div></div>
+  <div class="mts-border"><div class="mts-m-5 mts-border">m-5</div></div>
+</div>
+`, '140px');
+
+mk('s1c', `
+<div class="mts-d-flex mts-flex--column mts-gap-3">
+  <div class="mts-d-flex mts-gap-1 mts-border mts-p-2">
+    <div class="mts-border mts-p-2">mts-gap-1</div>
+    <div class="mts-border mts-p-2">B</div>
+    <div class="mts-border mts-p-2">C</div>
+  </div>
+  <div class="mts-d-flex mts-gap-3 mts-border mts-p-2">
+    <div class="mts-border mts-p-2">mts-gap-3</div>
+    <div class="mts-border mts-p-2">B</div>
+    <div class="mts-border mts-p-2">C</div>
+  </div>
+  <div class="mts-d-flex mts-gap-5 mts-border mts-p-2">
+    <div class="mts-border mts-p-2">mts-gap-5</div>
+    <div class="mts-border mts-p-2">B</div>
+    <div class="mts-border mts-p-2">C</div>
+  </div>
+</div>
+`, '200px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 2 · DISPLAY                                                                */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s2a', `
+<div class="mts-d-flex mts-gap-3 mts-flex--wrap mts-align-items--center">
+  <div class="mts-d-block mts-border mts-p-2">mts-d-block</div>
+  <span class="mts-d-inline mts-border mts-p-2">mts-d-inline</span>
+  <div class="mts-d-inline-block mts-border mts-p-2">mts-d-inline-block</div>
+  <div class="mts-d-flex mts-gap-2 mts-border mts-p-2">
+    <div class="mts-border mts-p-2">mts-d-flex</div>
+    <div class="mts-border mts-p-2">B</div>
+  </div>
+</div>
+`, '130px');
+
+mk('s2b', `
+<div class="mts-d-flex mts-gap-3 mts-align-items--center">
+  <div class="mts-border mts-p-2">A</div>
+  <div class="mts-d-none mts-border mts-p-2">B — mts-d-none</div>
+  <div class="mts-border mts-p-2">C</div>
+</div>
+`, '110px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 3 · FLEX                                                                   */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s3a', `
+<div class="mts-d-flex mts-flex--row mts-gap-2 mts-border mts-p-2 mts-mb-3">
+  <div class="mts-border mts-p-2">Flex item 1</div>
+  <div class="mts-border mts-p-2">Flex item 2</div>
+  <div class="mts-border mts-p-2">Flex item 3</div>
+</div>
+<div class="mts-d-flex mts-flex--column mts-gap-2 mts-border mts-p-2">
+  <div class="mts-border mts-p-2">Flex item 1</div>
+  <div class="mts-border mts-p-2">Flex item 2</div>
+  <div class="mts-border mts-p-2">Flex item 3</div>
+</div>
+`, '280px');
+
+mk('s3b', `
+<div class="mts-d-flex mts-flex--column mts-gap-2">
+  <div class="mts-d-flex mts-justify-content--start mts-gap-2 mts-border mts-p-2">
+    <div class="mts-border mts-p-2">justify-content--start</div>
+    <div class="mts-border mts-p-2">B</div>
+  </div>
+  <div class="mts-d-flex mts-justify-content--center mts-gap-2 mts-border mts-p-2">
+    <div class="mts-border mts-p-2">justify-content--center</div>
+    <div class="mts-border mts-p-2">B</div>
+  </div>
+  <div class="mts-d-flex mts-justify-content--end mts-gap-2 mts-border mts-p-2">
+    <div class="mts-border mts-p-2">justify-content--end</div>
+    <div class="mts-border mts-p-2">B</div>
+  </div>
+  <div class="mts-d-flex mts-justify-content--between mts-border mts-p-2">
+    <div class="mts-border mts-p-2">justify-content--between</div>
+    <div class="mts-border mts-p-2">B</div>
+  </div>
+</div>
+`, '240px');
+
+mk('s3c', `
+<div class="mts-d-flex mts-gap-4 mts-flex--wrap">
+  <div class="mts-d-flex mts-align-items--start mts-gap-1 mts-border mts-p-2" style="height:64px">
+    <div class="mts-border mts-p-2">start</div>
+    <div class="mts-border mts-p-2" style="height:40px">B</div>
+  </div>
+  <div class="mts-d-flex mts-align-items--center mts-gap-1 mts-border mts-p-2" style="height:64px">
+    <div class="mts-border mts-p-2">center</div>
+    <div class="mts-border mts-p-2" style="height:40px">B</div>
+  </div>
+  <div class="mts-d-flex mts-align-items--end mts-gap-1 mts-border mts-p-2" style="height:64px">
+    <div class="mts-border mts-p-2">end</div>
+    <div class="mts-border mts-p-2" style="height:40px">B</div>
+  </div>
+  <div class="mts-d-flex mts-align-items--stretch mts-gap-1 mts-border mts-p-2" style="height:64px">
+    <div class="mts-border mts-p-2">stretch</div>
+    <div class="mts-border mts-p-2">B</div>
+  </div>
+</div>
+`, '160px');
+
+mk('s3d', `
+<div class="mts-d-flex mts-gap-2 mts-border mts-p-2 mts-mb-3">
+  <div class="mts-flex--1 mts-border mts-p-2">mts-flex--1 (se expande)</div>
+  <div class="mts-border mts-p-2">B</div>
+  <div class="mts-border mts-p-2">C</div>
+</div>
+<div class="mts-d-flex mts-flex--wrap mts-gap-2 mts-border mts-p-2" style="width:220px">
+  <div class="mts-border mts-p-2">mts-flex--wrap</div>
+  <div class="mts-border mts-p-2">B</div>
+  <div class="mts-border mts-p-2">C</div>
+  <div class="mts-border mts-p-2">D</div>
+</div>
+`, '230px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 4 · SIZING                                                                 */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s4a', `
+<div class="mts-d-flex mts-flex--column mts-gap-2">
+  <div class="mts-w--25 mts-border mts-p-2">mts-w--25 · 25%</div>
+  <div class="mts-w--50 mts-border mts-p-2">mts-w--50 · 50%</div>
+  <div class="mts-w--75 mts-border mts-p-2">mts-w--75 · 75%</div>
+  <div class="mts-w--100 mts-border mts-p-2">mts-w--100 · 100%</div>
+</div>
+`, '200px');
+
+mk('s4b', `
+<div class="mts-d-flex mts-flex--column mts-gap-2">
+  <div class="mts-max-w--xs mts-border mts-p-2">mts-max-w--xs · 320px</div>
+  <div class="mts-max-w--sm mts-border mts-p-2">mts-max-w--sm · 420px</div>
+  <div class="mts-max-w--md mts-border mts-p-2">mts-max-w--md · 560px</div>
+  <div class="mts-max-w--lg mts-border mts-p-2">mts-max-w--lg · 640px</div>
+</div>
+`, '200px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 5 · TEXT                                                                   */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s5a', `
+<div class="mts-d-flex mts-flex--column mts-gap-2" style="width:280px">
+  <div class="mts-text--left mts-border mts-p-2">mts-text--left</div>
+  <div class="mts-text--center mts-border mts-p-2">mts-text--center</div>
+  <div class="mts-text--right mts-border mts-p-2">mts-text--right</div>
+</div>
+`, '160px');
+
+mk('s5b', `
+<div class="mts-d-flex mts-gap-4 mts-flex--wrap mts-align-items--end">
+  <span class="mts-text--xs">mts-text--xs</span>
+  <span class="mts-text--sm">mts-text--sm</span>
+  <span class="mts-text--md">mts-text--md</span>
+  <span class="mts-text--lg">mts-text--lg</span>
+  <span class="mts-text--xl">mts-text--xl</span>
+</div>
+`, '110px');
+
+mk('s5c', `
+<div class="mts-d-flex mts-gap-5 mts-flex--wrap mts-align-items--center">
+  <span class="mts-fw--normal">mts-fw--normal</span>
+  <span class="mts-fw--medium">mts-fw--medium</span>
+  <span class="mts-fw--semibold">mts-fw--semibold</span>
+  <span class="mts-fw--bold">mts-fw--bold</span>
+</div>
+`, '100px');
+
+mk('s5d', `
+<div class="mts-d-flex mts-gap-4 mts-flex--wrap mts-align-items--center mts-mb-3">
+  <span class="mts-text--uppercase">mts-text--uppercase</span>
+  <span class="mts-text--lowercase">MTS-TEXT--LOWERCASE</span>
+  <span class="mts-text--capitalize">mts-text--capitalize text</span>
+  <span class="mts-text--underline">mts-text--underline</span>
+  <span class="mts-text--line-through">mts-text--line-through</span>
+  <span class="mts-fst--italic">mts-fst--italic</span>
+</div>
+<div class="mts-text--truncate mts-border mts-p-2" style="width:260px">
+  mts-text--truncate: texto largo cortado con ellipsis al desbordar el contenedor
+</div>
+`, '200px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 6 · COLORS                                                                 */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s6', `
+<div class="mts-d-flex mts-gap-3 mts-flex--wrap mts-align-items--center">
+  <span class="mts-text-color--primary mts-border mts-p-2">primary</span>
+  <span class="mts-text-color--secondary mts-border mts-p-2">secondary</span>
+  <span class="mts-text-color--muted mts-border mts-p-2">muted</span>
+  <span class="mts-text-color--success mts-border mts-p-2">success</span>
+  <span class="mts-text-color--warning mts-border mts-p-2">warning</span>
+  <span class="mts-text-color--danger mts-border mts-p-2">danger</span>
+  <span class="mts-text-color--info mts-border mts-p-2">info</span>
+  <span class="mts-text-color--accent mts-border mts-p-2">accent</span>
+  <span class="mts-text-color--disabled mts-border mts-p-2">disabled</span>
+</div>
+`, '110px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 7 · BACKGROUND                                                             */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s7', `
+<div class="mts-d-flex mts-gap-3 mts-flex--wrap mts-align-items--center">
+  <div class="mts-bg-color--body mts-border mts-p-3">mts-bg-color--body</div>
+  <div class="mts-bg-color--surface mts-border mts-p-3">--surface</div>
+  <div class="mts-bg-color--surface-2 mts-border mts-p-3">--surface-2</div>
+  <div class="mts-bg-color--primary mts-p-3" style="color:#fff">--primary</div>
+  <div class="mts-bg-color--success mts-p-3" style="color:#fff">--success</div>
+  <div class="mts-bg-color--warning mts-p-3" style="color:#fff">--warning</div>
+  <div class="mts-bg-color--danger mts-p-3" style="color:#fff">--danger</div>
+  <div class="mts-bg-color--info mts-p-3" style="color:#fff">--info</div>
+</div>
+`, '130px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 8 · BORDERS                                                                */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s8a', `
+<div class="mts-d-flex mts-gap-3 mts-flex--wrap mts-align-items--center">
+  <div class="mts-border mts-p-3">mts-border</div>
+  <div class="mts-border-top mts-p-3">mts-border-top</div>
+  <div class="mts-border-bottom mts-p-3">mts-border-bottom</div>
+  <div class="mts-border-left mts-p-3">mts-border-left</div>
+  <div class="mts-border-right mts-p-3">mts-border-right</div>
+</div>
+`, '120px');
+
+mk('s8b', `
+<div class="mts-d-flex mts-gap-3 mts-flex--wrap mts-align-items--center">
+  <div class="mts-border mts-rounded--0 mts-p-3">--0</div>
+  <div class="mts-border mts-rounded--sm mts-p-3">--sm</div>
+  <div class="mts-border mts-rounded--md mts-p-3">--md</div>
+  <div class="mts-border mts-rounded--lg mts-p-3">--lg</div>
+  <div class="mts-border mts-rounded--xl mts-p-3">--xl</div>
+  <div class="mts-border mts-rounded--full mts-p-3" style="width:48px;height:48px;display:flex;align-items:center;justify-content:center">full</div>
+  <div class="mts-border mts-rounded--pill mts-px-4 mts-py-2">pill</div>
+</div>
+`, '120px');
+
+mk('s8c', `
+<div class="mts-d-flex mts-gap-3 mts-flex--wrap mts-align-items--center">
+  <div class="mts-border mts-border-color--primary mts-p-3">--primary</div>
+  <div class="mts-border mts-border-color--success mts-p-3">--success</div>
+  <div class="mts-border mts-border-color--warning mts-p-3">--warning</div>
+  <div class="mts-border mts-border-color--danger mts-p-3">--danger</div>
+  <div class="mts-border mts-border-color--info mts-p-3">--info</div>
+</div>
+`, '110px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 9 · SHADOWS                                                                */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s9', `
+<div class="mts-d-flex mts-gap-5 mts-flex--wrap mts-align-items--center" style="padding:8px">
+  <div class="mts-shadow--none mts-bg-color--surface mts-border mts-rounded--md mts-p-4">shadow--none</div>
+  <div class="mts-shadow--xs mts-bg-color--surface mts-rounded--md mts-p-4">shadow--xs</div>
+  <div class="mts-shadow--sm mts-bg-color--surface mts-rounded--md mts-p-4">shadow--sm</div>
+  <div class="mts-shadow--md mts-bg-color--surface mts-rounded--md mts-p-4">shadow--md</div>
+  <div class="mts-shadow--lg mts-bg-color--surface mts-rounded--md mts-p-4">shadow--lg</div>
+  <div class="mts-shadow--xl mts-bg-color--surface mts-rounded--md mts-p-4">shadow--xl</div>
+</div>
+`, '150px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 10 · POSITION                                                              */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s10a', `
+<div class="mts-d-flex mts-gap-3 mts-flex--wrap mts-align-items--center">
+  <div class="mts-position--static mts-border mts-p-3">mts-position--static</div>
+  <div class="mts-position--relative mts-border mts-p-3">mts-position--relative</div>
+  <div class="mts-position--sticky mts-border mts-p-3">mts-position--sticky</div>
+</div>
+`, '110px');
+
+mk('s10b', `
+<div class="mts-position--relative mts-border mts-p-4" style="height:100px">
+  contenedor relative
+  <span class="mts-position--absolute mts-top--0 mts-end--0 mts-bg-color--primary mts-p-2" style="color:#fff">top-0 end-0</span>
+  <span class="mts-position--absolute mts-bottom--0 mts-start--0 mts-bg-color--success mts-p-2" style="color:#fff">bottom-0 start-0</span>
+</div>
+`, '170px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 11 · OVERFLOW                                                              */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s11', `
+<div class="mts-d-flex mts-gap-4 mts-flex--wrap mts-align-items--start">
+  <div class="mts-overflow-hidden mts-border mts-p-2" style="width:150px;height:64px">
+    overflow-hidden<br>línea 2<br>línea 3<br>línea 4 (oculta)
+  </div>
+  <div class="mts-overflow-auto mts-border mts-p-2" style="width:150px;height:64px">
+    overflow-auto<br>línea 2<br>línea 3<br>línea 4 (scroll)
+  </div>
+  <div class="mts-overflow-scroll mts-border mts-p-2" style="width:150px;height:64px">
+    overflow-scroll<br>línea 2<br>línea 3<br>línea 4 (siempre)
+  </div>
+</div>
+`, '180px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 12 · INTERACTIONS                                                          */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s12a', `
+<div class="mts-d-flex mts-gap-3 mts-flex--wrap mts-align-items--center">
+  <div class="mts-cursor--pointer mts-border mts-p-3">mts-cursor--pointer</div>
+  <div class="mts-cursor--default mts-border mts-p-3">mts-cursor--default</div>
+  <div class="mts-cursor--not-allowed mts-border mts-p-3 mts-opacity--50">mts-cursor--not-allowed</div>
+  <div class="mts-cursor--grab mts-border mts-p-3">mts-cursor--grab</div>
+  <div class="mts-cursor--text mts-border mts-p-3">mts-cursor--text</div>
+</div>
+`, '120px');
+
+mk('s12b', `
+<div class="mts-d-flex mts-gap-3 mts-flex--wrap mts-align-items--center">
+  <div class="mts-pe--none mts-border mts-p-3 mts-opacity--50">mts-pe--none (sin eventos)</div>
+  <div class="mts-user-select--none mts-border mts-p-3">mts-user-select--none (intenta seleccionar)</div>
+</div>
+`, '110px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 13 · VISIBILITY                                                            */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s13a', `
+<div class="mts-d-flex mts-gap-3 mts-align-items--center">
+  <div class="mts-visible mts-border mts-p-3">mts-visible</div>
+  <div class="mts-invisible mts-border mts-p-3">mts-invisible (ocupa espacio)</div>
+  <div class="mts-visible mts-border mts-p-3">mts-visible</div>
+</div>
+`, '110px');
+
+mk('s13b', `
+<div class="mts-d-flex mts-gap-3 mts-align-items--center">
+  <div class="mts-opacity--100 mts-border mts-p-3">opacity--100</div>
+  <div class="mts-opacity--75 mts-border mts-p-3">opacity--75</div>
+  <div class="mts-opacity--50 mts-border mts-p-3">opacity--50</div>
+  <div class="mts-opacity--25 mts-border mts-p-3">opacity--25</div>
+  <div class="mts-opacity--0 mts-border mts-p-3">opacity--0</div>
+</div>
+`, '110px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 14 · VERTICAL ALIGN                                                        */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s14', `
+<div class="mts-border mts-p-3" style="line-height:3">
+  <span class="mts-align--top mts-border mts-px-2">align--top</span>
+  <span class="mts-align--middle mts-border mts-px-2">align--middle</span>
+  <span class="mts-align--bottom mts-border mts-px-2">align--bottom</span>
+  <span class="mts-align--text-top mts-border mts-px-2">align--text-top</span>
+  <span class="mts-align--baseline mts-border mts-px-2">align--baseline</span>
+  <span style="font-size:1.4em"> — referencia</span>
+</div>
+`, '150px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 15 · FLOAT                                                                 */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+mk('s15', `
+<div class="mts-clearfix mts-border mts-p-3" style="min-height:80px">
+  <div class="mts-float--left mts-bg-color--primary mts-p-3 mts-mr-3" style="color:#fff">mts-float--left</div>
+  <div class="mts-float--right mts-bg-color--primary mts-p-3 mts-ml-3" style="color:#fff">mts-float--right</div>
+  <p>mts-clearfix — el contenedor no colapsa.</p>
+</div>
+`, '170px');
+
+</script>
+</body>
+</html>

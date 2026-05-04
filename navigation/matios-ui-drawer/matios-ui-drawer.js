@@ -61,8 +61,8 @@ MTS.Drawer = class MtsDrawer {
   show()   { if (this._isOpen) return this; this._isOpen = true; this._backdropEl.classList.add('mts-drawer-backdrop--visible'); this._drawerEl.removeAttribute('hidden'); requestAnimationFrame(() => requestAnimationFrame(() => this._drawerEl.classList.add('mts-drawer--open'))); document.body.style.overflow = 'hidden'; this._emit('open', {}); return this; }
   hide()   { if (!this._isOpen) return this; this._isOpen = false; this._drawerEl.classList.remove('mts-drawer--open'); this._backdropEl.classList.remove('mts-drawer-backdrop--visible'); setTimeout(() => { this._drawerEl.setAttribute('hidden', ''); document.body.style.overflow = ''; }, 300); this._emit('close', {}); return this; }
   toggle() { return this._isOpen ? this.hide() : this.show(); }
-  setTitle(html)   { if (this._titleEl) this._titleEl.innerHTML = html; return this; }
-  setContent(html) { if (this._bodyEl) { this._bodyEl.innerHTML = ''; typeof html === 'string' ? (this._bodyEl.innerHTML = html) : this._bodyEl.appendChild(html); } return this; }
+  setTitle(html)   { if (this._titleEl) this._titleEl.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(html) : html; return this; }
+  setContent(html) { if (this._bodyEl) { this._bodyEl.innerHTML = ''; typeof html === 'string' ? (this._bodyEl.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(html) : html) : this._bodyEl.appendChild(html); } return this; }
   destroy() { this.hide(); setTimeout(() => { this._drawerEl?.remove(); this._backdropEl?.remove(); }, 350); }
   on(e, cb) { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
 
@@ -82,7 +82,7 @@ MTS.Drawer = class MtsDrawer {
     header.className = 'mts-drawer__header';
     this._titleEl = document.createElement('h5');
     this._titleEl.className = 'mts-drawer__title';
-    this._titleEl.innerHTML = this.title;
+    this._titleEl.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.title) : this.title;
     header.appendChild(this._titleEl);
     if (this.closable) {
       const closeBtn = document.createElement('button');
@@ -96,7 +96,7 @@ MTS.Drawer = class MtsDrawer {
     // Body
     this._bodyEl = document.createElement('div');
     this._bodyEl.className = 'mts-drawer__body';
-    typeof this.content === 'string' ? (this._bodyEl.innerHTML = this.content) : this._bodyEl.appendChild(this.content);
+    typeof this.content === 'string' ? (this._bodyEl.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.content) : this.content) : this._bodyEl.appendChild(this.content);
 
     this._drawerEl.appendChild(header);
     this._drawerEl.appendChild(this._bodyEl);
@@ -104,7 +104,7 @@ MTS.Drawer = class MtsDrawer {
     if (this.footer) {
       const footerEl = document.createElement('div');
       footerEl.className = 'mts-drawer__footer';
-      typeof this.footer === 'string' ? (footerEl.innerHTML = this.footer) : footerEl.appendChild(this.footer);
+      typeof this.footer === 'string' ? (footerEl.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.footer) : this.footer) : footerEl.appendChild(this.footer);
       this._drawerEl.appendChild(footerEl);
     }
 

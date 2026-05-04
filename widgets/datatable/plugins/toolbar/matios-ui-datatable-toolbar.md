@@ -212,10 +212,3 @@ new MTS.DocumentManagerWorkflowPlugin({
 Requiere que el toolbar esté instalado **antes** que el DM en el array de plugins, y que el dev llame `toolbar.update()` en `onSelectionChange`.
 
 ---
-
-## Changelog
-
-| Versión | Cambios |
-|---|---|
-| 1.2.0 | `addButtons(buttons, id)` / `removeButtons(id)` para inyección desde plugins externos |
-| 1.1.0 | Versión inicial |

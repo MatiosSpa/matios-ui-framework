@@ -30,32 +30,34 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
   <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
   <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="./matios-ui-stepper.css">
   <script src="../../support/demo-shared.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="./matios-ui-stepper.js"></script>
 </head>
 <body>
-<div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
-  <button class="demo-btn-sm demo-btn-sep">—</button>
-  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
-</div>
 
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Stepper</h1>
     <p>Wizard + progress. Componente oficial unificado para flujos, checkout, compact y dots.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-stepper.md')">Documentación</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
@@ -70,47 +72,19 @@
 </div>
 
 <script>
-function esc(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
 function indentHtml(html) {
-  var indent = 0;
-  var step = 2;
+  var indent = 0, step = 2;
   var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
   var result = '';
   var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
   tokens.forEach(function(tok) {
     var t = tok.trim();
     if (!t) return;
-    if (/^<\//.test(t)) {
-      indent = Math.max(0, indent - step);
-      result += ' '.repeat(indent) + t + '\n';
-    } else if (/^<[^!]/.test(t)) {
-      result += ' '.repeat(indent) + t + '\n';
-      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
-      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
-    } else {
-      var text = t.replace(/\s+/g, ' ');
-      if (text) result += ' '.repeat(indent) + text + '\n';
-    }
+    if (/^<\//.test(t)) { indent = Math.max(0, indent - step); result += ' '.repeat(indent) + t + '\n'; }
+    else if (/^<[^!]/.test(t)) { result += ' '.repeat(indent) + t + '\n'; var tag = (t.match(/^<([a-z][a-z0-9-]*)/i)||[])[1]||''; if (!voids.test(tag) && !/\/>$/.test(t)) indent += step; }
+    else { var text = t.replace(/\s+/g,' '); if (text) result += ' '.repeat(indent) + text + '\n'; }
   });
-  return result.replace(/\s+$/, '');
-}
-
-function htmlTab(previewHtml) {
-  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
-    esc(indentHtml(previewHtml)) +
-  '</pre>';
-}
-
-function jsTab(code) {
-  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
-    esc(code) +
-  '</pre>';
+  return result.trimEnd();
 }
 
 function makeSection(id, previewHtml, jsCode, initFn, height) {
@@ -119,11 +93,13 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
     height: height || '380px',
     lazy: false,
     tabs: [
-      { id: id + '-preview', label: 'Preview', content: previewHtml },
-      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
-      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' }
     ]
   });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
 
@@ -144,11 +120,12 @@ var checkoutStepper;
 var compactStepper;
 var statusStepper;
 
-var preview_s1 = `
-<div class="demo-stack">
-  <div id="stepper-wizard"></div>
-  <div class="result-box" id="stepper-result">— navega los pasos —</div>
-</div>`;
+var preview_s1 = [
+'<div class="demo-stack">',
+'  <div id="stepper-wizard"></div>',
+'  <div class="result-box" id="stepper-result">— navega los pasos —</div>',
+'</div>'
+].join('\n');
 
 var js_s1 = [
 "const wizardStepper = new MTS.Stepper('#stepper-wizard', {",
@@ -164,17 +141,18 @@ var js_s1 = [
 "});"
 ].join('\n');
 
-var preview_s2 = `
-<div class="demo-stack">
-  <div id="stepper-checkout"></div>
-  <div class="demo-row">
-    <button type="button" id="btn-checkout-prev">Prev</button>
-    <button type="button" id="btn-checkout-next">Next</button>
-    <button type="button" id="btn-checkout-go0">goTo(0)</button>
-    <button type="button" id="btn-checkout-go3">goTo(3)</button>
-  </div>
-  <div class="result-box" id="stepper-checkout-result">— navega el checkout —</div>
-</div>`;
+var preview_s2 = [
+'<div class="demo-stack">',
+'  <div id="stepper-checkout"></div>',
+'  <div class="demo-row">',
+'    <button type="button" id="btn-checkout-prev">Prev</button>',
+'    <button type="button" id="btn-checkout-next">Next</button>',
+'    <button type="button" id="btn-checkout-go0">goTo(0)</button>',
+'    <button type="button" id="btn-checkout-go3">goTo(3)</button>',
+'  </div>',
+'  <div class="result-box" id="stepper-checkout-result">— navega el checkout —</div>',
+'</div>'
+].join('\n');
 
 var js_s2 = [
 "const checkoutStepper = new MTS.Stepper('#stepper-checkout', {",
@@ -197,11 +175,12 @@ var js_s2 = [
 "checkoutStepper.goTo(3);"
 ].join('\n');
 
-var preview_s3 = `
-<div class="demo-stack">
-  <div id="stepper-compact"></div>
-  <div class="result-box" id="stepper-compact-result">— haz click en los pasos —</div>
-</div>`;
+var preview_s3 = [
+'<div class="demo-stack">',
+'  <div id="stepper-compact"></div>',
+'  <div class="result-box" id="stepper-compact-result">— haz click en los pasos —</div>',
+'</div>'
+].join('\n');
 
 var js_s3 = [
 "const compactStepper = new MTS.Stepper('#stepper-compact', {",
@@ -221,19 +200,20 @@ var js_s3 = [
 "});"
 ].join('\n');
 
-var preview_s4 = `
-<div class="demo-stack">
-  <div class="demo-label">Pipeline tracker</div>
-  <div id="stepper-dots"></div>
-  <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:-4px;font-size:11px;color:var(--mts-text-muted);text-align:center">
-    <div>Trigger</div>
-    <div>Build</div>
-    <div>Tests</div>
-    <div>Deploy</div>
-    <div>Live</div>
-  </div>
-  <div class="result-box" id="stepper-dots-result">build #184 · Tests running</div>
-</div>`;
+var preview_s4 = [
+'<div class="demo-stack">',
+'  <div class="demo-label">Pipeline tracker</div>',
+'  <div id="stepper-dots"></div>',
+'  <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:-4px;font-size:11px;color:var(--mts-text-muted);text-align:center">',
+'    <div>Trigger</div>',
+'    <div>Build</div>',
+'    <div>Tests</div>',
+'    <div>Deploy</div>',
+'    <div>Live</div>',
+'  </div>',
+'  <div class="result-box" id="stepper-dots-result">build #184 · Tests running</div>',
+'</div>'
+].join('\n');
 
 var js_s4 = [
 "const pipelineStepper = new MTS.Stepper('#stepper-dots', {",
@@ -254,17 +234,18 @@ var js_s4 = [
 "});"
 ].join('\n');
 
-var preview_s5 = `
-<div class="demo-stack">
-  <div id="stepper-status"></div>
-  <div class="demo-row" style="flex-wrap:wrap">
-    <button type="button" id="btn-status-error">setStepStatus(1, 'error')</button>
-    <button type="button" id="btn-status-pending">setStepStatus(1, 'pending')</button>
-    <button type="button" id="btn-status-prev">Prev</button>
-    <button type="button" id="btn-status-next">Next</button>
-  </div>
-  <div class="result-box" id="stepper-status-result">— usa la API —</div>
-</div>`;
+var preview_s5 = [
+'<div class="demo-stack">',
+'  <div id="stepper-status"></div>',
+'  <div class="demo-row" style="flex-wrap:wrap">',
+'    <button type="button" id="btn-status-error">setStepStatus(1, \'error\')</button>',
+'    <button type="button" id="btn-status-pending">setStepStatus(1, \'pending\')</button>',
+'    <button type="button" id="btn-status-prev">Prev</button>',
+'    <button type="button" id="btn-status-next">Next</button>',
+'  </div>',
+'  <div class="result-box" id="stepper-status-result">— usa la API —</div>',
+'</div>'
+].join('\n');
 
 var js_s5 = [
 "const statusStepper = new MTS.Stepper('#stepper-status', {",

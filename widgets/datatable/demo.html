@@ -33,6 +33,7 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
   <link rel="stylesheet" href="../../support/demo-shared.css">
   <link rel="stylesheet" href="../../navigation/matios-ui-accordion/matios-ui-accordion.css">
@@ -51,19 +52,6 @@
 </head>
 <body>
 
-<div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
-  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
-  <button class="demo-btn-sm demo-btn-sep">—</button>
-  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setAccent('corporate')">Corporate</button>
-  <button class="demo-btn-sm" onclick="setAccent('navy')">Navy</button>
-  <button class="demo-btn-sm" onclick="setAccent('emerald')">Emerald</button>
-  <button class="demo-btn-sm" onclick="setAccent('petrol')">Petrol</button>
-  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
-</div>
 
 <div class="demo-page">
 
@@ -87,8 +75,7 @@
     { id: 'd7',  label: '7 — MTS.DataTableFilterPlugin (filtros con chips)',                     src: 'demos/demo_8/demo.html'  },
     { id: 'd8',  label: '8 — MTS.DataTableColumnVisibilityPlugin (toggle de columnas)',          src: 'demos/demo_9/demo.html'  },
     { id: 'd9',  label: '9 — MTS.DataTableExpandRowPlugin (filas expandibles)',                  src: 'demos/demo_10/demo.html' },
-    { id: 'd10', label: '10 — DataTable + DocumentManager Plugin',                               src: 'demos/demo_11/demo.html' },
-    { id: 'd11', label: '11 — DocumentManagerPreviewPlugin (modal fullscreen + panel lateral)', src: 'demos/demo_12/demo.html' },
+    { id: 'd10', label: '10 — DocumentManager completo (Upload + Preview + Workflow + Filter + ColVis)', src: 'demos/demo_11/demo.html' },
   ];
 
   /* Propaga modo y acento activo al iframe que se abre */
@@ -106,7 +93,7 @@
       id:      d.id,
       title:   d.label,
       content: `<iframe
-                  class="dt-demo-frame"
+                  class="dt-demo-frame demo-launcher__iframe"
                   data-src="${d.src}"
                   title="${d.label}">
                 </iframe>`,

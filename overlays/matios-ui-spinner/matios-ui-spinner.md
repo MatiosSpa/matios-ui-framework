@@ -1,7 +1,7 @@
 # MTS.Spinner
 
-[EN] Animated loading indicator with five variants, five sizes, custom colors, label text and full-screen overlay mode.
-[ES] Indicador de carga animado con cinco variantes, cinco tamaños, colores personalizados, texto de label y modo overlay pantalla completa.
+🇬🇧 Animated loading indicator with five variants, five sizes, custom colors, label text and full-screen overlay mode.
+🇪🇸 Indicador de carga animado con cinco variantes, cinco tamaños, colores personalizados, texto de label y modo overlay pantalla completa.
 
 ---
 
@@ -17,13 +17,13 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
 | `variant` | `string` | `'circle'` | `'circle'` · `'dots'` · `'bars'` · `'pulse'` · `'ring'` |
 | `size` | `string` | `'md'` | `'xs'` · `'sm'` · `'md'` · `'lg'` · `'xl'` |
-| `color` | `string` | `null` | [EN] Custom CSS color / [ES] Color CSS personalizado |
-| `label` | `string` | `''` | [EN] Text below the spinner / [ES] Texto debajo del spinner |
-| `overlay` | `boolean` | `false` | [EN] Full-screen overlay mode / [ES] Modo overlay pantalla completa |
+| `color` | `string` | `null` | 🇬🇧 Custom CSS color / 🇪🇸 Color CSS personalizado |
+| `label` | `string` | `''` | 🇬🇧 Text below the spinner / 🇪🇸 Texto debajo del spinner |
+| `overlay` | `boolean` | `false` | 🇬🇧 Full-screen overlay mode / 🇪🇸 Modo overlay pantalla completa |
 
 ---
 
@@ -119,10 +119,3 @@ spinner.destroy()
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingüe, docs estandarizados |
-| 1.0.0 | [EN] Initial release — circle/dots/bars/pulse/ring, overlay / [ES] Versión inicial |

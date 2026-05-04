@@ -1,7 +1,7 @@
 # MTS.Tabs
 
-[EN] Tab component with underline, pill and card variants, horizontal and vertical layout, lazy rendering, icons and badges.
-[ES] Componente de pestañas con variantes underline, pill y card, layout horizontal y vertical, renderizado lazy, íconos y badges.
+🇬🇧 Tab component with underline, pill and card variants, horizontal and vertical layout, lazy rendering, icons and badges.
+🇪🇸 Componente de pestañas con variantes underline, pill y card, layout horizontal y vertical, renderizado lazy, íconos y badges.
 
 ---
 
@@ -17,31 +17,31 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `tabs` | `array` | `[]` | [EN] Tab items (see below) / [ES] Ítems de pestañas |
-| `active` | `string` | first tab | [EN] Initially active tab ID / [ES] ID de la pestaña activa inicial |
-| `variant` | `string` | `'underline'` | `'underline'` · `'pill'` · `'card'` |
+| `tabs` | `array` | `[]` | 🇬🇧 Tab items (see below) / 🇪🇸 Ítems de pestañas |
+| `active` | `string` | first tab | 🇬🇧 Initially active tab ID / 🇪🇸 ID de la pestaña activa inicial |
+| `variant` | `string` | `'underline'` | `'underline'` · `'pill'` · `'card'` · `'bordered'` |
 | `direction` | `string` | `'horizontal'` | `'horizontal'` · `'vertical'` |
-| `lazy` | `boolean` | `true` | [EN] Render panel content only when first activated / [ES] Renderizar panel solo al activarse por primera vez |
-| `border` | `boolean` | `true` | [EN] Show separator border between nav and panels / [ES] Mostrar borde separador nav/paneles |
-| `borderWidth` | `string` | `'2px'` | [EN] Separator border width / [ES] Grosor del borde separador |
-| `height` | `string` | `'auto'` | [EN] Panel height: `'auto'` · `'stretch'` · `'200px'` / [ES] Alto del panel |
-| `stretch` | `boolean` | `false` | [EN] Alias for `height:'stretch'` / [ES] Alias de `height:'stretch'` |
-| `navWidth` | `string` | `null` | [EN] Nav width in vertical mode (e.g. `'200px'`) / [ES] Ancho del nav en vertical |
-| `panelBorder` | `boolean` | `true` | [EN] Left border on panel in vertical mode / [ES] Borde izquierdo en panel vertical |
-| `onChange` | `function` | — | [EN] Fires when active tab changes / [ES] Se dispara al cambiar la pestaña activa |
+| `lazy` | `boolean` | `false` | 🇬🇧 Render panel content only when first activated / 🇪🇸 Renderizar panel solo al activarse por primera vez |
+| `border` | `boolean` | `true` | 🇬🇧 Show separator border between nav and panels / 🇪🇸 Mostrar borde separador nav/paneles |
+| `borderWidth` | `string` | `'2px'` | 🇬🇧 Separator border width / 🇪🇸 Grosor del borde separador |
+| `height` | `string` | `'360px'` | 🇬🇧 Panel height: `'auto'` · `'stretch'` · `'200px'` / 🇪🇸 Alto del panel |
+| `stretch` | `boolean` | `false` | 🇬🇧 Alias for `height:'stretch'` / 🇪🇸 Alias de `height:'stretch'` |
+| `navWidth` | `string` | `null` | 🇬🇧 Nav width in vertical mode (e.g. `'200px'`) / 🇪🇸 Ancho del nav en vertical |
+| `panelBorder` | `boolean` | `true` | 🇬🇧 Left border on panel in vertical mode / 🇪🇸 Borde izquierdo en panel vertical |
+| `onChange` | `function` | — | 🇬🇧 Fires when active tab changes / 🇪🇸 Se dispara al cambiar la pestaña activa |
 
 ### Tab item schema / Esquema de ítem
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `label` | `string` | [EN] Tab label / [ES] Texto de la pestaña |
-| `content` | `string` | [EN] Panel HTML content / [ES] Contenido HTML del panel |
-| `icon` | `string` | [EN] Icon HTML (optional) / [ES] HTML del ícono (opcional) |
-| `badge` | `string\|number` | [EN] Badge text (optional) / [ES] Texto del badge (opcional) |
-| `disabled` | `boolean` | [EN] Disables the tab / [ES] Deshabilita la pestaña |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `label` | `string` | 🇬🇧 Tab label / 🇪🇸 Texto de la pestaña |
+| `content` | `string` | 🇬🇧 Panel HTML content / 🇪🇸 Contenido HTML del panel |
+| `icon` | `string` | 🇬🇧 Icon HTML (optional) / 🇪🇸 HTML del ícono (opcional) |
+| `badge` | `string\|number` | 🇬🇧 Badge text (optional) / 🇪🇸 Texto del badge (opcional) |
+| `disabled` | `boolean` | 🇬🇧 Disables the tab / 🇪🇸 Deshabilita la pestaña |
 
 ---
 
@@ -154,10 +154,3 @@ document.getElementById('my-tabs')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 1.0.0 | [EN] Initial release — underline/pill/card, vertical, lazy, icons, badges / [ES] Versión inicial |

@@ -79,22 +79,20 @@ MTS.Tabs = class MtsTabs {
   addTab(tab)    { this.tabs.push(tab); this._build(); return this; }
   removeTab(id)  { this.tabs = this.tabs.filter(t => t.id !== id); if (this.active === id) this.active = this.tabs[0]?.id; this._build(); return this; }
   on(e, cb)      { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
-  destroy()      { this._el.innerHTML = ''; }
+  destroy()      { this._el.replaceChildren(); }
 
   _build() {
-    this._el.innerHTML = '';
+    this._el.replaceChildren();
     // Resetear clase limpia â€” quitar modificadores del build anterior
+    const isStretch = this.stretch || this.height === 'stretch';
     this._syncClasses([
       `mts-tabs`,
       `mts-tabs--${this.variant}`,
       `mts-tabs--${this.direction}`,
-      !this.stretch && this.height !== 'auto' && this.height !== 'stretch' ? 'mts-tabs--fixed-panels' : ''
+      isStretch ? 'mts-tabs--stretch' : '',
+      !isStretch && this.height !== 'auto' ? 'mts-tabs--fixed-panels' : ''
     ]);
     this._el.style.cssText = '';
-    /* Altura stretch */
-    if (this.stretch || this.height === 'stretch') {
-      this._el.style.cssText = 'height:100%;display:flex;flex-direction:' + (this.direction==='vertical'?'row':'column') + ';';
-    }
 
     // Nav
     this._navEl = document.createElement('div');
@@ -122,7 +120,7 @@ MTS.Tabs = class MtsTabs {
       btn.id = `mts-tab-${tab.id}`;
       btn.disabled = tab.disabled ?? false;
 
-      if (tab.icon) { const ic = document.createElement('span'); ic.className = 'mts-tabs__tab-icon'; ic.innerHTML = tab.icon; btn.appendChild(ic); }
+      if (tab.icon) { const ic = document.createElement('span'); ic.className = 'mts-tabs__tab-icon'; ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(tab.icon) : tab.icon; btn.appendChild(ic); }
       const lbl = document.createElement('span'); lbl.textContent = tab.label; btn.appendChild(lbl);
       if (tab.badge != null) { const b = document.createElement('span'); b.className = 'mts-tabs__tab-badge'; b.textContent = tab.badge; btn.appendChild(b); }
 
@@ -172,7 +170,7 @@ MTS.Tabs = class MtsTabs {
   }
 
   _renderContent(panel, tab) {
-    if (typeof tab.content === 'string') panel.innerHTML = tab.content;
+    if (typeof tab.content === 'string') panel.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(tab.content) : tab.content;
     else if (tab.content instanceof Element) panel.appendChild(tab.content);
     else if (typeof tab.content === 'function') panel.appendChild(tab.content());
   }

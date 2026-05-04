@@ -97,7 +97,7 @@ MTS.FileUpload = class MtsFileUpload {
 
     const lbl = document.createElement('div');
     lbl.className = 'mts-fileupload__label';
-    lbl.innerHTML = this.label;
+    lbl.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.label) : this.label;
     this._zone.appendChild(lbl);
 
     if (this.hint) {
@@ -212,7 +212,10 @@ MTS.FileUpload = class MtsFileUpload {
         thumb.appendChild(img);
       } else {
         const ext = file.name.split('.').pop().toUpperCase().slice(0, 4);
-        thumb.innerHTML = `<span style="font-size:10px;font-weight:700;color:var(--mts-color-primary)">${ext}</span>`;
+        var _extSpan = document.createElement('span');
+        _extSpan.style.cssText = 'font-size:10px;font-weight:700;color:var(--mts-color-primary)';
+        _extSpan.textContent = ext;
+        thumb.appendChild(_extSpan);
       }
       item.appendChild(thumb);
 

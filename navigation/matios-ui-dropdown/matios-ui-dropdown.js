@@ -79,7 +79,7 @@ MTS.Dropdown = class MtsDropdown {
       li.className = 'mts-dropdown__item' + (item.disabled ? ' mts-dropdown__item--disabled' : '') + (item.danger ? ' mts-dropdown__item--danger' : '');
       li.setAttribute('role', 'menuitem');
 
-      if (item.icon) { const ic = document.createElement('span'); ic.className = 'mts-dropdown__item-icon'; ic.innerHTML = item.icon; li.appendChild(ic); }
+      if (item.icon) { const ic = document.createElement('span'); ic.className = 'mts-dropdown__item-icon'; ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(item.icon) : item.icon; li.appendChild(ic); }
       const lbl = document.createElement('span'); lbl.textContent = item.label; li.appendChild(lbl);
       if (item.shortcut) { const sc = document.createElement('span'); sc.className = 'mts-dropdown__shortcut'; sc.textContent = item.shortcut; li.appendChild(sc); }
       if (item.items?.length) { const arr = document.createElement('span'); arr.className = 'mts-dropdown__arrow'; arr.innerHTML = '›'; li.appendChild(arr); this._buildSubmenu(li, item.items); }
@@ -101,7 +101,7 @@ MTS.Dropdown = class MtsDropdown {
       const li = document.createElement('li');
       li.className = 'mts-dropdown__item' + (item.disabled ? ' mts-dropdown__item--disabled' : '');
       li.setAttribute('role', 'menuitem');
-      if (item.icon) { const ic = document.createElement('span'); ic.className = 'mts-dropdown__item-icon'; ic.innerHTML = item.icon; li.appendChild(ic); }
+      if (item.icon) { const ic = document.createElement('span'); ic.className = 'mts-dropdown__item-icon'; ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(item.icon) : item.icon; li.appendChild(ic); }
       const lbl = document.createElement('span'); lbl.textContent = item.label; li.appendChild(lbl);
       if (!item.disabled) li.addEventListener('click', (e) => { e.stopPropagation(); this.close(); if (item.onClick) item.onClick(item); this._emit('select', { id: item.id, item }); });
       sub.appendChild(li);

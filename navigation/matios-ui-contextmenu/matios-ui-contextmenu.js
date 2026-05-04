@@ -115,7 +115,7 @@ MTS.ContextMenu = class MtsContextMenu {
       if (item.icon) {
         const ico = document.createElement('span');
         ico.className = 'mts-contextmenu__icon';
-        ico.innerHTML = item.icon;
+        ico.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(item.icon) : item.icon;
         li.appendChild(ico);
       }
       const lbl = document.createElement('span');

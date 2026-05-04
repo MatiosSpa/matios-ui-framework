@@ -269,7 +269,11 @@ MTS.Kanban = class MtsKanban {
       tagsWrap.querySelectorAll('.mts-kanban__tag-pill').forEach(p => p.remove());
       _tags.forEach((tag, i) => {
         const pill = F('span', 'mts-kanban__tag-pill');
-        pill.innerHTML = tag + ' <span class="mts-kanban__tag-remove">×</span>';
+        pill.textContent = tag + ' ';
+        const _tagRemove = document.createElement('span');
+        _tagRemove.className = 'mts-kanban__tag-remove';
+        _tagRemove.textContent = '×';
+        pill.appendChild(_tagRemove);
         pill.querySelector('.mts-kanban__tag-remove').addEventListener('click', () => {
           _tags.splice(i, 1); renderTags();
         });

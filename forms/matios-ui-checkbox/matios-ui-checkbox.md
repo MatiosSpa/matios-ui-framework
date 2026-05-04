@@ -1,7 +1,7 @@
 # MTS.Checkbox
 
-[EN] Checkbox component — individual with indeterminate state, and groups with vertical or horizontal layout.
-[ES] Componente checkbox — individual con estado indeterminado, y grupos con layout vertical u horizontal.
+🇬🇧 Checkbox component — individual with indeterminate state, and groups with vertical or horizontal layout.
+🇪🇸 Componente checkbox — individual con estado indeterminado, y grupos con layout vertical u horizontal.
 
 ---
 
@@ -17,33 +17,33 @@
 
 ## MTS.Checkbox — Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `label` | `string` | `''` | [EN] Text next to checkbox / [ES] Texto junto al checkbox |
-| `checked` | `boolean` | `false` | [EN] Initial checked state / [ES] Estado inicial |
-| `indeterminate` | `boolean` | `false` | [EN] Partial selection state / [ES] Estado de selección parcial |
-| `disabled` | `boolean` | `false` | [EN] Disables interaction / [ES] Deshabilita la interacción |
-| `value` | `string` | `''` | [EN] Value associated with this checkbox / [ES] Valor asociado a este checkbox |
-| `onChange` | `function` | — | [EN] Fires on state change / [ES] Se dispara al cambiar el estado |
+| `label` | `string` | `''` | 🇬🇧 Text next to checkbox / 🇪🇸 Texto junto al checkbox |
+| `checked` | `boolean` | `false` | 🇬🇧 Initial checked state / 🇪🇸 Estado inicial |
+| `indeterminate` | `boolean` | `false` | 🇬🇧 Partial selection state / 🇪🇸 Estado de selección parcial |
+| `disabled` | `boolean` | `false` | 🇬🇧 Disables interaction / 🇪🇸 Deshabilita la interacción |
+| `value` | `string` | `''` | 🇬🇧 Value associated with this checkbox / 🇪🇸 Valor asociado a este checkbox |
+| `onChange` | `function` | — | 🇬🇧 Fires on state change / 🇪🇸 Se dispara al cambiar el estado |
 
 ---
 
 ## MTS.CheckboxGroup — Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `options` | `array` | `[]` | [EN] `[{ value, label, disabled? }]` |
-| `value` | `array` | `[]` | [EN] Initially selected values / [ES] Valores seleccionados inicialmente |
-| `disabled` | `boolean` | `false` | [EN] Disables all checkboxes / [ES] Deshabilita todos los checkboxes |
-| `horizontal` | `boolean` | `false` | [EN] Horizontal layout / [ES] Layout horizontal |
-| `onChange` | `function` | — | [EN] Fires when selection changes / [ES] Se dispara al cambiar la selección |
+| `options` | `array` | `[]` | 🇬🇧 `[{ value, label, disabled? }]` |
+| `value` | `array` | `[]` | 🇬🇧 Initially selected values / 🇪🇸 Valores seleccionados inicialmente |
+| `disabled` | `boolean` | `false` | 🇬🇧 Disables all checkboxes / 🇪🇸 Deshabilita todos los checkboxes |
+| `horizontal` | `boolean` | `false` | 🇬🇧 Horizontal layout / 🇪🇸 Layout horizontal |
+| `onChange` | `function` | — | 🇬🇧 Fires when selection changes / 🇪🇸 Se dispara al cambiar la selección |
 
 ---
 
 ## Events / Eventos
 
-[EN] Use `onChange` in the constructor. This is the recommended approach.
-[ES] Usa `onChange` en el constructor. Este es el enfoque recomendado.
+🇬🇧 Use `onChange` in the constructor. This is the recommended approach.
+🇪🇸 Usa `onChange` en el constructor. Este es el enfoque recomendado.
 
 ```js
 // Individual checkbox / Checkbox individual
@@ -190,11 +190,3 @@ document.getElementById('my-checkbox')
 | `onChange` | `mts:checkbox:change` |
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 2.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 2.0.0 | [EN] Split from monolithic checkbox file, fix horizontal layout / [ES] Separado del archivo monolítico, fix layout horizontal |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

@@ -1,7 +1,7 @@
 # MTS.Label
 
-[EN] Form label component with required/optional badges, hint text, error state and size variants. Also usable as pure HTML with CSS classes.
-[ES] Componente label de formulario con badges requerido/opcional, texto de ayuda, estado de error y variantes de tamaño. También usable como HTML puro con clases CSS.
+🇬🇧 Form label component with required/optional badges, hint text, error state and size variants. Also usable as pure HTML with CSS classes.
+🇪🇸 Componente label de formulario con badges requerido/opcional, texto de ayuda, estado de error y variantes de tamaño. También usable como HTML puro con clases CSS.
 
 ---
 
@@ -17,44 +17,44 @@
 
 ## CSS Classes / Clases CSS
 
-[EN] Use directly in HTML without JavaScript.
-[ES] Usa directamente en HTML sin JavaScript.
+🇬🇧 Use directly in HTML without JavaScript.
+🇪🇸 Usa directamente en HTML sin JavaScript.
 
-| Class / Clase | [EN] Description / [ES] Descripción |
+| Class / Clase | 🇬🇧 Description / 🇪🇸 Descripción |
 |---------------|--------------------------------------|
-| `.mts-label` | [EN] Base label / [ES] Label base |
-| `.mts-label--required` | [EN] Shows red asterisk `*` / [ES] Muestra asterisco rojo `*` |
-| `.mts-label--optional` | [EN] Shows optional badge / [ES] Muestra badge opcional |
-| `.mts-label--hidden` | [EN] Visually hidden, screen-reader accessible / [ES] Oculto visualmente, accesible |
-| `.mts-label--sm` | [EN] Small size / [ES] Tamaño pequeño |
-| `.mts-label--lg` | [EN] Large size, semibold / [ES] Tamaño grande, semibold |
-| `.mts-label__text` | [EN] Inner text span / [ES] Span interno del texto |
-| `.mts-label__optional` | [EN] Optional badge span / [ES] Span badge opcional |
-| `.mts-form-hint` | [EN] Helper text below field / [ES] Texto de ayuda debajo del campo |
-| `.mts-form-error` | [EN] Error text below field / [ES] Texto de error debajo del campo |
+| `.mts-label` | 🇬🇧 Base label / 🇪🇸 Label base |
+| `.mts-label--required` | 🇬🇧 Shows red asterisk `*` / 🇪🇸 Muestra asterisco rojo `*` |
+| `.mts-label--optional` | 🇬🇧 Shows optional badge / 🇪🇸 Muestra badge opcional |
+| `.mts-label--hidden` | 🇬🇧 Visually hidden, screen-reader accessible / 🇪🇸 Oculto visualmente, accesible |
+| `.mts-label--sm` | 🇬🇧 Small size / 🇪🇸 Tamaño pequeño |
+| `.mts-label--lg` | 🇬🇧 Large size, semibold / 🇪🇸 Tamaño grande, semibold |
+| `.mts-label__text` | 🇬🇧 Inner text span / 🇪🇸 Span interno del texto |
+| `.mts-label__optional` | 🇬🇧 Optional badge span / 🇪🇸 Span badge opcional |
+| `.mts-form-hint` | 🇬🇧 Helper text below field / 🇪🇸 Texto de ayuda debajo del campo |
+| `.mts-form-error` | 🇬🇧 Error text below field / 🇪🇸 Texto de error debajo del campo |
 
 ---
 
 ## Options / Opciones (JavaScript)
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `text` | `string` | element text | [EN] Label text / [ES] Texto del label |
-| `required` | `boolean` | `false` | [EN] Show red asterisk / [ES] Mostrar asterisco rojo |
-| `optional` | `boolean` | `false` | [EN] Show optional badge / [ES] Mostrar badge opcional |
-| `hint` | `string` | `null` | [EN] Helper text / [ES] Texto de ayuda |
-| `error` | `string` | `null` | [EN] Error text / [ES] Texto de error |
+| `text` | `string` | element text | 🇬🇧 Label text / 🇪🇸 Texto del label |
+| `required` | `boolean` | `false` | 🇬🇧 Show red asterisk / 🇪🇸 Mostrar asterisco rojo |
+| `optional` | `boolean` | `false` | 🇬🇧 Show optional badge / 🇪🇸 Mostrar badge opcional |
+| `hint` | `string` | `null` | 🇬🇧 Helper text / 🇪🇸 Texto de ayuda |
+| `error` | `string` | `null` | 🇬🇧 Error text / 🇪🇸 Texto de error |
 | `size` | `string` | `''` | `'sm'` · `''` · `'lg'` |
-| `hidden` | `boolean` | `false` | [EN] Visually hidden / [ES] Oculto visualmente |
-| `forId` | `string` | `null` | [EN] `for` attribute / [ES] Atributo `for` |
-| `className` | `string` | `''` | [EN] Extra CSS classes / [ES] Clases CSS adicionales |
+| `hidden` | `boolean` | `false` | 🇬🇧 Visually hidden / 🇪🇸 Oculto visualmente |
+| `forId` | `string` | `null` | 🇬🇧 `for` attribute / 🇪🇸 Atributo `for` |
+| `className` | `string` | `''` | 🇬🇧 Extra CSS classes / 🇪🇸 Clases CSS adicionales |
 
 ---
 
 ## HTML Usage / Uso HTML
 
-[EN] Pure HTML — no JavaScript required.
-[ES] HTML puro — no requiere JavaScript.
+🇬🇧 Pure HTML — no JavaScript required.
+🇪🇸 HTML puro — no requiere JavaScript.
 
 ```html
 <!-- Basic / Básico -->
@@ -134,8 +134,8 @@ lbl.destroy()
 
 ## In Form Groups / En grupos de formulario
 
-[EN] Label is typically used inside `.mts-form-group`:
-[ES] El label se usa típicamente dentro de `.mts-form-group`:
+🇬🇧 Label is typically used inside `.mts-form-group`:
+🇪🇸 El label se usa típicamente dentro de `.mts-form-group`:
 
 ```html
 <div class="mts-form-group">
@@ -146,10 +146,3 @@ lbl.destroy()
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual docs, standardized structure / [ES] Docs bilingüe, estructura estandarizada |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

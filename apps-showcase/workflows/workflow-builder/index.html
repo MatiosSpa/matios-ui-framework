@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
@@ -156,18 +156,18 @@
       variant: 'elevated',
       size: 'lg',
       body:
-        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
-          '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
-            '<div class="mts-d-flex mts-items-center mts-gap-2 mts-flex-wrap">' +
+        '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
+          '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
+            '<div class="mts-d-flex mts-align-items--center mts-gap-2 mts-flex--wrap">' +
               '<span id="workflow-builder-badge-status"></span>' +
               '<span id="workflow-builder-badge-stages"></span>' +
             '</div>' +
-            '<p class="mts-text-md mts-text-muted mts-m-0">Define el flujo base, ordena las etapas y luego publica una version lista para generar tareas en la bandeja.</p>' +
+            '<p class="mts-text--md mts-text-color--muted mts-m-0">Define el flujo base, ordena las etapas y luego publica una version lista para generar tareas en la bandeja.</p>' +
           '</div>' +
-          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+          '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text-md mts-text-primary">Datos base</strong>' +
-              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Nombre, tipo, modulo origen y resumen general del workflow.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Datos base</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Nombre, tipo, modulo origen y resumen general del workflow.</p>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md">' +
               '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-name"></div></div>' +
@@ -176,20 +176,20 @@
               '<div class="mts-g-col-12"><div id="workflow-builder-description"></div></div>' +
             '</div>' +
           '</section>' +
-          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
-            '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3 mts-flex-wrap">' +
+          '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
+            '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3 mts-flex--wrap">' +
               '<div>' +
-                '<strong class="mts-text-md mts-text-primary">Etapas</strong>' +
-                '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Ordena la secuencia y luego edita la etapa seleccionada.</p>' +
+                '<strong class="mts-text--md mts-text-color--primary">Etapas</strong>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Ordena la secuencia y luego edita la etapa seleccionada.</p>' +
               '</div>' +
               '<div id="workflow-builder-add-stage"></div>' +
             '</div>' +
             '<div id="workflow-builder-stages"></div>' +
           '</section>' +
-          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+          '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text-md mts-text-primary">Editar etapa seleccionada</strong>' +
-              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0" id="workflow-builder-stage-caption">Selecciona una etapa para ajustar asignacion, aprobadores, regla y SLA.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Editar etapa seleccionada</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0" id="workflow-builder-stage-caption">Selecciona una etapa para ajustar asignacion, aprobadores, regla y SLA.</p>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md">' +
               '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-stage-title"></div></div>' +
@@ -199,27 +199,27 @@
               '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-stage-sla"></div></div>' +
               '<div class="mts-g-col-12"><div id="workflow-builder-stage-note"></div></div>' +
             '</div>' +
-            '<div class="mts-d-flex mts-gap-2 mts-flex-wrap">' +
+            '<div class="mts-d-flex mts-gap-2 mts-flex--wrap">' +
               '<div id="workflow-builder-save-stage"></div>' +
               '<div id="workflow-builder-remove-stage"></div>' +
             '</div>' +
           '</section>' +
           '<div class="mts-grid mts-grid--gap-md">' +
-            '<section class="mts-surface mts-g-col-12 mts-g-col-xl-7 mts-d-flex mts-flex-col mts-gap-3">' +
+            '<section class="mts-surface mts-g-col-12 mts-g-col-xl-7 mts-d-flex mts-flex--column mts-gap-3">' +
               '<div>' +
-                '<strong class="mts-text-md mts-text-primary">Reglas base</strong>' +
-                '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Condiciones que modifican la definicion antes de publicar.</p>' +
+                '<strong class="mts-text--md mts-text-color--primary">Reglas base</strong>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Condiciones que modifican la definicion antes de publicar.</p>' +
               '</div>' +
-              '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+              '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
                 ruleRow('Monto mayor a 5000 USD', 'Agrega una revision financiera extra antes del cierre final.') +
                 ruleRow('Permiso sensible', 'Fuerza aprobador de Security en modo any-1-of-2.') +
                 ruleRow('Owner del workspace es requester', 'Salta manager review para no duplicar la decision.') +
               '</div>' +
             '</section>' +
-            '<section class="mts-surface mts-g-col-12 mts-g-col-xl-5 mts-d-flex mts-flex-col mts-gap-3">' +
+            '<section class="mts-surface mts-g-col-12 mts-g-col-xl-5 mts-d-flex mts-flex--column mts-gap-3">' +
               '<div>' +
-                '<strong class="mts-text-md mts-text-primary">Resumen</strong>' +
-                '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Estado del borrador listo para guardar o publicar.</p>' +
+                '<strong class="mts-text--md mts-text-color--primary">Resumen</strong>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Estado del borrador listo para guardar o publicar.</p>' +
               '</div>' +
               '<div class="mts-grid mts-grid--gap-md">' +
                 summaryCell('Tipo', 'Access') +
@@ -414,14 +414,14 @@
     });
 
     function summaryCell(label, value) {
-      return '<div class="mts-g-col-12 mts-g-col-md-6"><div class="mts-surface mts-p-3 mts-d-flex mts-flex-col mts-gap-1"><span class="mts-text-xs mts-text-muted">' + label + '</span><strong class="mts-text-sm mts-text-primary">' + value + '</strong></div></div>';
+      return '<div class="mts-g-col-12 mts-g-col-md-6"><div class="mts-surface mts-p-3 mts-d-flex mts-flex--column mts-gap-1"><span class="mts-text--xs mts-text-color--muted">' + label + '</span><strong class="mts-text--sm mts-text-color--primary">' + value + '</strong></div></div>';
     }
 
     function ruleRow(title, copy) {
       return '' +
-        '<article class="mts-surface mts-p-3 mts-d-flex mts-flex-col mts-gap-1">' +
-          '<strong class="mts-text-sm mts-text-primary">' + title + '</strong>' +
-          '<p class="mts-text-sm mts-text-secondary mts-m-0">' + copy + '</p>' +
+        '<article class="mts-surface mts-p-3 mts-d-flex mts-flex--column mts-gap-1">' +
+          '<strong class="mts-text--sm mts-text-color--primary">' + title + '</strong>' +
+          '<p class="mts-text--sm mts-text-color--secondary mts-m-0">' + copy + '</p>' +
         '</article>';
     }
 

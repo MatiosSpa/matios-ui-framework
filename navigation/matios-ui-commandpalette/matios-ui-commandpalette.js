@@ -218,7 +218,7 @@ MTS.CommandPalette = class MtsCommandPalette {
         if (cmd.icon) {
           const ico = document.createElement('div');
           ico.className = 'mts-cmd__item-icon';
-          ico.innerHTML = cmd.icon;
+          ico.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(cmd.icon) : cmd.icon;
           item.appendChild(ico);
         }
 

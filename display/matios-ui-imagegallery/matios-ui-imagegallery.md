@@ -1,7 +1,7 @@
 # MTS.ImageGallery
 
-[EN] Image gallery with grid, masonry and list layouts, filters, multi-selection and built-in lightbox.
-[ES] Galería de imágenes con layouts grid, masonry y list, filtros, selección múltiple y lightbox integrado.
+🇬🇧 Image gallery with grid, masonry and list layouts, filters, multi-selection and built-in lightbox.
+🇪🇸 Galería de imágenes con layouts grid, masonry y list, filtros, selección múltiple y lightbox integrado.
 
 ---
 
@@ -17,28 +17,28 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `images` | `array` | `[]` | [EN] Image items (see schema) / [ES] Ítems de imagen |
+| `images` | `array` | `[]` | 🇬🇧 Image items (see schema) / 🇪🇸 Ítems de imagen |
 | `layout` | `string` | `'grid'` | `'grid'` · `'masonry'` · `'list'` |
-| `cols` | `number` | `3` | [EN] Grid columns / [ES] Columnas del grid |
-| `gap` | `string` | `'8px'` | [EN] Gap between items / [ES] Espacio entre ítems |
-| `selectable` | `boolean` | `false` | [EN] Allow multi-selection / [ES] Permitir selección múltiple |
-| `lightbox` | `boolean` | `true` | [EN] Open lightbox on click / [ES] Abrir lightbox al hacer click |
-| `filters` | `boolean` | `false` | [EN] Show filter buttons by category / [ES] Mostrar botones de filtro por categoría |
-| `onSelect` | `function` | — | [EN] `({ selected, image }) => {}` Fires when selection changes / [ES] Se dispara al cambiar la selección |
-| `onOpen` | `function` | — | [EN] `({ image, index }) => {}` Fires when image opens in lightbox / [ES] Se dispara al abrir una imagen |
+| `cols` | `number` | `3` | 🇬🇧 Grid columns / 🇪🇸 Columnas del grid |
+| `gap` | `string` | `'8px'` | 🇬🇧 Gap between items / 🇪🇸 Espacio entre ítems |
+| `selectable` | `boolean` | `false` | 🇬🇧 Allow multi-selection / 🇪🇸 Permitir selección múltiple |
+| `lightbox` | `boolean` | `true` | 🇬🇧 Open lightbox on click / 🇪🇸 Abrir lightbox al hacer click |
+| `filters` | `boolean` | `false` | 🇬🇧 Show filter buttons by category / 🇪🇸 Mostrar botones de filtro por categoría |
+| `onSelect` | `function` | — | 🇬🇧 `({ selected, image }) => {}` Fires when selection changes / 🇪🇸 Se dispara al cambiar la selección |
+| `onOpen` | `function` | — | 🇬🇧 `({ image, index }) => {}` Fires when image opens in lightbox / 🇪🇸 Se dispara al abrir una imagen |
 
 ### Image schema / Esquema de imagen
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `src` | `string` | [EN] Image URL / [ES] URL de la imagen |
-| `thumb` | `string` | [EN] Thumbnail URL (optional) / [ES] URL de miniatura (opcional) |
-| `alt` | `string` | [EN] Alt text / [ES] Texto alternativo |
-| `caption` | `string` | [EN] Caption shown in lightbox / [ES] Pie de foto en el lightbox |
-| `category` | `string` | [EN] Filter category / [ES] Categoría para filtros |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `src` | `string` | 🇬🇧 Image URL / 🇪🇸 URL de la imagen |
+| `thumb` | `string` | 🇬🇧 Thumbnail URL (optional) / 🇪🇸 URL de miniatura (opcional) |
+| `alt` | `string` | 🇬🇧 Alt text / 🇪🇸 Texto alternativo |
+| `caption` | `string` | 🇬🇧 Caption shown in lightbox / 🇪🇸 Pie de foto en el lightbox |
+| `category` | `string` | 🇬🇧 Filter category / 🇪🇸 Categoría para filtros |
 
 ---
 
@@ -136,10 +136,3 @@ el.addEventListener('mts:imagegallery:open',   (e) => console.log(e.detail));
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Normalized to `.on()`, bilingual docs / [ES] Normalizado a `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release — grid/masonry/list, filters, selection, lightbox / [ES] Versión inicial |

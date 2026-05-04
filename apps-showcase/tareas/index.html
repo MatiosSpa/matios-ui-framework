@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-theme="dark">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -27,11 +27,11 @@
   <script src="../../display/matios-ui-emptystate/matios-ui-emptystate.js"></script>
 <style>
 *{box-sizing:border-box}
-body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;min-height:100vh;}
+body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-family:var(--mts-font-family);margin:0;min-height:100vh;}
 .app-topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:50px;background:var(--mts-bg-surface);border-bottom:1px solid var(--mts-border-color);position:sticky;top:0;z-index:100;}
-.app-topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mts-text-muted);cursor:pointer;padding:4px 8px;border-radius:var(--mts-radius-md);border:none;background:none;transition:color .15s,background .15s;font-family:var(--mts-font-family);}
-.app-topbar-back:hover{color:var(--mts-text-primary);background:var(--mts-bg-surface-2);}
-.app-topbar-title{font-size:14px;font-weight:700;color:var(--mts-text-primary);flex:1;}
+.app-topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mts-text-color--muted);cursor:pointer;padding:4px 8px;border-radius:var(--mts-radius-md);border:none;background:none;transition:color .15s,background .15s;font-family:var(--mts-font-family);}
+.app-topbar-back:hover{color:var(--mts-text-color--primary);background:var(--mts-bg-surface-2);}
+.app-topbar-title{font-size:14px;font-weight:700;color:var(--mts-text-color--primary);flex:1;}
 .app-topbar-badge{font-size:10px;padding:2px 8px;border-radius:var(--mts-radius-full);background:var(--mts-color-primary-light);color:var(--mts-color-primary);font-weight:700;}
 .app-content{padding:24px;max-width:1100px;margin:0 auto;}
 .app-card{background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:24px;}
@@ -42,12 +42,12 @@ body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var
 .app-grid-4{grid-template-columns:repeat(4,1fr);}
 .app-h2{font-size:18px;font-weight:800;margin:0 0 4px;}
 .app-h2 span{color:var(--mts-color-primary);}
-.app-sub{font-size:13px;color:var(--mts-text-muted);margin:0 0 20px;}
+.app-sub{font-size:13px;color:var(--mts-text-color--muted);margin:0 0 20px;}
 .app-divider{border:none;border-top:1px solid var(--mts-border-color);margin:20px 0;}
-.app-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);margin-bottom:6px;}
+.app-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-color--muted);margin-bottom:6px;}
 .app-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
 .app-theme{position:fixed;bottom:16px;right:16px;display:flex;gap:4px;z-index:999;}
-.app-theme-btn{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+.app-theme-btn{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-color--secondary);}
 .app-theme-btn:hover{background:var(--mts-bg-surface-2);}
 @media(max-width:640px){.app-grid-2,.app-grid-3,.app-grid-4{grid-template-columns:1fr;}}
 </style>
@@ -61,13 +61,13 @@ body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var
 .task-list{display:flex;flex-direction:column;gap:2px;}
 .task-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);transition:background .15s;}
 .task-item:hover{background:var(--mts-bg-surface-2);}
-.task-item.done .task-title{text-decoration:line-through;color:var(--mts-text-muted);}
+.task-item.done .task-title{text-decoration:line-through;color:var(--mts-text-color--muted);}
 .task-title{flex:1;font-size:14px;}
 .task-meta{display:flex;align-items:center;gap:8px;}
-.task-del{background:none;border:none;color:var(--mts-text-muted);cursor:pointer;padding:4px;border-radius:4px;font-size:16px;line-height:1;transition:color .15s;}
+.task-del{background:none;border:none;color:var(--mts-text-color--muted);cursor:pointer;padding:4px;border-radius:4px;font-size:16px;line-height:1;transition:color .15s;}
 .task-del:hover{color:var(--mts-color-danger);}
 .task-filters{display:flex;gap:6px;flex-wrap:wrap;}
-.task-filter{padding:4px 12px;border-radius:var(--mts-radius-full);font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:none;color:var(--mts-text-muted);font-family:inherit;transition:all .15s;}
+.task-filter{padding:4px 12px;border-radius:var(--mts-radius-full);font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:none;color:var(--mts-text-color--muted);font-family:inherit;transition:all .15s;}
 .task-filter.active{background:var(--mts-color-primary);border-color:var(--mts-color-primary);color:#fff;}
 </style>
 <div class="task-content">
@@ -140,7 +140,7 @@ function renderTasks(){
     var dot='<span style="width:8px;height:8px;border-radius:50%;background:'+PRIO_COLORS[task.priority]+';flex-shrink:0;"></span>';
     item.innerHTML='<input type="checkbox" '+(task.done?'checked':'')+' style="cursor:pointer;width:16px;height:16px;accent-color:var(--mts-color-primary);">'
       +'<span class="task-title">'+task.title+'</span>'
-      +'<span class="task-meta">'+dot+'<span style="font-size:10px;color:var(--mts-text-muted);">'+PRIO_LABELS[task.priority]+'</span></span>'
+      +'<span class="task-meta">'+dot+'<span style="font-size:10px;color:var(--mts-text-color--muted);">'+PRIO_LABELS[task.priority]+'</span></span>'
       +'<button class="task-del" title="Eliminar">×</button>';
     item.querySelector('input').addEventListener('change',function(e){
       task.done=e.target.checked;renderTasks();

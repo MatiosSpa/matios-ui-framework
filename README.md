@@ -222,6 +222,9 @@ This makes the framework:
 - Context Menu
 - SideNav
 - TabBar
+- TopBar
+- StatusBar
+- Menu
 - ScrollSpy
 - Intersection Reveal
 
@@ -257,9 +260,11 @@ This makes the framework:
 ### Layout
 
 - Grid
+- Splitter
+- Scroll
+- Shell
 - ScrollSpy
 - Intersection Reveal
-- Splitter
 
 ### Data
 
@@ -272,6 +277,8 @@ This makes the framework:
 - HttpClient
 - CodeBlock
 - DevPanel
+- DiagnosticsPanel
+- JsonViewer
 
 ### Support
 

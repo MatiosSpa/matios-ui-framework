@@ -1,7 +1,7 @@
 # MTS.Badge
 
-[EN] Badge, pill and counter component. Works via CSS classes alone or with JS for dynamic counters, removable tags and notification dots.
-[ES] Componente de badge, pill y contador. Funciona con clases CSS solas o con JS para contadores dinámicos, tags removibles y dots de notificación.
+🇬🇧 Badge, pill and counter component. Works via CSS classes alone or with JS for dynamic counters, removable tags and notification dots.
+🇪🇸 Componente de badge, pill y contador. Funciona con clases CSS solas o con JS para contadores dinámicos, tags removibles y dots de notificación.
 
 ---
 
@@ -17,8 +17,8 @@
 
 ## CSS Only / Solo CSS
 
-[EN] No JS needed for static badges — just add classes.
-[ES] Sin JS para badges estáticos — solo agrega clases.
+🇬🇧 No JS needed for static badges — just add classes.
+🇪🇸 Sin JS para badges estáticos — solo agrega clases.
 
 ```html
 <!-- Variants / Variantes -->
@@ -42,18 +42,18 @@
 
 ## Options / Opciones (JS)
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `label` | `string` | element text | [EN] Badge text / [ES] Texto del badge |
-| `count` | `number` | `null` | [EN] Numeric counter / [ES] Contador numérico |
-| `maxCount` | `number` | `99` | [EN] Max before showing "99+" / [ES] Máximo antes de mostrar "99+" |
-| `dot` | `boolean` | `false` | [EN] Dot only, no text / [ES] Solo punto, sin texto |
+| `label` | `string` | element text | 🇬🇧 Badge text / 🇪🇸 Texto del badge |
+| `count` | `number` | `null` | 🇬🇧 Numeric counter / 🇪🇸 Contador numérico |
+| `maxCount` | `number` | `99` | 🇬🇧 Max before showing "99+" / 🇪🇸 Máximo antes de mostrar "99+" |
+| `dot` | `boolean` | `false` | 🇬🇧 Dot only, no text / 🇪🇸 Solo punto, sin texto |
 | `variant` | `string` | `'default'` | `'default'` · `'primary'` · `'success'` · `'warning'` · `'danger'` · `'info'` · `'accent'` |
 | `shape` | `string` | `'pill'` | `'pill'` · `'square'` · `'dot'` |
 | `size` | `string` | `'md'` | `'xs'` · `'sm'` · `'md'` · `'lg'` |
-| `removable` | `boolean` | `false` | [EN] Show remove button / [ES] Mostrar botón de remover |
-| `pulse` | `boolean` | `false` | [EN] Pulse animation (for notification dots) / [ES] Animación de pulso |
-| `onRemove` | `function` | — | [EN] Fires when remove button is clicked / [ES] Se dispara al hacer click en remover |
+| `removable` | `boolean` | `false` | 🇬🇧 Show remove button / 🇪🇸 Mostrar botón de remover |
+| `pulse` | `boolean` | `false` | 🇬🇧 Pulse animation (for notification dots) / 🇪🇸 Animación de pulso |
+| `onRemove` | `function` | — | 🇬🇧 Fires when remove button is clicked / 🇪🇸 Se dispara al hacer click en remover |
 
 ---
 
@@ -151,10 +151,3 @@ document.getElementById('my-badge')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] `onRemove` normalized to `.on()`, bilingual docs / [ES] `onRemove` normalizado a `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release — CSS variants, JS counter, removable, pulse dot / [ES] Versión inicial |

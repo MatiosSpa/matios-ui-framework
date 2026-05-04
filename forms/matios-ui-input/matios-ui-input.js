@@ -27,6 +27,8 @@ MTS.Input = class MtsInput {
    * @param {boolean}  options.showCount   Muestra contador de caracteres
    * @param {number}   options.rows        Para textarea â€” default: 4
    * @param {object}   options.rules       Reglas de validaciÃ³n { required, min, max, minLength, maxLength, pattern, custom }
+   * @param {boolean}  options.selectOnFocus   Selecciona todo el texto al recibir foco — default: false
+   * @param {boolean}  options.nextOnEnter     Enter mueve el foco al siguiente input en el DOM — default: false. No aplica a textarea
    * @param {boolean}  options.validateOnBlur
    * @param {boolean}  options.validateOnInput
    * @param {function} options.onChange
@@ -54,7 +56,9 @@ MTS.Input = class MtsInput {
     if (_ds.showPassword !== undefined) _fromHTML.showPassword = true;
     if (_ds.showCount !== undefined) _fromHTML.showCount = true;
     if (_ds.maxLength !== undefined) _fromHTML.maxLength = parseInt(_ds.maxLength);
-    if (_ds.rows !== undefined) _fromHTML.rows = parseInt(_ds.rows);
+    if (_ds.rows          !== undefined) _fromHTML.rows          = parseInt(_ds.rows);
+    if (_ds.selectOnFocus !== undefined) _fromHTML.selectOnFocus = true;
+    if (_ds.nextOnEnter   !== undefined) _fromHTML.nextOnEnter   = true;
     options = { ..._fromHTML, ...options };
 
 
@@ -75,6 +79,8 @@ MTS.Input = class MtsInput {
     this.rows            = options.rows           ?? 4;
     this.name            = options.name           || null;
     this.autocomplete    = options.autocomplete   ?? null;
+    this.selectOnFocus   = options.selectOnFocus  ?? false;
+    this.nextOnEnter     = options.nextOnEnter    ?? false;
     this.rules           = options.rules          || {};
     this.renderMode      = options.renderMode     || 'auto';
     this.validateOnBlur  = options.validateOnBlur  ?? true;
@@ -186,7 +192,7 @@ MTS.Input = class MtsInput {
     if (this.iconLeft) {
       const ic = document.createElement('span');
       ic.className  = 'mts-input__icon mts-input__icon--left';
-      ic.innerHTML  = this.iconLeft;
+      ic.innerHTML  = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.iconLeft) : this.iconLeft;
       wrap.appendChild(ic);
     }
 
@@ -231,7 +237,7 @@ MTS.Input = class MtsInput {
     if (this.iconRight && !this.clearable && !this.showPassword) {
       const ic = document.createElement('span');
       ic.className = 'mts-input__icon mts-input__icon--right';
-      ic.innerHTML = this.iconRight;
+      ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.iconRight) : this.iconRight;
       wrap.appendChild(ic);
     }
 
@@ -269,8 +275,18 @@ MTS.Input = class MtsInput {
       if (this.validateOnInput) this.validate();
       this._emit('change', { value: e.target.value });
     });
+    this._inputEl.addEventListener('keydown', (e) => {
+      if (this.nextOnEnter && e.key === 'Enter' && this.type !== 'textarea') {
+        e.preventDefault();
+        var next = this._findNextInput();
+        if (next) next.focus();
+      }
+    });
     this._inputEl.addEventListener('focus', () => {
       this._wrapEl.classList.add('mts-input-wrap--focus');
+      if (this.selectOnFocus && this.type !== 'password') {
+        setTimeout(() => this._inputEl.select(), 0);
+      }
       this._emit('focus', { value: this.getValue() });
     });
     this._inputEl.addEventListener('blur', () => {
@@ -278,6 +294,14 @@ MTS.Input = class MtsInput {
       if (this.validateOnBlur) this.validate();
       this._emit('blur', { value: this.getValue() });
     });
+  }
+
+  _findNextInput() {
+    var all = Array.from(document.querySelectorAll(
+      'input:not([disabled]):not([type="hidden"]), textarea:not([disabled]), select:not([disabled])'
+    )).filter(function(el) { return el.offsetParent !== null; });
+    var idx = all.indexOf(this._inputEl);
+    return (idx !== -1 && idx < all.length - 1) ? all[idx + 1] : null;
   }
 
   _updateCount() {

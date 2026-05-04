@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else    document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS Utilities — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../navigation/matios-ui-accordion/matios-ui-accordion.css">
+  <link rel="stylesheet" href="../support/demo-shared.css">
+  <script src="../support/demo-shared.js"></script>
+  <script src="../navigation/matios-ui-accordion/matios-ui-accordion.js"></script>
+</head>
+<body>
+  <div class="demo-page demo-page--launcher">
+    <div class="demo-header">
+      <h1>MTS <span>Utilities</span></h1>
+      <p>Utilidades transversales — browser · codeblock · devpanel · diagnosticspanel · httpclient · jsonviewer · pageloader · sessiontimeout</p>
+    </div>
+
+    <div id="utilities-launcher" class="demo-launcher"></div>
+  </div>
+
+  <script>
+    initGroupLauncher('#utilities-launcher', [
+      { id: 'browser',           component: 'browser',           title: 'MTS.Browser',           subtitle: 'Navegador web embebido con historial y controles',                          src: 'matios-ui-browser/demo.html'           },
+      { id: 'codeblock',         component: 'codeblock',         title: 'MTS.CodeBlock',         subtitle: 'Bloque de código con highlight, líneas y copy',                             src: 'matios-ui-codeblock/demo.html'         },
+      { id: 'devpanel',          component: 'devpanel',          title: 'MTS.DevPanel',          subtitle: 'Panel de desarrollo flotante para debug en runtime',                        src: 'matios-ui-devpanel/demo.html'          },
+      { id: 'diagnosticspanel',  component: 'diagnosticspanel',  title: 'MTS.DiagnosticsPanel',  subtitle: 'Panel de diagnóstico del sistema y del entorno',                            src: 'matios-ui-diagnosticspanel/demo.html'  },
+      { id: 'httpclient',        component: 'httpclient',        title: 'MTS.HttpClient',        subtitle: 'Cliente HTTP visual — request builder, headers y response',                 src: 'matios-ui-httpclient/demo.html'        },
+      { id: 'jsonviewer',        component: 'jsonviewer',        title: 'MTS.JsonViewer',        subtitle: 'Visualizador de JSON con colapso de nodos y búsqueda',                      src: 'matios-ui-jsonviewer/demo.html'        },
+      { id: 'pageloader',        component: 'pageloader',        title: 'MTS.PageLoader',        subtitle: 'Barra de carga de página con trickle, blocker y spinner',                  src: 'matios-ui-pageloader/demo.html'        },
+      { id: 'sessiontimeout',    component: 'sessiontimeout',    title: 'MTS.SessionTimeout',    subtitle: 'Timeout de sesión — barra fija + modal de advertencia con countdown',       src: 'matios-ui-sessiontimeout/demo.html'    },
+    ]);
+  </script>
+</body>
+</html>

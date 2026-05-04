@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Scroll — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../css-helpers/matios-ui-css-helpers.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="./matios-ui-scroll.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="./matios-ui-scroll.js"></script>
+</head>
+<body>
+
+
+<div class="demo-page">
+
+  <div class="demo-header">
+    <h1><span>MTS</span>.Scroll</h1>
+    <p>Contenedor scrollable con scrollbar temático, fades de borde adaptativos y eventos de posición.</p>
+    <div class="demo-header-actions">
+    </div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <!-- ── 1 · VERTICAL ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Vertical (default)</div>
+    <div id="s1"></div>
+  </div>
+
+  <!-- ── 2 · HORIZONTAL ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Horizontal</div>
+    <div id="s2"></div>
+  </div>
+
+  <!-- ── 3 · BOTH ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">3 — Both</div>
+    <div id="s3"></div>
+  </div>
+
+  <!-- ── 4 · fadeBg personalizado ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">4 — fadeBg personalizado (dentro de surface)</div>
+    <div id="s4"></div>
+  </div>
+
+  <!-- ── 5 · EVENTOS ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">5 — Eventos onScroll · onReachStart · onReachEnd</div>
+    <div id="s5"></div>
+    <div class="result-box" id="s5-log">Esperando scroll...</div>
+  </div>
+
+  <!-- ── 6 · API PROGRAMÁTICA ── -->
+  <div class="demo-section">
+    <div class="demo-section-title">6 — API programática</div>
+    <div id="s6"></div>
+  </div>
+
+</div>
+
+<script>
+window.addEventListener('message', function(e) {
+  if (!e.data) return;
+  if (e.data.type === 'setMode')   document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+  if (e.data.type === 'setAccent') {
+    if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+
+/*
+  mk(id, html, js, height)
+  - Preview : html envuelto en mts-p-4
+  - HTML    : CodeBlock con el HTML del ejemplo
+  - JS      : CodeBlock con el código de inicialización
+*/
+function mk(id, html, js, h) {
+  var cbHtml = id + '-cb-html';
+  var cbJs   = id + '-cb-js';
+
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: h || '280px',
+    tabs: [
+      { id: id + '-p',    label: 'Preview',     content: '<div class="mts-p-4">' + html + '</div>' },
+      { id: id + '-html', label: 'HTML',         content: '<div id="' + cbHtml + '" style="height:100%"></div>' },
+      { id: id + '-js',   label: 'JavaScript',   content: '<div id="' + cbJs   + '" style="height:100%"></div>' }
+    ]
+  });
+
+  new MTS.CodeBlock('#' + cbHtml, { code: html.trim(), language: 'html', copyable: true, height: '100%' });
+  new MTS.CodeBlock('#' + cbJs,   { code: js.trim(),   language: 'js',   copyable: true, height: '100%' });
+}
+
+/* ── Contenido de ejemplo ── */
+var paras = [
+  'El diseño de sistemas UI es el arte de crear componentes coherentes y reutilizables que escalen en cualquier producto digital.',
+  'Un buen sistema de diseño define tokens, patrones y comportamientos que los equipos pueden adoptar sin fricciones.',
+  'La consistencia visual no surge de la coincidencia — surge de decisiones deliberadas documentadas y compartidas.',
+  'Cada componente debería ser capaz de vivir de forma aislada sin depender del contexto donde se usa.',
+  'El dark mode no es solo invertir colores — implica repensar contrastes, jerarquías y sombras desde cero.',
+  'La accesibilidad no es una capa encima del diseño: es parte del diseño desde el primer trazo.',
+  'Los tokens CSS permiten que un mismo componente se adapte a cualquier tema sin tocar una línea de JS.',
+];
+
+function makeParas() {
+  return paras.map(function(p, i) {
+    return '<p style="padding:8px 0;border-bottom:1px solid var(--mts-border-color);margin:0;font-size:13px">' + (i+1) + '. ' + p + '</p>';
+  }).join('\n  ');
+}
+
+/* ════════════════════════════════════
+   1 · VERTICAL
+   ════════════════════════════════════ */
+mk('s1',
+/* HTML */
+'<div id="scroll-v" style="height:180px">\n' +
+'  ' + makeParas() + '\n' +
+'</div>',
+/* JS */
+"new MTS.Scroll('#scroll-v', {\n" +
+"  direction: 'vertical'\n" +
+'});',
+'280px');
+
+new MTS.Scroll('#scroll-v', { direction: 'vertical' });
+
+/* ════════════════════════════════════
+   2 · HORIZONTAL
+   ════════════════════════════════════ */
+var hItems = [
+  'Componentes', 'Tokens', 'Temas', 'Dark Mode', 'Accesibilidad',
+  'Tipografía', 'Iconos', 'Spacing', 'Borders', 'Shadows',
+  'Animaciones', 'Formularios', 'Overlays', 'Navegación', 'Display'
+].map(function(label) {
+  return '<div style="flex-shrink:0;padding:12px 20px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);font-size:13px;white-space:nowrap">' + label + '</div>';
+}).join('\n    ');
+
+mk('s2',
+/* HTML */
+'<div id="scroll-h" style="height:80px">\n' +
+'  <div style="display:flex;gap:8px;align-items:center;height:100%">\n' +
+'    ' + hItems + '\n' +
+'  </div>\n' +
+'</div>',
+/* JS */
+"new MTS.Scroll('#scroll-h', {\n" +
+"  direction: 'horizontal'\n" +
+'});',
+'200px');
+
+new MTS.Scroll('#scroll-h', { direction: 'horizontal' });
+
+/* ════════════════════════════════════
+   3 · BOTH
+   ════════════════════════════════════ */
+var gridCells = '';
+for (var r = 1; r <= 8; r++) {
+  for (var c = 1; c <= 8; c++) {
+    gridCells += '<div style="flex-shrink:0;width:100px;height:48px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-sm);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mts-text-muted)">' + r + ',' + c + '</div>';
+  }
+}
+
+mk('s3',
+/* HTML */
+'<div id="scroll-b" style="height:180px">\n' +
+'  <div style="display:flex;flex-wrap:wrap;gap:6px;width:900px">\n' +
+'    <!-- 64 celdas -->\n' +
+'  </div>\n' +
+'</div>',
+/* JS */
+"new MTS.Scroll('#scroll-b', {\n" +
+"  direction: 'both'\n" +
+'});',
+'290px');
+
+/* Instancia real con celdas reales */
+var scrollBEl = document.getElementById('scroll-b');
+if (scrollBEl) {
+  var inner = scrollBEl.querySelector('div');
+  if (inner) inner.innerHTML = gridCells;
+}
+new MTS.Scroll('#scroll-b', { direction: 'both' });
+
+/* ════════════════════════════════════
+   4 · fadeBg personalizado
+   ════════════════════════════════════ */
+mk('s4',
+/* HTML */
+'<div style="background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:16px">\n' +
+'  <div id="scroll-fg" style="height:140px">\n' +
+'    ' + makeParas() + '\n' +
+'  </div>\n' +
+'</div>',
+/* JS */
+"new MTS.Scroll('#scroll-fg', {\n" +
+"  direction: 'vertical',\n" +
+"  fadeBg: 'var(--mts-bg-surface)' // ← hace match con el fondo del contenedor\n" +
+'});',
+'290px');
+
+new MTS.Scroll('#scroll-fg', {
+  direction: 'vertical',
+  fadeBg: 'var(--mts-bg-surface)'
+});
+
+/* ════════════════════════════════════
+   5 · EVENTOS
+   ════════════════════════════════════ */
+mk('s5',
+/* HTML */
+'<div id="scroll-ev" style="height:160px">\n' +
+'  ' + makeParas() + '\n' +
+'</div>',
+/* JS */
+"new MTS.Scroll('#scroll-ev', {\n" +
+"  direction: 'vertical',\n" +
+"  onScroll: function(e) {\n" +
+"    console.log('scrollTop:', e.scrollTop, '| percent:', e.percent + '%');\n" +
+"  },\n" +
+"  onReachStart: function() {\n" +
+"    console.log('llegaste al inicio');\n" +
+"  },\n" +
+"  onReachEnd: function() {\n" +
+"    console.log('llegaste al final — cargar más datos');\n" +
+"  }\n" +
+'});',
+'290px');
+
+new MTS.Scroll('#scroll-ev', {
+  direction: 'vertical',
+  onScroll: function(e) {
+    document.getElementById('s5-log').textContent =
+      'onScroll → scrollTop: ' + e.scrollTop + 'px  |  ' + e.percent + '%';
+  },
+  onReachStart: function() {
+    document.getElementById('s5-log').textContent = '⬆ onReachStart — llegaste al inicio';
+  },
+  onReachEnd: function() {
+    document.getElementById('s5-log').textContent = '⬇ onReachEnd — llegaste al final';
+  }
+});
+
+/* ════════════════════════════════════
+   6 · API PROGRAMÁTICA
+   ════════════════════════════════════ */
+mk('s6',
+/* HTML */
+'<div style="display:flex;flex-direction:column;gap:8px">\n' +
+'  <div id="s6-btns" style="display:flex;gap:8px;flex-wrap:wrap"></div>\n' +
+'  <div id="scroll-api" style="height:160px">\n' +
+'    ' + makeParas() + '\n' +
+'  </div>\n' +
+'</div>',
+/* JS */
+"const scroll = new MTS.Scroll('#scroll-api', { direction: 'vertical' });\n\n" +
+"scroll.scrollTo(200);\n" +
+"scroll.scrollTo(200, false);\n" +
+"scroll.scrollToStart();\n" +
+"scroll.scrollToEnd();\n" +
+"scroll.getScroll();\n" +
+"scroll.getPercent();\n" +
+"scroll.update();\n" +
+"scroll.destroy();",
+'310px');
+
+var scrollApi = new MTS.Scroll('#scroll-api', { direction: 'vertical' });
+
+[
+  { label: 'scrollToStart()', fn: function() { scrollApi.scrollToStart(); } },
+  { label: 'scrollToEnd()',   fn: function() { scrollApi.scrollToEnd(); } },
+  { label: 'scrollTo(80)',    fn: function() { scrollApi.scrollTo(80); } },
+  { label: 'getPercent()',    fn: function() { alert('Posición: ' + scrollApi.getPercent() + '%'); } },
+].forEach(function(item) {
+  new MTS.Button('#s6-btns', {
+    label: item.label,
+    variant: 'secondary',
+    size: 'sm',
+    onClick: item.fn
+  });
+});
+
+MTS.Icon.initAll();
+</script>
+</body>
+</html>

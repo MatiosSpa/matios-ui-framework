@@ -74,7 +74,7 @@ MTS.Popover = class MtsPopover {
   show()    { this._open(); return this; }
   hide()    { this._close(); return this; }
   toggle()  { this._visible ? this._close() : this._open(); return this; }
-  setContent(html) { this.content = html; if (this._pop) this._pop.querySelector('.mts-popover__body').innerHTML = html; return this; }
+  setContent(html) { this.content = html; if (this._pop) this._pop.querySelector('.mts-popover__body').innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(html) : html; return this; }
   destroy() { this._close(); this._target?.removeEventListener('click', this._clickHandler); }
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
@@ -135,7 +135,7 @@ MTS.Popover = class MtsPopover {
 
     const body = document.createElement('div');
     body.className = 'mts-popover__body';
-    body.innerHTML = this.content;
+    body.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.content) : this.content;
     pop.appendChild(body);
 
     if (this.trigger === 'hover') {

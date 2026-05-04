@@ -58,7 +58,7 @@ MTS.EmptyState = class MtsEmptyState {
 
     const icon = document.createElement('div');
     icon.className = 'mts-emptystate__icon';
-    icon.innerHTML = this.customIcon || this._getIcon();
+    icon.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.customIcon || this._getIcon()) : (this.customIcon || this._getIcon());
     this._el.appendChild(icon);
 
     const title = document.createElement('h3');

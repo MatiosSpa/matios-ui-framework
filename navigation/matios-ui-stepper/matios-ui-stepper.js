@@ -206,7 +206,7 @@ MTS.Stepper = class MtsStepper {
       } else if (isDone) {
         indicator.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
       } else if (step.icon && self.variant !== 'dots') {
-        indicator.innerHTML = step.icon;
+        indicator.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(step.icon) : step.icon;
       } else if (self.variant !== 'dots') {
         indicator.textContent = idx + 1;
       }
@@ -270,7 +270,7 @@ MTS.Stepper = class MtsStepper {
       if (content !== undefined && content !== null) {
         var resolved = typeof content === 'function' ? content() : content;
         if (typeof resolved === 'string') {
-          panel.innerHTML = resolved;
+          panel.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(resolved) : resolved;
         } else if (resolved instanceof Element || resolved instanceof DocumentFragment) {
           panel.innerHTML = '';
           panel.appendChild(resolved);

@@ -1,7 +1,7 @@
 # MTS.ContextMenu
 
-[EN] Right-click (and long-press on mobile) context menu with icons, shortcuts, groups, dividers and danger items.
-[ES] Menú contextual de click derecho (y long-press en móvil) con íconos, shortcuts, grupos, divisores e ítems de peligro.
+🇬🇧 Right-click (and long-press on mobile) context menu with icons, shortcuts, groups, dividers and danger items.
+🇪🇸 Menú contextual de click derecho (y long-press en móvil) con íconos, shortcuts, grupos, divisores e ítems de peligro.
 
 ---
 
@@ -17,30 +17,30 @@
 
 ## Options / Opciones
 
-[EN] First argument is the target element or `'document'` for a global context menu.
-[ES] El primer argumento es el elemento objetivo o `'document'` para un menú contextual global.
+🇬🇧 First argument is the target element or `'document'` for a global context menu.
+🇪🇸 El primer argumento es el elemento objetivo o `'document'` para un menú contextual global.
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `items` | `array` | `[]` | [EN] Menu items (see schema below) / [ES] Ítems del menú |
-| `longPress` | `boolean` | `true` | [EN] Enable long-press on mobile / [ES] Activar long-press en móvil |
-| `onOpen` | `function` | — | [EN] Fires when menu opens: `({ x, y, event }) => {}` / [ES] Se dispara al abrir |
-| `onClose` | `function` | — | [EN] Fires when menu closes / [ES] Se dispara al cerrar |
-| `onSelect` | `function` | — | [EN] Fires when item selected: `({ id, item }) => {}` / [ES] Se dispara al seleccionar |
+| `items` | `array` | `[]` | 🇬🇧 Menu items (see schema below) / 🇪🇸 Ítems del menú |
+| `longPress` | `boolean` | `true` | 🇬🇧 Enable long-press on mobile / 🇪🇸 Activar long-press en móvil |
+| `onOpen` | `function` | — | 🇬🇧 Fires when menu opens: `({ x, y, event }) => {}` / 🇪🇸 Se dispara al abrir |
+| `onClose` | `function` | — | 🇬🇧 Fires when menu closes / 🇪🇸 Se dispara al cerrar |
+| `onSelect` | `function` | — | 🇬🇧 Fires when item selected: `({ id, item }) => {}` / 🇪🇸 Se dispara al seleccionar |
 
 ### Item schema / Esquema de ítem
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `label` | `string` | [EN] Display text / [ES] Texto visible |
-| `icon` | `string` | [EN] Icon HTML / [ES] HTML del ícono |
-| `shortcut` | `string` | [EN] Keyboard shortcut hint / [ES] Atajo de teclado |
-| `danger` | `boolean` | [EN] Red danger style / [ES] Estilo de peligro rojo |
-| `disabled` | `boolean` | [EN] Disables the item / [ES] Deshabilita el ítem |
-| `divider` | `boolean` | [EN] Renders a separator line / [ES] Renderiza una línea separadora |
-| `group` | `string` | [EN] Group label / [ES] Etiqueta de grupo |
-| `onClick` | `function` | [EN] Per-item click handler / [ES] Handler de click por ítem |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `label` | `string` | 🇬🇧 Display text / 🇪🇸 Texto visible |
+| `icon` | `string` | 🇬🇧 Icon HTML / 🇪🇸 HTML del ícono |
+| `shortcut` | `string` | 🇬🇧 Keyboard shortcut hint / 🇪🇸 Atajo de teclado |
+| `danger` | `boolean` | 🇬🇧 Red danger style / 🇪🇸 Estilo de peligro rojo |
+| `disabled` | `boolean` | 🇬🇧 Disables the item / 🇪🇸 Deshabilita el ítem |
+| `divider` | `boolean` | 🇬🇧 Renders a separator line / 🇪🇸 Renderiza una línea separadora |
+| `group` | `string` | 🇬🇧 Group label / 🇪🇸 Etiqueta de grupo |
+| `onClick` | `function` | 🇬🇧 Per-item click handler / 🇪🇸 Handler de click por ítem |
 
 ---
 
@@ -152,10 +152,3 @@ document.getElementById('my-zone')
 | `onSelect` | `mts:contextmenu:select` |
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Normalized to `.on()` pattern, added `id` to select detail, bilingual docs / [ES] Normalizado al patrón `.on()`, agregado `id` al detail de select, docs bilingüe |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

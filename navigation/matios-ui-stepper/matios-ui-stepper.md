@@ -1,12 +1,12 @@
 # MTS.Stepper
 
-[EN] Unified step flow + progress component. Supports `wizard` and `progress` in a single API.
-[ES] Componente unificado para flujo paso a paso + progreso visual. Soporta `wizard` y `progress` con una sola API.
+🇬🇧 Unified step flow + progress component. Supports `wizard` and `progress` in a single API.
+🇪🇸 Componente unificado para flujo paso a paso + progreso visual. Soporta `wizard` y `progress` con una sola API.
 
 > **Compatibility note / Nota de compatibilidad**
 >
-> [EN] `MTS.StepProgress` is now a compatibility alias. New usage should go through `MTS.Stepper`.
-> [ES] `MTS.StepProgress` queda como alias de compatibilidad. El uso nuevo debe hacerse con `MTS.Stepper`.
+> 🇬🇧 `MTS.StepProgress` is now a compatibility alias. New usage should go through `MTS.Stepper`.
+> 🇪🇸 `MTS.StepProgress` queda como alias de compatibilidad. El uso nuevo debe hacerse con `MTS.Stepper`.
 
 ---
 
@@ -24,8 +24,8 @@
 
 ### `wizard`
 
-[EN] Uses step indicators plus content panels.
-[ES] Usa indicadores de pasos más paneles de contenido.
+🇬🇧 Uses step indicators plus content panels.
+🇪🇸 Usa indicadores de pasos más paneles de contenido.
 
 ```js
 new MTS.Stepper('#el', {
@@ -40,8 +40,8 @@ new MTS.Stepper('#el', {
 
 ### `progress`
 
-[EN] Pure progress indicator. Covers checkout, compact and dots scenarios.
-[ES] Indicador visual puro. Cubre checkout, compact y dots.
+🇬🇧 Pure progress indicator. Covers checkout, compact and dots scenarios.
+🇪🇸 Indicador visual puro. Cubre checkout, compact y dots.
 
 ```js
 new MTS.Stepper('#el', {
@@ -98,30 +98,30 @@ new MTS.Stepper('#checkout-progress', {
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
 | `mode` | `string` | `'wizard'` | `'wizard'` · `'progress'` |
-| `variant` | `string` | `'default'` | [EN] `'default'` · `'compact'` · `'dots'` — progress mode only / [ES] solo en modo progress |
-| `steps` | `array` | `[]` | [EN] Steps array / [ES] Arreglo de pasos |
-| `active` | `number` | `0` | [EN] Initially active step index / [ES] Índice del paso activo inicial |
+| `variant` | `string` | `'default'` | 🇬🇧 `'default'` · `'compact'` · `'dots'` — progress mode only / 🇪🇸 solo en modo progress |
+| `steps` | `array` | `[]` | 🇬🇧 Steps array / 🇪🇸 Arreglo de pasos |
+| `active` | `number` | `0` | 🇬🇧 Initially active step index / 🇪🇸 Índice del paso activo inicial |
 | `direction` | `string` | `'horizontal'` | `'horizontal'` · `'vertical'` |
-| `clickable` | `boolean` | `false` | [EN] Allow clicking steps to navigate / [ES] Permitir navegar haciendo click |
-| `onChange` | `function` | — | [EN] Fires when active step changes / [ES] Se dispara al cambiar el paso activo |
-| `onComplete` | `function` | — | [EN] Fires when last step is reached / [ES] Se dispara al llegar al último paso |
-| `onStepClick` | `function` | — | [EN] Fires when a step is clicked / [ES] Se dispara al hacer click en un paso |
-| `onStatusChange` | `function` | — | [EN] Fires when step status changes / [ES] Se dispara al cambiar estado |
+| `clickable` | `boolean` | `false` | 🇬🇧 Allow clicking steps to navigate / 🇪🇸 Permitir navegar haciendo click |
+| `onChange` | `function` | — | 🇬🇧 Fires when active step changes / 🇪🇸 Se dispara al cambiar el paso activo |
+| `onComplete` | `function` | — | 🇬🇧 Fires when last step is reached / 🇪🇸 Se dispara al llegar al último paso |
+| `onStepClick` | `function` | — | 🇬🇧 Fires when a step is clicked / 🇪🇸 Se dispara al hacer click en un paso |
+| `onStatusChange` | `function` | — | 🇬🇧 Fires when step status changes / 🇪🇸 Se dispara al cambiar estado |
 
 ### Step schema / Esquema de paso
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `label` | `string` | [EN] Step label / [ES] Texto del paso |
-| `description` | `string` | [EN] Subtitle — hidden in `compact` and `dots` / [ES] Subtítulo |
-| `icon` | `string` | [EN] SVG HTML for the indicator / [ES] HTML SVG del indicador |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `label` | `string` | 🇬🇧 Step label / 🇪🇸 Texto del paso |
+| `description` | `string` | 🇬🇧 Subtitle — hidden in `compact` and `dots` / 🇪🇸 Subtítulo |
+| `icon` | `string` | 🇬🇧 SVG HTML for the indicator / 🇪🇸 HTML SVG del indicador |
 | `status` | `string` | `'pending'` · `'error'` |
-| `disabled` | `boolean` | [EN] Prevent navigation / [ES] Impide navegar |
-| `content` | `string|Element|Function` | [EN] Wizard-only panel content / [ES] Contenido del panel en wizard |
+| `disabled` | `boolean` | 🇬🇧 Prevent navigation / 🇪🇸 Impide navegar |
+| `content` | `string|Element|Function` | 🇬🇧 Wizard-only panel content / 🇪🇸 Contenido del panel en wizard |
 
 ---
 
@@ -158,11 +158,3 @@ el.addEventListener('mts:stepper:statuschange', (e) => {});
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 2.2.0 | [EN] Consolidated StepProgress examples into Stepper / [ES] Se consolidaron ejemplos de StepProgress dentro de Stepper |
-| 2.1.0 | [EN] Bilingual docs and standardized structure / [ES] Docs bilingüe y estructura estandarizada |
-| 2.0.0 | [EN] Unified wizard + progress modes / [ES] Modos wizard y progress unificados |

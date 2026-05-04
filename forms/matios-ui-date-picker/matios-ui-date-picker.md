@@ -1,7 +1,7 @@
 # MTS.DatePicker
 
-[EN] Date, time, range, month and week selectors. Each type is an independent class extending a common base. Zero dependencies.
-[ES] Selectores de fecha, hora, rango, mes y semana. Cada tipo es una clase independiente que extiende una base común. Cero dependencias.
+🇬🇧 Date, time, range, month and week selectors. Each type is an independent class extending a common base. Zero dependencies.
+🇪🇸 Selectores de fecha, hora, rango, mes y semana. Cada tipo es una clase independiente que extiende una base común. Cero dependencias.
 
 ---
 
@@ -143,10 +143,3 @@ document.getElementById('mi-input')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 2.0.0 | [EN] Split into individual classes. MTS.DatePicker.Month, Week, Color added. / [ES] Separado en clases individuales. MTS.DatePicker.Month, Week, Color nuevos. |
-| 1.0.0 | [EN] Initial release (single class with modes) / [ES] Release inicial (clase única con modos) |

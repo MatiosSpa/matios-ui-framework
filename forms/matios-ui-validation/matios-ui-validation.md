@@ -1,7 +1,7 @@
 # MTS.Validate
 
-[EN] Form validation without dependencies. Auto-integrates with `MTS.Input` — detects instances and uses their own error/success API.
-[ES] Validación de formularios sin dependencias. Se integra automáticamente con `MTS.Input` — detecta las instancias y usa su propia API de error/éxito.
+🇬🇧 Form validation without dependencies. Auto-integrates with `MTS.Input` — detects instances and uses their own error/success API.
+🇪🇸 Validación de formularios sin dependencias. Se integra automáticamente con `MTS.Input` — detecta las instancias y usa su propia API de error/éxito.
 
 ---
 
@@ -18,21 +18,21 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `rules` | `object` | `{}` | [EN] Validation rules per field name / [ES] Reglas de validación por nombre de campo |
-| `messages` | `object` | `{}` | [EN] Custom error messages per field/rule / [ES] Mensajes de error personalizados |
-| `validateOnBlur` | `boolean` | `true` | [EN] Validate when field loses focus / [ES] Validar al perder foco |
-| `validateOnInput` | `boolean` | `false` | [EN] Validate on every keystroke / [ES] Validar en cada tecla |
-| `onValid` | `function` | — | [EN] Fires on submit when form is valid / [ES] Se dispara al enviar cuando el formulario es válido |
-| `onInvalid` | `function` | — | [EN] Fires on submit when form has errors / [ES] Se dispara al enviar cuando hay errores |
+| `rules` | `object` | `{}` | 🇬🇧 Validation rules per field name / 🇪🇸 Reglas de validación por nombre de campo |
+| `messages` | `object` | `{}` | 🇬🇧 Custom error messages per field/rule / 🇪🇸 Mensajes de error personalizados |
+| `validateOnBlur` | `boolean` | `true` | 🇬🇧 Validate when field loses focus / 🇪🇸 Validar al perder foco |
+| `validateOnInput` | `boolean` | `false` | 🇬🇧 Validate on every keystroke / 🇪🇸 Validar en cada tecla |
+| `onValid` | `function` | — | 🇬🇧 Fires on submit when form is valid / 🇪🇸 Se dispara al enviar cuando el formulario es válido |
+| `onInvalid` | `function` | — | 🇬🇧 Fires on submit when form has errors / 🇪🇸 Se dispara al enviar cuando hay errores |
 
 ---
 
 ## Events / Eventos
 
-[EN] Use `onValid` and `onInvalid` in the constructor.
-[ES] Usa `onValid` y `onInvalid` en el constructor.
+🇬🇧 Use `onValid` and `onInvalid` in the constructor.
+🇪🇸 Usa `onValid` y `onInvalid` en el constructor.
 
 ```js
 new MTS.Validate('#my-form', {
@@ -53,27 +53,27 @@ new MTS.Validate('#my-form', {
 
 ## Validation Rules / Reglas de validación
 
-| Rule | Type | [EN] Description / [ES] Descripción |
+| Rule | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |------|------|--------------------------------------|
-| `required` | `boolean` | [EN] Field cannot be empty / [ES] Campo no puede estar vacío |
-| `minLength` | `number` | [EN] Minimum characters / [ES] Mínimo de caracteres |
-| `maxLength` | `number` | [EN] Maximum characters / [ES] Máximo de caracteres |
-| `min` | `number` | [EN] Minimum numeric value / [ES] Valor numérico mínimo |
-| `max` | `number` | [EN] Maximum numeric value / [ES] Valor numérico máximo |
-| `email` | `boolean` | [EN] Valid email format / [ES] Formato email válido |
-| `url` | `boolean` | [EN] Valid URL format / [ES] Formato URL válido |
-| `number` | `boolean` | [EN] Numeric only / [ES] Solo números |
-| `integer` | `boolean` | [EN] Integer only / [ES] Solo enteros |
-| `pattern` | `RegExp` | [EN] Custom regex / [ES] Regex personalizado |
-| `equalTo` | `string` | [EN] Must equal field (e.g. `'#pass'`) / [ES] Debe ser igual al campo |
-| `rut` | `boolean` | [EN] Chilean RUT validation / [ES] Validación RUT chileno |
-| `phone` | `boolean` | [EN] Phone format / [ES] Formato teléfono |
-| `date` | `boolean` | [EN] Valid date / [ES] Fecha válida |
-| `minDate` | `string` | [EN] Min date (e.g. `'2024-01-01'`) / [ES] Fecha mínima |
-| `maxDate` | `string` | [EN] Max date / [ES] Fecha máxima |
-| `accept` | `string` | [EN] File types (`'image/*'`, `'.pdf'`) / [ES] Tipos de archivo |
-| `maxSize` | `number` | [EN] Max file size in MB / [ES] Tamaño máximo en MB |
-| `custom` | `function` | [EN] `(value, el) => true \| 'error'` / [ES] Validación personalizada |
+| `required` | `boolean` | 🇬🇧 Field cannot be empty / 🇪🇸 Campo no puede estar vacío |
+| `minLength` | `number` | 🇬🇧 Minimum characters / 🇪🇸 Mínimo de caracteres |
+| `maxLength` | `number` | 🇬🇧 Maximum characters / 🇪🇸 Máximo de caracteres |
+| `min` | `number` | 🇬🇧 Minimum numeric value / 🇪🇸 Valor numérico mínimo |
+| `max` | `number` | 🇬🇧 Maximum numeric value / 🇪🇸 Valor numérico máximo |
+| `email` | `boolean` | 🇬🇧 Valid email format / 🇪🇸 Formato email válido |
+| `url` | `boolean` | 🇬🇧 Valid URL format / 🇪🇸 Formato URL válido |
+| `number` | `boolean` | 🇬🇧 Numeric only / 🇪🇸 Solo números |
+| `integer` | `boolean` | 🇬🇧 Integer only / 🇪🇸 Solo enteros |
+| `pattern` | `RegExp` | 🇬🇧 Custom regex / 🇪🇸 Regex personalizado |
+| `equalTo` | `string` | 🇬🇧 Must equal field (e.g. `'#pass'`) / 🇪🇸 Debe ser igual al campo |
+| `rut` | `boolean` | 🇬🇧 Chilean RUT validation / 🇪🇸 Validación RUT chileno |
+| `phone` | `boolean` | 🇬🇧 Phone format / 🇪🇸 Formato teléfono |
+| `date` | `boolean` | 🇬🇧 Valid date / 🇪🇸 Fecha válida |
+| `minDate` | `string` | 🇬🇧 Min date (e.g. `'2024-01-01'`) / 🇪🇸 Fecha mínima |
+| `maxDate` | `string` | 🇬🇧 Max date / 🇪🇸 Fecha máxima |
+| `accept` | `string` | 🇬🇧 File types (`'image/*'`, `'.pdf'`) / 🇪🇸 Tipos de archivo |
+| `maxSize` | `number` | 🇬🇧 Max file size in MB / 🇪🇸 Tamaño máximo en MB |
+| `custom` | `function` | 🇬🇧 `(value, el) => true \| 'error'` / 🇪🇸 Validación personalizada |
 
 ---
 
@@ -183,10 +183,3 @@ v.addRule('name', 'minLength', 5)
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual docs, standardized structure / [ES] Docs bilingüe, estructura estandarizada |
-| 1.0.0 | [EN] Initial release — MTS.Input integration, Chilean RUT, custom validation / [ES] Versión inicial |

@@ -1,7 +1,7 @@
 # MTS.Alert
 
-[EN] Inline alert and banner component with variants, icons, action buttons and auto-dismiss. Works via JS and pure HTML/CSS.
-[ES] Componente de alerta y banner inline con variantes, íconos, botones de acción y auto-dismiss. Funciona via JS y HTML/CSS puro.
+🇬🇧 Inline alert and banner component with variants, icons, action buttons and auto-dismiss. Works via JS and pure HTML/CSS.
+🇪🇸 Componente de alerta y banner inline con variantes, íconos, botones de acción y auto-dismiss. Funciona via JS y HTML/CSS puro.
 
 ---
 
@@ -17,17 +17,17 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
 | `variant` | `string` | `'info'` | `'info'` · `'success'` · `'warning'` · `'danger'` |
-| `title` | `string` | `''` | [EN] Optional title / [ES] Título opcional |
-| `message` | `string` | `''` | [EN] Main message / [ES] Mensaje principal |
-| `closable` | `boolean` | `true` | [EN] Show close button / [ES] Mostrar botón de cierre |
-| `icon` | `boolean` | `true` | [EN] Show icon / [ES] Mostrar ícono |
-| `action` | `string` | `null` | [EN] Action button label / [ES] Label del botón de acción |
-| `autoDismiss` | `number` | `0` | [EN] Auto-close after ms (0 = disabled) / [ES] Auto-cerrar tras ms (0 = deshabilitado) |
-| `onAction` | `function` | — | [EN] Fires when action button is clicked / [ES] Se dispara al hacer click en el botón de acción |
-| `onClose` | `function` | — | [EN] Fires when alert is closed / [ES] Se dispara al cerrar la alerta |
+| `title` | `string` | `''` | 🇬🇧 Optional title / 🇪🇸 Título opcional |
+| `message` | `string` | `''` | 🇬🇧 Main message / 🇪🇸 Mensaje principal |
+| `closable` | `boolean` | `true` | 🇬🇧 Show close button / 🇪🇸 Mostrar botón de cierre |
+| `icon` | `boolean` | `true` | 🇬🇧 Show icon / 🇪🇸 Mostrar ícono |
+| `action` | `string` | `null` | 🇬🇧 Action button label / 🇪🇸 Label del botón de acción |
+| `autoDismiss` | `number` | `0` | 🇬🇧 Auto-close after ms (0 = disabled) / 🇪🇸 Auto-cerrar tras ms (0 = deshabilitado) |
+| `onAction` | `function` | — | 🇬🇧 Fires when action button is clicked / 🇪🇸 Se dispara al hacer click en el botón de acción |
+| `onClose` | `function` | — | 🇬🇧 Fires when alert is closed / 🇪🇸 Se dispara al cerrar la alerta |
 
 ---
 
@@ -155,10 +155,3 @@ document.getElementById('my-alert')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] `onAction` normalized to `.on()`, bilingual docs / [ES] `onAction` normalizado a `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

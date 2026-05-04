@@ -89,7 +89,7 @@ MTS.Grid = class MtsGrid {
     this._applyStyle(el, item.style);
 
     if (item.html != null) {
-      el.innerHTML = item.html;
+      el.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(item.html) : item.html;
     } else if (item.text != null) {
       el.textContent = item.text;
     }

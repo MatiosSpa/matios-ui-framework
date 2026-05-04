@@ -30,181 +30,168 @@
 <link href="../../themes/matios-ui-accent-violet.css" rel="stylesheet"/>
 <link href="../../themes/matios-ui-accent-olive.css" rel="stylesheet"/>
 <link href="../../themes/matios-ui-accent-blue.css" rel="stylesheet"/>
+<link href="../../themes/matios-ui-accent-high-contrast.css" rel="stylesheet"/>
+<link href="../../themes/matios-ui-accent-corporate.css" rel="stylesheet"/>
+<link href="../../themes/matios-ui-accent-navy.css" rel="stylesheet"/>
+<link href="../../themes/matios-ui-accent-emerald.css" rel="stylesheet"/>
+<link href="../../themes/matios-ui-accent-petrol.css" rel="stylesheet"/>
 <link href="../../support/demo-shared.css" rel="stylesheet"/>
 <link href="../../forms/matios-ui-button/matios-ui-button.css" rel="stylesheet"/>
+<link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css"/>
+<link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css"/>
+<link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css"/>
 <link href="../matios-ui-tabs/matios-ui-tabs.css" rel="stylesheet"/><link href="./matios-ui-drawer.css" rel="stylesheet"/>
-<script src="../../support/demo-shared.js"></script><script src="../matios-ui-tabs/matios-ui-tabs.js"></script>
+<script src="../../support/demo-shared.js"></script>
+<script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+<script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+<script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+<script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+<script src="../matios-ui-tabs/matios-ui-tabs.js"></script>
 <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
 <script src="./matios-ui-drawer.js"></script>
 </head>
 <body>
-<div class="demo-theme">
-<button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
-<button class="demo-btn-sm" onclick="setMode('light')">Light</button>
-<button class="demo-btn-sm demo-btn-sep">—</button>
-<button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
-<button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
-<button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
-<button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
-</div>
 <div class="demo-page">
 <div class="demo-header">
 <h1><span>MTS</span>.Drawer</h1>
 <p>Sliding side panel — left, right, top, bottom · sm/md/lg/full · static mode.</p>
 <div class="demo-header-actions">
-<button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-drawer.md')">📄 Docs</button>
 </div>
 <div class="demo-docs-panel" id="docs-panel"></div>
 </div>
 <!-- 1. Posiciones -->
-<div class="demo-section"><div class="demo-section-title">1 — Posiciones / Positions</div><div id="tabs-s1"></div><div hidden="" id="src-s1-preview"><div class="demo-row">
-<button class="mts-btn mts-btn--secondary" onclick="drawers.right.show()">Right (default)</button>
-<button class="mts-btn mts-btn--secondary" onclick="drawers.left.show()">Left</button>
-<button class="mts-btn mts-btn--secondary" onclick="drawers.top.show()">Top</button>
-<button class="mts-btn mts-btn--secondary" onclick="drawers.bottom.show()">Bottom</button>
-</div><div class="result-box" id="drawer-result">— abre un drawer —</div></div><div hidden="" id="src-s1-html">&lt;!-- MTS.Drawer has no HTML container — it appends to body
-     MTS.Drawer no tiene contenedor HTML — se agrega al body --&gt;
-
-&lt;button onclick="drawer.show()"&gt;Open drawer&lt;/button&gt;
-
-&lt;script&gt;
-  const drawer = new MTS.Drawer({
-    title:    'Filters',
-    content:  '&lt;p&gt;Filter options here&lt;/p&gt;',
-    position: 'right',   // 'left' | 'right' | 'top' | 'bottom'
-    size:     'md',      // 'sm' | 'md' | 'lg' | 'full'
-    // Fires when drawer opens / Se dispara al abrir
-    onOpen:  () =&gt; console.log('opened'),
-    // Fires when drawer closes / Se dispara al cerrar
-    onClose: () =&gt; console.log('closed'),
-  });
-&lt;/script&gt;</div><div hidden="" id="src-s1-js">// Right (default) / Derecha
-const rightDrawer = new MTS.Drawer({
-  title:    'Filters',
-  content:  '&lt;p&gt;Filter panel&lt;/p&gt;',
-  position: 'right',
-  size:     'md',
-  onOpen:   () =&gt; console.log('opened'),
-  onClose:  () =&gt; console.log('closed'),
-});
-
-// Left navigation / Navegación izquierda
-const leftDrawer = new MTS.Drawer({
-  title:    'Navigation',
-  content:  '&lt;nav&gt;&lt;ul&gt;&lt;li&gt;Home&lt;/li&gt;&lt;li&gt;Products&lt;/li&gt;&lt;/ul&gt;&lt;/nav&gt;',
-  position: 'left',
-  size:     'sm',
-});
-
-// Bottom sheet
-const bottomSheet = new MTS.Drawer({
-  title:    'Options',
-  position: 'bottom',
-  size:     'sm',
-  content:  '&lt;ul&gt;...&lt;/ul&gt;',
-});</div></div>
+<div class="demo-section"><div class="demo-section-title">1 — Posiciones / Positions</div><div id="tabs-s1"></div></div>
 <!-- 2. Tamaños -->
-<div class="demo-section"><div class="demo-section-title">2 — Tamaños / Sizes</div><div id="tabs-s2"></div><div hidden="" id="src-s2-preview"><div class="demo-row">
-<button class="mts-btn mts-btn--secondary" onclick="drawers.sm.show()">sm</button>
-<button class="mts-btn mts-btn--secondary" onclick="drawers.md.show()">md</button>
-<button class="mts-btn mts-btn--secondary" onclick="drawers.lg.show()">lg</button>
-<button class="mts-btn mts-btn--secondary" onclick="drawers.full.show()">full</button>
-</div></div><div hidden="" id="src-s2-html">&lt;button onclick="drawer.show()"&gt;Open&lt;/button&gt;
-&lt;script&gt;
-  const drawer = new MTS.Drawer({
-    size:    'lg',      // 'sm' | 'md' | 'lg' | 'full'
-    title:   'Large drawer',
-    content: '...',
-  });
-&lt;/script&gt;</div><div hidden="" id="src-s2-js">// Size: 'sm' | 'md' | 'lg' | 'full' / Tamaño
-new MTS.Drawer({ size: 'sm',   title: 'Small',  content: '...' });
-new MTS.Drawer({ size: 'md',   title: 'Medium', content: '...' }); // default
-new MTS.Drawer({ size: 'lg',   title: 'Large',  content: '...' });
-new MTS.Drawer({ size: 'full', title: 'Full',   content: '...' });</div></div>
+<div class="demo-section"><div class="demo-section-title">2 — Tamaños / Sizes</div><div id="tabs-s2"></div></div>
 <!-- 3. Static + API -->
-<div class="demo-section"><div class="demo-section-title">3 — Static (no cierra con Esc/backdrop) + API</div><div id="tabs-s3"></div><div hidden="" id="src-s3-preview"><div class="demo-row">
-<button class="mts-btn mts-btn--secondary" onclick="drawers.static.show()">Open static drawer</button>
-</div></div><div hidden="" id="src-s3-html">&lt;!-- static: true — user must click a button to close
-     static: true — el usuario debe hacer click en un botón para cerrar --&gt;
-&lt;button onclick="drawer.show()"&gt;Open&lt;/button&gt;
-&lt;script&gt;
-  const drawer = new MTS.Drawer({
-    title:   'Confirm action',
-    content: '&lt;p&gt;Are you sure?&lt;/p&gt;',
-    footer:  '&lt;button onclick="drawer.hide()"&gt;Cancel&lt;/button&gt;
-             &lt;button&gt;Confirm&lt;/button&gt;',
-    static:  true,  // no Esc / no backdrop click
-  });
-&lt;/script&gt;</div><div hidden="" id="src-s3-js">const drawer = new MTS.Drawer({
-  title:   'Confirm action',
-  content: '&lt;p&gt;Are you sure you want to proceed?&lt;/p&gt;',
-  // Static — only closes via code / Estático — solo cierra via código
-  static:  true,
-  onClose: () =&gt; console.log('closed'),
-});
-
-// API
-drawer.show()
-drawer.hide()
-drawer.toggle()
-drawer.setTitle('Updated title')
-drawer.setContent('&lt;p&gt;New content&lt;/p&gt;')
-drawer.destroy()</div></div>
+<div class="demo-section"><div class="demo-section-title">3 — Static (no cierra con Esc/backdrop) + API</div><div id="tabs-s3"></div></div>
 </div>
 <script>
-var CONTENT = function(pos){ return '<div style="padding:20px;font-size:14px;color:var(--mts-text-secondary)"><p>Drawer posición: <strong>' + pos + '</strong></p><p>Haz click fuera o presiona Esc para cerrar.</p></div>'; };
-
-var drawers = {
-  right:  new MTS.Drawer({ title:'Right drawer',  position:'right',  size:'md', content: CONTENT('right'),  onOpen: function(){ document.getElementById('drawer-result').textContent = 'onOpen → position: right'; },  onClose: function(){ document.getElementById('drawer-result').textContent = 'onClose → right'; } }),
-  left:   new MTS.Drawer({ title:'Left drawer',   position:'left',   size:'sm', content: CONTENT('left'),   onOpen: function(){ document.getElementById('drawer-result').textContent = 'onOpen → position: left'; },   onClose: function(){ document.getElementById('drawer-result').textContent = 'onClose → left'; } }),
-  top:    new MTS.Drawer({ title:'Top drawer',    position:'top',    size:'sm', content: CONTENT('top'),    onOpen: function(){ document.getElementById('drawer-result').textContent = 'onOpen → position: top'; },    onClose: function(){ document.getElementById('drawer-result').textContent = 'onClose → top'; } }),
-  bottom: new MTS.Drawer({ title:'Bottom sheet',  position:'bottom', size:'sm', content: CONTENT('bottom'), onOpen: function(){ document.getElementById('drawer-result').textContent = 'onOpen → position: bottom'; }, onClose: function(){ document.getElementById('drawer-result').textContent = 'onClose → bottom'; } }),
-  sm:     new MTS.Drawer({ title:'Small (sm)',    position:'right',  size:'sm', content: CONTENT('sm') }),
-  md:     new MTS.Drawer({ title:'Medium (md)',   position:'right',  size:'md', content: CONTENT('md') }),
-  lg:     new MTS.Drawer({ title:'Large (lg)',    position:'right',  size:'lg', content: CONTENT('lg') }),
-  full:   new MTS.Drawer({ title:'Full width',    position:'right',  size:'full', content: CONTENT('full') }),
-  static: new MTS.Drawer({
-    title:  'Static drawer',
-    static: true,
-    content: '<div style="padding:20px;font-size:14px;color:var(--mts-text-secondary)"><p>Este drawer <strong>no cierra</strong> con Esc ni haciendo click en el backdrop.</p><p>Solo cierra con el botón ×.</p></div>',
-  }),
-};
-</script>
-<script data-nav-tabs-helper="true">(function(){
-  function preTab(sourceId) {
-    var src = document.getElementById(sourceId);
-    return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
-      (src ? src.innerHTML : '') +
-    '</pre>';
-  }
-
-  function mountPreview(sourceId, panelId) {
-    var src = document.getElementById(sourceId);
-    var panel = document.getElementById(panelId);
-    if (!src || !panel) return;
-    while (src.firstChild) panel.appendChild(src.firstChild);
-  }
-
-  function makeSection(id, sourceBase) {
-    new MTS.Tabs('#' + id, {
-      variant: 'card',
-      height: '340px',
-      lazy: false,
-      tabs: [
-        { id: id + '-preview', label: 'Preview', content: '<div></div>' },
-        { id: id + '-html', label: 'HTML', content: preTab(sourceBase + '-html') },
-        { id: id + '-js', label: 'JavaScript', content: preTab(sourceBase + '-js') }
-      ]
-    });
-    mountPreview(sourceBase + '-preview', 'mts-panel-' + id + '-preview');
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    var tabs = document.querySelectorAll('[id^="tabs-s"]');
-    tabs.forEach(function(el){
-      var num = el.id.replace('tabs-s','');
-      makeSection(el.id, 'src-s' + num);
-    });
+function indentHtml(html) {
+  var indent = 0, step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) { indent = Math.max(0, indent - step); result += ' '.repeat(indent) + t + '\n'; }
+    else if (/^<[^!]/.test(t)) { result += ' '.repeat(indent) + t + '\n'; var tag = (t.match(/^<([a-z][a-z0-9-]*)/i)||[])[1]||''; if (!voids.test(tag) && !/\/>$/.test(t)) indent += step; }
+    else { var text = t.replace(/\s+/g,' '); if (text) result += ' '.repeat(indent) + text + '\n'; }
   });
-})();</script></body>
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: height || '360px',
+    lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' }
+    ]
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+var CONTENT = function(pos){ return '<div style="padding:20px;font-size:14px;color:var(--mts-text-secondary)"><p>Drawer posición: <strong>' + pos + '</strong></p><p>Haz click fuera o presiona Esc para cerrar.</p></div>'; };
+var drawers;
+
+var preview_s1 =
+  '<div class="demo-row">' +
+    '<button class="mts-btn mts-btn--secondary" onclick="drawers.right.show()">Right (default)</button>' +
+    '<button class="mts-btn mts-btn--secondary" onclick="drawers.left.show()">Left</button>' +
+    '<button class="mts-btn mts-btn--secondary" onclick="drawers.top.show()">Top</button>' +
+    '<button class="mts-btn mts-btn--secondary" onclick="drawers.bottom.show()">Bottom</button>' +
+  '</div>' +
+  '<div class="result-box" id="drawer-result">— abre un drawer —</div>';
+
+var js_s1 =
+  "// Right (default)\n" +
+  "const rightDrawer = new MTS.Drawer({\n" +
+  "  title:    'Filters',\n" +
+  "  content:  '<p>Filter panel</p>',\n" +
+  "  position: 'right',\n" +
+  "  size:     'md',\n" +
+  "  onOpen:   function(){ console.log('opened'); },\n" +
+  "  onClose:  function(){ console.log('closed'); }\n" +
+  "});\n\n" +
+  "// Left navigation\n" +
+  "const leftDrawer = new MTS.Drawer({\n" +
+  "  title:    'Navigation',\n" +
+  "  content:  '<nav><ul><li>Home</li><li>Products</li></ul></nav>',\n" +
+  "  position: 'left',\n" +
+  "  size:     'sm'\n" +
+  "});\n\n" +
+  "// Bottom sheet\n" +
+  "const bottomSheet = new MTS.Drawer({\n" +
+  "  title:    'Options',\n" +
+  "  position: 'bottom',\n" +
+  "  size:     'sm',\n" +
+  "  content:  '<ul>...</ul>'\n" +
+  "});";
+
+var preview_s2 =
+  '<div class="demo-row">' +
+    '<button class="mts-btn mts-btn--secondary" onclick="drawers.sm.show()">sm</button>' +
+    '<button class="mts-btn mts-btn--secondary" onclick="drawers.md.show()">md</button>' +
+    '<button class="mts-btn mts-btn--secondary" onclick="drawers.lg.show()">lg</button>' +
+    '<button class="mts-btn mts-btn--secondary" onclick="drawers.full.show()">full</button>' +
+  '</div>';
+
+var js_s2 =
+  "// Size: 'sm' | 'md' | 'lg' | 'full'\n" +
+  "new MTS.Drawer({ size: 'sm',   title: 'Small',  content: '...' });\n" +
+  "new MTS.Drawer({ size: 'md',   title: 'Medium', content: '...' }); // default\n" +
+  "new MTS.Drawer({ size: 'lg',   title: 'Large',  content: '...' });\n" +
+  "new MTS.Drawer({ size: 'full', title: 'Full',   content: '...' });";
+
+var preview_s3 =
+  '<div class="demo-row">' +
+    '<button class="mts-btn mts-btn--secondary" onclick="drawers.static.show()">Open static drawer</button>' +
+  '</div>';
+
+var js_s3 =
+  "// static: true — user must click a button to close\n" +
+  "const drawer = new MTS.Drawer({\n" +
+  "  title:   'Confirm action',\n" +
+  "  content: '<p>Are you sure you want to proceed?</p>',\n" +
+  "  static:  true,\n" +
+  "  onClose: function(){ console.log('closed'); }\n" +
+  "});\n\n" +
+  "// API\n" +
+  "drawer.show()\n" +
+  "drawer.hide()\n" +
+  "drawer.toggle()\n" +
+  "drawer.setTitle('Updated title')\n" +
+  "drawer.setContent('<p>New content</p>')\n" +
+  "drawer.destroy()";
+
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  drawers = {
+    right:  new MTS.Drawer({ title:'Right drawer',  position:'right',  size:'md', content: CONTENT('right'),  onOpen: function(){ document.getElementById('drawer-result').textContent = 'onOpen → position: right'; },  onClose: function(){ document.getElementById('drawer-result').textContent = 'onClose → right'; } }),
+    left:   new MTS.Drawer({ title:'Left drawer',   position:'left',   size:'sm', content: CONTENT('left'),   onOpen: function(){ document.getElementById('drawer-result').textContent = 'onOpen → position: left'; },   onClose: function(){ document.getElementById('drawer-result').textContent = 'onClose → left'; } }),
+    top:    new MTS.Drawer({ title:'Top drawer',    position:'top',    size:'sm', content: CONTENT('top'),    onOpen: function(){ document.getElementById('drawer-result').textContent = 'onOpen → position: top'; },    onClose: function(){ document.getElementById('drawer-result').textContent = 'onClose → top'; } }),
+    bottom: new MTS.Drawer({ title:'Bottom sheet',  position:'bottom', size:'sm', content: CONTENT('bottom'), onOpen: function(){ document.getElementById('drawer-result').textContent = 'onOpen → position: bottom'; }, onClose: function(){ document.getElementById('drawer-result').textContent = 'onClose → bottom'; } }),
+    sm:     new MTS.Drawer({ title:'Small (sm)',    position:'right',  size:'sm', content: CONTENT('sm') }),
+    md:     new MTS.Drawer({ title:'Medium (md)',   position:'right',  size:'md', content: CONTENT('md') }),
+    lg:     new MTS.Drawer({ title:'Large (lg)',    position:'right',  size:'lg', content: CONTENT('lg') }),
+    full:   new MTS.Drawer({ title:'Full width',    position:'right',  size:'full', content: CONTENT('full') }),
+    static: new MTS.Drawer({
+      title:  'Static drawer',
+      static: true,
+      content: '<div style="padding:20px;font-size:14px;color:var(--mts-text-secondary)"><p>Este drawer <strong>no cierra</strong> con Esc ni haciendo click en el backdrop.</p><p>Solo cierra con el botón ×.</p></div>',
+    }),
+  };
+}, '340px');
+
+makeSection('tabs-s2', preview_s2, js_s2, null, '340px');
+
+makeSection('tabs-s3', preview_s3, js_s3, null, '340px');
+</script>
+</body>
 </html>

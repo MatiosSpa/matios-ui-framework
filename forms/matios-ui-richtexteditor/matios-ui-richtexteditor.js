@@ -66,7 +66,7 @@ MTS.RichTextEditor = class MtsRichTextEditor {
 
   /* ── API ── */
   getValue()        { return this._editor?.innerHTML || ''; }
-  setValue(html)    { if (this._editor) { this._editor.innerHTML = html; } return this; }
+  setValue(html)    { if (this._editor) { this._editor.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(html) : html; } return this; }
   getText()         { return this._editor?.innerText || ''; }
   focus()           { this._editor?.focus(); return this; }
   clear()           { if (this._editor) this._editor.innerHTML = ''; return this; }
@@ -105,7 +105,7 @@ MTS.RichTextEditor = class MtsRichTextEditor {
     editor.className = 'mts-rte__editor';
     editor.contentEditable = (!this.disabled && !this.readonly) ? 'true' : 'false';
     editor.spellcheck = true;
-    editor.innerHTML  = this._value;
+    editor.innerHTML  = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this._value) : this._value;
 
     /* Placeholder */
     if (!this._value) editor.classList.add('mts-rte__editor--empty');

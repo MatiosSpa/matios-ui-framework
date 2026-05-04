@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
@@ -47,19 +47,19 @@
       variant: 'elevated',
       size: 'lg',
       body:
-        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
-          '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
-            '<div class="mts-d-flex mts-items-center mts-gap-2 mts-flex-wrap">' +
+        '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
+          '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
+            '<div class="mts-d-flex mts-align-items--center mts-gap-2 mts-flex--wrap">' +
               MTS.Badge.html('Riesgo alto', 'danger', 'sm') +
               MTS.Badge.html('Abierta', 'warning', 'sm') +
             '</div>' +
-            '<p class="mts-text-md mts-text-muted mts-m-0">La alerta se gatillo por un inicio de sesion desde Bogota para un usuario que normalmente opera desde Santiago.</p>' +
+            '<p class="mts-text--md mts-text-color--muted mts-m-0">La alerta se gatillo por un inicio de sesion desde Bogota para un usuario que normalmente opera desde Santiago.</p>' +
           '</div>' +
           '<div class="mts-grid mts-grid--gap-md">' +
-            '<section class="mts-surface mts-g-col-12 mts-g-col-xl-8 mts-d-flex mts-flex-col mts-gap-3">' +
+            '<section class="mts-surface mts-g-col-12 mts-g-col-xl-8 mts-d-flex mts-flex--column mts-gap-3">' +
               '<div>' +
-                '<strong class="mts-text-md mts-text-primary">Resumen del incidente</strong>' +
-                '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Contexto base de la alerta antes de decidir contencion o cierre.</p>' +
+                '<strong class="mts-text--md mts-text-color--primary">Resumen del incidente</strong>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Contexto base de la alerta antes de decidir contencion o cierre.</p>' +
               '</div>' +
               '<div class="mts-grid mts-grid--gap-md">' +
                 summaryCell('Usuario', 'Camila Soto') +
@@ -70,22 +70,22 @@
                 summaryCell('Senal principal', 'Nueva ubicacion') +
               '</div>' +
             '</section>' +
-            '<section class="mts-surface mts-g-col-12 mts-g-col-xl-4 mts-d-flex mts-flex-col mts-gap-3">' +
+            '<section class="mts-surface mts-g-col-12 mts-g-col-xl-4 mts-d-flex mts-flex--column mts-gap-3">' +
               '<div>' +
-                '<strong class="mts-text-md mts-text-primary">Decision operativa</strong>' +
-                '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Acciones rapidas sobre la alerta.</p>' +
+                '<strong class="mts-text--md mts-text-color--primary">Decision operativa</strong>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Acciones rapidas sobre la alerta.</p>' +
               '</div>' +
-              '<ul class="mts-d-flex mts-flex-col mts-gap-2 mts-p-0 mts-m-0">' +
-                '<li class="mts-text-sm mts-text-secondary">Validar si hubo viaje o VPN declarada.</li>' +
-                '<li class="mts-text-sm mts-text-secondary">Comparar con sesiones cercanas del mismo usuario.</li>' +
-                '<li class="mts-text-sm mts-text-secondary">Contener si no existe contexto valido.</li>' +
+              '<ul class="mts-d-flex mts-flex--column mts-gap-2 mts-p-0 mts-m-0">' +
+                '<li class="mts-text--sm mts-text-color--secondary">Validar si hubo viaje o VPN declarada.</li>' +
+                '<li class="mts-text--sm mts-text-color--secondary">Comparar con sesiones cercanas del mismo usuario.</li>' +
+                '<li class="mts-text--sm mts-text-color--secondary">Contener si no existe contexto valido.</li>' +
               '</ul>' +
             '</section>' +
           '</div>' +
-          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+          '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text-md mts-text-primary">Analisis</strong>' +
-              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">La señal más fuerte es la ubicación fuera del patrón habitual. Aunque el segundo factor fue exitoso, conviene validar contexto antes de cerrar el incidente.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Analisis</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">La señal más fuerte es la ubicación fuera del patrón habitual. Aunque el segundo factor fue exitoso, conviene validar contexto antes de cerrar el incidente.</p>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md">' +
               analysisRow('Accion sugerida', 'Validar origen con la usuaria y revisar sesiones cercanas.') +
@@ -93,12 +93,12 @@
               analysisRow('Estado recomendado', 'Mantener abierta hasta confirmar origen.') +
             '</div>' +
           '</section>' +
-          '<section class="mts-surface mts-d-flex mts-flex-col mts-gap-3">' +
+          '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text-md mts-text-primary">Linea de tiempo</strong>' +
-              '<p class="mts-text-sm mts-text-muted mts-mt-1 mts-mb-0">Eventos cercanos para evaluar el riesgo.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Linea de tiempo</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Eventos cercanos para evaluar el riesgo.</p>' +
             '</div>' +
-            '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+            '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
               timelineRow('Ayer, 18:10', 'Inicio de sesion desde Bogota, CO', 'SSO + 2FA completado con exito.') +
               timelineRow('Ayer, 18:13', 'Alerta abierta por Security', 'Se detecta ubicacion fuera del patron habitual.') +
               timelineRow('Hoy, 08:20', 'Revision pendiente', 'Aun falta validar contexto con la usuaria.') +
@@ -135,15 +135,15 @@
     });
 
     function summaryCell(label, value) {
-      return '<div class="mts-g-col-12 mts-g-col-md-6 mts-g-col-xl-4"><div class="mts-surface mts-p-3 mts-d-flex mts-flex-col mts-gap-1"><span class="mts-text-xs mts-text-muted">' + label + '</span><strong class="mts-text-sm mts-text-primary">' + value + '</strong></div></div>';
+      return '<div class="mts-g-col-12 mts-g-col-md-6 mts-g-col-xl-4"><div class="mts-surface mts-p-3 mts-d-flex mts-flex--column mts-gap-1"><span class="mts-text--xs mts-text-color--muted">' + label + '</span><strong class="mts-text--sm mts-text-color--primary">' + value + '</strong></div></div>';
     }
 
     function analysisRow(label, value) {
-      return '<div class="mts-g-col-12 mts-g-col-md-4"><div class="mts-surface mts-p-3 mts-d-flex mts-flex-col mts-gap-1"><span class="mts-text-xs mts-text-muted">' + label + '</span><strong class="mts-text-sm mts-text-primary">' + value + '</strong></div></div>';
+      return '<div class="mts-g-col-12 mts-g-col-md-4"><div class="mts-surface mts-p-3 mts-d-flex mts-flex--column mts-gap-1"><span class="mts-text--xs mts-text-color--muted">' + label + '</span><strong class="mts-text--sm mts-text-color--primary">' + value + '</strong></div></div>';
     }
 
     function timelineRow(date, title, copy) {
-      return '<article class="mts-surface mts-p-3 mts-d-flex mts-flex-col mts-gap-1"><span class="mts-text-xs mts-text-muted">' + date + '</span><strong class="mts-text-sm mts-text-primary">' + title + '</strong><p class="mts-text-sm mts-text-secondary mts-m-0">' + copy + '</p></article>';
+      return '<article class="mts-surface mts-p-3 mts-d-flex mts-flex--column mts-gap-1"><span class="mts-text--xs mts-text-color--muted">' + date + '</span><strong class="mts-text--sm mts-text-color--primary">' + title + '</strong><p class="mts-text--sm mts-text-color--secondary mts-m-0">' + copy + '</p></article>';
     }
 
     function notify(variant, message) {

@@ -1,7 +1,7 @@
 # MTS.SideNav
 
-[EN] Collapsible sidebar navigation with nested submenus, badges, groups, dividers, accordion mode and external collapse button.
-[ES] Navegación lateral colapsable con submenús anidados, badges, grupos, divisores, modo acordeón y botón externo de colapso.
+🇬🇧 Collapsible sidebar navigation with nested submenus, badges, groups, dividers, accordion mode and external collapse button.
+🇪🇸 Navegación lateral colapsable con submenús anidados, badges, grupos, divisores, modo acordeón y botón externo de colapso.
 
 ---
 
@@ -17,31 +17,31 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `items` | `array` | `[]` | [EN] Navigation items tree / [ES] Árbol de ítems de navegación |
-| `active` | `string` | `''` | [EN] Initially active item ID / [ES] ID del ítem activo inicial |
-| `collapsed` | `boolean` | `false` | [EN] Start collapsed (icons only) / [ES] Iniciar colapsado (solo íconos) |
-| `collapseBtn` | `string` | — | [EN] External collapse button selector / [ES] Selector del botón externo de colapso |
-| `logo` | `string` | `''` | [EN] Logo HTML for the nav header / [ES] HTML del logo en el header |
-| `footer` | `string` | `''` | [EN] Footer HTML / [ES] HTML del pie de la nav |
-| `accordion` | `boolean` | `true` | [EN] Only one submenu open at a time / [ES] Solo un submenú abierto a la vez |
-| `onChange` | `function` | — | [EN] Fires when active item changes / [ES] Se dispara al cambiar el ítem activo |
-| `onCollapse` | `function` | — | [EN] Fires when nav collapses or expands / [ES] Se dispara al colapsar o expandir |
+| `items` | `array` | `[]` | 🇬🇧 Navigation items tree / 🇪🇸 Árbol de ítems de navegación |
+| `active` | `string` | `''` | 🇬🇧 Initially active item ID / 🇪🇸 ID del ítem activo inicial |
+| `collapsed` | `boolean` | `false` | 🇬🇧 Start collapsed (icons only) / 🇪🇸 Iniciar colapsado (solo íconos) |
+| `collapseBtn` | `string` | — | 🇬🇧 External collapse button selector / 🇪🇸 Selector del botón externo de colapso |
+| `logo` | `string` | `''` | 🇬🇧 Logo HTML for the nav header / 🇪🇸 HTML del logo en el header |
+| `footer` | `string` | `''` | 🇬🇧 Footer HTML / 🇪🇸 HTML del pie de la nav |
+| `accordion` | `boolean` | `true` | 🇬🇧 Only one submenu open at a time / 🇪🇸 Solo un submenú abierto a la vez |
+| `onChange` | `function` | — | 🇬🇧 Fires when active item changes / 🇪🇸 Se dispara al cambiar el ítem activo |
+| `onCollapse` | `function` | — | 🇬🇧 Fires when nav collapses or expands / 🇪🇸 Se dispara al colapsar o expandir |
 
 ### Item schema / Esquema de ítem
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `label` | `string` | [EN] Display text / [ES] Texto visible |
-| `icon` | `string` | [EN] Icon HTML / [ES] HTML del ícono |
-| `badge` | `string\|number` | [EN] Badge value / [ES] Valor del badge |
-| `href` | `string` | [EN] Link URL / [ES] URL del enlace |
-| `children` | `array` | [EN] Nested items (submenu) / [ES] Ítems anidados (submenú) |
-| `group` | `string` | [EN] Group label above item / [ES] Etiqueta de grupo |
-| `divider` | `boolean` | [EN] Renders a separator line / [ES] Renderiza una línea separadora |
-| `disabled` | `boolean` | [EN] Disables the item / [ES] Deshabilita el ítem |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `label` | `string` | 🇬🇧 Display text / 🇪🇸 Texto visible |
+| `icon` | `string` | 🇬🇧 Icon HTML / 🇪🇸 HTML del ícono |
+| `badge` | `string\|number` | 🇬🇧 Badge value / 🇪🇸 Valor del badge |
+| `href` | `string` | 🇬🇧 Link URL / 🇪🇸 URL del enlace |
+| `children` | `array` | 🇬🇧 Nested items (submenu) / 🇪🇸 Ítems anidados (submenú) |
+| `group` | `string` | 🇬🇧 Group label above item / 🇪🇸 Etiqueta de grupo |
+| `divider` | `boolean` | 🇬🇧 Renders a separator line / 🇪🇸 Renderiza una línea separadora |
+| `disabled` | `boolean` | 🇬🇧 Disables the item / 🇪🇸 Deshabilita el ítem |
 
 ---
 
@@ -163,10 +163,3 @@ document.getElementById('sidebar')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Fully normalized to `.on()` pattern, bilingual docs / [ES] Completamente normalizado al patrón `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release — collapse, submenus, badges, groups / [ES] Versión inicial |

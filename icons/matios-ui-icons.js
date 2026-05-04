@@ -165,6 +165,19 @@ const ICONS = {
   'file-audio':   { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M11 17H9a2 2 0 0 1 0-4h1v-4l4-1v4h1a2 2 0 0 1 0 4h-1"/>` },
   'file-code':    { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="10 13 8 15 10 17"/><polyline points="14 13 16 15 14 17"/>` },
   'file-zip':     { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><path d="M10 12h4v2h-4zM10 16h4v2h-4z"/>` },
+
+  /* ── OFIMATICA / OFFICE ───────────────────────────────── */
+  'file-word':       { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="8 11 9.5 18 12 14 14.5 18 16 11"/>` },
+  'file-excel':      { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="11.5" x2="16" y2="11.5"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="8" y1="18.5" x2="16" y2="18.5"/><line x1="12" y1="11.5" x2="12" y2="18.5"/>` },
+  'file-powerpoint': { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8.5 19v-8h2.5c3 0 3 4 0 4H8.5"/>` },
+  'file-access':     { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><ellipse cx="12" cy="12.5" rx="4" ry="1.5"/><path d="M8 12.5v4c0 .83 1.79 1.5 4 1.5c2.21 0 4-.67 4-1.5v-4"/>` },
+  'file-project':    { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="12" x2="14" y2="12"/><line x1="11" y1="15" x2="16" y2="15"/><line x1="8" y1="18" x2="13" y2="18"/>` },
+  'file-visio':      { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polygon points="12 11 16.5 15 12 19 7.5 15"/>` },
+  'file-onenote':    { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8.5" y1="11" x2="8.5" y2="19"/><line x1="8.5" y1="11" x2="15.5" y2="19"/><line x1="15.5" y1="11" x2="15.5" y2="19"/>` },
+  'file-publisher':  { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 12h3v6H8z"/><path d="M13 12h3v6h-3z"/>` },
+  'file-outlook':    { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><rect x="7.5" y="12" width="9" height="6.5" rx="0.5"/><polyline points="7.5 12 12 15.5 16.5 12"/>` },
+  'file-csv':        { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="11" y2="13"/><line x1="12.5" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="11.5" y2="17"/><line x1="13" y1="17" x2="16" y2="17"/>` },
+
   'folder':       { o: `<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>`,
                     f: `<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2v11z" fill="currentColor" stroke="none"/>` },
   'folder-open':  { o: `<path d="M6 14l1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/>` },

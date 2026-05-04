@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
@@ -90,10 +90,10 @@
       variant: 'elevated',
       size: 'lg',
       body:
-        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+        '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div id="profile-list-alert"></div>' +
-          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3">' +
-            '<p class="mts-text-md mts-text-muted mts-m-0">Cada perfil concentra permisos detallados de un modulo especifico.</p>' +
+          '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3">' +
+            '<p class="mts-text--md mts-text-color--muted mts-m-0">Cada perfil concentra permisos detallados de un modulo especifico.</p>' +
             '<span id="profile-list-count" class="mts-badge mts-badge--info mts-badge--sm">0 perfiles</span>' +
           '</div>' +
           '<div id="profile-list-table"></div>' +
@@ -163,7 +163,7 @@
               profiles.map(function (profile) {
                 return '' +
                   '<tr class="mts-table__row">' +
-                    '<td class="mts-table__td"><strong class="mts-text-sm mts-text-primary">' + escapeHtml(profile.name) + '</strong></td>' +
+                    '<td class="mts-table__td"><strong class="mts-text--sm mts-text-color--primary">' + escapeHtml(profile.name) + '</strong></td>' +
                     '<td class="mts-table__td">' + escapeHtml(profile.description) + '</td>' +
                     '<td class="mts-table__td mts-table__td--actions">' +
                       actionButton('edit', profile.id, 'edit', 'Editar') +

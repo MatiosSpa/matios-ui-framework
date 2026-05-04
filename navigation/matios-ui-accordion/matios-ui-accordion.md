@@ -1,7 +1,7 @@
 # MTS.Accordion
 
-[EN] Expandable sections component with single or multiple open panels, flush mode and icons.
-[ES] Componente de secciones expandibles con panel único o múltiple abierto, modo flush e íconos.
+🇬🇧 Expandable sections component with single or multiple open panels, flush mode and icons.
+🇪🇸 Componente de secciones expandibles con panel único o múltiple abierto, modo flush e íconos.
 
 ---
 
@@ -17,24 +17,24 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `items` | `array` | `[]` | [EN] Accordion items (see below) / [ES] Ítems del acordeón |
-| `multiple` | `boolean` | `false` | [EN] Allow multiple panels open simultaneously / [ES] Permitir múltiples paneles abiertos |
-| `flush` | `boolean` | `false` | [EN] No card border — flat style / [ES] Sin borde card — estilo plano |
-| `onOpen` | `function` | — | [EN] Fires when a panel opens / [ES] Se dispara al abrir un panel |
-| `onClose` | `function` | — | [EN] Fires when a panel closes / [ES] Se dispara al cerrar un panel |
+| `items` | `array` | `[]` | 🇬🇧 Accordion items (see below) / 🇪🇸 Ítems del acordeón |
+| `multiple` | `boolean` | `false` | 🇬🇧 Allow multiple panels open simultaneously / 🇪🇸 Permitir múltiples paneles abiertos |
+| `flush` | `boolean` | `false` | 🇬🇧 No card border — flat style / 🇪🇸 Sin borde card — estilo plano |
+| `onOpen` | `function` | — | 🇬🇧 Fires when a panel opens / 🇪🇸 Se dispara al abrir un panel |
+| `onClose` | `function` | — | 🇬🇧 Fires when a panel closes / 🇪🇸 Se dispara al cerrar un panel |
 
 ### Item schema / Esquema de ítem
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `title` | `string` | [EN] Panel header text / [ES] Texto del header |
-| `content` | `string` | [EN] Panel HTML content / [ES] Contenido HTML del panel |
-| `icon` | `string` | [EN] Icon HTML (optional) / [ES] HTML del ícono (opcional) |
-| `open` | `boolean` | [EN] Initially open / [ES] Abierto inicialmente |
-| `disabled` | `boolean` | [EN] Disables the panel / [ES] Deshabilita el panel |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `title` | `string` | 🇬🇧 Panel header text / 🇪🇸 Texto del header |
+| `content` | `string` | 🇬🇧 Panel HTML content / 🇪🇸 Contenido HTML del panel |
+| `icon` | `string` | 🇬🇧 Icon HTML (optional) / 🇪🇸 HTML del ícono (opcional) |
+| `open` | `boolean` | 🇬🇧 Initially open / 🇪🇸 Abierto inicialmente |
+| `disabled` | `boolean` | 🇬🇧 Disables the panel / 🇪🇸 Deshabilita el panel |
 
 ---
 
@@ -169,10 +169,3 @@ document.getElementById('my-accordion')
 | `onClose` | `mts:accordion:close` |
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 1.0.0 | [EN] Initial release — single/multiple, flush, icons, disabled / [ES] Versión inicial |

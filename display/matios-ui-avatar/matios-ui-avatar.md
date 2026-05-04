@@ -1,7 +1,7 @@
 # MTS.Avatar
 
-[EN] Avatar component with image, initials fallback, status dot, badge and group support. Auto-generates initials and color from name.
-[ES] Componente de avatar con imagen, fallback a iniciales, dot de estado, badge y soporte de grupo. Genera iniciales y color automáticamente desde el nombre.
+🇬🇧 Avatar component with image, initials fallback, status dot, badge and group support. Auto-generates initials and color from name.
+🇪🇸 Componente de avatar con imagen, fallback a iniciales, dot de estado, badge y soporte de grupo. Genera iniciales y color automáticamente desde el nombre.
 
 ---
 
@@ -17,16 +17,16 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `src` | `string` | `null` | [EN] Image URL — falls back to initials on error / [ES] URL de imagen — cae a iniciales si falla |
-| `name` | `string` | `''` | [EN] Full name — generates initials and auto color / [ES] Nombre completo — genera iniciales y color |
-| `initials` | `string` | auto | [EN] Manual initials — overrides name / [ES] Iniciales manuales — sobreescribe name |
+| `src` | `string` | `null` | 🇬🇧 Image URL — falls back to initials on error / 🇪🇸 URL de imagen — cae a iniciales si falla |
+| `name` | `string` | `''` | 🇬🇧 Full name — generates initials and auto color / 🇪🇸 Nombre completo — genera iniciales y color |
+| `initials` | `string` | auto | 🇬🇧 Manual initials — overrides name / 🇪🇸 Iniciales manuales — sobreescribe name |
 | `size` | `string` | `'md'` | `'xs'` · `'sm'` · `'md'` · `'lg'` · `'xl'` |
-| `color` | `string` | auto | [EN] Background color — auto-generated from name / [ES] Color de fondo — auto desde name |
+| `color` | `string` | auto | 🇬🇧 Background color — auto-generated from name / 🇪🇸 Color de fondo — auto desde name |
 | `status` | `string` | `null` | `'online'` · `'offline'` · `'busy'` · `'away'` |
-| `square` | `boolean` | `false` | [EN] Square shape / [ES] Forma cuadrada |
-| `badge` | `string\|number` | `null` | [EN] Badge text or number / [ES] Texto o número en badge |
+| `square` | `boolean` | `false` | 🇬🇧 Square shape / 🇪🇸 Forma cuadrada |
+| `badge` | `string\|number` | `null` | 🇬🇧 Badge text or number / 🇪🇸 Texto o número en badge |
 
 ---
 
@@ -138,10 +138,3 @@ MTS.Avatar.colorFromName('Ana García') // → '#...' (deterministic)
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingüe, docs estandarizados |
-| 1.0.0 | [EN] Initial release — image/initials, status, badge, group / [ES] Versión inicial |

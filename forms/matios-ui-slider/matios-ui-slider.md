@@ -1,7 +1,7 @@
 # MTS.Slider
 
-[EN] Range slider component — single value or dual-thumb range, with label, custom formatter and step.
-[ES] Componente slider de rango — valor simple o rango de dos thumbs, con label, formateador personalizado y step.
+🇬🇧 Range slider component — single value or dual-thumb range, with label, custom formatter and step.
+🇪🇸 Componente slider de rango — valor simple o rango de dos thumbs, con label, formateador personalizado y step.
 
 ---
 
@@ -17,24 +17,24 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `min` | `number` | `0` | [EN] Minimum value / [ES] Valor mínimo |
-| `max` | `number` | `100` | [EN] Maximum value / [ES] Valor máximo |
-| `step` | `number` | `1` | [EN] Step increment / [ES] Incremento de paso |
-| `value` | `number\|array` | `min` | [EN] Initial value. Array `[min, max]` for range / [ES] Valor inicial. Array `[min, max]` para rango |
-| `range` | `boolean` | `false` | [EN] Enable dual-thumb range mode / [ES] Activar modo rango de dos thumbs |
-| `label` | `string` | `''` | [EN] Label text above slider / [ES] Texto label sobre el slider |
-| `showValue` | `boolean` | `true` | [EN] Show current value next to label / [ES] Mostrar valor actual junto al label |
-| `labelFormat` | `function` | `null` | [EN] Custom value formatter / [ES] Formateador personalizado de valor |
-| `onChange` | `function` | — | [EN] Fires when value changes / [ES] Se dispara al cambiar el valor |
+| `min` | `number` | `0` | 🇬🇧 Minimum value / 🇪🇸 Valor mínimo |
+| `max` | `number` | `100` | 🇬🇧 Maximum value / 🇪🇸 Valor máximo |
+| `step` | `number` | `1` | 🇬🇧 Step increment / 🇪🇸 Incremento de paso |
+| `value` | `number\|array` | `min` | 🇬🇧 Initial value. Array `[min, max]` for range / 🇪🇸 Valor inicial. Array `[min, max]` para rango |
+| `range` | `boolean` | `false` | 🇬🇧 Enable dual-thumb range mode / 🇪🇸 Activar modo rango de dos thumbs |
+| `label` | `string` | `''` | 🇬🇧 Label text above slider / 🇪🇸 Texto label sobre el slider |
+| `showValue` | `boolean` | `true` | 🇬🇧 Show current value next to label / 🇪🇸 Mostrar valor actual junto al label |
+| `labelFormat` | `function` | `null` | 🇬🇧 Custom value formatter / 🇪🇸 Formateador personalizado de valor |
+| `onChange` | `function` | — | 🇬🇧 Fires when value changes / 🇪🇸 Se dispara al cambiar el valor |
 
 ---
 
 ## Events / Eventos
 
-[EN] Use `onChange` in the constructor. This is the recommended approach.
-[ES] Usa `onChange` en el constructor. Este es el enfoque recomendado.
+🇬🇧 Use `onChange` in the constructor. This is the recommended approach.
+🇪🇸 Usa `onChange` en el constructor. Este es el enfoque recomendado.
 
 ```js
 // Simple slider / Slider simple
@@ -167,11 +167,3 @@ document.getElementById('my-slider')
 | `onChange` | `mts:slider:change` |
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 3.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 3.0.0 | [EN] Rewritten with custom div thumbs and drag API — fixed dual-thumb behavior / [ES] Reescrito con thumbs div custom y API drag — corregido comportamiento rango doble |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

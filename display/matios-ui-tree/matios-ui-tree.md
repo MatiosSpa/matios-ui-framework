@@ -1,7 +1,7 @@
 # MTS.Tree
 
-[EN] Tree view with expand/collapse, selectable nodes, checkboxes with child propagation, icons, badges and connection lines.
-[ES] Vista de árbol con expandir/colapsar, nodos seleccionables, checkboxes con propagación a hijos, íconos, badges y líneas de conexión.
+🇬🇧 Tree view with expand/collapse, selectable nodes, checkboxes with child propagation, icons, badges and connection lines.
+🇪🇸 Vista de árbol con expandir/colapsar, nodos seleccionables, checkboxes con propagación a hijos, íconos, badges y líneas de conexión.
 
 ---
 
@@ -17,31 +17,31 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `nodes` | `array` | `[]` | [EN] Node tree (see schema) / [ES] Árbol de nodos |
-| `expandAll` | `boolean` | `false` | [EN] Expand all nodes on init / [ES] Expandir todos al inicio |
-| `selectable` | `boolean` | `false` | [EN] Allow node selection / [ES] Permitir selección de nodos |
-| `checkable` | `boolean` | `false` | [EN] Show checkboxes / [ES] Mostrar checkboxes |
-| `showIcons` | `boolean` | `true` | [EN] Show folder/file icons / [ES] Mostrar íconos folder/file |
-| `showLines` | `boolean` | `true` | [EN] Show connection lines / [ES] Mostrar líneas de conexión |
-| `onSelect` | `function` | — | [EN] `({ node, path }) => {}` Fires on node selection / [ES] Se dispara al seleccionar un nodo |
-| `onToggle` | `function` | — | [EN] `({ node, expanded }) => {}` Fires on expand/collapse / [ES] Se dispara al expandir/colapsar |
-| `onCheck` | `function` | — | [EN] `({ node, checked, checkedIds }) => {}` Fires on checkbox change / [ES] Se dispara al cambiar un checkbox |
+| `nodes` | `array` | `[]` | 🇬🇧 Node tree (see schema) / 🇪🇸 Árbol de nodos |
+| `expandAll` | `boolean` | `false` | 🇬🇧 Expand all nodes on init / 🇪🇸 Expandir todos al inicio |
+| `selectable` | `boolean` | `false` | 🇬🇧 Allow node selection / 🇪🇸 Permitir selección de nodos |
+| `checkable` | `boolean` | `false` | 🇬🇧 Show checkboxes / 🇪🇸 Mostrar checkboxes |
+| `showIcons` | `boolean` | `true` | 🇬🇧 Show folder/file icons / 🇪🇸 Mostrar íconos folder/file |
+| `showLines` | `boolean` | `true` | 🇬🇧 Show connection lines / 🇪🇸 Mostrar líneas de conexión |
+| `onSelect` | `function` | — | 🇬🇧 `({ node, path }) => {}` Fires on node selection / 🇪🇸 Se dispara al seleccionar un nodo |
+| `onToggle` | `function` | — | 🇬🇧 `({ node, expanded }) => {}` Fires on expand/collapse / 🇪🇸 Se dispara al expandir/colapsar |
+| `onCheck` | `function` | — | 🇬🇧 `({ node, checked, checkedIds }) => {}` Fires on checkbox change / 🇪🇸 Se dispara al cambiar un checkbox |
 
 ### Node schema / Esquema de nodo
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `label` | `string` | [EN] Display text / [ES] Texto visible |
-| `children` | `array` | [EN] Child nodes / [ES] Nodos hijos |
-| `expanded` | `boolean` | [EN] Initially expanded / [ES] Expandido inicialmente |
-| `selected` | `boolean` | [EN] Initially selected / [ES] Seleccionado inicialmente |
-| `checked` | `boolean` | [EN] Initially checked / [ES] Marcado inicialmente |
-| `icon` | `string` | [EN] Custom SVG icon / [ES] Ícono SVG personalizado |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `label` | `string` | 🇬🇧 Display text / 🇪🇸 Texto visible |
+| `children` | `array` | 🇬🇧 Child nodes / 🇪🇸 Nodos hijos |
+| `expanded` | `boolean` | 🇬🇧 Initially expanded / 🇪🇸 Expandido inicialmente |
+| `selected` | `boolean` | 🇬🇧 Initially selected / 🇪🇸 Seleccionado inicialmente |
+| `checked` | `boolean` | 🇬🇧 Initially checked / 🇪🇸 Marcado inicialmente |
+| `icon` | `string` | 🇬🇧 Custom SVG icon / 🇪🇸 Ícono SVG personalizado |
 | `badge` | `object` | `{ label, variant? }` |
-| `disabled` | `boolean` | [EN] Disables the node / [ES] Deshabilita el nodo |
+| `disabled` | `boolean` | 🇬🇧 Disables the node / 🇪🇸 Deshabilita el nodo |
 
 ---
 
@@ -172,10 +172,3 @@ el.addEventListener('mts:tree:check',  (e) => console.log(e.detail));
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Normalized to `.on()`, improved CSS styles, bilingual docs / [ES] Normalizado a `.on()`, estilos CSS mejorados, docs bilingüe |
-| 1.0.0 | [EN] Initial release — expand/collapse, selectable, checkable, badges / [ES] Versión inicial |

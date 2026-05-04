@@ -33,7 +33,8 @@ MTS.Modal = class MtsModal {
    * @param {boolean}  options.closable          Muestra botón X y cierra con Esc — default: true
    * @param {boolean}  options.backdrop          Click fuera cierra — default: true
    * @param {boolean}  options.scrollable        Body scrolleable — default: false
-   * @param {boolean}  options.centered          Centrado verticalmente — default: true
+   * @param {string}   options.position          'top' | 'center' | 'bottom' — posición vertical (default: 'center')
+   * @param {boolean}  options.centered          Alias backward-compat de position:'center' — default: true
    * @param {boolean}  options.static            No cierra con Esc ni backdrop — default: false
    *
    * — Callbacks (alternativa a .on()) —
@@ -86,11 +87,17 @@ MTS.Modal = class MtsModal {
     // Body is scrollable / Body es scrolleable
     this.scrollable = options.scrollable ?? false;
 
-    // Center modal vertically / Centrar modal verticalmente
-    this.centered = options.centered ?? true;
+    // Position: 'top' | 'center' | 'bottom' (default: 'center')
+    // 'centered' se mantiene como alias de backward-compat → position: 'center'
+    const centeredAlias = options.centered ?? true
+    this.position = options.position ?? (centeredAlias ? 'center' : 'top')
 
     // Static — does not close on Esc or backdrop / No cierra con Esc ni backdrop
     this.static = options.static ?? false;
+
+    // Border radius of the modal panel / Radio de bordes del panel del modal
+    // 'none' | 'sm' | 'md' | 'lg' | 'xl' — default: 'none'
+    this.radius = options.radius || 'none';
 
     this._listeners = {};
     this._isOpen    = false;
@@ -187,10 +194,17 @@ MTS.Modal = class MtsModal {
     return this._isOpen ? this.hide() : this.show();
   }
 
-  /** Actualiza el título */
-  setTitle(html) {
-    if (this._titleEl) this._titleEl.innerHTML = html;
-    this.title = html;
+  /** Actualiza el título — acepta string o Element */
+  setTitle(content) {
+    if (this._titleEl) {
+      this._titleEl.innerHTML = '';
+      if (content instanceof Element) {
+        this._titleEl.appendChild(content);
+      } else {
+        this._titleEl.textContent = content;
+      }
+    }
+    this.title = content;
     return this;
   }
 
@@ -201,7 +215,7 @@ MTS.Modal = class MtsModal {
       if (content instanceof Element) {
         this._bodyEl.appendChild(content);
       } else {
-        this._bodyEl.innerHTML = content;
+        this._bodyEl.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(content) : content;
       }
     }
     return this;
@@ -426,13 +440,15 @@ MTS.Modal = class MtsModal {
 
     // — Dialog —
     this._dialogEl = document.createElement('div');
-    this._dialogEl.className  = `mts-modal mts-modal--${this.size}`;
+    this._dialogEl.className  = `mts-modal mts-modal--${this.size} mts-modal--${this.position}`;
+    if (this.radius && this.radius !== 'none') {
+      this._dialogEl.classList.add(`mts-modal--radius-${this.radius}`);
+    }
     this._dialogEl.id         = this.id;
     this._dialogEl.setAttribute('role', 'dialog');
     this._dialogEl.setAttribute('aria-modal', 'true');
     this._dialogEl.setAttribute('aria-hidden', 'true');
     this._dialogEl.setAttribute('hidden', '');
-    if (this.centered)   this._dialogEl.classList.add('mts-modal--centered');
     if (this.scrollable) this._dialogEl.classList.add('mts-modal--scrollable');
 
     // — Content —
@@ -444,8 +460,12 @@ MTS.Modal = class MtsModal {
     this._headerEl.className = 'mts-modal__header';
 
     this._titleEl = document.createElement('h5');
-    this._titleEl.className   = 'mts-modal__title';
-    this._titleEl.innerHTML   = this.title;
+    this._titleEl.className = 'mts-modal__title';
+    if (this.title instanceof Element) {
+      this._titleEl.appendChild(this.title);
+    } else {
+      this._titleEl.textContent = this.title;
+    }
     this._headerEl.appendChild(this._titleEl);
 
     if (this.closable) {
@@ -463,7 +483,7 @@ MTS.Modal = class MtsModal {
     if (this.body instanceof Element) {
       this._bodyEl.appendChild(this.body);
     } else {
-      this._bodyEl.innerHTML = this.body;
+      this._bodyEl.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.body) : this.body;
     }
 
     // — Footer —
@@ -476,7 +496,7 @@ MTS.Modal = class MtsModal {
         if (this.footer instanceof Element) {
           this._footerEl.appendChild(this.footer);
         } else {
-          this._footerEl.innerHTML = this.footer;
+          this._footerEl.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.footer) : this.footer;
         }
       }
 

@@ -55,9 +55,53 @@ body.mts-modal-open {
   display: none;
 }
 
-/* Centrado vertical */
+/* ── position: 'top' (default) ── */
+.mts-modal--top {
+  align-items: flex-start;
+}
+
+/* ── position: 'center' ──
+   Usa margin: auto en el content en lugar de align-items: center,
+   para que funcione correctamente cuando el contenido supera el viewport. */
+.mts-modal--center {
+  align-items: flex-start;
+}
+.mts-modal--center .mts-modal__content {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/* ── position: 'bottom' — bottom sheet ── */
+.mts-modal--bottom {
+  align-items: flex-end;
+  padding-bottom: 0;
+}
+.mts-modal--bottom .mts-modal__content {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  max-width: 100%;
+  width: 100%;
+}
+.mts-modal--bottom.mts-modal--sm   .mts-modal__content { max-width: 480px; }
+.mts-modal--bottom.mts-modal--md   .mts-modal__content { max-width: 640px; }
+.mts-modal--bottom.mts-modal--lg   .mts-modal__content { max-width: 800px; }
+.mts-modal--bottom.mts-modal--xl   .mts-modal__content { max-width: 1100px; }
+
+/* Animación bottom: entra desde abajo */
+.mts-modal--bottom .mts-modal__content {
+  transform: translateY(32px) scale(1);
+}
+.mts-modal--bottom.mts-modal--visible .mts-modal__content {
+  transform: translateY(0) scale(1);
+}
+
+/* Backward compat — centered: true */
 .mts-modal--centered {
-  align-items: center;
+  align-items: flex-start;
+}
+.mts-modal--centered .mts-modal__content {
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 /* Scrollable — body hace scroll, no el viewport */
@@ -78,12 +122,13 @@ body.mts-modal-open {
   position: relative;
   background: var(--mts-bg-surface);
   border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
-  border-radius: var(--mts-radius-xl);
+  border-radius: 0;
   box-shadow: var(--mts-shadow-xl);
   width: 100%;
   display: flex;
   flex-direction: column;
   pointer-events: auto;
+  overflow: hidden;
 
   /* Animación de entrada */
   opacity: 0;
@@ -97,6 +142,13 @@ body.mts-modal-open {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
+
+
+/* ── Radius — modificadores opcionales ── */
+.mts-modal--radius-sm .mts-modal__content { border-radius: var(--mts-radius-sm); }
+.mts-modal--radius-md .mts-modal__content { border-radius: var(--mts-radius-md); }
+.mts-modal--radius-lg .mts-modal__content { border-radius: var(--mts-radius-lg); }
+.mts-modal--radius-xl .mts-modal__content { border-radius: var(--mts-radius-xl); }
 
 
 /* ============================================================
@@ -188,6 +240,7 @@ body.mts-modal-open {
   line-height: var(--mts-line-height-base);
   flex: 1;
   min-height: 0;
+  overflow-y: auto;
   box-sizing: border-box;
 }
 
@@ -197,6 +250,8 @@ body.mts-modal-open {
 }
 
 .mts-modal--fullscreen .mts-modal__body {
+  display: flex;
+  flex-direction: column;
   overflow: auto;
 }
 
@@ -254,24 +309,33 @@ body.mts-modal-open {
    ============================================================ */
 
 @media (max-width: 576px) {
-  .mts-modal {
-    padding: var(--mts-space-4) var(--mts-space-2);
-    align-items: flex-end;
-  }
-
+  /* top y center → sheet desde abajo en mobile */
+  .mts-modal--top,
+  .mts-modal--center,
   .mts-modal--centered {
+    padding: var(--mts-space-4) 0 0;
     align-items: flex-end;
   }
 
-  .mts-modal__content {
+  .mts-modal--top    .mts-modal__content,
+  .mts-modal--center .mts-modal__content,
+  .mts-modal--centered .mts-modal__content {
+    margin: 0;   /* anula el margin: auto del center en desktop */
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    border-radius: var(--mts-radius-xl) var(--mts-radius-xl) 0 0;
+    max-width: 100%;
     transform: translateY(40px) scale(1) !important;
   }
 
-  .mts-modal--visible .mts-modal__content {
+  .mts-modal--top.mts-modal--visible    .mts-modal__content,
+  .mts-modal--center.mts-modal--visible .mts-modal__content,
+  .mts-modal--centered.mts-modal--visible .mts-modal__content {
     transform: translateY(0) scale(1) !important;
+  }
+
+  /* bottom siempre fue sheet — mantiene estilos base */
+  .mts-modal--bottom {
+    padding: 0;
   }
 
   .mts-modal--sm .mts-modal__content,

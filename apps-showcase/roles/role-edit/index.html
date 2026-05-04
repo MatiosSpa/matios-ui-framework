@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
@@ -191,12 +191,12 @@
       variant: 'elevated',
       size: 'lg',
       body:
-        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+        '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div id="role-edit-alert"></div>' +
-          '<section class="mts-surface mts-p-4 mts-d-flex mts-justify-between mts-gap-4 mts-flex-wrap">' +
-            '<div class="mts-d-flex mts-flex-col mts-gap-2">' +
-              '<p class="mts-text-md mts-m-0">Ajusta un rol existente con la misma experiencia visual que ya usamos en la alta. Cada modulo conserva un unico perfil activo.</p>' +
-              '<p class="mts-text-sm mts-text-muted mts-m-0">Para reemplazar un perfil, quita el actual y mueve el nuevo desde disponibles. Si intentas repetir modulo, la transferencia se bloquea y rebota al origen.</p>' +
+          '<section class="mts-surface mts-p-4 mts-d-flex mts-justify-content--between mts-gap-4 mts-flex--wrap">' +
+            '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
+              '<p class="mts-text--md mts-m-0">Ajusta un rol existente con la misma experiencia visual que ya usamos en la alta. Cada modulo conserva un unico perfil activo.</p>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-m-0">Para reemplazar un perfil, quita el actual y mueve el nuevo desde disponibles. Si intentas repetir modulo, la transferencia se bloquea y rebota al origen.</p>' +
             '</div>' +
             '<div>' +
               '<span id="role-edit-status" class="mts-badge mts-badge--info mts-badge--sm">0 perfiles activos</span>' +
@@ -206,28 +206,28 @@
             '<div class="mts-g-col-12 mts-g-col-md-6"><div id="role-edit-name"></div></div>' +
             '<div class="mts-g-col-12"><div id="role-edit-description"></div></div>' +
           '</div>' +
-          '<section class="mts-surface mts-p-4 mts-d-flex mts-flex-col mts-gap-4">' +
-            '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3 mts-flex-wrap">' +
+          '<section class="mts-surface mts-p-4 mts-d-flex mts-flex--column mts-gap-4">' +
+            '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3 mts-flex--wrap">' +
               '<div>' +
                 '<h3 class="mts-h4 mts-m-0">Perfiles del rol</h3>' +
-                '<p class="mts-text-sm mts-text-muted mts-m-0">Version de edicion alineada con la experiencia de `role-create`.</p>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-m-0">Version de edicion alineada con la experiencia de `role-create`.</p>' +
               '</div>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md mts-grid--center">' +
               '<div class="mts-g-col-12 mts-g-col-md-6">' +
                 '<div id="role-edit-module-filter"></div>' +
               '</div>' +
-              '<div class="mts-g-col-12 mts-g-col-md-6 mts-d-flex mts-items-center mts-justify-between">' +
+              '<div class="mts-g-col-12 mts-g-col-md-6 mts-d-flex mts-align-items--center mts-justify-content--between">' +
                 '<span id="role-edit-filter-count" class="mts-badge mts-badge--neutral mts-badge--sm">0 perfiles visibles</span>' +
               '</div>' +
             '</div>' +
             '<div id="role-edit-transfer"></div>' +
           '</section>' +
           '<section class="mts-surface mts-p-4">' +
-            '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3 mts-flex-wrap">' +
+            '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3 mts-flex--wrap">' +
               '<div>' +
                 '<h3 class="mts-h4 mts-m-0">Cobertura actual</h3>' +
-                '<p class="mts-text-sm mts-text-muted mts-m-0">Resumen del rol luego de cada ajuste para revisar rapido que modulos siguen cubiertos.</p>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-m-0">Resumen del rol luego de cada ajuste para revisar rapido que modulos siguen cubiertos.</p>' +
               '</div>' +
               '<span id="role-edit-count" class="mts-badge mts-badge--info mts-badge--sm">0 modulos</span>' +
             '</div>' +
@@ -386,7 +386,7 @@
       if (!items.length) {
         document.getElementById('role-edit-summary').innerHTML =
           '<div class="mts-g-col-12">' +
-            '<div class="mts-surface mts-p-4 mts-d-flex mts-flex-col mts-gap-2 mts-items-center mts-justify-center mts-text-center">' +
+            '<div class="mts-surface mts-p-4 mts-d-flex mts-flex--column mts-gap-2 mts-align-items--center mts-justify-content--center mts-text--center">' +
             '<strong>El rol quedo vacio.</strong>' +
             '<span>Vuelve a mover perfiles desde la lista izquierda para recuperar cobertura por modulo.</span>' +
             '</div>' +
@@ -396,10 +396,10 @@
 
       document.getElementById('role-edit-summary').innerHTML = items.map(function (item) {
         return '' +
-          '<article class="mts-surface mts-p-4 mts-d-flex mts-flex-col mts-gap-2 mts-g-col-12 mts-g-col-md-6 mts-g-col-xl-3">' +
-            '<span class="mts-text-xs mts-text-semibold mts-text-accent">' + escapeHtml(item.moduleName) + '</span>' +
+          '<article class="mts-surface mts-p-4 mts-d-flex mts-flex--column mts-gap-2 mts-g-col-12 mts-g-col-md-6 mts-g-col-xl-3">' +
+            '<span class="mts-text--xs mts-fw--semibold mts-text-color--accent">' + escapeHtml(item.moduleName) + '</span>' +
             '<h4 class="mts-h4 mts-m-0">' + escapeHtml(item.name) + '</h4>' +
-            '<p class="mts-text-sm mts-text-muted mts-m-0">' + escapeHtml(item.description) + '</p>' +
+            '<p class="mts-text--sm mts-text-color--muted mts-m-0">' + escapeHtml(item.description) + '</p>' +
           '</article>';
       }).join('');
     }

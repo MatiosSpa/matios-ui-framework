@@ -1,0 +1,115 @@
+/* ============================================================
+   MATIOS UI — matios-ui-topbar.css
+   MTS.Topbar — Barra superior para dashboards y apps
+   Requiere: matios-ui-base.css
+   ============================================================ */
+
+.mts-topbar {
+  --mts-topbar-height: 52px;
+  --mts-topbar-bg: var(--mts-bg-surface);
+  --mts-topbar-border-color: var(--mts-border-color);
+  --mts-topbar-shadow: 0 1px 4px rgba(0, 0, 0, .07);
+  --mts-topbar-padding: 0 var(--mts-space-4);
+  --mts-topbar-gap: var(--mts-space-3);
+
+  height: var(--mts-topbar-height);
+  background: var(--mts-topbar-bg);
+  border-bottom: var(--mts-border-width) var(--mts-border-style) var(--mts-topbar-border-color);
+  box-shadow: var(--mts-topbar-shadow);
+  display: flex;
+  align-items: center;
+  padding: var(--mts-topbar-padding);
+  gap: var(--mts-topbar-gap);
+  flex-shrink: 0;
+  z-index: var(--mts-z-sticky, 100);
+}
+
+.mts-topbar--sticky    { position: sticky; top: 0; }
+.mts-topbar--no-shadow { --mts-topbar-shadow: none; }
+.mts-topbar--no-border { border-bottom: none; }
+
+/* ── Brand ─────────────────────────────────────────── */
+.mts-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+  cursor: pointer;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: inherit;
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+}
+.mts-topbar__brand:hover { opacity: .85; }
+
+.mts-topbar__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mts-topbar__brand-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.mts-topbar__title {
+  font-size: var(--mts-font-size-md);
+  font-weight: var(--mts-font-weight-bold);
+  color: var(--mts-text-primary);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.mts-topbar__subtitle {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+/* ── Slots ─────────────────────────────────────────── */
+.mts-topbar__start {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+}
+
+.mts-topbar__spacer { flex: 1; }
+
+/* Slot de MTS.Menu montado en topbar */
+.mts-topbar__menu {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  /* overflow: visible — necesario para que el dropdown salga del topbar */
+}
+
+.mts-topbar__center {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+  flex: 1;
+  justify-content: center;
+}
+
+.mts-topbar__end {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+}
+
+/* ── Divider visual entre grupos de acciones ───────── */
+.mts-topbar__divider {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background: var(--mts-topbar-border-color);
+  flex-shrink: 0;
+  margin: 0 var(--mts-space-1);
+  align-self: center;
+}

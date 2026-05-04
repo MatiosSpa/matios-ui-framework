@@ -1,7 +1,7 @@
 # MTS.Pagination
 
-[EN] Full-featured pagination with page size selector, record summary, jump-to-page and size variants.
-[ES] Paginación completa con selector de page size, resumen de registros, ir a página y variantes de tamaño.
+🇬🇧 Full-featured pagination with page size selector, record summary, jump-to-page and size variants.
+🇪🇸 Paginación completa con selector de page size, resumen de registros, ir a página y variantes de tamaño.
 
 ---
 
@@ -17,18 +17,18 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `total` | `number` | `0` | [EN] Total number of records / [ES] Total de registros |
-| `page` | `number` | `1` | [EN] Current page (1-based) / [ES] Página actual (base 1) |
-| `pageSize` | `number` | `10` | [EN] Records per page / [ES] Registros por página |
-| `pageSizes` | `number[]` | `[10,25,50,100]` | [EN] Page size options / [ES] Opciones del selector |
-| `showSizes` | `boolean` | `true` | [EN] Show page size selector / [ES] Mostrar selector de page size |
-| `showInfo` | `boolean` | `true` | [EN] Show "Showing X-Y of Z" / [ES] Mostrar "Mostrando X-Y de Z" |
-| `showJump` | `boolean` | `false` | [EN] Show jump-to-page input / [ES] Mostrar input para ir a página |
-| `siblings` | `number` | `1` | [EN] Pages shown on each side of active / [ES] Páginas a cada lado del activo |
+| `total` | `number` | `0` | 🇬🇧 Total number of records / 🇪🇸 Total de registros |
+| `page` | `number` | `1` | 🇬🇧 Current page (1-based) / 🇪🇸 Página actual (base 1) |
+| `pageSize` | `number` | `10` | 🇬🇧 Records per page / 🇪🇸 Registros por página |
+| `pageSizes` | `number[]` | `[10,25,50,100]` | 🇬🇧 Page size options / 🇪🇸 Opciones del selector |
+| `showSizes` | `boolean` | `true` | 🇬🇧 Show page size selector / 🇪🇸 Mostrar selector de page size |
+| `showInfo` | `boolean` | `true` | 🇬🇧 Show "Showing X-Y of Z" / 🇪🇸 Mostrar "Mostrando X-Y de Z" |
+| `showJump` | `boolean` | `false` | 🇬🇧 Show jump-to-page input / 🇪🇸 Mostrar input para ir a página |
+| `siblings` | `number` | `1` | 🇬🇧 Pages shown on each side of active / 🇪🇸 Páginas a cada lado del activo |
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
-| `onChange` | `function` | — | [EN] Fires when page or page size changes / [ES] Se dispara al cambiar la página o page size |
+| `onChange` | `function` | — | 🇬🇧 Fires when page or page size changes / 🇪🇸 Se dispara al cambiar la página o page size |
 
 ---
 
@@ -116,6 +116,9 @@ pag.setPageSize(50)
 // Get current state / Obtener estado actual
 pag.getState()
 // → { page: 3, pageSize: 25, total: 250, from: 51, to: 75 }
+
+// Register event listener / Registrar listener
+pag.on('change', (e) => console.log(e.detail))
 ```
 
 ---
@@ -130,10 +133,3 @@ document.getElementById('my-pagination')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 1.0.0 | [EN] Initial release — page size, info, jump, siblings / [ES] Versión inicial |

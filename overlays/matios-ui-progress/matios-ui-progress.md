@@ -1,7 +1,7 @@
 # MTS.Progress
 
-[EN] Progress bar and circle indicator with variants, striped/animated fills, indeterminate mode and smooth value transitions.
-[ES] Barra de progreso e indicador circular con variantes, relleno rayado/animado, modo indeterminado y transiciones suaves.
+🇬🇧 Progress bar and circle indicator with variants, striped/animated fills, indeterminate mode and smooth value transitions.
+🇪🇸 Barra de progreso e indicador circular con variantes, relleno rayado/animado, modo indeterminado y transiciones suaves.
 
 ---
 
@@ -17,25 +17,25 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
 | `type` | `string` | `'bar'` | `'bar'` · `'circle'` · `'indeterminate'` |
-| `value` | `number` | `0` | [EN] Initial value / [ES] Valor inicial |
-| `min` | `number` | `0` | [EN] Minimum value / [ES] Valor mínimo |
-| `max` | `number` | `100` | [EN] Maximum value / [ES] Valor máximo |
+| `value` | `number` | `0` | 🇬🇧 Initial value / 🇪🇸 Valor inicial |
+| `min` | `number` | `0` | 🇬🇧 Minimum value / 🇪🇸 Valor mínimo |
+| `max` | `number` | `100` | 🇬🇧 Maximum value / 🇪🇸 Valor máximo |
 | `variant` | `string` | `'default'` | `'default'` · `'primary'` · `'success'` · `'warning'` · `'danger'` · `'info'` |
 | `size` | `string` | `'md'` | `'xs'` · `'sm'` · `'md'` · `'lg'` |
-| `showLabel` | `boolean` | `false` | [EN] Show label text / [ES] Mostrar texto de label |
-| `showValue` | `boolean` | `false` | [EN] Show percentage value / [ES] Mostrar valor en porcentaje |
-| `striped` | `boolean` | `false` | [EN] Striped fill pattern / [ES] Patrón de relleno rayado |
-| `animated` | `boolean` | `false` | [EN] Animate stripes / [ES] Animar las rayas |
-| `rounded` | `boolean` | `true` | [EN] Rounded corners / [ES] Esquinas redondeadas |
-| `label` | `string` | `''` | [EN] Label text / [ES] Texto del label |
-| `labelFormat` | `function` | `null` | [EN] `(value, pct) => string` Custom label / [ES] Label personalizado |
-| `radius` | `number` | `40` | [EN] Circle radius in px / [ES] Radio del círculo en px (solo `type:'circle'`) |
-| `strokeWidth` | `number` | `6` | [EN] Circle stroke width in px / [ES] Ancho del trazo en px (solo `type:'circle'`) |
-| `onChange` | `function` | — | [EN] `({ value, pct }) => {}` Fires on value change / [ES] Se dispara al cambiar el valor |
-| `onComplete` | `function` | — | [EN] Fires when value reaches max / [ES] Se dispara al llegar al máximo |
+| `showLabel` | `boolean` | `false` | 🇬🇧 Show label text / 🇪🇸 Mostrar texto de label |
+| `showValue` | `boolean` | `false` | 🇬🇧 Show percentage value / 🇪🇸 Mostrar valor en porcentaje |
+| `striped` | `boolean` | `false` | 🇬🇧 Striped fill pattern / 🇪🇸 Patrón de relleno rayado |
+| `animated` | `boolean` | `false` | 🇬🇧 Animate stripes / 🇪🇸 Animar las rayas |
+| `rounded` | `boolean` | `true` | 🇬🇧 Rounded corners / 🇪🇸 Esquinas redondeadas |
+| `label` | `string` | `''` | 🇬🇧 Label text / 🇪🇸 Texto del label |
+| `labelFormat` | `function` | `null` | 🇬🇧 `(value, pct) => string` Custom label / 🇪🇸 Label personalizado |
+| `radius` | `number` | `40` | 🇬🇧 Circle radius in px / 🇪🇸 Radio del círculo en px (solo `type:'circle'`) |
+| `strokeWidth` | `number` | `6` | 🇬🇧 Circle stroke width in px / 🇪🇸 Ancho del trazo en px (solo `type:'circle'`) |
+| `onChange` | `function` | — | 🇬🇧 `({ value, pct }) => {}` Fires on value change / 🇪🇸 Se dispara al cambiar el valor |
+| `onComplete` | `function` | — | 🇬🇧 Fires when value reaches max / 🇪🇸 Se dispara al llegar al máximo |
 
 ---
 
@@ -161,10 +161,3 @@ el.addEventListener('mts:progress:complete',  (e) => console.log('done'));
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingüe, docs estandarizados |
-| 1.0.0 | [EN] Initial release — bar/circle/indeterminate, striped, animated / [ES] Versión inicial |

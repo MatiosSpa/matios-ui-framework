@@ -106,7 +106,7 @@ MTS.Card = class MtsCard {
   setBody(html) {
     this.body = html;
     const el = this._el.querySelector('.mts-card__body');
-    if (el) el.innerHTML = html;
+    if (el) el.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(html) : html;
     return this;
   }
 
@@ -163,8 +163,8 @@ MTS.Card = class MtsCard {
         this.actions.forEach(a => {
           const btn = document.createElement('button');
           btn.className = 'mts-btn mts-btn--' + (a.variant || 'ghost') + ' mts-btn--sm';
-          btn.innerHTML = (a.icon ? `<span class="mts-btn__icon">${a.icon}</span>` : '') +
-            (a.label ? `<span>${a.label}</span>` : '');
+          if (a.icon) { const _s = document.createElement('span'); _s.className = 'mts-btn__icon'; _s.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(a.icon) : a.icon; btn.appendChild(_s); }
+          if (a.label) { const _s = document.createElement('span'); _s.textContent = a.label; btn.appendChild(_s); }
           if (a.onClick) btn.addEventListener('click', e => { e.stopPropagation(); a.onClick(e); });
           acts.appendChild(btn);
         });
@@ -178,7 +178,7 @@ MTS.Card = class MtsCard {
     if (this.body !== null) {
       const body = document.createElement('div');
       body.className = 'mts-card__body';
-      body.innerHTML = this.body;
+      body.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.body) : this.body;
       this._el.appendChild(body);
     }
 
@@ -189,8 +189,8 @@ MTS.Card = class MtsCard {
       this.footer.forEach(f => {
         const btn = document.createElement('button');
         btn.className = 'mts-btn mts-btn--' + (f.variant || 'secondary') + ' mts-btn--sm';
-        btn.innerHTML = (f.icon ? `<span class="mts-btn__icon">${f.icon}</span>` : '') +
-          (f.label ? `<span>${f.label}</span>` : '');
+          if (f.icon) { const _s = document.createElement('span'); _s.className = 'mts-btn__icon'; _s.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(f.icon) : f.icon; btn.appendChild(_s); }
+          if (f.label) { const _s = document.createElement('span'); _s.textContent = f.label; btn.appendChild(_s); }
         if (f.onClick) btn.addEventListener('click', e => { e.stopPropagation(); f.onClick(e); });
         footer.appendChild(btn);
       });

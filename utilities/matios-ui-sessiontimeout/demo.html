@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.SessionTimeout — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-modal/matios-ui-modal.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-progress/matios-ui-progress.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-toast/matios-ui-toast.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="./matios-ui-sessiontimeout.css">
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../overlays/matios-ui-modal/matios-ui-modal.js"></script>
+  <script src="../../overlays/matios-ui-progress/matios-ui-progress.js"></script>
+  <script src="../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="./matios-ui-sessiontimeout.js"></script>
+</head>
+<body>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.SessionTimeout</h1>
+    <p>Gestión de timeout de sesión por inactividad. Barra de progreso fija en el borde inferior + modal de advertencia con countdown configurable. Compatible con cualquier estrategia de renovación de token.</p>
+  </div>
+
+  <div class="demo-section"><div class="demo-section-title">1 — Básico</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Mensajes personalizados</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Solo barra (sin modal de aviso)</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Uso real con onRefresh / onExpire</div><div id="tabs-s4"></div></div>
+</div>
+
+<script>
+/* ── Helpers estándar de demo ── */
+function indentHtml(html){
+  var indent=0, step=2;
+  var voids=/^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result='';
+  (html.match(/<[^>]+>|[^<]+/g)||[]).forEach(function(tok){
+    var t=tok.trim(); if(!t) return;
+    if(/^<\//.test(t)){ indent=Math.max(0,indent-step); result+=' '.repeat(indent)+t+'\n'; }
+    else if(/^<[^!]/.test(t)){
+      result+=' '.repeat(indent)+t+'\n';
+      var tag=(t.match(/^<([a-z][a-z0-9-]*)/i)||[])[1]||'';
+      if(!voids.test(tag) && !/\/>$/.test(t)) indent+=step;
+    } else { var text=t.replace(/\s+/g,' '); if(text) result+=' '.repeat(indent)+text+'\n'; }
+  });
+  return result.trimEnd();
+}
+function makeSection(id, previewHtml, jsCode, initFn, height){
+  new MTS.Tabs('#'+id, { variant:'card', height:height||'420px', lazy:false, tabs:[
+    { id:id+'-preview', label:'Preview',    content: previewHtml },
+    { id:id+'-html',    label:'HTML',       content: '<div id="'+id+'-cb-html"></div>' },
+    { id:id+'-js',      label:'JavaScript', content: '<div id="'+id+'-cb-js"></div>'   },
+  ]});
+  new MTS.CodeBlock('#'+id+'-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#'+id+'-cb-js',   { code: jsCode,                  language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+/* ── Instancia activa de demo (solo una barra a la vez) ── */
+var _demoInstance = null;
+function createDemo(options) {
+  if (_demoInstance) { _demoInstance.destroy(); }
+  _demoInstance = new MTS.SessionTimeout(options);
+  return _demoInstance;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   1 — Básico
+══════════════════════════════════════════════════════════════ */
+var preview1 =
+  '<div class="demo-stack" style="max-width:340px;">' +
+    '<div id="s1-btn"></div>' +
+    '<p style="margin:8px 0 0;font-size:13px;color:var(--mts-text-muted);">La barra de sesión aparece en el borde inferior de la página.</p>' +
+  '</div>';
+
+var js1 =
+  "const session = new MTS.SessionTimeout({\n" +
+  "  timeoutMinutes: 30,\n" +
+  "  warningMinutes: 5,\n" +
+  "  onRefresh: function(done) {\n" +
+  "    done();\n" +
+  "  },\n" +
+  "  onExpire: function() {\n" +
+  "    logout();\n" +
+  "  },\n" +
+  "});\n\n" +
+  "session.showWarning();";
+
+makeSection('tabs-s1', preview1, js1, function() {
+  var session = createDemo({
+    timeoutMinutes: 30,
+    warningMinutes: 5,
+    onRefresh: function(done) { done(); },
+    onExpire:  function() { MTS.Toast.show({ message: 'Sesión expirada.', variant: 'warning', duration: 4000 }); },
+  });
+  new MTS.Button('#s1-btn', {
+    label: 'Simular aviso de sesión',
+    variant: 'primary',
+    onClick: function() { session.showWarning(); },
+  });
+}, '220px');
+
+/* ══════════════════════════════════════════════════════════════
+   2 — Mensajes personalizados
+══════════════════════════════════════════════════════════════ */
+var preview2 =
+  '<div class="demo-stack" style="max-width:340px;">' +
+    '<div id="s2-btn"></div>' +
+  '</div>';
+
+var js2 =
+  "new MTS.SessionTimeout({\n" +
+  "  timeoutMinutes: 30,\n" +
+  "  warningMinutes: 5,\n" +
+  "  messages: {\n" +
+  "    title:      'Atencion',\n" +
+  "    body:       'Tu sesion expirara en {time}. Sigues aqui?',\n" +
+  "    warning:    'Guarda tu trabajo antes de que se cierre la sesion.',\n" +
+  "    btnRefresh: 'Sigo trabajando',\n" +
+  "    btnExpire:  'Salir ahora',\n" +
+  "  },\n" +
+  "  onRefresh: function(done) { done(); },\n" +
+  "  onExpire:  function()     { logout(); },\n" +
+  "});";
+
+makeSection('tabs-s2', preview2, js2, function() {
+  new MTS.Button('#s2-btn', {
+    label: 'Simular aviso personalizado',
+    variant: 'primary',
+    onClick: function() {
+      if (_demoInstance) { _demoInstance.destroy(); }
+      _demoInstance = new MTS.SessionTimeout({
+        timeoutMinutes: 30,
+        warningMinutes: 5,
+        titleIcon: 'alert-triangle',
+        titleText: 'Atención',
+        messages: {
+          body:       'Tu sesión expirará en {time}. ¿Sigues aquí?',
+          warning:    'Guarda tu trabajo antes de que se cierre la sesión.',
+          btnRefresh: 'Sigo trabajando',
+          btnExpire:  'Salir ahora',
+        },
+        onRefresh: function(done) { done(); },
+        onExpire:  function()     { MTS.Toast.show({ message: 'Sesión expirada.', variant: 'warning', duration: 4000 }); },
+      });
+      _demoInstance.showWarning();
+    },
+  });
+}, '200px');
+
+/* ══════════════════════════════════════════════════════════════
+   3 — Solo barra (sin modal de aviso)
+══════════════════════════════════════════════════════════════ */
+var preview3 =
+  '<div class="demo-stack" style="max-width:340px;">' +
+    '<div id="s3-btn"></div>' +
+    '<p style="margin:8px 0 0;font-size:13px;color:var(--mts-text-muted);">Con <code>warningMinutes: 0</code> la barra se agota silenciosamente sin abrir el modal.</p>' +
+  '</div>';
+
+var js3 =
+  "new MTS.SessionTimeout({\n" +
+  "  timeoutMinutes: 30,\n" +
+  "  warningMinutes: 0,\n" +
+  "  onExpire: function() { logout(); },\n" +
+  "});";
+
+makeSection('tabs-s3', preview3, js3, function() {
+  new MTS.Button('#s3-btn', {
+    label: 'Activar (solo barra)',
+    variant: 'secondary',
+    onClick: function() {
+      createDemo({
+        timeoutMinutes: 30,
+        warningMinutes: 0,
+        onExpire: function() { MTS.Toast.show({ message: 'Sesión expirada.', variant: 'warning', duration: 4000 }); },
+      });
+    },
+  });
+}, '200px');
+
+/* ══════════════════════════════════════════════════════════════
+   4 — Uso real con onRefresh / onExpire
+══════════════════════════════════════════════════════════════ */
+var preview4 =
+  '<div class="demo-stack" style="max-width:340px;">' +
+    '<p style="margin:0;font-size:13px;color:var(--mts-text-muted);">Patron completo para produccion. <code>onRefresh</code> hace el fetch a la API y llama <code>done()</code> al terminar. Si falla, no llama <code>done()</code> — el timer sigue corriendo.</p>' +
+  '</div>';
+
+var js4 =
+  "const session = new MTS.SessionTimeout({\n" +
+  "  timeoutMinutes: 30,\n" +
+  "  warningMinutes: 5,\n" +
+  "  messages: {\n" +
+  "    title:      'Tu sesion esta por vencer',\n" +
+  "    body:       'Por inactividad, tu sesion se cerrara en {time}.',\n" +
+  "    warning:    'Si tienes trabajo sin guardar, podrias perderlo.',\n" +
+  "    btnRefresh: 'Renovar sesion',\n" +
+  "    btnExpire:  'Cerrar sesion',\n" +
+  "  },\n" +
+  "  onRefresh: function(done) {\n" +
+  "    fetch('/api/auth/refresh', { method: 'POST' })\n" +
+  "      .then(function(res) {\n" +
+  "        if (res.ok) {\n" +
+  "          done();\n" +
+  "        } else {\n" +
+  "          logout();\n" +
+  "        }\n" +
+  "      })\n" +
+  "      .catch(function() { logout(); });\n" +
+  "  },\n" +
+  "  onExpire: function() {\n" +
+  "    logout();\n" +
+  "  },\n" +
+  "});\n\n" +
+  "document.addEventListener('click', function() { session.reset(); });";
+
+makeSection('tabs-s4', preview4, js4, null, '380px');
+</script>
+
+</body>
+</html>

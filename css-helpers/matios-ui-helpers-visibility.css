@@ -1,0 +1,30 @@
+/* ============================================================
+   MATIOS UI — CSS Helpers: Visibility
+   Versión: 1.0.0
+
+   Nota: visibility:hidden oculta visualmente pero mantiene el espacio.
+   Para ocultar completamente (sin espacio) usar display:none via helpers-display.
+   ============================================================ */
+
+.mts-visible   { visibility: visible !important; }
+.mts-invisible { visibility: hidden !important; }
+
+/* ── Screen reader only (accesibilidad) ─────────────────── */
+.mts-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* ── Opacity ────────────────────────────────────────────── */
+.mts-opacity--0   { opacity: 0 !important; }
+.mts-opacity--25  { opacity: 0.25 !important; }
+.mts-opacity--50  { opacity: 0.5 !important; }
+.mts-opacity--75  { opacity: 0.75 !important; }
+.mts-opacity--100 { opacity: 1 !important; }

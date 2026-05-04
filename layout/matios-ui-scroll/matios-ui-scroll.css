@@ -1,0 +1,116 @@
+/* ============================================================
+   MATIOS UI — matios-ui-scroll.css
+   MTS.Scroll — Contenedor scrollable con scrollbar temático
+                y sombras de borde adaptativas
+   Version: 1.0.0
+   ============================================================ */
+
+/* ── Bloque raíz ─────────────────────────────────────────── */
+
+.mts-scroll {
+  position: relative;
+  overflow: hidden;
+
+  /*
+    --mts-scroll-fade-bg controla el color de las sombras de borde.
+    Cambiar si el contenedor no está sobre --mts-bg-body.
+    Ej: --mts-scroll-fade-bg: var(--mts-bg-surface);
+  */
+  --mts-scroll-fade-bg: var(--mts-bg-body);
+  --mts-scroll-fade-size: 40px;
+  --mts-scroll-thumb-color: var(--mts-border-color);
+  --mts-scroll-thumb-hover: var(--mts-color-primary);
+  --mts-scroll-bar-size: 4px;
+}
+
+/* ── Viewport — área de scroll real ──────────────────────── */
+
+.mts-scroll__viewport {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: var(--mts-scroll-thumb-color) transparent;
+}
+
+/* WebKit / Blink */
+.mts-scroll__viewport::-webkit-scrollbar {
+  width: var(--mts-scroll-bar-size);
+  height: var(--mts-scroll-bar-size);
+}
+.mts-scroll__viewport::-webkit-scrollbar-track {
+  background: transparent;
+}
+.mts-scroll__viewport::-webkit-scrollbar-thumb {
+  background: var(--mts-scroll-thumb-color);
+  border-radius: 99px;
+  transition: background .15s;
+}
+.mts-scroll__viewport::-webkit-scrollbar-thumb:hover {
+  background: var(--mts-scroll-thumb-hover);
+}
+.mts-scroll__viewport::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ── Dirección ───────────────────────────────────────────── */
+
+.mts-scroll--vertical .mts-scroll__viewport {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.mts-scroll--horizontal .mts-scroll__viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.mts-scroll--both .mts-scroll__viewport {
+  overflow: auto;
+}
+
+/* ── Fades de borde ──────────────────────────────────────── */
+
+.mts-scroll__fade {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s ease;
+  z-index: 2;
+}
+
+.mts-scroll__fade.mts-scroll__fade--visible {
+  opacity: 1;
+}
+
+/* Vertical: fades arriba / abajo */
+.mts-scroll--vertical .mts-scroll__fade--start,
+.mts-scroll--both    .mts-scroll__fade--start {
+  top: 0; left: 0; right: 0;
+  height: var(--mts-scroll-fade-size);
+  background: linear-gradient(to bottom, var(--mts-scroll-fade-bg), transparent);
+}
+
+.mts-scroll--vertical .mts-scroll__fade--end,
+.mts-scroll--both    .mts-scroll__fade--end {
+  bottom: 0; left: 0; right: 0;
+  height: var(--mts-scroll-fade-size);
+  background: linear-gradient(to top, var(--mts-scroll-fade-bg), transparent);
+}
+
+/* Horizontal: fades izquierda / derecha */
+.mts-scroll--horizontal .mts-scroll__fade--start {
+  top: 0; bottom: 0; left: 0;
+  width: var(--mts-scroll-fade-size);
+  height: auto;
+  background: linear-gradient(to right, var(--mts-scroll-fade-bg), transparent);
+}
+
+.mts-scroll--horizontal .mts-scroll__fade--end {
+  top: 0; bottom: 0; right: 0;
+  width: var(--mts-scroll-fade-size);
+  height: auto;
+  background: linear-gradient(to left, var(--mts-scroll-fade-bg), transparent);
+}

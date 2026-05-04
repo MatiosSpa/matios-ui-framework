@@ -294,8 +294,15 @@ MTS.NumberInput = class MtsNumberInput {
     btn.addEventListener('click', (e) => e.stopPropagation());
   }
   _emit(event, detail) {
-    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
-    this._el?.dispatchEvent(new CustomEvent(`mts:numberinput:${event}`, { bubbles: true, detail }));
+    var listeners = this._listeners[event] || [];
+    if (event === 'change') {
+      listeners.forEach(function(fn) { fn(detail.value, detail.formatted); });
+    } else {
+      listeners.forEach(function(fn) { fn({ type: event, detail: detail }); });
+    }
+    if (this._el) {
+      this._el.dispatchEvent(new CustomEvent('mts:numberinput:' + event, { bubbles: true, detail: detail }));
+    }
   }
 };
 

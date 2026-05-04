@@ -58,7 +58,7 @@ MTS.Timeline = class MtsTimeline {
       const dot = document.createElement('div');
       dot.className = 'mts-timeline__dot';
       if (ev.color) dot.style.background = ev.color;
-      if (ev.icon) { dot.innerHTML = ev.icon; dot.classList.add('mts-timeline__dot--icon'); }
+      if (ev.icon) { dot.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(ev.icon) : ev.icon; dot.classList.add('mts-timeline__dot--icon'); }
 
       // Contenido
       const content = document.createElement('div');
@@ -80,7 +80,7 @@ MTS.Timeline = class MtsTimeline {
       if (ev.description) {
         const desc = document.createElement('div');
         desc.className = 'mts-timeline__description';
-        desc.innerHTML = ev.description;
+        desc.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(ev.description) : ev.description;
         content.appendChild(desc);
       }
 

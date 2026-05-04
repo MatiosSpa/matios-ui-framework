@@ -72,7 +72,7 @@ MTS.TabBar = class MtsTabBar {
 
       const iconWrap = document.createElement('div');
       iconWrap.className = 'mts-tabbar__icon';
-      iconWrap.innerHTML = tab.icon || '';
+      iconWrap.innerHTML = tab.icon ? (typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(tab.icon) : tab.icon) : '';
 
       /* Badge */
       if (tab.badge !== undefined && tab.badge !== null && tab.badge !== '') {

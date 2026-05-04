@@ -1,18 +1,26 @@
 /* ============================================================
    MATIOS UI — matios-ui-skeleton.css
-   Version: 1.0.0
+   Version: 2.0.0
    ============================================================ */
 
 .mts-skeleton { display: block; }
 
-/* ── Bone base ── */
+
+/* ============================================================
+   1. BONE BASE
+   ============================================================ */
+
 .mts-skeleton__bone {
   background: var(--mts-bg-surface-2);
   display: block;
   flex-shrink: 0;
 }
 
-/* ── Animación pulse ── */
+
+/* ============================================================
+   2. ANIMACIONES
+   ============================================================ */
+
 @keyframes mts-skeleton-pulse {
   0%, 100% { opacity: 1; }
   50%       { opacity: .45; }
@@ -21,7 +29,6 @@
   animation: mts-skeleton-pulse 1.6s ease-in-out infinite;
 }
 
-/* ── Animación wave ── */
 @keyframes mts-skeleton-wave {
   0%   { background-position: -200% 0; }
   100% { background-position:  200% 0; }
@@ -37,5 +44,99 @@
   animation: mts-skeleton-wave 1.6s linear infinite;
 }
 
-/* ── Sin animación ── */
 .mts-skeleton__bone--none { animation: none; }
+
+
+/* ============================================================
+   3. VARIANTE — text
+   ============================================================ */
+
+.mts-skeleton__text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+/* ============================================================
+   4. VARIANTE — card
+   ============================================================ */
+
+.mts-skeleton__card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--mts-bg-surface);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-lg);
+}
+
+.mts-skeleton__card-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mts-skeleton__card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* ============================================================
+   5. VARIANTE — list
+   ============================================================ */
+
+.mts-skeleton__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mts-skeleton__list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mts-skeleton__list-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+
+/* ============================================================
+   6. VARIANTE — table
+   ============================================================ */
+
+.mts-skeleton__table {
+  display: flex;
+  flex-direction: column;
+}
+
+.mts-skeleton__table-header {
+  display: grid;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--mts-bg-surface-2);
+  border-radius: var(--mts-radius-md) var(--mts-radius-md) 0 0;
+  border: 1px solid var(--mts-border-color);
+  border-bottom: none;
+}
+
+.mts-skeleton__table-row {
+  display: grid;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--mts-border-color);
+  border-bottom: none;
+}
+
+.mts-skeleton__table-row:last-child {
+  border-bottom: 1px solid var(--mts-border-color);
+  border-radius: 0 0 var(--mts-radius-md) var(--mts-radius-md);
+}

@@ -123,13 +123,14 @@ MTS.DataTable = class DataTable {
   _mergeDefaults(cfg) {
     const d = MTS.DataTable._defaults
 
-    /* Resolver locale — extrae solo los textos raíz (strings, no objetos anidados) */
-    const loc = typeof MTS?.DataTable?.getLocale === 'function'
-      ? MTS.DataTable.getLocale(cfg.locale ?? d.locale)
-      : {}
-    const locTexts = Object.fromEntries(
-      Object.entries(loc).filter(([, v]) => typeof v !== 'object')
-    )
+    /* Resolver locale desde el sistema global MTS.Locales (matios-ui-i18n.js).
+       Fallback a MTS.DataTable.getLocale para retrocompatibilidad. */
+    const locKey = cfg.locale ?? d.locale ?? 'es'
+    const loc = typeof MTS?.getLocale === 'function'
+      ? MTS.getLocale(locKey)
+      : (typeof MTS?.DataTable?.getLocale === 'function' ? MTS.DataTable.getLocale(locKey) : {})
+    /* Textos del core DataTable — viven en la sección 'MTS.DataTable' del locale */
+    const locTexts = loc['MTS.DataTable'] || {}
     /* Exponer locale activo para renders estáticos de plugins (ej: DM renderStatus) */
     MTS.DataTable._activeLocale = loc
 

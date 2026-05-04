@@ -1,7 +1,7 @@
 # MTS.TagInput
 
-[EN] Tag input with autocomplete, debounce and object support. Each tag stores `{ uid, name }` — uid is the unique identifier (email, id, uuid, etc.), name is what's displayed.
-[ES] Input de tags con autocompletado, debounce y soporte de objetos. Cada tag guarda `{ uid, name }` — uid es el identificador único (email, id, uuid, etc.), name es lo que se muestra.
+🇬🇧 Tag input with autocomplete, debounce and object support. Each tag stores `{ uid, name }` — uid is the unique identifier (email, id, uuid, etc.), name is what's displayed.
+🇪🇸 Input de tags con autocompletado, debounce y soporte de objetos. Cada tag guarda `{ uid, name }` — uid es el identificador único (email, id, uuid, etc.), name es lo que se muestra.
 
 ---
 
@@ -97,11 +97,3 @@ ti.destroy()
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 2.0.0 | [EN] Tags now store `{ uid, name }` objects. `onSearch` returns objects. Hint shown in dropdown. / [ES] Tags ahora guardan objetos `{ uid, name }`. `onSearch` retorna objetos. Hint en el dropdown. |
-| 1.1.0 | [EN] Added `onSearch` async handler and debounce. / [ES] `onSearch` asíncrono y debounce. |
-| 1.0.0 | [EN] Initial release. / [ES] Release inicial. |

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <script>
@@ -29,52 +29,80 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
   <link rel="stylesheet" href="../../support/demo-shared.css">
   <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
-  <link rel="stylesheet" href="./matios-ui-spinner.css">
+  <link rel="stylesheet" href="./matios-ui-spinner.css?v=20">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
-  <script src="./matios-ui-spinner.js"></script>
+  <script src="./matios-ui-spinner.js?v=20"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
 </head>
 <body>
-<div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
-  <button class="demo-btn-sm demo-btn-sep">—</button>
-  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
-</div>
+
 
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Spinner</h1>
-    <p>Animated loading indicators — variants, sizes, custom color, label and overlay mode.</p>
-    <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-spinner.md')">Docs</button>
-    </div>
-    <div class="demo-docs-panel" id="docs-panel"></div>
+    <p>Indicadores de carga animados — 12 variantes, tones de color, 5 tamaños, label y overlay.</p>
   </div>
 
   <div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
   <div class="demo-section"><div class="demo-section-title">2 — Tamaños</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Label, color y overlay</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Colores</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Multi-color</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Label</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Overlay</div><div id="tabs-s6"></div></div>
 </div>
 
-<script>
-function esc(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+<style>
+.sp-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px;
+  min-width: 96px;
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-lg);
+  background: var(--mts-bg-surface);
 }
+.sp-card span {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--mts-text-muted);
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+.sp-group-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--mts-text-muted);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--mts-border-color);
+}
+</style>
 
+<script>
+var VARIANTS = ['dual','ring','bars','roller','clock','ellipsis','grid','ripple','activity','triple','orbital','dots','bounce'];
+
+/* ── Helpers ─────────────────────────────────────────────── */
 function indentHtml(html) {
-  var indent = 0;
-  var step = 2;
+  var indent = 0, step = 2;
   var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
   var result = '';
   var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
@@ -93,212 +121,237 @@ function indentHtml(html) {
       if (text) result += ' '.repeat(indent) + text + '\n';
     }
   });
-  return result.trimEnd();
+  return result.trim();
 }
-
-function htmlTab(previewHtml) {
-  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
-    esc(indentHtml(previewHtml)) +
-  '</pre>';
-}
-
-function jsTab(code) {
-  return '<pre class="demo-code" style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
-    esc(code) +
-  '</pre>';
-}
-
-function makeSection(id, previewHtml, jsCode, height) {
+function makeSection(id, previewHtml, jsCode, initFn, height) {
   new MTS.Tabs('#' + id, {
     variant: 'card',
-    height: height || '360px',
+    height: height || '240px',
     lazy: false,
     tabs: [
-      { id: id + '-preview', label: 'Preview', content: previewHtml },
-      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
-      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>'   }
     ]
   });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
 }
 
-var preview_s1 = `
-<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">
-  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-    <div id="spinner-circle"></div>
-    <div style="font-size:12px;color:var(--mts-text-muted)">circle</div>
-  </div>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-    <div id="spinner-dots"></div>
-    <div style="font-size:12px;color:var(--mts-text-muted)">dots</div>
-  </div>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-    <div id="spinner-bars"></div>
-    <div style="font-size:12px;color:var(--mts-text-muted)">bars</div>
-  </div>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-    <div id="spinner-pulse"></div>
-    <div style="font-size:12px;color:var(--mts-text-muted)">pulse</div>
-  </div>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-    <div id="spinner-ring"></div>
-    <div style="font-size:12px;color:var(--mts-text-muted)">ring</div>
-  </div>
-</div>`;
-
-var js_s1 = `new MTS.Spinner('#spinner-circle', { variant: 'circle', size: 'md' });
-new MTS.Spinner('#spinner-dots',   { variant: 'dots',   size: 'md' });
-new MTS.Spinner('#spinner-bars',   { variant: 'bars',   size: 'md' });
-new MTS.Spinner('#spinner-pulse',  { variant: 'pulse',  size: 'md' });
-new MTS.Spinner('#spinner-ring',   { variant: 'ring',   size: 'md' });`;
-
-var preview_s2 = `
-<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">
-  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-    <div id="spinner-xs"></div>
-    <div style="font-size:12px;color:var(--mts-text-muted)">xs</div>
-  </div>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-    <div id="spinner-sm"></div>
-    <div style="font-size:12px;color:var(--mts-text-muted)">sm</div>
-  </div>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-    <div id="spinner-md"></div>
-    <div style="font-size:12px;color:var(--mts-text-muted)">md</div>
-  </div>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-    <div id="spinner-lg"></div>
-    <div style="font-size:12px;color:var(--mts-text-muted)">lg</div>
-  </div>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-    <div id="spinner-xl"></div>
-    <div style="font-size:12px;color:var(--mts-text-muted)">xl</div>
-  </div>
-</div>`;
-
-var js_s2 = `new MTS.Spinner('#spinner-xs', { variant: 'circle', size: 'xs' });
-new MTS.Spinner('#spinner-sm', { variant: 'circle', size: 'sm' });
-new MTS.Spinner('#spinner-md', { variant: 'circle', size: 'md' });
-new MTS.Spinner('#spinner-lg', { variant: 'circle', size: 'lg' });
-new MTS.Spinner('#spinner-xl', { variant: 'circle', size: 'xl' });`;
-
-var preview_s3 = `
-<div class="demo-stack">
-  <div class="demo-row" style="align-items:stretch">
-    <div style="flex:1;min-width:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-      <div id="spinner-label"></div>
-      <div style="font-size:12px;color:var(--mts-text-muted)">Con label</div>
-    </div>
-    <div style="flex:1;min-width:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-      <div id="spinner-violet"></div>
-      <div style="font-size:12px;color:var(--mts-text-muted)">Color personalizado</div>
-    </div>
-    <div style="flex:1;min-width:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-surface)">
-      <div id="spinner-green"></div>
-      <div style="font-size:12px;color:var(--mts-text-muted)">Otra variante</div>
-    </div>
-  </div>
-  <div class="demo-row">
-    <button id="btn-spinner-overlay" data-label="Mostrar overlay 2s" data-variant="secondary"></button>
-  </div>
-  <div class="result-box" id="spinner-result">— prueba el overlay —</div>
-</div>`;
-
-var js_s3 = `new MTS.Button('#btn-spinner-overlay');
-
-new MTS.Spinner('#spinner-label', {
-  variant: 'circle',
-  size: 'lg',
-  label: 'Cargando...'
-});
-
-new MTS.Spinner('#spinner-violet', {
-  variant: 'ring',
-  size: 'md',
-  color: '#7c3aed'
-});
-
-new MTS.Spinner('#spinner-green', {
-  variant: 'dots',
-  size: 'md',
-  color: '#16a34a'
-});
-
-document.getElementById('btn-spinner-overlay').addEventListener('click', function () {
-  document.getElementById('spinner-result').textContent = 'Overlay visible por 2 segundos...';
-
-  var host = document.createElement('div');
-  document.body.appendChild(host);
-
-  var overlay = new MTS.Spinner(host, {
-    variant: 'circle',
-    size: 'xl',
-    overlay: true,
-    label: 'Procesando...'
+/* ── HTML builders ───────────────────────────────────────── */
+function buildCards(prefix, variants) {
+  var html = '';
+  variants.forEach(function(v) {
+    html += '<div class="sp-card"><div id="' + prefix + '-' + v + '"></div><span>' + v + '</span></div>';
   });
+  return html;
+}
 
-  overlay.show();
+function buildGroup(label, cardsHtml) {
+  return '<div>' +
+    '<div class="sp-group-label">' + label + '</div>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:10px">' + cardsHtml + '</div>' +
+    '</div>';
+}
 
-  setTimeout(function () {
-    overlay.hide();
-    host.remove();
-    document.getElementById('spinner-result').textContent = 'Overlay cerrado ✓';
-  }, 2000);
-});`;
+/* ════════════════════════════════════════════════════════════
+   1 — Variantes
+   ════════════════════════════════════════════════════════════ */
+var preview_s1 =
+  '<div style="display:flex;flex-wrap:wrap;gap:12px;padding:16px 0">' +
+  buildCards('s1', VARIANTS) +
+  '</div>';
 
-makeSection('tabs-s1', preview_s1, js_s1, '360px');
-makeSection('tabs-s2', preview_s2, js_s2, '360px');
-makeSection('tabs-s3', preview_s3, js_s3, '390px');
+var js_s1 =
+  "var variants = ['dual','ring','bars','roller','clock','ellipsis',\n" +
+  "                'grid','ripple','activity','triple','orbital','dots','bounce'];\n\n" +
+  "variants.forEach(function(v) {\n" +
+  "  new MTS.Spinner('#s1-' + v, { variant: v, size: 'lg' });\n" +
+  "});";
 
-new MTS.Spinner('#spinner-circle', { variant: 'circle', size: 'md' });
-new MTS.Spinner('#spinner-dots',   { variant: 'dots',   size: 'md' });
-new MTS.Spinner('#spinner-bars',   { variant: 'bars',   size: 'md' });
-new MTS.Spinner('#spinner-pulse',  { variant: 'pulse',  size: 'md' });
-new MTS.Spinner('#spinner-ring',   { variant: 'ring',   size: 'md' });
-
-new MTS.Spinner('#spinner-xs', { variant: 'circle', size: 'xs' });
-new MTS.Spinner('#spinner-sm', { variant: 'circle', size: 'sm' });
-new MTS.Spinner('#spinner-md', { variant: 'circle', size: 'md' });
-new MTS.Spinner('#spinner-lg', { variant: 'circle', size: 'lg' });
-new MTS.Spinner('#spinner-xl', { variant: 'circle', size: 'xl' });
-
-new MTS.Button('#btn-spinner-overlay');
-new MTS.Spinner('#spinner-label', {
-  variant: 'circle',
-  size: 'lg',
-  label: 'Cargando...'
-});
-new MTS.Spinner('#spinner-violet', {
-  variant: 'ring',
-  size: 'md',
-  color: '#7c3aed'
-});
-new MTS.Spinner('#spinner-green', {
-  variant: 'dots',
-  size: 'md',
-  color: '#16a34a'
-});
-
-document.getElementById('btn-spinner-overlay').addEventListener('click', function () {
-  document.getElementById('spinner-result').textContent = 'Overlay visible por 2 segundos...';
-
-  var host = document.createElement('div');
-  document.body.appendChild(host);
-
-  var overlay = new MTS.Spinner(host, {
-    variant: 'circle',
-    size: 'xl',
-    overlay: true,
-    label: 'Procesando...'
+makeSection('tabs-s1', preview_s1, js_s1, function() {
+  VARIANTS.forEach(function(v) {
+    new MTS.Spinner('#s1-' + v, { variant: v, size: 'lg' });
   });
+}, '260px');
 
-  overlay.show();
+/* ════════════════════════════════════════════════════════════
+   2 — Tamaños
+   ════════════════════════════════════════════════════════════ */
+var SIZES = ['xs','sm','md','lg','xl'];
 
-  setTimeout(function () {
-    overlay.hide();
-    host.remove();
-    document.getElementById('spinner-result').textContent = 'Overlay cerrado ✓';
-  }, 2000);
+var preview_s2 = '<div style="padding:8px 0;display:flex;flex-direction:column;gap:20px">';
+SIZES.forEach(function(size) {
+  preview_s2 += buildGroup(size, buildCards('s2-' + size, VARIANTS));
 });
+preview_s2 += '</div>';
+
+var js_s2 =
+  "var variants = ['dual','ring','bars','roller','clock','ellipsis',\n" +
+  "                'grid','ripple','activity','triple','orbital','dots','bounce'];\n" +
+  "var sizes    = ['xs','sm','md','lg','xl'];\n\n" +
+  "sizes.forEach(function(size) {\n" +
+  "  variants.forEach(function(v) {\n" +
+  "    new MTS.Spinner('#s2-' + size + '-' + v, { variant: v, size: size });\n" +
+  "  });\n" +
+  "});";
+
+makeSection('tabs-s2', preview_s2, js_s2, function() {
+  SIZES.forEach(function(size) {
+    VARIANTS.forEach(function(v) {
+      new MTS.Spinner('#s2-' + size + '-' + v, { variant: v, size: size });
+    });
+  });
+}, '560px');
+
+/* ════════════════════════════════════════════════════════════
+   3 — Colores
+   ════════════════════════════════════════════════════════════ */
+var COLOR_DEFS = [
+  { key: 'primary', label: 'primary (default)', color: null       },
+  { key: 'warning', label: 'warning',            color: 'warning'  },
+  { key: 'danger',  label: 'danger',             color: 'danger'   },
+  { key: 'success', label: 'success',            color: 'success'  },
+  { key: 'muted',   label: 'muted',              color: 'muted'    },
+  { key: 'custom',  label: 'color: "#f97316"',   color: '#f97316'  }
+];
+
+var preview_s3 = '<div style="padding:8px 0;display:flex;flex-direction:column;gap:20px">';
+COLOR_DEFS.forEach(function(c) {
+  preview_s3 += buildGroup(c.label, buildCards('s3-' + c.key, VARIANTS));
+});
+preview_s3 += '</div>';
+
+var js_s3 =
+  "var variants  = ['dual','ring','bars','roller','clock','ellipsis',\n" +
+  "                 'grid','ripple','activity','triple','orbital','dots','bounce'];\n" +
+  "var colorDefs = [\n" +
+  "  { key: 'primary', color: null       },\n" +
+  "  { key: 'warning', color: 'warning'  },\n" +
+  "  { key: 'danger',  color: 'danger'   },\n" +
+  "  { key: 'success', color: 'success'  },\n" +
+  "  { key: 'muted',   color: 'muted'    },\n" +
+  "  { key: 'custom',  color: '#f97316'  }\n" +
+  "];\n\n" +
+  "colorDefs.forEach(function(c) {\n" +
+  "  variants.forEach(function(v) {\n" +
+  "    var opts = { variant: v, size: 'md' };\n" +
+  "    if (c.color) opts.color = c.color;\n" +
+  "    new MTS.Spinner('#s3-' + c.key + '-' + v, opts);\n" +
+  "  });\n" +
+  "});";
+
+makeSection('tabs-s3', preview_s3, js_s3, function() {
+  COLOR_DEFS.forEach(function(c) {
+    VARIANTS.forEach(function(v) {
+      var opts = { variant: v, size: 'md' };
+      if (c.color) opts.color = c.color;
+      new MTS.Spinner('#s3-' + c.key + '-' + v, opts);
+    });
+  });
+}, '660px');
+
+/* ════════════════════════════════════════════════════════════
+   4 — Multi-color
+   orbital usa color2 · triple usa color2 + color3
+   el resto solo color (se muestran con success para distinguir)
+   ════════════════════════════════════════════════════════════ */
+var preview_s4 =
+  '<div style="display:flex;flex-wrap:wrap;gap:12px;padding:16px 0">' +
+  buildCards('s4', VARIANTS) +
+  '</div>';
+
+var js_s4 =
+  "// orbital, triple y bounce usan color2 visualmente\n" +
+  "// triple además usa color3\n" +
+  "var variants = ['dual','ring','bars','roller','clock','ellipsis',\n" +
+  "                'grid','ripple','activity','triple','orbital','dots','bounce'];\n\n" +
+  "variants.forEach(function(v) {\n" +
+  "  var opts = {\n" +
+  "    variant: v,\n" +
+  "    size:    'lg',\n" +
+  "    color:   'success',\n" +
+  "    color2:  'var(--mts-color-warning, #f59e0b)'\n" +
+  "  };\n" +
+  "  if (v === 'triple') opts.color3 = 'var(--mts-color-danger, #ef4444)';\n" +
+  "  new MTS.Spinner('#s4-' + v, opts);\n" +
+  "});";
+
+makeSection('tabs-s4', preview_s4, js_s4, function() {
+  VARIANTS.forEach(function(v) {
+    var opts = {
+      variant: v,
+      size:    'lg',
+      color:   'success',
+      color2:  'var(--mts-color-warning, #f59e0b)'
+    };
+    if (v === 'triple') opts.color3 = 'var(--mts-color-danger, #ef4444)';
+    new MTS.Spinner('#s4-' + v, opts);
+  });
+}, '240px');
+
+/* ════════════════════════════════════════════════════════════
+   5 — Label
+   ════════════════════════════════════════════════════════════ */
+var preview_s5 =
+  '<div style="display:flex;flex-wrap:wrap;gap:16px;padding:16px 0">';
+VARIANTS.forEach(function(v) {
+  preview_s5 += '<div id="s5-' + v + '"></div>';
+});
+preview_s5 += '</div>';
+
+var js_s5 =
+  "var variants = ['dual','ring','bars','roller','clock','ellipsis',\n" +
+  "                'grid','ripple','activity','triple','orbital','dots','bounce'];\n\n" +
+  "variants.forEach(function(v) {\n" +
+  "  new MTS.Spinner('#s5-' + v, { variant: v, size: 'lg', label: 'Cargando...' });\n" +
+  "});";
+
+makeSection('tabs-s5', preview_s5, js_s5, function() {
+  VARIANTS.forEach(function(v) {
+    new MTS.Spinner('#s5-' + v, { variant: v, size: 'lg', label: 'Cargando...' });
+  });
+}, '240px');
+
+/* ════════════════════════════════════════════════════════════
+   6 — Overlay
+   ════════════════════════════════════════════════════════════ */
+var preview_s6 =
+  '<div style="padding:24px 0;display:flex;flex-direction:column;gap:14px;align-items:flex-start">' +
+    '<p style="margin:0;font-size:13px;color:var(--mts-text-muted)">Cubre la pantalla completa con fondo semitransparente. Se cierra automáticamente a los 2.5 s.</p>' +
+    '<button id="s6-btn" data-label="Mostrar Overlay" data-variant="primary"></button>' +
+  '</div>';
+
+var js_s6 =
+  "new MTS.Button('#s6-btn');\n\n" +
+  "document.getElementById('s6-btn').addEventListener('click', function() {\n" +
+  "  var el = document.createElement('div');\n" +
+  "  document.body.appendChild(el);\n" +
+  "  var sp = new MTS.Spinner(el, {\n" +
+  "    variant: 'dual',\n" +
+  "    size:    'xl',\n" +
+  "    label:   'Cargando...',\n" +
+  "    overlay: true\n" +
+  "  });\n" +
+  "  setTimeout(function() { sp.destroy(); el.remove(); }, 2500);\n" +
+  "});";
+
+makeSection('tabs-s6', preview_s6, js_s6, function() {
+  new MTS.Button('#s6-btn');
+  document.getElementById('s6-btn').addEventListener('click', function() {
+    var el = document.createElement('div');
+    document.body.appendChild(el);
+    var sp = new MTS.Spinner(el, {
+      variant: 'dual',
+      size:    'xl',
+      label:   'Cargando...',
+      overlay: true
+    });
+    setTimeout(function() { sp.destroy(); el.remove(); }, 2500);
+  });
+}, '180px');
 </script>
+
 </body>
 </html>

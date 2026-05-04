@@ -1,7 +1,7 @@
 # MTS.ConfirmButton
 
-[EN] Two-step inline confirmation button. Prevents accidental actions without requiring a modal. Includes an auto-cancel timeout bar.
-[ES] Botón de confirmación inline en 2 pasos. Evita acciones accidentales sin necesitar un modal. Incluye barra de timeout que auto-cancela.
+🇬🇧 Two-step inline confirmation button. Prevents accidental actions without requiring a modal. Includes an auto-cancel timeout bar.
+🇪🇸 Botón de confirmación inline en 2 pasos. Evita acciones accidentales sin necesitar un modal. Incluye barra de timeout que auto-cancela.
 
 ---
 
@@ -19,25 +19,25 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `label` | `string` | `'Eliminar'` | [EN] Initial button label / [ES] Label del botón inicial |
-| `confirmLabel` | `string` | `'¿Confirmar?'` | [EN] Confirm button label / [ES] Label del botón confirmar |
-| `cancelLabel` | `string` | `'No'` | [EN] Cancel button label / [ES] Label del botón cancelar |
-| `variant` | `string` | `'secondary'` | [EN] Initial button variant / [ES] Variante inicial |
-| `confirmVariant` | `string` | `'danger'` | [EN] Variant during confirmation / [ES] Variante al confirmar |
+| `label` | `string` | `'Eliminar'` | 🇬🇧 Initial button label / 🇪🇸 Label del botón inicial |
+| `confirmLabel` | `string` | `'¿Confirmar?'` | 🇬🇧 Confirm button label / 🇪🇸 Label del botón confirmar |
+| `cancelLabel` | `string` | `'No'` | 🇬🇧 Cancel button label / 🇪🇸 Label del botón cancelar |
+| `variant` | `string` | `'secondary'` | 🇬🇧 Initial button variant / 🇪🇸 Variante inicial |
+| `confirmVariant` | `string` | `'danger'` | 🇬🇧 Variant during confirmation / 🇪🇸 Variante al confirmar |
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
-| `timeout` | `number` | `4000` | [EN] Auto-cancel delay in ms. `0` = no timeout / [ES] Delay auto-cancelar en ms. `0` = sin timeout |
-| `iconLeft` | `string` | `''` | [EN] Left icon HTML / [ES] HTML del ícono izquierdo |
-| `onConfirm` | `function` | — | [EN] Fires when user confirms / [ES] Se dispara al confirmar |
-| `onCancel` | `function` | — | [EN] Fires when user cancels or timeout expires / [ES] Se dispara al cancelar o expirar |
+| `timeout` | `number` | `4000` | 🇬🇧 Auto-cancel delay in ms. `0` = no timeout / 🇪🇸 Delay auto-cancelar en ms. `0` = sin timeout |
+| `iconLeft` | `string` | `''` | 🇬🇧 Left icon HTML / 🇪🇸 HTML del ícono izquierdo |
+| `onConfirm` | `function` | — | 🇬🇧 Fires when user confirms / 🇪🇸 Se dispara al confirmar |
+| `onCancel` | `function` | — | 🇬🇧 Fires when user cancels or timeout expires / 🇪🇸 Se dispara al cancelar o expirar |
 
 ---
 
 ## Events / Eventos
 
-[EN] Use `onConfirm` and `onCancel` in the constructor. This is the recommended approach.
-[ES] Usa `onConfirm` y `onCancel` en el constructor. Este es el enfoque recomendado.
+🇬🇧 Use `onConfirm` and `onCancel` in the constructor. This is the recommended approach.
+🇪🇸 Usa `onConfirm` y `onCancel` en el constructor. Este es el enfoque recomendado.
 
 ```js
 new MTS.ConfirmButton('#my-btn', {
@@ -76,19 +76,19 @@ new MTS.ConfirmButton('#my-btn', {
 </script>
 ```
 
-[EN] Available `data-*` attributes:
-[ES] Atributos `data-*` disponibles:
+🇬🇧 Available `data-*` attributes:
+🇪🇸 Atributos `data-*` disponibles:
 
 | Attribute / Atributo | JS Option | Description / Descripción |
 |----------------------|-----------|---------------------------|
-| `data-label` | `label` | [EN] Initial label / [ES] Label inicial |
-| `data-confirm-label` | `confirmLabel` | [EN] Confirm label / [ES] Label confirmar |
-| `data-cancel-label` | `cancelLabel` | [EN] Cancel label / [ES] Label cancelar |
-| `data-variant` | `variant` | |
-| `data-confirm-variant` | `confirmVariant` | |
+| `data-label` | `label` | 🇬🇧 Initial label / 🇪🇸 Label inicial |
+| `data-confirm-label` | `confirmLabel` | 🇬🇧 Confirm label / 🇪🇸 Label confirmar |
+| `data-cancel-label` | `cancelLabel` | 🇬🇧 Cancel label / 🇪🇸 Label cancelar |
+| `data-variant` | `variant` | 🇬🇧 Initial button variant / 🇪🇸 Variante del botón inicial |
+| `data-confirm-variant` | `confirmVariant` | 🇬🇧 Confirm step variant / 🇪🇸 Variante del paso de confirmación |
 | `data-size` | `size` | `sm` · `md` · `lg` |
-| `data-timeout` | `timeout` | [EN] ms, `0` = no timeout / [ES] ms, `0` = sin timeout |
-| `data-disabled` | `disabled` | [EN] Presence activates / [ES] Presencia activa |
+| `data-timeout` | `timeout` | 🇬🇧 ms, `0` = no timeout / 🇪🇸 ms, `0` = sin timeout |
+| `data-disabled` | `disabled` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
 
 ---
 
@@ -138,10 +138,3 @@ btn.enable()
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

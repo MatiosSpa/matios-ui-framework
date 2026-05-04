@@ -73,7 +73,7 @@ MTS.Alert = class MtsAlert {
     return this;
   }
 
-  setMessage(msg) { if (this._msgEl) this._msgEl.innerHTML = msg; return this; }
+  setMessage(msg) { if (this._msgEl) this._msgEl.textContent = msg; return this; }
   on(e, cb)       { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
 
   _build() {
@@ -100,7 +100,7 @@ MTS.Alert = class MtsAlert {
 
     this._msgEl = document.createElement('div');
     this._msgEl.className = 'mts-alert__message';
-    this._msgEl.innerHTML = this.message;
+    this._msgEl.textContent = this.message;
     body.appendChild(this._msgEl);
 
     if (this.action && this.onAction) {

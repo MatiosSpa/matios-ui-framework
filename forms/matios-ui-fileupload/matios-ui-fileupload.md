@@ -1,7 +1,7 @@
 # MTS.FileUpload
 
-[EN] File upload zone with drag & drop, image preview, file type and size validation. Zero dependencies.
-[ES] Zona de carga de archivos con drag & drop, preview de imágenes, validación de tipo y tamaño. 0 dependencias.
+🇬🇧 File upload zone with drag & drop, image preview, file type and size validation. Zero dependencies.
+🇪🇸 Zona de carga de archivos con drag & drop, preview de imágenes, validación de tipo y tamaño. 0 dependencias.
 
 ---
 
@@ -17,27 +17,27 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `accept` | `string` | `'*'` | [EN] Accepted file types (e.g. `'image/*'`, `'.pdf,.doc'`) / [ES] Tipos aceptados |
-| `multiple` | `boolean` | `false` | [EN] Allow multiple files / [ES] Permitir múltiples archivos |
-| `maxSize` | `number` | `null` | [EN] Max file size in MB / [ES] Tamaño máximo en MB |
-| `maxFiles` | `number` | `null` | [EN] Max number of files / [ES] Número máximo de archivos |
-| `label` | `string` | `'Arrastra archivos aquí o selecciona'` | [EN] Drop zone label / [ES] Label de la zona |
-| `hint` | `string` | `''` | [EN] Helper text / [ES] Texto de ayuda |
-| `preview` | `boolean` | `true` | [EN] Show image thumbnails / [ES] Mostrar miniaturas de imágenes |
-| `disabled` | `boolean` | `false` | [EN] Disables the zone / [ES] Deshabilita la zona |
-| `onChange` | `function` | — | [EN] `(files: File[]) => {}` Fires on add or remove / [ES] Se dispara al agregar o eliminar |
-| `onAdd` | `function` | — | [EN] `(file: File) => {}` Fires when a file is added / [ES] Se dispara al agregar un archivo |
-| `onRemove` | `function` | — | [EN] `(file: File) => {}` Fires when a file is removed / [ES] Se dispara al eliminar |
-| `onError` | `function` | — | [EN] `(errors: string[]) => {}` Fires on validation failure / [ES] Se dispara al fallar validación |
+| `accept` | `string` | `'*'` | 🇬🇧 Accepted file types (e.g. `'image/*'`, `'.pdf,.doc'`) / 🇪🇸 Tipos aceptados |
+| `multiple` | `boolean` | `false` | 🇬🇧 Allow multiple files / 🇪🇸 Permitir múltiples archivos |
+| `maxSize` | `number` | `null` | 🇬🇧 Max file size in MB / 🇪🇸 Tamaño máximo en MB |
+| `maxFiles` | `number` | `null` | 🇬🇧 Max number of files / 🇪🇸 Número máximo de archivos |
+| `label` | `string` | `'Arrastra archivos aquí o selecciona'` | 🇬🇧 Drop zone label / 🇪🇸 Label de la zona |
+| `hint` | `string` | `''` | 🇬🇧 Helper text / 🇪🇸 Texto de ayuda |
+| `preview` | `boolean` | `true` | 🇬🇧 Show image thumbnails / 🇪🇸 Mostrar miniaturas de imágenes |
+| `disabled` | `boolean` | `false` | 🇬🇧 Disables the zone / 🇪🇸 Deshabilita la zona |
+| `onChange` | `function` | — | 🇬🇧 `(files: File[]) => {}` Fires on add or remove / 🇪🇸 Se dispara al agregar o eliminar |
+| `onAdd` | `function` | — | 🇬🇧 `(file: File) => {}` Fires when a file is added / 🇪🇸 Se dispara al agregar un archivo |
+| `onRemove` | `function` | — | 🇬🇧 `(file: File) => {}` Fires when a file is removed / 🇪🇸 Se dispara al eliminar |
+| `onError` | `function` | — | 🇬🇧 `(errors: string[]) => {}` Fires on validation failure / 🇪🇸 Se dispara al fallar validación |
 
 ---
 
 ## Events / Eventos
 
-[EN] Use `onChange`, `onAdd`, `onRemove` and `onError` in the constructor. This is the recommended approach.
-[ES] Usa `onChange`, `onAdd`, `onRemove` y `onError` en el constructor. Este es el enfoque recomendado.
+🇬🇧 Use `onChange`, `onAdd`, `onRemove` and `onError` in the constructor. This is the recommended approach.
+🇪🇸 Usa `onChange`, `onAdd`, `onRemove` y `onError` en el constructor. Este es el enfoque recomendado.
 
 ```js
 new MTS.FileUpload('#my-zone', {
@@ -164,10 +164,3 @@ document.getElementById('my-zone')
 | `onError` | `mts:fileupload:error` |
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 1.0.0 | [EN] Initial release — drag & drop, preview, validation / [ES] Versión inicial |

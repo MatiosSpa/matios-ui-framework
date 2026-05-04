@@ -483,11 +483,12 @@ MTS.CalendarUI = class CalendarUI {
       ? (durMin >= 60 ? `${Math.floor(durMin / 60)}h${durMin % 60 ? ` ${durMin % 60}min` : ''}` : `${durMin}min`)
       : null;
 
+    const _esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     const row = (icon, key, val) => val
       ? `<div style="display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid var(--mts-border-color);">
            <span style="color:var(--mts-color-primary);flex-shrink:0;margin-top:1px;">${ic(icon)}</span>
-           <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mts-text-muted);margin-bottom:2px;">${key}</div>
-           <div style="font-size:13px;color:var(--mts-text-primary)">${val}</div></div>
+           <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mts-text-muted);margin-bottom:2px;">${_esc(key)}</div>
+           <div style="font-size:13px;color:var(--mts-text-primary)">${_esc(val)}</div></div>
          </div>`
       : '';
 

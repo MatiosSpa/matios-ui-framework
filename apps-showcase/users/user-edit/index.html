@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
@@ -79,9 +79,9 @@
       variant: 'elevated',
       size: 'lg',
       body:
-        '<div class="mts-d-flex mts-flex-col mts-gap-4">' +
+        '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div id="user-edit-alert"></div>' +
-          '<p class="mts-text-md mts-text-muted mts-m-0">Aqui se ajustan datos base, area, estado y rol. El cambio de clave vive aparte en modal para no mezclarlo con el formulario principal.</p>' +
+          '<p class="mts-text--md mts-text-color--muted mts-m-0">Aqui se ajustan datos base, area, estado y rol. El cambio de clave vive aparte en modal para no mezclarlo con el formulario principal.</p>' +
           '<div class="mts-grid mts-grid--gap-md">' +
             '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-edit-first-name"></div></div>' +
             '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-edit-last-name"></div></div>' +
@@ -94,7 +94,7 @@
             '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-edit-role"></div></div>' +
             '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-edit-status"></div></div>' +
           '</div>' +
-          '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
+          '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
             '<div id="user-edit-force-reset"></div>' +
             '<div id="user-edit-notify"></div>' +
           '</div>' +
@@ -298,7 +298,7 @@
 
     function openPasswordModal(initialMode) {
       var body = document.createElement('div');
-      body.className = 'mts-d-flex mts-flex-col mts-gap-4';
+      body.className = 'mts-d-flex mts-flex--column mts-gap-4';
       body.innerHTML =
         '<div id="change-password-alert"></div>' +
         '<div id="change-password-mode"></div>' +

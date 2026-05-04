@@ -29,29 +29,30 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
   <link rel="stylesheet" href="../../support/demo-shared.css">
   <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-skeleton.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="./matios-ui-skeleton.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
 </head>
 <body>
-<div class="demo-theme">
-  <button class="demo-btn-sm" onclick="setMode('dark')">Dark</button>
-  <button class="demo-btn-sm" onclick="setMode('light')">Light</button>
-  <button class="demo-btn-sm demo-btn-sep">—</button>
-  <button class="demo-btn-sm" onclick="setAccent('violet')">Violet</button>
-  <button class="demo-btn-sm" onclick="setAccent('olive')">Olive</button>
-  <button class="demo-btn-sm" onclick="setAccent('blue')">Blue</button>
-  <button class="demo-btn-sm" onclick="setAccent(null)">Default</button>
-</div>
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Skeleton</h1>
     <p>Animated loading placeholder — text, circle, rect, card, list, table · pulse and wave animations.</p>
     <div class="demo-header-actions">
-      <button class="demo-docs-btn" onclick="toggleDocs('docs-panel','./matios-ui-skeleton.md')">Docs</button>
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
@@ -62,13 +63,6 @@
 </div>
 
 <script>
-function esc(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
 function indentHtml(html) {
   var indent = 0;
   var step = 2;
@@ -93,34 +87,23 @@ function indentHtml(html) {
   return result.trimEnd();
 }
 
-function htmlTab(previewHtml) {
-  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
-    esc(indentHtml(previewHtml)) +
-  '</pre>';
-}
-
-function jsTab(code) {
-  return '<pre style="display:block;height:100%;box-sizing:border-box;white-space:pre;overflow:auto;margin:0">' +
-    esc(code) +
-  '</pre>';
-}
-
-function makeSection(id, previewHtml, jsCode, initFn) {
+function makeSection(id, previewHtml, jsCode, initFn, height) {
   new MTS.Tabs('#' + id, {
     variant: 'card',
-    height: '340px',
+    height: height || '340px',
     lazy: false,
     tabs: [
-      { id: id + '-preview', label: 'Preview', content: previewHtml },
-      { id: id + '-html', label: 'HTML', content: htmlTab(previewHtml) },
-      { id: id + '-js', label: 'JavaScript', content: jsTab(jsCode) }
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>'   }
     ]
   });
-
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
 
-var preview_s1 = `
+const preview_s1 = `
 <div class="demo-grid">
   <div>
     <div class="demo-label">variant: text (4 lines)</div>
@@ -136,7 +119,7 @@ var preview_s1 = `
   </div>
 </div>`;
 
-var js_s1 = `new MTS.Skeleton('#sk-text', {
+const js_s1 = `new MTS.Skeleton('#sk-text', {
   variant: 'text',
   lines: 4,
   animation: 'pulse'
@@ -154,7 +137,7 @@ new MTS.Skeleton('#sk-rect', {
   height: '120px'
 });`;
 
-var preview_s2 = `
+const preview_s2 = `
 <div class="demo-grid">
   <div>
     <div class="demo-label">variant: card</div>
@@ -170,7 +153,7 @@ var preview_s2 = `
   </div>
 </div>`;
 
-var js_s2 = `new MTS.Skeleton('#sk-card', {
+const js_s2 = `new MTS.Skeleton('#sk-card', {
   variant: 'card'
 });
 
@@ -185,7 +168,7 @@ new MTS.Skeleton('#sk-table', {
   cols: 4
 });`;
 
-var preview_s3 = `
+const preview_s3 = `
 <div class="demo-grid">
   <div>
     <div class="demo-label">animation: pulse</div>
@@ -201,7 +184,7 @@ var preview_s3 = `
   </div>
 </div>`;
 
-var js_s3 = `new MTS.Skeleton('#sk-pulse', {
+const js_s3 = `new MTS.Skeleton('#sk-pulse', {
   variant: 'text',
   lines: 3,
   animation: 'pulse'

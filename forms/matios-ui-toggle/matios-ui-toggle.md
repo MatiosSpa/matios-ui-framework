@@ -1,14 +1,14 @@
 # MTS.Toggle
 
-[EN] On/off switch component with three sizes, optional label, and disabled state.
-[ES] Componente switch encendido/apagado con tres tamaños, label opcional y estado disabled.
+🇬🇧 On/off switch component with three sizes, optional label, and disabled state.
+🇪🇸 Componente switch encendido/apagado con tres tamaños, label opcional y estado disabled.
 
 ---
 
 ## Installation / Instalación
 
-[EN] Include the base CSS, the component CSS and the component JS in your HTML.
-[ES] Incluye el CSS base, el CSS del componente y el JS del componente en tu HTML.
+🇬🇧 Include the base CSS, the component CSS and the component JS in your HTML.
+🇪🇸 Incluye el CSS base, el CSS del componente y el JS del componente en tu HTML.
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -20,16 +20,16 @@
 
 ## Options / Opciones
 
-[EN] All options are passed as the second argument to the constructor.
-[ES] Todas las opciones se pasan como segundo argumento al constructor.
+🇬🇧 All options are passed as the second argument to the constructor.
+🇪🇸 Todas las opciones se pasan como segundo argumento al constructor.
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `label` | `string` | `''` | [EN] Text displayed next to the switch / [ES] Texto junto al switch |
-| `checked` | `boolean` | `false` | [EN] Initial state / [ES] Estado inicial |
-| `disabled` | `boolean` | `false` | [EN] Disables all interaction / [ES] Deshabilita toda interacción |
-| `size` | `string` | `'md'` | [EN] Size variant: `'sm'` · `'md'` · `'lg'` / [ES] Variante de tamaño |
-| `onChange` | `function` | — | [EN] Fires when state changes / [ES] Se dispara al cambiar el estado |
+| `label` | `string` | `''` | 🇬🇧 Text displayed next to the switch / 🇪🇸 Texto junto al switch |
+| `checked` | `boolean` | `false` | 🇬🇧 Initial state / 🇪🇸 Estado inicial |
+| `disabled` | `boolean` | `false` | 🇬🇧 Disables all interaction / 🇪🇸 Deshabilita toda interacción |
+| `size` | `string` | `'md'` | 🇬🇧 Size variant: `'sm'` · `'md'` · `'lg'` / 🇪🇸 Variante de tamaño |
+| `onChange` | `function` | — | 🇬🇧 Fires when state changes / 🇪🇸 Se dispara al cambiar el estado |
 
 ---
 
@@ -45,8 +45,8 @@
 
 ## Events / Eventos
 
-[EN] Use `onXxx` callbacks in the constructor. This is the recommended approach — no need for `addEventListener` or `.on()`.
-[ES] Usa los callbacks `onXxx` en el constructor. Este es el enfoque recomendado — no necesitas `addEventListener` ni `.on()`.
+🇬🇧 Use `onXxx` callbacks in the constructor. This is the recommended approach — no need for `addEventListener` or `.on()`.
+🇪🇸 Usa los callbacks `onXxx` en el constructor. Este es el enfoque recomendado — no necesitas `addEventListener` ni `.on()`.
 
 ```js
 new MTS.Toggle('#my-toggle', {
@@ -58,19 +58,19 @@ new MTS.Toggle('#my-toggle', {
 });
 ```
 
-[EN] The event object contains:
-[ES] El objeto de evento contiene:
+🇬🇧 The event object contains:
+🇪🇸 El objeto de evento contiene:
 
 | Property / Propiedad | Type / Tipo | Description / Descripción |
 |----------------------|-------------|---------------------------|
-| `e.detail.checked` | `boolean` | [EN] Current state / [ES] Estado actual |
+| `e.detail.checked` | `boolean` | 🇬🇧 Current state / 🇪🇸 Estado actual |
 
 ---
 
 ## HTML Usage / Uso HTML
 
-[EN] Declare the structure in HTML and instantiate with JavaScript. The component reads the element and builds the switch inside it.
-[ES] Declara la estructura en HTML e instancia con JavaScript. El componente lee el elemento y construye el switch dentro.
+🇬🇧 Declare the structure in HTML and instantiate with JavaScript. The component reads the element and builds the switch inside it.
+🇪🇸 Declara la estructura en HTML e instancia con JavaScript. El componente lee el elemento y construye el switch dentro.
 
 ```html
 <div id="my-toggle"></div>
@@ -85,8 +85,8 @@ new MTS.Toggle('#my-toggle', {
 </script>
 ```
 
-[EN] Disabled state:
-[ES] Estado disabled:
+🇬🇧 Disabled state:
+🇪🇸 Estado disabled:
 
 ```html
 <div id="my-toggle-disabled"></div>
@@ -104,8 +104,8 @@ new MTS.Toggle('#my-toggle', {
 
 ## JavaScript Usage / Uso JavaScript
 
-[EN] Create the component entirely from JavaScript — the container only needs to exist in the DOM.
-[ES] Crea el componente completamente desde JavaScript — el contenedor solo necesita existir en el DOM.
+🇬🇧 Create the component entirely from JavaScript — the container only needs to exist in the DOM.
+🇪🇸 Crea el componente completamente desde JavaScript — el contenedor solo necesita existir en el DOM.
 
 ```js
 const toggle = new MTS.Toggle('#my-toggle', {
@@ -129,8 +129,8 @@ const toggle = new MTS.Toggle('#my-toggle', {
 
 ## API
 
-[EN] Methods available on the instance after creation.
-[ES] Métodos disponibles en la instancia después de crearla.
+🇬🇧 Methods available on the instance after creation.
+🇪🇸 Métodos disponibles en la instancia después de crearla.
 
 ```js
 const toggle = new MTS.Toggle('#my-toggle', { ... });
@@ -150,8 +150,8 @@ toggle.toggle()
 
 ## DOM Event / Evento DOM
 
-[EN] If you need to listen from outside the component instance (e.g. from another module), use the native DOM event.
-[ES] Si necesitas escuchar desde fuera de la instancia (ej: desde otro módulo), usa el evento DOM nativo.
+🇬🇧 If you need to listen from outside the component instance (e.g. from another module), use the native DOM event.
+🇪🇸 Si necesitas escuchar desde fuera de la instancia (ej: desde otro módulo), usa el evento DOM nativo.
 
 ```js
 document.getElementById('my-toggle')
@@ -162,10 +162,3 @@ document.getElementById('my-toggle')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 1.0.0 | [EN] Extracted from checkbox component / [ES] Extraído del componente checkbox |

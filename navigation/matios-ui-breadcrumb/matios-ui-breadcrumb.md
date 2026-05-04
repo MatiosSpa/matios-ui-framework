@@ -1,7 +1,7 @@
 # MTS.Breadcrumb
 
-[EN] Navigation breadcrumb with custom separator, icon support, collapsible overflow and dynamic item management.
-[ES] Breadcrumb de navegación con separador personalizado, soporte de íconos, colapso de desbordamiento y gestión dinámica de ítems.
+🇬🇧 Navigation breadcrumb with custom separator, icon support, collapsible overflow and dynamic item management.
+🇪🇸 Breadcrumb de navegación con separador personalizado, soporte de íconos, colapso de desbordamiento y gestión dinámica de ítems.
 
 ---
 
@@ -17,21 +17,21 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `items` | `array` | `[]` | [EN] Breadcrumb items (see below) / [ES] Ítems del breadcrumb |
-| `separator` | `string` | `'/'` | [EN] Separator HTML between items / [ES] HTML del separador entre ítems |
-| `maxItems` | `number` | `null` | [EN] Collapse if items exceed this count / [ES] Colapsar si los ítems superan este número |
-| `onClick` | `function` | — | [EN] Fires when an item is clicked / [ES] Se dispara al hacer click en un ítem |
+| `items` | `array` | `[]` | 🇬🇧 Breadcrumb items (see below) / 🇪🇸 Ítems del breadcrumb |
+| `separator` | `string` | `'/'` | 🇬🇧 Separator HTML between items / 🇪🇸 HTML del separador entre ítems |
+| `maxItems` | `number` | `null` | 🇬🇧 Collapse if items exceed this count / 🇪🇸 Colapsar si los ítems superan este número |
+| `onClick` | `function` | — | 🇬🇧 Fires when an item is clicked / 🇪🇸 Se dispara al hacer click en un ítem |
 
 ### Item schema / Esquema de ítem
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `label` | `string` | [EN] Display text / [ES] Texto visible |
-| `href` | `string` | [EN] Link URL (optional) / [ES] URL del enlace (opcional) |
-| `onClick` | `function` | [EN] Click handler (optional) / [ES] Handler de click (opcional) |
-| `icon` | `string` | [EN] Icon HTML (optional) / [ES] HTML del ícono (opcional) |
+| `label` | `string` | 🇬🇧 Display text / 🇪🇸 Texto visible |
+| `href` | `string` | 🇬🇧 Link URL (optional) / 🇪🇸 URL del enlace (opcional) |
+| `onClick` | `function` | 🇬🇧 Click handler (optional) / 🇪🇸 Handler de click (opcional) |
+| `icon` | `string` | 🇬🇧 Icon HTML (optional) / 🇪🇸 HTML del ícono (opcional) |
 
 ---
 
@@ -154,10 +154,3 @@ document.getElementById('my-breadcrumb')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 1.0.0 | [EN] Initial release — separators, icons, collapse, dynamic items / [ES] Versión inicial |

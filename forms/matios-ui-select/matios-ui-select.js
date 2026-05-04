@@ -384,7 +384,7 @@ MTS.Select = class MtsSelect {
         if (opt.icon) {
           const ic = document.createElement('span');
           ic.className = 'mts-select__option-icon';
-          ic.innerHTML = opt.icon;
+          ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(opt.icon) : opt.icon;
           item.appendChild(ic);
         }
 

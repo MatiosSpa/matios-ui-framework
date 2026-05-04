@@ -1,7 +1,7 @@
 /* ============================================================
    MATIOS UI — matios-ui-pagination.js
    MTS.Pagination — Paginación completa con page size y resumen
-   Version: 1.0.0
+   Version: 1.2.0
    ============================================================ */
 window.MTS = window.MTS || {};
 
@@ -106,7 +106,7 @@ MTS.Pagination = class MtsPagination {
   }
 
   _build() {
-    this._el.innerHTML = '';
+    this._el.replaceChildren();
     this._syncClasses(['mts-pagination', 'mts-pagination--' + this.size]);
     const tp = this._totalPages();
 
@@ -155,7 +155,7 @@ MTS.Pagination = class MtsPagination {
         (page === this.page ? ' mts-pagination__btn--active' : '') +
         (isEllipsis ? ' mts-pagination__btn--ellipsis' : '');
       b.disabled = disabled || isEllipsis;
-      b.innerHTML = label;
+      b.textContent = label;
       if (!disabled && !isEllipsis) b.addEventListener('click', () => this.setPage(page));
       return b;
     };

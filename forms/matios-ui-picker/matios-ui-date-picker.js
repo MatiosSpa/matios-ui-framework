@@ -509,7 +509,10 @@ MTS.DatePicker = class MtsDatePicker {
       info.className = 'mts-picker-range__info';
       const startStr = this._rangeStart ? this._formatDate(this._rangeStart) : '—';
       const endStr   = this._rangeEnd   ? this._formatDate(this._rangeEnd)   : '—';
-      info.innerHTML = `<span>${startStr}</span><span class="mts-picker-range__arrow">→</span><span>${endStr}</span>`;
+      var _sSpan = document.createElement('span'); _sSpan.textContent = startStr;
+      var _arrow = document.createElement('span'); _arrow.className = 'mts-picker-range__arrow'; _arrow.textContent = '→';
+      var _eSpan = document.createElement('span'); _eSpan.textContent = endStr;
+      info.appendChild(_sSpan); info.appendChild(_arrow); info.appendChild(_eSpan);
       container.appendChild(info);
     }
   }

@@ -31,7 +31,7 @@ new MTS.Splitter('#split', {
 | `collapsible` | `boolean` | `false` | Doble click en el gutter colapsa un panel |
 | `gutterSize` | `string` | `'6px'` | Ancho/alto del divisor |
 | `onChange` | `function` | `null` | `({ sizes, firstSize, secondSize }) => {}` |
-| `onDragStart` | `function` | `null` | |
+| `onDragStart` | `function` | `null` | 🇬🇧 Fires when drag starts / 🇪🇸 Se dispara al iniciar el drag |
 | `onDragEnd` | `function` | `null` | `({ sizes }) => {}` |
 
 ## API

@@ -1,7 +1,7 @@
 # MTS.Tooltip
 
-[EN] Tooltip with smart positioning, multiple triggers, variants and HTML content support. Includes `initAll()` for bulk initialization from HTML attributes.
-[ES] Tooltip con posicionamiento inteligente, múltiples triggers, variantes y soporte de HTML. Incluye `initAll()` para inicialización masiva desde atributos HTML.
+🇬🇧 Tooltip with smart positioning, multiple triggers, variants and HTML content support. Includes `initAll()` for bulk initialization from HTML attributes.
+🇪🇸 Tooltip con posicionamiento inteligente, múltiples triggers, variantes y soporte de HTML. Incluye `initAll()` para inicialización masiva desde atributos HTML.
 
 ---
 
@@ -17,18 +17,18 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `content` | `string` | `''` | [EN] Tooltip HTML or text / [ES] HTML o texto del tooltip |
+| `content` | `string` | `''` | 🇬🇧 Tooltip HTML or text / 🇪🇸 HTML o texto del tooltip |
 | `position` | `string` | `'top'` | `'top'` · `'bottom'` · `'left'` · `'right'` |
 | `trigger` | `string` | `'hover'` | `'hover'` · `'click'` · `'focus'` |
-| `delay` | `number` | `0` | [EN] Show delay in ms / [ES] Delay para mostrar en ms |
-| `hideDelay` | `number` | `0` | [EN] Hide delay in ms / [ES] Delay para ocultar en ms |
-| `offset` | `number` | `8` | [EN] Gap between target and tooltip in px / [ES] Separación en px |
+| `delay` | `number` | `0` | 🇬🇧 Show delay in ms / 🇪🇸 Delay para mostrar en ms |
+| `hideDelay` | `number` | `0` | 🇬🇧 Hide delay in ms / 🇪🇸 Delay para ocultar en ms |
+| `offset` | `number` | `8` | 🇬🇧 Gap between target and tooltip in px / 🇪🇸 Separación en px |
 | `variant` | `string` | `'dark'` | `'dark'` · `'light'` |
-| `maxWidth` | `number` | `220` | [EN] Max width in px / [ES] Ancho máximo en px |
-| `color` | `string` | `null` | [EN] Custom text color / [ES] Color de texto personalizado |
-| `bg` | `string` | `null` | [EN] Custom background color / [ES] Color de fondo personalizado |
+| `maxWidth` | `number` | `220` | 🇬🇧 Max width in px / 🇪🇸 Ancho máximo en px |
+| `color` | `string` | `null` | 🇬🇧 Custom text color / 🇪🇸 Color de texto personalizado |
+| `bg` | `string` | `null` | 🇬🇧 Custom background color / 🇪🇸 Color de fondo personalizado |
 
 ---
 
@@ -171,10 +171,3 @@ document.getElementById('my-btn')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingüe, docs estandarizados |
-| 1.0.0 | [EN] Initial release — smart positioning, initAll(), HTML content / [ES] Versión inicial |

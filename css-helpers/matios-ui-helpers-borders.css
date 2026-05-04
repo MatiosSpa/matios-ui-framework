@@ -1,0 +1,56 @@
+/* ============================================================
+   MATIOS UI — CSS Helpers: Borders
+   Versión: 1.0.0
+
+   BEM:
+   - bloque=mts-border,       modificador=lado
+   - bloque=mts-border-color, modificador=token
+   - bloque=mts-border-width, modificador=valor
+   - bloque=mts-rounded,      modificador=tamaño
+   ============================================================ */
+
+/* ── Border — aditivo ───────────────────────────────────── */
+.mts-border        { border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color) !important; }
+.mts-border-top    { border-top: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color) !important; }
+.mts-border-bottom { border-bottom: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color) !important; }
+.mts-border-left   { border-left: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color) !important; }
+.mts-border-right  { border-right: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color) !important; }
+
+/* ── Border — sustractivo ───────────────────────────────── */
+.mts-border--none        { border: none !important; }
+.mts-border-top--none    { border-top: none !important; }
+.mts-border-bottom--none { border-bottom: none !important; }
+.mts-border-left--none   { border-left: none !important; }
+.mts-border-right--none  { border-right: none !important; }
+
+/* ── Border color — BEM ─────────────────────────────────── */
+.mts-border-color--primary { border-color: var(--mts-color-primary) !important; }
+.mts-border-color--success { border-color: var(--mts-color-success) !important; }
+.mts-border-color--warning { border-color: var(--mts-color-warning) !important; }
+.mts-border-color--danger  { border-color: var(--mts-color-danger) !important; }
+.mts-border-color--info    { border-color: var(--mts-color-info) !important; }
+.mts-border-color--white   { border-color: #ffffff !important; }
+.mts-border-color--muted   { border-color: var(--mts-border-color) !important; }
+.mts-border-color--strong  { border-color: var(--mts-border-color-strong) !important; }
+
+/* ── Border width — BEM ─────────────────────────────────── */
+.mts-border-width--1 { border-width: 1px !important; }
+.mts-border-width--2 { border-width: 2px !important; }
+.mts-border-width--3 { border-width: 3px !important; }
+.mts-border-width--4 { border-width: 4px !important; }
+
+/* ── Border radius — BEM ────────────────────────────────── */
+.mts-rounded--0    { border-radius: 0 !important; }
+.mts-rounded--xs   { border-radius: var(--mts-radius-xs) !important; }
+.mts-rounded--sm   { border-radius: var(--mts-radius-sm) !important; }
+.mts-rounded--md   { border-radius: var(--mts-radius-md) !important; }
+.mts-rounded--lg   { border-radius: var(--mts-radius-lg) !important; }
+.mts-rounded--xl   { border-radius: var(--mts-radius-xl) !important; }
+.mts-rounded--full { border-radius: var(--mts-radius-full) !important; }
+.mts-rounded--pill { border-radius: var(--mts-radius-full) !important; }
+
+/* Border radius por lado */
+.mts-rounded-top--md    { border-top-left-radius: var(--mts-radius-md) !important; border-top-right-radius: var(--mts-radius-md) !important; }
+.mts-rounded-bottom--md { border-bottom-left-radius: var(--mts-radius-md) !important; border-bottom-right-radius: var(--mts-radius-md) !important; }
+.mts-rounded-left--md   { border-top-left-radius: var(--mts-radius-md) !important; border-bottom-left-radius: var(--mts-radius-md) !important; }
+.mts-rounded-right--md  { border-top-right-radius: var(--mts-radius-md) !important; border-bottom-right-radius: var(--mts-radius-md) !important; }

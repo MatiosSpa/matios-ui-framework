@@ -1,7 +1,7 @@
 # MTS.RatingReview
 
-[EN] Rating review widget with average score, star display, breakdown bars and optional interactive voting.
-[ES] Widget de reseñas con promedio, estrellas, barras de desglose y votación interactiva opcional.
+🇬🇧 Rating review widget with average score, star display, breakdown bars and optional interactive voting.
+🇪🇸 Widget de reseñas con promedio, estrellas, barras de desglose y votación interactiva opcional.
 
 ---
 
@@ -17,14 +17,14 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `average` | `number` | `0` | [EN] Average rating (1-5) / [ES] Promedio de calificaciones |
-| `total` | `number` | `0` | [EN] Total number of reviews / [ES] Total de reseñas |
-| `breakdown` | `object` | `{5:0,4:0,3:0,2:0,1:0}` | [EN] Count per star / [ES] Cantidad por estrella |
-| `interactive` | `boolean` | `false` | [EN] Show interactive voting stars / [ES] Mostrar estrellas de votación |
+| `average` | `number` | `0` | 🇬🇧 Average rating (1-5) / 🇪🇸 Promedio de calificaciones |
+| `total` | `number` | `0` | 🇬🇧 Total number of reviews / 🇪🇸 Total de reseñas |
+| `breakdown` | `object` | `{5:0,4:0,3:0,2:0,1:0}` | 🇬🇧 Count per star / 🇪🇸 Cantidad por estrella |
+| `interactive` | `boolean` | `false` | 🇬🇧 Show interactive voting stars / 🇪🇸 Mostrar estrellas de votación |
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
-| `onRate` | `function` | — | [EN] `({ stars }) => {}` Fires when user rates / [ES] Se dispara al calificar |
+| `onRate` | `function` | — | 🇬🇧 `({ stars }) => {}` Fires when user rates / 🇪🇸 Se dispara al calificar |
 
 ---
 
@@ -109,10 +109,3 @@ document.getElementById('my-widget')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] `onRate` normalized to `.on()`, bilingual docs / [ES] Normalizado a `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release — average, breakdown bars, interactive voting / [ES] Versión inicial |

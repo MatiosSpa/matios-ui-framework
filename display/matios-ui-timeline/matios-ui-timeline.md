@@ -1,7 +1,7 @@
 # MTS.Timeline
 
-[EN] Vertical or horizontal timeline with icons, badges, dates, colors and clickable events.
-[ES] Línea de tiempo vertical u horizontal con íconos, badges, fechas, colores y eventos clickeables.
+🇬🇧 Vertical or horizontal timeline with icons, badges, dates, colors and clickable events.
+🇪🇸 Línea de tiempo vertical u horizontal con íconos, badges, fechas, colores y eventos clickeables.
 
 ---
 
@@ -17,23 +17,23 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `events` | `array` | `[]` | [EN] Timeline event items (see schema) / [ES] Ítems de eventos |
+| `events` | `array` | `[]` | 🇬🇧 Timeline event items (see schema) / 🇪🇸 Ítems de eventos |
 | `direction` | `string` | `'vertical'` | `'vertical'` · `'horizontal'` |
 | `align` | `string` | `'left'` | `'left'` · `'right'` · `'alternate'` (vertical only) |
-| `onEventClick` | `function` | — | [EN] `({ event, index }) => {}` Fires on item click / [ES] Se dispara al hacer click en un ítem |
+| `onEventClick` | `function` | — | 🇬🇧 `({ event, index }) => {}` Fires on item click / 🇪🇸 Se dispara al hacer click en un ítem |
 
 ### Event schema / Esquema de evento
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `id` | `string` | [EN] Unique identifier / [ES] Identificador único |
-| `title` | `string` | [EN] Event title (required) / [ES] Título del evento (requerido) |
-| `description` | `string` | [EN] Body text / [ES] Texto del cuerpo |
-| `date` | `string` | [EN] Date label / [ES] Etiqueta de fecha |
-| `icon` | `string` | [EN] SVG icon HTML / [ES] HTML del ícono SVG |
-| `color` | `string` | [EN] Dot color / [ES] Color del punto |
+| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
+| `title` | `string` | 🇬🇧 Event title (required) / 🇪🇸 Título del evento (requerido) |
+| `description` | `string` | 🇬🇧 Body text / 🇪🇸 Texto del cuerpo |
+| `date` | `string` | 🇬🇧 Date label / 🇪🇸 Etiqueta de fecha |
+| `icon` | `string` | 🇬🇧 SVG icon HTML / 🇪🇸 HTML del ícono SVG |
+| `color` | `string` | 🇬🇧 Dot color / 🇪🇸 Color del punto |
 | `badge` | `object` | `{ label, variant }` |
 
 ---
@@ -132,10 +132,3 @@ document.getElementById('my-timeline')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] `onEventClick` normalized to `.on()`, bilingual docs / [ES] Normalizado a `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release — vertical/horizontal, alternate, icons, badges / [ES] Versión inicial |

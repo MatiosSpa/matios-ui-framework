@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
+  <script>
+    (function(){
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else    document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS Layout — Demo</title>
@@ -14,6 +33,10 @@
   <link rel="stylesheet" href="../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-petrol.css">
   <link rel="stylesheet" href="../navigation/matios-ui-accordion/matios-ui-accordion.css">
   <link rel="stylesheet" href="../support/demo-shared.css">
   <script src="../support/demo-shared.js"></script>
@@ -23,7 +46,7 @@
   <div class="demo-page demo-page--launcher">
     <div class="demo-header">
       <h1>MTS <span>Layout</span></h1>
-      <p>Componentes de layout — grid · scrollspy · intersectionreveal · splitter</p>
+      <p>Componentes de layout — grid · scrollspy · intersectionreveal · splitter · shell</p>
     </div>
 
     <div id="layout-launcher" class="demo-launcher"></div>
@@ -34,7 +57,9 @@
       { id: 'grid', component: 'grid', title: 'MTS.Grid', subtitle: 'Sistema de distribución por filas y columnas para layout general', src: 'matios-ui-grid/demo.html' },
       { id: 'scrollspy', component: 'scrollspy', title: 'MTS.ScrollSpy', subtitle: 'Resalta la sección activa al hacer scroll', src: 'matios-ui-scrollspy/demo.html' },
       { id: 'intersectionreveal', component: 'intersectionreveal', title: 'MTS.IntersectionReveal', subtitle: 'Anima elementos al entrar al viewport', src: 'matios-ui-intersectionreveal/demo.html' },
-      { id: 'splitter', component: 'splitter', title: 'MTS.Splitter', subtitle: 'Divide paneles con resizing horizontal o vertical', src: 'matios-ui-splitter/demo.html' }
+      { id: 'splitter', component: 'splitter', title: 'MTS.Splitter', subtitle: 'Divide paneles con resizing horizontal o vertical', src: 'matios-ui-splitter/demo.html' },
+      { id: 'scroll',   component: 'scroll',   title: 'MTS.Scroll',   subtitle: 'Contenedor scrollable temático con fades de borde y eventos de posición', src: 'matios-ui-scroll/demo.html' },
+      { id: 'shell',    component: 'shell',    title: 'MTS.Shell',    subtitle: 'Orquestador de layout — Topbar + SideNav + StatusBar + main con CSS Grid', src: 'matios-ui-shell/demo.html' }
     ]);
   </script>
 </body>

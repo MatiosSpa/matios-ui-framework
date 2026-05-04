@@ -1,7 +1,7 @@
 # MTS.JsonViewer
 
-[EN] Collapsible JSON viewer for payloads, config, diagnostics, and structured responses. Accepts a raw JSON string or a JavaScript object, formats it, and lets the user expand, collapse, paste, and copy the result.
-[ES] Visor plegable de JSON para payloads, config, diagnostico y respuestas estructuradas. Acepta un string JSON o un objeto JavaScript, lo formatea y permite expandir, colapsar, pegar y copiar el resultado.
+🇬🇧 Collapsible JSON viewer for payloads, config, diagnostics, and structured responses. Accepts a raw JSON string or a JavaScript object, formats it, and lets the user expand, collapse, paste, and copy the result.
+🇪🇸 Visor plegable de JSON para payloads, config, diagnostico y respuestas estructuradas. Acepta un string JSON o un objeto JavaScript, lo formatea y permite expandir, colapsar, pegar y copiar el resultado.
 
 ---
 

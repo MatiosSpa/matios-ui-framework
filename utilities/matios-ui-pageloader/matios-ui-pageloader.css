@@ -1,0 +1,63 @@
+/* ============================================================
+   MATIOS UI — matios-ui-pageloader.css  v1.0.0
+   MTS.PageLoader — Indicador de carga de página.
+   ============================================================ */
+
+/* ── Barra fija ── */
+
+.mts-pageloader__bar-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.mts-pageloader__bar-wrap--top    { top: 0; }
+.mts-pageloader__bar-wrap--bottom { bottom: 0; }
+
+/* Sin border-radius en la barra de carga de página */
+.mts-pageloader__bar-wrap .mts-progress-bar,
+.mts-pageloader__bar-wrap .mts-progress-bar__fill {
+  border-radius: 0;
+}
+
+/* Estado error — sobreescribe color del fill a danger */
+.mts-pageloader__bar-wrap--error .mts-progress-bar__fill {
+  background: var(--mts-color-danger);
+}
+
+/* ── Blocker (overlay) ── */
+
+.mts-pageloader__blocker {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Capa de fondo — controla opacidad sin afectar al contenido central */
+.mts-pageloader__backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--mts-bg-body);
+  opacity: var(--_backdrop-opacity, 0.85);
+}
+
+/* Variante blur */
+.mts-pageloader__blocker--blur .mts-pageloader__backdrop {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: var(--mts-bg-body);
+}
+
+/* Centro — spinner o progress circle, por encima del backdrop */
+.mts-pageloader__center {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

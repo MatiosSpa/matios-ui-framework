@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
@@ -97,9 +97,9 @@
       variant: 'elevated',
       size: 'lg',
       body:
-        '<div class="mts-d-flex mts-flex-col mts-gap-3">' +
-          '<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3 mts-flex-wrap">' +
-            '<p class="mts-text-sm mts-text-muted mts-m-0">Tabla operativa de tareas pendientes con prioridad, modulo y etapa actual.</p>' +
+        '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
+          '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3 mts-flex--wrap">' +
+            '<p class="mts-text--sm mts-text-color--muted mts-m-0">Tabla operativa de tareas pendientes con prioridad, modulo y etapa actual.</p>' +
             '<span id="workflow-inbox-count" class="mts-badge mts-badge--info mts-badge--sm">0 tareas</span>' +
           '</div>' +
           '<div id="workflow-inbox-table"></div>' +
@@ -191,9 +191,9 @@
                 return '' +
                   '<tr class="mts-table__row">' +
                     '<td class="mts-table__td">' +
-                      '<div class="mts-d-flex mts-flex-col mts-gap-1">' +
-                        '<strong class="mts-text-sm mts-text-primary">' + escapeHtml(task.title) + '</strong>' +
-                        '<span class="mts-text-sm mts-text-muted">' + escapeHtml(task.id) + '</span>' +
+                      '<div class="mts-d-flex mts-flex--column mts-gap-1">' +
+                        '<strong class="mts-text--sm mts-text-color--primary">' + escapeHtml(task.title) + '</strong>' +
+                        '<span class="mts-text--sm mts-text-color--muted">' + escapeHtml(task.id) + '</span>' +
                       '</div>' +
                     '</td>' +
                     '<td class="mts-table__td">' + escapeHtml(task.requester) + '</td>' +

@@ -21,6 +21,14 @@ MTS.CodeBlock = class MtsCodeBlock {
     this.wrap = options.wrap ?? ds.wrap === 'true';
     this.height = options.height ?? ds.height ?? 'auto';
 
+    var _copy = options.copy || {};
+    this.copy = {
+      iconOnly:     _copy.iconOnly     !== undefined ? _copy.iconOnly     : true,
+      label:        _copy.label        !== undefined ? _copy.label        : 'Copiar',
+      labelCopied:  _copy.labelCopied  !== undefined ? _copy.labelCopied  : '¡Copiado!',
+      tooltip:      _copy.tooltip      !== undefined ? _copy.tooltip      : 'Copiar / Copy',
+    };
+
     this._copyInstance = null;
     this._fallbackCopyHandler = null;
     this._copyTimer = null;
@@ -102,15 +110,21 @@ MTS.CodeBlock = class MtsCodeBlock {
     const actions = document.createElement('div');
     actions.className = 'mts-codeblock__actions';
 
-    const lang = document.createElement('span');
-    lang.className = 'mts-codeblock__lang';
-    lang.textContent = MTS.CodeBlock.normalizeLanguage(this.language).toUpperCase();
-    actions.appendChild(lang);
+    var langHost = document.createElement('span');
+    langHost.className = 'mts-codeblock__lang';
+    var langText = MTS.CodeBlock.normalizeLanguage(this.language).toUpperCase();
+    if (window.MTS && MTS.Badge) {
+      new MTS.Badge(langHost, { label: langText, variant: 'secondary', size: 'sm' });
+    } else {
+      langHost.textContent = langText;
+    }
+    actions.appendChild(langHost);
 
     if (this.copyable) {
       const copyHost = document.createElement('button');
       copyHost.type = 'button';
       copyHost.className = 'mts-btn mts-btn--secondary mts-btn--sm';
+      if (this.copy.tooltip) copyHost.title = this.copy.tooltip;
       actions.appendChild(copyHost);
       this._copyHost = copyHost;
     } else {
@@ -137,10 +151,12 @@ MTS.CodeBlock = class MtsCodeBlock {
 
     if (window.MTS && MTS.CopyButton) {
       this._copyInstance = new MTS.CopyButton(this._copyHost, {
-        text: this.code,
-        variant: 'secondary',
-        size: 'sm',
-        iconOnly: true
+        text:         this.code,
+        variant:      'secondary',
+        size:         'sm',
+        iconOnly:     this.copy.iconOnly,
+        label:        this.copy.label,
+        labelCopied:  this.copy.labelCopied,
       });
       return;
     }

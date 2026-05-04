@@ -159,16 +159,22 @@ function mdToHtml(md) {
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
     .replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm, function (_, hdr, rows) {
-      var ths = hdr.split('|').filter(function (c) { return c.trim(); })
+      function splitCells(line) {
+        var cells = line.split('|');
+        if (cells.length && !cells[0].trim()) cells.shift();
+        if (cells.length && !cells[cells.length - 1].trim()) cells.pop();
+        return cells;
+      }
+      var ths = splitCells(hdr)
         .map(function (c) { return '<th>' + c.trim() + '</th>'; }).join('');
       var trs = rows.trim().split('\n').map(function (r) {
-        return '<tr>' + r.split('|').filter(function (c) { return c.trim(); })
+        return '<tr>' + splitCells(r)
           .map(function (c) { return '<td>' + c.trim() + '</td>'; }).join('') + '</tr>';
       }).join('');
       return '<table><thead><tr>' + ths + '</tr></thead><tbody>' + trs + '</tbody></table>';
     })
     .replace(/^[*\-] (.+)$/gm, '<li>$1</li>')
-    .replace(/((?:<li>[^<]*<\/li>\n?)+)/g, '<ul>$1</ul>')
+    .replace(/((?:<li>[\s\S]*?<\/li>\n?)+)/g, '<ul>$1</ul>')
     .replace(/^(?!<)(.+)$/gm, '<p>$1</p>');
 
   function escCode(str) {

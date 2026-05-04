@@ -196,7 +196,7 @@ MTS.DataTableColumnVisibilityPlugin = class DataTableColumnVisibilityPlugin {
      APLICAR VISIBILIDAD — modifica _cfg.columns y redibuja
   ---------------------------------------------------------- */
   _t(key) {
-    return this._table?._cfg?.locale?.colvis?.[key] ?? key
+    return this._table?._cfg?.locale?.['MTS.DataTableColumnVisibilityPlugin']?.[key] ?? key
   }
 
   _applyVisibility() {

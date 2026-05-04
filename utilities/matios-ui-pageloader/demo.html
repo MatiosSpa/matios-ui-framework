@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.PageLoader — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-progress/matios-ui-progress.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-spinner/matios-ui-spinner.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="./matios-ui-pageloader.css">
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../overlays/matios-ui-progress/matios-ui-progress.js"></script>
+  <script src="../../overlays/matios-ui-spinner/matios-ui-spinner.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="./matios-ui-pageloader.js"></script>
+</head>
+<body>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.PageLoader</h1>
+    <p>Indicador de carga de página estilo NProgress. Barra fija con avance automático (trickle), overlay blocker con spinner o progress circle, o ambos a la vez.</p>
+  </div>
+
+  <div class="demo-section"><div class="demo-section-title">1 — Barra (top)</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Barra (bottom) y variantes</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Blocker con spinner</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Blocker con progress circle</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Modo both (barra + blocker)</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Error</div><div id="tabs-s6"></div></div>
+</div>
+
+<script>
+/* ── Helpers estándar de demo ── */
+function indentHtml(html){
+  var indent=0, step=2;
+  var voids=/^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result='';
+  (html.match(/<[^>]+>|[^<]+/g)||[]).forEach(function(tok){
+    var t=tok.trim(); if(!t) return;
+    if(/^<\//.test(t)){ indent=Math.max(0,indent-step); result+=' '.repeat(indent)+t+'\n'; }
+    else if(/^<[^!]/.test(t)){
+      result+=' '.repeat(indent)+t+'\n';
+      var tag=(t.match(/^<([a-z][a-z0-9-]*)/i)||[])[1]||'';
+      if(!voids.test(tag) && !/\/>$/.test(t)) indent+=step;
+    } else { var text=t.replace(/\s+/g,' '); if(text) result+=' '.repeat(indent)+text+'\n'; }
+  });
+  return result.trimEnd();
+}
+function makeSection(id, previewHtml, jsCode, initFn, height){
+  new MTS.Tabs('#'+id, { variant:'card', height:height||'420px', lazy:false, tabs:[
+    { id:id+'-preview', label:'Preview',    content: previewHtml },
+    { id:id+'-html',    label:'HTML',       content: '<div id="'+id+'-cb-html"></div>' },
+    { id:id+'-js',      label:'JavaScript', content: '<div id="'+id+'-cb-js"></div>'   },
+  ]});
+  new MTS.CodeBlock('#'+id+'-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#'+id+'-cb-js',   { code: jsCode,                  language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+/* ── Helper para simular carga async ── */
+function simulateLoad(loader, durationMs) {
+  loader.start();
+  setTimeout(function() { loader.done(); }, durationMs || 2000);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   1 — Barra (top)
+══════════════════════════════════════════════════════════════ */
+var preview1 =
+  '<div class="demo-stack" style="max-width:340px;">' +
+    '<div id="s1-btn"></div>' +
+  '</div>';
+
+var js1 =
+  "const loader = new MTS.PageLoader({\n" +
+  "  mode:     'bar',\n" +
+  "  position: 'top',\n" +
+  "  variant:  'primary',\n" +
+  "});\n\n" +
+  "loader.start();\n\n" +
+  "fetch('/api/data')\n" +
+  "  .then(function() { loader.done(); })\n" +
+  "  .catch(function() { loader.error(); });";
+
+makeSection('tabs-s1', preview1, js1, function() {
+  var loader = new MTS.PageLoader({ mode: 'bar', position: 'top', variant: 'primary' });
+  new MTS.Button('#s1-btn', {
+    label: 'Simular carga (top)',
+    variant: 'primary',
+    onClick: function() { simulateLoad(loader, 2500); },
+  });
+}, '200px');
+
+/* ══════════════════════════════════════════════════════════════
+   2 — Barra (bottom) y variantes
+══════════════════════════════════════════════════════════════ */
+var preview2 =
+  '<div class="demo-stack" style="max-width:460px;">' +
+    '<div id="s2-row"></div>' +
+  '</div>';
+
+var js2 =
+  "const loaderBottom = new MTS.PageLoader({\n" +
+  "  mode:     'bar',\n" +
+  "  position: 'bottom',\n" +
+  "  variant:  'success',\n" +
+  "  trickleSpeed: 600,\n" +
+  "});\n\n" +
+  "loaderBottom.start();\n" +
+  "setTimeout(function() { loaderBottom.done(); }, 2000);";
+
+makeSection('tabs-s2', preview2, js2, function() {
+  var variants = ['primary', 'success', 'warning', 'danger'];
+  var row = document.querySelector('#s2-row');
+  row.style.display = 'flex';
+  row.style.gap = '8px';
+  row.style.flexWrap = 'wrap';
+  variants.forEach(function(v) {
+    var wrap = document.createElement('div');
+    row.appendChild(wrap);
+    var loader = new MTS.PageLoader({ mode: 'bar', position: 'bottom', variant: v, trickleSpeed: 600 });
+    new MTS.Button(wrap, {
+      label: v,
+      variant: v,
+      size: 'sm',
+      onClick: function() { simulateLoad(loader, 2000); },
+    });
+  });
+}, '200px');
+
+/* ══════════════════════════════════════════════════════════════
+   3 — Blocker con spinner
+══════════════════════════════════════════════════════════════ */
+var preview3 =
+  '<div class="demo-stack" style="max-width:340px;">' +
+    '<div id="s3-btn"></div>' +
+  '</div>';
+
+var js3 =
+  "const loader = new MTS.PageLoader({\n" +
+  "  mode:            'blocker',\n" +
+  "  backdropOpacity: 0.85,\n" +
+  "  loader: {\n" +
+  "    variant: 'ring',\n" +
+  "    size:    'lg',\n" +
+  "  },\n" +
+  "});\n\n" +
+  "loader.start();\n" +
+  "setTimeout(function() { loader.done(); }, 2000);";
+
+makeSection('tabs-s3', preview3, js3, function() {
+  var loader = new MTS.PageLoader({
+    mode: 'blocker',
+    backdropOpacity: 0.85,
+    loader: { variant: 'ring', size: 'lg' },
+  });
+  new MTS.Button('#s3-btn', {
+    label: 'Simular blocker (spinner)',
+    variant: 'primary',
+    onClick: function() { simulateLoad(loader, 2000); },
+  });
+}, '200px');
+
+/* ══════════════════════════════════════════════════════════════
+   4 — Blocker con progress circle
+══════════════════════════════════════════════════════════════ */
+var preview4 =
+  '<div class="demo-stack" style="max-width:340px;">' +
+    '<div id="s4-btn"></div>' +
+  '</div>';
+
+var js4 =
+  "const loader = new MTS.PageLoader({\n" +
+  "  mode:            'blocker',\n" +
+  "  backdropOpacity: 0.9,\n" +
+  "  blur:            true,\n" +
+  "  loader: {\n" +
+  "    type:    'circle',\n" +
+  "    size:    'lg',\n" +
+  "    variant: 'primary',\n" +
+  "  },\n" +
+  "});\n\n" +
+  "loader.start();\n" +
+  "setTimeout(function() { loader.done(); }, 2500);";
+
+makeSection('tabs-s4', preview4, js4, function() {
+  var loader = new MTS.PageLoader({
+    mode: 'blocker',
+    backdropOpacity: 0.9,
+    blur: true,
+    loader: { type: 'circle', size: 'lg', variant: 'primary' },
+  });
+  new MTS.Button('#s4-btn', {
+    label: 'Simular blocker (progress circle)',
+    variant: 'primary',
+    onClick: function() { simulateLoad(loader, 2500); },
+  });
+}, '200px');
+
+/* ══════════════════════════════════════════════════════════════
+   5 — Modo both (barra + blocker)
+══════════════════════════════════════════════════════════════ */
+var preview5 =
+  '<div class="demo-stack" style="max-width:340px;">' +
+    '<div id="s5-btn"></div>' +
+  '</div>';
+
+var js5 =
+  "const loader = new MTS.PageLoader({\n" +
+  "  mode:            'both',\n" +
+  "  position:        'top',\n" +
+  "  variant:         'primary',\n" +
+  "  backdropOpacity: 0.7,\n" +
+  "});\n\n" +
+  "loader.start();\n" +
+  "setTimeout(function() { loader.done(); }, 2000);";
+
+makeSection('tabs-s5', preview5, js5, function() {
+  var loader = new MTS.PageLoader({
+    mode: 'both',
+    position: 'top',
+    variant: 'primary',
+    backdropOpacity: 0.7,
+  });
+  new MTS.Button('#s5-btn', {
+    label: 'Simular barra + blocker',
+    variant: 'primary',
+    onClick: function() { simulateLoad(loader, 2000); },
+  });
+}, '200px');
+
+/* ══════════════════════════════════════════════════════════════
+   6 — Error
+══════════════════════════════════════════════════════════════ */
+var preview6 =
+  '<div class="demo-stack" style="max-width:460px;">' +
+    '<div id="s6-row"></div>' +
+  '</div>';
+
+var js6 =
+  "const loader = new MTS.PageLoader({ mode: 'bar', variant: 'primary' });\n\n" +
+  "loader.start();\n\n" +
+  "fetch('/api/data')\n" +
+  "  .then(function(res) {\n" +
+  "    if (!res.ok) throw new Error('Error del servidor');\n" +
+  "    loader.done();\n" +
+  "  })\n" +
+  "  .catch(function() {\n" +
+  "    loader.error();\n" +
+  "  });";
+
+makeSection('tabs-s6', preview6, js6, function() {
+  var loader = new MTS.PageLoader({ mode: 'bar', variant: 'primary' });
+  var row = document.querySelector('#s6-row');
+  row.style.display = 'flex';
+  row.style.gap = '8px';
+
+  var wrapDone = document.createElement('div');
+  var wrapErr  = document.createElement('div');
+  row.appendChild(wrapDone);
+  row.appendChild(wrapErr);
+
+  new MTS.Button(wrapDone, {
+    label: 'Simular done()',
+    variant: 'primary',
+    onClick: function() {
+      loader.start();
+      setTimeout(function() { loader.done(); }, 1800);
+    },
+  });
+  new MTS.Button(wrapErr, {
+    label: 'Simular error()',
+    variant: 'danger',
+    onClick: function() {
+      loader.start();
+      setTimeout(function() { loader.error(); }, 1800);
+    },
+  });
+}, '200px');
+</script>
+
+</body>
+</html>

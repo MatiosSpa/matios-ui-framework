@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Signup - Matios UI</title>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+        }
+      } catch (error) {}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../css-helpers/matios-ui-css-helpers.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-toggle/matios-ui-toggle.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../../forms/matios-ui-toggle/matios-ui-toggle.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <main class="mts-d-flex mts-align-items--center mts-justify-content--center mts-p-4 mts-min-vh-100">
+    <section class="mts-card mts-card--elevated mts-w--100 mts-max-w-xl">
+      <div class="mts-card__body mts-p-6">
+        <div class="mts-text--center mts-mb-4">
+          <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
+          <h1 class="mts-h1 mts-mt-2">Crear cuenta</h1>
+        </div>
+
+        <div class="mts-d-flex mts-flex--column mts-gap-4">
+          <div id="signup-alert"></div>
+          <div id="signup-first-name"></div>
+          <div id="signup-last-name"></div>
+          <div id="signup-email"></div>
+
+          <section class="mts-surface mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-4">
+            <div class="mts-d-flex mts-flex--column mts-gap-1 mts-flex--1">
+              <strong class="mts-text--sm mts-fw--semibold mts-text-color--primary">Clave automatica</strong>
+              <span class="mts-text--sm mts-text-color--muted">Generar una clave temporal y enviarla por correo</span>
+            </div>
+            <div id="signup-auto-password"></div>
+          </section>
+
+          <div id="signup-password"></div>
+          <div id="signup-confirm"></div>
+          <div id="signup-terms"></div>
+          <div id="signup-submit"></div>
+        </div>
+      </div>
+
+      <div class="mts-card__footer mts-card__footer--center">
+        <span class="mts-text--md mts-text-color--muted">Ya tienes cuenta?</span>
+        <div id="signup-login"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    var autoPassword = false;
+
+    var firstNameInput = new MTS.Input('#signup-first-name', {
+      type: 'text',
+      label: 'Nombre',
+      placeholder: 'Ingresa tu nombre',
+      iconLeft: MTS.Icon.get('user')
+    });
+
+    var lastNameInput = new MTS.Input('#signup-last-name', {
+      type: 'text',
+      label: 'Apellido',
+      placeholder: 'Ingresa tu apellido',
+      iconLeft: MTS.Icon.get('user')
+    });
+
+    var emailInput = new MTS.Input('#signup-email', {
+      type: 'email',
+      label: 'Correo',
+      placeholder: 'Ingresa tu correo',
+      iconLeft: MTS.Icon.get('mail')
+    });
+
+    var autoPasswordToggle = new MTS.Toggle('#signup-auto-password', {
+      checked: false,
+      onChange: function (event) {
+        autoPassword = !!event.detail.checked;
+        syncPasswordMode();
+      }
+    });
+
+    var passwordInput = new MTS.Input('#signup-password', {
+      type: 'password',
+      label: 'Clave',
+      placeholder: 'Crea una clave',
+      iconLeft: MTS.Icon.get('lock'),
+      showPassword: true
+    });
+
+    var confirmInput = new MTS.Input('#signup-confirm', {
+      type: 'password',
+      label: 'Confirmar clave',
+      placeholder: 'Repite tu clave',
+      iconLeft: MTS.Icon.get('lock'),
+      showPassword: true
+    });
+
+    var termsCheckbox = new MTS.Checkbox('#signup-terms', {
+      label: 'Acepto los terminos y condiciones'
+    });
+
+    new MTS.Button('#signup-login', {
+      label: 'Ir al login',
+      variant: 'link',
+      size: 'sm',
+      onClick: function () {
+        openScreen('../login/index.html');
+      }
+    });
+
+    var submitButton = new MTS.Button('#signup-submit', {
+      label: 'Crear cuenta',
+      variant: 'primary',
+      block: true,
+      onClick: function (event, instance) {
+        submitSignup(instance);
+      }
+    });
+
+    function clearAlerts() {
+      document.getElementById('signup-alert').innerHTML = '';
+    }
+
+    function showAlert(variant, title, message) {
+      clearAlerts();
+      MTS.Alert.show('#signup-alert', {
+        variant: variant,
+        title: title,
+        message: message,
+        closable: true
+      });
+    }
+
+    function isChecked(instance) {
+      return instance && typeof instance.isChecked === 'function' ? instance.isChecked() : false;
+    }
+
+    function syncPasswordMode() {
+      document.getElementById('signup-password').classList.toggle('mts-d-none', autoPassword);
+      document.getElementById('signup-confirm').classList.toggle('mts-d-none', autoPassword);
+      passwordInput.clearError();
+      confirmInput.clearError();
+      autoPasswordToggle.setChecked(autoPassword);
+    }
+
+    function submitSignup(button) {
+      var firstName = firstNameInput.getValue().trim();
+      var lastName = lastNameInput.getValue().trim();
+      var email = emailInput.getValue().trim();
+      var password = passwordInput.getValue().trim();
+      var confirmPassword = confirmInput.getValue().trim();
+
+      firstNameInput.clearError();
+      lastNameInput.clearError();
+      emailInput.clearError();
+      passwordInput.clearError();
+      confirmInput.clearError();
+      clearAlerts();
+
+      if (!firstName) {
+        firstNameInput.setError('Ingresa tu nombre');
+        return;
+      }
+
+      if (!lastName) {
+        lastNameInput.setError('Ingresa tu apellido');
+        return;
+      }
+
+      if (!email) {
+        emailInput.setError('Ingresa tu correo');
+        return;
+      }
+
+      if (!isChecked(termsCheckbox)) {
+        showAlert('warning', 'Faltan terminos', 'Debes aceptar los terminos para continuar.');
+        return;
+      }
+
+      if (!autoPassword) {
+        if (!password) {
+          passwordInput.setError('Crea una clave');
+          return;
+        }
+
+        if (password.length < 8) {
+          passwordInput.setError('La clave debe tener al menos 8 caracteres');
+          return;
+        }
+
+        if (!confirmPassword) {
+          confirmInput.setError('Confirma tu clave');
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          confirmInput.setError('Las claves no coinciden');
+          return;
+        }
+      }
+
+      button.setLoading(true);
+      button.setLabel('Creando...');
+
+      setTimeout(function () {
+        button.setLoading(false);
+        button.setLabel('Crear cuenta');
+
+        if (autoPassword) {
+          showAlert('success', 'Cuenta creada', 'Se generaria una clave temporal para <strong>' + escapeHtml(email) + '</strong> y se enviaria por correo.');
+        } else {
+          showAlert('success', 'Cuenta creada', 'Cuenta lista para <strong>' + escapeHtml(email) + '</strong>.');
+        }
+      }, 700);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    syncPasswordMode();
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

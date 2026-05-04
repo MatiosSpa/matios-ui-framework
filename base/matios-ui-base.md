@@ -400,13 +400,3 @@ document.getElementById('sidebar').classList.toggle('mts-layout__sidebar--collap
 ```
 
 ---
-
-## Changelog
-
-| Versión | Descripción |
-|---------|-------------|
-| 1.0.0   | Release inicial — tokens, reset, temas light/dark/ocean, panel, layout, botones, forms, loaders, skeleton, utilidades |
-
----
-
-**Siguiente componente:** [`mts-grid.css`](./mts-grid.md) — Tabla de datos con ordenamiento, paginación, búsqueda y drag & drop.

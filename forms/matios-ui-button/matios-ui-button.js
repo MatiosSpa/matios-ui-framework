@@ -154,7 +154,7 @@ MTS.Button = class MtsButton {
     if (this.iconLeft) {
       const ic = document.createElement('span');
       ic.className = 'mts-btn__icon-left';
-      ic.innerHTML = this.iconLeft;
+      ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.iconLeft) : this.iconLeft;
       this._el.appendChild(ic);
     }
     if (!this.iconOnly && this.label) {
@@ -166,7 +166,7 @@ MTS.Button = class MtsButton {
     if (this.iconRight) {
       const ic = document.createElement('span');
       ic.className = 'mts-btn__icon-right';
-      ic.innerHTML = this.iconRight;
+      ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.iconRight) : this.iconRight;
       this._el.appendChild(ic);
     }
   }
@@ -341,7 +341,7 @@ MTS.MenuButton = class MtsMenuButton {
       if (item.icon) {
         const ic = document.createElement('span');
         ic.className = 'mts-menu-item__icon';
-        ic.innerHTML = item.icon;
+        ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(item.icon) : item.icon;
         btn.appendChild(ic);
       }
       btn.appendChild(document.createTextNode(item.label));
@@ -473,7 +473,7 @@ MTS.SplitButton = class MtsSplitButton {
       if (item.icon) {
         const ic = document.createElement('span');
         ic.className = 'mts-menu-item__icon';
-        ic.innerHTML = item.icon;
+        ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(item.icon) : item.icon;
         btn.appendChild(ic);
       }
       btn.appendChild(document.createTextNode(item.label));

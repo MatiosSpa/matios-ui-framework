@@ -1,7 +1,7 @@
 # MTS.EmptyState
 
-[EN] Empty state placeholder with preset variants, custom icon, CTA button and size options.
-[ES] Placeholder de estado vacío con variantes predefinidas, ícono custom, botón CTA y opciones de tamaño.
+🇬🇧 Empty state placeholder with preset variants, custom icon, CTA button and size options.
+🇪🇸 Placeholder de estado vacío con variantes predefinidas, ícono custom, botón CTA y opciones de tamaño.
 
 ---
 
@@ -17,15 +17,15 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
 | `variant` | `string` | `'no-data'` | `'no-data'` · `'search'` · `'error'` · `'permissions'` · `'custom'` |
-| `title` | `string` | auto | [EN] Title text (auto from variant) / [ES] Título (auto desde variante) |
-| `description` | `string` | auto | [EN] Description text / [ES] Texto de descripción |
-| `action` | `string` | `null` | [EN] CTA button label / [ES] Label del botón CTA |
-| `icon` | `string` | auto | [EN] Custom SVG icon (overrides variant) / [ES] Ícono SVG custom |
+| `title` | `string` | auto | 🇬🇧 Title text (auto from variant) / 🇪🇸 Título (auto desde variante) |
+| `description` | `string` | auto | 🇬🇧 Description text / 🇪🇸 Texto de descripción |
+| `action` | `string` | `null` | 🇬🇧 CTA button label / 🇪🇸 Label del botón CTA |
+| `icon` | `string` | auto | 🇬🇧 Custom SVG icon (overrides variant) / 🇪🇸 Ícono SVG custom |
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
-| `onAction` | `function` | — | [EN] Fires when CTA button is clicked / [ES] Se dispara al hacer click en el botón CTA |
+| `onAction` | `function` | — | 🇬🇧 Fires when CTA button is clicked / 🇪🇸 Se dispara al hacer click en el botón CTA |
 
 ---
 
@@ -120,10 +120,3 @@ document.getElementById('my-empty')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] `onAction` normalized to `.on()`, bilingual docs / [ES] Normalizado a `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release — no-data/search/error/permissions/custom, sizes / [ES] Versión inicial |

@@ -1,7 +1,7 @@
 # MTS.KPICard
 
-[EN] KPI metric card with trend indicator, sparkline mini-chart, icon and variants. Supports real-time updates via `update()`.
-[ES] Tarjeta de métrica KPI con indicador de tendencia, mini gráfico sparkline, ícono y variantes. Soporta actualizaciones en tiempo real con `update()`.
+🇬🇧 KPI metric card with trend indicator, sparkline mini-chart, icon and variants. Supports real-time updates via `update()`.
+🇪🇸 Tarjeta de métrica KPI con indicador de tendencia, mini gráfico sparkline, ícono y variantes. Soporta actualizaciones en tiempo real con `update()`.
 
 ---
 
@@ -17,17 +17,17 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `label` | `string` | `''` | [EN] Metric label / [ES] Etiqueta de la métrica |
-| `value` | `string\|number` | `0` | [EN] Main value / [ES] Valor principal |
-| `unit` | `string` | `''` | [EN] Unit suffix: %, $, km, etc. / [ES] Sufijo de unidad |
-| `trend` | `number` | `null` | [EN] Trend % (positive = up, negative = down) / [ES] Tendencia % |
-| `trendLabel` | `string` | `''` | [EN] Label next to trend / [ES] Texto junto a la tendencia |
-| `sparkline` | `number[]` | `[]` | [EN] Data array for mini chart / [ES] Array de datos para el mini gráfico |
+| `label` | `string` | `''` | 🇬🇧 Metric label / 🇪🇸 Etiqueta de la métrica |
+| `value` | `string\|number` | `0` | 🇬🇧 Main value / 🇪🇸 Valor principal |
+| `unit` | `string` | `''` | 🇬🇧 Unit suffix: %, $, km, etc. / 🇪🇸 Sufijo de unidad |
+| `trend` | `number` | `null` | 🇬🇧 Trend % (positive = up, negative = down) / 🇪🇸 Tendencia % |
+| `trendLabel` | `string` | `''` | 🇬🇧 Label next to trend / 🇪🇸 Texto junto a la tendencia |
+| `sparkline` | `number[]` | `[]` | 🇬🇧 Data array for mini chart / 🇪🇸 Array de datos para el mini gráfico |
 | `variant` | `string` | `'default'` | `'default'` · `'primary'` · `'success'` · `'warning'` · `'danger'` |
-| `icon` | `string` | `null` | [EN] SVG icon string / [ES] String SVG del ícono |
-| `onClick` | `function` | — | [EN] Fires when card is clicked / [ES] Se dispara al hacer click |
+| `icon` | `string` | `null` | 🇬🇧 SVG icon string / 🇪🇸 String SVG del ícono |
+| `onClick` | `function` | — | 🇬🇧 Fires when card is clicked / 🇪🇸 Se dispara al hacer click |
 
 ---
 
@@ -120,10 +120,3 @@ document.getElementById('my-kpi')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] `onClick` normalized to `.on()`, bilingual docs / [ES] `onClick` normalizado a `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release — trend, sparkline, icon, variants / [ES] Versión inicial |

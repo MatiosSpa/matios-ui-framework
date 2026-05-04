@@ -2,8 +2,8 @@
 
 > **Deprecated / Deprecado**
 >
-> [EN] `MTS.StepProgress` is now a compatibility alias for `MTS.Stepper` in `mode: 'progress'`.
-> [ES] `MTS.StepProgress` ahora es un alias de compatibilidad para `MTS.Stepper` en `mode: 'progress'`.
+> 🇬🇧 `MTS.StepProgress` is now a compatibility alias for `MTS.Stepper` in `mode: 'progress'`.
+> 🇪🇸 `MTS.StepProgress` ahora es un alias de compatibilidad para `MTS.Stepper` en `mode: 'progress'`.
 
 ## Recommended / Recomendado
 
@@ -73,15 +73,7 @@ new MTS.Stepper('#el', {
 
 ## Notes / Notas
 
-- [EN] New examples live in `MTS.Stepper`.
-- [ES] Los ejemplos nuevos viven en `MTS.Stepper`.
-- [EN] Old code keeps working through this alias.
-- [ES] El código antiguo sigue funcionando mediante este alias.
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 2.0.0 | [EN] Deprecated component, now compatibility alias to Stepper / [ES] Componente deprecado, ahora alias de compatibilidad a Stepper |
-| 1.1.0 | [EN] Bilingual docs / [ES] Docs bilingüe |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |
+- 🇬🇧 New examples live in `MTS.Stepper`.
+- 🇪🇸 Los ejemplos nuevos viven en `MTS.Stepper`.
+- 🇬🇧 Old code keeps working through this alias.
+- 🇪🇸 El código antiguo sigue funcionando mediante este alias.

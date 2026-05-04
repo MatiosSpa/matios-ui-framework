@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Seleccionar Workspace - Matios UI</title>
+  <script>
+    (function () {
+      var source = location.search || location.hash || '';
+      var modeMatch = source.match(/mts-mode=([a-z-]+)/);
+      var accentMatch = source.match(/mts-accent=([a-z-]+)/);
+
+      if (modeMatch) document.documentElement.setAttribute('data-mts-mode', modeMatch[1]);
+      if (accentMatch) document.documentElement.setAttribute('data-mts-accent', accentMatch[1]);
+
+      try {
+        var parentWindow = window.parent;
+        if (parentWindow && parentWindow !== window) {
+          var parentMode = parentWindow.currentModeVal || parentWindow.document.documentElement.getAttribute('data-mts-mode');
+          var parentAccent = parentWindow.currentAccentVal || parentWindow.document.documentElement.getAttribute('data-mts-accent');
+
+          if (parentMode) document.documentElement.setAttribute('data-mts-mode', parentMode);
+          if (parentAccent) document.documentElement.setAttribute('data-mts-accent', parentAccent);
+          else document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (error) {}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../css-helpers/matios-ui-css-helpers.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../../display/matios-ui-card/matios-ui-card.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../display/matios-ui-card/matios-ui-card.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+</head>
+<body>
+  <main class="mts-d-flex mts-align-items--center mts-justify-content--center mts-p-4 mts-min-vh-100">
+    <section class="mts-card mts-card--elevated mts-w--100 mts-max-w-xl">
+      <div class="mts-card__body mts-p-6">
+        <div class="mts-text--center mts-mb-4">
+          <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
+          <h1 class="mts-h1 mts-mt-2">Selecciona tu workspace</h1>
+          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Elige el contexto con el que quieres entrar.</p>
+        </div>
+
+        <div class="mts-d-flex mts-flex--column mts-gap-4">
+          <div id="workspace-info-alert"></div>
+          <div id="workspace-feedback-alert"></div>
+          <div id="workspace-option-1"></div>
+          <div id="workspace-option-2"></div>
+          <div id="workspace-option-3"></div>
+
+          <section class="mts-surface mts-d-flex mts-flex--column mts-gap-2">
+            <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Workspace seleccionado</p>
+            <p class="mts-text--md mts-text-color--primary mts-m-0" id="workspace-current-name">Acme Chile / Operaciones</p>
+            <p class="mts-text--sm mts-text-color--muted mts-m-0" id="workspace-current-meta">Admin de plataforma • Produccion • 24 miembros</p>
+          </section>
+
+          <div id="workspace-submit"></div>
+        </div>
+      </div>
+
+      <div class="mts-card__footer mts-card__footer--between">
+        <div id="workspace-login-btn"></div>
+        <div id="workspace-back-btn"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    window.addEventListener('message', function (e) {
+      if (!e.data) return;
+      if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+      if (e.data.type === 'setAccent') {
+        if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+        else document.documentElement.removeAttribute('data-mts-accent');
+      }
+    });
+
+    function goBack() {
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'closeApp' }, '*');
+          return;
+        }
+      } catch (error) {}
+      window.history.back();
+    }
+
+    function openScreen(path) {
+      var params = location.search || '';
+      window.location.href = path + params;
+    }
+
+    var workspaces = [
+      {
+        id: 'acme-ops',
+        org: 'Acme Chile',
+        name: 'Operaciones',
+        role: 'Admin de plataforma',
+        env: 'Produccion',
+        members: '24 miembros'
+      },
+      {
+        id: 'acme-labs',
+        org: 'Acme Labs',
+        name: 'Sandbox de producto',
+        role: 'Editor',
+        env: 'Staging',
+        members: '11 miembros'
+      },
+      {
+        id: 'northwind',
+        org: 'Northwind Group',
+        name: 'Regional LATAM',
+        role: 'Viewer',
+        env: 'Produccion',
+        members: '39 miembros'
+      }
+    ];
+
+    var selectedWorkspaceId = workspaces[0].id;
+    var cardsById = {};
+
+    new MTS.Button('#workspace-login-btn', {
+      label: 'Volver al login',
+      variant: 'link',
+      onClick: function () {
+        openScreen('../login/index.html');
+      }
+    });
+
+    new MTS.Button('#workspace-back-btn', {
+      label: 'Volver al grupo',
+      variant: 'link',
+      onClick: function () {
+        goBack();
+      }
+    });
+
+    var submitButton = new MTS.Button('#workspace-submit', {
+      label: 'Continuar con Operaciones',
+      variant: 'primary',
+      block: true,
+      onClick: function (event, instance) {
+        submitSelection(instance);
+      }
+    });
+
+    MTS.Alert.show('#workspace-info-alert', {
+      variant: 'info',
+      title: 'Contextos disponibles',
+      message: 'Esta pantalla representa el paso posterior al login cuando una cuenta participa en varios workspaces.',
+      closable: false
+    });
+
+    renderWorkspaceCards();
+    renderSelection();
+
+    function renderWorkspaceCards() {
+      workspaces.forEach(function (workspace, index) {
+        cardsById[workspace.id] = new MTS.Card('#workspace-option-' + (index + 1), {
+          title: workspace.org,
+          subtitle: workspace.name,
+          variant: 'outlined',
+          clickable: true,
+          hoverable: true,
+          selected: workspace.id === selectedWorkspaceId,
+          body:
+            '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
+              '<p class="mts-text--sm mts-text-color--muted mts-m-0">' + workspace.role + '</p>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-m-0">' + workspace.env + ' • ' + workspace.members + '</p>' +
+            '</div>',
+          footer: [{
+            label: workspace.id === selectedWorkspaceId ? 'Seleccionado' : 'Seleccionar',
+            variant: workspace.id === selectedWorkspaceId ? 'primary' : 'secondary',
+            icon: workspace.id === selectedWorkspaceId ? MTS.Icon.get('check') : MTS.Icon.get('arrow-right'),
+            onClick: function () {
+              selectWorkspace(workspace.id);
+            }
+          }],
+          footerAlign: 'end',
+          onClick: function () {
+            selectWorkspace(workspace.id);
+          }
+        });
+      });
+    }
+
+    function selectWorkspace(workspaceId) {
+      if (selectedWorkspaceId === workspaceId) return;
+      selectedWorkspaceId = workspaceId;
+      clearFeedbackAlert();
+      renderSelection();
+    }
+
+    function renderSelection() {
+      workspaces.forEach(function (workspace, index) {
+        var isSelected = workspace.id === selectedWorkspaceId;
+        var host = document.querySelector('#workspace-option-' + (index + 1));
+        if (cardsById[workspace.id]) cardsById[workspace.id].setSelected(isSelected);
+
+        var footerButton = host.querySelector('.mts-card__footer .mts-btn');
+        if (footerButton) {
+          footerButton.classList.remove('mts-btn--primary', 'mts-btn--secondary');
+          footerButton.classList.add(isSelected ? 'mts-btn--primary' : 'mts-btn--secondary');
+          var labelEl = footerButton.querySelector('.mts-btn__label');
+          if (labelEl) labelEl.textContent = isSelected ? 'Seleccionado' : 'Seleccionar';
+          var iconLeftEl = footerButton.querySelector('.mts-btn__icon-left');
+          if (iconLeftEl) iconLeftEl.innerHTML = isSelected ? MTS.Icon.get('check') : MTS.Icon.get('arrow-right');
+        }
+      });
+
+      var workspace = getSelectedWorkspace();
+      document.getElementById('workspace-current-name').textContent = workspace.org + ' / ' + workspace.name;
+      document.getElementById('workspace-current-meta').textContent = workspace.role + ' • ' + workspace.env + ' • ' + workspace.members;
+      submitButton.setLabel('Continuar con ' + workspace.name);
+    }
+
+    function submitSelection(button) {
+      var workspace = getSelectedWorkspace();
+      clearFeedbackAlert();
+      button.setLoading(true);
+      button.setLabel('Abriendo ' + workspace.name + '...');
+
+      setTimeout(function () {
+        button.setLoading(false);
+        button.setLabel('Continuar con ' + workspace.name);
+        MTS.Alert.show('#workspace-feedback-alert', {
+          variant: 'success',
+          title: 'Workspace listo',
+          message: 'El acceso continuaría con <strong>' + escapeHtml(workspace.org + ' / ' + workspace.name) + '</strong>.',
+          closable: true
+        });
+      }, 800);
+    }
+
+    function getSelectedWorkspace() {
+      for (var i = 0; i < workspaces.length; i++) {
+        if (workspaces[i].id === selectedWorkspaceId) return workspaces[i];
+      }
+      return workspaces[0];
+    }
+
+    function clearFeedbackAlert() {
+      document.getElementById('workspace-feedback-alert').innerHTML = '';
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    MTS.Icon.initAll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+/* ============================================================
+   MATIOS UI — matios-ui-sessiontimeout.css  v1.0.0
+   MTS.SessionTimeout
+   ============================================================ */
+
+/* ── Barra de progreso fija (borde inferior) ── */
+
+.mts-session-timeout {
+  position: fixed;
+  bottom:   0;
+  left:     0;
+  right:    0;
+  z-index:  9999;
+}
+
+/* Override: sin border-radius para franja edge-to-edge */
+.mts-session-timeout .mts-progress__track,
+.mts-session-timeout .mts-progress__fill {
+  border-radius: 0;
+}
+
+/* ── Modal — cuerpo ── */
+
+.mts-session-timeout__body-text {
+  margin: 0 0 var(--mts-space-3);
+  color:  var(--mts-text-primary);
+  line-height: var(--mts-line-height-base);
+}
+
+/* Countdown: tabular, color danger para destacar urgencia */
+.mts-session-timeout__countdown {
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--mts-font-weight-semibold);
+  color:       var(--mts-color-danger);
+}
+
+/* Advertencia de pérdida de trabajo */
+.mts-session-timeout__warning {
+  margin:        0;
+  padding:       var(--mts-space-2) var(--mts-space-3);
+  font-size:     var(--mts-text-sm);
+  color:         var(--mts-text-muted);
+  background:    var(--mts-bg-subtle);
+  border-radius: var(--mts-radius-sm);
+  border-left:   3px solid var(--mts-color-warning);
+  line-height:   var(--mts-line-height-base);
+}

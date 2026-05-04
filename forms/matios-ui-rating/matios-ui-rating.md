@@ -1,7 +1,7 @@
 # MTS.Rating
 
-[EN] Star rating component with hover preview, half-star support and readonly mode.
-[ES] Componente de valoración por estrellas con preview al hover, medio punto y modo readonly.
+🇬🇧 Star rating component with hover preview, half-star support and readonly mode.
+🇪🇸 Componente de valoración por estrellas con preview al hover, medio punto y modo readonly.
 
 ---
 
@@ -17,21 +17,21 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `value` | `number` | `0` | [EN] Initial rating value (0 to max) / [ES] Valor inicial (0 a max) |
-| `max` | `number` | `5` | [EN] Total number of stars / [ES] Total de estrellas |
-| `halfStars` | `boolean` | `false` | [EN] Allow half-star ratings / [ES] Permitir valoraciones de medio punto |
-| `readonly` | `boolean` | `false` | [EN] Display only, no interaction / [ES] Solo display, sin interacción |
-| `size` | `string` | `'md'` | [EN] Size variant: `'sm'` · `'md'` · `'lg'` / [ES] Variante de tamaño |
-| `onChange` | `function` | — | [EN] Fires when rating changes / [ES] Se dispara al cambiar la valoración |
+| `value` | `number` | `0` | 🇬🇧 Initial rating value (0 to max) / 🇪🇸 Valor inicial (0 a max) |
+| `max` | `number` | `5` | 🇬🇧 Total number of stars / 🇪🇸 Total de estrellas |
+| `halfStars` | `boolean` | `false` | 🇬🇧 Allow half-star ratings / 🇪🇸 Permitir valoraciones de medio punto |
+| `readonly` | `boolean` | `false` | 🇬🇧 Display only, no interaction / 🇪🇸 Solo display, sin interacción |
+| `size` | `string` | `'md'` | 🇬🇧 Size variant: `'sm'` · `'md'` · `'lg'` / 🇪🇸 Variante de tamaño |
+| `onChange` | `function` | — | 🇬🇧 Fires when rating changes / 🇪🇸 Se dispara al cambiar la valoración |
 
 ---
 
 ## Events / Eventos
 
-[EN] Use `onChange` in the constructor. This is the recommended approach.
-[ES] Usa `onChange` en el constructor. Este es el enfoque recomendado.
+🇬🇧 Use `onChange` in the constructor. This is the recommended approach.
+🇪🇸 Usa `onChange` en el constructor. Este es el enfoque recomendado.
 
 ```js
 new MTS.Rating('#my-rating', {
@@ -137,16 +137,9 @@ document.getElementById('my-rating')
   });
 ```
 
-| Event / Evento | DOM Namespace | [EN] Description / [ES] Descripción |
+| Event / Evento | DOM Namespace | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------------|---------------|--------------------------------------|
-| `onChange` | `mts:rating:change` | [EN] User selects a rating / [ES] Usuario selecciona valoración |
-| — | `mts:rating:hover` | [EN] User hovers over a star / [ES] Usuario hace hover sobre una estrella |
+| `onChange` | `mts:rating:change` | 🇬🇧 User selects a rating / 🇪🇸 Usuario selecciona valoración |
+| — | `mts:rating:hover` | 🇬🇧 User hovers over a star / 🇪🇸 Usuario hace hover sobre una estrella |
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual comments, standardized docs / [ES] Comentarios bilingües, docs estandarizados |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

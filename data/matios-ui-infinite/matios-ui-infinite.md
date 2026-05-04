@@ -1,7 +1,7 @@
 # MTS.Infinite
 
-[EN] Infinite scroll with IntersectionObserver — vertical list, grid and table layouts. The component does not fetch data; the developer controls loading via `onLoadMore`.
-[ES] Scroll infinito con IntersectionObserver — layouts vertical, grid y table. El componente no hace fetch; el desarrollador controla la carga via `onLoadMore`.
+🇬🇧 Infinite scroll with IntersectionObserver — vertical list, grid and table layouts. The component does not fetch data; the developer controls loading via `onLoadMore`.
+🇪🇸 Scroll infinito con IntersectionObserver — layouts vertical, grid y table. El componente no hace fetch; el desarrollador controla la carga via `onLoadMore`.
 
 ---
 
@@ -17,20 +17,20 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `onLoadMore` | `function` | — | [EN] `async ({ page, pageSize }) => { items, hasMore }` **Required** / [ES] **Requerido** |
-| `renderItem` | `function` | — | [EN] `(item, index) => HTMLString\|Element` Item renderer / [ES] Renderizador de ítems |
-| `pageSize` | `number` | `20` | [EN] Items per load / [ES] Ítems por carga |
+| `onLoadMore` | `function` | — | 🇬🇧 `async ({ page, pageSize }) => { items, hasMore }` **Required** / 🇪🇸 **Requerido** |
+| `renderItem` | `function` | — | 🇬🇧 `(item, index) => HTMLString\|Element` Item renderer / 🇪🇸 Renderizador de ítems |
+| `pageSize` | `number` | `20` | 🇬🇧 Items per load / 🇪🇸 Ítems por carga |
 | `layout` | `string` | `'vertical'` | `'vertical'` · `'grid'` · `'table'` |
-| `threshold` | `number` | `0.1` | [EN] IntersectionObserver threshold / [ES] Umbral del observer |
-| `loaderText` | `string` | `'Cargando...'` | [EN] Loading text / [ES] Texto de carga |
-| `endText` | `string` | `'No hay más resultados'` | [EN] End of data text / [ES] Texto al terminar |
-| `animate` | `boolean` | `true` | [EN] Animate item entrance / [ES] Animar entrada de ítems |
-| `emptyState` | `object` | `{ icon, title, message }` | [EN] Empty state config / [ES] Config del estado vacío |
-| `onLoad` | `function` | — | [EN] `({ items, page }) => {}` Fires after each load / [ES] Se dispara tras cada carga |
-| `onError` | `function` | — | [EN] `({ error }) => {}` Fires on load error / [ES] Se dispara al ocurrir un error |
-| `onEnd` | `function` | — | [EN] `({ total }) => {}` Fires when all data is loaded / [ES] Se dispara al cargar todos los datos |
+| `threshold` | `number` | `0.1` | 🇬🇧 IntersectionObserver threshold / 🇪🇸 Umbral del observer |
+| `loaderText` | `string` | `'Cargando...'` | 🇬🇧 Loading text / 🇪🇸 Texto de carga |
+| `endText` | `string` | `'No hay más resultados'` | 🇬🇧 End of data text / 🇪🇸 Texto al terminar |
+| `animate` | `boolean` | `true` | 🇬🇧 Animate item entrance / 🇪🇸 Animar entrada de ítems |
+| `emptyState` | `object` | `{ icon, title, message }` | 🇬🇧 Empty state config / 🇪🇸 Config del estado vacío |
+| `onLoad` | `function` | — | 🇬🇧 `({ items, page }) => {}` Fires after each load / 🇪🇸 Se dispara tras cada carga |
+| `onError` | `function` | — | 🇬🇧 `({ error }) => {}` Fires on load error / 🇪🇸 Se dispara al ocurrir un error |
+| `onEnd` | `function` | — | 🇬🇧 `({ total }) => {}` Fires when all data is loaded / 🇪🇸 Se dispara al cargar todos los datos |
 
 ---
 
@@ -135,10 +135,3 @@ el.addEventListener('mts:infinite:error', (e) => console.error(e.detail.error));
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] `onLoad/onError/onEnd` normalized to `.on()`, bilingual docs / [ES] Normalizados a `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release — vertical/grid/table, IntersectionObserver / [ES] Versión inicial |

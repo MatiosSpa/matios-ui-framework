@@ -1,7 +1,7 @@
 # MTS.Icon
 
-[EN] SVG icon library — 278 icons, outline + filled variants, 7 sizes, semantic colors. Zero dependencies, auto-initialized on DOM load.
-[ES] Librería de íconos SVG — 278 íconos, variantes outline + filled, 7 tamaños, colores semánticos. Cero dependencias, auto-inicializado al cargar el DOM.
+🇬🇧 SVG icon library — 278 icons, outline + filled variants, 7 sizes, semantic colors. Zero dependencies, auto-initialized on DOM load.
+🇪🇸 Librería de íconos SVG — 278 íconos, variantes outline + filled, 7 tamaños, colores semánticos. Cero dependencias, auto-inicializado al cargar el DOM.
 
 ---
 
@@ -16,8 +16,8 @@
 
 ## CSS Classes / Clases CSS
 
-[EN] Use `<i>` tags with `mts-icon` + `mts-icon-{name}`. Auto-initialized on DOMContentLoaded.
-[ES] Usa etiquetas `<i>` con `mts-icon` + `mts-icon-{name}`. Se auto-inicializa en DOMContentLoaded.
+🇬🇧 Use `<i>` tags with `mts-icon` + `mts-icon-{name}`. Auto-initialized on DOMContentLoaded.
+🇪🇸 Usa etiquetas `<i>` con `mts-icon` + `mts-icon-{name}`. Se auto-inicializa en DOMContentLoaded.
 
 ```html
 <!-- Basic / Básico -->
@@ -125,10 +125,3 @@ MTS.Icon.initAll(container)   // scope to container
 | `mts-icon--3xl` | 48px |
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual docs, standardized / [ES] Docs bilingüe, estandarizado |
-| 1.0.0 | [EN] Initial release — 278 icons, outline/filled, 7 sizes / [ES] Versión inicial |

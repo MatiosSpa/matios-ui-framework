@@ -14,6 +14,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0; /* no encoger en contenedores con max-height — siempre respetar el tamaño del contenido */
   transition: box-shadow var(--mts-transition-fast), border-color var(--mts-transition-fast), transform var(--mts-transition-fast);
 }
 
@@ -142,7 +143,7 @@
 
 .mts-card__body {
   padding: var(--mts-space-5);
-  flex: 1;
+  flex: 1 1 auto; /* auto = contenido primero, flex-basis:0 colapsaba en contenedores sin altura explícita */
   color: var(--mts-text-secondary);
   font-size: var(--mts-font-size-sm);
   line-height: var(--mts-line-height-base);

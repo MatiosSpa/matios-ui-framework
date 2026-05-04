@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-mts-theme="dark">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -31,11 +31,11 @@
   <script src="../../forms/matios-ui-select/matios-ui-select.js"></script>
 <style>
 *{box-sizing:border-box}
-body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var(--mts-font-family);margin:0;min-height:100vh;}
+body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-family:var(--mts-font-family);margin:0;min-height:100vh;}
 .app-topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:50px;background:var(--mts-bg-surface);border-bottom:1px solid var(--mts-border-color);position:sticky;top:0;z-index:100;}
-.app-topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mts-text-muted);cursor:pointer;padding:4px 8px;border-radius:var(--mts-radius-md);border:none;background:none;transition:color .15s,background .15s;font-family:var(--mts-font-family);}
-.app-topbar-back:hover{color:var(--mts-text-primary);background:var(--mts-bg-surface-2);}
-.app-topbar-title{font-size:14px;font-weight:700;color:var(--mts-text-primary);flex:1;}
+.app-topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--mts-text-color--muted);cursor:pointer;padding:4px 8px;border-radius:var(--mts-radius-md);border:none;background:none;transition:color .15s,background .15s;font-family:var(--mts-font-family);}
+.app-topbar-back:hover{color:var(--mts-text-color--primary);background:var(--mts-bg-surface-2);}
+.app-topbar-title{font-size:14px;font-weight:700;color:var(--mts-text-color--primary);flex:1;}
 .app-topbar-badge{font-size:10px;padding:2px 8px;border-radius:var(--mts-radius-full);background:var(--mts-color-primary-light);color:var(--mts-color-primary);font-weight:700;}
 .app-content{padding:24px;max-width:1100px;margin:0 auto;}
 .app-card{background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:24px;}
@@ -46,12 +46,12 @@ body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var
 .app-grid-4{grid-template-columns:repeat(4,1fr);}
 .app-h2{font-size:18px;font-weight:800;margin:0 0 4px;}
 .app-h2 span{color:var(--mts-color-primary);}
-.app-sub{font-size:13px;color:var(--mts-text-muted);margin:0 0 20px;}
+.app-sub{font-size:13px;color:var(--mts-text-color--muted);margin:0 0 20px;}
 .app-divider{border:none;border-top:1px solid var(--mts-border-color);margin:20px 0;}
-.app-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-muted);margin-bottom:6px;}
+.app-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--mts-text-color--muted);margin-bottom:6px;}
 .app-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
 .app-theme{position:fixed;bottom:16px;right:16px;display:flex;gap:4px;z-index:999;}
-.app-theme-btn{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-secondary);}
+.app-theme-btn{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--mts-border-color);background:var(--mts-bg-surface);color:var(--mts-text-color--secondary);}
 .app-theme-btn:hover{background:var(--mts-bg-surface-2);}
 @media(max-width:640px){.app-grid-2,.app-grid-3,.app-grid-4{grid-template-columns:1fr;}}
 </style>
@@ -62,15 +62,15 @@ body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:var
 .hd-content{padding:20px 24px;max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:20px;}
 .hd-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .hd-table{width:100%;border-collapse:collapse;font-size:13px;}
-.hd-table th{padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mts-text-muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
+.hd-table th{padding:10px 14px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mts-text-color--muted);background:var(--mts-bg-surface-2);border-bottom:1px solid var(--mts-border-color);}
 .hd-table td{padding:12px 14px;border-bottom:1px solid var(--mts-border-color);vertical-align:middle;}
 .hd-table tr:hover td{background:var(--mts-bg-surface);cursor:pointer;}
 .hd-subject{font-weight:600;}
-.hd-user{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mts-text-muted);}
+.hd-user{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mts-text-color--muted);}
 .hd-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
 .hd-stat{background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);padding:16px;}
 .hd-stat-val{font-size:28px;font-weight:800;margin-bottom:2px;}
-.hd-stat-lbl{font-size:11px;color:var(--mts-text-muted);}
+.hd-stat-lbl{font-size:11px;color:var(--mts-text-color--muted);}
 </style>
 <div class="hd-content">
   <!-- Stats -->
@@ -159,13 +159,13 @@ function renderTickets(filter){
   list.forEach(function(t){
     var sm=STATUS_MAP[t.status];var pm=PRIO_MAP[t.priority];
     var tr=document.createElement('tr');
-    tr.innerHTML='<td style="font-size:11px;color:var(--mts-text-muted);font-weight:600;">#'+t.id+'</td>'
+    tr.innerHTML='<td style="font-size:11px;color:var(--mts-text-color--muted);font-weight:600;">#'+t.id+'</td>'
       +'<td class="hd-subject">'+t.subject+'</td>'
       +'<td class="hd-user"><span style="width:22px;height:22px;border-radius:50%;background:var(--mts-color-primary);color:var(--mts-color-primary-text);font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">'+t.user.split(' ').map(function(x){return x[0];}).join('')+'</span>'+t.user+'</td>'
       +'<td><span class="mts-badge mts-badge--'+sm.v+'">'+sm.label+'</span></td>'
       +'<td><span class="mts-badge mts-badge--'+pm.v+'">'+pm.label+'</span></td>'
-      +'<td style="font-size:12px;color:var(--mts-text-muted);">'+t.agent+'</td>'
-      +'<td style="font-size:11px;color:var(--mts-text-muted);">'+t.created+'</td>';
+      +'<td style="font-size:12px;color:var(--mts-text-color--muted);">'+t.agent+'</td>'
+      +'<td style="font-size:11px;color:var(--mts-text-color--muted);">'+t.created+'</td>';
     tr.addEventListener('click',function(){openTicket(t);});
     tbody.appendChild(tr);
   });
@@ -175,16 +175,16 @@ var ticketDrawer=null;
 function openTicket(t){
   var sm=STATUS_MAP[t.status];var pm=PRIO_MAP[t.priority];
   var content='<div style="display:flex;flex-direction:column;gap:20px;font-size:13px;">'
-    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);margin-bottom:6px;">ASUNTO</div>'
+    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:6px;">ASUNTO</div>'
     +'<div style="font-weight:600;">'+t.subject+'</div></div>'
     +'<div style="display:flex;gap:16px;flex-wrap:wrap;">'
-    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);margin-bottom:4px;">ESTADO</div>'
+    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:4px;">ESTADO</div>'
     +'<span class="mts-badge mts-badge--'+sm.v+'">'+sm.label+'</span></div>'
-    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);margin-bottom:4px;">PRIORIDAD</div>'
+    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:4px;">PRIORIDAD</div>'
     +'<span class="mts-badge mts-badge--'+pm.v+'">'+pm.label+'</span></div>'
-    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);margin-bottom:4px;">USUARIO</div>'
+    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:4px;">USUARIO</div>'
     +'<span>'+t.user+'</span></div></div>'
-    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-muted);margin-bottom:8px;">HISTORIAL</div>'
+    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:8px;">HISTORIAL</div>'
     +'<div id="ticket-tl-'+t.id+'"></div></div>'
     +'</div>';
 

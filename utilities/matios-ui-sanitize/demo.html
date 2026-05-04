@@ -29,10 +29,21 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
   <link rel="stylesheet" href="../../support/demo-shared.css">
   <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
   <script src="../../support/demo-shared.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
   <script src="./matios-ui-sanitize.js"></script>
   <style>
     .san-card {
@@ -156,224 +167,250 @@
   </style>
 </head>
 <body>
-<main class="mts-demo-wrap">
 
-  <header class="mts-demo-header">
-    <h1 class="mts-demo-title">MTS.Sanitize <span class="mts-badge mts-badge--primary mts-badge--sm">v1.0</span></h1>
-    <p class="mts-demo-subtitle">Utilidad de escape y sanitización para prevención de XSS. Sin dependencias.</p>
-  </header>
-
-  <div style="display:flex;flex-direction:column;gap:var(--mts-space-5);">
-
-    <!-- html() -->
-    <div class="san-card">
-      <h2 class="san-card-title">
-        <code>MTS.Sanitize.html(str)</code>
-        <span class="san-badge">Seguro para innerHTML</span>
-      </h2>
-      <p class="san-card-desc">Escapa los 5 caracteres especiales HTML: <code>&amp; &lt; &gt; " '</code> — usar cuando el valor va dentro de una template string asignada a <code>innerHTML</code>.</p>
-      <div class="san-playground">
-        <div>
-          <div class="san-field-label">Entrada — escribe algo</div>
-          <input id="html-input" class="san-input" type="text" placeholder="Ej: &lt;script&gt;alert(1)&lt;/script&gt;" />
-        </div>
-        <div>
-          <div class="san-field-label">Salida escapada</div>
-          <div id="html-output" class="san-output"></div>
-        </div>
-      </div>
-      <hr class="san-divider">
-      <div id="cb-html"></div>
-    </div>
-
-    <!-- attr() -->
-    <div class="san-card">
-      <h2 class="san-card-title">
-        <code>MTS.Sanitize.attr(str)</code>
-        <span class="san-badge">Seguro para atributos</span>
-      </h2>
-      <p class="san-card-desc">Como <code>html()</code> pero además escapa el backtick. Usar en <code>title</code>, <code>aria-label</code>, <code>data-*</code>, etc.</p>
-      <div class="san-playground">
-        <div>
-          <div class="san-field-label">Entrada — escribe algo</div>
-          <input id="attr-input" class="san-input" type="text" placeholder='Ej: He said "hi" &amp; bye' />
-        </div>
-        <div>
-          <div class="san-field-label">Salida escapada</div>
-          <div id="attr-output" class="san-output"></div>
-        </div>
-      </div>
-      <hr class="san-divider">
-      <div id="cb-attr"></div>
-    </div>
-
-    <!-- url() -->
-    <div class="san-card">
-      <h2 class="san-card-title">
-        <code>MTS.Sanitize.url(str)</code>
-        <span class="san-badge">Bloquea javascript: data: vbscript:</span>
-      </h2>
-      <p class="san-card-desc">Permite <code>https://</code>, <code>http://</code>, rutas relativas y protocolo relativo <code>//</code>. Retorna <code>''</code> si la URL es peligrosa.</p>
-      <div class="san-url-table" id="url-table"></div>
-      <hr class="san-divider">
-      <div id="cb-url"></div>
-    </div>
-
-    <!-- text() -->
-    <div class="san-card">
-      <h2 class="san-card-title">
-        <code>MTS.Sanitize.text(str)</code>
-        <span class="san-badge">Para textContent</span>
-      </h2>
-      <p class="san-card-desc">Convierte cualquier valor a string, manejando <code>null</code> y <code>undefined</code> como cadena vacía. Semánticamente indica que el valor irá a <code>textContent</code>.</p>
-      <div class="san-text-table" id="text-table"></div>
-      <hr class="san-divider">
-      <div id="cb-text"></div>
-    </div>
-
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.Sanitize</h1>
+    <p>Utilidad de escape y sanitizacion para prevencion de XSS. Sin dependencias.</p>
+    <div class="demo-header-actions"></div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-</main>
+
+  <div class="demo-section">
+    <div class="demo-section-title">1 — html() — Sanitiza HTML completo</div>
+    <div id="tabs-s1"></div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">2 — escape() — Escapa entidades HTML</div>
+    <div id="tabs-s2"></div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">3 — attr() — Seguro para atributos</div>
+    <div id="tabs-s3"></div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">4 — url() — Bloquea protocolos peligrosos</div>
+    <div id="tabs-s4"></div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title">5 — text() — Para textContent</div>
+    <div id="tabs-s5"></div>
+  </div>
+</div>
 
 <script>
-  /* ── html() ─────────────────────────────────────────── */
-  var htmlInput  = document.getElementById('html-input');
-  var htmlOutput = document.getElementById('html-output');
-  htmlInput.addEventListener('input', function() {
-    htmlOutput.textContent = MTS.Sanitize.html(htmlInput.value);
-  });
-
-  /* ── attr() ─────────────────────────────────────────── */
-  var attrInput  = document.getElementById('attr-input');
-  var attrOutput = document.getElementById('attr-output');
-  attrInput.addEventListener('input', function() {
-    attrOutput.textContent = MTS.Sanitize.attr(attrInput.value);
-  });
-
-  /* ── url() tabla ─────────────────────────────────────── */
-  var urlCases = [
-    'https://ejemplo.com/doc.pdf',
-    '/documentos/archivo.xlsx',
-    './relativo/ruta.html',
-    'javascript:alert(1)',
-    'data:text/html,<b>hola</b>',
-    '  JAVASCRIPT:alert(1)',
-    'vbscript:msgbox(1)',
-  ];
-  var urlTable = document.getElementById('url-table');
-  urlCases.forEach(function(url) {
-    var result = MTS.Sanitize.url(url);
-    var row = document.createElement('div');
-    row.className = 'san-url-row';
-
-    var inEl = document.createElement('span');
-    inEl.className = 'san-url-in';
-    inEl.textContent = '"' + url + '"';
-
-    var arrEl = document.createElement('span');
-    arrEl.className = 'san-url-arr';
-    arrEl.textContent = '→';
-
-    var outEl = document.createElement('span');
-    if (result === '') {
-      outEl.className = 'san-url-blocked';
-      outEl.textContent = '(bloqueada — retorna "")';
-    } else {
-      outEl.className = 'san-url-ok';
-      outEl.textContent = '"' + result + '"';
-    }
-
-    row.appendChild(inEl);
-    row.appendChild(arrEl);
-    row.appendChild(outEl);
-    urlTable.appendChild(row);
-  });
-
-  /* ── text() tabla ────────────────────────────────────── */
-  var textCases = [
-    { label: 'null',              val: null },
-    { label: 'undefined',         val: undefined },
-    { label: '0',                 val: 0 },
-    { label: '42',                val: 42 },
-    { label: '"<b>texto</b>"',    val: '<b>texto</b>' },
-    { label: '"  espacios  "',    val: '  espacios  ' },
-  ];
-  var textTable = document.getElementById('text-table');
-  textCases.forEach(function(c) {
-    var row = document.createElement('div');
-    row.className = 'san-text-row';
-
-    var inEl = document.createElement('span');
-    inEl.className = 'san-text-in';
-    inEl.textContent = c.label;
-
-    var arrEl = document.createElement('span');
-    arrEl.className = 'san-text-arr';
-    arrEl.textContent = '→';
-
-    var outEl = document.createElement('span');
-    outEl.className = 'san-text-out';
-    outEl.textContent = '"' + MTS.Sanitize.text(c.val) + '"';
-
-    row.appendChild(inEl);
-    row.appendChild(arrEl);
-    row.appendChild(outEl);
-    textTable.appendChild(row);
-  });
-
-  /* ── Codeblocks ──────────────────────────────────────── */
-  var codes = [
-    {
-      id: 'cb-html',
-      lang: 'js',
-      code: [
-        '// ❌ Vulnerable',
-        'el.innerHTML = `<span>${nombreServidor}</span>`',
-        '',
-        '// ✅ Seguro',
-        'el.innerHTML = `<span>${MTS.Sanitize.html(nombreServidor)}</span>`',
-      ].join('\n'),
-    },
-    {
-      id: 'cb-attr',
-      lang: 'js',
-      code: [
-        '// ❌ Vulnerable',
-        "el.setAttribute('title', userInput)",
-        '',
-        '// ✅ Seguro',
-        "el.setAttribute('title', MTS.Sanitize.attr(userInput))",
-      ].join('\n'),
-    },
-    {
-      id: 'cb-url',
-      lang: 'js',
-      code: [
-        '// ❌ Vulnerable',
-        'anchor.href = row.downloadUrl',
-        '',
-        "// ✅ Seguro — si la URL es peligrosa retorna '' y el fallback '#' evita el void",
-        "anchor.href = MTS.Sanitize.url(row.downloadUrl) || '#'",
-      ].join('\n'),
-    },
-    {
-      id: 'cb-text',
-      lang: 'js',
-      code: [
-        '// textContent ya es seguro por naturaleza.',
-        '// .text() lo hace explícito y maneja null/undefined.',
-        'el.textContent = MTS.Sanitize.text(item.name)',
-        'el.textContent = MTS.Sanitize.text(null) // → ""',
-      ].join('\n'),
-    },
-  ];
-
-  if (typeof MTS.CodeBlock !== 'undefined') {
-    codes.forEach(function(c) {
-      var host = document.getElementById(c.id);
-      if (!host) return;
-      new MTS.CodeBlock(host, { language: c.lang, code: c.code });
+  function indentHtml(html) {
+    var indent = 0, step = 2;
+    var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+    var result = '';
+    (html.match(/<[^>]+>|[^<]+/g) || []).forEach(function(tok) {
+      var t = tok.trim(); if (!t) return;
+      if (/^<\//.test(t)) { indent = Math.max(0, indent - step); result += ' '.repeat(indent) + t + '\n'; }
+      else if (/^<[^!]/.test(t)) {
+        result += ' '.repeat(indent) + t + '\n';
+        var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+        if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+      } else { var text = t.replace(/\s+/g, ' '); if (text) result += ' '.repeat(indent) + text + '\n'; }
     });
+    return result.trimEnd();
   }
+
+  function makeSection(id, previewHtml, jsCode, initFn) {
+    new MTS.Tabs('#' + id, {
+      variant: 'card',
+      height: '350px',
+      lazy: false,
+      tabs: [
+        { id: id + '-preview', label: 'Preview',    content: previewHtml },
+        { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+        { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' }
+      ]
+    });
+    new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+    new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+    if (typeof initFn === 'function') initFn();
+  }
+
+  /* ── S1 — html() ──────────────────────────────────────── */
+  var preview_s1 =
+    '<div class="san-playground">' +
+      '<div>' +
+        '<div class="san-field-label">Entrada — escribe algo</div>' +
+        '<input id="html-input-s1" class="san-input" type="text" placeholder="Ej: &lt;script&gt;alert(1)&lt;/script&gt;" />' +
+      '</div>' +
+      '<div>' +
+        '<div class="san-field-label">Salida sanitizada</div>' +
+        '<div id="html-output-s1" class="san-output"></div>' +
+      '</div>' +
+    '</div>';
+
+  var js_s1 = [
+    '// Vulnerable',
+    'el.innerHTML = `<span>${nombreServidor}</span>`',
+    '',
+    '// Seguro — tags peligrosos eliminados',
+    "el.innerHTML = MTS.Sanitize.html('<b>Hola</b><script>alert(1)<\\/script>')",
+    "// → '<b>Hola</b>'"
+  ].join('\n');
+
+  makeSection('tabs-s1', preview_s1, js_s1, function() {
+    document.getElementById('html-input-s1').addEventListener('input', function() {
+      document.getElementById('html-output-s1').textContent = MTS.Sanitize.html(document.getElementById('html-input-s1').value);
+    });
+  });
+
+  /* ── S2 — escape() ────────────────────────────────────── */
+  var preview_s2 =
+    '<div class="san-playground">' +
+      '<div>' +
+        '<div class="san-field-label">Entrada — escribe algo</div>' +
+        '<input id="escape-input-s2" class="san-input" type="text" placeholder="Ej: &lt;script&gt;alert(1)&lt;/script&gt;" />' +
+      '</div>' +
+      '<div>' +
+        '<div class="san-field-label">Salida escapada</div>' +
+        '<div id="escape-output-s2" class="san-output"></div>' +
+      '</div>' +
+    '</div>';
+
+  var js_s2 = [
+    '// Para mostrar HTML como texto plano en innerHTML',
+    'el.innerHTML = `<span>${MTS.Sanitize.escape(nombreServidor)}</span>`',
+    '',
+    '// Ejemplo:',
+    "MTS.Sanitize.escape('<script>alert(1)<\/script>')",
+    "// → '&lt;script&gt;alert(1)&lt;\/script&gt;'"
+  ].join('\n');
+
+  makeSection('tabs-s2', preview_s2, js_s2, function() {
+    document.getElementById('escape-input-s2').addEventListener('input', function() {
+      document.getElementById('escape-output-s2').textContent = MTS.Sanitize.escape(document.getElementById('escape-input-s2').value);
+    });
+  });
+
+  /* ── S3 — attr() ──────────────────────────────────────── */
+  var preview_s3 =
+    '<div class="san-playground">' +
+      '<div>' +
+        '<div class="san-field-label">Entrada — escribe algo</div>' +
+        '<input id="attr-input-s3" class="san-input" type="text" placeholder="Ej: He said &quot;hi&quot; &amp; bye" />' +
+      '</div>' +
+      '<div>' +
+        '<div class="san-field-label">Salida escapada</div>' +
+        '<div id="attr-output-s3" class="san-output"></div>' +
+      '</div>' +
+    '</div>';
+
+  var js_s3 = [
+    '// Vulnerable',
+    "el.setAttribute('title', userInput)",
+    '',
+    '// Seguro',
+    "el.setAttribute('title', MTS.Sanitize.attr(userInput))"
+  ].join('\n');
+
+  makeSection('tabs-s3', preview_s3, js_s3, function() {
+    document.getElementById('attr-input-s3').addEventListener('input', function() {
+      document.getElementById('attr-output-s3').textContent = MTS.Sanitize.attr(document.getElementById('attr-input-s3').value);
+    });
+  });
+
+  /* ── S4 — url() ───────────────────────────────────────── */
+  var preview_s4 = '<div id="url-table-s4" class="san-url-table"></div>';
+
+  var js_s4 = [
+    '// Vulnerable',
+    'anchor.href = row.downloadUrl',
+    '',
+    "// Seguro — retorna '' si la URL es peligrosa",
+    "anchor.href = MTS.Sanitize.url(row.downloadUrl) || '#'"
+  ].join('\n');
+
+  makeSection('tabs-s4', preview_s4, js_s4, function() {
+    var urlCases = [
+      'https://ejemplo.com/doc.pdf',
+      '/documentos/archivo.xlsx',
+      './relativo/ruta.html',
+      'javascript:alert(1)',
+      'data:text/html,<b>hola</b>',
+      '  JAVASCRIPT:alert(1)',
+      'vbscript:msgbox(1)'
+    ];
+    var urlTable = document.getElementById('url-table-s4');
+    urlCases.forEach(function(url) {
+      var result = MTS.Sanitize.url(url);
+      var row = document.createElement('div');
+      row.className = 'san-url-row';
+
+      var inEl = document.createElement('span');
+      inEl.className = 'san-url-in';
+      inEl.textContent = '"' + url + '"';
+
+      var arrEl = document.createElement('span');
+      arrEl.className = 'san-url-arr';
+      arrEl.textContent = '→';
+
+      var outEl = document.createElement('span');
+      if (result === '') {
+        outEl.className = 'san-url-blocked';
+        outEl.textContent = '(bloqueada — retorna "")';
+      } else {
+        outEl.className = 'san-url-ok';
+        outEl.textContent = '"' + result + '"';
+      }
+
+      row.appendChild(inEl);
+      row.appendChild(arrEl);
+      row.appendChild(outEl);
+      urlTable.appendChild(row);
+    });
+  });
+
+  /* ── S5 — text() ──────────────────────────────────────── */
+  var preview_s5 = '<div id="text-table-s5" class="san-text-table"></div>';
+
+  var js_s5 = [
+    '// textContent ya es seguro por naturaleza.',
+    '// .text() lo hace explicito y maneja null/undefined.',
+    'el.textContent = MTS.Sanitize.text(item.name)',
+    'el.textContent = MTS.Sanitize.text(null) // → ""'
+  ].join('\n');
+
+  makeSection('tabs-s5', preview_s5, js_s5, function() {
+    var textCases = [
+      { label: 'null',           val: null },
+      { label: 'undefined',      val: undefined },
+      { label: '0',              val: 0 },
+      { label: '42',             val: 42 },
+      { label: '"<b>texto</b>"', val: '<b>texto</b>' },
+      { label: '"  espacios  "', val: '  espacios  ' }
+    ];
+    var textTable = document.getElementById('text-table-s5');
+    textCases.forEach(function(c) {
+      var row = document.createElement('div');
+      row.className = 'san-text-row';
+
+      var inEl = document.createElement('span');
+      inEl.className = 'san-text-in';
+      inEl.textContent = c.label;
+
+      var arrEl = document.createElement('span');
+      arrEl.className = 'san-text-arr';
+      arrEl.textContent = '→';
+
+      var outEl = document.createElement('span');
+      outEl.className = 'san-text-out';
+      outEl.textContent = '"' + MTS.Sanitize.text(c.val) + '"';
+
+      row.appendChild(inEl);
+      row.appendChild(arrEl);
+      row.appendChild(outEl);
+      textTable.appendChild(row);
+    });
+  });
 </script>
 </body>
 </html>

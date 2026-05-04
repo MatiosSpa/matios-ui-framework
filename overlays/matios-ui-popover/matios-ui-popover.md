@@ -1,7 +1,7 @@
 # MTS.Popover
 
-[EN] Rich tooltip with title, HTML body, arrow, close button and smart positioning.
-[ES] Tooltip enriquecido con título, body HTML, flecha, botón de cierre y posicionamiento inteligente.
+🇬🇧 Rich tooltip with title, HTML body, arrow, close button and smart positioning.
+🇪🇸 Tooltip enriquecido con título, body HTML, flecha, botón de cierre y posicionamiento inteligente.
 
 ---
 
@@ -17,18 +17,18 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `title` | `string` | `''` | [EN] Popover header title / [ES] Título del header |
-| `content` | `string` | `''` | [EN] Body HTML or text / [ES] HTML o texto del cuerpo |
+| `title` | `string` | `''` | 🇬🇧 Popover header title / 🇪🇸 Título del header |
+| `content` | `string` | `''` | 🇬🇧 Body HTML or text / 🇪🇸 HTML o texto del cuerpo |
 | `position` | `string` | `'bottom'` | `'top'` · `'bottom'` · `'left'` · `'right'` |
 | `trigger` | `string` | `'click'` | `'click'` · `'hover'` |
-| `offset` | `number` | `8` | [EN] Gap in px between target and popover / [ES] Separación en px |
-| `arrow` | `boolean` | `true` | [EN] Show arrow / [ES] Mostrar flecha |
-| `closable` | `boolean` | `true` | [EN] Show × in header / [ES] Mostrar × en el header |
-| `width` | `string` | `'260px'` | [EN] Popover width / [ES] Ancho del popover |
-| `onShow` | `function` | — | [EN] Fires when popover shows / [ES] Se dispara al mostrar |
-| `onHide` | `function` | — | [EN] Fires when popover hides / [ES] Se dispara al ocultar |
+| `offset` | `number` | `8` | 🇬🇧 Gap in px between target and popover / 🇪🇸 Separación en px |
+| `arrow` | `boolean` | `true` | 🇬🇧 Show arrow / 🇪🇸 Mostrar flecha |
+| `closable` | `boolean` | `true` | 🇬🇧 Show × in header / 🇪🇸 Mostrar × en el header |
+| `width` | `string` | `'260px'` | 🇬🇧 Popover width / 🇪🇸 Ancho del popover |
+| `onShow` | `function` | — | 🇬🇧 Fires when popover shows / 🇪🇸 Se dispara al mostrar |
+| `onHide` | `function` | — | 🇬🇧 Fires when popover hides / 🇪🇸 Se dispara al ocultar |
 
 ---
 
@@ -142,10 +142,3 @@ document.getElementById('my-btn')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Normalized `onShow`/`onHide` to `.on()`, bilingual docs / [ES] Normalizados `onShow`/`onHide` a `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release / [ES] Versión inicial |

@@ -379,7 +379,7 @@ MTS.DataTableFilterPlugin = class DataTableFilterPlugin {
      HELPERS
   ---------------------------------------------------------- */
   _t(key) {
-    return this._table?._cfg?.locale?.filter?.[key] ?? key
+    return this._table?._cfg?.locale?.['MTS.DataTableFilterPlugin']?.[key] ?? key
   }
 
   _icon(name) {

@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="es" data-mts-mode="dark">
 <head>
+  <script>
+    (function(){
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else    document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS Overlays — Demo</title>
@@ -15,6 +34,10 @@
   <link rel="stylesheet" href="../themes/matios-ui-accent-olive.css">
   <link rel="stylesheet" href="../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../themes/matios-ui-accent-petrol.css">
   <link rel="stylesheet" href="../navigation/matios-ui-accordion/matios-ui-accordion.css">
   <link rel="stylesheet" href="../support/demo-shared.css">
   <script src="../support/demo-shared.js"></script>

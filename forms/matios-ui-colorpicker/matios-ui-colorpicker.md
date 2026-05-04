@@ -1,7 +1,7 @@
 # MTS.ColorPicker
 
-[EN] Standalone color picker with H/S/L sliders, preset palette, hex input and hex/rgb/hsl output formats. Trigger and inline modes. Zero dependencies.
-[ES] Selector de color standalone con sliders H/S/L, paleta de presets, input hex y formatos hex/rgb/hsl. Modos trigger e inline. 0 dependencias.
+🇬🇧 Standalone color picker with H/S/L sliders, preset palette, hex input and hex/rgb/hsl output formats. Trigger and inline modes. Zero dependencies.
+🇪🇸 Selector de color standalone con sliders H/S/L, paleta de presets, input hex y formatos hex/rgb/hsl. Modos trigger e inline. 0 dependencias.
 
 ---
 
@@ -17,28 +17,28 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `value` | `string` | `'#4f8eff'` | [EN] Initial color (hex) / [ES] Color inicial (hex) |
-| `label` | `string` | `''` | [EN] Field label / [ES] Etiqueta del campo |
-| `format` | `string` | `'hex'` | [EN] Output format: `'hex'` · `'rgb'` · `'hsl'` / [ES] Formato de salida |
-| `presets` | `array` | 14 colors | [EN] Preset color palette / [ES] Paleta de colores preset |
-| `showPresets` | `boolean` | `true` | [EN] Show preset palette / [ES] Mostrar paleta |
-| `showSliders` | `boolean` | `true` | [EN] Show HSL sliders / [ES] Mostrar sliders HSL |
-| `showInput` | `boolean` | `true` | [EN] Show hex input / [ES] Mostrar input hex |
-| `inline` | `boolean` | `false` | [EN] Always visible, no trigger / [ES] Siempre visible, sin trigger |
+| `value` | `string` | `'#4f8eff'` | 🇬🇧 Initial color (hex) / 🇪🇸 Color inicial (hex) |
+| `label` | `string` | `''` | 🇬🇧 Field label / 🇪🇸 Etiqueta del campo |
+| `format` | `string` | `'hex'` | 🇬🇧 Output format: `'hex'` · `'rgb'` · `'hsl'` / 🇪🇸 Formato de salida |
+| `presets` | `array` | 14 colors | 🇬🇧 Preset color palette / 🇪🇸 Paleta de colores preset |
+| `showPresets` | `boolean` | `true` | 🇬🇧 Show preset palette / 🇪🇸 Mostrar paleta |
+| `showSliders` | `boolean` | `true` | 🇬🇧 Show HSL sliders / 🇪🇸 Mostrar sliders HSL |
+| `showInput` | `boolean` | `true` | 🇬🇧 Show hex input / 🇪🇸 Mostrar input hex |
+| `inline` | `boolean` | `false` | 🇬🇧 Always visible, no trigger / 🇪🇸 Siempre visible, sin trigger |
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
-| `disabled` | `boolean` | `false` | [EN] Disables interaction / [ES] Deshabilita la interacción |
-| `onChange` | `function` | — | [EN] Fires when color changes / [ES] Se dispara al cambiar el color |
-| `onOpen` | `function` | — | [EN] Fires when popup opens / [ES] Se dispara al abrir el popup |
-| `onClose` | `function` | — | [EN] Fires when popup closes / [ES] Se dispara al cerrar el popup |
+| `disabled` | `boolean` | `false` | 🇬🇧 Disables interaction / 🇪🇸 Deshabilita la interacción |
+| `onChange` | `function` | — | 🇬🇧 Fires when color changes / 🇪🇸 Se dispara al cambiar el color |
+| `onOpen` | `function` | — | 🇬🇧 Fires when popup opens / 🇪🇸 Se dispara al abrir el popup |
+| `onClose` | `function` | — | 🇬🇧 Fires when popup closes / 🇪🇸 Se dispara al cerrar el popup |
 
 ---
 
 ## Events / Eventos
 
-[EN] Use `onChange`, `onOpen` and `onClose` in the constructor.
-[ES] Usa `onChange`, `onOpen` y `onClose` en el constructor.
+🇬🇧 Use `onChange`, `onOpen` and `onClose` in the constructor.
+🇪🇸 Usa `onChange`, `onOpen` y `onClose` en el constructor.
 
 ```js
 new MTS.ColorPicker('#my-picker', {
@@ -86,8 +86,8 @@ new MTS.ColorPicker('#my-picker', {
 </script>
 ```
 
-[EN] Available `data-*` attributes:
-[ES] Atributos `data-*` disponibles:
+🇬🇧 Available `data-*` attributes:
+🇪🇸 Atributos `data-*` disponibles:
 
 | Attribute / Atributo | JS Option |
 |----------------------|-----------|
@@ -170,10 +170,3 @@ document.getElementById('my-picker')
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Bilingual docs, standardized structure / [ES] Docs bilingüe, estructura estandarizada |
-| 1.0.0 | [EN] Initial release — HSL sliders, presets, hex/rgb/hsl / [ES] Versión inicial |

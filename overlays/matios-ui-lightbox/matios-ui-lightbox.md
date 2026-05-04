@@ -1,7 +1,7 @@
 # MTS.Lightbox
 
-[EN] Media viewer with navigation, zoom and thumbnail strip. Supports images, HTML5 video, YouTube and Vimeo. Auto-bind from CSS selector.
-[ES] Visor de medios con navegación, zoom y tira de miniaturas. Soporta imágenes, video HTML5, YouTube y Vimeo. Auto-bind desde selector CSS.
+🇬🇧 Media viewer with navigation, zoom and thumbnail strip. Supports images, HTML5 video, YouTube and Vimeo. Auto-bind from CSS selector.
+🇪🇸 Visor de medios con navegación, zoom y tira de miniaturas. Soporta imágenes, video HTML5, YouTube y Vimeo. Auto-bind desde selector CSS.
 
 ---
 
@@ -17,28 +17,28 @@
 
 ## Options / Opciones
 
-| Option | Type | Default | [EN] Description / [ES] Descripción |
+| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
 |--------|------|---------|--------------------------------------|
-| `index` | `number` | `0` | [EN] Initially active item index / [ES] Índice activo inicial |
-| `loop` | `boolean` | `true` | [EN] Infinite loop navigation / [ES] Navegación en loop infinito |
-| `zoom` | `boolean` | `true` | [EN] Allow zoom on images / [ES] Permitir zoom en imágenes |
-| `download` | `boolean` | `false` | [EN] Show download button / [ES] Mostrar botón de descarga |
-| `counter` | `boolean` | `true` | [EN] Show item counter / [ES] Mostrar contador de ítems |
-| `thumbnails` | `boolean` | `false` | [EN] Show thumbnail strip / [ES] Mostrar tira de miniaturas |
+| `index` | `number` | `0` | 🇬🇧 Initially active item index / 🇪🇸 Índice activo inicial |
+| `loop` | `boolean` | `true` | 🇬🇧 Infinite loop navigation / 🇪🇸 Navegación en loop infinito |
+| `zoom` | `boolean` | `true` | 🇬🇧 Allow zoom on images / 🇪🇸 Permitir zoom en imágenes |
+| `download` | `boolean` | `false` | 🇬🇧 Show download button / 🇪🇸 Mostrar botón de descarga |
+| `counter` | `boolean` | `true` | 🇬🇧 Show item counter / 🇪🇸 Mostrar contador de ítems |
+| `thumbnails` | `boolean` | `false` | 🇬🇧 Show thumbnail strip / 🇪🇸 Mostrar tira de miniaturas |
 | `animation` | `string` | `'fade'` | `'fade'` · `'slide'` |
-| `onOpen` | `function` | — | [EN] `({ item, index }) => {}` Fires when lightbox opens / [ES] Se dispara al abrir |
-| `onClose` | `function` | — | [EN] Fires when lightbox closes / [ES] Se dispara al cerrar |
-| `onChange` | `function` | — | [EN] `({ item, index }) => {}` Fires when active item changes / [ES] Se dispara al cambiar el ítem |
+| `onOpen` | `function` | — | 🇬🇧 `({ item, index }) => {}` Fires when lightbox opens / 🇪🇸 Se dispara al abrir |
+| `onClose` | `function` | — | 🇬🇧 Fires when lightbox closes / 🇪🇸 Se dispara al cerrar |
+| `onChange` | `function` | — | 🇬🇧 `({ item, index }) => {}` Fires when active item changes / 🇪🇸 Se dispara al cambiar el ítem |
 
 ### Item schema / Esquema de ítem
 
-| Property | Type | [EN] Description / [ES] Descripción |
+| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
 |----------|------|--------------------------------------|
-| `src` | `string` | [EN] Media URL (required) / [ES] URL del medio (requerido) |
+| `src` | `string` | 🇬🇧 Media URL (required) / 🇪🇸 URL del medio (requerido) |
 | `type` | `string` | `'image'` · `'video'` · `'youtube'` · `'vimeo'` |
-| `caption` | `string` | [EN] Caption text / [ES] Texto de pie de foto |
-| `alt` | `string` | [EN] Image alt text / [ES] Texto alternativo |
-| `thumb` | `string` | [EN] Thumbnail URL / [ES] URL de la miniatura |
+| `caption` | `string` | 🇬🇧 Caption text / 🇪🇸 Texto de pie de foto |
+| `alt` | `string` | 🇬🇧 Image alt text / 🇪🇸 Texto alternativo |
+| `thumb` | `string` | 🇬🇧 Thumbnail URL / 🇪🇸 URL de la miniatura |
 
 ---
 
@@ -95,8 +95,8 @@ new MTS.Lightbox([
 
 ## Auto-bind from CSS Selector / Auto-bind desde selector CSS
 
-[EN] Pass a CSS selector instead of an array. The lightbox reads `data-*` attributes from each matched element and binds click events automatically.
-[ES] Pasa un selector CSS en lugar de un arreglo. El lightbox lee atributos `data-*` de cada elemento y vincula los clicks automáticamente.
+🇬🇧 Pass a CSS selector instead of an array. The lightbox reads `data-*` attributes from each matched element and binds click events automatically.
+🇪🇸 Pasa un selector CSS en lugar de un arreglo. El lightbox lee atributos `data-*` de cada elemento y vincula los clicks automáticamente.
 
 ```html
 <a href="/img/1.jpg" data-lightbox data-caption="Photo 1">
@@ -116,7 +116,7 @@ new MTS.Lightbox([
 </script>
 ```
 
-| data attribute | [EN] Maps to / [ES] Mapea a |
+| data attribute | 🇬🇧 Maps to / 🇪🇸 Mapea a |
 |----------------|------------------------------|
 | `href` / `src` | `item.src` |
 | `data-type` | `item.type` |
@@ -128,11 +128,11 @@ new MTS.Lightbox([
 
 ## Keyboard Navigation / Navegación por teclado
 
-| Key | [EN] Action / [ES] Acción |
+| Key | 🇬🇧 Action / 🇪🇸 Acción |
 |-----|--------------------------|
-| `←` / `→` | [EN] Previous / Next / [ES] Anterior / Siguiente |
-| `Escape` | [EN] Close / [ES] Cerrar |
-| `+` / `-` | [EN] Zoom in / out (images) / [ES] Zoom in / out (imágenes) |
+| `←` / `→` | 🇬🇧 Previous / Next / 🇪🇸 Anterior / Siguiente |
+| `Escape` | 🇬🇧 Close / 🇪🇸 Cerrar |
+| `+` / `-` | 🇬🇧 Zoom in / out (images) / 🇪🇸 Zoom in / out (imágenes) |
 
 ---
 
@@ -173,10 +173,3 @@ document.addEventListener('mts:lightbox:close',   () => {});
 ```
 
 ---
-
-## Changelog
-
-| Version | Description |
-|---------|-------------|
-| 1.1.0 | [EN] Normalized to `.on()` pattern, bilingual docs / [ES] Normalizado al patrón `.on()`, docs bilingüe |
-| 1.0.0 | [EN] Initial release — images, video, YouTube, Vimeo, zoom, thumbnails / [ES] Versión inicial |
