@@ -20,8 +20,10 @@ MTS.ColorPicker = class MtsColorPicker {
    * @param {boolean}  options.showInput         Muestra input de texto â€” default: true
    * @param {boolean}  options.showFormatSwitch  Muestra botón para cambiar hex/rgb/hsl — default: true
    * @param {boolean}  options.showTriggerText   Muestra el valor hex/rgb/hsl en el trigger — default: true
+   * @param {string}   options.triggerVariant    'default'|'preview' — default: 'default'
+   * @param {string}   options.previewText       Texto del chip en triggerVariant:'preview' — default: 'Vista previa'
    * @param {boolean}  options.inline      Siempre visible (sin trigger) — default: false
-   * @param {string}   options.size        'sm'|'md'|'lg' â€” default: 'md'
+   * @param {string}   options.size        'sm'|'md'|'lg' — default: 'md'
    * @param {boolean}  options.disabled
    * @param {function} options.onChange    ({ hex, value, formatted }) => {}
    * @param {function} options.onOpen
@@ -76,6 +78,12 @@ MTS.ColorPicker = class MtsColorPicker {
 
     // Show hex/rgb/hsl text in trigger / Muestra el valor en el trigger
     this.showTriggerText = options.showTriggerText ?? true;
+
+    // Trigger variant: 'default' | 'preview'
+    this.triggerVariant = options.triggerVariant || 'default';
+
+    // Text shown inside the preview chip (triggerVariant:'preview')
+    this.previewText = options.previewText || 'Vista previa';
 
     // Always visible, no trigger button / Siempre visible, sin botón trigger
     this.inline = options.inline ?? false;
@@ -140,14 +148,19 @@ MTS.ColorPicker = class MtsColorPicker {
     }
 
     if (this.inline) {
-      /* Modo inline â€” popup siempre visible dentro del contenedor */
+      /* Modo inline — popup siempre visible dentro del contenedor */
       const pop = document.createElement('div');
       pop.className = 'mts-colorpicker__pop mts-colorpicker__pop--inline';
       this._el.appendChild(pop);
       this._popEl = pop;
       this._renderPop();
+    } else if (this.triggerVariant === 'preview') {
+      /* Modo preview — chip de color + botón icono */
+      this._buildPreviewTrigger();
+      const self = this;
+      document.addEventListener('click', function() { self._closePop(); });
     } else {
-      /* Modo trigger â€” botÃ³n que abre popup */
+      /* Modo trigger default — swatch + valor + chevron */
       const triggerWrap = document.createElement('div');
       triggerWrap.className = 'mts-colorpicker__trigger-wrap mts-colorpicker__trigger-wrap--' + this.size;
 
@@ -157,7 +170,7 @@ MTS.ColorPicker = class MtsColorPicker {
 
       const chevron = document.createElement('span');
       chevron.className = 'mts-colorpicker__chevron';
-      chevron.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>';
+      chevron.innerHTML = '<svg width=”12” height=”12” viewBox=”0 0 24 24” fill=”none” stroke=”currentColor” stroke-width=”2”><path d=”M6 9l6 6 6-6”/></svg>';
 
       triggerWrap.appendChild(swatch);
       if (this.showTriggerText) {
@@ -171,7 +184,8 @@ MTS.ColorPicker = class MtsColorPicker {
 
       if (!this.disabled) {
         triggerWrap.style.cursor = 'pointer';
-        triggerWrap.addEventListener('click', (e) => { e.stopPropagation(); this._open ? this._closePop() : this._openPop(); });
+        const self = this;
+        triggerWrap.addEventListener('click', function(e) { e.stopPropagation(); if (self._open) { self._closePop(); } else { self._openPop(); } });
       } else {
         triggerWrap.classList.add('mts-colorpicker__trigger-wrap--disabled');
       }
@@ -180,9 +194,43 @@ MTS.ColorPicker = class MtsColorPicker {
       this._swatchEl    = swatch;
       this._el.appendChild(triggerWrap);
 
-      /* Cerrar al click fuera */
-      document.addEventListener('click', () => this._closePop());
+      const self = this;
+      document.addEventListener('click', function() { self._closePop(); });
     }
+  }
+
+  _buildPreviewTrigger() {
+    const wrap = document.createElement('div');
+    wrap.className = 'mts-colorpicker__preview-trigger';
+
+    /* Chip — muestra el color de fondo + texto de ejemplo */
+    const chip = document.createElement('div');
+    chip.className = 'mts-colorpicker__preview-chip';
+    chip.style.background = this._hex;
+    chip.style.color = this._contrastColor(this._hex);
+    chip.textContent = this.previewText;
+    /* Evitar que click en el chip cierre el popup */
+    chip.addEventListener('click', function(e) { e.stopPropagation(); });
+    this._previewChip = chip;
+
+    /* Botón icono — abre/cierra el popup */
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'mts-colorpicker__preview-chip-btn';
+    btn.setAttribute('aria-label', 'Seleccionar color');
+    btn.innerHTML = '<svg width=”16” height=”16” viewBox=”0 0 24 24” fill=”currentColor”><path d=”M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z”/></svg>';
+    this._previewBtn = btn;
+
+    const self = this;
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (self._open) { self._closePop(); } else { self._openPop(); }
+    });
+
+    wrap.appendChild(chip);
+    wrap.appendChild(btn);
+    this._el.appendChild(wrap);
+    this._triggerWrap = wrap; /* referencia para _positionPop */
   }
 
   _openPop() {
@@ -203,6 +251,7 @@ MTS.ColorPicker = class MtsColorPicker {
     window.addEventListener('scroll', this._scrollHandler, true);
 
     this._triggerWrap?.classList.add('mts-colorpicker__trigger-wrap--open');
+    this._previewBtn?.classList.add('mts-colorpicker__preview-chip-btn--open');
     this._emit('open', {});
   }
 
@@ -216,6 +265,7 @@ MTS.ColorPicker = class MtsColorPicker {
       this._scrollHandler = null;
     }
     this._triggerWrap?.classList.remove('mts-colorpicker__trigger-wrap--open');
+    this._previewBtn?.classList.remove('mts-colorpicker__preview-chip-btn--open');
     this._emit('close', {});
   }
 
@@ -366,6 +416,18 @@ MTS.ColorPicker = class MtsColorPicker {
   _updateTrigger() {
     if (this._swatchEl) this._swatchEl.style.background = this._hex;
     if (this._valText)  this._valText.textContent = this._formatOutput();
+    if (this._previewChip) {
+      this._previewChip.style.background = this._hex;
+      this._previewChip.style.color = this._contrastColor(this._hex);
+    }
+  }
+
+  /* Devuelve '#ffffff' o '#1a1a1a' según la luminancia del color de fondo */
+  _contrastColor(hex) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return (0.299 * r + 0.587 * g + 0.114 * b) > 128 ? '#1a1a1a' : '#ffffff';
   }
 
   _emitChange() {

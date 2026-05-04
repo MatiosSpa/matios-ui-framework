@@ -615,12 +615,12 @@ function buildEventForm(){
   if (_notasTA) _notasTA.style.resize = 'none';
   /* Color picker — MTS.ColorPicker inline, solo paleta */
   const _colorPicker = new MTS.ColorPicker(c.querySelector('#ef-col'), {
-    inline:           true,
+    triggerVariant:   'preview',
+    previewText:      'Así se verá el evento',
     showSliders:      false,
-    showInput:        true,
+    showInput:        false,
     showPresets:      true,
     showFormatSwitch: false,
-    showTriggerText:  false,
     format:           'hex',
     value:            se.color || '#3b82f6',
     presets: [
