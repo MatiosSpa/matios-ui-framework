@@ -50,10 +50,13 @@ MTS.ColorPicker = class MtsColorPicker {
     this.format = options.format || 'hex';
 
     // Preset color palette / Paleta de colores preset
+    // Default: 25 colors — 5 families × 5 tones (navy→sky, petrol→mint, crimson→blush, amber, violet)
     this.presets = options.presets || [
-      '#f87171','#fb923c','#fbbf24','#a3e635','#34d399',
-      '#38bdf8','#818cf8','#c084fc','#f472b6','#94a3b8',
-      '#ffffff','#64748b','#1e293b','#000000',
+      '#0a1628','#0d2b6b','#1d4ed8','#3b82f6','#93c5fd',
+      '#0c2a35','#115e59','#0f766e','#10b981','#6ee7b7',
+      '#3b0000','#7f0000','#cc0000','#e53935','#ffcdd2',
+      '#451a00','#92400e','#f59e0b','#ffb737','#fde68a',
+      '#2e1065','#4c1d95','#7c3aed','#a78bfa','#ddd6fe',
     ];
 
     // Show preset palette / Mostrar paleta de presets
