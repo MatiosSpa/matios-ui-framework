@@ -247,12 +247,14 @@ MTS.ColorPicker = class MtsColorPicker {
       hexInp.className = 'mts-colorpicker__hex-input';
       hexInp.value = this._hex;
       hexInp.spellcheck = false;
-      hexInp.addEventListener('input', (e) => {
+      const self = this;
+      hexInp.addEventListener('input', function(e) {
         const v = e.target.value;
         if (/^#[0-9A-Fa-f]{6}$/.test(v)) {
-          this._hex = v;
+          self._hex = v;
           preview.style.background = v;
-          this._syncSliders();
+          self._syncSliders();
+          self._emitChange();
         }
       });
       this._hexInpEl = hexInp;
@@ -277,17 +279,19 @@ MTS.ColorPicker = class MtsColorPicker {
         inp.type = 'range'; inp.min = cfg.min; inp.max = cfg.max; inp.value = cfg.val;
         inp.className = 'mts-colorpicker__slider mts-colorpicker__slider--' + cfg.key;
         const num = document.createElement('span'); num.textContent = cfg.val;
-        inp.addEventListener('input', (e) => {
+        const self = this;
+        inp.addEventListener('input', function(e) {
           num.textContent = e.target.value;
-          this._hex = this._hslToHex(
-            cfg.key==='h' ? Number(e.target.value) : +this._sliders.h.value,
-            cfg.key==='s' ? Number(e.target.value)/100 : +this._sliders.s.value/100,
-            cfg.key==='l' ? Number(e.target.value)/100 : +this._sliders.l.value/100,
+          self._hex = self._hslToHex(
+            cfg.key==='h' ? Number(e.target.value) : +self._sliders.h.value,
+            cfg.key==='s' ? Number(e.target.value)/100 : +self._sliders.s.value/100,
+            cfg.key==='l' ? Number(e.target.value)/100 : +self._sliders.l.value/100,
           );
-          if (this._previewEl) this._previewEl.style.background = this._hex;
-          if (this._hexInpEl)  this._hexInpEl.value = this._hex;
-          if (this._swatchEl)  this._swatchEl.style.background = this._hex;
-          if (this._valText)   this._valText.textContent = this._formatOutput();
+          if (self._previewEl) self._previewEl.style.background = self._hex;
+          if (self._hexInpEl)  self._hexInpEl.value = self._hex;
+          if (self._swatchEl)  self._swatchEl.style.background = self._hex;
+          if (self._valText)   self._valText.textContent = self._formatOutput();
+          self._emitChange();
         });
         this._sliders[cfg.key] = inp;
         row.appendChild(lbl); row.appendChild(inp); row.appendChild(num);
@@ -404,8 +408,8 @@ MTS.ColorPicker = class MtsColorPicker {
     return '#'+toH(r)+toH(g)+toH(b);
   }
   _emit(event, detail) {
-    (this._listeners[event] || []).forEach(fn => fn({ type: event, detail }));
-    this._el?.dispatchEvent(new CustomEvent(`mts:colorpicker:${event}`, { bubbles: true, detail }));
+    (this._listeners[event] || []).forEach(function(fn) { fn(detail); });
+    this._el?.dispatchEvent(new CustomEvent('mts:colorpicker:' + event, { bubbles: true, detail }));
   }
 };
 
