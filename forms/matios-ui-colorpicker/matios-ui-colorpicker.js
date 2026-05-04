@@ -185,11 +185,16 @@ MTS.ColorPicker = class MtsColorPicker {
 
     const pop = document.createElement('div');
     pop.className = 'mts-colorpicker__pop';
-    pop.addEventListener('click', e => e.stopPropagation());
+    pop.addEventListener('click', function(e) { e.stopPropagation(); });
     document.body.appendChild(pop);
     this._popEl = pop;
     this._renderPop();
     this._positionPop();
+
+    const self = this;
+    this._scrollHandler = function() { self._positionPop(); };
+    window.addEventListener('scroll', this._scrollHandler, true);
+
     this._triggerWrap?.classList.add('mts-colorpicker__trigger-wrap--open');
     this._emit('open', {});
   }
@@ -199,6 +204,10 @@ MTS.ColorPicker = class MtsColorPicker {
     this._open = false;
     this._popEl?.remove();
     this._popEl = null;
+    if (this._scrollHandler) {
+      window.removeEventListener('scroll', this._scrollHandler, true);
+      this._scrollHandler = null;
+    }
     this._triggerWrap?.classList.remove('mts-colorpicker__trigger-wrap--open');
     this._emit('close', {});
   }
