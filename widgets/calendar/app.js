@@ -622,6 +622,13 @@ function buildEventForm(){
     showFormatSwitch: false,
     format:           'hex',
     value:            se.color || '#3b82f6',
+    presets: [
+      '#0a1628','#0d2b6b','#1d4ed8','#3b82f6',  /* Navy → cielo   */
+      '#0c2a35','#115e59','#0f766e','#10b981',  /* Petrol → menta */
+      '#3b0000','#7f0000','#cc0000','#e53935',  /* Crimson        */
+      '#451a00','#92400e','#f59e0b','#ffb737',  /* Ámbar          */
+      '#2e1065','#4c1d95','#7c3aed','#a78bfa',  /* Violet         */
+    ],
   });
   return {container:c, colorPicker:_colorPicker};
 }
