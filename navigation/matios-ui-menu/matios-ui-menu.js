@@ -185,7 +185,10 @@ MTS.Menu = class MtsMenu {
       node.appendChild(dropdown);
 
       if (self.trigger === 'hover') {
-        node.addEventListener('mouseenter', function() { node.classList.add('mts-menu__node--open'); });
+        node.addEventListener('mouseenter', function() {
+          node.classList.add('mts-menu__node--open');
+          self._positionDropdown(dropdown, node);
+        });
         node.addEventListener('mouseleave', function() { node.classList.remove('mts-menu__node--open'); });
       } else {
         btn.addEventListener('click', function(e) {
@@ -198,7 +201,10 @@ MTS.Menu = class MtsMenu {
               n.classList.remove('mts-menu__node--open');
             });
           }
-          if (!isOpen) node.classList.add('mts-menu__node--open');
+          if (!isOpen) {
+            node.classList.add('mts-menu__node--open');
+            self._positionDropdown(dropdown, node);
+          }
         });
       }
     } else {
@@ -439,6 +445,26 @@ MTS.Menu = class MtsMenu {
       }
     }
     return null;
+  }
+
+  /* ════════════════════════════════════════════════════
+     POSICIONAMIENTO — dropdown horizontal (portal fix)
+     ════════════════════════════════════════════════════ */
+
+  /**
+   * Posiciona el dropdown con coordenadas fixed relativas al anchorEl.
+   * Se llama después de agregar --open (dropdown ya visible → getBCR real).
+   * Corrige desborde derecho del viewport.
+   */
+  _positionDropdown(dropEl, anchorEl) {
+    var rect = anchorEl.getBoundingClientRect();
+    dropEl.style.top  = (rect.bottom + 4) + 'px';
+    dropEl.style.left = rect.left + 'px';
+    // Corrección de viewport derecho
+    var pr = dropEl.getBoundingClientRect();
+    if (pr.right > window.innerWidth - 8) {
+      dropEl.style.left = (window.innerWidth - pr.width - 8) + 'px';
+    }
   }
 
   /* ════════════════════════════════════════════════════

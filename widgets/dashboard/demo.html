@@ -576,13 +576,12 @@ TOP_PRODUCTS.forEach(function(p, idx) {
 
 new MTS.Card('#card-products', {
   title:   'Top productos',
-  body:    '',
+  body:    productBodyEl,
   variant: 'outlined',
   actions: [{ label: 'Ver todos', variant: 'ghost', onClick: function() {
     MTS.Toast.show({ message: 'Sección de productos en construcción.', variant: 'info', duration: 2000 });
   }}],
 });
-document.querySelector('#card-products .mts-card__body').appendChild(productBodyEl);
 
 /* ============================================================
    CARD ACTIVIDAD RECIENTE
@@ -603,13 +602,12 @@ new MTS.Timeline(activityBodyEl, {
 
 new MTS.Card('#card-activity', {
   title:   'Actividad reciente',
-  body:    '',
+  body:    activityBodyEl,
   variant: 'outlined',
   actions: [{ label: 'Ver todo', variant: 'ghost', onClick: function() {
     MTS.Toast.show({ message: 'Log de actividad en construcción.', variant: 'info', duration: 2000 });
   }}],
 });
-document.querySelector('#card-activity .mts-card__body').appendChild(activityBodyEl);
 
 /* ── Iconos finales ─────────────────────────────────────── */
 MTS.Icon.initAll();

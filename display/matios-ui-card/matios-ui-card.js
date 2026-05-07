@@ -1,6 +1,6 @@
 ﻿/* ============================================================
-   MATIOS UI â€” matios-ui-card.js  v1.0.0
-   MTS.Card â€” Card genÃ©rica con header, body, footer
+   MATIOS UI — matios-ui-card.js  v1.0.1
+   MTS.Card — Card genérica con header, body, footer
    ============================================================ */
 
 window.MTS = window.MTS || {};
@@ -11,7 +11,7 @@ MTS.Card = class MtsCard {
    * @param {object}  options
    * @param {string}  options.title
    * @param {string}  options.subtitle
-   * @param {string}  options.body          HTML del cuerpo
+   * @param {string|HTMLElement} options.body  HTML string o nodo DOM del cuerpo
    * @param {string}  options.image         URL de imagen
    * @param {string}  options.imageAlt
    * @param {string}  options.imageRatio    'default'|'square'|'wide'
@@ -103,10 +103,17 @@ MTS.Card = class MtsCard {
     return this;
   }
 
-  setBody(html) {
-    this.body = html;
+  setBody(val) {
+    this.body = val;
     const el = this._el.querySelector('.mts-card__body');
-    if (el) el.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(html) : html;
+    if (el) {
+      el.innerHTML = '';
+      if (val instanceof Element) {
+        el.appendChild(val);
+      } else {
+        el.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(val) : val;
+      }
+    }
     return this;
   }
 
@@ -178,7 +185,11 @@ MTS.Card = class MtsCard {
     if (this.body !== null) {
       const body = document.createElement('div');
       body.className = 'mts-card__body';
-      body.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.body) : this.body;
+      if (this.body instanceof Element) {
+        body.appendChild(this.body);
+      } else {
+        body.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.body) : this.body;
+      }
       this._el.appendChild(body);
     }
 

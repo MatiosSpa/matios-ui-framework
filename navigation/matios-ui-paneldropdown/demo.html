@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="light">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.PanelDropdown — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="./matios-ui-paneldropdown.css">
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="./matios-ui-paneldropdown.js"></script>
+</head>
+<body>
+<div class="demo-page">
+
+  <div class="demo-section">
+    <div class="demo-section__header">
+      <h2>Panel de notificaciones</h2>
+      <p>Header con contador de no leídas · ítems con dot de color · timestamp · footer CTA.</p>
+    </div>
+    <div class="demo-section__body">
+      <div id="tabs-s1"></div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section__header">
+      <h2>Menú de usuario</h2>
+      <p>Sin dot · sin timestamp · ícono por ítem · ítem danger · <code>position: 'bottom-end'</code>.</p>
+    </div>
+    <div class="demo-section__body">
+      <div id="tabs-s2"></div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section__header">
+      <h2>Sin header · sin footer</h2>
+      <p>Solo cuerpo con ítems. Útil para menús contextuales simples con contenido enriquecido.</p>
+    </div>
+    <div class="demo-section__body">
+      <div id="tabs-s3"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+function indentHtml(html) {
+  var indent = 0, step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  (html.match(/<[^>]+>|[^<]+/g) || []).forEach(function(tok) {
+    var t = tok.trim(); if (!t) return;
+    if (/^<\//.test(t)) { indent = Math.max(0, indent - step); result += ' '.repeat(indent) + t + '\n'; }
+    else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else { var text = t.replace(/\s+/g, ' '); if (text) result += ' '.repeat(indent) + text + '\n'; }
+  });
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, { variant: 'card', height: height || '420px', lazy: false, tabs: [
+    { id: id + '-preview', label: 'Preview',    content: previewHtml },
+    { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+    { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>'   },
+  ]});
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode,                  language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+/* ════════════════════════════════════════════════════════
+   SECCIÓN 1 — Notificaciones
+   ════════════════════════════════════════════════════════ */
+
+var preview_s1 =
+  '<div style="display:flex;justify-content:flex-end;align-items:flex-start;padding:16px">' +
+    '<button id="s1-notif-btn" class="mts-btn mts-btn--ghost mts-btn--sm">' +
+      '<i class="mts-icon mts-icon-bell"></i>' +
+    '</button>' +
+  '</div>';
+
+var js_s1 =
+"new MTS.PanelDropdown(document.getElementById('notif-btn'), {\n" +
+"  position: 'bottom-end',\n" +
+"  header:   { title: 'Notificaciones', badge: 3 },\n" +
+"  items: [\n" +
+"    { id:'n1', dot:'#10b981', icon:'mts-icon-check-circle',\n" +
+"      title: 'Pedido #1047 entregado',\n" +
+"      description: 'Ana Torres recibió su pedido.',\n" +
+"      timestamp: 'Hace 5 min', unread: true },\n" +
+"    { id:'n2', dot:'#6366f1', icon:'mts-icon-user-plus',\n" +
+"      title: 'Nuevo usuario registrado',\n" +
+"      description: 'Rodrigo Campos se registró.',\n" +
+"      timestamp: 'Hace 18 min', unread: true },\n" +
+"    { id:'n3', dot:'#ef4444', icon:'mts-icon-x-circle',\n" +
+"      title: 'Pedido #1044 cancelado',\n" +
+"      description: 'Sofía Castro canceló el pedido.',\n" +
+"      timestamp: 'Hace 42 min', unread: true },\n" +
+"    { divider: true },\n" +
+"    { id:'n4', dot:'#f59e0b', icon:'mts-icon-dollar-sign',\n" +
+"      title: 'Pago procesado',\n" +
+"      description: '$4.200 recibidos de Luis Herrera.',\n" +
+"      timestamp: 'Hace 1 hora' },\n" +
+"    { id:'n5', dot:'#0ea5e9', icon:'mts-icon-file-text',\n" +
+"      title: 'Reporte mensual generado',\n" +
+"      description: 'Reporte de abril listo.',\n" +
+"      timestamp: 'Hace 2 horas' },\n" +
+"  ],\n" +
+"  footer: { label: 'Ver todas las notificaciones', onClick: function() { console.log('ver todas'); } },\n" +
+"});";
+
+function initS1() {
+  new MTS.PanelDropdown(document.getElementById('s1-notif-btn'), {
+    position: 'bottom-end',
+    header:   { title: 'Notificaciones', badge: 3 },
+    items: [
+      { id:'n1', dot:'#10b981', icon:'mts-icon-check-circle',
+        title: 'Pedido #1047 entregado',
+        description: 'Ana Torres recibió su pedido.',
+        timestamp: 'Hace 5 min', unread: true },
+      { id:'n2', dot:'#6366f1', icon:'mts-icon-user-plus',
+        title: 'Nuevo usuario registrado',
+        description: 'Rodrigo Campos se registró.',
+        timestamp: 'Hace 18 min', unread: true },
+      { id:'n3', dot:'#ef4444', icon:'mts-icon-x-circle',
+        title: 'Pedido #1044 cancelado',
+        description: 'Sofía Castro canceló el pedido.',
+        timestamp: 'Hace 42 min', unread: true },
+      { divider: true },
+      { id:'n4', dot:'#f59e0b', icon:'mts-icon-dollar-sign',
+        title: 'Pago procesado',
+        description: '$4.200 recibidos de Luis Herrera.',
+        timestamp: 'Hace 1 hora' },
+      { id:'n5', dot:'#0ea5e9', icon:'mts-icon-file-text',
+        title: 'Reporte mensual generado',
+        description: 'Reporte de abril listo.',
+        timestamp: 'Hace 2 horas' },
+    ],
+    footer: { label: 'Ver todas las notificaciones', onClick: function() {} },
+  });
+  MTS.Icon.initAll();
+}
+
+/* ════════════════════════════════════════════════════════
+   SECCIÓN 2 — Menú de usuario
+   ════════════════════════════════════════════════════════ */
+
+var preview_s2 =
+  '<div style="display:flex;justify-content:flex-end;align-items:flex-start;padding:16px">' +
+    '<button id="s2-user-btn" class="mts-btn mts-btn--ghost mts-btn--sm">' +
+      '<i class="mts-icon mts-icon-user"></i> Carlos Méndez' +
+    '</button>' +
+  '</div>';
+
+var js_s2 =
+"new MTS.PanelDropdown(document.getElementById('user-btn'), {\n" +
+"  position: 'bottom-end',\n" +
+"  width:    260,\n" +
+"  header:   { title: 'Carlos Méndez' },\n" +
+"  items: [\n" +
+"    { id:'perfil',  icon:'mts-icon-user',        title: 'Mi perfil' },\n" +
+"    { id:'config',  icon:'mts-icon-settings',     title: 'Configuración' },\n" +
+"    { id:'ayuda',   icon:'mts-icon-help-circle',  title: 'Ayuda' },\n" +
+"    { divider: true },\n" +
+"    { id:'logout',  icon:'mts-icon-log-out',      title: 'Cerrar sesión' },\n" +
+"  ],\n" +
+"  footer: null,\n" +
+"});";
+
+function initS2() {
+  new MTS.PanelDropdown(document.getElementById('s2-user-btn'), {
+    position: 'bottom-end',
+    width:    260,
+    header:   { title: 'Carlos Méndez' },
+    items: [
+      { id:'perfil',  icon:'mts-icon-user',        title: 'Mi perfil' },
+      { id:'config',  icon:'mts-icon-settings',     title: 'Configuración' },
+      { id:'ayuda',   icon:'mts-icon-help-circle',  title: 'Ayuda' },
+      { divider: true },
+      { id:'logout',  icon:'mts-icon-log-out',      title: 'Cerrar sesión' },
+    ],
+    footer: null,
+  });
+  MTS.Icon.initAll();
+}
+
+/* ════════════════════════════════════════════════════════
+   SECCIÓN 3 — Sin header ni footer
+   ════════════════════════════════════════════════════════ */
+
+var preview_s3 =
+  '<div style="display:flex;justify-content:flex-start;align-items:flex-start;padding:16px">' +
+    '<button id="s3-ctx-btn" class="mts-btn mts-btn--secondary mts-btn--sm">' +
+      'Acciones <i class="mts-icon mts-icon-chevron-down"></i>' +
+    '</button>' +
+  '</div>';
+
+var js_s3 =
+"new MTS.PanelDropdown(document.getElementById('ctx-btn'), {\n" +
+"  position: 'bottom-start',\n" +
+"  width:    240,\n" +
+"  items: [\n" +
+"    { id:'edit',     icon:'mts-icon-edit',       title: 'Editar',    description: 'Modificar el registro' },\n" +
+"    { id:'dup',      icon:'mts-icon-copy',        title: 'Duplicar',  description: 'Crear una copia' },\n" +
+"    { id:'export',   icon:'mts-icon-download',    title: 'Exportar',  description: 'Descargar como CSV' },\n" +
+"    { divider: true },\n" +
+"    { id:'delete',   icon:'mts-icon-trash-2',     title: 'Eliminar',  description: 'Esta acción no se puede deshacer' },\n" +
+"  ],\n" +
+"});";
+
+function initS3() {
+  new MTS.PanelDropdown(document.getElementById('s3-ctx-btn'), {
+    position: 'bottom-start',
+    width:    240,
+    items: [
+      { id:'edit',   icon:'mts-icon-edit',     title: 'Editar',   description: 'Modificar el registro' },
+      { id:'dup',    icon:'mts-icon-copy',      title: 'Duplicar', description: 'Crear una copia' },
+      { id:'export', icon:'mts-icon-download',  title: 'Exportar', description: 'Descargar como CSV' },
+      { divider: true },
+      { id:'delete', icon:'mts-icon-trash-2',   title: 'Eliminar', description: 'Esta acción no se puede deshacer' },
+    ],
+  });
+  MTS.Icon.initAll();
+}
+
+/* ════════════════════════════════════════════════════════
+   Init
+   ════════════════════════════════════════════════════════ */
+
+makeSection('tabs-s1', preview_s1, js_s1, initS1, '360px');
+makeSection('tabs-s2', preview_s2, js_s2, initS2, '320px');
+makeSection('tabs-s3', preview_s3, js_s3, initS3, '300px');
+
+</script>
+</body>
+</html>

@@ -77,11 +77,10 @@
   align-self: center;
 }
 
-/* Dropdown panel */
+/* Dropdown panel — position:fixed para escapar overflow:hidden del topbar */
+/* top + left los calcula JS via getBoundingClientRect()                  */
 .mts-menu--horizontal .mts-menu__dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
+  position: fixed;
   min-width: 180px;
   background: var(--mts-bg-surface);
   border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
@@ -89,7 +88,7 @@
   box-shadow: 0 8px 24px rgba(0,0,0,.12);
   padding: var(--mts-space-1);
   display: none;
-  z-index: var(--mts-z-dropdown, 200);
+  z-index: 9999;
   animation: mts-menu-drop .12s ease;
 }
 @keyframes mts-menu-drop {

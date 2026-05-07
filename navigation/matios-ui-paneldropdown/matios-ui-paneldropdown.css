@@ -1,0 +1,181 @@
+/* ============================================================
+   MATIOS UI — matios-ui-paneldropdown.css
+   MTS.PanelDropdown — Panel flotante anclado a un trigger
+   Version: 1.0.0
+   ============================================================ */
+
+/* ── Panel raíz (portal en document.body) ─────────────────── */
+.mts-paneldropdown {
+  position: fixed;
+  z-index: 9999;
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-lg);
+  box-shadow: 0 8px 32px rgba(0,0,0,.14);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 240px;
+  animation: mts-paneldropdown-in .15s ease;
+}
+
+@keyframes mts-paneldropdown-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+.mts-paneldropdown__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--mts-space-3) var(--mts-space-4);
+  border-bottom: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  flex-shrink: 0;
+}
+
+.mts-paneldropdown__header-title {
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+}
+
+.mts-paneldropdown__header-badge {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--mts-radius-full);
+  background: var(--mts-color-primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: var(--mts-font-weight-semibold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Body (scrollable) ────────────────────────────────────── */
+.mts-paneldropdown__body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--mts-space-1) 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mts-border-color-strong) transparent;
+}
+.mts-paneldropdown__body::-webkit-scrollbar { width: 4px; }
+.mts-paneldropdown__body::-webkit-scrollbar-track { background: transparent; }
+.mts-paneldropdown__body::-webkit-scrollbar-thumb { background: var(--mts-border-color-strong); border-radius: 2px; }
+
+/* ── Ítem ─────────────────────────────────────────────────── */
+.mts-paneldropdown__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-2) var(--mts-space-4);
+  cursor: pointer;
+  transition: background var(--mts-transition-fast);
+  position: relative;
+  text-align: left;
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: var(--mts-font-family);
+}
+.mts-paneldropdown__item:hover { background: var(--mts-bg-surface-2); }
+.mts-paneldropdown__item--unread { background: var(--mts-color-primary-light); }
+.mts-paneldropdown__item--unread:hover { background: var(--mts-color-primary-light); filter: brightness(.97); }
+
+/* Dot de color (tipo de notificación) */
+.mts-paneldropdown__item-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--mts-radius-full);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+/* Ícono */
+.mts-paneldropdown__item-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--mts-radius-md);
+  background: var(--mts-bg-surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--mts-text-muted);
+  font-size: 15px;
+}
+
+/* Contenido */
+.mts-paneldropdown__item-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mts-paneldropdown__item-title {
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-medium);
+  color: var(--mts-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mts-paneldropdown__item--unread .mts-paneldropdown__item-title {
+  font-weight: var(--mts-font-weight-semibold);
+}
+
+.mts-paneldropdown__item-desc {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mts-paneldropdown__item-time {
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+/* ── Divider ──────────────────────────────────────────────── */
+.mts-paneldropdown__divider {
+  height: 1px;
+  background: var(--mts-border-color);
+  margin: var(--mts-space-1) 0;
+}
+
+/* ── Footer ───────────────────────────────────────────────── */
+.mts-paneldropdown__footer {
+  flex-shrink: 0;
+  border-top: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  padding: var(--mts-space-2) var(--mts-space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mts-paneldropdown__footer-btn {
+  background: none;
+  border: none;
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-medium);
+  color: var(--mts-color-primary);
+  cursor: pointer;
+  padding: var(--mts-space-1) var(--mts-space-2);
+  border-radius: var(--mts-radius-md);
+  transition: background var(--mts-transition-fast);
+  width: 100%;
+  text-align: center;
+}
+.mts-paneldropdown__footer-btn:hover { background: var(--mts-color-primary-light); }

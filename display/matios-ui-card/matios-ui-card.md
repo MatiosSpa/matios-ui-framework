@@ -21,7 +21,7 @@
 |--------|------|---------|--------------------------------------|
 | `title` | `string` | `null` | 🇬🇧 Header title / 🇪🇸 Título del header |
 | `subtitle` | `string` | `null` | 🇬🇧 Header subtitle / 🇪🇸 Subtítulo del header |
-| `body` | `string` | `null` | 🇬🇧 Body HTML / 🇪🇸 HTML del cuerpo |
+| `body` | `string \| HTMLElement` | `null` | 🇬🇧 Body HTML string or DOM node / 🇪🇸 HTML string o nodo DOM del cuerpo |
 | `image` | `string` | `null` | 🇬🇧 Cover image URL / 🇪🇸 URL de imagen de portada |
 | `imageAlt` | `string` | `''` | 🇬🇧 Image alt text / 🇪🇸 Texto alternativo |
 | `imageRatio` | `string` | `'default'` | `'default'` · `'square'` · `'wide'` |
@@ -139,6 +139,40 @@ document.getElementById('my-card')
 
 ---
 
+## Body como HTMLElement
+
+Desde `v1.0.1`, `body` acepta un nodo DOM directamente — sin workarounds:
+
+```js
+// Construye el contenido con createElement
+const content = document.createElement('div');
+
+const title = document.createElement('p');
+title.className = 'mts-text--semibold';
+title.textContent = 'Resumen del período';
+content.appendChild(title);
+
+const chart = document.createElement('div');
+chart.id = 'chart-ventas';
+content.appendChild(chart);
+
+// Pásalo directo como body
+new MTS.Card('#card-reporte', {
+  title: 'Ventas del mes',
+  body:  content,
+});
+
+// También funciona con setBody()
+const card = new MTS.Card('#mi-card', { title: 'Reporte' });
+const tabla = document.createElement('table');
+// ... construyes la tabla ...
+card.setBody(tabla);
+```
+
+> **Nota:** si el `body` es un `HTMLElement` y se llama un método que dispara `_build()` (como `setTitle()`), el nodo se re-appendea automáticamente — no se pierde.
+
+---
+
 ## CSS Classes / Clases CSS
 
 | Class | 🇬🇧 Effect / 🇪🇸 Efecto |
@@ -153,3 +187,13 @@ document.getElementById('my-card')
 | `.mts-card--sm / --lg` | 🇬🇧 Size modifiers / 🇪🇸 Modificadores de tamaño |
 
 ---
+
+## Changelog
+
+### v1.0.1 — 2026-05-07
+- `body` acepta `HTMLElement` además de string HTML
+- `setBody()` actualizado — detecta `Element` y usa `appendChild` en lugar de `innerHTML`
+- Rebuild robusto: si `body` es un nodo DOM, `_build()` lo re-appendea automáticamente
+
+### v1.0.0 — inicial
+- Card genérica con header, body, footer, imagen, variantes, hover/click, acciones
