@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.RichEditor — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="./matios-ui-richeditor.css">
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="./matios-ui-richeditor.js"></script>
+</head>
+<body>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.RichEditor</h1>
+    <p>Editor de plantillas con merge fields — chips atómicos, paleta de campos, formato básico y progressive enhancement sobre un &lt;textarea&gt;.</p>
+    <div class="demo-header-actions"></div>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <div class="demo-section"><div class="demo-section-title">Editor completo — todas las opciones</div><div id="tabs-demo"></div></div>
+</div>
+
+<script>
+
+function indentHtml(html) {
+  var indent = 0; var step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function(tok) {
+    var t = tok.trim(); if (!t) return;
+    if (/^<\//.test(t)) { indent = Math.max(0, indent - step); result += ' '.repeat(indent) + t + '\n'; }
+    else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else { var text = t.replace(/\s+/g, ' '); if (text) result += ' '.repeat(indent) + text + '\n'; }
+  });
+  return result.trimEnd();
+}
+
+/* makeSection — con lazy:false los panels ya están en el DOM al salir del
+   constructor de Tabs, así que CodeBlock y el initFn se crean sincrónicamente. */
+function makeSection(id, previewHtml, codeHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height:  height || '420px',
+    lazy:    false,
+    active:  id + '-preview',
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>'   }
+    ]
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(codeHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',          language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+/* ════════════════════════════════════════════════════════════
+   CATÁLOGO — 10 campos en 5 grupos (demo multilenguaje: inglés)
+════════════════════════════════════════════════════════════ */
+var CATALOG = [
+  { token: '{{user.firstName}}',  label: 'First name',   group: 'User'    },
+  { token: '{{user.lastName}}',   label: 'Last name',    group: 'User'    },
+  { token: '{{user.email}}',      label: 'Email',        group: 'User'    },
+  { token: '{{company.name}}',    label: 'Company name', group: 'Company' },
+  { token: '{{company.phone}}',   label: 'Phone',        group: 'Company' },
+  { token: '{{otp.code}}',        label: 'OTP code',     group: 'OTP'     },
+  { token: '{{otp.expiresIn}}',   label: 'Expires in',   group: 'OTP'     },
+  { token: '{{link.reset}}',      label: 'Reset link',   group: 'Links'   },
+  { token: '{{link.confirm}}',    label: 'Confirm link', group: 'Links'   },
+  { token: '{{brand.name}}',      label: 'Brand name',   group: 'Brand'   },
+];
+
+/* ════════════════════════════════════════════════════════════
+   DEMO ÚNICO — Editor completo con todas las opciones
+════════════════════════════════════════════════════════════ */
+var DEMO_HTML =
+  '<textarea id="mfe-main"></textarea>';
+
+var DEMO_JS =
+  "var BTN = MTS.RichEditor.ToolbarButton;\n\n" +
+  "// Cada entrada del toolbar puede ser:\n" +
+  "//   BTN.XXX  — constante directa (label/tooltip del componente por defecto)\n" +
+  "//   { button, label, tooltip, options, show }\n" +
+  "//     button  — constante BTN requerida\n" +
+  "//     label   — texto visible en el botón (sobreescribe el default)\n" +
+  "//     tooltip — title del hover (default: igual que label)\n" +
+  "//     options — opciones del select (FONT_SIZE, FONT_FAMILY, FORMAT_BLOCK)\n" +
+  "//     show    — false para ocultar sin borrar la entrada del array\n\n" +
+  "var catalog = [\n" +
+  "  { token: '{{user.firstName}}',  label: 'First name',   group: 'User'    },\n" +
+  "  { token: '{{user.email}}',      label: 'Email',        group: 'User'    },\n" +
+  "  { token: '{{company.name}}',    label: 'Company name', group: 'Company' },\n" +
+  "  { token: '{{otp.code}}',        label: 'OTP code',     group: 'OTP'     },\n" +
+  "  { token: '{{link.reset}}',      label: 'Reset link',   group: 'Links'   },\n" +
+  "];\n\n" +
+  "var editor = new MTS.RichEditor('#mfe-main', {\n" +
+  "  catalog:           catalog,\n" +
+  "  placeholder:       'Start writing your template...',\n" +
+  "  searchPlaceholder: 'Search fields...',\n" +
+  "  height:            '280px',\n" +
+  "  maxLength:         2000,\n\n" +
+  "  toolbar: [\n" +
+  "    // ── constantes directas ────────────────────────────────────────\n" +
+  "    BTN.BOLD, BTN.ITALIC, BTN.UNDERLINE, BTN.STRIKE, BTN.FORMAT_BLOCK,\n" +
+  "    BTN.SEP,\n\n" +
+  "    // ── label + tooltip + options ──────────────────────────────────\n" +
+  "    { button: BTN.FONT_SIZE,   label: 'Size', tooltip: 'Font size in px',\n" +
+  "      options: [12, 14, 16, 18, 20, 24, 32] },\n" +
+  "    { button: BTN.FONT_FAMILY, label: 'Font', tooltip: 'Font family',\n" +
+  "      options: [\n" +
+  "        { label: 'Default',     value: '' },\n" +
+  "        { label: 'DM Sans',     value: 'DM Sans, sans-serif' },\n" +
+  "        { label: 'Georgia',     value: 'Georgia, serif' },\n" +
+  "        { label: 'Courier New', value: 'Courier New, monospace' },\n" +
+  "      ] },\n" +
+  "    BTN.SEP,\n" +
+  "    BTN.LIST_UL, BTN.LIST_OL, BTN.INDENT, BTN.OUTDENT,\n" +
+  "    BTN.SEP,\n" +
+  "    BTN.ALIGN_LEFT, BTN.ALIGN_CENTER, BTN.ALIGN_RIGHT, BTN.ALIGN_FULL,\n" +
+  "    BTN.SEP,\n" +
+  "    BTN.LINK, BTN.UNLINK, BTN.TEXT_COLOR, BTN.BG_COLOR,\n" +
+  "    BTN.SEP,\n\n" +
+  "    // ── show:false — excluir sin borrar la entrada ─────────────────\n" +
+  "    BTN.TABLE, BTN.HTML_SOURCE, BTN.UNDO, BTN.CLEAN_FORMAT,\n" +
+  "    { button: BTN.REDO, show: false },\n" +
+  "    BTN.SEP,\n\n" +
+  "    // ── label explícito en botones tipo toggle ─────────────────────\n" +
+  "    { button: BTN.FIELDS, label: 'Fields', tooltip: 'Toggle merge field palette' },\n" +
+  "  ],\n\n" +
+  "  onChange: function(e) { console.log(e.detail.value); },\n" +
+  "});\n\n" +
+  "// ── API ──────────────────────────────────────────────────────────────\n" +
+  "editor.getValue();                                  // → Handlebars HTML string\n" +
+  "editor.setValue('<p>Hello {{user.firstName}}</p>'); // carga + tokeniza chips\n" +
+  "editor.insertField('{{user.email}}');               // inserta chip en el cursor\n" +
+  "editor.setCatalog(newCatalog);                      // reemplaza catálogo (async)\n" +
+  "editor.getCustomFields();                           // [{token, label, defaultValue}]\n" +
+  "editor.setPreview(true);                            // modo lectura (sin toolbar)\n" +
+  "editor.setPreview(false);                           // volver a editar\n" +
+  "editor.focus();                                     // enfoca el área de texto\n" +
+  "editor.destroy();                                   // restaura el <textarea> original\n\n" +
+  "// ── Guardar al backend ───────────────────────────────────────────────\n" +
+  "var payload = {\n" +
+  "  body:         editor.getValue(),        // Handlebars string\n" +
+  "  customFields: editor.getCustomFields(), // campos definidos por el usuario\n" +
+  "};";
+
+makeSection('tabs-demo',
+  '<div id="mfe-main"></div>' +
+  '<div class="demo-row" style="margin-top:8px">' +
+    '<button class="demo-btn-sm" id="d-get">getValue()</button>' +
+    '<button class="demo-btn-sm" id="d-prev">setPreview(true)</button>' +
+    '<button class="demo-btn-sm" id="d-edit">setPreview(false)</button>' +
+    '<button class="demo-btn-sm" id="d-insert">insertField(email)</button>' +
+    '<button class="demo-btn-sm" id="d-customs">getCustomFields()</button>' +
+  '</div>' +
+  '<div class="result-box" id="d-out">— onChange muestra el Handlebars en tiempo real —</div>',
+  DEMO_HTML,
+  DEMO_JS,
+  function() {
+    var BTN = MTS.RichEditor.ToolbarButton;
+    var ed = new MTS.RichEditor('#mfe-main', {
+      catalog:           CATALOG,
+      placeholder:       'Start writing your template...',
+      searchPlaceholder: 'Search fields...',
+      height:            '280px',
+      maxLength:         2000,
+      toolbar: [
+        BTN.BOLD, BTN.ITALIC, BTN.UNDERLINE, BTN.STRIKE, BTN.FORMAT_BLOCK,
+        BTN.SEP,
+        { button: BTN.FONT_SIZE,   label: 'Size', tooltip: 'Font size in px',
+          options: [12, 14, 16, 18, 20, 24, 32] },
+        { button: BTN.FONT_FAMILY, label: 'Font', tooltip: 'Font family',
+          options: [
+            { label: 'Default',     value: '' },
+            { label: 'DM Sans',     value: 'DM Sans, sans-serif' },
+            { label: 'Georgia',     value: 'Georgia, serif' },
+            { label: 'Courier New', value: 'Courier New, monospace' },
+          ] },
+        BTN.SEP,
+        BTN.LIST_UL, BTN.LIST_OL, BTN.INDENT, BTN.OUTDENT,
+        BTN.SEP,
+        BTN.ALIGN_LEFT, BTN.ALIGN_CENTER, BTN.ALIGN_RIGHT, BTN.ALIGN_FULL,
+        BTN.SEP,
+        BTN.LINK, BTN.UNLINK, BTN.TEXT_COLOR, BTN.BG_COLOR,
+        BTN.SEP,
+        BTN.TABLE, BTN.HTML_SOURCE, BTN.UNDO, BTN.CLEAN_FORMAT,
+        { button: BTN.REDO, show: false },
+        BTN.SEP,
+        { button: BTN.FIELDS, label: 'Fields', tooltip: 'Toggle merge field palette' },
+      ],
+      onChange: function(e) { document.getElementById('d-out').textContent = e.detail.value; },
+    });
+    ed.setValue(
+      '<p>Hello <strong>{{user.firstName}}</strong> {{user.lastName}},</p>' +
+      '<p>Your OTP code is <strong>{{otp.code}}</strong> — expires in {{otp.expiresIn}}.</p>' +
+      '<p>Reset your password: {{link.reset}}</p>' +
+      '<p>Regards,<br>{{brand.name}}</p>'
+    );
+    document.getElementById('d-get').addEventListener('click', function() {
+      document.getElementById('d-out').textContent = ed.getValue() || '(empty)';
+    });
+    document.getElementById('d-prev').addEventListener('click',    function() { ed.setPreview(true);  });
+    document.getElementById('d-edit').addEventListener('click',    function() { ed.setPreview(false); });
+    document.getElementById('d-insert').addEventListener('click',  function() { ed.insertField('{{user.email}}'); ed.focus(); });
+    document.getElementById('d-customs').addEventListener('click', function() {
+      var c = ed.getCustomFields();
+      document.getElementById('d-out').textContent =
+        c.length ? JSON.stringify(c, null, 2) : '(no custom fields yet — add one from the palette)';
+    });
+  },
+  '660px'
+);
+
+</script>
+</body>
+</html>

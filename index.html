@@ -144,7 +144,7 @@ const NAV_ITEMS = [
     { key:'sc-projects',  label:'ProjectManager', icon:'mts-icon-trello',  src:'widgets/projects/demo.html', md:'sc-projects' },
   ]},
 
-  { key:'utilities', label:'Utilities', icon:'mts-icon-tool', children: [
+  { key:'utilities', label:'Utilities', icon:'mts-icon-tool', src:'utilities/demo.html', children: [
     { key:'httpclient',       label:'HttpClient',      icon:'mts-icon-globe',     src:'utilities/matios-ui-httpclient/demo.html',      md:'httpclient' },
     { key:'codeblock',        label:'CodeBlock',       icon:'mts-icon-file-text', src:'utilities/matios-ui-codeblock/demo.html',        md:'codeblock'       },
     { key:'jsonviewer',       label:'JsonViewer',      icon:'mts-icon-code',      src:'utilities/matios-ui-jsonviewer/demo.html',       md:'jsonviewer'       },
@@ -180,7 +180,7 @@ const MD_MAP = {
   'phoneinput':'forms/matios-ui-phoneinput/matios-ui-phoneinput.md',
   'confirmbutton':'forms/matios-ui-confirmbutton/matios-ui-confirmbutton.md',
   'colorpicker':'forms/matios-ui-colorpicker/matios-ui-colorpicker.md',
-  'richtexteditor':'forms/matios-ui-richtexteditor/matios-ui-richtexteditor.md',
+  'richeditor':'forms/matios-ui-richeditor/matios-ui-richeditor.md',
   'formlayout':'forms/matios-ui-formlayout/matios-ui-formlayout.md',
   'label':'forms/matios-ui-label/matios-ui-label.md',
   'copybutton':'forms/matios-ui-copybutton/matios-ui-copybutton.md',
@@ -192,6 +192,7 @@ const MD_MAP = {
   'scrollspy':'layout/matios-ui-scrollspy/matios-ui-scrollspy.md',
   'intersectionreveal':'layout/matios-ui-intersectionreveal/matios-ui-intersectionreveal.md',
   'splitter':'layout/matios-ui-splitter/matios-ui-splitter.md',
+  'shell':'layout/matios-ui-shell/matios-ui-shell.md',
   'scroll':'layout/matios-ui-scroll/matios-ui-scroll.md',
   'data':'data/README.md',
   'icons':'icons/matios-ui-icons.md',
@@ -208,6 +209,7 @@ const MD_MAP = {
   'topbar':'navigation/matios-ui-topbar/matios-ui-topbar.md',
   'menu':'navigation/matios-ui-menu/matios-ui-menu.md',
   'paneldropdown':'navigation/matios-ui-paneldropdown/matios-ui-paneldropdown.md',
+  'dashboardgrid':'layout/matios-ui-dashboardgrid/matios-ui-dashboardgrid.md',
   'sc-charts':        'widgets/charts/matios-ui-chart.md',
   'chart-bar':        'widgets/charts/matios-ui-chart.md',
   'chart-line':       'widgets/charts/matios-ui-chart-line.md',
@@ -230,7 +232,7 @@ let currentActiveMd = null;
 let mdCache       = {};
 let currentMdRaw  = '';
 
-// Expose to iframes
+// Expose to iframesc
 Object.defineProperty(window, 'currentModeVal',  { get(){ return currentMode;   }, set(v){ currentMode = v; } });
 Object.defineProperty(window, 'currentAccentVal', { get(){ return currentAccent; }, set(v){ currentAccent = v; } });
 
@@ -395,7 +397,7 @@ var mainStatusBar = new MTS.StatusBar('#mainStatusBar', {
     '<span class="mts-statusbar__sep"></span>' +
     '<span class="mts-statusbar__tag mts-statusbar__tag--primary">v1.0.0</span>',
   end:
-    '<span class="mts-statusbar__item">60+ componentes</span>' +
+    '<span class="mts-statusbar__item">80+ componentes</span>' +
     '<span class="mts-statusbar__sep"></span>' +
     '<span class="mts-statusbar__item">278 íconos</span>'
 });
@@ -605,9 +607,9 @@ function showWelcome() {
   el.innerHTML =
     '<div class="welcome__logo">M</div>' +
     '<div class="welcome__title">Matios <span>UI</span></div>' +
-    '<p class="welcome__sub">Framework CSS/JS · 0 dependencias · temas via CSS Variables · 60+ componentes.</p>' +
+    '<p class="welcome__sub">Framework CSS/JS · 0 dependencias · temas via CSS Variables · 80+ componentes.</p>' +
     '<div class="welcome__stats">' +
-      '<div class="welcome__stat"><div class="welcome__stat-val">60+</div><div class="welcome__stat-lbl">Componentes</div></div>' +
+      '<div class="welcome__stat"><div class="welcome__stat-val">80+</div><div class="welcome__stat-lbl">Componentes</div></div>' +
       '<div class="welcome__stat"><div class="welcome__stat-val">278</div><div class="welcome__stat-lbl">Íconos</div></div>' +
       '<div class="welcome__stat"><div class="welcome__stat-val">3×8</div><div class="welcome__stat-lbl">Modes × accents</div></div>' +
     '</div>' +
@@ -619,6 +621,8 @@ function showWelcome() {
       '<div class="welcome__chip" onclick="loadById(\'layout\')"><i class="mts-icon mts-icon-layout"></i>Layout</div>' +
       '<div class="welcome__chip" onclick="loadById(\'data\')"><i class="mts-icon mts-icon-database"></i>Data</div>' +
       '<div class="welcome__chip" onclick="loadById(\'icons\')"><i class="mts-icon mts-icon-star"></i>Íconos</div>' +
+      '<div class="welcome__chip" onclick="loadById(\'utilities\')"><i class="mts-icon mts-icon-tool"></i>Utilities</div>' +
+      '<div class="welcome__chip" onclick="loadById(\'sc-dashboard\')"><i class="mts-icon mts-icon-bar-chart-2"></i>Widgets</div>' +
     '</div>' +
     '<button class="welcome__cta" onclick="loadById(\'showcase\')">' +
       '<i class="mts-icon mts-icon-activity mts-icon--sm"></i>Abrir Showcase' +

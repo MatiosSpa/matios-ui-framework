@@ -1,0 +1,1424 @@
+/* ============================================================
+   MATIOS UI — matios-ui-richeditor.js
+   MTS.RichEditor — Editor de plantillas con merge fields
+   Incluye merge fields opcionales via catalog.
+   Progressive enhancement sobre <textarea>.
+   getValue() / setValue() = string Handlebars crudo.
+   0 dependencias. Sin iframe. Sin librerías externas.
+   ============================================================ */
+window.MTS = window.MTS || {};
+
+MTS.RichEditor = class MtsRichEditor {
+  /**
+   * @param {string|Element} selector   <textarea> existente o selector CSS
+   * @param {object} options
+   * @param {Array}    options.catalog           [{token, label, group}]
+   * @param {string}   options.placeholder       default: 'Escribe el mensaje...'
+   * @param {string}   options.searchPlaceholder default: 'Buscar campo...'
+   * @param {string}   options.height            default: '260px'
+   * @param {string}   options.minHeight         default: '120px'
+   * @param {boolean}  options.disabled
+   * @param {boolean}  options.readonly
+   * @param {number}   options.maxLength         0 = sin límite
+   * @param {Array}    options.toolbar           Grupos activos. Disponibles:
+   *   'format' | 'font' | 'lists' | 'align' | 'insert' | 'source' | 'clean' | 'fields'
+   *   default: ['format','lists','insert','fields']
+   * @param {number[]} options.fontSizes         Tamaños en px. Requiere grupo 'font' en toolbar.
+   *   Ej: [10, 12, 14, 16, 18, 24, 32]
+   * @param {Array}    options.fonts             [{label, value}]. Requiere grupo 'font' en toolbar.
+   *   Ej: [{ label:'Sans-serif', value:'Arial, sans-serif' }]
+   * @param {object}   options.labels            Sobreescribe cualquier string de la UI.
+   *   Claves: bold, italic, underline, strike, normal, heading1..3, quote, code,
+   *   listUl, listOl, indent, outdent, alignLeft, alignCenter, alignRight, alignFull,
+   *   linkInsert, linkRemove, textColor, bgColor, undo, redo, cleanFormat,
+   *   htmlSource, fields, fontSize, fontFamily,
+   *   urlLabel, urlApply, urlCancel, htmlApply, htmlCancel
+   * @param {function} options.onChange          function(e) — e.detail.value = Handlebars string
+   * @param {function} options.onFocus
+   * @param {function} options.onBlur
+   */
+  constructor(selector, options) {
+    options = options || {};
+
+    /* ── Textarea fuente de verdad (progressive enhancement) ── */
+    var el = typeof selector === 'string' ? document.querySelector(selector) : selector;
+    if (!el) return;
+    this._textarea = (el.tagName === 'TEXTAREA') ? el
+      : (el.querySelector('textarea') || document.createElement('textarea'));
+    if (!this._textarea.parentNode) el.appendChild(this._textarea);
+
+    /* ── Labels — defaults en español, consumidor sobreescribe lo que necesita ── */
+    var DEF_LABELS = {
+      bold: 'Negrita', italic: 'Cursiva', underline: 'Subrayado', strike: 'Tachado',
+      normal: 'Normal', heading1: 'Título 1', heading2: 'Título 2', heading3: 'Título 3',
+      quote: 'Cita', code: 'Código',
+      listUl: 'Lista', listOl: 'Lista numerada', indent: 'Indentar', outdent: 'Desindentar',
+      alignLeft: 'Izquierda', alignCenter: 'Centro', alignRight: 'Derecha', alignFull: 'Justificado',
+      linkInsert: 'Insertar enlace', linkRemove: 'Quitar enlace',
+      textColor: 'Color de texto', bgColor: 'Color de fondo',
+      undo: 'Deshacer', redo: 'Rehacer', cleanFormat: 'Limpiar formato',
+      htmlSource: 'HTML', fields: 'Campos', fontSize: 'Tamaño', fontFamily: 'Fuente',
+      urlLabel: 'URL:', urlApply: 'Aplicar', urlCancel: '×',
+      htmlApply: 'Aplicar', htmlCancel: '×',
+      table: 'Tabla',
+    };
+    this.labels = Object.assign({}, DEF_LABELS, options.labels || {});
+
+    /* ── Opciones ── */
+    this._catalog          = options.catalog          || [];
+    this.placeholder       = options.placeholder      || 'Escribe el mensaje...';
+    this.searchPlaceholder = options.searchPlaceholder || 'Buscar campo...';
+    this.height            = options.height            || '260px';
+    this.minHeight         = options.minHeight         || '120px';
+    this.disabled          = options.disabled          || false;
+    this.readonly          = options.readonly          || false;
+    this.maxLength         = options.maxLength         || 0;
+    this.toolbar           = options.toolbar           || ['format', 'lists', 'insert', 'fields'];
+    this.fontSizes         = options.fontSizes         || [];
+    this.fonts             = options.fonts             || [];
+
+    /* ── Estado interno ── */
+    this._savedRange     = null;
+    this._listeners      = {};
+    this._customFields   = [];
+    this._paletteOpen    = false;
+    this._groupCollapsed = {};
+    this._preview        = false;
+    this._htmlMode       = false;
+
+    if (options.onChange) this.on('change', options.onChange);
+    if (options.onFocus)  this.on('focus',  options.onFocus);
+    if (options.onBlur)   this.on('blur',   options.onBlur);
+
+    this._build();
+
+    /* Cargar valor inicial del textarea */
+    if (this._textarea.value) {
+      this._setEditorContent(this._textarea.value);
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     API — mismos nombres que el RTE + extensiones de merge fields
+  ══════════════════════════════════════════════════════════════ */
+
+  getValue()  { return this._serialize(); }
+  getText()   { return this._editor ? this._editor.innerText || '' : ''; }
+  focus()     { if (this._editor) this._editor.focus(); return this; }
+  clear()     { if (this._editor) { this._editor.innerHTML = ''; this._syncTextarea(); this._updateStatus(); } return this; }
+
+  setValue(html) {
+    this._setEditorContent(html || '');
+    this._syncTextarea();
+    return this;
+  }
+
+  disable() {
+    this.disabled = true;
+    if (this._editor) this._editor.contentEditable = 'false';
+    if (this._el) this._el.classList.add('mts-re--disabled');
+    return this;
+  }
+
+  enable() {
+    this.disabled = false;
+    if (this._editor) this._editor.contentEditable = 'true';
+    if (this._el) this._el.classList.remove('mts-re--disabled');
+    return this;
+  }
+
+  destroy() {
+    this._hideTablePicker();
+    if (this._tablePickerEl && this._tablePickerEl.parentNode) {
+      this._tablePickerEl.parentNode.removeChild(this._tablePickerEl);
+    }
+    if (this._el) this._el.remove();
+    if (this._textarea) {
+      this._textarea.hidden = false;
+      this._textarea.value  = this.getValue();
+    }
+  }
+
+  on(e, cb) {
+    if (!this._listeners[e]) this._listeners[e] = [];
+    this._listeners[e].push(cb);
+    return this;
+  }
+
+  off(e, cb) {
+    this._listeners[e] = (this._listeners[e] || []).filter(function(f) { return f !== cb; });
+    return this;
+  }
+
+  /* ── Extensiones de merge fields ── */
+
+  setCatalog(catalog) {
+    this._catalog = Array.isArray(catalog) ? catalog : [];
+    this._renderPaletteGroups(
+      this._paletteSearchEl ? this._paletteSearchEl.value.trim().toLowerCase() : ''
+    );
+    return this;
+  }
+
+  insertField(token) {
+    if (this.disabled || this.readonly || this._preview) return this;
+    var self = this;
+    if (this._editor) this._editor.focus();
+    this._restoreRange();
+    var chip = this._createChip(token);
+    var sel  = window.getSelection();
+    if (sel && sel.rangeCount > 0) {
+      var range = sel.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(chip);
+      range.setStartAfter(chip);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } else {
+      if (this._editor) this._editor.appendChild(chip);
+    }
+    if (!chip.nextSibling || chip.nextSibling.nodeType !== Node.TEXT_NODE) {
+      chip.parentNode.insertBefore(document.createTextNode('​'), chip.nextSibling);
+    }
+    this._syncTextarea();
+    this._updateStatus();
+    this._emit('change', { value: this.getValue() });
+    return this;
+  }
+
+  setPreview(bool) {
+    this._preview = !!bool;
+    if (!this._el) return this;
+    this._el.classList.toggle('mts-re--preview', this._preview);
+    if (this._editor) {
+      this._editor.contentEditable = (this._preview || this.disabled || this.readonly) ? 'false' : 'true';
+    }
+    return this;
+  }
+
+  getCustomFields() {
+    return this._customFields.slice();
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     BUILD
+  ══════════════════════════════════════════════════════════════ */
+
+  _build() {
+    var self = this;
+    var L    = this.labels;
+
+    /* Ocultar textarea original */
+    this._textarea.hidden = true;
+
+    /* Wrapper raíz */
+    var el = document.createElement('div');
+    el.className = 'mts-re';
+    if (this.disabled) el.classList.add('mts-re--disabled');
+    this._el = el;
+
+    /* Toolbar */
+    var tb = document.createElement('div');
+    tb.className = 'mts-re__toolbar';
+    this._buildToolbar(tb);
+    this._toolbarEl = tb;
+    el.appendChild(tb);
+
+    /* Link bar */
+    var linkBar = document.createElement('div');
+    linkBar.className = 'mts-re__link-bar mts-re__link-bar--hidden';
+    var linkLabel = document.createElement('span');
+    linkLabel.className = 'mts-re__link-label';
+    linkLabel.textContent = L.urlLabel;
+    var linkInput = document.createElement('input');
+    linkInput.type = 'text';
+    linkInput.className = 'mts-re__link-input';
+    linkInput.placeholder = 'https://...';
+    linkInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter')  { e.preventDefault(); self._applyLink(linkInput.value); }
+      if (e.key === 'Escape') { self._hideLinkBar(); }
+    });
+    var linkApply = document.createElement('button');
+    linkApply.type = 'button';
+    linkApply.className = 'mts-re__btn mts-re__btn--sm mts-re__btn--primary';
+    linkApply.textContent = L.urlApply;
+    linkApply.addEventListener('mousedown', function(e) { e.preventDefault(); });
+    linkApply.addEventListener('click', function() { self._applyLink(linkInput.value); });
+    var linkCancel = document.createElement('button');
+    linkCancel.type = 'button';
+    linkCancel.className = 'mts-re__btn mts-re__btn--sm';
+    linkCancel.textContent = L.urlCancel;
+    linkCancel.addEventListener('mousedown', function(e) { e.preventDefault(); });
+    linkCancel.addEventListener('click', function() { self._hideLinkBar(); });
+    linkBar.appendChild(linkLabel);
+    linkBar.appendChild(linkInput);
+    linkBar.appendChild(linkApply);
+    linkBar.appendChild(linkCancel);
+    this._linkBarEl   = linkBar;
+    this._linkInputEl = linkInput;
+    el.appendChild(linkBar);
+
+    /* HTML source panel */
+    var htmlPanel = document.createElement('div');
+    htmlPanel.className = 'mts-re__html-panel mts-re__html-panel--hidden';
+    var htmlActions = document.createElement('div');
+    htmlActions.className = 'mts-re__html-actions';
+    var htmlActionsLabel = document.createElement('span');
+    htmlActionsLabel.className = 'mts-re__html-actions-label';
+    htmlActionsLabel.textContent = 'HTML';
+    var htmlApplyBtn = document.createElement('button');
+    htmlApplyBtn.type = 'button';
+    htmlApplyBtn.className = 'mts-re__btn mts-re__btn--sm mts-re__btn--primary';
+    htmlApplyBtn.textContent = L.htmlApply;
+    htmlApplyBtn.addEventListener('mousedown', function(e) { e.preventDefault(); });
+    htmlApplyBtn.addEventListener('click', function() { self._applyHtml(); });
+    var htmlCancelBtn = document.createElement('button');
+    htmlCancelBtn.type = 'button';
+    htmlCancelBtn.className = 'mts-re__btn mts-re__btn--sm';
+    htmlCancelBtn.textContent = L.htmlCancel;
+    htmlCancelBtn.addEventListener('mousedown', function(e) { e.preventDefault(); });
+    htmlCancelBtn.addEventListener('click', function() { self._hideHtmlPanel(); });
+    htmlActions.appendChild(htmlActionsLabel);
+    htmlActions.appendChild(htmlApplyBtn);
+    htmlActions.appendChild(htmlCancelBtn);
+
+    /* Host del CodeBlock editable (o textarea de fallback si MTS.CodeBlock no está disponible) */
+    var htmlCbHost = document.createElement('div');
+    htmlPanel.appendChild(htmlActions);
+    htmlPanel.appendChild(htmlCbHost);
+    this._htmlPanelEl  = htmlPanel;
+    this._htmlCbHost   = htmlCbHost;
+    this._htmlCodeBlock = null;
+    this._htmlTextarea  = null; /* fallback */
+
+    if (typeof MTS !== 'undefined' && MTS.CodeBlock) {
+      this._htmlCodeBlock = new MTS.CodeBlock(htmlCbHost, {
+        language: 'html',
+        copyable: false,
+        toolbar:  false,
+        height:   this.height,
+        editable: true,
+      });
+    } else {
+      /* Fallback: textarea plano */
+      var htmlTextarea = document.createElement('textarea');
+      htmlTextarea.className = 'mts-re__html-textarea';
+      htmlTextarea.spellcheck = false;
+      htmlTextarea.style.height = this.height;
+      htmlCbHost.appendChild(htmlTextarea);
+      this._htmlTextarea = htmlTextarea;
+    }
+
+    el.appendChild(htmlPanel);
+
+    /* Body: flex row */
+    var body = document.createElement('div');
+    body.className = 'mts-re__body';
+
+    /* Editor wrap */
+    var editorWrap = document.createElement('div');
+    editorWrap.className = 'mts-re__editor-wrap';
+    editorWrap.style.minHeight = this.minHeight;
+    editorWrap.style.height    = this.height;
+
+    var editor = document.createElement('div');
+    editor.className = 'mts-re__editor';
+    editor.contentEditable = (!this.disabled && !this.readonly) ? 'true' : 'false';
+    editor.spellcheck = true;
+    editor.setAttribute('data-placeholder', this.placeholder);
+    if (!this._textarea.value) editor.classList.add('mts-re__editor--empty');
+
+    editor.addEventListener('input', function() {
+      editor.classList.toggle('mts-re__editor--empty', !editor.innerHTML || editor.innerHTML === '<br>');
+      if (self.maxLength > 0 && self._editor.textContent.length > self.maxLength) {
+        document.execCommand('undo');
+      }
+      self._syncTextarea();
+      self._emit('change', { value: self.getValue() });
+      self._updateToolbarState();
+      self._updateStatus();
+    });
+    editor.addEventListener('paste',  function(e) { self._onPaste(e); });
+    editor.addEventListener('keydown', function(e) { self._onKeydown(e); });
+    editor.addEventListener('focus', function(e) {
+      el.classList.add('mts-re--focused');
+      self._emit('focus', { event: e });
+    });
+    editor.addEventListener('blur', function(e) {
+      el.classList.remove('mts-re--focused');
+      self._saveRange();
+      self._emit('blur', { event: e });
+    });
+    editor.addEventListener('keyup',   function() { self._updateToolbarState(); });
+    editor.addEventListener('mouseup', function() { self._updateToolbarState(); });
+
+    this._editor    = editor;
+    this._toolbarEl = tb;
+    editorWrap.appendChild(editor);
+    body.appendChild(editorWrap);
+    body.appendChild(this._buildPalette());
+    this._bodyEl = body;
+    el.appendChild(body);
+
+    /* Status bar */
+    var status = document.createElement('div');
+    status.className = 'mts-re__status';
+    this._statusEl = status;
+    el.appendChild(status);
+    this._updateStatus();
+
+    /* Insertar en el DOM después del textarea */
+    this._textarea.parentNode.insertBefore(el, this._textarea.nextSibling);
+
+    /* Table picker — appended a document.body para evitar clipping por overflow */
+    this._tablePickerEl      = null;
+    this._tablePickerOutside = null;
+    document.body.appendChild(this._buildTablePicker());
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     TOOLBAR
+     Grupos disponibles: format | font | lists | align | insert | source | clean | fields
+  ══════════════════════════════════════════════════════════════ */
+
+  _buildToolbar(tb) {
+    var self = this;
+    var BTN  = MTS.RichEditor.ToolbarButton;
+
+    this._btnMap           = {};
+    this._formatSelect     = null;
+    this._fontSizeSelect   = null;
+    this._fontFamilySelect = null;
+
+    var defs      = this._getButtonDefs();
+    this._btnDefs = defs;
+    var items     = this._normalizeToolbar(this.toolbar);
+
+    items.forEach(function(item) {
+
+      /* ── Separador ── */
+      if (item === BTN.SEP) {
+        var sep = document.createElement('div');
+        sep.className = 'mts-re__sep';
+        tb.appendChild(sep);
+        return;
+      }
+
+      /* ── Normalizar a config object ── */
+      var cfg;
+      if (typeof item === 'string') {
+        cfg = { button: item };
+      } else if (item && item.button) {
+        cfg = item;
+      } else {
+        return;
+      }
+      if (cfg.show === false) return;
+
+      var def = defs[cfg.button];
+      if (!def) return;
+
+      var label   = cfg.label   || self.labels[def.labelKey] || '';
+      var tooltip = cfg.tooltip || label;
+
+      /* ── Select ── */
+      if (def.type === 'select') {
+        var opts = self._resolveSelectOpts(def, cfg);
+        if (!opts.length) return;
+        var sel = document.createElement('select');
+        sel.className = 'mts-re__select';
+        sel.title = tooltip;
+        opts.forEach(function(o) {
+          var opt = document.createElement('option');
+          opt.value       = o.value;
+          opt.textContent = o.label;
+          sel.appendChild(opt);
+        });
+        sel.addEventListener('mousedown', function() { self._saveRange(); });
+        sel.addEventListener('change', function() {
+          self._restoreRange();
+          def.exec(sel.value);
+          if (!def.isFontSize) { if (self._editor) self._editor.focus(); }
+        });
+        if (def.isFormatBlock) self._formatSelect     = sel;
+        if (def.isFontSize)    self._fontSizeSelect   = sel;
+        if (def.isFontFamily)  self._fontFamilySelect = sel;
+        tb.appendChild(sel);
+
+      /* ── Color picker ── */
+      } else if (def.type === 'color' || def.type === 'bgcolor') {
+        var wrap = document.createElement('div');
+        wrap.className = 'mts-re__color-wrap';
+        wrap.title = tooltip;
+        var ico = document.createElement('div');
+        ico.className = 'mts-re__color-icon';
+        ico.innerHTML = def.icon;
+        var inp = document.createElement('input');
+        inp.type  = 'color';
+        inp.value = def.type === 'color' ? '#000000' : '#ffff00';
+        inp.className = 'mts-re__color-input';
+        inp.addEventListener('input',     function() { self._restoreRange(); def.exec(inp.value); });
+        inp.addEventListener('mousedown', function() { self._saveRange(); });
+        wrap.appendChild(ico);
+        wrap.appendChild(inp);
+        tb.appendChild(wrap);
+
+      /* ── Botón ── */
+      } else {
+        var btn = document.createElement('button');
+        btn.type      = 'button';
+        btn.className = 'mts-re__btn';
+        var iconSpan = document.createElement('span');
+        iconSpan.className = 'mts-re__btn-icon';
+        iconSpan.innerHTML = (typeof MTS !== 'undefined' && MTS.Sanitize)
+          ? MTS.Sanitize.html(def.icon) : def.icon;
+        btn.appendChild(iconSpan);
+        if (def.hasLabel) {
+          var lbl = document.createElement('span');
+          lbl.className   = 'mts-re__btn-label';
+          lbl.textContent = label;
+          btn.appendChild(lbl);
+        }
+        btn.title = tooltip;
+        btn.addEventListener('mousedown', function(e) { e.preventDefault(); self._saveRange(); });
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          def.exec(btn);
+          self._updateToolbarState();
+          self._updateStatus();
+        });
+        self._btnMap[cfg.button] = btn;
+        tb.appendChild(btn);
+      }
+    });
+  }
+
+  /* Expande el array toolbar (legacy strings o constantes TB) a un array plano normalizado */
+  _normalizeToolbar(raw) {
+    var self = this;
+    var BTN  = MTS.RichEditor.ToolbarButton;
+
+    var LEGACY = {
+      format: [BTN.BOLD, BTN.ITALIC, BTN.UNDERLINE, BTN.STRIKE, { button: BTN.FORMAT_BLOCK }],
+      font: (function() {
+        var acc = [];
+        if (self.fontSizes && self.fontSizes.length) acc.push({ button: BTN.FONT_SIZE,   options: self.fontSizes });
+        if (self.fonts     && self.fonts.length)     acc.push({ button: BTN.FONT_FAMILY, options: self.fonts });
+        return acc;
+      })(),
+      lists:  [BTN.LIST_UL, BTN.LIST_OL, BTN.INDENT, BTN.OUTDENT],
+      align:  [BTN.ALIGN_LEFT, BTN.ALIGN_CENTER, BTN.ALIGN_RIGHT, BTN.ALIGN_FULL],
+      insert: [BTN.LINK, BTN.UNLINK, BTN.TEXT_COLOR, BTN.BG_COLOR],
+      table:  [BTN.TABLE],
+      source: [BTN.HTML_SOURCE],
+      clean:  [BTN.UNDO, BTN.REDO, BTN.CLEAN_FORMAT],
+      fields: [BTN.FIELDS],
+    };
+
+    var result      = [];
+    var afterLegacy = false;
+
+    raw.forEach(function(item) {
+      if (typeof item === 'string' && LEGACY[item]) {
+        /* Grupo legacy — SEP automático entre grupos consecutivos */
+        if (afterLegacy && result.length && result[result.length - 1] !== BTN.SEP) {
+          result.push(BTN.SEP);
+        }
+        LEGACY[item].forEach(function(btn) { result.push(btn); });
+        afterLegacy = true;
+      } else {
+        afterLegacy = false;
+        result.push(item);
+      }
+    });
+
+    return result;
+  }
+
+  /* Resuelve las opciones finales para un select según su tipo */
+  _resolveSelectOpts(def, cfg) {
+    var rawOpts = cfg.options;
+
+    if (def.isFormatBlock) {
+      if (!rawOpts || !rawOpts.length) return def.defaultOptions;
+      /* Slugs ('normal','h1',...) → filtrar defaultOptions */
+      if (typeof rawOpts[0] === 'string') {
+        return def.defaultOptions.filter(function(o) { return rawOpts.indexOf(o.slug) >= 0; });
+      }
+      return rawOpts; /* ya son {label, value} */
+    }
+
+    if (def.isFontSize) {
+      if (!rawOpts || !rawOpts.length) return [];
+      if (typeof rawOpts[0] === 'number') {
+        return rawOpts.map(function(s) { return { label: s + 'px', value: s + 'px' }; });
+      }
+      return rawOpts;
+    }
+
+    /* fontFamily y cualquier otro select — {label, value} directo */
+    return rawOpts || def.defaultOptions || [];
+  }
+
+  /* Registro completo de todos los botones disponibles en el toolbar */
+  _getButtonDefs() {
+    var self = this;
+    var L    = this.labels;
+
+    var SVG = {
+      bold:      '<b>B</b>',
+      italic:    '<i>I</i>',
+      underline: '<u>U</u>',
+      strike:    '<s>S</s>',
+      listUl:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+      listOl:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4M4 10h2M6 18H4c0-1 2-2 2-3s-1-2-2-2"/></svg>',
+      indent:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/><polyline points="9 12 13 12"/><polyline points="9 10 13 12 9 14"/></svg>',
+      outdent:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="8" x2="21" y2="8"/><line x1="3" y1="16" x2="21" y2="16"/><polyline points="13 12 9 12"/><polyline points="13 10 9 12 13 14"/></svg>',
+      alignLeft:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg>',
+      alignCenter: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>',
+      alignRight:  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="6" y1="18" x2="21" y2="18"/></svg>',
+      alignFull:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>',
+      link:      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>',
+      unlink:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.84 12.25l1.72-1.71h-.02a5.004 5.004 0 00-.12-7.07 5.006 5.006 0 00-6.95 0l-1.72 1.71"/><path d="M5.17 11.75l-1.71 1.71a5.004 5.004 0 00.12 7.07 5.006 5.006 0 006.95 0l1.71-1.71"/><line x1="8" y1="2" x2="8" y2="5"/><line x1="2" y1="8" x2="5" y2="8"/><line x1="16" y1="19" x2="16" y2="22"/><line x1="19" y1="16" x2="22" y2="16"/></svg>',
+      textColor: '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M11.5 3L4 21h3.2l1.6-5h7.4l1.6 5H21L13.5 3h-2zm-1.7 10L12 6.5l2.2 6.5H9.8z"/><rect x="3" y="22" width="18" height="2"/></svg>',
+      bgColor:   '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="2" y="2" width="20" height="20" rx="3"/></svg>',
+      undo:      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"/></svg>',
+      redo:      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 019-9 9 9 0 016 2.3l3 2.7"/></svg>',
+      clean:     '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+      source:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+      fields:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+      table:     '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>',
+    };
+
+    return {
+      /* ── Formato ── */
+      bold:        { type:'button', icon:SVG.bold,      labelKey:'bold',        cmdState:'bold',               exec:function()  { self._exec('bold'); } },
+      italic:      { type:'button', icon:SVG.italic,    labelKey:'italic',      cmdState:'italic',             exec:function()  { self._exec('italic'); } },
+      underline:   { type:'button', icon:SVG.underline, labelKey:'underline',   cmdState:'underline',          exec:function()  { self._exec('underline'); } },
+      strike:      { type:'button', icon:SVG.strike,    labelKey:'strike',      cmdState:'strikeThrough',      exec:function()  { self._exec('strikeThrough'); } },
+      formatBlock: {
+        type:'select', isFormatBlock:true, labelKey:'normal',
+        defaultOptions:[
+          { slug:'normal',     value:'div',        label:L.normal   },
+          { slug:'h1',         value:'h1',         label:L.heading1 },
+          { slug:'h2',         value:'h2',         label:L.heading2 },
+          { slug:'h3',         value:'h3',         label:L.heading3 },
+          { slug:'blockquote', value:'blockquote', label:L.quote    },
+          { slug:'pre',        value:'pre',        label:L.code     },
+        ],
+        exec:function(v) { self._exec('formatBlock', v); },
+      },
+      /* ── Fuente ── */
+      fontSize:   { type:'select', isFontSize:true,   labelKey:'fontSize',   defaultOptions:[], exec:function(v) { self._execFontSize(v); } },
+      fontFamily: { type:'select', isFontFamily:true, labelKey:'fontFamily', defaultOptions:[], exec:function(v) { self._execFontName(v); } },
+      /* ── Listas ── */
+      listUl:  { type:'button', icon:SVG.listUl,  labelKey:'listUl',  cmdState:'insertUnorderedList', exec:function() { self._exec('insertUnorderedList'); } },
+      listOl:  { type:'button', icon:SVG.listOl,  labelKey:'listOl',  cmdState:'insertOrderedList',   exec:function() { self._exec('insertOrderedList'); } },
+      indent:  { type:'button', icon:SVG.indent,  labelKey:'indent',                                  exec:function() { self._exec('indent'); } },
+      outdent: { type:'button', icon:SVG.outdent, labelKey:'outdent',                                  exec:function() { self._exec('outdent'); } },
+      /* ── Alineación ── */
+      alignLeft:   { type:'button', icon:SVG.alignLeft,   labelKey:'alignLeft',   cmdState:'justifyLeft',   exec:function() { self._exec('justifyLeft'); } },
+      alignCenter: { type:'button', icon:SVG.alignCenter, labelKey:'alignCenter', cmdState:'justifyCenter', exec:function() { self._exec('justifyCenter'); } },
+      alignRight:  { type:'button', icon:SVG.alignRight,  labelKey:'alignRight',  cmdState:'justifyRight',  exec:function() { self._exec('justifyRight'); } },
+      alignFull:   { type:'button', icon:SVG.alignFull,   labelKey:'alignFull',   cmdState:'justifyFull',   exec:function() { self._exec('justifyFull'); } },
+      /* ── Insertar ── */
+      link:      { type:'button', icon:SVG.link,      labelKey:'linkInsert',               exec:function()  { self._saveRange(); self._toggleLinkBar(); } },
+      unlink:    { type:'button', icon:SVG.unlink,    labelKey:'linkRemove', cmdState:'unlink', exec:function() { self._exec('unlink'); } },
+      textColor: { type:'color',  icon:SVG.textColor, labelKey:'textColor',                exec:function(v) { self._execForeColor(v); } },
+      bgColor:   { type:'bgcolor',icon:SVG.bgColor,   labelKey:'bgColor',                  exec:function(v) { self._exec('hiliteColor', v); } },
+      /* ── Tabla ── */
+      table:     { type:'button', icon:SVG.table,  labelKey:'table',                       exec:function(btn) { self._saveRange(); self._toggleTablePicker(btn); } },
+      /* ── HTML source ── */
+      htmlSource:  { type:'button', icon:SVG.source, labelKey:'htmlSource', hasLabel:true, exec:function()    { self._toggleHtmlPanel(); } },
+      /* ── Historial / limpieza ── */
+      undo:        { type:'button', icon:SVG.undo,  labelKey:'undo',                       exec:function() { self._exec('undo'); } },
+      redo:        { type:'button', icon:SVG.redo,  labelKey:'redo',                       exec:function() { self._exec('redo'); } },
+      cleanFormat: { type:'button', icon:SVG.clean, labelKey:'cleanFormat',                exec:function() { self._exec('removeFormat'); self._exec('unlink'); } },
+      /* ── Campos ── */
+      fields:      { type:'button', icon:SVG.fields, labelKey:'fields', hasLabel:true,     exec:function() { self._togglePalette(); } },
+    };
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     MÉTODOS INTERNOS — idénticos al RTE
+  ══════════════════════════════════════════════════════════════ */
+
+  _exec(cmd, value) {
+    this._restoreRange();
+    try { document.execCommand(cmd, false, value || null); } catch(e) {}
+    if (this._editor) this._editor.focus();
+    this._updateToolbarState();
+    this._updateStatus();
+    this._syncTextarea();
+    this._emit('change', { value: this.getValue() });
+  }
+
+  _saveRange() {
+    var sel = window.getSelection();
+    if (sel && sel.rangeCount > 0 && this._editor && this._editor.contains(sel.anchorNode)) {
+      this._savedRange = sel.getRangeAt(0).cloneRange();
+    }
+  }
+
+  _restoreRange() {
+    if (!this._savedRange) return;
+    var sel = window.getSelection();
+    if (sel) { sel.removeAllRanges(); sel.addRange(this._savedRange); }
+  }
+
+  _updateToolbarState() {
+    var self = this;
+    var BTN  = MTS.RichEditor.ToolbarButton;
+
+    /* Botones con cmdState — iterar sobre _btnDefs y consultar queryCommandState */
+    if (this._btnDefs) {
+      Object.keys(this._btnDefs).forEach(function(key) {
+        var def = self._btnDefs[key];
+        if (!def.cmdState) return;
+        var btn = self._btnMap[key];
+        if (!btn) return;
+        try { btn.classList.toggle('mts-re__btn--active', document.queryCommandState(def.cmdState)); } catch(e) {}
+      });
+    }
+
+    /* Select de formato de bloque (párrafo / encabezados)
+       queryCommandValue retorna 'p' para párrafos por defecto en la mayoría
+       de browsers, pero nuestra opción Normal tiene value:'div'. Normalizamos. */
+    if (this._formatSelect) {
+      try {
+        var fbVal = (document.queryCommandValue('formatBlock') || '').toLowerCase();
+        if (fbVal === 'p' || fbVal === '') fbVal = 'div';
+        this._formatSelect.value = fbVal;
+      } catch(e) {}
+    }
+    /* Select de familia de fuente — compara primer token de la familia */
+    if (this._fontFamilySelect) {
+      try {
+        var fontName = (document.queryCommandValue('fontName') || '').replace(/['"]/g, '').toLowerCase();
+        var ffs = this._fontFamilySelect;
+        var fMatched = false;
+        Array.prototype.forEach.call(ffs.options, function(opt) {
+          if (!opt.value) return;
+          var first = opt.value.split(',')[0].trim().toLowerCase();
+          if (first && first === fontName.split(',')[0].trim()) { ffs.value = opt.value; fMatched = true; }
+        });
+        if (!fMatched) ffs.value = ffs.options[0] ? ffs.options[0].value : '';
+      } catch(e) {}
+    }
+    /* Select de tamaño de fuente — computed style del nodo bajo el cursor */
+    if (this._fontSizeSelect) {
+      try {
+        var selObj = window.getSelection();
+        var node   = selObj && selObj.focusNode;
+        if (node && node.nodeType === 3) node = node.parentNode;
+        var computedSize = (node && this._editor && this._editor.contains(node))
+          ? window.getComputedStyle(node).fontSize : '';
+        var fss      = this._fontSizeSelect;
+        var sMatched = false;
+        Array.prototype.forEach.call(fss.options, function(opt) {
+          if (opt.value && opt.value === computedSize) { fss.value = opt.value; sMatched = true; }
+        });
+        if (!sMatched) fss.value = fss.options[0] ? fss.options[0].value : '';
+      } catch(e) {}
+    }
+    /* Estado botón HTML source */
+    var htmlBtn = this._btnMap[BTN.HTML_SOURCE];
+    if (htmlBtn) htmlBtn.classList.toggle('mts-re__btn--active', this._htmlMode);
+    /* Estado botón paleta / campos */
+    var paletteBtn = this._btnMap[BTN.FIELDS];
+    if (paletteBtn) paletteBtn.classList.toggle('mts-re__btn--active', this._paletteOpen);
+  }
+
+  _updateStatus() {
+    if (!this._statusEl) return;
+    var text  = this._editor ? this._editor.innerText || '' : '';
+    var words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    var chars = text.length;
+    this._statusEl.textContent = words + ' palabras · ' + chars + ' caracteres';
+  }
+
+  _emit(event, detail) {
+    var self = this;
+    (this._listeners[event] || []).forEach(function(fn) { fn({ type: event, detail: detail }); });
+    if (self._textarea) {
+      self._textarea.dispatchEvent(new CustomEvent('mts:re:' + event, { bubbles: true, detail: detail }));
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     EXTENSIONES MFE
+  ══════════════════════════════════════════════════════════════ */
+
+  /* ── Link bar ── */
+
+  _toggleLinkBar() {
+    if (this._linkBarEl.classList.contains('mts-re__link-bar--hidden')) {
+      this._showLinkBar();
+    } else {
+      this._hideLinkBar();
+    }
+  }
+
+  _showLinkBar() {
+    this._linkBarEl.classList.remove('mts-re__link-bar--hidden');
+    this._linkInputEl.value = '';
+    this._linkInputEl.focus();
+  }
+
+  _hideLinkBar() {
+    this._linkBarEl.classList.add('mts-re__link-bar--hidden');
+    if (this._editor) this._editor.focus();
+  }
+
+  _applyLink(url) {
+    if (!url || !url.trim()) return;
+    var safeUrl = (typeof MTS !== 'undefined' && MTS.Sanitize) ? MTS.Sanitize.url(url.trim()) : url.trim();
+    if (!safeUrl) return;
+    this._hideLinkBar();
+    this._exec('createLink', safeUrl);
+  }
+
+  /* ── HTML source panel ── */
+
+  _toggleHtmlPanel() {
+    if (this._htmlMode) { this._hideHtmlPanel(); } else { this._showHtmlPanel(); }
+  }
+
+  _showHtmlPanel() {
+    this._htmlMode = true;
+    var html = this._prettyHtml(this._serialize());
+    if (this._htmlCodeBlock) {
+      this._htmlCodeBlock.setCode(html);
+    } else if (this._htmlTextarea) {
+      this._htmlTextarea.value = html;
+    }
+    this._htmlPanelEl.classList.remove('mts-re__html-panel--hidden');
+    this._bodyEl.classList.add('mts-re__body--hidden');
+    /* Foco al textarea del CodeBlock o al textarea de fallback */
+    var focusTarget = (this._htmlCodeBlock && this._htmlCodeBlock._editTextarea)
+      ? this._htmlCodeBlock._editTextarea
+      : this._htmlTextarea;
+    if (focusTarget) setTimeout(function() { focusTarget.focus(); }, 0);
+    this._updateToolbarState();
+  }
+
+  _hideHtmlPanel() {
+    this._htmlMode = false;
+    this._htmlPanelEl.classList.add('mts-re__html-panel--hidden');
+    this._bodyEl.classList.remove('mts-re__body--hidden');
+    if (this._editor) this._editor.focus();
+    this._updateToolbarState();
+  }
+
+  _applyHtml() {
+    var raw = this._htmlCodeBlock
+      ? this._htmlCodeBlock.getValue()
+      : (this._htmlTextarea ? this._htmlTextarea.value : '');
+    this._hideHtmlPanel();
+    this.setValue(raw);
+    this._emit('change', { value: this.getValue() });
+  }
+
+  /* ── Paleta toggle ── */
+
+  _togglePalette() {
+    this._paletteOpen = !this._paletteOpen;
+    if (this._paletteEl) {
+      this._paletteEl.classList.toggle('mts-re__palette--hidden', !this._paletteOpen);
+    }
+    var btn = this._btnMap[MTS.RichEditor.ToolbarButton.FIELDS];
+    if (btn) btn.classList.toggle('mts-re__btn--active', this._paletteOpen);
+  }
+
+  /* ── Table picker ── */
+
+  _buildTablePicker() {
+    var self   = this;
+    var COLS   = 8;
+    var ROWS   = 8;
+    var picker = document.createElement('div');
+    picker.className = 'mts-re__table-picker mts-re__table-picker--hidden';
+
+    var label = document.createElement('div');
+    label.className = 'mts-re__table-picker-label';
+    label.textContent = this.labels.table;
+    picker.appendChild(label);
+
+    var grid = document.createElement('div');
+    grid.className = 'mts-re__table-picker-grid';
+    picker.appendChild(grid);
+
+    /* Construir celdas del grid */
+    var cells = [];
+    var r, c;
+    for (r = 0; r < ROWS; r++) {
+      cells[r] = [];
+      for (c = 0; c < COLS; c++) {
+        (function(row, col) {
+          var cell = document.createElement('span');
+          cell.className = 'mts-re__table-picker-cell';
+          cell.addEventListener('mouseover', function() {
+            var i, j;
+            for (i = 0; i < ROWS; i++) {
+              for (j = 0; j < COLS; j++) {
+                cells[i][j].classList.toggle(
+                  'mts-re__table-picker-cell--active', i <= row && j <= col
+                );
+              }
+            }
+            label.textContent = (col + 1) + ' × ' + (row + 1);
+          });
+          cell.addEventListener('click', function() {
+            self._insertTable(row + 1, col + 1);
+            self._hideTablePicker();
+          });
+          cells[row][col] = cell;
+          grid.appendChild(cell);
+        })(r, c);
+      }
+    }
+
+    picker.addEventListener('mouseleave', function() {
+      var i, j;
+      for (i = 0; i < ROWS; i++) {
+        for (j = 0; j < COLS; j++) {
+          cells[i][j].classList.remove('mts-re__table-picker-cell--active');
+        }
+      }
+      label.textContent = self.labels.table;
+    });
+
+    this._tablePickerEl = picker;
+    return picker;
+  }
+
+  _toggleTablePicker(btn) {
+    if (!this._tablePickerEl) return;
+    if (this._tablePickerEl.classList.contains('mts-re__table-picker--hidden')) {
+      this._showTablePicker(btn);
+    } else {
+      this._hideTablePicker();
+    }
+  }
+
+  _showTablePicker(btn) {
+    var self = this;
+    var rect = btn.getBoundingClientRect();
+    this._tablePickerEl.style.top  = (rect.bottom + 4) + 'px';
+    this._tablePickerEl.style.left = rect.left + 'px';
+    this._tablePickerEl.classList.remove('mts-re__table-picker--hidden');
+    setTimeout(function() {
+      self._tablePickerOutside = function(e) {
+        if (!self._tablePickerEl.contains(e.target)) { self._hideTablePicker(); }
+      };
+      document.addEventListener('mousedown', self._tablePickerOutside);
+    }, 0);
+  }
+
+  _hideTablePicker() {
+    if (this._tablePickerEl) {
+      this._tablePickerEl.classList.add('mts-re__table-picker--hidden');
+    }
+    if (this._tablePickerOutside) {
+      document.removeEventListener('mousedown', this._tablePickerOutside);
+      this._tablePickerOutside = null;
+    }
+  }
+
+  _insertTable(rows, cols) {
+    var html = '<table><tbody>';
+    var r, c;
+    for (r = 0; r < rows; r++) {
+      html += '<tr>';
+      for (c = 0; c < cols; c++) { html += '<td>&nbsp;</td>'; }
+      html += '</tr>';
+    }
+    html += '</tbody></table><p><br></p>';
+    this._restoreRange();
+    try { document.execCommand('insertHTML', false, html); } catch(e) {}
+    if (this._editor) this._editor.focus();
+    this._syncTextarea();
+    this._updateStatus();
+    this._emit('change', { value: this.getValue() });
+  }
+
+  /* ── Font size — truco font[size="7"] → span[style] ── */
+
+  _execFontSize(size) {
+    this._restoreRange();
+    document.execCommand('fontSize', false, '7');
+    var fonts = this._editor ? this._editor.querySelectorAll('font[size="7"]') : [];
+    Array.prototype.forEach.call(fonts, function(f) {
+      var span = document.createElement('span');
+      span.style.fontSize = size;
+      while (f.firstChild) span.appendChild(f.firstChild);
+      f.parentNode.replaceChild(span, f);
+    });
+    if (this._editor) this._editor.focus();
+    this._updateStatus();
+    this._syncTextarea();
+    this._emit('change', { value: this.getValue() });
+  }
+
+  /* ── Font family — con styleWithCSS para output limpio ── */
+
+  _execFontName(family) {
+    this._restoreRange();
+    try { document.execCommand('styleWithCSS', false, true); } catch(e) {}
+    try { document.execCommand('fontName', false, family); } catch(e) {}
+    try { document.execCommand('styleWithCSS', false, false); } catch(e) {}
+    if (this._editor) this._editor.focus();
+    this._updateStatus();
+    this._syncTextarea();
+    this._emit('change', { value: this.getValue() });
+  }
+
+  /* ── Color de texto — con styleWithCSS para evitar <font color="..."> ── */
+
+  _execForeColor(color) {
+    this._restoreRange();
+    try { document.execCommand('styleWithCSS', false, true); } catch(e) {}
+    try { document.execCommand('foreColor', false, color); } catch(e) {}
+    try { document.execCommand('styleWithCSS', false, false); } catch(e) {}
+    if (this._editor) this._editor.focus();
+    this._updateStatus();
+    this._syncTextarea();
+    this._emit('change', { value: this.getValue() });
+  }
+
+  /* ── Paleta de campos ── */
+
+  _buildPalette() {
+    var self = this;
+    var palette = document.createElement('aside');
+    palette.className = 'mts-re__palette mts-re__palette--hidden';
+    this._paletteEl = palette;
+
+    var searchWrap = document.createElement('div');
+    searchWrap.className = 'mts-re__palette-search';
+    var searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.className = 'mts-re__palette-search-input';
+    searchInput.placeholder = this.searchPlaceholder;
+    searchInput.addEventListener('input', function() {
+      self._renderPaletteGroups(searchInput.value.trim().toLowerCase());
+    });
+    searchInput.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+    this._paletteSearchEl = searchInput;
+    searchWrap.appendChild(searchInput);
+    palette.appendChild(searchWrap);
+
+    var groupsWrap = document.createElement('div');
+    groupsWrap.className = 'mts-re__palette-groups';
+    this._paletteGroupsEl = groupsWrap;
+    palette.appendChild(groupsWrap);
+
+    var customSection = document.createElement('div');
+    customSection.className = 'mts-re__palette-custom';
+    this._paletteCustomEl = customSection;
+    this._renderCustomSection();
+    palette.appendChild(customSection);
+
+    this._renderPaletteGroups('');
+    return palette;
+  }
+
+  _renderPaletteGroups(filter) {
+    var self = this;
+    var wrap = this._paletteGroupsEl;
+    while (wrap.firstChild) wrap.removeChild(wrap.firstChild);
+
+    var groups     = {};
+    var groupOrder = [];
+    this._catalog.forEach(function(entry) {
+      var g = entry.group || 'Otros';
+      if (!groups[g]) { groups[g] = []; groupOrder.push(g); }
+      groups[g].push(entry);
+    });
+    if (this._customFields.length > 0) {
+      if (!groups['Custom']) groupOrder.push('Custom');
+      groups['Custom'] = this._customFields.map(function(cf) {
+        return { token: cf.token, label: cf.label, group: 'Custom' };
+      });
+    }
+
+    var hasVisible = false;
+    groupOrder.forEach(function(groupName) {
+      var items = groups[groupName].filter(function(entry) {
+        if (!filter) return true;
+        return entry.label.toLowerCase().indexOf(filter) >= 0
+            || entry.token.toLowerCase().indexOf(filter) >= 0;
+      });
+      if (!items.length) return;
+      hasVisible = true;
+
+      var collapsed = filter ? false : !!self._groupCollapsed[groupName];
+
+      var groupEl = document.createElement('div');
+      groupEl.className = 'mts-re__palette-group' + (collapsed ? ' mts-re__palette-group--collapsed' : '');
+
+      var header = document.createElement('div');
+      header.className = 'mts-re__palette-group-header';
+      var headerText = document.createElement('span');
+      headerText.textContent = groupName;
+      var arrow = document.createElement('span');
+      arrow.className = 'mts-re__palette-group-arrow';
+      arrow.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+      header.appendChild(headerText);
+      header.appendChild(arrow);
+      header.addEventListener('mousedown', function(e) { e.preventDefault(); });
+      header.addEventListener('click', function() {
+        if (filter) return;
+        var isNowCollapsed = groupEl.classList.toggle('mts-re__palette-group--collapsed');
+        self._groupCollapsed[groupName] = isNowCollapsed;
+      });
+
+      var body = document.createElement('div');
+      body.className = 'mts-re__palette-group-body';
+
+      items.forEach(function(entry) {
+        var item = document.createElement('div');
+        item.className = 'mts-re__palette-item';
+        if (groupName === 'Custom') item.classList.add('mts-re__palette-item--custom');
+        var labelEl = document.createElement('span');
+        labelEl.className = 'mts-re__palette-item-label';
+        labelEl.textContent = entry.label;
+        var tokenEl = document.createElement('span');
+        tokenEl.className = 'mts-re__palette-item-token';
+        tokenEl.textContent = entry.token;
+        item.appendChild(labelEl);
+        item.appendChild(tokenEl);
+        item.addEventListener('mousedown', function(e) { e.preventDefault(); });
+        item.addEventListener('click', function() { self.insertField(entry.token); });
+        body.appendChild(item);
+      });
+
+      groupEl.appendChild(header);
+      groupEl.appendChild(body);
+      wrap.appendChild(groupEl);
+    });
+
+    if (!hasVisible && filter) {
+      var empty = document.createElement('div');
+      empty.className = 'mts-re__palette-empty';
+      empty.textContent = 'Sin resultados para "' + filter + '"';
+      wrap.appendChild(empty);
+    }
+  }
+
+  _renderCustomSection() {
+    var self = this;
+    var wrap = this._paletteCustomEl;
+    while (wrap.firstChild) wrap.removeChild(wrap.firstChild);
+
+    var addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'mts-re__btn mts-re__btn--add-custom';
+    addBtn.textContent = '+ Campo personalizado';
+    addBtn.addEventListener('mousedown', function(e) { e.preventDefault(); });
+    addBtn.addEventListener('click', function() {
+      form.classList.toggle('mts-re__custom-form--hidden');
+    });
+    wrap.appendChild(addBtn);
+
+    var form = document.createElement('div');
+    form.className = 'mts-re__custom-form mts-re__custom-form--hidden';
+
+    function makeInput(ph) {
+      var inp = document.createElement('input');
+      inp.type = 'text';
+      inp.placeholder = ph;
+      inp.className = 'mts-re__custom-input';
+      inp.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+      return inp;
+    }
+
+    var inpToken = makeInput('Nombre del campo (ej: cliente)');
+    var inpLabel = makeInput('Etiqueta visible');
+    var inpDV    = makeInput('Valor por defecto (opcional)');
+    var actions  = document.createElement('div');
+    actions.className = 'mts-re__custom-actions';
+
+    var saveBtn = document.createElement('button');
+    saveBtn.type = 'button';
+    saveBtn.className = 'mts-re__btn mts-re__btn--primary mts-re__btn--sm';
+    saveBtn.textContent = 'Agregar';
+    saveBtn.addEventListener('mousedown', function(e) { e.preventDefault(); });
+    saveBtn.addEventListener('click', function() {
+      var raw   = inpToken.value.trim().replace(/[^a-zA-Z0-9_.]/g, '');
+      var label = inpLabel.value.trim();
+      if (!raw || !label) return;
+      self._customFields.push({ token: '{{custom.' + raw + '}}', label: label, defaultValue: inpDV.value.trim() });
+      self._renderPaletteGroups(self._paletteSearchEl ? self._paletteSearchEl.value.trim().toLowerCase() : '');
+      inpToken.value = ''; inpLabel.value = ''; inpDV.value = '';
+      form.classList.add('mts-re__custom-form--hidden');
+    });
+
+    var cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.className = 'mts-re__btn mts-re__btn--sm';
+    cancelBtn.textContent = 'Cancelar';
+    cancelBtn.addEventListener('mousedown', function(e) { e.preventDefault(); });
+    cancelBtn.addEventListener('click', function() { form.classList.add('mts-re__custom-form--hidden'); });
+
+    actions.appendChild(saveBtn);
+    actions.appendChild(cancelBtn);
+    form.appendChild(inpToken);
+    form.appendChild(inpLabel);
+    form.appendChild(inpDV);
+    form.appendChild(actions);
+    wrap.appendChild(form);
+  }
+
+  /* ── Paste / Keydown ── */
+
+  _onPaste(e) {
+    e.preventDefault();
+    var text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    if (!text) return;
+    this._insertTextAtCursor(text);
+  }
+
+  _onKeydown(e) {
+    if (e.key !== 'Backspace' && e.key !== 'Delete') return;
+    var sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
+    var range = sel.getRangeAt(0);
+    if (!range.collapsed) return;
+
+    if (e.key === 'Backspace') {
+      var node = range.startContainer;
+      if (node.nodeType === Node.TEXT_NODE && range.startOffset === 0) {
+        var prev = node.previousSibling;
+        if (prev && prev.classList && prev.classList.contains('mts-re__chip')) {
+          prev.remove(); e.preventDefault();
+          this._syncTextarea();
+          this._emit('change', { value: this.getValue() });
+        }
+      }
+    }
+    if (e.key === 'Delete') {
+      var nodeD = range.startContainer;
+      if (nodeD.nodeType === Node.TEXT_NODE && range.startOffset === nodeD.nodeValue.length) {
+        var next = nodeD.nextSibling;
+        if (next && next.classList && next.classList.contains('mts-re__chip')) {
+          next.remove(); e.preventDefault();
+          this._syncTextarea();
+          this._emit('change', { value: this.getValue() });
+        }
+      }
+    }
+  }
+
+  /* ── Chips ── */
+
+  _createChip(token) {
+    var label    = this._findLabel(token);
+    var isCustom = /^\{\{custom\./.test(token);
+    var span = document.createElement('span');
+    span.className = 'mts-re__chip' + (isCustom ? ' mts-re__chip--custom' : '');
+    span.contentEditable = 'false';
+    span.draggable = false;
+    span.setAttribute('data-token', token);
+    span.textContent = label;
+    return span;
+  }
+
+  _findLabel(token) {
+    var i;
+    for (i = 0; i < this._catalog.length; i++) {
+      if (this._catalog[i].token === token) return this._catalog[i].label;
+    }
+    for (i = 0; i < this._customFields.length; i++) {
+      if (this._customFields[i].token === token) return this._customFields[i].label;
+    }
+    var m = token.match(/^\{\{(.+)\}\}$/);
+    return m ? m[1] : token;
+  }
+
+  _tokenizeTextNodes(root) {
+    var self    = this;
+    var TOKEN_RE = /\{\{[^}]+\}\}/;
+    var nodes   = [];
+    var walker  = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(node) {
+        if (node.parentNode && node.parentNode.classList &&
+            node.parentNode.classList.contains('mts-re__chip')) return NodeFilter.FILTER_REJECT;
+        return TOKEN_RE.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+      }
+    });
+    var n;
+    while ((n = walker.nextNode())) nodes.push(n);
+    nodes.forEach(function(tn) { self._tokenizeTextNode(tn); });
+  }
+
+  _tokenizeTextNode(textNode) {
+    var self  = this;
+    var parts = textNode.nodeValue.split(/(\{\{[^}]+\}\})/g);
+    if (parts.length === 1) return;
+    var frag = document.createDocumentFragment();
+    parts.forEach(function(part) {
+      if (/^\{\{[^}]+\}\}$/.test(part)) {
+        frag.appendChild(self._createChip(part));
+      } else if (part) {
+        frag.appendChild(document.createTextNode(part));
+      }
+    });
+    textNode.parentNode.replaceChild(frag, textNode);
+  }
+
+  /* ── Serialización ── */
+
+  /* Formatea HTML usando el DOM como parser — más robusto que regex.
+     El browser parsea el HTML en nodos; nosotros recorremos el árbol y
+     reconstruimos la salida con indentación para elementos de bloque.
+     Elementos inline (strong, em, a, span…) se preservan con outerHTML intacto. */
+  _prettyHtml(html) {
+    if (!html) return '';
+
+    /* Elementos de bloque — generan salto de línea + indentación propia.
+       HR es bloque void (sin hijos). IMG, BR, INPUT son inline/reemplazados
+       → van por la rama outerHTML junto a STRONG, EM, A, SPAN, etc. */
+    var BLOCK = { P:1, DIV:1, H1:1, H2:1, H3:1, H4:1, H5:1, H6:1,
+                  UL:1, OL:1, LI:1, BLOCKQUOTE:1, PRE:1, HR:1,
+                  TABLE:1, THEAD:1, TBODY:1, TFOOT:1, TR:1, TD:1, TH:1,
+                  FIGURE:1, FIGCAPTION:1,
+                  SECTION:1, ARTICLE:1, HEADER:1, FOOTER:1, MAIN:1, NAV:1 };
+    var IND = '  ';
+
+    function getAttrs(el) {
+      var s = '';
+      Array.prototype.forEach.call(el.attributes, function(a) {
+        s += ' ' + a.name;
+        if (a.value !== '') s += '="' + a.value + '"';
+      });
+      return s;
+    }
+
+    function walk(node, depth) {
+      var out = '';
+      var pad = IND.repeat(depth);
+      Array.prototype.forEach.call(node.childNodes, function(child) {
+        if (child.nodeType === 3) {           /* TEXT_NODE — inline, sin tocar */
+          if (child.nodeValue.trim()) out += child.nodeValue;
+        } else if (child.nodeType === 1) {    /* ELEMENT_NODE */
+          var tag = child.tagName;
+          if (BLOCK[tag]) {
+            if (child.childNodes.length === 0) {
+              /* Bloque vacío o void (ej. <hr>) */
+              out += '\n' + pad + child.outerHTML;
+            } else {
+              var inner = walk(child, depth + 1);
+              out += '\n' + pad
+                   + '<' + tag.toLowerCase() + getAttrs(child) + '>'
+                   + inner
+                   + '</' + tag.toLowerCase() + '>';
+            }
+          } else {
+            /* Inline (strong, em, a, span, img, br, etc.) — outerHTML intacto */
+            out += child.outerHTML;
+          }
+        }
+      });
+      return out;
+    }
+
+    var wrap = document.createElement('div');
+    wrap.innerHTML = html;
+    return walk(wrap, 0).trim();
+  }
+
+  _serialize() {
+    if (!this._editor) return '';
+    var clone = this._editor.cloneNode(true);
+    clone.querySelectorAll('.mts-re__chip').forEach(function(chip) {
+      chip.replaceWith(document.createTextNode(chip.getAttribute('data-token') || ''));
+    });
+    return clone.innerHTML.replace(/​/g, '');
+  }
+
+  _setEditorContent(str) {
+    if (!this._editor) return;
+    var safe = (typeof MTS !== 'undefined' && MTS.Sanitize) ? MTS.Sanitize.html(str) : str;
+    this._editor.innerHTML = safe;
+    this._tokenizeTextNodes(this._editor);
+    this._editor.classList.toggle('mts-re__editor--empty', !this._editor.textContent.trim());
+    this._updateStatus();
+  }
+
+  _syncTextarea() {
+    if (this._textarea) this._textarea.value = this.getValue();
+  }
+
+  _insertTextAtCursor(text) {
+    var self  = this;
+    var parts = text.split(/(\{\{[^}]+\}\})/g);
+    var frag  = document.createDocumentFragment();
+    parts.forEach(function(part) {
+      if (/^\{\{[^}]+\}\}$/.test(part)) {
+        frag.appendChild(self._createChip(part));
+      } else if (part) {
+        frag.appendChild(document.createTextNode(part));
+      }
+    });
+    var sel = window.getSelection();
+    if (sel && sel.rangeCount > 0) {
+      var range = sel.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(frag);
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } else {
+      if (this._editor) this._editor.appendChild(frag);
+    }
+    this._syncTextarea();
+    this._updateStatus();
+    this._emit('change', { value: this.getValue() });
+  }
+};
+
+/* ══════════════════════════════════════════════════════════════
+   MTS.RichEditor.Toolbar — constantes públicas de botones
+   Uso: toolbar: [BTN.BOLD, BTN.ITALIC, BTN.SEP, { button: BTN.LINK, tooltip: 'Enlace' }]
+   Compatible con el array legacy de grupos: ['format','lists',...]
+══════════════════════════════════════════════════════════════ */
+MTS.RichEditor.ToolbarButton = Object.freeze({
+  /* Formato de texto */
+  BOLD:         'bold',
+  ITALIC:       'italic',
+  UNDERLINE:    'underline',
+  STRIKE:       'strike',
+  FORMAT_BLOCK: 'formatBlock',
+  /* Fuente */
+  FONT_SIZE:    'fontSize',
+  FONT_FAMILY:  'fontFamily',
+  /* Listas */
+  LIST_UL:      'listUl',
+  LIST_OL:      'listOl',
+  INDENT:       'indent',
+  OUTDENT:      'outdent',
+  /* Alineación */
+  ALIGN_LEFT:   'alignLeft',
+  ALIGN_CENTER: 'alignCenter',
+  ALIGN_RIGHT:  'alignRight',
+  ALIGN_FULL:   'alignFull',
+  /* Insertar */
+  LINK:         'link',
+  UNLINK:       'unlink',
+  TEXT_COLOR:   'textColor',
+  BG_COLOR:     'bgColor',
+  /* Tabla */
+  TABLE:        'table',
+  /* HTML fuente */
+  HTML_SOURCE:  'htmlSource',
+  /* Historial / limpieza */
+  UNDO:         'undo',
+  REDO:         'redo',
+  CLEAN_FORMAT: 'cleanFormat',
+  /* Merge fields */
+  FIELDS:       'fields',
+  /* Separador de sección */
+  SEP:          '|',
+});

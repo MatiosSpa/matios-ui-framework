@@ -1,0 +1,145 @@
+/* ============================================================
+   MATIOS UI — matios-ui-richeditor.css
+   MTS.RichEditor — clon de MTS.RichEditor + merge fields
+   Renombrado mts-re → mts-re. Extensiones MFE marcadas con [MFE].
+   ============================================================ */
+
+/* ── Wrapper raíz ── */
+.mts-re { display:flex;flex-direction:column;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);overflow:hidden;background:var(--mts-bg-surface);transition:border-color .15s,box-shadow .15s; }
+.mts-re--focused { border-color:var(--mts-color-primary);box-shadow:0 0 0 3px var(--mts-color-primary-light); }
+.mts-re--disabled { opacity:.55;pointer-events:none; }
+
+/* ── Toolbar ── */
+.mts-re__toolbar { display:flex;flex-wrap:wrap;align-items:center;gap:2px;padding:6px 8px;border-bottom:1px solid var(--mts-border-color);background:var(--mts-bg-surface-2); }
+.mts-re__sep { width:1px;height:20px;background:var(--mts-border-color);margin:0 4px;flex-shrink:0; }
+
+/* ── Botones ── */
+.mts-re__btn { display:flex;align-items:center;justify-content:center;gap:4px;min-width:28px;height:28px;padding:0 4px;background:none;border:1px solid transparent;border-radius:var(--mts-radius-sm);cursor:pointer;color:var(--mts-text-muted);font-family:var(--mts-font-family);font-size:12px;white-space:nowrap;flex-shrink:0;transition:all .12s; }
+.mts-re__btn:hover { background:var(--mts-bg-surface);border-color:var(--mts-border-color);color:var(--mts-text-primary); }
+.mts-re__btn--active { background:var(--mts-color-primary-light);border-color:var(--mts-color-primary);color:var(--mts-color-primary); }
+.mts-re__btn b,.mts-re__btn i,.mts-re__btn u,.mts-re__btn s { font-size:13px;line-height:1; }
+
+/* [MFE] Variantes de botón */
+.mts-re__btn--primary { background:var(--mts-color-primary);color:var(--mts-color-primary-text,#fff);border-color:var(--mts-color-primary); }
+.mts-re__btn--primary:hover { background:var(--mts-color-primary-hover);border-color:var(--mts-color-primary-hover); }
+.mts-re__btn--sm { padding:3px 8px;height:auto;min-width:auto;font-size:11px; }
+.mts-re__btn--toggle { padding:0 8px; }
+.mts-re__btn-icon { display:flex;align-items:center;line-height:1; }
+.mts-re__btn-icon svg { flex-shrink:0; }
+.mts-re__btn-label { font-size:12px;line-height:1; }
+
+/* ── Select formato ── */
+.mts-re__select { height:28px;padding:0 6px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-sm);background:var(--mts-bg-surface);color:var(--mts-text-secondary);font-size:12px;cursor:pointer;outline:none;font-family:var(--mts-font-family); }
+.mts-re__select:hover { border-color:var(--mts-color-primary); }
+
+/* ── Color picker ── */
+.mts-re__color-wrap { position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid transparent;border-radius:var(--mts-radius-sm);cursor:pointer;transition:all .12s; }
+.mts-re__color-wrap:hover { background:var(--mts-bg-surface);border-color:var(--mts-border-color); }
+.mts-re__color-icon { color:var(--mts-text-muted);display:flex;pointer-events:none; }
+.mts-re__color-input { position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;border:none;padding:0; }
+
+/* [MFE] Link bar — reemplaza prompt() del RTE */
+.mts-re__link-bar { display:flex;align-items:center;gap:6px;padding:5px 10px;border-bottom:1px solid var(--mts-border-color);background:var(--mts-bg-surface-2);flex-shrink:0; }
+.mts-re__link-bar--hidden { display:none; }
+.mts-re__link-label { font-size:12px;color:var(--mts-text-muted);flex-shrink:0; }
+.mts-re__link-input { flex:1;padding:3px 7px;font-size:12px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-sm);background:var(--mts-bg-surface);color:var(--mts-text-primary);font-family:var(--mts-font-family);outline:none; }
+.mts-re__link-input:focus { border-color:var(--mts-color-primary); }
+
+/* [MFE] Body — flex row: editor + paleta */
+.mts-re__body { display:flex;overflow:hidden;position:relative; }
+
+/* ── Editor wrap ── */
+.mts-re__editor-wrap { overflow-y:auto;flex:1;position:relative;min-width:0; }
+
+/* ── Editor ── */
+.mts-re__editor { padding:14px 16px;outline:none;min-height:100%;font-size:14px;line-height:1.7;color:var(--mts-text-primary);font-family:var(--mts-font-family);word-wrap:break-word; }
+.mts-re__editor--empty::before { content:attr(data-placeholder);color:var(--mts-text-muted);pointer-events:none; }
+
+/* Estilos del contenido */
+.mts-re__editor h1 { font-size:24px;font-weight:800;margin:.4em 0 .2em; }
+.mts-re__editor h2 { font-size:20px;font-weight:700;margin:.4em 0 .2em; }
+.mts-re__editor h3 { font-size:16px;font-weight:700;margin:.4em 0 .2em; }
+.mts-re__editor blockquote { border-left:3px solid var(--mts-color-primary);margin:.5em 0;padding:.3em .8em;color:var(--mts-text-muted);font-style:italic; }
+.mts-re__editor pre { background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:6px;padding:.5em .8em;font-family:var(--mts-font-mono);font-size:13px;overflow-x:auto; }
+.mts-re__editor a { color:var(--mts-color-primary);text-decoration:underline; }
+.mts-re__editor ul,.mts-re__editor ol { padding-left:1.5em;margin:.3em 0; }
+.mts-re__editor ul { list-style-type:disc; }
+.mts-re__editor ol { list-style-type:decimal; }
+
+/* [MFE] Chips */
+.mts-re__chip { display:inline-flex;align-items:center;padding:1px 7px 2px;border-radius:var(--mts-radius-full,9999px);font-size:11px;font-weight:500;line-height:1.5;vertical-align:baseline;white-space:nowrap;cursor:default;user-select:none;-webkit-user-select:none;background:var(--mts-color-primary-light);color:var(--mts-color-primary);border:1px solid var(--mts-color-primary);opacity:.85; }
+.mts-re__chip--custom { background:var(--mts-color-warning-light,rgba(251,191,36,.12));color:var(--mts-color-warning,#fbbf24);border-color:var(--mts-color-warning,#fbbf24); }
+
+/* ── Status bar ── */
+.mts-re__status { padding:4px 12px;border-top:1px solid var(--mts-border-color);background:var(--mts-bg-surface-2);font-size:11px;color:var(--mts-text-muted);text-align:right; }
+
+/* [MFE] Paleta de campos — posición absoluta para no cliquearse por overflow del contenedor padre */
+.mts-re__palette { position:absolute;right:0;top:0;bottom:0;width:230px;border-left:1px solid var(--mts-border-color);display:flex;flex-direction:column;overflow:hidden;background:var(--mts-bg-surface-2);z-index:5;box-shadow:-4px 0 12px rgba(0,0,0,.1); }
+.mts-re__palette--hidden { display:none; }
+
+.mts-re__palette-search { padding:7px 8px;border-bottom:1px solid var(--mts-border-color);flex-shrink:0; }
+.mts-re__palette-search-input { width:100%;box-sizing:border-box;padding:4px 8px;font-size:12px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-sm);background:var(--mts-bg-surface);color:var(--mts-text-primary);font-family:var(--mts-font-family);outline:none; }
+.mts-re__palette-search-input:focus { border-color:var(--mts-color-primary); }
+
+.mts-re__palette-groups { flex:1;overflow-y:auto;min-height:0; }
+.mts-re__palette-group { border-bottom:1px solid var(--mts-border-color); }
+.mts-re__palette-group-header { display:flex;align-items:center;justify-content:space-between;padding:5px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mts-text-muted);cursor:pointer;user-select:none;-webkit-user-select:none;transition:color .1s; }
+.mts-re__palette-group-header:hover { color:var(--mts-text-primary); }
+.mts-re__palette-group-arrow { display:flex;align-items:center;flex-shrink:0;transition:transform .15s; }
+.mts-re__palette-group--collapsed .mts-re__palette-group-arrow { transform:rotate(-90deg); }
+.mts-re__palette-group-body { /* visible por defecto */ }
+.mts-re__palette-group--collapsed .mts-re__palette-group-body { display:none; }
+
+.mts-re__palette-item { display:flex;flex-direction:column;gap:1px;padding:5px 10px;cursor:pointer;transition:background .1s; }
+.mts-re__palette-item:hover { background:var(--mts-bg-surface); }
+.mts-re__palette-item--custom .mts-re__palette-item-token { color:var(--mts-color-warning,#fbbf24); }
+.mts-re__palette-item-label { font-size:13px;font-weight:500;color:var(--mts-text-primary); }
+.mts-re__palette-item-token { font-size:11px;color:var(--mts-text-muted);font-family:var(--mts-font-mono); }
+
+.mts-re__palette-empty { padding:12px 10px;font-size:12px;color:var(--mts-text-muted);text-align:center; }
+
+/* [MFE] Custom fields */
+.mts-re__palette-custom { border-top:1px solid var(--mts-border-color);flex-shrink:0;padding:6px 8px; }
+.mts-re__btn--add-custom { width:100%;justify-content:center;font-size:12px;color:var(--mts-text-muted);border:1px dashed var(--mts-border-color); }
+.mts-re__btn--add-custom:hover { border-color:var(--mts-color-primary);color:var(--mts-color-primary);background:var(--mts-color-primary-light); }
+
+.mts-re__custom-form { display:flex;flex-direction:column;gap:5px;margin-top:6px; }
+.mts-re__custom-form--hidden { display:none; }
+.mts-re__custom-input { width:100%;box-sizing:border-box;padding:4px 7px;font-size:12px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-sm);background:var(--mts-bg-surface);color:var(--mts-text-primary);font-family:var(--mts-font-family);outline:none; }
+.mts-re__custom-input:focus { border-color:var(--mts-color-primary); }
+.mts-re__custom-actions { display:flex;gap:4px; }
+
+/* [MFE] HTML source panel */
+.mts-re__html-panel { display:none;flex-direction:column;overflow:hidden;flex-shrink:0; }
+.mts-re__html-panel:not(.mts-re__html-panel--hidden) { display:flex; }
+.mts-re__html-panel--hidden { display:none !important; }
+.mts-re__html-actions { display:flex;gap:4px;padding:5px 8px;border-bottom:1px solid var(--mts-border-color);background:var(--mts-bg-surface-2);flex-shrink:0;align-items:center; }
+.mts-re__html-actions-label { font-size:11px;color:var(--mts-text-muted);flex:1; }
+/* Fallback textarea — solo visible si MTS.CodeBlock no está disponible */
+.mts-re__html-textarea { flex:1;padding:10px 12px;font-family:var(--mts-font-mono);font-size:12px;line-height:1.6;border:none;outline:none;resize:none;background:var(--mts-bg-surface);color:var(--mts-text-primary);width:100%;box-sizing:border-box; }
+.mts-re__body--hidden { display:none; }
+
+/* [MFE] Preview mode */
+.mts-re--preview .mts-re__toolbar { display:none; }
+.mts-re--preview .mts-re__link-bar { display:none; }
+.mts-re--preview .mts-re__palette { display:none; }
+.mts-re--preview .mts-re__editor { background:var(--mts-bg-surface-2);cursor:default;pointer-events:none; }
+
+/* [MFE] Table picker */
+.mts-re__table-picker { position:fixed;z-index:9999;background:var(--mts-bg-surface);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);padding:8px;box-shadow:0 4px 16px rgba(0,0,0,.15); }
+.mts-re__table-picker--hidden { display:none; }
+.mts-re__table-picker-label { font-size:11px;color:var(--mts-text-muted);text-align:center;margin-bottom:6px;min-height:14px; }
+.mts-re__table-picker-grid { display:grid;grid-template-columns:repeat(8,16px);gap:2px; }
+.mts-re__table-picker-cell { width:16px;height:16px;border:1px solid var(--mts-border-color);border-radius:2px;cursor:pointer;background:var(--mts-bg-surface-2);transition:background .08s,border-color .08s; }
+.mts-re__table-picker-cell--active { background:var(--mts-color-primary-light);border-color:var(--mts-color-primary); }
+
+/* [MFE] Tabla insertada en el editor */
+.mts-re__editor table { border-collapse:collapse;width:100%;margin:.4em 0; }
+.mts-re__editor td,.mts-re__editor th { border:1px solid var(--mts-border-color);padding:5px 9px;min-width:40px;vertical-align:top; }
+.mts-re__editor th { background:var(--mts-bg-surface-2);font-weight:600; }
+
+/* [MFE] Responsive — paleta colapsada en pantallas pequeñas */
+@media (max-width:600px) {
+  .mts-re__palette { display:none; }
+  .mts-re__palette--mobile-open { display:flex;position:absolute;right:0;top:0;height:100%;z-index:10;box-shadow:-4px 0 12px rgba(0,0,0,.18); }
+}
