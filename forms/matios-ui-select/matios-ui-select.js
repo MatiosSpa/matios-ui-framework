@@ -87,6 +87,7 @@ MTS.Select = class MtsSelect {
 
     this._build();
     this._bindEvents();
+    this._container._mtsInstance = this;
   }
 
   /* ── Public API / API pública ────────────────────────────── */

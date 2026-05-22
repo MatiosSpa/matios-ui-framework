@@ -96,6 +96,7 @@ MTS.Input = class MtsInput {
 
     this._build();
     this._bindEvents();
+    this._container._mtsInstance = this;
   }
 
   /* API */

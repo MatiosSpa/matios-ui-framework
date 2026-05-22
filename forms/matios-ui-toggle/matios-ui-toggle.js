@@ -35,6 +35,7 @@ MTS.Toggle = class MtsToggle {
     if (options.onChange) this.on('change', options.onChange);
 
     this._build();
+    this._el._mtsInstance = this;
   }
 
   // Returns true if the switch is currently on

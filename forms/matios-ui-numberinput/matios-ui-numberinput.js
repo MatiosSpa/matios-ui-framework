@@ -88,9 +88,10 @@ MTS.NumberInput = class MtsNumberInput {
     if (options.onBlur)   this.on('blur',   options.onBlur);
 
     this._build();
+    this._el._mtsInstance = this;
   }
 
-  /* â”€â”€ API pÃºblica â”€â”€ */
+  /*â”€â”€ API pÃºblica â”€â”€ */
   getValue()       { return this.value; }
   setValue(v, silent = false) {
     this.value = this._clamp(Number(v));

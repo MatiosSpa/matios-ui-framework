@@ -32,6 +32,7 @@ MTS.Radio = class MtsRadio {
     if (options.onChange) this.on('change', options.onChange);
 
     this._build();
+    this._el._mtsInstance = this;
   }
 
   // Returns currently selected value / Retorna el valor actualmente seleccionado

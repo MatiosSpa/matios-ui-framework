@@ -35,6 +35,7 @@ MTS.Checkbox = class MtsCheckbox {
     if (options.onChange) this.on('change', options.onChange);
 
     this._build();
+    this._el._mtsInstance = this;
   }
 
   // Returns true if checked / Retorna true si está marcado
@@ -115,6 +116,7 @@ MTS.CheckboxGroup = class MtsCheckboxGroup {
     if (options.onChange) this.on('change', options.onChange);
 
     this._build();
+    this._el._mtsInstance = this;
   }
 
   // Returns array of selected values / Retorna arreglo de valores seleccionados

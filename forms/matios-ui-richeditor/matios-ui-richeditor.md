@@ -325,6 +325,10 @@ Si el JS del componente no está cargado (o se llama `destroy()`), el `<textarea
 
 ## Changelog
 
+### 2026-05-21
+- **Fix bug 1** — Items de la paleta de campos ahora capturan `_saveRange()` en `mousedown`, igual que los botones de toolbar. Antes, el segundo campo (y siguientes) se insertaban en la posición del cursor anterior en lugar de la posición actual.
+- **Fix bug 2** — En modo HTML source (`_htmlMode`): `insertField()` y `_exec()` retornan inmediatamente sin operar sobre el editor WYSIWYG oculto. Toolbar y paleta se atenúan visualmente (`opacity:.4; pointer-events:none`) para indicar que no aplican en modo edición de HTML crudo.
+
 ### 2026-05-19
 - Componente renombrado a `MTS.RichEditor` (reemplaza y consolida `MTS.MergeFieldEditor` y `MTS.RichTextEditor`)
 - `MTS.RichEditor.ToolbarButton` — objeto estático con constantes de botón (`BTN.BOLD`, `BTN.SEP`, etc.)

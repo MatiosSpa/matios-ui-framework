@@ -144,6 +144,11 @@ acc.closeAll()
 // Check if open / Verificar si está abierto
 acc.isOpen('panel-id')    // → boolean
 
+// Disable / enable an item at runtime / Deshabilitar / habilitar un ítem en runtime
+acc.setItemDisabled('panel-id', true)   // deshabilita — se cierra si estaba abierto
+acc.setItemDisabled('panel-id', false)  // habilita
+acc.isDisabled('panel-id')             // → boolean
+
 // Register event listener / Registrar listener
 acc.on('open',  (e) => console.log(e.detail.id))
 acc.on('close', (e) => console.log(e.detail.id))
@@ -169,3 +174,9 @@ document.getElementById('my-accordion')
 | `onClose` | `mts:accordion:close` |
 
 ---
+
+## Changelog
+
+### 2026-05-21
+- `setItemDisabled(id, bool)` — deshabilita/habilita un ítem en runtime sin reconstruir el DOM. Si el ítem estaba abierto al deshabilitarse, se cierra automáticamente. Lee `item.disabled` del estado interno al operar desde el click handler.
+- `isDisabled(id)` — retorna el estado disabled actual del ítem.

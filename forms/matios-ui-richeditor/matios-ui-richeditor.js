@@ -91,6 +91,7 @@ MTS.RichEditor = class MtsRichEditor {
     if (options.onBlur)   this.on('blur',   options.onBlur);
 
     this._build();
+    if (this._el) { this._el._mtsInstance = this; }
 
     /* Cargar valor inicial del textarea */
     if (this._textarea.value) {
@@ -161,7 +162,7 @@ MTS.RichEditor = class MtsRichEditor {
   }
 
   insertField(token) {
-    if (this.disabled || this.readonly || this._preview) return this;
+    if (this.disabled || this.readonly || this._preview || this._htmlMode) return this;
     var self = this;
     if (this._editor) this._editor.focus();
     this._restoreRange();
@@ -645,6 +646,7 @@ MTS.RichEditor = class MtsRichEditor {
   ══════════════════════════════════════════════════════════════ */
 
   _exec(cmd, value) {
+    if (this._htmlMode) return;
     this._restoreRange();
     try { document.execCommand(cmd, false, value || null); } catch(e) {}
     if (this._editor) this._editor.focus();
@@ -795,6 +797,9 @@ MTS.RichEditor = class MtsRichEditor {
     }
     this._htmlPanelEl.classList.remove('mts-re__html-panel--hidden');
     this._bodyEl.classList.add('mts-re__body--hidden');
+    /* Atenuar toolbar y paleta — sus controles no aplican en modo HTML crudo */
+    if (this._toolbarEl) this._toolbarEl.classList.add('mts-re__toolbar--html-mode');
+    if (this._paletteEl) this._paletteEl.classList.add('mts-re__palette--html-mode');
     /* Foco al textarea del CodeBlock o al textarea de fallback */
     var focusTarget = (this._htmlCodeBlock && this._htmlCodeBlock._editTextarea)
       ? this._htmlCodeBlock._editTextarea
@@ -807,6 +812,9 @@ MTS.RichEditor = class MtsRichEditor {
     this._htmlMode = false;
     this._htmlPanelEl.classList.add('mts-re__html-panel--hidden');
     this._bodyEl.classList.remove('mts-re__body--hidden');
+    /* Restaurar toolbar y paleta */
+    if (this._toolbarEl) this._toolbarEl.classList.remove('mts-re__toolbar--html-mode');
+    if (this._paletteEl) this._paletteEl.classList.remove('mts-re__palette--html-mode');
     if (this._editor) this._editor.focus();
     this._updateToolbarState();
   }
@@ -1089,7 +1097,7 @@ MTS.RichEditor = class MtsRichEditor {
         tokenEl.textContent = entry.token;
         item.appendChild(labelEl);
         item.appendChild(tokenEl);
-        item.addEventListener('mousedown', function(e) { e.preventDefault(); });
+        item.addEventListener('mousedown', function(e) { e.preventDefault(); self._saveRange(); });
         item.addEventListener('click', function() { self.insertField(entry.token); });
         body.appendChild(item);
       });

@@ -47,6 +47,7 @@ MTS.Slider = class MtsSlider {
     if (options.onChange) this.on('change', options.onChange);
 
     this._build();
+    this._el._mtsInstance = this;
   }
 
   // Returns current value — number for simple, [min, max] for range

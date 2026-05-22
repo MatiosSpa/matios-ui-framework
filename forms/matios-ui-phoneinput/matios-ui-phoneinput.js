@@ -103,6 +103,7 @@ MTS.PhoneInput = class MtsPhoneInput {
 
     this._ddOpen = false;
     this._build();
+    this._el._mtsInstance = this;
   }
 
   /* ── API ── */

@@ -44,6 +44,7 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     this._setupInput();
     this._buildPopup();
     this._bindEvents();
+    this._input._mtsInstance = this;
   }
 
   /* ── API pública ── */

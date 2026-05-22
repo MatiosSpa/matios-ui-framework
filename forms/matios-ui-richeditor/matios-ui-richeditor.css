@@ -113,6 +113,9 @@
 .mts-re__html-panel { display:none;flex-direction:column;overflow:hidden;flex-shrink:0; }
 .mts-re__html-panel:not(.mts-re__html-panel--hidden) { display:flex; }
 .mts-re__html-panel--hidden { display:none !important; }
+/* Toolbar y paleta atenuadas mientras el panel HTML source está abierto */
+.mts-re__toolbar--html-mode { opacity:.4;pointer-events:none; }
+.mts-re__palette--html-mode { opacity:.4;pointer-events:none; }
 .mts-re__html-actions { display:flex;gap:4px;padding:5px 8px;border-bottom:1px solid var(--mts-border-color);background:var(--mts-bg-surface-2);flex-shrink:0;align-items:center; }
 .mts-re__html-actions-label { font-size:11px;color:var(--mts-text-muted);flex:1; }
 /* Fallback textarea — solo visible si MTS.CodeBlock no está disponible */

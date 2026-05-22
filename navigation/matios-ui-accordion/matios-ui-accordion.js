@@ -11,9 +11,10 @@ MTS.Accordion = class MtsAccordion {
   /**
    * @param {string|Element} selector
    * @param {object} options
-   * @param {Array}    options.items      [{ id, title, content, icon?, open?, disabled? }]
-   * @param {boolean}  options.multiple   Permite múltiples abiertos — default: false
-   * @param {boolean}  options.flush      Sin bordes/card — default: false
+   * @param {Array}    options.items          [{ id, title, content, icon?, open?, disabled? }]
+   * @param {boolean}  options.multiple       Permite múltiples abiertos — default: false
+   * @param {boolean}  options.flush          Sin bordes/card — default: false
+   * @param {number}   options.bodyMaxHeight  Altura máxima del cuerpo en px — activa scroll interno
    * @param {function} options.onOpen
    * @param {function} options.onClose
    */
@@ -29,6 +30,9 @@ MTS.Accordion = class MtsAccordion {
 
     // Flush mode — no card border / Modo flush — sin borde card
     this.flush = options.flush ?? false;
+
+    // Max height for panel body in px — enables internal scroll
+    this._bodyMaxHeight = options.bodyMaxHeight ?? null;
 
     // Track which item IDs are currently open / Seguir qué IDs están actualmente abiertos
     this._open = new Set(this.items.filter(i => i.open).map(i => i.id));
@@ -49,6 +53,32 @@ MTS.Accordion = class MtsAccordion {
   openAll()   { this.items.forEach(i => this._toggle(i.id, true));  return this; }
   closeAll()  { this.items.forEach(i => this._toggle(i.id, false)); return this; }
   isOpen(id)  { return this._open.has(id); }
+
+  /**
+   * Habilita o deshabilita un ítem del acordeón sin reconstruir el DOM.
+   * Si el ítem estaba abierto y se deshabilita, se cierra automáticamente.
+   * @param {string}  id       — ID del ítem (options.items[].id)
+   * @param {boolean} disabled — true para deshabilitar, false para habilitar
+   */
+  setItemDisabled(id, disabled) {
+    const item = this.items.find(i => i.id === id);
+    if (!item) return this;
+    item.disabled = disabled;
+    const wrap   = this._el.querySelector(`#mts-acc-${id}`);
+    if (!wrap) return this;
+    const header = wrap.querySelector('.mts-accordion__header');
+    wrap.classList.toggle('mts-accordion__item--disabled', disabled);
+    if (header) header.disabled = disabled;
+    if (disabled && this._open.has(id)) this._setOpen(id, false);
+    return this;
+  }
+
+  /** Retorna true si el ítem está deshabilitado. */
+  isDisabled(id) {
+    const item = this.items.find(i => i.id === id);
+    return item ? (item.disabled ?? false) : false;
+  }
+
   on(e, cb)   { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   destroy()   { this._el.innerHTML = ''; }
 
@@ -113,8 +143,18 @@ MTS.Accordion = class MtsAccordion {
     header.setAttribute('aria-expanded', open);
     body.classList.toggle('mts-accordion__body--open', open);
     // Animación de altura
-    if (open) { body.style.maxHeight = body.scrollHeight + 'px'; }
-    else { body.style.maxHeight = '0'; }
+    if (open) {
+      if (this._bodyMaxHeight !== null) {
+        body.style.maxHeight  = this._bodyMaxHeight + 'px';
+        body.style.overflowY  = 'auto';
+      } else {
+        body.style.maxHeight  = body.scrollHeight + 'px';
+        body.style.overflowY  = '';
+      }
+    } else {
+      body.style.maxHeight = '0';
+      body.style.overflowY = '';
+    }
   }
 
   _emit(event, detail) {

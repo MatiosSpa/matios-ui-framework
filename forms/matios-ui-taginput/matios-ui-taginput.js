@@ -66,9 +66,10 @@ MTS.TagInput = class MtsTagInput {
 
     this._build();
     this._bindEvents();
+    this._el._mtsInstance = this;
   }
 
-  /* â”€â”€ NormalizaciÃ³n interna â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /*â”€â”€ NormalizaciÃ³n interna â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   _normalize(tag) {
     if (typeof tag === 'string') return { uid: tag, name: tag };
     /* Acepta { uid, name } o { value, label } (compatibilidad con Select) */
