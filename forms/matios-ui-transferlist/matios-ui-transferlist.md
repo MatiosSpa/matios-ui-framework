@@ -90,7 +90,13 @@ validateKey: function (item) {
 | `itemLabel` | `string\|function` | `'label'` | Texto principal visible |
 | `itemDescription` | `string\|function` | `'description'` | Texto secundario visible |
 | `renderItem` | `function` | `null` | Render custom del item |
-| `showMoveButtons` | `boolean` | `true` | Muestra u oculta los botones laterales |
+| `showMoveButtons` | `boolean` | `true` | Master switch — `false` oculta todos los botones sin excepcion |
+| `buttons` | `object` | todos `true` | Control individual por boton. Si se omite, los 4 visibles (retrocompat) |
+| `buttons.allToSelected` | `boolean` | `true` | Muestra el boton `»` (mover todos al destino) |
+| `buttons.toSelected` | `boolean` | `true` | Muestra el boton `›` (mover seleccionado al destino) |
+| `buttons.toOrigin` | `boolean` | `true` | Muestra el boton `‹` (mover seleccionado al origen) |
+| `buttons.allToOrigin` | `boolean` | `true` | Muestra el boton `«` (mover todos al origen) |
+| `removableSelectedItem` | `boolean` | `false` | Muestra una `x` por item en el lado seleccionado. Click elimina el item del destino — no lo mueve al origen |
 | `draggable` | `boolean` | `true` | Permite drag and drop |
 | `disabled` | `boolean` | `false` | Deshabilita la interaccion |
 | `validateUnique` | `boolean` | `false` | Activa validacion unica en destino |
@@ -149,7 +155,37 @@ La componente no impone nombres fijos de negocio. Toma el datasource real y lo b
 
 ## Version
 
-| Version | Descripcion |
-|---------|-------------|
-| 2.0.0 | Nueva API con `originDataSource`, `selectedDataSource`, validacion unica y llave interna automatica |
-| 1.0.0 | Release inicial de TransferList |
+## Uso previsto — solo boton › + eliminar con x
+
+```js
+new MTS.TransferList('#roles-transfer', {
+  originTitle: 'Disponibles',
+  selectedTitle: 'Asignados',
+  itemLabel: 'name',
+  itemDescription: 'moduleName',
+  validateUnique: true,
+  validateKey: 'moduleId',
+  duplicateMessage: 'Ya hay un perfil de ese modulo en el rol.',
+  draggable: false,
+  showMoveButtons: true,
+  buttons: { allToSelected: false, toSelected: true, toOrigin: false, allToOrigin: false },
+  removableSelectedItem: true
+});
+```
+
+Resultado: solo el boton `›` para agregar + una `x` por item en el lado seleccionado para quitar.
+
+---
+
+## Changelog
+
+### 2026-05-22
+- `buttons` — control individual de cada boton (`allToSelected`, `toSelected`, `toOrigin`, `allToOrigin`). Si se omite el objeto, los 4 permanecen visibles (retrocompat).
+- `showMoveButtons: false` — ahora remueve los botones del DOM (antes solo aplicaba clase CSS). Gana sobre cualquier valor de `buttons.*`.
+- `removableSelectedItem` — boton `x` por item en el lado seleccionado. Elimina el item del destino sin moverlo al origen, sin validaciones, sin mecanica de move. Emite `change` con `trigger: 'remove'`.
+
+### 2.0.0
+- Nueva API con `originDataSource`, `selectedDataSource`, validacion unica y llave interna automatica.
+
+### 1.0.0
+- Release inicial de TransferList.

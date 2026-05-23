@@ -67,6 +67,7 @@
   <div class="demo-section"><div class="demo-section-title">3 - Participantes de evento</div><div id="tabs-s3"></div></div>
   <div class="demo-section"><div class="demo-section-title">4 - Planes por region</div><div id="tabs-s4"></div></div>
   <div class="demo-section"><div class="demo-section-title">5 - Roles por modulo</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 - Botones individuales + eliminar con x</div><div id="tabs-s6"></div></div>
 </div>
 
 <script>
@@ -365,6 +366,58 @@ makeSection('tabs-s4', preview_s4, js_s4, function () {
     }
   });
 }, '600px');
+
+var preview_s6 =
+  '<div class="demo-stack">' +
+    '<div id="s6-transfer"></div>' +
+  '</div>';
+
+var js_s6 =
+  "new MTS.TransferList('#s6-transfer', {\n" +
+  "  label: 'Perfiles del rol',\n" +
+  "  hint: 'Solo el boton › para agregar. La x quita el item del destino sin moverlo al origen.',\n" +
+  "  originTitle: 'Disponibles',\n" +
+  "  selectedTitle: 'Asignados',\n" +
+  "  itemLabel: 'name',\n" +
+  "  itemDescription: 'moduleName',\n" +
+  "  originDataSource: profilesS6,\n" +
+  "  selectedDataSource: [],\n" +
+  "  validateUnique: true,\n" +
+  "  validateKey: 'moduleId',\n" +
+  "  duplicateMessage: 'Ya hay un perfil de ese modulo en el rol.',\n" +
+  "  draggable: false,\n" +
+  "  showMoveButtons: true,\n" +
+  "  buttons: { allToSelected: false, toSelected: true, toOrigin: false, allToOrigin: false },\n" +
+  "  removableSelectedItem: true\n" +
+  "});";
+
+makeSection('tabs-s6', preview_s6, js_s6, function () {
+  var profilesS6 = [
+    { id: 'u-base',   name: 'Workspace base',        moduleName: 'Usuarios',    moduleId: 'users' },
+    { id: 'u-sup',    name: 'Supervisor operacional', moduleName: 'Usuarios',    moduleId: 'users' },
+    { id: 'd-editor', name: 'Editor documental',      moduleName: 'Documentos',  moduleId: 'documents' },
+    { id: 'd-aprob',  name: 'Aprobador documental',   moduleName: 'Documentos',  moduleId: 'documents' },
+    { id: 'b-view',   name: 'Consulta financiera',    moduleName: 'Billing',     moduleId: 'billing' }
+  ];
+
+  new MTS.TransferList('#s6-transfer', {
+    label: 'Perfiles del rol',
+    hint: 'Solo el boton › para agregar. La x quita el item del destino sin moverlo al origen.',
+    originTitle: 'Disponibles',
+    selectedTitle: 'Asignados',
+    itemLabel: 'name',
+    itemDescription: 'moduleName',
+    originDataSource: profilesS6,
+    selectedDataSource: [],
+    validateUnique: true,
+    validateKey: 'moduleId',
+    duplicateMessage: 'Ya hay un perfil de ese modulo en el rol.',
+    draggable: false,
+    showMoveButtons: true,
+    buttons: { allToSelected: false, toSelected: true, toOrigin: false, allToOrigin: false },
+    removableSelectedItem: true
+  });
+}, '560px');
 
 makeSection('tabs-s5', preview_s5, js_s5, function () {
   var profiles = [

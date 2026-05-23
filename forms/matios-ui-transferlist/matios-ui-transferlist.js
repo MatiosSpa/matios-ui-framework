@@ -27,6 +27,14 @@ MTS.TransferList = class MtsTransferList {
     this.renderItem = typeof options.renderItem === 'function' ? options.renderItem : null;
 
     this.showMoveButtons = options.showMoveButtons !== false;
+    var _noBtnObj = options.buttons == null;
+    this.buttons = {
+      allToSelected: _noBtnObj ? true : options.buttons.allToSelected === true,
+      toSelected:    _noBtnObj ? true : options.buttons.toSelected    === true,
+      toOrigin:      _noBtnObj ? true : options.buttons.toOrigin      === true,
+      allToOrigin:   _noBtnObj ? true : options.buttons.allToOrigin   === true,
+    };
+    this.removableSelectedItem = options.removableSelectedItem === true;
     this.draggable = options.draggable !== false;
     this.disabled = options.disabled === true;
 
@@ -163,29 +171,36 @@ MTS.TransferList = class MtsTransferList {
     this._root = document.createElement('div');
     this._root.className = 'mts-transferlist';
     if (this.disabled) this._root.classList.add('mts-transferlist--disabled');
-    if (!this.showMoveButtons) this._root.classList.add('mts-transferlist--no-controls');
 
-    this._root.innerHTML =
-      '<div class="mts-transferlist__column">' +
-        '<div class="mts-transferlist__header">' +
-          '<span class="mts-transferlist__title">' + this._escapeHtml(this.originTitle) + '</span>' +
-          '<span class="mts-transferlist__count" data-transfer-count="origin">0</span>' +
-        '</div>' +
-        '<div class="mts-transferlist__list" data-transfer-list="origin"></div>' +
+    // Origin column
+    var originCol = document.createElement('div');
+    originCol.className = 'mts-transferlist__column';
+    originCol.innerHTML =
+      '<div class="mts-transferlist__header">' +
+        '<span class="mts-transferlist__title">' + this._escapeHtml(this.originTitle) + '</span>' +
+        '<span class="mts-transferlist__count" data-transfer-count="origin">0</span>' +
       '</div>' +
-      '<div class="mts-transferlist__controls">' +
-        '<button type="button" class="mts-transferlist__control" data-transfer-action="all-to-selected" aria-label="Move all to selected">&raquo;</button>' +
-        '<button type="button" class="mts-transferlist__control" data-transfer-action="to-selected" aria-label="Move to selected">&rsaquo;</button>' +
-        '<button type="button" class="mts-transferlist__control" data-transfer-action="to-origin" aria-label="Move to origin">&lsaquo;</button>' +
-        '<button type="button" class="mts-transferlist__control" data-transfer-action="all-to-origin" aria-label="Move all to origin">&laquo;</button>' +
+      '<div class="mts-transferlist__list" data-transfer-list="origin"></div>';
+    this._root.appendChild(originCol);
+
+    // Controls — condicional por showMoveButtons + buttons individuales
+    var controlsEl = this._buildControls();
+    if (controlsEl) {
+      this._root.appendChild(controlsEl);
+    } else {
+      this._root.classList.add('mts-transferlist--no-controls');
+    }
+
+    // Selected column
+    var selectedCol = document.createElement('div');
+    selectedCol.className = 'mts-transferlist__column';
+    selectedCol.innerHTML =
+      '<div class="mts-transferlist__header">' +
+        '<span class="mts-transferlist__title">' + this._escapeHtml(this.selectedTitle) + '</span>' +
+        '<span class="mts-transferlist__count" data-transfer-count="selected">0</span>' +
       '</div>' +
-      '<div class="mts-transferlist__column">' +
-        '<div class="mts-transferlist__header">' +
-          '<span class="mts-transferlist__title">' + this._escapeHtml(this.selectedTitle) + '</span>' +
-          '<span class="mts-transferlist__count" data-transfer-count="selected">0</span>' +
-        '</div>' +
-        '<div class="mts-transferlist__list" data-transfer-list="selected"></div>' +
-      '</div>';
+      '<div class="mts-transferlist__list" data-transfer-list="selected"></div>';
+    this._root.appendChild(selectedCol);
 
     this._el.appendChild(this._root);
 
@@ -196,16 +211,54 @@ MTS.TransferList = class MtsTransferList {
       this._el.appendChild(hint);
     }
 
-    this._originListEl = this._root.querySelector('[data-transfer-list="origin"]');
+    this._originListEl   = this._root.querySelector('[data-transfer-list="origin"]');
     this._selectedListEl = this._root.querySelector('[data-transfer-list="selected"]');
-    this._originCountEl = this._root.querySelector('[data-transfer-count="origin"]');
+    this._originCountEl  = this._root.querySelector('[data-transfer-count="origin"]');
     this._selectedCountEl = this._root.querySelector('[data-transfer-count="selected"]');
+  }
+
+  _buildControls() {
+    if (!this.showMoveButtons) { return null; }
+
+    var btns = [
+      { action: 'all-to-selected', label: 'Move all to selected', show: this.buttons.allToSelected, char: '»' },
+      { action: 'to-selected',     label: 'Move to selected',     show: this.buttons.toSelected,    char: '›' },
+      { action: 'to-origin',       label: 'Move to origin',       show: this.buttons.toOrigin,      char: '‹' },
+      { action: 'all-to-origin',   label: 'Move all to origin',   show: this.buttons.allToOrigin,   char: '«' },
+    ];
+
+    var visible = btns.filter(function (b) { return b.show; });
+    if (!visible.length) { return null; }
+
+    var controlsEl = document.createElement('div');
+    controlsEl.className = 'mts-transferlist__controls';
+
+    visible.forEach(function (b) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mts-transferlist__control';
+      btn.setAttribute('data-transfer-action', b.action);
+      btn.setAttribute('aria-label', b.label);
+      btn.textContent = b.char;
+      controlsEl.appendChild(btn);
+    });
+
+    return controlsEl;
   }
 
   _bindEvents() {
     var self = this;
 
     this._root.addEventListener('click', function (event) {
+      // Botón (x) de eliminar — se procesa antes que la selección del ítem
+      var removeBtn = event.target.closest('[data-transfer-remove]');
+      if (removeBtn) {
+        event.stopPropagation();
+        if (self.disabled) { return; }
+        self._removeSelectedItem(removeBtn.getAttribute('data-transfer-remove'));
+        return;
+      }
+
       var actionBtn = event.target.closest('[data-transfer-action]');
       if (actionBtn) {
         if (self.disabled) return;
@@ -342,7 +395,45 @@ MTS.TransferList = class MtsTransferList {
           '</div>';
       }
 
+      // Botón (x) — solo en lado seleccionado, solo si removableSelectedItem: true
+      if (side === 'selected' && self.removableSelectedItem) {
+        var removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'mts-transferlist__item-remove';
+        removeBtn.setAttribute('data-transfer-remove', entry.key);
+        removeBtn.setAttribute('aria-label', 'Remove item');
+        removeBtn.textContent = '×';
+        itemEl.appendChild(removeBtn);
+      }
+
       host.appendChild(itemEl);
+    });
+  }
+
+  _removeSelectedItem(key) {
+    var index = -1;
+    for (var i = 0; i < this.selectedDataSource.length; i++) {
+      if (String(this.selectedDataSource[i].key) === String(key)) { index = i; break; }
+    }
+    if (index === -1) { return; }
+
+    var entry = this.selectedDataSource[index];
+    this.selectedDataSource.splice(index, 1);
+
+    if (String(this._activeSelectedKey) === String(key)) { this._activeSelectedKey = null; }
+
+    this._render();
+
+    if (this._legacyOnChange) {
+      this._legacyOnChange({
+        type: 'change',
+        detail: { item: entry.item, from: 'selected', to: null, trigger: 'remove', originItems: this.getOriginItems(), selectedItems: this.getSelectedItems() }
+      });
+    }
+
+    this._emit('change', {
+      item: entry.item, from: 'selected', to: null, trigger: 'remove',
+      originItems: this.getOriginItems(), selectedItems: this.getSelectedItems()
     });
   }
 

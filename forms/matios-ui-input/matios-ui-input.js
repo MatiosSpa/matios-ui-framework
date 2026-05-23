@@ -312,8 +312,8 @@ MTS.Input = class MtsInput {
   }
 
   _renderValidation() {
-    this._wrapEl.classList.toggle('mts-input-wrap--error',   !this._isValid);
-    this._wrapEl.classList.toggle('mts-input-wrap--success',  this._isValid && this.getValue().length > 0);
+    this._wrapEl.classList.toggle('mts-input-wrap--error', !this._isValid);
+    this._wrapEl.classList.remove('mts-input-wrap--success');
     this._feedbackEl.className   = this._isValid ? 'mts-form-hint' : 'mts-form-error';
     this._feedbackEl.textContent = this._isValid ? this.hint : this._errors[0];
   }

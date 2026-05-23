@@ -236,6 +236,31 @@
   background: color-mix(in srgb, var(--mts-bg-surface) 92%, var(--mts-color-primary) 8%);
 }
 
+/* ── Botón eliminar ítem del lado seleccionado ───────────── */
+
+.mts-transferlist__item-remove {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--mts-radius-sm);
+  background: transparent;
+  color: var(--mts-text-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--mts-transition-fast), color var(--mts-transition-fast);
+}
+
+.mts-transferlist__item-remove:hover {
+  background: color-mix(in srgb, transparent 80%, var(--mts-color-danger, #ef4444) 20%);
+  color: var(--mts-color-danger, #ef4444);
+}
+
 @keyframes mts-transferlist-reject {
   0% { transform: translateX(0); }
   25% { transform: translateX(-8px); }
