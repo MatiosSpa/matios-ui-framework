@@ -1,0 +1,304 @@
+/* ============================================================
+   MATIOS UI — matios-ui-sprint-board.css
+   MTS.SprintBoard — Backlog + Sprint Board
+   ============================================================ */
+
+/* ── Contenedor raíz ──────────────────────────────────────── */
+.mts-sb {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-primary);
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-radius: var(--mts-radius-lg);
+  overflow: hidden;
+}
+
+/* ── Toolbar ─────────────────────────────────────────────── */
+.mts-sb__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-2) var(--mts-space-4);
+  background: var(--mts-bg-surface-2);
+  border-bottom: var(--mts-border-width) solid var(--mts-border-color);
+  flex-shrink: 0;
+}
+.mts-sb__toolbar-actions {
+  display: flex;
+  gap: var(--mts-space-2);
+  align-items: center;
+}
+.mts-sb__sprint-info  { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mts-sb__sprint-name  { font-size: var(--mts-font-size-sm); font-weight: var(--mts-font-weight-semibold); color: var(--mts-text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mts-sb__sprint-dates { font-size: var(--mts-font-size-xs); color: var(--mts-text-muted); }
+
+/* ── Velocity banner ─────────────────────────────────────── */
+.mts-sb__velocity {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-2) var(--mts-space-4);
+  background: var(--mts-bg-surface-2);
+  border-bottom: var(--mts-border-width) solid var(--mts-border-color);
+  flex-shrink: 0;
+}
+.mts-sb__velocity-label {
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-muted);
+  white-space: nowrap;
+}
+.mts-sb__capacity-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--mts-bg-surface);
+  border-radius: var(--mts-radius-full);
+  overflow: hidden;
+  border: var(--mts-border-width) solid var(--mts-border-color);
+}
+.mts-sb__capacity-fill {
+  height: 100%;
+  background: var(--mts-color-primary);
+  border-radius: var(--mts-radius-full);
+  transition: width var(--mts-transition-base);
+}
+.mts-sb__capacity-fill--over { background: var(--mts-color-danger); }
+
+/* ── Split principal ─────────────────────────────────────── */
+.mts-sb__split {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ── Panels ──────────────────────────────────────────────── */
+.mts-sb__backlog-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: var(--mts-border-width) solid var(--mts-border-color);
+  background: var(--mts-bg-surface);
+}
+
+.mts-sb__sprint-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+  background: var(--mts-bg-surface);
+}
+
+/* ── Panel header ────────────────────────────────────────── */
+.mts-sb__panel-header {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+  padding: var(--mts-space-2) var(--mts-space-3);
+  background: var(--mts-bg-surface-2);
+  border-bottom: var(--mts-border-width) solid var(--mts-border-color);
+  flex-shrink: 0;
+}
+.mts-sb__panel-title {
+  flex: 1;
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mts-text-muted);
+}
+.mts-sb__panel-count {
+  font-size: var(--mts-font-size-xs);
+  font-weight: 600;
+  background: var(--mts-bg-surface);
+  color: var(--mts-text-muted);
+  padding: 1px 7px;
+  border-radius: var(--mts-radius-full);
+  border: var(--mts-border-width) solid var(--mts-border-color);
+}
+
+/* ── SP Badge ────────────────────────────────────────────── */
+.mts-sb__sp-badge {
+  font-size: var(--mts-font-size-xs);
+  font-weight: 700;
+  font-family: var(--mts-font-mono);
+  background: var(--mts-color-primary-light);
+  color: var(--mts-color-primary);
+  padding: 2px 6px;
+  border-radius: var(--mts-radius-full);
+  white-space: nowrap;
+}
+.mts-sb__sp-badge--sm {
+  font-size: 10px;
+  padding: 1px 5px;
+}
+
+/* ── Backlog list ────────────────────────────────────────── */
+.mts-sb__backlog-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--mts-space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-1);
+  scrollbar-width: thin;
+  scrollbar-color: var(--mts-border-color-strong) transparent;
+}
+.mts-sb__backlog-list::-webkit-scrollbar { width: 6px; }
+.mts-sb__backlog-list::-webkit-scrollbar-thumb { background: var(--mts-border-color-strong); border-radius: 3px; }
+
+/* ── Story row ───────────────────────────────────────────── */
+.mts-sb__story {
+  display: flex;
+  align-items: center;
+  gap: var(--mts-space-2);
+  padding: var(--mts-space-2) var(--mts-space-2);
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  transition: background var(--mts-transition-fast), box-shadow var(--mts-transition-fast);
+  user-select: none;
+}
+.mts-sb__story:hover { background: var(--mts-bg-surface-2); box-shadow: var(--mts-shadow-xs); }
+.mts-sb__story--selected { background: var(--mts-color-primary-light); border-color: var(--mts-color-primary); }
+
+/* Priority accents */
+.mts-sb__story--critical { border-left-color: var(--mts-color-danger); }
+.mts-sb__story--high     { border-left-color: var(--mts-color-warning); }
+.mts-sb__story--medium   { border-left-color: var(--mts-color-primary); }
+.mts-sb__story--low      { border-left-color: var(--mts-color-success); }
+
+.mts-sb__story-type {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  line-height: 1;
+}
+.mts-sb__story-type svg { width: 14px; height: 14px; }
+
+.mts-sb__story-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.mts-sb__story-code {
+  font-size: 10px;
+  font-family: var(--mts-font-mono);
+  color: var(--mts-text-muted);
+  font-weight: 600;
+}
+.mts-sb__story-title {
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mts-sb__story-move {
+  background: none;
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-radius: var(--mts-radius-sm);
+  color: var(--mts-text-muted);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 2px 6px;
+  flex-shrink: 0;
+  transition: color var(--mts-transition-fast), border-color var(--mts-transition-fast);
+}
+.mts-sb__story-move:hover { color: var(--mts-color-primary); border-color: var(--mts-color-primary); }
+
+/* ── Sprint Kanban wrapper ───────────────────────────────── */
+.mts-sb__kanban-wrap {
+  flex: 1;
+  overflow: auto;
+  padding: var(--mts-space-2);
+}
+.mts-sb__kanban-wrap .mts-kanban {
+  min-height: 200px;
+}
+
+/* ── Columnas fallback (sin MTS.Kanban) ──────────────────── */
+.mts-sb__cols {
+  display: flex;
+  flex: 1;
+  gap: var(--mts-space-3);
+  overflow-x: auto;
+  padding: var(--mts-space-3);
+}
+.mts-sb__col {
+  flex: 1;
+  min-width: 200px;
+  background: var(--mts-bg-surface-2);
+  border-radius: var(--mts-radius-md);
+  padding: var(--mts-space-2);
+}
+.mts-sb__col-title {
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mts-text-muted);
+  padding-bottom: var(--mts-space-2);
+}
+
+/* ── Estado vacío ────────────────────────────────────────── */
+.mts-sb__empty {
+  padding: var(--mts-space-6) var(--mts-space-4);
+  text-align: center;
+  color: var(--mts-text-muted);
+  font-size: var(--mts-font-size-sm);
+}
+
+/* ── Formulario agregar historia ─────────────────────────── */
+.mts-sb__add-form {
+  display: flex;
+  gap: var(--mts-space-2);
+  padding: var(--mts-space-2);
+  background: var(--mts-bg-surface-2);
+  border-bottom: var(--mts-border-width) solid var(--mts-border-color);
+  flex-wrap: wrap;
+}
+.mts-sb__add-input {
+  flex: 1;
+  min-width: 120px;
+  padding: 6px 10px;
+  font-size: var(--mts-font-size-sm);
+  font-family: var(--mts-font-family);
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) solid var(--mts-color-primary);
+  border-radius: var(--mts-radius-md);
+  color: var(--mts-text-primary);
+  outline: none;
+}
+.mts-sb__add-field {
+  padding: 6px 8px;
+  font-size: var(--mts-font-size-xs);
+  font-family: var(--mts-font-family);
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  color: var(--mts-text-primary);
+  outline: none;
+}
+.mts-sb__add-actions {
+  display: flex;
+  gap: var(--mts-space-1);
+  align-items: center;
+}

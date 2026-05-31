@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es" class="mts-h-full" data-mts-mode="light">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.GanttChart — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../../layout/matios-ui-splitter/matios-ui-splitter.css">
+  <link rel="stylesheet" href="../../../navigation/matios-ui-topbar/matios-ui-topbar.css">
+  <link rel="stylesheet" href="../../../navigation/matios-ui-menu/matios-ui-menu.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-formlayout/matios-ui-formlayout.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-slider/matios-ui-slider.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-autocomplete/matios-ui-autocomplete.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-itemlist/matios-ui-itemlist.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-taginput/matios-ui-taginput.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-date-picker/matios-ui-date-picker.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-colorpicker/matios-ui-colorpicker.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-modal/matios-ui-modal.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-popover/matios-ui-popover.css">
+  <link rel="stylesheet" href="../../../utilities/matios-ui-devpanel/matios-ui-devpanel.css">
+  <link rel="stylesheet" href="matios-ui-gantt-chart.css">
+  <link rel="stylesheet" href="../../../support/demo-shared.css">
+  <script src="../../../support/demo-shared.js"></script>
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../base/matios-ui-base.js"></script>
+  <script src="../../../base/matios-ui-i18n.js"></script>
+  <script src="../../../layout/matios-ui-splitter/matios-ui-splitter.js"></script>
+  <script src="../../../navigation/matios-ui-menu/matios-ui-menu.js"></script>
+  <script src="../../../navigation/matios-ui-topbar/matios-ui-topbar.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
+  <script src="../../../forms/matios-ui-slider/matios-ui-slider.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../forms/matios-ui-autocomplete/matios-ui-autocomplete.js"></script>
+  <script src="../../../forms/matios-ui-itemlist/matios-ui-itemlist.js"></script>
+  <script src="../../../forms/matios-ui-taginput/matios-ui-taginput.js"></script>
+  <script src="../../../forms/matios-ui-date-picker/matios-ui-date-picker-base.js"></script>
+  <script src="../../../forms/matios-ui-date-picker/matios-ui-date-picker-date.js"></script>
+  <script src="../../../forms/matios-ui-colorpicker/matios-ui-colorpicker.js"></script>
+  <script src="../../../overlays/matios-ui-modal/matios-ui-modal.js"></script>
+  <script src="../../../overlays/matios-ui-popover/matios-ui-popover.js"></script>
+  <script src="../../../utilities/matios-ui-devpanel/matios-ui-devpanel.js"></script>
+  <script src="matios-ui-gantt-chart-i18n.js"></script>
+  <script src="matios-ui-gantt-chart.js"></script>
+</head>
+<body class="mts-vh-100 mts-p-0 mts-d-flex mts-flex-col mts-overflow-hidden">
+
+<input type="file" id="g-file" accept=".csv,.xlsx,.xls,.xml" class="mts-d-none">
+<div id="gantt-toolbar"></div>
+
+<div class="mts-flex-1 mts-min-h-0 mts-d-flex mts-flex-col mts-overflow-hidden"><div id="gantt" class="mts-flex-1 mts-min-h-0"></div></div>
+
+<script>
+/* ═══ LOCALE ═══ */
+/* Todo texto visible del demo sale del locale del componente (MTS.GanttChart.ui). Cero strings en duro. */
+var UI = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.GanttChart'] && MTS.getLocale()['MTS.GanttChart'].ui) || {};
+
+/* ═══ DATOS ═══ */
+/* Equipo con uid — el uid viaja en cada assignee para que el BE identifique a la persona. */
+var TEAM = [
+  { uid: 'u1', name: 'Ana García' },
+  { uid: 'u2', name: 'Luis Pérez' },
+  { uid: 'u3', name: 'María Torres' },
+  { uid: 'u4', name: 'Carlos Ruiz' },
+  { uid: 'u5', name: 'Pedro Mora' },
+];
+function teamUid(name) {
+  for (var i = 0; i < TEAM.length; i++) { if (TEAM[i].name === name) return TEAM[i].uid; }
+  return null;
+}
+
+var TASKS = [
+  { id:'t1',  wbs:'1',     label:'Fase 1 — Planificación',          start:'2025-01-06', end:'2025-01-31', color:'#1d4ed8',
+    assignees:[{ name:'Ana García' },{ name:'Luis Pérez' }] },
+  { id:'t2',  wbs:'1.1',   label:'Levantamiento de requerimientos', start:'2025-01-06', end:'2025-01-10', color:'#3b82f6',
+    progress:1, assignees:[{ name:'Ana García' }] },
+  { id:'t3',  wbs:'1.2',   label:'Análisis y alcance',              start:'2025-01-13', end:'2025-01-17', color:'#3b82f6',
+    predecessors:['1.1'], progress:1, assignees:[{ name:'Luis Pérez' }] },
+  { id:'t4',  wbs:'1.3',   label:'Validación con stakeholders',     start:'2025-01-20', end:'2025-01-31', color:'#3b82f6',
+    predecessors:['1.2'], progress:0.7, assignees:[{ name:'Ana García' },{ name:'Carlos Ruiz' }] },
+  { id:'t5',  wbs:'2',     label:'Fase 2 — Diseño',                 start:'2025-02-03', end:'2025-02-28', color:'#0f766e',
+    assignees:[{ name:'María Torres' }] },
+  { id:'t6',  wbs:'2.1',   label:'Arquitectura del sistema',        start:'2025-02-03', end:'2025-02-14', color:'#10b981',
+    predecessors:['1.3'], progress:0.5, assignees:[{ name:'María Torres' },{ name:'Carlos Ruiz' }] },
+  { id:'t7',  wbs:'2.2',   label:'Diseño de base de datos',         start:'2025-02-10', end:'2025-02-21', color:'#10b981',
+    predecessors:['2.1'], progress:0.3, assignees:[{ name:'Carlos Ruiz' }] },
+  { id:'t8',  wbs:'2.3',   label:'Prototipo UI/UX',                 start:'2025-02-17', end:'2025-02-28', color:'#10b981',
+    predecessors:['2.1'], progress:0.2, assignees:[{ name:'María Torres' }] },
+  { id:'t9',  wbs:'3',     label:'Fase 3 — Desarrollo',             start:'2025-03-03', end:'2025-05-30', color:'#7c3aed',
+    assignees:[{ name:'Pedro Mora' },{ name:'Ana García' },{ name:'Luis Pérez' }] },
+  { id:'t10', wbs:'3.1',   label:'Backend — API REST',              start:'2025-03-03', end:'2025-04-11', color:'#a78bfa',
+    predecessors:['2.2'], progress:0.1, assignees:[{ name:'Pedro Mora' }] },
+  { id:'t11', wbs:'3.1.1', label:'Módulo de autenticación',         start:'2025-03-03', end:'2025-03-21', color:'#a78bfa',
+    assignees:[{ name:'Pedro Mora' }] },
+  { id:'t12', wbs:'3.1.2', label:'Módulo de reportes',              start:'2025-03-24', end:'2025-04-11', color:'#a78bfa',
+    predecessors:['3.1.1'], assignees:[{ name:'Luis Pérez' }] },
+  { id:'t13', wbs:'3.2',   label:'Frontend — React',                start:'2025-03-17', end:'2025-05-09', color:'#a78bfa',
+    predecessors:['2.3'], assignees:[{ name:'Ana García' }] },
+  { id:'t14', wbs:'3.3',   label:'Integraciones',                   start:'2025-04-14', end:'2025-05-09', color:'#a78bfa',
+    predecessors:['3.1','3.2'], assignees:[{ name:'Carlos Ruiz' }] },
+  { id:'t15', wbs:'4',     label:'Fase 4 — Despliegue',             start:'2025-06-02', end:'2025-06-27', color:'#cc0000',
+    assignees:[{ name:'Carlos Ruiz' }] },
+  { id:'t16', wbs:'4.1',   label:'Entorno de staging',              start:'2025-06-02', end:'2025-06-06', color:'#e53935',
+    predecessors:['3.3'], assignees:[{ name:'Carlos Ruiz' }] },
+  { id:'t17', wbs:'4.2',   label:'UAT con cliente',                 start:'2025-06-09', end:'2025-06-20', color:'#e53935',
+    predecessors:['4.1'], assignees:[{ name:'Ana García' },{ name:'Carlos Ruiz' }] },
+  { id:'t18', wbs:'4.3',   label:'Go-live producción',              start:'2025-06-23', end:'2025-06-27', color:'#e53935',
+    predecessors:['4.2'], assignees:[{ name:'Carlos Ruiz' }] },
+  { id:'t19', wbs:'5',     label:'Cierre del proyecto',             start:'2025-06-30', end:'2025-06-30',
+    predecessors:['4.3'], assignees:[{ name:'Ana García' }] },
+];
+
+/* El "BE" entrega assignees con uid: lo completamos en el seed desde TEAM (por nombre). */
+TASKS.forEach(function (t) {
+  (t.assignees || []).forEach(function (a) { if (!a.uid) { var u = teamUid(a.name); if (u) a.uid = u; } });
+});
+
+/* Línea base de ejemplo (como si ya viniera del BE): plan original de algunas tareas.
+   La barra real va por encima; la diferencia con la fantasma = el desvío. */
+var BASELINE = {
+  t4:  ['2025-01-20', '2025-01-28'],   // se planificó hasta el 28; el real se corrió al 31 (atraso)
+  t7:  ['2025-02-10', '2025-02-18'],
+  t13: ['2025-03-17', '2025-04-25'],
+  t17: ['2025-06-09', '2025-06-18'],
+};
+TASKS.forEach(function (t) {
+  if (BASELINE[t.id]) { t.baselineStart = BASELINE[t.id][0]; t.baselineEnd = BASELINE[t.id][1]; }
+});
+
+function mockDS() {
+  return new Promise(function (resolve) {
+    setTimeout(function () { resolve({ data: TASKS, total: TASKS.length }); }, 300);
+  });
+}
+
+function pad(n) { return String(n).padStart(2, '0'); }
+function parseISO(s) { var p = String(s).split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+function toISO(d) { return d ? d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) : ''; }
+function parseProjectCSV(text) {
+  var lines = text.split(/\r?\n/).filter(function (l) { return l.trim(); });
+  lines.shift();
+  return lines.map(function (line, i) {
+    var c = line.split(',');
+    return {
+      id: 'imp-' + (i + 1), wbs: c[0], label: c[1],
+      assignees: c[2] ? c[2].split(' | ').map(function (n) { return { name: n.trim() }; }) : [],
+      start: c[3], end: c[4], progress: c[5] ? parseFloat(c[5]) : 0,
+    };
+  });
+}
+function logEv(badge, msg, detail) { if (dev) dev.log(badge, msg, detail); }
+
+/* Simula el envío al backend. En real sería:
+   fetch(path, { method, headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
+   Acá lo mostramos claro en consola + en el Activity Log para ver EXACTO qué iría al BE. */
+function apiSim(method, path, payload) {
+  if (window.console && console.log) {
+    console.log('%c→ API ' + method + ' ' + path, 'color:#10b981;font-weight:700', payload);
+  }
+  logEv('api', method + ' ' + path, JSON.stringify(payload));
+  return Promise.resolve({ ok: true, status: 200 });
+}
+
+/* ═══ ESTADO ═══ */
+var gantt = null, dev = null, mode = 'add', editSave = null, depsInput = null;
+var input = null, startPicker = null, endPicker = null, slider = null, colorPicker = null, respAC = null, respList = null;
+
+/* Dependencias: nombre legible (WBS — tarea) y sugerencias para el TagInput, desde el set de tareas. */
+function depName(wbs) {
+  for (var i = 0; i < TASKS.length; i++) { if (TASKS[i].wbs === wbs) return wbs + ' — ' + TASKS[i].label; }
+  return wbs;
+}
+function depSuggestions(excludeWbs) {
+  return TASKS.filter(function (x) { return x.wbs !== excludeWbs; })
+              .map(function (x) { return { uid: x.wbs, name: x.wbs + ' — ' + x.label }; });
+}
+function depTags(list) {
+  return (list || []).map(function (w) { return { uid: w, name: depName(w) }; });
+}
+
+/* ═══ MODAL DE ALTA / EDICIÓN (2 columnas, FormLayout) ═══ */
+var form = document.createElement('form');
+form.id = 'g-form';
+form.className = 'mts-form';
+form.innerHTML =
+  '<div class="mts-d-flex mts-gap-4">' +
+    '<div class="mts-form mts-flex-1 mts-min-w-0">' +
+      '<div id="g-name" name="name"></div>' +
+      '<div class="mts-d-flex mts-gap-3">' +
+        '<div class="mts-form-group mts-flex-1 mts-min-w-0">' +
+          '<label class="mts-form-label" for="g-start">' + UI.fieldStart + '</label>' +
+          '<input type="text" id="g-start" name="start" autocomplete="off">' +
+        '</div>' +
+        '<div class="mts-form-group mts-flex-1 mts-min-w-0">' +
+          '<label class="mts-form-label" for="g-finish">' + UI.fieldEnd + '</label>' +
+          '<input type="text" id="g-finish" name="finish" autocomplete="off">' +
+        '</div>' +
+      '</div>' +
+      '<div id="g-progress" name="progress"></div>' +
+      '<div id="g-color" name="color"></div>' +
+      '<div class="mts-form-group"><div id="g-deps"></div></div>' +
+    '</div>' +
+    '<div class="mts-form mts-flex-1 mts-min-w-0">' +
+      '<div class="mts-form-group">' +
+        '<label class="mts-form-label" for="g-resp-ac">' + UI.fieldResp + '</label>' +
+        '<input type="text" id="g-resp-ac" class="mts-input" placeholder="' + UI.respPlaceholder + '" autocomplete="off">' +
+      '</div>' +
+      '<ul id="g-resp-list"></ul>' +
+    '</div>' +
+  '</div>';
+
+var modal = new MTS.Modal({
+  title: UI.taskTitle, body: form, size: 'lg', scrollable: true,
+  buttons: [
+    { label: UI.cancel, variant: 'ghost', close: true },
+    { label: UI.save, variant: 'primary', onClick: function () {
+        var valid = true;
+        if (!input.getValue().trim()) { input.setError(UI.needName); valid = false; } else { input.clearError(); }
+        if (!startPicker.getValue() || !endPicker.getValue()) { valid = false; logEv('view', 'Validación', 'faltan fechas'); }
+        if (!valid) return;
+        if (mode === 'add') { gantt.submitAddTask(); return; }
+        if (editSave) {
+          editSave({
+            label:        input.getValue(),
+            start:        toISO(startPicker.getValue()),
+            end:          toISO(endPicker.getValue()),
+            progress:     slider.getValue() / 100,
+            color:        colorPicker.getHex(),
+            predecessors: depsInput.getTags().map(function (t) { return t.uid; }),
+            assignees:    respList.getDatasource().map(function (it) { return { uid: it.value, name: it.name }; }),
+          });
+          modal.hide();
+        }
+    } },
+  ],
+});
+
+input       = new MTS.Input('#g-name', { label: UI.fieldName, autocomplete: 'browser-off' });
+startPicker = new MTS.DatePicker.Date('#g-start',  { format: 'YYYY-MM-DD' });
+endPicker   = new MTS.DatePicker.Date('#g-finish', { format: 'YYYY-MM-DD' });
+slider      = new MTS.Slider('#g-progress', { min: 0, max: 100, step: 5, label: UI.fieldProgress });
+colorPicker = new MTS.ColorPicker('#g-color', { value: '#1d4ed8', label: UI.fieldColor, showFormatSwitch: false });
+depsInput   = new MTS.TagInput('#g-deps', {
+  label: UI.fieldDeps, placeholder: UI.depsPlaceholder,
+  allowCustom: false, suggestions: depSuggestions(null),
+});
+respList    = new MTS.ItemList('#g-resp-list', { canRemove: true, row: { primary: 'name' }, datasource: [] });
+respAC      = new MTS.Autocomplete('#g-resp-ac', {
+  datasource: TEAM.map(function (m) { return { value: m.uid, text: m.name }; }),
+  minChars: 1,
+  onSelect: function (item) {
+    // value = uid, text = nombre. El ItemList guarda ambos → al guardar mandamos { uid, name }.
+    var exists = respList.getDatasource().some(function (it) { return it.value === item.value; });
+    if (!exists) respList.addItem({ value: item.value, name: item.text });
+    respAC.clear();
+  },
+});
+
+function buildPickers(current) {
+  depsInput.setTags((current && current.predecessors) ? depTags(current.predecessors) : []);
+  respList.setDatasource((current && current.assignees)
+    ? current.assignees.map(function (a) { return { value: a.uid || teamUid(a.name) || a.name, name: a.name }; })
+    : []);
+  respAC.clear();
+}
+
+function openForAdd() {
+  mode = 'add';
+  input.setValue(''); input.clearError();
+  startPicker.setValue(null); endPicker.setValue(null);
+  slider.setValue(0); colorPicker.setValue('#1d4ed8');
+  buildPickers(null);
+  modal.show();
+}
+
+/* ═══ "ABRIR" (importar) ═══ */
+var fileInput = document.getElementById('g-file');
+fileInput.addEventListener('change', function () {
+  if (fileInput.files[0]) gantt.importFile(fileInput.files[0]);
+  fileInput.value = '';
+});
+
+/* ═══ "GUARDAR COMO" (exportar) ═══ */
+var expForm = document.createElement('form');
+expForm.className = 'mts-form';
+expForm.innerHTML = '<div id="g-exp-name"></div><div id="g-exp-fmt"></div>';
+var exportModal = new MTS.Modal({
+  title: UI.saveAsTitle, body: expForm, size: 'sm',
+  buttons: [
+    { label: UI.cancel, variant: 'ghost', close: true },
+    { label: UI.save, variant: 'primary', onClick: function () {
+        var base = (expName.getValue() || 'proyecto').replace(/\.[^.]+$/, '');
+        var fmt  = expFmt.getValue();
+        var ext  = fmt === 'csv' ? 'csv' : (fmt === 'excel' ? 'xlsx' : 'xml');
+        gantt.exportTasks(fmt, base + '.' + ext);
+        exportModal.hide();
+    } },
+  ],
+});
+var expName = new MTS.Input('#g-exp-name', { label: UI.fileName, value: 'proyecto', autocomplete: 'browser-off' });
+var expFmt  = new MTS.Select('#g-exp-fmt', { label: UI.format, value: 'csv', options: [
+  { value: 'csv',       label: UI.fmtCsv },
+  { value: 'excel',     label: UI.fmtExcel },
+  { value: 'msproject', label: UI.fmtMsproject },
+] });
+
+/* ═══ EDITOR POR CELDA (doble clic) — MTS.Popover anclado a la celda ═══ */
+/* El componente emite onCellEdit({task, field, anchorEl, updateTask}); acá decidimos el control. */
+var cellPop = null, cellPopOutside = null, cellPopCommit = null;
+
+function closeCellPopover() { if (cellPop) cellPop.hide(); }
+
+function openCellEditor(e) {
+  closeCellPopover();
+
+  var t = e.task;
+  // Si el commit anterior re-renderizó la grilla, la celda ancla quedó suelta → la re-ubicamos por task+campo.
+  if (e.anchorEl && !e.anchorEl.isConnected) {
+    var row = document.querySelector('[data-task-id="' + t.id + '"]');
+    var cell = row && row.querySelector('.mts-gantt__td--' + e.field);
+    if (cell) e.anchorEl = cell;
+  }
+
+  var host = document.createElement('div');
+  var title = '';
+
+  if (e.field === 'predecessors') {
+    title = UI.fieldDeps;
+    var depHost = document.createElement('div');
+    host.appendChild(depHost);
+    var ti = new MTS.TagInput(depHost, {
+      placeholder: UI.depsPlaceholder, allowCustom: false,
+      suggestions: depSuggestions(t.wbs), tags: depTags(t.predecessors),
+    });
+    cellPopCommit = function () { e.updateTask({ predecessors: ti.getTags().map(function (x) { return x.uid; }) }); };
+
+  } else if (e.field === 'start' || e.field === 'end') {
+    title = e.field === 'start' ? UI.fieldStart : UI.fieldEnd;
+    var di = document.createElement('input'); di.type = 'text'; di.autocomplete = 'off';
+    host.appendChild(di);
+    var dp = new MTS.DatePicker.Date(di, { format: 'YYYY-MM-DD' });
+    dp.setValue(t[e.field] ? parseISO(t[e.field]) : null);
+    cellPopCommit = function () { var v = dp.getValue(); var f = {}; f[e.field] = v ? toISO(v) : ''; e.updateTask(f); };
+
+  } else if (e.field === 'progress') {
+    title = UI.fieldProgress;
+    var sh = document.createElement('div'); host.appendChild(sh);
+    var sl = new MTS.Slider(sh, { min: 0, max: 100, step: 5, value: Math.round((t.progress || 0) * 100) });
+    cellPopCommit = function () { e.updateTask({ progress: sl.getValue() / 100 }); };
+
+  } else { return; }
+
+  cellPop = new MTS.Popover(e.anchorEl, {
+    trigger: 'manual', title: title, content: '', width: '300px', position: 'bottom',
+    onShow: function () {
+      var body = document.querySelector('.mts-popover .mts-popover__body');
+      if (body) body.appendChild(host);
+    },
+    onHide: function () {
+      if (cellPopCommit) { var commit = cellPopCommit; cellPopCommit = null; commit(); }
+      if (cellPopOutside) { document.removeEventListener('mousedown', cellPopOutside, true); cellPopOutside = null; }
+      cellPop = null;
+      logEv('change', 'Editar celda', t.label + ' · ' + e.field);
+    },
+  });
+  cellPop.show();
+
+  // Cerrar al clic fuera; ignora el propio popover, el calendario portal del DatePicker y la celda ancla.
+  cellPopOutside = function (ev) {
+    if (ev.target.closest('.mts-popover') || ev.target.closest('.mts-picker-popup')) return;
+    if (e.anchorEl && e.anchorEl.contains(ev.target)) return;
+    if (cellPop) cellPop.hide();
+  };
+  document.addEventListener('mousedown', cellPopOutside, true);
+}
+
+/* ═══ GANTT ═══ */
+gantt = new MTS.GanttChart('#gantt', {
+  dataSource: mockDS,
+  scale:      'week',
+  editable:   true,
+  addTask:    { showButton: false, form: '#g-form', open: openForAdd, close: function () { modal.hide(); } },
+  editTask:    true,
+  reorderable: true,
+  columns: [
+    { field: 'wbs',          label: UI.cols.wbs,       width: 55 },
+    { field: 'label',        label: UI.cols.name,      width: 190 },
+    { field: 'assignees',    label: UI.cols.assignees, width: 90 },
+    { field: 'color',        label: UI.cols.color,     width: 50 },
+    { field: 'start',        label: UI.cols.start,     width: 92,  editable: true },
+    { field: 'end',          label: UI.cols.end,       width: 92,  editable: true },
+    { field: 'progress',     label: UI.cols.progress,  width: 64,  editable: true },
+    { field: 'predecessors', label: UI.cols.deps,      width: 110, editable: true },
+    { field: 'variance',     label: UI.cols.variance,  width: 72 },
+  ],
+  onLoad:      function (e) { logEv('view', 'Cargado', e.tasks.length + ' tareas'); },
+  onAddTask: function (e) {
+    e.resolve({
+      name:            e.data.name,
+      start:           e.data.start,
+      finish:          e.data.finish,
+      percentComplete: e.data.progress,
+      color:           colorPicker.getHex(),
+      predecessors:    depsInput.getTags().map(function (t) { return t.uid; }),
+      assignees:       respList.getDatasource().map(function (it) { return { uid: it.value, name: it.name }; }),
+    });
+  },
+  onTaskAdd:   function (e) { apiSim('POST', '/api/tasks', e.task); },
+  onTaskEdit: function (e) {
+    var t = e.task;
+    mode = 'edit';
+    editSave = e.updateTask;
+    logEv('click', 'Editar', t.label);
+    input.setValue(t.label || ''); input.clearError();
+    startPicker.setValue(t.start ? parseISO(t.start) : null);
+    endPicker.setValue(t.end ? parseISO(t.end) : null);
+    slider.setValue(Math.round((t.progress || 0) * 100));
+    colorPicker.setValue(t.color || '#1d4ed8');
+    buildPickers(t);
+    modal.show();
+  },
+  onCellEdit:        function (e) { openCellEditor(e); },
+  onTaskChange:      function (e) { apiSim('PATCH', '/api/tasks/' + e.task.id, e.fields); },
+  onTaskMove:        function (e) { apiSim('PATCH', '/api/tasks/' + e.task.id, { start: e.task.start, end: e.task.end }); },
+  onTaskResize:      function (e) { apiSim('PATCH', '/api/tasks/' + e.task.id, { start: e.task.start, end: e.task.end }); },
+  onTaskDelete:      function (e) { apiSim('DELETE', '/api/tasks/' + e.task.id, { id: e.task.id }); },
+  onReorder:         function (e) { apiSim('PUT', '/api/tasks/reorder', {
+                       moved: e.task.id, mode: e.mode, target: e.target,
+                       order: e.tasks.map(function (t) { return { id: t.id, wbs: t.wbs, predecessors: t.predecessors }; })
+                     }); },
+  onAssigneesChange: function (e) { apiSim('PUT', '/api/tasks/' + e.task.id + '/assignees', e.assignees); },
+  onBaselineSave:    function (e) { apiSim('POST', '/api/projects/p1/baseline', { baseline: e.baseline }); },
+  onScaleChange:     function (e) { logEv('view',   'Escala', e.scale); },
+  onExport: function (e) {
+    if (e.format === 'csv' && e.csv) {
+      var blob = new Blob([e.csv], { type: 'text/csv;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = e.filename || 'proyecto.csv';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      logEv('api', 'Guardar como (CSV)', e.filename);
+    } else {
+      // Excel / MS Project → el backend serializa desde el payload canónico (fase 2).
+      apiSim('POST', '/api/projects/export?format=' + e.format, { filename: e.filename, tasks: e.tasks });
+    }
+  },
+  onImport: function (e) {
+    if (e.format === 'csv') {
+      var reader = new FileReader();
+      reader.onload = function () { gantt.setTasks(parseProjectCSV(String(reader.result))); };
+      reader.readAsText(e.file);
+      logEv('api', 'Abrir (CSV)', e.name);
+    } else {
+      // Excel / MS Project → el backend parsea (adapters) y devuelve el modelo canónico (fase 2).
+      apiSim('POST', '/api/projects/import?format=' + e.format, { name: e.name });
+    }
+  },
+});
+
+/* ═══ DEV PANEL (Config · Log · Code) — envuelve el Gantt ═══ */
+dev = new MTS.DevPanel('#gantt', {
+  watch:  gantt,
+  panels: ['config', 'log', 'code'],
+});
+
+/* ═══ TOOLBAR: Topbar + Menu + Button ═══ */
+/* Items del menú. "Columnas" se arma desde gantt.getColumns() con un check por columna visible
+   (el nombre de la tarea queda siempre visible, no se puede ocultar). */
+function buildMenuItems() {
+  var colChildren = gantt.getColumns()
+    .filter(function (c) { return c.field !== 'label'; })
+    .map(function (c) {
+      return { key: 'col:' + c.field, label: c.label, icon: c.hidden ? '' : 'mts-icon-check' };
+    });
+  return [
+    { key: 'file', label: UI.menuFile, icon: 'mts-icon-folder', children: [
+      { key: 'open',   label: UI.menuOpen,   icon: 'mts-icon-folder-open' },
+      { key: 'saveas', label: UI.menuSaveAs, icon: 'mts-icon-save' } ] },
+    { key: 'view', label: UI.menuView, icon: 'mts-icon-eye', children: [
+      { key: 'day',   label: UI.scaleDay,   icon: 'mts-icon-calendar-day' },
+      { key: 'week',  label: UI.scaleWeek,  icon: 'mts-icon-calendar' },
+      { key: 'month', label: UI.scaleMonth, icon: 'mts-icon-calendar' } ] },
+    { key: 'columns', label: UI.menuColumns, icon: 'mts-icon-columns', children: colChildren },
+    { key: 'wbs', label: UI.menuWbs, icon: 'mts-icon-sitemap', children: [
+      { key: 'collapse', label: UI.collapseAll, icon: 'mts-icon-minimize' },
+      { key: 'expand',   label: UI.expandAll,   icon: 'mts-icon-expand' } ] },
+    { key: 'edit', label: UI.menuEdit, icon: 'mts-icon-edit', children: [
+      { key: 'undo', label: UI.undo, icon: 'mts-icon-undo' },
+      { key: 'redo', label: UI.redo, icon: 'mts-icon-redo' },
+      { key: 'baseline', label: UI.saveBaseline, icon: 'mts-icon-flag' },
+      { key: 'clearbaseline', label: UI.clearBaseline, icon: 'mts-icon-flag' } ] },
+  ];
+}
+
+var menu = new MTS.Menu({
+  items: buildMenuItems(),
+  onClick: function (item) {
+    if (item.key === 'open')          fileInput.click();
+    else if (item.key === 'saveas')   exportModal.show();
+    else if (item.key === 'day' || item.key === 'week' || item.key === 'month') gantt.setScale(item.key);
+    else if (item.key === 'collapse') { gantt.collapseAll(); logEv('nav', 'Colapsar todo'); }
+    else if (item.key === 'expand')   { gantt.expandAll();   logEv('nav', 'Expandir todo'); }
+    else if (item.key === 'undo')     { gantt.undo(); logEv('nav', 'Deshacer'); }
+    else if (item.key === 'redo')     { gantt.redo(); logEv('nav', 'Rehacer'); }
+    else if (item.key === 'baseline') { gantt.saveBaseline(); }
+    else if (item.key === 'clearbaseline') { gantt.clearBaseline(); apiSim('DELETE', '/api/projects/p1/baseline', { project: 'p1' }); }
+    else if (item.key && item.key.indexOf('col:') === 0) {
+      var field = item.key.slice(4);
+      var col   = gantt.getColumns().filter(function (c) { return c.field === field; })[0];
+      gantt.setColumnVisible(field, !!(col && col.hidden));   // toggle: si está oculta → mostrar
+      menu.setItems(buildMenuItems());
+      if (window.MTS && MTS.Icon) MTS.Icon.initAll();
+      logEv('view', 'Columna', field + (col && col.hidden ? ' (mostrar)' : ' (ocultar)'));
+    }
+  },
+});
+
+var endEl = document.createElement('div');
+endEl.className = 'mts-d-flex mts-gap-2 mts-items-center';
+endEl.innerHTML = '<div id="g-btn-add"></div>';
+
+new MTS.Topbar('#gantt-toolbar', { brand: { title: 'MTS.GanttChart' }, menu: menu, end: endEl, shadow: false, sticky: false });
+
+new MTS.Button('#g-btn-add', {
+  label: UI.addTask,
+  iconLeft: '<i class="mts-icon mts-icon-add"></i>',
+  size: 'sm',
+  variant: 'ghost',
+  onClick: openForAdd,
+});
+
+if (window.MTS && MTS.Icon) MTS.Icon.initAll();
+</script>
+</body>
+</html>

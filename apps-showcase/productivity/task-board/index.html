@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="../../../overlays/matios-ui-alert/matios-ui-alert.css">
   <link rel="stylesheet" href="../../../overlays/matios-ui-modal/matios-ui-modal.css">
   <link rel="stylesheet" href="../../../display/matios-ui-kpicard/matios-ui-kpicard.css">
-  <link rel="stylesheet" href="../../../display/matios-ui-kanban/matios-ui-kanban.css">
+  <link rel="stylesheet" href="../../../widgets/boards/matios-ui-kanban/matios-ui-kanban.css">
   <link rel="stylesheet" href="task-board.css">
   <script src="../../../icons/matios-ui-icons.js"></script>
   <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
@@ -31,7 +31,8 @@
   <script src="../../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
   <script src="../../../overlays/matios-ui-modal/matios-ui-modal.js"></script>
   <script src="../../../display/matios-ui-kpicard/matios-ui-kpicard.js"></script>
-  <script src="../../../display/matios-ui-kanban/matios-ui-kanban.js"></script>
+  <script src="../../../base/matios-ui-base.js"></script>
+  <script src="../../../widgets/boards/matios-ui-kanban/matios-ui-kanban.js"></script>
 </head>
 <body>
   <div class="task-board-page">
@@ -280,20 +281,20 @@ function renderBoard(){
       {id:'done',title:'Done',color:'#16a34a',wip:99,cards:visible.filter(function(t){return t.state==='done';})}
     ],
     onCardClick:function(e){
-      openTaskModal(findTaskById(e.detail.card.id), e.detail.colId);
+      openTaskModal(findTaskById(e.card.id), e.colId);
     },
-    onMove:function(e){
-      var moved=findTaskById(e.detail.card.id);
-      if(moved) moved.state=e.detail.toColId;
+    onCardMove:function(e){
+      var moved=findTaskById(e.card.id);
+      if(moved) moved.state=e.toColId;
       MTS.Alert.show('#task-board-alert',{
         variant:'success',
         title:'Estado actualizado',
-        message:'La tarea <strong>'+e.detail.card.id+'</strong> se movio a <strong>'+e.detail.toColId+'</strong> dentro del board.',
+        message:'La tarea <strong>'+e.card.id+'</strong> se movio a <strong>'+e.toColId+'</strong> dentro del board.',
         closable:true
       });
     },
-    onAddCard:function(e){
-      var added=e.detail.card;
+    onCardAdd:function(e){
+      var added=e.card;
       TASKS.push({
         id:added.id,
         title:added.title,
@@ -303,9 +304,9 @@ function renderBoard(){
         assignee:added.assignee||'',
         owner:ownerValueFromName(added.assignee||'') || '',
         dueDate:'Por definir',
-        state:e.detail.colId
+        state:e.colId
       });
-      openTaskModal(findTaskById(added.id), e.detail.colId);
+      openTaskModal(findTaskById(added.id), e.colId);
     }
   });
 }

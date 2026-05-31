@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es" class="mts-h-full" data-mts-mode="light">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Kanban — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../base/matios-ui-grid.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../../layout/matios-ui-splitter/matios-ui-splitter.css">
+  <link rel="stylesheet" href="../../../navigation/matios-ui-topbar/matios-ui-topbar.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-formlayout/matios-ui-formlayout.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../../overlays/matios-ui-modal/matios-ui-modal.css">
+  <link rel="stylesheet" href="../../../utilities/matios-ui-devpanel/matios-ui-devpanel.css">
+  <link rel="stylesheet" href="matios-ui-kanban.css">
+  <link rel="stylesheet" href="../../../support/demo-shared.css">
+  <script src="../../../support/demo-shared.js"></script>
+  <script src="../../../icons/matios-ui-icons.js"></script>
+  <script src="../../../base/matios-ui-base.js"></script>
+  <script src="../../../base/matios-ui-i18n.js"></script>
+  <script src="../../../layout/matios-ui-splitter/matios-ui-splitter.js"></script>
+  <script src="../../../navigation/matios-ui-topbar/matios-ui-topbar.js"></script>
+  <script src="../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../../overlays/matios-ui-modal/matios-ui-modal.js"></script>
+  <script src="../../../utilities/matios-ui-devpanel/matios-ui-devpanel.js"></script>
+  <script src="matios-ui-kanban-i18n.js"></script>
+  <script src="matios-ui-kanban.js"></script>
+</head>
+<body class="mts-vh-100 mts-p-0 mts-d-flex mts-flex-col mts-overflow-hidden">
+
+<div id="kb-toolbar"></div>
+<div class="mts-flex-1 mts-min-h-0 mts-d-flex mts-flex-col mts-overflow-hidden"><div id="kanban" class="mts-flex-1 mts-min-h-0"></div></div>
+
+<script>
+/* ═══ LOCALE ═══ Todo texto del demo sale del locale del componente (MTS.Kanban). */
+var LK = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Kanban']) || {};
+var UI = LK.ui || {};
+
+/* ═══ DATOS ═══ */
+var TEAM = ['Ana García', 'Luis Pérez', 'María Torres', 'Carlos Ruiz', 'Pedro Mora'];
+
+function buildColumns() {
+  var c = UI.cols || {};
+  return [
+    { id:'todo',   title:c.todo   || 'Por hacer',  color:'#64748b', cards:[
+      { id:'c1', title:'Configurar repositorio', priority:'high',   assignee:'Ana García' },
+      { id:'c2', title:'Definir alcance del MVP', priority:'medium', assignee:'Luis Pérez' } ] },
+    { id:'doing',  title:c.doing  || 'En curso',   color:'#f59e0b', wip:3, cards:[
+      { id:'c3', title:'Diseño de la API',        priority:'medium', assignee:'María Torres' },
+      { id:'c4', title:'Modelo de datos',         priority:'low',    assignee:'Carlos Ruiz' } ] },
+    { id:'review', title:c.review || 'En revisión', color:'#3b82f6', cards:[
+      { id:'c5', title:'Revisión de seguridad',   priority:'high',   assignee:'Pedro Mora' } ] },
+    { id:'done',   title:c.done   || 'Hecho',      color:'#10b981', cards:[
+      { id:'c6', title:'Setup del proyecto',      priority:'low',    assignee:'Ana García' } ] },
+  ];
+}
+
+function mockDS() {
+  return new Promise(function (resolve) {
+    setTimeout(function () { resolve({ columns: buildColumns() }); }, 300);
+  });
+}
+
+function logEv(badge, msg, detail) { if (dev) dev.log(badge, msg, detail); }
+
+/* Simula el envío al backend (console.log + Activity Log). En real: fetch(path, {method, body}). */
+function apiSim(method, path, payload) {
+  if (window.console && console.log) {
+    console.log('%c→ API ' + method + ' ' + path, 'color:#10b981;font-weight:700', payload);
+  }
+  logEv('api', method + ' ' + path, JSON.stringify(payload));
+  return Promise.resolve({ ok: true, status: 200 });
+}
+
+/* ═══ ESTADO ═══ */
+var kanban = null, dev = null, mode = 'add', editId = null;
+var titleInput = null, prioSelect = null, assigneeSelect = null, descInput = null;
+
+/* ═══ MODAL DE ALTA / EDICIÓN (único; el botón Guardar decide por modo) ═══ */
+var form = document.createElement('form');
+form.id = 'kb-form';
+form.className = 'mts-form';
+form.innerHTML =
+  '<div id="kb-title" name="title"></div>' +
+  '<div id="kb-priority" name="priority"></div>' +
+  '<div id="kb-assignee" name="assignee"></div>' +
+  '<div id="kb-desc" name="description"></div>';
+
+function saveHandler() {
+  if (!titleInput.getValue().trim()) { titleInput.setError(UI.needTitle || 'Ingresa un título'); return; }
+  titleInput.clearError();
+  if (mode === 'add') { kanban.submitAddTask(); return; }
+  if (mode === 'edit' && editId) {
+    kanban.updateCard(editId, {
+      title:       titleInput.getValue(),
+      priority:    prioSelect.getValue(),
+      assignee:    assigneeSelect.getValue() || undefined,
+      description: descInput.getValue() || undefined,
+    });
+    modal.hide();
+  }
+}
+
+var modal = new MTS.Modal({
+  title: UI.cardTitle || 'Tarjeta', body: form, size: 'sm', scrollable: true,
+  buttons: [
+    { label: UI.cancel || 'Cancelar', variant: 'ghost', close: true },
+    { label: UI.del || 'Eliminar', variant: 'danger', onClick: function () {
+        if (mode === 'edit' && editId) kanban.removeCard(editId);
+        modal.hide();
+    } },
+    { label: UI.save || 'Guardar', variant: 'primary', onClick: saveHandler },
+  ],
+});
+
+titleInput     = new MTS.Input('#kb-title', { label: UI.fTitle || 'Título', autocomplete: 'browser-off' });
+prioSelect     = new MTS.Select('#kb-priority', { label: UI.fPriority || 'Prioridad', value: 'medium', options: [
+  { value: 'low',    label: LK.priorityLow    || 'Baja' },
+  { value: 'medium', label: LK.priorityMedium || 'Media' },
+  { value: 'high',   label: LK.priorityHigh   || 'Alta' },
+] });
+assigneeSelect = new MTS.Select('#kb-assignee', { label: UI.fAssignee || 'Responsable', value: '', options:
+  [{ value: '', label: '—' }].concat(TEAM.map(function (n) { return { value: n, label: n }; })) });
+descInput      = new MTS.Input('#kb-desc', { label: UI.fDesc || 'Descripción', autocomplete: 'browser-off' });
+
+function openForAdd() {
+  mode = 'add'; editId = null;
+  titleInput.setValue(''); titleInput.clearError();
+  prioSelect.setValue('medium'); assigneeSelect.setValue(''); descInput.setValue('');
+  modal.show();
+}
+
+function openForEdit(card) {
+  mode = 'edit'; editId = card.id;
+  titleInput.setValue(card.title || ''); titleInput.clearError();
+  prioSelect.setValue(card.priority || 'medium');
+  assigneeSelect.setValue(card.assignee || '');
+  descInput.setValue(card.description || '');
+  modal.show();
+}
+
+/* ═══ KANBAN ═══ */
+kanban = new MTS.Kanban('#kanban', {
+  dataSource:  mockDS,
+  editColumns: true,
+  addTask: { showButton: false, form: '#kb-form', open: openForAdd, close: function () { modal.hide(); } },
+  onLoad:         function (e) { logEv('view', 'Cargado', e.columns.length + ' columnas'); },
+  onAddTask:      function (e) { e.resolve(e.data); },
+  onCardAdd:      function (e) { apiSim('POST', '/api/cards', e.card); },
+  onCardChange:   function (e) { apiSim('PATCH', '/api/cards/' + e.card.id, e.fields); },
+  onCardMove:     function (e) { apiSim('PATCH', '/api/cards/' + e.card.id, { colId: e.toColId, position: e.position }); },
+  onCardDelete:   function (e) { apiSim('DELETE', '/api/cards/' + e.card.id, { id: e.card.id }); },
+  onColumnAdd:    function (e) { apiSim('POST', '/api/columns', { id: e.column.id, title: e.column.title, index: e.index }); },
+  onColumnRemove: function (e) { apiSim('DELETE', '/api/columns/' + e.column.id, { id: e.column.id }); },
+  onColumnChange: function (e) { apiSim('PATCH', '/api/columns/' + e.column.id, e.fields); },
+  onCardClick:    function (e) { logEv('click', 'Abrir', e.card.title); openForEdit(e.card); },
+});
+
+/* ═══ DEV PANEL (Config · Log · Code) ═══ */
+dev = new MTS.DevPanel('#kanban', { watch: kanban, panels: ['config', 'log', 'code'] });
+
+/* ═══ TOOLBAR: Topbar + Button ═══ */
+var endEl = document.createElement('div');
+endEl.className = 'mts-d-flex mts-gap-2 mts-items-center';
+endEl.innerHTML = '<div id="kb-btn-add"></div>';
+
+new MTS.Topbar('#kb-toolbar', { brand: { title: UI.brand || 'MTS.Kanban' }, end: endEl, shadow: false, sticky: false });
+new MTS.Button('#kb-btn-add', { label: UI.addCard || '+ Tarjeta', iconLeft: '<i class="mts-icon mts-icon-add"></i>', size: 'sm', variant: 'ghost', onClick: openForAdd });
+
+if (window.MTS && MTS.Icon) MTS.Icon.initAll();
+</script>
+</body>
+</html>

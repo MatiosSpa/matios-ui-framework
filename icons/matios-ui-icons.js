@@ -112,6 +112,7 @@ const ICONS = {
   'grid':         { o: `<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>` },
   'grid-2':       { o: `<path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"/>` },
   'list':         { o: `<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>` },
+  'sitemap':      { o: `<rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="6" y2="16"/><line x1="18" y1="12" x2="18" y2="16"/>` },
   'layout':       { o: `<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>` },
   'columns':      { o: `<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18"/>` },
   'rows':         { o: `<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18"/>` },
@@ -380,6 +381,11 @@ const ICONS = {
   'window':       { o: `<rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 9h20M7 3v6"/>` },
   'card':         { o: `<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>` },
   'form':         { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>` },
+
+  /* ── AGILE / BOARDS ──────────────────────────────────── */
+  'book-open':    { o: `<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>` },
+  'bug':          { o: `<rect x="8" y="6" width="8" height="14" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="m5 19 3-2"/><path d="M20 13h-4"/><path d="M4 13h4"/><path d="m10 4 1-2 1 2"/>` },
+  'lightning':    { o: `<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>` },
 };
 
 /* ============================================================

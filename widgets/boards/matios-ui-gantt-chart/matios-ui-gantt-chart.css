@@ -1,0 +1,565 @@
+/* ============================================================
+   MATIOS UI — matios-ui-gantt-chart.css
+   MTS.GanttChart — Gantt + Grid + WBS
+   ============================================================ */
+
+/* ── Tokens internos ──────────────────────────────────────── */
+.mts-gantt {
+  --mts-gantt-row-h:        36px;
+  --mts-gantt-header-h:     48px;
+  --mts-gantt-grid-w:       400px;
+  --mts-gantt-indent:       18px;
+  --mts-gantt-today-color:  var(--mts-color-danger);
+  --mts-gantt-sel-bg:       var(--mts-color-primary-light);
+  --mts-gantt-sel-border:   var(--mts-color-primary);
+}
+
+/* ── Contenedor raíz ──────────────────────────────────────── */
+.mts-gantt {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  border-radius: var(--mts-radius-lg);
+  overflow: hidden;
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-primary);
+}
+
+/* ── Layout split (grid | divider | gantt) ────────────────── */
+.mts-gantt__toolbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: var(--mts-border-width) solid var(--mts-border-color);
+  background: var(--mts-bg-surface);
+}
+
+.mts-gantt__split {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ── Panel izquierdo — Grid ───────────────────────────────── */
+.mts-gantt__grid-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: var(--mts-border-width) solid var(--mts-border-color);
+  background: var(--mts-bg-surface);
+  z-index: 2;
+}
+
+/* ── Panel derecho — Gantt ────────────────────────────────── */
+.mts-gantt__gantt-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+  background: var(--mts-bg-surface);
+}
+
+/* ── Separador — gestionado por MTS.Splitter ─────────────── */
+
+/* ── Headers (grid + gantt sincronizados) ─────────────────── */
+.mts-gantt__grid-header,
+.mts-gantt__gantt-header {
+  height: var(--mts-gantt-header-h);
+  flex-shrink: 0;
+  background: var(--mts-bg-surface-2);
+  border-bottom: var(--mts-border-width) solid var(--mts-border-color);
+  overflow: hidden;
+  user-select: none;
+}
+
+.mts-gantt__grid-header {
+  display: flex;
+  align-items: stretch;
+}
+
+.mts-gantt__th {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--mts-space-2);
+  font-size: var(--mts-font-size-xs);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-right: var(--mts-border-width) solid var(--mts-border-color);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.mts-gantt__th:last-child { border-right: none; }
+
+/* ── Scroll bodies ────────────────────────────────────────── */
+.mts-gantt__grid-body {
+  flex: 1;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mts-border-color-strong) transparent;
+}
+.mts-gantt__grid-body::-webkit-scrollbar { width: 10px; height: 10px; }
+.mts-gantt__grid-body::-webkit-scrollbar-track { background: transparent; }
+.mts-gantt__grid-body::-webkit-scrollbar-thumb { background: var(--mts-border-color-strong); border-radius: 3px; }
+
+.mts-gantt__gantt-body {
+  flex: 1;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mts-border-color-strong) transparent;
+}
+.mts-gantt__gantt-body::-webkit-scrollbar { width: 10px; height: 10px; }
+.mts-gantt__gantt-body::-webkit-scrollbar-track { background: transparent; }
+.mts-gantt__gantt-body::-webkit-scrollbar-thumb { background: var(--mts-border-color-strong); border-radius: 3px; }
+
+/* ── Filas del grid ───────────────────────────────────────── */
+.mts-gantt__tr {
+  display: flex;
+  align-items: stretch;
+  height: var(--mts-gantt-row-h);
+  border-bottom: var(--mts-border-width) solid var(--mts-border-color);
+  transition: background var(--mts-transition-fast);
+  cursor: default;
+}
+.mts-gantt__tr:last-child { border-bottom: none; }
+.mts-gantt__tr:hover { background: var(--mts-bg-surface-2); }
+.mts-gantt__tr--selected { background: var(--mts-gantt-sel-bg); }
+.mts-gantt__tr--selected:hover { background: var(--mts-gantt-sel-bg); }
+
+.mts-gantt__tr--group {
+  background: var(--mts-bg-surface-2);
+  font-weight: var(--mts-font-weight-semibold);
+}
+.mts-gantt__tr--group:hover { background: var(--mts-bg-surface-2); }
+
+.mts-gantt__tr--collapsed { }
+
+/* ── Celdas del grid ──────────────────────────────────────── */
+.mts-gantt__td {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--mts-space-2);
+  border-right: var(--mts-border-width) solid var(--mts-border-color);
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-primary);
+  min-width: 0;
+}
+.mts-gantt__td:last-child { border-right: none; }
+
+.mts-gantt__td--editing {
+  padding: 0 var(--mts-space-1);
+  background: var(--mts-bg-surface);
+  outline: 2px solid var(--mts-color-primary);
+  outline-offset: -2px;
+}
+
+.mts-gantt__td--wbs {
+  color: var(--mts-text-muted);
+  font-size: var(--mts-font-size-xs);
+  font-family: var(--mts-font-mono);
+  justify-content: center;
+}
+
+.mts-gantt__td--label {
+  gap: var(--mts-space-1);
+  min-width: 0;
+}
+
+.mts-gantt__label-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.mts-gantt__td--color { justify-content: center; }
+
+.mts-gantt__td--progress { justify-content: center; font-family: var(--mts-font-mono); }
+
+/* ── Celda % como mini-barra de progreso ──────────────────── */
+.mts-gantt__pct {
+  position: relative;
+  width: 100%;
+  height: 16px;
+  border-radius: var(--mts-radius-full);
+  background: var(--mts-bg-surface-2);
+  border: var(--mts-border-width) solid var(--mts-border-color);
+  overflow: hidden;
+}
+.mts-gantt__pct-fill {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  height: 100%;
+  background: var(--mts-color-primary);
+  opacity: 0.30;
+  transition: width var(--mts-transition-base);
+}
+.mts-gantt__pct-fill--done {
+  opacity: 0.55;
+  background: var(--mts-color-success, var(--mts-color-primary));
+}
+.mts-gantt__pct-num {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mts-font-mono);
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Celda Desvío (variance vs línea base) ────────────────── */
+.mts-gantt__td--variance { justify-content: center; }
+.mts-gantt__variance {
+  font-family: var(--mts-font-mono);
+  font-size: var(--mts-font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+.mts-gantt__variance--late   { color: var(--mts-color-danger); }
+.mts-gantt__variance--early  { color: var(--mts-color-success, var(--mts-color-primary)); }
+.mts-gantt__variance--ontime { color: var(--mts-text-muted); }
+
+/* ── Zebra + filas de fase (grupo) ────────────────────────── */
+.mts-gantt__grid-body .mts-gantt__tr:nth-child(even):not(.mts-gantt__tr--group):not(.mts-gantt__tr--selected) {
+  background: color-mix(in srgb, var(--mts-bg-surface-2) 45%, transparent);
+}
+.mts-gantt__tr--group {
+  box-shadow: inset 3px 0 0 var(--mts-color-primary);
+}
+.mts-gantt__tr--group .mts-gantt__label-text {
+  font-weight: var(--mts-font-weight-semibold);
+  letter-spacing: 0.01em;
+}
+.mts-gantt__assignee {
+  box-shadow: var(--mts-shadow-xs);
+}
+
+/* ── Toggle collapse WBS ──────────────────────────────────── */
+.mts-gantt__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: var(--mts-radius-sm);
+  cursor: pointer;
+  color: var(--mts-text-muted);
+  transition: color var(--mts-transition-fast), background var(--mts-transition-fast);
+}
+.mts-gantt__toggle:hover { color: var(--mts-text-primary); background: var(--mts-bg-surface-2); }
+.mts-gantt__toggle svg { width: 10px; height: 10px; transition: transform var(--mts-transition-fast); }
+.mts-gantt__toggle--open svg { transform: rotate(90deg); }
+
+.mts-gantt__toggle-placeholder {
+  width: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Inline editing ───────────────────────────────────────── */
+.mts-gantt__cell-input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--mts-font-family);
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-primary);
+  padding: 0 var(--mts-space-1);
+}
+.mts-gantt__cell-input::placeholder { color: var(--mts-text-muted); }
+
+/* ── Color swatch ─────────────────────────────────────────── */
+.mts-gantt__color-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--mts-radius-sm);
+  border: var(--mts-border-width) solid rgba(0,0,0,.2);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform var(--mts-transition-fast), box-shadow var(--mts-transition-fast);
+}
+.mts-gantt__color-swatch:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 2px var(--mts-color-primary-light);
+}
+
+/* ── ColorPicker inline ───────────────────────────────────── */
+.mts-gantt__cp-wrap { display: flex; align-items: center; justify-content: center; }
+.mts-gantt__cp-wrap .mts-colorpicker { display: flex; align-items: center; justify-content: center; }
+
+.mts-gantt__cp-wrap .mts-colorpicker__trigger-wrap {
+  padding: 0 3px;
+  gap: 3px;
+  background: transparent;
+  border: none;
+  height: auto;
+  border-radius: var(--mts-radius-sm);
+}
+.mts-gantt__cp-wrap .mts-colorpicker__trigger-wrap:hover { background: transparent; border: none; box-shadow: none; }
+.mts-gantt__cp-wrap .mts-colorpicker__trigger-wrap--open { background: transparent; border: none; box-shadow: none; }
+.mts-gantt__cp-wrap .mts-colorpicker__swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--mts-radius-sm);
+  transition: transform var(--mts-transition-fast), box-shadow var(--mts-transition-fast);
+}
+.mts-gantt__cp-wrap .mts-colorpicker__trigger-wrap:hover .mts-colorpicker__swatch {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 2px var(--mts-color-primary-light);
+}
+.mts-gantt__cp-wrap .mts-colorpicker__chevron { color: var(--mts-text-muted); opacity: 0.5; }
+
+/* ── Assignees ────────────────────────────────────────────── */
+.mts-gantt__assignees {
+  display: flex;
+  align-items: center;
+  gap: -4px;
+}
+.mts-gantt__assignee {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--mts-radius-full);
+  border: 2px solid var(--mts-bg-surface);
+  background: var(--mts-bg-surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+  margin-left: -4px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.mts-gantt__assignee:first-child { margin-left: 0; }
+.mts-gantt__assignee img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Reordenar/anidar por drag (opción reorderable) */
+.mts-gantt__tr--reorderable { position: relative; }
+.mts-gantt__drag-handle {
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  text-align: center;
+  cursor: grab;
+  color: var(--mts-text-color--muted);
+  font-size: 11px;
+  opacity: 0;
+  transition: opacity .12s;
+  user-select: none;
+  z-index: 3;
+}
+.mts-gantt__tr--reorderable:hover .mts-gantt__drag-handle { opacity: 1; }
+.mts-gantt__drag-handle:active { cursor: grabbing; }
+.mts-gantt__tr--dragging { opacity: .45; }
+.mts-gantt__tr--drop-into   { background: var(--mts-color-primary-light); box-shadow: inset 0 0 0 2px var(--mts-color-primary); }
+.mts-gantt__tr--drop-before { box-shadow: inset 0  2px 0 0 var(--mts-color-primary); }
+.mts-gantt__tr--drop-after  { box-shadow: inset 0 -2px 0 0 var(--mts-color-primary); }
+
+/* Celda de asignados editable (clic → onAssigneesClick) */
+.mts-gantt__assignees--editable {
+  cursor: pointer;
+  border-radius: var(--mts-radius-sm);
+  padding: 2px 4px;
+  margin: -2px -4px;
+  transition: background var(--mts-transition-fast, .12s);
+}
+.mts-gantt__assignees--editable:hover {
+  background: var(--mts-bg-surface-2);
+}
+.mts-gantt__assignees-add {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--mts-radius-full);
+  border: 1px dashed var(--mts-border-color);
+  color: var(--mts-text-color--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--mts-font-size-sm);
+}
+
+/* ── Gantt SVG container ──────────────────────────────────── */
+.mts-gantt__gantt-svg {
+  display: block;
+  min-height: 100%;
+}
+
+/* El SVG del gráfico (header + body) puede exceder el panel → habilita scroll horizontal.
+   Anula el `svg { max-width:100% }` global de base, que si no lo aplasta y mata el scroll. */
+.mts-gantt__gantt-header svg,
+.mts-gantt__gantt-body svg {
+  max-width: none;
+}
+
+/* Línea "hoy" */
+.mts-gantt__today-line {
+  stroke: var(--mts-gantt-today-color);
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+  opacity: 0.7;
+}
+
+.mts-gantt__today-label {
+  fill: var(--mts-gantt-today-color);
+  font-size: 10px;
+  font-weight: var(--mts-font-weight-semibold);
+  font-family: var(--mts-font-family);
+}
+
+/* ── Barra de tarea ───────────────────────────────────────── */
+.mts-gantt__bar {
+  rx: 3px;
+  opacity: 0.9;
+  transition: opacity 0.1s;
+  cursor: pointer;
+}
+.mts-gantt__bar:hover { opacity: 1; }
+.mts-gantt__bar--selected { outline: 2px solid var(--mts-gantt-sel-border); }
+
+.mts-gantt__bar--group {
+  rx: 2px;
+  opacity: 1;
+}
+
+.mts-gantt__bar-progress {
+  rx: 3px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Línea base (baseline): barra fantasma fina bajo la barra real. La separación = el desvío vs el plan. */
+.mts-gantt__bar-baseline {
+  fill: var(--mts-text-muted);
+  opacity: 0.45;
+  rx: 2px;
+  pointer-events: none;
+}
+
+.mts-gantt__bar-handle {
+  fill: rgba(255,255,255,0);
+  cursor: ew-resize;
+}
+
+.mts-gantt__bar-label {
+  fill: #fff;
+  font-size: 10px;
+  font-family: var(--mts-font-family);
+  pointer-events: none;
+  dominant-baseline: middle;
+  text-anchor: middle;
+}
+
+.mts-gantt__milestone {
+  fill: var(--mts-color-warning);
+  stroke: var(--mts-bg-surface);
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+
+/* ── Dependencias (flechas SVG) ───────────────────────────── */
+.mts-gantt__link {
+  fill: none;
+  stroke: var(--mts-text-muted);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+  opacity: 0.6;
+}
+.mts-gantt__link--critical {
+  stroke: var(--mts-color-danger);
+  opacity: 0.85;
+  stroke-dasharray: none;
+}
+
+/* ── Critical path ────────────────────────────────────────── */
+.mts-gantt__tr--critical .mts-gantt__td--label { color: var(--mts-color-danger); }
+.mts-gantt__bar--critical { filter: brightness(1.1); }
+
+/* ── Ejes y grid SVG ──────────────────────────────────────── */
+.mts-gantt__grid-line {
+  stroke: var(--mts-border-color);
+  stroke-width: 0.5;
+}
+.mts-gantt__axis-label {
+  fill: var(--mts-text-muted);
+  font-size: 10px;
+  font-family: var(--mts-font-family);
+}
+.mts-gantt__axis-label--month {
+  font-weight: var(--mts-font-weight-semibold);
+  font-size: 11px;
+}
+
+/* ── Estado vacío ─────────────────────────────────────────── */
+.mts-gantt__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mts-space-3);
+  padding: var(--mts-space-12) var(--mts-space-6);
+  color: var(--mts-text-muted);
+  font-size: var(--mts-font-size-sm);
+}
+
+/* ── Estado de carga ──────────────────────────────────────── */
+.mts-gantt__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--mts-space-8);
+}
+
+/* ── Skeleton rows ────────────────────────────────────────── */
+.mts-gantt__skeleton-row {
+  display: flex;
+  align-items: center;
+  height: var(--mts-gantt-row-h);
+  padding: 0 var(--mts-space-3);
+  gap: var(--mts-space-2);
+  border-bottom: var(--mts-border-width) solid var(--mts-border-color);
+}
+.mts-gantt__skeleton-bone {
+  background: var(--mts-bg-surface-2);
+  border-radius: var(--mts-radius-sm);
+  height: 10px;
+  animation: mts-gantt-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes mts-gantt-shimmer {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1;   }
+}
+
+/* ── Header Gantt scroll ──────────────────────────────────── */
+.mts-gantt__gantt-header-scroll {
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ── Selección múltiple ───────────────────────────────────── */
+.mts-gantt__tr--multi-selected {
+  background: var(--mts-gantt-sel-bg);
+  border-left: 3px solid var(--mts-gantt-sel-border);
+}
+
+/* ── Row hover Gantt ──────────────────────────────────────── */
+.mts-gantt__row-bg--hover    { fill: var(--mts-bg-surface-2); }
+.mts-gantt__row-bg--selected { fill: var(--mts-gantt-sel-bg); }
+.mts-gantt__row-bg--group    { fill: var(--mts-bg-surface-2); }
