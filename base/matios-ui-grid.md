@@ -1,10 +1,10 @@
 # matios-ui-grid
 
-Sistema de grid CSS nativo — 12 columnas, responsive, sin JS, sin compilar.
+Native CSS grid system — 12 columns, responsive, no JS, no build step.
 
 ---
 
-## Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="../../base/matios-ui-base.css">
@@ -13,109 +13,81 @@ Sistema de grid CSS nativo — 12 columnas, responsive, sin JS, sin compilar.
 
 ---
 
-## Uso básico
+## Usage
 
 ```html
-<!-- Grid de 12 columnas — default -->
+<!-- 12-column grid (default) -->
 <div class="mts-grid">
-  <div class="mts-g-col-6">Mitad izquierda</div>
-  <div class="mts-g-col-6">Mitad derecha</div>
+  <div class="mts-g-col-6">Left half</div>
+  <div class="mts-g-col-6">Right half</div>
 </div>
 
-<!-- 3 columnas iguales -->
+<!-- Unequal columns -->
 <div class="mts-grid">
-  <div class="mts-g-col-4">Col 1</div>
-  <div class="mts-g-col-4">Col 2</div>
-  <div class="mts-g-col-4">Col 3</div>
-</div>
-
-<!-- Columnas desiguales -->
-<div class="mts-grid">
-  <div class="mts-g-col-8">Contenido principal</div>
+  <div class="mts-g-col-8">Main content</div>
   <div class="mts-g-col-4">Sidebar</div>
 </div>
+
+<!-- 3 columns with a large gap (via control variables) -->
+<div class="mts-grid" style="--mts-columns:3; --mts-gap:2rem">...</div>
 ```
 
----
+### Responsive
 
-## CSS Variables de control
-
-Aplicadas directamente en el contenedor `.mts-grid`:
-
-| Variable | Default | Descripción |
-|----------|---------|-------------|
-| `--mts-columns` | `12` | Número de columnas |
-| `--mts-rows` | `1` | Número de filas |
-| `--mts-gap` | `1rem` | Gap horizontal y vertical |
-| `--mts-col-gap` | — | Gap solo horizontal |
-| `--mts-row-gap` | — | Gap solo vertical |
+Breakpoint prefixes: `sm` (576px), `md` (768px), `lg` (992px), `xl` (1200px).
 
 ```html
-<!-- Grid de 3 columnas con gap grande -->
-<div class="mts-grid" style="--mts-columns:3; --mts-gap:2rem">
-  ...
-</div>
-```
-
----
-
-## Clases de columna
-
-`.mts-g-col-{1..12}` — ocupa N columnas del grid.
-
-| Clase | Columnas |
-|-------|----------|
-| `.mts-g-col-1` | 1/12 |
-| `.mts-g-col-2` | 2/12 |
-| `.mts-g-col-3` | 3/12 (25%) |
-| `.mts-g-col-4` | 4/12 (33%) |
-| `.mts-g-col-6` | 6/12 (50%) |
-| `.mts-g-col-8` | 8/12 (66%) |
-| `.mts-g-col-12` | 12/12 (100%) |
-
----
-
-## Responsive
-
-Prefijos por breakpoint: `sm` (576px), `md` (768px), `lg` (992px), `xl` (1200px).
-
-```html
-<!-- Full en mobile, mitad en md, tercio en lg -->
 <div class="mts-grid">
   <div class="mts-g-col-12 mts-g-col-md-6 mts-g-col-lg-4">...</div>
   <div class="mts-g-col-12 mts-g-col-md-6 mts-g-col-lg-4">...</div>
-  <div class="mts-g-col-12 mts-g-col-md-12 mts-g-col-lg-4">...</div>
 </div>
 ```
 
 ---
 
-## Modificadores de gap
+## CSS Classes
 
-| Clase | Gap |
+### Columns & alignment
+
+| Class | Description |
+|-------|-------------|
+| `.mts-g-col-{1..12}` | Span N of 12 columns (e.g. `-3` = 25%, `-6` = 50%, `-8` = 66%) |
+| `.mts-g-col-{sm\|md\|lg\|xl}-{1..12}` | Responsive span per breakpoint |
+| `.mts-g-start-{n}` | Start at column `n` |
+| `.mts-grid--center` / `--start` / `--end` | `align-items: center / start / end` |
+
+### Gap modifiers
+
+| Class | Gap |
 |-------|-----|
 | `.mts-grid--no-gap` | 0 |
-| `.mts-grid--gap-xs` | 4px |
-| `.mts-grid--gap-sm` | 8px |
-| `.mts-grid--gap-md` | 16px |
-| `.mts-grid--gap-lg` | 24px |
-| `.mts-grid--gap-xl` | 32px |
+| `.mts-grid--gap-xs` / `-sm` / `-md` / `-lg` / `-xl` | 4 / 8 / 16 / 24 / 32 px |
 
 ---
 
-## Alineación
+## CSS Variables
 
-```html
-<div class="mts-grid mts-grid--center">...</div>   <!-- align-items: center -->
-<div class="mts-grid mts-grid--start">...</div>    <!-- align-items: start -->
-<div class="mts-grid mts-grid--end">...</div>      <!-- align-items: end -->
-```
+Applied directly on the `.mts-grid` container:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--mts-columns` | `12` | Number of columns |
+| `--mts-rows` | `1` | Number of rows |
+| `--mts-gap` | `1rem` | Horizontal and vertical gap |
+| `--mts-col-gap` | — | Horizontal gap only |
+| `--mts-row-gap` | — | Vertical gap only |
 
 ---
 
-## Start column
+## Notes
 
-```html
-<!-- Empieza en la columna 3 y ocupa 4 -->
-<div class="mts-g-col-4 mts-g-start-3">...</div>
-```
+- This is the low-level CSS grid (`base/`). For structural page layout with a JS helper and layout shortcuts, see
+  `MTS.Grid` (`layout/matios-ui-grid`); for forms, see `MTS.FormLayout`.
+
+---
+
+## Changelog
+
+### Initial
+- Native 12-column CSS grid: column/responsive/start classes, gap modifiers, alignment, and `--mts-columns` /
+  `--mts-rows` / `--mts-gap` control variables.

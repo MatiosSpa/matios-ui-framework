@@ -1,84 +1,28 @@
 # MTS.PasswordStrength
 
-Medidor de fortaleza de contraseña en tiempo real. Se integra con `MTS.Input` — detecta la instancia automáticamente. Compatible con `MTS.Validate` vía regla `custom`.
+Real-time password-strength meter. Integrates with `MTS.Input` — it detects the instance automatically. Works with `MTS.Validate` via a `custom` rule.
 
 ---
 
-## Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-input.css">
 <link rel="stylesheet" href="matios-ui-passwordstrength.css">
-
 <script src="matios-ui-input.js"></script>
 <script src="matios-ui-passwordstrength.js"></script>
 ```
 
 ---
 
-## Opciones
-
-| Opción | Tipo | Default | Descripción |
-|--------|------|---------|-------------|
-| `input` | `MTS.Input \| HTMLElement` | — | Input al que se vincula (obligatorio) |
-| `minLength` | `number` | — | Largo mínimo de la contraseña |
-| `maxLength` | `number` | — | Largo máximo de la contraseña. Se aplica automáticamente como `maxlength` en el input nativo — el usuario no puede escribir más caracteres. |
-| `minUppercase` | `number` | — | Cantidad mínima de letras mayúsculas |
-| `minLowercase` | `number` | — | Cantidad mínima de letras minúsculas |
-| `minNumbers` | `number` | — | Cantidad mínima de dígitos numéricos |
-| `minSpecial` | `number` | — | Cantidad mínima de símbolos especiales |
-| `allowedSpecial` | `string` | `'!@#$%^&*()_+-=[]{}|;:,.<>?'` | Símbolos especiales permitidos |
-| `showChecklist` | `boolean` | `true` | Muestra el checklist de reglas debajo de la barra |
-| `onChange` | `function` | — | Callback al cambiar el puntaje: `({ score, level, isValid, results })` |
-
----
-
-## API
+## Usage
 
 ```js
-const meter = new MTS.PasswordStrength('#meter', { input: inPass, minLength: 8, ... });
+// Basic
+const inPass = new MTS.Input('#field-pass', { label: 'Password', type: 'password' });
+new MTS.PasswordStrength('#meter', { input: inPass, minLength: 8 });
 
-meter.isValid()    // → boolean — true solo si el 100% de las reglas pasan
-meter.getScore()   // → number  — puntaje 0-100
-meter.getLevel()   // → string  — '' | 'weak' | 'fair' | 'strong' | 'very-strong'
-meter.getResults() // → [{ label: string, ok: boolean }]
-meter.destroy()    // limpia el contenedor y remueve clases
-```
-
----
-
-## Niveles
-
-| Nivel | Label | Color | Segmentos activos |
-|---|---|---|---|
-| `weak` | Débil | danger (rojo) | 1 / 4 |
-| `fair` | Regular | warning (naranja) | 2 / 4 |
-| `strong` | Fuerte | info (azul) | 3 / 4 |
-| `very-strong` | Muy fuerte | success (verde) | 4 / 4 |
-
-El nivel se calcula en función del porcentaje de reglas que pasan (0-100%). El campo vacío siempre muestra la barra en estado neutro (sin nivel).
-
----
-
-## Uso básico
-
-```js
-const inPass = new MTS.Input('#campo-pass', {
-  label: 'Contraseña',
-  type:  'password',
-});
-
-new MTS.PasswordStrength('#meter', {
-  input:     inPass,
-  minLength: 8,
-});
-```
-
----
-
-## Reglas completas
-
-```js
+// Full rule set
 new MTS.PasswordStrength('#meter', {
   input:          inPass,
   minLength:      8,
@@ -88,60 +32,85 @@ new MTS.PasswordStrength('#meter', {
   minSpecial:     1,
   allowedSpecial: '!@#$%^&*',
 });
+
+// Bar only (no checklist)
+new MTS.PasswordStrength('#meter', { input: inPass, minLength: 8, showChecklist: false });
 ```
 
 ---
 
-## Integración con MTS.Validate
+## Options
 
-`isValid()` retorna `true` solo cuando el 100% de las reglas pasan. Se usa como regla `custom` en `MTS.Validate`:
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `input` | `MTS.Input \| HTMLElement` | — | Input it binds to (**required**) |
+| `minLength` | `number` | — | Minimum password length |
+| `maxLength` | `number` | — | Maximum length. Applied as `maxlength` on the native input — the user cannot type more |
+| `minUppercase` | `number` | — | Minimum uppercase letters |
+| `minLowercase` | `number` | — | Minimum lowercase letters |
+| `minNumbers` | `number` | — | Minimum digits |
+| `minSpecial` | `number` | — | Minimum special symbols |
+| `allowedSpecial` | `string` | ``'!@#$%^&*()_+-=[]{}|;:,.<>?'`` | Allowed special symbols |
+| `showChecklist` | `boolean` | `true` | Show the rule checklist below the bar |
+| `onChange` | `function` | — | Score callback — `({ score, level, isValid, results })` |
+
+---
+
+## API
+
+| Method | Description |
+|--------|-------------|
+| `isValid()` | `true` only when 100% of the rules pass |
+| `getScore()` | Score `0–100` |
+| `getLevel()` | `'' \| 'weak' \| 'fair' \| 'strong' \| 'very-strong'` |
+| `getResults()` | `[{ label, ok }]` |
+| `destroy()` | Clear the container and remove classes |
+
+### Levels
+
+| Level | Color | Active segments |
+|-------|-------|-----------------|
+| `weak` | danger | 1 / 4 |
+| `fair` | warning | 2 / 4 |
+| `strong` | info | 3 / 4 |
+| `very-strong` | success | 4 / 4 |
+
+The level is computed from the percentage of passing rules (0–100%). An empty field shows a neutral bar (no level).
+
+### Integration with MTS.Validate
+
+`isValid()` returns `true` only when every rule passes — use it as a `custom` rule:
 
 ```js
-const meter = new MTS.PasswordStrength('#meter', {
-  input:     inPass,
-  minLength: 8,
-  // ... más reglas
-});
+const meter = new MTS.PasswordStrength('#meter', { input: inPass, minLength: 8 });
 
 new MTS.Validate(form, {
   rules: {
-    password: {
-      custom: function() {
-        return meter.isValid() || 'La contraseña no cumple los requisitos.';
-      },
-    },
+    password: { custom: function () { return meter.isValid() || 'The password does not meet the requirements.'; } },
   },
-  onValid: function(data) { guardarClave(data); },
+  onValid: function (data) { savePassword(data); },
 });
 ```
 
 ---
 
-## Solo barra (sin checklist)
+## Events
 
-```js
-new MTS.PasswordStrength('#meter', {
-  input:         inPass,
-  minLength:     8,
-  showChecklist: false,
-});
-```
+| Method | Payload | When |
+|--------|---------|------|
+| `onChange(fn)` | `{ score, level, isValid, results }` | The score changes |
 
 ---
 
-## Callback onChange
+## Accessibility
 
-```js
-new MTS.PasswordStrength('#meter', {
-  input:    inPass,
-  // ... reglas
-  onChange: function(data) {
-    console.log(data.score);    // 0-100
-    console.log(data.level);    // 'weak' | 'fair' | 'strong' | 'very-strong'
-    console.log(data.isValid);  // boolean
-    console.log(data.results);  // [{ label, ok }]
-  },
-});
-```
+- The meter complements (does not replace) clear text requirements — the checklist conveys which rules pass.
+- Consider an `aria-live` region for the level text so screen-reader users hear strength changes.
 
 ---
+
+## Changelog
+
+### Initial
+- Real-time password-strength meter bound to `MTS.Input`, configurable rules (length/upper/lower/number/special),
+  4 strength levels, rule checklist, `MTS.Validate` integration, and `isValid` / `getScore` / `getLevel` / `getResults`.

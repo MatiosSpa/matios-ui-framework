@@ -1,11 +1,10 @@
 # MTS.Rating
 
-🇬🇧 Star rating component with hover preview, half-star support and readonly mode.
-🇪🇸 Componente de valoración por estrellas con preview al hover, medio punto y modo readonly.
+Star rating input with hover preview, half-star support and read-only mode.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,131 +14,75 @@
 
 ---
 
-## Options / Opciones
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `value` | `number` | `0` | 🇬🇧 Initial rating value (0 to max) / 🇪🇸 Valor inicial (0 a max) |
-| `max` | `number` | `5` | 🇬🇧 Total number of stars / 🇪🇸 Total de estrellas |
-| `halfStars` | `boolean` | `false` | 🇬🇧 Allow half-star ratings / 🇪🇸 Permitir valoraciones de medio punto |
-| `readonly` | `boolean` | `false` | 🇬🇧 Display only, no interaction / 🇪🇸 Solo display, sin interacción |
-| `size` | `string` | `'md'` | 🇬🇧 Size variant: `'sm'` · `'md'` · `'lg'` / 🇪🇸 Variante de tamaño |
-| `onChange` | `function` | — | 🇬🇧 Fires when rating changes / 🇪🇸 Se dispara al cambiar la valoración |
-
----
-
-## Events / Eventos
-
-🇬🇧 Use `onChange` in the constructor. This is the recommended approach.
-🇪🇸 Usa `onChange` en el constructor. Este es el enfoque recomendado.
+## Usage
 
 ```js
-new MTS.Rating('#my-rating', {
-  // Fires when user selects a rating / Se dispara al seleccionar una valoración
-  onChange: (e) => {
-    console.log(e.detail.value); // → 3.5
-  },
-});
+// Basic
+new MTS.Rating('#rating-product', { value: 3, max: 5, onChange: function (e) { console.log(e.detail.value); } });
+
+// Half stars
+new MTS.Rating('#rating-half', { value: 3.5, halfStars: true, onChange: function (e) { console.log(e.detail.value); } });
+
+// Read-only
+new MTS.Rating('#rating-readonly', { value: 4.5, halfStars: true, readonly: true });
 ```
+
+The container only needs to exist in the DOM (`<div id="rating-product"></div>`). Also supports `data-value`,
+`data-half-stars`, `data-readonly`.
 
 ---
 
-## HTML Usage / Uso HTML
+## Options
 
-```html
-<!-- Basic / Básico -->
-<div id="rating-product"></div>
-
-<script>
-  new MTS.Rating('#rating-product', {
-    value:   3,
-    max:     5,
-    onChange: (e) => console.log(e.detail.value),
-  });
-</script>
-
-<!-- Half stars / Medio punto -->
-<div id="rating-half"></div>
-
-<script>
-  new MTS.Rating('#rating-half', {
-    value:     3.5,
-    halfStars: true,
-    onChange:  (e) => console.log(e.detail.value),
-  });
-</script>
-
-<!-- Readonly / Solo lectura -->
-<div id="rating-readonly"
-  data-value="4.5"
-  data-half-stars
-  data-readonly>
-</div>
-<script>
-  new MTS.Rating('#rating-readonly');
-</script>
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-const rating = new MTS.Rating('#my-rating', {
-  // Initial value / Valor inicial
-  value: 3,
-
-  // Total stars / Total de estrellas
-  max: 5,
-
-  // Allow half-star ratings / Permitir medio punto
-  halfStars: true,
-
-  // Display only / Solo display
-  readonly: false,
-
-  // Size: 'sm' | 'md' | 'lg' / Tamaño
-  size: 'md',
-
-  // Fires when rating changes / Se dispara al cambiar la valoración
-  onChange: (e) => {
-    console.log(e.detail.value); // → 3.5
-  },
-});
-```
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `value` | `number` | `0` | Initial rating value (0 to `max`) |
+| `max` | `number` | `5` | Total number of stars |
+| `halfStars` | `boolean` | `false` | Allow half-star ratings |
+| `readonly` | `boolean` | `false` | Display only, no interaction |
+| `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
+| `onChange` | `function` | — | Fires when the rating changes |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `getValue()` | Get the current value (e.g. `3.5`) |
+| `setValue(n)` | Set the value programmatically (`.5` requires `halfStars: true`) |
+| `destroy()` | Destroy the instance |
+
 ```js
-const rating = new MTS.Rating('#my-rating', { ... });
-
-// Get current value / Obtener valor actual
-rating.getValue()     // → number (e.g. 3.5)
-
-// Set value programmatically / Establecer valor programáticamente
-rating.setValue(4)
-rating.setValue(4.5)  // requires halfStars: true
-
-// Destroy / Destruir
-rating.destroy()
+const rating = new MTS.Rating('#my-rating', { halfStars: true });
+rating.setValue(4.5);
 ```
 
 ---
 
-## DOM Events / Eventos DOM
+## Events
+
+| Method | DOM event | Payload |
+|--------|-----------|---------|
+| `onChange` | `mts:rating:change` | `{ value }` |
+| — | `mts:rating:hover` | `{ value }` (hover preview) |
 
 ```js
 document.getElementById('my-rating')
-  .addEventListener('mts:rating:change', (e) => {
-    console.log(e.detail.value); // → number
-  });
+  .addEventListener('mts:rating:change', function (e) { console.log(e.detail.value); });
 ```
 
-| Event / Evento | DOM Namespace | 🇬🇧 Description / 🇪🇸 Descripción |
-|----------------|---------------|--------------------------------------|
-| `onChange` | `mts:rating:change` | 🇬🇧 User selects a rating / 🇪🇸 Usuario selecciona valoración |
-| — | `mts:rating:hover` | 🇬🇧 User hovers over a star / 🇪🇸 Usuario hace hover sobre una estrella |
+---
+
+## Accessibility
+
+- In interactive mode the stars are keyboard-operable (arrow keys step the value, respecting `halfStars`).
+- A `readonly` rating should still expose its value as text for assistive tech.
 
 ---
+
+## Changelog
+
+### Initial
+- Star rating input with hover preview, half-star support, configurable `max`, sizes, read-only mode,
+  `onChange`, and `getValue` / `setValue`.

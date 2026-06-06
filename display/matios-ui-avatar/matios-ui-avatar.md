@@ -1,11 +1,10 @@
 # MTS.Avatar
 
-🇬🇧 Avatar component with image, initials fallback, status dot, badge and group support. Auto-generates initials and color from name.
-🇪🇸 Componente de avatar con imagen, fallback a iniciales, dot de estado, badge y soporte de grupo. Genera iniciales y color automáticamente desde el nombre.
+Avatar with image, initials fallback, status dot, badge and group support. Auto-generates initials and a deterministic color from the name.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,126 +14,90 @@
 
 ---
 
-## Options / Opciones
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `src` | `string` | `null` | 🇬🇧 Image URL — falls back to initials on error / 🇪🇸 URL de imagen — cae a iniciales si falla |
-| `name` | `string` | `''` | 🇬🇧 Full name — generates initials and auto color / 🇪🇸 Nombre completo — genera iniciales y color |
-| `initials` | `string` | auto | 🇬🇧 Manual initials — overrides name / 🇪🇸 Iniciales manuales — sobreescribe name |
-| `size` | `string` | `'md'` | `'xs'` · `'sm'` · `'md'` · `'lg'` · `'xl'` |
-| `color` | `string` | auto | 🇬🇧 Background color — auto-generated from name / 🇪🇸 Color de fondo — auto desde name |
-| `status` | `string` | `null` | `'online'` · `'offline'` · `'busy'` · `'away'` |
-| `square` | `boolean` | `false` | 🇬🇧 Square shape / 🇪🇸 Forma cuadrada |
-| `badge` | `string\|number` | `null` | 🇬🇧 Badge text or number / 🇪🇸 Texto o número en badge |
-
----
-
-## JavaScript Usage / Uso JavaScript
+## Usage
 
 ```js
-// With image / Con imagen
-new MTS.Avatar('#avatar-img', {
-  src:  'https://example.com/photo.jpg',
-  name: 'Ana García',
-  size: 'md',
-});
+// With image (falls back to initials on error)
+new MTS.Avatar('#avatar-img', { src: 'https://example.com/photo.jpg', name: 'Ana García', size: 'md' });
 
-// Initials from name / Iniciales desde name
-new MTS.Avatar('#avatar-initials', {
-  name: 'Pedro Martínez',   // → 'PM', auto color
-  size: 'lg',
-});
+// Initials from name (auto color)
+new MTS.Avatar('#avatar-initials', { name: 'Pedro Martínez', size: 'lg' });   // → 'PM'
 
-// Manual initials + custom color / Iniciales manuales + color
-new MTS.Avatar('#avatar-custom', {
-  initials: 'JD',
-  color:    '#7c3aed',
-  size:     'md',
-});
+// Manual initials + custom color
+new MTS.Avatar('#avatar-custom', { initials: 'JD', color: '#7c3aed' });
 
-// With status dot / Con dot de estado
-new MTS.Avatar('#avatar-status', {
-  name:   'Laura Sánchez',
-  status: 'online',   // 'online' | 'offline' | 'busy' | 'away'
-});
+// Status dot
+new MTS.Avatar('#avatar-status', { name: 'Laura Sánchez', status: 'online' });
 
-// Square shape / Forma cuadrada
-new MTS.Avatar('#avatar-square', {
-  name:   'Bot',
-  square: true,
-  size:   'lg',
-});
-
-// With badge / Con badge
-new MTS.Avatar('#avatar-badge', {
-  name:  'Carlos',
-  badge: 3,
-});
+// Square shape + badge
+new MTS.Avatar('#avatar-square', { name: 'Bot', square: true, badge: 3 });
 ```
 
 ---
 
-## HTML Usage / Uso HTML
+## Options
 
-```html
-<div id="my-avatar"></div>
-
-<script>
-  new MTS.Avatar('#my-avatar', {
-    src:    'photo.jpg',
-    name:   'Ana García',
-    status: 'online',
-  });
-</script>
-```
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `src` | `string` | `null` | Image URL — falls back to initials on error |
+| `name` | `string` | `''` | Full name — generates initials and an auto color |
+| `initials` | `string` | auto | Manual initials — overrides `name` |
+| `size` | `string` | `'md'` | `'xs'` · `'sm'` · `'md'` · `'lg'` · `'xl'` |
+| `color` | `string` | auto | Background color — auto-generated from `name` |
+| `status` | `string` | `null` | `'online'` · `'offline'` · `'busy'` · `'away'` |
+| `square` | `boolean` | `false` | Square shape |
+| `badge` | `string \| number` | `null` | Badge text or number |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `setStatus(value)` | Update the status dot (`'online'…` or `null` to remove) |
+| `setSrc(url)` | Update the image |
+
 ```js
 const avatar = new MTS.Avatar('#my-avatar', { name: 'Ana García' });
-
-// Update status / Actualizar estado
-avatar.setStatus('online')
-avatar.setStatus('busy')
-avatar.setStatus(null)   // remove dot / quitar dot
-
-// Update image / Actualizar imagen
-avatar.setSrc('https://example.com/new-photo.jpg')
+avatar.setStatus('busy');
+avatar.setSrc('https://example.com/new-photo.jpg');
 ```
 
----
+### MTS.AvatarGroup
 
-## AvatarGroup / Grupo de avatares
+Stack overlapping avatars with an overflow counter:
 
 ```js
-// Stack overlapping avatars / Apilar avatares superpuestos
 new MTS.AvatarGroup('#group', {
   avatars: [
     { src: '/img/1.jpg', name: 'Ana' },
     { src: '/img/2.jpg', name: 'Pedro' },
-    { name: 'Laura' },
-    { name: 'Carlos' },
-    { name: 'María' },
+    { name: 'Laura' }, { name: 'Carlos' }, { name: 'María' },
   ],
-  max:  3,      // show max 3, then "+2" / mostrar máx 3, luego "+2"
+  max:  3,      // show 3, then "+2"
   size: 'md',
 });
 ```
 
----
-
-## Static Helpers / Helpers estáticos
+### Static helpers
 
 ```js
-// Generate initials from name / Generar iniciales desde nombre
-MTS.Avatar.getInitials('Ana García')   // → 'AG'
-MTS.Avatar.getInitials('Pedro')        // → 'PE'
-
-// Generate consistent color from name / Generar color consistente desde nombre
-MTS.Avatar.colorFromName('Ana García') // → '#...' (deterministic)
+MTS.Avatar.getInitials('Ana García');    // → 'AG'
+MTS.Avatar.getInitials('Pedro');         // → 'PE'
+MTS.Avatar.colorFromName('Ana García');  // → '#…' (deterministic)
 ```
 
 ---
+
+## Accessibility
+
+- When `src` is set, the `<img>` gets the `name` as its `alt`. Keep `name` meaningful.
+- The status dot is decorative; convey status with text elsewhere if it carries meaning for assistive tech.
+
+---
+
+## Changelog
+
+### Initial
+- Avatar with image + initials fallback, deterministic auto color, sizes, status dot, square shape and badge.
+- `MTS.AvatarGroup` (overlap + overflow counter). Static helpers `getInitials` / `colorFromName`.

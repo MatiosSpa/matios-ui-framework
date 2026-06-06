@@ -1,11 +1,10 @@
 # MTS.Slider
 
-🇬🇧 Range slider component — single value or dual-thumb range, with label, custom formatter and step.
-🇪🇸 Componente slider de rango — valor simple o rango de dos thumbs, con label, formateador personalizado y step.
+Range slider component — single value or dual-thumb range, with label, custom formatter and step.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,155 +14,91 @@
 
 ---
 
-## Options / Opciones
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `min` | `number` | `0` | 🇬🇧 Minimum value / 🇪🇸 Valor mínimo |
-| `max` | `number` | `100` | 🇬🇧 Maximum value / 🇪🇸 Valor máximo |
-| `step` | `number` | `1` | 🇬🇧 Step increment / 🇪🇸 Incremento de paso |
-| `value` | `number\|array` | `min` | 🇬🇧 Initial value. Array `[min, max]` for range / 🇪🇸 Valor inicial. Array `[min, max]` para rango |
-| `range` | `boolean` | `false` | 🇬🇧 Enable dual-thumb range mode / 🇪🇸 Activar modo rango de dos thumbs |
-| `label` | `string` | `''` | 🇬🇧 Label text above slider / 🇪🇸 Texto label sobre el slider |
-| `showValue` | `boolean` | `true` | 🇬🇧 Show current value next to label / 🇪🇸 Mostrar valor actual junto al label |
-| `labelFormat` | `function` | `null` | 🇬🇧 Custom value formatter / 🇪🇸 Formateador personalizado de valor |
-| `onChange` | `function` | — | 🇬🇧 Fires when value changes / 🇪🇸 Se dispara al cambiar el valor |
-
----
-
-## Events / Eventos
-
-🇬🇧 Use `onChange` in the constructor. This is the recommended approach.
-🇪🇸 Usa `onChange` en el constructor. Este es el enfoque recomendado.
+## Usage
 
 ```js
-// Simple slider / Slider simple
-new MTS.Slider('#my-slider', {
-  // Fires on every drag / Se dispara en cada arrastre
-  onChange: (e) => {
-    console.log(e.detail.value); // → number
-  },
+// Simple slider
+const slider = new MTS.Slider('#slider-volume', {
+  label:       'Volume',
+  min:         0,
+  max:         100,
+  step:        5,
+  value:       65,
+  showValue:   true,
+  labelFormat: function (v) { return v + '%'; },
+  onChange:    function (e) { console.log(e.detail.value); }, // → number
 });
 
-// Range slider / Slider de rango
-new MTS.Slider('#my-slider', {
-  range: true,
-  onChange: (e) => {
-    console.log(e.detail.value); // → [min, max]
-  },
-});
-```
-
----
-
-## HTML Usage / Uso HTML
-
-```html
-<!-- Simple slider / Slider simple -->
-<div id="slider-volume"></div>
-
-<script>
-  new MTS.Slider('#slider-volume', {
-    label:       'Volume',
-    min:         0,
-    max:         100,
-    value:       65,
-    showValue:   true,
-    labelFormat: (v) => v + '%',
-    onChange:    (e) => console.log(e.detail.value),
-  });
-</script>
-
-<!-- Range slider / Slider de rango -->
-<div id="slider-price"></div>
-
-<script>
-  new MTS.Slider('#slider-price', {
-    label:       'Price range',
-    range:       true,
-    min:         0,
-    max:         1000,
-    step:        10,
-    value:       [200, 700],
-    showValue:   true,
-    labelFormat: ([a, b]) => '$' + a + ' – $' + b,
-    onChange:    (e) => console.log(e.detail.value), // → [200, 700]
-  });
-</script>
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-// Simple / Simple
-const slider = new MTS.Slider('#my-slider', {
-  // Label above slider / Label sobre el slider
-  label: 'Volume',
-
-  // Range boundaries / Límites del rango
-  min: 0,
-  max: 100,
-
-  // Step increment / Incremento de paso
-  step: 5,
-
-  // Initial value / Valor inicial
-  value: 65,
-
-  // Show value next to label / Mostrar valor junto al label
-  showValue: true,
-
-  // Custom formatter / Formateador personalizado
-  labelFormat: (v) => v + '%',
-
-  // Fires on drag / Se dispara al arrastrar
-  onChange: (e) => console.log(e.detail.value),
-});
-
-// Range / Rango
-const range = new MTS.Slider('#my-range', {
+// Range slider (dual thumb)
+const range = new MTS.Slider('#slider-price', {
+  label:       'Price range',
   range:       true,
-  label:       'Price',
   min:         0,
   max:         1000,
   step:        10,
-  value:       [200, 700],  // [minimum, maximum] / [mínimo, máximo]
+  value:       [200, 700],
   showValue:   true,
-  labelFormat: ([a, b]) => '$' + a + ' – $' + b,
-  onChange:    (e) => console.log(e.detail.value), // → [200, 700]
+  labelFormat: function (v) { return '$' + v[0] + ' – $' + v[1]; },
+  onChange:    function (e) { console.log(e.detail.value); }, // → [200, 700]
 });
 ```
+
+The container only needs to exist in the DOM (`<div id="slider-volume"></div>`).
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `step` | `number` | `1` | Step increment |
+| `value` | `number \| array` | `min` | Initial value. Array `[min, max]` for range |
+| `range` | `boolean` | `false` | Enable dual-thumb range mode |
+| `label` | `string` | `''` | Label text above the slider |
+| `showValue` | `boolean` | `true` | Show the current value next to the label |
+| `labelFormat` | `function` | `null` | Custom value formatter — `(value) → string` |
+| `onChange` | `function` | — | Fires when the value changes |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `getValue()` | Returns the current value — `number` (simple) or `[number, number]` (range) |
+| `setValue(value)` | Set the value programmatically (number or `[min, max]`) |
+
 ```js
-const slider = new MTS.Slider('#my-slider', { ... });
-
-// Returns current value / Retorna el valor actual
-slider.getValue()              // → number (simple) | [number, number] (range)
-
-// Sets value programmatically / Establece el valor programáticamente
-slider.setValue(50)            // simple
-slider.setValue([300, 600])    // range / rango
+const slider = new MTS.Slider('#my-slider', { min: 0, max: 100 });
+slider.setValue(50);
 ```
 
 ---
 
-## DOM Event / Evento DOM
+## Events
+
+| Method | DOM event | Payload |
+|--------|-----------|---------|
+| `onChange` | `mts:slider:change` | `{ value }` — `number` or `[number, number]` |
 
 ```js
 document.getElementById('my-slider')
-  .addEventListener('mts:slider:change', (e) => {
-    console.log(e.detail.value); // → number | [number, number]
-  });
+  .addEventListener('mts:slider:change', function (e) { console.log(e.detail.value); });
 ```
 
-| Event / Evento | DOM Namespace |
-|----------------|---------------|
-| `onChange` | `mts:slider:change` |
+---
+
+## Accessibility
+
+- Each thumb is keyboard-operable: arrow keys step by `step`, `Home`/`End` jump to min/max.
+- Provide a `label` so the slider has an accessible name; `labelFormat` improves the announced value.
 
 ---
+
+## Changelog
+
+### Initial
+- Slider with single value or dual-thumb range, configurable min/max/step, label with live value, custom
+  `labelFormat`, `onChange`, and `getValue` / `setValue`.

@@ -6,7 +6,14 @@
 
 <p align="center">
   Zero-dependency UI framework built with pure CSS and JavaScript.<br>
-  Mode + accent theming &nbsp;·&nbsp; High-contrast support &nbsp;·&nbsp; 60+ components &nbsp;·&nbsp; 278 icons
+  Mode + accent theming &nbsp;·&nbsp; High-contrast support &nbsp;·&nbsp; 80+ components &nbsp;·&nbsp; 278 icons
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT">
+  <img src="https://img.shields.io/badge/dependencies-0-brightgreen.svg" alt="Zero dependencies">
+  <img src="https://img.shields.io/badge/build-none-lightgrey.svg" alt="No build step">
+  &nbsp;·&nbsp; <a href="./README.es.md">Español</a>
 </p>
 
 ---
@@ -101,19 +108,19 @@ Available accents: `violet` · `olive` · `blue` · `corporate` · `navy` · `em
 ## Component Groups
 
 ### Forms
-`Button` · `Input` · `Select` · `Checkbox` · `Radio` · `Toggle` · `Slider` · `TagInput` · `Rating` · `DatePicker` · `FileUpload` · `NumberInput` · `PhoneInput` · `ColorPicker` · `RichTextEditor` · `FormLayout` · `CopyButton` · `ConfirmButton` · `Label` · `PasswordStrength` · `Validation`
+`Button` · `Input` · `Select` · `Checkbox` · `Radio` · `Toggle` · `Slider` · `TagInput` · `Rating` · `DatePicker` · `FileUpload` · `NumberInput` · `PhoneInput` · `ColorPicker` · `RichEditor` · `FormLayout` · `FormGuard` · `CopyButton` · `ConfirmButton` · `Label` · `PasswordStrength` · `TransferList` · `Validate`
 
 ### Navigation
-`Tabs` · `Accordion` · `Breadcrumb` · `Stepper` · `Drawer` · `Dropdown` · `Pagination` · `CommandPalette` · `ContextMenu` · `SideNav` · `TabBar` · `Topbar` · `StatusBar` · `Menu` · `ScrollSpy` · `IntersectionReveal`
+`Tabs` · `Accordion` · `Breadcrumb` · `Stepper` · `StepProgress` · `Drawer` · `Dropdown` · `PanelDropdown` · `Pagination` · `CommandPalette` · `ContextMenu` · `SideNav` · `TabBar` · `Topbar` · `Menu`
 
 ### Overlays
 `Alert` · `Badge` · `Tooltip` · `Modal` · `Popover` · `Toast` · `Progress` · `Skeleton` · `Spinner` · `Lightbox`
 
 ### Display
-`Avatar` · `Card` · `KPICard` · `EmptyState` · `Timeline` · `Kanban` · `SortableList` · `Countdown` · `RatingReview` · `Tree` · `ImageGallery` · `VirtualList` · `Splitter`
+`Avatar` · `Card` · `KPICard` · `EmptyState` · `Timeline` · `SortableList` · `Countdown` · `RatingReview` · `Tree` · `ImageGallery` · `VirtualList` · `MarkdownViewer`
 
 ### Layout
-`Grid` · `Shell` · `Scroll` · `Splitter` · `ScrollSpy` · `IntersectionReveal`
+`Grid` · `Scroll` · `Splitter` · `ScrollSpy` · `IntersectionReveal`
 
 ### Data
 `Table` · `DataTable` (widget)
@@ -138,9 +145,10 @@ Higher-level components composed from primitives.
 
 | Widget | Description |
 |---|---|
-| **DataTable** | Full-featured data grid — sort, filter, pagination, plugins (DocumentManager, Toolbar, ColVis, ExpandRow, ContextMenu, Workflow, Filter) |
-| **Dashboard** | Admin template — Shell + Topbar + SideNav + StatusBar + KPI Cards + DataTable + Cards + Timeline |
-| **Calendar** | Month / week / day / schedule views with event management |
+| **DataTable** | Full-featured data grid — sort, filter, pagination, plugins (DocumentManager, Toolbar, ColumnVisibility, ExpandRow, Filter) |
+| **Calendar** | Month / week / day / agenda views with event management, drag & drop and async datasource |
+| **Boards** | `GanttChart` (SVG Gantt + WBS, baseline, undo/redo) · `Kanban` · `SprintBoard` — each with an FE↔BE contract doc |
+| **Dashboard** | Admin template — _in development_ |
 
 ---
 
@@ -214,11 +222,32 @@ document.getElementById('my-calendar')
 - Source is readable — no build pipeline required
 - Naming, grouping, and structure follow the same conventions throughout
 
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the full coding conventions, rules, and development flow.
+
 ---
 
 ## Status
 
 Matios UI is **production-ready** as a framework — coherent structure, consistent theming, full component coverage, and real documentation per component.
+
+---
+
+## Documentation
+
+- Every component has its own `.md` (Installation · Usage · Options · API · Events · CSS Variables · Accessibility · Changelog) next to its `.css`/`.js`/`demo.html`.
+- Each component group has a `README.md` index listing its components.
+
+## Contributing
+
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and the [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md). Issues and pull requests are welcome.
+
+## License
+
+[MIT](./LICENSE) © Matios SpA.
+
+## Español
+
+¿Prefieres español? Lee la [guía de inicio en español](./README.es.md).
 
 ---
 

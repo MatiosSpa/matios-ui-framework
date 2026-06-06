@@ -1,10 +1,10 @@
 # MTS.PanelDropdown
 
-Panel flotante anclado a un trigger — notificaciones, menú de usuario, acciones contextuales enriquecidas. Portal `position:fixed` que escapa cualquier `overflow:hidden`.
+Floating panel anchored to a trigger — notifications, user menu, rich contextual actions. A `position:fixed` portal that escapes any `overflow:hidden`.
 
 ---
 
-## Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-paneldropdown.css">
@@ -13,109 +13,110 @@ Panel flotante anclado a un trigger — notificaciones, menú de usuario, accion
 
 ---
 
-## Opciones
+## Usage
 
-| Opción | Tipo | Default | Descripción |
-|--------|------|---------|-------------|
-| `header` | `{ title, badge? } \| null` | `null` | Header con título y badge contador |
-| `items` | `Array` | `[]` | Ítems del cuerpo (ver estructura abajo) |
-| `footer` | `{ label, onClick } \| null` | `null` | Footer con botón CTA |
-| `width` | `number` | `320` | Ancho del panel en px |
-| `maxHeight` | `number` | `420` | Altura máxima del body (activa scroll) |
-| `position` | `string` | `'bottom-end'` | `'bottom-end'` · `'bottom-start'` |
-| `onOpen` | `function` | — | Se dispara al abrir |
-| `onClose` | `function` | — | Se dispara al cerrar |
-
-### Estructura de ítem
+The first argument is the trigger element.
 
 ```js
-// Ítem completo
-{ id, title, description?, timestamp?, dot?, icon?, unread?, onClick? }
-
-// Divider
-{ divider: true }
-```
-
-| Propiedad | Tipo | Descripción |
-|-----------|------|-------------|
-| `id` | `string` | Identificador |
-| `title` | `string` | Texto principal |
-| `description` | `string` | Texto secundario (muted) |
-| `timestamp` | `string` | Tiempo relativo — "Hace 5 min" |
-| `dot` | `string` | Color CSS del dot indicador — `'#10b981'` |
-| `icon` | `string` | Clase del ícono MTS — `'mts-icon-bell'` |
-| `unread` | `boolean` | Fondo resaltado para ítems no leídos |
-| `onClick` | `function(item)` | Callback al hacer click — cierra el panel automáticamente |
-
----
-
-## Uso
-
-```js
-// Panel de notificaciones
+// Notifications panel
 const pd = new MTS.PanelDropdown(document.getElementById('btn-notif'), {
   position: 'bottom-end',
-  header:   { title: 'Notificaciones', badge: 3 },
+  header:   { title: 'Notifications', badge: 3 },
   items: [
     {
-      id:          'n1',
-      dot:         '#10b981',
-      icon:        'mts-icon-check-circle',
-      title:       'Pedido #1047 entregado',
-      description: 'Ana Torres recibió su pedido.',
-      timestamp:   'Hace 5 min',
-      unread:      true,
-      onClick:     function(item) { console.log(item.id); },
+      id: 'n1', dot: '#10b981', icon: 'mts-icon-check-circle',
+      title: 'Order #1047 delivered', description: 'Ana Torres received her order.',
+      timestamp: '5 min ago', unread: true,
+      onClick: function (item) { console.log(item.id); },
     },
     { divider: true },
-    { id: 'n2', dot: '#6366f1', icon: 'mts-icon-user-plus',
-      title: 'Nuevo usuario', timestamp: 'Hace 1 hora' },
+    { id: 'n2', dot: '#6366f1', icon: 'mts-icon-user-plus', title: 'New user', timestamp: '1 hour ago' },
   ],
-  footer: {
-    label:   'Ver todas las notificaciones',
-    onClick: function() { router.push('/notificaciones'); },
-  },
+  footer: { label: 'See all notifications', onClick: function () { router.push('/notifications'); } },
 });
 
-// Menú de usuario — sin footer
+// User menu — no footer
 new MTS.PanelDropdown(avatarEl, {
   position: 'bottom-end',
   width:    260,
   header:   { title: 'Carlos Méndez' },
   items: [
-    { id:'perfil',  icon:'mts-icon-user',     title: 'Mi perfil' },
-    { id:'config',  icon:'mts-icon-settings',  title: 'Configuración' },
+    { id: 'profile', icon: 'mts-icon-user',     title: 'My profile' },
+    { id: 'config',  icon: 'mts-icon-settings', title: 'Settings' },
     { divider: true },
-    { id:'logout',  icon:'mts-icon-log-out',   title: 'Cerrar sesión' },
+    { id: 'logout',  icon: 'mts-icon-log-out',  title: 'Sign out' },
   ],
 });
 ```
 
 ---
 
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `header` | `{ title, badge? } \| null` | `null` | Header with title and counter badge |
+| `items` | `array` | `[]` | Body items (see schema below) |
+| `footer` | `{ label, onClick } \| null` | `null` | Footer with a CTA button |
+| `width` | `number` | `320` | Panel width in px |
+| `maxHeight` | `number` | `420` | Max body height (enables scroll) |
+| `position` | `string` | `'bottom-end'` | `'bottom-end'` · `'bottom-start'` |
+| `onOpen` | `function` | — | Fires when the panel opens |
+| `onClose` | `function` | — | Fires when the panel closes |
+
+### Item schema
+
+`{ id, title, description?, timestamp?, dot?, icon?, unread?, onClick? }` or `{ divider: true }`.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Identifier |
+| `title` | `string` | Primary text |
+| `description` | `string` | Secondary (muted) text |
+| `timestamp` | `string` | Relative time — e.g. "5 min ago" |
+| `dot` | `string` | CSS color of the indicator dot — e.g. `'#10b981'` |
+| `icon` | `string` | MTS icon class — e.g. `'mts-icon-bell'` |
+| `unread` | `boolean` | Highlighted background for unread items |
+| `onClick` | `function(item)` | Click callback — closes the panel automatically |
+
+---
+
 ## API
 
-```js
-pd.open()                // Abre el panel
-pd.close()               // Cierra el panel
-pd.toggle()              // Alterna
-pd.setItems(items)       // Reemplaza los ítems (funciona en caliente si está abierto)
-pd.setHeaderBadge(n)     // Actualiza el contador del header (0 = oculta el badge)
-pd.destroy()             // Desmonta y limpia listeners
+| Method | Description |
+|--------|-------------|
+| `open()` / `close()` / `toggle()` | Control the panel |
+| `setItems(items)` | Replace the items (live while open) |
+| `setHeaderBadge(n)` | Update the header counter (`0` hides the badge) |
+| `on(event, fn)` | Listen to `'open'` / `'close'` |
+| `destroy()` | Unmount and clean up listeners |
 
-pd.on('open',  fn)       // Evento: panel abierto
-pd.on('close', fn)       // Evento: panel cerrado
+```js
+pd.setItems(newItems);
+pd.setHeaderBadge(0);
 ```
+
+---
+
+## Events
+
+| Method | When |
+|--------|------|
+| `onOpen` / `on('open', fn)` | The panel opens |
+| `onClose` / `on('close', fn)` | The panel closes |
+
+---
+
+## Accessibility
+
+- Opens from the trigger and closes on outside click and `Esc`; the panel body scrolls when content exceeds `maxHeight`.
+- `unread` is a visual cue — convey unread state in text as well for assistive tech.
 
 ---
 
 ## Changelog
 
-### v1.0.0 — 2026-05-07
-- Componente inicial
-- Portal `position:fixed` — escapa `overflow:hidden` de cualquier contenedor
-- Header con title + badge contador
-- Body con scroll — ítems: dot de color, ícono, title, description, timestamp, unread
-- Footer con botón CTA
-- Posición: `bottom-end` / `bottom-start` con corrección automática de viewport
-- Click fuera cierra el panel
+### 2026-05-07
+- Initial component. `position:fixed` portal escaping any container `overflow:hidden`.
+- Header (title + counter badge), scrollable body (dot/icon/title/description/timestamp/unread), CTA footer.
+- `bottom-end` / `bottom-start` positioning with automatic viewport correction; outside-click closes the panel.

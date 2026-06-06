@@ -1,17 +1,17 @@
 # MTS.MarkdownViewer
 
-Renderiza archivos `.md` remotos con el estilo de prosa del framework. Fetch + parse + render en una línea.
+Renders remote `.md` files with the framework prose style. Fetch + parse + render in a single line.
 
 ---
 
-## Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-markdownviewer.css">
 <script src="matios-ui-markdownviewer.js"></script>
 ```
 
-Opcional — code blocks con syntax highlight:
+Optional — syntax-highlighted code blocks:
 
 ```html
 <link rel="stylesheet" href="matios-ui-codeblock.css">
@@ -20,65 +20,64 @@ Opcional — code blocks con syntax highlight:
 
 ---
 
-## Uso básico
+## Usage
 
 ```js
-new MTS.MarkdownViewer('#help-panel', {
-  url: '/messaging/help/help.es.md'
-});
+new MTS.MarkdownViewer('#help-panel', { url: '/messaging/help/help.en.md' });
 ```
 
 ---
 
-## Opciones
+## Options
 
-| Opción | Tipo | Default | Descripción |
+| Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `url` | `string` | `null` | URL del archivo `.md` a cargar al inicializar |
+| `url` | `string` | `null` | URL of the `.md` file to load on init |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `load(url)` | Load a different URL at runtime |
+| `destroy()` | Clear the container |
+
 ```js
 const viewer = new MTS.MarkdownViewer('#container', { url: '/help/intro.md' });
-
-// Cargar una URL distinta en runtime
 viewer.load('/help/advanced.md');
-
-// Destruir
-viewer.destroy();
 ```
 
 ---
 
-## Markdown soportado
+## Supported Markdown
 
-| Elemento | Sintaxis |
-|----------|----------|
+| Element | Syntax |
+|---------|--------|
 | Headers | `#` `##` `###` |
-| Bold | `**texto**` |
-| Inline code | `` `código` `` |
+| Bold | `**text**` |
+| Inline code | `` `code` `` |
 | Code blocks | ` ```lang ` |
-| Tablas | `\| col \| col \|` |
-| Listas | `- ítem` |
-| Links | `[texto](url)` |
-| Blockquote | `> texto` |
-| Separador | `---` |
+| Tables | `\| col \| col \|` |
+| Lists | `- item` |
+| Links | `[text](url)` |
+| Blockquote | `> text` |
+| Divider | `---` |
 
-Los code blocks usan `MTS.CodeBlock` si está disponible en el contexto. Si no, renderizan como `<pre><code>`.
+Code blocks use `MTS.CodeBlock` when available in the context; otherwise they render as `<pre><code>`.
 
 ---
 
-## Notas
+## Notes
 
-- El fetch es relativo a la URL del documento que instancia el componente.
-- Si el archivo no existe o el servidor retorna error, el contenedor queda vacío sin lanzar excepción.
-- El componente no aplica `MTS.Sanitize` al HTML generado — el contenido del `.md` se asume de fuente confiable (controlada por el desarrollador, no por el usuario final).
+- The fetch is relative to the URL of the document that instantiates the component.
+- If the file does not exist or the server returns an error, the container is left empty — no exception is thrown.
+- The component does **not** run `MTS.Sanitize` on the generated HTML — the `.md` content is assumed to come from
+  a trusted source (controlled by the developer, not the end user).
 
 ---
 
 ## Changelog
 
 ### 2026-05-22
-- Componente creado. Parser extraído de `index.html` y encapsulado como `MTS.MarkdownViewer`.
+- Component created. Parser extracted from `index.html` and encapsulated as `MTS.MarkdownViewer`.

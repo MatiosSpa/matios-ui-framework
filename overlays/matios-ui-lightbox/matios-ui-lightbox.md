@@ -1,11 +1,10 @@
 # MTS.Lightbox
 
-🇬🇧 Media viewer with navigation, zoom and thumbnail strip. Supports images, HTML5 video, YouTube and Vimeo. Auto-bind from CSS selector.
-🇪🇸 Visor de medios con navegación, zoom y tira de miniaturas. Soporta imágenes, video HTML5, YouTube y Vimeo. Auto-bind desde selector CSS.
+Media viewer with navigation, zoom and thumbnail strip. Supports images, HTML5 video, YouTube and Vimeo. Auto-binds from a CSS selector.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,161 +14,116 @@
 
 ---
 
-## Options / Opciones
+## Usage
 
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `index` | `number` | `0` | 🇬🇧 Initially active item index / 🇪🇸 Índice activo inicial |
-| `loop` | `boolean` | `true` | 🇬🇧 Infinite loop navigation / 🇪🇸 Navegación en loop infinito |
-| `zoom` | `boolean` | `true` | 🇬🇧 Allow zoom on images / 🇪🇸 Permitir zoom en imágenes |
-| `download` | `boolean` | `false` | 🇬🇧 Show download button / 🇪🇸 Mostrar botón de descarga |
-| `counter` | `boolean` | `true` | 🇬🇧 Show item counter / 🇪🇸 Mostrar contador de ítems |
-| `thumbnails` | `boolean` | `false` | 🇬🇧 Show thumbnail strip / 🇪🇸 Mostrar tira de miniaturas |
-| `animation` | `string` | `'fade'` | `'fade'` · `'slide'` |
-| `onOpen` | `function` | — | 🇬🇧 `({ item, index }) => {}` Fires when lightbox opens / 🇪🇸 Se dispara al abrir |
-| `onClose` | `function` | — | 🇬🇧 Fires when lightbox closes / 🇪🇸 Se dispara al cerrar |
-| `onChange` | `function` | — | 🇬🇧 `({ item, index }) => {}` Fires when active item changes / 🇪🇸 Se dispara al cambiar el ítem |
-
-### Item schema / Esquema de ítem
-
-| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
-|----------|------|--------------------------------------|
-| `src` | `string` | 🇬🇧 Media URL (required) / 🇪🇸 URL del medio (requerido) |
-| `type` | `string` | `'image'` · `'video'` · `'youtube'` · `'vimeo'` |
-| `caption` | `string` | 🇬🇧 Caption text / 🇪🇸 Texto de pie de foto |
-| `alt` | `string` | 🇬🇧 Image alt text / 🇪🇸 Texto alternativo |
-| `thumb` | `string` | 🇬🇧 Thumbnail URL / 🇪🇸 URL de la miniatura |
-
----
-
-## Events / Eventos
+### Programmatic
 
 ```js
-const lb = new MTS.Lightbox([...], {
-  // Fires when lightbox opens / Se dispara al abrir el lightbox
-  onOpen: (e) => {
-    console.log(e.detail.item);  // → { src, type, caption }
-    console.log(e.detail.index); // → 0
-  },
-  // Fires when active item changes / Se dispara al cambiar el ítem activo
-  onChange: (e) => {
-    console.log(e.detail.index); // → 2
-  },
-  // Fires when lightbox closes / Se dispara al cerrar el lightbox
-  onClose: (e) => console.log('closed'),
-});
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-// Programmatic / Programático
 const lb = new MTS.Lightbox([
   { src: '/img/photo1.jpg', caption: 'Mountain view' },
-  { src: '/img/photo2.jpg', caption: 'Ocean sunset'  },
-  { src: '/img/photo3.jpg', caption: 'Forest trail'  },
+  { src: '/img/photo2.jpg', caption: 'Ocean sunset' },
+  { src: '/img/photo3.jpg', caption: 'Forest trail' },
 ], {
-  loop:       true,
-  zoom:       true,
-  thumbnails: true,
-  download:   true,
-  onOpen:     (e) => console.log('opened:', e.detail.index),
-  onChange:   (e) => console.log('changed:', e.detail.index),
-  onClose:    ()  => console.log('closed'),
+  loop: true, zoom: true, thumbnails: true, download: true,
+  onChange: function (e) { console.log('changed:', e.detail.index); },
 });
+lb.open(0);
 
-lb.open(0); // open at index 0 / abrir en el índice 0
-
-// Mixed media / Medios mixtos
+// Mixed media
 new MTS.Lightbox([
-  { src: '/img/photo.jpg',                type: 'image'   },
-  { src: '/video/clip.mp4',               type: 'video'   },
-  { src: 'https://youtu.be/dQw4w9WgXcQ',  type: 'youtube' },
-  { src: 'https://vimeo.com/123456789',   type: 'vimeo'   },
+  { src: '/img/photo.jpg',               type: 'image' },
+  { src: '/video/clip.mp4',              type: 'video' },
+  { src: 'https://youtu.be/dQw4w9WgXcQ', type: 'youtube' },
+  { src: 'https://vimeo.com/123456789',  type: 'vimeo' },
 ]).open();
 ```
 
----
+### Auto-bind from a CSS selector
 
-## Auto-bind from CSS Selector / Auto-bind desde selector CSS
-
-🇬🇧 Pass a CSS selector instead of an array. The lightbox reads `data-*` attributes from each matched element and binds click events automatically.
-🇪🇸 Pasa un selector CSS en lugar de un arreglo. El lightbox lee atributos `data-*` de cada elemento y vincula los clicks automáticamente.
+Pass a selector instead of an array. The lightbox reads `data-*` from each matched element and binds clicks:
 
 ```html
-<a href="/img/1.jpg" data-lightbox data-caption="Photo 1">
-  <img src="/img/1-thumb.jpg" alt="Photo 1">
-</a>
-<a href="/img/2.jpg" data-lightbox data-caption="Photo 2">
-  <img src="/img/2-thumb.jpg" alt="Photo 2">
-</a>
+<a href="/img/1.jpg" data-lightbox data-caption="Photo 1"><img src="/img/1-thumb.jpg" alt="Photo 1"></a>
+<a href="/img/2.jpg" data-lightbox data-caption="Photo 2"><img src="/img/2-thumb.jpg" alt="Photo 2"></a>
 
 <script>
-  // Pass the selector — clicks are bound automatically
-  // Pasa el selector — los clicks se vinculan automáticamente
-  new MTS.Lightbox('[data-lightbox]', {
-    thumbnails: true,
-    onChange:   (e) =&gt; console.log(e.detail.index),
-  });
+  new MTS.Lightbox('[data-lightbox]', { thumbnails: true });
 </script>
 ```
 
-| data attribute | 🇬🇧 Maps to / 🇪🇸 Mapea a |
-|----------------|------------------------------|
-| `href` / `src` | `item.src` |
-| `data-type` | `item.type` |
-| `data-caption` | `item.caption` |
-| `data-alt` | `item.alt` |
-| `data-thumb` | `item.thumb` |
+Mapping: `href`/`src` → `item.src`, `data-type` → `item.type`, `data-caption` → `item.caption`,
+`data-alt` → `item.alt`, `data-thumb` → `item.thumb`.
 
 ---
 
-## Keyboard Navigation / Navegación por teclado
+## Options
 
-| Key | 🇬🇧 Action / 🇪🇸 Acción |
-|-----|--------------------------|
-| `←` / `→` | 🇬🇧 Previous / Next / 🇪🇸 Anterior / Siguiente |
-| `Escape` | 🇬🇧 Close / 🇪🇸 Cerrar |
-| `+` / `-` | 🇬🇧 Zoom in / out (images) / 🇪🇸 Zoom in / out (imágenes) |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `index` | `number` | `0` | Initially active item index |
+| `loop` | `boolean` | `true` | Infinite loop navigation |
+| `zoom` | `boolean` | `true` | Allow zoom on images |
+| `download` | `boolean` | `false` | Show the download button |
+| `counter` | `boolean` | `true` | Show the item counter |
+| `thumbnails` | `boolean` | `false` | Show the thumbnail strip |
+| `animation` | `string` | `'fade'` | `'fade'` · `'slide'` |
+| `onOpen` | `function` | — | `({ item, index })` when the lightbox opens |
+| `onClose` | `function` | — | Fires when the lightbox closes |
+| `onChange` | `function` | — | `({ item, index })` when the active item changes |
+
+### Item schema
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `src` | `string` | Media URL (**required**) |
+| `type` | `string` | `'image'` · `'video'` · `'youtube'` · `'vimeo'` |
+| `caption` | `string` | Caption text |
+| `alt` | `string` | Image alt text |
+| `thumb` | `string` | Thumbnail URL |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `open([index])` | Open at an index |
+| `close()` | Close the lightbox |
+| `next()` / `prev()` / `goTo(i)` | Navigate |
+| `on(event, cb)` / `off(event, cb)` | Listen to `'open'` / `'change'` / `'close'` |
+| `destroy()` | Destroy the instance |
+
 ```js
-const lb = new MTS.Lightbox([...], { ... });
-
-// Open at index / Abrir en el índice
-lb.open(0)
-
-// Close / Cerrar
-lb.close()
-
-// Navigate / Navegar
-lb.next()
-lb.prev()
-lb.goTo(2)
-
-// Register / remove listeners / Registrar / eliminar listeners
-lb.on('open',   (e) => console.log(e.detail.index))
-lb.on('change', (e) => console.log(e.detail.index))
-lb.on('close',  (e) => {})
-lb.off('change', handler)
-
-// Destroy / Destruir
-lb.destroy()
+const lb = new MTS.Lightbox(items, { loop: true });
+lb.open(0);
+lb.next();
 ```
 
 ---
 
-## DOM Events / Eventos DOM
+## Events
+
+| Method | DOM event | Payload |
+|--------|-----------|---------|
+| `onOpen` | `mts:lightbox:open` | `{ item, index }` |
+| `onChange` | `mts:lightbox:change` | `{ item, index }` |
+| `onClose` | `mts:lightbox:close` | — |
 
 ```js
-document.addEventListener('mts:lightbox:open',   (e) => console.log(e.detail.index));
-document.addEventListener('mts:lightbox:change',  (e) => console.log(e.detail.index));
-document.addEventListener('mts:lightbox:close',   () => {});
+document.addEventListener('mts:lightbox:change', function (e) { console.log(e.detail.index); });
 ```
 
 ---
+
+## Accessibility
+
+- Keyboard: `←`/`→` previous/next, `Esc` closes, `+`/`-` zoom in/out on images.
+- Focus is trapped while open and returned on close; provide `alt`/`caption` for each item.
+
+---
+
+## Changelog
+
+### Initial
+- Media lightbox for images, HTML5 video, YouTube and Vimeo; navigation, zoom, thumbnail strip, counter, download,
+  fade/slide animation, CSS-selector auto-bind, full keyboard control, and `open` / `close` / `next` / `prev` / `goTo`.

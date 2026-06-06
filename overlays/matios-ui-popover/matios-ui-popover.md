@@ -1,11 +1,10 @@
 # MTS.Popover
 
-🇬🇧 Rich tooltip with title, HTML body, arrow, close button and smart positioning.
-🇪🇸 Tooltip enriquecido con título, body HTML, flecha, botón de cierre y posicionamiento inteligente.
+Rich tooltip with title, HTML body, arrow, close button and smart positioning.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,130 +14,105 @@
 
 ---
 
-## Options / Opciones
+## Usage
 
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `title` | `string` | `''` | 🇬🇧 Popover header title / 🇪🇸 Título del header |
-| `content` | `string` | `''` | 🇬🇧 Body HTML or text / 🇪🇸 HTML o texto del cuerpo |
-| `position` | `string` | `'bottom'` | `'top'` · `'bottom'` · `'left'` · `'right'` |
-| `trigger` | `string` | `'click'` | `'click'` · `'hover'` |
-| `offset` | `number` | `8` | 🇬🇧 Gap in px between target and popover / 🇪🇸 Separación en px |
-| `arrow` | `boolean` | `true` | 🇬🇧 Show arrow / 🇪🇸 Mostrar flecha |
-| `closable` | `boolean` | `true` | 🇬🇧 Show × in header / 🇪🇸 Mostrar × en el header |
-| `width` | `string` | `'260px'` | 🇬🇧 Popover width / 🇪🇸 Ancho del popover |
-| `onShow` | `function` | — | 🇬🇧 Fires when popover shows / 🇪🇸 Se dispara al mostrar |
-| `onHide` | `function` | — | 🇬🇧 Fires when popover hides / 🇪🇸 Se dispara al ocultar |
-
----
-
-## Events / Eventos
+The first argument is the trigger element.
 
 ```js
-const pop = new MTS.Popover('#my-btn', {
-  title:   'Help',
-  content: '<p>Explanatory text here.</p>',
-  // Fires when popover shows / Se dispara al mostrar el popover
-  onShow: (e) => console.log('shown'),
-  // Fires when popover hides / Se dispara al ocultar el popover
-  onHide: (e) => console.log('hidden'),
-});
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-// Basic click trigger / Trigger click básico
+// Click trigger
 new MTS.Popover('#btn-help', {
-  title:   'What is this?',
-  content: '<p>This field requires a valid email address.</p>',
-  position: 'bottom',
-  trigger:  'click',
+  title: 'What is this?', content: '<p>This field requires a valid email address.</p>',
+  position: 'bottom', trigger: 'click',
 });
 
-// Hover trigger / Trigger hover
+// Hover trigger
 new MTS.Popover('#btn-info', {
-  title:    'Pro tip',
-  content:  '<p>Use <kbd>⌘S</kbd> to save quickly.</p>',
-  position: 'top',
-  trigger:  'hover',
-  arrow:    true,
+  title: 'Pro tip', content: '<p>Use <kbd>⌘S</kbd> to save quickly.</p>', position: 'top', trigger: 'hover',
 });
 
-// No close button — custom width / Sin botón de cierre — ancho personalizado
+// No close button, custom width
 new MTS.Popover('#btn-preview', {
-  title:    'Preview',
-  content:  '<img src="preview.jpg" style="width:100%;border-radius:6px">',
-  closable: false,
-  width:    '320px',
-  onShow:   (e) => console.log('opened'),
-  onHide:   (e) => console.log('closed'),
+  title: 'Preview', content: '<img src="preview.jpg" alt="Preview" class="mts-w-full">',
+  closable: false, width: '320px',
+  onShow: function () { console.log('opened'); },
+  onHide: function () { console.log('closed'); },
 });
 ```
 
----
-
-## HTML Declarative / HTML Declarativo
+### HTML with `data-*`
 
 ```html
 <button id="my-btn"
   data-title="Need help?"
   data-content="Contact support at help@example.com"
   data-position="top"
-  data-trigger="click">
-  Help
-</button>
+  data-trigger="click">Help</button>
 
-<script>
-  new MTS.Popover('#my-btn');
-</script>
+<script> new MTS.Popover('#my-btn'); </script>
 ```
 
-| Attribute / Atributo | JS Option |
-|----------------------|-----------|
-| `data-title` | `title` |
-| `data-content` | `content` |
-| `data-position` | `position` |
-| `data-trigger` | `trigger` |
-| `data-closable` | `closable` |
-| `data-width` | `width` |
+Supported `data-*`: `data-title`, `data-content`, `data-position`, `data-trigger`, `data-closable`, `data-width`.
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `title` | `string` | `''` | Popover header title |
+| `content` | `string` | `''` | Body HTML or text |
+| `position` | `string` | `'bottom'` | `'top'` · `'bottom'` · `'left'` · `'right'` |
+| `trigger` | `string` | `'click'` | `'click'` · `'hover'` |
+| `offset` | `number` | `8` | Gap in px between target and popover |
+| `arrow` | `boolean` | `true` | Show the arrow |
+| `closable` | `boolean` | `true` | Show the × in the header |
+| `width` | `string` | `'260px'` | Popover width |
+| `onShow` | `function` | — | Fires when the popover shows |
+| `onHide` | `function` | — | Fires when the popover hides |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `show()` / `hide()` / `toggle()` | Control the popover |
+| `setContent(value)` | Update the body at runtime |
+| `setTitle(text)` | Update the header title |
+| `on(event, cb)` / `off(event, cb)` | Listen to `'show'` / `'hide'` |
+| `destroy()` | Destroy the instance |
+
 ```js
-const pop = new MTS.Popover('#my-btn', { ... });
-
-// Show / hide / toggle / Mostrar / ocultar / alternar
-pop.show()
-pop.hide()
-pop.toggle()
-
-// Update content at runtime / Actualizar contenido en runtime
-pop.setContent('<p>New content</p>')
-
-// Register / remove listeners / Registrar / eliminar listeners
-pop.on('show', (e) => {})
-pop.on('hide', (e) => {})
-pop.off('show', handler)
-
-// Destroy / Destruir
-pop.destroy()
+const pop = new MTS.Popover('#my-btn', { title: 'Help' });
+pop.setContent('<p>New content</p>');
+pop.toggle();
 ```
 
 ---
 
-## DOM Events / Eventos DOM
+## Events
+
+| Method | DOM event | When |
+|--------|-----------|------|
+| `onShow` | `mts:popover:show` | The popover shows |
+| `onHide` | `mts:popover:hide` | The popover hides |
 
 ```js
 document.getElementById('my-btn')
-  .addEventListener('mts:popover:show', () => console.log('shown'));
-
-document.getElementById('my-btn')
-  .addEventListener('mts:popover:hide', () => console.log('hidden'));
+  .addEventListener('mts:popover:show', function () { console.log('shown'); });
 ```
 
 ---
+
+## Accessibility
+
+- In `click` mode the popover is dismissible with `Esc` and outside click; focus returns to the trigger.
+- Use the `focus`/`hover` trigger thoughtfully so keyboard users can reach the content.
+
+---
+
+## Changelog
+
+### Initial
+- Rich popover with title + HTML body, arrow, close button, click/hover triggers, smart positioning, custom width,
+  `data-*` declarative API, `setContent` / `setTitle`, and `onShow` / `onHide`.

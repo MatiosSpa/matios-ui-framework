@@ -1,11 +1,10 @@
 # MTS.JsonViewer
 
-🇬🇧 Collapsible JSON viewer for payloads, config, diagnostics, and structured responses. Accepts a raw JSON string or a JavaScript object, formats it, and lets the user expand, collapse, paste, and copy the result.
-🇪🇸 Visor plegable de JSON para payloads, config, diagnostico y respuestas estructuradas. Acepta un string JSON o un objeto JavaScript, lo formatea y permite expandir, colapsar, pegar y copiar el resultado.
+Collapsible JSON viewer for payloads, config, diagnostics and structured responses. Accepts a JSON string or a JavaScript object, formats it, and supports expand, collapse, paste and copy.
 
 ---
 
-## Installation / Instalacion
+## Installation
 
 ```html
 <link rel="stylesheet" href="utilities/matios-ui-jsonviewer/matios-ui-jsonviewer.css">
@@ -14,112 +13,82 @@
 <script src="utilities/matios-ui-jsonviewer/matios-ui-jsonviewer.js"></script>
 ```
 
-`matios-ui-icons.js` es opcional, pero mejora los toggles con iconos Matios.
+`matios-ui-icons.js` is optional but improves the toggles with Matios icons.
 
 ---
 
-## Quickstart
+## Usage
 
 ```js
+// From a JSON string
 new MTS.JsonViewer('#payload', {
-  title: 'Request body',
+  title:    'Request body',
   subtitle: 'POST /api/roles',
-  data: '{"name":"Admin","active":true,"modules":["users","billing"]}',
-  copyable: true
+  data:     '{"name":"Admin","active":true,"modules":["users","billing"]}',
+  copyable: true,
 });
-```
 
-Tambien puedes pasar un objeto directamente:
-
-```js
+// From a JavaScript object
 new MTS.JsonViewer('#session', {
   title: 'Session',
-  data: {
-    user: 'demo@matios.dev',
-    roles: ['owner', 'billing-admin'],
-    active: true
-  }
+  data:  { user: 'demo@matios.dev', roles: ['owner', 'billing-admin'], active: true },
 });
-```
 
-Si quieres pegar JSON directamente dentro del componente:
-
-```js
-new MTS.JsonViewer('#editor', {
-  title: 'Paste and format',
-  editable: true,
-  placeholder: 'Pega aqui tu JSON y presiona Format'
-});
+// Editable — the user can paste JSON directly
+new MTS.JsonViewer('#editor', { title: 'Paste and format', editable: true, placeholder: 'Paste JSON and press Format' });
 ```
 
 ---
 
-## Constructor options / Opciones
+## Options
 
 | Option | Type | Default | Description |
-|---|---|---|---|
-| `data` | `string \| object \| array` | `''` | JSON string o estructura JS a visualizar |
-| `title` | `string` | `''` | Titulo superior |
-| `subtitle` | `string` | `''` | Texto secundario |
-| `copyable` | `boolean` | `true` | Muestra boton copiar |
-| `height` | `string` | `'auto'` | Alto del componente |
-| `collapsedDepth` | `number \| null` | `null` | Colapsa nodos a partir de cierta profundidad |
-| `emptyText` | `string` | `'Sin datos JSON.'` | Texto para estado vacio |
-| `editable` | `boolean` | `false` | Muestra textarea interna para pegar JSON |
-| `placeholder` | `string` | `'Pega aqui un JSON y presiona Format.'` | Placeholder de la textarea |
+|--------|------|---------|-------------|
+| `data` | `string \| object \| array` | `''` | JSON string or JS structure to display |
+| `title` | `string` | `''` | Top title |
+| `subtitle` | `string` | `''` | Secondary text |
+| `copyable` | `boolean` | `true` | Show the copy button |
+| `height` | `string` | `'auto'` | Component height |
+| `collapsedDepth` | `number \| null` | `null` | Collapse nodes beyond a given depth |
+| `emptyText` | `string` | localized | Empty-state text |
+| `editable` | `boolean` | `false` | Show an internal textarea to paste JSON |
+| `placeholder` | `string` | localized | Textarea placeholder |
 
 ---
 
-## Methods / Metodos
+## API
 
-### `setData(data)`
-
-Actualiza el payload y vuelve a renderizar el arbol.
+| Method | Description |
+|--------|-------------|
+| `setData(data)` | Update the payload and re-render the tree |
+| `setTitle(title[, subtitle])` | Update the toolbar title and subtitle |
+| `expandAll()` / `collapseAll()` | Expand all / collapse the root's children |
+| `format()` | In `editable` mode, parse and format the textarea content |
+| `destroy()` | Clear the component |
 
 ```js
-viewer.setData('{"status":"ok","items":[1,2,3]}');
+const viewer = new MTS.JsonViewer('#payload', { title: 'Response' });
 viewer.setData({ status: 'ok', items: [1, 2, 3] });
+viewer.expandAll();
 ```
 
-### `setTitle(title, subtitle?)`
+---
 
-Actualiza titulo y subtitulo del toolbar.
+## Notes
 
-### `expandAll()`
-
-Expande todos los nodos.
-
-### `collapseAll()`
-
-Colapsa todos los nodos hijos del root.
-
-### `format()`
-
-Si el componente esta en modo `editable`, toma el contenido de la textarea, intenta parsearlo y lo formatea dentro del viewer.
-
-### `destroy()`
-
-Limpia el componente.
+- If `data` is a string and `JSON.parse()` fails, the component shows the error, keeps the raw text and still allows
+  copying the original content — useful for debugging malformed payloads.
+- Integrates natively with `MTS.DiagnosticsPanel` and the `MTS.HttpClient` inspector.
 
 ---
 
-## Invalid JSON / JSON invalido
+## Accessibility
 
-Si `data` es string y `JSON.parse()` falla:
-
-- muestra el mensaje de error
-- conserva el texto raw
-- permite copiar el contenido original
-
-Eso sirve para soporte, debugging o validacion rapida de payloads mal formados.
+- Tree nodes are keyboard-operable (expand/collapse); the copy and format controls are real focusable buttons.
 
 ---
 
-## Good fit / Donde calza bien
+## Changelog
 
-- `DiagnosticsPanel`
-- `HttpClient`
-- inspectores de requests/responses
-- configuracion de modulos
-- visores de session
-- demos de payloads API
+### 2026-05-17
+- Documentation homologated to the standard template; full install paths; API converted to a table.

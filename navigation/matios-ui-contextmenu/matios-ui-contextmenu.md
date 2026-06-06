@@ -1,11 +1,10 @@
 # MTS.ContextMenu
 
-🇬🇧 Right-click (and long-press on mobile) context menu with icons, shortcuts, groups, dividers and danger items.
-🇪🇸 Menú contextual de click derecho (y long-press en móvil) con íconos, shortcuts, grupos, divisores e ítems de peligro.
+Right-click (and long-press on mobile) context menu with icons, shortcuts, groups, dividers and danger items.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,140 +14,107 @@
 
 ---
 
-## Options / Opciones
+## Usage
 
-🇬🇧 First argument is the target element or `'document'` for a global context menu.
-🇪🇸 El primer argumento es el elemento objetivo o `'document'` para un menú contextual global.
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `items` | `array` | `[]` | 🇬🇧 Menu items (see schema below) / 🇪🇸 Ítems del menú |
-| `longPress` | `boolean` | `true` | 🇬🇧 Enable long-press on mobile / 🇪🇸 Activar long-press en móvil |
-| `onOpen` | `function` | — | 🇬🇧 Fires when menu opens: `({ x, y, event }) => {}` / 🇪🇸 Se dispara al abrir |
-| `onClose` | `function` | — | 🇬🇧 Fires when menu closes / 🇪🇸 Se dispara al cerrar |
-| `onSelect` | `function` | — | 🇬🇧 Fires when item selected: `({ id, item }) => {}` / 🇪🇸 Se dispara al seleccionar |
-
-### Item schema / Esquema de ítem
-
-| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
-|----------|------|--------------------------------------|
-| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
-| `label` | `string` | 🇬🇧 Display text / 🇪🇸 Texto visible |
-| `icon` | `string` | 🇬🇧 Icon HTML / 🇪🇸 HTML del ícono |
-| `shortcut` | `string` | 🇬🇧 Keyboard shortcut hint / 🇪🇸 Atajo de teclado |
-| `danger` | `boolean` | 🇬🇧 Red danger style / 🇪🇸 Estilo de peligro rojo |
-| `disabled` | `boolean` | 🇬🇧 Disables the item / 🇪🇸 Deshabilita el ítem |
-| `divider` | `boolean` | 🇬🇧 Renders a separator line / 🇪🇸 Renderiza una línea separadora |
-| `group` | `string` | 🇬🇧 Group label / 🇪🇸 Etiqueta de grupo |
-| `onClick` | `function` | 🇬🇧 Per-item click handler / 🇪🇸 Handler de click por ítem |
-
----
-
-## Events / Eventos
+The first argument is the target element, or `'document'` for a global (whole-page) context menu.
 
 ```js
-new MTS.ContextMenu('#my-zone', {
-  items: [...],
-  // Fires when menu opens / Se dispara al abrir el menú
-  onOpen: (e) => {
-    console.log(e.detail.x, e.detail.y); // → cursor position
-  },
-
-  // Fires when menu closes / Se dispara al cerrar el menú
-  onClose: (e) => console.log('closed'),
-
-  // Fires when an item is selected / Se dispara al seleccionar un ítem
-  onSelect: (e) => {
-    console.log(e.detail.id);   // → 'copy'
-    console.log(e.detail.item); // → { id, label, ... }
-  },
-});
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-// On a specific element / En un elemento específico
+// On a specific element
 new MTS.ContextMenu('#my-table', {
   items: [
-    { id: 'copy',   label: 'Copy',   shortcut: '⌘C' },
-    { id: 'cut',    label: 'Cut',    shortcut: '⌘X' },
-    { id: 'paste',  label: 'Paste',  shortcut: '⌘V' },
+    { id: 'copy',  label: 'Copy',  shortcut: '⌘C' },
+    { id: 'cut',   label: 'Cut',   shortcut: '⌘X' },
+    { id: 'paste', label: 'Paste', shortcut: '⌘V' },
     { divider: true },
     { id: 'delete', label: 'Delete', danger: true },
   ],
-  onSelect: (e) => console.log(e.detail.id),
+  onSelect: function (e) { console.log(e.detail.id); },
 });
 
-// Global context menu (whole page) / Menú contextual global (toda la página)
+// Global context menu with groups and icons
 new MTS.ContextMenu('document', {
   items: [
     { group: 'View' },
     { id: 'refresh', label: 'Refresh', shortcut: 'F5' },
-    { id: 'zoom',    label: 'Zoom in',  shortcut: '⌘+' },
     { divider: true },
     { group: 'Edit' },
-    { id: 'select',  label: 'Select all', shortcut: '⌘A' },
+    { id: 'select', label: 'Select all', shortcut: '⌘A' },
   ],
-  onSelect: (e) => console.log(e.detail.id),
-});
-
-// With icons and groups / Con íconos y grupos
-new MTS.ContextMenu('#my-zone', {
-  items: [
-    { group: 'File' },
-    { id: 'open',   label: 'Open',    icon: ICON_FOLDER },
-    { id: 'save',   label: 'Save',    icon: ICON_SAVE,   shortcut: '⌘S' },
-    { divider: true },
-    { id: 'delete', label: 'Delete',  icon: ICON_TRASH,  danger: true },
-  ],
-  onOpen:   (e) => console.log('opened at', e.detail.x, e.detail.y),
-  onClose:  () => console.log('closed'),
-  onSelect: (e) => console.log(e.detail.id),
+  onOpen:   function (e) { console.log('opened at', e.detail.x, e.detail.y); },
+  onSelect: function (e) { console.log(e.detail.id); },
 });
 ```
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `items` | `array` | `[]` | Menu items (see schema below) |
+| `longPress` | `boolean` | `true` | Enable long-press on mobile |
+| `onOpen` | `function` | — | Fires when the menu opens — `{ x, y, event }` |
+| `onClose` | `function` | — | Fires when the menu closes |
+| `onSelect` | `function` | — | Fires when an item is selected — `{ id, item }` |
+
+### Item schema
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Unique identifier |
+| `label` | `string` | Display text |
+| `icon` | `string` | Icon HTML |
+| `shortcut` | `string` | Keyboard shortcut hint |
+| `danger` | `boolean` | Red danger style |
+| `disabled` | `boolean` | Disables the item |
+| `divider` | `boolean` | Renders a separator line |
+| `group` | `string` | Group label |
+| `onClick` | `function` | Per-item click handler |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `setItems(array)` | Replace the item list |
+| `show(x, y)` | Show at a specific position |
+| `hide()` | Hide the menu |
+| `on(event, cb)` / `off(event, cb)` | Listen to `'select'` / `'open'` / `'close'` |
+| `destroy()` | Destroy the instance |
+
 ```js
-const ctx = new MTS.ContextMenu('#my-zone', { ... });
-
-// Replace item list / Reemplazar lista de ítems
-ctx.setItems([...])
-
-// Show at specific position / Mostrar en posición específica
-ctx.show(100, 200)
-
-// Hide / Ocultar
-ctx.hide()
-
-// Register / remove listeners / Registrar / eliminar listeners
-ctx.on('select', (e) => console.log(e.detail.id))
-ctx.off('select', handler)
-
-// Destroy / Destruir
-ctx.destroy()
+const ctx = new MTS.ContextMenu('#my-zone', { items: [/* … */] });
+ctx.show(100, 200);
+ctx.on('select', function (e) { console.log(e.detail.id); });
 ```
 
 ---
 
-## DOM Events / Eventos DOM
+## Events
+
+| Method | DOM event | Payload |
+|--------|-----------|---------|
+| `onOpen` | `mts:contextmenu:open` | `{ x, y, event }` |
+| `onClose` | `mts:contextmenu:close` | — |
+| `onSelect` | `mts:contextmenu:select` | `{ id, item }` |
 
 ```js
 document.getElementById('my-zone')
-  .addEventListener('mts:contextmenu:select', (e) => {
-    console.log(e.detail.id, e.detail.item);
-  });
+  .addEventListener('mts:contextmenu:select', function (e) { console.log(e.detail.id, e.detail.item); });
 ```
 
-| Event / Evento | DOM Namespace |
-|----------------|---------------|
-| `onOpen` | `mts:contextmenu:open` |
-| `onClose` | `mts:contextmenu:close` |
-| `onSelect` | `mts:contextmenu:select` |
+---
+
+## Accessibility
+
+- Once open, the menu is arrow-navigable, `Enter` activates and `Esc` closes; `danger` items are styled distinctly.
+- Provide an equivalent keyboard path to the actions, since right-click/long-press is a pointer gesture.
 
 ---
+
+## Changelog
+
+### Initial
+- Context menu on an element or `document`, right-click + mobile long-press, icons/shortcuts/groups/dividers and
+  danger items, `show(x,y)` / `hide` / `setItems`, and `onOpen` / `onClose` / `onSelect`.

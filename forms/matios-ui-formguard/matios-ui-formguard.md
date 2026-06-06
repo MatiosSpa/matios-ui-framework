@@ -1,203 +1,158 @@
 # MTS.FormGuard
 
-Dirty-tracking declarativo para formularios. Una sola llamada `MTS.FormGuard.start()` en el shell de la aplicación; los plugins solo agregan atributos HTML — cero JavaScript adicional.
+Declarative dirty-tracking for forms. A single `MTS.FormGuard.start()` call in the app shell; plugins only add HTML attributes — zero extra JavaScript.
 
 ---
 
-## Instalación
+## Installation
 
 ```html
-<link  rel="stylesheet" href="matios-ui-formguard.css">
+<link rel="stylesheet" href="matios-ui-formguard.css">
 <script src="matios-ui-formguard.js"></script>
 ```
 
-Inicializar en el shell (una sola vez, al arrancar la app):
+Initialize once, in the app shell:
 
 ```js
 MTS.FormGuard.start();
-```
 
-Con mensajes personalizados:
-
-```js
+// With custom messages
 MTS.FormGuard.start({
   messages: {
-    modalTitle:  'Cambios pendientes',
-    modalBody:   'Hay cambios sin guardar en el formulario.',
-    btnKeep:     'Seguir editando',
-    btnDiscard:  'Descartar',
-    btnSave:     'Guardar y salir'
-  }
+    modalTitle: 'Unsaved changes',
+    modalBody:  'There are unsaved changes in the form.',
+    btnKeep:    'Keep editing',
+    btnDiscard: 'Discard',
+    btnSave:    'Save and leave',
+  },
 });
 ```
 
 ---
 
-## Uso básico
+## Usage
 
-Agregar `data-mts-form` al contenedor del formulario. FormGuard lo adopta automáticamente (sea que esté en el DOM al inicio o que se inyecte después vía SPA).
+Add `data-mts-form` to the form container. FormGuard adopts it automatically — whether it is in the DOM at start
+or injected later by a SPA.
 
 ```html
 <div data-mts-form data-mts-form-id="user-profile">
+  <!-- MTS components — tracked automatically via _mtsInstance -->
+  <div id="input-name"></div>
+  <div id="select-role"></div>
 
-  <!-- MTS components — rastreados automáticamente via _mtsInstance -->
-  <div id="input-nombre"></div>
-  <div id="select-rol"></div>
+  <!-- Native controls — tracked automatically -->
+  <input type="text" name="notes">
 
-  <!-- Controles nativos — rastreados automáticamente -->
-  <input type="text" name="notas">
-
-  <button data-mts-form-back>Volver</button>
-  <button id="btn-guardar">Guardar</button>
-
+  <button data-mts-form-back>Back</button>
+  <button id="btn-save">Save</button>
 </div>
 ```
 
 ```js
-// Componentes MTS — instanciarlos normalmente, sin tocar FormGuard
-new MTS.Input('#input-nombre', { label: 'Nombre' });
-new MTS.Select('#select-rol',  { options: [...] });
+// Instantiate MTS components normally — nothing to wire into FormGuard
+new MTS.Input('#input-name', { label: 'Name' });
+new MTS.Select('#select-role', { options: [/* … */] });
 ```
 
 ---
 
-## Atributos HTML
+## HTML attributes
 
-| Atributo | En elemento | Descripción |
-|---|---|---|
-| `data-mts-form` | Contenedor | Marca el formulario gestionado |
-| `data-mts-form-id` | Contenedor | ID único del form (auto-generado si se omite) |
-| `data-mts-form-save` | Contenedor | Selector CSS del botón guardar — recibe el dot rojo y es el que se clickea en "Guardar y salir" |
-| `data-mts-form-back` | Botón | Intercepta el click si el form está sucio y muestra el modal de confirmación |
-| `data-mts-form-watch` | Control nativo | Fuerza el tracking en un elemento aunque no sea input/select/textarea estándar |
-| `data-mts-form-ignore` | Subtree | Excluye ese nodo y todos sus descendientes del tracking |
-| `data-mts-form-title-target` | Contenedor | Selector CSS del elemento donde se inyecta el ` *` de dirty. Si se omite, usa `.mts-card__title` dentro del form |
-
----
-
-## Opciones de `start()`
-
-| Opción | Tipo | Descripción |
-|---|---|---|
-| `messages.unsavedChanges` | string | Mensaje del `confirm()` nativo (fallback si no hay MTS.Modal) |
-| `messages.modalTitle` | string | Título del MTS.Modal |
-| `messages.modalBody` | string | Cuerpo del MTS.Modal |
-| `messages.btnKeep` | string | Botón "Seguir editando" |
-| `messages.btnDiscard` | string | Botón "Descartar cambios" |
-| `messages.btnSave` | string | Botón "Guardar y salir" |
+| Attribute | On element | Description |
+|-----------|-----------|-------------|
+| `data-mts-form` | Container | Marks a managed form |
+| `data-mts-form-id` | Container | Unique form id (auto-generated if omitted) |
+| `data-mts-form-save` | Container | CSS selector of the save button — receives the red dot and is clicked on "Save and leave" |
+| `data-mts-form-back` | Button | Intercepts the click if the form is dirty and shows the confirmation modal |
+| `data-mts-form-watch` | Native control | Forces tracking on an element that is not a standard input/select/textarea |
+| `data-mts-form-ignore` | Subtree | Excludes that node and all descendants from tracking |
+| `data-mts-form-title-target` | Container | CSS selector where the dirty ` *` is injected. Defaults to `.mts-card__title` inside the form |
 
 ---
 
 ## API
 
-| Método | Descripción |
-|---|---|
-| `MTS.FormGuard.start(options?)` | Inicia el tracking. Idempotente — llamadas repetidas se ignoran. |
-| `MTS.FormGuard.stop()` | Detiene el tracking y limpia todo el estado. |
-| `MTS.FormGuard.syncAll()` | Re-toma el snapshot de todos los forms activos (útil después de `setValue()` masivo). |
-| `MTS.FormGuard.sync(formId)` | Re-toma el snapshot de un form específico por su `data-mts-form-id`. |
-| `MTS.FormGuard.hasUnsavedChanges()` | `boolean` — true si hay al menos un form sucio. |
-| `MTS.FormGuard.getDirtyCount()` | `number` — cantidad de forms sucios. |
+| Method | Description |
+|--------|-------------|
+| `MTS.FormGuard.start(options?)` | Start tracking. Idempotent — repeated calls are ignored |
+| `MTS.FormGuard.stop()` | Stop tracking and clear all state |
+| `MTS.FormGuard.syncAll()` | Re-snapshot every active form (useful after a bulk `setValue()`) |
+| `MTS.FormGuard.sync(formId)` | Re-snapshot a specific form by its `data-mts-form-id` |
+| `MTS.FormGuard.hasUnsavedChanges()` | `boolean` — true if at least one form is dirty |
+| `MTS.FormGuard.getDirtyCount()` | `number` — count of dirty forms |
+
+### `start()` message options
+
+`messages.unsavedChanges` (native `confirm()` fallback), `messages.modalTitle`, `messages.modalBody`,
+`messages.btnKeep`, `messages.btnDiscard`, `messages.btnSave`.
 
 ---
 
-## Eventos DOM
+## Events
 
-### Eventos emitidos por FormGuard
+### Emitted by FormGuard (bubble from `[data-mts-form]`)
 
-Todos burbujean desde el elemento `[data-mts-form]`.
+| Event | `e.detail` | Description |
+|-------|-----------|-------------|
+| `mts:form:dirty-change` | `{ formId, isDirty }` | The form's dirty state changed |
+| `mts:form:before-navigate` | `{ formId }` | Cancelable. Emitted before opening the navigation modal — `e.preventDefault()` cancels it |
 
-| Evento | `e.detail` | Descripción |
-|---|---|---|
-| `mts:form:dirty-change` | `{ formId, isDirty }` | El estado dirty del form cambió |
-| `mts:form:before-navigate` | `{ formId }` | Cancelable. Se emite antes de abrir el modal de navegación. `e.preventDefault()` cancela el modal. |
+### Dispatched by the consumer (FormGuard listens via bubbling)
 
-```js
-document.addEventListener('mts:form:dirty-change', function (e) {
-  console.log('Form', e.detail.formId, 'dirty:', e.detail.isDirty);
-});
-```
-
-### Eventos que el consumidor puede disparar
-
-Disparar sobre cualquier descendiente del `[data-mts-form]` (o el propio elemento) — FormGuard los escucha por burbujeo.
-
-| Evento | `detail` | Descripción |
-|---|---|---|
-| `mts:form:save-ack` | `{ formId? }` | El plugin confirmó que el guardado fue exitoso. FormGuard resetea el snapshot. |
-| `mts:form:snapshot-sync` | — | Fuerza un re-snapshot inmediato sin marcar dirty (útil después de `setValue()` programático). |
+| Event | `detail` | Description |
+|-------|----------|-------------|
+| `mts:form:save-ack` | `{ formId? }` | The plugin confirmed a successful save. FormGuard resets the snapshot |
+| `mts:form:snapshot-sync` | — | Forces an immediate re-snapshot without marking dirty (after programmatic `setValue()`) |
 
 ```js
-// Después de un save exitoso en el plugin:
+// After a successful save in the plugin:
 document.querySelector('[data-mts-form-id="user-profile"]').dispatchEvent(
   new CustomEvent('mts:form:save-ack', { bubbles: true, detail: { formId: 'user-profile' } })
 );
-
-// Después de cargar datos programáticamente:
-document.querySelector('[data-mts-form]').dispatchEvent(
-  new CustomEvent('mts:form:snapshot-sync', { bubbles: true })
-);
 ```
 
 ---
 
-## Variables CSS
+## CSS Variables
 
-| Variable | Valor default | Descripción |
-|---|---|---|
-| `--mts-color-warning` | `#f59e0b` | Color del asterisco dirty |
-| `--mts-color-danger` | `#ef4444` | Color del dot en el botón guardar |
-| `--mts-bg-surface` | `#ffffff` | Color del borde del dot |
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `--mts-color-warning` | `#f59e0b` | Color of the dirty asterisk |
+| `--mts-color-danger` | `#ef4444` | Color of the dot on the save button |
+| `--mts-bg-surface` | `#ffffff` | Border color of the dot |
 
 ---
 
-## Notas
+## Notes
 
-### Componentes rastreados automáticamente
+**Automatically tracked controls.** Any element that meets at least one condition: (1) has `._mtsInstance` (any MTS
+component instantiated on the node); (2) has `data-mts-form-watch`; (3) is a native `<input>`, `<select>` or
+`<textarea>` (except `type=submit/button/reset/image`). Elements with `data-mts-form-ignore` and their descendants
+are excluded. Nested forms are treated as independent units.
 
-FormGuard rastrea todos los elementos que cumplan al menos una condición:
-1. Tienen `._mtsInstance` — cualquier componente MTS instanciado sobre ese nodo
-2. Tienen `data-mts-form-watch` — control nativo marcado explícitamente
-3. Son `<input>`, `<select>` o `<textarea>` nativos (excepto `type=submit/button/reset/image`)
+**Reversible dirty tracking.** If the user reverts a field to its original value, the form is marked clean again.
+Comparison uses `===` for primitives and `JSON.stringify()` for arrays/objects.
 
-Los elementos con `data-mts-form-ignore` y todos sus descendientes son excluidos.
-Los formularios anidados (`[data-mts-form]` dentro de otro) son tratados como unidades independientes.
+**MutationObserver.** FormGuard observes `document.body` with `{ childList: true, subtree: true }`, so forms injected
+by a SPA or `innerHTML` are adopted when they appear and released when they disappear — no plugin code required.
 
-### Dirty tracking reversible
+**"Save and leave" flow.** Click on `[data-mts-form-back]` with a dirty form → `mts:form:before-navigate`
+(cancelable) → MTS.Modal (or `confirm()` fallback). On "Save and leave", FormGuard clicks the `data-mts-form-save`
+button and waits up to 10s for `mts:form:save-ack`; on ack it closes the modal, resets the snapshot and continues.
 
-Si el usuario revierte un campo a su valor original, FormGuard lo detecta y marca el form como limpio de nuevo. La comparación usa `===` para primitivos y `JSON.stringify()` para arrays/objetos.
-
-### MutationObserver
-
-FormGuard usa un `MutationObserver` sobre `document.body` con `{ childList: true, subtree: true }`. Los formularios inyectados vía SPA o `innerHTML` son adoptados automáticamente cuando aparecen en el DOM y liberados cuando desaparecen — sin ningún código adicional en el plugin.
-
-### Flujo del modal "Guardar y salir"
-
-1. El usuario hace click en un elemento `[data-mts-form-back]` con el form sucio
-2. Se emite `mts:form:before-navigate` (cancelable)
-3. Se abre MTS.Modal (o `confirm()` como fallback)
-4. Si el usuario elige **"Guardar y salir"**: FormGuard clickea el botón de `data-mts-form-save` y espera hasta 10 s el evento `mts:form:save-ack` desde el plugin
-5. Al recibir el ack: cierra el modal, resetea el snapshot y continúa la navegación
-
-### beforeunload — cierre de pestaña o navegación externa
-
-Cuando hay forms sucios, FormGuard registra un listener de `beforeunload`. Al disparar muestra **MTS.Modal** con dos opciones:
-
-- **Seguir editando** — cierra el modal, el usuario permanece en la página.
-- **Salir sin guardar** — cierra el modal, elimina el listener y resetea el dirty state. El siguiente intento de navegar/cerrar ya no es bloqueado.
-
-**Limitación del browser**: en cierre de pestaña (`Ctrl+W` / click en la X del browser) algunos browsers muestran su propio dialog nativo encima del modal. Esto es una restricción de seguridad del browser — no existe API web para suprimirlo. Si tu caso de uso requiere el dialog nativo en lugar del modal, reemplazá `_mountBeforeUnload` con un handler que solo haga `e.returnValue = ''`.
+**beforeunload.** When forms are dirty, FormGuard registers a `beforeunload` listener and shows MTS.Modal (Keep
+editing / Leave without saving). Browser limitation: on tab close some browsers show their own native dialog on top
+of the modal — there is no web API to suppress it.
 
 ---
 
 ## Changelog
 
 ### 2026-05-21
-- Componente creado
-- Singleton declarativo: `start()`, `stop()`, `syncAll()`, `sync()`, `hasUnsavedChanges()`, `getDirtyCount()`
-- MutationObserver: adopt/release automático
-- Dirty tracking reversible con snapshot por control
-- Modal 3 botones (MTS.Modal + fallback `confirm()`)
-- beforeunload cuando hay forms sucios
-- Convención `_mtsInstance` en: Input, Toggle, Select, Checkbox, CheckboxGroup, Radio, Slider, TagInput, DatePicker.Base, RichEditor, NumberInput, PhoneInput
-- Eventos: `mts:form:dirty-change`, `mts:form:before-navigate`, `mts:form:save-ack`, `mts:form:snapshot-sync`
+- Component created. Declarative singleton: `start` / `stop` / `syncAll` / `sync` / `hasUnsavedChanges` / `getDirtyCount`.
+- MutationObserver auto adopt/release; reversible per-control snapshot dirty tracking.
+- 3-button modal (MTS.Modal + `confirm()` fallback); `beforeunload` guard when dirty.
+- `_mtsInstance` convention across Input, Toggle, Select, Checkbox, CheckboxGroup, Radio, Slider, TagInput,
+  DatePicker.Base, RichEditor, NumberInput, PhoneInput.
+- Events: `mts:form:dirty-change`, `mts:form:before-navigate`, `mts:form:save-ack`, `mts:form:snapshot-sync`.

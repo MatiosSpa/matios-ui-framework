@@ -1,14 +1,10 @@
 # MTS.Toggle
 
-🇬🇧 On/off switch component with three sizes, optional label, and disabled state.
-🇪🇸 Componente switch encendido/apagado con tres tamaños, label opcional y estado disabled.
+On/off switch component with three sizes, optional label and disabled state.
 
 ---
 
-## Installation / Instalación
-
-🇬🇧 Include the base CSS, the component CSS and the component JS in your HTML.
-🇪🇸 Incluye el CSS base, el CSS del componente y el JS del componente en tu HTML.
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -18,147 +14,74 @@
 
 ---
 
-## Options / Opciones
+## Usage
 
-🇬🇧 All options are passed as the second argument to the constructor.
-🇪🇸 Todas las opciones se pasan como segundo argumento al constructor.
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `label` | `string` | `''` | 🇬🇧 Text displayed next to the switch / 🇪🇸 Texto junto al switch |
-| `checked` | `boolean` | `false` | 🇬🇧 Initial state / 🇪🇸 Estado inicial |
-| `disabled` | `boolean` | `false` | 🇬🇧 Disables all interaction / 🇪🇸 Deshabilita toda interacción |
-| `size` | `string` | `'md'` | 🇬🇧 Size variant: `'sm'` · `'md'` · `'lg'` / 🇪🇸 Variante de tamaño |
-| `onChange` | `function` | — | 🇬🇧 Fires when state changes / 🇪🇸 Se dispara al cambiar el estado |
-
----
-
-## Size Reference / Referencia de tamaños
-
-| `size` | Width / Ancho | Height / Alto |
-|--------|---------------|---------------|
-| `sm`   | 32px          | 18px          |
-| `md`   | 42px          | 24px          |
-| `lg`   | 52px          | 30px          |
-
----
-
-## Events / Eventos
-
-🇬🇧 Use `onXxx` callbacks in the constructor. This is the recommended approach — no need for `addEventListener` or `.on()`.
-🇪🇸 Usa los callbacks `onXxx` en el constructor. Este es el enfoque recomendado — no necesitas `addEventListener` ni `.on()`.
-
-```js
-new MTS.Toggle('#my-toggle', {
-  // Fires when the switch is turned on or off
-  // Se dispara cuando el switch se enciende o apaga
-  onChange: (e) => {
-    console.log(e.detail.checked); // → true | false
-  },
-});
-```
-
-🇬🇧 The event object contains:
-🇪🇸 El objeto de evento contiene:
-
-| Property / Propiedad | Type / Tipo | Description / Descripción |
-|----------------------|-------------|---------------------------|
-| `e.detail.checked` | `boolean` | 🇬🇧 Current state / 🇪🇸 Estado actual |
-
----
-
-## HTML Usage / Uso HTML
-
-🇬🇧 Declare the structure in HTML and instantiate with JavaScript. The component reads the element and builds the switch inside it.
-🇪🇸 Declara la estructura en HTML e instancia con JavaScript. El componente lee el elemento y construye el switch dentro.
-
-```html
-<div id="my-toggle"></div>
-
-<script>
-  new MTS.Toggle('#my-toggle', {
-    label:    'Active notifications',
-    checked:  true,
-    size:     'md',
-    onChange: (e) => console.log('checked:', e.detail.checked),
-  });
-</script>
-```
-
-🇬🇧 Disabled state:
-🇪🇸 Estado disabled:
-
-```html
-<div id="my-toggle-disabled"></div>
-
-<script>
-  new MTS.Toggle('#my-toggle-disabled', {
-    label:    'Not available',
-    disabled: true,
-    checked:  false,
-  });
-</script>
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-🇬🇧 Create the component entirely from JavaScript — the container only needs to exist in the DOM.
-🇪🇸 Crea el componente completamente desde JavaScript — el contenedor solo necesita existir en el DOM.
+The container only needs to exist in the DOM (`<div id="my-toggle"></div>`):
 
 ```js
 const toggle = new MTS.Toggle('#my-toggle', {
-  // Text next to the switch / Texto junto al switch
-  label: 'Active notifications',
-
-  // Initial state / Estado inicial
-  checked: true,
-
-  // Size: 'sm' | 'md' | 'lg' / Tamaño
-  size: 'md',
-
-  // Fires on every state change / Se dispara en cada cambio de estado
-  onChange: (e) => {
-    console.log('checked:', e.detail.checked); // → true | false
-  },
+  label:    'Active notifications',
+  checked:  true,
+  size:     'md',
+  onChange: function (e) { console.log('checked:', e.detail.checked); },
 });
+
+// Disabled
+new MTS.Toggle('#my-toggle-disabled', { label: 'Not available', disabled: true, checked: false });
 ```
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `label` | `string` | `''` | Text displayed next to the switch |
+| `checked` | `boolean` | `false` | Initial state |
+| `disabled` | `boolean` | `false` | Disables all interaction |
+| `size` | `string` | `'md'` | `'sm'` (32×18) · `'md'` (42×24) · `'lg'` (52×30) |
+| `onChange` | `function` | — | Fires when the state changes — `{ checked }` |
 
 ---
 
 ## API
 
-🇬🇧 Methods available on the instance after creation.
-🇪🇸 Métodos disponibles en la instancia después de crearla.
+| Method | Description |
+|--------|-------------|
+| `isChecked()` | Returns the current state |
+| `setChecked(bool)` | Set the state programmatically |
+| `toggle()` | Invert the current state |
 
 ```js
-const toggle = new MTS.Toggle('#my-toggle', { ... });
-
-// Returns current state / Retorna el estado actual
-toggle.isChecked()        // → boolean
-
-// Sets state programmatically / Establece el estado programáticamente
-toggle.setChecked(true)
-toggle.setChecked(false)
-
-// Toggles current state / Invierte el estado actual
-toggle.toggle()
+const toggle = new MTS.Toggle('#my-toggle', { label: 'Notifications' });
+toggle.setChecked(true);
+toggle.toggle();
 ```
 
 ---
 
-## DOM Event / Evento DOM
+## Events
 
-🇬🇧 If you need to listen from outside the component instance (e.g. from another module), use the native DOM event.
-🇪🇸 Si necesitas escuchar desde fuera de la instancia (ej: desde otro módulo), usa el evento DOM nativo.
+| Method | DOM event | Payload |
+|--------|-----------|---------|
+| `onChange` | `mts:toggle:change` | `{ checked }` |
 
 ```js
-document.getElementById('my-toggle')
-  .querySelector('input')
-  .addEventListener('mts:toggle:change', (e) => {
-    console.log(e.detail.checked); // → true | false
-  });
+document.getElementById('my-toggle').querySelector('input')
+  .addEventListener('mts:toggle:change', function (e) { console.log(e.detail.checked); });
 ```
 
 ---
+
+## Accessibility
+
+- Renders a real `<input type="checkbox">` styled as a switch — focusable and toggled with `Space`.
+- Provide a `label` (or `aria-label`) so the switch has an accessible name describing what it controls.
+
+---
+
+## Changelog
+
+### Initial
+- On/off switch with `sm` / `md` / `lg` sizes, optional label, disabled state, `onChange`, and
+  `isChecked` / `setChecked` / `toggle`.

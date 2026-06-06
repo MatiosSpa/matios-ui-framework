@@ -1,11 +1,10 @@
 # MTS.Tree
 
-🇬🇧 Tree view with expand/collapse, selectable nodes, checkboxes with child propagation, icons, badges and connection lines.
-🇪🇸 Vista de árbol con expandir/colapsar, nodos seleccionables, checkboxes con propagación a hijos, íconos, badges y líneas de conexión.
+Tree view with expand/collapse, selectable nodes, checkboxes with child propagation, icons, badges and connection lines.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,97 +14,33 @@
 
 ---
 
-## Options / Opciones
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `nodes` | `array` | `[]` | 🇬🇧 Node tree (see schema) / 🇪🇸 Árbol de nodos |
-| `expandAll` | `boolean` | `false` | 🇬🇧 Expand all nodes on init / 🇪🇸 Expandir todos al inicio |
-| `selectable` | `boolean` | `false` | 🇬🇧 Allow node selection / 🇪🇸 Permitir selección de nodos |
-| `checkable` | `boolean` | `false` | 🇬🇧 Show checkboxes / 🇪🇸 Mostrar checkboxes |
-| `showIcons` | `boolean` | `true` | 🇬🇧 Show folder/file icons / 🇪🇸 Mostrar íconos folder/file |
-| `showLines` | `boolean` | `true` | 🇬🇧 Show connection lines / 🇪🇸 Mostrar líneas de conexión |
-| `onSelect` | `function` | — | 🇬🇧 `({ node, path }) => {}` Fires on node selection / 🇪🇸 Se dispara al seleccionar un nodo |
-| `onToggle` | `function` | — | 🇬🇧 `({ node, expanded }) => {}` Fires on expand/collapse / 🇪🇸 Se dispara al expandir/colapsar |
-| `onCheck` | `function` | — | 🇬🇧 `({ node, checked, checkedIds }) => {}` Fires on checkbox change / 🇪🇸 Se dispara al cambiar un checkbox |
-
-### Node schema / Esquema de nodo
-
-| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
-|----------|------|--------------------------------------|
-| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
-| `label` | `string` | 🇬🇧 Display text / 🇪🇸 Texto visible |
-| `children` | `array` | 🇬🇧 Child nodes / 🇪🇸 Nodos hijos |
-| `expanded` | `boolean` | 🇬🇧 Initially expanded / 🇪🇸 Expandido inicialmente |
-| `selected` | `boolean` | 🇬🇧 Initially selected / 🇪🇸 Seleccionado inicialmente |
-| `checked` | `boolean` | 🇬🇧 Initially checked / 🇪🇸 Marcado inicialmente |
-| `icon` | `string` | 🇬🇧 Custom SVG icon / 🇪🇸 Ícono SVG personalizado |
-| `badge` | `object` | `{ label, variant? }` |
-| `disabled` | `boolean` | 🇬🇧 Disables the node / 🇪🇸 Deshabilita el nodo |
-
----
-
-## Events / Eventos
+## Usage
 
 ```js
-new MTS.Tree('#my-tree', {
-  nodes: [...],
-  selectable: true,
-  checkable:  true,
-  // Fires when a node is selected / Se dispara al seleccionar un nodo
-  onSelect: (e) => {
-    console.log(e.detail.node.id);   // → 'src'
-    console.log(e.detail.path);      // → ['root', 'src']
-  },
-  // Fires when a node expands/collapses / Se dispara al expandir/colapsar
-  onToggle: (e) => {
-    console.log(e.detail.node.id);
-    console.log(e.detail.expanded);  // → true | false
-  },
-  // Fires when checkbox changes / Se dispara al cambiar un checkbox
-  onCheck: (e) => {
-    console.log(e.detail.node.id);
-    console.log(e.detail.checked);      // → true | false
-    console.log(e.detail.checkedIds);   // → ['src', 'index.js', ...]
-  },
-});
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-// File tree / Árbol de archivos
+// File tree
 new MTS.Tree('#file-tree', {
-  showLines: true,
-  showIcons: true,
+  showLines:  true,
+  showIcons:  true,
   selectable: true,
   nodes: [
-    {
-      id: 'src', label: 'src', expanded: true,
-      children: [
-        { id: 'components', label: 'components', children: [
-          { id: 'button', label: 'Button.js' },
-          { id: 'input',  label: 'Input.js' },
-        ]},
-        { id: 'index', label: 'index.js' },
-        { id: 'app',   label: 'App.js', selected: true },
-      ],
-    },
-    {
-      id: 'public', label: 'public',
-      children: [
-        { id: 'index-html', label: 'index.html' },
-        { id: 'favicon',    label: 'favicon.ico' },
-      ],
-    },
+    { id: 'src', label: 'src', expanded: true, children: [
+      { id: 'components', label: 'components', children: [
+        { id: 'button', label: 'Button.js' },
+        { id: 'input',  label: 'Input.js' },
+      ]},
+      { id: 'index', label: 'index.js' },
+      { id: 'app',   label: 'App.js', selected: true },
+    ]},
+    { id: 'public', label: 'public', children: [
+      { id: 'index-html', label: 'index.html' },
+      { id: 'favicon',    label: 'favicon.ico' },
+    ]},
   ],
-  onSelect: (e) => console.log('selected:', e.detail.node.id),
-  onToggle: (e) => console.log('toggled:', e.detail.node.id, e.detail.expanded),
+  onSelect: function (e) { console.log('selected:', e.detail.node.id); },
+  onToggle: function (e) { console.log('toggled:', e.detail.node.id, e.detail.expanded); },
 });
 
-// Checkable tree / Árbol con checkboxes
+// Checkable tree (child propagation)
 new MTS.Tree('#perm-tree', {
   checkable: true,
   nodes: [
@@ -119,56 +54,87 @@ new MTS.Tree('#perm-tree', {
       { id: 'reports-export', label: 'Export' },
     ]},
   ],
-  onCheck: (e) => updatePermissions(e.detail.checkedIds),
-});
-
-// With badges / Con badges
-new MTS.Tree('#org-tree', {
-  nodes: [
-    { id: 'eng',  label: 'Engineering', badge: { label: '12', variant: 'primary' }, children: [
-      { id: 'frontend', label: 'Frontend', badge: { label: '4' } },
-      { id: 'backend',  label: 'Backend',  badge: { label: '8' } },
-    ]},
-    { id: 'design', label: 'Design', badge: { label: '3', variant: 'success' } },
-  ],
+  onCheck: function (e) { updatePermissions(e.detail.checkedIds); },
 });
 ```
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `nodes` | `array` | `[]` | Node tree (see schema below) |
+| `expandAll` | `boolean` | `false` | Expand all nodes on init |
+| `selectable` | `boolean` | `false` | Allow node selection |
+| `checkable` | `boolean` | `false` | Show checkboxes |
+| `showIcons` | `boolean` | `true` | Show folder/file icons |
+| `showLines` | `boolean` | `true` | Show connection lines |
+| `onSelect` | `function` | — | Fires on node selection — `({ node, path })` |
+| `onToggle` | `function` | — | Fires on expand/collapse — `({ node, expanded })` |
+| `onCheck` | `function` | — | Fires on checkbox change — `({ node, checked, checkedIds })` |
+
+### Node schema
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Unique identifier |
+| `label` | `string` | Display text |
+| `children` | `array` | Child nodes |
+| `expanded` | `boolean` | Initially expanded |
+| `selected` | `boolean` | Initially selected |
+| `checked` | `boolean` | Initially checked |
+| `icon` | `string` | Custom SVG icon |
+| `badge` | `object` | `{ label, variant? }` |
+| `disabled` | `boolean` | Disables the node |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `expandAll()` / `collapseAll()` | Expand / collapse the whole tree |
+| `expand(id)` / `collapse(id)` | Expand / collapse a single node |
+| `select(id)` / `deselect()` | Select / clear selection |
+| `getChecked()` | Get the checked node ids `['id1', 'id2', …]` |
+| `on(event, cb)` / `off(event, cb)` | Register / remove listeners (`'select'`, `'toggle'`, `'check'`) |
+
 ```js
-const tree = new MTS.Tree('#my-tree', { ... });
-
-// Expand / collapse / Expandir / colapsar
-tree.expandAll()
-tree.collapseAll()
-tree.expand('src')
-tree.collapse('src')
-
-// Select / deselect / Seleccionar / deseleccionar
-tree.select('index')
-tree.deselect()
-
-// Get checked IDs / Obtener IDs marcados
-tree.getChecked()  // → ['id1', 'id2', ...]
-
-// Register listeners / Registrar listeners
-tree.on('select', (e) => console.log(e.detail.node.id))
-tree.on('toggle', (e) => console.log(e.detail.expanded))
-tree.on('check',  (e) => console.log(e.detail.checkedIds))
-tree.off('select', handler)
+const tree = new MTS.Tree('#my-tree', { nodes: [/* … */] });
+tree.expand('src');
+tree.on('check', function (e) { console.log(e.detail.checkedIds); });
 ```
 
 ---
 
-## DOM Events / Eventos DOM
+## Events
+
+| Method | Payload | When |
+|--------|---------|------|
+| `onSelect(fn)` / `on('select', fn)` | `{ node, path }` | A node is selected |
+| `onToggle(fn)` / `on('toggle', fn)` | `{ node, expanded }` | A node expands/collapses |
+| `onCheck(fn)` / `on('check', fn)` | `{ node, checked, checkedIds }` | A checkbox changes (with child propagation) |
+
+Also dispatched as DOM events:
 
 ```js
-el.addEventListener('mts:tree:select', (e) => console.log(e.detail));
-el.addEventListener('mts:tree:toggle', (e) => console.log(e.detail));
-el.addEventListener('mts:tree:check',  (e) => console.log(e.detail));
+el.addEventListener('mts:tree:select', function (e) { console.log(e.detail); });
+el.addEventListener('mts:tree:toggle', function (e) { console.log(e.detail); });
+el.addEventListener('mts:tree:check',  function (e) { console.log(e.detail); });
 ```
 
 ---
+
+## Accessibility
+
+- Nodes are operable by keyboard: arrow keys move/expand/collapse, `Enter`/`Space` select or toggle the checkbox.
+- A `disabled` node is skipped by selection and checkbox propagation; reflect that state visually.
+
+---
+
+## Changelog
+
+### Initial
+- Tree view with expand/collapse, selectable nodes, checkboxes with parent/child propagation, folder/file icons,
+  connection lines, badges, and `expand` / `collapse` / `select` / `getChecked` API.

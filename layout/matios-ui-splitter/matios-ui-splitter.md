@@ -1,46 +1,99 @@
 # MTS.Splitter
 
-Paneles redimensionables con drag. El contenedor debe tener exactamente 2 hijos.
+Two resizable panels separated by a draggable divider. The container must have exactly two direct children.
 
-## Uso
+---
+
+## Installation
+
+```html
+<link rel="stylesheet" href="layout/matios-ui-splitter/matios-ui-splitter.css">
+<script src="layout/matios-ui-splitter/matios-ui-splitter.js"></script>
+```
+
+---
+
+## Usage
+
 ```html
 <div id="split">
-  <div class="panel-left">Panel izquierdo</div>
-  <div class="panel-right">Panel derecho</div>
+  <div>Left panel</div>
+  <div>Right panel</div>
 </div>
 ```
+
 ```js
 new MTS.Splitter('#split', {
   direction:   'horizontal',
-  initialSize: 30,   // primer panel 30%
+  initialSize: 30,
   minSize:     15,
   maxSize:     85,
-  onChange: ({ firstSize, secondSize }) => {
-    console.log(firstSize + '% / ' + secondSize + '%')
-  },
-})
+  onChange: function (sizes) { console.log(sizes.firstSize + '% / ' + sizes.secondSize + '%'); },
+});
 ```
 
-## Opciones
-| Opción | Tipo | Default | Descripción |
+---
+
+## Options
+
+| Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `direction` | `string` | `'horizontal'` | `'horizontal'`\|`'vertical'` |
-| `initialSize` | `number` | `50` | Tamaño inicial del primer panel en % |
-| `minSize` | `number` | `10` | Mínimo % para cada panel |
-| `maxSize` | `number` | `90` | Máximo % para el primer panel |
-| `collapsible` | `boolean` | `false` | Doble click en el gutter colapsa un panel |
-| `gutterSize` | `string` | `'6px'` | Ancho/alto del divisor |
-| `onChange` | `function` | `null` | `({ sizes, firstSize, secondSize }) => {}` |
-| `onDragStart` | `function` | `null` | 🇬🇧 Fires when drag starts / 🇪🇸 Se dispara al iniciar el drag |
-| `onDragEnd` | `function` | `null` | `({ sizes }) => {}` |
+| `direction` | `string` | `'horizontal'` | Divider orientation: `'horizontal'` · `'vertical'` |
+| `initialSize` | `number` | `50` | Initial size of the first panel (%) |
+| `minSize` | `number` | `10` | Minimum % allowed per panel |
+| `maxSize` | `number` | `90` | Maximum % allowed for the first panel |
+| `collapsible` | `boolean` | `false` | Double-click the divider to collapse the panel |
+| `gutterSize` | `string` | `'6px'` | Divider width/height in CSS |
+| `onChange` | `function` | `null` | `({ sizes, firstSize, secondSize })` — fires while dragging |
+| `onDragStart` | `function` | `null` | Fires when dragging starts |
+| `onDragEnd` | `function` | `null` | `({ sizes })` — fires on release |
+
+---
 
 ## API
+
+| Method | Description |
+|--------|-------------|
+| `setSize(pct)` | Set the first panel size (%) |
+| `getSizes()` | Returns `{ firstSize, secondSize }` (%) |
+| `collapseFirst()` / `collapseSecond()` | Collapse a panel |
+| `restore()` | Restore panels to the pre-collapse size |
+| `destroy()` | Destroy the instance |
+
 ```js
-const sp = new MTS.Splitter('#el')
-sp.setSize(40)        // primer panel al 40%
-sp.getSizes()         // → { firstSize:40, secondSize:60 }
-sp.collapseFirst()    // colapsar panel izquierdo
-sp.collapseSecond()   // colapsar panel derecho
-sp.restore()          // restaurar al tamaño anterior
-sp.destroy()
+const sp = new MTS.Splitter('#split', { initialSize: 30 });
+sp.setSize(40);
+sp.getSizes(); // → { firstSize, secondSize }
 ```
+
+---
+
+## Events
+
+| Method | Payload | When |
+|--------|---------|------|
+| `onChange` | `{ sizes, firstSize, secondSize }` | While dragging |
+| `onDragStart` | — | Drag starts |
+| `onDragEnd` | `{ sizes }` | On release |
+
+---
+
+## Accessibility
+
+- The divider is keyboard-operable (arrow keys resize); expose `role="separator"` with `aria-valuenow` for the
+  first panel's size where the split conveys meaningful proportions.
+
+---
+
+## Notes
+
+- The container needs a defined `height` when `direction: 'vertical'`.
+- With `collapsible: true`, double-click toggles between collapse and restore.
+- Panels resize via `flex-basis`; the container becomes `display: flex`.
+
+---
+
+## Changelog
+
+### 2026-05-13
+- Documentation homologated to the standard template.

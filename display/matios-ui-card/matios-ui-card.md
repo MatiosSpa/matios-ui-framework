@@ -1,11 +1,10 @@
 # MTS.Card
 
-🇬🇧 Generic card with header, body, footer, cover image, variants, hover/click states and action buttons. Works via CSS classes alone or with JS.
-🇪🇸 Card genérica con header, body, footer, imagen de portada, variantes, estados hover/click y botones de acción. Funciona con clases CSS solas o con JS.
+Generic card with header, body, footer, cover image, variants, hover/click states and action buttons. Works via CSS classes alone or with JS.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,49 +14,58 @@
 
 ---
 
-## Options / Opciones
+## Usage
 
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `title` | `string` | `null` | 🇬🇧 Header title / 🇪🇸 Título del header |
-| `subtitle` | `string` | `null` | 🇬🇧 Header subtitle / 🇪🇸 Subtítulo del header |
-| `body` | `string \| HTMLElement` | `null` | 🇬🇧 Body HTML string or DOM node / 🇪🇸 HTML string o nodo DOM del cuerpo |
-| `image` | `string` | `null` | 🇬🇧 Cover image URL / 🇪🇸 URL de imagen de portada |
-| `imageAlt` | `string` | `''` | 🇬🇧 Image alt text / 🇪🇸 Texto alternativo |
-| `imageRatio` | `string` | `'default'` | `'default'` · `'square'` · `'wide'` |
-| `variant` | `string` | `null` | `'flat'` · `'elevated'` · `'outlined'` · `'primary'` · `'success'` · `'warning'` · `'danger'` |
-| `size` | `string` | `''` | `''` · `'sm'` · `'lg'` |
-| `hoverable` | `boolean` | `false` | 🇬🇧 Show hover lift effect / 🇪🇸 Efecto de elevación al hover |
-| `clickable` | `boolean` | `false` | 🇬🇧 Make card clickable / 🇪🇸 Hacer la card clickeable |
-| `selected` | `boolean` | `false` | 🇬🇧 Selected state / 🇪🇸 Estado seleccionado |
-| `horizontal` | `boolean` | `false` | 🇬🇧 Horizontal layout / 🇪🇸 Layout horizontal |
-| `actions` | `array` | `[]` | 🇬🇧 Header action buttons `[{ label, icon, variant, onClick }]` / 🇪🇸 Botones en el header |
-| `footer` | `array` | `[]` | 🇬🇧 Footer buttons `[{ label, icon, variant, onClick }]` / 🇪🇸 Botones del footer |
-| `footerAlign` | `string` | `'start'` | `'start'` · `'end'` · `'between'` · `'center'` |
-| `onClick` | `function` | — | 🇬🇧 Fires when clickable card is clicked / 🇪🇸 Se dispara al hacer click en la card |
-
----
-
-## Events / Eventos
+### JavaScript
 
 ```js
-const card = new MTS.Card('#my-card', {
-  title:     'Product',
+// Basic
+new MTS.Card('#my-card', {
+  title:    'Product name',
+  subtitle: 'Category',
+  body:     '<p>Product description here.</p>',
+  variant:  'elevated',
+});
+
+// With image, header actions and footer
+new MTS.Card('#card-product', {
+  title:      'Mountain Trek',
+  subtitle:   'Footwear',
+  image:      '/img/product.jpg',
+  imageRatio: 'wide',
+  body:       '<p>Premium hiking boots.</p>',
+  actions: [
+    { label: 'Edit',   variant: 'ghost',  onClick: function () { edit(); } },
+    { label: 'Delete', variant: 'danger', onClick: function () { remove(); } },
+  ],
+  footer: [
+    { label: 'Cancel', variant: 'ghost',   onClick: function () { cancel(); } },
+    { label: 'Buy',    variant: 'primary', onClick: function () { buy(); } },
+  ],
+  footerAlign: 'between',
+});
+
+// Clickable card
+new MTS.Card('#card-nav', {
+  title:     'Analytics',
+  body:      '<p>View your metrics.</p>',
   clickable: true,
-  // Fires when card is clicked / Se dispara al hacer click en la card
-  onClick: (e) => {
-    console.log(e.detail.card);  // → MTS.Card instance
-    console.log(e.detail.event); // → MouseEvent
-  },
+  hoverable: true,
+  onClick: function (e) { router.push('/analytics'); },
+});
+
+// Sharp card (Linear/Jira style) — opt-in border & radius
+new MTS.Card('#card-sharp', {
+  title:  'My Card',
+  body:   '<p>...</p>',
+  radius: 'none',
+  border: '1',
 });
 ```
 
----
-
-## CSS Only / Solo CSS
+### CSS only (no JS)
 
 ```html
-<!-- Base card without JS / Card base sin JS -->
 <div class="mts-card">
   <div class="mts-card__header">
     <div class="mts-card__title">Title</div>
@@ -72,128 +80,142 @@ const card = new MTS.Card('#my-card', {
 </div>
 ```
 
----
+### `body` as an HTMLElement
 
-## JavaScript Usage / Uso JavaScript
+`body` accepts a DOM node directly (no workarounds):
 
 ```js
-// Basic / Básico
-new MTS.Card('#my-card', {
-  title:    'Product name',
-  subtitle: 'Category',
-  body:     '<p>Product description here.</p>',
-  variant:  'elevated',
-});
+const content = document.createElement('div');
+const title = document.createElement('p');
+title.className = 'mts-text--semibold';
+title.textContent = 'Period summary';
+content.appendChild(title);
 
-// With image and actions / Con imagen y acciones
-new MTS.Card('#card-product', {
-  title:      'Mountain Trek',
-  subtitle:   'Footwear',
-  image:      '/img/product.jpg',
-  imageRatio: 'wide',
-  body:       '<p>Premium hiking boots.</p>',
-  actions: [
-    { label: 'Edit',   variant: 'ghost',   onClick: () => edit() },
-    { label: 'Delete', variant: 'danger',  onClick: () => remove() },
-  ],
-  footer: [
-    { label: 'Cancel', variant: 'ghost',   onClick: () => cancel() },
-    { label: 'Buy',    variant: 'primary', onClick: () => buy() },
-  ],
-  footerAlign: 'between',
-});
+new MTS.Card('#card-report', { title: 'Monthly sales', body: content });
 
-// Clickable card / Card clickeable
-new MTS.Card('#card-nav', {
-  title:     'Analytics',
-  body:      '<p>View your metrics.</p>',
-  clickable: true,
-  hoverable: true,
-  // Fires on click / Se dispara al hacer click
-  onClick: (e) => router.push('/analytics'),
-});
+// Also works with setBody()
+const card = new MTS.Card('#my-card', { title: 'Report' });
+card.setBody(document.createElement('table'));
 ```
+
+> If `body` is an `HTMLElement` and a method that triggers `_build()` is called (e.g. `setTitle()`), the node is re-appended automatically — it is not lost.
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `title` | `string` | `null` | Header title |
+| `subtitle` | `string` | `null` | Header subtitle |
+| `body` | `string \| HTMLElement` | `null` | Body HTML string or DOM node |
+| `image` | `string` | `null` | Cover image URL |
+| `imageAlt` | `string` | `''` | Image alt text |
+| `imageRatio` | `string` | `'default'` | `'default'` · `'square'` · `'wide'` |
+| `variant` | `string` | `null` | `'flat'` · `'elevated'` · `'outlined'` · `'primary'` · `'success'` · `'warning'` · `'danger'` |
+| `size` | `string` | `''` | `''` · `'sm'` · `'lg'` |
+| `hoverable` | `boolean` | `false` | Lift effect on hover |
+| `clickable` | `boolean` | `false` | Make the card clickable |
+| `selected` | `boolean` | `false` | Selected state |
+| `horizontal` | `boolean` | `false` | Side-by-side (image + content) layout |
+| `actions` | `array` | `[]` | Header action buttons `[{ label, icon, variant, onClick }]` |
+| `footer` | `array` | `[]` | Footer buttons `[{ label, icon, variant, onClick }]` |
+| `footerAlign` | `string` | `'start'` | `'start'` · `'end'` · `'between'` · `'center'` |
+| `radius` | `string` | `null` | **Opt-in** corner radius: `'none'` · `'xs'` · `'sm'` · `'md'` · `'lg'` · `'xl'` · `'full'`. `null` = default (radius-lg). Invalid → ignored (warning) |
+| `border` | `string` | `null` | **Opt-in** border: `'none'` · `'1'` · `'2'` · `'3'` (number accepted). `null` = default (base border). Invalid → ignored (warning) |
+| `onClick` | `function` | — | Fires when a clickable card is clicked |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `on(event, cb)` / `off(event, cb)` | Register / remove listeners |
+| `setTitle(text)` | Update the header title |
+| `setBody(value)` | Update the body (string or `HTMLElement`) |
+| `setSelected(bool)` | Toggle the selected state |
+| `setLoading(bool)` | Toggle the loading skeleton |
+| `setRadius(value)` | Set the corner radius opt-in (`'none'…'full'` \| `null`). Idempotent |
+| `setBorder(value)` | Set the border opt-in (`'none'\|'1'\|'2'\|'3'` \| `null`). Idempotent |
+| `destroy()` | Clear the card DOM |
+
 ```js
 const card = new MTS.Card('#my-card', { ... });
-
-// Register / remove listeners / Registrar / eliminar listeners
-card.on('click', (e) => console.log(e.detail.card))
-card.off('click', handler)
+card.on('click', function (e) { console.log(e.detail.card); });
+card.setRadius('none');
+card.setBorder('1');
 ```
 
 ---
 
-## DOM Event / Evento DOM
+## Events
+
+| Method | Payload | When |
+|--------|---------|------|
+| `onClick(fn)` / `on('click', fn)` | `{ card, event }` | A `clickable` card is clicked |
+
+Also dispatched as a DOM event for external integration:
 
 ```js
 document.getElementById('my-card')
-  .addEventListener('mts:card:click', (e) => {
-    console.log(e.detail.card);
-  });
+  .addEventListener('mts:card:click', function (e) { console.log(e.detail.card); });
 ```
 
 ---
 
-## Body como HTMLElement
+## CSS Classes
 
-Desde `v1.0.1`, `body` acepta un nodo DOM directamente — sin workarounds:
-
-```js
-// Construye el contenido con createElement
-const content = document.createElement('div');
-
-const title = document.createElement('p');
-title.className = 'mts-text--semibold';
-title.textContent = 'Resumen del período';
-content.appendChild(title);
-
-const chart = document.createElement('div');
-chart.id = 'chart-ventas';
-content.appendChild(chart);
-
-// Pásalo directo como body
-new MTS.Card('#card-reporte', {
-  title: 'Ventas del mes',
-  body:  content,
-});
-
-// También funciona con setBody()
-const card = new MTS.Card('#mi-card', { title: 'Reporte' });
-const tabla = document.createElement('table');
-// ... construyes la tabla ...
-card.setBody(tabla);
-```
-
-> **Nota:** si el `body` es un `HTMLElement` y se llama un método que dispara `_build()` (como `setTitle()`), el nodo se re-appendea automáticamente — no se pierde.
+| Class | Effect |
+|-------|--------|
+| `.mts-card` | Base card |
+| `.mts-card--elevated` | Drop shadow |
+| `.mts-card--outlined` | Border only |
+| `.mts-card--flat` | No border, no shadow |
+| `.mts-card--primary / --success / --warning / --danger` | Colored left border accent |
+| `.mts-card--hoverable` | Lift on hover |
+| `.mts-card--clickable` | Pointer cursor |
+| `.mts-card--selected` | Selected highlight |
+| `.mts-card--horizontal` | Side-by-side layout |
+| `.mts-card--sm / --lg` | Size modifiers |
+| `.mts-card--radius-{none\|xs\|sm\|md\|lg\|xl\|full}` | **Opt-in** radius (uses `--mts-radius-*` tokens). Wins over the default and the variants |
+| `.mts-card--border-{none\|1\|2\|3}` | **Opt-in** border (px width, `--mts-border-color`). Wins over `--elevated`/`--flat`/`--outlined` |
+| `.mts-card--no-frame` | Removes the visual frame (background + border + radius + shadow); keeps the flex-column layout. Useful when embedded in a container that already provides the frame (e.g. `MTS.DashboardGrid`, drawer, sidebar) |
+| `.mts-card--accent-top-{primary\|success\|warning\|danger\|info}` | 3px decorative strip on the **top** border (matches the `mts-kpicard` pattern). Orthogonal to the color variants. Combinable with `--no-frame` |
 
 ---
 
-## CSS Classes / Clases CSS
+## CSS Variables
 
-| Class | 🇬🇧 Effect / 🇪🇸 Efecto |
-|-------|--------------------------|
-| `.mts-card` | 🇬🇧 Base card / 🇪🇸 Card base |
-| `.mts-card--elevated` | 🇬🇧 Drop shadow / 🇪🇸 Sombra |
-| `.mts-card--outlined` | 🇬🇧 Border only / 🇪🇸 Solo borde |
-| `.mts-card--hoverable` | 🇬🇧 Lift on hover / 🇪🇸 Eleva al hover |
-| `.mts-card--clickable` | 🇬🇧 Pointer cursor / 🇪🇸 Cursor pointer |
-| `.mts-card--selected` | 🇬🇧 Selected highlight / 🇪🇸 Resaltado seleccionado |
-| `.mts-card--horizontal` | 🇬🇧 Side-by-side layout / 🇪🇸 Layout lado a lado |
-| `.mts-card--sm / --lg` | 🇬🇧 Size modifiers / 🇪🇸 Modificadores de tamaño |
+The card consumes the framework base tokens (it does not define its own): `--mts-bg-surface`,
+`--mts-border-color`, `--mts-radius-*`, `--mts-shadow-*`, `--mts-space-*`, `--mts-text-*`. Theme it via
+`data-mts-mode` / `data-mts-accent`, or override the tokens on a scope.
+
+---
+
+## Accessibility
+
+- Use a real heading inside `__title` (or keep it a styled `<div>` consistently) for screen-reader structure.
+- For `clickable` cards, handle keyboard activation in your `onClick` consumer (e.g. add `role="button"`,
+  `tabindex="0"` and trigger on `Enter`/`Space`) when the card is the primary action target.
+- The cover image always has an `alt` (`imageAlt`); keep it descriptive or empty for decorative images.
 
 ---
 
 ## Changelog
 
-### v1.0.1 — 2026-05-07
-- `body` acepta `HTMLElement` además de string HTML
-- `setBody()` actualizado — detecta `Element` y usa `appendChild` en lugar de `innerHTML`
-- Rebuild robusto: si `body` es un nodo DOM, `_build()` lo re-appendea automáticamente
+### 2026-05-31
+- New modifiers: `mts-card--radius-{none|xs|sm|md|lg|xl|full}` and `mts-card--border-{none|1|2|3}`. **Opt-in**
+  control of corner radius and border without changing defaults (declared at the end of the CSS so they win by
+  source order over the variants, without `!important`).
+- New JS options: `radius`, `border`. New methods: `setRadius(value)`, `setBorder(value)` (idempotent; invalid
+  value → ignored with a warning).
+- **Backward-compatible**: if `radius`/`border` are not passed, the card is byte-for-byte identical to before.
 
-### v1.0.0 — inicial
-- Card genérica con header, body, footer, imagen, variantes, hover/click, acciones
+### 2026-05-07
+- `body` accepts an `HTMLElement` in addition to an HTML string.
+- `setBody()` detects an `Element` and uses `appendChild` instead of `innerHTML`.
+- Robust rebuild: when `body` is a DOM node, `_build()` re-appends it automatically.
+
+### Initial
+- Generic card with header, body, footer, image, variants, hover/click states and actions.

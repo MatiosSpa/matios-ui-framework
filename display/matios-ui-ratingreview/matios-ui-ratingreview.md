@@ -1,11 +1,10 @@
 # MTS.RatingReview
 
-🇬🇧 Rating review widget with average score, star display, breakdown bars and optional interactive voting.
-🇪🇸 Widget de reseñas con promedio, estrellas, barras de desglose y votación interactiva opcional.
+Rating review widget with average score, star display, breakdown bars and optional interactive voting.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,40 +14,10 @@
 
 ---
 
-## Options / Opciones
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `average` | `number` | `0` | 🇬🇧 Average rating (1-5) / 🇪🇸 Promedio de calificaciones |
-| `total` | `number` | `0` | 🇬🇧 Total number of reviews / 🇪🇸 Total de reseñas |
-| `breakdown` | `object` | `{5:0,4:0,3:0,2:0,1:0}` | 🇬🇧 Count per star / 🇪🇸 Cantidad por estrella |
-| `interactive` | `boolean` | `false` | 🇬🇧 Show interactive voting stars / 🇪🇸 Mostrar estrellas de votación |
-| `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
-| `onRate` | `function` | — | 🇬🇧 `({ stars }) => {}` Fires when user rates / 🇪🇸 Se dispara al calificar |
-
----
-
-## Events / Eventos
+## Usage
 
 ```js
-new MTS.RatingReview('#my-widget', {
-  average:     4.3,
-  total:       1284,
-  interactive: true,
-  // Fires when user clicks a star / Se dispara al hacer click en una estrella
-  onRate: (e) => {
-    console.log(e.detail.stars); // → 4
-    submitRating(e.detail.stars);
-  },
-});
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-// Read-only — shows score and breakdown / Solo lectura — muestra puntaje y desglose
+// Read-only — shows score and breakdown
 new MTS.RatingReview('#my-widget', {
   average:   4.3,
   total:     1284,
@@ -56,56 +25,77 @@ new MTS.RatingReview('#my-widget', {
   breakdown: { 5: 720, 4: 380, 3: 120, 2: 48, 1: 16 },
 });
 
-// Interactive — user can rate / Interactivo — usuario puede calificar
+// Interactive — the user can rate
 new MTS.RatingReview('#my-widget', {
   average:     4.3,
   total:       1284,
   breakdown:   { 5: 720, 4: 380, 3: 120, 2: 48, 1: 16 },
   interactive: true,
-  // Fires when user rates / Se dispara al calificar
-  onRate: (e) => {
-    console.log('rated:', e.detail.stars); // → 4
+  onRate: function (e) {
     fetch('/api/rate', { method: 'POST', body: JSON.stringify({ stars: e.detail.stars }) });
   },
 });
 
-// Large size / Tamaño grande
+// Large size
 new MTS.RatingReview('#my-widget', {
-  average:   4.8,
-  total:     523,
-  breakdown: { 5: 480, 4: 30, 3: 8, 2: 3, 1: 2 },
-  size:      'lg',
+  average: 4.8, total: 523, breakdown: { 5: 480, 4: 30, 3: 8, 2: 3, 1: 2 }, size: 'lg',
 });
 ```
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `average` | `number` | `0` | Average rating (1–5) |
+| `total` | `number` | `0` | Total number of reviews |
+| `breakdown` | `object` | `{5:0,4:0,3:0,2:0,1:0}` | Count per star |
+| `interactive` | `boolean` | `false` | Show interactive voting stars |
+| `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
+| `onRate` | `function` | — | Fires when the user rates — `({ stars })` |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `update(options)` | Update data (average, total, breakdown) and re-render |
+| `on(event, cb)` / `off(event, cb)` | Register / remove listeners (`'rate'`) |
+
 ```js
-const widget = new MTS.RatingReview('#my-widget', { ... });
-
-// Update data and re-render / Actualizar datos y re-renderizar
-widget.update({
-  average:   4.5,
-  total:     1300,
-  breakdown: { 5: 750, 4: 380, 3: 110, 2: 48, 1: 12 },
-})
-
-// Register / remove listeners / Registrar / eliminar listeners
-widget.on('rate', (e) => console.log(e.detail.stars))
-widget.off('rate', handler)
+const widget = new MTS.RatingReview('#my-widget', { average: 4.3, total: 1284 });
+widget.update({ average: 4.5, total: 1300, breakdown: { 5: 750, 4: 380, 3: 110, 2: 48, 1: 12 } });
+widget.on('rate', function (e) { console.log(e.detail.stars); });
 ```
 
 ---
 
-## DOM Event / Evento DOM
+## Events
+
+| Method | Payload | When |
+|--------|---------|------|
+| `onRate(fn)` / `on('rate', fn)` | `{ stars }` | The user clicks a star (when `interactive`) |
+
+Also dispatched as a DOM event:
 
 ```js
 document.getElementById('my-widget')
-  .addEventListener('mts:ratingreview:rate', (e) => {
-    console.log(e.detail.stars);
-  });
+  .addEventListener('mts:ratingreview:rate', function (e) { console.log(e.detail.stars); });
 ```
 
 ---
+
+## Accessibility
+
+- In `interactive` mode the stars are keyboard-operable; convey the current value with text for assistive tech.
+- The breakdown bars are a visual summary; the `average` and `total` carry the headline meaning.
+
+---
+
+## Changelog
+
+### Initial
+- Rating widget with average score, star display, per-star breakdown bars, optional interactive voting
+  (`onRate`), sizes, and `update()`.

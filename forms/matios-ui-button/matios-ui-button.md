@@ -1,11 +1,10 @@
 # MTS.Button
 
-🇬🇧 Button component with variants, sizes, icons, loading state, groups and custom styles.
-🇪🇸 Componente botón con variantes, tamaños, íconos, estado loading, grupos y estilos custom.
+Button component with variants, sizes, icons, loading state, groups and custom styles.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,44 +14,21 @@
 
 ---
 
-## Options / Opciones
+## Usage
 
-🇬🇧 All options are passed as the second argument to the constructor.
-🇪🇸 Todas las opciones se pasan como segundo argumento al constructor.
+### JavaScript
 
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `label` | `string` | button text | 🇬🇧 Visible text / 🇪🇸 Texto visible |
-| `variant` | `string` | `'primary'` | `'primary'` · `'secondary'` · `'ghost'` · `'danger'` · `'success'` · `'warning'` · `'link'` |
-| `size` | `string` | `''` | `'xs'` · `'sm'` · `''` · `'lg'` · `'xl'` |
-| `block` | `boolean` | `false` | 🇬🇧 Full width / 🇪🇸 Ancho completo |
-| `round` | `boolean` | `false` | 🇬🇧 Pill border-radius / 🇪🇸 Border-radius pill |
-| `iconOnly` | `boolean` | `false` | 🇬🇧 Square padding, no text / 🇪🇸 Padding cuadrado, sin texto |
-| `iconLeft` | `string` | `null` | 🇬🇧 Left icon HTML / 🇪🇸 HTML del ícono izquierdo |
-| `iconRight` | `string` | `null` | 🇬🇧 Right icon HTML / 🇪🇸 HTML del ícono derecho |
-| `disabled` | `boolean` | `false` | 🇬🇧 Disables interaction / 🇪🇸 Deshabilita la interacción |
-| `loading` | `boolean` | `false` | 🇬🇧 Shows spinner / 🇪🇸 Muestra spinner |
-| `shadow` | `boolean` | `false` | 🇬🇧 Colored shadow / 🇪🇸 Sombra de color |
-| `ring` | `boolean` | `false` | 🇬🇧 Semitransparent ring / 🇪🇸 Ring semitransparente |
-| `className` | `string` | `''` | 🇬🇧 Extra CSS classes / 🇪🇸 Clases CSS adicionales |
-| `style` | `object` | `null` | 🇬🇧 Inline styles / 🇪🇸 Estilos inline |
-| `onClick` | `function` | — | 🇬🇧 Fires on click / 🇪🇸 Se dispara al hacer click |
-
----
-
-## Events / Eventos
-
-🇬🇧 Use `onClick` in the constructor. This is the recommended approach — no need for `addEventListener`.
-🇪🇸 Usa `onClick` en el constructor. Este es el enfoque recomendado — no necesitas `addEventListener`.
+The container only needs to exist in the DOM:
 
 ```js
-new MTS.Button('#my-btn', {
-  // Fires on every click, receives the DOM event and the instance
-  // Se dispara en cada click, recibe el evento DOM y la instancia
-  onClick: (event, instance) => {
+const btn = new MTS.Button('#my-btn', {
+  label:   'Save changes',
+  variant: 'primary',
+  shadow:  true,
+  onClick: function (event, instance) {
     instance.setLoading(true);
     instance.setLabel('Saving...');
-    setTimeout(() => {
+    setTimeout(function () {
       instance.setLoading(false);
       instance.setLabel('Saved ✓');
     }, 1500);
@@ -60,156 +36,113 @@ new MTS.Button('#my-btn', {
 });
 ```
 
-🇬🇧 The callback receives:
-🇪🇸 El callback recibe:
+### HTML with `data-*`
 
-| Parameter | Type | Description / Descripción |
-|-----------|------|---------------------------|
-| `event` | `MouseEvent` | 🇬🇧 Native DOM click event / 🇪🇸 Evento click DOM nativo |
-| `instance` | `MTS.Button` | 🇬🇧 The button instance / 🇪🇸 La instancia del botón |
-
----
-
-## HTML Usage / Uso HTML
-
-🇬🇧 Declare the button in HTML using `data-*` attributes, then instantiate with JavaScript.
-🇪🇸 Declara el botón en HTML usando atributos `data-*`, luego instancia con JavaScript.
+Declare the button with `data-*` attributes, then instantiate:
 
 ```html
-<button id="btn-save"
-  data-variant="primary"
-  data-label="Save"
-  data-shadow>
-</button>
+<button id="btn-save" data-variant="primary" data-label="Save" data-shadow></button>
 
 <script>
   new MTS.Button('#btn-save', {
-    // Fires on click / Se dispara al hacer click
-    onClick: (event, instance) => {
+    onClick: function (event, instance) {
       instance.setLoading(true);
-      setTimeout(() => instance.setLoading(false), 1500);
+      setTimeout(function () { instance.setLoading(false); }, 1500);
     },
   });
 </script>
 ```
 
-🇬🇧 Available `data-*` attributes:
-🇪🇸 Atributos `data-*` disponibles:
-
-| Attribute / Atributo | JS Option | Description / Descripción |
-|----------------------|-----------|---------------------------|
-| `data-label` | `label` | 🇬🇧 Button text / 🇪🇸 Texto del botón |
-| `data-variant` | `variant` | `primary` · `secondary` · `ghost` · `danger` · `success` · `warning` · `link` |
-| `data-size` | `size` | `xs` · `sm` · `lg` · `xl` |
-| `data-disabled` | `disabled` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
-| `data-loading` | `loading` | 🇬🇧 Presence activates / 🇪🇸 Presencia activa |
-| `data-block` | `block` | 🇬🇧 Full width / 🇪🇸 Ancho completo |
-| `data-round` | `round` | 🇬🇧 Pill shape / 🇪🇸 Forma pill |
-| `data-icon-only` | `iconOnly` | 🇬🇧 Square padding / 🇪🇸 Padding cuadrado |
-| `data-shadow` | `shadow` | 🇬🇧 Colored shadow / 🇪🇸 Sombra de color |
-| `data-ring` | `ring` | 🇬🇧 Semitransparent ring / 🇪🇸 Ring semitransparente |
+Available `data-*` attributes: `data-label`, `data-variant`, `data-size`, `data-disabled`, `data-loading`,
+`data-block`, `data-round`, `data-icon-only`, `data-shadow`, `data-ring` (boolean attributes activate by presence).
 
 ---
 
-## JavaScript Usage / Uso JavaScript
+## Options
 
-🇬🇧 Create the component entirely from JavaScript — the container only needs to exist in the DOM.
-🇪🇸 Crea el componente completamente desde JavaScript — el contenedor solo necesita existir en el DOM.
+All options are passed as the second argument to the constructor.
 
-```js
-const btn = new MTS.Button('#my-btn', {
-  // Visible text / Texto visible
-  label: 'Save changes',
-
-  // Visual variant / Variante visual
-  variant: 'primary',
-
-  // Size: 'xs' | 'sm' | '' | 'lg' | 'xl' / Tamaño
-  size: '',
-
-  // Colored shadow / Sombra de color
-  shadow: true,
-
-  // Fires on click / Se dispara al hacer click
-  onClick: (event, instance) => {
-    console.log('clicked!');
-  },
-});
-```
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `label` | `string` | button text | Visible text |
+| `variant` | `string` | `'primary'` | `'primary'` · `'secondary'` · `'ghost'` · `'danger'` · `'success'` · `'warning'` · `'link'` |
+| `size` | `string` | `''` | `'xs'` · `'sm'` · `''` · `'lg'` · `'xl'` |
+| `block` | `boolean` | `false` | Full width |
+| `round` | `boolean` | `false` | Pill border-radius |
+| `iconOnly` | `boolean` | `false` | Square padding, no text |
+| `iconLeft` | `string` | `null` | Left icon HTML |
+| `iconRight` | `string` | `null` | Right icon HTML |
+| `disabled` | `boolean` | `false` | Disables interaction |
+| `loading` | `boolean` | `false` | Shows a spinner |
+| `shadow` | `boolean` | `false` | Colored shadow |
+| `ring` | `boolean` | `false` | Semi-transparent ring |
+| `className` | `string` | `''` | Extra CSS classes |
+| `style` | `object` | `null` | Inline styles |
+| `onClick` | `function` | — | Fires on click — `(event, instance)` |
 
 ---
 
 ## API
 
-🇬🇧 Methods available on the instance after creation.
-🇪🇸 Métodos disponibles en la instancia después de crearla.
+| Method | Description |
+|--------|-------------|
+| `enable()` / `disable()` | Enable / disable interaction |
+| `setLoading(bool)` | Show / hide the loading spinner |
+| `setLabel(text)` | Change the label at runtime |
+| `setVariant(name)` | Change the variant at runtime |
+| `setShadow(bool)` / `setRing(bool)` | Toggle shadow / ring |
+| `destroy()` | Destroy the instance |
 
 ```js
-const btn = new MTS.Button('#my-btn', { ... });
-
-// Enable / disable interaction / Habilitar / deshabilitar interacción
-btn.enable()
-btn.disable()
-
-// Show / hide loading spinner / Mostrar / ocultar spinner de carga
-btn.setLoading(true)
-btn.setLoading(false)
-
-// Change label at runtime / Cambiar texto en runtime
-btn.setLabel('Saved ✓')
-
-// Change variant at runtime / Cambiar variante en runtime
-btn.setVariant('secondary')
-
-// Toggle shadow / Activar o desactivar sombra
-btn.setShadow(true)
-btn.setShadow(false)
-
-// Toggle ring / Activar o desactivar ring
-btn.setRing(true)
-btn.setRing(false)
-
-// Destroy the instance / Destruir la instancia
-btn.destroy()
+const btn = new MTS.Button('#my-btn', { label: 'Save' });
+btn.setLoading(true);
+btn.setVariant('secondary');
 ```
 
----
+### MTS.ButtonGroup
 
-## MTS.ButtonGroup
-
-🇬🇧 Groups buttons visually — shared borders, no gap, border-radius only on the edges.
-🇪🇸 Agrupa botones visualmente — bordes compartidos, sin gap, border-radius solo en los extremos.
+Groups buttons visually — shared borders, no gap, border-radius only on the edges. Each object accepts the same
+options as `MTS.Button`:
 
 ```js
 const group = new MTS.ButtonGroup('#my-group', [
-  // Each object accepts the same options as MTS.Button
-  // Cada objeto acepta las mismas opciones que MTS.Button
-  { label: 'Day',   variant: 'secondary', onClick: () => {} },
-  { label: 'Week',  variant: 'secondary', onClick: () => {} },
-  { label: 'Month', variant: 'primary',   onClick: () => {} },
+  { label: 'Day',   variant: 'secondary', onClick: function () {} },
+  { label: 'Week',  variant: 'secondary', onClick: function () {} },
+  { label: 'Month', variant: 'primary',   onClick: function () {} },
 ]);
 
-// Set active button by index / Establecer botón activo por índice
-group.setActive(2)
-
-// Access individual buttons / Acceder a botones individuales
-group.getButton(0).disable()
-group.getButton(1).setLabel('New label')
-group.getButtons()   // → [MTS.Button, MTS.Button, ...]
+group.setActive(2);
+group.getButton(0).disable();
+group.getButtons(); // → [MTS.Button, …]
 ```
 
 ---
 
-## DOM Event / Evento DOM
+## Events
 
-🇬🇧 If you need to listen from outside the component instance, use the native DOM event.
-🇪🇸 Si necesitas escuchar desde fuera de la instancia, usa el evento DOM nativo.
+| Method | Payload | When |
+|--------|---------|------|
+| `onClick(fn)` (constructor) | `(event, instance)` | On every click — recommended approach |
+
+Also dispatched as a DOM event for external listeners:
 
 ```js
 document.getElementById('my-btn')
-  .addEventListener('mts:button:click', (e) => {
-    console.log(e.detail.button); // → MTS.Button instance / instancia MTS.Button
-  });
+  .addEventListener('mts:button:click', function (e) { console.log(e.detail.button); });
 ```
 
 ---
+
+## Accessibility
+
+- Renders a real `<button>` — focusable and activatable with `Enter`/`Space` out of the box.
+- For `iconOnly` buttons, provide an accessible name (e.g. `aria-label`) since there is no visible text.
+- `disabled` and `loading` block interaction; `loading` should keep the accessible name meaningful.
+
+---
+
+## Changelog
+
+### Initial
+- Button with 7 variants, 5 sizes, left/right icons, `iconOnly`, `block`, `round`, `loading`, `shadow`, `ring`,
+  `data-*` declarative API, runtime setters, `MTS.ButtonGroup`, and `mts:button:click` DOM event.

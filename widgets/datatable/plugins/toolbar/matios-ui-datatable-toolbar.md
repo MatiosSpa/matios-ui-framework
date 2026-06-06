@@ -1,214 +1,127 @@
 # MTS.DataTableToolbarPlugin
 
-Barra de botones de acción sobre el DataTable. Los botones pueden ser estáticos o **reactivos al estado de la tabla** mediante `condition` y `update()`.
+Action button bar above the DataTable. Buttons can be static or **reactive to the table state** via `condition` and `update()`.
 
 ---
 
-## Instalación
+## Installation
 
 ```js
-const toolbar = new MTS.DataTableToolbarPlugin({ buttons: [...] })
-
-new MTS.DataTable({
-  plugins: [toolbar],
-  ...
-})
+const toolbar = new MTS.DataTableToolbarPlugin({ buttons: [/* … */] });
+new MTS.DataTable({ plugins: [toolbar] /* … */ });
 ```
 
-**Dependencias CSS/JS:** `matios-ui-button.css` + `matios-ui-button.js`
+**Dependencies:** `matios-ui-button.css` + `matios-ui-button.js`.
 
 ---
 
-## Opciones de cada botón
+## Button options
 
-| Propiedad | Tipo | Descripción |
-|---|---|---|
-| `label` | `string` | Texto visible. Opcional si hay `icon`. |
-| `icon` | `string` | Nombre de icono MTS sin prefijo (ej: `'plus'`). Opcional si hay `label`. |
-| `tooltip` | `string` | Atributo `title` + `aria-label` en icon-only. |
-| `variant` | `string` | Variante MTS.Button. Default: `'secondary'`. |
-| `danger` | `boolean` | Shorthand para `variant: 'danger'`. |
-| `disabled` | `boolean` | Siempre deshabilitado, independiente del estado. |
-| `condition` | `(table) => boolean` | Si retorna `false`, el botón se deshabilita. Se re-evalúa con `update()`. |
-| `action` | `(table) => void` | Callback al hacer clic. Recibe la instancia del DataTable. |
+| Property | Type | Description |
+|----------|------|-------------|
+| `label` | `string` | Visible text (optional if `icon` is set) |
+| `icon` | `string` | MTS icon name without prefix (e.g. `'plus'`) (optional if `label` is set) |
+| `tooltip` | `string` | `title` + `aria-label` for icon-only buttons |
+| `variant` | `string` | MTS.Button variant (default `'secondary'`) |
+| `danger` | `boolean` | Shorthand for `variant: 'danger'` |
+| `disabled` | `boolean` | Always disabled, regardless of state |
+| `condition` | `(table) → boolean` | If it returns `false` the button is disabled. Re-evaluated by `update()` |
+| `action` | `(table) → void` | Click callback, receives the DataTable instance |
 
-`{ separator: true }` crea un corte visual entre grupos de botones.
-
----
-
-## API pública
-
-### `toolbar.update()`
-
-Re-evalúa todas las `condition` y habilita/deshabilita botones según el resultado. **No re-renderiza** — solo actualiza el atributo `disabled` de cada botón.
-
-### `toolbar.addButtons(buttons, id)`
-
-Inyecta un conjunto de botones al final del toolbar, precedido por un separador automático. `id` identifica el conjunto para poder eliminarlo después.
-
-Devuelve `this` (chainable).
-
-### `toolbar.removeButtons(id)`
-
-Elimina el conjunto de botones previamente inyectado con ese `id` y re-renderiza el toolbar.
-
-Devuelve `this` (chainable).
+`{ separator: true }` creates a visual break between button groups.
 
 ---
 
-## Toolbar reactivo al contexto
+## API
 
-Los botones con `condition` se habilitan o deshabilitan dinámicamente según lo que ocurre en la tabla. El mecanismo es manual y deliberado: el dev decide **cuándo** y **ante qué eventos** llamar `toolbar.update()`.
+| Method | Description |
+|--------|-------------|
+| `update()` | Re-evaluate every `condition` and enable/disable buttons (does not re-render — only toggles `disabled`) |
+| `addButtons(buttons, id)` | Append a button set (preceded by an auto separator); `id` namespaces it for removal. Chainable |
+| `removeButtons(id)` | Remove the button set with that `id` and re-render. Chainable |
 
-### Patrón básico — reaccionar a la selección
+---
+
+## Context-reactive toolbar
+
+Buttons with `condition` enable/disable dynamically. The mechanism is deliberate and manual: the dev decides **when**
+to call `toolbar.update()`. The standard pattern is to react to selection:
 
 ```js
 new MTS.DataTable({
   plugins: [toolbar],
-  onSelectionChange: () => toolbar.update(),
-})
+  onSelectionChange: function () { toolbar.update(); },
+});
 ```
 
-Con esto, cada vez que el usuario selecciona o deselecciona filas, todas las `condition` se re-evalúan.
+It is manual (not automatic) because each table has its own business logic — making it automatic would require the
+plugin to know that logic and break separation of concerns.
 
-### ¿Por qué es manual y no automático?
-
-Cada tabla tiene su propia lógica de negocio. Un toolbar de usuarios reacciona diferente a uno de documentos. Hacerlo automático requeriría que el plugin conozca esa lógica, lo cual rompería la separación de responsabilidades.
-
-El patrón `onSelectionChange: () => toolbar.update()` es suficientemente simple para ser el estándar en todos los casos.
-
----
-
-## Ejemplo — Activar/Desactivar usuario
+### Example — Activate / Deactivate user
 
 ```js
 const toolbar = new MTS.DataTableToolbarPlugin({
   buttons: [
     {
-      label:     'Activar',
-      icon:      'check-circle',
-      tooltip:   'Activar el usuario seleccionado',
-      // Habilitado solo si la selección es un único usuario inactivo
-      condition: (table) => {
-        const sel = table.getSelection()
-        return sel.length === 1 && sel[0].status === 'inactive'
-      },
-      action: (table) => {
-        const [user] = table.getSelection()
-        console.log('[users.onActivar]')
-        console.log(user)
-      },
+      label: 'Activate', icon: 'check-circle', tooltip: 'Activate the selected user',
+      condition: function (table) { const sel = table.getSelection(); return sel.length === 1 && sel[0].status === 'inactive'; },
+      action: function (table) { const u = table.getSelection()[0]; console.log('[users.onActivate]', u); },
     },
     {
-      label:     'Desactivar',
-      icon:      'pause',
-      tooltip:   'Desactivar el usuario seleccionado',
-      condition: (table) => {
-        const sel = table.getSelection()
-        return sel.length === 1 && sel[0].status === 'active'
-      },
-      action: (table) => {
-        const [user] = table.getSelection()
-        console.log('[users.onDesactivar]')
-        console.log(user)
-      },
+      label: 'Deactivate', icon: 'pause', tooltip: 'Deactivate the selected user',
+      condition: function (table) { const sel = table.getSelection(); return sel.length === 1 && sel[0].status === 'active'; },
+      action: function (table) { const u = table.getSelection()[0]; console.log('[users.onDeactivate]', u); },
     },
   ],
-})
+});
 
-new MTS.DataTable({
-  plugins: [toolbar],
-  onSelectionChange: () => toolbar.update(),
-  ...
-})
+new MTS.DataTable({ plugins: [toolbar], onSelectionChange: function () { toolbar.update(); } });
 ```
 
----
+### Example — DocumentManager (Upload, Move, Delete)
 
-## Ejemplo — DocumentManager (Subir, Mover, Eliminar)
-
-Cuando el toolbar coexiste con `MTS.DocumentManagerPlugin`, los botones pueden acceder a la carpeta actual via `dm.getItem()` (requiere cerrar sobre la referencia `dm`):
+When the toolbar coexists with `MTS.DocumentManagerPlugin`, buttons can read the current folder via `dm.getItem()`
+(close over the `dm` reference):
 
 ```js
-const dm      = new MTS.DocumentManagerPlugin({...})
+const dm = new MTS.DocumentManagerPlugin({ /* … */ });
 const toolbar = new MTS.DataTableToolbarPlugin({
   buttons: [
-    {
-      label:  'Subir',
-      icon:   'upload',
-      // dm.getItem() → carpeta actual, null si estás en el root
-      action: () => {
-        console.log('[dm.onSubir]')
-        console.log(dm.getItem())
-      },
-    },
+    { label: 'Upload', icon: 'upload', action: function () { console.log('[dm.onUpload]', dm.getItem()); } },
     { separator: true },
-    {
-      label:     'Mover',
-      icon:      'move',
-      condition: (table) => table.getSelection().length > 0,
-      action:    (table) => {
-        console.log('[dm.onMover]')
-        console.log(table.getSelection())
-      },
-    },
-    {
-      label:     'Eliminar',
-      icon:      'trash',
-      danger:    true,
-      condition: (table) => table.getSelection().length > 0,
-      action:    (table) => {
-        console.log('[dm.onEliminar]')
-        console.log(table.getSelection())
-      },
-    },
+    { label: 'Move',   icon: 'move',  condition: function (t) { return t.getSelection().length > 0; }, action: function (t) { console.log('[dm.onMove]', t.getSelection()); } },
+    { label: 'Delete', icon: 'trash', danger: true, condition: function (t) { return t.getSelection().length > 0; }, action: function (t) { console.log('[dm.onDelete]', t.getSelection()); } },
   ],
-})
+});
 
-new MTS.DataTable({
-  plugins:           [toolbar, dm],
-  onSelectionChange: () => toolbar.update(),
-  ...
-})
+new MTS.DataTable({ plugins: [toolbar, dm], onSelectionChange: function () { toolbar.update(); } });
 ```
 
 ---
 
-## Inyección de botones desde plugins externos
+## Button injection from other plugins
 
-Otros plugins pueden añadir sus propios botones al toolbar usando `addButtons` / `removeButtons`. Esto les permite integrarse sin conocer la configuración inicial del toolbar.
-
-```js
-// Dentro de install() de un plugin:
-const toolbar = table.getPlugin('MTS.DataTableToolbarPlugin')
-if (toolbar) {
-  toolbar.addButtons([
-    { label: 'Aprobar', icon: 'check-circle', condition: ..., action: ... },
-  ], 'miPlugin')
-}
-
-// Dentro de uninstall() del plugin:
-toolbar?.removeButtons('miPlugin')
-```
-
-El `id` actúa como namespace del conjunto: permite añadir y quitar en bloque sin afectar otros botones.
-
-### Ejemplo real — `showInToolbar` en WorkflowPlugin
-
-`MTS.DocumentManagerWorkflowPlugin` soporta la opción `showInToolbar: true`, que inyecta automáticamente los botones de workflow (Iniciar, Enviar, Aprobar, Firmar, Rechazar, Reiniciar) al toolbar disponible.
-
-Las condiciones usan **unanimidad de estado**: todos los ítems seleccionados deben compartir el mismo estado para que la acción se habilite.
+Other plugins can add their own buttons via `addButtons` / `removeButtons`, integrating without knowing the initial
+config. The `id` acts as a namespace so a set can be added/removed as a block:
 
 ```js
-new MTS.DocumentManagerWorkflowPlugin({
-  statusField:   'workflowStatus',
-  showInToolbar: true,             // ← inyecta botones de workflow en el toolbar
-  onApprove:     (items) => {},
-  onReject:      (items) => {},
-  // ...
-})
+// In a plugin's install():
+const toolbar = table.getPlugin('MTS.DataTableToolbarPlugin');
+if (toolbar) toolbar.addButtons([{ label: 'Approve', icon: 'check-circle', condition: cond, action: act }], 'myPlugin');
+
+// In uninstall():
+if (toolbar) toolbar.removeButtons('myPlugin');
 ```
 
-Requiere que el toolbar esté instalado **antes** que el DM en el array de plugins, y que el dev llame `toolbar.update()` en `onSelectionChange`.
+`MTS.DocumentManagerWorkflowPlugin` uses this via `showInToolbar: true`, injecting workflow buttons (Start, Send,
+Approve, Sign, Reject, Restart). Their conditions use **state unanimity**: all selected items must share the same
+state for the action to enable. Requires the toolbar to be installed **before** the DM in the plugins array and
+`toolbar.update()` called on `onSelectionChange`.
 
 ---
+
+## Changelog
+
+### Initial
+- Action toolbar plugin: static or state-reactive buttons (`condition` + `update()`), separators, runtime
+  `addButtons` / `removeButtons` with namespacing, and cross-plugin injection (`showInToolbar`).

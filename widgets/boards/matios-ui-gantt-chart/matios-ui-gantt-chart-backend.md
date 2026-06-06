@@ -58,6 +58,40 @@ El FE pide las tareas vía `dataSource` (función o `{url, method, headers, para
 { "id": "l1", "from": "t1", "to": "t2", "type": "FS", "lag": 0 }   // FS | FF | SS | SF
 ```
 
+### DDL sugerido (PostgreSQL)
+```sql
+CREATE TABLE task (
+  id           text PRIMARY KEY,
+  project_id   text NOT NULL REFERENCES project(id),
+  wbs          text NOT NULL,            -- '1', '1.1', '1.1.1' (jerarquía + orden)
+  label        text NOT NULL,
+  start        date,
+  "end"        date,
+  progress     numeric DEFAULT 0,        -- 0..1
+  color        text,
+  status       text,
+  predecessors jsonb DEFAULT '[]',       -- WBS de dependencias
+  -- línea base (§4, modelo A):
+  baseline_start    date,
+  baseline_end      date,
+  baseline_progress numeric,
+  baseline_set_at   timestamptz,
+  extras       jsonb DEFAULT '{}'
+);
+CREATE TABLE task_assignee (             -- N:M tarea ↔ usuario
+  task_id text REFERENCES task(id),
+  uid     text REFERENCES app_user(uid),
+  PRIMARY KEY (task_id, uid)
+);
+CREATE TABLE task_link (                 -- dependencias explícitas (opcional)
+  id   text PRIMARY KEY,
+  from_id text REFERENCES task(id),
+  to_id   text REFERENCES task(id),
+  type text DEFAULT 'FS',               -- FS|FF|SS|SF
+  lag  int DEFAULT 0
+);
+```
+
 ---
 
 ## 3. Eventos del FE → endpoints del BE
@@ -153,8 +187,37 @@ Si la tarea **no** trae `baseline*`, no se dibuja nada (la feature es opcional p
 
 ---
 
+## 6. Convenciones transversales (aplican a los 3 boards)
+
+**Auth / headers.** El `dataSource` acepta `{ headers }`; mandá ahí el token (`Authorization: Bearer …`).
+Los `fetch` de las mutaciones (POST/PATCH/DELETE/PUT) los hace el consumer → agregale los mismos headers.
+
+**Generación y reconciliación de `id`.** Si el usuario crea una tarea, el FE le pone un id temporal (`t-<ts>`).
+El BE debería responder al `POST` con el **id canónico**; el consumer reemplaza el temporal (`updateTask`) para
+mantener coherencia (predecesores referencian WBS, no id, así que no se rompen). Si tu BD acepta el id del FE, devolvé el mismo.
+
+**UI optimista + rollback.** El FE aplica el cambio en pantalla al instante (y soporta undo/redo local) y luego
+emite el evento. Si el `fetch` falla, el consumer debe **revertir** (`reload()` desde el `dataSource`, o `undo()`).
+El componente no hace rollback contra el BE solo.
+
+**Manejo de errores.** En la carga, error → **`onError({ error })`**. En mutaciones, el consumer maneja el `.catch`.
+Forma sugerida del error del BE:
+```jsonc
+{ "error": { "code": "VALIDATION", "message": "Fecha fin < fecha inicio", "fields": { "end": "inválida" } } }
+```
+
+**Validaciones mínimas (server-side, no confíes solo en el FE).**
+- `label` no vacío; `end >= start`; `progress ∈ [0,1]`; `wbs` único por proyecto y bien formado.
+- `predecessors` referencian WBS existentes; sin ciclos. `baselineEnd >= baselineStart`.
+
+**Códigos de estado.** `200` (update ok), `201` (created + id), `204` (deleted), `409` (conflicto WBS/orden),
+`422` (validación). El consumer reacciona según el código.
+
+---
+
 ## Resumen para el BE
 1. Exponer `GET /tasks` con `{ data, links? }` y la Task de §2 (incluí `baseline*` y `assignees[].uid`).
 2. Implementar los endpoints de §3 (POST/PATCH/DELETE/PUT) con los payloads indicados.
 3. Para baseline: columnas `baseline_*` (modelo A) + `POST /baseline`, y devolver esos campos en el GET.
 4. Para Excel/MSProject: adapters contra el modelo canónico.
+5. Reconciliación de `id`, UI optimista, errores y validaciones → §6.

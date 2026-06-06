@@ -1,11 +1,10 @@
 # MTS.Radio
 
-🇬🇧 Radio button group component — single selection with vertical or horizontal layout.
-🇪🇸 Componente grupo de radio buttons — selección única con layout vertical u horizontal.
+Radio button group component — single selection with vertical or horizontal layout.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,146 +14,87 @@
 
 ---
 
-## Options / Opciones
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `options` | `array` | `[]` | 🇬🇧 `[{ value, label, disabled? }]` |
-| `value` | `string` | `null` | 🇬🇧 Initially selected value / 🇪🇸 Valor seleccionado inicialmente |
-| `name` | `string` | auto | 🇬🇧 Radio group name (unique per group) / 🇪🇸 Nombre del grupo (único por grupo) |
-| `disabled` | `boolean` | `false` | 🇬🇧 Disables all radio buttons / 🇪🇸 Deshabilita todos los radio buttons |
-| `horizontal` | `boolean` | `false` | 🇬🇧 Horizontal layout / 🇪🇸 Layout horizontal |
-| `onChange` | `function` | — | 🇬🇧 Fires when selection changes / 🇪🇸 Se dispara al cambiar la selección |
-
----
-
-## Events / Eventos
-
-🇬🇧 Use `onChange` in the constructor. This is the recommended approach.
-🇪🇸 Usa `onChange` en el constructor. Este es el enfoque recomendado.
+## Usage
 
 ```js
-new MTS.Radio('#my-radio', {
-  options: [...],
-  // Fires when user selects a different option / Se dispara al seleccionar una opción diferente
-  onChange: (e) => {
-    console.log(e.detail.value); // → selected value string / string del valor seleccionado
-  },
-});
-```
-
----
-
-## HTML Usage / Uso HTML
-
-```html
-<!-- Vertical (default) / Vertical -->
-<div id="radio-priority"></div>
-
-<script>
-  new MTS.Radio('#radio-priority', {
-    name:     'priority',
-    value:    'medium',
-    options: [
-      { value: 'high',   label: 'High' },
-      { value: 'medium', label: 'Medium' },
-      { value: 'low',    label: 'Low' },
-    ],
-    onChange: (e) => console.log(e.detail.value),
-  });
-</script>
-
-<!-- Horizontal / Horizontal -->
-<div id="radio-view"></div>
-
-<script>
-  new MTS.Radio('#radio-view', {
-    horizontal: true,
-    name:       'view',
-    value:      'table',
-    options: [
-      { value: 'table', label: 'Table' },
-      { value: 'cards', label: 'Cards' },
-      { value: 'list',  label: 'List' },
-    ],
-    onChange: (e) => console.log(e.detail.value),
-  });
-</script>
-
-<!-- With disabled option / Con opción deshabilitada -->
-<div id="radio-plan"></div>
-
-<script>
-  new MTS.Radio('#radio-plan', {
-    horizontal: true,
-    name:       'plan',
-    value:      'free',
-    options: [
-      { value: 'free',       label: 'Free' },
-      { value: 'pro',        label: 'Pro' },
-      { value: 'enterprise', label: 'Enterprise (coming soon)', disabled: true },
-    ],
-  });
-</script>
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-const radio = new MTS.Radio('#my-radio', {
-  // Array of options / Arreglo de opciones
+// Vertical (default)
+new MTS.Radio('#radio-priority', {
+  name:  'priority',
+  value: 'medium',
   options: [
-    { value: 'a', label: 'Option A' },
-    { value: 'b', label: 'Option B' },
-    { value: 'c', label: 'Option C', disabled: true },
+    { value: 'high',   label: 'High' },
+    { value: 'medium', label: 'Medium' },
+    { value: 'low',    label: 'Low' },
   ],
+  onChange: function (e) { console.log(e.detail.value); },
+});
 
-  // Initially selected value / Valor seleccionado inicialmente
-  value: 'a',
-
-  // Radio group name (unique per page) / Nombre del grupo (único por página)
-  name: 'my-group',
-
-  // Horizontal layout / Layout horizontal
-  horizontal: false,
-
-  // Disables all options / Deshabilita todas las opciones
-  disabled: false,
-
-  // Fires when selection changes / Se dispara al cambiar la selección
-  onChange: (e) => console.log(e.detail.value),
+// Horizontal, with a disabled option
+new MTS.Radio('#radio-plan', {
+  horizontal: true,
+  name:       'plan',
+  value:      'free',
+  options: [
+    { value: 'free',       label: 'Free' },
+    { value: 'pro',        label: 'Pro' },
+    { value: 'enterprise', label: 'Enterprise (coming soon)', disabled: true },
+  ],
 });
 ```
+
+The container only needs to exist in the DOM (`<div id="radio-priority"></div>`).
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `options` | `array` | `[]` | `[{ value, label, disabled? }]` |
+| `value` | `string` | `null` | Initially selected value |
+| `name` | `string` | auto | Radio group name (unique per group) |
+| `disabled` | `boolean` | `false` | Disables all radio buttons |
+| `horizontal` | `boolean` | `false` | Horizontal layout |
+| `onChange` | `function` | — | Fires when the selection changes — `{ value }` |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `getValue()` | Returns the selected value (`string \| null`) |
+| `setValue(value)` | Set the selected value programmatically |
+
 ```js
-const radio = new MTS.Radio('#my-radio', { ... });
-
-// Returns selected value / Retorna el valor seleccionado
-radio.getValue()        // → string | null
-
-// Sets selected value programmatically / Establece el valor seleccionado programáticamente
-radio.setValue('b')
+const radio = new MTS.Radio('#my-radio', { options: [/* … */], value: 'a' });
+radio.setValue('b');
 ```
 
 ---
 
-## DOM Event / Evento DOM
+## Events
+
+| Method | DOM event | Payload |
+|--------|-----------|---------|
+| `onChange` | `mts:radio:change` | `{ value }` |
 
 ```js
 document.getElementById('my-radio')
-  .addEventListener('mts:radio:change', (e) => {
-    console.log(e.detail.value); // → selected value / valor seleccionado
-  });
+  .addEventListener('mts:radio:change', function (e) { console.log(e.detail.value); });
 ```
 
-| Event / Evento | DOM Namespace |
-|----------------|---------------|
-| `onChange` | `mts:radio:change` |
+---
+
+## Accessibility
+
+- Renders real `<input type="radio">` controls sharing a `name` — arrow keys move selection within the group.
+- A `disabled` option is skipped by keyboard navigation; reflect that state visually.
 
 ---
+
+## Changelog
+
+### Initial
+- Radio group with single selection, vertical/horizontal layout, per-option disable, auto group name,
+  `onChange`, and `getValue` / `setValue`.

@@ -1,144 +1,141 @@
 # MTS.Topbar
 
-Barra superior para dashboards y apps — brand con logo, slots de contenido configurables, y composición natural con `MTS.SideNav`.
+Top bar for dashboards and apps — brand with logo, configurable content slots, and natural composition with `MTS.SideNav`.
 
-## Uso
+---
+
+## Installation
 
 ```html
-<div id="mi-topbar"></div>
+<link rel="stylesheet" href="matios-ui-base.css">
+<link rel="stylesheet" href="matios-ui-topbar.css">
+<script src="matios-ui-topbar.js"></script>
+```
+
+---
+
+## Usage
+
+```html
+<div id="my-topbar"></div>
 ```
 
 ```js
-new MTS.Topbar('#mi-topbar', {
+new MTS.Topbar('#my-topbar', {
   brand: {
-    logo: '<img src="logo.svg" width="28" height="28">',
-    title: 'Mi<span style="color:var(--mts-color-primary)">App</span>',
-    onClick: function() { /* ir al inicio */ }
+    logo:    '<img src="logo.svg" width="28" height="28">',
+    title:   'My App',
+    onClick: function () { router.push('/'); },
   },
-  end: '<button class="mts-btn mts-btn--secondary mts-btn--sm">Perfil</button>'
+  end: '<button class="mts-btn mts-btn--secondary mts-btn--sm">Profile</button>',
 });
 ```
 
-## Opciones
+### CSS only (no JS)
 
-| Opción | Tipo | Default | Descripción |
+```html
+<header class="mts-topbar">
+  <div class="mts-topbar__brand">
+    <div class="mts-topbar__logo"><img src="logo.svg" width="28" height="28"></div>
+    <div class="mts-topbar__brand-info">
+      <div class="mts-topbar__title">My App</div>
+      <div class="mts-topbar__subtitle">v1.0.0</div>
+    </div>
+  </div>
+  <div class="mts-topbar__spacer"></div>
+  <div class="mts-topbar__end">
+    <button class="mts-btn mts-btn--secondary mts-btn--sm">Profile</button>
+  </div>
+</header>
+```
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `brand` | `object` | `null` | `{ logo, title, subtitle, href, onClick }` |
-| `brand.logo` | `string` | — | HTML del logo (imagen, div con gradiente, etc.) |
-| `brand.title` | `string` | — | Nombre de la app — acepta HTML para colorear spans |
-| `brand.subtitle` | `string` | — | Tagline o versión debajo del título |
-| `brand.href` | `string` | — | Si se provee, el brand se renderiza como `<a>` |
-| `brand.onClick` | `function` | — | Handler de click en el brand |
-| `start` | `string\|Element` | `null` | Slot izquierdo (entre brand y spacer) |
-| `center` | `string\|Element` | `null` | Slot central — reemplaza el spacer |
-| `end` | `string\|Element` | `null` | Slot derecho |
-| `height` | `string` | `null` | Override de `--mts-topbar-height`. Ej: `'50px'` |
+| `brand.logo` | `string` | — | Logo HTML (image, gradient div, etc.) |
+| `brand.title` | `string` | — | App name — accepts HTML (e.g. to color a span) |
+| `brand.subtitle` | `string` | — | Tagline or version below the title |
+| `brand.href` | `string` | — | If provided, the brand renders as an `<a>` |
+| `brand.onClick` | `function` | — | Brand click handler |
+| `start` | `string \| Element` | `null` | Left slot (between brand and spacer) |
+| `center` | `string \| Element` | `null` | Center slot — replaces the spacer |
+| `end` | `string \| Element` | `null` | Right slot |
+| `height` | `string` | `null` | Override `--mts-topbar-height` (e.g. `'50px'`) |
 | `sticky` | `boolean` | `false` | `position:sticky; top:0` |
-| `shadow` | `boolean` | `true` | Box-shadow inferior |
-| `border` | `boolean` | `true` | Border-bottom |
+| `shadow` | `boolean` | `true` | Bottom box-shadow |
+| `border` | `boolean` | `true` | Bottom border |
+
+---
 
 ## API
 
-```js
-var tb = new MTS.Topbar('#el', { brand: { title: 'App' } });
-
-tb.setBrand({ title: 'Nueva App', logo: '...' });
-tb.setStart('<span>Breadcrumb</span>');
-tb.setEnd('<button>Perfil</button>');
-tb.setCenter('<input placeholder="Buscar...">');
-tb.getSlot('end');   // → Element del slot end
-tb.destroy();
-```
-
-| Método | Descripción |
+| Method | Description |
 |--------|-------------|
-| `setBrand(brand)` | Actualiza el brand y reconstruye |
-| `setStart(content)` | Actualiza slot start (HTML o Element) |
-| `setEnd(content)` | Actualiza slot end (HTML o Element) |
-| `setCenter(content)` | Actualiza slot center (provoca rebuild) |
-| `getSlot(name)` | Retorna el Element del slot: `'brand'`, `'start'`, `'center'`, `'spacer'`, `'end'` |
-| `destroy()` | Elimina el componente y restaura el DOM |
+| `setBrand(brand)` | Update the brand and rebuild |
+| `setStart(content)` | Update the start slot (HTML or Element) |
+| `setEnd(content)` | Update the end slot (HTML or Element) |
+| `setCenter(content)` | Update the center slot (triggers rebuild) |
+| `getSlot(name)` | Return the slot Element: `'brand'`, `'start'`, `'center'`, `'spacer'`, `'end'` |
+| `destroy()` | Remove the component and restore the DOM |
 
-## Personalizar vía CSS
-
-```css
-#mi-topbar {
-  --mts-topbar-height: 60px;
-  --mts-topbar-bg: var(--mts-bg-surface-2);
-  --mts-topbar-shadow: 0 2px 8px rgba(0,0,0,.12);
-}
+```js
+const tb = new MTS.Topbar('#el', { brand: { title: 'App' } });
+tb.setEnd('<button>Profile</button>');
+// getSlot returns the Element, so MTS components can be injected directly:
+new MTS.Button(tb.getSlot('end'), { label: 'Profile' });
 ```
 
-| Variable | Default | Descripción |
+---
+
+## CSS Variables
+
+| Variable | Default | Description |
 |----------|---------|-------------|
-| `--mts-topbar-height` | `52px` | Altura de la barra |
-| `--mts-topbar-bg` | `var(--mts-bg-surface)` | Color de fondo |
-| `--mts-topbar-border-color` | `var(--mts-border-color)` | Color del borde inferior y dividers |
-| `--mts-topbar-shadow` | `0 1px 4px rgba(0,0,0,.07)` | Sombra inferior |
-| `--mts-topbar-padding` | `0 var(--mts-space-4)` | Padding horizontal |
-| `--mts-topbar-gap` | `var(--mts-space-3)` | Gap entre secciones |
+| `--mts-topbar-height` | `52px` | Bar height |
+| `--mts-topbar-bg` | `var(--mts-bg-surface)` | Background color |
+| `--mts-topbar-border-color` | `var(--mts-border-color)` | Bottom border and divider color |
+| `--mts-topbar-shadow` | `0 1px 4px rgba(0,0,0,.07)` | Bottom shadow |
+| `--mts-topbar-padding` | `0 var(--mts-space-4)` | Horizontal padding |
+| `--mts-topbar-gap` | `var(--mts-space-3)` | Gap between sections |
 
-## Layout con SideNav
+---
 
-La composición estándar de dashboard: topbar en la parte superior + sidenav a la izquierda.
+## Layout with SideNav
+
+The standard dashboard composition — topbar on top + sidenav on the left, using framework layout utilities
+(no inline styles):
 
 ```html
-<div style="height:100vh;display:flex;flex-direction:column">
+<div class="mts-vh-100 mts-d-flex mts-flex-col">
   <div id="topbar"></div>
-  <div style="display:flex;flex:1;overflow:hidden">
+  <div class="mts-d-flex mts-flex-1 mts-overflow-hidden">
     <div id="sidenav"></div>
-    <main style="flex:1;overflow-y:auto;padding:24px">
-      <!-- contenido -->
-    </main>
+    <main class="mts-flex-1"><!-- content (scrollable) --></main>
   </div>
 </div>
 ```
 
 ```js
-new MTS.Topbar('#topbar', {
-  brand: { logo: '...', title: 'Mi Dashboard' },
-  end: '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">...</button>'
-});
-
-new MTS.SideNav('#sidenav', {
-  items: [
-    { id: 'home',    label: 'Inicio',    icon: '...' },
-    { id: 'reports', label: 'Reportes',  icon: '...' },
-    { divider: true },
-    { id: 'config',  label: 'Config',    icon: '...' },
-  ],
-  onChange: function(e) { navigate(e.detail.id); }
-});
+new MTS.Topbar('#topbar', { brand: { logo: '...', title: 'My Dashboard' } });
+new MTS.SideNav('#sidenav', { items: [/* … */], onChange: function (e) { navigate(e.detail.id); } });
 ```
 
-## Uso sin JavaScript (HTML puro)
+---
 
-El Topbar también funciona como HTML puro usando las clases directamente:
+## Notes
 
-```html
-<header class="mts-topbar">
-  <div class="mts-topbar__brand">
-    <div class="mts-topbar__logo">
-      <img src="logo.svg" width="28" height="28">
-    </div>
-    <div class="mts-topbar__brand-info">
-      <div class="mts-topbar__title">Mi App</div>
-      <div class="mts-topbar__subtitle">v1.0.0</div>
-    </div>
-  </div>
-  <div class="mts-topbar__start">
-    <!-- contenido opcional izquierdo -->
-  </div>
-  <div class="mts-topbar__spacer"></div>
-  <div class="mts-topbar__end">
-    <button class="mts-btn mts-btn--secondary mts-btn--sm">Perfil</button>
-  </div>
-</header>
-```
+- The `selector` element becomes `.mts-topbar` directly — no extra wrapper is created.
+- A divider `<span class="mts-topbar__divider"></span>` can be placed inside any slot to separate action groups.
+- For `sticky`, the parent needs `height:100vh` (or similar) for sticky positioning to work.
 
-## Notas
+---
 
-- El elemento `selector` se convierte directamente en `.mts-topbar` — no crea un wrapper extra.
-- `getSlot('end')` retorna el Element, por lo que se pueden inyectar componentes MTS directamente (`new MTS.Button(tb.getSlot('end'), { ... })`).
-- El divider `<span class="mts-topbar__divider"></span>` puede usarse dentro de cualquier slot para separar grupos de acciones visualmente.
-- Para sticky, el elemento padre necesita `height:100vh` o similar para que el sticky funcione correctamente.
+## Changelog
+
+### Initial
+- Top bar with brand (logo/title/subtitle/href/onClick), start/center/end slots, sticky/shadow/border options,
+  CSS-only usage, `--mts-topbar-*` variables, and `setBrand` / `setStart` / `setEnd` / `setCenter` / `getSlot`.

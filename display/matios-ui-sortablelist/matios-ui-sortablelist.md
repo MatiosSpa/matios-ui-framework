@@ -1,11 +1,10 @@
 # MTS.SortableList
 
-🇬🇧 Drag-and-drop sortable list with numbered items, move buttons, icons, avatars, badges and read-only mode.
-🇪🇸 Lista reordenable con drag & drop, ítems numerados, botones de movimiento, íconos, avatares, badges y modo lectura.
+Drag-and-drop sortable list with numbered items, move buttons, icons, avatars, badges and a read-only mode.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,75 +14,26 @@
 
 ---
 
-## Options / Opciones
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `items` | `array` | `[]` | 🇬🇧 Item list (see schema) / 🇪🇸 Lista de ítems |
-| `variant` | `string` | `'default'` | `'default'` · `'flush'` · `'compact'` |
-| `numbered` | `boolean` | `false` | 🇬🇧 Show order numbers / 🇪🇸 Mostrar números de orden |
-| `showHandle` | `boolean` | `true` | 🇬🇧 Show drag handle / 🇪🇸 Mostrar asa de arrastre |
-| `locked` | `boolean` | `false` | 🇬🇧 Read-only — no drag / 🇪🇸 Modo lectura — sin drag |
-| `moveButtons` | `boolean` | `false` | 🇬🇧 Show ↑ ↓ move buttons / 🇪🇸 Mostrar botones ↑ ↓ |
-| `onReorder` | `function` | — | 🇬🇧 `({ items, fromIndex, toIndex }) => {}` Fires on reorder / 🇪🇸 Se dispara al reordenar |
-| `onItemClick` | `function` | — | 🇬🇧 `({ item, index }) => {}` Fires on item click / 🇪🇸 Se dispara al hacer click |
-
-### Item schema / Esquema de ítem
-
-| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
-|----------|------|--------------------------------------|
-| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
-| `title` | `string` | 🇬🇧 Item title / 🇪🇸 Título del ítem |
-| `description` | `string` | 🇬🇧 Subtitle text / 🇪🇸 Texto subtítulo |
-| `meta` | `string` | 🇬🇧 Right-side metadata / 🇪🇸 Metadata lado derecho |
-| `icon` | `string` | 🇬🇧 SVG icon HTML / 🇪🇸 HTML del ícono SVG |
-| `avatar` | `string` | 🇬🇧 Avatar initials / 🇪🇸 Iniciales del avatar |
-| `badge` | `object` | `{ label, variant }` |
-| `disabled` | `boolean` | 🇬🇧 Disable drag for this item / 🇪🇸 Deshabilitar drag en este ítem |
-
----
-
-## Events / Eventos
+## Usage
 
 ```js
-new MTS.SortableList('#my-list', {
-  items: [...],
-  // Fires when items are reordered / Se dispara al reordenar
-  onReorder: (e) => {
-    console.log(e.detail.items);     // → new ordered array
-    console.log(e.detail.fromIndex); // → 2
-    console.log(e.detail.toIndex);   // → 0
-  },
-  // Fires when an item is clicked / Se dispara al hacer click en un ítem
-  onItemClick: (e) => {
-    console.log(e.detail.item.id);
-    console.log(e.detail.index);
-  },
-});
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-// Basic sortable / Básico reordenable
+// Basic sortable
 const list = new MTS.SortableList('#my-list', {
   variant:     'default',
   numbered:    true,
   showHandle:  true,
   moveButtons: true,
   items: [
-    { id: '1', title: 'Design review',   description: 'Ana García',  badge: { label: 'Pending', variant: 'warning' } },
-    { id: '2', title: 'Backend API',     description: 'Pedro López',  badge: { label: 'In progress', variant: 'primary' } },
-    { id: '3', title: 'QA testing',      description: 'Laura Sánchez', disabled: true },
-    { id: '4', title: 'Deploy to prod',  description: 'Carlos Ruiz',  badge: { label: 'Blocked', variant: 'danger' } },
+    { id: '1', title: 'Design review',  description: 'Ana García',    badge: { label: 'Pending',     variant: 'warning' } },
+    { id: '2', title: 'Backend API',    description: 'Pedro López',   badge: { label: 'In progress', variant: 'primary' } },
+    { id: '3', title: 'QA testing',     description: 'Laura Sánchez', disabled: true },
+    { id: '4', title: 'Deploy to prod', description: 'Carlos Ruiz',   badge: { label: 'Blocked',     variant: 'danger' } },
   ],
-  onReorder:   (e) => saveOrder(e.detail.items),
-  onItemClick: (e) => openDetail(e.detail.item),
+  onReorder:   function (e) { saveOrder(e.detail.items); },
+  onItemClick: function (e) { openDetail(e.detail.item); },
 });
 
-// With icons and metadata / Con íconos y metadata
+// With icons and metadata
 new MTS.SortableList('#my-list', {
   variant: 'compact',
   items: [
@@ -91,54 +41,89 @@ new MTS.SortableList('#my-list', {
     { id: '2', title: 'Feature request', icon: '🟡', meta: 'P2 · 4h' },
     { id: '3', title: 'Documentation',   icon: '🟢', meta: 'P3 · 1h' },
   ],
-  onReorder: (e) => console.log(e.detail.items),
 });
 
-// Read-only locked / Solo lectura
-new MTS.SortableList('#my-list', {
-  locked: true,
-  items:  [...],
-});
+// Read-only (locked)
+new MTS.SortableList('#my-list', { locked: true, items: [/* … */] });
 ```
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `items` | `array` | `[]` | Item list (see schema below) |
+| `variant` | `string` | `'default'` | `'default'` · `'flush'` · `'compact'` |
+| `numbered` | `boolean` | `false` | Show order numbers |
+| `showHandle` | `boolean` | `true` | Show the drag handle |
+| `locked` | `boolean` | `false` | Read-only — no drag |
+| `moveButtons` | `boolean` | `false` | Show ↑ ↓ move buttons |
+| `onReorder` | `function` | — | Fires on reorder — `({ items, fromIndex, toIndex })` |
+| `onItemClick` | `function` | — | Fires on item click — `({ item, index })` |
+
+### Item schema
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Unique identifier |
+| `title` | `string` | Item title |
+| `description` | `string` | Subtitle text |
+| `meta` | `string` | Right-side metadata |
+| `icon` | `string` | SVG icon HTML |
+| `avatar` | `string` | Avatar initials |
+| `badge` | `object` | `{ label, variant }` |
+| `disabled` | `boolean` | Disable drag for this item |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `getItems()` | Get the current order |
+| `setItems(array)` | Replace all items |
+| `addItem(item[, index])` | Add an item (optionally at an index) |
+| `removeItem(id)` | Remove an item by id |
+| `updateItem(id, patch)` | Update an item |
+| `lock()` / `unlock()` | Toggle read-only mode |
+| `on(event, cb)` / `off(event, cb)` | Register / remove listeners (`'reorder'`, `'itemClick'`) |
+
 ```js
-const list = new MTS.SortableList('#my-list', { items: [...] });
-
-// Get current order / Obtener orden actual
-list.getItems()
-
-// Replace all items / Reemplazar todos los ítems
-list.setItems([...])
-
-// Add item / Agregar ítem
-list.addItem({ id: 'new', title: 'New item' })
-list.addItem({ id: 'top', title: 'At top' }, 0)  // at index / en índice
-
-// Remove / update / Eliminar / actualizar
-list.removeItem('new')
-list.updateItem('1', { title: 'Updated title' })
-
-// Lock / unlock / Bloquear / desbloquear
-list.lock()
-list.unlock()
-
-// Register listeners / Registrar listeners
-list.on('reorder',   (e) => console.log(e.detail.items))
-list.on('itemClick', (e) => console.log(e.detail.item))
-list.off('reorder',  handler)
+const list = new MTS.SortableList('#my-list', { items: [/* … */] });
+list.addItem({ id: 'top', title: 'At top' }, 0);
+list.updateItem('1', { title: 'Updated title' });
+list.on('reorder', function (e) { console.log(e.detail.items); });
 ```
 
 ---
 
-## DOM Events / Eventos DOM
+## Events
+
+| Method | Payload | When |
+|--------|---------|------|
+| `onReorder(fn)` / `on('reorder', fn)` | `{ items, fromIndex, toIndex }` | Items are reordered |
+| `onItemClick(fn)` / `on('itemClick', fn)` | `{ item, index }` | An item is clicked |
+
+Also dispatched as DOM events:
 
 ```js
-el.addEventListener('mts:sortable:reorder',   (e) => console.log(e.detail));
-el.addEventListener('mts:sortable:itemclick', (e) => console.log(e.detail));
+el.addEventListener('mts:sortable:reorder',   function (e) { console.log(e.detail); });
+el.addEventListener('mts:sortable:itemclick', function (e) { console.log(e.detail); });
 ```
 
 ---
+
+## Accessibility
+
+- Move buttons (`moveButtons`) provide a keyboard-operable alternative to drag-and-drop — keep them enabled when
+  pointer dragging is the only other affordance.
+- A `disabled` item or `locked` list is not draggable; reflect that state visually and in any status text.
+
+---
+
+## Changelog
+
+### Initial
+- Sortable list with drag-and-drop, numbered items, drag handle, ↑↓ move buttons, icons/avatars/badges, locked
+  read-only mode, and full item CRUD (`addItem` / `removeItem` / `updateItem` / `setItems`).

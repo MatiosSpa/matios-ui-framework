@@ -1,11 +1,10 @@
 # MTS.Tabs
 
-🇬🇧 Tab component with underline, pill and card variants, horizontal and vertical layout, lazy rendering, icons and badges.
-🇪🇸 Componente de pestañas con variantes underline, pill y card, layout horizontal y vertical, renderizado lazy, íconos y badges.
+Tab component with underline, pill and card variants, horizontal and vertical layout, lazy rendering, icons and badges.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,142 +14,104 @@
 
 ---
 
-## Options / Opciones
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `tabs` | `array` | `[]` | 🇬🇧 Tab items (see below) / 🇪🇸 Ítems de pestañas |
-| `active` | `string` | first tab | 🇬🇧 Initially active tab ID / 🇪🇸 ID de la pestaña activa inicial |
-| `variant` | `string` | `'underline'` | `'underline'` · `'pill'` · `'card'` · `'bordered'` |
-| `direction` | `string` | `'horizontal'` | `'horizontal'` · `'vertical'` |
-| `lazy` | `boolean` | `false` | 🇬🇧 Render panel content only when first activated / 🇪🇸 Renderizar panel solo al activarse por primera vez |
-| `border` | `boolean` | `true` | 🇬🇧 Show separator border between nav and panels / 🇪🇸 Mostrar borde separador nav/paneles |
-| `borderWidth` | `string` | `'2px'` | 🇬🇧 Separator border width / 🇪🇸 Grosor del borde separador |
-| `height` | `string` | `'360px'` | 🇬🇧 Panel height: `'auto'` · `'stretch'` · `'200px'` / 🇪🇸 Alto del panel |
-| `stretch` | `boolean` | `false` | 🇬🇧 Alias for `height:'stretch'` / 🇪🇸 Alias de `height:'stretch'` |
-| `navWidth` | `string` | `null` | 🇬🇧 Nav width in vertical mode (e.g. `'200px'`) / 🇪🇸 Ancho del nav en vertical |
-| `panelBorder` | `boolean` | `true` | 🇬🇧 Left border on panel in vertical mode / 🇪🇸 Borde izquierdo en panel vertical |
-| `onChange` | `function` | — | 🇬🇧 Fires when active tab changes / 🇪🇸 Se dispara al cambiar la pestaña activa |
-
-### Tab item schema / Esquema de ítem
-
-| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
-|----------|------|--------------------------------------|
-| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
-| `label` | `string` | 🇬🇧 Tab label / 🇪🇸 Texto de la pestaña |
-| `content` | `string` | 🇬🇧 Panel HTML content / 🇪🇸 Contenido HTML del panel |
-| `icon` | `string` | 🇬🇧 Icon HTML (optional) / 🇪🇸 HTML del ícono (opcional) |
-| `badge` | `string\|number` | 🇬🇧 Badge text (optional) / 🇪🇸 Texto del badge (opcional) |
-| `disabled` | `boolean` | 🇬🇧 Disables the tab / 🇪🇸 Deshabilita la pestaña |
-
----
-
-## Events / Eventos
+## Usage
 
 ```js
-new MTS.Tabs('#my-tabs', {
-  tabs: [...],
-  // Fires when active tab changes / Se dispara al cambiar la pestaña activa
-  onChange: (e) => {
-    console.log(e.detail.id);  // → 'tab-2'
-    console.log(e.detail.tab); // → { id, label, content, ... }
-  },
-});
-```
-
----
-
-## HTML Usage / Uso HTML
-
-```html
-<div id="my-tabs"></div>
-
-<script>
-  new MTS.Tabs('#my-tabs', {
-    variant: 'underline',
-    tabs: [
-      { id: 'overview', label: 'Overview',  content: '<p>Overview content</p>' },
-      { id: 'details',  label: 'Details',   content: '<p>Details content</p>' },
-      { id: 'history',  label: 'History',   content: '<p>History content</p>', disabled: true },
-    ],
-    onChange: (e) =&gt; console.log(e.detail.id),
-  });
-</script>
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-// Underline (default) / Underline (por defecto)
+// Underline (default)
 new MTS.Tabs('#tabs-basic', {
   variant: 'underline',
   tabs: [
     { id: 'a', label: 'Tab A', content: '<p>Content A</p>' },
     { id: 'b', label: 'Tab B', content: '<p>Content B</p>' },
-    { id: 'c', label: 'Tab C', content: '<p>Content C</p>' },
+    { id: 'c', label: 'Tab C', content: '<p>Content C</p>', disabled: true },
   ],
-  onChange: (e) => console.log(e.detail.id),
+  onChange: function (e) { console.log(e.detail.id); },
 });
 
-// Pill variant / Variante pill
-new MTS.Tabs('#tabs-pill', {
-  variant: 'pill',
-  active:  'b',
-  tabs: [...],
-});
+// Pill variant with a preselected tab
+new MTS.Tabs('#tabs-pill', { variant: 'pill', active: 'b', tabs: [/* … */] });
 
-// Vertical layout / Layout vertical
-new MTS.Tabs('#tabs-vertical', {
-  variant:   'card',
-  direction: 'vertical',
-  navWidth:  '180px',
-  height:    '300px',
-  tabs: [...],
-});
+// Vertical layout
+new MTS.Tabs('#tabs-vertical', { variant: 'card', direction: 'vertical', navWidth: '180px', height: '300px', tabs: [/* … */] });
 
-// With icons and badges / Con íconos y badges
+// With icons and badges
 new MTS.Tabs('#tabs-icons', {
-  tabs: [
-    { id: 'inbox', label: 'Inbox', badge: 5,     icon: '<svg>...</svg>', content: '...' },
-    { id: 'sent',  label: 'Sent',  badge: null,  icon: '<svg>...</svg>', content: '...' },
-  ],
+  tabs: [{ id: 'inbox', label: 'Inbox', badge: 5, icon: '<svg>...</svg>', content: '...' }],
 });
 ```
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `tabs` | `array` | `[]` | Tab items (see schema below) |
+| `active` | `string` | first tab | Initially active tab id |
+| `variant` | `string` | `'underline'` | `'underline'` · `'pill'` · `'card'` · `'bordered'` |
+| `direction` | `string` | `'horizontal'` | `'horizontal'` · `'vertical'` |
+| `lazy` | `boolean` | `false` | Render a panel only when first activated |
+| `border` | `boolean` | `true` | Show the separator border between nav and panels |
+| `borderWidth` | `string` | `'2px'` | Separator border width |
+| `height` | `string` | `'360px'` | Panel height: `'auto'` · `'stretch'` · e.g. `'200px'` |
+| `stretch` | `boolean` | `false` | Alias for `height: 'stretch'` |
+| `navWidth` | `string` | `null` | Nav width in vertical mode (e.g. `'200px'`) |
+| `panelBorder` | `boolean` | `true` | Left border on the panel in vertical mode |
+| `onChange` | `function` | — | Fires when the active tab changes — `{ id, tab }` |
+
+### Tab item schema
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Unique identifier |
+| `label` | `string` | Tab label |
+| `content` | `string` | Panel HTML content |
+| `icon` | `string` | Icon HTML (optional) |
+| `badge` | `string \| number` | Badge text (optional) |
+| `disabled` | `boolean` | Disables the tab |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `setActive(id)` | Activate a tab programmatically |
+| `addTab(tab)` | Add a tab |
+| `removeTab(id)` | Remove a tab |
+| `on(event, cb)` | Listen to `'change'` |
+| `destroy()` | Destroy the instance |
+
 ```js
-const tabs = new MTS.Tabs('#my-tabs', { ... });
-
-// Set active tab programmatically / Activar pestaña programáticamente
-tabs.setActive('tab-id')
-
-// Add a tab / Agregar una pestaña
-tabs.addTab({ id: 'new', label: 'New Tab', content: '<p>...</p>' })
-
-// Remove a tab / Eliminar una pestaña
-tabs.removeTab('tab-id')
-
-// Register event listener / Registrar listener
-tabs.on('change', (e) => console.log(e.detail.id))
-
-// Destroy / Destruir
-tabs.destroy()
+const tabs = new MTS.Tabs('#my-tabs', { tabs: [/* … */] });
+tabs.setActive('details');
+tabs.addTab({ id: 'new', label: 'New Tab', content: '<p>...</p>' });
 ```
 
 ---
 
-## DOM Event / Evento DOM
+## Events
+
+| Method | DOM event | Payload |
+|--------|-----------|---------|
+| `onChange` | `mts:tabs:change` | `{ id, tab }` |
 
 ```js
 document.getElementById('my-tabs')
-  .addEventListener('mts:tabs:change', (e) => {
-    console.log(e.detail.id);  // → active tab id
-  });
+  .addEventListener('mts:tabs:change', function (e) { console.log(e.detail.id); });
 ```
 
 ---
+
+## Accessibility
+
+- Tabs are keyboard-navigable (arrow keys move between tabs, `Enter`/`Space` activate); a `disabled` tab is skipped.
+- Each panel is associated with its tab and the active state is exposed to assistive tech.
+
+---
+
+## Changelog
+
+### Initial
+- Tabs with underline/pill/card/bordered variants, horizontal/vertical layout, lazy panels, icons and badges,
+  configurable height/nav width, `onChange`, and `setActive` / `addTab` / `removeTab`.

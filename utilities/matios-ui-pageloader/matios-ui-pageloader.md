@@ -1,150 +1,107 @@
 # MTS.PageLoader
 
-Indicador de carga de página estilo NProgress. Barra fija en el borde superior o inferior de la pantalla con avance automático (trickle). Soporta tres modos: solo barra, overlay completo con spinner o progress, o ambos simultáneamente.
+NProgress-style page loading indicator. A fixed bar at the top or bottom of the screen with automatic trickle. Three modes: bar only, full overlay with spinner or progress, or both at once.
 
-**Dependencias:** `MTS.Progress`, `MTS.Spinner`
+**Dependencies:** `MTS.Progress`, `MTS.Spinner`.
 
 ---
 
-## Instalación
+## Installation
 
 ```html
-<link rel="stylesheet" href="matios-ui-progress.css">
-<link rel="stylesheet" href="matios-ui-spinner.css">
-<link rel="stylesheet" href="matios-ui-pageloader.css">
+<link rel="stylesheet" href="forms/matios-ui-progress/matios-ui-progress.css">
+<link rel="stylesheet" href="forms/matios-ui-spinner/matios-ui-spinner.css">
+<link rel="stylesheet" href="utilities/matios-ui-pageloader/matios-ui-pageloader.css">
 
-<script src="matios-ui-progress.js"></script>
-<script src="matios-ui-spinner.js"></script>
-<script src="matios-ui-pageloader.js"></script>
+<script src="forms/matios-ui-progress/matios-ui-progress.js"></script>
+<script src="forms/matios-ui-spinner/matios-ui-spinner.js"></script>
+<script src="utilities/matios-ui-pageloader/matios-ui-pageloader.js"></script>
 ```
 
 ---
 
-## Opciones
+## Usage
 
-| Opción | Tipo | Default | Descripción |
+```js
+// Bar
+const loader = new MTS.PageLoader({ mode: 'bar' });
+loader.start();
+fetch('/api/data')
+  .then(function (res) { return res.json(); })
+  .then(function (data) { loader.done(); })
+  .catch(function () { loader.error(); });
+
+// Blocker (overlay with spinner)
+new MTS.PageLoader({ mode: 'blocker', backdropOpacity: 0.7, blur: true, loader: { variant: 'ring', size: 'lg' } });
+
+// Blocker with a progress circle
+new MTS.PageLoader({ mode: 'blocker', loader: { type: 'circle', size: 'lg', variant: 'primary' } });
+
+// Bar + blocker at once
+new MTS.PageLoader({ mode: 'both', position: 'top', variant: 'primary' });
+
+// Bottom bar, success variant
+new MTS.PageLoader({ mode: 'bar', position: 'bottom', variant: 'success', trickleSpeed: 600 });
+```
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `mode` | `string` | `'bar'` | Modo de display: `'bar'`, `'blocker'` o `'both'` |
-| `position` | `string` | `'top'` | Posición de la barra: `'top'` o `'bottom'` |
-| `variant` | `string` | `'primary'` | Variante de color para barra y loader |
-| `minimum` | `number` | `0.08` | Valor inicial al llamar `start()` (0–1) |
-| `trickle` | `boolean` | `true` | Activa el avance automático |
-| `trickleSpeed` | `number` | `400` | Intervalo en ms entre cada paso de trickle |
-| `speed` | `number` | `200` | Duración en ms del fade out al completar |
-| `blur` | `boolean` | `false` | Agrega efecto blur al backdrop del blocker |
-| `backdropOpacity` | `number` | `0.85` | Opacidad del fondo del blocker (0–1) |
-| `bar` | `object` | `null` | Opciones adicionales para `MTS.Progress` (barra) |
-| `loader` | `object` | `null` | Opciones para el loader central. Sin `type` → `MTS.Spinner` (`variant` = tipo: `ring`, `dual`, `bars`…). Con `type: 'circle'` → `MTS.Progress` (`variant` = color). |
+| `mode` | `string` | `'bar'` | `'bar'` · `'blocker'` · `'both'` |
+| `position` | `string` | `'top'` | Bar position: `'top'` · `'bottom'` |
+| `variant` | `string` | `'primary'` | Color variant for bar and loader |
+| `minimum` | `number` | `0.08` | Initial value on `start()` (0–1) |
+| `trickle` | `boolean` | `true` | Enable automatic advance |
+| `trickleSpeed` | `number` | `400` | Interval (ms) between trickle steps |
+| `speed` | `number` | `200` | Fade-out duration (ms) on complete |
+| `blur` | `boolean` | `false` | Add a blur effect to the blocker backdrop |
+| `backdropOpacity` | `number` | `0.85` | Blocker backdrop opacity (0–1) |
+| `bar` | `object` | `null` | Extra options for the `MTS.Progress` bar |
+| `loader` | `object` | `null` | Center loader. Without `type` → `MTS.Spinner` (`variant` = type). With `type: 'circle'` → `MTS.Progress` (`variant` = color). |
 
 ---
 
 ## API
 
-```js
-const loader = new MTS.PageLoader({ mode: 'bar' });
-
-loader.start()       // Muestra el loader y comienza el trickle automático
-loader.done()        // Completa al 100% y desaparece con fade out
-loader.error()       // Completa en color danger y desaparece
-loader.set(0.6)      // Establece el progreso manualmente (0–1)
-loader.increment(0.1)// Suma al valor actual
-loader.destroy()     // Destruye el componente y limpia el DOM
-```
-
----
-
-## Uso básico
+| Method | Description |
+|--------|-------------|
+| `start()` | Show the loader and begin the automatic trickle |
+| `done()` | Complete to 100% and fade out |
+| `error()` | Complete in the danger color and fade out |
+| `set(n)` | Set progress manually (0–1) |
+| `increment(n)` | Add to the current value |
+| `destroy()` | Destroy the component and clear the DOM |
 
 ```js
 const loader = new MTS.PageLoader({ mode: 'bar' });
-
 loader.start();
-
-fetch('/api/data')
-  .then(function(res) { return res.json(); })
-  .then(function(data) {
-    loader.done();
-  })
-  .catch(function() {
-    loader.error();
-  });
-```
-
----
-
-## Modo blocker (overlay con spinner)
-
-```js
-const loader = new MTS.PageLoader({
-  mode: 'blocker',
-  backdropOpacity: 0.7,
-  blur: true,
-  loader: { variant: 'ring', size: 'lg' },
-});
-
-loader.start();
-// ... operación async
+loader.set(0.6);
 loader.done();
 ```
 
 ---
 
-## Modo blocker con progress circle
+## Notes
 
-```js
-const loader = new MTS.PageLoader({
-  mode: 'blocker',
-  loader: {
-    type:    'circle',
-    size:    'lg',
-    variant: 'primary',
-  },
-});
-
-loader.start();
-loader.set(0.4);
-loader.done();
-```
+- The bar and blocker are injected into `document.body` automatically — no prior markup required.
+- The trickle uses natural damping (`remaining * 0.1`) — it slows as it nears 1 and never reaches 100% on its own;
+  only `done()` / `error()` complete it.
+- `error()` adds `mts-pageloader__bar-wrap--error`, overriding the fill color to danger.
+- `backdropOpacity` controls the backdrop opacity without affecting the center spinner/progress; `blur: true` applies
+  `backdrop-filter: blur(8px)`.
 
 ---
 
-## Modo bar + blocker simultáneos
+## Accessibility
 
-```js
-const loader = new MTS.PageLoader({
-  mode: 'both',
-  position: 'top',
-  variant: 'primary',
-});
-
-loader.start();
-// ... carga
-loader.done();
-```
+- For the blocker mode, mark the page region `aria-busy="true"` while loading and restore focus when done.
 
 ---
 
-## Barra en bottom con variante success
+## Changelog
 
-```js
-const loader = new MTS.PageLoader({
-  mode: 'bar',
-  position: 'bottom',
-  variant: 'success',
-  trickleSpeed: 600,
-});
-
-loader.start();
-```
-
----
-
-## Notas
-
-- La barra y el blocker se inyectan automáticamente en `document.body`. No requieren markup HTML previo.
-- El trickle usa amortiguación natural (`remaining * 0.1`) — el avance se ralentiza conforme se acerca a 1 sin llegar nunca al 100% automáticamente. Solo `done()` o `error()` completan al máximo.
-- `error()` añade la clase `mts-pageloader__bar-wrap--error` que sobreescribe el color del fill a `danger`.
-- `backdropOpacity` controla la opacidad del fondo sin afectar al spinner o progress central.
-- Con `blur: true`, el backdrop aplica `backdrop-filter: blur(8px)`.
-
----
+### 2026-05-17
+- Install paths corrected to full paths from the framework root.

@@ -1,11 +1,10 @@
 # MTS.Select
 
-🇬🇧 Select component with search, multi-select, option groups, icons and external async search.
-🇪🇸 Componente select con búsqueda, multi-selección, grupos de opciones, íconos y búsqueda asíncrona externa.
+Select component with search, multi-select, option groups, icons and external async search.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,84 +14,50 @@
 
 ---
 
-## Options / Opciones
+## Usage
 
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `options` | `array` | `[]` | 🇬🇧 `[{ value, label, group?, icon?, disabled? }]` |
-| `value` | `any` | `null` | 🇬🇧 Initial selected value / 🇪🇸 Valor seleccionado inicialmente |
-| `label` | `string` | `''` | 🇬🇧 Field label / 🇪🇸 Etiqueta del campo |
-| `placeholder` | `string` | `'Selecciona...'` | 🇬🇧 Placeholder text / 🇪🇸 Texto de marcador |
-| `hint` | `string` | `''` | 🇬🇧 Helper text / 🇪🇸 Texto de ayuda |
-| `multiple` | `boolean` | `false` | 🇬🇧 Allow multiple selection / 🇪🇸 Permitir selección múltiple |
-| `searchable` | `boolean` | `false` | 🇬🇧 Enable search inside list / 🇪🇸 Habilitar búsqueda en la lista |
-| `clearable` | `boolean` | `false` | 🇬🇧 Show clear button / 🇪🇸 Mostrar botón limpiar |
-| `disabled` | `boolean` | `false` | 🇬🇧 Disables interaction / 🇪🇸 Deshabilita la interacción |
-| `maxSelect` | `number` | `null` | 🇬🇧 Max selections in multi mode / 🇪🇸 Máximo de selecciones en modo multi |
-| `debounce` | `number` | `300` | 🇬🇧 Debounce delay for `onSearch` in ms / 🇪🇸 Delay debounce para `onSearch` en ms |
-| `minChars` | `number` | `1` | 🇬🇧 Min chars to trigger `onSearch` / 🇪🇸 Mínimo de caracteres para disparar `onSearch` |
-| `onSearch` | `function` | — | 🇬🇧 Async search: `async (query) => [{value, label}]` / 🇪🇸 Búsqueda asíncrona |
-| `onChange` | `function` | — | 🇬🇧 Fires on selection change / 🇪🇸 Se dispara al cambiar la selección |
-
----
-
-## Events / Eventos
-
-🇬🇧 Use `onChange` in the constructor. This is the recommended approach.
-🇪🇸 Usa `onChange` en el constructor. Este es el enfoque recomendado.
+### JavaScript
 
 ```js
-new MTS.Select('#my-select', {
-  options: [...],
-  // Fires when selection changes / Se dispara al cambiar la selección
-  onChange: (e) => {
-    console.log(e.detail.value);   // → selected value / valor seleccionado
-    console.log(e.detail.text);    // → selected label / label seleccionado
-    console.log(e.detail.option);  // → full option object / objeto opción completo
+// Basic
+const sel = new MTS.Select('#my-select', {
+  label: 'Select an option',
+  value: 'a',
+  options: [
+    { value: 'a', label: 'Option A' },
+    { value: 'b', label: 'Option B', disabled: true },
+    { value: 'c', label: 'Option C' },
+  ],
+  onChange: function (e) { console.log(e.detail.value, e.detail.text); },
+});
+
+// Option groups
+new MTS.Select('#grouped', {
+  options: [
+    { value: 'a1', label: 'Alpha 1', group: 'Group A' },
+    { value: 'a2', label: 'Alpha 2', group: 'Group A' },
+    { value: 'b1', label: 'Beta 1',  group: 'Group B' },
+  ],
+});
+
+// Async external search
+new MTS.Select('#users', {
+  label:      'Search users',
+  searchable: true,
+  minChars:   2,
+  debounce:   400,
+  onSearch: async function (query) {
+    const res = await fetch('/api/users?q=' + query);
+    return res.json(); // must return [{ value, label }]
   },
+  onChange: function (e) { console.log(e.detail.value); },
 });
 ```
 
-🇬🇧 For multi-select, the event detail contains:
-🇪🇸 Para multi-select, el detalle del evento contiene:
-
-```js
-onChange: (e) => {
-  console.log(e.detail.value);   // → ['val1', 'val2']
-  console.log(e.detail.text);    // → ['Label 1', 'Label 2']
-  console.log(e.detail.options); // → [{value, label}, ...]
-},
-```
-
----
-
-## HTML Usage / Uso HTML
+### HTML with `data-*`
 
 ```html
-<!-- Basic select / Select básico -->
-<div id="sel-country"
-  data-label="Country"
-  data-placeholder="Select a country..."
-  data-clearable>
-</div>
-
-<script>
-  new MTS.Select('#sel-country', {
-    options: [
-      { value: 'cl', label: 'Chile' },
-      { value: 'ar', label: 'Argentina' },
-      { value: 'mx', label: 'México' },
-    ],
-    onChange: (e) => console.log(e.detail.value),
-  });
-</script>
-
-<!-- Multi-select / Multi-selección -->
-<div id="sel-tags"
-  data-label="Technologies"
-  data-multiple
-  data-searchable>
-</div>
+<div id="sel-tags" data-label="Technologies" data-multiple data-searchable></div>
 
 <script>
   new MTS.Select('#sel-tags', {
@@ -101,110 +66,88 @@ onChange: (e) => {
       { value: 'ts',  label: 'TypeScript' },
       { value: 'css', label: 'CSS' },
     ],
-    value:    ['js'],
-    onChange: (e) => console.log(e.detail.value),
+    value: ['js'],
   });
 </script>
 ```
 
 ---
 
-## JavaScript Usage / Uso JavaScript
+## Options
 
-```js
-// Basic / Básico
-const sel = new MTS.Select('#my-select', {
-  // Options list / Lista de opciones
-  options: [
-    { value: 'a', label: 'Option A' },
-    { value: 'b', label: 'Option B', disabled: true },
-    { value: 'c', label: 'Option C' },
-  ],
-
-  // Initial value / Valor inicial
-  value: 'a',
-
-  // Field label / Etiqueta del campo
-  label: 'Select an option',
-
-  // Fires on change / Se dispara al cambiar
-  onChange: (e) => console.log(e.detail.value, e.detail.text),
-});
-
-// With option groups / Con grupos de opciones
-new MTS.Select('#my-select', {
-  options: [
-    { value: 'a1', label: 'Alpha 1', group: 'Group A' },
-    { value: 'a2', label: 'Alpha 2', group: 'Group A' },
-    { value: 'b1', label: 'Beta 1',  group: 'Group B' },
-  ],
-  label: 'Grouped select',
-});
-
-// With async external search / Con búsqueda externa asíncrona
-new MTS.Select('#my-select', {
-  label:     'Search users',
-  searchable: true,
-  minChars:   2,
-  debounce:   400,
-  // Called by the component on each keystroke
-  // El componente lo llama en cada tecla
-  onSearch: async (query) => {
-    const res = await fetch('/api/users?q=' + query);
-    return res.json(); // must return [{value, label}] / debe retornar [{value, label}]
-  },
-  onChange: (e) => console.log(e.detail.value),
-});
-```
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `options` | `array` | `[]` | `[{ value, label, group?, icon?, disabled? }]` |
+| `value` | `any` | `null` | Initial selected value |
+| `label` | `string` | `''` | Field label |
+| `placeholder` | `string` | localized | Placeholder text |
+| `hint` | `string` | `''` | Helper text |
+| `multiple` | `boolean` | `false` | Allow multiple selection |
+| `searchable` | `boolean` | `false` | Enable search inside the list |
+| `clearable` | `boolean` | `false` | Show the clear button |
+| `disabled` | `boolean` | `false` | Disables interaction |
+| `maxSelect` | `number` | `null` | Max selections in multi mode |
+| `debounce` | `number` | `300` | Debounce delay for `onSearch` (ms) |
+| `minChars` | `number` | `1` | Min chars to trigger `onSearch` |
+| `onSearch` | `function` | — | Async search: `async (query) → [{ value, label }]` |
+| `onChange` | `function` | — | Fires on selection change |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `getValue()` | Get the value — `string \| null` (single) or `string[]` (multiple) |
+| `getText()` | Get the selected label(s) |
+| `setValue(value)` | Set the value programmatically |
+| `clear()` | Clear the selection |
+| `setOptions(array[, enable])` | Replace the options list (`enable=true` also enables the field) |
+| `open()` / `close()` / `toggle()` | Control the dropdown |
+| `enable()` / `disable()` | Enable / disable interaction |
+| `destroy()` | Destroy the instance |
+
 ```js
-const sel = new MTS.Select('#my-select', { ... });
-
-// Get / set value / Obtener / establecer valor
-sel.getValue()         // → value | [value, ...]
-sel.getValue()         // → string | null (single) | string[] (multiple)
-sel.setText()          // → selected label string / label del valor seleccionado
-sel.setValue('b')
-
-// Clear selection / Limpiar selección
-sel.clear()
-
-// Replace options list / Reemplazar lista de opciones
-sel.setOptions([{ value: 'x', label: 'X' }])
-sel.setOptions([...], true) // true = also enable / true = también habilita
-
-// Open / close / toggle dropdown / Abrir / cerrar / alternar dropdown
-sel.open()
-sel.close()
-sel.toggle()
-
-// Enable / disable / Habilitar / deshabilitar
-sel.enable()
-sel.disable()
-
-// Destroy / Destruir
-sel.destroy()
+const sel = new MTS.Select('#my-select', { options: [/* … */] });
+sel.setValue('b');
+sel.setOptions([{ value: 'x', label: 'X' }]);
 ```
 
 ---
 
-## DOM Events / Eventos DOM
+## Events
+
+| Method / event | DOM event | Payload |
+|----------------|-----------|---------|
+| `onChange` | `mts:select:change` | single: `{ value, text, option }` · multiple: `{ value, text, options }` |
+| — | `mts:select:open` | — |
+| — | `mts:select:close` | — |
 
 ```js
 document.getElementById('my-select')
-  .addEventListener('mts:select:change', (e) => {
-    console.log(e.detail.value);
-  });
+  .addEventListener('mts:select:change', function (e) { console.log(e.detail.value); });
 ```
 
-| Event / Evento | DOM Namespace |
-|----------------|---------------|
-| `onChange` | `mts:select:change` |
-| — | `mts:select:open` |
-| — | `mts:select:close` |
+---
+
+## CSS Variables
+
+Uses the framework base tokens for surface, border, text and accent colors, plus the popup/dropdown surface and
+shadow tokens. Theme via `data-mts-mode` / `data-mts-accent`.
 
 ---
+
+## Accessibility
+
+- The trigger is keyboard-operable: open with `Enter`/`Space`/arrows, navigate options with arrows, select with
+  `Enter`, close with `Esc`.
+- In `searchable` mode the search field receives focus on open; selected options are announced.
+- Provide a `label` (or `aria-label`) so the control has an accessible name.
+
+---
+
+## Changelog
+
+### Initial
+- Select with single/multiple selection, in-list search, async external search (`onSearch` + debounce/minChars),
+  option groups, icons, per-option disable, `maxSelect`, clearable, and full programmatic API.

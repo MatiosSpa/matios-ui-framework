@@ -1,11 +1,10 @@
 # MTS.Accordion
 
-🇬🇧 Expandable sections component with single or multiple open panels, flush mode and icons.
-🇪🇸 Componente de secciones expandibles con panel único o múltiple abierto, modo flush e íconos.
+Expandable sections component with single or multiple open panels, flush mode and icons.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,168 +14,101 @@
 
 ---
 
-## Options / Opciones
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `items` | `array` | `[]` | 🇬🇧 Accordion items (see below) / 🇪🇸 Ítems del acordeón |
-| `multiple` | `boolean` | `false` | 🇬🇧 Allow multiple panels open simultaneously / 🇪🇸 Permitir múltiples paneles abiertos |
-| `flush` | `boolean` | `false` | 🇬🇧 No card border — flat style / 🇪🇸 Sin borde card — estilo plano |
-| `onOpen` | `function` | — | 🇬🇧 Fires when a panel opens / 🇪🇸 Se dispara al abrir un panel |
-| `onClose` | `function` | — | 🇬🇧 Fires when a panel closes / 🇪🇸 Se dispara al cerrar un panel |
-
-### Item schema / Esquema de ítem
-
-| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
-|----------|------|--------------------------------------|
-| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
-| `title` | `string` | 🇬🇧 Panel header text / 🇪🇸 Texto del header |
-| `content` | `string` | 🇬🇧 Panel HTML content / 🇪🇸 Contenido HTML del panel |
-| `icon` | `string` | 🇬🇧 Icon HTML (optional) / 🇪🇸 HTML del ícono (opcional) |
-| `open` | `boolean` | 🇬🇧 Initially open / 🇪🇸 Abierto inicialmente |
-| `disabled` | `boolean` | 🇬🇧 Disables the panel / 🇪🇸 Deshabilita el panel |
-
----
-
-## Events / Eventos
+## Usage
 
 ```js
-new MTS.Accordion('#my-accordion', {
-  items: [...],
-  // Fires when a panel opens / Se dispara al abrir un panel
-  onOpen: (e) => {
-    console.log(e.detail.id); // → 'panel-1'
-  },
-  // Fires when a panel closes / Se dispara al cerrar un panel
-  onClose: (e) => {
-    console.log(e.detail.id); // → 'panel-1'
-  },
-});
-```
-
----
-
-## HTML Usage / Uso HTML
-
-```html
-<div id="my-accordion"></div>
-
-<script>
-  new MTS.Accordion('#my-accordion', {
-    items: [
-      {
-        id:      'item-1',
-        title:   'What is Matios UI?',
-        content: '<p>A zero-dependency component library.</p>',
-        open:    true,
-      },
-      {
-        id:      'item-2',
-        title:   'How do I install it?',
-        content: '<p>Add the CSS and JS files to your project.</p>',
-      },
-      {
-        id:       'item-3',
-        title:    'Premium features',
-        content:  '<p>Coming soon.</p>',
-        disabled: true,
-      },
-    ],
-    onOpen:  (e) =&gt; console.log('opened:', e.detail.id),
-    onClose: (e) =&gt; console.log('closed:', e.detail.id),
-  });
-</script>
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-// Single open (default) / Un panel abierto (por defecto)
+// Single open (default)
 new MTS.Accordion('#accordion-basic', {
   items: [
     { id: 'a', title: 'Section A', content: '<p>Content A</p>', open: true },
     { id: 'b', title: 'Section B', content: '<p>Content B</p>' },
-    { id: 'c', title: 'Section C', content: '<p>Content C</p>' },
+    { id: 'c', title: 'Premium', content: '<p>Coming soon.</p>', disabled: true },
   ],
-  onOpen:  (e) => console.log('opened:', e.detail.id),
-  onClose: (e) => console.log('closed:', e.detail.id),
+  onOpen:  function (e) { console.log('opened:', e.detail.id); },
+  onClose: function (e) { console.log('closed:', e.detail.id); },
 });
 
-// Multiple open / Múltiples abiertos
-new MTS.Accordion('#accordion-multi', {
-  multiple: true,
-  items: [...],
-});
+// Multiple open
+new MTS.Accordion('#accordion-multi', { multiple: true, items: [/* … */] });
 
-// Flush — no card border / Sin borde card
-new MTS.Accordion('#accordion-flush', {
-  flush: true,
-  items: [...],
-});
+// Flush — no card border
+new MTS.Accordion('#accordion-flush', { flush: true, items: [/* … */] });
 
-// With icons / Con íconos
+// With icons
 new MTS.Accordion('#accordion-icons', {
-  items: [
-    { id: 'a', icon: '<svg>...</svg>', title: 'Settings', content: '...' },
-    { id: 'b', icon: '<svg>...</svg>', title: 'Profile',  content: '...' },
-  ],
+  items: [{ id: 'a', icon: '<svg>...</svg>', title: 'Settings', content: '...' }],
 });
 ```
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `items` | `array` | `[]` | Accordion items (see schema below) |
+| `multiple` | `boolean` | `false` | Allow multiple panels open simultaneously |
+| `flush` | `boolean` | `false` | No card border — flat style |
+| `onOpen` | `function` | — | Fires when a panel opens — `{ id }` |
+| `onClose` | `function` | — | Fires when a panel closes — `{ id }` |
+
+### Item schema
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Unique identifier |
+| `title` | `string` | Panel header text |
+| `content` | `string` | Panel HTML content |
+| `icon` | `string` | Icon HTML (optional) |
+| `open` | `boolean` | Initially open |
+| `disabled` | `boolean` | Disables the panel |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `open(id)` / `close(id)` / `toggle(id)` | Open / close / toggle a panel by id |
+| `openAll()` / `closeAll()` | Open / close all panels |
+| `isOpen(id)` | Whether a panel is open |
+| `setItemDisabled(id, bool)` | Disable / enable an item at runtime (closes it if it was open) |
+| `isDisabled(id)` | Current disabled state |
+| `on(event, cb)` | Listen to `'open'` / `'close'` |
+| `destroy()` | Destroy the instance |
+
 ```js
-const acc = new MTS.Accordion('#my-accordion', { ... });
-
-// Open / close a panel by id / Abrir / cerrar un panel por id
-acc.open('panel-id')
-acc.close('panel-id')
-acc.toggle('panel-id')
-
-// Open / close all / Abrir / cerrar todos
-acc.openAll()
-acc.closeAll()
-
-// Check if open / Verificar si está abierto
-acc.isOpen('panel-id')    // → boolean
-
-// Disable / enable an item at runtime / Deshabilitar / habilitar un ítem en runtime
-acc.setItemDisabled('panel-id', true)   // deshabilita — se cierra si estaba abierto
-acc.setItemDisabled('panel-id', false)  // habilita
-acc.isDisabled('panel-id')             // → boolean
-
-// Register event listener / Registrar listener
-acc.on('open',  (e) => console.log(e.detail.id))
-acc.on('close', (e) => console.log(e.detail.id))
-
-// Destroy / Destruir
-acc.destroy()
+const acc = new MTS.Accordion('#my-accordion', { items: [/* … */] });
+acc.open('panel-id');
+acc.setItemDisabled('panel-id', true);
 ```
 
 ---
 
-## DOM Events / Eventos DOM
+## Events
+
+| Method | DOM event | Payload |
+|--------|-----------|---------|
+| `onOpen` | `mts:accordion:open` | `{ id }` |
+| `onClose` | `mts:accordion:close` | `{ id }` |
 
 ```js
 document.getElementById('my-accordion')
-  .addEventListener('mts:accordion:open', (e) => {
-    console.log(e.detail.id);
-  });
+  .addEventListener('mts:accordion:open', function (e) { console.log(e.detail.id); });
 ```
 
-| Event / Evento | DOM Namespace |
-|----------------|---------------|
-| `onOpen` | `mts:accordion:open` |
-| `onClose` | `mts:accordion:close` |
+---
+
+## Accessibility
+
+- Headers render as buttons: focusable, toggled with `Enter`/`Space`; a `disabled` item is skipped.
+- The panel content is associated with its header so assistive tech announces the expanded/collapsed state.
 
 ---
 
 ## Changelog
 
 ### 2026-05-21
-- `setItemDisabled(id, bool)` — deshabilita/habilita un ítem en runtime sin reconstruir el DOM. Si el ítem estaba abierto al deshabilitarse, se cierra automáticamente. Lee `item.disabled` del estado interno al operar desde el click handler.
-- `isDisabled(id)` — retorna el estado disabled actual del ítem.
+- `setItemDisabled(id, bool)` — disable/enable an item at runtime without rebuilding the DOM; an open item closes
+  automatically when disabled.
+- `isDisabled(id)` — returns the current disabled state.

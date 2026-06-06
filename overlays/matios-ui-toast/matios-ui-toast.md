@@ -1,11 +1,10 @@
 # MTS.Toast
 
-🇬🇧 Transient notification (snackbar) with variants, positions, action button, auto-dismiss and loading state. Static API — no instantiation required.
-🇪🇸 Notificación fugaz (snackbar) con variantes, posiciones, botón de acción, auto-dismiss y estado de carga. API estática — no requiere instanciación.
+Transient notification (snackbar) with variants, positions, action button, auto-dismiss and loading state. Static API — no instantiation required.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,116 +14,90 @@
 
 ---
 
-## Options / Opciones
+## Usage
 
-🇬🇧 `MTS.Toast` is a static API — call `MTS.Toast.show(options)` directly.
-🇪🇸 `MTS.Toast` es una API estática — llama `MTS.Toast.show(options)` directamente.
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `message` | `string` | — | 🇬🇧 Toast message (required) / 🇪🇸 Mensaje del toast (requerido) |
-| `title` | `string` | `null` | 🇬🇧 Optional title / 🇪🇸 Título opcional |
-| `variant` | `string` | `'default'` | `'default'` · `'success'` · `'warning'` · `'danger'` · `'info'` · `'loading'` |
-| `position` | `string` | `'bottom-right'` | `'top-right'` · `'top-left'` · `'top-center'` · `'bottom-right'` · `'bottom-left'` · `'bottom-center'` |
-| `duration` | `number` | `4000` | 🇬🇧 Auto-close after ms (0 = manual close) / 🇪🇸 Cerrar tras ms (0 = cierre manual) |
-| `closable` | `boolean` | `true` | 🇬🇧 Show × button / 🇪🇸 Mostrar botón × |
-| `action` | `string` | `null` | 🇬🇧 Action button label / 🇪🇸 Label del botón de acción |
-| `icon` | `string` | auto | 🇬🇧 Custom icon HTML / 🇪🇸 HTML del ícono personalizado |
-| `onAction` | `function` | — | 🇬🇧 Fires when action button is clicked / 🇪🇸 Se dispara al hacer click en la acción |
-| `onClose` | `function` | — | 🇬🇧 Fires when toast closes / 🇪🇸 Se dispara al cerrar el toast |
-
----
-
-## JavaScript Usage / Uso JavaScript
+`MTS.Toast` is a static API — call `MTS.Toast.show(options)` directly.
 
 ```js
-// Basic / Básico
+// Basic
 MTS.Toast.show({ message: 'Changes saved.' });
 
 // Success
+MTS.Toast.show({ variant: 'success', message: 'File uploaded successfully.', duration: 3000 });
+
+// Warning with title
+MTS.Toast.show({ variant: 'warning', title: 'Low storage', message: 'Only 2GB remaining.', duration: 6000 });
+
+// Danger — stays until closed
+MTS.Toast.show({ variant: 'danger', message: 'Connection failed. Please try again.', duration: 0, closable: true });
+
+// With an action button
 MTS.Toast.show({
-  variant: 'success',
-  message: 'File uploaded successfully.',
-  duration: 3000,
+  variant: 'info', message: 'New version available.', action: 'Update now',
+  onAction: function () { installUpdate(); },
+  onClose:  function () { console.log('dismissed'); },
 });
 
-// Warning with title / Advertencia con título
-MTS.Toast.show({
-  variant:  'warning',
-  title:    'Low storage',
-  message:  'Only 2GB remaining.',
-  duration: 6000,
-});
-
-// Danger / Error
-MTS.Toast.show({
-  variant:  'danger',
-  message:  'Connection failed. Please try again.',
-  duration: 0,      // stays until closed / permanece hasta cerrar
-  closable: true,
-});
-
-// With action button / Con botón de acción
-MTS.Toast.show({
-  variant:  'info',
-  message:  'New version available.',
-  action:   'Update now',
-  // Fires when action is clicked / Se dispara al hacer click en la acción
-  onAction: () => installUpdate(),
-  // Fires when toast closes / Se dispara al cerrar el toast
-  onClose:  () => console.log('dismissed'),
-});
-
-// Loading state / Estado de carga
-const loader = MTS.Toast.show({
-  variant:  'loading',
-  message:  'Uploading file...',
-  duration: 0,       // does not auto-close / no cierra automáticamente
-  closable: false,
-});
-loader.close(); // close manually when done / cerrar manualmente al terminar
-
-// Top center position / Posición arriba al centro
-MTS.Toast.show({
-  variant:  'success',
-  message:  'Saved!',
-  position: 'top-center',
-  duration: 2000,
-});
+// Loading — close manually when done
+const loader = MTS.Toast.show({ variant: 'loading', message: 'Uploading file...', duration: 0, closable: false });
+await doHeavyWork();
+loader.close();
+MTS.Toast.show({ variant: 'success', message: 'Done!', position: 'top-center', duration: 2000 });
 ```
+
+`MTS.Toast.show()` returns an object with a `close()` method to dismiss the toast programmatically.
 
 ---
 
-## Return Value / Valor de retorno
+## Options
 
-🇬🇧 `MTS.Toast.show()` returns an object with a `close()` method to dismiss the toast programmatically.
-🇪🇸 `MTS.Toast.show()` retorna un objeto con un método `close()` para cerrar el toast programáticamente.
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `message` | `string` | — | Toast message (**required**) |
+| `title` | `string` | `null` | Optional title |
+| `variant` | `string` | `'default'` | `'default'` · `'success'` · `'warning'` · `'danger'` · `'info'` · `'loading'` |
+| `position` | `string` | `'bottom-right'` | `top/bottom` × `left/center/right` |
+| `duration` | `number` | `4000` | Auto-close after ms (`0` = manual close) |
+| `closable` | `boolean` | `true` | Show the × button |
+| `action` | `string` | `null` | Action button label |
+| `icon` | `string` | auto | Custom icon HTML |
+| `onAction` | `function` | — | Fires when the action button is clicked |
+| `onClose` | `function` | — | Fires when the toast closes |
+
+---
+
+## API
+
+| Method | Description |
+|--------|-------------|
+| `MTS.Toast.show(options)` | Show a toast; returns `{ close() }` |
+| `<returned>.close()` | Dismiss the toast programmatically |
 
 ```js
-const toast = MTS.Toast.show({
-  variant:  'loading',
-  message:  'Processing...',
-  duration: 0,
-});
-
-// Later... / Más tarde...
-await doHeavyWork();
+const toast = MTS.Toast.show({ variant: 'loading', message: 'Processing...', duration: 0 });
 toast.close();
-
-MTS.Toast.show({ variant: 'success', message: 'Done!' });
 ```
 
 ---
 
-## Positions / Posiciones
+## Events
 
-| Value | 🇬🇧 Location / 🇪🇸 Ubicación |
-|-------|--------------------------------|
-| `'top-right'` | 🇬🇧 Top right corner / 🇪🇸 Esquina superior derecha |
-| `'top-left'` | 🇬🇧 Top left corner / 🇪🇸 Esquina superior izquierda |
-| `'top-center'` | 🇬🇧 Top center / 🇪🇸 Centro superior |
-| `'bottom-right'` | 🇬🇧 Bottom right (default) / 🇪🇸 Esquina inferior derecha (default) |
-| `'bottom-left'` | 🇬🇧 Bottom left corner / 🇪🇸 Esquina inferior izquierda |
-| `'bottom-center'` | 🇬🇧 Bottom center / 🇪🇸 Centro inferior |
+| Callback | When |
+|----------|------|
+| `onAction` | The action button is clicked |
+| `onClose` | The toast closes (auto or manual) |
 
 ---
+
+## Accessibility
+
+- Toasts render in an `aria-live` region so screen readers announce them; `danger`/`warning` use assertive timing.
+- For important actions, prefer `duration: 0` so the toast does not disappear before it can be read or acted on.
+
+---
+
+## Changelog
+
+### Initial
+- Static toast API with default/success/warning/danger/info/loading variants, six positions, auto-dismiss or manual
+  close, optional title/action/icon, and a returned handle with `close()`.

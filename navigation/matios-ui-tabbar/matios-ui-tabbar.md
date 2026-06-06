@@ -1,11 +1,10 @@
 # MTS.TabBar
 
-🇬🇧 Mobile-style bottom navigation bar with icons, labels, badges and three visual variants.
-🇪🇸 Barra de navegación inferior estilo móvil con íconos, labels, badges y tres variantes visuales.
+Mobile-style bottom navigation bar with icons, labels, badges and three visual variants.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,123 +14,86 @@
 
 ---
 
-## Options / Opciones
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `tabs` | `array` | `[]` | 🇬🇧 Tab items (see schema below) / 🇪🇸 Ítems del tab bar |
-| `active` | `string` | first tab | 🇬🇧 Initially active tab ID / 🇪🇸 ID del tab activo inicial |
-| `variant` | `string` | `'default'` | `'default'` · `'pill'` · `'floating'` |
-| `showLabels` | `boolean` | `true` | 🇬🇧 Show labels below icons / 🇪🇸 Mostrar labels bajo los íconos |
-| `onChange` | `function` | — | 🇬🇧 Fires when active tab changes / 🇪🇸 Se dispara al cambiar el tab activo |
-
-### Tab item schema / Esquema de ítem
-
-| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
-|----------|------|--------------------------------------|
-| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
-| `label` | `string` | 🇬🇧 Tab label / 🇪🇸 Texto del tab |
-| `icon` | `string` | 🇬🇧 Icon HTML / 🇪🇸 HTML del ícono |
-| `badge` | `string\|number` | 🇬🇧 Badge count or text / 🇪🇸 Contador o texto del badge |
-
----
-
-## Events / Eventos
-
-```js
-new MTS.TabBar('#my-tabbar', {
-  tabs: [...],
-  // Fires when active tab changes / Se dispara al cambiar el tab activo
-  onChange: (e) => {
-    console.log(e.detail.id);  // → 'home'
-    console.log(e.detail.tab); // → { id, label, icon, badge }
-  },
-});
-```
-
----
-
-## HTML Usage / Uso HTML
-
-```html
-<div id="app-tabbar"
-  data-active="home"
-  data-variant="default">
-</div>
-
-<script>
-  const ICON_HOME   = '&lt;svg&gt;...&lt;/svg&gt;';
-  const ICON_SEARCH = '&lt;svg&gt;...&lt;/svg&gt;';
-
-  new MTS.TabBar('#app-tabbar', {
-    tabs: [
-      { id: 'home',     label: 'Home',    icon: ICON_HOME,   badge: null },
-      { id: 'search',   label: 'Search',  icon: ICON_SEARCH, badge: null },
-      { id: 'messages', label: 'Messages',icon: ICON_MSG,    badge: 3    },
-      { id: 'profile',  label: 'Profile', icon: ICON_USER,   badge: null },
-    ],
-    onChange: (e) =&gt; console.log(e.detail.id),
-  });
-</script>
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
+## Usage
 
 ```js
 const tabbar = new MTS.TabBar('#my-tabbar', {
-  // Visual variant: 'default' | 'pill' | 'floating'
-  variant: 'default',
-
-  // Initially active tab / Tab activo inicial
-  active: 'home',
-
-  // Show labels below icons / Mostrar labels bajo los íconos
+  variant:    'default', // 'default' | 'pill' | 'floating'
+  active:     'home',
   showLabels: true,
-
   tabs: [
-    { id: 'home',     label: 'Home',     icon: ICON_HOME    },
-    { id: 'explore',  label: 'Explore',  icon: ICON_EXPLORE },
-    { id: 'inbox',    label: 'Inbox',    icon: ICON_INBOX, badge: 5 },
-    { id: 'profile',  label: 'Profile',  icon: ICON_USER    },
+    { id: 'home',    label: 'Home',    icon: ICON_HOME },
+    { id: 'explore', label: 'Explore', icon: ICON_EXPLORE },
+    { id: 'inbox',   label: 'Inbox',   icon: ICON_INBOX, badge: 5 },
+    { id: 'profile', label: 'Profile', icon: ICON_USER },
   ],
-
-  // Fires when active tab changes / Se dispara al cambiar el tab activo
-  onChange: (e) => {
-    console.log(e.detail.id);  // → 'explore'
-    console.log(e.detail.tab); // → { id, label, icon, badge }
-  },
+  onChange: function (e) { console.log(e.detail.id, e.detail.tab); },
 });
 ```
+
+Also supports `data-active` and `data-variant` on the container.
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `tabs` | `array` | `[]` | Tab items (see schema below) |
+| `active` | `string` | first tab | Initially active tab id |
+| `variant` | `string` | `'default'` | `'default'` · `'pill'` · `'floating'` |
+| `showLabels` | `boolean` | `true` | Show labels below the icons |
+| `onChange` | `function` | — | Fires when the active tab changes — `{ id, tab }` |
+
+### Tab item schema
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Unique identifier |
+| `label` | `string` | Tab label |
+| `icon` | `string` | Icon HTML |
+| `badge` | `string \| number` | Badge count or text |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `setActive(id)` | Activate a tab programmatically |
+| `setBadge(id, value)` | Update (or clear with `null`) a badge |
+| `destroy()` | Destroy the instance |
+
 ```js
-const tabbar = new MTS.TabBar('#my-tabbar', { ... });
-
-// Set active tab programmatically / Activar tab programáticamente
-tabbar.setActive('profile')
-
-// Update badge value / Actualizar valor del badge
-tabbar.setBadge('inbox', 12)   // set badge / establecer badge
-tabbar.setBadge('inbox', null) // clear badge / limpiar badge
-
-// Destroy / Destruir
-tabbar.destroy()
+const tabbar = new MTS.TabBar('#my-tabbar', { tabs: [/* … */] });
+tabbar.setActive('profile');
+tabbar.setBadge('inbox', 12);
 ```
 
 ---
 
-## DOM Event / Evento DOM
+## Events
+
+| Method | DOM event | Payload |
+|--------|-----------|---------|
+| `onChange` | `mts:tabbar:change` | `{ id, tab }` |
 
 ```js
 document.getElementById('my-tabbar')
-  .addEventListener('mts:tabbar:change', (e) => {
-    console.log(e.detail.id);
-  });
+  .addEventListener('mts:tabbar:change', function (e) { console.log(e.detail.id); });
 ```
 
 ---
+
+## Accessibility
+
+- Tabs are real controls — keyboard-focusable and activatable; the active tab is exposed as the current state.
+- With `showLabels: false`, provide an accessible name (`aria-label`/title) on each icon-only tab.
+
+---
+
+## Changelog
+
+### Initial
+- Bottom tab bar with default/pill/floating variants, icons, optional labels, badges, `onChange`, and
+  `setActive` / `setBadge`.

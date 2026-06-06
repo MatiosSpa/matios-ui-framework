@@ -1,11 +1,10 @@
 # MTS.Label
 
-🇬🇧 Form label component with required/optional badges, hint text, error state and size variants. Also usable as pure HTML with CSS classes.
-🇪🇸 Componente label de formulario con badges requerido/opcional, texto de ayuda, estado de error y variantes de tamaño. También usable como HTML puro con clases CSS.
+Form label component with required/optional badges, hint text, error state and size variants. Also usable as pure HTML with CSS classes.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,134 +14,106 @@
 
 ---
 
-## CSS Classes / Clases CSS
+## Usage
 
-🇬🇧 Use directly in HTML without JavaScript.
-🇪🇸 Usa directamente en HTML sin JavaScript.
-
-| Class / Clase | 🇬🇧 Description / 🇪🇸 Descripción |
-|---------------|--------------------------------------|
-| `.mts-label` | 🇬🇧 Base label / 🇪🇸 Label base |
-| `.mts-label--required` | 🇬🇧 Shows red asterisk `*` / 🇪🇸 Muestra asterisco rojo `*` |
-| `.mts-label--optional` | 🇬🇧 Shows optional badge / 🇪🇸 Muestra badge opcional |
-| `.mts-label--hidden` | 🇬🇧 Visually hidden, screen-reader accessible / 🇪🇸 Oculto visualmente, accesible |
-| `.mts-label--sm` | 🇬🇧 Small size / 🇪🇸 Tamaño pequeño |
-| `.mts-label--lg` | 🇬🇧 Large size, semibold / 🇪🇸 Tamaño grande, semibold |
-| `.mts-label__text` | 🇬🇧 Inner text span / 🇪🇸 Span interno del texto |
-| `.mts-label__optional` | 🇬🇧 Optional badge span / 🇪🇸 Span badge opcional |
-| `.mts-form-hint` | 🇬🇧 Helper text below field / 🇪🇸 Texto de ayuda debajo del campo |
-| `.mts-form-error` | 🇬🇧 Error text below field / 🇪🇸 Texto de error debajo del campo |
-
----
-
-## Options / Opciones (JavaScript)
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `text` | `string` | element text | 🇬🇧 Label text / 🇪🇸 Texto del label |
-| `required` | `boolean` | `false` | 🇬🇧 Show red asterisk / 🇪🇸 Mostrar asterisco rojo |
-| `optional` | `boolean` | `false` | 🇬🇧 Show optional badge / 🇪🇸 Mostrar badge opcional |
-| `hint` | `string` | `null` | 🇬🇧 Helper text / 🇪🇸 Texto de ayuda |
-| `error` | `string` | `null` | 🇬🇧 Error text / 🇪🇸 Texto de error |
-| `size` | `string` | `''` | `'sm'` · `''` · `'lg'` |
-| `hidden` | `boolean` | `false` | 🇬🇧 Visually hidden / 🇪🇸 Oculto visualmente |
-| `forId` | `string` | `null` | 🇬🇧 `for` attribute / 🇪🇸 Atributo `for` |
-| `className` | `string` | `''` | 🇬🇧 Extra CSS classes / 🇪🇸 Clases CSS adicionales |
-
----
-
-## HTML Usage / Uso HTML
-
-🇬🇧 Pure HTML — no JavaScript required.
-🇪🇸 HTML puro — no requiere JavaScript.
+### CSS only (no JS)
 
 ```html
-<!-- Basic / Básico -->
+<!-- Basic -->
 <label class="mts-label" for="name">Full name</label>
-<input class="mts-input" id="name">
 
-<!-- Required / Requerido -->
+<!-- Required -->
 <label class="mts-label mts-label--required" for="email">Email</label>
 
-<!-- Optional / Opcional -->
+<!-- Optional -->
 <label class="mts-label" for="phone">
   <span class="mts-label__text">Phone</span>
   <span class="mts-label__optional">optional</span>
 </label>
 
-<!-- With hint / Con texto de ayuda -->
+<!-- In a form group with hint -->
 <div class="mts-form-group">
   <label class="mts-label mts-label--required" for="email">Email</label>
   <input class="mts-input" id="email" type="email">
   <span class="mts-form-hint">We'll never share your email.</span>
 </div>
 
-<!-- Visually hidden / Oculto visualmente -->
+<!-- Visually hidden (screen-reader accessible) -->
 <label class="mts-label mts-label--hidden" for="search">Search</label>
-<input class="mts-input" id="search" placeholder="Search...">
 ```
 
----
-
-## JavaScript Usage / Uso JavaScript
+### JavaScript
 
 ```js
 const lbl = new MTS.Label('#my-label', {
-  // Label text / Texto del label
-  text: 'Full name',
-
-  // Show required asterisk / Mostrar asterisco requerido
+  text:     'Full name',
   required: true,
-
-  // Helper text / Texto de ayuda
-  hint: 'As it appears on your ID document',
-
-  // for attribute / Atributo for
-  forId: 'input-name',
-
-  // Size: 'sm' | '' | 'lg' / Tamaño
-  size: '',
+  hint:     'As it appears on your ID document',
+  forId:    'input-name',
 });
 ```
 
 ---
 
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `text` | `string` | element text | Label text |
+| `required` | `boolean` | `false` | Show the red asterisk |
+| `optional` | `boolean` | `false` | Show the optional badge |
+| `hint` | `string` | `null` | Helper text |
+| `error` | `string` | `null` | Error text |
+| `size` | `string` | `''` | `'sm'` · `''` · `'lg'` |
+| `hidden` | `boolean` | `false` | Visually hidden |
+| `forId` | `string` | `null` | `for` attribute |
+| `className` | `string` | `''` | Extra CSS classes |
+
+---
+
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `setText(text)` | Change the label text |
+| `setHint(text)` | Set / clear the hint |
+| `setError(msg)` / `clearError()` | Set / clear the error |
+| `setRequired(bool)` | Toggle the required asterisk |
+| `destroy()` | Destroy the instance |
+
 ```js
-const lbl = new MTS.Label('#my-label', { ... });
-
-// Change text / Cambiar texto
-lbl.setText('New label text')
-
-// Show/clear hint / Mostrar/limpiar hint
-lbl.setHint('Helper text')
-
-// Show/clear error / Mostrar/limpiar error
-lbl.setError('This field is required')
-lbl.clearError()
-
-// Toggle required / Alternar requerido
-lbl.setRequired(true)
-lbl.setRequired(false)
-
-// Destroy / Destruir
-lbl.destroy()
+const lbl = new MTS.Label('#my-label', { text: 'Email' });
+lbl.setRequired(true);
+lbl.setError('This field is required');
 ```
 
 ---
 
-## In Form Groups / En grupos de formulario
+## CSS Classes
 
-🇬🇧 Label is typically used inside `.mts-form-group`:
-🇪🇸 El label se usa típicamente dentro de `.mts-form-group`:
-
-```html
-<div class="mts-form-group">
-  <label class="mts-label mts-label--required" for="email">Email</label>
-  <input class="mts-input" id="email" type="email">
-  <span class="mts-form-hint">We'll use this for notifications.</span>
-</div>
-```
+| Class | Description |
+|-------|-------------|
+| `.mts-label` | Base label |
+| `.mts-label--required` | Shows the red asterisk `*` |
+| `.mts-label--optional` | Shows the optional badge |
+| `.mts-label--hidden` | Visually hidden, screen-reader accessible |
+| `.mts-label--sm` / `--lg` | Small / large (semibold) size |
+| `.mts-label__text` | Inner text span |
+| `.mts-label__optional` | Optional badge span |
+| `.mts-form-hint` | Helper text below the field |
+| `.mts-form-error` | Error text below the field |
 
 ---
+
+## Accessibility
+
+- Always set `forId` (or the `for` attribute) so the label is programmatically tied to its field.
+- `--hidden` keeps the label available to screen readers while hiding it visually — prefer it over removing the label.
+
+---
+
+## Changelog
+
+### Initial
+- Form label with required/optional badges, hint and error text, size variants, visually-hidden mode, CSS-only
+  usage, and `setText` / `setHint` / `setError` / `setRequired` API.

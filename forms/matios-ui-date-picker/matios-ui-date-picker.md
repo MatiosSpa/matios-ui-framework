@@ -1,16 +1,15 @@
 # MTS.DatePicker
 
-🇬🇧 Date, time, range, month and week selectors. Each type is an independent class extending a common base. Zero dependencies.
-🇪🇸 Selectores de fecha, hora, rango, mes y semana. Cada tipo es una clase independiente que extiende una base común. Cero dependencias.
+Date, time, range, month and week selectors. Each type is an independent class extending a common base. Zero dependencies.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-picker.css">
 
-<!-- Load only what you need / Cargar solo los que necesitas -->
+<!-- Load only what you need -->
 <script src="matios-ui-picker-base.js"></script>
 <script src="matios-ui-picker-date.js"></script>
 <script src="matios-ui-picker-time.js"></script>
@@ -22,124 +21,141 @@
 
 ---
 
-## MTS.DatePicker.Date — Date only / Solo fecha
+## Usage
+
+### Date only — `MTS.DatePicker.Date`
 
 ```js
-const dp = new MTS.DatePicker.Date('#mi-input', {
+const dp = new MTS.DatePicker.Date('#my-input', {
   format:       'DD/MM/YYYY',
   locale:       'es-CL',
   clearable:    true,
   minDate:      new Date('2024-01-01'),
   maxDate:      new Date('2025-12-31'),
-  disabledDays: [0, 6],   // 0=Sun/Dom, 6=Sat/Sáb
-  onChange:     (e) => console.log(e.detail.value, e.detail.formatted),
+  disabledDays: [0, 6], // 0 = Sunday, 6 = Saturday
+  onChange:     function (e) { console.log(e.detail.value, e.detail.formatted); },
 });
 
 dp.setValue(new Date());
-dp.getValue();   // → Date
-dp.clear();
+dp.getValue(); // → Date
 ```
 
----
-
-## MTS.DatePicker.Time — Time only / Solo hora
+### Time only — `MTS.DatePicker.Time`
 
 ```js
-new MTS.DatePicker.Time('#mi-input', {
-  timeStep:  15,    // step in minutes / paso en minutos
+new MTS.DatePicker.Time('#my-input', {
+  timeStep:  15,  // minutes
   startHour: 8,
   endHour:   20,
-  btnNow:    'Ahora',
-  btnAccept: 'Aceptar',
-  onChange:  (e) => console.log(e.detail.formatted),  // → '09:30'
+  btnNow:    'Now',
+  btnAccept: 'Accept',
+  onChange:  function (e) { console.log(e.detail.formatted); }, // → '09:30'
 });
 ```
 
----
-
-## MTS.DatePicker.DateTime — Date + Time / Fecha + Hora
+### Date + time — `MTS.DatePicker.DateTime`
 
 ```js
-new MTS.DatePicker.DateTime('#mi-input', {
-  format:    'DD/MM/YYYY',
-  timeStep:  5,
-  btnToday:  'Hoy',
-  btnAccept: 'Aceptar',
-  onChange:  (e) => console.log(e.detail.value, e.detail.formatted),
+new MTS.DatePicker.DateTime('#my-input', {
+  format: 'DD/MM/YYYY', timeStep: 5, btnToday: 'Today', btnAccept: 'Accept',
+  onChange: function (e) { console.log(e.detail.value, e.detail.formatted); },
 });
 ```
 
----
-
-## MTS.DatePicker.DateRange — Date range / Rango de fechas
+### Date range — `MTS.DatePicker.DateRange`
 
 ```js
-const rp = new MTS.DatePicker.DateRange('#mi-input', {
-  format:    'DD/MM/YYYY',
-  btnClear:  'Limpiar',
-  btnAccept: 'Aplicar',
-  onChange:  (e) => {
-    console.log(e.detail.value.start);   // Date start / Date inicio
-    console.log(e.detail.value.end);     // Date end / Date fin
-    console.log(e.detail.formatted);     // '01/03/2025 → 15/03/2025'
+const rp = new MTS.DatePicker.DateRange('#my-input', {
+  format: 'DD/MM/YYYY', btnClear: 'Clear', btnAccept: 'Apply',
+  onChange: function (e) {
+    console.log(e.detail.value.start); // Date
+    console.log(e.detail.value.end);   // Date
+    console.log(e.detail.formatted);   // '01/03/2025 → 15/03/2025'
   },
 });
 
 rp.setValue([new Date('2025-03-01'), new Date('2025-03-15')]);
-rp.getValue();   // → { start: Date, end: Date }
+rp.getValue(); // → { start: Date, end: Date }
 ```
 
----
-
-## MTS.DatePicker.Month — Month & Year / Mes y Año
+### Month & year — `MTS.DatePicker.Month`
 
 ```js
-new MTS.DatePicker.Month('#mi-input', {
-  onChange: (e) => console.log(e.detail.formatted),  // → '03/2025'
-});
+new MTS.DatePicker.Month('#my-input', { onChange: function (e) { console.log(e.detail.formatted); } }); // → '03/2025'
 ```
 
----
-
-## MTS.DatePicker.Week — Week / Semana
+### Week — `MTS.DatePicker.Week`
 
 ```js
-new MTS.DatePicker.Week('#mi-input', {
-  onChange: (e) => {
-    console.log(e.detail.value.start);   // Monday / lunes de la semana
-    console.log(e.detail.value.end);     // Sunday / domingo de la semana
-    console.log(e.detail.formatted);     // 'Semana 12 - 2025'
+new MTS.DatePicker.Week('#my-input', {
+  onChange: function (e) {
+    console.log(e.detail.value.start); // Monday of the week
+    console.log(e.detail.value.end);   // Sunday of the week
+    console.log(e.detail.formatted);   // 'Week 12 - 2025'
   },
 });
 ```
 
 ---
 
+## Options
+
+Common across types (each type adds its own — see the examples above):
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `format` | `string` | Display format mask (e.g. `'DD/MM/YYYY'`) |
+| `locale` | `string` | Locale for month/day names and formatting |
+| `clearable` | `boolean` | Show the clear control |
+| `minDate` / `maxDate` | `Date` | Selectable range bounds |
+| `disabledDays` | `number[]` | Weekdays to disable (`0` = Sunday … `6` = Saturday) |
+| `timeStep` | `number` | Minute step (Time / DateTime) |
+| `startHour` / `endHour` | `number` | Hour bounds (Time) |
+| `btnNow` / `btnToday` / `btnAccept` / `btnClear` | `string` | Action button labels (localizable) |
+| `onChange` / `onOpen` / `onClose` | `function` | Lifecycle callbacks |
+
 ---
 
-## Common API / API común
+## API
+
+Shared by every picker type:
+
+| Method | Description |
+|--------|-------------|
+| `open()` / `close()` | Open / close the popup |
+| `getValue()` | Value by type (`Date`, string, or `{ start, end }`) |
+| `setValue(value)` | Set the value (chainable) |
+| `clear()` | Clear the value |
+| `destroy()` | Destroy the instance |
+| `on(event, cb)` | Listen to `'change'`, `'open'`, `'close'` |
+
+---
+
+## Events
+
+| Method | DOM event | Payload |
+|--------|-----------|---------|
+| `onChange` / `on('change', fn)` | `mts:picker:change` | `{ value, formatted }` |
+| `onOpen` / `on('open', fn)` | — | — |
+| `onClose` / `on('close', fn)` | — | — |
 
 ```js
-picker.open()
-picker.close()
-picker.getValue()        // → value by type / valor según tipo
-picker.setValue(...)     // chainable
-picker.clear()
-picker.destroy()
-
-// Events / Eventos
-picker.on('change', (e) => {
-  e.detail.value;       // native value / valor nativo (Date, string, objeto)
-  e.detail.formatted;   // formatted string / string formateado en el input
-});
-picker.on('open',  () => {});
-picker.on('close', () => {});
-
-// DOM events / Eventos DOM
-document.getElementById('mi-input')
-  .addEventListener('mts:picker:change', (e) => {
-    console.log(e.detail.value, e.detail.formatted);
-  });
+document.getElementById('my-input')
+  .addEventListener('mts:picker:change', function (e) { console.log(e.detail.value, e.detail.formatted); });
 ```
 
 ---
+
+## Accessibility
+
+- The popup traps focus while open and closes on `Esc`; the calendar grid is navigable with the arrow keys.
+- `disabledDays`, `minDate` and `maxDate` are skipped by keyboard navigation.
+- Provide a label on the bound input so the picker has an accessible name.
+
+---
+
+## Changelog
+
+### Initial
+- Independent picker classes (`Date`, `Time`, `DateTime`, `DateRange`, `Month`, `Week`) over a shared base, with
+  format masks, locale, min/max and disabled days, configurable action labels, and a common open/value/clear API.

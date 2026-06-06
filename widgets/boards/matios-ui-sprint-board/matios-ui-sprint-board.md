@@ -1,10 +1,10 @@
 # MTS.SprintBoard
 
-Tablero Scrum: panel Backlog (izquierda) + Sprint Board (derecha) con drag bidireccional. Internamente usa `MTS.Kanban` para el panel Sprint. Emite eventos para que el consumer persista.
+Scrum board: a Backlog panel (left) + Sprint Board (right) with bidirectional drag. Uses `MTS.Kanban` internally for the Sprint panel. Emits events so the consumer persists.
 
 ---
 
-## Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="base/matios-ui-base.css">
@@ -20,7 +20,7 @@ Tablero Scrum: panel Backlog (izquierda) + Sprint Board (derecha) con drag bidir
 
 ---
 
-## Uso básico
+## Usage
 
 ```html
 <div id="sprintboard" style="height: 600px"></div>
@@ -28,188 +28,140 @@ Tablero Scrum: panel Backlog (izquierda) + Sprint Board (derecha) con drag bidir
 
 ```js
 const sb = new MTS.SprintBoard('#sprintboard', {
-  dataSource: function() {
-    return fetch('/api/sprint').then(function(r) { return r.json(); });
-  },
+  dataSource:   function () { return fetch('/api/sprint').then(function (r) { return r.json(); }); },
   showVelocity: true,
-  addStories: true,
+  addStories:   true,
 });
 
-sb.onStoryMove(function(e) {
-  persistStory(e.story);
-});
-sb.onSprintStart(function(e) {
-  activateSprint(e.sprint.id);
-});
+sb.onStoryMove(function (e) { persistStory(e.story); });
+sb.onSprintStart(function (e) { activateSprint(e.sprint.id); });
 ```
 
 ---
 
-## Opciones
+## Options
 
-| Opción | Tipo | Default | Descripción |
-|---|---|---|---|
-| `dataSource` | `fn(query) => Promise<{stories, sprints}>` | — | Carga async |
-| `currentSprintId` | `string` | — | ID del sprint visible; se auto-detecta si hay uno `status:'active'` |
-| `columns` | `array` | `[todo, wip, done]` | Columnas del Sprint Board (mismo schema que MTS.Kanban) |
-| `showBacklog` | `boolean` | `true` | Mostrar panel Backlog |
-| `showVelocity` | `boolean` | `false` | Mostrar barra de capacity |
-| `splitter` | `'horizontal' \| 'vertical'` | `'horizontal'` | Orientación Backlog vs Sprint |
-| `addStories` | `boolean` | `false` | Botón "+ Historia" en toolbar |
-| `onLoad` | `fn` | — | Constructor handler |
-| `onError` | `fn` | — | Constructor handler |
-| `onStoryAdd` | `fn` | — | Constructor handler |
-| `onStoryChange` | `fn` | — | Constructor handler |
-| `onStoryMove` | `fn` | — | Constructor handler |
-| `onStoryDelete` | `fn` | — | Constructor handler |
-| `onSprintChange` | `fn` | — | Constructor handler |
-| `onSprintStart` | `fn` | — | Constructor handler |
-| `onSprintComplete` | `fn` | — | Constructor handler |
-| `onSelect` | `fn` | — | Constructor handler |
-| `addTask` | `object` | — | Activa el botón "+ Agregar historia" en la toolbar. El **modal lo pone el dev** |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `dataSource` | `fn(query) → Promise<{stories, sprints}>` | — | Async load |
+| `currentSprintId` | `string` | — | Visible sprint id; auto-detected if one has `status:'active'` |
+| `columns` | `array` | `[todo, wip, done]` | Sprint Board columns (same schema as `MTS.Kanban`) |
+| `showBacklog` | `boolean` | `true` | Show the Backlog panel |
+| `showVelocity` | `boolean` | `false` | Show the capacity bar |
+| `splitter` | `'horizontal' \| 'vertical'` | `'horizontal'` | Backlog vs Sprint orientation |
+| `addStories` | `boolean` | `false` | "+ Story" button in the toolbar |
+| `addTask` | `object` | — | Enables the "+ Add story" toolbar button. **The modal is supplied by the dev** |
+| `onLoad` / `onError` / `onStoryAdd` / `onStoryChange` / `onStoryMove` / `onStoryDelete` / `onSprintChange` / `onSprintStart` / `onSprintComplete` / `onSelect` | `fn` | — | Constructor handlers |
 
-### `addTask` — alta con modal del dev
+### `addTask` — add via the dev's modal
 
-El componente aporta el botón y la cosecha; el modal es del dev (un `MTS.Modal` o cualquier markup).
+The component provides the button and harvests the form; the modal is the dev's. Flow: click → `open()` → dev confirms
+with `sb.submitAddTask()` → harvest by `name`/`id` → `onAddTask({ data, resolve, reject })`. `resolve()` normalizes a
+canonical (Jira-style) Story + aliases and inserts it (`addStory`, location from `data._location` or `'backlog'`).
+Aliases: `summary`/`title`→`title`, `issuetype`/`type`→`type`, `key`→`code`; unrecognized → `extras`.
+
+### Story & Sprint shapes
 
 ```js
-addTask: {
-  label: '+ Agregar historia',        // opcional
-  form:  '#mi-form',                   // contenedor a cosechar (o `modal:`)
-  open:  function () { miModal.show(); },
-  close: function () { miModal.hide(); },
-  map:   function (data) { return data; },  // opcional
-}
-```
-
-Flujo: clic → `open()` → el dev confirma con `sb.submitAddTask()` (o `[data-mts-addtask-submit]`) → cosecha
-por `name`/`id` (cosecha propia del componente) → `onAddTask({ data, resolve, reject })`. `resolve()` normaliza
-canónico (estilo Jira) + alias → Story e inserta (`addStory`, location por `data._location` o `'backlog'`).
-Alias: `summary`/`title`→`title` · `issuetype`/`type`→`type` · `key`→`code`. No reconocidos → `extras`.
-
-### Story shape
-
-```js
+// Story
 {
-  id:           's1',
-  code:         'PRJ-42',
-  title:        'Como user quiero...',
-  description:  '...',
-  type:         'userstory' | 'task' | 'bug' | 'epic' | 'spike',
-  storyPoints:  5,
-  priority:     'low' | 'medium' | 'high' | 'critical',
-  tags:         ['ui'],
-  assignees:    [{ id, name, avatar }],
-  sprintId:     null | 'sprint-7',
-  status:       'todo' | 'wip' | 'done',
-  parentEpicId: null,
+  id: 's1', code: 'PRJ-42', title: 'As a user I want…', description: '…',
+  type: 'userstory' | 'task' | 'bug' | 'epic' | 'spike',
+  storyPoints: 5, priority: 'low' | 'medium' | 'high' | 'critical',
+  tags: ['ui'], assignees: [{ id, name, avatar }],
+  sprintId: null | 'sprint-7', status: 'todo' | 'wip' | 'done', parentEpicId: null,
 }
-```
 
-### Sprint shape
-
-```js
+// Sprint
 {
-  id:        'sprint-7',
-  number:    7,
-  name:      'Sprint 7',
-  goal:      'Cerrar UI de Onboarding',
-  startDate: '2026-06-01',
-  endDate:   '2026-06-14',
-  status:    'planning' | 'active' | 'completed' | 'cancelled',
-  capacity:  40,
-  committed: 38,
+  id: 'sprint-7', number: 7, name: 'Sprint 7', goal: 'Close onboarding UI',
+  startDate: '2026-06-01', endDate: '2026-06-14',
+  status: 'planning' | 'active' | 'completed' | 'cancelled', capacity: 40, committed: 38,
 }
 ```
 
 ---
 
-## Eventos
+## Events
 
-| Método | Payload | Cuándo |
-|---|---|---|
-| `onAddTask(fn)` | `{data, resolve, reject}` | Confirmación del modal del dev (cosecha cruda). `resolve()` inserta, `reject()` cancela |
-| `onLoad(fn)` | `{stories, sprints}` | DataSource resuelto |
-| `onError(fn)` | `{error}` | DataSource rechazado |
-| `onStoryAdd(fn)` | `{story, location}` | Historia agregada (`'backlog' \| 'sprint'`) |
-| `onStoryChange(fn)` | `{story, fields}` | Historia actualizada |
-| `onStoryMove(fn)` | `{story, from, to}` | Movida entre Backlog y Sprint, o entre columnas |
-| `onStoryDelete(fn)` | `{story}` | Historia eliminada |
-| `onSprintChange(fn)` | `{sprint, fields}` | Sprint editado |
-| `onSprintStart(fn)` | `{sprint}` | Sprint activado |
-| `onSprintComplete(fn)` | `{sprint, doneStories, pendingStories}` | Sprint cerrado |
-| `onSelect(fn)` | `{stories}` | Selección cambió |
+| Method | Payload | When |
+|--------|---------|------|
+| `onAddTask(fn)` | `{ data, resolve, reject }` | Dev modal confirmation; `resolve()` inserts, `reject()` cancels |
+| `onLoad(fn)` | `{ stories, sprints }` | DataSource resolved |
+| `onError(fn)` | `{ error }` | DataSource rejected |
+| `onStoryAdd(fn)` | `{ story, location }` | Story added (`'backlog' \| 'sprint'`) |
+| `onStoryChange(fn)` | `{ story, fields }` | Story updated |
+| `onStoryMove(fn)` | `{ story, from, to }` | Moved between Backlog/Sprint or columns |
+| `onStoryDelete(fn)` | `{ story }` | Story removed |
+| `onSprintChange(fn)` | `{ sprint, fields }` | Sprint edited |
+| `onSprintStart(fn)` | `{ sprint }` | Sprint activated |
+| `onSprintComplete(fn)` | `{ sprint, doneStories, pendingStories }` | Sprint closed |
+| `onSelect(fn)` | `{ stories }` | Selection changed |
 
 ```js
-const sb = new MTS.SprintBoard('#sb', { ... });
-
-const disposeMove = sb.onStoryMove(function(e) {
-  console.log(e.story.title, e.from.type, '→', e.to.type);
-  persistStory(e.story);
-});
-
-disposeMove(); // unsubscribe
+const dispose = sb.onStoryMove(function (e) { persistStory(e.story); });
+dispose(); // unsubscribe
 ```
+
+### Backend integration
+
+The FE does not persist — event payloads are ready to send to the BE:
+
+| Event | BE action | Payload |
+|-------|-----------|---------|
+| `onStoryAdd` | `POST /api/stories` | full story (`assignees[].uid`, `type`, `storyPoints`, `_location`) |
+| `onStoryChange` | `PATCH /api/stories/:id` | `fields` |
+| `onStoryMove` | `PATCH /api/stories/:id` | `{ from, to }` |
+| `onStoryDelete` | `DELETE /api/stories/:id` | `{ id }` |
+| `onSprintStart` / `onSprintComplete` | `POST /api/sprints/:id/start\|complete` | `{ id }` / `{ done, pending }` |
+
+> Full backend contract (dataSource, Story/Sprint shapes, DDL, sprint lifecycle, ids, errors, validations):
+> [`matios-ui-sprint-board-backend.md`](matios-ui-sprint-board-backend.md). The demo shows it live via `apiSim`.
 
 ---
 
-## API pública
+## API
 
-| Método | Descripción |
-|---|---|
+| Method | Description |
+|--------|-------------|
 | `addStory(story, location)` | location: `'backlog' \| 'sprint'` |
-| `submitAddTask()` | Cosecha el form del modal del dev y dispara `onAddTask` (lo llama el botón confirmar del modal). Solo con la opción `addTask` |
-| `updateStory(id, fields)` | Actualiza campos |
-| `deleteStory(id)` | Elimina historia |
-| `moveStory(id, target)` | target: `{type, columnId?}` |
-| `startSprint(sprintId)` | Activa sprint — emite `onSprintStart` |
-| `completeSprint(sprintId)` | Cierra sprint — mueve pendientes al backlog |
-| `setCurrentSprint(sprintId)` | Cambia el sprint visible |
-| `getBacklog()` | Devuelve historias sin sprint |
-| `getCurrentSprintStories()` | Devuelve historias del sprint activo |
-| `reload()` | Re-invoca dataSource |
-| `destroy()` | Limpia DOM y listeners |
+| `submitAddTask()` | Harvest the dev modal form and fire `onAddTask` (only with the `addTask` option) |
+| `updateStory(id, fields)` / `deleteStory(id)` | Update / delete a story |
+| `moveStory(id, target)` | target: `{ type, columnId? }` |
+| `startSprint(id)` / `completeSprint(id)` | Activate / close a sprint (close moves pending stories to the backlog) |
+| `setCurrentSprint(id)` | Change the visible sprint |
+| `getBacklog()` / `getCurrentSprintStories()` | Read helpers |
+| `reload()` / `destroy()` | Re-invoke dataSource / clean up |
 
 ---
 
-## Composición con MTS.Kanban
+## Composition with MTS.Kanban
 
-El panel Sprint usa `MTS.Kanban` internamente. El SprintBoard escucha `onCardMove` del Kanban y lo traduce a `onStoryMove` con el schema de stories. El consumer solo interactúa con la API de SprintBoard — no con el Kanban interno.
+The Sprint panel uses `MTS.Kanban` internally. SprintBoard listens to the Kanban's `onCardMove` and translates it to
+`onStoryMove` with the story schema. The consumer only interacts with the SprintBoard API — not the inner Kanban.
+
+---
+
+## Accessibility
+
+- Backlog ↔ Sprint moves are also available via buttons (not only drag); convey story type/priority in text, not
+  color alone.
 
 ---
 
 ## Changelog
 
-### 2026-05-31 — Demo consolidado + DevPanel + i18n + integración BE
-- **i18n propio** `matios-ui-sprint-board-i18n.js` (es/en/pt, namespace `MTS.SprintBoard`) + método `_t()`.
-  Todos los strings internos pasan por `_t()` con fallback: columnas (Por hacer/En curso/Completado), toolbar
-  (Iniciar/Cerrar Sprint, "Sin sprint activo", "+ Historia", "+ Agregar historia"), Backlog/vacío, Capacidad/SP,
-  flechas mover, y el form inline de historia.
-- **Contrato `MTS.DevPanel`**: `getConfig()` (toggles `showBacklog`/`showVelocity`/`addStories`) + `getCode()`.
-- **Demo único** `demo.html` (estilo Gantt/Kanban): board envuelto en **`MTS.DevPanel`** (Config·Log·Code) + Topbar
-  (brand), **carga async** (`dataSource` → `{stories, sprints}`), modal único alta/edición (Input/Select: tipo,
-  prioridad, puntos, responsable), **eventos → `apiSim`** (console.log + Activity Log): `onStoryAdd`→POST,
-  `onStoryChange`→PATCH, `onStoryMove`→PATCH, `onStoryDelete`→DELETE, `onSprintStart`/`onSprintComplete`→POST.
-  Clic en historia (`onSelect`) abre el modal de edición. **100% locale, sin CSS satélite.** Carpeta `demos/` eliminada.
-
-### 2026-05-30 (2)
-- Feature `addTask` — botón "+ Agregar historia" en toolbar + evento `onAddTask({data, resolve, reject})`.
-  Modal del dev; cosecha propia por `name`/`id`; `_normalizeCanonicalStory` (Jira+alias →
-  Story, `extras` para round-trip); `submitAddTask()`. Demo: `demos/demo_4`. Lógica propia del componente.
+### 2026-05-31 — Consolidated demo + DevPanel + i18n + BE integration
+- Own i18n `matios-ui-sprint-board-i18n.js` (es/en/pt, namespace `MTS.SprintBoard`) + `_t()`; all internal strings localized.
+- `MTS.DevPanel` contract: `getConfig()` (toggles `showBacklog`/`showVelocity`/`addStories`) + `getCode()`.
+- Single consolidated `demo.html` (DevPanel + Topbar + async dataSource + add/edit modal + `apiSim`); `demos/` removed.
+- FE↔BE contract: new `matios-ui-sprint-board-backend.md` + "Backend integration" section here.
 
 ### 2026-05-30
-- **Bug fix**: `_storyToCard()` referenciaba la constante inexistente `TYPE_ICONS` →
-  `ReferenceError` al renderizar historias en el sprint. El título de la card es texto plano,
-  así que se usa `story.title` directo.
-- Creados los 3 demos del launcher: `demos/demo_1` (estático), `demos/demo_2` (async),
-  `demos/demo_3` (eventos) — antes el launcher iframeaba archivos inexistentes (`Cannot GET`).
+- `addTask` feature — "+ Add story" toolbar button + `onAddTask({ data, resolve, reject })`; dev modal; canonical
+  (Jira-style) + alias story normalization; `submitAddTask()`.
+- Fix: `_storyToCard()` referenced a non-existent `TYPE_ICONS` constant → render `ReferenceError`.
 
 ### 2026-05-29
-- Componente nuevo — `widgets/boards/matios-ui-sprint-board/`
-- Implementa los 10 eventos del levantamiento: `onLoad`, `onError`, `onStoryAdd`, `onStoryChange`, `onStoryMove`, `onStoryDelete`, `onSprintChange`, `onSprintStart`, `onSprintComplete`, `onSelect`
-- Panel Sprint usa `MTS.Kanban` internamente (composición)
-- Drag bidireccional Backlog ↔ Sprint via botones
-- Columnas del Sprint draggables via MTS.Kanban
-- Splitter horizontal configurable via `MTS.Splitter`
-- Velocity banner con capacity bar
-- `addStories: true` muestra formulario inline
+- New component — `widgets/boards/matios-ui-sprint-board/`. Implements the 10 events; Sprint panel composed from
+  `MTS.Kanban`; bidirectional Backlog ↔ Sprint; configurable `MTS.Splitter`; velocity banner with capacity bar.

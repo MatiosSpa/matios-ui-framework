@@ -1,67 +1,51 @@
-# mts-base.css
+# matios-ui-base
 
-El cimiento de todo el framework MTS. Define los **design tokens**, el **reset**, el **sistema de temas** y las **utilidades** que todos los componentes usan.
+The foundation of the entire MTS framework. Defines the **design tokens**, the **reset**, the **theme system** and the **utilities** every component uses.
 
 ---
 
-## Instalación
+## Installation
 
-Incluye el archivo antes de cualquier otro CSS de MTS:
+Include this file before any other MTS CSS:
 
 ```html
-<link rel="stylesheet" href="mts-base.css">
-<!-- luego los componentes -->
-<link rel="stylesheet" href="mts-grid.css">
-<link rel="stylesheet" href="mts-calendar.css">
+<link rel="stylesheet" href="matios-ui-base.css">
+<!-- then the components -->
+<link rel="stylesheet" href="matios-ui-grid.css">
 ```
 
 ---
 
-## Temas
+## Themes
 
-El sistema de temas funciona con el atributo `data-mts-theme` en cualquier elemento contenedor. Si lo pones en `<html>` o `<body>`, aplica globalmente.
+The theme system works through the `data-mts-theme` attribute on any container. Set it on `<html>` or `<body>` to
+apply globally.
 
-### Temas incluidos
-
-| Valor | Descripción |
+| Value | Description |
 |-------|-------------|
-| `light` | Claro (por defecto) |
-| `dark` | Oscuro |
-| `ocean` | Azul océano (ejemplo de tema custom) |
-
-### Uso
+| `light` | Light (default) |
+| `dark` | Dark |
+| `ocean` | Ocean blue (example custom theme) |
 
 ```html
-<!-- Tema claro (por defecto, no necesitas ponerlo) -->
-<html data-mts-theme="light">
-
-<!-- Tema oscuro -->
 <html data-mts-theme="dark">
-
-<!-- Tema personalizado -->
-<html data-mts-theme="ocean">
 ```
-
-### Cambiar tema con JS
 
 ```js
-// Cambiar tema globalmente
+// Change the theme globally
 document.documentElement.setAttribute('data-mts-theme', 'dark');
 
 // Toggle dark/light
 const current = document.documentElement.getAttribute('data-mts-theme');
-document.documentElement.setAttribute(
-  'data-mts-theme',
-  current === 'dark' ? 'light' : 'dark'
-);
+document.documentElement.setAttribute('data-mts-theme', current === 'dark' ? 'light' : 'dark');
 ```
 
-### Crear tu propio tema
+### Create your own theme
 
-Copia este bloque en tu CSS y redefine solo las variables que necesitas:
+Copy this block into your CSS and redefine only the variables you need:
 
 ```css
-[data-mts-theme="mi-tema"] {
+[data-mts-theme="my-theme"] {
   --mts-color-primary:       #7c3aed;
   --mts-color-primary-hover: #6d28d9;
   --mts-color-accent:        #f59e0b;
@@ -71,128 +55,63 @@ Copia este bloque en tu CSS y redefine solo las variables que necesitas:
 
 ---
 
-## Design Tokens
+## Design tokens
 
-Todas las variables CSS disponibles bajo el prefijo `--mts-`.
+All CSS variables under the `--mts-` prefix.
 
-### Colores
+### Colors
 
 ```css
-/* Primario */
---mts-color-primary         /* Color principal de la marca */
---mts-color-primary-hover   /* Hover del primario */
---mts-color-primary-active  /* Active/pressed del primario */
---mts-color-primary-light   /* Versión clara para fondos/focus ring */
---mts-color-primary-text    /* Texto sobre fondo primario */
-
-/* Acento */
---mts-color-accent
---mts-color-accent-hover
---mts-color-accent-text
-
-/* Semánticos */
---mts-color-success / --mts-color-success-light / --mts-color-success-text
---mts-color-warning / --mts-color-warning-light / --mts-color-warning-text
---mts-color-danger  / --mts-color-danger-light  / --mts-color-danger-text
---mts-color-info    / --mts-color-info-light    / --mts-color-info-text
-
-/* Grises (escala de 50 a 900) */
---mts-gray-50  /* más claro */
---mts-gray-100
---mts-gray-200
---mts-gray-300
---mts-gray-400
---mts-gray-500
---mts-gray-600
---mts-gray-700
---mts-gray-800
---mts-gray-900  /* más oscuro */
+/* Primary */
+--mts-color-primary  --mts-color-primary-hover  --mts-color-primary-active  --mts-color-primary-light  --mts-color-primary-text
+/* Accent */
+--mts-color-accent  --mts-color-accent-hover  --mts-color-accent-text
+/* Semantic (each with -light and -text variants) */
+--mts-color-success  --mts-color-warning  --mts-color-danger  --mts-color-info
+/* Grays (50 lightest → 900 darkest) */
+--mts-gray-50 … --mts-gray-900
 ```
 
-### Superficies y texto
+### Surfaces & text
 
 ```css
---mts-bg-body        /* Fondo de página */
---mts-bg-surface     /* Fondo de tarjetas / paneles */
---mts-bg-surface-2   /* Fondo alternativo (zebra, hover) */
+--mts-bg-body        /* page background */
+--mts-bg-surface     /* card / panel background */
+--mts-bg-surface-2   /* alternate background (zebra, hover) */
 
---mts-text-primary   /* Texto principal */
---mts-text-secondary /* Texto secundario */
---mts-text-muted     /* Texto apagado */
---mts-text-disabled  /* Texto deshabilitado */
---mts-text-inverse   /* Texto sobre fondo oscuro */
+--mts-text-primary   --mts-text-secondary  --mts-text-muted  --mts-text-disabled  --mts-text-inverse
 ```
 
-### Tipografía
+### Typography
 
 ```css
---mts-font-family    /* Sans-serif del sistema */
---mts-font-mono      /* Monoespaciada */
-
-/* Tamaños */
---mts-font-size-xs    /* 11px */
---mts-font-size-sm    /* 13px */
---mts-font-size-md    /* 14px — base */
---mts-font-size-lg    /* 16px */
---mts-font-size-xl    /* 20px */
---mts-font-size-2xl   /* 24px */
---mts-font-size-3xl   /* 30px */
-
-/* Pesos */
---mts-font-weight-normal    /* 400 */
---mts-font-weight-medium    /* 500 */
---mts-font-weight-semibold  /* 600 */
---mts-font-weight-bold      /* 700 */
+--mts-font-family    --mts-font-mono
+/* Sizes */ --mts-font-size-xs (11) · -sm (13) · -md (14, base) · -lg (16) · -xl (20) · -2xl (24) · -3xl (30)
+/* Weights */ --mts-font-weight-normal (400) · -medium (500) · -semibold (600) · -bold (700)
 ```
 
-### Espaciado
+### Spacing, radius, shadow
 
 ```css
---mts-space-1   /* 4px  */
---mts-space-2   /* 8px  */
---mts-space-3   /* 12px */
---mts-space-4   /* 16px */
---mts-space-5   /* 20px */
---mts-space-6   /* 24px */
---mts-space-8   /* 32px */
---mts-space-10  /* 40px */
---mts-space-12  /* 48px */
-```
-
-### Radios de borde
-
-```css
---mts-radius-xs    /* 2px  */
---mts-radius-sm    /* 4px  */
---mts-radius-md    /* 6px  — más usado */
---mts-radius-lg    /* 10px — cards */
---mts-radius-xl    /* 16px */
---mts-radius-full  /* 9999px — pills, avatares */
-```
-
-### Sombras
-
-```css
---mts-shadow-xs   /* muy sutil */
---mts-shadow-sm   /* elementos pequeños */
---mts-shadow-md   /* cards, dropdowns */
---mts-shadow-lg   /* modales, popovers */
---mts-shadow-xl   /* drawers, overlays grandes */
+/* Spacing */ --mts-space-1 (4px) · -2 (8) · -3 (12) · -4 (16) · -5 (20) · -6 (24) · -8 (32) · -10 (40) · -12 (48)
+/* Radius */  --mts-radius-xs (2) · -sm (4) · -md (6) · -lg (10, cards) · -xl (16) · -full (9999, pills/avatars)
+/* Shadow */  --mts-shadow-xs · -sm · -md (cards, dropdowns) · -lg (modals, popovers) · -xl (drawers, large overlays)
 ```
 
 ### Z-index
 
 ```css
---mts-z-base       /* 1    */
---mts-z-dropdown   /* 100  */
---mts-z-sticky     /* 200  */
---mts-z-overlay    /* 300  */
---mts-z-modal      /* 400  */
---mts-z-toast      /* 500  */
---mts-z-tooltip    /* 600  */
+--mts-z-base     /* 1   */
+--mts-z-dropdown /* 100 — dropdowns within their own stacking context */
+--mts-z-sticky   /* 200 */
+--mts-z-overlay  /* 300 — modal backdrop */
+--mts-z-modal    /* 400 */
+--mts-z-popover  /* 500 — portals that must float over the modal (dropdowns, pickers, autocomplete) */
+--mts-z-toast    /* 600 */
+--mts-z-tooltip  /* 700 */
 ```
 
-### Transiciones
+### Transitions
 
 ```css
 --mts-transition-fast  /* 0.12s ease */
@@ -202,201 +121,154 @@ Todas las variables CSS disponibles bajo el prefijo `--mts-`.
 
 ---
 
-## Clases de componente
+## Component classes
 
 ### Panel `.mts-panel`
 
-Contenedor principal de cada sección de la aplicación.
+Main container for each application section: `.mts-panel__header` / `__title` / `__subtitle` / `__actions` / `__body`,
+plus `.mts-separator`.
 
 ```html
 <div class="mts-panel">
   <div class="mts-panel__header">
-    <div>
-      <h1 class="mts-panel__title">Título de la sección</h1>
-      <p class="mts-panel__subtitle">Descripción opcional</p>
-    </div>
-    <div class="mts-panel__actions">
-      <button class="mts-btn mts-btn--primary">+ Nuevo</button>
-    </div>
+    <div><h1 class="mts-panel__title">Section title</h1><p class="mts-panel__subtitle">Optional description</p></div>
+    <div class="mts-panel__actions"><button class="mts-btn mts-btn--primary">+ New</button></div>
   </div>
   <hr class="mts-separator">
-  <div class="mts-panel__body">
-    <!-- contenido -->
-  </div>
+  <div class="mts-panel__body"><!-- content --></div>
 </div>
 ```
 
 ### Surface `.mts-surface`
 
-Bloque con borde y fondo, para agrupar contenido.
-
-```html
-<!-- Estándar -->
-<div class="mts-surface"> ... </div>
-
-<!-- Con sombra, sin borde -->
-<div class="mts-surface mts-surface--elevated"> ... </div>
-
-<!-- Bordes rectos -->
-<div class="mts-surface mts-surface--flat"> ... </div>
-```
+Bordered, filled block to group content: base, `--elevated` (shadow, no border), `--flat` (square corners).
 
 ### Layout `.mts-layout`
 
-Shell para aplicaciones con sidebar.
-
-```html
-<div class="mts-layout">
-  <aside class="mts-layout__sidebar" id="sidebar">
-    <!-- navegación -->
-  </aside>
-
-  <div class="mts-layout__main">
-    <header class="mts-layout__topbar">
-      <!-- topbar -->
-    </header>
-    <main class="mts-layout__content">
-      <!-- páginas -->
-    </main>
-    <footer class="mts-layout__footer">
-      © 2025 Mi App
-    </footer>
-  </div>
-</div>
-```
-
-Para colapsar el sidebar:
-
-```js
-document.getElementById('sidebar').classList.toggle('mts-layout__sidebar--collapsed');
-```
+App shell with a sidebar: `.mts-layout__sidebar` / `__main` / `__topbar` / `__content` / `__footer`. Collapse the
+sidebar by toggling `.mts-layout__sidebar--collapsed`.
 
 ---
 
-## Botones `.mts-btn`
+## Buttons `.mts-btn`
 
 ```html
-<!-- Variantes -->
-<button class="mts-btn mts-btn--primary">Primario</button>
-<button class="mts-btn mts-btn--secondary">Secundario</button>
+<!-- Variants -->
+<button class="mts-btn mts-btn--primary">Primary</button>
+<button class="mts-btn mts-btn--secondary">Secondary</button>
 <button class="mts-btn mts-btn--ghost">Ghost</button>
-<button class="mts-btn mts-btn--danger">Eliminar</button>
-<button class="mts-btn mts-btn--link">Enlace</button>
+<button class="mts-btn mts-btn--danger">Delete</button>
+<button class="mts-btn mts-btn--link">Link</button>
 
-<!-- Tamaños -->
-<button class="mts-btn mts-btn--primary mts-btn--xs">Extra small</button>
-<button class="mts-btn mts-btn--primary mts-btn--sm">Small</button>
-<button class="mts-btn mts-btn--primary">Default</button>
-<button class="mts-btn mts-btn--primary mts-btn--lg">Large</button>
-<button class="mts-btn mts-btn--primary mts-btn--xl">Extra large</button>
-
-<!-- Modificadores -->
-<button class="mts-btn mts-btn--primary mts-btn--block">Ancho completo</button>
-<button class="mts-btn mts-btn--primary mts-btn--round">Redondeado</button>
-<button class="mts-btn mts-btn--ghost mts-btn--icon">✕</button>
-
-<!-- Deshabilitado -->
-<button class="mts-btn mts-btn--primary" disabled>Deshabilitado</button>
+<!-- Sizes: --xs, --sm, (default), --lg, --xl. Modifiers: --block, --round, --icon -->
+<button class="mts-btn mts-btn--primary mts-btn--lg mts-btn--block">Full width</button>
+<button class="mts-btn mts-btn--primary" disabled>Disabled</button>
 ```
 
 ---
 
-## Formularios
+## Forms
 
 ```html
 <div class="mts-form-group">
-  <label class="mts-label mts-label--required">Nombre</label>
-  <input type="text" class="mts-input" placeholder="Ingresa tu nombre">
-  <span class="mts-form-hint">Mínimo 3 caracteres</span>
+  <label class="mts-label mts-label--required">Name</label>
+  <input type="text" class="mts-input" placeholder="Enter your name">
+  <span class="mts-form-hint">Minimum 3 characters</span>
 </div>
 
-<div class="mts-form-group">
-  <label class="mts-label">Descripción</label>
-  <textarea class="mts-textarea" rows="4"></textarea>
-</div>
-
-<div class="mts-form-group">
-  <label class="mts-label">País</label>
-  <select class="mts-select">
-    <option>Chile</option>
-    <option>Perú</option>
-  </select>
-</div>
-
-<!-- Estado de error -->
 <div class="mts-form-group">
   <label class="mts-label">Email</label>
   <input type="email" class="mts-input mts-input--error" value="invalid">
-  <span class="mts-form-error">Ingresa un email válido</span>
+  <span class="mts-form-error">Enter a valid email</span>
 </div>
 ```
 
+Also: `.mts-textarea`, `.mts-select`.
+
 ---
 
-## Loaders
+## Loaders & skeleton
 
 ```html
-<!-- Bolitas animadas (tu original mejorada) -->
-<div class="mts-loader">
-  <div class="mts-loader__balls">
-    <div class="mts-loader__ball"></div>
-    <div class="mts-loader__ball"></div>
-    <div class="mts-loader__ball"></div>
-    <div class="mts-loader__ball"></div>
-    <div class="mts-loader__ball"></div>
-  </div>
-  <span class="mts-loader__text">Cargando...</span>
-</div>
-
-<!-- Spinner circular -->
 <span class="mts-spinner"></span>
 <span class="mts-spinner mts-spinner--sm"></span>
-<span class="mts-spinner mts-spinner--lg"></span>
-```
 
----
-
-## Skeleton
-
-```html
 <div class="mts-skeleton mts-skeleton--title"></div>
 <div class="mts-skeleton mts-skeleton--text"></div>
-<div class="mts-skeleton mts-skeleton--text" style="width: 80%"></div>
-<div class="mts-skeleton mts-skeleton--text" style="width: 60%"></div>
 ```
 
 ---
 
-## Tipografía utilitaria
+## Typography & layout utilities
 
 ```html
-<h1 class="mts-h1">Título 1</h1>
-<h2 class="mts-h2">Título 2</h2>
-<h3 class="mts-h3">Título 3</h3>
+<h1 class="mts-h1">Heading 1</h1>
+<p class="mts-text-muted mts-text-sm">Small muted text</p>
+<span class="mts-text-danger mts-text-bold">Important error</span>
+<code class="mts-mono">code.example()</code>
 
-<p class="mts-text-muted mts-text-sm">Texto pequeño apagado</p>
-<span class="mts-text-danger mts-text-bold">Error importante</span>
-<code class="mts-mono">codigo.ejemplo()</code>
-<p class="mts-truncate" style="width: 200px">Texto largo que se trunca con puntos suspensivos</p>
-```
-
----
-
-## Utilidades de layout
-
-```html
 <!-- Flex -->
-<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3">
-  <span>Izquierda</span>
-  <span>Derecha</span>
-</div>
+<div class="mts-d-flex mts-items-center mts-justify-between mts-gap-3"><span>Left</span><span>Right</span></div>
 
-<!-- Responsive -->
-<span class="mts-hide-mobile">Solo desktop</span>
-<span class="mts-hide-tablet">Solo desktop grande</span>
+<!-- Responsive helpers -->
+<span class="mts-hide-mobile">Desktop only</span>
 
-<!-- Espaciado -->
-<div class="mts-mb-4 mts-p-3"> ... </div>
+<!-- Spacing -->
+<div class="mts-mb-4 mts-p-3">…</div>
+```
+
+Layout utilities include: `mts-d-flex`, `mts-flex-col`, `mts-flex-1`, `mts-gap-*`, `mts-items-center`,
+`mts-justify-between`, `mts-h-full`, `mts-vh-100`, `mts-min-w-0`, `mts-min-h-0`, `mts-overflow-hidden`, `mts-p-0`,
+`mts-mb-*`, `mts-mono`, `mts-truncate`, `mts-hide-mobile` / `mts-hide-tablet`.
+
+---
+
+## matios-ui-base.js — shared JS
+
+Base JS file of the framework. Load it **before** the components that require it.
+
+```html
+<script src="base/matios-ui-base.js"></script>
+<script src="widgets/boards/matios-ui-gantt-chart/matios-ui-gantt-chart.js"></script>
+```
+
+### `MTS._defineEvents(instance, eventNames, opts)`
+
+Mixin that generates the explicit event API on any component.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `instance` | `object` | The component instance (`this` in the constructor) |
+| `eventNames` | `string[]` | Event names in camelCase |
+| `opts` | `object` | Constructor options — registers `opts.onXxxx` automatically |
+
+It adds to `instance`: `onXxxx(handler)` → returns `dispose()`; `_emit(name, payload)`; and
+`_disposeAllListeners()` (call in `destroy()`).
+
+```js
+function MyComponent(el, opts) {
+  this._el = typeof el === 'string' ? document.querySelector(el) : el;
+  MTS._defineEvents(this, ['load', 'itemAdd', 'itemRemove'], opts);
+}
+
+const comp = new MyComponent('#host', { onLoad: function (e) { console.log('loaded', e); } });
+const disposeAdd = comp.onItemAdd(function (e) { persist(e.item); });
+disposeAdd(); // unsubscribe
+
+MyComponent.prototype.destroy = function () { this._disposeAllListeners(); /* … */ };
 ```
 
 ---
+
+## Accessibility
+
+- Tokens drive contrast; when adding a custom theme keep text/surface pairs above WCAG AA contrast.
+- Respect `prefers-reduced-motion` for the loaders/skeleton animations in your app shell.
+
+---
+
+## Changelog
+
+### 2026-05-29
+- `matios-ui-base.js` created — `MTS._defineEvents` mixin for the explicit event API (Boards Kit).
+- Token `--mts-z-popover: 500` added to the z-index stack; toast 500→600, tooltip 600→700.

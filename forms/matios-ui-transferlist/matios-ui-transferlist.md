@@ -1,21 +1,10 @@
 # MTS.TransferList
 
-Componente de asignacion entre dos listas.
-
-Sirve para patrones tipo:
-- `Transfer List`
-- `Dual Listbox`
-- `Pick List`
-- `Shuttle`
-
-Ideal para casos como:
-- asignar perfiles a un rol
-- mover elementos entre origen y seleccionados
-- bloquear duplicados por una llave de validacion
+Assignment component between two lists — covers Transfer List / Dual Listbox / Pick List / Shuttle patterns. Ideal for assigning profiles to a role, moving items between source and selected, or blocking duplicates by a validation key.
 
 ---
 
-## Instalacion
+## Installation
 
 ```html
 <link rel="stylesheet" href="../../base/matios-ui-base.css">
@@ -25,167 +14,127 @@ Ideal para casos como:
 
 ---
 
-## Uso basico
+## Usage
 
 ```js
+// Basic
 new MTS.TransferList('#my-transfer', {
-  label: 'Perfiles',
-  originTitle: 'Disponibles',
-  selectedTitle: 'Seleccionados',
+  label:         'Profiles',
+  originTitle:   'Available',
+  selectedTitle: 'Selected',
   originDataSource: [
-    { nombre: 'Perfil A', detalle: 'Modulo usuarios' },
-    { nombre: 'Perfil B', detalle: 'Modulo documentos' }
+    { name: 'Profile A', detail: 'Users module' },
+    { name: 'Profile B', detail: 'Documents module' },
   ],
   selectedDataSource: [],
-  itemLabel: 'nombre',
-  itemDescription: 'detalle'
+  itemLabel:       'name',
+  itemDescription: 'detail',
 });
+
+// Unique validation on the target + single-button layout
+new MTS.TransferList('#roles-transfer', {
+  originTitle:     'Available',
+  selectedTitle:   'Assigned',
+  itemLabel:       'name',
+  itemDescription: 'moduleName',
+  validateUnique:  true,
+  validateKey:     'moduleId',
+  duplicateMessage: 'There is already a profile for that module.',
+  draggable:       false,
+  buttons: { allToSelected: false, toSelected: true, toOrigin: false, allToOrigin: false },
+  removableSelectedItem: true,
+  onRequestItem: function (item, moved) { console.log(item, moved); },
+});
+```
+
+`validateKey` can be a `string` (an item property) or a `function` returning the value to compare:
+
+```js
+validateKey: function (item) { return item.id + '_' + item.creationDate; }
 ```
 
 ---
 
-## Validacion unica en destino
+## Options
 
-`validateUnique` permite impedir duplicados en la lista de seleccionados.
-
-```js
-new MTS.TransferList('#profiles-transfer', {
-  originDataSource: profiles,
-  selectedDataSource: [],
-  itemLabel: 'name',
-  itemDescription: 'description',
-  validateUnique: true,
-  validateKey: 'moduleId',
-  duplicateMessage: 'Ya existe un perfil para ese modulo.',
-  onRequestItem: function (item, moved) {
-    console.log(item, moved);
-  }
-});
-```
-
-`validateKey` puede ser:
-- `string`: usa una propiedad del item
-- `function`: devuelve el valor a comparar
-
-```js
-validateKey: function (item) {
-  return item.id + '_' + item.creationDate;
-}
-```
-
----
-
-## Opciones
-
-| Propiedad | Tipo | Default | Descripcion |
-|-----------|------|---------|-------------|
-| `label` | `string` | `''` | Label superior |
-| `hint` | `string` | `''` | Texto de ayuda |
-| `originTitle` | `string` | `'Origin'` | Titulo lista origen |
-| `selectedTitle` | `string` | `'Selected'` | Titulo lista seleccionada |
-| `originEmptyText` | `string` | `'No items available'` | Texto vacio lista origen |
-| `selectedEmptyText` | `string` | `'No items selected'` | Texto vacio lista seleccionada |
-| `originDataSource` | `array` | `[]` | Data source inicial del origen |
-| `selectedDataSource` | `array` | `[]` | Data source inicial de seleccionados |
-| `itemLabel` | `string\|function` | `'label'` | Texto principal visible |
-| `itemDescription` | `string\|function` | `'description'` | Texto secundario visible |
-| `renderItem` | `function` | `null` | Render custom del item |
-| `showMoveButtons` | `boolean` | `true` | Master switch — `false` oculta todos los botones sin excepcion |
-| `buttons` | `object` | todos `true` | Control individual por boton. Si se omite, los 4 visibles (retrocompat) |
-| `buttons.allToSelected` | `boolean` | `true` | Muestra el boton `»` (mover todos al destino) |
-| `buttons.toSelected` | `boolean` | `true` | Muestra el boton `›` (mover seleccionado al destino) |
-| `buttons.toOrigin` | `boolean` | `true` | Muestra el boton `‹` (mover seleccionado al origen) |
-| `buttons.allToOrigin` | `boolean` | `true` | Muestra el boton `«` (mover todos al origen) |
-| `removableSelectedItem` | `boolean` | `false` | Muestra una `x` por item en el lado seleccionado. Click elimina el item del destino — no lo mueve al origen |
-| `draggable` | `boolean` | `true` | Permite drag and drop |
-| `disabled` | `boolean` | `false` | Deshabilita la interaccion |
-| `validateUnique` | `boolean` | `false` | Activa validacion unica en destino |
-| `validateKey` | `string\|function` | `null` | Llave usada para comparar duplicados |
-| `duplicateMessage` | `string` | `'Duplicate item'` | Mensaje visual cuando el drop esta bloqueado |
-| `onRequestItem` | `function` | `null` | Callback unico: recibe `(item, moved)` |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `label` | `string` | `''` | Top label |
+| `hint` | `string` | `''` | Helper text |
+| `originTitle` | `string` | `'Origin'` | Source list title |
+| `selectedTitle` | `string` | `'Selected'` | Selected list title |
+| `originEmptyText` | `string` | `'No items available'` | Empty text, source |
+| `selectedEmptyText` | `string` | `'No items selected'` | Empty text, selected |
+| `originDataSource` | `array` | `[]` | Initial source data |
+| `selectedDataSource` | `array` | `[]` | Initial selected data |
+| `itemLabel` | `string \| function` | `'label'` | Primary visible text |
+| `itemDescription` | `string \| function` | `'description'` | Secondary visible text |
+| `renderItem` | `function` | `null` | Custom item renderer |
+| `showMoveButtons` | `boolean` | `true` | Master switch — `false` removes all buttons |
+| `buttons` | `object` | all `true` | Per-button control (omit = all 4 visible, backward-compat) |
+| `buttons.allToSelected` | `boolean` | `true` | Show `»` (move all to target) |
+| `buttons.toSelected` | `boolean` | `true` | Show `›` (move selected to target) |
+| `buttons.toOrigin` | `boolean` | `true` | Show `‹` (move selected to origin) |
+| `buttons.allToOrigin` | `boolean` | `true` | Show `«` (move all to origin) |
+| `removableSelectedItem` | `boolean` | `false` | Show an `x` per item on the selected side — click removes it from the target (does not move it back to origin) |
+| `draggable` | `boolean` | `true` | Allow drag and drop |
+| `disabled` | `boolean` | `false` | Disables interaction |
+| `validateUnique` | `boolean` | `false` | Enable unique validation on the target |
+| `validateKey` | `string \| function` | `null` | Key used to compare duplicates |
+| `duplicateMessage` | `string` | `'Duplicate item'` | Message shown when a drop is blocked |
+| `onRequestItem` | `function` | `null` | Single callback — receives `(item, moved)` |
 
 ---
 
 ## API
 
-```js
-const transfer = new MTS.TransferList('#transfer', { ... });
-
-transfer.getValue();
-transfer.getSelectedItems();
-transfer.getOriginItems();
-transfer.getAvailableItems();
-transfer.setItems({ originDataSource: [], selectedDataSource: [] });
-transfer.setValue([]);
-transfer.moveToSelected(itemOrInternalKey);
-transfer.moveToOrigin(itemOrInternalKey);
-transfer.moveToAvailable(itemOrInternalKey);
-transfer.moveAllToSelected();
-transfer.moveAllToOrigin();
-transfer.moveAllToAvailable();
-transfer.clear();
-transfer.enable();
-transfer.disable();
-transfer.destroy();
-```
+| Method | Description |
+|--------|-------------|
+| `getValue()` / `setValue(array)` | Get / set the selected values |
+| `getSelectedItems()` / `getOriginItems()` / `getAvailableItems()` | Read each list |
+| `setItems({ originDataSource, selectedDataSource })` | Replace both data sources |
+| `moveToSelected(item)` / `moveToOrigin(item)` / `moveToAvailable(item)` | Move one (item or internal key) |
+| `moveAllToSelected()` / `moveAllToOrigin()` / `moveAllToAvailable()` | Move all |
+| `clear()` | Clear the selection |
+| `enable()` / `disable()` | Enable / disable interaction |
+| `destroy()` | Destroy the instance |
 
 ---
 
-## Data attributes automáticos
+## Events
 
-Cada item renderizado recibe:
+| DOM event | Description |
+|-----------|-------------|
+| `mts:transferlist:request-item` | An item move was requested (`onRequestItem(item, moved)` is the recommended API) |
+| `mts:transferlist:change` | The lists changed (includes `trigger`, e.g. `'remove'`) |
+| `mts:transferlist:invalid-transfer` | A transfer was blocked by unique validation |
+| `mts:transferlist:selection-change` | The current in-list selection changed |
 
-- `data-mts-item-key` con una llave interna automatica
-- todos los campos del registro convertidos automaticamente a `data-*`
+### Automatic data attributes
 
-La componente no impone nombres fijos de negocio. Toma el datasource real y lo baja al `div` raiz del item.
-
----
-
-## Eventos DOM
-
-- `mts:transferlist:request-item`
-- `mts:transferlist:change`
-- `mts:transferlist:invalid-transfer`
-- `mts:transferlist:selection-change`
-
-`onRequestItem(item, moved)` es la API principal recomendada para integracion.
+Each rendered item gets `data-mts-item-key` (an automatic internal key) plus every record field mapped to `data-*`.
+The component imposes no fixed business field names — it takes the real data source and lowers it onto the item root.
 
 ---
 
-## Version
+## Accessibility
 
-## Uso previsto — solo boton › + eliminar con x
-
-```js
-new MTS.TransferList('#roles-transfer', {
-  originTitle: 'Disponibles',
-  selectedTitle: 'Asignados',
-  itemLabel: 'name',
-  itemDescription: 'moduleName',
-  validateUnique: true,
-  validateKey: 'moduleId',
-  duplicateMessage: 'Ya hay un perfil de ese modulo en el rol.',
-  draggable: false,
-  showMoveButtons: true,
-  buttons: { allToSelected: false, toSelected: true, toOrigin: false, allToOrigin: false },
-  removableSelectedItem: true
-});
-```
-
-Resultado: solo el boton `›` para agregar + una `x` por item en el lado seleccionado para quitar.
+- Move buttons provide a keyboard-operable alternative to drag-and-drop — keep at least one path enabled.
+- Blocked transfers surface `duplicateMessage`; convey list changes in a status region for assistive tech.
 
 ---
 
 ## Changelog
 
 ### 2026-05-22
-- `buttons` — control individual de cada boton (`allToSelected`, `toSelected`, `toOrigin`, `allToOrigin`). Si se omite el objeto, los 4 permanecen visibles (retrocompat).
-- `showMoveButtons: false` — ahora remueve los botones del DOM (antes solo aplicaba clase CSS). Gana sobre cualquier valor de `buttons.*`.
-- `removableSelectedItem` — boton `x` por item en el lado seleccionado. Elimina el item del destino sin moverlo al origen, sin validaciones, sin mecanica de move. Emite `change` con `trigger: 'remove'`.
+- `buttons` — per-button control (`allToSelected`, `toSelected`, `toOrigin`, `allToOrigin`); omit the object to keep
+  all four visible (backward-compat).
+- `showMoveButtons: false` now removes the buttons from the DOM (was CSS-only) and wins over any `buttons.*`.
+- `removableSelectedItem` — `x` per item on the selected side; removes from the target without moving it to origin,
+  no validation, emits `change` with `trigger: 'remove'`.
 
-### 2.0.0
-- Nueva API con `originDataSource`, `selectedDataSource`, validacion unica y llave interna automatica.
+### New data-source API
+- `originDataSource` / `selectedDataSource`, unique validation, and automatic internal item keys.
 
-### 1.0.0
-- Release inicial de TransferList.
+### Initial
+- First release of TransferList.

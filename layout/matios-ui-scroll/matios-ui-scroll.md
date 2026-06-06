@@ -1,77 +1,98 @@
 # MTS.Scroll
 
-Contenedor scrollable con scrollbar temático (fino, adaptado al tema activo), fades de borde que indican más contenido, y eventos de posición.
+Scrollable container with a themed scrollbar (thin, adapted to the active theme), edge fades that hint at more content, and position events.
 
-## Uso
+---
+
+## Installation
 
 ```html
-<div id="mi-scroll" style="height:300px">
-  <!-- contenido largo aquí -->
-</div>
+<link rel="stylesheet" href="layout/matios-ui-scroll/matios-ui-scroll.css">
+<script src="layout/matios-ui-scroll/matios-ui-scroll.js"></script>
+```
+
+---
+
+## Usage
+
+```html
+<div id="my-scroll" style="height: 300px"><!-- long content here --></div>
 ```
 
 ```js
-new MTS.Scroll('#mi-scroll', {
-  direction: 'vertical',
-  onReachEnd: function() {
-    console.log('llegaste al final — cargar más datos');
-  }
+new MTS.Scroll('#my-scroll', {
+  direction:  'vertical',
+  onReachEnd: function () { console.log('reached the end — load more data'); },
 });
 ```
 
-## Opciones
+---
 
-| Opción | Tipo | Default | Descripción |
+## Options
+
+| Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `direction` | `string` | `'vertical'` | `'vertical'` \| `'horizontal'` \| `'both'` |
-| `shadows` | `boolean` | `true` | Mostrar fades en los bordes del contenedor |
-| `fadeBg` | `string` | `null` | Color del fade. Usar cuando el contenedor no está sobre `--mts-bg-body`. Ej: `'var(--mts-bg-surface)'` |
-| `fadeSize` | `string` | `null` | Tamaño del fade en CSS. Ej: `'60px'` |
-| `threshold` | `number` | `24` | Distancia en px desde el borde para disparar `onReachStart` / `onReachEnd` |
-| `onScroll` | `function` | `null` | `({ scrollTop, scrollLeft, percent }) => {}` |
-| `onReachStart` | `function` | `null` | Se dispara al llegar al inicio |
-| `onReachEnd` | `function` | `null` | Se dispara al llegar al final |
+| `direction` | `string` | `'vertical'` | `'vertical'` · `'horizontal'` · `'both'` |
+| `shadows` | `boolean` | `true` | Show edge fades on the container |
+| `fadeBg` | `string` | `null` | Fade color — use when the container is not over `--mts-bg-body` (e.g. `'var(--mts-bg-surface)'`) |
+| `fadeSize` | `string` | `null` | Fade size in CSS (e.g. `'60px'`) |
+| `threshold` | `number` | `24` | Distance in px from the edge to fire `onReachStart` / `onReachEnd` |
+| `onScroll` | `function` | `null` | `({ scrollTop, scrollLeft, percent })` |
+| `onReachStart` | `function` | `null` | Fires when reaching the start |
+| `onReachEnd` | `function` | `null` | Fires when reaching the end |
+
+---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `scrollTo(px[, smooth])` | Move to a position in px (`smooth` defaults to `true`) |
+| `scrollToStart()` / `scrollToEnd()` | Move to start / end |
+| `getScroll()` | Current position in px |
+| `getPercent()` | Scroll percentage (0–100) |
+| `update()` | Recalculate fades (after content grows dynamically) |
+| `destroy()` | Remove the component and restore the original DOM |
+
 ```js
-const scroll = new MTS.Scroll('#el', { direction: 'vertical' });
-
-scroll.scrollTo(200)        // mueve a 200px (smooth por default)
-scroll.scrollTo(200, false) // mueve a 200px sin animación
-scroll.scrollToStart()      // mueve al inicio
-scroll.scrollToEnd()        // mueve al final
-scroll.getScroll()          // → número de px actuales
-scroll.getPercent()         // → porcentaje 0–100
-scroll.update()             // recalcula fades (si el contenido cambió dinámicamente)
-scroll.destroy()            // elimina el componente y restaura el DOM original
+const sc = new MTS.Scroll('#my-scroll', { direction: 'vertical' });
+sc.scrollToEnd();
+sc.update();
 ```
 
-## Personalizar el scrollbar vía CSS
+---
 
-El componente expone variables CSS sobrescribibles por elemento:
+## Events
 
-```css
-#mi-scroll {
-  --mts-scroll-thumb-color: var(--mts-color-primary);
-  --mts-scroll-thumb-hover: var(--mts-color-accent);
-  --mts-scroll-bar-size: 6px;
-  --mts-scroll-fade-size: 60px;
-  --mts-scroll-fade-bg: var(--mts-bg-surface);
-}
-```
+| Method | Payload | When |
+|--------|---------|------|
+| `onScroll` | `{ scrollTop, scrollLeft, percent }` | On scroll |
+| `onReachStart` / `onReachEnd` | — | Reached the start / end |
 
-| Variable | Default | Descripción |
+---
+
+## CSS Variables
+
+| Variable | Default | Description |
 |----------|---------|-------------|
-| `--mts-scroll-thumb-color` | `var(--mts-border-color)` | Color del thumb del scrollbar |
-| `--mts-scroll-thumb-hover` | `var(--mts-color-primary)` | Color del thumb al hover |
-| `--mts-scroll-bar-size` | `4px` | Ancho/alto del scrollbar |
-| `--mts-scroll-fade-size` | `40px` | Alto/ancho de los fades |
-| `--mts-scroll-fade-bg` | `var(--mts-bg-body)` | Color base del gradiente de fade |
+| `--mts-scroll-thumb-color` | `var(--mts-border-color)` | Scrollbar thumb color |
+| `--mts-scroll-thumb-hover` | `var(--mts-color-primary)` | Thumb color on hover |
+| `--mts-scroll-bar-size` | `4px` | Scrollbar width/height |
+| `--mts-scroll-fade-size` | `40px` | Fade height/width |
+| `--mts-scroll-fade-bg` | `var(--mts-bg-body)` | Base color of the fade gradient |
 
-## Notas
+---
 
-- El contenedor **necesita altura fija** (`height`, `max-height`, o `flex:1` en un padre flex) para que el scroll funcione.
-- Para contenedores sobre `mts-surface` o `mts-surface-2`, pasar `fadeBg: 'var(--mts-bg-surface)'` o el equivalente para que el fade no se vea mal.
-- `onReachEnd` es ideal como trigger para infinite scroll — combinable con `MTS.Infinite`.
-- `update()` es necesario si el contenido crece dinámicamente después de la inicialización.
+## Notes
+
+- The container needs a fixed height (`height`, `max-height`, or `flex: 1` in a flex parent) for scrolling to work.
+- For containers over `mts-bg-surface` / `-2`, pass `fadeBg: 'var(--mts-bg-surface)'` so the fade blends correctly.
+- `onReachEnd` is ideal as an infinite-scroll trigger — pairs well with `MTS.Infinite`.
+- Call `update()` if the content grows dynamically after initialization.
+
+---
+
+## Changelog
+
+### 2026-05-13
+- Documentation homologated to the standard template.

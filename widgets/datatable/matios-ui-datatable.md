@@ -1,11 +1,10 @@
 # MTS.DataTable
 
-Datatable dinámico con soporte de paginación, ordenamiento, búsqueda, selección y plugins.
-Core puro — sin dependencias externas. Usa `MTS.Table` internamente para el markup y CSS.
+Dynamic data table with pagination, sorting, search, selection and plugins. Pure core — no external dependencies. Uses `MTS.Table` internally for markup and CSS.
 
 ---
 
-## Dependencias
+## Installation
 
 ```html
 <link rel="stylesheet" href="../base/matios-ui-base.css">
@@ -16,7 +15,7 @@ Core puro — sin dependencias externas. Usa `MTS.Table` internamente para el ma
 
 ---
 
-## Uso mínimo
+## Usage
 
 ```html
 <div id="myTable"></div>
@@ -26,307 +25,194 @@ Core puro — sin dependencias externas. Usa `MTS.Table` internamente para el ma
 new MTS.DataTable({
   elementId: 'myTable',
   columns: [
-    { field: 'name',  label: 'Nombre', sortable: true },
+    { field: 'name',  label: 'Name', sortable: true },
     { field: 'email', label: 'Email' },
   ],
-  dataSource: async (query) => {
-    const res = await fetch('/api/users?' + new URLSearchParams(query))
-    return res.json()
+  dataSource: async function (query) {
+    const res = await fetch('/api/users?' + new URLSearchParams(query));
+    return res.json();
   },
-})
+});
 ```
 
 ---
 
-## Configuración
+## Configuration
 
-### Elemento contenedor
+### Container
 
-| Opción | Tipo | Descripción |
-|---|---|---|
-| `elementId` | `string` | Id del elemento HTML donde se monta la tabla. |
-| `element` | `HTMLElement` | Alternativa directa al elementId. |
+| Option | Type | Description |
+|--------|------|-------------|
+| `elementId` | `string` | Id of the host element |
+| `element` | `HTMLElement` | Direct alternative to `elementId` |
 
-### Columnas
+### Columns
 
 ```js
 columns: [
   {
-    field:         'name',       // campo del objeto de datos
-    label:         'Nombre',     // encabezado visible
-    sortable:      true,         // habilita ordenamiento en esta columna
-    align:         'start',      // 'start' | 'center' | 'end'
-    width:         '200px',      // ancho fijo (opcional)
-    alwaysVisible: true,         // no se puede ocultar con ColumnVisibility
-    render:        (v, row) => v // función de renderizado custom
-  }
+    field:         'name',     // data object field
+    label:         'Name',     // visible header
+    sortable:      true,       // enable sorting on this column
+    align:         'start',    // 'start' | 'center' | 'end'
+    width:         '200px',    // fixed width (optional)
+    alwaysVisible: true,       // cannot be hidden via ColumnVisibility
+    render:        function (v, row) { return v; }, // custom renderer
+  },
 ]
 ```
 
-`render(value, row)` recibe el valor del campo y el objeto completo de la fila.
-Si retorna una cadena con HTML, se interpola via `innerHTML`. Si no hay `render`, se usa `textContent`.
+`render(value, row)` receives the field value and the full row object. If it returns an HTML string it is set via
+`innerHTML`; without `render`, `textContent` is used.
 
 ### DataSource
 
 ```js
-// Función async — forma recomendada
-dataSource: async (query) => {
-  const res = await http.get('/api/items', { params: query })
-  if (!res.success) throw new Error(res.message)
-  return res.data
+// Async function — recommended
+dataSource: async function (query) {
+  const res = await http.get('/api/items', { params: query });
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
-// URL directa (GET/POST)
-dataSource: {
-  url:     '/api/items',
-  method:  'GET',         // 'GET' | 'POST'
-  headers: {},
-  params:  {}             // params base (se fusionan con los del query)
-}
+// Direct URL (GET/POST)
+dataSource: { url: '/api/items', method: 'GET', headers: {}, params: {} }
 ```
 
-**Contrato de respuesta del API:**
+**API response contract:** `{ data: [], total: 0, totalPages: 1 }`.
+
+**Query the dataSource receives:** `{ page, size, orderBy, orderDir, search, … }` (plus any params injected by
+plugins such as FilterPlugin).
+
+### Pagination & layout
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `pageSize` | `number` | `10` | Rows per page |
+| `rowId` | `string` | `null` | Field uniquely identifying each row (required for selection) |
+| `hover` | `boolean` | `true` | Highlight the row on hover |
+| `striped` | `boolean` | `false` | Alternating row background |
+| `bordered` | `boolean` | `false` | Borders on all cells |
+| `compact` | `boolean` | `false` | Less cell padding |
+| `fixedHeader` | `boolean` | `false` | Sticky header on vertical scroll |
+| `fixedHeaderHeight` | `string` | `'400px'` | Max scroll-area height when `fixedHeader: true` |
+
+### Initial sort, search & selection
 
 ```js
-{
-  data:       [],   // array de objetos
-  total:      0,    // total de registros (para paginación)
-  totalPages: 1     // número total de páginas
-}
+sort:   { column: 'name', direction: 'asc' },         // 'asc' | 'desc'
+search: { enabled: true, minChars: 1, width: '240px' },
+selection: { mode: 'multi', checkboxes: false },      // 'none' | 'single' | 'multi'
 ```
 
-**Query que recibe el dataSource:**
+| `mode` | Behavior |
+|--------|----------|
+| `'none'` | No selection (default) |
+| `'single'` | One row at a time |
+| `'multi'` | Multiple by click; with `checkboxes: true` adds a checkbox column and "select all" |
+
+### Page-size options
 
 ```js
-{
-  page:    1,         // página actual
-  size:    10,        // filas por página
-  orderBy: 'name',    // columna de orden activa (null si no hay)
-  orderDir:'asc',     // 'asc' | 'desc'
-  search:  '',        // texto de búsqueda activo
-  // + cualquier parámetro inyectado por plugins (FilterPlugin, etc.)
-}
+pagination: { pageSizeOptions: [5, 10, 25, 50, 100] }
 ```
 
-### Paginación y layout
+> **Important:** `pageSize` must be included in `pageSizeOptions`, otherwise the selector cannot pre-select the
+> initial value and shows an empty placeholder.
 
-| Opción | Tipo | Default | Descripción |
-|---|---|---|---|
-| `pageSize` | `number` | `10` | Filas por página. |
-| `rowId` | `string` | `null` | Campo que identifica unívocamente cada fila (requerido para selección). |
-| `hover` | `boolean` | `true` | Resalta la fila al pasar el cursor. |
-| `striped` | `boolean` | `false` | Filas alternadas con fondo diferente. |
-| `bordered` | `boolean` | `false` | Bordes en todas las celdas. |
-| `compact` | `boolean` | `false` | Celdas con menos padding. |
-| `fixedHeader` | `boolean` | `false` | Encabezado fijo al hacer scroll vertical. |
-| `fixedHeaderHeight` | `string` | `'400px'` | Altura máxima del área de scroll cuando `fixedHeader: true`. |
-
-### Ordenamiento inicial
+### Action column, row class, persistence, i18n
 
 ```js
-sort: { column: 'name', direction: 'asc' }  // 'asc' | 'desc'
-```
-
-### Búsqueda
-
-```js
-search: {
-  enabled:  true,     // muestra el input de búsqueda en el toolbar
-  minChars: 1,        // mínimo de caracteres para disparar la búsqueda
-  width:    '240px',  // ancho del input
-}
-```
-
-### Selección
-
-```js
-selection: {
-  mode:       'multi',  // 'none' | 'single' | 'multi'
-  checkboxes: false,    // muestra columna de checkboxes (solo mode: 'multi')
-}
-```
-
-| `mode` | Comportamiento |
-|---|---|
-| `'none'` | Sin selección. Default. |
-| `'single'` | Solo una fila a la vez. Clic en otra deselecciona la anterior. |
-| `'multi'` | Selección múltiple por clic. Con `checkboxes: true` agrega columna de checks y "seleccionar todo". |
-
-> Para deshabilitar la selección: `selection: { mode: 'none' }`.
-
-### Paginación — opciones de página
-
-```js
-pagination: {
-  pageSizeOptions: [5, 10, 25, 50, 100]  // opciones del selector de filas por página
-}
-```
-
-> **Importante:** `pageSize` debe estar incluido en `pageSizeOptions`. Si no coincide, el selector no puede pre-seleccionar el valor inicial y muestra el placeholder vacío.
->
-> ```js
-> // ✗ MAL — 12 no está en la lista, el selector queda vacío
-> pageSize: 12,
-> pagination: { pageSizeOptions: [5, 10, 25, 50, 100] }
->
-> // ✓ BIEN — 12 está en la lista, se pre-selecciona al arrancar
-> pageSize: 12,
-> pagination: { pageSizeOptions: [12, 25, 50, 100] }
-> ```
-
-### Columna de acciones
-
-```js
-actionColumn:      true,      // inyecta columna de acciones al final
-actionColumnLabel: '',        // label del encabezado (vacío por defecto)
-actionColumnWidth: '120px',   // ancho de la columna
-```
-
-La columna de acciones la inyecta y controla `MTS.DocumentManagerContextMenuPlugin` cuando `actionColumn: true`.
-
-### Fila con clase dinámica
-
-```js
-rowClass: (row) => row.status === 'inactive' ? 'mts-row--muted' : null
-```
-
-### Estado persistente
-
-```js
-persist: {
-  enabled: true,
-  key:     'mi-tabla',   // clave en localStorage; auto-generada desde elementId si se omite
-}
-```
-
-Persiste: página actual, orden, búsqueda y tamaño de página.
-
-### Internacionalización
-
-```js
-locale: 'es',   // 'es' | 'en' — requiere matios-ui-datatable-i18n.js
-
-// Override manual de textos (se fusionan sobre el locale activo)
-texts: {
-  search:   'Buscar...',
-  noData:   'Sin resultados',
-  loading:  'Cargando...',
-  error:    'Error al cargar datos.',
-  retry:    'Reintentar',
-  showing:  'Mostrando {start}–{end} de {total}',
-  perPage:  'Filas:',
-  previous: 'Anterior',
-  next:     'Siguiente',
-}
+actionColumn: true, actionColumnLabel: '', actionColumnWidth: '120px', // controlled by DocumentManagerContextMenuPlugin
+rowClass: function (row) { return row.status === 'inactive' ? 'mts-row--muted' : null; },
+persist:  { enabled: true, key: 'my-table' },        // persists page, sort, search, page size
+locale:   'es',                                       // 'es' | 'en' — requires matios-ui-datatable-i18n.js
+texts:    { search: 'Search...', noData: 'No results', /* … merged over the active locale */ },
 ```
 
 ---
 
-## Eventos / Callbacks
+## Events / Callbacks
 
 ```js
 new MTS.DataTable({
-  // ...
-
-  onSelectionChange: (items) => {
-    // Se dispara cada vez que cambia la selección.
-    // Recibe directamente el array de objetos seleccionados.
-    console.log(items)
-  },
-
-  onReady: (table) => {
-    // Se dispara una vez, tras el primer render completo
-  },
-
-  onLoad: (result, table) => {
-    // Se dispara tras cada carga de datos exitosa
-  },
-
-  onError: (err, table) => {
-    // Se dispara cuando dataSource lanza un error
-  },
-})
+  onSelectionChange: function (items) { console.log(items); }, // array of selected objects
+  onReady:           function (table) {},                       // once, after the first full render
+  onLoad:            function (result, table) {},               // after each successful data load
+  onError:           function (err, table) {},                  // when dataSource throws
+});
 ```
 
 ---
 
-## API pública
+## API
 
-### Carga y navegación
+### Load & navigation
 
-| Método | Descripción |
-|---|---|
-| `table.load()` | Carga la primera página. |
-| `table.reload()` | Recarga la página actual manteniendo el estado. |
-| `table.goToPage(n)` | Navega a la página `n`. |
-| `table.setSearch(text)` | Establece el texto de búsqueda y recarga. |
-| `table.setParams(params)` | Fusiona parámetros extra al query y recarga. |
-| `table.clearParams(...keys)` | Elimina parámetros por clave y recarga. |
-| `table.redraw()` | Re-renderiza la tabla con los últimos datos sin hacer un nuevo request. |
+| Method | Description |
+|--------|-------------|
+| `load()` | Load the first page |
+| `reload()` | Reload the current page keeping state |
+| `goToPage(n)` | Navigate to page `n` |
+| `setSearch(text)` | Set the search text and reload |
+| `setParams(params)` / `clearParams(...keys)` | Merge / remove extra query params and reload |
+| `redraw()` | Re-render with the latest data without a new request |
 
-### Selección
+### Selection
 
-| Método | Descripción |
-|---|---|
-| `table.getSelection()` | Devuelve un array con los objetos de las filas seleccionadas. |
-| `table.clearSelection()` | Deselecciona todas las filas. |
-| `table.selectRow(id)` | Selecciona la fila con el id dado. |
-| `table.deselectRow(id)` | Deselecciona la fila con el id dado. |
+| Method | Description |
+|--------|-------------|
+| `getSelection()` | Array of selected row objects |
+| `clearSelection()` | Deselect all rows |
+| `selectRow(id)` / `deselectRow(id)` | Select / deselect a row by id |
 
-### Plugins
+### Plugins, hooks & lifecycle
 
-| Método | Descripción |
-|---|---|
-| `table.use(plugin)` | Instala un plugin en tiempo de ejecución. |
-| `table.remove(name)` | Desinstala el plugin con ese `descriptor.name`. |
-| `table.getPlugin(name)` | Devuelve la instancia del plugin o `null` si no está instalado. |
-
-### Hooks
-
-Alternativa limpia al monkey-patching de callbacks. Permiten que múltiples plugins suscriban al mismo evento.
-
-| Método | Descripción |
-|---|---|
-| `table.registerHook(name, fn)` | Registra `fn` como listener del evento `name`. |
-| `table.unregisterHook(name, fn)` | Elimina `fn` del evento `name`. |
+| Method | Description |
+|--------|-------------|
+| `use(plugin)` / `remove(name)` / `getPlugin(name)` | Install / uninstall / get a plugin at runtime |
+| `registerHook(name, fn)` / `unregisterHook(name, fn)` | Subscribe/unsubscribe to a lifecycle event (multiple plugins can share it) |
+| `destroy()` | Unmount the table, uninstall all plugins and clear the DOM |
 
 ```js
-// Ejemplo — DocumentManagerPlugin usa esto internamente
-const onReady = () => { /* inicializar algo */ }
-table.registerHook('onReady', onReady)
-
-// Al desinstalar:
-table.unregisterHook('onReady', onReady)
+const onReady = function () { /* … */ };
+table.registerHook('onReady', onReady);
+table.unregisterHook('onReady', onReady);
 ```
 
-### Ciclo de vida
+---
 
-| Método | Descripción |
-|---|---|
-| `table.destroy()` | Desmonta la tabla, desinstala todos los plugins y limpia el DOM. |
+## Plugin contract
+
+| Requirement | Description |
+|-------------|-------------|
+| `static descriptor.name` | Unique id (e.g. `'MTS.DataTableToolbarPlugin'`) |
+| `static descriptor.version` | Semver version |
+| `static descriptor.provides` | Capability it exposes (avoids conflicts) |
+| `install(table)` | Called on mount, receives the DataTable instance |
+| `uninstall()` | Called on unmount — must clean up DOM, listeners and references |
+
+## Available plugins
+
+| Plugin | Folder | Description |
+|--------|--------|-------------|
+| `MTS.DataTableToolbarPlugin` | `plugins/toolbar/` | Button bar reactive to table state |
+| `MTS.DataTableFilterPlugin` | `plugins/filter/` | Filter chips (static or async select) |
+| `MTS.DataTableColumnVisibilityPlugin` | `plugins/columnvisibility/` | Panel to show/hide columns |
+| `MTS.DataTableExpandRowPlugin` | `plugins/expandrow/` | Expandable row with custom detail |
+| `MTS.DocumentManagerPlugin` | `plugins/documentmanager/` | Document manager with breadcrumb and drag & drop |
 
 ---
 
-## Contrato de Plugin
+## Accessibility
 
-| Requisito | Descripción |
-|---|---|
-| `static descriptor.name` | Identificador único (ej: `'MTS.DataTableToolbarPlugin'`). |
-| `static descriptor.version` | Versión semver. |
-| `static descriptor.provides` | Capacidad que expone (evita conflictos). |
-| `install(table)` | Llamado al montar. Recibe la instancia del DataTable. |
-| `uninstall()` | Llamado al desmontar. Debe limpiar DOM, listeners y referencias. |
+- Built on `MTS.Table` semantics (real `<th>` headers with scope); sortable headers expose the current sort state.
+- Selection checkboxes and pagination controls are keyboard-operable; reflect the selected/current state in text.
 
 ---
 
-## Plugins disponibles
+## Changelog
 
-| Plugin | Archivo | Descripción |
-|---|---|---|
-| `MTS.DataTableToolbarPlugin` | `plugins/toolbar/` | Barra de botones reactivos al estado de la tabla. |
-| `MTS.DataTableFilterPlugin` | `plugins/filter/` | Chips de filtros (select estático o async). |
-| `MTS.DataTableColumnVisibilityPlugin` | `plugins/columnvisibility/` | Panel para ocultar/mostrar columnas. |
-| `MTS.DataTableExpandRowPlugin` | `plugins/expandrow/` | Fila expandible con detalle custom. |
-| `MTS.DocumentManagerPlugin` | `plugins/documentmanager/` | Gestor de documentos con breadcrumb y drag & drop. |
-
----
+### Initial
+- Dynamic data table: async/URL dataSource with a fixed response contract, pagination, sorting, search, single/multi
+  selection, persistence, i18n, custom renderers/row classes, a plugin system with lifecycle hooks, and five plugins.

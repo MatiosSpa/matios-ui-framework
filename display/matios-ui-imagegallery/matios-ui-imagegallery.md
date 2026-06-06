@@ -1,11 +1,10 @@
 # MTS.ImageGallery
 
-🇬🇧 Image gallery with grid, masonry and list layouts, filters, multi-selection and built-in lightbox.
-🇪🇸 Galería de imágenes con layouts grid, masonry y list, filtros, selección múltiple y lightbox integrado.
+Image gallery with grid, masonry and list layouts, category filters, multi-selection and a built-in lightbox.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,124 +14,108 @@
 
 ---
 
-## Options / Opciones
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `images` | `array` | `[]` | 🇬🇧 Image items (see schema) / 🇪🇸 Ítems de imagen |
-| `layout` | `string` | `'grid'` | `'grid'` · `'masonry'` · `'list'` |
-| `cols` | `number` | `3` | 🇬🇧 Grid columns / 🇪🇸 Columnas del grid |
-| `gap` | `string` | `'8px'` | 🇬🇧 Gap between items / 🇪🇸 Espacio entre ítems |
-| `selectable` | `boolean` | `false` | 🇬🇧 Allow multi-selection / 🇪🇸 Permitir selección múltiple |
-| `lightbox` | `boolean` | `true` | 🇬🇧 Open lightbox on click / 🇪🇸 Abrir lightbox al hacer click |
-| `filters` | `boolean` | `false` | 🇬🇧 Show filter buttons by category / 🇪🇸 Mostrar botones de filtro por categoría |
-| `onSelect` | `function` | — | 🇬🇧 `({ selected, image }) => {}` Fires when selection changes / 🇪🇸 Se dispara al cambiar la selección |
-| `onOpen` | `function` | — | 🇬🇧 `({ image, index }) => {}` Fires when image opens in lightbox / 🇪🇸 Se dispara al abrir una imagen |
-
-### Image schema / Esquema de imagen
-
-| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
-|----------|------|--------------------------------------|
-| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
-| `src` | `string` | 🇬🇧 Image URL / 🇪🇸 URL de la imagen |
-| `thumb` | `string` | 🇬🇧 Thumbnail URL (optional) / 🇪🇸 URL de miniatura (opcional) |
-| `alt` | `string` | 🇬🇧 Alt text / 🇪🇸 Texto alternativo |
-| `caption` | `string` | 🇬🇧 Caption shown in lightbox / 🇪🇸 Pie de foto en el lightbox |
-| `category` | `string` | 🇬🇧 Filter category / 🇪🇸 Categoría para filtros |
-
----
-
-## Events / Eventos
+## Usage
 
 ```js
-new MTS.ImageGallery('#my-gallery', {
-  images: [...],
-  // Fires when selection changes / Se dispara al cambiar la selección
-  onSelect: (e) => {
-    console.log(e.detail.selected); // → [{ id, src, ... }, ...]
-    console.log(e.detail.image);    // → last toggled image
-  },
-  // Fires when image opens in lightbox / Se dispara al abrir en lightbox
-  onOpen: (e) => {
-    console.log(e.detail.image); // → { id, src, caption, ... }
-    console.log(e.detail.index); // → 2
-  },
-});
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-// Basic grid with lightbox / Grid básico con lightbox
+// Basic grid with lightbox
 new MTS.ImageGallery('#my-gallery', {
   layout:   'grid',
   cols:     3,
   lightbox: true,
   images: [
-    { id:'1', src:'/img/photo1.jpg', alt:'Mountain', caption:'Mountain view', category:'nature' },
-    { id:'2', src:'/img/photo2.jpg', alt:'Ocean',    caption:'Ocean sunset',  category:'nature' },
-    { id:'3', src:'/img/photo3.jpg', alt:'City',     caption:'City at night', category:'urban'  },
+    { id: '1', src: '/img/photo1.jpg', alt: 'Mountain', caption: 'Mountain view', category: 'nature' },
+    { id: '2', src: '/img/photo2.jpg', alt: 'Ocean',    caption: 'Ocean sunset',  category: 'nature' },
+    { id: '3', src: '/img/photo3.jpg', alt: 'City',     caption: 'City at night', category: 'urban'  },
   ],
-  onOpen: (e) => console.log('opened:', e.detail.image.id),
+  onOpen: function (e) { console.log('opened:', e.detail.image.id); },
 });
 
-// With filters / Con filtros
-new MTS.ImageGallery('#my-gallery', {
-  filters:  true,   // shows All · nature · urban buttons
-  lightbox: true,
-  images: [...],
-});
+// With category filters (renders All · nature · urban buttons)
+new MTS.ImageGallery('#my-gallery', { filters: true, lightbox: true, images: [/* … */] });
 
-// Multi-selection / Selección múltiple
+// Multi-selection
 new MTS.ImageGallery('#my-gallery', {
   selectable: true,
   lightbox:   false,
-  images: [...],
-  onSelect: (e) => {
-    console.log('selected:', e.detail.selected.length);
-    updateToolbar(e.detail.selected);
-  },
+  images: [/* … */],
+  onSelect: function (e) { updateToolbar(e.detail.selected); },
 });
 
-// Masonry layout / Layout masonry
-new MTS.ImageGallery('#my-gallery', {
-  layout: 'masonry',
-  cols:   4,
-  images: [...],
-});
+// Masonry layout
+new MTS.ImageGallery('#my-gallery', { layout: 'masonry', cols: 4, images: [/* … */] });
 ```
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `images` | `array` | `[]` | Image items (see schema below) |
+| `layout` | `string` | `'grid'` | `'grid'` · `'masonry'` · `'list'` |
+| `cols` | `number` | `3` | Grid columns |
+| `gap` | `string` | `'8px'` | Gap between items |
+| `selectable` | `boolean` | `false` | Allow multi-selection |
+| `lightbox` | `boolean` | `true` | Open the lightbox on click |
+| `filters` | `boolean` | `false` | Show category filter buttons |
+| `onSelect` | `function` | — | Fires when selection changes — `({ selected, image })` |
+| `onOpen` | `function` | — | Fires when an image opens in the lightbox — `({ image, index })` |
+
+### Image schema
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Unique identifier |
+| `src` | `string` | Image URL |
+| `thumb` | `string` | Thumbnail URL (optional) |
+| `alt` | `string` | Alt text |
+| `caption` | `string` | Caption shown in the lightbox |
+| `category` | `string` | Filter category |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `getSelected()` | Returns the selected images `[{ id, src, … }]` |
+| `clearSelection()` | Clear the current selection |
+| `setImages(array)` | Replace the image set and re-render |
+| `on(event, cb)` / `off(event, cb)` | Register / remove listeners (`'select'`, `'open'`) |
+
 ```js
-const gallery = new MTS.ImageGallery('#my-gallery', { images: [...] });
-
-// Get selected images / Obtener imágenes seleccionadas
-gallery.getSelected()  // → [{ id, src, ... }, ...]
-
-// Clear selection / Limpiar selección
-gallery.clearSelection()
-
-// Set images / Establecer imágenes
-gallery.setImages([...])
-
-// Register listeners / Registrar listeners
-gallery.on('select', (e) => console.log(e.detail.selected))
-gallery.on('open',   (e) => console.log(e.detail.image))
-gallery.off('select', handler)
+const gallery = new MTS.ImageGallery('#my-gallery', { images: [/* … */] });
+gallery.on('select', function (e) { console.log(e.detail.selected); });
+gallery.on('open',   function (e) { console.log(e.detail.image); });
 ```
 
 ---
 
-## DOM Events / Eventos DOM
+## Events
+
+| Method | Payload | When |
+|--------|---------|------|
+| `onSelect(fn)` / `on('select', fn)` | `{ selected, image }` | Selection changes (`image` = last toggled) |
+| `onOpen(fn)` / `on('open', fn)` | `{ image, index }` | An image opens in the lightbox |
+
+Also dispatched as DOM events:
 
 ```js
-el.addEventListener('mts:imagegallery:select', (e) => console.log(e.detail));
-el.addEventListener('mts:imagegallery:open',   (e) => console.log(e.detail));
+el.addEventListener('mts:imagegallery:select', function (e) { console.log(e.detail); });
+el.addEventListener('mts:imagegallery:open',   function (e) { console.log(e.detail); });
 ```
 
 ---
+
+## Accessibility
+
+- Always provide `alt` for each image — it is applied to the rendered `<img>`.
+- The lightbox traps focus while open and closes on `Esc`; navigate between images with the arrow keys.
+
+---
+
+## Changelog
+
+### Initial
+- Image gallery with `grid` / `masonry` / `list` layouts, category filters, multi-selection, built-in lightbox,
+  and `getSelected` / `clearSelection` / `setImages`.

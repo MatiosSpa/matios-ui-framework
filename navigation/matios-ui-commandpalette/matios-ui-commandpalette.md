@@ -1,11 +1,10 @@
 # MTS.CommandPalette
 
-🇬🇧 ⌘K-style command palette with keyboard navigation, groups, icons, shortcuts, local and async search.
-🇪🇸 Paleta de comandos estilo ⌘K con navegación por teclado, grupos, íconos, shortcuts y búsqueda local y async.
+⌘K-style command palette with keyboard navigation, groups, icons, shortcuts, and local or async search.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,157 +14,112 @@
 
 ---
 
-## Options / Opciones
+## Usage
 
-🇬🇧 `MTS.CommandPalette` takes no selector — it appends itself to `document.body`.
-🇪🇸 `MTS.CommandPalette` no recibe selector — se agrega a `document.body`.
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `commands` | `array` | `[]` | 🇬🇧 Command list (see schema below) / 🇪🇸 Lista de comandos |
-| `placeholder` | `string` | `'Buscar comando...'` | 🇬🇧 Input placeholder / 🇪🇸 Placeholder del input |
-| `hotkey` | `string` | `'k'` | 🇬🇧 Hotkey letter — triggers ⌘K / Ctrl+K / 🇪🇸 Tecla — activa ⌘K / Ctrl+K |
-| `overlay` | `boolean` | `true` | 🇬🇧 Show dark backdrop / 🇪🇸 Mostrar fondo oscuro |
-| `maxResults` | `number` | `8` | 🇬🇧 Max visible results / 🇪🇸 Máximo de resultados visibles |
-| `onOpen` | `function` | — | 🇬🇧 Fires when palette opens / 🇪🇸 Se dispara al abrir |
-| `onClose` | `function` | — | 🇬🇧 Fires when palette closes / 🇪🇸 Se dispara al cerrar |
-| `onSelect` | `function` | — | 🇬🇧 `({ id, command }) => {}` Fires on command selection / 🇪🇸 Se dispara al seleccionar |
-| `onSearch` | `function` | — | 🇬🇧 `(query) => commands[]` Async search override / 🇪🇸 Búsqueda async — reemplaza la búsqueda local |
-
-### Command schema / Esquema de comando
-
-| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
-|----------|------|--------------------------------------|
-| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
-| `label` | `string` | 🇬🇧 Display text / 🇪🇸 Texto visible |
-| `description` | `string` | 🇬🇧 Subtitle / 🇪🇸 Subtítulo |
-| `group` | `string` | 🇬🇧 Group label / 🇪🇸 Etiqueta de grupo |
-| `icon` | `string` | 🇬🇧 Icon HTML / 🇪🇸 HTML del ícono |
-| `shortcut` | `string` | 🇬🇧 Keyboard shortcut hint / 🇪🇸 Atajo de teclado |
-| `keywords` | `string[]` | 🇬🇧 Extra search terms / 🇪🇸 Términos extra de búsqueda |
-| `action` | `function` | 🇬🇧 `(command) => {}` Executed on select / 🇪🇸 Se ejecuta al seleccionar |
-| `disabled` | `boolean` | 🇬🇧 Excludes from results / 🇪🇸 Excluye de resultados |
-
----
-
-## Events / Eventos
+`MTS.CommandPalette` takes no selector — it appends itself to `document.body` and opens with ⌘K / Ctrl+K.
 
 ```js
-const cp = new MTS.CommandPalette({
-  commands: [...],
-  // Fires when palette opens / Se dispara al abrir
-  onOpen:  () => console.log('opened'),
-  // Fires when palette closes / Se dispara al cerrar
-  onClose: () => console.log('closed'),
-  // Fires when a command is selected / Se dispara al seleccionar un comando
-  onSelect: (e) => {
-    console.log(e.detail.id);      // → 'create-file'
-    console.log(e.detail.command); // → { id, label, ... }
-  },
-});
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-// Basic / Básico — opens with ⌘K / abre con ⌘K
 const cp = new MTS.CommandPalette({
   placeholder: 'Search commands...',
   commands: [
-    // Group: Navigation / Grupo: Navegación
-    {
-      id:          'go-home',
-      label:       'Go to Home',
-      description: 'Navigate to the home page',
-      group:       'Navigation',
-      icon:        '<svg>...</svg>',
-      shortcut:    '⌘H',
-      keywords:    ['home', 'inicio'],
-      action:      () => router.push('/'),
-    },
-    {
-      id:       'go-settings',
-      label:    'Settings',
-      group:    'Navigation',
-      shortcut: '⌘,',
-      action:   () => router.push('/settings'),
-    },
-    // Group: Actions / Grupo: Acciones
-    {
-      id:     'create-file',
-      label:  'Create new file',
-      group:  'Actions',
-      action: () => createFile(),
-    },
-    {
-      id:       'delete',
-      label:    'Delete selected',
-      group:    'Actions',
-      disabled: true,
-    },
+    { id: 'go-home', label: 'Go to Home', description: 'Navigate to the home page', group: 'Navigation',
+      icon: '<svg>...</svg>', shortcut: '⌘H', keywords: ['home', 'start'], action: function () { router.push('/'); } },
+    { id: 'go-settings', label: 'Settings', group: 'Navigation', shortcut: '⌘,', action: function () { router.push('/settings'); } },
+    { id: 'create-file', label: 'Create new file', group: 'Actions', action: function () { createFile(); } },
+    { id: 'delete', label: 'Delete selected', group: 'Actions', disabled: true },
   ],
-  onSelect: (e) => console.log('selected:', e.detail.id),
+  onSelect: function (e) { console.log('selected:', e.detail.id); },
+});
+```
+
+### Async search
+
+When `onSearch` is registered it replaces local search. It must return an array or a Promise:
+
+```js
+new MTS.CommandPalette({
+  onSearch: async function (e) {
+    const query = e.detail.query;
+    if (!query) return defaultCommands;
+    return fetch('/api/search?q=' + query).then(function (r) { return r.json(); });
+  },
+  onSelect: function (e) { console.log(e.detail.id); },
 });
 ```
 
 ---
 
-## Async Search / Búsqueda async
+## Options
 
-🇬🇧 When `onSearch` is registered, it replaces local search. Must return an array or a Promise.
-🇪🇸 Cuando `onSearch` está registrado, reemplaza la búsqueda local. Debe retornar un arreglo o una Promesa.
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `commands` | `array` | `[]` | Command list (see schema below) |
+| `placeholder` | `string` | localized | Input placeholder |
+| `hotkey` | `string` | `'k'` | Hotkey letter — triggers ⌘K / Ctrl+K |
+| `overlay` | `boolean` | `true` | Show the dark backdrop |
+| `maxResults` | `number` | `8` | Max visible results |
+| `onOpen` | `function` | — | Fires when the palette opens |
+| `onClose` | `function` | — | Fires when the palette closes |
+| `onSelect` | `function` | — | Fires on command selection — `{ id, command }` |
+| `onSearch` | `function` | — | `(query) → commands[]` — async search override (replaces local search) |
 
-```js
-const cp = new MTS.CommandPalette({
-  // onSearch replaces local search / onSearch reemplaza la búsqueda local
-  onSearch: async (e) => {
-    const query = e.detail.query;
-    if (!query) return defaultCommands;
-    const results = await fetch(`/api/search?q=${query}`).then(r => r.json());
-    return results;
-  },
-  onSelect: (e) => console.log(e.detail.id),
-});
-```
+### Command schema
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Unique identifier |
+| `label` | `string` | Display text |
+| `description` | `string` | Subtitle |
+| `group` | `string` | Group label |
+| `icon` | `string` | Icon HTML |
+| `shortcut` | `string` | Keyboard shortcut hint |
+| `keywords` | `string[]` | Extra search terms |
+| `action` | `function` | `(command)` — executed on select |
+| `disabled` | `boolean` | Excludes from results |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `open()` / `close()` / `toggle()` | Control the palette |
+| `setCommands(array)` | Replace the commands |
+| `addCommands(array)` | Add commands |
+| `on(event, cb)` / `off(event, cb)` | Listen to `'select'` / `'open'` / `'close'` |
+| `destroy()` | Destroy and unbind the hotkey |
+
 ```js
-const cp = new MTS.CommandPalette({ ... });
-
-// Open / close / toggle / Abrir / cerrar / alternar
-cp.open()
-cp.close()
-cp.toggle()
-
-// Replace commands / Reemplazar comandos
-cp.setCommands([...])
-
-// Add commands / Agregar comandos
-cp.addCommands([...])
-
-// Register / remove listeners / Registrar / eliminar listeners
-cp.on('select', (e) => console.log(e.detail.id))
-cp.off('select', handler)
-
-// Destroy and unbind hotkey / Destruir y desvincular hotkey
-cp.destroy()
+const cp = new MTS.CommandPalette({ commands: [/* … */] });
+cp.toggle();
+cp.on('select', function (e) { console.log(e.detail.id); });
 ```
 
 ---
 
-## DOM Events / Eventos DOM
+## Events
+
+| Method | DOM event | Payload |
+|--------|-----------|---------|
+| `onSelect` | `mts:commandpalette:select` | `{ id, command }` |
+| `onOpen` | `mts:commandpalette:open` | — |
+| `onClose` | `mts:commandpalette:close` | — |
 
 ```js
-document.addEventListener('mts:commandpalette:select', (e) => {
-  console.log(e.detail.id, e.detail.command);
-});
-document.addEventListener('mts:commandpalette:open',  () => {});
-document.addEventListener('mts:commandpalette:close', () => {});
+document.addEventListener('mts:commandpalette:select', function (e) { console.log(e.detail.id, e.detail.command); });
 ```
 
 ---
+
+## Accessibility
+
+- Fully keyboard-driven: the hotkey opens it, arrows move through results, `Enter` runs the command, `Esc` closes.
+- The search input is focused on open; `disabled` commands are excluded from results and navigation.
+
+---
+
+## Changelog
+
+### Initial
+- ⌘K command palette with grouped results, icons, shortcut hints, keywords, local or async (`onSearch`) search,
+  configurable hotkey/overlay/maxResults, and `open` / `close` / `toggle` / `setCommands` / `addCommands`.

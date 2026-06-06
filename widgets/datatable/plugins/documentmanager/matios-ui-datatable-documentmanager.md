@@ -1,19 +1,18 @@
 # MTS.DocumentManagerPlugin
 
-🇬🇧 Transforms a DataTable into a full document manager with folder navigation, breadcrumb, drag-and-drop, dropzone, and file upload — all extendable via sub-plugins.
-🇪🇸 Transforma un DataTable en un gestor de documentos completo con navegación de carpetas, breadcrumb, drag-and-drop, dropzone y subida de archivos — todo extensible mediante sub-plugins.
+Transforms a DataTable into a full document manager with folder navigation, breadcrumb, drag-and-drop, dropzone and file upload — all extendable via sub-plugins.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
-<!-- DataTable core (required) / DataTable core (requerido) -->
+<!-- DataTable core (required) -->
 <link rel="stylesheet" href="matios-ui-datatable.css">
 <script src="matios-ui-datatable.js"></script>
 <script src="matios-ui-datatable-i18n.js"></script>
 
-<!-- Shared menu (required by DM plugins) / Menú compartido (requerido por plugins DM) -->
+<!-- Shared menu (required by DM plugins) -->
 <link rel="stylesheet" href="plugins/shared/matios-ui-datatable-menu.css">
 <script src="plugins/shared/matios-ui-datatable-menu.js"></script>
 
@@ -24,176 +23,128 @@
 
 ---
 
-## Architecture / Arquitectura
+## Architecture
 
-🇬🇧 The DocumentManager is a **plugin stack**. Each layer adds capabilities and is completely optional:
-🇪🇸 El DocumentManager es un **stack de plugins**. Cada capa agrega capacidades y es completamente opcional:
+The DocumentManager is a **plugin stack**. Each layer adds capabilities and is completely optional:
 
 ```
 MTS.DataTable
- └── MTS.DocumentManagerPlugin             ← folder nav, breadcrumb, drag-drop, dropzone
-      └── MTS.DocumentManagerUploadPlugin  ← upload modal with file list and progress
-      └── MTS.DocumentManagerContextMenuPlugin  ← right-click / actions column
+ └── MTS.DocumentManagerPlugin                 ← folder nav, breadcrumb, drag-drop, dropzone
+      ├── MTS.DocumentManagerUploadPlugin      ← upload modal with file list and progress
+      ├── MTS.DocumentManagerPreviewPlugin     ← fullscreen preview modal with side panel
+      └── MTS.DocumentManagerContextMenuPlugin ← right-click / actions column
            └── MTS.DocumentManagerWorkflowPlugin ← approval lifecycle actions
 ```
 
-🇬🇧 Sub-plugins are passed via `plugins: [...]` in each parent's options.
-🇪🇸 Los sub-plugins se pasan mediante `plugins: [...]` en las opciones de cada padre.
+Sub-plugins are passed via `plugins: [...]` in each parent's options.
 
 ---
 
 ## MTS.DocumentManagerPlugin
 
-### Options / Opciones
+### Options
 
-| Option | Type | Default | Description / Descripción |
-|--------|------|---------|---------------------------|
-| `rootLabel` | `string` | `'Root'` | 🇬🇧 Label for the root folder in the breadcrumb / 🇪🇸 Etiqueta de la carpeta raíz en el breadcrumb |
-| `breadcrumb` | `boolean` | `false` | 🇬🇧 Show folder navigation breadcrumb / 🇪🇸 Mostrar breadcrumb de navegación de carpetas |
-| `dragDrop` | `boolean` | `false` | 🇬🇧 Enable drag-and-drop to move items between folders / 🇪🇸 Habilitar drag-and-drop para mover ítems entre carpetas |
-| `dropzone` | `boolean` | `false` | 🇬🇧 Enable OS file drop over the table to trigger upload / 🇪🇸 Habilitar arrastre de archivos del OS sobre la tabla para disparar el upload |
-| `accept` | `string` | `'*'` | 🇬🇧 Accepted file types — extensions (`.pdf`), MIME types (`image/*`), comma-separated / 🇪🇸 Tipos de archivo aceptados — extensiones (`.pdf`), MIME types (`image/*`), separados por coma |
-| `multiple` | `boolean` | `true` | 🇬🇧 Allow uploading more than one file at a time / 🇪🇸 Permitir subir más de un archivo a la vez |
-| `maxFiles` | `number\|null` | `null` | 🇬🇧 Maximum number of files per upload batch / 🇪🇸 Máximo de archivos por lote de subida |
-| `maxFileSizeMB` | `number\|null` | `null` | 🇬🇧 Maximum file size in MB per file / 🇪🇸 Tamaño máximo por archivo en MB |
-| `onFileExists` | `string` | `'ask'` | `'ask'` · `'replace'` · `'version'` · `'skip'` — 🇬🇧 Policy when a file with the same name already exists / 🇪🇸 Política cuando ya existe un archivo con el mismo nombre |
-| `onFileDrop` | `function` | `null` | `(files, folder) => {}` — 🇬🇧 Fires when files are dropped on the dropzone / 🇪🇸 Se dispara al soltar archivos en el dropzone |
-| `onUpload` | `async function` | `null` | `async (file, folder, { action, currentVersion }) => {}` — 🇬🇧 Called once per file during upload / 🇪🇸 Se llama una vez por archivo durante la subida |
-| `onUploaded` | `function` | `null` | `(files, folder) => {}` — 🇬🇧 Fires when the entire batch finishes / 🇪🇸 Se dispara cuando termina todo el lote |
-| `onError` | `function` | `null` | `(err, file, folder) => {}` — 🇬🇧 Fires when a file upload fails / 🇪🇸 Se dispara cuando falla la subida de un archivo |
-| `onFileClick` | `function` | `null` | `(item) => {}` — 🇬🇧 Fires when the user clicks a file row / 🇪🇸 Se dispara al hacer clic en una fila de archivo |
-| `onDrop` | `function` | `null` | `(items, folder) => {}` — 🇬🇧 Fires when items are dragged to a folder (move) / 🇪🇸 Se dispara al arrastrar ítems a una carpeta (mover) |
-| `plugins` | `array` | `[]` | 🇬🇧 Sub-plugins: `DocumentManagerUploadPlugin`, `DocumentManagerContextMenuPlugin` / 🇪🇸 Sub-plugins del gestor de documentos |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `rootLabel` | `string` | `'Root'` | Label for the root folder in the breadcrumb |
+| `breadcrumb` | `boolean` | `false` | Show the folder navigation breadcrumb |
+| `dragDrop` | `boolean` | `false` | Enable drag-and-drop to move items between folders |
+| `dropzone` | `boolean` | `false` | Enable OS file drop over the table to trigger upload |
+| `accept` | `string` | `'*'` | Accepted file types — extensions (`.pdf`), MIME types (`image/*`), comma-separated |
+| `multiple` | `boolean` | `true` | Allow uploading more than one file at a time |
+| `maxFiles` | `number \| null` | `null` | Maximum number of files per upload batch |
+| `maxFileSizeMB` | `number \| null` | `null` | Maximum file size in MB per file |
+| `onFileExists` | `string` | `'ask'` | `'ask'` · `'replace'` · `'version'` · `'skip'` — policy when a same-name file exists |
+| `onFileDrop` | `function` | `null` | `(files, folder)` — fires when files are dropped on the dropzone |
+| `onUpload` | `async function` | `null` | `async (file, folder, { action, currentVersion })` — called once per file |
+| `onUploaded` | `function` | `null` | `(files, folder)` — fires when the batch finishes |
+| `onError` | `function` | `null` | `(err, file, folder)` — fires when an upload fails |
+| `onFileClick` | `function` | `null` | `(item)` — fires when a file row is clicked |
+| `onDrop` | `function` | `null` | `(items, folder)` — fires when items are dragged to a folder (move) |
+| `plugins` | `array` | `[]` | Sub-plugins (Upload, Preview, ContextMenu) |
 
-### `onFileExists` values / valores de `onFileExists`
+**`onFileExists` values:** `'ask'` (per-file buttons: Replace / New version / Skip), `'replace'`, `'version'`,
+`'skip'` (auto).
 
-| Value | Behavior / Comportamiento |
-|-------|---------------------------|
-| `'ask'` | 🇬🇧 Shows per-file buttons: Replace / New version / Skip / 🇪🇸 Muestra botones por archivo: Reemplazar / Nueva versión / Omitir |
-| `'replace'` | 🇬🇧 Auto-replaces the existing file / 🇪🇸 Reemplaza automáticamente el archivo existente |
-| `'version'` | 🇬🇧 Auto-creates a new version / 🇪🇸 Crea automáticamente una nueva versión |
-| `'skip'` | 🇬🇧 Auto-skips (does not upload) / 🇪🇸 Omite automáticamente (no sube) |
+**`onUpload` third argument** (when `onFileExists` is `'ask'`): `{ action: 'replace'|'version'|null, currentVersion: string|null }`
+(`null` action = new file with no conflict).
 
-### `onUpload` callback
+### Static render helpers
 
-🇬🇧 The third argument carries the conflict resolution decision when `onFileExists` is `'ask'`:
-🇪🇸 El tercer argumento lleva la decisión de resolución de conflicto cuando `onFileExists` es `'ask'`:
-
-| Property | Type | Description / Descripción |
-|----------|------|---------------------------|
-| `action` | `'replace'\|'version'\|null` | 🇬🇧 `null` = new file with no conflict / 🇪🇸 `null` = archivo nuevo sin conflicto |
-| `currentVersion` | `string\|null` | 🇬🇧 Version string returned by `onCheckFileExists`, if any / 🇪🇸 Versión retornada por `onCheckFileExists`, si existe |
-
-### Static render helpers / Helpers de render estáticos
-
-🇬🇧 Use these in column `render` functions — they output ready-to-use HTML:
-🇪🇸 Úsalos en las funciones `render` de columna — devuelven HTML listo para usar:
+Use in column `render` functions — they output ready-to-use HTML:
 
 ```js
-// Icon + name with folder/file styling / Ícono + nombre con estilo carpeta/archivo
-// If row.version is present, shows an inline version badge before the name.
-// Si row.version está presente, muestra un badge de versión inline antes del nombre.
-render: (v, row) => MTS.DocumentManagerPlugin.renderName(v, row)
-
-// Human-readable file size (KB, MB, GB) / Tamaño legible (KB, MB, GB)
-render: MTS.DocumentManagerPlugin.renderSize
-
-// Status badge (active / archived / etc.) / Badge de estado
-render: MTS.DocumentManagerPlugin.renderStatus
-
-// Workflow status badge / Badge de estado de workflow
-render: MTS.DocumentManagerPlugin.renderWorkflowStatus
+render: function (v, row) { return MTS.DocumentManagerPlugin.renderName(v, row); } // icon + name (+ version badge)
+render: MTS.DocumentManagerPlugin.renderSize           // human-readable size
+render: MTS.DocumentManagerPlugin.renderStatus         // status badge
+render: MTS.DocumentManagerPlugin.renderWorkflowStatus // workflow status badge
 ```
 
-### `getItems()` method
+### `getItems()`
 
-🇬🇧 Returns the items currently visible in the table (current page data). Useful in `onCheckFileExists` to detect duplicates without an HTTP call.
-🇪🇸 Retorna los ítems visibles actualmente en la tabla (datos de la página actual). Útil en `onCheckFileExists` para detectar duplicados sin llamada HTTP.
+Returns the items currently visible in the table (current page data). Useful in `onCheckFileExists` to detect
+duplicates without an HTTP call: `dm.getItems()` → `[{ id, name, type, size, modified, … }]`.
 
-```js
-const items = dm.getItems()
-// → [{ id, name, type, size, modified, ... }, ...]
-```
+### Data contract
 
-### Data contract / Contrato de datos
+The `dataSource` must return items with the fields your columns and plugins need. Only `id`, `name` and `type` are
+strictly required; all others are optional (missing ones show `—` in built-in panels).
 
-🇬🇧 The `dataSource` must return items with at least the fields your columns and plugins need. The table below lists every field the built-in plugins read, with the consuming plugin noted.
-🇪🇸 El `dataSource` debe retornar los campos que usen tus columnas y plugins. La tabla lista todos los campos que leen los plugins built-in, con el plugin que los consume indicado.
+| Field | Type | Used by | Notes |
+|-------|------|---------|-------|
+| `id` | `string \| number` | All | Unique identifier |
+| `name` | `string` | DM, Preview | File or folder name |
+| `type` | `'file' \| 'folder'` | DM, Preview | Drives icon, click behavior and actions |
+| `ext` | `string` | DM, Preview | Extension without dot (`pdf`, `docx`) |
+| `mimeType` | `string \| null` | Preview | MIME type — file icon and BasicInfoPanel |
+| `version` | `string \| number \| null` | DM, Preview | Inline badge in the row and preview header |
+| `sizeFormatted` | `string \| null` | BasicInfoPanel | Human-readable size — preferred over `size` |
+| `size` | `number \| null` | BasicInfoPanel | Bytes — fallback when `sizeFormatted` is absent |
+| `createdAt` / `modifiedAt` / `updatedAt` | `string \| null` | BasicInfoPanel | Dates (`modifiedAt` preferred over `updatedAt`) |
+| `status` | `string \| null` | DM, BasicInfoPanel | Item status (`active`, `archived`, …) |
+| `owner` / `author` | `string \| null` | BasicInfoPanel | Owner — `owner` preferred over `author` |
+| `workflowStatus` | `string \| null` | WorkflowPlugin | Required only when using WorkflowPlugin |
 
-| Field | Type | Used by / Usado por | Notes / Notas |
-|-------|------|---------------------|---------------|
-| `id` | `string\|number` | All plugins | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
-| `name` | `string` | DM, Preview | 🇬🇧 File or folder name / 🇪🇸 Nombre del archivo o carpeta |
-| `type` | `'file'\|'folder'` | DM, Preview | 🇬🇧 Drives icon, click behavior and actions / 🇪🇸 Define ícono, comportamiento al clic y acciones |
-| `ext` | `string` | DM, Preview | 🇬🇧 File extension without dot (`pdf`, `docx`) / 🇪🇸 Extensión sin punto (`pdf`, `docx`) |
-| `mimeType` | `string\|null` | Preview | 🇬🇧 MIME type — used for file icon and BasicInfoPanel / 🇪🇸 Tipo MIME — para ícono y BasicInfoPanel |
-| `version` | `string\|number\|null` | DM, Preview | 🇬🇧 Version string/number — shown as inline badge in the row and in the preview header / 🇪🇸 Versión — badge inline en la fila y en el header del preview |
-| `sizeFormatted` | `string\|null` | BasicInfoPanel | 🇬🇧 Human-readable size (`500 KB`) — preferred over `size` / 🇪🇸 Tamaño legible (`500 KB`) — preferido sobre `size` |
-| `size` | `number\|null` | BasicInfoPanel | 🇬🇧 File size in bytes — fallback when `sizeFormatted` is absent / 🇪🇸 Tamaño en bytes — fallback cuando no hay `sizeFormatted` |
-| `createdAt` | `string\|null` | BasicInfoPanel | 🇬🇧 Creation date as string / 🇪🇸 Fecha de creación como string |
-| `modifiedAt` | `string\|null` | BasicInfoPanel | 🇬🇧 Last modified date — preferred over `updatedAt` / 🇪🇸 Última modificación — preferido sobre `updatedAt` |
-| `updatedAt` | `string\|null` | BasicInfoPanel | 🇬🇧 Fallback for `modifiedAt` / 🇪🇸 Fallback para `modifiedAt` |
-| `status` | `string\|null` | DM, BasicInfoPanel | 🇬🇧 Item status (`active`, `archived`, …) / 🇪🇸 Estado del ítem |
-| `owner` | `string\|null` | BasicInfoPanel | 🇬🇧 Owner or responsible — preferred over `author` / 🇪🇸 Propietario o responsable — preferido sobre `author` |
-| `author` | `string\|null` | BasicInfoPanel | 🇬🇧 Fallback for `owner` / 🇪🇸 Fallback para `owner` |
-| `workflowStatus` | `string\|null` | WorkflowPlugin | 🇬🇧 Workflow state — required only when using WorkflowPlugin / 🇪🇸 Estado del workflow — solo requerido con WorkflowPlugin |
-
-🇬🇧 Only `id`, `name` and `type` are strictly required. All other fields are optional — missing ones show `—` in the built-in panels.
-🇪🇸 Solo `id`, `name` y `type` son estrictamente requeridos. El resto son opcionales — los ausentes muestran `—` en los paneles built-in.
-
-### Usage / Uso
+### Usage
 
 ```js
 const dm = new MTS.DocumentManagerPlugin({
-  rootLabel:     'Documentos',
+  rootLabel:     'Documents',
   breadcrumb:    true,
   dragDrop:      true,
   dropzone:      true,
-
-  // File constraints / Restricciones de archivo
   accept:        '.pdf,.docx,.xlsx,image/*',
   multiple:      true,
   maxFiles:      10,
   maxFileSizeMB: 25,
   onFileExists:  'ask',
-
-  onFileDrop: (files, folder) => dmUpload.open(files, folder),
-
-  onUpload: async (file, folder, { action, currentVersion } = {}) => {
+  onFileDrop:  function (files, folder) { dmUpload.open(files, folder); },
+  onUpload: async function (file, folder, opts) {
+    opts = opts || {};
     const fd = new FormData();
-    fd.append('file',           file);
-    fd.append('folderId',       folder?.id ?? '');
-    fd.append('action',         action         ?? '');
-    fd.append('currentVersion', currentVersion ?? '');
+    fd.append('file', file);
+    fd.append('folderId', folder ? folder.id : '');
+    fd.append('action', opts.action || '');
+    fd.append('currentVersion', opts.currentVersion || '');
     const res = await http.post('/api/documents/upload', fd);
     if (!res.success) throw new Error(res.message);
   },
-  onUploaded:  (files, folder) => table.reload(),
-  onError:     (err, file)     => console.error(err),
-  onFileClick: (item)          => openPreview(item),
-  onDrop:      (items, folder) => moveItems(items, folder),
-
+  onUploaded:  function () { table.reload(); },
+  onFileClick: function (item) { openPreview(item); },
+  onDrop:      function (items, folder) { moveItems(items, folder); },
   plugins: [dmUpload, dmContextMenu],
 });
 
 new MTS.DataTable({
   elementId: 'my-table',
   columns: [
-    { field: 'name',         label: 'Nombre',     sortable: true,
-      render: (v, row) => MTS.DocumentManagerPlugin.renderName(v, row) },
-    { field: 'sizeFormatted', label: 'Tamaño',    align: 'end', width: '100px' },
-    { field: 'modifiedAt',   label: 'Modificado', sortable: true },
-    { field: 'status',       label: 'Estado',
-      render: MTS.DocumentManagerPlugin.renderStatus },
+    { field: 'name', label: 'Name', sortable: true, render: function (v, row) { return MTS.DocumentManagerPlugin.renderName(v, row); } },
+    { field: 'sizeFormatted', label: 'Size', align: 'end', width: '100px' },
+    { field: 'modifiedAt', label: 'Modified', sortable: true },
+    { field: 'status', label: 'Status', render: MTS.DocumentManagerPlugin.renderStatus },
   ],
-  dataSource: async (query) => {
-    const res = await http.get('/api/documents', { params: query });
-    return res.data;
-  },
-  rowId:        'id',
-  pageSize:     10,
-  actionColumn: true,
-  plugins:      [dm],
+  dataSource: async function (query) { const res = await http.get('/api/documents', { params: query }); return res.data; },
+  rowId: 'id', pageSize: 10, actionColumn: true, plugins: [dm],
 });
 ```
 
@@ -201,67 +152,33 @@ new MTS.DataTable({
 
 ## MTS.DocumentManagerUploadPlugin
 
-🇬🇧 Upload modal with drag-drop area, file list, progress indicator, and conflict resolution. Must be installed as a sub-plugin of `DocumentManagerPlugin`.
-🇪🇸 Modal de subida con zona drag-drop, lista de archivos, indicador de progreso y resolución de conflictos. Debe instalarse como sub-plugin de `DocumentManagerPlugin`.
-
-### Additional CSS / CSS adicional
+Upload modal with a drag-drop area, file list, progress indicator and conflict resolution. Installed as a sub-plugin
+of `DocumentManagerPlugin`.
 
 ```html
 <link rel="stylesheet" href="plugins/documentmanager/matios-ui-datatable-documentmanager-upload.css">
 <script src="plugins/documentmanager/matios-ui-datatable-documentmanager-upload.js"></script>
-
-<!-- Modal dependency / Dependencia modal -->
 <link rel="stylesheet" href="overlays/matios-ui-modal/matios-ui-modal.css">
 <script src="overlays/matios-ui-modal/matios-ui-modal.js"></script>
 ```
 
-### Options / Opciones
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `uploadProgress` | `string` | `'none'` | `'none'` · `'spinner'` · `'bar'` — per-file progress style |
+| `uploadCheck` | `object \| null` | `null` | File-existence check hooks |
+| `uploadCheck.onCheckFileExists` | `function` | — | `async (file, folder) → false \| true \| { version }` |
 
-| Option | Type | Default | Description / Descripción |
-|--------|------|---------|---------------------------|
-| `uploadProgress` | `string` | `'none'` | `'none'` · `'spinner'` · `'bar'` — 🇬🇧 Progress indicator style per file / 🇪🇸 Estilo de indicador de progreso por archivo |
-| `uploadCheck` | `object\|null` | `null` | 🇬🇧 File existence check hooks / 🇪🇸 Hooks para verificar existencia de archivos |
-| `uploadCheck.onCheckFileExists` | `function` | — | `async (file, folder) => false \| true \| { version }` — 🇬🇧 Return `false` if the file doesn't exist, `true` or `{ version: 'v1' }` if it does / 🇪🇸 Retorna `false` si no existe, `true` o `{ version: 'v1' }` si existe |
-
-### `onCheckFileExists` return values / valores de retorno
-
-| Return | Meaning / Significado |
-|--------|-----------------------|
-| `false` | 🇬🇧 File does not exist — proceed with upload / 🇪🇸 El archivo no existe — proceder con la subida |
-| `true` | 🇬🇧 File exists, no version info / 🇪🇸 El archivo existe, sin información de versión |
-| `{ version: 'v1' }` | 🇬🇧 File exists with a known version — badge shown in UI / 🇪🇸 El archivo existe con versión conocida — badge mostrado en la UI |
-
-### `open()` method
-
-🇬🇧 Opens the upload modal. Can be called from a toolbar button or `onFileDrop`.
-🇪🇸 Abre el modal de subida. Se puede llamar desde un botón de toolbar o desde `onFileDrop`.
-
-```js
-// Open empty / Abrir vacío
-dmUpload.open()
-
-// Open pre-loaded with dropped files / Abrir precargado con archivos soltados
-dmUpload.open(files, folder)
-```
-
-### Constraints read from DocumentManagerPlugin / Restricciones leídas desde DocumentManagerPlugin
-
-🇬🇧 The upload plugin reads `accept`, `multiple`, `maxFiles`, `maxFileSizeMB`, and `onFileExists` directly from `dm._options`. Set them once on `DocumentManagerPlugin` — they apply to both the dropzone and the modal.
-🇪🇸 El plugin de upload lee `accept`, `multiple`, `maxFiles`, `maxFileSizeMB` y `onFileExists` directamente desde `dm._options`. Se configuran una sola vez en `DocumentManagerPlugin` y aplican tanto al dropzone como al modal.
-
-### Usage / Uso
+`open([files, folder])` opens the modal (empty or pre-loaded). The plugin reads `accept`, `multiple`, `maxFiles`,
+`maxFileSizeMB` and `onFileExists` directly from the `DocumentManagerPlugin` — set them once there.
 
 ```js
 const dmUpload = new MTS.DocumentManagerUploadPlugin({
   uploadProgress: 'bar',
   uploadCheck: {
-    // Check against visible table data (no HTTP) / Verificar contra datos visibles (sin HTTP)
-    onCheckFileExists: (file, folder) => {
-      const items = dmUpload._dm?.getItems() ?? [];
-      const found = items.find(i => i.type === 'file' && i.name === file.name);
-      // Return { version } so the badge is shown in the conflict UI
-      // Retornar { version } para mostrar el badge en la UI de conflicto
-      return found ? { version: found.version ?? 'v1' } : false;
+    onCheckFileExists: function (file, folder) {
+      const items = (dmUpload._dm && dmUpload._dm.getItems()) || [];
+      const found = items.find(function (i) { return i.type === 'file' && i.name === file.name; });
+      return found ? { version: found.version || 'v1' } : false; // { version } shows the badge in the conflict UI
     },
   },
 });
@@ -271,130 +188,76 @@ const dmUpload = new MTS.DocumentManagerUploadPlugin({
 
 ## MTS.DocumentManagerContextMenuPlugin
 
-🇬🇧 Adds a context menu (right-click or "Actions" column button) with standard document operations. Also injects the actions column into the table automatically.
-🇪🇸 Agrega un menú contextual (clic derecho o botón "Acciones") con operaciones estándar de documentos. También inyecta la columna de acciones en la tabla automáticamente.
-
-### Additional CSS / CSS adicional
+Adds a context menu (right-click or "Actions" column button) with standard document operations, and injects the
+actions column automatically. Omitting a handler removes that action from the menu.
 
 ```html
 <script src="plugins/documentmanager/matios-ui-datatable-documentmanager-contextmenu.js"></script>
 ```
 
-### Options / Opciones
-
-| Option | Type | Description / Descripción |
-|--------|------|---------------------------|
-| `onView` | `function` | `(item) => {}` — 🇬🇧 View file / 🇪🇸 Ver archivo |
-| `onDownload` | `function` | `(items) => {}` — 🇬🇧 Download one or more files / 🇪🇸 Descargar uno o más archivos |
-| `onOpen` | `function` | `(item) => {}` — 🇬🇧 Open folder / 🇪🇸 Abrir carpeta |
-| `onRename` | `function` | `(item) => {}` — 🇬🇧 Rename item / 🇪🇸 Renombrar ítem |
-| `onMove` | `function` | `(items) => {}` — 🇬🇧 Move items / 🇪🇸 Mover ítems |
-| `onDelete` | `function` | `(items) => {}` — 🇬🇧 Delete items / 🇪🇸 Eliminar ítems |
-| `plugins` | `array` | 🇬🇧 Context menu extensions — e.g. `DocumentManagerWorkflowPlugin` / 🇪🇸 Extensiones del menú contextual |
-
-🇬🇧 Omitting a handler removes that action from the menu — no need to pass empty functions.
-🇪🇸 Omitir un handler elimina esa acción del menú — no es necesario pasar funciones vacías.
-
-### Usage / Uso
-
-```js
-const dmCtx = new MTS.DocumentManagerContextMenuPlugin({
-  onView:     (item)  => openPreview(item),
-  onDownload: (items) => downloadFiles(items),
-  onRename:   (item)  => showRenameDialog(item),
-  onMove:     (items) => showMoveDialog(items),
-  onDelete:   (items) => confirmDelete(items),
-  plugins:    [dmWorkflow],
-});
-```
+| Option | Type | Description |
+|--------|------|-------------|
+| `onView` | `function` | `(item)` — view file |
+| `onDownload` | `function` | `(items)` — download one or more files |
+| `onOpen` | `function` | `(item)` — open folder |
+| `onRename` | `function` | `(item)` — rename item |
+| `onMove` | `function` | `(items)` — move items |
+| `onDelete` | `function` | `(items)` — delete items |
+| `plugins` | `array` | Context-menu extensions — e.g. `DocumentManagerWorkflowPlugin` |
 
 ---
 
 ## MTS.DocumentManagerWorkflowPlugin
 
-🇬🇧 Extends the context menu with approval lifecycle actions based on the item's `workflowStatus` field. Optionally renders workflow buttons in the toolbar.
-🇪🇸 Extiende el menú contextual con acciones del ciclo de vida de aprobación basadas en el campo `workflowStatus` del ítem. Opcionalmente renderiza botones de workflow en el toolbar.
-
-### Lifecycle / Ciclo de vida
+Extends the context menu with approval lifecycle actions based on the item's `workflowStatus`. Optionally renders
+workflow buttons in the toolbar.
 
 ```
-null/undefined  →  Iniciar       (onStart)
-draft           →  Enviar a aprobación  (onSendForApproval)
-pending         →  Aprobar (onApprove) · Rechazar (onReject)
-review          →  Firmar  (onSign)    · Rechazar (onReject)
-approved        →  (sin acciones / no actions)
-rejected        →  Reiniciar  (onRestart)
-signed          →  (estado final / final state)
+null/undefined → Start            (onStart)
+draft          → Send for approval (onSendForApproval)
+pending        → Approve (onApprove) · Reject (onReject)
+review         → Sign    (onSign)    · Reject (onReject)
+approved       → (no actions)
+rejected       → Restart (onRestart)
+signed         → (final state)
 ```
 
-### Additional CSS / CSS adicional
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `statusField` | `string` | `'workflowStatus'` | Item field holding the workflow state |
+| `showInToolbar` | `boolean` | `false` | Inject workflow buttons into the toolbar |
+| `onStart` / `onSendForApproval` / `onApprove` / `onSign` / `onReject` / `onRestart` | `function` | `null` | `(items)` lifecycle transitions |
 
-```html
-<script src="plugins/documentmanager/matios-ui-datatable-documentmanager-workflow.js"></script>
-```
-
-### Options / Opciones
-
-| Option | Type | Default | Description / Descripción |
-|--------|------|---------|---------------------------|
-| `statusField` | `string` | `'workflowStatus'` | 🇬🇧 Item field name that holds the workflow state / 🇪🇸 Nombre del campo del ítem que contiene el estado de workflow |
-| `showInToolbar` | `boolean` | `false` | 🇬🇧 Inject workflow buttons into the toolbar / 🇪🇸 Inyectar botones de workflow en el toolbar |
-| `onStart` | `function` | `null` | `(items) => {}` — `null → draft` |
-| `onSendForApproval` | `function` | `null` | `(items) => {}` — `draft → pending` |
-| `onApprove` | `function` | `null` | `(items) => {}` — `pending → approved` |
-| `onSign` | `function` | `null` | `(items) => {}` — `review → signed` |
-| `onReject` | `function` | `null` | `(items) => {}` — `pending\|review → rejected` |
-| `onRestart` | `function` | `null` | `(items) => {}` — `rejected → draft` |
-
-### Toolbar unanimity rule / Regla de unanimidad en toolbar
-
-🇬🇧 When `showInToolbar: true`, a toolbar button is enabled only when **all** selected items share the same workflow state that activates that action. Mixed selections disable all workflow buttons.
-🇪🇸 Con `showInToolbar: true`, un botón del toolbar se habilita solo cuando **todos** los ítems seleccionados comparten el mismo estado de workflow que activa esa acción. Selecciones mixtas deshabilitan todos los botones de workflow.
-
-### Autonomous toolbar / Toolbar autónomo
-
-🇬🇧 If `MTS.DataTableToolbarPlugin` is **not** present, the workflow plugin renders its own toolbar bar automatically via `table.setToolbarLeft()`. No additional configuration is needed.
-🇪🇸 Si `MTS.DataTableToolbarPlugin` **no** está presente, el plugin de workflow renderiza su propia barra de botones automáticamente usando `table.setToolbarLeft()`. No se requiere configuración adicional.
-
-### Usage / Uso
+**Toolbar unanimity rule:** with `showInToolbar: true`, a button is enabled only when **all** selected items share
+the same state that activates it; mixed selections disable all workflow buttons. **Autonomous toolbar:** if
+`MTS.DataTableToolbarPlugin` is not present, the workflow plugin renders its own bar via `table.setToolbarLeft()`.
 
 ```js
 const dmWorkflow = new MTS.DocumentManagerWorkflowPlugin({
-  statusField:   'workflowStatus',
+  statusField: 'workflowStatus',
   showInToolbar: true,
-
-  onStart:           (items) => api.post('/workflow/start',    { ids: ids(items) }),
-  onSendForApproval: (items) => api.post('/workflow/submit',   { ids: ids(items) }),
-  onApprove:         (items) => api.post('/workflow/approve',  { ids: ids(items) }),
-  onSign:            (items) => api.post('/workflow/sign',     { ids: ids(items) }),
-  onReject:          (items) => api.post('/workflow/reject',   { ids: ids(items) }),
-  onRestart:         (items) => api.post('/workflow/restart',  { ids: ids(items) }),
+  onStart:           function (items) { api.post('/workflow/start',   { ids: ids(items) }); },
+  onSendForApproval: function (items) { api.post('/workflow/submit',  { ids: ids(items) }); },
+  onApprove:         function (items) { api.post('/workflow/approve', { ids: ids(items) }); },
+  onSign:            function (items) { api.post('/workflow/sign',    { ids: ids(items) }); },
+  onReject:          function (items) { api.post('/workflow/reject',  { ids: ids(items) }); },
+  onRestart:         function (items) { api.post('/workflow/restart', { ids: ids(items) }); },
 });
 
-// Install as context menu extension / Instalar como extensión del menú contextual
-const dmCtx = new MTS.DocumentManagerContextMenuPlugin({
-  // ...
-  plugins: [dmWorkflow],
-});
+const dmCtx = new MTS.DocumentManagerContextMenuPlugin({ /* … */ plugins: [dmWorkflow] });
 ```
 
 ---
 
 ## MTS.DocumentManagerPreviewPlugin
 
-🇬🇧 Opens a fullscreen modal with an iframe to preview the document. The modal includes a collapsible side panel with an accordion of sub-panels (metadata, workflow, custom). Buttons in the header: ← prev, → next, version badge, Replace, Download.
-🇪🇸 Abre un modal fullscreen con un iframe para previsualizar el documento. El modal incluye un panel lateral colapsible con acordeón de sub-paneles (metadatos, workflow, personalizados). Botones en el header: ← prev, → next, badge de versión, Reemplazar, Descargar.
-
-🇬🇧 The plugin does **not** intercept `onFileClick` automatically — the dev wires it explicitly.
-🇪🇸 El plugin **no** intercepta `onFileClick` automáticamente — el dev lo conecta explícitamente.
-
-### Additional files / Archivos adicionales
+Opens a fullscreen modal with an iframe to preview the document. The modal has a collapsible side panel with an
+accordion of sub-panels (metadata, workflow, custom). Header buttons: ← prev, → next, version badge, Replace,
+Download. The plugin does **not** intercept `onFileClick` automatically — the dev wires it.
 
 ```html
 <link rel="stylesheet" href="plugins/documentmanager/matios-ui-datatable-documentmanager-preview.css">
 <script src="plugins/documentmanager/matios-ui-datatable-documentmanager-preview.js"></script>
-
-<!-- Dependencies / Dependencias -->
 <link rel="stylesheet" href="overlays/matios-ui-modal/matios-ui-modal.css">
 <script src="overlays/matios-ui-modal/matios-ui-modal.js"></script>
 <link rel="stylesheet" href="navigation/matios-ui-accordion/matios-ui-accordion.css">
@@ -402,299 +265,107 @@ const dmCtx = new MTS.DocumentManagerContextMenuPlugin({
 <script src="overlays/matios-ui-badge/matios-ui-badge.js"></script>
 ```
 
-### Options / Opciones
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `panels` | `array` | `[]` | Sub-panels for the side accordion |
+| `urlResolver` | `function` | `null` | `(item) → string \| null` — iframe URL for the item |
+| `onDownload` | `function` | `null` | `(item)` — "Download" header button |
+| `onReplace` | `function` | `null` | `(item, file, version) → Promise` — "Replace" → picker → confirm overlay (return a Promise to drive the progress bar) |
+| `onPrev` / `onNext` | `function` | `null` | `(currentItem)` — ← / → header buttons |
+| `panelVisible` | `boolean` | `true` | Side panel visible on open |
+| `panelWidth` | `string` | `'340px'` | Width of the open side panel |
 
-| Option | Type | Default | Description / Descripción |
-|--------|------|---------|---------------------------|
-| `panels` | `array` | `[]` | 🇬🇧 Sub-panels for the side accordion / 🇪🇸 Sub-paneles del acordeón lateral |
-| `urlResolver` | `function` | `null` | `(item) → string\|null` — 🇬🇧 Returns the iframe URL for the item / 🇪🇸 Retorna la URL del iframe para el ítem |
-| `onDownload` | `function` | `null` | `(item) => {}` — 🇬🇧 "Download" button in the header / 🇪🇸 Botón "Descargar" en el header |
-| `onReplace` | `function` | `null` | `(item, file, version) => Promise` — 🇬🇧 "Replace" button → file picker → confirm overlay. Must return a Promise to activate the progress bar / 🇪🇸 Botón "Reemplazar" → file picker → overlay de confirmación. Debe retornar Promise para activar la barra de progreso |
-| `onPrev` | `function` | `null` | `(currentItem) => {}` — 🇬🇧 ← button in the header / 🇪🇸 Botón ← en el header |
-| `onNext` | `function` | `null` | `(currentItem) => {}` — 🇬🇧 → button in the header / 🇪🇸 Botón → en el header |
-| `panelVisible` | `boolean` | `true` | 🇬🇧 Side panel visible on open / 🇪🇸 Panel lateral visible al abrir |
-| `panelWidth` | `string` | `'340px'` | 🇬🇧 Width of the open side panel / 🇪🇸 Ancho del panel lateral abierto |
+`show(item[, url])` opens the preview (with the `urlResolver` URL or an explicit one). **Replace flow:** clicking
+"Replace" opens a file picker → a confirm overlay shows file info, a version input (suggested `parseInt(currentVersion)+1`)
+and an extension-mismatch warning; "Upload" calls `onReplace(item, file, version)` and, if it returns a Promise, shows
+an indeterminate progress bar then success/error.
 
-### `show()` method
-
-```js
-// Open with URL from urlResolver / Abrir con URL del urlResolver
-dmPreview.show(item)
-
-// Open with an explicit URL / Abrir con URL explícita
-dmPreview.show(item, 'https://cdn.example.com/preview/' + item.id)
-```
-
-### Replace flow / Flujo de reemplazo
-
-🇬🇧 When `onReplace` is provided: clicking "Replace" opens a file picker → selecting a file shows a confirm overlay with file info, version input (suggested: `parseInt(currentVersion) + 1`), and an extension mismatch warning if the new file has a different extension. Clicking "Upload" calls `onReplace(item, file, version)`. If it returns a Promise, the overlay shows an indeterminate progress bar, then success or error state.
-🇪🇸 Cuando se configura `onReplace`: clicar "Reemplazar" abre un file picker → al seleccionar un archivo aparece un overlay de confirmación con info del archivo, input de versión (sugerido: `parseInt(versionActual) + 1`), y advertencia si la extensión difiere. Clicar "Subir" llama a `onReplace(item, file, version)`. Si retorna Promise, el overlay muestra barra de progreso indeterminada, luego estado éxito o error.
-
-### Sub-panel interface / Interfaz de sub-panel
-
-🇬🇧 A panel is any object that implements the following interface:
-🇪🇸 Un panel es cualquier objeto que implemente la siguiente interfaz:
+**Sub-panel interface:**
 
 ```js
 {
-  key:     string,           // unique accordion item ID / ID único del ítem del acordeón
-  label:   string,           // accordion item title / título del ítem del acordeón
-  icon:    string | null,    // optional inline SVG / SVG inline opcional
-
-  install(preview),          // called when preview plugin installs / se llama al instalar
-  uninstall(),               // called on teardown / se llama al desmontar
-  render(item) → Element,    // synchronous skeleton / skeleton sincrónico
-  load(item) → Element | Promise<Element>,   // async real content / contenido real asíncrono
+  key: string, label: string, icon: string | null,
+  install(preview), uninstall(),
+  render(item) → Element,                      // synchronous skeleton
+  load(item) → Element | Promise<Element>,     // async real content
 }
 ```
 
-### Usage / Uso
-
 ```js
 const dmPreview = new MTS.DocumentManagerPreviewPlugin({
-  panels: [
-    new MTS.DocumentManagerPreviewBasicInfoPanel(),
-  ],
-  urlResolver: function(item) {
-    return '/api/documents/' + item.id + '/retrieve';
+  panels: [new MTS.DocumentManagerPreviewBasicInfoPanel()],
+  urlResolver: function (item) { return '/api/documents/' + item.id + '/retrieve'; },
+  onDownload:  function (item) { window.open('/api/documents/' + item.id + '/download'); },
+  onReplace:   function (item, file, version) {
+    return http.upload('/api/documents/' + item.id + '/replace', file, { data: { version: version } })
+      .then(function (res) { if (!res.success) throw new Error(res.message); table.reload(); });
   },
-  onDownload: function(item) {
-    window.open('/api/documents/' + item.id + '/download');
-  },
-  onReplace: function(item, file, version) {
-    return http.upload('/api/documents/' + item.id + '/replace', file, {
-      data: { version: version },
-    }).then(function(res) {
-      if (!res.success) throw new Error(res.message || 'Error al subir.');
-      table.reload();
-    });
-  },
-  onPrev: function(currentItem) {
-    var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
-    var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
-    if (idx > 0) dmPreview.show(files[idx - 1]);
-  },
-  onNext: function(currentItem) {
-    var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
-    var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
-    if (idx < files.length - 1) dmPreview.show(files[idx + 1]);
-  },
+  onPrev: function (cur) { const f = dm.getItems().filter(function (i) { return i.type === 'file'; }); const idx = f.findIndex(function (i) { return i.id === cur.id; }); if (idx > 0) dmPreview.show(f[idx - 1]); },
+  onNext: function (cur) { const f = dm.getItems().filter(function (i) { return i.type === 'file'; }); const idx = f.findIndex(function (i) { return i.id === cur.id; }); if (idx < f.length - 1) dmPreview.show(f[idx + 1]); },
 });
 
-// Wire to onFileClick / Conectar a onFileClick
-const dm = new MTS.DocumentManagerPlugin({
-  onFileClick: function(item) { dmPreview.show(item); },
-  plugins: [dmPreview, dmUpload, dmCtx],
-});
+const dm = new MTS.DocumentManagerPlugin({ onFileClick: function (item) { dmPreview.show(item); }, plugins: [dmPreview, dmUpload, dmCtx] });
 ```
 
 ---
 
 ## MTS.DocumentManagerPreviewBasicInfoPanel
 
-🇬🇧 Built-in side panel that renders item metadata in a compact label/value layout. Configurable via `options.fields` — if omitted, uses default fields (retrocompatible with v1.1.0).
-🇪🇸 Panel lateral built-in que renderiza los metadatos del ítem en layout compacto etiqueta/valor. Configurable mediante `options.fields` — si se omite, usa los campos por defecto (retrocompatible con v1.1.0).
-
-### Options / Opciones
-
-| Option | Type | Default | Description / Descripción |
-|--------|------|---------|---------------------------|
-| `fields` | `array` | `DEFAULT_FIELDS` | 🇬🇧 Array of field descriptors — see below / 🇪🇸 Array de descriptores de campo — ver abajo |
-
-### Field descriptor / Descriptor de campo
-
-🇬🇧 Each entry in `fields` can be one of:
-🇪🇸 Cada entrada en `fields` puede ser:
+Built-in side panel rendering item metadata in a compact label/value layout. Configurable via `options.fields`; if
+omitted, uses default fields.
 
 ```js
-{ label: 'Nombre',     field: 'name'       }   // reads item[field] / lee item[field]
-{ label: 'Área',       resolve: function(item) { return item.department || '—'; } }
-```
+// Default
+new MTS.DocumentManagerPreviewBasicInfoPanel();
 
-### Default fields / Campos por defecto
-
-`Nombre` · `Tipo` · `Tamaño` · `Versión` · `Creado` · `Modificado` · `Estado` · `Propietario`
-
-### Usage / Uso
-
-```js
-// Default behavior / Comportamiento por defecto
-new MTS.DocumentManagerPreviewBasicInfoPanel()
-
-// Custom fields / Campos personalizados
+// Custom fields — each entry reads item[field] or uses resolve(item)
 new MTS.DocumentManagerPreviewBasicInfoPanel({
   fields: [
-    { label: 'Nombre',     field: 'name'       },
-    { label: 'Versión',    field: 'version'    },
-    { label: 'Modificado', field: 'modifiedAt' },
-    { label: 'Área',       resolve: function(item) { return item.department || '—'; } },
-  ]
-})
-```
-
-### `DEFAULT_FIELDS` static getter
-
-🇬🇧 Access the default fields to clone and extend them:
-🇪🇸 Accede a los campos por defecto para clonarlos y extenderlos:
-
-```js
-const myFields = MTS.DocumentManagerPreviewBasicInfoPanel.DEFAULT_FIELDS.slice()
-myFields.push({ label: 'Área', field: 'department' })
-
-new MTS.DocumentManagerPreviewBasicInfoPanel({ fields: myFields })
-```
-
----
-
-## Full example / Ejemplo completo
-
-```js
-// 1. Preview sub-plugin / Sub-plugin de preview
-const dmPreview = new MTS.DocumentManagerPreviewPlugin({
-  panels: [ new MTS.DocumentManagerPreviewBasicInfoPanel() ],
-  urlResolver: (item) => '/api/documents/' + item.id + '/retrieve',
-  onDownload:  (item) => window.open('/api/documents/' + item.id + '/download'),
-  onReplace: (item, file, version) =>
-    http.upload('/api/documents/' + item.id + '/replace', file, { data: { version } })
-        .then(res => { if (!res.success) throw new Error(res.message); table.reload(); }),
-  onPrev: (cur) => { const f = dm.getItems().filter(i => i.type==='file'); const idx = f.findIndex(i => i.id===cur.id); if (idx>0) dmPreview.show(f[idx-1]); },
-  onNext: (cur) => { const f = dm.getItems().filter(i => i.type==='file'); const idx = f.findIndex(i => i.id===cur.id); if (idx<f.length-1) dmPreview.show(f[idx+1]); },
-});
-
-// 2. Upload sub-plugin / Sub-plugin de upload
-const dmUpload = new MTS.DocumentManagerUploadPlugin({
-  uploadProgress: 'bar',
-  uploadCheck: {
-    onCheckFileExists: (file, folder) => {
-      const items = dmUpload._dm?.getItems() ?? [];
-      const found = items.find(i => i.type === 'file' && i.name === file.name);
-      return found ? { version: found.version ?? 'v1' } : false;
-    },
-  },
-});
-
-// 3. Workflow sub-plugin / Sub-plugin de workflow
-const dmWorkflow = new MTS.DocumentManagerWorkflowPlugin({
-  statusField:       'workflowStatus',
-  showInToolbar:     true,
-  onStart:           (items) => console.log('start',  items),
-  onSendForApproval: (items) => console.log('submit', items),
-  onApprove:         (items) => console.log('approve', items),
-  onSign:            (items) => console.log('sign',   items),
-  onReject:          (items) => console.log('reject', items),
-  onRestart:         (items) => console.log('restart', items),
-});
-
-// 4. Context menu sub-plugin / Sub-plugin de menú contextual
-const dmCtx = new MTS.DocumentManagerContextMenuPlugin({
-  onView:     (item)  => openPreview(item),
-  onDownload: (items) => downloadFiles(items),
-  onRename:   (item)  => showRenameDialog(item),
-  onMove:     (items) => showMoveDialog(items),
-  onDelete:   (items) => confirmAndDelete(items),
-  plugins:    [dmWorkflow],
-});
-
-// 5. Main plugin / Plugin principal
-const dm = new MTS.DocumentManagerPlugin({
-  rootLabel:     'Documentos',
-  breadcrumb:    true,
-  dragDrop:      true,
-  dropzone:      true,
-  accept:        '.pdf,.docx,.xlsx,.pptx,image/*',
-  multiple:      true,
-  maxFiles:      10,
-  maxFileSizeMB: 25,
-  onFileExists:  'ask',
-  onFileDrop:    (files, folder) => dmUpload.open(files, folder),
-  onUpload: async (file, folder, { action, currentVersion } = {}) => {
-    const fd = new FormData();
-    fd.append('file',           file);
-    fd.append('folderId',       folder?.id ?? '');
-    fd.append('action',         action         ?? '');
-    fd.append('currentVersion', currentVersion ?? '');
-    await http.post('/api/documents/upload', fd);
-  },
-  onUploaded:  () => table.reload(),
-  onFileClick: (item) => dmPreview.show(item),
-  onDrop:      (items, folder) => moveItems(items, folder),
-  plugins:     [dmPreview, dmUpload, dmCtx],
-});
-
-// 6. Optional toolbar / Toolbar opcional
-const toolbar = new MTS.DataTableToolbarPlugin({
-  buttons: [
-    { label: 'Subir',  icon: 'upload', action: () => dmUpload.open() },
-    { separator: true },
-    { label: 'Eliminar', icon: 'trash', danger: true,
-      condition: (t) => t.getSelection().length > 0,
-      action: (t) => confirmAndDelete(t.getSelection()) },
+    { label: 'Name',     field: 'name' },
+    { label: 'Version',  field: 'version' },
+    { label: 'Modified', field: 'modifiedAt' },
+    { label: 'Area', resolve: function (item) { return item.department || '—'; } },
   ],
 });
 
-// 7. DataTable / DataTable
-const table = new MTS.DataTable({
-  elementId: 'my-dm',
-  columns: [
-    { field: 'name',           label: 'Nombre',     sortable: true, alwaysVisible: true,
-      render: (v, row) => MTS.DocumentManagerPlugin.renderName(v, row) },
-    { field: 'sizeFormatted',  label: 'Tamaño',     align: 'end', width: '100px' },
-    { field: 'modifiedAt',     label: 'Modificado', sortable: true },
-    { field: 'status',         label: 'Estado',
-      render: MTS.DocumentManagerPlugin.renderStatus },
-    { field: 'workflowStatus', label: 'Workflow',
-      render: MTS.DocumentManagerPlugin.renderWorkflowStatus },
-  ],
-  dataSource: async (query) => {
-    const res = await http.get('/api/documents', { params: query });
-    if (!res.success) throw new Error(res.message);
-    return res.data;
-  },
-  rowId:        'id',
-  pageSize:     10,
-  hover:        true,
-  fixedHeader:  true,
-  fixedHeaderHeight: '480px',
-  selection:    { mode: 'single' },
-  actionColumn: true,
-  plugins:      [toolbar, dm],
-  onSelectionChange: () => toolbar.update(),
-});
+// Clone and extend the defaults
+const myFields = MTS.DocumentManagerPreviewBasicInfoPanel.DEFAULT_FIELDS.slice();
+myFields.push({ label: 'Area', field: 'department' });
+new MTS.DocumentManagerPreviewBasicInfoPanel({ fields: myFields });
 ```
+
+Default fields: Name · Type · Size · Version · Created · Modified · Status · Owner.
 
 ---
 
-## Locale / Localización
+## Localization
 
-🇬🇧 Pass `locale: 'es'` (or `'en'`) to `MTS.DataTable` to use built-in translations for all UI labels. Custom labels can be overridden via `locale` config object:
-🇪🇸 Pasa `locale: 'es'` (o `'en'`) a `MTS.DataTable` para usar las traducciones integradas en todos los labels. Los labels custom se pueden sobreescribir mediante el objeto `locale`:
+Pass `locale: 'es'` (or `'en'`) to `MTS.DataTable` for built-in translations of all UI labels, or override via a
+`locale` config object:
 
 ```js
 new MTS.DataTable({
   locale: {
     dm: {
-      upload: {
-        title:          'Subir archivos',
-        dropHint:       'Arrastra archivos aquí o',
-        selectBtn:      'Seleccionar archivos',
-        uploadBtn:      'Subir',
-        cancelBtn:      'Cancelar',
-        actionReplace:  'Reemplazar',
-        actionVersion:  'Nueva versión',
-        actionSkip:     'Omitir',
-        fileTypeNotAllowed: 'Tipo de archivo no permitido',
-      },
-      workflow: {
-        start:           'Iniciar workflow',
-        sendForApproval: 'Enviar a aprobación',
-        approve:         'Aprobar',
-        sign:            'Firmar',
-        reject:          'Rechazar',
-        restart:         'Reiniciar workflow',
-      },
+      upload:   { title: 'Upload files', dropHint: 'Drop files here or', selectBtn: 'Select files', uploadBtn: 'Upload', cancelBtn: 'Cancel', actionReplace: 'Replace', actionVersion: 'New version', actionSkip: 'Skip', fileTypeNotAllowed: 'File type not allowed' },
+      workflow: { start: 'Start workflow', sendForApproval: 'Send for approval', approve: 'Approve', sign: 'Sign', reject: 'Reject', restart: 'Restart workflow' },
     },
   },
 });
 ```
 
 ---
+
+## Accessibility
+
+- The context menu, breadcrumb and modal controls are keyboard-operable; the preview modal traps focus and closes on `Esc`.
+- The dropzone supplements an explicit upload button — provide both so drag is not the only path.
+
+---
+
+## Changelog
+
+### Initial
+- DocumentManager plugin stack over `MTS.DataTable`: folder navigation, breadcrumb, drag-drop, OS dropzone, upload
+  modal with conflict resolution and progress, context menu, approval workflow (with toolbar injection), fullscreen
+  preview with side-panel accordion (BasicInfoPanel), render helpers, data contract and full localization.

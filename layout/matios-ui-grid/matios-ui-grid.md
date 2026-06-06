@@ -1,169 +1,116 @@
 # MTS.Grid
 
-Native CSS Grid utilities for structural page layout. Use `MTS.Grid` to distribute content blocks across columns, rows and responsive spans without styling the inner component itself.
-
----
-
-## Description
-
-`MTS.Grid` is the layout layer for page distribution.
-
-Use it for:
-
-- page sections
-- dashboards
-- sidebars
-- content splits
-- responsive blocks
-- nested layout composition
-
-Do not use it to replace `MTS.FormLayout`.
+CSS Grid utilities for structural page layout. Distributes content blocks across columns, rows and responsive spans without styling the inner component.
 
 ---
 
 ## Installation
 
 ```html
-<link rel="stylesheet" href="../../base/matios-ui-base.css">
-<link rel="stylesheet" href="../../base/matios-ui-grid.css">
-<link rel="stylesheet" href="../../layout/matios-ui-grid/matios-ui-grid.css">
-<script src="../../layout/matios-ui-grid/matios-ui-grid.js"></script>
+<link rel="stylesheet" href="base/matios-ui-base.css">
+<link rel="stylesheet" href="layout/matios-ui-grid/matios-ui-grid.css">
+<script src="layout/matios-ui-grid/matios-ui-grid.js"></script>
 ```
 
 ---
 
-## Core classes
+## Usage
 
-| Class | Purpose |
-|------|---------|
-| `mts-grid` | Main grid container |
-| `mts-grid--gap-sm` | Small gap |
-| `mts-grid--gap-md` | Medium gap |
-| `mts-grid--gap-lg` | Large gap |
-| `mts-g-col-1` ... `mts-g-col-12` | Column span |
-| `mts-g-col-full` | Full width |
-| `mts-g-col-auto` | Auto width |
-| `mts-g-row-2` | Row span |
-| `mts-g-start-3` | Start on column 3 |
-| `mts-g-self-start` | Align item to start |
-| `mts-g-self-center` | Align item to center |
-| `mts-g-self-end` | Align item to end |
+### CSS only
 
----
+```html
+<div class="mts-grid mts-grid--gap-md">
+  <div class="mts-g-col-8">Main content</div>
+  <div class="mts-g-col-4">Sidebar</div>
+</div>
+```
 
-## Responsive classes
+### JavaScript helper
 
-| Breakpoint | Prefix |
-|-----------|--------|
-| `576px` | `mts-g-col-sm-*` |
-| `768px` | `mts-g-col-md-*` |
-| `992px` | `mts-g-col-lg-*` |
-| `1200px` | `mts-g-col-xl-*` |
+```js
+new MTS.Grid('#my-grid', {
+  className: 'mts-grid--gap-md',
+  items: [
+    { col: 8, html: '<div>Main</div>' },
+    { col: 4, html: '<div>Sidebar</div>' },
+  ],
+});
+```
 
-Example:
+The JS helper renders the same native CSS classes — it does not create a separate layout system.
+
+### Responsive
 
 ```html
 <div class="mts-grid mts-grid--gap-md">
   <div class="mts-g-col-12 mts-g-col-md-6 mts-g-col-lg-4">A</div>
   <div class="mts-g-col-12 mts-g-col-md-6 mts-g-col-lg-4">B</div>
-  <div class="mts-g-col-12 mts-g-col-md-12 mts-g-col-lg-4">C</div>
+  <div class="mts-g-col-12 mts-g-col-lg-4">C</div>
 </div>
 ```
 
----
-
-## Equal columns
+### Row spans (set `--mts-rows`)
 
 ```html
-<div class="mts-grid mts-grid--3 mts-grid--gap-md">
-  <div>Column 1</div>
-  <div>Column 2</div>
-  <div>Column 3</div>
-</div>
-```
-
----
-
-## Fixed spans
-
-```html
-<div class="mts-grid mts-grid--gap-md">
-  <div class="mts-g-col-8">Main</div>
-  <div class="mts-g-col-4">Sidebar</div>
-</div>
-```
-
----
-
-## Start column
-
-```html
-<div class="mts-grid mts-grid--gap-md">
-  <div class="mts-g-col-4 mts-g-start-3">Starts at column 3</div>
-  <div class="mts-g-col-full">Full width row</div>
-</div>
-```
-
----
-
-## Row span
-
-```html
-<div class="mts-grid mts-grid--gap-md" style="--mts-rows:3;">
+<div class="mts-grid mts-grid--gap-md" style="--mts-rows: 3;">
   <div class="mts-g-col-6 mts-g-row-2">Tall block</div>
   <div class="mts-g-col-6">Right top</div>
   <div class="mts-g-col-6">Right middle</div>
-  <div class="mts-g-col-full">Footer row</div>
+  <div class="mts-g-col-full">Full row</div>
 </div>
 ```
 
 ---
 
-## Helper shortcuts already available
+## CSS Classes
 
-```html
-<div class="mts-grid mts-grid--sidebar mts-grid--gap-md">
-  <aside>Sidebar</aside>
-  <section>Main content</section>
-</div>
-```
+### Core
 
-Also available:
+| Class | Description |
+|-------|-------------|
+| `mts-grid` | Main grid container |
+| `mts-grid--gap-sm` / `--gap-md` / `--gap-lg` | Small / medium / large gap |
+| `mts-g-col-1` … `mts-g-col-12` | Column span (1–12) |
+| `mts-g-col-full` / `mts-g-col-auto` | Full width / auto width |
+| `mts-g-row-2` | Span 2 rows |
+| `mts-g-start-3` | Start at column 3 |
+| `mts-g-self-start` / `--center` / `--end` | Align the item on the cross axis |
 
-- `mts-grid--2`
-- `mts-grid--3`
-- `mts-grid--4`
-- `mts-grid--sidebar`
-- `mts-grid--sidebar-right`
-- `mts-grid--auto-fill`
-- `mts-grid--auto-fit`
+### Layout shortcuts
+
+| Class | Description |
+|-------|-------------|
+| `mts-grid--2` / `--3` / `--4` | 2 / 3 / 4 equal columns |
+| `mts-grid--sidebar` / `--sidebar-right` | Sidebar left / right + content |
+| `mts-grid--auto-fill` / `--auto-fit` | `auto-fill` / `auto-fit` columns |
+
+### Responsive prefixes
+
+| Breakpoint | Prefix |
+|------------|--------|
+| `576px` | `mts-g-col-sm-*` |
+| `768px` | `mts-g-col-md-*` |
+| `992px` | `mts-g-col-lg-*` |
+| `1200px` | `mts-g-col-xl-*` |
 
 ---
 
-## JavaScript helper
+## CSS Variables
 
-```javascript
-const grid = new MTS.Grid('#grid-js-demo', {
-  className: 'mts-grid--gap-md',
-  items: [
-    {
-      col: 8,
-      html: '<div>Main</div>',
-    },
-    {
-      col: 4,
-      html: '<div>Sidebar</div>',
-    },
-  ],
-});
-```
-
-The JavaScript helper renders the same native CSS classes. It does not create a second layout system.
+| Variable | Description |
+|----------|-------------|
+| `--mts-rows` | Explicit number of grid rows (for `mts-g-row-*` spans) |
 
 ---
 
 ## Notes
 
-- `MTS.Grid` is for general page distribution.
-- `MTS.FormLayout` stays focused on form structure.
-- The demo may use shared dotted-outline helpers from `./support/demo-shared.css` only to make grid boundaries easier to read.
+- Use `MTS.Grid` for general page layout. For forms, use `MTS.FormLayout`.
+- Demos may use the dashed-outline helpers from `support/demo-shared.css` to visualize cells.
+
+---
+
+## Changelog
+
+### 2026-05-13
+- Documentation homologated to the standard template.

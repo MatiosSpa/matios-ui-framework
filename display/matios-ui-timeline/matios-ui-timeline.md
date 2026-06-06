@@ -1,11 +1,10 @@
 # MTS.Timeline
 
-🇬🇧 Vertical or horizontal timeline with icons, badges, dates, colors and clickable events.
-🇪🇸 Línea de tiempo vertical u horizontal con íconos, badges, fechas, colores y eventos clickeables.
+Vertical or horizontal timeline with icons, badges, dates, colors and clickable events.
 
 ---
 
-## Installation / Instalación
+## Installation
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
@@ -15,120 +14,95 @@
 
 ---
 
-## Options / Opciones
-
-| Option | Type | Default | 🇬🇧 Description / 🇪🇸 Descripción |
-|--------|------|---------|--------------------------------------|
-| `events` | `array` | `[]` | 🇬🇧 Timeline event items (see schema) / 🇪🇸 Ítems de eventos |
-| `direction` | `string` | `'vertical'` | `'vertical'` · `'horizontal'` |
-| `align` | `string` | `'left'` | `'left'` · `'right'` · `'alternate'` (vertical only) |
-| `onEventClick` | `function` | — | 🇬🇧 `({ event, index }) => {}` Fires on item click / 🇪🇸 Se dispara al hacer click en un ítem |
-
-### Event schema / Esquema de evento
-
-| Property | Type | 🇬🇧 Description / 🇪🇸 Descripción |
-|----------|------|--------------------------------------|
-| `id` | `string` | 🇬🇧 Unique identifier / 🇪🇸 Identificador único |
-| `title` | `string` | 🇬🇧 Event title (required) / 🇪🇸 Título del evento (requerido) |
-| `description` | `string` | 🇬🇧 Body text / 🇪🇸 Texto del cuerpo |
-| `date` | `string` | 🇬🇧 Date label / 🇪🇸 Etiqueta de fecha |
-| `icon` | `string` | 🇬🇧 SVG icon HTML / 🇪🇸 HTML del ícono SVG |
-| `color` | `string` | 🇬🇧 Dot color / 🇪🇸 Color del punto |
-| `badge` | `object` | `{ label, variant }` |
-
----
-
-## Events / Eventos
+## Usage
 
 ```js
-new MTS.Timeline('#my-timeline', {
-  events: [...],
-  // Fires when an event item is clicked / Se dispara al hacer click en un ítem
-  onEventClick: (e) => {
-    console.log(e.detail.event); // → { id, title, date, ... }
-    console.log(e.detail.index); // → 2
-  },
-});
-```
-
----
-
-## JavaScript Usage / Uso JavaScript
-
-```js
-// Vertical left (default) / Vertical izquierda (default)
+// Vertical left (default)
 new MTS.Timeline('#my-timeline', {
   direction: 'vertical',
   align:     'left',
   events: [
-    {
-      id:          'deploy',
-      title:       'Production deploy',
-      description: 'v2.4.0 deployed successfully.',
-      date:        '2 min ago',
-      badge:       { label: 'Success', variant: 'success' },
-    },
-    {
-      id:          'review',
-      title:       'Code review',
-      description: 'PR #142 approved.',
-      date:        '1 hour ago',
-      color:       '#7c3aed',
-    },
-    {
-      id:    'commit',
-      title: 'Commit pushed',
-      date:  'Yesterday',
-    },
+    { id: 'deploy', title: 'Production deploy', description: 'v2.4.0 deployed successfully.', date: '2 min ago', badge: { label: 'Success', variant: 'success' } },
+    { id: 'review', title: 'Code review',       description: 'PR #142 approved.',             date: '1 hour ago', color: '#7c3aed' },
+    { id: 'commit', title: 'Commit pushed',     date: 'Yesterday' },
   ],
-  onEventClick: (e) => console.log(e.detail.event.id),
+  onEventClick: function (e) { console.log(e.detail.event.id); },
 });
 
-// Alternating layout / Layout alternado
-new MTS.Timeline('#my-timeline', {
-  align: 'alternate',
-  events: [...],
-});
+// Alternating layout
+new MTS.Timeline('#my-timeline', { align: 'alternate', events: [/* … */] });
 
-// With custom icons / Con íconos personalizados
+// With custom icons
 new MTS.Timeline('#my-timeline', {
-  events: [
-    {
-      title: 'Payment received',
-      icon:  '<svg>...</svg>',
-      color: '#16a34a',
-    },
-  ],
+  events: [{ title: 'Payment received', icon: '<svg>...</svg>', color: '#16a34a' }],
 });
 ```
+
+---
+
+## Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `events` | `array` | `[]` | Timeline event items (see schema below) |
+| `direction` | `string` | `'vertical'` | `'vertical'` · `'horizontal'` |
+| `align` | `string` | `'left'` | `'left'` · `'right'` · `'alternate'` (vertical only) |
+| `onEventClick` | `function` | — | Fires on item click — `({ event, index })` |
+
+### Event schema
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Unique identifier |
+| `title` | `string` | Event title (**required**) |
+| `description` | `string` | Body text |
+| `date` | `string` | Date label |
+| `icon` | `string` | SVG icon HTML |
+| `color` | `string` | Dot color |
+| `badge` | `object` | `{ label, variant }` |
 
 ---
 
 ## API
 
+| Method | Description |
+|--------|-------------|
+| `setEvents(array)` | Replace all events |
+| `addEvent(event)` | Add one event and re-render |
+| `on(event, cb)` / `off(event, cb)` | Register / remove listeners (`'eventclick'`) |
+
 ```js
-const tl = new MTS.Timeline('#my-timeline', { events: [...] });
-
-// Replace all events / Reemplazar todos los eventos
-tl.setEvents([...])
-
-// Add one event and re-render / Agregar un evento y re-renderizar
-tl.addEvent({ id: 'new', title: 'New event', date: 'Just now' })
-
-// Register / remove listeners / Registrar / eliminar listeners
-tl.on('eventclick', (e) => console.log(e.detail.event.id))
-tl.off('eventclick', handler)
+const tl = new MTS.Timeline('#my-timeline', { events: [/* … */] });
+tl.addEvent({ id: 'new', title: 'New event', date: 'Just now' });
+tl.on('eventclick', function (e) { console.log(e.detail.event.id); });
 ```
 
 ---
 
-## DOM Event / Evento DOM
+## Events
+
+| Method | Payload | When |
+|--------|---------|------|
+| `onEventClick(fn)` / `on('eventclick', fn)` | `{ event, index }` | An event item is clicked |
+
+Also dispatched as a DOM event:
 
 ```js
 document.getElementById('my-timeline')
-  .addEventListener('mts:timeline:eventclick', (e) => {
-    console.log(e.detail.event, e.detail.index);
-  });
+  .addEventListener('mts:timeline:eventclick', function (e) { console.log(e.detail.event, e.detail.index); });
 ```
 
 ---
+
+## Accessibility
+
+- Each event title should be meaningful on its own; the dot color and icon are decorative.
+- For a horizontal timeline, ensure the container is scrollable/focusable when content overflows.
+
+---
+
+## Changelog
+
+### Initial
+- Timeline with vertical/horizontal direction, left/right/alternate alignment, per-event icon/color/badge/date,
+  clickable events (`onEventClick`), and `setEvents` / `addEvent`.
