@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matios UI Framework</title>
@@ -127,9 +127,9 @@ const NAV_ITEMS = [
 
   { divider: true },
 
-  { key:'componentes', label:'Componentes', icon:'mts-icon-package', children: [
-    { key:'forms',      label:'Formularios', icon:'mts-icon-form',     src:'forms/demo.html',      md:'forms' },
-    { key:'navigation', label:'Navegación',  icon:'mts-icon-compass',  src:'navigation/demo.html', md:'navigation' },
+  { key:'componentes', label:'Components', icon:'mts-icon-package', children: [
+    { key:'forms',      label:'Forms', icon:'mts-icon-form',     src:'forms/demo.html',      md:'forms' },
+    { key:'navigation', label:'Navigation',  icon:'mts-icon-compass',  src:'navigation/demo.html', md:'navigation' },
     { key:'overlays',   label:'Overlays',    icon:'mts-icon-layers',   src:'overlays/demo.html',   md:'overlays' },
     { key:'display',    label:'Display',     icon:'mts-icon-grid',     src:'display/demo.html',    md:'display' },
     { key:'layout',     label:'Layout',      icon:'mts-icon-layout',   src:'layout/demo.html',     md:'layout' },
@@ -138,10 +138,15 @@ const NAV_ITEMS = [
 
   { key:'sc-apps', label:'Widgets', icon:'mts-icon-bar-chart-2', children: [
     { key:'sc-dashboard', label:'Dashboard',  icon:'mts-icon-bar-chart-2', src:'widgets/dashboard/demo.html' },
-    { key:'sc-calendar',  label:'Calendario', icon:'mts-icon-calendar',    src:'widgets/calendar/demo.html',              md:'sc-calendar' },
+    { key:'sc-calendar',  label:'Calendar', icon:'mts-icon-calendar',    src:'widgets/calendar/demo.html',  md:'sc-calendar' },
     { key:'sc-datatable', label:'DataTable',  icon:'mts-icon-table',       src:'widgets/datatable/demo.html' },
-    { key:'sc-charts',    label:'Charts',     icon:'mts-icon-pie-chart',   src:'widgets/charts/demo.html',  md:'sc-charts' },
-    { key:'sc-projects',  label:'ProjectManager', icon:'mts-icon-trello',  src:'widgets/projects/demo.html', md:'sc-projects' },
+    { key:'sc-charts',    label:'Charts',     icon:'mts-icon-pie-chart',   src:'widgets/charts/demo.html',    md:'sc-charts' },
+  ]},
+
+  { key:'boards', label:'Boards', icon:'mts-icon-columns', children: [
+    { key:'sc-gantt',       label:'GanttChart',  icon:'mts-icon-bar-chart-2', src:'widgets/boards/matios-ui-gantt-chart/demo.html',  md:'sc-gantt'       },
+    { key:'sc-kanban',      label:'Kanban',       icon:'mts-icon-columns',      src:'widgets/boards/matios-ui-kanban/demo.html',       md:'sc-kanban'      },
+    { key:'sc-sprintboard', label:'SprintBoard',  icon:'mts-icon-layers',      src:'widgets/boards/matios-ui-sprint-board/demo.html', md:'sc-sprintboard' },
   ]},
 
   { key:'utilities', label:'Utilities', icon:'mts-icon-tool', src:'utilities/demo.html', children: [
@@ -158,13 +163,13 @@ const NAV_ITEMS = [
 
   { divider: true },
 
-  { key:'sistema', label:'Sistema', icon:'mts-icon-settings', children: [
-    { key:'themes',      label:'Temas',       icon:'mts-icon-sun',  src:'themes/demo.html',      md:null },
-    { key:'icons',       label:'Íconos',      icon:'mts-icon-star', src:'icons/demo.html',       md:'icons' },
+  { key:'sistema', label:'System', icon:'mts-icon-settings', children: [
+    { key:'themes',      label:'Themes',       icon:'mts-icon-sun',  src:'themes/demo.html',      md:null },
+    { key:'icons',       label:'Icons',      icon:'mts-icon-star', src:'icons/demo.html',       md:'icons' },
     { key:'css-helpers', label:'CSS Helpers', icon:'mts-icon-code', src:'css-helpers/demo.html', md:'css-helpers' },
   ]},
 
-  { key:'cal-x', label:'Cal. Académico', icon:'mts-icon-award',
+  { key:'cal-x', label:'calendar', icon:'mts-icon-award',
     src:'/index.html' },
 ];
 
@@ -220,8 +225,13 @@ const MD_MAP = {
   'chart-composite':  'widgets/charts/matios-ui-chart-composite.md',
   'chart-temporal':   'widgets/charts/matios-ui-chart-temporal.md',
   'chart-flow':       'widgets/charts/matios-ui-chart-flow.md',
-  'sc-projects':      'widgets/projects/matios-ui-project.md',
+  'sc-gantt':         'widgets/boards/matios-ui-gantt-chart/matios-ui-gantt-chart.md',
+  'sc-kanban':        'widgets/boards/matios-ui-kanban/matios-ui-kanban.md',
+  'sc-sprintboard':   'widgets/boards/matios-ui-sprint-board/matios-ui-sprint-board.md',
   'markdownviewer':   'display/matios-ui-markdownviewer/matios-ui-markdownviewer.md',
+  'otp':              'forms/matios-ui-otp/matios-ui-otp.md',
+  'itemlist':         'forms/matios-ui-itemlist/matios-ui-itemlist.md',
+  'autocomplete':     'forms/matios-ui-autocomplete/matios-ui-autocomplete.md',
 };
 
 /* ── State ───────────────────────────────────────── */
@@ -341,7 +351,7 @@ var LOGO_HTML = '<div style="width:28px;height:28px;background:linear-gradient(1
 var END_HTML =
   '<button id="docsBtn" class="mts-btn mts-btn--secondary mts-btn--sm" onclick="openDocs()" style="display:none">' +
     '<i class="mts-icon mts-icon-file-text mts-icon--sm"></i>' +
-    '<span class="mts-btn__label">Ver docs</span>' +
+    '<span class="mts-btn__label">View docs</span>' +
   '</button>' +
   '<div class="theme-picker">' +
     '<div class="theme-picker__group">' +
@@ -399,9 +409,9 @@ var mainStatusBar = new MTS.StatusBar('#mainStatusBar', {
     '<span class="mts-statusbar__sep"></span>' +
     '<span class="mts-statusbar__tag mts-statusbar__tag--primary">v1.0.0</span>',
   end:
-    '<span class="mts-statusbar__item">80+ componentes</span>' +
+    '<span class="mts-statusbar__item">80+ components</span>' +
     '<span class="mts-statusbar__sep"></span>' +
-    '<span class="mts-statusbar__item">278 íconos</span>'
+    '<span class="mts-statusbar__item">278 icons</span>'
 });
 
 new MTS.Shell(document.body, {
@@ -444,9 +454,9 @@ function showWip(item) {
   ws.innerHTML =
     '<div style="width:56px;height:56px;border-radius:14px;background:var(--mts-color-primary-light);display:flex;align-items:center;justify-content:center;font-size:26px;">🚧</div>' +
     '<div style="font-family:\'Syne\',sans-serif;font-size:22px;font-weight:800;color:var(--mts-text-primary);margin-bottom:8px;">' + item.label + '</div>' +
-    '<p style="font-size:13px;color:var(--mts-text-muted);line-height:1.7;margin-bottom:22px;">Esta demo de interfaz completa está en el roadmap.<br>Llegará como parte de la sección <strong style="color:var(--mts-color-primary)">Showcase</strong>.</p>' +
+    '<p style="font-size:13px;color:var(--mts-text-muted);line-height:1.7;margin-bottom:22px;">This full interface demo is on the roadmap.<br>It will arrive as part of the <strong style="color:var(--mts-color-primary)">Showcase</strong> section.</p>' +
     '<div style="display:inline-flex;align-items:center;gap:7px;background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:99px;padding:6px 16px;font-size:12px;color:var(--mts-text-muted);">' +
-    '<i class="mts-icon mts-icon-clock mts-icon--sm"></i> Próximamente</div>';
+    '<i class="mts-icon mts-icon-clock mts-icon--sm"></i> Coming soon</div>';
   if (window.MTS && MTS.Icon) MTS.Icon.initAll();
 }
 
@@ -503,7 +513,7 @@ window.addEventListener('message', function(e) {
 
 /* ── README Drawer ───────────────────────────────── */
 var rmDrawer = new MTS.Drawer({
-  title: 'Documentación',
+  title: 'Documentation',
   position: 'right',
   size: 'lg',
   content: '',
@@ -511,8 +521,8 @@ var rmDrawer = new MTS.Drawer({
 });
 
 var rmCopyBtn = new MTS.CopyButton('#rmCpBtnHost', {
-  label: 'Copiar MD',
-  labelCopied: '¡Copiado!',
+  label: 'Copy MD',
+  labelCopied: 'Copied!',
   variant: 'secondary',
   size: 'sm'
 });
@@ -529,7 +539,7 @@ async function openDocs() {
     var spinHost = document.createElement('div');
     spinHost.style.cssText = 'display:flex;align-items:center;justify-content:center;padding:60px 0';
     rmDrawer.setContent(spinHost);
-    new MTS.Spinner(spinHost, { size: 'sm', label: 'Cargando...' });
+    new MTS.Spinner(spinHost, { size: 'sm', label: 'Loading...' });
   }
 
   rmDrawer.show();
@@ -541,13 +551,13 @@ async function openDocs() {
     for (const url of (Array.isArray(entry) ? entry : [entry])) {
       try { const r = await fetch(url); if (r.ok) combined += (combined ? '\n\n---\n\n' : '') + await r.text(); } catch(e) {}
     }
-    if (!combined) throw new Error('vacío');
+    if (!combined) throw new Error('empty');
     mdCache[mdKey] = combined;
     renderMd(combined);
   } catch(e) {
     rmDrawer.setContent(
       '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:60px 0;color:var(--mts-text-muted)">' +
-      '<span style="font-size:28px">📄</span><span>README no encontrado</span></div>'
+      '<span style="font-size:28px">📄</span><span>README not found</span></div>'
     );
   }
 }
@@ -609,25 +619,25 @@ function showWelcome() {
   el.innerHTML =
     '<div class="welcome__logo">M</div>' +
     '<div class="welcome__title">Matios <span>UI</span></div>' +
-    '<p class="welcome__sub">Framework CSS/JS · 0 dependencias · temas via CSS Variables · 80+ componentes.</p>' +
+    '<p class="welcome__sub">CSS/JS framework · 0 dependencies · themes via CSS Variables · 80+ components.</p>' +
     '<div class="welcome__stats">' +
-      '<div class="welcome__stat"><div class="welcome__stat-val">80+</div><div class="welcome__stat-lbl">Componentes</div></div>' +
-      '<div class="welcome__stat"><div class="welcome__stat-val">278</div><div class="welcome__stat-lbl">Íconos</div></div>' +
+      '<div class="welcome__stat"><div class="welcome__stat-val">80+</div><div class="welcome__stat-lbl">Components</div></div>' +
+      '<div class="welcome__stat"><div class="welcome__stat-val">278</div><div class="welcome__stat-lbl">Icons</div></div>' +
       '<div class="welcome__stat"><div class="welcome__stat-val">3×8</div><div class="welcome__stat-lbl">Modes × accents</div></div>' +
     '</div>' +
     '<div class="welcome__chips">' +
-      '<div class="welcome__chip" onclick="loadById(\'forms\')"><i class="mts-icon mts-icon-form"></i>Formularios</div>' +
-      '<div class="welcome__chip" onclick="loadById(\'navigation\')"><i class="mts-icon mts-icon-compass"></i>Navegación</div>' +
+      '<div class="welcome__chip" onclick="loadById(\'forms\')"><i class="mts-icon mts-icon-form"></i>Forms</div>' +
+      '<div class="welcome__chip" onclick="loadById(\'navigation\')"><i class="mts-icon mts-icon-compass"></i>Navigation</div>' +
       '<div class="welcome__chip" onclick="loadById(\'overlays\')"><i class="mts-icon mts-icon-layers"></i>Overlays</div>' +
       '<div class="welcome__chip" onclick="loadById(\'display\')"><i class="mts-icon mts-icon-grid"></i>Display</div>' +
       '<div class="welcome__chip" onclick="loadById(\'layout\')"><i class="mts-icon mts-icon-layout"></i>Layout</div>' +
       '<div class="welcome__chip" onclick="loadById(\'data\')"><i class="mts-icon mts-icon-database"></i>Data</div>' +
-      '<div class="welcome__chip" onclick="loadById(\'icons\')"><i class="mts-icon mts-icon-star"></i>Íconos</div>' +
+      '<div class="welcome__chip" onclick="loadById(\'icons\')"><i class="mts-icon mts-icon-star"></i>Icons</div>' +
       '<div class="welcome__chip" onclick="loadById(\'utilities\')"><i class="mts-icon mts-icon-tool"></i>Utilities</div>' +
       '<div class="welcome__chip" onclick="loadById(\'sc-dashboard\')"><i class="mts-icon mts-icon-bar-chart-2"></i>Widgets</div>' +
     '</div>' +
     '<button class="welcome__cta" onclick="loadById(\'showcase\')">' +
-      '<i class="mts-icon mts-icon-activity mts-icon--sm"></i>Abrir Showcase' +
+      '<i class="mts-icon mts-icon-activity mts-icon--sm"></i>Open Showcase' +
     '</button>';
   if (window.MTS && MTS.Icon) MTS.Icon.initAll();
 }
