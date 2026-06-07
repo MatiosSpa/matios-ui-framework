@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -41,6 +41,8 @@
   <link rel="stylesheet" href="../../overlays/matios-ui-badge/matios-ui-badge.css">
   <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
   <script src="../../support/demo-shared.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-tabs-i18n.js"></script>
   <script src="./matios-ui-tabs.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
@@ -51,23 +53,44 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Tabs</h1>
-    <p>Underline, pill y card — horizontal y vertical — íconos, badges y API programática.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="result-box" style="margin:0 0 16px 0">Aviso: este demo usa un shell manual para <strong>Preview | HTML | JavaScript</strong> y así evitar el choque entre <strong>MTS.Tabs</strong> externo e interno dentro del mismo componente.</div>
+  <div class="result-box" id="demo-notice" style="margin:0 0 16px 0"></div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Underline (default)</div><div id="shell-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Pill</div><div id="shell-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Card</div><div id="shell-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Vertical</div><div id="shell-s4"></div></div>
-  <div class="demo-section"><div class="demo-section-title">5 — Con íconos y badges / With icons and badges</div><div id="shell-s5"></div></div>
-  <div class="demo-section"><div class="demo-section-title">6 — API — setActive() programático</div><div id="shell-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="shell-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="shell-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="shell-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="shell-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="shell-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s6-title"></div><div id="shell-s6"></div></div>
 </div>
 
 <script>
+/* ============================================================
+   LOCALE
+   ============================================================ */
+
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Tabs'] && MTS.getLocale()['MTS.Tabs'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Underline, pill and card — horizontal and vertical — icons, badges and programmatic API.';
+document.getElementById('demo-notice').innerHTML     = D.notice   || 'Note: this demo uses a manual shell for <strong>Preview | HTML | JavaScript</strong> to avoid the clash between the outer and inner <strong>MTS.Tabs</strong> within the same component.';
+document.getElementById('s1-title').textContent      = D.s1Title  || '1 — Underline (default)';
+document.getElementById('s2-title').textContent      = D.s2Title  || '2 — Pill';
+document.getElementById('s3-title').textContent      = D.s3Title  || '3 — Card';
+document.getElementById('s4-title').textContent      = D.s4Title  || '4 — Vertical';
+document.getElementById('s5-title').textContent      = D.s5Title  || '5 — With icons and badges';
+document.getElementById('s6-title').textContent      = D.s6Title  || '6 — API — programmatic setActive()';
+
 /* ============================================================
    UTILIDADES
    ============================================================ */
@@ -186,8 +209,10 @@ function makeShellSection(hostId, config) {
    ============================================================ */
 
 function tabsContent(label) {
+  var prefix = D.contentPrefix || 'Content of ';
+  var suffix = D.contentSuffix || '.';
   return '<div style="padding:16px;font-size:14px;color:var(--mts-text-secondary)">' +
-    '<p style="margin:0">Contenido de <strong>' + label + '</strong>.</p>' +
+    '<p style="margin:0">' + prefix + '<strong>' + label + '</strong>' + suffix + '</p>' +
   '</div>';
 }
 
@@ -202,7 +227,7 @@ const iconSent  = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" s
 makeShellSection('shell-s1', {
   previewHtml:
     '<div id="tabs-underline"></div>' +
-    '<div class="result-box" id="tabs-result" style="margin-top:12px">— cambia de pestaña —</div>',
+    '<div class="result-box" id="tabs-result" style="margin-top:12px">' + (D.resultPlaceholder || '— switch tabs —') + '</div>',
   htmlCode:
     '<div id="my-tabs"></div>',
   jsCode:
@@ -229,7 +254,7 @@ makeShellSection('shell-s1', {
         { id: 'disabled', label: 'Disabled', content: tabsContent('Disabled'), disabled: true },
       ],
       onChange: function(e) {
-        document.getElementById('tabs-result').textContent = 'onChange → id: ' + e.detail.id;
+        document.getElementById('tabs-result').textContent = (D.onChangePrefix || 'onChange → id: ') + e.detail.id;
       },
     });
   },
@@ -359,7 +384,7 @@ makeShellSection('shell-s6', {
       '<button type="button" class="mts-btn mts-btn--secondary mts-btn--sm" id="btn-add">addTab(\'delta\')</button>' +
       '<button type="button" class="mts-btn mts-btn--secondary mts-btn--sm" id="btn-remove">removeTab(\'delta\')</button>' +
     '</div>' +
-    '<div class="result-box" id="tabs-api-result" style="margin-top:12px">— usa los botones —</div>',
+    '<div class="result-box" id="tabs-api-result" style="margin-top:12px">' + (D.apiResultPlaceholder || '— use the buttons —') + '</div>',
   htmlCode:
     '<div id="my-tabs"></div>\n' +
     '<div class="demo-row">\n' +
@@ -390,7 +415,7 @@ makeShellSection('shell-s6', {
         { id: 'gamma', label: 'Gamma', content: tabsContent('Gamma') },
       ],
       onChange: function(e) {
-        document.getElementById('tabs-api-result').textContent = 'onChange → id: ' + e.detail.id;
+        document.getElementById('tabs-api-result').textContent = (D.onChangePrefix || 'onChange → id: ') + e.detail.id;
       },
     });
 
@@ -402,11 +427,11 @@ makeShellSection('shell-s6', {
     });
     document.getElementById('btn-add').addEventListener('click', function() {
       tabsApi.addTab({ id: 'delta', label: 'Delta', content: tabsContent('Delta') });
-      document.getElementById('tabs-api-result').textContent = 'addTab → id: delta';
+      document.getElementById('tabs-api-result').textContent = (D.addTabPrefix || 'addTab → id: ') + 'delta';
     });
     document.getElementById('btn-remove').addEventListener('click', function() {
       tabsApi.removeTab('delta');
-      document.getElementById('tabs-api-result').textContent = 'removeTab → id: delta';
+      document.getElementById('tabs-api-result').textContent = (D.removeTabPrefix || 'removeTab → id: ') + 'delta';
     });
   },
 });

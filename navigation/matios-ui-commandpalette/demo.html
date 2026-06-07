@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-commandpalette-i18n.js"></script>
   <script src="./matios-ui-commandpalette.js"></script>
 </head>
 <body>
@@ -56,14 +58,14 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.CommandPalette</h1>
-    <p>Buscador de comandos tipo ⌘K con comandos agrupados y acciones.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Básico</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Agrupado</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
 </div>
 
 <script>
@@ -104,14 +106,27 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.CommandPalette']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || '⌘K-style command search with grouped commands and actions.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Grouped';
+
 var cpBasic, cpGrouped;
 var preview_s1 =
   '<div class="demo-stack">' +
     '<div class="demo-row">' +
-      '<button class="demo-btn-sm" onclick="cpBasic.open()">Abrir palette</button>' +
-      '<button class="demo-btn-sm" onclick="cpBasic.close()">Cerrar</button>' +
+      '<button class="demo-btn-sm" onclick="cpBasic.open()">' + (D.btnOpenBasic || 'Open palette') + '</button>' +
+      '<button class="demo-btn-sm" onclick="cpBasic.close()">' + (D.btnCloseBasic || 'Close') + '</button>' +
     '</div>' +
-    '<div class="result-box" id="cp-result-basic">— abre la palette para probar comandos —</div>' +
+    '<div class="result-box" id="cp-result-basic">' + (D.resultBasicPlaceholder || '— open the palette to try commands —') + '</div>' +
   '</div>';
 
 var js_s1 =
@@ -127,9 +142,9 @@ var js_s1 =
 var preview_s2 =
   '<div class="demo-stack">' +
     '<div class="demo-row">' +
-      '<button class="demo-btn-sm" onclick="cpGrouped.open()">Abrir palette agrupada</button>' +
+      '<button class="demo-btn-sm" onclick="cpGrouped.open()">' + (D.btnOpenGrouped || 'Open grouped palette') + '</button>' +
     '</div>' +
-    '<div class="result-box" id="cp-result-grouped">— palette con grupos y shortcuts —</div>' +
+    '<div class="result-box" id="cp-result-grouped">' + (D.resultGroupedPlaceholder || '— palette with groups and shortcuts —') + '</div>' +
   '</div>';
 
 var js_s2 =
@@ -144,11 +159,11 @@ var js_s2 =
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {
   cpBasic = new MTS.CommandPalette({
-    placeholder: 'Buscar comando...',
+    placeholder: D.searchPlaceholder || 'Search command...',
     commands: [
-      { id: 'dashboard', label: 'Ir al Dashboard', icon: MTS.Icon.get('grid'), action: function(){ setResult('cp-result-basic', 'action → dashboard'); } },
-      { id: 'settings', label: 'Abrir ajustes', icon: MTS.Icon.get('cog'), action: function(){ setResult('cp-result-basic', 'action → settings'); } },
-      { id: 'new', label: 'Crear nuevo', icon: MTS.Icon.get('add-circle'), action: function(){ setResult('cp-result-basic', 'action → new'); } }
+      { id: 'dashboard', label: D.cmdDashboard || 'Go to Dashboard', icon: MTS.Icon.get('grid'), action: function(){ setResult('cp-result-basic', 'action → dashboard'); } },
+      { id: 'settings', label: D.cmdSettings || 'Open settings', icon: MTS.Icon.get('cog'), action: function(){ setResult('cp-result-basic', 'action → settings'); } },
+      { id: 'new', label: D.cmdNew || 'Create new', icon: MTS.Icon.get('add-circle'), action: function(){ setResult('cp-result-basic', 'action → new'); } }
     ]
   });
 }, '280px');
@@ -158,8 +173,8 @@ makeSection('tabs-s2', preview_s2, js_s2, function() {
     commands: [
       { id: 'dashboard', label: 'Dashboard', group: 'Navigation', icon: MTS.Icon.get('grid'), shortcut: '⌘D', action: function(){ setResult('cp-result-grouped', 'select → dashboard'); } },
       { id: 'projects', label: 'Projects', group: 'Navigation', icon: MTS.Icon.get('kanban'), shortcut: '⌘P', action: function(){ setResult('cp-result-grouped', 'select → projects'); } },
-      { id: 'theme-dark', label: 'Modo oscuro', group: 'Preferences', icon: MTS.Icon.get('moon'), action: function(){ setMode('dark'); setResult('cp-result-grouped', 'theme → dark'); } },
-      { id: 'theme-light', label: 'Modo claro', group: 'Preferences', icon: MTS.Icon.get('sun'), action: function(){ setMode('light'); setResult('cp-result-grouped', 'theme → light'); } }
+      { id: 'theme-dark', label: D.cmdThemeDark || 'Dark mode', group: 'Preferences', icon: MTS.Icon.get('moon'), action: function(){ setMode('dark'); setResult('cp-result-grouped', 'theme → dark'); } },
+      { id: 'theme-light', label: D.cmdThemeLight || 'Light mode', group: 'Preferences', icon: MTS.Icon.get('sun'), action: function(){ setMode('light'); setResult('cp-result-grouped', 'theme → light'); } }
     ]
   });
 }, '280px');

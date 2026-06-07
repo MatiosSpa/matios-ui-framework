@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -46,21 +46,48 @@
 <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
 <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
 <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-timeline-i18n.js"></script>
   <script src="./matios-ui-timeline.js"></script>
 </head>
 <body>
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Timeline</h1>
-    <p>Timeline demo actualizado al patrón Preview | HTML | JavaScript.</p>
+    <p id="demo-subtitle">Timeline demo updated to the Preview | HTML | JavaScript pattern.</p>
     <div class="demo-header-actions"></div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-  <div class="demo-section"><div class="demo-section-title">1 — Básica</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Alineaciones</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — addEvent() / setEvents()</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title">1 — Basic</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title">2 — Alignments</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title">3 — addEvent() / setEvents()</div><div id="tabs-s3"></div></div>
 </div>
 <script>
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function(){
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Timeline'].demo) || {};
+
+var T_subtitle     = D.subtitle     || 'Timeline demo updated to the Preview | HTML | JavaScript pattern.';
+var T_s1Title      = D.s1Title      || '1 — Basic';
+var T_s2Title      = D.s2Title      || '2 — Alignments';
+var T_s3Title      = D.s3Title      || '3 — addEvent() / setEvents()';
+var T_initialTitle = D.initialTitle || 'Initial event';
+var T_initialDate  = D.initialDate  || 'Start';
+var T_randomTitle  = D.randomTitle  || 'Event #';
+var T_randomDate   = D.randomDate   || 'Now';
+var T_randomDesc   = D.randomDesc   || 'Created dynamically.';
+
+(function(){
+  var sub = document.getElementById('demo-subtitle'); if (sub) sub.textContent = T_subtitle;
+  var t1 = document.getElementById('s1-title');       if (t1)  t1.textContent  = T_s1Title;
+  var t2 = document.getElementById('s2-title');       if (t2)  t2.textContent  = T_s2Title;
+  var t3 = document.getElementById('s3-title');       if (t3)  t3.textContent  = T_s3Title;
+})();
+
 function indentHtml(html) {
   var indent = 0;
   var step = 2;
@@ -109,11 +136,11 @@ var js_s3 = "var tlApi = new MTS.Timeline('#tl-api', { events:[{ title:'Evento i
 var tlApi;
 function addRandom() {
   var n = Math.floor(Math.random() * 1000);
-  tlApi.addEvent({ title:'Evento #' + n, date:'Ahora', description:'Creado dinámicamente.' });
+  tlApi.addEvent({ title: T_randomTitle + n, date: T_randomDate, description: T_randomDesc });
 }
 makeSection('tabs-s1', preview_s1, js_s1, function() { new MTS.Timeline('#tl-basic', { events:[{ title:'Order charged', date:'Today', description:'$248.00 charged.' },{ title:'Order shipped', date:'Yesterday', description:'Tracking #9X4712.' },{ title:'Order placed', date:'3 days ago', description:'3 items.' }] }); }, '360px');
 makeSection('tabs-s2', preview_s2, js_s2, function() { new MTS.Timeline('#tl-left', { align:'left', events:[{ title:'Kickoff', date:'Week 1' },{ title:'Build', date:'Week 2' },{ title:'Launch', date:'Week 3' }] }); new MTS.Timeline('#tl-alternate', { align:'alternate', events:[{ title:'Kickoff', date:'Week 1' },{ title:'Build', date:'Week 2' },{ title:'Launch', date:'Week 3' }] }); }, '380px');
-makeSection('tabs-s3', preview_s3, js_s3, function() { tlApi = new MTS.Timeline('#tl-api', { events:[{ title:'Evento inicial', date:'Inicio' }] }); }, '340px');
+makeSection('tabs-s3', preview_s3, js_s3, function() { tlApi = new MTS.Timeline('#tl-api', { events:[{ title: T_initialTitle, date: T_initialDate }] }); }, '340px');
 
 </script>
 </body>

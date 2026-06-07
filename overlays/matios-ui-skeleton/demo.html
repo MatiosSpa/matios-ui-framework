@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -42,6 +42,8 @@
   <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-skeleton-i18n.js"></script>
   <script src="./matios-ui-skeleton.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
@@ -51,15 +53,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Skeleton</h1>
-    <p>Animated loading placeholder — text, circle, rect, card, list, table · pulse and wave animations.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Text · Circle · Rect</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Card · List · Table</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Animations</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
@@ -103,18 +105,41 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Skeleton'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Animated loading placeholder — text, circle, rect, card, list, table · pulse and wave animations.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Text · Circle · Rect';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Card · List · Table';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Animations';
+
+var labelText   = D.labelText   || 'variant: text (4 lines)';
+var labelCircle = D.labelCircle || 'variant: circle';
+var labelRect   = D.labelRect   || 'variant: rect';
+var labelCard   = D.labelCard   || 'variant: card';
+var labelList   = D.labelList   || 'variant: list (4 items)';
+var labelTable  = D.labelTable  || 'variant: table';
+var labelPulse  = D.labelPulse  || 'animation: pulse';
+var labelWave   = D.labelWave   || 'animation: wave';
+var labelNone   = D.labelNone   || 'animation: none';
+
 const preview_s1 = `
 <div class="demo-grid">
   <div>
-    <div class="demo-label">variant: text (4 lines)</div>
+    <div class="demo-label">${labelText}</div>
     <div id="sk-text"></div>
   </div>
   <div>
-    <div class="demo-label">variant: circle</div>
+    <div class="demo-label">${labelCircle}</div>
     <div id="sk-circle"></div>
   </div>
   <div>
-    <div class="demo-label">variant: rect</div>
+    <div class="demo-label">${labelRect}</div>
     <div id="sk-rect"></div>
   </div>
 </div>`;
@@ -140,15 +165,15 @@ new MTS.Skeleton('#sk-rect', {
 const preview_s2 = `
 <div class="demo-grid">
   <div>
-    <div class="demo-label">variant: card</div>
+    <div class="demo-label">${labelCard}</div>
     <div id="sk-card"></div>
   </div>
   <div>
-    <div class="demo-label">variant: list (4 items)</div>
+    <div class="demo-label">${labelList}</div>
     <div id="sk-list"></div>
   </div>
   <div>
-    <div class="demo-label">variant: table</div>
+    <div class="demo-label">${labelTable}</div>
     <div id="sk-table"></div>
   </div>
 </div>`;
@@ -171,15 +196,15 @@ new MTS.Skeleton('#sk-table', {
 const preview_s3 = `
 <div class="demo-grid">
   <div>
-    <div class="demo-label">animation: pulse</div>
+    <div class="demo-label">${labelPulse}</div>
     <div id="sk-pulse"></div>
   </div>
   <div>
-    <div class="demo-label">animation: wave</div>
+    <div class="demo-label">${labelWave}</div>
     <div id="sk-wave"></div>
   </div>
   <div>
-    <div class="demo-label">animation: none</div>
+    <div class="demo-label">${labelNone}</div>
     <div id="sk-none"></div>
   </div>
 </div>`;

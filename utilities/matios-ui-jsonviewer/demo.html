@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -50,6 +50,8 @@
   <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-jsonviewer-i18n.js"></script>
   <script src="./matios-ui-jsonviewer.js"></script>
 </head>
 <body>
@@ -57,14 +59,14 @@
   <div class="demo-page">
     <div class="demo-header">
       <h1><span>MTS</span>.JsonViewer</h1>
-      <p>Utility para ver payloads JSON, responses y configuraciones con formato, plegado y copia dentro de demos, soporte y tooling.</p>
+      <p id="demo-subtitle"></p>
       <div class="demo-header-actions">
       </div>
       <div class="demo-docs-panel" id="docs-panel"></div>
     </div>
 
     <section class="demo-section">
-      <div class="demo-section-title">1 - Paste / payload / raw invalido</div>
+      <div class="demo-section-title" id="s1-title"></div>
       <div class="mts-grid mts-grid--gap-md">
         <div class="mts-g-col-12 mts-g-col-lg-4"><div id="tabs-inline"></div></div>
         <div class="mts-g-col-12 mts-g-col-lg-4"><div id="tabs-payload"></div></div>
@@ -74,6 +76,25 @@
   </div>
 
   <script>
+    // — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+    (function () {
+      var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+      var lang = m ? m[1] : 'en';
+      if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+    })();
+    var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.JsonViewer'].demo) || {};
+
+    document.getElementById('demo-subtitle').textContent = D.subtitle || 'Utility to view JSON payloads, responses and configurations with formatting, folding and copy inside demos, support and tooling.';
+    document.getElementById('s1-title').textContent      = D.s1Title || '1 - Paste / payload / invalid raw';
+
+    var inlineTitle       = D.inlineTitle       || 'Paste and format';
+    var inlineSubtitle    = D.inlineSubtitle    || 'Paste single-line JSON and format it inside the component';
+    var inlinePlaceholder = D.inlinePlaceholder || 'Paste your JSON here and press Format';
+    var payloadTitle      = D.payloadTitle      || 'Request payload';
+    var payloadSubtitle   = D.payloadSubtitle   || 'POST /api/workflows';
+    var invalidTitle      = D.invalidTitle      || 'Fallback raw';
+    var invalidSubtitle   = D.invalidSubtitle   || 'Invalid JSON with parse message';
+
     function createPreviewPanel(id) {
       var panel = document.createElement('div');
       panel.className = 'mts-p-2';
@@ -128,21 +149,21 @@
       {
         id: 'inline',
         previewOptions: {
-          title: 'Paste and format',
-          subtitle: 'Pega JSON en una linea y formatealo dentro del componente',
+          title: inlineTitle,
+          subtitle: inlineSubtitle,
           data: '{"user":{"id":14,"name":"Matias"},"active":true,"roles":["admin","billing"]}',
           editable: true,
-          placeholder: 'Pega aqui tu JSON y presiona Format',
+          placeholder: inlinePlaceholder,
           copyable: true,
           height: '400px'
         },
         jsCode:
 `new MTS.JsonViewer('#preview-inline', {
-  title: 'Paste and format',
-  subtitle: 'Pega JSON en una linea y formatealo dentro del componente',
+  title: '` + inlineTitle + `',
+  subtitle: '` + inlineSubtitle + `',
   data: '{"user":{"id":14,"name":"Matias"},"active":true,"roles":["admin","billing"]}',
   editable: true,
-  placeholder: 'Pega aqui tu JSON y presiona Format',
+  placeholder: '` + inlinePlaceholder + `',
   copyable: true,
   height: '400px'
 });`
@@ -150,8 +171,8 @@
       {
         id: 'payload',
         previewOptions: {
-          title: 'Request payload',
-          subtitle: 'POST /api/workflows',
+          title: payloadTitle,
+          subtitle: payloadSubtitle,
           data: {
             workflowId: 'WF-104',
             owner: {
@@ -175,8 +196,8 @@
         },
         jsCode:
 `new MTS.JsonViewer('#preview-payload', {
-  title: 'Request payload',
-  subtitle: 'POST /api/workflows',
+  title: '` + payloadTitle + `',
+  subtitle: '` + payloadSubtitle + `',
   data: {
     workflowId: 'WF-104',
     owner: {
@@ -201,16 +222,16 @@
       {
         id: 'invalid',
         previewOptions: {
-          title: 'Fallback raw',
-          subtitle: 'JSON invalido con mensaje de parseo',
+          title: invalidTitle,
+          subtitle: invalidSubtitle,
           data: '{"name":"Role builder","active":true,"stages":[{"id":1},{"id":2},]}',
           copyable: true,
           height: '400px'
         },
         jsCode:
 `new MTS.JsonViewer('#preview-invalid', {
-  title: 'Fallback raw',
-  subtitle: 'JSON invalido con mensaje de parseo',
+  title: '` + invalidTitle + `',
+  subtitle: '` + invalidSubtitle + `',
   data: '{"name":"Role builder","active":true,"stages":[{"id":1},{"id":2},]}',
   copyable: true
 });`

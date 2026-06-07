@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -43,6 +43,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-badge-i18n.js"></script>
   <script src="./matios-ui-badge.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
@@ -52,15 +54,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Badge</h1>
-    <p>Badges, pills and counters — CSS-only o vía JS — tags removibles y notification dots.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Solo CSS</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Tamaños y formas</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Via JS</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
@@ -104,6 +106,26 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Badge']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Badges, pills and counters — CSS-only or via JS — removable tags and notification dots.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — CSS only';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Sizes and shapes';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Via JS';
+
+var txtNoneNeeded      = D.jsNoneNeeded || '// No JavaScript needed.';
+var txtCssOnly         = D.jsCssOnly || '// This variant uses only the component CSS classes.';
+var txtCssShapes       = D.jsCssShapes || '// Sizes, shapes and dot/pulse work with CSS classes only.';
+var txtResultPlaceholder = D.resultPlaceholder || '— use the buttons or remove a tag —';
+var txtRemovePrefix    = D.removePrefix || 'onRemove → ';
+
 var preview_s1 = `
 <div class="demo-row" style="flex-wrap:wrap;gap:8px">
   <span class="mts-badge">Default</span>
@@ -115,8 +137,7 @@ var preview_s1 = `
   <span class="mts-badge mts-badge--accent">Accent</span>
 </div>`;
 
-var js_s1 = `// No JavaScript needed.
-// Esta variante usa solo clases CSS del componente.`;
+var js_s1 = txtNoneNeeded + '\n' + txtCssOnly;
 
 var preview_s2 = `
 <div class="demo-row" style="flex-wrap:wrap;gap:12px;align-items:center">
@@ -130,8 +151,7 @@ var preview_s2 = `
   <span class="mts-badge mts-badge--danger mts-badge--dot mts-badge--pulse"></span>
 </div>`;
 
-var js_s2 = `// No JavaScript needed.
-// Tamaños, shapes y dot/pulse funcionan solo con clases CSS.`;
+var js_s2 = txtNoneNeeded + '\n' + txtCssShapes;
 
 var preview_s3 = `
 <div class="demo-stack">
@@ -152,7 +172,7 @@ var preview_s3 = `
     <button id="btn-count-5" data-label="setCount(5)" data-variant="secondary"></button>
     <button id="btn-count-100" data-label="setCount(100)" data-variant="primary"></button>
   </div>
-  <div class="result-box" id="badge-result">— usa los botones o remueve un tag —</div>
+  <div class="result-box" id="badge-result">` + txtResultPlaceholder + `</div>
 </div>`;
 
 var js_s3 = `new MTS.Button('#btn-notifs');
@@ -235,7 +255,7 @@ function mountBadgeDemo() {
       removable: true,
       onRemove: function (e) {
         e.detail.badge._el.remove();
-        document.getElementById('badge-result').textContent = 'onRemove → "' + label + '"';
+        document.getElementById('badge-result').textContent = txtRemovePrefix + '"' + label + '"';
       }
     });
   }

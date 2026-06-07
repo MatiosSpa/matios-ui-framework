@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -48,6 +48,8 @@
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-label-i18n.js"></script>
   <script src="./matios-ui-label.js"></script>
 </head>
 <body>
@@ -55,17 +57,17 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Label</h1>
-    <p>Etiquetas de formulario con badges required/optional, hint, error y enhancement progresivo.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — HTML puro</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Hint y error</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Tamaños</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — API programática</div><div id="tabs-s4"></div></div>
-  <div class="demo-section"><div class="demo-section-title">5 — HTML completo + enhancement</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
 </div>
 
 <script>
@@ -114,6 +116,22 @@ function setResult(id, text) {
   var el = document.getElementById(id);
   if (el) el.textContent = text;
 }
+
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Label']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Form labels with required/optional badges, hint, error and progressive enhancement.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Pure HTML';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Hint and error';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Sizes';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Programmatic API';
+document.getElementById('s5-title').textContent      = D.s5Title || '5 — Full HTML + enhancement';
 
 var preview_s1 =
   '<div class="demo-stack">' +
@@ -202,7 +220,7 @@ var preview_s4 =
       '<button class="demo-btn-sm" onclick="labelApiDemo(\'error\')">setError()</button>' +
       '<button class="demo-btn-sm" onclick="labelApiDemo(\'clear\')">clearError()</button>' +
     '</div>' +
-    '<div class="result-box" id="label-api-result">— usa los botones para probar la API —</div>' +
+    '<div class="result-box" id="label-api-result">' + (D.apiResultHint || '— use the buttons to try the API —') + '</div>' +
   '</div>';
 
 var js_s4 =

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-button-i18n.js"></script>
   <script src="./matios-ui-button.js"></script>
 </head>
 <body>
@@ -56,21 +58,21 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Button</h1>
-    <p>Botones con variantes, tamaños, iconos, agrupación y enhancement progresivo desde HTML declarativo.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Tamaños</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Con iconos</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Estados</div><div id="tabs-s4"></div></div>
-  <div class="demo-section"><div class="demo-section-title">5 — Grupos</div><div id="tabs-s5"></div></div>
-  <div class="demo-section"><div class="demo-section-title">6 — MenuButton y SplitButton</div><div id="tabs-s6"></div></div>
-  <div class="demo-section"><div class="demo-section-title">7 — Eventos onClick</div><div id="tabs-s7"></div></div>
-  <div class="demo-section"><div class="demo-section-title">8 — Shadow y Ring</div><div id="tabs-s8"></div></div>
-  <div class="demo-section"><div class="demo-section-title">9 — HTML declarativo + enhancement</div><div id="tabs-s9"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s6-title"></div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s7-title"></div><div id="tabs-s7"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s8-title"></div><div id="tabs-s8"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s9-title"></div><div id="tabs-s9"></div></div>
 </div>
 
 <script>
@@ -120,6 +122,25 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Button'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Buttons with variants, sizes, icons, grouping and progressive enhancement from declarative HTML.';
+document.getElementById('s1-title').textContent = D.s1Title || '1 — Variants';
+document.getElementById('s2-title').textContent = D.s2Title || '2 — Sizes';
+document.getElementById('s3-title').textContent = D.s3Title || '3 — With icons';
+document.getElementById('s4-title').textContent = D.s4Title || '4 — States';
+document.getElementById('s5-title').textContent = D.s5Title || '5 — Groups';
+document.getElementById('s6-title').textContent = D.s6Title || '6 — MenuButton and SplitButton';
+document.getElementById('s7-title').textContent = D.s7Title || '7 — onClick events';
+document.getElementById('s8-title').textContent = D.s8Title || '8 — Shadow and ring';
+document.getElementById('s9-title').textContent = D.s9Title || '9 — Declarative HTML + enhancement';
+
 var preview_s1 =
   '<div class="demo-row">' +
     '<button id="btn-v-primary" data-variant="primary" data-label="Primary"></button>' +
@@ -155,7 +176,7 @@ var js_s2 =
 var preview_s3 =
   '<div class="demo-stack">' +
     '<div class="demo-col">' +
-      '<div class="demo-label">Icono izquierdo</div>' +
+      '<div class="demo-label">' + (D.labelIconLeft || 'Left icon') + '</div>' +
       '<div class="demo-row">' +
         '<button id="btn-i-save"></button>' +
         '<button id="btn-i-edit"></button>' +
@@ -163,14 +184,14 @@ var preview_s3 =
       '</div>' +
     '</div>' +
     '<div class="demo-col">' +
-      '<div class="demo-label">Icono derecho</div>' +
+      '<div class="demo-label">' + (D.labelIconRight || 'Right icon') + '</div>' +
       '<div class="demo-row">' +
         '<button id="btn-i-next"></button>' +
         '<button id="btn-i-export"></button>' +
       '</div>' +
     '</div>' +
     '<div class="demo-col">' +
-      '<div class="demo-label">Solo icono</div>' +
+      '<div class="demo-label">' + (D.labelIconOnly || 'Icon only') + '</div>' +
       '<div class="demo-row">' +
         '<button id="btn-i-heart"></button>' +
         '<button id="btn-i-search"></button>' +
@@ -225,7 +246,7 @@ var preview_s6 =
   '<div class="demo-stack">' +
     '<div id="menu-button-demo"></div>' +
     '<div id="split-button-demo"></div>' +
-    '<div class="result-box" id="result-s6">— sin acciones —</div>' +
+    '<div class="result-box" id="result-s6">' + (D.resultNoActions || '— no actions yet —') + '</div>' +
   '</div>';
 
 var js_s6 =
@@ -253,11 +274,11 @@ var js_s6 =
 var preview_s7 =
   '<div class="demo-stack">' +
     '<div class="demo-row">' +
-      '<button id="btn-e-save" data-label="Guardar" data-variant="primary"></button>' +
-      '<button id="btn-e-cancel" data-label="Cancelar" data-variant="ghost"></button>' +
-      '<button id="btn-e-archive" data-label="Archivar" data-variant="secondary"></button>' +
+      '<button id="btn-e-save" data-label="' + (D.btnSave || 'Save') + '" data-variant="primary"></button>' +
+      '<button id="btn-e-cancel" data-label="' + (D.btnCancel || 'Cancel') + '" data-variant="ghost"></button>' +
+      '<button id="btn-e-archive" data-label="' + (D.btnArchive || 'Archive') + '" data-variant="secondary"></button>' +
     '</div>' +
-    '<div class="result-box" id="result-s7">— sin eventos —</div>' +
+    '<div class="result-box" id="result-s7">' + (D.resultNoEvents || '— no events yet —') + '</div>' +
   '</div>';
 
 var js_s7 =
@@ -291,7 +312,7 @@ var preview_s9 =
       '<button id="btn-d-cancel" data-variant="ghost" data-label="Cancel"></button>' +
       '<button id="btn-d-small" data-variant="secondary" data-size="sm" data-label="Small"></button>' +
     '</div>' +
-    '<div class="result-box" id="result-s9">— declarative enhancement —</div>' +
+    '<div class="result-box" id="result-s9">' + (D.resultDeclarative || '— declarative enhancement —') + '</div>' +
   '</div>';
 
 var js_s9 =
@@ -323,11 +344,11 @@ makeSection('tabs-s2', preview_s2, js_s2, function() {
 });
 
 makeSection('tabs-s3', preview_s3, js_s3, function() {
-  new MTS.Button('#btn-i-save',   { label: 'Guardar', iconLeft: MTS.Icon.get('save') });
-  new MTS.Button('#btn-i-edit',   { label: 'Editar', variant: 'secondary', iconLeft: MTS.Icon.get('edit-2') });
-  new MTS.Button('#btn-i-trash',  { label: 'Eliminar', variant: 'danger', iconLeft: MTS.Icon.get('trash') });
-  new MTS.Button('#btn-i-next',   { label: 'Siguiente', iconRight: MTS.Icon.get('arrow-right') });
-  new MTS.Button('#btn-i-export', { label: 'Exportar', variant: 'ghost', iconRight: MTS.Icon.get('download') });
+  new MTS.Button('#btn-i-save',   { label: (D.btnSave || 'Save'), iconLeft: MTS.Icon.get('save') });
+  new MTS.Button('#btn-i-edit',   { label: (D.btnEdit || 'Edit'), variant: 'secondary', iconLeft: MTS.Icon.get('edit-2') });
+  new MTS.Button('#btn-i-trash',  { label: (D.btnDelete || 'Delete'), variant: 'danger', iconLeft: MTS.Icon.get('trash') });
+  new MTS.Button('#btn-i-next',   { label: (D.btnNext || 'Next'), iconRight: MTS.Icon.get('arrow-right') });
+  new MTS.Button('#btn-i-export', { label: (D.btnExport || 'Export'), variant: 'ghost', iconRight: MTS.Icon.get('download') });
   new MTS.Button('#btn-i-heart',  { iconLeft: MTS.Icon.get('heart'), iconOnly: true, variant: 'secondary' });
   new MTS.Button('#btn-i-search', { iconLeft: MTS.Icon.get('search'), iconOnly: true, variant: 'ghost' });
 });
@@ -354,32 +375,32 @@ makeSection('tabs-s5', preview_s5, js_s5, function() {
 
 makeSection('tabs-s6', preview_s6, js_s6, function() {
   new MTS.MenuButton('#menu-button-demo', {
-    label: 'Acciones',
+    label: (D.btnActions || 'Actions'),
     variant: 'secondary',
     items: [
-      { label: 'Editar', icon: MTS.Icon.get('edit-2'), onClick: function() { setResult('result-s6', 'Editar'); } },
-      { label: 'Duplicar', icon: MTS.Icon.get('copy'), onClick: function() { setResult('result-s6', 'Duplicar'); } },
+      { label: (D.btnEdit || 'Edit'), icon: MTS.Icon.get('edit-2'), onClick: function() { setResult('result-s6', (D.btnEdit || 'Edit')); } },
+      { label: (D.btnDuplicate || 'Duplicate'), icon: MTS.Icon.get('copy'), onClick: function() { setResult('result-s6', (D.btnDuplicate || 'Duplicate')); } },
       '---',
-      { label: 'Eliminar', icon: MTS.Icon.get('trash'), danger: true, onClick: function() { setResult('result-s6', 'Eliminar'); } }
+      { label: (D.btnDelete || 'Delete'), icon: MTS.Icon.get('trash'), danger: true, onClick: function() { setResult('result-s6', (D.btnDelete || 'Delete')); } }
     ]
   });
 
   new MTS.SplitButton('#split-button-demo', {
-    label: 'Guardar',
+    label: (D.btnSave || 'Save'),
     variant: 'primary',
     iconLeft: MTS.Icon.get('save'),
-    onClick: function() { setResult('result-s6', 'Guardar'); },
+    onClick: function() { setResult('result-s6', (D.btnSave || 'Save')); },
     items: [
-      { label: 'Guardar borrador', onClick: function() { setResult('result-s6', 'Guardar borrador'); } },
-      { label: 'Guardar y publicar', onClick: function() { setResult('result-s6', 'Guardar y publicar'); } }
+      { label: (D.btnSaveDraft || 'Save draft'), onClick: function() { setResult('result-s6', (D.btnSaveDraft || 'Save draft')); } },
+      { label: (D.btnSavePublish || 'Save and publish'), onClick: function() { setResult('result-s6', (D.btnSavePublish || 'Save and publish')); } }
     ]
   });
 });
 
 makeSection('tabs-s7', preview_s7, js_s7, function() {
-  new MTS.Button('#btn-e-save',    { onClick: function() { setResult('result-s7', 'Guardar'); } });
-  new MTS.Button('#btn-e-cancel',  { onClick: function() { setResult('result-s7', 'Cancelar'); } });
-  new MTS.Button('#btn-e-archive', { onClick: function() { setResult('result-s7', 'Archivar'); } });
+  new MTS.Button('#btn-e-save',    { onClick: function() { setResult('result-s7', (D.btnSave || 'Save')); } });
+  new MTS.Button('#btn-e-cancel',  { onClick: function() { setResult('result-s7', (D.btnCancel || 'Cancel')); } });
+  new MTS.Button('#btn-e-archive', { onClick: function() { setResult('result-s7', (D.btnArchive || 'Archive')); } });
 });
 
 makeSection('tabs-s8', preview_s8, js_s8, function() {

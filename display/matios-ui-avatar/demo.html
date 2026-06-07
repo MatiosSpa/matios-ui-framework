@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -46,20 +46,22 @@
 <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
 <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
 <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+<script src="../../base/matios-ui-i18n.js"></script>
+<script src="./matios-ui-avatar-i18n.js"></script>
   <script src="./matios-ui-avatar.js"></script>
 </head>
 <body>
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Avatar</h1>
-    <p>Avatar demo actualizado al patrón Preview | HTML | JavaScript.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions"></div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-  <div class="demo-section"><div class="demo-section-title">1 — Básico y estados</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Tamaños</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — AvatarGroup</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — API setStatus() / setSrc()</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 <script>
 function indentHtml(html) {
@@ -101,13 +103,31 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
-var preview_s1 = "<div class=\"demo-row\">\n  <div id=\"av-img\"></div>\n  <div id=\"av-initials\"></div>\n  <div id=\"av-online\"></div>\n  <div id=\"av-busy\"></div>\n  <div id=\"av-away\"></div>\n  <div id=\"av-square\"></div>\n  <div id=\"av-badge\"></div>\n</div>";
+
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Avatar'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Avatar demo updated to the Preview | HTML | JavaScript pattern.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic and states';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Sizes';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — AvatarGroup';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — API setStatus() / setSrc()';
+
+var btnUpdate  = D.btnUpdate  || 'update()';
+var btnRestore = D.btnRestore || 'restore';
+
+var preview_s1 ="<div class=\"demo-row\">\n  <div id=\"av-img\"></div>\n  <div id=\"av-initials\"></div>\n  <div id=\"av-online\"></div>\n  <div id=\"av-busy\"></div>\n  <div id=\"av-away\"></div>\n  <div id=\"av-square\"></div>\n  <div id=\"av-badge\"></div>\n</div>";
 var js_s1 = "new MTS.Avatar('#av-img', { src:'https://i.pravatar.cc/150?img=1', name:'Ana Garc\u00eda' });\nnew MTS.Avatar('#av-initials', { name:'Pedro Mart\u00ednez' });\nnew MTS.Avatar('#av-online', { name:'Laura', status:'online' });\nnew MTS.Avatar('#av-busy', { name:'Carlos', status:'busy' });\nnew MTS.Avatar('#av-away', { name:'Mar\u00eda', status:'away' });\nnew MTS.Avatar('#av-square', { name:'Bot', square:true });\nnew MTS.Avatar('#av-badge', { name:'Ana', badge:3 });";
 var preview_s2 = "<div class=\"demo-row\">\n  <div id=\"av-xs\"></div>\n  <div id=\"av-sm\"></div>\n  <div id=\"av-md\"></div>\n  <div id=\"av-lg\"></div>\n  <div id=\"av-xl\"></div>\n</div>";
 var js_s2 = "['xs','sm','md','lg','xl'].forEach(function(size) { new MTS.Avatar('#av-' + size, { name:'Ana Garc\u00eda', size:size }); });";
 var preview_s3 = "<div class=\"demo-stack\">\n  <div id=\"av-group-1\"></div>\n  <div id=\"av-group-2\"></div>\n</div>";
 var js_s3 = "new MTS.AvatarGroup('#av-group-1', { avatars:[{src:'https://i.pravatar.cc/150?img=1',name:'Ana'},{name:'Pedro Mart\u00ednez'},{name:'Laura S\u00e1nchez'},{name:'Carlos Ruiz'},{name:'Mar\u00eda Torres'}], max:3, size:'md' });\nnew MTS.AvatarGroup('#av-group-2', { avatars:[{name:'Ana'},{name:'Pedro'},{name:'Laura'}], size:'lg' });";
-var preview_s4 = "<div class=\"demo-stack\">\n  <div id=\"av-api\"></div>\n  <div class=\"demo-row\">\n    <button class=\"demo-btn-sm\" onclick=\"avatarApi.update({ name:'Carla Soto', status:'online', badge:2 })\">update()</button>\n    <button class=\"demo-btn-sm\" onclick=\"avatarApi.update({ src:'https://i.pravatar.cc/150?img=12', name:'Ana Garc\u00eda', status:null, badge:null })\">restore</button>\n  </div>\n</div>";
+var preview_s4 = "<div class=\"demo-stack\">\n  <div id=\"av-api\"></div>\n  <div class=\"demo-row\">\n    <button class=\"demo-btn-sm\" onclick=\"avatarApi.update({ name:'Carla Soto', status:'online', badge:2 })\">" + btnUpdate + "</button>\n    <button class=\"demo-btn-sm\" onclick=\"avatarApi.update({ src:'https://i.pravatar.cc/150?img=12', name:'Ana Garc\u00eda', status:null, badge:null })\">" + btnRestore + "</button>\n  </div>\n</div>";
 var js_s4 = "var avatarApi = new MTS.Avatar('#av-api', { src:'https://i.pravatar.cc/150?img=12', name:'Ana Garc\u00eda', size:'lg' });\navatarApi.update({ name:'Carla Soto', status:'online', badge:2 });";
 var avatarApi;
 makeSection('tabs-s1', preview_s1, js_s1, function() {

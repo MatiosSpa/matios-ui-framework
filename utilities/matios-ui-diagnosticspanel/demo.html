@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -53,6 +53,8 @@
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../matios-ui-jsonviewer/matios-ui-jsonviewer.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-diagnosticspanel-i18n.js"></script>
   <script src="./matios-ui-diagnosticspanel.js"></script>
 </head>
 <body>
@@ -60,7 +62,7 @@
   <div class="demo-page">
     <div class="demo-header">
       <h1><span>MTS</span>.DiagnosticsPanel</h1>
-      <p>Consola integrada inferior para logs, requests, errores, sesion y export de diagnostico dentro de una app real.</p>
+      <p id="demo-subtitle"></p>
       <div class="demo-header-actions">
       </div>
       <div class="demo-docs-panel" id="docs-panel"></div>
@@ -70,6 +72,16 @@
   </div>
 
   <script>
+    // — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+    (function () {
+      var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+      var lang = m ? m[1] : 'en';
+      if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+    })();
+    var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.DiagnosticsPanel'].demo) || {};
+
+    document.getElementById('demo-subtitle').textContent = D.subtitle || 'Bottom docked console for logs, requests, errors, session and diagnostics export inside a real app.';
+
     var htmlUsageSnippet =
       "<!-- Host real del ejemplo -->\n" +
       "<div id=\"calendario\"></div>\n\n" +
@@ -194,7 +206,7 @@
 
       var block = new MTS.CodeBlock(host, {
         title: title,
-        subtitle: 'Cargando...',
+        subtitle: D.loading || 'Loading...',
         language: language,
         code: '',
         copyable: true,
@@ -267,10 +279,10 @@
       window.requestAnimationFrame(syncPreviewHeight);
     });
 
-    htmlPanel.block.setTitle('Uso real en calendar-app', 'HTML real resumido');
+    htmlPanel.block.setTitle(D.htmlTitle || 'Real usage in calendar-app', D.htmlSubtitle || 'Condensed real HTML');
     htmlPanel.block.setCode(htmlUsageSnippet);
 
-    jsPanel.block.setTitle('Integracion real de diagnostics-bootstrap.js + app.js', 'JavaScript comentado');
+    jsPanel.block.setTitle(D.jsTitle || 'Real integration of diagnostics-bootstrap.js + app.js', D.jsSubtitle || 'Commented JavaScript');
     jsPanel.block.setCode(jsUsageSnippet);
   </script>
 </body>

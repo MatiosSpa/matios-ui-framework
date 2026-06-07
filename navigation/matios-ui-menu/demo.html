@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -54,6 +54,8 @@
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../navigation/matios-ui-topbar/matios-ui-topbar.js"></script>
   <script src="../../navigation/matios-ui-sidenav/matios-ui-sidenav.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-menu-i18n.js"></script>
   <script src="./matios-ui-menu.js"></script>
   <style>
     .demo-topbar-wrap { border-radius:var(--mts-radius-lg);overflow:visible; }
@@ -84,7 +86,7 @@
 
   <div class="demo-header">
     <h1><span>MTS</span>.Menu</h1>
-    <p>Menú de navegación con n niveles, íconos y un único <code>onClick</code> — para <strong>MTS.Topbar</strong> (horizontal) y <strong>MTS.SideNav</strong> (árbol).</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
@@ -92,31 +94,51 @@
 
   <!-- ── 1 · HORIZONTAL en Topbar ── -->
   <div class="demo-section">
-    <div class="demo-section-title">1 — Horizontal · MTS.Topbar + MTS.Menu</div>
+    <div class="demo-section-title" id="s1-title"></div>
     <div id="s1"></div>
   </div>
 
   <!-- ── 2 · ÁRBOL en SideNav ── -->
   <div class="demo-section">
-    <div class="demo-section-title">2 — Árbol · MTS.SideNav + MTS.Menu</div>
+    <div class="demo-section-title" id="s2-title"></div>
     <div id="s2"></div>
   </div>
 
   <!-- ── 3 · N NIVELES + badges + disabled ── -->
   <div class="demo-section">
-    <div class="demo-section-title">3 — N niveles · badges · disabled</div>
+    <div class="demo-section-title" id="s3-title"></div>
     <div id="s3"></div>
   </div>
 
   <!-- ── 4 · MISMA INSTANCIA: topbar + sidenav ── -->
   <div class="demo-section">
-    <div class="demo-section-title">4 — Una instancia · Topbar horizontal + SideNav árbol sincronizados</div>
+    <div class="demo-section-title" id="s4-title"></div>
     <div id="s4"></div>
   </div>
 
 </div>
 
 <script>
+
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Menu']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').innerHTML = D.subtitleHtml || 'Navigation menu with n levels, icons and a single <code>onClick</code> — for <strong>MTS.Topbar</strong> (horizontal) and <strong>MTS.SideNav</strong> (tree).';
+document.getElementById('s1-title').textContent    = D.s1Title || '1 — Horizontal · MTS.Topbar + MTS.Menu';
+document.getElementById('s2-title').textContent    = D.s2Title || '2 — Tree · MTS.SideNav + MTS.Menu';
+document.getElementById('s3-title').textContent    = D.s3Title || '3 — N levels · badges · disabled';
+document.getElementById('s4-title').textContent    = D.s4Title || '4 — One instance · Horizontal Topbar + Tree SideNav synced';
+
+function fmt(tpl, item) {
+  return String(tpl).replace('{key}', item.key).replace('{label}', item.label);
+}
+
 window.addEventListener('message', function(e) {
   if (!e.data) return;
   if (e.data.type === 'setMode')   document.documentElement.setAttribute('data-mts-mode', e.data.mode);
@@ -151,7 +173,7 @@ mk('s1',
 '<div class="demo-topbar-wrap">\n' +
 '  <div id="tb1"></div>\n' +
 '</div>\n' +
-'<div class="demo-log" id="log1">— click un ítem —</div>',
+'<div class="demo-log" id="log1">' + (D.logHint || '— click an item —') + '</div>',
 "var menu1 = new MTS.Menu({\n" +
 "  active: 'dashboard',\n" +
 "  items: [\n" +
@@ -176,19 +198,19 @@ mk('s1',
 var menu1 = new MTS.Menu({
   active: 'dashboard',
   items: [
-    { key: 'dashboard', label: 'Dashboard', icon: 'mts-icon-home' },
-    { key: 'reportes',  label: 'Reportes',  icon: 'mts-icon-bar-chart-2', children: [
-      { key: 'ventas',    label: 'Ventas' },
-      { key: 'compras',   label: 'Compras' },
-      { key: 'logistica', label: 'Logística' },
+    { key: 'dashboard', label: D.lblDashboard || 'Dashboard', icon: 'mts-icon-home' },
+    { key: 'reportes',  label: D.lblReports || 'Reports',     icon: 'mts-icon-bar-chart-2', children: [
+      { key: 'ventas',    label: D.lblSales || 'Sales' },
+      { key: 'compras',   label: D.lblPurchases || 'Purchases' },
+      { key: 'logistica', label: D.lblLogistics || 'Logistics' },
     ]},
-    { key: 'usuarios', label: 'Usuarios', icon: 'mts-icon-users' },
+    { key: 'usuarios', label: D.lblUsers || 'Users', icon: 'mts-icon-users' },
     { divider: true },
-    { key: 'config',   label: 'Config',   icon: 'mts-icon-settings' },
+    { key: 'config',   label: D.lblConfig || 'Config', icon: 'mts-icon-settings' },
   ],
   onClick: function(item) {
     var log = document.getElementById('log1');
-    if (log) log.textContent = 'key: ' + item.key + ' · label: ' + item.label;
+    if (log) log.textContent = fmt(D.logResult || 'key: {key} · label: {label}', item);
   }
 });
 
@@ -203,7 +225,7 @@ new MTS.Topbar('#tb1', {
 mk('s2',
 '<div class="demo-sidebar-wrap">\n' +
 '  <div id="sn2"></div>\n' +
-'  <div class="demo-content-mock" id="content2">Seleccioná un ítem</div>\n' +
+'  <div class="demo-content-mock" id="content2">' + (D.selectHint || 'Select an item') + '</div>\n' +
 '</div>',
 "var menu2 = new MTS.Menu({\n" +
 "  active: 'dashboard',\n" +
@@ -226,13 +248,13 @@ mk('s2',
 var menu2 = new MTS.Menu({
   active: 'dashboard',
   items: [
-    { key: 'dashboard', label: 'Dashboard', icon: 'mts-icon-home' },
-    { key: 'reportes',  label: 'Reportes',  icon: 'mts-icon-bar-chart-2', children: [
-      { key: 'ventas',  label: 'Ventas' },
-      { key: 'compras', label: 'Compras' },
+    { key: 'dashboard', label: D.lblDashboard || 'Dashboard', icon: 'mts-icon-home' },
+    { key: 'reportes',  label: D.lblReports || 'Reports',     icon: 'mts-icon-bar-chart-2', children: [
+      { key: 'ventas',  label: D.lblSales || 'Sales' },
+      { key: 'compras', label: D.lblPurchases || 'Purchases' },
     ]},
     { divider: true },
-    { key: 'config',   label: 'Config',    icon: 'mts-icon-settings' },
+    { key: 'config',   label: D.lblConfig || 'Config', icon: 'mts-icon-settings' },
   ],
   onClick: function(item) {
     var c = document.getElementById('content2');
@@ -248,7 +270,7 @@ new MTS.SideNav('#sn2', { menu: menu2 });
 mk('s3',
 '<div class="demo-sidebar-wrap">\n' +
 '  <div id="sn3"></div>\n' +
-'  <div class="demo-content-mock" id="content3">Seleccioná un ítem</div>\n' +
+'  <div class="demo-content-mock" id="content3">' + (D.selectHint || 'Select an item') + '</div>\n' +
 '</div>',
 "var menu3 = new MTS.Menu({\n" +
 "  items: [\n" +
@@ -271,21 +293,21 @@ mk('s3',
 
 var menu3 = new MTS.Menu({
   items: [
-    { key: 'home',  label: 'Inicio',       icon: 'mts-icon-home' },
-    { key: 'ops',   label: 'Operaciones',  icon: 'mts-icon-layers', badge: '3', children: [
-      { key: 'ops-ar', label: 'Argentina', children: [
-        { key: 'ops-ar-bs',  label: 'Buenos Aires' },
-        { key: 'ops-ar-cba', label: 'Córdoba' },
+    { key: 'home',  label: D.lblHome || 'Home',             icon: 'mts-icon-home' },
+    { key: 'ops',   label: D.lblOperations || 'Operations', icon: 'mts-icon-layers', badge: '3', children: [
+      { key: 'ops-ar', label: D.lblArgentina || 'Argentina', children: [
+        { key: 'ops-ar-bs',  label: D.lblBuenosAires || 'Buenos Aires' },
+        { key: 'ops-ar-cba', label: D.lblCordoba || 'Córdoba' },
       ]},
-      { key: 'ops-br', label: 'Brasil' },
-      { key: 'ops-cl', label: 'Chile', disabled: true },
+      { key: 'ops-br', label: D.lblBrazil || 'Brazil' },
+      { key: 'ops-cl', label: D.lblChile || 'Chile', disabled: true },
     ]},
     { divider: true },
-    { key: 'admin', label: 'Admin', icon: 'mts-icon-shield', disabled: true },
+    { key: 'admin', label: D.lblAdmin || 'Admin', icon: 'mts-icon-shield', disabled: true },
   ],
   onClick: function(item) {
     var c = document.getElementById('content3');
-    if (c) c.textContent = 'key: ' + item.key;
+    if (c) c.textContent = (D.keyPrefix || 'key: ') + item.key;
   }
 });
 
@@ -299,7 +321,7 @@ mk('s4',
 '  <div id="tb4"></div>\n' +
 '  <div style="display:flex;height:260px">\n' +
 '    <div id="sn4"></div>\n' +
-'    <div class="demo-content-mock" id="content4">Seleccioná un ítem</div>\n' +
+'    <div class="demo-content-mock" id="content4">' + (D.selectHint || 'Select an item') + '</div>\n' +
 '  </div>\n' +
 '</div>',
 "// Una sola instancia — activo sincronizado en topbar y sidebar\n" +
@@ -330,12 +352,12 @@ mk('s4',
 var menu4 = new MTS.Menu({
   active: 'inicio',
   items: [
-    { key: 'inicio',   label: 'Inicio',   icon: 'mts-icon-home' },
-    { key: 'reportes', label: 'Reportes', icon: 'mts-icon-bar-chart-2', children: [
-      { key: 'ventas',  label: 'Ventas' },
-      { key: 'compras', label: 'Compras' },
+    { key: 'inicio',   label: D.lblHome || 'Home',       icon: 'mts-icon-home' },
+    { key: 'reportes', label: D.lblReports || 'Reports', icon: 'mts-icon-bar-chart-2', children: [
+      { key: 'ventas',  label: D.lblSales || 'Sales' },
+      { key: 'compras', label: D.lblPurchases || 'Purchases' },
     ]},
-    { key: 'usuarios', label: 'Usuarios', icon: 'mts-icon-users', badge: '5' },
+    { key: 'usuarios', label: D.lblUsers || 'Users', icon: 'mts-icon-users', badge: '5' },
   ],
   onClick: function(item) {
     var c = document.getElementById('content4');

@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -35,6 +35,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../forms/matios-ui-checkbox/matios-ui-checkbox.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-browser-i18n.js"></script>
   <script src="./matios-ui-browser.js"></script>
 
   <style>
@@ -104,115 +106,109 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Browser</h1>
-    <p>Utilidad universal de APIs del navegador. Probá cada módulo en esta misma página.</p>
+    <p id="demo-subtitle"></p>
   </div>
 
   <div class="browser-grid">
 
     <!-- ── 🛡️ Guard ──────────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">🛡️ Guard — Protección de página</div>
+      <div class="browser-card__title" id="guard-title"></div>
       <div class="browser-card__checks" id="guard-checks"></div>
-      <div class="browser-card__note">
-        Genera fricción para el usuario casual. F12 y Ctrl+U no son bloqueables.
-      </div>
+      <div class="browser-card__note" id="guard-note"></div>
     </div>
 
     <!-- ── 📍 Location ────────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">📍 Location — Geolocalización</div>
+      <div class="browser-card__title" id="location-title"></div>
       <div class="browser-card__actions" id="location-actions"></div>
       <div class="browser-card__result" id="location-result">—</div>
     </div>
 
     <!-- ── 🔔 Notifications ───────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">🔔 Notifications — Notificaciones</div>
+      <div class="browser-card__title" id="notif-title"></div>
       <div class="browser-card__actions" id="notif-actions"></div>
       <div class="browser-card__result" id="notif-result">—</div>
     </div>
 
     <!-- ── 📋 Clipboard ───────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">📋 Clipboard — Portapapeles</div>
+      <div class="browser-card__title" id="clip-title"></div>
       <div class="browser-card__actions" id="clip-actions"></div>
       <div class="browser-card__result" id="clip-result">—</div>
     </div>
 
     <!-- ── 🖥️ Fullscreen ──────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">🖥️ Fullscreen — Pantalla completa</div>
+      <div class="browser-card__title" id="fs-title"></div>
       <div class="browser-card__actions" id="fs-actions"></div>
       <div class="browser-card__result" id="fs-result">—</div>
     </div>
 
     <!-- ── 💡 Wake Lock ───────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">💡 Wake Lock — Mantener pantalla activa</div>
+      <div class="browser-card__title" id="wl-title"></div>
       <div class="browser-card__actions" id="wl-actions"></div>
       <div class="browser-card__result" id="wl-result">—</div>
-      <div class="browser-card__note">
-        Evita que la pantalla se apague. Útil en formularios largos o dashboards de monitoreo.
-      </div>
+      <div class="browser-card__note" id="wl-note"></div>
     </div>
 
     <!-- ── 🌐 Network ─────────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">🌐 Network — Estado de la red</div>
+      <div class="browser-card__title" id="net-title"></div>
       <div class="browser-card__actions" id="net-actions"></div>
       <div class="browser-card__result" id="net-result">—</div>
     </div>
 
     <!-- ── 🔋 Battery ─────────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">🔋 Battery — Estado de la batería</div>
+      <div class="browser-card__title" id="bat-title"></div>
       <div class="browser-card__actions" id="bat-actions"></div>
       <div class="browser-card__result" id="bat-result">—</div>
     </div>
 
     <!-- ── 📳 Vibration ───────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">📳 Vibration — Vibración</div>
+      <div class="browser-card__title" id="vib-title"></div>
       <div class="browser-card__actions" id="vib-actions"></div>
       <div class="browser-card__result" id="vib-result">—</div>
-      <div class="browser-card__note">Solo disponible en dispositivos móviles.</div>
+      <div class="browser-card__note" id="vib-note"></div>
     </div>
 
     <!-- ── 📤 Share ───────────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">📤 Share — Compartir nativo</div>
+      <div class="browser-card__title" id="share-title"></div>
       <div class="browser-card__actions" id="share-actions"></div>
       <div class="browser-card__result" id="share-result">—</div>
     </div>
 
     <!-- ── 👁️ Visibility ──────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">👁️ Visibility — Visibilidad de pestaña</div>
+      <div class="browser-card__title" id="vis-title"></div>
       <div class="browser-card__actions" id="vis-actions"></div>
       <div class="browser-card__result" id="vis-result">—</div>
-      <div class="browser-card__note">
-        Cambiá de pestaña y volvé para ver el evento.
-      </div>
+      <div class="browser-card__note" id="vis-note"></div>
     </div>
 
     <!-- ── 📷 Media ───────────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">📷 Media — Cámara · Micrófono · Pantalla</div>
+      <div class="browser-card__title" id="media-title"></div>
       <div class="browser-card__actions" id="media-actions"></div>
       <div class="browser-card__result" id="media-result">—</div>
     </div>
 
     <!-- ── 🧭 Orientation ─────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">🧭 Orientation — Orientación del dispositivo</div>
+      <div class="browser-card__title" id="orient-title"></div>
       <div class="browser-card__checks" id="orient-checks"></div>
       <div class="browser-card__result" id="orient-result">—</div>
-      <div class="browser-card__note">Solo disponible en dispositivos móviles.</div>
+      <div class="browser-card__note" id="orient-note"></div>
     </div>
 
     <!-- ── 💾 Storage ─────────────────────────────────────────── -->
     <div class="browser-card">
-      <div class="browser-card__title">💾 Storage — localStorage / sessionStorage</div>
+      <div class="browser-card__title" id="storage-title"></div>
       <div class="browser-card__actions" id="storage-actions"></div>
       <div class="browser-card__result" id="storage-result">—</div>
     </div>
@@ -222,300 +218,335 @@
 
 <script>
 
+  /* ── Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar ── */
+  (function () {
+    var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+    var lang = m ? m[1] : 'en';
+    if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  })();
+  var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Browser'] && MTS.getLocale()['MTS.Browser'].demo) || {};
+
+  /* ── Textos estáticos desde locale ─────────────────────────── */
+  function setText(id, text) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
+
+  setText('demo-subtitle',  D.subtitle      || 'Universal browser API utility. Try each module right on this page.');
+  setText('guard-title',    D.guardTitle    || '🛡️ Guard — Page protection');
+  setText('guard-note',     D.guardNote     || 'Creates friction for the casual user. F12 and Ctrl+U cannot be blocked.');
+  setText('location-title', D.locationTitle || '📍 Location — Geolocation');
+  setText('notif-title',    D.notifTitle    || '🔔 Notifications');
+  setText('clip-title',     D.clipTitle     || '📋 Clipboard');
+  setText('fs-title',       D.fsTitle       || '🖥️ Fullscreen');
+  setText('wl-title',       D.wlTitle       || '💡 Wake Lock — Keep screen awake');
+  setText('wl-note',        D.wlNote        || 'Prevents the screen from turning off. Useful for long forms or monitoring dashboards.');
+  setText('net-title',      D.netTitle      || '🌐 Network — Network status');
+  setText('bat-title',      D.batTitle      || '🔋 Battery — Battery status');
+  setText('vib-title',      D.vibTitle      || '📳 Vibration');
+  setText('vib-note',       D.vibNote       || 'Only available on mobile devices.');
+  setText('share-title',    D.shareTitle    || '📤 Share — Native share');
+  setText('vis-title',      D.visTitle      || '👁️ Visibility — Tab visibility');
+  setText('vis-note',       D.visNote       || 'Switch tabs and come back to see the event.');
+  setText('media-title',    D.mediaTitle    || '📷 Media — Camera · Microphone · Screen');
+  setText('orient-title',   D.orientTitle   || '🧭 Orientation — Device orientation');
+  setText('orient-note',    D.orientNote    || 'Only available on mobile devices.');
+  setText('storage-title',  D.storageTitle  || '💾 Storage — localStorage / sessionStorage');
+
   /* ── Helpers ───────────────────────────────────────────────── */
-  const btn = (container, label, variant, onClick) => {
-    const el = document.createElement('button')
-    el.type = 'button'
-    new MTS.Button(el, { label, variant: variant ?? 'secondary', size: 'sm' })
-    el.addEventListener('click', onClick)
-    document.getElementById(container).appendChild(el)
-    return el
+  function btn(container, label, variant, onClick) {
+    var el = document.createElement('button');
+    el.type = 'button';
+    new MTS.Button(el, { label: label, variant: variant || 'secondary', size: 'sm' });
+    el.addEventListener('click', onClick);
+    document.getElementById(container).appendChild(el);
+    return el;
   }
 
-  const chk = (container, label, checked, onChange) => {
-    const wrap = document.createElement('div')
-    document.getElementById(container).appendChild(wrap)
-    return new MTS.Checkbox(wrap, { label, checked, onChange })
+  function chk(container, label, checked, onChange) {
+    var wrap = document.createElement('div');
+    document.getElementById(container).appendChild(wrap);
+    return new MTS.Checkbox(wrap, { label: label, checked: checked, onChange: onChange });
   }
 
-  const result = (id, text, state) => {
-    const el = document.getElementById(id)
-    el.textContent = text
-    el.className   = 'browser-card__result' + (state ? ` is-${state}` : '')
+  function result(id, text, state) {
+    var el = document.getElementById(id);
+    el.textContent = text;
+    el.className   = 'browser-card__result' + (state ? ' is-' + state : '');
   }
 
-  const fmt = (obj) => JSON.stringify(obj, null, 2)
+  function fmt(obj) { return JSON.stringify(obj, null, 2); }
 
   /* ── 🛡️ Guard ──────────────────────────────────────────────── */
-  chk('guard-checks', 'Bloquear clic derecho (contextMenu)',       false, (e) => MTS.Browser.guard.contextMenu(e.detail.checked))
-  chk('guard-checks', 'Bloquear selección de texto (textSelect)', false, (e) => MTS.Browser.guard.textSelect(e.detail.checked))
-  chk('guard-checks', 'Bloquear arrastrar imágenes (dragImages)', false, (e) => MTS.Browser.guard.dragImages(e.detail.checked))
-  chk('guard-checks', 'Bloquear Ctrl+C (copy)',                   false, (e) => MTS.Browser.guard.copy(e.detail.checked))
-  chk('guard-checks', 'Bloquear Ctrl+P (print)',                  false, (e) => MTS.Browser.guard.print(e.detail.checked))
-  chk('guard-checks', 'Bloquear Ctrl+S (save)',                   false, (e) => MTS.Browser.guard.save(e.detail.checked))
+  chk('guard-checks', D.guardContextMenu || 'Block right-click (contextMenu)', false, function (e) { MTS.Browser.guard.contextMenu(e.detail.checked); });
+  chk('guard-checks', D.guardTextSelect  || 'Block text selection (textSelect)', false, function (e) { MTS.Browser.guard.textSelect(e.detail.checked); });
+  chk('guard-checks', D.guardDragImages  || 'Block image dragging (dragImages)', false, function (e) { MTS.Browser.guard.dragImages(e.detail.checked); });
+  chk('guard-checks', D.guardCopy        || 'Block Ctrl+C (copy)',  false, function (e) { MTS.Browser.guard.copy(e.detail.checked); });
+  chk('guard-checks', D.guardPrint       || 'Block Ctrl+P (print)', false, function (e) { MTS.Browser.guard.print(e.detail.checked); });
+  chk('guard-checks', D.guardSave        || 'Block Ctrl+S (save)',  false, function (e) { MTS.Browser.guard.save(e.detail.checked); });
 
   /* ── 📍 Location ────────────────────────────────────────────── */
-  btn('location-actions', 'Obtener posición', 'secondary', async () => {
-    result('location-result', 'Solicitando...', null)
+  btn('location-actions', D.locationGet || 'Get position', 'secondary', async function () {
+    result('location-result', D.locationRequesting || 'Requesting...', null);
     try {
-      const pos = await MTS.Browser.location.get({ highAccuracy: true })
-      result('location-result', fmt(pos), 'ok')
+      var pos = await MTS.Browser.location.get({ highAccuracy: true });
+      result('location-result', fmt(pos), 'ok');
     } catch (err) {
-      result('location-result', err.message, 'error')
+      result('location-result', err.message, 'error');
     }
-  })
+  });
 
   /* ── 🔔 Notifications ───────────────────────────────────────── */
-  ;(() => {
-    const update = () => result('notif-result', `Permiso actual: ${MTS.Browser.notifications.getPermission()}`)
-    update()
+  (function () {
+    function update() { result('notif-result', (D.notifCurrentPermission || 'Current permission: ') + MTS.Browser.notifications.getPermission()); }
+    update();
 
-    btn('notif-actions', 'Pedir permiso', 'secondary', async () => {
+    btn('notif-actions', D.notifRequest || 'Request permission', 'secondary', async function () {
       try {
-        const p = await MTS.Browser.notifications.requestPermission()
-        result('notif-result', `Permiso: ${p}`, p === 'granted' ? 'ok' : 'error')
+        var p = await MTS.Browser.notifications.requestPermission();
+        result('notif-result', (D.notifPermission || 'Permission: ') + p, p === 'granted' ? 'ok' : 'error');
       } catch (err) {
-        result('notif-result', err.message, 'error')
+        result('notif-result', err.message, 'error');
       }
-    })
+    });
 
-    btn('notif-actions', 'Enviar notificación', 'secondary', async () => {
+    btn('notif-actions', D.notifSend || 'Send notification', 'secondary', async function () {
       try {
         await MTS.Browser.notifications.send('MTS.Browser', {
-          body: '¡Notificación de prueba desde la demo!',
-          icon: '../../icons/favicon.ico',
-        })
-        result('notif-result', 'Notificación enviada', 'ok')
+          body: D.notifBody || 'Test notification from the demo!',
+          icon: '../../icons/favicon.ico'
+        });
+        result('notif-result', D.notifSent || 'Notification sent', 'ok');
       } catch (err) {
-        result('notif-result', err.message, 'error')
+        result('notif-result', err.message, 'error');
       }
-    })
-  })()
+    });
+  })();
 
   /* ── 📋 Clipboard ───────────────────────────────────────────── */
-  btn('clip-actions', 'Copiar texto', 'secondary', async () => {
+  btn('clip-actions', D.clipCopy || 'Copy text', 'secondary', async function () {
     try {
-      await MTS.Browser.clipboard.write('Texto copiado desde MTS.Browser demo 📋')
-      result('clip-result', '✓ Texto copiado al portapapeles', 'ok')
+      await MTS.Browser.clipboard.write(D.clipText || 'Text copied from the MTS.Browser demo 📋');
+      result('clip-result', D.clipCopied || '✓ Text copied to clipboard', 'ok');
     } catch (err) {
-      result('clip-result', err.message, 'error')
+      result('clip-result', err.message, 'error');
     }
-  })
+  });
 
-  btn('clip-actions', 'Leer portapapeles', 'secondary', async () => {
+  btn('clip-actions', D.clipRead || 'Read clipboard', 'secondary', async function () {
     try {
-      const text = await MTS.Browser.clipboard.read()
-      result('clip-result', text, 'ok')
+      var text = await MTS.Browser.clipboard.read();
+      result('clip-result', text, 'ok');
     } catch (err) {
-      result('clip-result', err.message, 'error')
+      result('clip-result', err.message, 'error');
     }
-  })
+  });
 
   /* ── 🖥️ Fullscreen ──────────────────────────────────────────── */
-  ;(() => {
-    const update = () => result('fs-result', `Activo: ${MTS.Browser.fullscreen.isActive()}`)
-    update()
-    MTS.Browser.fullscreen.onChange(active => result('fs-result', `Activo: ${active}`, active ? 'ok' : null))
+  (function () {
+    function update() { result('fs-result', (D.fsActive || 'Active: ') + MTS.Browser.fullscreen.isActive()); }
+    update();
+    MTS.Browser.fullscreen.onChange(function (active) { result('fs-result', (D.fsActive || 'Active: ') + active, active ? 'ok' : null); });
 
-    btn('fs-actions', 'Alternar pantalla completa', 'secondary', async () => {
-      try { await MTS.Browser.fullscreen.toggle() }
-      catch (err) { result('fs-result', err.message, 'error') }
-    })
-  })()
+    btn('fs-actions', D.fsToggle || 'Toggle fullscreen', 'secondary', async function () {
+      try { await MTS.Browser.fullscreen.toggle(); }
+      catch (err) { result('fs-result', err.message, 'error'); }
+    });
+  })();
 
   /* ── 💡 Wake Lock ───────────────────────────────────────────── */
-  ;(() => {
-    const update = () => result('wl-result', `Activo: ${MTS.Browser.wakeLock.isActive()}`)
-    update()
+  (function () {
+    function update() { result('wl-result', (D.wlActive || 'Active: ') + MTS.Browser.wakeLock.isActive()); }
+    update();
 
-    btn('wl-actions', 'Activar', 'secondary', async () => {
+    btn('wl-actions', D.wlEnable || 'Enable', 'secondary', async function () {
       try {
-        await MTS.Browser.wakeLock.enable()
-        result('wl-result', 'Wake Lock activo — la pantalla no se apagará', 'ok')
-      } catch (err) { result('wl-result', err.message, 'error') }
-    })
+        await MTS.Browser.wakeLock.enable();
+        result('wl-result', D.wlEnabled || 'Wake Lock active — the screen will not turn off', 'ok');
+      } catch (err) { result('wl-result', err.message, 'error'); }
+    });
 
-    btn('wl-actions', 'Desactivar', 'secondary', async () => {
+    btn('wl-actions', D.wlDisable || 'Disable', 'secondary', async function () {
       try {
-        await MTS.Browser.wakeLock.disable()
-        result('wl-result', 'Wake Lock liberado', null)
-      } catch (err) { result('wl-result', err.message, 'error') }
-    })
-  })()
+        await MTS.Browser.wakeLock.disable();
+        result('wl-result', D.wlReleased || 'Wake Lock released', null);
+      } catch (err) { result('wl-result', err.message, 'error'); }
+    });
+  })();
 
   /* ── 🌐 Network ─────────────────────────────────────────────── */
-  ;(() => {
-    const update = () => {
-      const conn = MTS.Browser.network.getConnection()
-      result('net-result', fmt({ online: MTS.Browser.network.isOnline(), connection: conn }))
+  (function () {
+    function update() {
+      var conn = MTS.Browser.network.getConnection();
+      result('net-result', fmt({ online: MTS.Browser.network.isOnline(), connection: conn }));
     }
-    update()
+    update();
 
-    MTS.Browser.network.onChange(online => {
-      result('net-result', `Online: ${online}`, online ? 'ok' : 'error')
-    })
+    MTS.Browser.network.onChange(function (online) {
+      result('net-result', (D.netOnline || 'Online: ') + online, online ? 'ok' : 'error');
+    });
 
-    btn('net-actions', 'Actualizar', 'secondary', update)
-  })()
+    btn('net-actions', D.netRefresh || 'Refresh', 'secondary', update);
+  })();
 
   /* ── 🔋 Battery ─────────────────────────────────────────────── */
-  btn('bat-actions', 'Leer batería', 'secondary', async () => {
+  btn('bat-actions', D.batRead || 'Read battery', 'secondary', async function () {
     try {
-      const info = await MTS.Browser.battery.get()
-      result('bat-result', fmt(info), 'ok')
-    } catch (err) { result('bat-result', err.message, 'error') }
-  })
+      var info = await MTS.Browser.battery.get();
+      result('bat-result', fmt(info), 'ok');
+    } catch (err) { result('bat-result', err.message, 'error'); }
+  });
 
   /* ── 📳 Vibration ───────────────────────────────────────────── */
-  btn('vib-actions', 'Vibrar 200ms', 'secondary', () => {
+  btn('vib-actions', D.vibVibrate || 'Vibrate 200ms', 'secondary', function () {
     try {
-      MTS.Browser.vibration.vibrate(200)
-      result('vib-result', 'Vibración enviada', 'ok')
-    } catch (err) { result('vib-result', err.message, 'error') }
-  })
+      MTS.Browser.vibration.vibrate(200);
+      result('vib-result', D.vibSent || 'Vibration sent', 'ok');
+    } catch (err) { result('vib-result', err.message, 'error'); }
+  });
 
-  btn('vib-actions', 'Patrón', 'secondary', () => {
+  btn('vib-actions', D.vibPattern || 'Pattern', 'secondary', function () {
     try {
-      MTS.Browser.vibration.vibrate([200, 100, 200, 100, 400])
-      result('vib-result', 'Patrón [200, 100, 200, 100, 400] enviado', 'ok')
-    } catch (err) { result('vib-result', err.message, 'error') }
-  })
+      MTS.Browser.vibration.vibrate([200, 100, 200, 100, 400]);
+      result('vib-result', D.vibPatternSent || 'Pattern [200, 100, 200, 100, 400] sent', 'ok');
+    } catch (err) { result('vib-result', err.message, 'error'); }
+  });
 
-  btn('vib-actions', 'Detener', 'secondary', () => {
-    MTS.Browser.vibration.stop()
-    result('vib-result', 'Vibración detenida')
-  })
+  btn('vib-actions', D.vibStop || 'Stop', 'secondary', function () {
+    MTS.Browser.vibration.stop();
+    result('vib-result', D.vibStopped || 'Vibration stopped');
+  });
 
   /* ── 📤 Share ───────────────────────────────────────────────── */
-  ;(() => {
-    const supported = MTS.Browser.share.isSupported()
-    result('share-result', supported ? 'Web Share API disponible' : 'No disponible en este navegador/dispositivo', supported ? 'ok' : 'error')
+  (function () {
+    var supported = MTS.Browser.share.isSupported();
+    result('share-result', supported ? (D.shareSupported || 'Web Share API available') : (D.shareUnsupported || 'Not available on this browser/device'), supported ? 'ok' : 'error');
 
-    btn('share-actions', 'Compartir esta página', 'secondary', async () => {
+    btn('share-actions', D.shareButton || 'Share this page', 'secondary', async function () {
       try {
         await MTS.Browser.share.share({
           title: 'MTS.Browser Demo',
-          text:  'Utilidad universal de APIs del navegador',
-          url:   window.location.href,
-        })
-        result('share-result', 'Compartido', 'ok')
+          text:  D.shareText || 'Universal browser API utility',
+          url:   window.location.href
+        });
+        result('share-result', D.shareShared || 'Shared', 'ok');
       } catch (err) {
-        result('share-result', err.name === 'AbortError' ? 'Cancelado por el usuario' : err.message, 'error')
+        result('share-result', err.name === 'AbortError' ? (D.shareCanceled || 'Canceled by the user') : err.message, 'error');
       }
-    })
-  })()
+    });
+  })();
 
   /* ── 👁️ Visibility ──────────────────────────────────────────── */
-  ;(() => {
-    let changes = 0
-    const update = () => result('vis-result', `visible: ${MTS.Browser.visibility.isVisible()} | cambios: ${changes}`)
-    update()
+  (function () {
+    var changes = 0;
+    function update() { result('vis-result', (D.visVisiblePrefix || 'visible: ') + MTS.Browser.visibility.isVisible() + (D.visChangesPrefix || ' | changes: ') + changes); }
+    update();
 
-    MTS.Browser.visibility.onChange(visible => {
-      changes++
-      result('vis-result', `visible: ${visible} | cambios: ${changes}`, visible ? 'ok' : null)
-    })
+    MTS.Browser.visibility.onChange(function (visible) {
+      changes++;
+      result('vis-result', (D.visVisiblePrefix || 'visible: ') + visible + (D.visChangesPrefix || ' | changes: ') + changes, visible ? 'ok' : null);
+    });
 
-    btn('vis-actions', 'Estado actual', 'secondary', update)
-  })()
+    btn('vis-actions', D.visCurrent || 'Current state', 'secondary', update);
+  })();
 
   /* ── 📷 Media ───────────────────────────────────────────────── */
-  ;(() => {
-    let stream = null
+  (function () {
+    var stream = null;
 
-    btn('media-actions', 'Cámara', 'secondary', async () => {
+    btn('media-actions', D.mediaCamera || 'Camera', 'secondary', async function () {
       try {
-        MTS.Browser.media.stop(stream)
-        stream = await MTS.Browser.media.requestCamera()
-        result('media-result', `Cámara activa — tracks: ${stream.getTracks().length}`, 'ok')
-      } catch (err) { result('media-result', err.message, 'error') }
-    })
+        MTS.Browser.media.stop(stream);
+        stream = await MTS.Browser.media.requestCamera();
+        result('media-result', (D.mediaCameraActive || 'Camera active — tracks: ') + stream.getTracks().length, 'ok');
+      } catch (err) { result('media-result', err.message, 'error'); }
+    });
 
-    btn('media-actions', 'Micrófono', 'secondary', async () => {
+    btn('media-actions', D.mediaMicrophone || 'Microphone', 'secondary', async function () {
       try {
-        MTS.Browser.media.stop(stream)
-        stream = await MTS.Browser.media.requestMicrophone()
-        result('media-result', `Micrófono activo — tracks: ${stream.getTracks().length}`, 'ok')
-      } catch (err) { result('media-result', err.message, 'error') }
-    })
+        MTS.Browser.media.stop(stream);
+        stream = await MTS.Browser.media.requestMicrophone();
+        result('media-result', (D.mediaMicrophoneActive || 'Microphone active — tracks: ') + stream.getTracks().length, 'ok');
+      } catch (err) { result('media-result', err.message, 'error'); }
+    });
 
-    btn('media-actions', 'Pantalla', 'secondary', async () => {
+    btn('media-actions', D.mediaScreen || 'Screen', 'secondary', async function () {
       try {
-        MTS.Browser.media.stop(stream)
-        stream = await MTS.Browser.media.requestScreen()
-        result('media-result', `Screen capture activo — tracks: ${stream.getTracks().length}`, 'ok')
-      } catch (err) { result('media-result', err.message, 'error') }
-    })
+        MTS.Browser.media.stop(stream);
+        stream = await MTS.Browser.media.requestScreen();
+        result('media-result', (D.mediaScreenActive || 'Screen capture active — tracks: ') + stream.getTracks().length, 'ok');
+      } catch (err) { result('media-result', err.message, 'error'); }
+    });
 
-    btn('media-actions', 'Detener', 'secondary', () => {
-      MTS.Browser.media.stop(stream)
-      stream = null
-      result('media-result', 'Stream detenido')
-    })
+    btn('media-actions', D.mediaStop || 'Stop', 'secondary', function () {
+      MTS.Browser.media.stop(stream);
+      stream = null;
+      result('media-result', D.mediaStopped || 'Stream stopped');
+    });
 
-    btn('media-actions', 'Listar dispositivos', 'secondary', async () => {
+    btn('media-actions', D.mediaListDevices || 'List devices', 'secondary', async function () {
       try {
-        const devices = await MTS.Browser.media.getDevices()
+        var devices = await MTS.Browser.media.getDevices();
         result('media-result', fmt({
-          cameras:     devices.cameras.map(d => d.label || d.deviceId),
-          microphones: devices.microphones.map(d => d.label || d.deviceId),
-          speakers:    devices.speakers.map(d => d.label || d.deviceId),
-        }), 'ok')
-      } catch (err) { result('media-result', err.message, 'error') }
-    })
-  })()
+          cameras:     devices.cameras.map(function (d) { return d.label || d.deviceId; }),
+          microphones: devices.microphones.map(function (d) { return d.label || d.deviceId; }),
+          speakers:    devices.speakers.map(function (d) { return d.label || d.deviceId; })
+        }), 'ok');
+      } catch (err) { result('media-result', err.message, 'error'); }
+    });
+  })();
 
   /* ── 🧭 Orientation ─────────────────────────────────────────── */
-  ;(() => {
-    let stopWatch = null
+  (function () {
+    var stopWatch = null;
 
-    chk('orient-checks', 'Observar orientación', false, (e) => {
+    chk('orient-checks', D.orientWatch || 'Watch orientation', false, function (e) {
       if (e.detail.checked) {
         try {
-          stopWatch = MTS.Browser.orientation.watch(data => {
-            result('orient-result', fmt(data))
-          })
-        } catch (err) { result('orient-result', err.message, 'error') }
+          stopWatch = MTS.Browser.orientation.watch(function (data) {
+            result('orient-result', fmt(data));
+          });
+        } catch (err) { result('orient-result', err.message, 'error'); }
       } else {
-        stopWatch?.()
-        stopWatch = null
-        result('orient-result', '—')
+        if (stopWatch) { stopWatch(); }
+        stopWatch = null;
+        result('orient-result', '—');
       }
-    })
-  })()
+    });
+  })();
 
   /* ── 💾 Storage ─────────────────────────────────────────────── */
-  ;(() => {
-    const update = async () => {
-      const quota = await MTS.Browser.storage.quota()
+  (function () {
+    async function update() {
+      var quota = await MTS.Browser.storage.quota();
       result('storage-result', fmt({
-        localKeys:    MTS.Browser.storage.local.keys(),
-        sessionKeys:  MTS.Browser.storage.session.keys(),
-        quota,
-      }))
+        localKeys:   MTS.Browser.storage.local.keys(),
+        sessionKeys: MTS.Browser.storage.session.keys(),
+        quota: quota
+      }));
     }
-    update()
+    update();
 
-    btn('storage-actions', 'Escribir local', 'secondary', () => {
-      MTS.Browser.storage.local.set('mts-browser-demo', { ts: Date.now(), value: 'hola' })
-      update()
-    })
+    btn('storage-actions', D.storageWriteLocal || 'Write local', 'secondary', function () {
+      MTS.Browser.storage.local.set('mts-browser-demo', { ts: Date.now(), value: 'hola' });
+      update();
+    });
 
-    btn('storage-actions', 'Leer local', 'secondary', () => {
-      const val = MTS.Browser.storage.local.get('mts-browser-demo')
-      result('storage-result', fmt(val), 'ok')
-    })
+    btn('storage-actions', D.storageReadLocal || 'Read local', 'secondary', function () {
+      var val = MTS.Browser.storage.local.get('mts-browser-demo');
+      result('storage-result', fmt(val), 'ok');
+    });
 
-    btn('storage-actions', 'Limpiar local', 'secondary', () => {
-      MTS.Browser.storage.local.remove('mts-browser-demo')
-      update()
-    })
+    btn('storage-actions', D.storageClearLocal || 'Clear local', 'secondary', function () {
+      MTS.Browser.storage.local.remove('mts-browser-demo');
+      update();
+    });
 
-    btn('storage-actions', 'Ver cuota', 'secondary', async () => {
-      const q = await MTS.Browser.storage.quota()
-      result('storage-result', q ? fmt(q) : 'Storage Estimate API no disponible', q ? 'ok' : 'error')
-    })
-  })()
+    btn('storage-actions', D.storageQuota || 'View quota', 'secondary', async function () {
+      var q = await MTS.Browser.storage.quota();
+      result('storage-result', q ? fmt(q) : (D.storageQuotaUnavailable || 'Storage Estimate API not available'), q ? 'ok' : 'error');
+    });
+  })();
 
 </script>
 </body>

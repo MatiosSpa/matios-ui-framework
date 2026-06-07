@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -47,6 +47,8 @@
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-rating-i18n.js"></script>
   <script src="./matios-ui-rating.js"></script>
 </head>
 <body>
@@ -54,15 +56,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Rating</h1>
-    <p>Calificación por estrellas con variantes, tamaños y enhancement progresivo desde HTML declarativo.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Tamaños y API</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — HTML declarativo + enhancement</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
@@ -112,13 +114,37 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Rating']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Star rating with variants, sizes and progressive enhancement from declarative HTML.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Variants';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Sizes and API';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Declarative HTML + enhancement';
+
+var resultBasicPlaceholder = D.resultBasicPlaceholder || '— click the stars —';
+var resultApiPlaceholder   = D.resultApiPlaceholder   || '— use the buttons —';
+var resultDeclPlaceholder  = D.resultDeclPlaceholder  || '— declarative HTML + enhancement —';
+var echoBasic              = D.echoBasic              || 'Basic → ';
+var echoHalf               = D.echoHalf               || 'Half → ';
+var echoScale10            = D.echoScale10            || 'Scale 10 → ';
+var echoChange             = D.echoChange             || 'onChange → ';
+var echoSetValue           = D.echoSetValue           || 'setValue(';
+var echoGetValue           = D.echoGetValue           || 'getValue() → ';
+
 var preview_s1 =
   '<div class="demo-stack">' +
     '<div id="rating-basic"></div>' +
     '<div id="rating-half"></div>' +
     '<div id="rating-readonly"></div>' +
     '<div id="rating-10"></div>' +
-    '<div class="result-box" id="rating-result">— haz click en las estrellas —</div>' +
+    '<div class="result-box" id="rating-result">' + resultBasicPlaceholder + '</div>' +
   '</div>';
 
 var js_s1 =
@@ -155,7 +181,7 @@ var preview_s2 =
       '<button class="demo-btn-sm" onclick="ratingApi(5)">setValue(5)</button>' +
       '<button class="demo-btn-sm" onclick="ratingApiGet()">getValue()</button>' +
     '</div>' +
-    '<div class="result-box" id="rating-api-result">— usa los botones —</div>' +
+    '<div class="result-box" id="rating-api-result">' + resultApiPlaceholder + '</div>' +
   '</div>';
 
 var js_s2 =
@@ -168,7 +194,7 @@ var js_s2 =
 var preview_s3 =
   '<div class="demo-stack">' +
     '<div id="rating-declarative" data-value="4" data-half-stars data-size="lg"></div>' +
-    '<div class="result-box" id="rating-declarative-result">— HTML declarativo + enhancement —</div>' +
+    '<div class="result-box" id="rating-declarative-result">' + resultDeclPlaceholder + '</div>' +
   '</div>';
 
 var js_s3 =
@@ -182,23 +208,23 @@ var ratingApiInstance;
 function ratingApi(value) {
   if (!ratingApiInstance) return;
   ratingApiInstance.setValue(value);
-  setResult('rating-api-result', 'setValue(' + value + ') ✓');
+  setResult('rating-api-result', echoSetValue + value + ') ✓');
 }
 function ratingApiGet() {
   if (!ratingApiInstance) return;
-  setResult('rating-api-result', 'getValue() → ' + ratingApiInstance.getValue());
+  setResult('rating-api-result', echoGetValue + ratingApiInstance.getValue());
 }
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {
   new MTS.Rating('#rating-basic', {
     value: 3,
     max: 5,
-    onChange: function(e) { setResult('rating-result', 'Basic → ' + e.detail.value); }
+    onChange: function(e) { setResult('rating-result', echoBasic + e.detail.value); }
   });
   new MTS.Rating('#rating-half', {
     value: 3.5,
     halfStars: true,
-    onChange: function(e) { setResult('rating-result', 'Half → ' + e.detail.value); }
+    onChange: function(e) { setResult('rating-result', echoHalf + e.detail.value); }
   });
   new MTS.Rating('#rating-readonly', {
     value: 4.5,
@@ -209,7 +235,7 @@ makeSection('tabs-s1', preview_s1, js_s1, function() {
     value: 7,
     max: 10,
     size: 'sm',
-    onChange: function(e) { setResult('rating-result', 'Escala 10 → ' + e.detail.value); }
+    onChange: function(e) { setResult('rating-result', echoScale10 + e.detail.value); }
   });
 });
 
@@ -221,7 +247,7 @@ makeSection('tabs-s2', preview_s2, js_s2, function() {
 
 makeSection('tabs-s3', preview_s3, js_s3, function() {
   new MTS.Rating('#rating-declarative', {
-    onChange: function(e) { setResult('rating-declarative-result', 'onChange → ' + e.detail.value); }
+    onChange: function(e) { setResult('rating-declarative-result', echoChange + e.detail.value); }
   });
 });
 </script>

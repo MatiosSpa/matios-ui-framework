@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-phoneinput-i18n.js"></script>
   <script src="./matios-ui-phoneinput.js"></script>
 </head>
 <body>
@@ -56,16 +58,16 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.PhoneInput</h1>
-    <p>Input de teléfono con selector de país, formato automático y enhancement progresivo desde HTML declarativo.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-<div class="demo-section"><div class="demo-section-title">1 — Básico — Chile default</div><div id="tabs-s1"></div></div>
-<div class="demo-section"><div class="demo-section-title">2 — Diferentes países iniciales</div><div id="tabs-s2"></div></div>
-<div class="demo-section"><div class="demo-section-title">3 — Tamaños + API</div><div id="tabs-s3"></div></div>
-<div class="demo-section"><div class="demo-section-title">4 — HTML declarativo + enhancement</div><div id="tabs-s4"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 
 <script>
@@ -116,13 +118,49 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.PhoneInput'] && MTS.getLocale()['MTS.PhoneInput'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Phone input with country selector, automatic formatting and progressive enhancement from declarative HTML.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic — Chile default';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Different initial countries';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Sizes + API';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Declarative HTML + enhancement';
+
+var L_phone           = D.labelPhone           || 'Phone';
+var L_withHint        = D.labelWithHint         || 'With hint';
+var L_disabled        = D.labelDisabled         || 'Disabled';
+var L_hintAreaCode    = D.hintAreaCode          || 'Include the area code';
+var L_mexico          = D.labelMexico           || 'Mexico';
+var L_argentina       = D.labelArgentina        || 'Argentina';
+var L_usa             = D.labelUsa              || 'USA';
+var L_lgApi           = D.labelLgApi            || 'LG + API';
+var L_corporatePhone  = D.labelCorporatePhone   || 'Corporate phone';
+var L_hintEnhancement = D.hintEnhancement       || 'Matios UI enhances the base HTML';
+var L_sectionDeclarative = D.sectionDeclarative || 'Declarative HTML';
+var L_sectionEnhanced    = D.sectionEnhanced    || 'Declarative HTML + enhancement';
+var L_resultPlaceholder        = D.resultPlaceholder        || '— interact —';
+var L_resultEnhancePlaceholder = D.resultEnhancePlaceholder || '— change country or number to see the enhancement —';
+var L_errorInvalid    = D.errorInvalid          || 'Invalid number';
+var L_setCountryApplied = D.setCountryApplied   || 'setCountry(BR) applied';
+var L_setErrorApplied   = D.setErrorApplied     || 'setError() applied';
+var L_clearErrorApplied = D.clearErrorApplied   || 'clearError() applied';
+var L_fullPrefix      = D.fullPrefix            || 'full: ';
+var L_countryPrefix   = D.countryPrefix         || 'country: ';
+var L_getValuePrefix  = D.getValuePrefix        || 'getValue() → ';
+
 var preview_s1 =
   '<div class="demo-grid">' +
     '<div id="ph-basic"></div>' +
     '<div id="ph-hint"></div>' +
     '<div id="ph-disabled"></div>' +
   '</div>' +
-  '<div class="result-box" id="res-ph">— interactúa —</div>';
+  '<div class="result-box" id="res-ph">' + L_resultPlaceholder + '</div>';
 
 var js_s1 =
   "new MTS.PhoneInput('#ph-basic', { label: 'Teléfono', country: 'CL', onChange: function(v) { setResult('res-ph', 'full: ' + v.full + ' | country: ' + v.country.name); } });\n" +
@@ -154,7 +192,7 @@ var preview_s3 =
       '<button class="demo-btn-sm" onclick="phApiDemo(\'clearError\')">clearError()</button>' +
       '<button class="demo-btn-sm" onclick="phApiDemo(\'getValue\')">getValue()</button>' +
     '</div>' +
-    '<div class="result-box" id="res-ph-api">— interactúa —</div>' +
+    '<div class="result-box" id="res-ph-api">' + L_resultPlaceholder + '</div>' +
   '</div>';
 
 var js_s3 =
@@ -166,13 +204,13 @@ var js_s3 =
 var preview_s4 =
   '<div class="demo-stack">' +
     '<div class="demo-col">' +
-      '<div class="demo-label">HTML declarativo</div>' +
-      '<div id="ph-declarative" data-label="Teléfono" data-country="CL" data-placeholder="9 1234 5678"></div>' +
+      '<div class="demo-label">' + L_sectionDeclarative + '</div>' +
+      '<div id="ph-declarative" data-label="' + L_phone + '" data-country="CL" data-placeholder="9 1234 5678"></div>' +
     '</div>' +
     '<div class="demo-col">' +
-      '<div class="demo-label">HTML declarativo + enhancement</div>' +
-      '<div id="ph-enhanced" data-label="Teléfono corporativo" data-country="MX" data-hint="Matios UI potencia el HTML base"></div>' +
-      '<div class="result-box" id="res-ph-enhance">— cambia país o número para ver el enhancement —</div>' +
+      '<div class="demo-label">' + L_sectionEnhanced + '</div>' +
+      '<div id="ph-enhanced" data-label="' + L_corporatePhone + '" data-country="MX" data-hint="' + L_hintEnhancement + '"></div>' +
+      '<div class="result-box" id="res-ph-enhance">' + L_resultEnhancePlaceholder + '</div>' +
     '</div>' +
   '</div>';
 
@@ -184,33 +222,33 @@ var phApi;
 
 function phApiDemo(action) {
   if (!phApi) return;
-  if (action === 'setCountry') { phApi.setCountry('BR'); setResult('res-ph-api', 'setCountry(BR) aplicado'); }
-  if (action === 'setError') { phApi.setError('Número inválido'); setResult('res-ph-api', 'setError() aplicado'); }
-  if (action === 'clearError') { phApi.clearError(); setResult('res-ph-api', 'clearError() aplicado'); }
-  if (action === 'getValue') { var v = phApi.getValue(); setResult('res-ph-api', 'getValue() → ' + v.full); }
+  if (action === 'setCountry') { phApi.setCountry('BR'); setResult('res-ph-api', L_setCountryApplied); }
+  if (action === 'setError') { phApi.setError(L_errorInvalid); setResult('res-ph-api', L_setErrorApplied); }
+  if (action === 'clearError') { phApi.clearError(); setResult('res-ph-api', L_clearErrorApplied); }
+  if (action === 'getValue') { var v = phApi.getValue(); setResult('res-ph-api', L_getValuePrefix + v.full); }
 }
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {
-  new MTS.PhoneInput('#ph-basic',{label:'Teléfono',country:'CL',onChange:function(v){setResult('res-ph','full: ' + v.full + ' | country: ' + v.country.name);}});
-  new MTS.PhoneInput('#ph-hint',{label:'Con hint',country:'CL',hint:'Incluye el código de área'});
-  new MTS.PhoneInput('#ph-disabled',{label:'Deshabilitado',country:'CL',value:'912345678',disabled:true});
+  new MTS.PhoneInput('#ph-basic',{label:L_phone,country:'CL',onChange:function(v){setResult('res-ph',L_fullPrefix + v.full + ' | ' + L_countryPrefix + v.country.name);}});
+  new MTS.PhoneInput('#ph-hint',{label:L_withHint,country:'CL',hint:L_hintAreaCode});
+  new MTS.PhoneInput('#ph-disabled',{label:L_disabled,country:'CL',value:'912345678',disabled:true});
 });
 
 makeSection('tabs-s2', preview_s2, js_s2, function() {
-  new MTS.PhoneInput('#ph-mx',{label:'México',country:'MX'});
-  new MTS.PhoneInput('#ph-ar',{label:'Argentina',country:'AR'});
-  new MTS.PhoneInput('#ph-us',{label:'EE.UU.',country:'US'});
+  new MTS.PhoneInput('#ph-mx',{label:L_mexico,country:'MX'});
+  new MTS.PhoneInput('#ph-ar',{label:L_argentina,country:'AR'});
+  new MTS.PhoneInput('#ph-us',{label:L_usa,country:'US'});
 });
 
 makeSection('tabs-s3', preview_s3, js_s3, function() {
   new MTS.PhoneInput('#ph-sm',{label:'SM',size:'sm',country:'CL'});
   new MTS.PhoneInput('#ph-md',{label:'MD',size:'md',country:'CL'});
-  phApi = new MTS.PhoneInput('#ph-lg',{label:'LG + API',size:'lg',country:'CL',onChange:function(v){setResult('res-ph-api','full: ' + v.full);}});
+  phApi = new MTS.PhoneInput('#ph-lg',{label:L_lgApi,size:'lg',country:'CL',onChange:function(v){setResult('res-ph-api',L_fullPrefix + v.full);}});
 });
 
 makeSection('tabs-s4', preview_s4, js_s4, function() {
   new MTS.PhoneInput('#ph-declarative');
-  new MTS.PhoneInput('#ph-enhanced',{onChange:function(v){setResult('res-ph-enhance','full: ' + v.full);},onCountryChange:function(v){setResult('res-ph-enhance','country: ' + v.country.name);}});
+  new MTS.PhoneInput('#ph-enhanced',{onChange:function(v){setResult('res-ph-enhance',L_fullPrefix + v.full);},onCountryChange:function(v){setResult('res-ph-enhance',L_countryPrefix + v.country.name);}});
 });
 
 </script>

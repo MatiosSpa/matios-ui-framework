@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -44,6 +44,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-alert-i18n.js"></script>
   <script src="./matios-ui-alert.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
@@ -54,18 +56,32 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Alert</h1>
-    <p>Inline alerts and banners — variants, action button, auto-dismiss and CSS-only usage.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Con acción y auto-dismiss</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Solo CSS</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Alert']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Inline alerts and banners — variants, action button, auto-dismiss and CSS-only usage.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Variants';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — With action and auto-dismiss';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — CSS only';
+
 function indentHtml(html) {
   var indent = 0;
   var step = 2;
@@ -106,14 +122,14 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
-var preview_s1 = `
-<div class="demo-stack">
-  <div id="alert-info"></div>
-  <div id="alert-success"></div>
-  <div id="alert-warning"></div>
-  <div id="alert-danger"></div>
-  <div class="result-box" id="alert-result">— cierra una alerta —</div>
-</div>`;
+var preview_s1 =
+  '<div class="demo-stack">' +
+    '<div id="alert-info"></div>' +
+    '<div id="alert-success"></div>' +
+    '<div id="alert-warning"></div>' +
+    '<div id="alert-danger"></div>' +
+    '<div class="result-box" id="alert-result">' + (D.resultPlaceholder || '— close an alert —') + '</div>' +
+  '</div>';
 
 var js_s1 = `new MTS.Alert('#alert-info', {
   variant: 'info',
@@ -151,15 +167,15 @@ new MTS.Alert('#alert-danger', {
   }
 });`;
 
-var preview_s2 = `
-<div class="demo-stack">
-  <div class="demo-row">
-    <button id="btn-show-action" data-label="Mostrar con acción" data-variant="secondary"></button>
-    <button id="btn-show-autodismiss" data-label="Auto-dismiss (3s)" data-variant="primary"></button>
-  </div>
-  <div id="alert-action"></div>
-  <div class="result-box" id="alert-action-result">— usa los botones —</div>
-</div>`;
+var preview_s2 =
+  '<div class="demo-stack">' +
+    '<div class="demo-row">' +
+      '<button id="btn-show-action" data-label="' + (D.btnShowAction || 'Show with action') + '" data-variant="secondary"></button>' +
+      '<button id="btn-show-autodismiss" data-label="' + (D.btnShowAutodismiss || 'Auto-dismiss (3s)') + '" data-variant="primary"></button>' +
+    '</div>' +
+    '<div id="alert-action"></div>' +
+    '<div class="result-box" id="alert-action-result">' + (D.actionResultPlaceholder || '— use the buttons —') + '</div>' +
+  '</div>';
 
 var js_s2 = `new MTS.Button('#btn-show-action');
 new MTS.Button('#btn-show-autodismiss');
@@ -196,33 +212,30 @@ document.getElementById('btn-show-autodismiss').addEventListener('click', functi
   });
 });`;
 
-var preview_s3 = `
-<div class="demo-stack">
-  <div class="mts-alert mts-alert--info">
-    <div class="mts-alert__body">
-      <div class="mts-alert__message">Alerta info — solo CSS.</div>
-    </div>
-  </div>
-
-  <div class="mts-alert mts-alert--success">
-    <div class="mts-alert__body">
-      <div class="mts-alert__title">Éxito</div>
-      <div class="mts-alert__message">Cambios guardados.</div>
-    </div>
-  </div>
-
-  <div class="mts-alert mts-alert--warning">
-    <div class="mts-alert__body">
-      <div class="mts-alert__message">Advertencia — revisa tu configuración.</div>
-    </div>
-  </div>
-
-  <div class="mts-alert mts-alert--danger">
-    <div class="mts-alert__body">
-      <div class="mts-alert__message">Error — no se pudo completar la operación.</div>
-    </div>
-  </div>
-</div>`;
+var preview_s3 =
+  '<div class="demo-stack">' +
+    '<div class="mts-alert mts-alert--info">' +
+      '<div class="mts-alert__body">' +
+        '<div class="mts-alert__message">' + (D.cssInfoMessage || 'Info alert — CSS only.') + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="mts-alert mts-alert--success">' +
+      '<div class="mts-alert__body">' +
+        '<div class="mts-alert__title">' + (D.cssSuccessTitle || 'Success') + '</div>' +
+        '<div class="mts-alert__message">' + (D.cssSuccessMessage || 'Changes saved.') + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="mts-alert mts-alert--warning">' +
+      '<div class="mts-alert__body">' +
+        '<div class="mts-alert__message">' + (D.cssWarningMessage || 'Warning — check your settings.') + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="mts-alert mts-alert--danger">' +
+      '<div class="mts-alert__body">' +
+        '<div class="mts-alert__message">' + (D.cssDangerMessage || 'Error — the operation could not be completed.') + '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
 
 var js_s3 = `// No JavaScript needed.
 // Esta variante usa solo clases CSS del componente.`;
@@ -239,37 +252,37 @@ function mountVariants() {
 
   new MTS.Alert('#alert-info', {
     variant: 'info',
-    title: 'Nueva versión disponible',
-    message: 'Actualiza para obtener las últimas funciones.',
+    title: D.infoTitle || 'New version available',
+    message: D.infoMessage || 'Update to get the latest features.',
     onClose: function () {
-      document.getElementById('alert-result').textContent = 'onClose → info';
+      document.getElementById('alert-result').textContent = D.echoInfo || 'onClose → info';
     }
   });
 
   new MTS.Alert('#alert-success', {
     variant: 'success',
-    title: 'Cambios guardados',
-    message: 'Tus datos se guardaron correctamente.',
+    title: D.successTitle || 'Changes saved',
+    message: D.successMessage || 'Your data was saved successfully.',
     onClose: function () {
-      document.getElementById('alert-result').textContent = 'onClose → success';
+      document.getElementById('alert-result').textContent = D.echoSuccess || 'onClose → success';
     }
   });
 
   new MTS.Alert('#alert-warning', {
     variant: 'warning',
-    title: 'Sesión por expirar',
-    message: 'Tu sesión expira en 5 minutos.',
+    title: D.warningTitle || 'Session about to expire',
+    message: D.warningMessage || 'Your session expires in 5 minutes.',
     onClose: function () {
-      document.getElementById('alert-result').textContent = 'onClose → warning';
+      document.getElementById('alert-result').textContent = D.echoWarning || 'onClose → warning';
     }
   });
 
   new MTS.Alert('#alert-danger', {
     variant: 'danger',
-    title: 'Error de conexión',
-    message: 'No se pudo conectar con el servidor.',
+    title: D.dangerTitle || 'Connection error',
+    message: D.dangerMessage || 'Could not connect to the server.',
     onClose: function () {
-      document.getElementById('alert-result').textContent = 'onClose → danger';
+      document.getElementById('alert-result').textContent = D.echoDanger || 'onClose → danger';
     }
   });
 }
@@ -285,29 +298,29 @@ function bindActionButtons() {
 
     new MTS.Alert('#alert-action', {
       variant: 'warning',
-      title: 'Sesión por expirar',
-      message: 'Tu sesión expira en 5 minutos.',
-      action: 'Renovar ahora',
+      title: D.warningTitle || 'Session about to expire',
+      message: D.warningMessage || 'Your session expires in 5 minutes.',
+      action: D.actionLabel || 'Renew now',
       onAction: function () {
-        document.getElementById('alert-action-result').textContent = 'onAction → renovar';
+        document.getElementById('alert-action-result').textContent = D.echoAction || 'onAction → renew';
       },
       onClose: function () {
-        document.getElementById('alert-action-result').textContent = 'onClose → descartado';
+        document.getElementById('alert-action-result').textContent = D.echoActionClose || 'onClose → dismissed';
       }
     });
   });
 
   document.getElementById('btn-show-autodismiss').addEventListener('click', function () {
     document.getElementById('alert-action').innerHTML = '';
-    document.getElementById('alert-action-result').textContent = 'Auto-dismiss en 3 segundos...';
+    document.getElementById('alert-action-result').textContent = D.autodismissCountdown || 'Auto-dismiss in 3 seconds...';
 
     new MTS.Alert('#alert-action', {
       variant: 'success',
-      message: 'Archivo subido correctamente.',
+      message: D.autodismissMessage || 'File uploaded successfully.',
       autoDismiss: 3000,
       closable: false,
       onClose: function () {
-        document.getElementById('alert-action-result').textContent = 'onClose → auto-dismissed ✓';
+        document.getElementById('alert-action-result').textContent = D.echoAutodismiss || 'onClose → auto-dismissed ✓';
       }
     });
   });

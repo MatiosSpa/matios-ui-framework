@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html data-mts-mode="dark" lang="es">
+<html data-mts-mode="dark" lang="en">
 <head>
 <script>
     (function(){
@@ -48,25 +48,27 @@
 <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
 <script src="../matios-ui-tabs/matios-ui-tabs.js"></script>
 <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+<script src="../../base/matios-ui-i18n.js"></script>
+<script src="./matios-ui-dropdown-i18n.js"></script>
 <script src="./matios-ui-dropdown.js"></script>
 </head>
 <body>
 <div class="demo-page">
 <div class="demo-header">
 <h1><span>MTS</span>.Dropdown</h1>
-<p>Dropdown menu — groups, icons, shortcuts, dividers, submenus and hover mode.</p>
+<p id="demo-subtitle"></p>
 <div class="demo-header-actions">
 </div>
 <div class="demo-docs-panel" id="docs-panel"></div>
 </div>
-<!-- 1. Básico -->
-<div class="demo-section"><div class="demo-section-title">1 — Básico con eventos / Basic with events</div><div id="tabs-s1"></div></div>
-<!-- 2. Con íconos y shortcuts -->
-<div class="demo-section"><div class="demo-section-title">2 — Con íconos y shortcuts / With icons and shortcuts</div><div id="tabs-s2"></div></div>
-<!-- 3. Grupos -->
-<div class="demo-section"><div class="demo-section-title">3 — Con grupos / With groups</div><div id="tabs-s3"></div></div>
-<!-- 4. Submenús anidados -->
-<div class="demo-section"><div class="demo-section-title">4 — Submenús anidados / Nested submenus</div><div id="tabs-s4"></div></div>
+<!-- 1. Basic -->
+<div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+<!-- 2. Icons and shortcuts -->
+<div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+<!-- 3. Groups -->
+<div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+<!-- 4. Nested submenus -->
+<div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 <script>
 function indentHtml(html) {
@@ -100,6 +102,21 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Dropdown']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Dropdown menu — groups, icons, shortcuts, dividers, submenus and hover mode.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic with events';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — With icons and shortcuts';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — With groups';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Nested submenus';
+
 var onSel = function(id){ return function(e){ document.getElementById(id).textContent = 'onSelect → id: "' + e.detail.id + '" label: "' + e.detail.item.label + '"'; }; };
 
 var IP = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
@@ -110,7 +127,7 @@ var preview_s1 =
   '<div class="demo-row">' +
     '<button class="mts-btn mts-btn--secondary" id="dd-basic-btn">Actions ▾</button>' +
   '</div>' +
-  '<div class="result-box" id="dd-result">— selecciona un ítem —</div>';
+  '<div class="result-box" id="dd-result">' + (D.resultPlaceholder || '— select an item —') + '</div>';
 
 var js_s1 =
   "new MTS.Dropdown('#btn-actions', {\n" +
@@ -168,7 +185,7 @@ var preview_s4 =
     '<button class="mts-btn mts-btn--secondary" id="dd-sub-btn">Edit ▾</button>' +
     '<button class="mts-btn mts-btn--ghost" id="dd-hover-btn">Hover ▾</button>' +
   '</div>' +
-  '<div class="result-box" id="dd-sub-result">— selecciona un ítem —</div>';
+  '<div class="result-box" id="dd-sub-result">' + (D.resultPlaceholder || '— select an item —') + '</div>';
 
 var js_s4 =
   "// Nested submenu (items inside items)\n" +
@@ -205,8 +222,8 @@ makeSection('tabs-s1', preview_s1, js_s1, function() {
       { id:'delete', label:'Delete', disabled:true },
     ],
     onSelect: onSel('dd-result'),
-    onOpen:  function(){ document.getElementById('dd-result').textContent = 'onOpen → dropdown abierto'; },
-    onClose: function(){ document.getElementById('dd-result').textContent = 'onClose → dropdown cerrado'; },
+    onOpen:  function(){ document.getElementById('dd-result').textContent = D.onOpenText || 'onOpen → dropdown opened'; },
+    onClose: function(){ document.getElementById('dd-result').textContent = D.onCloseText || 'onClose → dropdown closed'; },
   });
 }, '340px');
 

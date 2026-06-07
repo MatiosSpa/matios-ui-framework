@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-select-i18n.js"></script>
   <script src="./matios-ui-select.js"></script>
 </head>
 <body>
@@ -56,17 +58,17 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Select</h1>
-    <p>Select personalizado con búsqueda, multi-select, carga asíncrona, cascada y enhancement progresivo desde HTML declarativo.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Variantes básicas</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Multi-select</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Autocomplete</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Cascada País → Estado → Ciudad</div><div id="tabs-s4"></div></div>
-  <div class="demo-section"><div class="demo-section-title">5 — HTML declarativo + enhancement</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
 </div>
 
 <script>
@@ -116,6 +118,26 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Select']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Custom select with search, multi-select, async loading, cascading and progressive enhancement from declarative HTML.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic variants';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Multi-select';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Autocomplete';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Cascade Country → State → City';
+document.getElementById('s5-title').textContent      = D.s5Title || '5 — Declarative HTML + enhancement';
+
+var EMPTY        = D.emptyResult   || '— no selection —';
+var VALUE_PREFIX = D.valuePrefix   || 'value → ';
+var TEXT_SEP     = D.textSeparator || ' | text → ';
+
 var PRODUCTS = [
   { value: 'iphone-15', label: 'iPhone 15' },
   { value: 'ipad-pro', label: 'iPad Pro' },
@@ -128,7 +150,7 @@ var preview_s1 =
     '<div id="sel-basic"></div>' +
     '<div id="sel-groups"></div>' +
     '<div id="sel-search"></div>' +
-    '<div><div id="sel-clearable"></div><div class="result-box" id="result-s1">— sin selección —</div></div>' +
+    '<div><div id="sel-clearable"></div><div class="result-box" id="result-s1">' + EMPTY + '</div></div>' +
   '</div>';
 
 var js_s1 =
@@ -177,7 +199,7 @@ var js_s1 =
 var preview_s2 =
   '<div class="demo-stack">' +
     '<div id="sel-multi"></div>' +
-    '<div class="result-box" id="result-s2">— sin selección —</div>' +
+    '<div class="result-box" id="result-s2">' + EMPTY + '</div>' +
   '</div>';
 
 var js_s2 =
@@ -200,8 +222,8 @@ var js_s2 =
 
 var preview_s3 =
   '<div class="demo-grid">' +
-    '<div><div id="sel-autocomplete"></div><div class="result-box" id="result-s3-local">— sin selección —</div></div>' +
-    '<div><div id="sel-async"></div><div class="result-box" id="result-s3-async">— sin selección —</div></div>' +
+    '<div><div id="sel-autocomplete"></div><div class="result-box" id="result-s3-local">' + EMPTY + '</div></div>' +
+    '<div><div id="sel-async"></div><div class="result-box" id="result-s3-async">' + EMPTY + '</div></div>' +
   '</div>';
 
 var js_s3 =
@@ -232,7 +254,7 @@ var preview_s4 =
     '<div id="sel-state"></div>' +
     '<div id="sel-city"></div>' +
   '</div>' +
-  '<div class="result-box" id="result-s4">— sin selección —</div>';
+  '<div class="result-box" id="result-s4">' + EMPTY + '</div>';
 
 var js_s4 =
   "var COUNTRIES = [\n" +
@@ -301,13 +323,13 @@ var js_s4 =
 var preview_s5 =
   '<div class="demo-stack">' +
     '<div class="demo-col">' +
-      '<div class="demo-label">HTML declarativo</div>' +
+      '<div class="demo-label">' + (D.labelDeclarative || 'Declarative HTML') + '</div>' +
       '<div id="sel-declarative" data-label="Country" data-placeholder="Select a country..." data-clearable data-searchable></div>' +
     '</div>' +
     '<div class="demo-col">' +
-      '<div class="demo-label">HTML declarativo + enhancement</div>' +
+      '<div class="demo-label">' + (D.labelEnhanced || 'Declarative HTML + enhancement') + '</div>' +
       '<div id="sel-enhanced" data-label="Project role" data-placeholder="Choose a role" data-clearable data-searchable></div>' +
-      '<div class="result-box" id="result-s5">— sin selección —</div>' +
+      '<div class="result-box" id="result-s5">' + EMPTY + '</div>' +
     '</div>' +
   '</div>';
 
@@ -374,7 +396,7 @@ makeSection('tabs-s1', preview_s1, js_s1, function() {
       { value: '3', label: 'Three' }
     ],
     onChange: function(e) {
-      setResult('result-s1', 'value → ' + JSON.stringify(e.detail.value));
+      setResult('result-s1', VALUE_PREFIX + JSON.stringify(e.detail.value));
     }
   });
 }, '420px');
@@ -393,7 +415,7 @@ makeSection('tabs-s2', preview_s2, js_s2, function() {
       { value: 'html', label: 'HTML' }
     ],
     onChange: function(e) {
-      setResult('result-s2', 'value → ' + JSON.stringify(e.detail.value));
+      setResult('result-s2', VALUE_PREFIX + JSON.stringify(e.detail.value));
     }
   });
 }, '340px');
@@ -405,7 +427,7 @@ makeSection('tabs-s3', preview_s3, js_s3, function() {
     minChars: 0,
     options: PRODUCTS,
     onChange: function(e) {
-      setResult('result-s3-local', 'value → ' + JSON.stringify(e.detail.value));
+      setResult('result-s3-local', VALUE_PREFIX + JSON.stringify(e.detail.value));
     }
   });
 
@@ -421,7 +443,7 @@ makeSection('tabs-s3', preview_s3, js_s3, function() {
       });
     },
     onChange: function(e) {
-      setResult('result-s3-async', 'value → ' + JSON.stringify(e.detail.value));
+      setResult('result-s3-async', VALUE_PREFIX + JSON.stringify(e.detail.value));
     }
   });
 }, '420px');
@@ -472,7 +494,7 @@ makeSection('tabs-s4', preview_s4, js_s4, function() {
       state.setOptions(STATES[e.detail.value] || [], true);
       city.setOptions([], false);
       city.disable();
-      setResult('result-s4', 'country → ' + JSON.stringify(e.detail.value));
+      setResult('result-s4', (D.countryPrefix || 'country → ') + JSON.stringify(e.detail.value));
     }
   });
 
@@ -483,7 +505,7 @@ makeSection('tabs-s4', preview_s4, js_s4, function() {
     onChange: function(e) {
       city.clear();
       city.setOptions(CITIES[e.detail.value] || [], true);
-      setResult('result-s4', 'state → ' + JSON.stringify(e.detail.value));
+      setResult('result-s4', (D.statePrefix || 'state → ') + JSON.stringify(e.detail.value));
     }
   });
 
@@ -492,7 +514,7 @@ makeSection('tabs-s4', preview_s4, js_s4, function() {
     options: [],
     disabled: true,
     onChange: function(e) {
-      setResult('result-s4', 'city → ' + JSON.stringify(e.detail.value));
+      setResult('result-s4', (D.cityPrefix || 'city → ') + JSON.stringify(e.detail.value));
     }
   });
 }, '420px');
@@ -513,7 +535,7 @@ makeSection('tabs-s5', preview_s5, js_s5, function() {
       { value: 'ux', label: 'UX Designer' }
     ],
     onChange: function(e) {
-      setResult('result-s5', 'value → ' + JSON.stringify(e.detail.value) + ' | text → ' + JSON.stringify(e.detail.text));
+      setResult('result-s5', VALUE_PREFIX + JSON.stringify(e.detail.value) + TEXT_SEP + JSON.stringify(e.detail.text));
     }
   });
 }, '380px');

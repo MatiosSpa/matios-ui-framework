@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -44,6 +44,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-popover-i18n.js"></script>
   <script src="./matios-ui-popover.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
@@ -54,14 +56,14 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Popover</h1>
-    <p>Rich tooltip — title, HTML body, arrow, positions, click/hover trigger.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Posiciones / Positions (click trigger)</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Hover + contenido HTML rico / HTML content + hover</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
 </div>
 
 <script>
@@ -105,6 +107,18 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Popover'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Rich tooltip — title, HTML body, arrow, positions, click/hover trigger.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Positions (click trigger)';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Hover + rich HTML content';
+
 var preview_s1 =
   '<div class="demo-col">' +
     '<div class="demo-row" style="justify-content:center;gap:16px;padding:24px 0;flex-wrap:wrap">' +
@@ -113,7 +127,7 @@ var preview_s1 =
       '<button id="pop-left"></button>' +
       '<button id="pop-right"></button>' +
     '</div>' +
-    '<div class="result-box" id="pop-result">— haz click en un botón —</div>' +
+    '<div class="result-box" id="pop-result">' + (D.resultPlaceholder || '— click a button —') + '</div>' +
   '</div>';
 
 var js_s1 =
@@ -166,31 +180,31 @@ var js_s2 =
   "});";
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {
-  new MTS.Button('#pop-top',    { label: 'Top',    variant: 'secondary' });
-  new MTS.Button('#pop-bottom', { label: 'Bottom', variant: 'secondary' });
-  new MTS.Button('#pop-left',   { label: 'Left',   variant: 'secondary' });
-  new MTS.Button('#pop-right',  { label: 'Right',  variant: 'secondary' });
+  new MTS.Button('#pop-top',    { label: D.btnTop    || 'Top',    variant: 'secondary' });
+  new MTS.Button('#pop-bottom', { label: D.btnBottom || 'Bottom', variant: 'secondary' });
+  new MTS.Button('#pop-left',   { label: D.btnLeft   || 'Left',   variant: 'secondary' });
+  new MTS.Button('#pop-right',  { label: D.btnRight  || 'Right',  variant: 'secondary' });
 
-  var content = '<p style="font-size:13px;color:var(--mts-text-muted)">Contenido con <strong>HTML</strong> y posicionamiento inteligente.</p>';
-  new MTS.Popover('#pop-top',    { title:'Arriba',    content:content, position:'top',    onShow:function(){ document.getElementById('pop-result').textContent = 'onShow → top'; },    onHide:function(){ document.getElementById('pop-result').textContent = 'onHide → top'; } });
-  new MTS.Popover('#pop-bottom', { title:'Abajo',     content:content, position:'bottom', onShow:function(){ document.getElementById('pop-result').textContent = 'onShow → bottom'; }, onHide:function(){ document.getElementById('pop-result').textContent = 'onHide → bottom'; } });
-  new MTS.Popover('#pop-left',   { title:'Izquierda', content:content, position:'left',   onShow:function(){ document.getElementById('pop-result').textContent = 'onShow → left'; },   onHide:function(){ document.getElementById('pop-result').textContent = 'onHide → left'; } });
-  new MTS.Popover('#pop-right',  { title:'Derecha',   content:content, position:'right',  onShow:function(){ document.getElementById('pop-result').textContent = 'onShow → right'; },  onHide:function(){ document.getElementById('pop-result').textContent = 'onHide → right'; } });
+  var content = '<p style="font-size:13px;color:var(--mts-text-muted)">' + (D.bodyPositions || 'Content with <strong>HTML</strong> and smart positioning.') + '</p>';
+  new MTS.Popover('#pop-top',    { title:(D.btnTop    || 'Top'),    content:content, position:'top',    onShow:function(){ document.getElementById('pop-result').textContent = 'onShow → top'; },    onHide:function(){ document.getElementById('pop-result').textContent = 'onHide → top'; } });
+  new MTS.Popover('#pop-bottom', { title:(D.btnBottom || 'Bottom'), content:content, position:'bottom', onShow:function(){ document.getElementById('pop-result').textContent = 'onShow → bottom'; }, onHide:function(){ document.getElementById('pop-result').textContent = 'onHide → bottom'; } });
+  new MTS.Popover('#pop-left',   { title:(D.btnLeft   || 'Left'),   content:content, position:'left',   onShow:function(){ document.getElementById('pop-result').textContent = 'onShow → left'; },   onHide:function(){ document.getElementById('pop-result').textContent = 'onHide → left'; } });
+  new MTS.Popover('#pop-right',  { title:(D.btnRight  || 'Right'),  content:content, position:'right',  onShow:function(){ document.getElementById('pop-result').textContent = 'onShow → right'; },  onHide:function(){ document.getElementById('pop-result').textContent = 'onHide → right'; } });
 });
 
 makeSection('tabs-s2', preview_s2, js_s2, function() {
-  new MTS.Button('#pop-hover',      { label: 'Hover me',     variant: 'secondary' });
-  new MTS.Button('#pop-html',       { label: 'Rich HTML',    variant: 'secondary' });
-  new MTS.Button('#pop-noclosable', { label: 'Sin × close',  variant: 'secondary' });
-  new MTS.Button('#pop-wide',       { label: 'Wide popover', variant: 'secondary' });
+  new MTS.Button('#pop-hover',      { label: D.btnHover   || 'Hover me',     variant: 'secondary' });
+  new MTS.Button('#pop-html',       { label: D.btnRichHtml|| 'Rich HTML',    variant: 'secondary' });
+  new MTS.Button('#pop-noclosable', { label: D.btnNoClose || 'No × close',   variant: 'secondary' });
+  new MTS.Button('#pop-wide',       { label: D.btnWide    || 'Wide popover', variant: 'secondary' });
 
-  new MTS.Popover('#pop-hover',  { title:'Pro tip', content:'<p style="font-size:13px">Usa <kbd>⌘S</kbd> para guardar rápido.</p>', trigger:'hover', position:'top' });
+  new MTS.Popover('#pop-hover',  { title:(D.titleProTip || 'Pro tip'), content:'<p style="font-size:13px">' + (D.bodyProTip || 'Use <kbd>⌘S</kbd> to save quickly.') + '</p>', trigger:'hover', position:'top' });
   new MTS.Popover('#pop-html', {
-    title:'Perfil de usuario', position:'bottom', width:'240px',
+    title:(D.titleProfile || 'User profile'), position:'bottom', width:'240px',
     content:'<div style="display:flex;gap:10px;align-items:center"><div style="width:36px;height:36px;border-radius:50%;background:var(--mts-color-primary);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">A</div><div><div style="font-weight:600;font-size:13px">Ana García</div><div style="font-size:11px;color:var(--mts-text-muted)">ana@empresa.com</div></div></div>'
   });
-  new MTS.Popover('#pop-noclosable', { title:'Info', content:'<p style="font-size:13px;color:var(--mts-text-muted)">Click fuera para cerrar.</p>', closable:false });
-  new MTS.Popover('#pop-wide', { title:'Detalles', content:'<p style="font-size:13px;color:var(--mts-text-muted)">Este popover tiene un ancho mayor para mostrar más contenido.</p>', width:'380px' });
+  new MTS.Popover('#pop-noclosable', { title:(D.titleInfo || 'Info'), content:'<p style="font-size:13px;color:var(--mts-text-muted)">' + (D.bodyInfo || 'Click outside to close.') + '</p>', closable:false });
+  new MTS.Popover('#pop-wide', { title:(D.titleDetails || 'Details'), content:'<p style="font-size:13px;color:var(--mts-text-muted)">' + (D.bodyDetails || 'This popover has a larger width to show more content.') + '</p>', width:'380px' });
 });
 </script>
 </body>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -44,6 +44,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-toast-i18n.js"></script>
   <script src="./matios-ui-toast.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
@@ -54,18 +56,32 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Toast</h1>
-    <p>Transient notifications — variants, positions, action button y loading state.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Posiciones</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Acción + loading</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Toast']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Transient notifications — variants, positions, action button and loading state.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Variants';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Positions';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Action + loading';
+
 function indentHtml(html) {
   var indent = 0;
   var step = 2;
@@ -176,11 +192,11 @@ document.getElementById('toast-bl').addEventListener('click', function () {
 var preview_s3 = `
 <div class="demo-stack">
   <div class="demo-row" style="flex-wrap:wrap">
-    <button id="toast-action" data-label="Con acción" data-variant="secondary"></button>
-    <button id="toast-loading" data-label="Loading → success" data-variant="secondary"></button>
-    <button id="toast-plain-success" data-label="Sin × (2s)" data-variant="primary"></button>
+    <button id="toast-action" data-label="${D.btnAction || 'With action'}" data-variant="secondary"></button>
+    <button id="toast-loading" data-label="${D.btnLoading || 'Loading → success'}" data-variant="secondary"></button>
+    <button id="toast-plain-success" data-label="${D.btnPlain || 'No × (2s)'}" data-variant="primary"></button>
   </div>
-  <div class="result-box" id="toast-result">— usa los botones —</div>
+  <div class="result-box" id="toast-result">${D.resultPlaceholder || '— use the buttons —'}</div>
 </div>`;
 
 var js_s3 = `new MTS.Button('#toast-action');
@@ -279,39 +295,39 @@ function mountToastDemo() {
   document.getElementById('toast-action').addEventListener('click', function () {
     MTS.Toast.show({
       variant: 'info',
-      title: 'Actualización disponible',
-      message: 'La versión 2.0 está lista.',
-      action: 'Instalar ahora',
+      title: D.actionTitle || 'Update available',
+      message: D.actionMessage || 'Version 2.0 is ready.',
+      action: D.actionLabel || 'Install now',
       duration: 0,
       onAction: function () {
-        document.getElementById('toast-result').textContent = 'onAction → instalar';
+        document.getElementById('toast-result').textContent = D.echoAction || 'onAction → install';
       },
       onClose: function () {
-        document.getElementById('toast-result').textContent = 'onClose → descartado';
+        document.getElementById('toast-result').textContent = D.echoClose || 'onClose → dismissed';
       }
     });
   });
 
   document.getElementById('toast-loading').addEventListener('click', function () {
-    document.getElementById('toast-result').textContent = 'Loading... (3s)';
+    document.getElementById('toast-result').textContent = D.loadingResult || 'Loading... (3s)';
     var loader = MTS.Toast.show({
       variant: 'loading',
-      message: 'Subiendo archivo...',
+      message: D.loadingMessage || 'Uploading file...',
       duration: 0,
       closable: false
     });
 
     setTimeout(function () {
       loader.close();
-      MTS.Toast.show({ variant: 'success', message: '¡Archivo subido correctamente!' });
-      document.getElementById('toast-result').textContent = 'loader.close() → success ✓';
+      MTS.Toast.show({ variant: 'success', message: D.loadingSuccess || 'Upload complete!' });
+      document.getElementById('toast-result').textContent = D.loadingEcho || 'loader.close() → success ✓';
     }, 3000);
   });
 
   document.getElementById('toast-plain-success').addEventListener('click', function () {
     MTS.Toast.show({
       variant: 'success',
-      message: '¡Hecho!',
+      message: D.plainSuccess || 'Done!',
       duration: 2000,
       closable: false
     });

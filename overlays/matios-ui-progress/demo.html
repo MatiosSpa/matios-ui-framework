@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -44,6 +44,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-progress-i18n.js"></script>
   <script src="./matios-ui-progress.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
@@ -54,16 +56,16 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Progress</h1>
-    <p>Bar · circle · indeterminate — variants, striped, animated and API methods.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Barras lineales</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Striped y tamaños</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Circulares</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Indeterminado + API</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 
 <script>
@@ -106,6 +108,27 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
+
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Progress'].demo) || {};
+
+function fmtStep(value) {
+  return (D.stepFormat || 'Step {value} of 10').replace('{value}', value);
+}
+function fmtChange(value, pct) {
+  return (D.onChangeEcho || 'onChange → value:{value} pct:{pct}%').replace('{value}', value).replace('{pct}', pct);
+}
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Bar · circle · indeterminate — variants, striped, animated and API methods.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Linear bars';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Striped and sizes';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Circular';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Indeterminate + API';
 
 var preview_s1 =
   '<div class="demo-stack">' +
@@ -186,7 +209,7 @@ var preview_s4 =
       '<button id="btn-var-danger" data-label="setVariant(danger)" data-variant="danger"></button>' +
       '<button id="btn-reset" data-label="reset()" data-variant="ghost"></button>' +
     '</div>' +
-    '<div class="result-box" id="pr-result">— usa los botones —</div>' +
+    '<div class="result-box" id="pr-result">' + (D.resultHint || '— use the buttons —') + '</div>' +
   '</div>';
 
 var js_s4 =
@@ -224,8 +247,8 @@ makeSection('tabs-s1', preview_s1, js_s1, function() {
   new MTS.Progress('#bar-danger',  { type: 'bar', value: 85, variant: 'danger', showValue: true });
   new MTS.Progress('#bar-info',    { type: 'bar', value: 95, variant: 'info', showValue: true });
   new MTS.Progress('#bar-label', {
-    type: 'bar', value: 3, max: 10, variant: 'primary', showLabel: true, label: 'Onboarding',
-    labelFormat: function(value) { return 'Paso ' + value + ' de 10'; }
+    type: 'bar', value: 3, max: 10, variant: 'primary', showLabel: true, label: (D.onboardingLabel || 'Onboarding'),
+    labelFormat: function(value) { return fmtStep(value); }
   });
 });
 
@@ -254,10 +277,10 @@ makeSection('tabs-s4', preview_s4, js_s4, function() {
     variant: 'primary',
     showValue: true,
     onChange: function(e) {
-      document.getElementById('pr-result').textContent = 'onChange → value:' + e.detail.value + ' pct:' + Math.round(e.detail.pct * 100) + '%';
+      document.getElementById('pr-result').textContent = fmtChange(e.detail.value, Math.round(e.detail.pct * 100));
     },
     onComplete: function() {
-      document.getElementById('pr-result').textContent = 'onComplete → ¡Completado!';
+      document.getElementById('pr-result').textContent = (D.onCompleteEcho || 'onComplete → Completed!');
     }
   });
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -46,6 +46,8 @@
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-fileupload-i18n.js"></script>
   <script src="./matios-ui-fileupload.js"></script>
 </head>
 <body>
@@ -53,15 +55,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.FileUpload</h1>
-    <p>Drag & drop file zone with validation, previews and API helpers.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Imágenes con preview / Images with preview</div><div id="tabs-fu1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Documento único / Single document</div><div id="tabs-fu2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Múltiples tipos + API / Multiple types + API</div><div id="tabs-fu3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-fu1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-fu2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-fu3"></div></div>
 </div>
 
 <script>
@@ -98,10 +100,43 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
+function setResult(id, text) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.FileUpload']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Drag & drop file zone with validation, previews and API helpers.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Images with preview';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Single document';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Multiple types + API';
+
+var hintImages        = D.hintImages || 'PNG, JPG up to 2MB · Max 5';
+var labelSingle       = D.labelSingle || 'Upload your CV as PDF';
+var hintSingle        = D.hintSingle || 'PDF up to 5MB';
+var hintDocs          = D.hintDocs || 'PDF, Word or Excel up to 10MB';
+var resultPlaceholder = D.resultPlaceholder || '— upload files to see the callbacks —';
+var apiPlaceholder    = D.apiPlaceholder || '— use the buttons —';
+var echoClear         = D.echoClear || 'clear() ✓';
+
+function echoChange(n)    { return (D.echoChange || 'onChange → {n} file(s)').replace('{n}', n); }
+function echoAdd(name)    { return (D.echoAdd || 'onAdd → "{name}"').replace('{name}', name); }
+function echoRemove(name) { return (D.echoRemove || 'onRemove → "{name}"').replace('{name}', name); }
+function echoError(err)   { return (D.echoError || 'onError → {error}').replace('{error}', err); }
+function echoGetFiles(f)  { return (D.echoGetFiles || 'getFiles() → {files}').replace('{files}', f); }
+
 var preview1 =
   '<div class="demo-stack">' +
     '<div id="fu-images"></div>' +
-    '<div class="result-box" id="fu-result">— sube archivos para ver los callbacks —</div>' +
+    '<div class="result-box" id="fu-result">' + resultPlaceholder + '</div>' +
   '</div>';
 var js1 =
   "new MTS.FileUpload('#fu-images', {\n" +
@@ -131,11 +166,11 @@ var preview3 =
   '<div class="demo-stack">' +
     '<div id="fu-docs"></div>' +
     '<div class="demo-row">' +
-      '<button class="demo-btn-sm" onclick="document.getElementById(\'fu-api-result\').textContent = \'getFiles() → \' + fuDocs.getFiles().map(function(f){ return f.name; }).join(\', \')">getFiles()</button>' +
-      '<button class="demo-btn-sm" onclick="fuDocs.clear(); document.getElementById(\'fu-api-result\').textContent = \'clear() ✓\'">clear()</button>' +
+      '<button class="demo-btn-sm" onclick="setResult(\'fu-api-result\', echoGetFiles(fuDocs.getFiles().map(function(f){ return f.name; }).join(\', \')))">getFiles()</button>' +
+      '<button class="demo-btn-sm" onclick="fuDocs.clear(); setResult(\'fu-api-result\', echoClear)">clear()</button>' +
       '<button class="demo-btn-sm" onclick="fuDocs.open()">open()</button>' +
     '</div>' +
-    '<div class="result-box" id="fu-api-result">— usa los botones —</div>' +
+    '<div class="result-box" id="fu-api-result">' + apiPlaceholder + '</div>' +
   '</div>';
 var js3 =
   "var fuDocs = new MTS.FileUpload('#fu-docs', {\n" +
@@ -153,18 +188,18 @@ var js3 =
 makeSection('tabs-fu1', preview1, js1, function(){
   new MTS.FileUpload('#fu-images', {
     accept:'image/*', multiple:true, maxSize:2, maxFiles:5,
-    hint:'PNG, JPG hasta 2MB · Máx 5',
-    onChange:function(files){ document.getElementById('fu-result').textContent = 'onChange → ' + files.length + ' archivo(s)'; },
-    onAdd:function(file){ document.getElementById('fu-result').textContent = 'onAdd → "' + file.name + '"'; },
-    onRemove:function(file){ document.getElementById('fu-result').textContent = 'onRemove → "' + file.name + '"'; },
-    onError:function(errors){ document.getElementById('fu-result').textContent = 'onError → ' + errors[0]; }
+    hint:hintImages,
+    onChange:function(files){ setResult('fu-result', echoChange(files.length)); },
+    onAdd:function(file){ setResult('fu-result', echoAdd(file.name)); },
+    onRemove:function(file){ setResult('fu-result', echoRemove(file.name)); },
+    onError:function(errors){ setResult('fu-result', echoError(errors[0])); }
   });
 }, '420px');
 
 makeSection('tabs-fu2', preview2, js2, function(){
   new MTS.FileUpload('#fu-single', {
     accept:'.pdf', multiple:false, maxSize:5, preview:false,
-    label:'Sube tu CV en PDF', hint:'PDF hasta 5MB'
+    label:labelSingle, hint:hintSingle
   });
 }, '300px');
 
@@ -172,8 +207,8 @@ var fuDocs;
 makeSection('tabs-fu3', preview3, js3, function(){
   fuDocs = new MTS.FileUpload('#fu-docs', {
     accept:'.pdf,.doc,.docx,.xls,.xlsx', multiple:true, maxSize:10, preview:false,
-    hint:'PDF, Word o Excel hasta 10MB',
-    onChange:function(files){ document.getElementById('fu-api-result').textContent = 'onChange → ' + files.length + ' archivo(s)'; }
+    hint:hintDocs,
+    onChange:function(files){ setResult('fu-api-result', echoChange(files.length)); }
   });
 }, '420px');
 </script>

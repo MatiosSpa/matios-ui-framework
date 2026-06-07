@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../overlays/matios-ui-progress/matios-ui-progress.js"></script>
   <script src="../../overlays/matios-ui-spinner/matios-ui-spinner.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-pageloader-i18n.js"></script>
   <script src="./matios-ui-pageloader.js"></script>
 </head>
 <body>
@@ -56,15 +58,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.PageLoader</h1>
-    <p>Indicador de carga de página estilo NProgress. Barra fija con avance automático (trickle), overlay blocker con spinner o progress circle, o ambos a la vez.</p>
+    <p id="demo-subtitle"></p>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Barra (top)</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Barra (bottom) y variantes</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Blocker con spinner</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Blocker con progress circle</div><div id="tabs-s4"></div></div>
-  <div class="demo-section"><div class="demo-section-title">5 — Modo both (barra + blocker)</div><div id="tabs-s5"></div></div>
-  <div class="demo-section"><div class="demo-section-title">6 — Error</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s6-title"></div><div id="tabs-s6"></div></div>
 </div>
 
 <script>
@@ -101,6 +103,22 @@ function simulateLoad(loader, durationMs) {
   setTimeout(function() { loader.done(); }, durationMs || 2000);
 }
 
+/* ── Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar ── */
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.PageLoader'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'NProgress-style page loading indicator. Fixed bar with automatic trickle, blocker overlay with spinner or progress circle, or both at once.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Bar (top)';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Bar (bottom) and variants';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Blocker with spinner';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Blocker with progress circle';
+document.getElementById('s5-title').textContent      = D.s5Title || '5 — Both mode (bar + blocker)';
+document.getElementById('s6-title').textContent      = D.s6Title || '6 — Error';
+
 /* ══════════════════════════════════════════════════════════════
    1 — Barra (top)
 ══════════════════════════════════════════════════════════════ */
@@ -123,7 +141,7 @@ var js1 =
 makeSection('tabs-s1', preview1, js1, function() {
   var loader = new MTS.PageLoader({ mode: 'bar', position: 'top', variant: 'primary' });
   new MTS.Button('#s1-btn', {
-    label: 'Simular carga (top)',
+    label: D.btnTop || 'Simulate load (top)',
     variant: 'primary',
     onClick: function() { simulateLoad(loader, 2500); },
   });
@@ -193,7 +211,7 @@ makeSection('tabs-s3', preview3, js3, function() {
     loader: { variant: 'ring', size: 'lg' },
   });
   new MTS.Button('#s3-btn', {
-    label: 'Simular blocker (spinner)',
+    label: D.btnSpinner || 'Simulate blocker (spinner)',
     variant: 'primary',
     onClick: function() { simulateLoad(loader, 2000); },
   });
@@ -229,7 +247,7 @@ makeSection('tabs-s4', preview4, js4, function() {
     loader: { type: 'circle', size: 'lg', variant: 'primary' },
   });
   new MTS.Button('#s4-btn', {
-    label: 'Simular blocker (progress circle)',
+    label: D.btnCircle || 'Simulate blocker (progress circle)',
     variant: 'primary',
     onClick: function() { simulateLoad(loader, 2500); },
   });
@@ -261,7 +279,7 @@ makeSection('tabs-s5', preview5, js5, function() {
     backdropOpacity: 0.7,
   });
   new MTS.Button('#s5-btn', {
-    label: 'Simular barra + blocker',
+    label: D.btnBoth || 'Simulate bar + blocker',
     variant: 'primary',
     onClick: function() { simulateLoad(loader, 2000); },
   });
@@ -299,7 +317,7 @@ makeSection('tabs-s6', preview6, js6, function() {
   row.appendChild(wrapErr);
 
   new MTS.Button(wrapDone, {
-    label: 'Simular done()',
+    label: D.btnDone || 'Simulate done()',
     variant: 'primary',
     onClick: function() {
       loader.start();
@@ -307,7 +325,7 @@ makeSection('tabs-s6', preview6, js6, function() {
     },
   });
   new MTS.Button(wrapErr, {
-    label: 'Simular error()',
+    label: D.btnError || 'Simulate error()',
     variant: 'danger',
     onClick: function() {
       loader.start();

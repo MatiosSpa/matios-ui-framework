@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-numberinput-i18n.js"></script>
   <script src="./matios-ui-numberinput.js"></script>
 </head>
 <body>
@@ -56,18 +58,18 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.NumberInput</h1>
-    <p>Input numérico con botones +/−, min/max, step y formatos de moneda y porcentaje.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-<div class="demo-section"><div class="demo-section-title">1 — Básico con min/max/step</div><div id="tabs-s1"></div></div>
-<div class="demo-section"><div class="demo-section-title">2 — Formatos: moneda y porcentaje</div><div id="tabs-s2"></div></div>
-<div class="demo-section"><div class="demo-section-title">3 — Prefix y Suffix</div><div id="tabs-s3"></div></div>
-<div class="demo-section"><div class="demo-section-title">4 — Tamaños</div><div id="tabs-s4"></div></div>
-<div class="demo-section"><div class="demo-section-title">5 — API programática</div><div id="tabs-s5"></div></div>
-<div class="demo-section"><div class="demo-section-title">6 — HTML declarativo + enhancement</div><div id="tabs-s6"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s6-title"></div><div id="tabs-s6"></div></div>
 </div>
 
 <script>
@@ -118,13 +120,64 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.NumberInput']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Number input with +/− buttons, min/max, step and currency and percentage formats.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic with min/max/step';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Formats: currency and percentage';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Prefix and Suffix';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Sizes';
+document.getElementById('s5-title').textContent      = D.s5Title || '5 — Programmatic API';
+document.getElementById('s6-title').textContent      = D.s6Title || '6 — Declarative HTML + enhancement';
+
+var labelQuantity    = D.labelQuantity    || 'Quantity';
+var labelStep5       = D.labelStep5       || 'Every 5 units';
+var labelDecimals    = D.labelDecimals    || 'With 2 decimals';
+var echoBasic        = D.echoBasic        || 'value: ';
+var echoFormatted    = D.echoFormatted    || ' | formatted: ';
+var labelPriceClp    = D.labelPriceClp    || 'Price (CLP)';
+var labelPriceUsd    = D.labelPriceUsd    || 'Price (USD)';
+var labelDiscount    = D.labelDiscount    || 'Discount';
+var echoPercent      = D.echoPercent      || 'Percentage → ';
+var labelAmount      = D.labelAmount      || 'Amount';
+var labelWeight      = D.labelWeight      || 'Weight';
+var labelTemperature = D.labelTemperature || 'Temperature';
+var sizeSm           = D.sizeSm           || 'Size SM';
+var sizeMd           = D.sizeMd           || 'Size MD';
+var sizeLg           = D.sizeLg           || 'Size LG';
+var labelPoints      = D.labelPoints      || 'Accumulated points';
+var hintPoints       = D.hintPoints       || 'Minimum 0, maximum 100';
+var apiExternalError = D.apiExternalError || 'External error message';
+var echoGetValue     = D.echoGetValue     || 'getValue() → ';
+var echoSetValue     = D.echoSetValue     || 'setValue(0) applied';
+var echoSetError     = D.echoSetError     || 'setError() applied';
+var echoClearError   = D.echoClearError   || 'clearError() applied';
+var echoDisable      = D.echoDisable      || 'disable() applied';
+var echoEnable       = D.echoEnable       || 'enable() applied';
+var echoFocus        = D.echoFocus        || 'focus() applied';
+var labelDeclHtml    = D.labelDeclHtml    || 'Declarative HTML';
+var labelEnhanceHtml = D.labelEnhanceHtml || 'Declarative HTML + enhancement';
+var labelUnits       = D.labelUnits       || 'Units';
+var hintEnhance      = D.hintEnhance      || 'Matios UI enhances the base HTML';
+var resBasicTxt      = D.resBasic         || '— interact with the inputs —';
+var resFormatTxt     = D.resFormat        || '— change the values —';
+var resApiTxt        = D.resApi           || '— use the buttons to call the API —';
+var resEnhanceTxt    = D.resEnhance       || '— change the value to see the enhancement —';
+
 var preview_s1 =
   '<div class="demo-grid">' +
     '<div id="ni-basic"></div>' +
     '<div id="ni-step"></div>' +
     '<div id="ni-decimals"></div>' +
   '</div>' +
-  '<div class="result-box" id="res-basic">— interactúa con los inputs —</div>';
+  '<div class="result-box" id="res-basic">' + resBasicTxt + '</div>';
 
 var js_s1 =
   "new MTS.NumberInput('#ni-basic', {\n" +
@@ -145,7 +198,7 @@ var preview_s2 =
     '<div id="ni-usd"></div>' +
     '<div id="ni-pct"></div>' +
   '</div>' +
-  '<div class="result-box" id="res-format">— cambia los valores —</div>';
+  '<div class="result-box" id="res-format">' + resFormatTxt + '</div>';
 
 var js_s2 =
   "new MTS.NumberInput('#ni-clp', { label: 'Precio (CLP)', value: 15000, format: 'currency', currency: 'CLP', locale: 'es-CL', step: 500, min: 0, onChange: function(v, f) { setResult('res-format', 'CLP → ' + f); } });\n" +
@@ -188,7 +241,7 @@ var preview_s5 =
       '<button class="demo-btn-sm" onclick="niApiDemo(\'enable\')">enable()</button>' +
       '<button class="demo-btn-sm" onclick="niApiDemo(\'focus\')">focus()</button>' +
     '</div>' +
-    '<div class="result-box" id="res-api">— usa los botones para llamar la API —</div>' +
+    '<div class="result-box" id="res-api">' + resApiTxt + '</div>' +
   '</div>';
 
 var js_s5 =
@@ -204,13 +257,13 @@ var js_s5 =
 var preview_s6 =
   '<div class="demo-stack">' +
     '<div class="demo-col">' +
-      '<div class="demo-label">HTML declarativo</div>' +
-      '<div id="ni-declarative" data-label="Unidades" data-value="12" data-min="0" data-max="50" data-step="1"></div>' +
+      '<div class="demo-label">' + labelDeclHtml + '</div>' +
+      '<div id="ni-declarative" data-label="' + labelUnits + '" data-value="12" data-min="0" data-max="50" data-step="1"></div>' +
     '</div>' +
     '<div class="demo-col">' +
-      '<div class="demo-label">HTML declarativo + enhancement</div>' +
-      '<div id="ni-enhanced" data-label="Monto" data-value="1500" data-prefix="$" data-step="100" data-hint="Matios UI potencia el HTML base"></div>' +
-      '<div class="result-box" id="res-enhance">— cambia el valor para ver el enhancement —</div>' +
+      '<div class="demo-label">' + labelEnhanceHtml + '</div>' +
+      '<div id="ni-enhanced" data-label="' + labelAmount + '" data-value="1500" data-prefix="$" data-step="100" data-hint="' + hintEnhance + '"></div>' +
+      '<div class="result-box" id="res-enhance">' + resEnhanceTxt + '</div>' +
     '</div>' +
   '</div>';
 
@@ -226,46 +279,46 @@ var niApi;
 
 function niApiDemo(action) {
   if (!niApi) return;
-  if (action === 'getValue') setResult('res-api', 'getValue() → ' + niApi.getValue());
-  if (action === 'setValue') { niApi.setValue(0); setResult('res-api', 'setValue(0) aplicado'); }
-  if (action === 'setError') { niApi.setError('Mensaje de error externo'); setResult('res-api', 'setError() aplicado'); }
-  if (action === 'clearError') { niApi.clearError(); setResult('res-api', 'clearError() aplicado'); }
-  if (action === 'disable') { niApi.disable(); setResult('res-api', 'disable() aplicado'); }
-  if (action === 'enable') { niApi.enable(); setResult('res-api', 'enable() aplicado'); }
-  if (action === 'focus') { niApi.focus(); setResult('res-api', 'focus() aplicado'); }
+  if (action === 'getValue') setResult('res-api', echoGetValue + niApi.getValue());
+  if (action === 'setValue') { niApi.setValue(0); setResult('res-api', echoSetValue); }
+  if (action === 'setError') { niApi.setError(apiExternalError); setResult('res-api', echoSetError); }
+  if (action === 'clearError') { niApi.clearError(); setResult('res-api', echoClearError); }
+  if (action === 'disable') { niApi.disable(); setResult('res-api', echoDisable); }
+  if (action === 'enable') { niApi.enable(); setResult('res-api', echoEnable); }
+  if (action === 'focus') { niApi.focus(); setResult('res-api', echoFocus); }
 }
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {
-  new MTS.NumberInput('#ni-basic',{label:'Cantidad',value:1,min:0,max:10,onChange:function(v,f){setResult('res-basic','valor: '+v+' | formateado: '+f);}});
-  new MTS.NumberInput('#ni-step',{label:'Cada 5 unidades',value:0,min:0,max:100,step:5});
-  new MTS.NumberInput('#ni-decimals',{label:'Con 2 decimales',value:1.5,step:0.1,decimals:2});
+  new MTS.NumberInput('#ni-basic',{label:labelQuantity,value:1,min:0,max:10,onChange:function(v,f){setResult('res-basic',echoBasic+v+echoFormatted+f);}});
+  new MTS.NumberInput('#ni-step',{label:labelStep5,value:0,min:0,max:100,step:5});
+  new MTS.NumberInput('#ni-decimals',{label:labelDecimals,value:1.5,step:0.1,decimals:2});
 });
 
 makeSection('tabs-s2', preview_s2, js_s2, function() {
-  new MTS.NumberInput('#ni-clp',{label:'Precio (CLP)',value:15000,format:'currency',currency:'CLP',locale:'es-CL',step:500,min:0,onChange:function(v,f){setResult('res-format','CLP → '+f);}});
-  new MTS.NumberInput('#ni-usd',{label:'Precio (USD)',value:99,format:'currency',currency:'USD',locale:'en-US',step:1,decimals:2,min:0,onChange:function(v,f){setResult('res-format','USD → '+f);}});
-  new MTS.NumberInput('#ni-pct',{label:'Descuento',value:10,format:'percent',min:0,max:100,step:5,onChange:function(v,f){setResult('res-format','Porcentaje → '+f);}});
+  new MTS.NumberInput('#ni-clp',{label:labelPriceClp,value:15000,format:'currency',currency:'CLP',locale:'es-CL',step:500,min:0,onChange:function(v,f){setResult('res-format','CLP → '+f);}});
+  new MTS.NumberInput('#ni-usd',{label:labelPriceUsd,value:99,format:'currency',currency:'USD',locale:'en-US',step:1,decimals:2,min:0,onChange:function(v,f){setResult('res-format','USD → '+f);}});
+  new MTS.NumberInput('#ni-pct',{label:labelDiscount,value:10,format:'percent',min:0,max:100,step:5,onChange:function(v,f){setResult('res-format',echoPercent+f);}});
 });
 
 makeSection('tabs-s3', preview_s3, js_s3, function() {
-  new MTS.NumberInput('#ni-prefix',{label:'Monto',prefix:'$',value:500,step:100,min:0});
-  new MTS.NumberInput('#ni-suffix',{label:'Peso',suffix:'kg',value:75,step:0.5,decimals:1,min:0});
-  new MTS.NumberInput('#ni-both',{label:'Temperatura',prefix:'~',suffix:'°C',value:20,min:-20,max:50});
+  new MTS.NumberInput('#ni-prefix',{label:labelAmount,prefix:'$',value:500,step:100,min:0});
+  new MTS.NumberInput('#ni-suffix',{label:labelWeight,suffix:'kg',value:75,step:0.5,decimals:1,min:0});
+  new MTS.NumberInput('#ni-both',{label:labelTemperature,prefix:'~',suffix:'°C',value:20,min:-20,max:50});
 });
 
 makeSection('tabs-s4', preview_s4, js_s4, function() {
-  new MTS.NumberInput('#ni-sm',{label:'Tamaño SM',size:'sm',value:1,min:0});
-  new MTS.NumberInput('#ni-md',{label:'Tamaño MD',size:'md',value:1,min:0});
-  new MTS.NumberInput('#ni-lg',{label:'Tamaño LG',size:'lg',value:1,min:0});
+  new MTS.NumberInput('#ni-sm',{label:sizeSm,size:'sm',value:1,min:0});
+  new MTS.NumberInput('#ni-md',{label:sizeMd,size:'md',value:1,min:0});
+  new MTS.NumberInput('#ni-lg',{label:sizeLg,size:'lg',value:1,min:0});
 });
 
 makeSection('tabs-s5', preview_s5, js_s5, function() {
-  niApi = new MTS.NumberInput('#ni-api',{label:'Puntos acumulados',value:50,min:0,max:100,hint:'Mínimo 0, máximo 100'});
+  niApi = new MTS.NumberInput('#ni-api',{label:labelPoints,value:50,min:0,max:100,hint:hintPoints});
 });
 
 makeSection('tabs-s6', preview_s6, js_s6, function() {
   new MTS.NumberInput('#ni-declarative');
-  new MTS.NumberInput('#ni-enhanced',{onChange:function(v,f){setResult('res-enhance','valor: '+v+' | formateado: '+f);}});
+  new MTS.NumberInput('#ni-enhanced',{onChange:function(v,f){setResult('res-enhance',echoBasic+v+echoFormatted+f);}});
 });
 
 </script>

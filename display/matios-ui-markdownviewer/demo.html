@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -45,6 +45,8 @@
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-markdownviewer-i18n.js"></script>
   <script src="./matios-ui-markdownviewer.js"></script>
 </head>
 <body>
@@ -52,12 +54,12 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.MarkdownViewer</h1>
-    <p>Renderiza archivos <code>.md</code> remotos con el estilo de prosa del framework. Fetch + parse + render en una línea.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 - Básico — URL remota</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 - Cambio de URL en runtime</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
 </div>
 
 <script>
@@ -92,6 +94,18 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.MarkdownViewer'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Renders remote .md files using the framework prose style. Fetch + parse + render in one line.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic — remote URL';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Runtime URL change';
+
 /* ── 1 — Básico ─────────────────────────────────────────── */
 
 var preview_s1 =
@@ -115,8 +129,8 @@ makeSection('tabs-s1', preview_s1, js_s1, function () {
 var preview_s2 =
   '<div class="demo-stack">' +
     '<div style="display:flex;gap:8px;margin-bottom:12px">' +
-      '<button id="s2-btn-a" class="mts-btn mts-btn--primary mts-btn--sm">Componente A</button>' +
-      '<button id="s2-btn-b" class="mts-btn mts-btn--outline mts-btn--sm">Componente B</button>' +
+      '<button id="s2-btn-a" class="mts-btn mts-btn--primary mts-btn--sm">' + (D.btnA || 'Component A') + '</button>' +
+      '<button id="s2-btn-b" class="mts-btn mts-btn--outline mts-btn--sm">' + (D.btnB || 'Component B') + '</button>' +
     '</div>' +
     '<div id="s2-mdv" style="padding:16px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg);background:var(--mts-bg-surface)"></div>' +
   '</div>';

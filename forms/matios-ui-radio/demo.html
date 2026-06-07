@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-radio-i18n.js"></script>
   <script src="./matios-ui-radio.js"></script>
 </head>
 <body>
@@ -56,15 +58,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Radio</h1>
-    <p>Grupo de radio buttons vertical y horizontal, con opción deshabilitada y grupo completo disabled.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-  <div class="demo-section"><div class="demo-section-title">1 — Vertical (default)</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Horizontal</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Con opción deshabilitada</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Grupo completo deshabilitado</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 
 <script>
@@ -114,10 +116,28 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Radio']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Vertical and horizontal radio button group, with a disabled option and a fully disabled group.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Vertical (default)';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Horizontal';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — With a disabled option';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Fully disabled group';
+
+var selectPlaceholder = D.selectPlaceholder || '— select an option —';
+var valuePrefix       = D.valuePrefix || 'value: ';
+
 var preview_s1 =
   '<div class="demo-stack">' +
     '<div id="radio-v"></div>' +
-    '<div class="result-box" id="radio-v-result">— selecciona una opción —</div>' +
+    '<div class="result-box" id="radio-v-result">' + selectPlaceholder + '</div>' +
   '</div>';
 
 var js_s1 =
@@ -135,7 +155,7 @@ var js_s1 =
 var preview_s2 =
   '<div class="demo-stack">' +
     '<div id="radio-h"></div>' +
-    '<div class="result-box" id="radio-h-result">— selecciona una opción —</div>' +
+    '<div class="result-box" id="radio-h-result">' + selectPlaceholder + '</div>' +
   '</div>';
 
 var js_s2 =
@@ -184,11 +204,11 @@ makeSection('tabs-s1', preview_s1, js_s1, function() {
     name: 'prioridad',
     value: 'medium',
     options: [
-      { value: 'high', label: 'Alta' },
-      { value: 'medium', label: 'Media' },
-      { value: 'low', label: 'Baja' }
+      { value: 'high', label: D.optHigh || 'High' },
+      { value: 'medium', label: D.optMedium || 'Medium' },
+      { value: 'low', label: D.optLow || 'Low' }
     ],
-    onChange: function(e) { setResult('radio-v-result', 'valor: ' + e.detail.value); }
+    onChange: function(e) { setResult('radio-v-result', valuePrefix + e.detail.value); }
   });
 });
 makeSection('tabs-s2', preview_s2, js_s2, function() {
@@ -197,11 +217,11 @@ makeSection('tabs-s2', preview_s2, js_s2, function() {
     name: 'vista',
     value: 'tabla',
     options: [
-      { value: 'tabla', label: 'Tabla' },
-      { value: 'tarjetas', label: 'Tarjetas' },
-      { value: 'lista', label: 'Lista' }
+      { value: 'tabla', label: D.optTable || 'Table' },
+      { value: 'tarjetas', label: D.optCards || 'Cards' },
+      { value: 'lista', label: D.optList || 'List' }
     ],
-    onChange: function(e) { setResult('radio-h-result', 'valor: ' + e.detail.value); }
+    onChange: function(e) { setResult('radio-h-result', valuePrefix + e.detail.value); }
   });
 });
 makeSection('tabs-s3', preview_s3, js_s3, function() {
@@ -210,9 +230,9 @@ makeSection('tabs-s3', preview_s3, js_s3, function() {
     name: 'plan',
     value: 'free',
     options: [
-      { value: 'free', label: 'Free' },
-      { value: 'pro', label: 'Pro' },
-      { value: 'enterprise', label: 'Enterprise (próximamente)', disabled: true }
+      { value: 'free', label: D.optFree || 'Free' },
+      { value: 'pro', label: D.optPro || 'Pro' },
+      { value: 'enterprise', label: D.optEnterprise || 'Enterprise (coming soon)', disabled: true }
     ]
   });
 });
@@ -222,9 +242,9 @@ makeSection('tabs-s4', preview_s4, js_s4, function() {
     name: 'estado',
     value: 'activo',
     options: [
-      { value: 'activo', label: 'Activo' },
-      { value: 'inactivo', label: 'Inactivo' },
-      { value: 'pendiente', label: 'Pendiente' }
+      { value: 'activo', label: D.optActive || 'Active' },
+      { value: 'inactivo', label: D.optInactive || 'Inactive' },
+      { value: 'pendiente', label: D.optPending || 'Pending' }
     ]
   });
 });

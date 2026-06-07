@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -51,6 +51,8 @@
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../matios-ui-stepper/matios-ui-stepper.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-stepprogress-i18n.js"></script>
   <script src="./matios-ui-stepprogress.js"></script>
 </head>
 <body>
@@ -58,18 +60,18 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.StepProgress</h1>
-    <p>Alias de compatibilidad. El componente oficial ahora es MTS.Stepper.</p>
+    <p id="demo-subtitle">Compatibility alias. The official component is now MTS.Stepper.</p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="result-box" style="margin-bottom:16px">
-    Usa MTS.Stepper para ejemplos nuevos. Este demo solo confirma compatibilidad.
+  <div class="result-box" id="compat-note" style="margin-bottom:16px">
+    Use MTS.Stepper for new examples. This demo only confirms compatibility.
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">1 — Compatibility alias</div>
+    <div class="demo-section-title" id="s1-title">1 — Compatibility alias</div>
     <div id="tabs-compat"></div>
   </div>
 </div>
@@ -106,10 +108,23 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.StepProgress']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Compatibility alias. The official component is now MTS.Stepper.';
+document.getElementById('compat-note').textContent   = D.compatNote || 'Use MTS.Stepper for new examples. This demo only confirms compatibility.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Compatibility alias';
+
 var preview = [
 '<div class="demo-stack">',
 '  <div id="stepprogress-compat"></div>',
-'  <div class="result-box" id="stepprogress-result">— alias activo —</div>',
+'  <div class="result-box" id="stepprogress-result">' + (D.resultPlaceholder || '— alias active —') + '</div>',
 '</div>'
 ].join('\n');
 
@@ -140,7 +155,7 @@ makeSection('tabs-compat', preview, jsCode, function() {
       { id: 'confirm', label: 'Confirmed' }
     ],
     onChange: function(e) {
-      document.getElementById('stepprogress-result').textContent = 'step → ' + e.detail.step.label;
+      document.getElementById('stepprogress-result').textContent = (D.stepPrefix || 'step → ') + e.detail.step.label;
     }
   });
 }, '320px');

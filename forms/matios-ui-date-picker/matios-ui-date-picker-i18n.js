@@ -1,0 +1,104 @@
+/* ============================================================
+   MATIOS UI — matios-ui-date-picker-i18n.js
+   i18n del componente + textos del demo (es / en / pt)
+   Namespace: MTS.DatePicker
+   ============================================================ */
+
+(function (global) {
+  var MTS = global.MTS = global.MTS || {};
+  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+
+  MTS.registerLocale('es', {
+    'MTS.DatePicker': {
+      demo: {
+        subtitle:            'Selectores de fecha, hora, rango, mes y semana. Cada tipo es una clase independiente.',
+        s1Title:             '1 — Fecha / Hora / Fecha y hora',
+        s2Title:             '2 — Rango de fechas',
+        s3Title:             '3 — Mes / Semana',
+        s4Title:             '4 — API común',
+        labelDate:           'Fecha',
+        labelTime:           'Hora',
+        labelDateTime:       'Fecha y hora',
+        labelRange:          'Rango de fechas',
+        labelMonth:          'Mes',
+        labelWeek:           'Semana',
+        outDate:             '— selecciona una fecha —',
+        outTime:             '— selecciona una hora —',
+        outDateTime:         '— selecciona fecha y hora —',
+        outRange:            '— selecciona un rango —',
+        outMonth:            '— selecciona un mes —',
+        outWeek:             '— selecciona una semana —',
+        apiHint:             'API común disponible para todos los tipos de selector.',
+        btnNow:              'Ahora',
+        btnAccept:           'Aceptar',
+        btnToday:            'Hoy',
+        btnClear:            'Limpiar',
+        btnApply:            'Aplicar',
+        localeCode:          'es-CL'
+      }
+    }
+  });
+
+  MTS.registerLocale('en', {
+    'MTS.DatePicker': {
+      demo: {
+        subtitle:            'Date, time, range, month and week pickers. Each type is an independent class.',
+        s1Title:             '1 — Date / Time / DateTime',
+        s2Title:             '2 — Date Range',
+        s3Title:             '3 — Month / Week',
+        s4Title:             '4 — Common API',
+        labelDate:           'Date',
+        labelTime:           'Time',
+        labelDateTime:       'DateTime',
+        labelRange:          'Date Range',
+        labelMonth:          'Month',
+        labelWeek:           'Week',
+        outDate:             '— pick a date —',
+        outTime:             '— pick a time —',
+        outDateTime:         '— pick date and time —',
+        outRange:            '— pick a range —',
+        outMonth:            '— pick a month —',
+        outWeek:             '— pick a week —',
+        apiHint:             'Common API available for every picker type.',
+        btnNow:              'Now',
+        btnAccept:           'Accept',
+        btnToday:            'Today',
+        btnClear:            'Clear',
+        btnApply:            'Apply',
+        localeCode:          'en-US'
+      }
+    }
+  });
+
+  MTS.registerLocale('pt', {
+    'MTS.DatePicker': {
+      demo: {
+        subtitle:            'Seletores de data, hora, intervalo, mês e semana. Cada tipo é uma classe independente.',
+        s1Title:             '1 — Data / Hora / Data e hora',
+        s2Title:             '2 — Intervalo de datas',
+        s3Title:             '3 — Mês / Semana',
+        s4Title:             '4 — API comum',
+        labelDate:           'Data',
+        labelTime:           'Hora',
+        labelDateTime:       'Data e hora',
+        labelRange:          'Intervalo de datas',
+        labelMonth:          'Mês',
+        labelWeek:           'Semana',
+        outDate:             '— selecione uma data —',
+        outTime:             '— selecione uma hora —',
+        outDateTime:         '— selecione data e hora —',
+        outRange:            '— selecione um intervalo —',
+        outMonth:            '— selecione um mês —',
+        outWeek:             '— selecione uma semana —',
+        apiHint:             'API comum disponível para todos os tipos de seletor.',
+        btnNow:              'Agora',
+        btnAccept:           'Aceitar',
+        btnToday:            'Hoje',
+        btnClear:            'Limpar',
+        btnApply:            'Aplicar',
+        localeCode:          'pt-BR'
+      }
+    }
+  });
+
+})(window);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -42,6 +42,8 @@
   <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
   <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
   <link rel="stylesheet" href="./matios-ui-confirmbutton.css">
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-confirmbutton-i18n.js"></script>
   <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
@@ -56,20 +58,35 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.ConfirmButton</h1>
-    <p>Confirmación inline en dos pasos para acciones sensibles, con enhancement progresivo desde HTML declarativo.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-<div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
-<div class="demo-section"><div class="demo-section-title">2 — Sin timeout</div><div id="tabs-s2"></div></div>
-<div class="demo-section"><div class="demo-section-title">3 — Tamaños</div><div id="tabs-s3"></div></div>
-<div class="demo-section"><div class="demo-section-title">4 — API</div><div id="tabs-s4"></div></div>
-<div class="demo-section"><div class="demo-section-title">5 — HTML declarativo + enhancement</div><div id="tabs-s5"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
 </div>
 
 <script>
+
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.ConfirmButton'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle  || 'Two-step inline confirmation for sensitive actions, with progressive enhancement from declarative HTML.';
+document.getElementById('s1-title').textContent      = D.s1Title   || '1 — Variants';
+document.getElementById('s2-title').textContent      = D.s2Title   || '2 — No timeout';
+document.getElementById('s3-title').textContent      = D.s3Title   || '3 — Sizes';
+document.getElementById('s4-title').textContent      = D.s4Title   || '4 — API';
+document.getElementById('s5-title').textContent      = D.s5Title   || '5 — Declarative HTML + enhancement';
 
 function indentHtml(html) {
   var indent = 0;
@@ -124,7 +141,7 @@ var preview_s1 =
       '<div id="cb-warning"></div>' +
       '<div id="cb-secondary"></div>' +
     '</div>' +
-    '<div class="result-box" id="cb-result">— interactúa con los botones —</div>' +
+    '<div class="result-box" id="cb-result">' + (D.resultButtonsHint || '— interact with the buttons —') + '</div>' +
   '</div>';
 
 var js_s1 =
@@ -138,7 +155,7 @@ var preview_s2 =
       '<div id="cb-notimeout"></div>' +
       '<div id="cb-ghost"></div>' +
     '</div>' +
-    '<div class="result-box" id="cb-timeout-result">— confirma o cancela —</div>' +
+    '<div class="result-box" id="cb-timeout-result">' + (D.resultTimeoutHint || '— confirm or cancel —') + '</div>' +
   '</div>';
 
 var js_s2 =
@@ -165,7 +182,7 @@ var preview_s4 =
       '<button class="demo-btn-sm" onclick="cbApiDemo(\'disable\')">disable()</button>' +
       '<button class="demo-btn-sm" onclick="cbApiDemo(\'enable\')">enable()</button>' +
     '</div>' +
-    '<div class="result-box" id="cb-api-result">— usa los botones para llamar la API —</div>' +
+    '<div class="result-box" id="cb-api-result">' + (D.resultApiHint || '— use the buttons to call the API —') + '</div>' +
   '</div>';
 
 var js_s4 =
@@ -175,13 +192,13 @@ var js_s4 =
 var preview_s5 =
   '<div class="demo-stack">' +
     '<div class="demo-col">' +
-      '<div class="demo-label">HTML declarativo</div>' +
+      '<div class="demo-label">' + (D.labelDeclarative || 'Declarative HTML') + '</div>' +
       '<div id="cb-declarative" data-label="Delete record" data-confirm-label="Yes, delete" data-cancel-label="Cancel" data-variant="secondary" data-confirm-variant="danger" data-timeout="4000"></div>' +
     '</div>' +
     '<div class="demo-col">' +
-      '<div class="demo-label">HTML declarativo + enhancement</div>' +
+      '<div class="demo-label">' + (D.labelEnhanced || 'Declarative HTML + enhancement') + '</div>' +
       '<div id="cb-enhanced" data-label="Archive item" data-confirm-label="Yes, archive" data-variant="secondary" data-confirm-variant="warning" data-timeout="4000"></div>' +
-      '<div class="result-box" id="cb-enhance-result">— confirma o cancela para ver el enhancement —</div>' +
+      '<div class="result-box" id="cb-enhance-result">' + (D.resultEnhanceHint || '— confirm or cancel to see the enhancement —') + '</div>' +
     '</div>' +
   '</div>';
 
@@ -193,20 +210,20 @@ var cbApi;
 
 function cbApiDemo(action) {
   if (!cbApi) return;
-  if (action === 'reset') { cbApi.reset(); setResult('cb-api-result', 'reset() aplicado'); }
-  if (action === 'disable') { cbApi.disable(); setResult('cb-api-result', 'disable() aplicado'); }
-  if (action === 'enable') { cbApi.enable(); setResult('cb-api-result', 'enable() aplicado'); }
+  if (action === 'reset') { cbApi.reset(); setResult('cb-api-result', D.echoResetApplied || 'reset() applied'); }
+  if (action === 'disable') { cbApi.disable(); setResult('cb-api-result', D.echoDisableApplied || 'disable() applied'); }
+  if (action === 'enable') { cbApi.enable(); setResult('cb-api-result', D.echoEnableApplied || 'enable() applied'); }
 }
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {
-  new MTS.ConfirmButton('#cb-danger',{label:'Delete record',confirmLabel:'Yes, delete',variant:'secondary',confirmVariant:'danger',timeout:4000,onConfirm:function(){setResult('cb-result','onConfirm → deleted ✓');},onCancel:function(){setResult('cb-result','onCancel → cancelled');}});
-  new MTS.ConfirmButton('#cb-warning',{label:'Archive',confirmLabel:'Yes, archive',variant:'secondary',confirmVariant:'warning',timeout:4000,onConfirm:function(){setResult('cb-result','onConfirm → archived ✓');}});
-  new MTS.ConfirmButton('#cb-secondary',{label:'Reset settings',confirmLabel:'Confirm',variant:'secondary',confirmVariant:'secondary',timeout:4000,onConfirm:function(){setResult('cb-result','onConfirm → reset ✓');}});
+  new MTS.ConfirmButton('#cb-danger',{label:'Delete record',confirmLabel:'Yes, delete',variant:'secondary',confirmVariant:'danger',timeout:4000,onConfirm:function(){setResult('cb-result',D.echoDeleted || 'onConfirm → deleted ✓');},onCancel:function(){setResult('cb-result',D.echoCancelled || 'onCancel → cancelled');}});
+  new MTS.ConfirmButton('#cb-warning',{label:'Archive',confirmLabel:'Yes, archive',variant:'secondary',confirmVariant:'warning',timeout:4000,onConfirm:function(){setResult('cb-result',D.echoArchived || 'onConfirm → archived ✓');}});
+  new MTS.ConfirmButton('#cb-secondary',{label:'Reset settings',confirmLabel:'Confirm',variant:'secondary',confirmVariant:'secondary',timeout:4000,onConfirm:function(){setResult('cb-result',D.echoReset || 'onConfirm → reset ✓');}});
 });
 
 makeSection('tabs-s2', preview_s2, js_s2, function() {
-  new MTS.ConfirmButton('#cb-notimeout',{label:'Logout',confirmLabel:'Yes, logout',variant:'ghost',confirmVariant:'danger',timeout:0,onConfirm:function(){setResult('cb-timeout-result','onConfirm → logged out ✓');},onCancel:function(){setResult('cb-timeout-result','onCancel → cancelled');}});
-  new MTS.ConfirmButton('#cb-ghost',{label:'Publish',confirmLabel:'Yes, publish',variant:'secondary',confirmVariant:'primary',timeout:4000,onConfirm:function(){setResult('cb-timeout-result','onConfirm → published ✓');}});
+  new MTS.ConfirmButton('#cb-notimeout',{label:'Logout',confirmLabel:'Yes, logout',variant:'ghost',confirmVariant:'danger',timeout:0,onConfirm:function(){setResult('cb-timeout-result',D.echoLoggedOut || 'onConfirm → logged out ✓');},onCancel:function(){setResult('cb-timeout-result',D.echoCancelled || 'onCancel → cancelled');}});
+  new MTS.ConfirmButton('#cb-ghost',{label:'Publish',confirmLabel:'Yes, publish',variant:'secondary',confirmVariant:'primary',timeout:4000,onConfirm:function(){setResult('cb-timeout-result',D.echoPublished || 'onConfirm → published ✓');}});
 });
 
 makeSection('tabs-s3', preview_s3, js_s3, function() {
@@ -216,12 +233,12 @@ makeSection('tabs-s3', preview_s3, js_s3, function() {
 });
 
 makeSection('tabs-s4', preview_s4, js_s4, function() {
-  cbApi = new MTS.ConfirmButton('#cb-api',{label:'Delete',confirmVariant:'danger',onConfirm:function(){setResult('cb-api-result','onConfirm → confirmed');},onCancel:function(){setResult('cb-api-result','onCancel → cancelled');}});
+  cbApi = new MTS.ConfirmButton('#cb-api',{label:'Delete',confirmVariant:'danger',onConfirm:function(){setResult('cb-api-result',D.echoConfirmed || 'onConfirm → confirmed');},onCancel:function(){setResult('cb-api-result',D.echoCancelled || 'onCancel → cancelled');}});
 });
 
 makeSection('tabs-s5', preview_s5, js_s5, function() {
   new MTS.ConfirmButton('#cb-declarative');
-  new MTS.ConfirmButton('#cb-enhanced',{onConfirm:function(){setResult('cb-enhance-result','onConfirm → archived ✓');},onCancel:function(){setResult('cb-enhance-result','onCancel → cancelled');}});
+  new MTS.ConfirmButton('#cb-enhanced',{onConfirm:function(){setResult('cb-enhance-result',D.echoArchived || 'onConfirm → archived ✓');},onCancel:function(){setResult('cb-enhance-result',D.echoCancelled || 'onCancel → cancelled');}});
 });
 
 </script>

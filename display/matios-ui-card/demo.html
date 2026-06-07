@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -46,6 +46,8 @@
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-card-i18n.js"></script>
   <script src="./matios-ui-card.js"></script>
   <style>
     .cards-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
@@ -57,19 +59,28 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Card</h1>
-    <p>Generic card — header, body, footer, image, variants, hoverable, clickable, actions.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Solo CSS / CSS only (no JS)</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Variantes de color / Color variants</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Hoverable y clickable / Hoverable and clickable</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Con imagen y acciones / With image and actions</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
 </div>
 
 <script>
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Card'] && MTS.getLocale()['MTS.Card'].demo) || {};
+
 function indentHtml(html) {
   var indent = 0;
   var step = 2;
@@ -109,6 +120,13 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Generic card — header, body, footer, image, variants, hoverable, clickable, actions.';
+document.getElementById('s1-title').textContent = D.s1Title || '1 — CSS only (no JS)';
+document.getElementById('s2-title').textContent = D.s2Title || '2 — Color variants';
+document.getElementById('s3-title').textContent = D.s3Title || '3 — Hoverable and clickable';
+document.getElementById('s4-title').textContent = D.s4Title || '4 — With image and actions';
+document.getElementById('s5-title').textContent = D.s5Title || '5 — Border & Radius — opt-in';
 
 var preview_s1 = `
 <div class="cards-grid">
@@ -184,7 +202,7 @@ var preview_s3 = `
   <div id="card-hover"></div>
   <div id="card-click"></div>
 </div>
-<div class="result-box" id="card-result">— haz click en la card clickeable —</div>`;
+<div class="result-box" id="card-result">${D.clickResultPlaceholder || '— click the clickable card —'}</div>`;
 
 var js_s3 = `new MTS.Card('#card-hover', {
   title: 'Hoverable',
@@ -207,7 +225,7 @@ var preview_s4 = `
   <div id="card-img"></div>
   <div id="card-actions"></div>
 </div>
-<div class="result-box" id="card-action-result">— usa los botones de las cards —</div>`;
+<div class="result-box" id="card-action-result">${D.actionResultPlaceholder || '— use the card buttons —'}</div>`;
 
 var js_s4 = `new MTS.Card('#card-img', {
   title: 'Mountain Trek',
@@ -261,7 +279,7 @@ makeSection('tabs-s2', preview_s2, js_s2, function () {
   ['primary', 'success', 'warning', 'danger'].forEach(function (variant) {
     new MTS.Card('#card-' + variant, {
       title: variant.charAt(0).toUpperCase() + variant.slice(1),
-      body: '<p style="font-size:13px;color:var(--mts-text-muted)">Card con variante ' + variant + '.</p>',
+      body: '<p style="font-size:13px;color:var(--mts-text-muted)">' + (D.variantBody || 'Card with ') + variant + '.</p>',
       variant: variant
     });
   });
@@ -270,17 +288,17 @@ makeSection('tabs-s2', preview_s2, js_s2, function () {
 makeSection('tabs-s3', preview_s3, js_s3, function () {
   new MTS.Card('#card-hover', {
     title: 'Hoverable',
-    body: '<p style="font-size:13px;color:var(--mts-text-muted)">Hover para ver el efecto de elevación.</p>',
+    body: '<p style="font-size:13px;color:var(--mts-text-muted)">' + (D.hoverBody || 'Hover to see the lift effect.') + '</p>',
     hoverable: true
   });
 
   new MTS.Card('#card-click', {
     title: 'Clickable',
-    body: '<p style="font-size:13px;color:var(--mts-text-muted)">Haz click en cualquier parte de la card.</p>',
+    body: '<p style="font-size:13px;color:var(--mts-text-muted)">' + (D.clickBody || 'Click anywhere on the card.') + '</p>',
     clickable: true,
     hoverable: true,
     onClick: function () {
-      document.getElementById('card-result').textContent = 'onClick → card clickeada ✓';
+      document.getElementById('card-result').textContent = D.clickResult || 'onClick → card clicked ✓';
     }
   });
 });
@@ -291,20 +309,20 @@ makeSection('tabs-s4', preview_s4, js_s4, function () {
     subtitle: 'Premium Footwear',
     image: 'https://picsum.photos/seed/shoe/400/200',
     imageRatio: 'wide',
-    body: '<p style="font-size:13px;color:var(--mts-text-muted)">Premium hiking boots.</p>',
+    body: '<p style="font-size:13px;color:var(--mts-text-muted)">' + (D.imageBody || 'Premium hiking boots for rough terrain.') + '</p>',
     actions: [
       {
-        label: 'Editar',
+        label: D.editLabel || 'Edit',
         variant: 'ghost',
         onClick: function () {
-          document.getElementById('card-action-result').textContent = 'action → Editar';
+          document.getElementById('card-action-result').textContent = (D.actionPrefix || 'action → ') + (D.editLabel || 'Edit');
         }
       },
       {
-        label: 'Borrar',
+        label: D.deleteLabel || 'Delete',
         variant: 'danger',
         onClick: function () {
-          document.getElementById('card-action-result').textContent = 'action → Borrar';
+          document.getElementById('card-action-result').textContent = (D.actionPrefix || 'action → ') + (D.deleteLabel || 'Delete');
         }
       }
     ]
@@ -312,25 +330,57 @@ makeSection('tabs-s4', preview_s4, js_s4, function () {
 
   new MTS.Card('#card-actions', {
     title: 'Checkout',
-    body: '<p style="font-size:13px;color:var(--mts-text-muted)">Completa tu compra.</p>',
+    body: '<p style="font-size:13px;color:var(--mts-text-muted)">' + (D.checkoutBody || 'Complete your purchase.') + '</p>',
     footer: [
       {
-        label: 'Cancelar',
+        label: D.cancelLabel || 'Cancel',
         variant: 'ghost',
         onClick: function () {
-          document.getElementById('card-action-result').textContent = 'footer → Cancelar';
+          document.getElementById('card-action-result').textContent = (D.footerPrefix || 'footer → ') + (D.cancelLabel || 'Cancel');
         }
       },
       {
-        label: 'Comprar',
+        label: D.buyLabel || 'Buy',
         variant: 'primary',
         onClick: function () {
-          document.getElementById('card-action-result').textContent = 'footer → Comprar';
+          document.getElementById('card-action-result').textContent = (D.footerPrefix || 'footer → ') + (D.buyLabel || 'Buy');
         }
       }
     ],
     footerAlign: 'between'
   });
+});
+
+/* 5 — Border & Radius (opt-in) */
+var preview_s5 = `<div class="cards-grid">
+  <div id="card-br1"></div>
+  <div id="card-br2"></div>
+  <div id="card-br3"></div>
+  <div id="card-br4"></div>
+  <div id="card-br5"></div>
+  <div id="card-br6"></div>
+</div>`;
+
+var js_s5 =
+`new MTS.Card('#card-br1', { title: 'Default', body: 'radius-lg + border base (igual que hoy)' });
+
+new MTS.Card('#card-br2', { title: 'Sharp', body: 'radius:none + border:1', radius: 'none', border: '1' });
+
+new MTS.Card('#card-br3', { title: 'Sharp sin borde', body: 'radius:none + border:none', radius: 'none', border: 'none' });
+
+new MTS.Card('#card-br4', { title: 'Chico + grueso', body: 'radius:sm + border:2', radius: 'sm', border: '2' });
+
+new MTS.Card('#card-br5', { title: 'Pill', body: 'radius:full', radius: 'full' });
+
+new MTS.Card('#card-br6', { title: 'Elevated + sharp', body: 'variant elevated + radius:none (el modifier gana)', variant: 'elevated', radius: 'none' });`;
+
+makeSection('tabs-s5', preview_s5, js_s5, function () {
+  new MTS.Card('#card-br1', { title: D.brDefaultTitle || 'Default', body: D.brDefaultBody || 'radius-lg + base border (same as today)' });
+  new MTS.Card('#card-br2', { title: D.brSharpTitle || 'Sharp', body: D.brSharpBody || 'radius:none + border:1', radius: 'none', border: '1' });
+  new MTS.Card('#card-br3', { title: D.brSharpNoBorderTitle || 'Sharp no border', body: D.brSharpNoBorderBody || 'radius:none + border:none', radius: 'none', border: 'none' });
+  new MTS.Card('#card-br4', { title: D.brSmallTitle || 'Small + thick', body: D.brSmallBody || 'radius:sm + border:2', radius: 'sm', border: '2' });
+  new MTS.Card('#card-br5', { title: D.brPillTitle || 'Pill', body: D.brPillBody || 'radius:full', radius: 'full' });
+  new MTS.Card('#card-br6', { title: D.brElevatedTitle || 'Elevated + sharp', body: D.brElevatedBody || 'variant elevated + radius:none (modifier wins)', variant: 'elevated', radius: 'none' });
 });
 </script>
 </body>

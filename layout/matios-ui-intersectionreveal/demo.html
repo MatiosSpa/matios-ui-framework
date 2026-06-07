@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.IntersectionReveal — Demo</title>
@@ -48,6 +48,8 @@
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-intersectionreveal-i18n.js"></script>
   <script src="./matios-ui-intersectionreveal.js"></script>
 
 </head>
@@ -55,18 +57,33 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.IntersectionReveal</h1>
-    <p>Anima elementos al entrar al viewport. Reemplaza AOS/ScrollReveal.</p>
+    <p id="ir-subtitle">Animates elements as they enter the viewport. Replaces AOS/ScrollReveal.</p>
     <div  class="demo-header-actions"></div>
     <div class="demo-docs-panel" id="dp"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">1 — Diferentes animaciones</div>
+    <div class="demo-section-title" id="ir-s1-title">1 — Different animations</div>
     <div id="intersection-code-1"></div>
   </div>
 </div>
 <script>
-function setMode(mode){document.documentElement.setAttribute('data-mts-mode',mode);} 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.IntersectionReveal'].demo) || {};
+
+(function () {
+  var sub = document.getElementById('ir-subtitle');
+  if (sub) sub.textContent = D.subtitle || 'Animates elements as they enter the viewport. Replaces AOS/ScrollReveal.';
+  var s1 = document.getElementById('ir-s1-title');
+  if (s1) s1.textContent = D.s1Title || '1 — Different animations';
+})();
+
+function setMode(mode){document.documentElement.setAttribute('data-mts-mode',mode);}
 function setAccent(accent){if(accent)document.documentElement.setAttribute('data-mts-accent',accent);else document.documentElement.removeAttribute('data-mts-accent');}
 if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
 function toggleDocs(id,p){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted)">Cargando...</em>';fetch(p).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>Error.</em>';});}
@@ -91,7 +108,14 @@ function replayReveal(){
 }
 function buildIntersectionRevealDemo(){
   var host=document.getElementById('intersection-code-1'); if(!host) return;
-  var previewHtml=`<div class="mts-ir">\n  <div class="mts-ir__grid" id="ir-grid1">\n    <div class="mts-ir__card"><span class="mts-ir__icon" data-icon="arrow-up"></span><div class="mts-ir__title">fade-up</div><p class="mts-ir__text">Desde abajo</p></div>\n    <div class="mts-ir__card"><span class="mts-ir__icon" data-icon="arrow-down"></span><div class="mts-ir__title">fade-down</div><p class="mts-ir__text">Desde arriba</p></div>\n    <div class="mts-ir__card"><span class="mts-ir__icon" data-icon="arrow-left"></span><div class="mts-ir__title">fade-left</div><p class="mts-ir__text">Desde derecha</p></div>\n    <div class="mts-ir__card"><span class="mts-ir__icon" data-icon="arrow-right"></span><div class="mts-ir__title">fade-right</div><p class="mts-ir__text">Desde izquierda</p></div>\n    <div class="mts-ir__card"><span class="mts-ir__icon" data-icon="zoom-in"></span><div class="mts-ir__title">zoom</div><p class="mts-ir__text">Zoom in</p></div>\n    <div class="mts-ir__card"><span class="mts-ir__icon" data-icon="refresh-cw"></span><div class="mts-ir__title">flip</div><p class="mts-ir__text">Flip vertical</p></div>\n  </div>\n  <div class="mts-ir__actions"><button class="demo-btn-sm" id="ir-replay-btn">Repetir animación</button></div>\n</div>`;
+  var cardFadeUp    = D.cardFadeUp    || 'From below';
+  var cardFadeDown  = D.cardFadeDown  || 'From above';
+  var cardFadeLeft  = D.cardFadeLeft  || 'From the right';
+  var cardFadeRight = D.cardFadeRight || 'From the left';
+  var cardZoom      = D.cardZoom      || 'Zoom in';
+  var cardFlip      = D.cardFlip      || 'Vertical flip';
+  var replayBtnText = D.replayBtn     || 'Replay animation';
+  var previewHtml=`<div class="mts-ir">\n  <div class="mts-ir__grid" id="ir-grid1">\n    <div class="mts-ir__card"><span class="mts-ir__icon" data-icon="arrow-up"></span><div class="mts-ir__title">fade-up</div><p class="mts-ir__text">${cardFadeUp}</p></div>\n    <div class="mts-ir__card"><span class="mts-ir__icon" data-icon="arrow-down"></span><div class="mts-ir__title">fade-down</div><p class="mts-ir__text">${cardFadeDown}</p></div>\n    <div class="mts-ir__card"><span class="mts-ir__icon" data-icon="arrow-left"></span><div class="mts-ir__title">fade-left</div><p class="mts-ir__text">${cardFadeLeft}</p></div>\n    <div class="mts-ir__card"><span class="mts-ir__icon" data-icon="arrow-right"></span><div class="mts-ir__title">fade-right</div><p class="mts-ir__text">${cardFadeRight}</p></div>\n    <div class="mts-ir__card"><span class="mts-ir__icon" data-icon="zoom-in"></span><div class="mts-ir__title">zoom</div><p class="mts-ir__text">${cardZoom}</p></div>\n    <div class="mts-ir__card"><span class="mts-ir__icon" data-icon="refresh-cw"></span><div class="mts-ir__title">flip</div><p class="mts-ir__text">${cardFlip}</p></div>\n  </div>\n  <div class="mts-ir__actions"><button class="demo-btn-sm" id="ir-replay-btn">${replayBtnText}</button></div>\n</div>`;
   var htmlCode=`<div class="mts-ir">\n  <div class="mts-ir__grid">\n    <div class="mts-ir__card">...</div>\n    <div class="mts-ir__card">...</div>\n  </div>\n</div>`;
   var jsCode=`new MTS.IntersectionReveal('.mts-ir__card', {\n  animation: 'fade-up',\n  duration: 600,\n  delay: 80,\n  threshold: 0,\n  once: false,\n});`;
   new MTS.Tabs(host,{variant:'card',lazy:false,active:'preview',tabs:[{id:'preview',label:'Preview',content:previewHtml},{id:'html',label:'HTML',content:'<div id="ir-cb-html"></div>'},{id:'js',label:'JavaScript',content:'<div id="ir-cb-js"></div>'}]});

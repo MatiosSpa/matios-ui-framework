@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -54,6 +54,8 @@
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../navigation/matios-ui-menu/matios-ui-menu.js"></script>
   <script src="../../navigation/matios-ui-sidenav/matios-ui-sidenav.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-topbar-i18n.js"></script>
   <script src="./matios-ui-topbar.js"></script>
 </head>
 <body>
@@ -63,7 +65,7 @@
 
   <div class="demo-header">
     <h1><span>MTS</span>.Topbar</h1>
-    <p>Barra superior para dashboards y apps — brand, slots de contenido y composición con SideNav.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
@@ -71,25 +73,25 @@
 
   <!-- ── 1 · BÁSICO ── -->
   <div class="demo-section">
-    <div class="demo-section-title">1 — Básico</div>
+    <div class="demo-section-title" id="s1-title"></div>
     <div id="s1"></div>
   </div>
 
   <!-- ── 2 · SLOTS START + END ── -->
   <div class="demo-section">
-    <div class="demo-section-title">2 — Slots start y end</div>
+    <div class="demo-section-title" id="s2-title"></div>
     <div id="s2"></div>
   </div>
 
   <!-- ── 3 · DIVIDER Y ACCIONES AGRUPADAS ── -->
   <div class="demo-section">
-    <div class="demo-section-title">3 — Divider y acciones agrupadas</div>
+    <div class="demo-section-title" id="s3-title"></div>
     <div id="s3"></div>
   </div>
 
   <!-- ── 4 · LAYOUT COMPLETO ── -->
   <div class="demo-section">
-    <div class="demo-section-title">4 — Layout completo (Topbar + SideNav)</div>
+    <div class="demo-section-title" id="s4-title"></div>
     <div id="s4"></div>
   </div>
 
@@ -104,6 +106,21 @@ window.addEventListener('message', function(e) {
     else document.documentElement.removeAttribute('data-mts-accent');
   }
 });
+
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Topbar']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Top bar for dashboards and apps — brand, content slots and composition with SideNav.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Start and end slots';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Divider and grouped actions';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Full layout (Topbar + SideNav)';
 
 function mk(id, html, js, h) {
   var cbHtml = id + '-cb-html';
@@ -142,7 +159,7 @@ new MTS.Topbar('#tb1', {
   brand: {
     logo: LOGO_HTML,
     title: 'Mi<span style="color:var(--mts-color-primary)">App</span>',
-    onClick: function() {}
+    onClick: function() { alert(D.brandAlert || 'Brand clicked'); }
   }
 });
 
@@ -168,8 +185,8 @@ new MTS.Topbar('#tb2', {
     title: 'Dashboard',
     subtitle: 'v1.0.0'
   },
-  end: '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" title="Notificaciones"><i class="mts-icon mts-icon-bell"></i></button>' +
-       '<button class="mts-btn mts-btn--secondary mts-btn--sm"><span class="mts-btn__label">Mi cuenta</span></button>'
+  end: '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" title="' + (D.notificationsTitle || 'Notifications') + '"><i class="mts-icon mts-icon-bell"></i></button>' +
+       '<button class="mts-btn mts-btn--secondary mts-btn--sm"><span class="mts-btn__label">' + (D.accountLabel || 'My account') + '</span></button>'
 });
 
 /* ════════════════════════════════════
@@ -190,12 +207,12 @@ mk('s3',
 
 new MTS.Topbar('#tb3', {
   brand: { logo: LOGO_HTML, title: 'CRM' },
-  start: '<span style="font-size:11px;color:var(--mts-text-muted)">Clientes / Lista</span>',
+  start: '<span style="font-size:11px;color:var(--mts-text-muted)">' + (D.breadcrumb || 'Customers / List') + '</span>',
   end:
-    '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" title="Buscar"><i class="mts-icon mts-icon-search"></i></button>' +
-    '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" title="Configuración"><i class="mts-icon mts-icon-settings"></i></button>' +
+    '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" title="' + (D.searchTitle || 'Search') + '"><i class="mts-icon mts-icon-search"></i></button>' +
+    '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" title="' + (D.settingsTitle || 'Settings') + '"><i class="mts-icon mts-icon-settings"></i></button>' +
     '<span class="mts-topbar__divider"></span>' +
-    '<button class="mts-btn mts-btn--primary mts-btn--sm"><span class="mts-btn__label">+ Nuevo</span></button>'
+    '<button class="mts-btn mts-btn--primary mts-btn--sm"><span class="mts-btn__label">' + (D.newButton || '+ New') + '</span></button>'
 });
 
 /* ════════════════════════════════════
@@ -207,7 +224,7 @@ mk('s4',
 '  <div style="display:flex;flex:1;overflow:hidden">\n' +
 '    <div id="sn4"></div>\n' +
 '    <div style="flex:1;padding:16px;display:flex;align-items:center;justify-content:center;color:var(--mts-text-muted);font-size:13px">\n' +
-'      Contenido principal\n' +
+'      ' + (D.mainContent || 'Main content') + '\n' +
 '    </div>\n' +
 '  </div>\n' +
 '</div>',
@@ -235,11 +252,11 @@ mk('s4',
 (function() {
   var sn4Menu = new MTS.Menu({
     items: [
-      { key: 'home',      label: 'Inicio',    icon: 'mts-icon-home' },
-      { key: 'analytics', label: 'Analytics', icon: 'mts-icon-bar-chart-2' },
-      { key: 'users',     label: 'Usuarios',  icon: 'mts-icon-users', badge: '3' },
+      { key: 'home',      label: (D.navHome || 'Home'),          icon: 'mts-icon-home' },
+      { key: 'analytics', label: (D.navAnalytics || 'Analytics'), icon: 'mts-icon-bar-chart-2' },
+      { key: 'users',     label: (D.navUsers || 'Users'),        icon: 'mts-icon-users', badge: '3' },
       { divider: true },
-      { key: 'settings',  label: 'Config',    icon: 'mts-icon-settings' }
+      { key: 'settings',  label: (D.navSettings || 'Settings'),  icon: 'mts-icon-settings' }
     ],
     active: 'home',
     onClick: function(item) { console.log('nav:', item.key); }
@@ -247,7 +264,7 @@ mk('s4',
 
   new MTS.Topbar('#tb4', {
     brand: { logo: LOGO_HTML, title: 'Dashboard' },
-    end: '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" title="Perfil"><i class="mts-icon mts-icon-user"></i></button>'
+    end: '<button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon" title="' + (D.profileTitle || 'Profile') + '"><i class="mts-icon mts-icon-user"></i></button>'
   });
 
   new MTS.SideNav('#sn4', {

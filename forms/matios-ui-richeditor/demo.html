@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -44,6 +44,8 @@
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-richeditor-i18n.js"></script>
   <script src="./matios-ui-richeditor.js"></script>
 </head>
 <body>
@@ -51,12 +53,12 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.RichEditor</h1>
-    <p>Editor de plantillas con merge fields — chips atómicos, paleta de campos, formato básico y progressive enhancement sobre un &lt;textarea&gt;.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions"></div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">Editor completo — todas las opciones</div><div id="tabs-demo"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-demo"></div></div>
 </div>
 
 <script>
@@ -96,6 +98,17 @@ function makeSection(id, previewHtml, codeHtml, jsCode, initFn, height) {
   new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',          language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
+
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.RichEditor'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Template editor with merge fields — atomic chips, field palette, basic formatting and progressive enhancement over a <textarea>.';
+document.getElementById('s1-title').textContent      = D.s1Title || 'Full editor — all options';
 
 /* ════════════════════════════════════════════════════════════
    CATÁLOGO — 10 campos en 5 grupos (demo multilenguaje: inglés)
@@ -197,7 +210,7 @@ makeSection('tabs-demo',
     '<button class="demo-btn-sm" id="d-insert">insertField(email)</button>' +
     '<button class="demo-btn-sm" id="d-customs">getCustomFields()</button>' +
   '</div>' +
-  '<div class="result-box" id="d-out">— onChange muestra el Handlebars en tiempo real —</div>',
+  '<div class="result-box" id="d-out">' + (D.resultPlaceholder || '— onChange shows the Handlebars output in real time —') + '</div>',
   DEMO_HTML,
   DEMO_JS,
   function() {
@@ -241,7 +254,7 @@ makeSection('tabs-demo',
       '<p>Regards,<br>{{brand.name}}</p>'
     );
     document.getElementById('d-get').addEventListener('click', function() {
-      document.getElementById('d-out').textContent = ed.getValue() || '(empty)';
+      document.getElementById('d-out').textContent = ed.getValue() || (D.emptyValue || '(empty)');
     });
     document.getElementById('d-prev').addEventListener('click',    function() { ed.setPreview(true);  });
     document.getElementById('d-edit').addEventListener('click',    function() { ed.setPreview(false); });
@@ -249,7 +262,7 @@ makeSection('tabs-demo',
     document.getElementById('d-customs').addEventListener('click', function() {
       var c = ed.getCustomFields();
       document.getElementById('d-out').textContent =
-        c.length ? JSON.stringify(c, null, 2) : '(no custom fields yet — add one from the palette)';
+        c.length ? JSON.stringify(c, null, 2) : (D.noCustomFields || '(no custom fields yet — add one from the palette)');
     });
   },
   '660px'

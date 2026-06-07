@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -48,6 +48,8 @@
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-imagegallery-i18n.js"></script>
   <script src="./matios-ui-imagegallery.js"></script>
 </head>
 <body>
@@ -55,15 +57,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.ImageGallery</h1>
-    <p>Image gallery — grid, masonry, list · filters by category · multi-selection · built-in lightbox.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Grid con filtros y lightbox / Grid with filters and lightbox</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Selección múltiple / Multi-selection</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Variante masonry + list</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
@@ -107,6 +109,25 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.ImageGallery'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Image gallery — grid, masonry, list · filters by category · multi-selection · built-in lightbox.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Grid with filters and lightbox';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Multi-selection';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Masonry + list variant';
+
+function fmt(tpl, vars) {
+  var out = String(tpl || '');
+  for (var k in vars) { if (vars.hasOwnProperty(k)) out = out.replace('{' + k + '}', vars[k]); }
+  return out;
+}
+
 var SEEDS = [10,20,30,40,50,60,70,80,90,100,110,120];
 var CATS  = ['nature','nature','urban','nature','urban','urban','nature','urban','nature','urban','nature','urban'];
 var CAPS  = ['Mountain view','Ocean sunset','City at night','Forest trail','Downtown','Harbor view','Waterfall','Skyline','Meadow','Bridge','Lake','Architecture'];
@@ -123,7 +144,7 @@ var IMAGES = SEEDS.map(function(s,i){
 
 var preview_s1 = `
 <div id="gallery-grid"></div>
-<div class="result-box" id="gallery-result">— haz click en una imagen para abrirla —</div>`;
+<div class="result-box" id="gallery-result">${D.resultOpenPlaceholder || '— click an image to open it —'}</div>`;
 
 var js_s1 = `const images = IMAGES;
 
@@ -145,7 +166,7 @@ var preview_s2 = `
   <button id="btn-clear-selection" data-variant="secondary" data-label="clearSelection()"></button>
   <button id="btn-show-selection" data-variant="primary" data-label="getSelected()"></button>
 </div>
-<div class="result-box" id="gallery-select-result">— haz click en imágenes para seleccionarlas —</div>`;
+<div class="result-box" id="gallery-select-result">${D.resultSelectPlaceholder || '— click images to select them —'}</div>`;
 
 var js_s2 = `const gallery = new MTS.ImageGallery('#gallery-select', {
   variant: 'grid',
@@ -205,7 +226,7 @@ makeSection('tabs-s1', preview_s1, js_s1, function () {
     lightbox: true,
     images: IMAGES,
     onOpen: function (e) {
-      document.getElementById('gallery-result').textContent = 'onOpen → "' + e.detail.image.caption + '" index:' + e.detail.index;
+      document.getElementById('gallery-result').textContent = fmt(D.openEcho || 'onOpen → "{caption}" index:{index}', { caption: e.detail.image.caption, index: e.detail.index });
     }
   });
 }, '420px');
@@ -218,7 +239,7 @@ makeSection('tabs-s2', preview_s2, js_s2, function () {
     lightbox: false,
     images: IMAGES.slice(0, 8),
     onSelect: function (e) {
-      document.getElementById('gallery-select-result').textContent = 'onSelect → ' + e.detail.selected.length + ' imagen(es) seleccionada(s)';
+      document.getElementById('gallery-select-result').textContent = fmt(D.selectEcho || 'onSelect → {count} image(s) selected', { count: e.detail.selected.length });
     }
   });
 
@@ -227,12 +248,12 @@ makeSection('tabs-s2', preview_s2, js_s2, function () {
 
   document.getElementById('btn-clear-selection').addEventListener('click', function () {
     gallery.clearSelection();
-    document.getElementById('gallery-select-result').textContent = 'clearSelection() → selección limpiada';
+    document.getElementById('gallery-select-result').textContent = D.cleared || 'clearSelection() → selection cleared';
   });
 
   document.getElementById('btn-show-selection').addEventListener('click', function () {
     var selected = gallery.getSelected();
-    document.getElementById('gallery-select-result').textContent = 'getSelected() → [' + selected.map(function (item) { return item.id; }).join(', ') + ']';
+    document.getElementById('gallery-select-result').textContent = (D.getSelectedPrefix || 'getSelected() → ') + '[' + selected.map(function (item) { return item.id; }).join(', ') + ']';
   });
 }, '440px');
 

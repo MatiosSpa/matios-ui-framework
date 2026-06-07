@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -48,6 +48,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-copybutton-i18n.js"></script>
   <script src="./matios-ui-copybutton.js"></script>
 </head>
 <body>
@@ -55,17 +57,17 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.CopyButton</h1>
-    <p>Botón para copiar texto o contenido objetivo al portapapeles con feedback visual.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Variantes y tamaños</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Solo ícono</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Con target</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Bloque de código</div><div id="tabs-s4"></div></div>
-  <div class="demo-section"><div class="demo-section-title">5 — HTML declarativo + enhancement</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
 </div>
 
 <script>
@@ -115,6 +117,21 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.CopyButton'] && MTS.getLocale()['MTS.CopyButton'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Button to copy text or target content to the clipboard with visual feedback.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Variants and sizes';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Icon only';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — With target';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Code block';
+document.getElementById('s5-title').textContent      = D.s5Title || '5 — Declarative HTML + enhancement';
+
 var preview_s1 =
   '<div class="demo-stack">' +
     '<div class="demo-row">' +
@@ -126,7 +143,7 @@ var preview_s1 =
       '<button id="cp-sm"></button>' +
       '<button id="cp-lg"></button>' +
     '</div>' +
-    '<div class="result-box" id="cp-result">— haz click para copiar —</div>' +
+    '<div class="result-box" id="cp-result">' + (D.resultPlaceholder || '— click to copy —') + '</div>' +
   '</div>';
 
 var js_s1 =
@@ -192,7 +209,7 @@ function initS1() {
     text: 'npm install matios-ui',
     label: 'Copy',
     variant: 'primary',
-    onCopy: function(e) { setResult('cp-result', 'copiado: ' + e.detail.text); }
+    onCopy: function(e) { setResult('cp-result', (D.copiedPrefix || 'copied: ') + e.detail.text); }
   });
   new MTS.CopyButton('#cp-secondary', { text: 'npm install matios-ui', label: 'Copy', variant: 'secondary' });
   new MTS.CopyButton('#cp-ghost', { text: 'npm install matios-ui', label: 'Copy', variant: 'ghost' });

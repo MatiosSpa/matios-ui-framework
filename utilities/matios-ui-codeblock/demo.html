@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -46,6 +46,8 @@
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-codeblock-i18n.js"></script>
   <script src="./matios-ui-codeblock.js"></script>
 </head>
 <body>
@@ -53,14 +55,14 @@
   <div class="demo-page">
     <div class="demo-header">
       <h1><span>MTS</span>.CodeBlock</h1>
-      <p>Syntax highlighting Matios para snippets compartidos, preview de codigo en demos y vistas de fuente dentro del showcase.</p>
+      <p id="demo-subtitle"></p>
       <div class="demo-header-actions">
       </div>
       <div class="demo-docs-panel" id="docs-panel"></div>
     </div>
 
     <section class="demo-section">
-      <div class="demo-section-title">1 — HTML / CSS / JavaScript</div>
+      <div class="demo-section-title" id="s1-title"></div>
       <div class="mts-grid mts-grid--gap-md">
         <div class="mts-g-col-12 mts-g-col-lg-4"><div id="tabs-html"></div></div>
         <div class="mts-g-col-12 mts-g-col-lg-4"><div id="tabs-css"></div></div>
@@ -69,7 +71,7 @@
     </section>
 
     <section class="demo-section">
-      <div class="demo-section-title">2 — CSharp / Java / SQL</div>
+      <div class="demo-section-title" id="s2-title"></div>
       <div class="mts-grid mts-grid--gap-md">
         <div class="mts-g-col-12 mts-g-col-lg-4"><div id="tabs-cs"></div></div>
         <div class="mts-g-col-12 mts-g-col-lg-4"><div id="tabs-java"></div></div>
@@ -78,7 +80,7 @@
     </section>
 
     <section class="demo-section">
-      <div class="demo-section-title">3 — Bash / JSON / YAML</div>
+      <div class="demo-section-title" id="s3-title"></div>
       <div class="mts-grid mts-grid--gap-md">
         <div class="mts-g-col-12 mts-g-col-lg-4"><div id="tabs-bash"></div></div>
         <div class="mts-g-col-12 mts-g-col-lg-4"><div id="tabs-json"></div></div>
@@ -87,12 +89,26 @@
     </section>
 
     <section class="demo-section">
-      <div class="demo-section-title">4 — Wrap opcional</div>
+      <div class="demo-section-title" id="s4-title"></div>
       <div id="tabs-wrap"></div>
     </section>
   </div>
 
   <script>
+    // — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+    (function () {
+      var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+      var lang = m ? m[1] : 'en';
+      if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+    })();
+    var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.CodeBlock'].demo) || {};
+
+    document.getElementById('demo-subtitle').textContent = D.subtitle || 'Matios syntax highlighting for shared snippets, code preview in demos and source views inside the showcase.';
+    document.getElementById('s1-title').textContent = D.s1Title || '1 — HTML / CSS / JavaScript';
+    document.getElementById('s2-title').textContent = D.s2Title || '2 — CSharp / Java / SQL';
+    document.getElementById('s3-title').textContent = D.s3Title || '3 — Bash / JSON / YAML';
+    document.getElementById('s4-title').textContent = D.s4Title || '4 — Optional wrap';
+
     function createPreviewPanel(id) {
       var panel = document.createElement('div');
       panel.className = 'mts-p-2';

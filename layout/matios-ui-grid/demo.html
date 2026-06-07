@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-grid-i18n.js"></script>
   <script src="./matios-ui-grid.js"></script>
 </head>
 <body>
@@ -56,7 +58,7 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Grid</h1>
-    <p>Distribución estructural de página con CSS Grid nativo, spans responsivos y helpers de layout.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
@@ -64,90 +66,141 @@
 
   <div class="mts-alert mts-alert--warning" role="status">
     <div class="mts-alert__body">
-      <div class="mts-alert__title">Visual support used in this demo</div>
-      <div class="mts-alert__message">This page only uses <strong>.demo-grid-outline</strong> and <strong>.demo-grid-outline--tall</strong> from <code>./support/demo-shared.css</code> to make the grid boundaries easier to read.</div>
+      <div class="mts-alert__title" id="alert-title"></div>
+      <div class="mts-alert__message" id="alert-message"></div>
     </div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">1 — Two halves</div>
-    <p>Basic 12-column split using two equal 6/6 spans.</p>
+    <div class="demo-section-title" id="s1-title"></div>
+    <p id="s1-desc"></p>
     <div id="preview-basic"></div>
     <div id="tabs-basic"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">2 — Three equal columns</div>
-    <p>Same visual weight across three content blocks.</p>
+    <div class="demo-section-title" id="s2-title"></div>
+    <p id="s2-desc"></p>
     <div id="preview-equal-3"></div>
     <div id="tabs-equal-3"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">3 — Main + sidebar</div>
-    <p>A classic 8/4 layout for content and sidebar composition.</p>
+    <div class="demo-section-title" id="s3-title"></div>
+    <p id="s3-desc"></p>
     <div id="preview-main-sidebar"></div>
     <div id="tabs-main-sidebar"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">4 — Responsive 12 → 6 → 4</div>
-    <p>Stacks on small screens and redistributes as space grows.</p>
+    <div class="demo-section-title" id="s4-title"></div>
+    <p id="s4-desc"></p>
     <div id="preview-responsive"></div>
     <div id="tabs-responsive"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">5 — Start column + full width</div>
-    <p>Place a block starting later in the grid and force a full-width row when needed.</p>
+    <div class="demo-section-title" id="s5-title"></div>
+    <p id="s5-desc"></p>
     <div id="preview-start-full"></div>
     <div id="tabs-start-full"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">6 — Gap scale</div>
-    <p>Compare small, medium and large spacing without changing the column contract.</p>
+    <div class="demo-section-title" id="s6-title"></div>
+    <p id="s6-desc"></p>
     <div id="preview-gap-scale"></div>
     <div id="tabs-gap-scale"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">7 — Vertical alignment</div>
-    <p>Use item self-alignment when blocks with different heights need different anchors.</p>
+    <div class="demo-section-title" id="s7-title"></div>
+    <p id="s7-desc"></p>
     <div id="preview-vertical"></div>
     <div id="tabs-vertical"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">8 — Row span</div>
-    <p>Let one item span more than one row while the rest flows around it.</p>
+    <div class="demo-section-title" id="s8-title"></div>
+    <p id="s8-desc"></p>
     <div id="preview-row-span"></div>
     <div id="tabs-row-span"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">9 — Sidebar helpers</div>
-    <p>Use the built-in shortcuts for common sidebar/page shell layouts.</p>
+    <div class="demo-section-title" id="s9-title"></div>
+    <p id="s9-desc"></p>
     <div id="preview-sidebar-helpers"></div>
     <div id="tabs-sidebar-helpers"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">10 — Auto fit</div>
-    <p>Automatically fit as many columns as the available width allows.</p>
+    <div class="demo-section-title" id="s10-title"></div>
+    <p id="s10-desc"></p>
     <div id="preview-autofit"></div>
     <div id="tabs-autofit"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">11 — JavaScript API</div>
-    <p>The helper renders the same CSS contract. It does not invent a second layout system.</p>
+    <div class="demo-section-title" id="s11-title"></div>
+    <p id="s11-desc"></p>
     <div id="preview-js-api"></div>
     <div id="tabs-js-api"></div>
   </div>
 </div>
 
 <script>
+  // — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+  (function () {
+    var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+    var lang = m ? m[1] : 'en';
+    if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  })();
+  var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Grid'] && MTS.getLocale()['MTS.Grid'].demo) || {};
+
+  function setText(id, text) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
+
+  setText('demo-subtitle', D.subtitle || 'Structural page layout with native CSS Grid, responsive spans and layout helpers.');
+  setText('alert-title', D.alertTitle || 'Visual support used in this demo');
+
+  var alertMessageEl = document.getElementById('alert-message');
+  if (alertMessageEl) {
+    alertMessageEl.innerHTML =
+      MTS.Sanitize.text(D.alertMessagePre || 'This page only uses ') +
+      '<strong>.demo-grid-outline</strong>' +
+      MTS.Sanitize.text(D.alertMessageMid || ' and ') +
+      '<strong>.demo-grid-outline--tall</strong>' +
+      MTS.Sanitize.text(D.alertMessageEnd || ' from ') +
+      '<code>./support/demo-shared.css</code>' +
+      MTS.Sanitize.text(D.alertMessageTail || ' to make the grid boundaries easier to read.');
+  }
+
+  setText('s1-title',  D.s1Title  || '1 — Two halves');
+  setText('s1-desc',   D.s1Desc   || 'Basic 12-column split using two equal 6/6 spans.');
+  setText('s2-title',  D.s2Title  || '2 — Three equal columns');
+  setText('s2-desc',   D.s2Desc   || 'Same visual weight across three content blocks.');
+  setText('s3-title',  D.s3Title  || '3 — Main + sidebar');
+  setText('s3-desc',   D.s3Desc   || 'A classic 8/4 layout for content and sidebar composition.');
+  setText('s4-title',  D.s4Title  || '4 — Responsive 12 → 6 → 4');
+  setText('s4-desc',   D.s4Desc   || 'Stacks on small screens and redistributes as space grows.');
+  setText('s5-title',  D.s5Title  || '5 — Start column + full width');
+  setText('s5-desc',   D.s5Desc   || 'Place a block starting later in the grid and force a full-width row when needed.');
+  setText('s6-title',  D.s6Title  || '6 — Gap scale');
+  setText('s6-desc',   D.s6Desc   || 'Compare small, medium and large spacing without changing the column contract.');
+  setText('s7-title',  D.s7Title  || '7 — Vertical alignment');
+  setText('s7-desc',   D.s7Desc   || 'Use item self-alignment when blocks with different heights need different anchors.');
+  setText('s8-title',  D.s8Title  || '8 — Row span');
+  setText('s8-desc',   D.s8Desc   || 'Let one item span more than one row while the rest flows around it.');
+  setText('s9-title',  D.s9Title  || '9 — Sidebar helpers');
+  setText('s9-desc',   D.s9Desc   || 'Use the built-in shortcuts for common sidebar/page shell layouts.');
+  setText('s10-title', D.s10Title || '10 — Auto fit');
+  setText('s10-desc',  D.s10Desc  || 'Automatically fit as many columns as the available width allows.');
+  setText('s11-title', D.s11Title || '11 — JavaScript API');
+  setText('s11-desc',  D.s11Desc  || 'The helper renders the same CSS contract. It does not invent a second layout system.');
+
   function mountPreview(id, html) {
     var el = document.getElementById(id);
     if (el) el.innerHTML = html;

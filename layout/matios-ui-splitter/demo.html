@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MTS.Splitter — Demo</title>
@@ -50,6 +50,8 @@
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-splitter-i18n.js"></script>
   <script src="./matios-ui-splitter.js"></script>
 </head>
 <body>
@@ -61,26 +63,34 @@
   </style>
   <div class="demo-header">
     <h1><span>MTS</span>.Splitter</h1>
-    <p>Paneles redimensionables con drag. Horizontal, vertical y colapsable.</p>
+    <p id="demo-subtitle"></p>
     <div  class="demo-header-actions"></div>
     <div class="demo-docs-panel" id="dp"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">1 — Horizontal — arrastra el divisor</div>
+    <div class="demo-section-title" id="s1-title"></div>
     <div id="splitter-code-1"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">2 — Vertical + colapsable con doble click</div>
+    <div class="demo-section-title" id="s2-title"></div>
     <div id="splitter-code-2"></div>
   </div>
 </div>
 <script>
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Splitter'].demo) || {};
+
 function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
 window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});
 if(window!==window.top){var ts=document.querySelector('.demo-theme');if(ts)ts.style.display='none';}
-function toggleDocs(id,p){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted)">Cargando...</em>';fetch(p).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>Error.</em>';});}
+function toggleDocs(id,p){var panel=document.getElementById(id);if(!panel)return;panel.classList.toggle('open');if(!panel.classList.contains('open')||panel.dataset.loaded)return;panel.innerHTML='<em style="color:var(--mts-text-muted)">'+(D.loading||'Loading...')+'</em>';fetch(p).then(function(r){return r.text();}).then(function(md){panel.innerHTML=mdToHtml(md);panel.dataset.loaded='1';}).catch(function(){panel.innerHTML='<em>'+(D.errorLabel||'Error.')+'</em>';});}
 function mdToHtml(md){if(!md)return'';var blocks=[];var h=md.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/```(\w*)\n?([\s\S]*?)```/g,function(_,l,c){blocks.push(c.trim());return'\x00B'+(blocks.length-1)+'\x00';}).replace(/^---+$/gm,'<hr>').replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,function(_,hdr,rows){var ths=hdr.split('|').filter(function(c){return c.trim();}).map(function(c){return'<th>'+c.trim()+'</th>';}).join('');var trs=rows.trim().split('\n').map(function(r){return'<tr>'+r.split('|').filter(function(c){return c.trim();}).map(function(c){return'<td>'+c.trim()+'</td>';}).join('')+'</tr>';}).join('');return'<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';}).replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/^(?!<)(.+)$/gm,'<p>$1</p>');return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});}
 
 function buildSplitterSection(target, previewHtml, htmlCode, jsCode, cbHtmlId, cbJsId){
@@ -93,19 +103,19 @@ function buildSplitterSection(target, previewHtml, htmlCode, jsCode, cbHtmlId, c
   new MTS.CodeBlock('#' + cbJsId,   { code: jsCode,   language: 'javascript', copyable: true });
 }
 var splitterPreview1 = `<div class="sp-wrap" id="sp-h">
-  <div class="sp-panel"><h4>Panel izquierdo</h4><p>Arrastra el divisor central para redimensionar los paneles.</p></div>
-  <div class="sp-panel"><h4>Panel derecho</h4><p>El tamaño mínimo es 15% y el máximo 85%.</p></div>
+  <div class="sp-panel"><h4>${D.panelLeftTitle||'Left panel'}</h4><p>${D.panelLeftText||'Drag the central divider to resize the panels.'}</p></div>
+  <div class="sp-panel"><h4>${D.panelRightTitle||'Right panel'}</h4><p>${D.panelRightText||'The minimum size is 15% and the maximum is 85%.'}</p></div>
 </div>
-<div class="result-box" id="res-sp">— arrastra el divisor —</div>
+<div class="result-box" id="res-sp">${D.resultPlaceholder||'— drag the divider —'}</div>
 <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
   <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spH.setSize(30)">setSize(30%)</button>
   <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spH.setSize(50)">setSize(50%)</button>
   <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spH.setSize(70)">setSize(70%)</button>
-  <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="var s=spH.getSizes();document.getElementById('res-sp').textContent='getSizes() → '+JSON.stringify(s)">getSizes()</button>
+  <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="var s=spH.getSizes();document.getElementById('res-sp').textContent=(D.getSizesPrefix||'getSizes() → ')+JSON.stringify(s)">getSizes()</button>
 </div>`;
 var splitterPreview2 = `<div class="sp-wrap" id="sp-v" style="height:280px;">
-  <div class="sp-panel"><h4>Panel superior</h4><p>Doble click en el divisor para colapsar el panel inferior.</p></div>
-  <div class="sp-panel"><h4>Panel inferior</h4><p>Restaura haciendo doble click nuevamente en el divisor.</p></div>
+  <div class="sp-panel"><h4>${D.panelTopTitle||'Top panel'}</h4><p>${D.panelTopText||'Double-click the divider to collapse the bottom panel.'}</p></div>
+  <div class="sp-panel"><h4>${D.panelBottomTitle||'Bottom panel'}</h4><p>${D.panelBottomText||'Restore by double-clicking the divider again.'}</p></div>
 </div>
 <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
   <button class="demo-btn-sm" style="padding:5px 12px;font-size:11px;" onclick="spV.collapseSecond()">collapseSecond()</button>
@@ -131,6 +141,9 @@ buildSplitterSection('#splitter-code-2', splitterPreview2, `<div id="split-verti
   onDragEnd: ({ firstSize, secondSize }) => console.log(firstSize, secondSize),
 });`, 'sp2-cb-html', 'sp2-cb-js');
 document.getElementById('sp-h').style.height='200px';
-var spH=new MTS.Splitter('#sp-h',{direction:'horizontal',initialSize:40,minSize:15,maxSize:85,onChange:function(e){document.getElementById('res-sp').textContent='onChange → primer panel: '+Math.round(e.firstSize)+'% | segundo: '+Math.round(e.secondSize)+'%';}});
+var spH=new MTS.Splitter('#sp-h',{direction:'horizontal',initialSize:40,minSize:15,maxSize:85,onChange:function(e){document.getElementById('res-sp').textContent=(D.onChangePrefix||'onChange → first panel: ')+Math.round(e.firstSize)+(D.onChangeMid||'% | second: ')+Math.round(e.secondSize)+'%';}});
 var spV=new MTS.Splitter('#sp-v',{direction:'vertical',initialSize:60,collapsible:true,gutterSize:'8px'});
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Resizable panels with drag. Horizontal, vertical and collapsible.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Horizontal — drag the divider';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Vertical + collapsible with double click';
 </script></body></html>

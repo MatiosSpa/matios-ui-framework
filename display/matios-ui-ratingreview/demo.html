@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -48,6 +48,8 @@
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-ratingreview-i18n.js"></script>
   <script src="./matios-ui-ratingreview.js"></script>
 </head>
 <body>
@@ -55,18 +57,32 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.RatingReview</h1>
-    <p>Widget de reseñas con promedio, breakdown por estrellas y votación interactiva.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Solo lectura con breakdown / Read-only with breakdown</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Interactivo — permite votar / Interactive voting</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — update() — actualizar datos en vivo / Live data update</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.RatingReview']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Review widget with average, star breakdown and interactive voting.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Read-only with breakdown';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Interactive — allows voting';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — update() — live data update';
+
 function indentHtml(html) {
   var indent = 0;
   var step = 2;
@@ -151,7 +167,7 @@ makeSection('tabs-s1', preview_s1,
 var preview_s2 =
   '<div class="demo-stack" style="max-width:520px">' +
     '<div id="rr-interactive"></div>' +
-    '<div class="result-box" id="rr-result">— haz click en las estrellas para calificar —</div>' +
+    '<div class="result-box" id="rr-result">' + (D.interactivePlaceholder || '— click the stars to rate —') + '</div>' +
   '</div>';
 
 makeSection('tabs-s2', preview_s2,
@@ -177,7 +193,7 @@ var preview_s3 =
       '<button type="button" class="mts-btn mts-btn--primary mts-btn--sm" onclick="simulateRating(1)">+★</button>' +
       '<button type="button" class="mts-btn mts-btn--outline mts-btn--sm" onclick="resetData()">Reset</button>' +
     '</div>' +
-    '<div class="result-box" id="rr-live-result">— usa los botones para simular nuevas reseñas —</div>' +
+    '<div class="result-box" id="rr-live-result">' + (D.livePlaceholder || '— use the buttons to simulate new reviews —') + '</div>' +
   '</div>';
 
 makeSection('tabs-s3', preview_s3,
@@ -218,7 +234,7 @@ new MTS.RatingReview('#rr-interactive', {
   breakdown: cloneBreakdown(),
   interactive: true,
   onRate: function (e) {
-    document.getElementById('rr-result').textContent = 'onRate → stars: ' + e.detail.stars + ' ★';
+    document.getElementById('rr-result').textContent = (D.onRatePrefix || 'onRate → stars: ') + e.detail.stars + ' ★';
   }
 });
 
@@ -252,7 +268,9 @@ function simulateRating(stars) {
   });
 
   document.getElementById('rr-live-result').textContent =
-    'update() → nueva reseña ★' + stars + ' · promedio: ' + liveData.average.toFixed(2) + ' · total: ' + liveData.total;
+    (D.liveNewReview || 'update() → new review ★') + stars +
+    (D.liveAverage || ' · average: ') + liveData.average.toFixed(2) +
+    (D.liveTotal || ' · total: ') + liveData.total;
 }
 
 function resetData() {
@@ -274,7 +292,7 @@ function resetData() {
     }
   });
 
-  document.getElementById('rr-live-result').textContent = 'reset() → datos originales restaurados';
+  document.getElementById('rr-live-result').textContent = D.liveReset || 'reset() → original data restored';
 }
 </script>
 </body>

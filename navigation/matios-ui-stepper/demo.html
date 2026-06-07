@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-stepper-i18n.js"></script>
   <script src="./matios-ui-stepper.js"></script>
 </head>
 <body>
@@ -56,19 +58,19 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Stepper</h1>
-    <p>Wizard + progress. Componente oficial unificado para flujos, checkout, compact y dots.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="result-box" style="margin-bottom:16px">MTS.StepProgress queda como alias de compatibilidad. Los ejemplos nuevos viven en MTS.Stepper.</div>
+  <div class="result-box" id="alias-note" style="margin-bottom:16px"></div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Wizard</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Checkout con navegación</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Compact + clickable</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Dots / pipeline</div><div id="tabs-s4"></div></div>
-  <div class="demo-section"><div class="demo-section-title">5 — API + status</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
 </div>
 
 <script>
@@ -115,6 +117,22 @@ function bindMatiosButtons(selectors) {
   });
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Stepper'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Wizard + progress. Official unified component for flows, checkout, compact and dots.';
+document.getElementById('alias-note').textContent    = D.aliasNote || 'MTS.StepProgress remains as a compatibility alias. New examples live in MTS.Stepper.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Wizard';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Checkout with navigation';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Compact + clickable';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Dots / pipeline';
+document.getElementById('s5-title').textContent      = D.s5Title || '5 — API + status';
+
 var wizardStepper;
 var checkoutStepper;
 var compactStepper;
@@ -123,7 +141,7 @@ var statusStepper;
 var preview_s1 = [
 '<div class="demo-stack">',
 '  <div id="stepper-wizard"></div>',
-'  <div class="result-box" id="stepper-result">— navega los pasos —</div>',
+'  <div class="result-box" id="stepper-result">' + (D.resultWizardPlaceholder || '— navigate the steps —') + '</div>',
 '</div>'
 ].join('\n');
 
@@ -150,7 +168,7 @@ var preview_s2 = [
 '    <button type="button" id="btn-checkout-go0">goTo(0)</button>',
 '    <button type="button" id="btn-checkout-go3">goTo(3)</button>',
 '  </div>',
-'  <div class="result-box" id="stepper-checkout-result">— navega el checkout —</div>',
+'  <div class="result-box" id="stepper-checkout-result">' + (D.resultCheckoutPlaceholder || '— navigate the checkout —') + '</div>',
 '</div>'
 ].join('\n');
 
@@ -178,7 +196,7 @@ var js_s2 = [
 var preview_s3 = [
 '<div class="demo-stack">',
 '  <div id="stepper-compact"></div>',
-'  <div class="result-box" id="stepper-compact-result">— haz click en los pasos —</div>',
+'  <div class="result-box" id="stepper-compact-result">' + (D.resultCompactPlaceholder || '— click on the steps —') + '</div>',
 '</div>'
 ].join('\n');
 
@@ -202,7 +220,7 @@ var js_s3 = [
 
 var preview_s4 = [
 '<div class="demo-stack">',
-'  <div class="demo-label">Pipeline tracker</div>',
+'  <div class="demo-label">' + (D.pipelineLabel || 'Pipeline tracker') + '</div>',
 '  <div id="stepper-dots"></div>',
 '  <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:-4px;font-size:11px;color:var(--mts-text-muted);text-align:center">',
 '    <div>Trigger</div>',
@@ -243,7 +261,7 @@ var preview_s5 = [
 '    <button type="button" id="btn-status-prev">Prev</button>',
 '    <button type="button" id="btn-status-next">Next</button>',
 '  </div>',
-'  <div class="result-box" id="stepper-status-result">— usa la API —</div>',
+'  <div class="result-box" id="stepper-status-result">' + (D.resultStatusPlaceholder || '— use the API —') + '</div>',
 '</div>'
 ].join('\n');
 
@@ -278,7 +296,7 @@ makeSection('tabs-s1', preview_s1, js_s1, function() {
       { id: 'security', label: 'Security', content: '<div class="demo-stack"><div class="demo-label">Security</div><div>Step 2 content</div></div>' },
       { id: 'confirm', label: 'Confirm', content: '<div class="demo-stack"><div class="demo-label">Confirm</div><div>Step 3 content</div></div>' }
     ],
-    onChange: function(e) { setResult('stepper-result', 'step → ' + e.detail.step.id); }
+    onChange: function(e) { setResult('stepper-result', (D.stepPrefix || 'step → ') + e.detail.step.id); }
   });
 }, '420px');
 
@@ -294,7 +312,7 @@ makeSection('tabs-s2', preview_s2, js_s2, function() {
       { id: 'confirm', label: 'Confirmed' }
     ],
     onChange: function(e) {
-      setResult('stepper-checkout-result', 'step → ' + e.detail.step.label);
+      setResult('stepper-checkout-result', (D.stepPrefix || 'step → ') + e.detail.step.label);
     }
   });
 
@@ -312,13 +330,13 @@ makeSection('tabs-s3', preview_s3, js_s3, function() {
     active: 2,
     clickable: true,
     steps: [
-      { id: 's1', label: 'Datos' },
-      { id: 's2', label: 'Seguridad' },
-      { id: 's3', label: 'Confirmar' },
-      { id: 's4', label: 'Listo' }
+      { id: 's1', label: D.compactStep1 || 'Details' },
+      { id: 's2', label: D.compactStep2 || 'Security' },
+      { id: 's3', label: D.compactStep3 || 'Confirm' },
+      { id: 's4', label: D.compactStep4 || 'Done' }
     ],
     onChange: function(e) {
-      setResult('stepper-compact-result', 'step → ' + e.detail.step.label);
+      setResult('stepper-compact-result', (D.stepPrefix || 'step → ') + e.detail.step.label);
     }
   });
 }, '300px');
@@ -355,10 +373,10 @@ makeSection('tabs-s5', preview_s5, js_s5, function() {
       { id: 'publish', label: 'Publish' }
     ],
     onChange: function(e) {
-      setResult('stepper-status-result', 'step → ' + e.detail.step.label);
+      setResult('stepper-status-result', (D.stepPrefix || 'step → ') + e.detail.step.label);
     },
     onStatusChange: function(e) {
-      setResult('stepper-status-result', 'status → ' + e.detail.status + ' / ' + e.detail.step.label);
+      setResult('stepper-status-result', (D.statusPrefix || 'status → ') + e.detail.status + ' / ' + e.detail.step.label);
     }
   });
 

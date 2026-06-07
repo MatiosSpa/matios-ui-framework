@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-contextmenu-i18n.js"></script>
   <script src="./matios-ui-contextmenu.js"></script>
 </head>
 <body>
@@ -56,14 +58,14 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.ContextMenu</h1>
-    <p>Menú contextual por click derecho con acciones, iconos y shortcuts.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Básico</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Iconos y acciones</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
 </div>
 
 <script>
@@ -104,10 +106,23 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.ContextMenu']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || '';
+document.getElementById('s1-title').textContent      = D.s1Title || '1';
+document.getElementById('s2-title').textContent      = D.s2Title || '2';
+
 var preview_s1 =
   '<div class="demo-stack">' +
-    '<div id="ctx-zone-basic" class="demo-grid-outline demo-grid-outline--tall">Click derecho aquí / Right click here</div>' +
-    '<div class="result-box" id="ctx-result-basic">— abre el menú contextual —</div>' +
+    '<div id="ctx-zone-basic" class="demo-grid-outline demo-grid-outline--tall">' + (D.zoneBasicHint || 'Right-click here') + '</div>' +
+    '<div class="result-box" id="ctx-result-basic">' + (D.resultBasicPlaceholder || '') + '</div>' +
   '</div>';
 
 var js_s1 =
@@ -124,8 +139,8 @@ var js_s1 =
 
 var preview_s2 =
   '<div class="demo-stack">' +
-    '<div id="ctx-zone-icons" class="demo-grid-outline demo-grid-outline--tall">Zona con iconos y shortcuts</div>' +
-    '<div class="result-box" id="ctx-result-icons">— click derecho para probar items con iconos —</div>' +
+    '<div id="ctx-zone-icons" class="demo-grid-outline demo-grid-outline--tall">' + (D.zoneIconsHint || 'Area with icons and shortcuts') + '</div>' +
+    '<div class="result-box" id="ctx-result-icons">' + (D.resultIconsPlaceholder || '') + '</div>' +
   '</div>';
 
 var js_s2 =
@@ -149,7 +164,7 @@ makeSection('tabs-s1', preview_s1, js_s1, function() {
       { divider: true },
       { id: 'delete', label: 'Delete', danger: true }
     ],
-    onSelect: function(e) { setResult('ctx-result-basic', 'select → ' + e.detail.id); }
+    onSelect: function(e) { setResult('ctx-result-basic', (D.selectPrefix || 'select → ') + e.detail.id); }
   });
 }, '320px');
 
@@ -162,7 +177,7 @@ makeSection('tabs-s2', preview_s2, js_s2, function() {
       { divider: true },
       { id: 'delete', label: 'Delete', icon: MTS.Icon.get('trash'), danger: true }
     ],
-    onSelect: function(e) { setResult('ctx-result-icons', 'select → ' + e.detail.id); }
+    onSelect: function(e) { setResult('ctx-result-icons', (D.selectPrefix || 'select → ') + e.detail.id); }
   });
 }, '320px');
 

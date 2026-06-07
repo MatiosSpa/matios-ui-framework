@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -48,6 +48,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-colorpicker-i18n.js"></script>
   <script src="./matios-ui-colorpicker.js"></script>
 </head>
 <body>
@@ -55,18 +57,18 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.ColorPicker</h1>
-    <p>Standalone color picker — HSL sliders, preset palette, hex/rgb/hsl output.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Trigger (popup) — tamaños / sizes</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Inline (siempre visible / always visible)</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Formatos hex · rgb · hsl + API</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Sin sliders · disabled</div><div id="tabs-s4"></div></div>
-  <div class="demo-section"><div class="demo-section-title">5 — HTML declarativo + enhancement</div><div id="tabs-s5"></div></div>
-  <div class="demo-section"><div class="demo-section-title">6 — Paleta: por defecto · presets personalizados</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s6-title"></div><div id="tabs-s6"></div></div>
 </div>
 
 <script>
@@ -111,51 +113,85 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
-makeSection("tabs-s1", "<div class=\"demo-grid\" style=\"align-items:start\">\n<div id=\"cp-sm\"></div>\n<div id=\"cp-md\"></div>\n<div id=\"cp-lg\"></div>\n</div><div class=\"result-box\" id=\"cp-result\">\u2014 selecciona un color \u2014</div>", "<div id=\"picker-brand\"\n  data-value=\"#7c3aed\"\n  data-label=\"Brand color\"\n  data-format=\"hex\">\n</div>\n\n<script>\n  new MTS.ColorPicker('#picker-brand', {\n    // Fires when color changes / Se dispara al cambiar el color\n    onChange: ({ hex, value }) => {\n      console.log(hex);   // \u2192 '#7c3aed' (always hex)\n      console.log(value); // \u2192 formatted value\n    },\n  });\n<\/script>", "// Small / Peque\u00f1o\nnew MTS.ColorPicker('#cp-sm', {\n  value:  '#f87171',\n  label:  'Color (sm)',\n  size:   'sm',\n  format: 'hex',\n  // Fires on color change / Se dispara al cambiar el color\n  onChange: ({ hex, value }) => console.log(hex),\n});\n\n// Medium (default) / Mediano\nnew MTS.ColorPicker('#cp-md', {\n  value:  '#4f8eff',\n  label:  'Color (md)',\n  size:   'md',\n  onChange: ({ hex }) => console.log(hex),\n});\n\n// Large / Grande\nnew MTS.ColorPicker('#cp-lg', {\n  value:  '#34d399',\n  label:  'Color (lg)',\n  size:   'lg',\n  onChange: ({ hex }) => console.log(hex),\n});");
-makeSection("tabs-s2", "<div style=\"max-width:320px\">\n<div id=\"cp-inline\"></div>\n</div><div class=\"result-box\" id=\"cp-inline-result\">\u2014 mueve los sliders \u2014</div>", "<\!-- inline: true \u2014 no trigger button / sin bot\u00f3n trigger -->\n<div id=\"picker-inline\" data-inline data-value=\"#34d399\"></div>\n\n<script>\n  new MTS.ColorPicker('#picker-inline', {\n    onChange: ({ hex }) => {\n      document.getElementById('preview').style.background = hex;\n    },\n  });\n<\/script>", "new MTS.ColorPicker('#picker-inline', {\n  // Always visible, no trigger / Siempre visible, sin trigger\n  inline: true,\n  value:  '#34d399',\n  format: 'hex',\n  onChange: ({ hex, value }) => {\n    console.log(hex, value);\n  },\n});");
-makeSection("tabs-s3", "<div class=\"demo-grid\">\n<div id=\"cp-hex\"></div>\n<div id=\"cp-rgb\"></div>\n<div id=\"cp-hsl\"></div>\n</div><div class=\"demo-row\" style=\"margin-top:8px\">\n<button class=\"demo-btn-sm\" onclick=\"document.getElementById('cp-api-result').textContent = 'getValue() \u2192 ' + cpApi.getValue()\">getValue()</button>\n<button class=\"demo-btn-sm\" onclick=\"document.getElementById('cp-api-result').textContent = 'getHex() \u2192 ' + cpApi.getHex()\">getHex()</button>\n<button class=\"demo-btn-sm\" onclick=\"cpApi.setValue('#f87171'); document.getElementById('cp-api-result').textContent = 'setValue(#f87171) \u2713'\">setValue()</button>\n<button class=\"demo-btn-sm\" onclick=\"cpApi.open()\">open()</button>\n<button class=\"demo-btn-sm\" onclick=\"cpApi.close()\">close()</button>\n</div><div class=\"result-box\" id=\"cp-api-result\">\u2014 usa los botones \u2014</div>", "<div id=\"picker-brand\" data-value=\"#4f8eff\" data-format=\"hex\"></div>\n\n<script>\n  const cp = new MTS.ColorPicker('#picker-brand', {\n    onChange: ({ hex, value }) => console.log(hex, value),\n  });\n  cp.getValue()         // respects format / respeta format\n  cp.getHex()           // always hex / siempre hex\n  cp.setValue('#00ff00')\n  cp.setFormat('rgb')\n  cp.open() / cp.close()\n<\/script>", "// Format: 'hex' | 'rgb' | 'hsl'\nnew MTS.ColorPicker('#cp-hex', { value:'#4f8eff', label:'HEX', format:'hex', onChange: ({value}) => console.log(value) });\nnew MTS.ColorPicker('#cp-rgb', { value:'#4f8eff', label:'RGB', format:'rgb', onChange: ({value}) => console.log(value) });\nnew MTS.ColorPicker('#cp-hsl', { value:'#4f8eff', label:'HSL', format:'hsl', onChange: ({value}) => console.log(value) });\n\nconst cp = new MTS.ColorPicker('#my-picker', { value: '#4f8eff', format: 'hex' });\n\n// Get value respecting format / Obtener valor respetando formato\ncp.getValue()          // \u2192 '#4f8eff' | 'rgb(79,142,255)' | 'hsl(218,100%,66%)'\n\n// Always get hex / Siempre obtener hex\ncp.getHex()            // \u2192 '#4f8eff'\n\n// Set color / Establecer color\ncp.setValue('#f87171')\n\n// Change output format / Cambiar formato de salida\ncp.setFormat('rgb')\n\n// Open / close / Abrir / cerrar\ncp.open()\ncp.close()");
-makeSection("tabs-s4", "<div class=\"demo-grid\">\n<div id=\"cp-nosliders\"></div>\n<div id=\"cp-disabled\"></div>\n</div>", "<\!-- Solo paleta / Palette only -->\n<div id=\"picker-palette\" data-value=\"#cc0000\"></div>\n<script>\n  new MTS.ColorPicker('#picker-palette', {\n    showSliders: false,\n    showInput:   false,\n  });\n<\/script>", "// Preset palette only / Solo paleta de presets\nnew MTS.ColorPicker('#cp-nosliders', {\n  showSliders: false,\n  showInput:   false,\n  value:       '#cc0000',\n  label:       'Sin sliders',\n});\n\n// Disabled / Deshabilitado\nnew MTS.ColorPicker('#cp-disabled', {\n  value:    '#94a3b8',\n  label:    'Disabled',\n  disabled: true,\n});");
-makeSection("tabs-s5", "<div id=\"cp-declarative\" data-value=\"#7c3aed\" data-label=\"Brand color\" data-format=\"hex\" data-size=\"md\"></div>\n<div class=\"result-box\" id=\"cp-declarative-result\">\u2014 enhancement declarativo \u2014</div>", "<div id=\"cp-declarative\"\n  data-value=\"#7c3aed\"\n  data-label=\"Brand color\"\n  data-format=\"hex\"\n  data-size=\"md\">\n</div>", "new MTS.ColorPicker('#cp-declarative', {\n  onChange: function(detail) {\n    document.getElementById('cp-declarative-result').textContent = 'onChange \u2192 ' + detail.hex;\n  }\n});");
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.ColorPicker'].demo) || {};
 
-var onChange = function(d){ document.getElementById('cp-result').textContent = 'onChange → hex: ' + d.hex + ' | value: ' + d.value; };
-new MTS.ColorPicker('#cp-sm', { value:'#f87171', label:'Small (sm)',   size:'sm', onChange: onChange });
-new MTS.ColorPicker('#cp-md', { value:'#4f8eff', label:'Medium (md)',  size:'md', onChange: onChange });
-new MTS.ColorPicker('#cp-lg', { value:'#34d399', label:'Large (lg)',   size:'lg', onChange: onChange });
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Standalone color picker — HSL sliders, preset palette, hex/rgb/hsl output.';
+document.getElementById('s1-title').textContent = D.s1Title || '1 — Trigger (popup) — sizes';
+document.getElementById('s2-title').textContent = D.s2Title || '2 — Inline (always visible)';
+document.getElementById('s3-title').textContent = D.s3Title || '3 — Formats hex · rgb · hsl + API';
+document.getElementById('s4-title').textContent = D.s4Title || '4 — No sliders · disabled';
+document.getElementById('s5-title').textContent = D.s5Title || '5 — Declarative HTML + enhancement';
+document.getElementById('s6-title').textContent = D.s6Title || '6 — Palette: default · custom presets';
+
+var resultSelectColor = D.resultSelectColor || '— pick a color —';
+var resultMoveSliders = D.resultMoveSliders || '— move the sliders —';
+var resultUseButtons  = D.resultUseButtons  || '— use the buttons —';
+var resultDeclarative = D.resultDeclarative || '— declarative enhancement —';
+var labelSmall            = D.labelSmall            || 'Small (sm)';
+var labelMedium           = D.labelMedium           || 'Medium (md)';
+var labelLarge            = D.labelLarge            || 'Large (lg)';
+var labelFormatHex        = D.labelFormatHex        || 'Format: HEX';
+var labelFormatRgb        = D.labelFormatRgb        || 'Format: RGB';
+var labelFormatHsl        = D.labelFormatHsl        || 'Format: HSL';
+var labelNoSliders        = D.labelNoSliders        || 'No sliders';
+var labelDisabled         = D.labelDisabled         || 'Disabled';
+var labelTriggerNoPresets = D.labelTriggerNoPresets || 'Trigger — no presets defined';
+var labelCustomPresets    = D.labelCustomPresets    || 'Custom presets';
+var labelEventColor       = D.labelEventColor       || 'Event color';
+var labelBrandColors      = D.labelBrandColors      || 'Brand colors';
+var echoOnChangePrefix    = D.echoOnChangePrefix    || 'onChange → ';
+
+makeSection("tabs-s1", "<div class=\"demo-grid\" style=\"align-items:start\">\n<div id=\"cp-sm\"></div>\n<div id=\"cp-md\"></div>\n<div id=\"cp-lg\"></div>\n</div><div class=\"result-box\" id=\"cp-result\">" + resultSelectColor + "</div>", "<div id=\"picker-brand\"\n  data-value=\"#7c3aed\"\n  data-label=\"Brand color\"\n  data-format=\"hex\">\n</div>\n\n<script>\n  new MTS.ColorPicker('#picker-brand', {\n    // Fires when color changes / Se dispara al cambiar el color\n    onChange: ({ hex, value }) => {\n      console.log(hex);   // \u2192 '#7c3aed' (always hex)\n      console.log(value); // \u2192 formatted value\n    },\n  });\n<\/script>", "// Small / Peque\u00f1o\nnew MTS.ColorPicker('#cp-sm', {\n  value:  '#f87171',\n  label:  'Color (sm)',\n  size:   'sm',\n  format: 'hex',\n  // Fires on color change / Se dispara al cambiar el color\n  onChange: ({ hex, value }) => console.log(hex),\n});\n\n// Medium (default) / Mediano\nnew MTS.ColorPicker('#cp-md', {\n  value:  '#4f8eff',\n  label:  'Color (md)',\n  size:   'md',\n  onChange: ({ hex }) => console.log(hex),\n});\n\n// Large / Grande\nnew MTS.ColorPicker('#cp-lg', {\n  value:  '#34d399',\n  label:  'Color (lg)',\n  size:   'lg',\n  onChange: ({ hex }) => console.log(hex),\n});");
+makeSection("tabs-s2", "<div style=\"max-width:320px\">\n<div id=\"cp-inline\"></div>\n</div><div class=\"result-box\" id=\"cp-inline-result\">" + resultMoveSliders + "</div>", "<\!-- inline: true \u2014 no trigger button / sin bot\u00f3n trigger -->\n<div id=\"picker-inline\" data-inline data-value=\"#34d399\"></div>\n\n<script>\n  new MTS.ColorPicker('#picker-inline', {\n    onChange: ({ hex }) => {\n      document.getElementById('preview').style.background = hex;\n    },\n  });\n<\/script>", "new MTS.ColorPicker('#picker-inline', {\n  // Always visible, no trigger / Siempre visible, sin trigger\n  inline: true,\n  value:  '#34d399',\n  format: 'hex',\n  onChange: ({ hex, value }) => {\n    console.log(hex, value);\n  },\n});");
+makeSection("tabs-s3", "<div class=\"demo-grid\">\n<div id=\"cp-hex\"></div>\n<div id=\"cp-rgb\"></div>\n<div id=\"cp-hsl\"></div>\n</div><div class=\"demo-row\" style=\"margin-top:8px\">\n<button class=\"demo-btn-sm\" onclick=\"document.getElementById('cp-api-result').textContent = 'getValue() \u2192 ' + cpApi.getValue()\">getValue()</button>\n<button class=\"demo-btn-sm\" onclick=\"document.getElementById('cp-api-result').textContent = 'getHex() \u2192 ' + cpApi.getHex()\">getHex()</button>\n<button class=\"demo-btn-sm\" onclick=\"cpApi.setValue('#f87171'); document.getElementById('cp-api-result').textContent = 'setValue(#f87171) \u2713'\">setValue()</button>\n<button class=\"demo-btn-sm\" onclick=\"cpApi.open()\">open()</button>\n<button class=\"demo-btn-sm\" onclick=\"cpApi.close()\">close()</button>\n</div><div class=\"result-box\" id=\"cp-api-result\">" + resultUseButtons + "</div>", "<div id=\"picker-brand\" data-value=\"#4f8eff\" data-format=\"hex\"></div>\n\n<script>\n  const cp = new MTS.ColorPicker('#picker-brand', {\n    onChange: ({ hex, value }) => console.log(hex, value),\n  });\n  cp.getValue()         // respects format / respeta format\n  cp.getHex()           // always hex / siempre hex\n  cp.setValue('#00ff00')\n  cp.setFormat('rgb')\n  cp.open() / cp.close()\n<\/script>", "// Format: 'hex' | 'rgb' | 'hsl'\nnew MTS.ColorPicker('#cp-hex', { value:'#4f8eff', label:'HEX', format:'hex', onChange: ({value}) => console.log(value) });\nnew MTS.ColorPicker('#cp-rgb', { value:'#4f8eff', label:'RGB', format:'rgb', onChange: ({value}) => console.log(value) });\nnew MTS.ColorPicker('#cp-hsl', { value:'#4f8eff', label:'HSL', format:'hsl', onChange: ({value}) => console.log(value) });\n\nconst cp = new MTS.ColorPicker('#my-picker', { value: '#4f8eff', format: 'hex' });\n\n// Get value respecting format / Obtener valor respetando formato\ncp.getValue()          // \u2192 '#4f8eff' | 'rgb(79,142,255)' | 'hsl(218,100%,66%)'\n\n// Always get hex / Siempre obtener hex\ncp.getHex()            // \u2192 '#4f8eff'\n\n// Set color / Establecer color\ncp.setValue('#f87171')\n\n// Change output format / Cambiar formato de salida\ncp.setFormat('rgb')\n\n// Open / close / Abrir / cerrar\ncp.open()\ncp.close()");
+makeSection("tabs-s4", "<div class=\"demo-grid\">\n<div id=\"cp-nosliders\"></div>\n<div id=\"cp-disabled\"></div>\n</div>", "<\!-- Solo paleta / Palette only -->\n<div id=\"picker-palette\" data-value=\"#cc0000\"></div>\n<script>\n  new MTS.ColorPicker('#picker-palette', {\n    showSliders: false,\n    showInput:   false,\n  });\n<\/script>", "// Preset palette only / Solo paleta de presets\nnew MTS.ColorPicker('#cp-nosliders', {\n  showSliders: false,\n  showInput:   false,\n  value:       '#cc0000',\n  label:       'Sin sliders',\n});\n\n// Disabled / Deshabilitado\nnew MTS.ColorPicker('#cp-disabled', {\n  value:    '#94a3b8',\n  label:    'Disabled',\n  disabled: true,\n});");
+makeSection("tabs-s5", "<div id=\"cp-declarative\" data-value=\"#7c3aed\" data-label=\"Brand color\" data-format=\"hex\" data-size=\"md\"></div>\n<div class=\"result-box\" id=\"cp-declarative-result\">" + resultDeclarative + "</div>", "<div id=\"cp-declarative\"\n  data-value=\"#7c3aed\"\n  data-label=\"Brand color\"\n  data-format=\"hex\"\n  data-size=\"md\">\n</div>", "new MTS.ColorPicker('#cp-declarative', {\n  onChange: function(detail) {\n    document.getElementById('cp-declarative-result').textContent = 'onChange \u2192 ' + detail.hex;\n  }\n});");
+
+var onChange = function(d){ document.getElementById('cp-result').textContent = echoOnChangePrefix + 'hex: ' + d.hex + ' | value: ' + d.value; };
+new MTS.ColorPicker('#cp-sm', { value:'#f87171', label:labelSmall,   size:'sm', onChange: onChange });
+new MTS.ColorPicker('#cp-md', { value:'#4f8eff', label:labelMedium,  size:'md', onChange: onChange });
+new MTS.ColorPicker('#cp-lg', { value:'#34d399', label:labelLarge,   size:'lg', onChange: onChange });
 new MTS.ColorPicker('#cp-inline', { inline:true, value:'#34d399', format:'hex',
-  onChange: function(d){ document.getElementById('cp-inline-result').textContent = 'onChange → ' + d.hex; }
+  onChange: function(d){ document.getElementById('cp-inline-result').textContent = echoOnChangePrefix + d.hex; }
 });
-new MTS.ColorPicker('#cp-hex', { value:'#4f8eff', label:'Format: HEX', format:'hex' });
-new MTS.ColorPicker('#cp-rgb', { value:'#4f8eff', label:'Format: RGB', format:'rgb' });
-var cpApi = new MTS.ColorPicker('#cp-hsl', { value:'#4f8eff', label:'Format: HSL', format:'hsl' });
-new MTS.ColorPicker('#cp-nosliders', { value:'#cc0000',  label:'Sin sliders', showSliders:false, showInput:false });
-new MTS.ColorPicker('#cp-disabled',  { value:'#94a3b8', label:'Disabled',    disabled:true });
+new MTS.ColorPicker('#cp-hex', { value:'#4f8eff', label:labelFormatHex, format:'hex' });
+new MTS.ColorPicker('#cp-rgb', { value:'#4f8eff', label:labelFormatRgb, format:'rgb' });
+var cpApi = new MTS.ColorPicker('#cp-hsl', { value:'#4f8eff', label:labelFormatHsl, format:'hsl' });
+new MTS.ColorPicker('#cp-nosliders', { value:'#cc0000',  label:labelNoSliders, showSliders:false, showInput:false });
+new MTS.ColorPicker('#cp-disabled',  { value:'#94a3b8', label:labelDisabled,    disabled:true });
 new MTS.ColorPicker('#cp-declarative', {
-  onChange: function(detail){ document.getElementById('cp-declarative-result').textContent = 'onChange → ' + detail.hex; }
+  onChange: function(detail){ document.getElementById('cp-declarative-result').textContent = echoOnChangePrefix + detail.hex; }
 });
 
 makeSection("tabs-s6",
   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">' +
     '<div>' +
-      '<div class="demo-label" style="margin-bottom:8px">Trigger — sin presets definidos</div>' +
+      '<div class="demo-label" style="margin-bottom:8px">' + labelTriggerNoPresets + '</div>' +
       '<div id="cp-def-trigger"></div>' +
     '</div>' +
     '<div>' +
-      '<div class="demo-label" style="margin-bottom:8px">Presets personalizados</div>' +
+      '<div class="demo-label" style="margin-bottom:8px">' + labelCustomPresets + '</div>' +
       '<div id="cp-custom"></div>' +
     '</div>' +
   '</div>' +
-  '<div class="result-box" id="cp-def-result">— selecciona un color —</div>',
+  '<div class="result-box" id="cp-def-result">' + resultSelectColor + '</div>',
   "// Paleta por defecto (sin definir presets)\nnew MTS.ColorPicker('#cp-def-trigger', {\n  label:    'Color de evento',\n  onChange: function(d) { console.log(d.hex); },\n});\n\n// Presets personalizados — colores de marca\nnew MTS.ColorPicker('#cp-custom', {\n  label:    'Colores de marca',\n  presets: [\n    '#0f172a', '#1e40af', '#0891b2', '#059669',\n    '#d97706', '#dc2626', '#7c3aed', '#be185d',\n    '#64748b', '#f1f5f9',\n  ],\n  onChange: function(d) { console.log(d.hex); },\n});",
   function() {
     var onDefChange = function(d) {
-      document.getElementById('cp-def-result').textContent = 'onChange → ' + d.hex;
+      document.getElementById('cp-def-result').textContent = echoOnChangePrefix + d.hex;
     };
     new MTS.ColorPicker('#cp-def-trigger', {
-      label:    'Color de evento',
+      label:    labelEventColor,
       onChange: onDefChange,
     });
     new MTS.ColorPicker('#cp-custom', {
-      label:    'Colores de marca',
+      label:    labelBrandColors,
       presets: [
         '#0f172a', '#1e40af', '#0891b2', '#059669',
         '#d97706', '#dc2626', '#7c3aed', '#be185d',

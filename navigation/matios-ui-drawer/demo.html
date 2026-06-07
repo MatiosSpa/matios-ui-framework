@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html data-mts-mode="dark" lang="es">
+<html data-mts-mode="dark" lang="en">
 <head>
 <script>
     (function(){
@@ -48,23 +48,25 @@
 <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
 <script src="../matios-ui-tabs/matios-ui-tabs.js"></script>
 <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+<script src="../../base/matios-ui-i18n.js"></script>
+<script src="./matios-ui-drawer-i18n.js"></script>
 <script src="./matios-ui-drawer.js"></script>
 </head>
 <body>
 <div class="demo-page">
 <div class="demo-header">
 <h1><span>MTS</span>.Drawer</h1>
-<p>Sliding side panel — left, right, top, bottom · sm/md/lg/full · static mode.</p>
+<p id="demo-subtitle"></p>
 <div class="demo-header-actions">
 </div>
 <div class="demo-docs-panel" id="docs-panel"></div>
 </div>
-<!-- 1. Posiciones -->
-<div class="demo-section"><div class="demo-section-title">1 — Posiciones / Positions</div><div id="tabs-s1"></div></div>
-<!-- 2. Tamaños -->
-<div class="demo-section"><div class="demo-section-title">2 — Tamaños / Sizes</div><div id="tabs-s2"></div></div>
+<!-- 1. Positions -->
+<div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+<!-- 2. Sizes -->
+<div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
 <!-- 3. Static + API -->
-<div class="demo-section"><div class="demo-section-title">3 — Static (no cierra con Esc/backdrop) + API</div><div id="tabs-s3"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 <script>
 function indentHtml(html) {
@@ -98,7 +100,21 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
-var CONTENT = function(pos){ return '<div style="padding:20px;font-size:14px;color:var(--mts-text-secondary)"><p>Drawer posición: <strong>' + pos + '</strong></p><p>Haz click fuera o presiona Esc para cerrar.</p></div>'; };
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Drawer']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Sliding side panel — left, right, top, bottom · sm/md/lg/full · static mode.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Positions';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Sizes';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Static (does not close with Esc/backdrop) + API';
+
+var CONTENT = function(pos){ return '<div style="padding:20px;font-size:14px;color:var(--mts-text-secondary)"><p>' + (D.contentPosition || 'Drawer position: ') + '<strong>' + pos + '</strong></p><p>' + (D.contentHint || 'Click outside or press Esc to close.') + '</p></div>'; };
 var drawers;
 
 var preview_s1 =
@@ -108,7 +124,7 @@ var preview_s1 =
     '<button class="mts-btn mts-btn--secondary" onclick="drawers.top.show()">Top</button>' +
     '<button class="mts-btn mts-btn--secondary" onclick="drawers.bottom.show()">Bottom</button>' +
   '</div>' +
-  '<div class="result-box" id="drawer-result">— abre un drawer —</div>';
+  '<div class="result-box" id="drawer-result">' + (D.resultPlaceholder || '— open a drawer —') + '</div>';
 
 var js_s1 =
   "// Right (default)\n" +
@@ -172,19 +188,21 @@ var js_s3 =
   "drawer.destroy()";
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {
+  var onOpenPrefix  = D.onOpenPrefix  || 'onOpen → position: ';
+  var onClosePrefix = D.onClosePrefix || 'onClose → ';
   drawers = {
-    right:  new MTS.Drawer({ title:'Right drawer',  position:'right',  size:'md', content: CONTENT('right'),  onOpen: function(){ document.getElementById('drawer-result').textContent = 'onOpen → position: right'; },  onClose: function(){ document.getElementById('drawer-result').textContent = 'onClose → right'; } }),
-    left:   new MTS.Drawer({ title:'Left drawer',   position:'left',   size:'sm', content: CONTENT('left'),   onOpen: function(){ document.getElementById('drawer-result').textContent = 'onOpen → position: left'; },   onClose: function(){ document.getElementById('drawer-result').textContent = 'onClose → left'; } }),
-    top:    new MTS.Drawer({ title:'Top drawer',    position:'top',    size:'sm', content: CONTENT('top'),    onOpen: function(){ document.getElementById('drawer-result').textContent = 'onOpen → position: top'; },    onClose: function(){ document.getElementById('drawer-result').textContent = 'onClose → top'; } }),
-    bottom: new MTS.Drawer({ title:'Bottom sheet',  position:'bottom', size:'sm', content: CONTENT('bottom'), onOpen: function(){ document.getElementById('drawer-result').textContent = 'onOpen → position: bottom'; }, onClose: function(){ document.getElementById('drawer-result').textContent = 'onClose → bottom'; } }),
-    sm:     new MTS.Drawer({ title:'Small (sm)',    position:'right',  size:'sm', content: CONTENT('sm') }),
-    md:     new MTS.Drawer({ title:'Medium (md)',   position:'right',  size:'md', content: CONTENT('md') }),
-    lg:     new MTS.Drawer({ title:'Large (lg)',    position:'right',  size:'lg', content: CONTENT('lg') }),
-    full:   new MTS.Drawer({ title:'Full width',    position:'right',  size:'full', content: CONTENT('full') }),
+    right:  new MTS.Drawer({ title:(D.titleRight  || 'Right drawer'),  position:'right',  size:'md', content: CONTENT('right'),  onOpen: function(){ document.getElementById('drawer-result').textContent = onOpenPrefix + 'right'; },  onClose: function(){ document.getElementById('drawer-result').textContent = onClosePrefix + 'right'; } }),
+    left:   new MTS.Drawer({ title:(D.titleLeft   || 'Left drawer'),   position:'left',   size:'sm', content: CONTENT('left'),   onOpen: function(){ document.getElementById('drawer-result').textContent = onOpenPrefix + 'left'; },   onClose: function(){ document.getElementById('drawer-result').textContent = onClosePrefix + 'left'; } }),
+    top:    new MTS.Drawer({ title:(D.titleTop    || 'Top drawer'),    position:'top',    size:'sm', content: CONTENT('top'),    onOpen: function(){ document.getElementById('drawer-result').textContent = onOpenPrefix + 'top'; },    onClose: function(){ document.getElementById('drawer-result').textContent = onClosePrefix + 'top'; } }),
+    bottom: new MTS.Drawer({ title:(D.titleBottom || 'Bottom sheet'),  position:'bottom', size:'sm', content: CONTENT('bottom'), onOpen: function(){ document.getElementById('drawer-result').textContent = onOpenPrefix + 'bottom'; }, onClose: function(){ document.getElementById('drawer-result').textContent = onClosePrefix + 'bottom'; } }),
+    sm:     new MTS.Drawer({ title:(D.titleSmall  || 'Small (sm)'),    position:'right',  size:'sm', content: CONTENT('sm') }),
+    md:     new MTS.Drawer({ title:(D.titleMedium || 'Medium (md)'),   position:'right',  size:'md', content: CONTENT('md') }),
+    lg:     new MTS.Drawer({ title:(D.titleLarge  || 'Large (lg)'),    position:'right',  size:'lg', content: CONTENT('lg') }),
+    full:   new MTS.Drawer({ title:(D.titleFull   || 'Full width'),    position:'right',  size:'full', content: CONTENT('full') }),
     static: new MTS.Drawer({
-      title:  'Static drawer',
+      title:  (D.titleStatic || 'Static drawer'),
       static: true,
-      content: '<div style="padding:20px;font-size:14px;color:var(--mts-text-secondary)"><p>Este drawer <strong>no cierra</strong> con Esc ni haciendo click en el backdrop.</p><p>Solo cierra con el botón ×.</p></div>',
+      content: '<div style="padding:20px;font-size:14px;color:var(--mts-text-secondary)"><p>' + (D.staticLine1 || 'This drawer <strong>does not close</strong> with Esc nor by clicking the backdrop.') + '</p><p>' + (D.staticLine2 || 'It only closes with the × button.') + '</p></div>',
     }),
   };
 }, '340px');

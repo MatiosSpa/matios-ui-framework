@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -46,19 +46,21 @@
 <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
 <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
 <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+<script src="../../base/matios-ui-i18n.js"></script>
+<script src="./matios-ui-emptystate-i18n.js"></script>
   <script src="./matios-ui-emptystate.js"></script>
 </head>
 <body>
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.EmptyState</h1>
-    <p>EmptyState demo actualizado al patrón Preview | HTML | JavaScript.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions"></div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-  <div class="demo-section"><div class="demo-section-title">1 — Variantes</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Tamaños</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — API update()</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 <script>
 function indentHtml(html) {
@@ -85,10 +87,43 @@ function indentHtml(html) {
   return result.trimEnd();
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.EmptyState'].demo) || {};
+
+var T = {
+  subtitle:          D.subtitle          || 'EmptyState demo updated to the Preview | HTML | JavaScript pattern.',
+  s1Title:           D.s1Title           || '1 — Variants',
+  s2Title:           D.s2Title           || '2 — Sizes',
+  s3Title:           D.s3Title           || '3 — update() API',
+  actionAddItem:     D.actionAddItem     || 'Add item',
+  searchTitle:       D.searchTitle       || 'No results for "dashboard"',
+  searchDescription: D.searchDescription || 'Try different keywords.',
+  actionClearSearch: D.actionClearSearch || 'Clear search',
+  actionRetry:       D.actionRetry       || 'Retry',
+  permsDescription:  D.permsDescription  || 'Contact your administrator.',
+  actionAddItemEn:   D.actionAddItemEn   || 'Add item',
+  dynNoResults:      D.dynNoResults      || 'No results',
+  dynAdjustFilters:  D.dynAdjustFilters  || 'Adjust the filters',
+  actionClear:       D.actionClear       || 'Clear',
+  actionAdd:         D.actionAdd         || 'Add',
+  resultPlaceholder: D.resultPlaceholder || '— use the buttons —',
+  clickPrefix:       D.clickPrefix       || 'click → '
+};
+
+document.getElementById('demo-subtitle').textContent = T.subtitle;
+document.getElementById('s1-title').textContent      = T.s1Title;
+document.getElementById('s2-title').textContent      = T.s2Title;
+document.getElementById('s3-title').textContent      = T.s3Title;
+
 function cb(label) {
   return function() {
     var box = document.getElementById('es-result');
-    if (box) box.textContent = 'click → ' + label;
+    if (box) box.textContent = T.clickPrefix + label;
   };
 }
 
@@ -111,17 +146,17 @@ var preview_s1 = "<div class=\"demo-grid\"><div id=\"es-nodata\"></div><div id=\
 var js_s1 = "new MTS.EmptyState('#es-nodata', { variant:'no-data', action:'Agregar \u00edtem' });\nnew MTS.EmptyState('#es-search', { variant:'search', title:'Sin resultados para \"dashboard\"', description:'Prueba con otras palabras.', action:'Limpiar b\u00fasqueda' });\nnew MTS.EmptyState('#es-error', { variant:'error', action:'Reintentar' });\nnew MTS.EmptyState('#es-perms', { variant:'permissions', description:'Contacta al administrador.' });";
 var preview_s2 = "<div class=\"demo-grid\"><div id=\"es-sm\"></div><div id=\"es-md\"></div><div id=\"es-lg\"></div></div>";
 var js_s2 = "['sm','md','lg'].forEach(function(size) { new MTS.EmptyState('#es-' + size, { variant:'no-data', size:size, action:'Add item' }); });";
-var preview_s3 = "<div class=\"demo-stack\"><div id=\"es-dynamic\"></div><div class=\"demo-row\"><button class=\"demo-btn-sm\" onclick=\"esDynamic.update({ variant:'search', title:'Sin resultados', description:'Ajusta los filtros', action:'Limpiar' })\">search</button><button class=\"demo-btn-sm\" onclick=\"esDynamic.update({ variant:'error', action:'Reintentar' })\">error</button><button class=\"demo-btn-sm\" onclick=\"esDynamic.update({ variant:'no-data', action:'Agregar' })\">restore</button></div><div class=\"result-box\" id=\"es-result\">\u2014 usa los botones \u2014</div></div>";
+var preview_s3 = "<div class=\"demo-stack\"><div id=\"es-dynamic\"></div><div class=\"demo-row\"><button class=\"demo-btn-sm\" onclick=\"esDynamic.update({ variant:'search', title:T.dynNoResults, description:T.dynAdjustFilters, action:T.actionClear })\">search</button><button class=\"demo-btn-sm\" onclick=\"esDynamic.update({ variant:'error', action:T.actionRetry })\">error</button><button class=\"demo-btn-sm\" onclick=\"esDynamic.update({ variant:'no-data', action:T.actionAdd })\">restore</button></div><div class=\"result-box\" id=\"es-result\">" + T.resultPlaceholder + "</div></div>";
 var js_s3 = "var esDynamic = new MTS.EmptyState('#es-dynamic', { variant:'no-data', action:'Agregar', onAction:function(){ document.getElementById('es-result').textContent='click \u2192 Agregar'; } });\nesDynamic.update({ variant:'search', title:'Sin resultados', description:'Ajusta los filtros', action:'Limpiar' });";
 var esDynamic;
 makeSection('tabs-s1', preview_s1, js_s1, function() {
-  new MTS.EmptyState('#es-nodata', { variant:'no-data', action:'Agregar ítem', onAction:cb('Agregar ítem') });
-  new MTS.EmptyState('#es-search', { variant:'search', title:'Sin resultados para "dashboard"', description:'Prueba con otras palabras.', action:'Limpiar búsqueda', onAction:cb('Limpiar búsqueda') });
-  new MTS.EmptyState('#es-error', { variant:'error', action:'Reintentar', onAction:cb('Reintentar') });
-  new MTS.EmptyState('#es-perms', { variant:'permissions', description:'Contacta al administrador.' });
+  new MTS.EmptyState('#es-nodata', { variant:'no-data', action:T.actionAddItem, onAction:cb(T.actionAddItem) });
+  new MTS.EmptyState('#es-search', { variant:'search', title:T.searchTitle, description:T.searchDescription, action:T.actionClearSearch, onAction:cb(T.actionClearSearch) });
+  new MTS.EmptyState('#es-error', { variant:'error', action:T.actionRetry, onAction:cb(T.actionRetry) });
+  new MTS.EmptyState('#es-perms', { variant:'permissions', description:T.permsDescription });
 }, '360px');
-makeSection('tabs-s2', preview_s2, js_s2, function() { ['sm','md','lg'].forEach(function(size) { new MTS.EmptyState('#es-' + size, { variant:'no-data', size:size, action:'Add item' }); }); }, '340px');
-makeSection('tabs-s3', preview_s3, js_s3, function() { esDynamic = new MTS.EmptyState('#es-dynamic', { variant:'no-data', action:'Agregar', onAction:function(){ document.getElementById('es-result').textContent='click → Agregar'; } }); }, '340px');
+makeSection('tabs-s2', preview_s2, js_s2, function() { ['sm','md','lg'].forEach(function(size) { new MTS.EmptyState('#es-' + size, { variant:'no-data', size:size, action:T.actionAddItemEn }); }); }, '340px');
+makeSection('tabs-s3', preview_s3, js_s3, function() { esDynamic = new MTS.EmptyState('#es-dynamic', { variant:'no-data', action:T.actionAdd, onAction:function(){ document.getElementById('es-result').textContent=T.clickPrefix + T.actionAdd; } }); }, '340px');
 
 </script>
 </body>

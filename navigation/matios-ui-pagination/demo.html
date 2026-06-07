@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -42,6 +42,8 @@
   <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
   <script src="../../support/demo-shared.js"></script>
   <script src="../matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-pagination-i18n.js"></script>
   <script src="./matios-ui-pagination.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
@@ -52,19 +54,35 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Pagination</h1>
-    <p>Full pagination — page size selector, record summary, jump-to-page, size variants.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Básico con onChange / Basic with onChange</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Con jump + tamaños / With jump + sizes</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — API — setPage, setTotal, setPageSize</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — siblings — páginas visibles a cada lado</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 
 <script>
+/* ============================================================
+   LOCALE — muestra inglés por defecto (cara pública); ?lang=es|en|pt
+   ============================================================ */
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Pagination'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Full pagination — page size selector, record summary, jump-to-page, size variants.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic with onChange';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — With jump + sizes';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — API — setPage, setTotal, setPageSize';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — siblings — visible pages on each side';
+
 /* ============================================================
    UTILIDADES
    ============================================================ */
@@ -133,7 +151,7 @@ function makeSection(id, previewHtml, jsCode, htmlCode) {
 
 const preview_s1 =
   '<div id="pag-basic"></div>' +
-  '<div class="result-box" id="pag-result" style="margin-top:12px">— cambia de página —</div>';
+  '<div class="result-box" id="pag-result" style="margin-top:12px">' + (D.resultPagePlaceholder || '— change the page —') + '</div>';
 
 const html_s1 =
   '<div id="my-pagination"\n' +
@@ -170,10 +188,10 @@ new MTS.Pagination('#pag-basic', {
   total: 250, page: 1, pageSize: 25,
   onChange: function(e) {
     document.getElementById('pag-result').textContent =
-      'onChange → page: ' + e.detail.page +
-      ' | pageSize: ' + e.detail.pageSize +
-      ' | from: ' + e.detail.from +
-      ' to: ' + e.detail.to;
+      (D.onChangePrefix || 'onChange → page: ') + e.detail.page +
+      (D.pageSizeLabel || ' | page size: ') + e.detail.pageSize +
+      (D.fromLabel || ' | from: ') + e.detail.from +
+      (D.toLabel || ' to: ') + e.detail.to;
   },
 });
 
@@ -233,7 +251,7 @@ const preview_s3 =
     '<button type="button" class="mts-btn mts-btn--secondary mts-btn--sm" id="btn-size50">setPageSize(50)</button>' +
     '<button type="button" class="mts-btn mts-btn--secondary mts-btn--sm" id="btn-state">getState()</button>' +
   '</div>' +
-  '<div class="result-box" id="pag-api-res" style="margin-top:12px">— usa los botones —</div>';
+  '<div class="result-box" id="pag-api-res" style="margin-top:12px">' + (D.resultApiPlaceholder || '— use the buttons —') + '</div>';
 
 const html_s3 =
   '<div id="my-pagination" data-total="250"></div>';
@@ -259,7 +277,7 @@ makeSection('tabs-s3', preview_s3, js_s3, html_s3);
 const pagApi = new MTS.Pagination('#pag-api', {
   total: 250, pageSize: 25,
   onChange: function(e) {
-    document.getElementById('pag-api-res').textContent = 'onChange → page: ' + e.detail.page;
+    document.getElementById('pag-api-res').textContent = (D.onChangePrefix || 'onChange → page: ') + e.detail.page;
   },
 });
 
@@ -271,11 +289,11 @@ document.getElementById('btn-page5').addEventListener('click', function() {
 });
 document.getElementById('btn-total500').addEventListener('click', function() {
   pagApi.setTotal(500);
-  document.getElementById('pag-api-res').textContent = 'setTotal(500) ✓';
+  document.getElementById('pag-api-res').textContent = D.setTotalDone || 'setTotal(500) ✓';
 });
 document.getElementById('btn-size50').addEventListener('click', function() {
   pagApi.setPageSize(50);
-  document.getElementById('pag-api-res').textContent = 'setPageSize(50) ✓';
+  document.getElementById('pag-api-res').textContent = D.setPageSizeDone || 'setPageSize(50) ✓';
 });
 document.getElementById('btn-state').addEventListener('click', function() {
   document.getElementById('pag-api-res').textContent = JSON.stringify(pagApi.getState());

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -47,6 +47,8 @@
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-taginput-i18n.js"></script>
   <script src="./matios-ui-taginput.js"></script>
 </head>
 <body>
@@ -54,16 +56,16 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.TagInput</h1>
-    <p>Etiquetas con sugerencias locales, búsqueda async y enhancement progresivo desde HTML declarativo.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Sugerencias locales</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Autocomplete async</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Límite máximo</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — HTML declarativo + enhancement</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 
 <script>
@@ -113,25 +115,54 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.TagInput'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Tags with local suggestions, async search and progressive enhancement from declarative HTML.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Local suggestions';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Async autocomplete';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Maximum limit';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Declarative HTML + enhancement';
+
+var resultBasicPlaceholder       = D.resultBasicPlaceholder || '— add or remove tags —';
+var resultAsyncPlaceholder       = D.resultAsyncPlaceholder || '— type to search —';
+var resultMaxPlaceholder         = D.resultMaxPlaceholder || '— maximum 3 tags —';
+var resultDeclarativePlaceholder = D.resultDeclarativePlaceholder || '— declarative HTML + enhancement —';
+var labelTags               = D.labelTags || 'Tags';
+var labelGuests             = D.labelGuests || 'Guests';
+var labelSkills             = D.labelSkills || 'Skills';
+var placeholderSearchUser   = D.placeholderSearchUser || 'Search user...';
+var placeholderSearchOrType = D.placeholderSearchOrType || 'Search or type...';
+var tagUrgent   = D.tagUrgent || 'Urgent';
+var tagPending  = D.tagPending || 'Pending';
+var tagApproved = D.tagApproved || 'Approved';
+var tagBlocked  = D.tagBlocked || 'Blocked';
+var tagReview   = D.tagReview || 'Review';
+
 var preview_s1 =
   '<div class="demo-stack">' +
     '<div id="tags-basic"></div>' +
-    '<div class="result-box" id="tags-result">— agrega o elimina etiquetas —</div>' +
+    '<div class="result-box" id="tags-result">' + resultBasicPlaceholder + '</div>' +
   '</div>';
 
 var js_s1 =
   "new MTS.TagInput('#tags-basic', {\n" +
-  "  label: 'Etiquetas',\n" +
+  "  label: '" + labelTags + "',\n" +
   "  tags: [\n" +
-  "    { uid: 'urgent', name: 'Urgente' },\n" +
-  "    { uid: 'review', name: 'Revisión' }\n" +
+  "    { uid: 'urgent', name: '" + tagUrgent + "' },\n" +
+  "    { uid: 'review', name: '" + tagReview + "' }\n" +
   "  ],\n" +
   "  suggestions: [\n" +
-  "    { uid: 'urgent', name: 'Urgente' },\n" +
-  "    { uid: 'pending', name: 'Pendiente' },\n" +
-  "    { uid: 'approved', name: 'Aprobado' },\n" +
-  "    { uid: 'blocked', name: 'Bloqueado' },\n" +
-  "    { uid: 'review', name: 'Revisión' }\n" +
+  "    { uid: 'urgent', name: '" + tagUrgent + "' },\n" +
+  "    { uid: 'pending', name: '" + tagPending + "' },\n" +
+  "    { uid: 'approved', name: '" + tagApproved + "' },\n" +
+  "    { uid: 'blocked', name: '" + tagBlocked + "' },\n" +
+  "    { uid: 'review', name: '" + tagReview + "' }\n" +
   "  ],\n" +
   "  onChange: function(e) {\n" +
   "    setResult('tags-result', JSON.stringify(e.detail.tags));\n" +
@@ -141,13 +172,13 @@ var js_s1 =
 var preview_s2 =
   '<div class="demo-stack">' +
     '<div id="tags-async"></div>' +
-    '<div class="result-box" id="tags-async-result">— escribe para buscar —</div>' +
+    '<div class="result-box" id="tags-async-result">' + resultAsyncPlaceholder + '</div>' +
   '</div>';
 
 var js_s2 =
   "new MTS.TagInput('#tags-async', {\n" +
-  "  label: 'Invitados',\n" +
-  "  placeholder: 'Buscar usuario...',\n" +
+  "  label: '" + labelGuests + "',\n" +
+  "  placeholder: '" + placeholderSearchUser + "',\n" +
   "  onSearch: async function(query) {\n" +
   "    var all = [\n" +
   "      { uid: 'ana@empresa.com', name: 'Ana García' },\n" +
@@ -167,12 +198,12 @@ var js_s2 =
 var preview_s3 =
   '<div class="demo-stack">' +
     '<div id="tags-max"></div>' +
-    '<div class="result-box" id="tags-max-result">— máximo 3 etiquetas —</div>' +
+    '<div class="result-box" id="tags-max-result">' + resultMaxPlaceholder + '</div>' +
   '</div>';
 
 var js_s3 =
   "new MTS.TagInput('#tags-max', {\n" +
-  "  label: 'Skills',\n" +
+  "  label: '" + labelSkills + "',\n" +
   "  maxTags: 3,\n" +
   "  allowCustom: true,\n" +
   "  suggestions: [\n" +
@@ -188,8 +219,8 @@ var js_s3 =
 
 var preview_s4 =
   '<div class="demo-stack">' +
-    '<div id="tags-declarative" data-label="Invitados" data-placeholder="Buscar o escribir..." data-max-tags="4"></div>' +
-    '<div class="result-box" id="tags-declarative-result">— HTML declarativo + enhancement —</div>' +
+    '<div id="tags-declarative" data-label="' + labelGuests + '" data-placeholder="' + placeholderSearchOrType + '" data-max-tags="4"></div>' +
+    '<div class="result-box" id="tags-declarative-result">' + resultDeclarativePlaceholder + '</div>' +
   '</div>';
 
 var js_s4 =
@@ -209,17 +240,17 @@ var js_s4 =
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {
   new MTS.TagInput('#tags-basic', {
-    label: 'Etiquetas',
+    label: labelTags,
     tags: [
-      { uid: 'urgent', name: 'Urgente' },
-      { uid: 'review', name: 'Revisión' }
+      { uid: 'urgent', name: tagUrgent },
+      { uid: 'review', name: tagReview }
     ],
     suggestions: [
-      { uid: 'urgent', name: 'Urgente' },
-      { uid: 'pending', name: 'Pendiente' },
-      { uid: 'approved', name: 'Aprobado' },
-      { uid: 'blocked', name: 'Bloqueado' },
-      { uid: 'review', name: 'Revisión' }
+      { uid: 'urgent', name: tagUrgent },
+      { uid: 'pending', name: tagPending },
+      { uid: 'approved', name: tagApproved },
+      { uid: 'blocked', name: tagBlocked },
+      { uid: 'review', name: tagReview }
     ],
     onChange: function(e) { setResult('tags-result', JSON.stringify(e.detail.tags)); }
   });
@@ -227,8 +258,8 @@ makeSection('tabs-s1', preview_s1, js_s1, function() {
 
 makeSection('tabs-s2', preview_s2, js_s2, function() {
   new MTS.TagInput('#tags-async', {
-    label: 'Invitados',
-    placeholder: 'Buscar usuario...',
+    label: labelGuests,
+    placeholder: placeholderSearchUser,
     onSearch: async function(query) {
       var all = [
         { uid: 'ana@empresa.com', name: 'Ana García' },
@@ -246,7 +277,7 @@ makeSection('tabs-s2', preview_s2, js_s2, function() {
 
 makeSection('tabs-s3', preview_s3, js_s3, function() {
   new MTS.TagInput('#tags-max', {
-    label: 'Skills',
+    label: labelSkills,
     maxTags: 3,
     allowCustom: true,
     suggestions: [

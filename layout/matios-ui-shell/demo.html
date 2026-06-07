@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -53,6 +53,8 @@
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
   <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-shell-i18n.js"></script>
   <script src="./matios-ui-shell.js"></script>
 
   <style>
@@ -225,16 +227,30 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Shell</h1>
-    <p>Orquestador de layout. Aplica CSS Grid al elemento raíz y asigna áreas nombradas a cada slot. No crea ni mueve elementos — solo agrega clases.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions"></div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-  <div class="demo-section"><div class="demo-section-title">1 — Combinaciones de layout</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Preview interactivo</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Patrón Masterpage</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Shell']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Layout orchestrator. Applies CSS Grid to the root element and assigns named areas to each slot. It does not create or move elements — it only adds classes.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Layout combinations';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Interactive preview';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Masterpage pattern';
+
 function indentHtml(html) {
   var indent = 0, step = 2;
   var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
@@ -285,28 +301,28 @@ var s1Html = [
   '    <div class="mini-shell mini-shell--main-only">',
   '      <div class="mini-shell__main" style="grid-area:main"></div>',
   '    </div>',
-  '    <div class="shell-card__label">Solo main</div>',
+  '    <div class="shell-card__label">' + (D.cardMainOnly || 'Main only') + '</div>',
   '  </div>',
   '  <div class="shell-card" data-layout="top">',
   '    <div class="mini-shell mini-shell--top">',
   '      <div class="mini-shell__topbar" style="grid-area:topbar"></div>',
   '      <div class="mini-shell__main" style="grid-area:main"></div>',
   '    </div>',
-  '    <div class="shell-card__label">top</div>',
+  '    <div class="shell-card__label">' + (D.cardTop || 'top') + '</div>',
   '  </div>',
   '  <div class="shell-card" data-layout="side">',
   '    <div class="mini-shell mini-shell--side">',
   '      <div class="mini-shell__sidenav" style="grid-area:sidenav"></div>',
   '      <div class="mini-shell__main" style="grid-area:main"></div>',
   '    </div>',
-  '    <div class="shell-card__label">side</div>',
+  '    <div class="shell-card__label">' + (D.cardSide || 'side') + '</div>',
   '  </div>',
   '  <div class="shell-card" data-layout="status">',
   '    <div class="mini-shell mini-shell--status">',
   '      <div class="mini-shell__main" style="grid-area:main"></div>',
   '      <div class="mini-shell__statusbar" style="grid-area:status"></div>',
   '    </div>',
-  '    <div class="shell-card__label">status</div>',
+  '    <div class="shell-card__label">' + (D.cardStatus || 'status') + '</div>',
   '  </div>',
   '  <div class="shell-card" data-layout="top-side">',
   '    <div class="mini-shell mini-shell--top-side">',
@@ -314,7 +330,7 @@ var s1Html = [
   '      <div class="mini-shell__sidenav" style="grid-area:sidenav"></div>',
   '      <div class="mini-shell__main" style="grid-area:main"></div>',
   '    </div>',
-  '    <div class="shell-card__label">top + side</div>',
+  '    <div class="shell-card__label">' + (D.cardTopSide || 'top + side') + '</div>',
   '  </div>',
   '  <div class="shell-card" data-layout="top-status">',
   '    <div class="mini-shell mini-shell--top-status">',
@@ -322,7 +338,7 @@ var s1Html = [
   '      <div class="mini-shell__main" style="grid-area:main"></div>',
   '      <div class="mini-shell__statusbar" style="grid-area:status"></div>',
   '    </div>',
-  '    <div class="shell-card__label">top + status</div>',
+  '    <div class="shell-card__label">' + (D.cardTopStatus || 'top + status') + '</div>',
   '  </div>',
   '  <div class="shell-card" data-layout="side-status">',
   '    <div class="mini-shell mini-shell--side-status">',
@@ -330,7 +346,7 @@ var s1Html = [
   '      <div class="mini-shell__main" style="grid-area:main"></div>',
   '      <div class="mini-shell__statusbar" style="grid-area:status"></div>',
   '    </div>',
-  '    <div class="shell-card__label">side + status</div>',
+  '    <div class="shell-card__label">' + (D.cardSideStatus || 'side + status') + '</div>',
   '  </div>',
   '  <div class="shell-card" data-layout="full">',
   '    <div class="mini-shell mini-shell--full">',
@@ -339,7 +355,7 @@ var s1Html = [
   '      <div class="mini-shell__main" style="grid-area:main"></div>',
   '      <div class="mini-shell__statusbar" style="grid-area:status"></div>',
   '    </div>',
-  '    <div class="shell-card__label">top + side + status</div>',
+  '    <div class="shell-card__label">' + (D.cardFull || 'top + side + status') + '</div>',
   '  </div>',
   '</div>'
 ].join('\n');
@@ -439,24 +455,24 @@ makeSection('tabs-s1', s1Html, s1Js, function() {
 var s2Html = [
   '<div class="slot-toggles">',
   '  <div class="slot-toggle" id="toggle-top-s2">',
-  '    <span class="slot-toggle__dot"></span>Topbar',
+  '    <span class="slot-toggle__dot"></span>' + (D.toggleTopbar || 'Topbar'),
   '  </div>',
   '  <div class="slot-toggle" id="toggle-side-s2">',
-  '    <span class="slot-toggle__dot"></span>SideNav',
+  '    <span class="slot-toggle__dot"></span>' + (D.toggleSidenav || 'SideNav'),
   '  </div>',
   '  <div class="slot-toggle" id="toggle-status-s2">',
-  '    <span class="slot-toggle__dot"></span>StatusBar',
+  '    <span class="slot-toggle__dot"></span>' + (D.toggleStatusbar || 'StatusBar'),
   '  </div>',
   '</div>',
   '<div class="preview-wrap">',
   '  <div id="previewShell-s2">',
-  '    <div id="prevTopbar-s2"    class="preview-slot preview-topbar"    style="display:none">Topbar</div>',
-  '    <div id="prevSidenav-s2"   class="preview-slot preview-sidenav"   style="display:none">Side</div>',
+  '    <div id="prevTopbar-s2"    class="preview-slot preview-topbar"    style="display:none">' + (D.slotTopbar || 'Topbar') + '</div>',
+  '    <div id="prevSidenav-s2"   class="preview-slot preview-sidenav"   style="display:none">' + (D.slotSide || 'Side') + '</div>',
   '    <div id="prevMain-s2"      class="preview-slot preview-main">',
   '      <span style="font-size:22px">&#11035;</span>',
-  '      <span>main</span>',
+  '      <span>' + (D.slotMain || 'main') + '</span>',
   '    </div>',
-  '    <div id="prevStatusbar-s2" class="preview-slot preview-statusbar" style="display:none">StatusBar</div>',
+  '    <div id="prevStatusbar-s2" class="preview-slot preview-statusbar" style="display:none">' + (D.slotStatusbar || 'StatusBar') + '</div>',
   '  </div>',
   '</div>'
 ].join('\n');
@@ -529,24 +545,24 @@ makeSection('tabs-s2', s2Html, s2Js, function() {
 var s3Html = [
   '<div class="slot-toggles">',
   '  <div class="slot-toggle" id="toggle-top-s3">',
-  '    <span class="slot-toggle__dot"></span>Topbar',
+  '    <span class="slot-toggle__dot"></span>' + (D.toggleTopbar || 'Topbar'),
   '  </div>',
   '  <div class="slot-toggle" id="toggle-side-s3">',
-  '    <span class="slot-toggle__dot"></span>SideNav',
+  '    <span class="slot-toggle__dot"></span>' + (D.toggleSidenav || 'SideNav'),
   '  </div>',
   '  <div class="slot-toggle" id="toggle-status-s3">',
-  '    <span class="slot-toggle__dot"></span>StatusBar',
+  '    <span class="slot-toggle__dot"></span>' + (D.toggleStatusbar || 'StatusBar'),
   '  </div>',
   '</div>',
   '<div class="preview-wrap">',
   '  <div id="previewShell-s3">',
-  '    <div id="prevTopbar-s3"    class="preview-slot preview-topbar"    style="display:none">Topbar</div>',
-  '    <div id="prevSidenav-s3"   class="preview-slot preview-sidenav"   style="display:none">Side</div>',
+  '    <div id="prevTopbar-s3"    class="preview-slot preview-topbar"    style="display:none">' + (D.slotTopbar || 'Topbar') + '</div>',
+  '    <div id="prevSidenav-s3"   class="preview-slot preview-sidenav"   style="display:none">' + (D.slotSide || 'Side') + '</div>',
   '    <div id="prevMain-s3"      class="preview-slot preview-main">',
   '      <span style="font-size:22px">&#11035;</span>',
-  '      <span>main (masterpage)</span>',
+  '      <span>' + (D.slotMainMaster || 'main (masterpage)') + '</span>',
   '    </div>',
-  '    <div id="prevStatusbar-s3" class="preview-slot preview-statusbar" style="display:none">StatusBar</div>',
+  '    <div id="prevStatusbar-s3" class="preview-slot preview-statusbar" style="display:none">' + (D.slotStatusbar || 'StatusBar') + '</div>',
   '  </div>',
   '</div>'
 ].join('\n');

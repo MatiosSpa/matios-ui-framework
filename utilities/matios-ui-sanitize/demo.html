@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -44,6 +44,8 @@
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
   <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-sanitize-i18n.js"></script>
   <script src="./matios-ui-sanitize.js"></script>
   <style>
     .san-card {
@@ -171,33 +173,33 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Sanitize</h1>
-    <p>Utilidad de escape y sanitizacion para prevencion de XSS. Sin dependencias.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions"></div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">1 — html() — Sanitiza HTML completo</div>
+    <div class="demo-section-title" id="s1-title"></div>
     <div id="tabs-s1"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">2 — escape() — Escapa entidades HTML</div>
+    <div class="demo-section-title" id="s2-title"></div>
     <div id="tabs-s2"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">3 — attr() — Seguro para atributos</div>
+    <div class="demo-section-title" id="s3-title"></div>
     <div id="tabs-s3"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">4 — url() — Bloquea protocolos peligrosos</div>
+    <div class="demo-section-title" id="s4-title"></div>
     <div id="tabs-s4"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">5 — text() — Para textContent</div>
+    <div class="demo-section-title" id="s5-title"></div>
     <div id="tabs-s5"></div>
   </div>
 </div>
@@ -235,15 +237,46 @@
     if (typeof initFn === 'function') initFn();
   }
 
+  // — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+  (function () {
+    var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+    var lang = m ? m[1] : 'en';
+    if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  })();
+  var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Sanitize']) || {};
+  var D = L.demo || {};
+
+  function escapeHtmlAttr(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  document.getElementById('demo-subtitle').textContent = D.subtitle || 'Escape and sanitization utilities to prevent XSS when building dynamic HTML.';
+  document.getElementById('s1-title').textContent = D.s1Title || '1 — html()';
+  document.getElementById('s2-title').textContent = D.s2Title || '2 — escape()';
+  document.getElementById('s3-title').textContent = D.s3Title || '3 — attr()';
+  document.getElementById('s4-title').textContent = D.s4Title || '4 — url()';
+  document.getElementById('s5-title').textContent = D.s5Title || '5 — text()';
+
+  var labelInput      = D.labelInput || 'Input — type something';
+  var labelOutputHtml = D.labelOutputHtml || 'Sanitized output';
+  var labelOutputEsc  = D.labelOutputEsc || 'Escaped output';
+  var phScript        = escapeHtmlAttr(D.placeholderScript || 'E.g.: <script>alert(1)</script>');
+  var phAttr          = escapeHtmlAttr(D.placeholderAttr || 'E.g.: He said "hi" & bye');
+  var urlBlockedText  = D.urlBlocked || '(blocked — returns "")';
+
   /* ── S1 — html() ──────────────────────────────────────── */
   var preview_s1 =
     '<div class="san-playground">' +
       '<div>' +
-        '<div class="san-field-label">Entrada — escribe algo</div>' +
-        '<input id="html-input-s1" class="san-input" type="text" placeholder="Ej: &lt;script&gt;alert(1)&lt;/script&gt;" />' +
+        '<div class="san-field-label">' + labelInput + '</div>' +
+        '<input id="html-input-s1" class="san-input" type="text" placeholder="' + phScript + '" />' +
       '</div>' +
       '<div>' +
-        '<div class="san-field-label">Salida sanitizada</div>' +
+        '<div class="san-field-label">' + labelOutputHtml + '</div>' +
         '<div id="html-output-s1" class="san-output"></div>' +
       '</div>' +
     '</div>';
@@ -267,11 +300,11 @@
   var preview_s2 =
     '<div class="san-playground">' +
       '<div>' +
-        '<div class="san-field-label">Entrada — escribe algo</div>' +
-        '<input id="escape-input-s2" class="san-input" type="text" placeholder="Ej: &lt;script&gt;alert(1)&lt;/script&gt;" />' +
+        '<div class="san-field-label">' + labelInput + '</div>' +
+        '<input id="escape-input-s2" class="san-input" type="text" placeholder="' + phScript + '" />' +
       '</div>' +
       '<div>' +
-        '<div class="san-field-label">Salida escapada</div>' +
+        '<div class="san-field-label">' + labelOutputEsc + '</div>' +
         '<div id="escape-output-s2" class="san-output"></div>' +
       '</div>' +
     '</div>';
@@ -295,11 +328,11 @@
   var preview_s3 =
     '<div class="san-playground">' +
       '<div>' +
-        '<div class="san-field-label">Entrada — escribe algo</div>' +
-        '<input id="attr-input-s3" class="san-input" type="text" placeholder="Ej: He said &quot;hi&quot; &amp; bye" />' +
+        '<div class="san-field-label">' + labelInput + '</div>' +
+        '<input id="attr-input-s3" class="san-input" type="text" placeholder="' + phAttr + '" />' +
       '</div>' +
       '<div>' +
-        '<div class="san-field-label">Salida escapada</div>' +
+        '<div class="san-field-label">' + labelOutputEsc + '</div>' +
         '<div id="attr-output-s3" class="san-output"></div>' +
       '</div>' +
     '</div>';
@@ -356,7 +389,7 @@
       var outEl = document.createElement('span');
       if (result === '') {
         outEl.className = 'san-url-blocked';
-        outEl.textContent = '(bloqueada — retorna "")';
+        outEl.textContent = urlBlockedText;
       } else {
         outEl.className = 'san-url-ok';
         outEl.textContent = '"' + result + '"';

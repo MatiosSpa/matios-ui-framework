@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -50,24 +50,47 @@
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-infinite-i18n.js"></script>
   <script src="./matios-ui-infinite.js"></script>
 </head>
 <body>
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Infinite</h1>
-    <p>Infinite scroll con carga incremental controlada por el desarrollador en layouts vertical y grid.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Layout vertical</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Layout grid</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — reset() y eventos</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Infinite']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Infinite scroll with incremental loading controlled by the developer in vertical and grid layouts.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Vertical layout';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Grid layout';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — reset() and events';
+
+function infEchoLoad(e) {
+  return (D.echoLoadPagePrefix || 'onLoad → page:') + e.detail.page + (D.echoLoadItems || ' items:') + e.detail.items.length;
+}
+function infEchoEnd(e) {
+  return (D.echoEndTotalPrefix || 'onEnd → total:') + e.detail.total + ' ✓';
+}
+
 function indentHtml(html) {
   var indent = 0;
   var step = 2;
@@ -108,7 +131,7 @@ function makeSection(id, previewHtml, jsCode) {
 }
 
 var previewS1 = '<div id="inf-vertical-demo" style="max-height:300px;overflow:auto;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg)"></div>' +
-  '<div class="result-box" id="inf-result-vertical" style="margin-top:12px">— haz scroll hasta el final para cargar más —</div>';
+  '<div class="result-box" id="inf-result-vertical" style="margin-top:12px">' + (D.resultVerticalHint || '— scroll to the bottom to load more —') + '</div>';
 
 var jsS1 = [
   "const infinite = new MTS.Infinite('#inf-vertical-demo', {",
@@ -137,7 +160,7 @@ var jsS1 = [
 ].join('\n');
 
 var previewS2 = '<div id="inf-grid-demo" style="max-height:320px;overflow:auto;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg)"></div>' +
-  '<div class="result-box" id="inf-result-grid" style="margin-top:12px">— layout grid con tarjetas simples —</div>';
+  '<div class="result-box" id="inf-result-grid" style="margin-top:12px">' + (D.resultGridHint || '— grid layout with simple cards —') + '</div>';
 
 var jsS2 = [
   "const infiniteGrid = new MTS.Infinite('#inf-grid-demo', {",
@@ -165,7 +188,7 @@ var jsS2 = [
 
 var previewS3 = '<div class="demo-row" style="margin-bottom:12px"><button id="btn-reset-inf"></button></div>' +
   '<div id="inf-events-demo" style="max-height:260px;overflow:auto;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-lg)"></div>' +
-  '<div class="result-box" id="inf-result-events" style="margin-top:12px">— observa onLoad y onEnd —</div>';
+  '<div class="result-box" id="inf-result-events" style="margin-top:12px">' + (D.resultEventsHint || '— watch onLoad and onEnd —') + '</div>';
 
 var jsS3 = [
   "const eventsInfinite = new MTS.Infinite('#inf-events-demo', {",
@@ -203,7 +226,7 @@ new MTS.Infinite('#inf-vertical-demo', {
       setTimeout(function() {
         var items = Array.from({ length: opts.pageSize }, function(_, i) {
           var n = (opts.page - 1) * opts.pageSize + i;
-          return { id: n, name: 'Usuario ' + (n + 1), email: 'user' + n + '@empresa.com' };
+          return { id: n, name: (D.itemUserPrefix || 'User ') + (n + 1), email: 'user' + n + '@company.com' };
         });
         resolve({ items: items, hasMore: opts.page < 4 });
       }, 300);
@@ -215,8 +238,8 @@ new MTS.Infinite('#inf-vertical-demo', {
     row.innerHTML = '<span style="width:36px;font-size:11px;color:var(--mts-text-muted)">#' + (index + 1) + '</span>' + '<span style="flex:1;font-weight:500">' + user.name + '</span>' + '<span style="font-size:11px;color:var(--mts-text-muted)">' + user.email + '</span>';
     return row;
   },
-  onLoad: function(e) { document.getElementById('inf-result-vertical').textContent = 'onLoad → page:' + e.detail.page + ' items:' + e.detail.items.length; },
-  onEnd: function(e) { document.getElementById('inf-result-vertical').textContent = 'onEnd → total:' + e.detail.total + ' ✓'; }
+  onLoad: function(e) { document.getElementById('inf-result-vertical').textContent = infEchoLoad(e); },
+  onEnd: function(e) { document.getElementById('inf-result-vertical').textContent = infEchoEnd(e); }
 });
 
 new MTS.Infinite('#inf-grid-demo', {
@@ -228,7 +251,7 @@ new MTS.Infinite('#inf-grid-demo', {
       setTimeout(function() {
         var items = Array.from({ length: opts.pageSize }, function(_, i) {
           var n = (opts.page - 1) * opts.pageSize + i;
-          return { id: n, title: 'Producto ' + (n + 1), price: (Math.random() * 300 + 20).toFixed(2) };
+          return { id: n, title: (D.itemProductPrefix || 'Product ') + (n + 1), price: (Math.random() * 300 + 20).toFixed(2) };
         });
         resolve({ items: items, hasMore: opts.page < 3 });
       }, 250);
@@ -240,8 +263,8 @@ new MTS.Infinite('#inf-grid-demo', {
     card.innerHTML = '<strong style="display:block;margin-bottom:4px">' + item.title + '</strong>$' + item.price;
     return card;
   },
-  onLoad: function(e) { document.getElementById('inf-result-grid').textContent = 'onLoad → page:' + e.detail.page + ' items:' + e.detail.items.length; },
-  onEnd: function(e) { document.getElementById('inf-result-grid').textContent = 'onEnd → total:' + e.detail.total + ' ✓'; }
+  onLoad: function(e) { document.getElementById('inf-result-grid').textContent = infEchoLoad(e); },
+  onEnd: function(e) { document.getElementById('inf-result-grid').textContent = infEchoEnd(e); }
 });
 
 var eventsInfinite = new MTS.Infinite('#inf-events-demo', {
@@ -252,7 +275,7 @@ var eventsInfinite = new MTS.Infinite('#inf-events-demo', {
       setTimeout(function() {
         var items = Array.from({ length: opts.pageSize }, function(_, i) {
           var n = (opts.page - 1) * opts.pageSize + i;
-          return { id: n, label: 'Registro ' + (n + 1) };
+          return { id: n, label: (D.itemRecordPrefix || 'Record ') + (n + 1) };
         });
         resolve({ items: items, hasMore: opts.page < 2 });
       }, 200);
@@ -261,12 +284,12 @@ var eventsInfinite = new MTS.Infinite('#inf-events-demo', {
   renderItem: function(item) {
     return '<div style="padding:10px 14px;border-bottom:1px solid var(--mts-border-color)">' + item.label + '</div>';
   },
-  onLoad: function(e) { document.getElementById('inf-result-events').textContent = 'onLoad → page:' + e.detail.page + ' items:' + e.detail.items.length; },
-  onEnd: function(e) { document.getElementById('inf-result-events').textContent = 'onEnd → total:' + e.detail.total + ' ✓'; }
+  onLoad: function(e) { document.getElementById('inf-result-events').textContent = infEchoLoad(e); },
+  onEnd: function(e) { document.getElementById('inf-result-events').textContent = infEchoEnd(e); }
 });
 
 new MTS.Button('#btn-reset-inf', {
-  label: 'reset()',
+  label: D.resetLabel || 'reset()',
   variant: 'secondary',
   onClick: function() { eventsInfinite.reset(); }
 });

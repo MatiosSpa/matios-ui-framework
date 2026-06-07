@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -51,6 +51,8 @@
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-input/matios-ui-input.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-passwordstrength-i18n.js"></script>
   <script src="./matios-ui-passwordstrength.js"></script>
 </head>
 <body>
@@ -58,14 +60,14 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.PasswordStrength</h1>
-    <p>Medidor de fortaleza de contraseña en tiempo real. Configurable: largo mínimo/máximo, mayúsculas, minúsculas, números y símbolos especiales. Se integra con <code>MTS.Input</code> y <code>MTS.Validate</code>.</p>
+    <p id="demo-subtitle"></p>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Básico (solo largo mínimo)</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Reglas completas</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Solo barra (sin checklist)</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Integración con MTS.Validate</div><div id="tabs-s4"></div></div>
-  <div class="demo-section"><div class="demo-section-title">5 — onChange callback</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
 </div>
 
 <script>
@@ -85,6 +87,22 @@ function indentHtml(html){
   });
   return result.trimEnd();
 }
+
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.PasswordStrength']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Real-time password strength meter. Configurable: min/max length, uppercase, lowercase, numbers and special symbols.';
+document.getElementById('s1-title').textContent = D.s1Title || '1 — Basic (minimum length only)';
+document.getElementById('s2-title').textContent = D.s2Title || '2 — Full rules';
+document.getElementById('s3-title').textContent = D.s3Title || '3 — Bar only (no checklist)';
+document.getElementById('s4-title').textContent = D.s4Title || '4 — Integration with MTS.Validate';
+document.getElementById('s5-title').textContent = D.s5Title || '5 — onChange callback';
 
 /* ══════════════════════════════════════════════════════════════
    1 — Básico
@@ -124,7 +142,7 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
 }
 makeSection('tabs-s1', preview1, js1, function() {
   var inPass = new MTS.Input('#s1-pass', {
-    label: 'Contraseña', type: 'password', placeholder: '••••••••',
+    label: D.labelPassword || 'Password', type: 'password', placeholder: '••••••••',
   });
   new MTS.PasswordStrength('#s1-meter', {
     input: inPass, minLength: 8,
@@ -158,7 +176,7 @@ var js2 =
 
 makeSection('tabs-s2', preview2, js2, function() {
   var inPass = new MTS.Input('#s2-pass', {
-    label: 'Nueva contraseña', type: 'password', placeholder: '••••••••',
+    label: D.labelNewPassword || 'New password', type: 'password', placeholder: '••••••••',
   });
   new MTS.PasswordStrength('#s2-meter', {
     input: inPass, minLength: 8,
@@ -193,7 +211,7 @@ var js3 =
 
 makeSection('tabs-s3', preview3, js3, function() {
   var inPass = new MTS.Input('#s3-pass', {
-    label: 'Contraseña', type: 'password', placeholder: '••••••••',
+    label: D.labelPassword || 'Password', type: 'password', placeholder: '••••••••',
   });
   new MTS.PasswordStrength('#s3-meter', {
     input: inPass, minLength: 6,
@@ -241,24 +259,24 @@ var js4 =
 
 makeSection('tabs-s4', preview4, js4, function() {
   var inPass = new MTS.Input('#s4-pass', {
-    name: 'password', label: 'Nueva contraseña', type: 'password', placeholder: '••••••••',
+    name: 'password', label: D.labelNewPassword || 'New password', type: 'password', placeholder: '••••••••',
   });
   var meter = new MTS.PasswordStrength('#s4-meter', {
     input: inPass, minLength: 8, minUppercase: 1,
     minNumbers: 1, minSpecial: 1, allowedSpecial: '!@#$%^&*',
   });
   var inConfirm = new MTS.Input('#s4-confirm', {
-    name: 'confirm', label: 'Confirmar contraseña', type: 'password', placeholder: '••••••••',
+    name: 'confirm', label: D.labelConfirm || 'Confirm password', type: 'password', placeholder: '••••••••',
   });
   new MTS.Button('#s4-btn', {
-    label: 'Guardar contraseña', variant: 'primary', block: true,
+    label: D.btnSave || 'Save password', variant: 'primary', block: true,
     onClick: function() {
       var ok = true;
-      if (!meter.isValid()) { inPass.setError('No cumple los requisitos.'); ok = false; }
+      if (!meter.isValid()) { inPass.setError(D.errRequirements || 'Does not meet the requirements.'); ok = false; }
       else                  { inPass.clearError(); }
-      if (inConfirm.getValue() !== inPass.getValue()) { inConfirm.setError('No coinciden.'); ok = false; }
+      if (inConfirm.getValue() !== inPass.getValue()) { inConfirm.setError(D.errMismatch || 'Do not match.'); ok = false; }
       else                                            { inConfirm.clearError(); }
-      if (ok) alert('✓ score: ' + meter.getScore() + '% — nivel: ' + meter.getLevel());
+      if (ok) alert((D.savedPrefix || '✓ score: ') + meter.getScore() + '%' + (D.savedLevel || ' — level: ') + meter.getLevel());
     },
   });
 }, '480px');
@@ -270,7 +288,7 @@ var preview5 =
   '<div class="demo-stack" style="max-width:360px;">' +
     '<div class="mts-form-group" id="s5-pass"></div>' +
     '<div id="s5-meter"></div>' +
-    '<div id="s5-log" class="result-box" style="margin-top:12px;font-family:monospace;font-size:12px;">Escribí algo para ver el callback...</div>' +
+    '<div id="s5-log" class="result-box" style="margin-top:12px;font-family:monospace;font-size:12px;">' + (D.logPlaceholder || 'Type something to see the callback...') + '</div>' +
   '</div>';
 
 var js5 =
@@ -287,7 +305,7 @@ var js5 =
 
 makeSection('tabs-s5', preview5, js5, function() {
   var inPass = new MTS.Input('#s5-pass', {
-    label: 'Contraseña', type: 'password', placeholder: '••••••••',
+    label: D.labelPassword || 'Password', type: 'password', placeholder: '••••••••',
   });
   var logEl = document.getElementById('s5-log');
   new MTS.PasswordStrength('#s5-meter', {
@@ -296,9 +314,9 @@ makeSection('tabs-s5', preview5, js5, function() {
     minSpecial: 1, allowedSpecial: '!@#$%^&*',
     onChange: function(data) {
       logEl.textContent =
-        'score: '   + data.score   + '%\n' +
-        'level: '   + data.level   + '\n' +
-        'isValid: ' + data.isValid;
+        (D.logScore || 'score: ') + data.score   + '%\n' +
+        (D.logLevel || 'level: ') + data.level   + '\n' +
+        (D.logValid || 'isValid: ') + data.isValid;
     },
   });
 }, '400px');

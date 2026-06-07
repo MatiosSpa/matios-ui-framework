@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -46,21 +46,23 @@
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-countdown-i18n.js"></script>
   <script src="./matios-ui-countdown.js"></script>
 </head>
 <body>
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Countdown</h1>
-    <p>Animated countdown timer — blocks, compact, minimal, and imperative API.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Variant: blocks (default)</div><div id="tabs-cd1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Compact y minimal</div><div id="tabs-cd2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — API — pause · resume · setTarget</div><div id="tabs-cd3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-cd1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-cd2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-cd3"></div></div>
 </div>
 <script>
 function indentHtml(html){
@@ -90,6 +92,19 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
+
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Countdown'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Animated countdown timer — blocks, compact, minimal, and imperative API.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Variant: blocks (default)';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Compact and minimal';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — API — pause · resume · setTarget';
 
 makeSection('tabs-cd1',
   '<div id="cd-blocks"></div>',
@@ -121,7 +136,7 @@ new MTS.Countdown('#cd-compact', { target:new Date(Date.now()+2*24*60*60*1000), 
 new MTS.Countdown('#cd-minimal', { target:new Date(Date.now()+2*24*60*60*1000), variant:'minimal', showDays:false, separator:':' });
 
 makeSection('tabs-cd3',
-  '<div><div id="cd-api"></div><div class="demo-row" style="margin-top:12px;flex-wrap:wrap"><button class="demo-btn-sm" onclick="cdApi.pause()">pause()</button><button class="demo-btn-sm" onclick="cdApi.resume()">resume()</button><button class="demo-btn-sm" onclick="cdApi.setTarget(new Date(Date.now()+30000))">setTarget(+30s)</button><button class="demo-btn-sm" onclick="cdApi.setTarget(new Date(Date.now()+3600000))">setTarget(+1h)</button></div><div class="result-box" id="cd-result">— usa los botones —</div></div>',
+  '<div><div id="cd-api"></div><div class="demo-row" style="margin-top:12px;flex-wrap:wrap"><button class="demo-btn-sm" onclick="cdApi.pause()">pause()</button><button class="demo-btn-sm" onclick="cdApi.resume()">resume()</button><button class="demo-btn-sm" onclick="cdApi.setTarget(new Date(Date.now()+30000))">setTarget(+30s)</button><button class="demo-btn-sm" onclick="cdApi.setTarget(new Date(Date.now()+3600000))">setTarget(+1h)</button></div><div class="result-box" id="cd-result">' + (D.resultPlaceholder || '— use the buttons —') + '</div></div>',
 `const cdApi = new MTS.Countdown('#cd-api', {
   target: new Date(Date.now() + 60000),
   variant: 'blocks',
@@ -137,8 +152,8 @@ cdApi.setTarget(new Date(Date.now() + 3600000));`);
 var cdApi = new MTS.Countdown('#cd-api', {
   target:new Date(Date.now()+60000),
   variant:'blocks',
-  onTick:function(e){ document.getElementById('cd-result').textContent='onTick → '+e.detail.hours+'h '+e.detail.mins+'m '+e.detail.secs+'s'; },
-  onComplete:function(){ document.getElementById('cd-result').textContent='onComplete → ¡Tiempo agotado!'; }
+  onTick:function(e){ document.getElementById('cd-result').textContent=(D.tickPrefix || 'onTick → ')+e.detail.hours+'h '+e.detail.mins+'m '+e.detail.secs+'s'; },
+  onComplete:function(){ document.getElementById('cd-result').textContent=(D.completeText || 'onComplete → Time is up!'); }
 });
 </script>
 </body>

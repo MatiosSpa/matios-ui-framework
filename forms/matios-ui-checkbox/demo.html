@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-checkbox-i18n.js"></script>
   <script src="./matios-ui-checkbox.js"></script>
 </head>
 <body>
@@ -56,15 +58,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Checkbox</h1>
-    <p>Checkbox individual, estados básicos, grupos vertical y horizontal, y grupo disabled.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-  <div class="demo-section"><div class="demo-section-title">1 — Checkbox individual</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Grupo vertical (default)</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Grupo horizontal</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Grupo completamente deshabilitado</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 
 <script>
@@ -114,16 +116,51 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Checkbox'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Single checkbox, basic states, vertical and horizontal groups, and a disabled group.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Single checkbox';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Vertical group (default)';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Horizontal group';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Fully disabled group';
+
+var labelNormal          = D.labelNormal || 'Normal';
+var labelChecked         = D.labelChecked || 'Pre-checked';
+var labelIndeterminate   = D.labelIndeterminate || 'Indeterminate';
+var labelDisabled        = D.labelDisabled || 'Disabled';
+var labelDisabledChecked = D.labelDisabledChecked || 'Disabled checked';
+var resultBasic          = D.resultBasicPlaceholder || '— interact with the checkboxes —';
+var resultGroup          = D.resultGroupPlaceholder || '— select options —';
+var cbAccept             = D.cbAccept || 'I accept the terms';
+var cbPreChecked         = D.cbPreChecked || 'Pre-checked';
+var cbPartial            = D.cbPartial || 'Partial selection';
+var echoChecked          = D.echoChecked || 'checked: ';
+var echoValues           = D.echoValues || 'values: ';
+var dayMon               = D.dayMon || 'Monday';
+var dayTue               = D.dayTue || 'Tuesday';
+var dayWed               = D.dayWed || 'Wednesday';
+var dayThu               = D.dayThu || 'Thursday';
+var dayFri               = D.dayFri || 'Friday';
+var optA                 = D.optA || 'Option A';
+var optB                 = D.optB || 'Option B';
+var optC                 = D.optC || 'Option C';
+
 var preview_s1 =
   '<div class="demo-stack">' +
     '<div class="demo-row">' +
-      '<div class="demo-col"><div class="demo-label">Normal</div><div id="chk-normal"></div></div>' +
-      '<div class="demo-col"><div class="demo-label">Pre-marcado</div><div id="chk-checked"></div></div>' +
-      '<div class="demo-col"><div class="demo-label">Indeterminado</div><div id="chk-indeterminate"></div></div>' +
-      '<div class="demo-col"><div class="demo-label">Disabled</div><div id="chk-disabled"></div></div>' +
-      '<div class="demo-col"><div class="demo-label">Disabled checked</div><div id="chk-disabled-checked"></div></div>' +
+      '<div class="demo-col"><div class="demo-label">' + labelNormal + '</div><div id="chk-normal"></div></div>' +
+      '<div class="demo-col"><div class="demo-label">' + labelChecked + '</div><div id="chk-checked"></div></div>' +
+      '<div class="demo-col"><div class="demo-label">' + labelIndeterminate + '</div><div id="chk-indeterminate"></div></div>' +
+      '<div class="demo-col"><div class="demo-label">' + labelDisabled + '</div><div id="chk-disabled"></div></div>' +
+      '<div class="demo-col"><div class="demo-label">' + labelDisabledChecked + '</div><div id="chk-disabled-checked"></div></div>' +
     '</div>' +
-    '<div class="result-box" id="chk-result">— interactúa con los checkboxes —</div>' +
+    '<div class="result-box" id="chk-result">' + resultBasic + '</div>' +
   '</div>';
 
 var js_s1 =
@@ -136,7 +173,7 @@ var js_s1 =
 var preview_s2 =
   '<div class="demo-stack">' +
     '<div id="chk-group-v"></div>' +
-    '<div class="result-box" id="chk-group-result">— selecciona opciones —</div>' +
+    '<div class="result-box" id="chk-group-result">' + resultGroup + '</div>' +
   '</div>';
 
 var js_s2 =
@@ -180,11 +217,11 @@ var js_s4 =
   "});";
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {
-  new MTS.Checkbox('#chk-normal', { label: 'Acepto los términos', onChange: function(e) { setResult('chk-result', 'checked: ' + e.detail.checked); } });
-  new MTS.Checkbox('#chk-checked', { label: 'Pre-marcado', checked: true, onChange: function(e) { setResult('chk-result', 'checked: ' + e.detail.checked); } });
-  new MTS.Checkbox('#chk-indeterminate', { label: 'Selección parcial', indeterminate: true });
-  new MTS.Checkbox('#chk-disabled', { label: 'Disabled', disabled: true });
-  new MTS.Checkbox('#chk-disabled-checked', { label: 'Disabled checked', checked: true, disabled: true });
+  new MTS.Checkbox('#chk-normal', { label: cbAccept, onChange: function(e) { setResult('chk-result', echoChecked + e.detail.checked); } });
+  new MTS.Checkbox('#chk-checked', { label: cbPreChecked, checked: true, onChange: function(e) { setResult('chk-result', echoChecked + e.detail.checked); } });
+  new MTS.Checkbox('#chk-indeterminate', { label: cbPartial, indeterminate: true });
+  new MTS.Checkbox('#chk-disabled', { label: labelDisabled, disabled: true });
+  new MTS.Checkbox('#chk-disabled-checked', { label: labelDisabledChecked, checked: true, disabled: true });
 });
 makeSection('tabs-s2', preview_s2, js_s2, function() {
   new MTS.CheckboxGroup('#chk-group-v', {
@@ -195,18 +232,18 @@ makeSection('tabs-s2', preview_s2, js_s2, function() {
       { value: 'docx', label: 'Word' }
     ],
     value: ['pdf'],
-    onChange: function(e) { setResult('chk-group-result', 'valores: ' + JSON.stringify(e.detail.value)); }
+    onChange: function(e) { setResult('chk-group-result', echoValues + JSON.stringify(e.detail.value)); }
   });
 });
 makeSection('tabs-s3', preview_s3, js_s3, function() {
   new MTS.CheckboxGroup('#chk-group-h', {
     horizontal: true,
     options: [
-      { value: 'lun', label: 'Lunes' },
-      { value: 'mar', label: 'Martes' },
-      { value: 'mie', label: 'Miércoles' },
-      { value: 'jue', label: 'Jueves' },
-      { value: 'vie', label: 'Viernes' }
+      { value: 'lun', label: dayMon },
+      { value: 'mar', label: dayTue },
+      { value: 'mie', label: dayWed },
+      { value: 'jue', label: dayThu },
+      { value: 'vie', label: dayFri }
     ],
     value: ['lun', 'mie']
   });
@@ -215,9 +252,9 @@ makeSection('tabs-s4', preview_s4, js_s4, function() {
   new MTS.CheckboxGroup('#chk-group-dis', {
     disabled: true,
     options: [
-      { value: 'a', label: 'Opción A' },
-      { value: 'b', label: 'Opción B' },
-      { value: 'c', label: 'Opción C' }
+      { value: 'a', label: optA },
+      { value: 'b', label: optB },
+      { value: 'c', label: optC }
     ],
     value: ['a']
   });

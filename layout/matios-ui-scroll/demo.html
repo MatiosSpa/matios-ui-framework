@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-scroll-i18n.js"></script>
   <script src="./matios-ui-scroll.js"></script>
 </head>
 <body>
@@ -58,7 +60,7 @@
 
   <div class="demo-header">
     <h1><span>MTS</span>.Scroll</h1>
-    <p>Contenedor scrollable con scrollbar temático, fades de borde adaptativos y eventos de posición.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
@@ -66,38 +68,38 @@
 
   <!-- ── 1 · VERTICAL ── -->
   <div class="demo-section">
-    <div class="demo-section-title">1 — Vertical (default)</div>
+    <div class="demo-section-title" id="s1-title"></div>
     <div id="s1"></div>
   </div>
 
   <!-- ── 2 · HORIZONTAL ── -->
   <div class="demo-section">
-    <div class="demo-section-title">2 — Horizontal</div>
+    <div class="demo-section-title" id="s2-title"></div>
     <div id="s2"></div>
   </div>
 
   <!-- ── 3 · BOTH ── -->
   <div class="demo-section">
-    <div class="demo-section-title">3 — Both</div>
+    <div class="demo-section-title" id="s3-title"></div>
     <div id="s3"></div>
   </div>
 
   <!-- ── 4 · fadeBg personalizado ── -->
   <div class="demo-section">
-    <div class="demo-section-title">4 — fadeBg personalizado (dentro de surface)</div>
+    <div class="demo-section-title" id="s4-title"></div>
     <div id="s4"></div>
   </div>
 
   <!-- ── 5 · EVENTOS ── -->
   <div class="demo-section">
-    <div class="demo-section-title">5 — Eventos onScroll · onReachStart · onReachEnd</div>
+    <div class="demo-section-title" id="s5-title"></div>
     <div id="s5"></div>
-    <div class="result-box" id="s5-log">Esperando scroll...</div>
+    <div class="result-box" id="s5-log"></div>
   </div>
 
   <!-- ── 6 · API PROGRAMÁTICA ── -->
   <div class="demo-section">
-    <div class="demo-section-title">6 — API programática</div>
+    <div class="demo-section-title" id="s6-title"></div>
     <div id="s6"></div>
   </div>
 
@@ -137,15 +139,33 @@ function mk(id, html, js, h) {
   new MTS.CodeBlock('#' + cbJs,   { code: js.trim(),   language: 'js',   copyable: true, height: '100%' });
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Scroll']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Scrollable container with themed scrollbar, adaptive edge fades and position events.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Vertical (default)';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Horizontal';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Both';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Custom fadeBg (inside surface)';
+document.getElementById('s5-title').textContent      = D.s5Title || '5 — Events onScroll · onReachStart · onReachEnd';
+document.getElementById('s6-title').textContent      = D.s6Title || '6 — Programmatic API';
+document.getElementById('s5-log').textContent        = D.logWaiting || 'Waiting for scroll...';
+
 /* ── Contenido de ejemplo ── */
 var paras = [
-  'El diseño de sistemas UI es el arte de crear componentes coherentes y reutilizables que escalen en cualquier producto digital.',
-  'Un buen sistema de diseño define tokens, patrones y comportamientos que los equipos pueden adoptar sin fricciones.',
-  'La consistencia visual no surge de la coincidencia — surge de decisiones deliberadas documentadas y compartidas.',
-  'Cada componente debería ser capaz de vivir de forma aislada sin depender del contexto donde se usa.',
-  'El dark mode no es solo invertir colores — implica repensar contrastes, jerarquías y sombras desde cero.',
-  'La accesibilidad no es una capa encima del diseño: es parte del diseño desde el primer trazo.',
-  'Los tokens CSS permiten que un mismo componente se adapte a cualquier tema sin tocar una línea de JS.',
+  D.para1 || 'UI systems design is the art of creating coherent, reusable components that scale across any digital product.',
+  D.para2 || 'A good design system defines tokens, patterns and behaviors that teams can adopt without friction.',
+  D.para3 || 'Visual consistency does not happen by chance — it comes from deliberate decisions, documented and shared.',
+  D.para4 || 'Each component should be able to live in isolation without depending on the context where it is used.',
+  D.para5 || 'Dark mode is not just inverting colors — it means rethinking contrasts, hierarchies and shadows from scratch.',
+  D.para6 || 'Accessibility is not a layer on top of design: it is part of the design from the very first stroke.',
+  D.para7 || 'CSS tokens let the same component adapt to any theme without touching a single line of JS.',
 ];
 
 function makeParas() {
@@ -174,9 +194,9 @@ new MTS.Scroll('#scroll-v', { direction: 'vertical' });
    2 · HORIZONTAL
    ════════════════════════════════════ */
 var hItems = [
-  'Componentes', 'Tokens', 'Temas', 'Dark Mode', 'Accesibilidad',
-  'Tipografía', 'Iconos', 'Spacing', 'Borders', 'Shadows',
-  'Animaciones', 'Formularios', 'Overlays', 'Navegación', 'Display'
+  D.chipComponents || 'Components', D.chipTokens || 'Tokens', D.chipThemes || 'Themes', D.chipDarkMode || 'Dark Mode', D.chipAccessibility || 'Accessibility',
+  D.chipTypography || 'Typography', D.chipIcons || 'Icons', D.chipSpacing || 'Spacing', D.chipBorders || 'Borders', D.chipShadows || 'Shadows',
+  D.chipAnimations || 'Animations', D.chipForms || 'Forms', D.chipOverlays || 'Overlays', D.chipNavigation || 'Navigation', D.chipDisplay || 'Display'
 ].map(function(label) {
   return '<div style="flex-shrink:0;padding:12px 20px;border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);font-size:13px;white-space:nowrap">' + label + '</div>';
 }).join('\n    ');
@@ -276,13 +296,13 @@ new MTS.Scroll('#scroll-ev', {
   direction: 'vertical',
   onScroll: function(e) {
     document.getElementById('s5-log').textContent =
-      'onScroll → scrollTop: ' + e.scrollTop + 'px  |  ' + e.percent + '%';
+      (D.logScroll || 'onScroll → scrollTop: ') + e.scrollTop + 'px  |  ' + e.percent + '%';
   },
   onReachStart: function() {
-    document.getElementById('s5-log').textContent = '⬆ onReachStart — llegaste al inicio';
+    document.getElementById('s5-log').textContent = D.logReachStart || '⬆ onReachStart — you reached the start';
   },
   onReachEnd: function() {
-    document.getElementById('s5-log').textContent = '⬇ onReachEnd — llegaste al final';
+    document.getElementById('s5-log').textContent = D.logReachEnd || '⬇ onReachEnd — you reached the end';
   }
 });
 
@@ -315,7 +335,7 @@ var scrollApi = new MTS.Scroll('#scroll-api', { direction: 'vertical' });
   { label: 'scrollToStart()', fn: function() { scrollApi.scrollToStart(); } },
   { label: 'scrollToEnd()',   fn: function() { scrollApi.scrollToEnd(); } },
   { label: 'scrollTo(80)',    fn: function() { scrollApi.scrollTo(80); } },
-  { label: 'getPercent()',    fn: function() { alert('Posición: ' + scrollApi.getPercent() + '%'); } },
+  { label: 'getPercent()',    fn: function() { alert((D.alertPosition || 'Position: ') + scrollApi.getPercent() + '%'); } },
 ].forEach(function(item) {
   new MTS.Button('#s6-btns', {
     label: item.label,

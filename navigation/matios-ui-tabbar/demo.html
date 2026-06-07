@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-tabbar-i18n.js"></script>
   <script src="./matios-ui-tabbar.js"></script>
 </head>
 <body>
@@ -56,15 +58,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.TabBar</h1>
-    <p>Barra de navegación tipo app móvil con variantes, badges y API básica.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Base</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Variantes</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — API</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
@@ -105,10 +107,24 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.TabBar']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || '';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Base';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Variants';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — API';
+
 var preview_s1 =
   '<div class="demo-stack">' +
     '<div id="tb-base"></div>' +
-    '<div class="result-box" id="tb-result">— cambia de tab —</div>' +
+    '<div class="result-box" id="tb-result">' + (D.resultPlaceholder || '— switch tab —') + '</div>' +
   '</div>';
 
 var js_s1 =
@@ -146,7 +162,7 @@ var preview_s3 =
       '<button class="demo-btn-sm" onclick="tbApi.setActive(\'search\')">setActive(\'search\')</button>' +
       '<button class="demo-btn-sm" onclick="tbApi.setBadge(\'inbox\', 9)">setBadge(\'inbox\', 9)</button>' +
     '</div>' +
-    '<div class="result-box" id="tb-api-result">— usa la API —</div>' +
+    '<div class="result-box" id="tb-api-result">' + (D.apiResultPlaceholder || '— use the API —') + '</div>' +
   '</div>';
 
 var js_s3 =
@@ -170,7 +186,7 @@ makeSection('tabs-s1', preview_s1, js_s1, function() {
       { id: 'inbox', label: 'Inbox', icon: MTS.Icon.get('inbox'), badge: 3 },
       { id: 'profile', label: 'Profile', icon: MTS.Icon.get('contact') }
     ],
-    onChange: function(e) { setResult('tb-result', 'active → ' + e.detail.id); }
+    onChange: function(e) { setResult('tb-result', (D.activePrefix || 'active → ') + e.detail.id); }
   });
 });
 
@@ -193,7 +209,7 @@ makeSection('tabs-s3', preview_s3, js_s3, function() {
       { id: 'search', label: 'Search', icon: MTS.Icon.get('search') },
       { id: 'inbox', label: 'Inbox', icon: MTS.Icon.get('inbox'), badge: 1 }
     ],
-    onChange: function(e) { setResult('tb-api-result', 'active → ' + e.detail.id); }
+    onChange: function(e) { setResult('tb-api-result', (D.activePrefix || 'active → ') + e.detail.id); }
   });
 });
 

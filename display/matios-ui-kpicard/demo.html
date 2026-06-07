@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -46,20 +46,22 @@
 <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
 <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
 <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-kpicard-i18n.js"></script>
   <script src="./matios-ui-kpicard.js"></script>
 </head>
 <body>
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.KPICard</h1>
-    <p>KPICard demo actualizado al patrón Preview | HTML | JavaScript.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions"></div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-  <div class="demo-section"><div class="demo-section-title">1 — Básico</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Variantes</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Clickable</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — API update()</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 <script>
 function indentHtml(html) {
@@ -101,12 +103,32 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
+
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.KPICard']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'KPICard demo updated to the Preview | HTML | JavaScript pattern.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Variants';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Clickable';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — API update()';
+
+var clickableLabel         = D.clickableLabel || 'Open tickets';
+var clickResultPlaceholder = D.clickResultPlaceholder || '— click on the card —';
+var clickPrefix            = D.clickPrefix || 'click → ';
+
 var preview_s1 = "<div class=\"demo-grid\"><div id=\"kpi-revenue\"></div><div id=\"kpi-visits\"></div><div id=\"kpi-users\"></div></div>";
 var js_s1 = "new MTS.KPICard('#kpi-revenue', { label:'Revenue', value:'$24.8K', trend:12, trendLabel:'vs last month', sparkline:[12,18,14,20,19,24,22] });\nnew MTS.KPICard('#kpi-visits', { label:'Visits', value:'148K', trend:8, trendLabel:'this week', variant:'primary', sparkline:[8,10,12,11,14,15,16] });\nnew MTS.KPICard('#kpi-users', { label:'New users', value:'1,248', trend:-4, trendLabel:'vs previous week', variant:'warning', sparkline:[20,18,19,17,16,15,14] });";
 var preview_s2 = "<div class=\"demo-grid\"><div id=\"kpi-v-default\"></div><div id=\"kpi-v-success\"></div><div id=\"kpi-v-danger\"></div></div>";
 var js_s2 = "new MTS.KPICard('#kpi-v-default', { label:'MRR', value:'$8.4K', trend:4, sparkline:[8,10,11,10,12,11,13] });\nnew MTS.KPICard('#kpi-v-success', { label:'Closed deals', value:'32', trend:17, variant:'success', sparkline:[14,16,18,17,19,21,24] });\nnew MTS.KPICard('#kpi-v-danger', { label:'Churn', value:'6.2%', trend:-9, variant:'danger', sparkline:[18,17,16,15,14,13,12] });";
-var preview_s3 = "<div class=\"demo-stack\"><div id=\"kpi-clickable\"></div><div class=\"result-box\" id=\"kpi-result\">\u2014 click en la tarjeta \u2014</div></div>";
-var js_s3 = "new MTS.KPICard('#kpi-clickable', { label:'Tickets abiertos', value:'28', trend:3, variant:'primary', onClick:function(){ document.getElementById('kpi-result').textContent = 'click \u2192 Tickets abiertos'; } });";
+var preview_s3 = "<div class=\"demo-stack\"><div id=\"kpi-clickable\"></div><div class=\"result-box\" id=\"kpi-result\">" + clickResultPlaceholder + "</div></div>";
+var js_s3 = "new MTS.KPICard('#kpi-clickable', { label:'" + clickableLabel + "', value:'28', trend:3, variant:'primary', onClick:function(){ document.getElementById('kpi-result').textContent = '" + clickPrefix + clickableLabel + "'; } });";
 var preview_s4 = "<div class=\"demo-stack\"><div id=\"kpi-live\"></div><div class=\"demo-row\"><button class=\"demo-btn-sm\" onclick=\"kpiLive.update({ value:'$13.4K', trend:15, variant:'success', sparkline:[10,12,13,14,15,16,18] })\">update()</button><button class=\"demo-btn-sm\" onclick=\"kpiLive.update({ value:'$11.2K', trend:4, variant:'default', sparkline:[8,10,11,10,12,11,13] })\">restore</button></div></div>";
 var js_s4 = "var kpiLive = new MTS.KPICard('#kpi-live', { label:'ARR', value:'$11.2K', trend:4, sparkline:[8,10,11,10,12,11,13] });\nkpiLive.update({ value:'$13.4K', trend:15, variant:'success', sparkline:[10,12,13,14,15,16,18] });";
 var kpiLive;
@@ -120,7 +142,7 @@ makeSection('tabs-s2', preview_s2, js_s2, function() {
   new MTS.KPICard('#kpi-v-success', { label:'Closed deals', value:'32', trend:17, variant:'success', sparkline:[14,16,18,17,19,21,24] });
   new MTS.KPICard('#kpi-v-danger', { label:'Churn', value:'6.2%', trend:-9, variant:'danger', sparkline:[18,17,16,15,14,13,12] });
 }, '340px');
-makeSection('tabs-s3', preview_s3, js_s3, function() { new MTS.KPICard('#kpi-clickable', { label:'Tickets abiertos', value:'28', trend:3, variant:'primary', onClick:function(){ document.getElementById('kpi-result').textContent = 'click → Tickets abiertos'; } }); }, '320px');
+makeSection('tabs-s3', preview_s3, js_s3, function() { new MTS.KPICard('#kpi-clickable', { label:clickableLabel, value:'28', trend:3, variant:'primary', onClick:function(){ document.getElementById('kpi-result').textContent = clickPrefix + clickableLabel; } }); }, '320px');
 makeSection('tabs-s4', preview_s4, js_s4, function() { kpiLive = new MTS.KPICard('#kpi-live', { label:'ARR', value:'$11.2K', trend:4, sparkline:[8,10,11,10,12,11,13] }); }, '320px');
 
 </script>

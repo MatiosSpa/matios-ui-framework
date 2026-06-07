@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,34 +49,61 @@
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-table-i18n.js"></script>
 </head>
 <body>
 
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Table</h1>
-    <p>Componente de tabla CSS-only — sin JavaScript requerido. Variantes, estados de fila, cabeceras ordenables, columnas de acciones.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Base</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Variantes</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Combinadas (toggle interactivo)</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Estados de fila</div><div id="tabs-s4"></div></div>
-  <div class="demo-section"><div class="demo-section-title">5 — Cabeceras ordenables</div><div id="tabs-s5"></div></div>
-  <div class="demo-section"><div class="demo-section-title">6 — Checkbox y selección múltiple</div><div id="tabs-s6"></div></div>
-  <div class="demo-section"><div class="demo-section-title">7 — Columna de acciones</div><div id="tabs-s7"></div></div>
-  <div class="demo-section"><div class="demo-section-title">8 — Estado vacío</div><div id="tabs-s8"></div></div>
-  <div class="demo-section"><div class="demo-section-title">9 — Footer y totales</div><div id="tabs-s9"></div></div>
-  <div class="demo-section"><div class="demo-section-title">10 — Header fijo (scroll vertical)</div><div id="tabs-s10"></div></div>
-  <div class="demo-section"><div class="demo-section-title">11 — Texto truncado</div><div id="tabs-s11"></div></div>
-  <div class="demo-section"><div class="demo-section-title">12 — Responsive</div><div id="tabs-s12"></div></div>
-  <div class="demo-section"><div class="demo-section-title">13 — Loading skeleton</div><div id="tabs-s13"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s6-title"></div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s7-title"></div><div id="tabs-s7"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s8-title"></div><div id="tabs-s8"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s9-title"></div><div id="tabs-s9"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s10-title"></div><div id="tabs-s10"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s11-title"></div><div id="tabs-s11"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s12-title"></div><div id="tabs-s12"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s13-title"></div><div id="tabs-s13"></div></div>
 </div>
 
 <script>
+/* ============================================================
+   LOCALE — muestra inglés por defecto (cara pública); ?lang=es|en|pt
+   ============================================================ */
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Table'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'CSS-only table component — no JavaScript required. Variants, row states, sortable headers, action columns.';
+document.getElementById('s1-title').textContent  = D.s1Title  || '1 — Base';
+document.getElementById('s2-title').textContent  = D.s2Title  || '2 — Variants';
+document.getElementById('s3-title').textContent  = D.s3Title  || '3 — Combined (interactive toggle)';
+document.getElementById('s4-title').textContent  = D.s4Title  || '4 — Row states';
+document.getElementById('s5-title').textContent  = D.s5Title  || '5 — Sortable headers';
+document.getElementById('s6-title').textContent  = D.s6Title  || '6 — Checkbox and multiple selection';
+document.getElementById('s7-title').textContent  = D.s7Title  || '7 — Actions column';
+document.getElementById('s8-title').textContent  = D.s8Title  || '8 — Empty state';
+document.getElementById('s9-title').textContent  = D.s9Title  || '9 — Footer and totals';
+document.getElementById('s10-title').textContent = D.s10Title || '10 — Fixed header (vertical scroll)';
+document.getElementById('s11-title').textContent = D.s11Title || '11 — Truncated text';
+document.getElementById('s12-title').textContent = D.s12Title || '12 — Responsive';
+document.getElementById('s13-title').textContent = D.s13Title || '13 — Loading skeleton';
+
 /* ============================================================
    UTILIDADES
    ============================================================ */
@@ -168,10 +195,10 @@ const PRODUCTS = [
 ];
 
 const BADGES = {
-  active:    'Activo',
-  pending:   'Pendiente',
-  suspended: 'Suspendido',
-  inactive:  'Inactivo',
+  active:    D.badgeActive    || 'Active',
+  pending:   D.badgePending   || 'Pending',
+  suspended: D.badgeSuspended || 'Suspended',
+  inactive:  D.badgeInactive  || 'Inactive',
 };
 
 const BADGE_VARIANTS = {
@@ -221,11 +248,11 @@ const preview_s1 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table">' +
       '<thead><tr>' +
-        '<th class="mts-table__th">Nombre</th>' +
-        '<th class="mts-table__th">Email</th>' +
-        '<th class="mts-table__th">Rol</th>' +
-        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
-        '<th class="mts-table__th mts-table__th--end">Fecha</th>' +
+        '<th class="mts-table__th">' + (D.colName || 'Name') + '</th>' +
+        '<th class="mts-table__th">' + (D.colEmail || 'Email') + '</th>' +
+        '<th class="mts-table__th">' + (D.colRole || 'Role') + '</th>' +
+        '<th class="mts-table__th mts-table__th--center">' + (D.colStatus || 'Status') + '</th>' +
+        '<th class="mts-table__th mts-table__th--end">' + (D.colDate || 'Date') + '</th>' +
       '</tr></thead>' +
       '<tbody>' +
         USERS.map(function(u) {
@@ -304,9 +331,9 @@ function variantBlock(modifier, label) {
     '<div class="mts-table-wrap" style="margin-bottom:20px">' +
       '<table class="mts-table ' + modifier + '">' +
         '<thead><tr>' +
-          '<th class="mts-table__th">Producto</th>' +
-          '<th class="mts-table__th">Categoría</th>' +
-          '<th class="mts-table__th mts-table__th--end">Precio</th>' +
+          '<th class="mts-table__th">' + (D.colProduct || 'Product') + '</th>' +
+          '<th class="mts-table__th">' + (D.colCategory || 'Category') + '</th>' +
+          '<th class="mts-table__th mts-table__th--end">' + (D.colPrice || 'Price') + '</th>' +
         '</tr></thead>' +
         '<tbody>' +
           PRODUCTS.slice(0, 4).map(function(p) {
@@ -372,11 +399,11 @@ const preview_s3 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table mts-table--hover" id="demo-toggle-table">' +
       '<thead><tr>' +
-        '<th class="mts-table__th">Producto</th>' +
-        '<th class="mts-table__th">SKU</th>' +
-        '<th class="mts-table__th">Categoría</th>' +
-        '<th class="mts-table__th mts-table__th--end">Stock</th>' +
-        '<th class="mts-table__th mts-table__th--end">Precio</th>' +
+        '<th class="mts-table__th">' + (D.colProduct || 'Product') + '</th>' +
+        '<th class="mts-table__th">' + (D.colSku || 'SKU') + '</th>' +
+        '<th class="mts-table__th">' + (D.colCategory || 'Category') + '</th>' +
+        '<th class="mts-table__th mts-table__th--end">' + (D.colStock || 'Stock') + '</th>' +
+        '<th class="mts-table__th mts-table__th--end">' + (D.colPrice || 'Price') + '</th>' +
       '</tr></thead>' +
       '<tbody>' +
         PRODUCTS.map(function(p) {
@@ -423,20 +450,20 @@ html_s3
    S4 — Row states
    ============================================================ */
 const ROW_STATES = [
-  { user: USERS[0], cls: 'mts-table__row--selected', badge: '<span class="mts-badge mts-badge--primary">Seleccionado</span>' },
-  { user: USERS[1], cls: 'mts-table__row--success',  badge: '<span class="mts-badge mts-badge--success">Éxito</span>'        },
-  { user: USERS[2], cls: 'mts-table__row--warning',  badge: '<span class="mts-badge mts-badge--warning">Advertencia</span>'  },
-  { user: USERS[3], cls: 'mts-table__row--danger',   badge: '<span class="mts-badge mts-badge--danger">Error</span>'         },
-  { user: USERS[4], cls: 'mts-table__row--info',     badge: '<span class="mts-badge mts-badge--info">Info</span>'            },
+  { user: USERS[0], cls: 'mts-table__row--selected', badge: '<span class="mts-badge mts-badge--primary">' + (D.stateSelected || 'Selected') + '</span>' },
+  { user: USERS[1], cls: 'mts-table__row--success',  badge: '<span class="mts-badge mts-badge--success">' + (D.stateSuccess || 'Success') + '</span>'  },
+  { user: USERS[2], cls: 'mts-table__row--warning',  badge: '<span class="mts-badge mts-badge--warning">' + (D.stateWarning || 'Warning') + '</span>'  },
+  { user: USERS[3], cls: 'mts-table__row--danger',   badge: '<span class="mts-badge mts-badge--danger">' + (D.stateDanger || 'Error') + '</span>'      },
+  { user: USERS[4], cls: 'mts-table__row--info',     badge: '<span class="mts-badge mts-badge--info">' + (D.stateInfo || 'Info') + '</span>'           },
 ];
 
 const preview_s4 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table">' +
       '<thead><tr>' +
-        '<th class="mts-table__th">Usuario</th>' +
-        '<th class="mts-table__th">Clase aplicada</th>' +
-        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
+        '<th class="mts-table__th">' + (D.colUser || 'User') + '</th>' +
+        '<th class="mts-table__th">' + (D.colAppliedClass || 'Applied class') + '</th>' +
+        '<th class="mts-table__th mts-table__th--center">' + (D.colStatus || 'Status') + '</th>' +
       '</tr></thead>' +
       '<tbody>' +
         ROW_STATES.map(function(r) {
@@ -533,10 +560,10 @@ function buildSortTable() {
 
   const thead = document.createElement('thead');
   const tr    = document.createElement('tr');
-  tr.appendChild(makeSortTh('name',     'Producto',  ''));
-  tr.appendChild(makeSortTh('category', 'Categoría', ''));
-  tr.appendChild(makeSortTh('stock',    'Stock',     'mts-table__th--end'));
-  tr.appendChild(makeSortTh('price',    'Precio',    'mts-table__th--end'));
+  tr.appendChild(makeSortTh('name',     D.colProduct  || 'Product',  ''));
+  tr.appendChild(makeSortTh('category', D.colCategory || 'Category', ''));
+  tr.appendChild(makeSortTh('stock',    D.colStock    || 'Stock',    'mts-table__th--end'));
+  tr.appendChild(makeSortTh('price',    D.colPrice    || 'Price',    'mts-table__th--end'));
   thead.appendChild(tr);
 
   const tbody = document.createElement('tbody');
@@ -635,10 +662,10 @@ const preview_s6 =
         '<th class="mts-table__th mts-table__th--check">' +
           '<input type="checkbox" class="mts-table__checkbox" id="chk-all" onchange="toggleAll(this)">' +
         '</th>' +
-        '<th class="mts-table__th">Nombre</th>' +
-        '<th class="mts-table__th">Email</th>' +
-        '<th class="mts-table__th">Rol</th>' +
-        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
+        '<th class="mts-table__th">' + (D.colName || 'Name') + '</th>' +
+        '<th class="mts-table__th">' + (D.colEmail || 'Email') + '</th>' +
+        '<th class="mts-table__th">' + (D.colRole || 'Role') + '</th>' +
+        '<th class="mts-table__th mts-table__th--center">' + (D.colStatus || 'Status') + '</th>' +
       '</tr></thead>' +
       '<tbody>' +
         USERS.map(function(u, i) {
@@ -655,7 +682,7 @@ const preview_s6 =
       '</tbody>' +
     '</table>' +
   '</div>' +
-  '<div class="result-box" id="chk-result" style="margin-top:8px">— selecciona filas —</div>';
+  '<div class="result-box" id="chk-result" style="margin-top:8px">' + (D.chkPlaceholder || '— select rows —') + '</div>';
 
 const html_s6 =
 '<div class="mts-table-wrap">\n' +
@@ -724,10 +751,10 @@ const preview_s7 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table mts-table--hover">' +
       '<thead><tr>' +
-        '<th class="mts-table__th">Nombre</th>' +
-        '<th class="mts-table__th">Email</th>' +
-        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
-        '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+        '<th class="mts-table__th">' + (D.colName || 'Name') + '</th>' +
+        '<th class="mts-table__th">' + (D.colEmail || 'Email') + '</th>' +
+        '<th class="mts-table__th mts-table__th--center">' + (D.colStatus || 'Status') + '</th>' +
+        '<th class="mts-table__th mts-table__th--actions">' + (D.colActions || 'Actions') + '</th>' +
       '</tr></thead>' +
       '<tbody>' +
         USERS.map(function(u) {
@@ -795,17 +822,17 @@ const preview_s8 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table">' +
       '<thead><tr>' +
-        '<th class="mts-table__th">Nombre</th>' +
-        '<th class="mts-table__th">Email</th>' +
-        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
-        '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+        '<th class="mts-table__th">' + (D.colName || 'Name') + '</th>' +
+        '<th class="mts-table__th">' + (D.colEmail || 'Email') + '</th>' +
+        '<th class="mts-table__th mts-table__th--center">' + (D.colStatus || 'Status') + '</th>' +
+        '<th class="mts-table__th mts-table__th--actions">' + (D.colActions || 'Actions') + '</th>' +
       '</tr></thead>' +
       '<tbody>' +
         '<tr>' +
           '<td colspan="4" class="mts-table__empty">' +
             '<i class="mts-icon mts-icon-inbox mts-icon--xl mts-table__empty-icon"></i>' +
-            '<div class="mts-table__empty-title">No se encontraron registros</div>' +
-            '<div class="mts-table__empty-msg">Intenta con otros filtros o agrega un nuevo elemento.</div>' +
+            '<div class="mts-table__empty-title">' + (D.emptyTitle || 'No records found') + '</div>' +
+            '<div class="mts-table__empty-msg">' + (D.emptyMsg || 'Try other filters or add a new item.') + '</div>' +
           '</td>' +
         '</tr>' +
       '</tbody>' +
@@ -867,10 +894,10 @@ const preview_s9 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table mts-table--hover">' +
       '<thead><tr>' +
-        '<th class="mts-table__th">Producto</th>' +
-        '<th class="mts-table__th">Categoría</th>' +
-        '<th class="mts-table__th mts-table__th--end">Stock</th>' +
-        '<th class="mts-table__th mts-table__th--end">Precio</th>' +
+        '<th class="mts-table__th">' + (D.colProduct || 'Product') + '</th>' +
+        '<th class="mts-table__th">' + (D.colCategory || 'Category') + '</th>' +
+        '<th class="mts-table__th mts-table__th--end">' + (D.colStock || 'Stock') + '</th>' +
+        '<th class="mts-table__th mts-table__th--end">' + (D.colPrice || 'Price') + '</th>' +
       '</tr></thead>' +
       '<tbody>' +
         PRODUCTS.map(function(p) {
@@ -884,7 +911,7 @@ const preview_s9 =
       '</tbody>' +
       '<tfoot>' +
         '<tr class="mts-table__tfoot">' +
-          '<td class="mts-table__td" colspan="2"><strong>Total</strong></td>' +
+          '<td class="mts-table__td" colspan="2"><strong>' + (D.totalLabel || 'Total') + '</strong></td>' +
           '<td class="mts-table__td mts-table__td--end"><strong>' + totalStock + '</strong></td>' +
           '<td class="mts-table__td mts-table__td--end"><strong>' + fmtPrice(totalPrice) + '</strong></td>' +
         '</tr>' +
@@ -945,10 +972,10 @@ const preview_s10 =
     '<table class="mts-table mts-table--hover mts-table--fixed">' +
       '<thead><tr>' +
         '<th class="mts-table__th" style="width:36px">#</th>' +
-        '<th class="mts-table__th">Nombre</th>' +
-        '<th class="mts-table__th">Email</th>' +
-        '<th class="mts-table__th">Rol</th>' +
-        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
+        '<th class="mts-table__th">' + (D.colName || 'Name') + '</th>' +
+        '<th class="mts-table__th">' + (D.colEmail || 'Email') + '</th>' +
+        '<th class="mts-table__th">' + (D.colRole || 'Role') + '</th>' +
+        '<th class="mts-table__th mts-table__th--center">' + (D.colStatus || 'Status') + '</th>' +
       '</tr></thead>' +
       '<tbody>' +
         fixedRows.map(function(u, i) {
@@ -1017,9 +1044,9 @@ const preview_s11 =
   '<div class="mts-table-wrap">' +
     '<table class="mts-table mts-table--hover">' +
       '<thead><tr>' +
-        '<th class="mts-table__th">Producto</th>' +
-        '<th class="mts-table__th" style="max-width:200px">Descripción</th>' +
-        '<th class="mts-table__th mts-table__th--end">Precio</th>' +
+        '<th class="mts-table__th">' + (D.colProduct || 'Product') + '</th>' +
+        '<th class="mts-table__th" style="max-width:200px">' + (D.colDescription || 'Description') + '</th>' +
+        '<th class="mts-table__th mts-table__th--end">' + (D.colPrice || 'Price') + '</th>' +
       '</tr></thead>' +
       '<tbody>' +
         TRUNC_DATA.map(function(p) {
@@ -1065,23 +1092,23 @@ html_s11
    ============================================================ */
 const preview_s12 =
   '<p style="font-size:11px;color:var(--mts-text-muted);margin:0 0 10px">' +
-    'Reduce el ancho de la ventana para ver el colapso de columnas en móvil.' +
+    (D.responsiveHint || 'Reduce the window width to see the columns collapse on mobile.') +
   '</p>' +
   '<div class="mts-table-wrap">' +
     '<table class="mts-table mts-table--hover mts-table--responsive">' +
       '<thead><tr>' +
-        '<th class="mts-table__th">Nombre</th>' +
-        '<th class="mts-table__th">Email</th>' +
-        '<th class="mts-table__th">Rol</th>' +
-        '<th class="mts-table__th mts-table__th--center">Estado</th>' +
+        '<th class="mts-table__th">' + (D.colName || 'Name') + '</th>' +
+        '<th class="mts-table__th">' + (D.colEmail || 'Email') + '</th>' +
+        '<th class="mts-table__th">' + (D.colRole || 'Role') + '</th>' +
+        '<th class="mts-table__th mts-table__th--center">' + (D.colStatus || 'Status') + '</th>' +
       '</tr></thead>' +
       '<tbody>' +
         USERS.map(function(u) {
           return '<tr class="mts-table__row">' +
-            '<td class="mts-table__td" data-label="Nombre">'  + u.name  + '</td>' +
-            '<td class="mts-table__td" data-label="Email">'   + u.email + '</td>' +
-            '<td class="mts-table__td" data-label="Rol">'     + u.role  + '</td>' +
-            '<td class="mts-table__td mts-table__td--center" data-label="Estado">' + badgeHtml(u.status) + '</td>' +
+            '<td class="mts-table__td" data-label="' + (D.colName || 'Name') + '">'  + u.name  + '</td>' +
+            '<td class="mts-table__td" data-label="' + (D.colEmail || 'Email') + '">'   + u.email + '</td>' +
+            '<td class="mts-table__td" data-label="' + (D.colRole || 'Role') + '">'     + u.role  + '</td>' +
+            '<td class="mts-table__td mts-table__td--center" data-label="' + (D.colStatus || 'Status') + '">' + badgeHtml(u.status) + '</td>' +
           '</tr>';
         }).join('') +
       '</tbody>' +
@@ -1168,8 +1195,8 @@ function updateChkResult() {
   const n  = document.querySelectorAll('.row-chk:checked').length;
   const el = document.getElementById('chk-result');
   if (el) el.textContent = n === 0
-    ? '— selecciona filas —'
-    : n + ' fila' + (n > 1 ? 's' : '') + ' seleccionada' + (n > 1 ? 's' : '');
+    ? (D.chkPlaceholder || '— select rows —')
+    : n + ' ' + (n > 1 ? (D.chkRowPlural || 'rows selected') : (D.chkRowSingular || 'row selected'));
 }
 
 function toggleVariant(cls) {
@@ -1192,11 +1219,11 @@ function buildTable() {
   const thead = document.createElement('thead');
   const hRow  = document.createElement('tr');
   [
-    { label: 'Nombre',  cls: '' },
-    { label: 'Email',   cls: '' },
-    { label: 'Rol',     cls: '' },
-    { label: 'Estado',  cls: 'mts-table__th--center' },
-    { label: 'Fecha',   cls: 'mts-table__th--end' },
+    { label: D.colName   || 'Name',   cls: '' },
+    { label: D.colEmail  || 'Email',  cls: '' },
+    { label: D.colRole   || 'Role',   cls: '' },
+    { label: D.colStatus || 'Status', cls: 'mts-table__th--center' },
+    { label: D.colDate   || 'Date',   cls: 'mts-table__th--end' },
   ].forEach(function(col) {
     const th = document.createElement('th');
     th.className = 'mts-table__th' + (col.cls ? ' ' + col.cls : '');
@@ -1247,7 +1274,7 @@ function buildTable() {
 const preview_s13 =
   '<div class="demo-stack">' +
     '<div class="demo-row" style="margin-bottom:10px">' +
-      '<button class="mts-btn mts-btn--primary mts-btn--sm" onclick="reloadSkeleton()">↺ Simular carga</button>' +
+      '<button class="mts-btn mts-btn--primary mts-btn--sm" onclick="reloadSkeleton()">' + (D.reloadButton || '↺ Simulate loading') + '</button>' +
     '</div>' +
     '<div id="skeleton-host"></div>' +
   '</div>';

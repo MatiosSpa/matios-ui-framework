@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html data-mts-mode="dark" lang="es">
+<html data-mts-mode="dark" lang="en">
 <head>
 <script>
     (function(){
@@ -46,25 +46,23 @@
 <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
 <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
 <script src="../matios-ui-tabs/matios-ui-tabs.js"></script>
+<script src="../../base/matios-ui-i18n.js"></script>
+<script src="./matios-ui-breadcrumb-i18n.js"></script>
 <script src="./matios-ui-breadcrumb.js"></script>
 </head>
 <body>
 <div class="demo-page">
 <div class="demo-header">
 <h1><span>MTS</span>.Breadcrumb</h1>
-<p>Navigation breadcrumb — custom separator, icons, collapsible overflow, dynamic items.</p>
+<p id="demo-subtitle"></p>
 <div class="demo-header-actions">
 </div>
 <div class="demo-docs-panel" id="docs-panel"></div>
 </div>
-<!-- 1. Básico con onClick -->
-<div class="demo-section"><div class="demo-section-title">1 — Básico con onClick / Basic with onClick</div><div id="tabs-s1"></div></div>
-<!-- 2. Separadores personalizados -->
-<div class="demo-section"><div class="demo-section-title">2 — Separadores personalizados / Custom separators</div><div id="tabs-s2"></div></div>
-<!-- 3. Con íconos -->
-<div class="demo-section"><div class="demo-section-title">3 — Con íconos / With icons</div><div id="tabs-s3"></div></div>
-<!-- 4. Colapso maxItems + API -->
-<div class="demo-section"><div class="demo-section-title">4 — Colapso con maxItems / Collapsible + API</div><div id="tabs-s4"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+<div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 <script>
 function indentHtml(html) {
@@ -98,13 +96,28 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Breadcrumb']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Navigation breadcrumb — custom separator, icons, collapsible overflow, dynamic items.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic with onClick';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Custom separators';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — With icons';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Collapsible with maxItems + API';
+
 var IH = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
 var IG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>';
 var bcApi;
 
 var preview_s1 =
   '<div id="bc-basic"></div>' +
-  '<div class="result-box" id="bc-result">— haz click en un ítem —</div>';
+  '<div class="result-box" id="bc-result">' + (D.resultBasicPlaceholder || '— click an item —') + '</div>';
 
 var js_s1 =
   "new MTS.Breadcrumb('#my-breadcrumb', {\n" +
@@ -120,7 +133,7 @@ var js_s1 =
   "  }\n" +
   "});";
 
-var SI = [{ label:'Home', href:'/' }, { label:'Categoría', href:'/cat' }, { label:'Página actual' }];
+var SI = [{ label:'Home', href:'/' }, { label:(D.exampleCategory || 'Category'), href:'/cat' }, { label:(D.exampleCurrentPage || 'Current page') }];
 
 var preview_s2 =
   '<div class="demo-stack">' +
@@ -157,11 +170,11 @@ var js_s3 =
 var preview_s4 =
   '<div id="bc-collapse"></div>' +
   '<div class="demo-row" style="margin-top:8px;flex-wrap:wrap">' +
-    '<button class="demo-btn-sm" onclick="bcApi.push({ label:\'Level 5\', href:\'/l5\' }); document.getElementById(\'bc-api-res\').textContent = \'push() ✓ — \' + bcApi.items.length + \' items\'">push()</button>' +
-    '<button class="demo-btn-sm" onclick="bcApi.pop(); document.getElementById(\'bc-api-res\').textContent = \'pop() ✓ — \' + bcApi.items.length + \' items\'">pop()</button>' +
-    '<button class="demo-btn-sm" onclick="bcApi.setItems([{label:\'Home\',href:\'/\'},{label:\'Reset\'}]); document.getElementById(\'bc-api-res\').textContent = \'setItems() ✓\'">setItems()</button>' +
+    '<button class="demo-btn-sm" onclick="bcApi.push({ label:\'Level 5\', href:\'/l5\' }); document.getElementById(\'bc-api-res\').textContent = (D.pushResult || \'push() ✓ — \') + bcApi.items.length + (D.itemsSuffix || \' items\')">push()</button>' +
+    '<button class="demo-btn-sm" onclick="bcApi.pop(); document.getElementById(\'bc-api-res\').textContent = (D.popResult || \'pop() ✓ — \') + bcApi.items.length + (D.itemsSuffix || \' items\')">pop()</button>' +
+    '<button class="demo-btn-sm" onclick="bcApi.setItems([{label:\'Home\',href:\'/\'},{label:\'Reset\'}]); document.getElementById(\'bc-api-res\').textContent = (D.setItemsResult || \'setItems() ✓\')">setItems()</button>' +
   '</div>' +
-  '<div class="result-box" id="bc-api-res">— usa los botones —</div>';
+  '<div class="result-box" id="bc-api-res">' + (D.resultApiPlaceholder || '— use the buttons —') + '</div>';
 
 var js_s4 =
   "const bc = new MTS.Breadcrumb('#my-breadcrumb', {\n" +
@@ -187,7 +200,7 @@ makeSection('tabs-s1', preview_s1, js_s1, function() {
   ];
   new MTS.Breadcrumb('#bc-basic', {
     items: ITEMS,
-    onClick: function(e){ document.getElementById('bc-result').textContent = 'onClick → label: "' + e.detail.item.label + '" | index: ' + e.detail.index; },
+    onClick: function(e){ document.getElementById('bc-result').textContent = (D.clickPrefix || 'onClick → label: ') + '"' + e.detail.item.label + '"' + (D.clickIndex || ' | index: ') + e.detail.index; },
   });
 }, '340px');
 
@@ -218,7 +231,7 @@ makeSection('tabs-s4', preview_s4, js_s4, function() {
       { label:'Level 3', href:'/l3' },
       { label:'Current' },
     ],
-    onClick: function(e){ document.getElementById('bc-api-res').textContent = 'onClick → "' + e.detail.item.label + '"'; },
+    onClick: function(e){ document.getElementById('bc-api-res').textContent = (D.clickShort || 'onClick → ') + '"' + e.detail.item.label + '"'; },
   });
 }, '340px');
 </script>

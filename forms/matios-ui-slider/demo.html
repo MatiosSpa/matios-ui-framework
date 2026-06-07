@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -47,6 +47,8 @@
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-slider-i18n.js"></script>
   <script src="./matios-ui-slider.js"></script>
 </head>
 <body>
@@ -54,15 +56,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Slider</h1>
-    <p>Slider simple, rango doble y control programático usando el patrón de demo estándar.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Slider simple</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Rango doble</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — API</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
@@ -112,12 +114,26 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Slider']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Simple slider, dual range and programmatic control using the standard demo pattern.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Simple slider';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Dual range';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — API';
+
 var preview_s1 =
   '<div class="demo-stack">' +
     '<div id="sl-basic"></div>' +
     '<div id="sl-percent"></div>' +
     '<div id="sl-step"></div>' +
-    '<div class="result-box" id="sl-result">— mueve los sliders —</div>' +
+    '<div class="result-box" id="sl-result">' + (D.resultSimple || '— move the sliders —') + '</div>' +
   '</div>';
 
 var js_s1 =
@@ -146,7 +162,7 @@ var preview_s2 =
   '<div class="demo-stack">' +
     '<div id="sl-range"></div>' +
     '<div id="sl-price"></div>' +
-    '<div class="result-box" id="sl-range-result">— mueve los rangos —</div>' +
+    '<div class="result-box" id="sl-range-result">' + (D.resultRange || '— move the ranges —') + '</div>' +
   '</div>';
 
 var js_s2 =
@@ -174,7 +190,7 @@ var preview_s3 =
       '<button class="demo-btn-sm" onclick="sliderApi(50)">setValue(50)</button>' +
       '<button class="demo-btn-sm" onclick="sliderApi(90)">setValue(90)</button>' +
     '</div>' +
-    '<div class="result-box" id="sl-api-result">— usa los botones —</div>' +
+    '<div class="result-box" id="sl-api-result">' + (D.resultApi || '— use the buttons —') + '</div>' +
   '</div>';
 
 var js_s3 =
@@ -193,56 +209,56 @@ var sliderApiInstance;
 function sliderApi(value) {
   if (!sliderApiInstance) return;
   sliderApiInstance.setValue(value);
-  setResult('sl-api-result', 'setValue(' + value + ') ✓');
+  setResult('sl-api-result', (D.echoSetValue || 'setValue(') + value + ') ✓');
 }
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {
   new MTS.Slider('#sl-basic', {
-    label: 'Volumen',
+    label: D.labelVolume || 'Volume',
     min: 0, max: 100, value: 65,
     showValue: true,
-    onChange: function(e) { setResult('sl-result', 'Volumen → ' + e.detail.value); }
+    onChange: function(e) { setResult('sl-result', (D.echoVolume || 'Volume → ') + e.detail.value); }
   });
   new MTS.Slider('#sl-percent', {
-    label: 'Brillo',
+    label: D.labelBrightness || 'Brightness',
     min: 0, max: 100, value: 80,
     showValue: true,
     labelFormat: function(v) { return v + '%'; },
-    onChange: function(e) { setResult('sl-result', 'Brillo → ' + e.detail.value + '%'); }
+    onChange: function(e) { setResult('sl-result', (D.echoBrightness || 'Brightness → ') + e.detail.value + '%'); }
   });
   new MTS.Slider('#sl-step', {
-    label: 'Temperatura',
+    label: D.labelTemperature || 'Temperature',
     min: 16, max: 30, step: 0.5, value: 22,
     showValue: true,
     labelFormat: function(v) { return v + '°C'; },
-    onChange: function(e) { setResult('sl-result', 'Temperatura → ' + e.detail.value + '°C'); }
+    onChange: function(e) { setResult('sl-result', (D.echoTemperature || 'Temperature → ') + e.detail.value + '°C'); }
   });
 });
 
 makeSection('tabs-s2', preview_s2, js_s2, function() {
   new MTS.Slider('#sl-range', {
     range: true,
-    label: 'Rango de edad',
+    label: D.labelAgeRange || 'Age range',
     min: 0, max: 100, value: [25, 45],
     showValue: true,
-    onChange: function(e) { setResult('sl-range-result', 'Edad → ' + e.detail.value.join(' – ')); }
+    onChange: function(e) { setResult('sl-range-result', (D.echoAge || 'Age → ') + e.detail.value.join(' – ')); }
   });
   new MTS.Slider('#sl-price', {
     range: true,
-    label: 'Precio',
+    label: D.labelPrice || 'Price',
     min: 0, max: 1000, step: 10, value: [200, 700],
     showValue: true,
     labelFormat: function(v) { return '$' + v[0] + ' – $' + v[1]; },
-    onChange: function(e) { setResult('sl-range-result', 'Precio → $' + e.detail.value[0] + ' – $' + e.detail.value[1]); }
+    onChange: function(e) { setResult('sl-range-result', (D.echoPrice || 'Price → ') + '$' + e.detail.value[0] + ' – $' + e.detail.value[1]); }
   });
 });
 
 makeSection('tabs-s3', preview_s3, js_s3, function() {
   sliderApiInstance = new MTS.Slider('#sl-api', {
-    label: 'API demo',
+    label: D.labelApiDemo || 'API demo',
     min: 0, max: 100, value: 40,
     showValue: true,
-    onChange: function(e) { setResult('sl-api-result', 'change → ' + e.detail.value); }
+    onChange: function(e) { setResult('sl-api-result', (D.echoChange || 'change → ') + e.detail.value); }
   });
 });
 </script>

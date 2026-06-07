@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -48,6 +48,8 @@
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../../forms/matios-ui-fileupload/matios-ui-fileupload.js"></script>
   <script src="../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-httpclient-i18n.js"></script>
   <script src="./matios-ui-httpclient.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
@@ -70,21 +72,21 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.HttpClient</h1>
-    <p>HTTP client con contrato consistente, timeout, retry, interceptores, upload y download usando el patrón estándar de demo.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — GET request</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — POST request</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Error handling</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Retry automático</div><div id="tabs-s4"></div></div>
-  <div class="demo-section"><div class="demo-section-title">5 — Interceptores</div><div id="tabs-s5"></div></div>
-  <div class="demo-section"><div class="demo-section-title">6 — Instancia global</div><div id="tabs-s6"></div></div>
-  <div class="demo-section"><div class="demo-section-title">7 — Upload con progreso</div><div id="tabs-s7"></div></div>
-  <div class="demo-section"><div class="demo-section-title">8 — Download</div><div id="tabs-s8"></div></div>
-  <div class="demo-section"><div class="demo-section-title">9 — Callbacks por request</div><div id="tabs-s9"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s6-title"></div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s7-title"></div><div id="tabs-s7"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s8-title"></div><div id="tabs-s8"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s9-title"></div><div id="tabs-s9"></div></div>
 </div>
 
 <script>
@@ -157,6 +159,26 @@ function setResult(id, payload, ok) {
   el.style.color = ok === true ? 'var(--mts-color-success)' : (ok === false ? 'var(--mts-color-danger)' : '');
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.HttpClient']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'HTTP client with a consistent contract, timeout, retry, interceptors, upload and download using the standard demo pattern.';
+document.getElementById('s1-title').textContent = D.s1Title || '1 — GET request';
+document.getElementById('s2-title').textContent = D.s2Title || '2 — POST request';
+document.getElementById('s3-title').textContent = D.s3Title || '3 — Error handling';
+document.getElementById('s4-title').textContent = D.s4Title || '4 — Automatic retry';
+document.getElementById('s5-title').textContent = D.s5Title || '5 — Interceptors';
+document.getElementById('s6-title').textContent = D.s6Title || '6 — Global instance';
+document.getElementById('s7-title').textContent = D.s7Title || '7 — Upload with progress';
+document.getElementById('s8-title').textContent = D.s8Title || '8 — Download';
+document.getElementById('s9-title').textContent = D.s9Title || '9 — Per-request callbacks';
+
 const http = new MTS.HttpClient({
   baseUrl: '/utilities/matios-ui-httpclient/api',
   timeout: 8000,
@@ -168,7 +190,7 @@ var preview_s1 =
     '<div class="demo-row">' +
       '<button id="btn-get"></button>' +
     '</div>' +
-    '<div class="result-box" id="res-get">— presiona el botón —</div>' +
+    '<div class="result-box" id="res-get">' + (D.pressButton || '— press the button —') + '</div>' +
   '</div>';
 
 var js_s1 =
@@ -189,7 +211,7 @@ var preview_s2 =
     '<div class="demo-row">' +
       '<button id="btn-post"></button>' +
     '</div>' +
-    '<div class="result-box" id="res-post">— presiona el botón —</div>' +
+    '<div class="result-box" id="res-post">' + (D.pressButton || '— press the button —') + '</div>' +
   '</div>';
 
 var js_s2 =
@@ -211,7 +233,7 @@ var preview_s3 =
       '<button id="btn-error"></button>' +
       '<button id="btn-timeout"></button>' +
     '</div>' +
-    '<div class="result-box" id="res-error">— presiona un botón —</div>' +
+    '<div class="result-box" id="res-error">' + (D.pressAButton || '— press a button —') + '</div>' +
   '</div>';
 
 var js_s3 =
@@ -230,7 +252,7 @@ var js_s3 =
   "});\n" +
   "const timeoutRes = await httpTimeout.get('/slow');";
 
-var preview_s4 = '<div class="result-box">Ejemplo conceptual. Revisa el código JavaScript para la configuración de retry automático y backoff.</div>';
+var preview_s4 = '<div class="result-box">' + (D.conceptRetry || 'Conceptual example. Check the JavaScript code for the automatic retry and backoff configuration.') + '</div>';
 var js_s4 =
   "const http = new MTS.HttpClient({\n" +
   "  baseUrl: 'https://api.miapp.com',\n" +
@@ -239,7 +261,7 @@ var js_s4 =
   "});\n\n" +
   "const res = await http.get('/endpoint-inestable');";
 
-var preview_s5 = '<div class="result-box">Ejemplo conceptual. Los interceptores permiten agregar headers, auth y manejo global de respuestas sin repetir lógica.</div>';
+var preview_s5 = '<div class="result-box">' + (D.conceptInterceptors || 'Conceptual example. Interceptors let you add headers, auth and global response handling without repeating logic.') + '</div>';
 var js_s5 =
   "const http = new MTS.HttpClient({ baseUrl: 'https://api.miapp.com' });\n\n" +
   "http.before((req) => {\n" +
@@ -252,7 +274,7 @@ var js_s5 =
   "  return res;\n" +
   "});";
 
-var preview_s6 = '<div class="result-box">Ejemplo conceptual. Puedes crear una instancia global una vez y reutilizarla en toda la aplicación.</div>';
+var preview_s6 = '<div class="result-box">' + (D.conceptGlobal || 'Conceptual example. You can create a global instance once and reuse it across the whole application.') + '</div>';
 var js_s6 =
   "MTS.HttpClient.create({\n" +
   "  baseUrl:   'https://api.miapp.com',\n" +
@@ -269,7 +291,7 @@ var preview_s7 =
     '<div class="demo-row">' +
       '<button id="btn-upload"></button>' +
     '</div>' +
-    '<div class="result-box" id="res-upload">— selecciona un archivo y presiona Subir —</div>' +
+    '<div class="result-box" id="res-upload">' + (D.selectFileHint || '— select a file and press Upload —') + '</div>' +
   '</div>';
 
 var js_s7 =
@@ -294,7 +316,7 @@ var preview_s8 =
     '<div class="demo-row">' +
       '<button id="btn-download"></button>' +
     '</div>' +
-    '<div class="result-box" id="res-download">— presiona el botón —</div>' +
+    '<div class="result-box" id="res-download">' + (D.pressButton || '— press the button —') + '</div>' +
   '</div>';
 
 var js_s8 =
@@ -312,7 +334,7 @@ var js_s8 =
   "  URL.revokeObjectURL(res.data.url);\n" +
   "}";
 
-var preview_s9 = '<div class="result-box">Ejemplo conceptual. Cada request puede definir callbacks específicos además de los callbacks globales.</div>';
+var preview_s9 = '<div class="result-box">' + (D.conceptCallbacks || 'Conceptual example. Each request can define specific callbacks in addition to the global callbacks.') + '</div>';
 var js_s9 =
   "const http = new MTS.HttpClient({\n" +
   "  baseUrl: '/utilities/matios-ui-httpclient/api',\n" +
@@ -327,12 +349,12 @@ var js_s9 =
 
 makeSection('tabs-s1', preview_s1, js_s1, function(){
   new MTS.Button('#btn-get', {
-    label: 'Ejecutar GET',
+    label: D.btnGet || 'Run GET',
     variant: 'primary',
     iconLeft: MTS.Icon.get('download')
   });
   document.getElementById('btn-get').addEventListener('click', async function(){
-    setResult('res-get', 'Cargando...');
+    setResult('res-get', D.loading || 'Loading...');
     const res = await http.get('/users/1');
     setResult('res-get', res, res.success);
   });
@@ -340,12 +362,12 @@ makeSection('tabs-s1', preview_s1, js_s1, function(){
 
 makeSection('tabs-s2', preview_s2, js_s2, function(){
   new MTS.Button('#btn-post', {
-    label: 'Ejecutar POST',
+    label: D.btnPost || 'Run POST',
     variant: 'success',
     iconLeft: MTS.Icon.get('upload')
   });
   document.getElementById('btn-post').addEventListener('click', async function(){
-    setResult('res-post', 'Enviando...');
+    setResult('res-post', D.sending || 'Sending...');
     const res = await http.post('/posts', { title: 'Mi post', body: 'Contenido', userId: 1 });
     setResult('res-post', res, res.success);
   });
@@ -353,22 +375,22 @@ makeSection('tabs-s2', preview_s2, js_s2, function(){
 
 makeSection('tabs-s3', preview_s3, js_s3, function(){
   new MTS.Button('#btn-error', {
-    label: 'Forzar 404',
+    label: D.btnError || 'Force 404',
     variant: 'danger',
     iconLeft: MTS.Icon.get('warning')
   });
   new MTS.Button('#btn-timeout', {
-    label: 'Forzar timeout',
+    label: D.btnTimeout || 'Force timeout',
     variant: 'secondary',
     iconLeft: MTS.Icon.get('clock')
   });
   document.getElementById('btn-error').addEventListener('click', async function(){
-    setResult('res-error', 'Ejecutando...');
+    setResult('res-error', D.running || 'Running...');
     const res = await http.get('/error');
     setResult('res-error', res, res.success);
   });
   document.getElementById('btn-timeout').addEventListener('click', async function(){
-    setResult('res-error', 'Esperando timeout (1s)...');
+    setResult('res-error', D.waitingTimeout || 'Waiting for timeout (1s)...');
     const httpTimeout = new MTS.HttpClient({ baseUrl: '/utilities/matios-ui-httpclient/api', timeout: 1000 });
     const res = await httpTimeout.get('/slow');
     setResult('res-error', res, res.success);
@@ -382,7 +404,7 @@ makeSection('tabs-s6', preview_s6, js_s6, null, '240px');
 const fuUpload = { instance: null };
 makeSection('tabs-s7', preview_s7, js_s7, function(){
   new MTS.Button('#btn-upload', {
-    label: 'Subir archivo',
+    label: D.btnUpload || 'Upload file',
     variant: 'primary',
     iconLeft: MTS.Icon.get('upload')
   });
@@ -390,33 +412,33 @@ makeSection('tabs-s7', preview_s7, js_s7, function(){
     accept: 'image/*,.pdf',
     multiple: false,
     maxSize: 10,
-    hint: 'PNG, JPG o PDF hasta 10MB',
+    hint: D.uploadHint || 'PNG, JPG or PDF up to 10MB',
     preview: true,
   });
   document.getElementById('btn-upload').addEventListener('click', async function(){
     const files = fuUpload.instance.getFiles();
     if (!files.length) {
-      setResult('res-upload', 'Selecciona un archivo primero', false);
+      setResult('res-upload', D.selectFileFirst || 'Select a file first', false);
       return;
     }
-    setResult('res-upload', 'Subiendo... 0%');
+    setResult('res-upload', D.uploadProgress || 'Uploading... 0%');
     const res = await http.upload('/upload', files[0], {
       fieldName: 'archivo',
-      onProgress: function(pct){ setResult('res-upload', 'Subiendo... ' + pct + '%'); }
+      onProgress: function(pct){ setResult('res-upload', (D.uploading || 'Uploading... ') + pct + '%'); }
     });
     setResult('res-upload', res, res.success);
-    if (res.success) MTS.Toast?.show({ message: 'Archivo subido correctamente', variant: 'success', duration: 3000 });
+    if (res.success) MTS.Toast?.show({ message: D.uploadSuccess || 'File uploaded successfully', variant: 'success', duration: 3000 });
   });
 }, '420px');
 
 makeSection('tabs-s8', preview_s8, js_s8, function(){
   new MTS.Button('#btn-download', {
-    label: 'Descargar archivo',
+    label: D.btnDownload || 'Download file',
     variant: 'secondary',
     iconLeft: MTS.Icon.get('download')
   });
   document.getElementById('btn-download').addEventListener('click', async function(){
-    setResult('res-download', 'Descargando...');
+    setResult('res-download', D.downloading || 'Downloading...');
     const res = await http.download('/download', 'export.json');
     if (res.success) {
       const a = document.createElement('a');
@@ -424,7 +446,7 @@ makeSection('tabs-s8', preview_s8, js_s8, function(){
       a.download = res.data.filename;
       a.click();
       URL.revokeObjectURL(res.data.url);
-      setResult('res-download', '✓ Descarga iniciada — ' + res.data.filename, true);
+      setResult('res-download', (D.downloadStarted || '✓ Download started — ') + res.data.filename, true);
     } else {
       setResult('res-download', res, false);
     }

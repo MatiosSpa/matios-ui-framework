@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -44,6 +44,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-modal-i18n.js"></script>
   <script src="./matios-ui-modal.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
@@ -54,16 +56,16 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Modal</h1>
-    <p>Dialog modal — sizes, footer buttons, scrollable, static, confirm/alert/prompt helpers.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Tamaños / Sizes</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Helpers rápidos / Convenience helpers</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Static + scrollable body</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Border radius</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 
 <script>
@@ -112,6 +114,20 @@ function setText(id, value) {
   if (el) el.textContent = value;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Modal'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Dialog modal — sizes, footer buttons, scrollable, static, confirm/alert/prompt helpers.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Sizes';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Convenience helpers';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Static + scrollable body';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Border radius';
+
 var preview_s1 = `
 <div class="demo-row">
   <button id="btn-modal-sm" data-variant="secondary" data-label="sm"></button>
@@ -120,7 +136,7 @@ var preview_s1 = `
   <button id="btn-modal-xl" data-variant="secondary" data-label="xl"></button>
   <button id="btn-modal-fullscreen" data-variant="secondary" data-label="fullscreen"></button>
 </div>
-<div class="result-box" id="modal-result">— abre un modal —</div>`;
+<div class="result-box" id="modal-result">` + (D.resultPlaceholder || '— open a modal —') + `</div>`;
 
 var js_s1 = `// Sizes: 'sm' | 'md' | 'lg' | 'xl' | 'fullscreen'
 function openModal(size) {
@@ -154,7 +170,7 @@ var preview_s2 = `
   <button id="btn-modal-alert" data-variant="secondary" data-label="alert()"></button>
   <button id="btn-modal-prompt" data-variant="secondary" data-label="prompt()"></button>
 </div>
-<div class="result-box" id="modal-helper-result">— usa los helpers —</div>`;
+<div class="result-box" id="modal-helper-result">` + (D.helperPlaceholder || '— use the helpers —') + `</div>`;
 
 var js_s2 = `// Confirm dialog / Diálogo de confirmación
 function showConfirm() {
@@ -199,8 +215,8 @@ function showPrompt() {
 
 var preview_s3 = `
 <div class="demo-row">
-  <button id="btn-modal-static" data-variant="secondary" data-label="Static modal"></button>
-  <button id="btn-modal-scrollable" data-variant="secondary" data-label="Scrollable body"></button>
+  <button id="btn-modal-static" data-variant="secondary" data-label="` + (D.staticBtn || 'Static modal') + `"></button>
+  <button id="btn-modal-scrollable" data-variant="secondary" data-label="` + (D.scrollableBtn || 'Scrollable body') + `"></button>
 </div>`;
 
 var js_s3 = `function showStatic() {
@@ -282,11 +298,11 @@ makeSection('tabs-s4', preview_s4, js_s4, function () {
       size:    'sm',
       onClick: function () {
         new MTS.Modal({
-          title:   'Border radius: ' + r,
+          title:   (D.radiusTitle || 'Border radius: ') + r,
           radius:  r,
           size:    'sm',
-          body:    '<p style="color:var(--mts-text-muted);font-size:13px">Este modal usa <code>radius: \'' + r + '\'</code>.</p>',
-          buttons: [{ label: 'Cerrar', variant: 'primary', close: true }],
+          body:    '<p style="color:var(--mts-text-muted);font-size:13px">' + (D.radiusBody || 'This modal uses ') + '<code>radius: \'' + r + '\'</code>.</p>',
+          buttons: [{ label: D.radiusClose || 'Close', variant: 'primary', close: true }],
         }).show();
       },
     });
@@ -295,13 +311,13 @@ makeSection('tabs-s4', preview_s4, js_s4, function () {
 
 function openModal(size) {
   new MTS.Modal({
-    title: 'Modal — size: ' + size,
-    body: '<p style="color:var(--mts-text-muted);font-size:13px">Contenido del modal con tamaño <strong>' + size + '</strong>.</p>',
+    title: (D.modalSizeTitle || 'Modal — size: ') + size,
+    body: '<p style="color:var(--mts-text-muted);font-size:13px">' + (D.modalSizeBody || 'Modal content with size ') + '<strong>' + size + '</strong>.</p>',
     size: size,
     buttons: [
-      { label: 'Cancelar', variant: 'ghost', close: true },
+      { label: D.btnCancel || 'Cancel', variant: 'ghost', close: true },
       {
-        label: 'Aceptar',
+        label: D.btnAccept || 'Accept',
         variant: 'primary',
         close: true,
         onClick: function () {
@@ -320,66 +336,66 @@ function openModal(size) {
 
 function showConfirm() {
   MTS.Modal.confirm({
-    title: 'Eliminar registro',
-    message: 'Esta acción no se puede deshacer.',
-    confirm: 'Eliminar',
-    cancel: 'Cancelar',
+    title: D.confirmTitle || 'Delete record',
+    message: D.confirmMessage || 'This action cannot be undone.',
+    confirm: D.confirmConfirm || 'Delete',
+    cancel: D.confirmCancel || 'Cancel',
     danger: true,
     onConfirm: function () {
-      setText('modal-helper-result', 'onConfirm → confirmado');
+      setText('modal-helper-result', 'onConfirm → ' + (D.confirmDone || 'confirmed'));
     },
     onCancel: function () {
-      setText('modal-helper-result', 'onCancel → cancelado');
+      setText('modal-helper-result', 'onCancel → ' + (D.confirmCancelled || 'cancelled'));
     }
   });
 }
 
 function showAlert() {
   MTS.Modal.alert({
-    title: 'Listo',
-    message: 'Los cambios fueron guardados correctamente.',
+    title: D.alertTitle || 'Done',
+    message: D.alertMessage || 'Your changes were saved successfully.',
     onClose: function () {
-      setText('modal-helper-result', 'onClose → aceptado');
+      setText('modal-helper-result', 'onClose → ' + (D.alertDone || 'accepted'));
     }
   });
 }
 
 function showPrompt() {
   MTS.Modal.prompt({
-    title: 'Renombrar archivo',
-    placeholder: 'Nuevo nombre...',
-    value: 'documento.pdf',
+    title: D.promptTitle || 'Rename file',
+    placeholder: D.promptPlaceholder || 'New name...',
+    value: D.promptValue || 'document.pdf',
     onConfirm: function (value) {
       setText('modal-helper-result', 'onConfirm → "' + value + '"');
     },
     onCancel: function () {
-      setText('modal-helper-result', 'onCancel → cancelado');
+      setText('modal-helper-result', 'onCancel → ' + (D.promptCancelled || 'cancelled'));
     }
   });
 }
 
 function showStatic() {
   new MTS.Modal({
-    title: 'Acción requerida',
-    body: '<p style="color:var(--mts-text-muted);font-size:13px">Este modal no cierra con Esc ni haciendo click fuera.</p>',
+    title: D.staticTitle || 'Action required',
+    body: '<p style="color:var(--mts-text-muted);font-size:13px">' + (D.staticBody || 'This modal does not close with Esc or by clicking outside.') + '</p>',
     static: true,
     buttons: [
-      { label: 'Entendido', variant: 'primary', close: true }
+      { label: D.staticOk || 'Got it', variant: 'primary', close: true }
     ]
   }).show();
 }
 
 function showScrollable() {
   new MTS.Modal({
-    title: 'Términos y condiciones',
+    title: D.termsTitle || 'Terms and conditions',
     size: 'lg',
     scrollable: true,
     body: '<p style="color:var(--mts-text-muted);font-size:13px">' +
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '.repeat(20) +
       '</p>',
     buttons: [
-      { label: 'Rechazar', variant: 'ghost', close: true },
-      { label: 'Aceptar', variant: 'primary', close: true }
+      { label: D.termsReject || 'Reject', variant: 'ghost', close: true },
+      { label: D.termsAccept || 'Accept', variant: 'primary', close: true }
     ]
   }).show();
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -47,6 +47,8 @@
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-virtuallist-i18n.js"></script>
   <script src="./matios-ui-virtuallist.js"></script>
   <style>
     .vl-row {
@@ -68,19 +70,19 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.VirtualList</h1>
-    <p>Virtualized list — renders only visible items · 100,000+ rows · infinite scroll via onEndReached.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">1 — 100.000 ítems virtualizados / 100,000 virtualized items</div>
+    <div class="demo-section-title" id="s1-title"></div>
     <div id="vl1-tabs"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">2 — appendItems() — Infinite scroll simulado / Simulated infinite scroll</div>
+    <div class="demo-section-title" id="s2-title"></div>
     <div id="vl2-tabs"></div>
   </div>
 </div>
@@ -125,11 +127,30 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.VirtualList'].demo) || {};
+
+function fmt(tpl, map) {
+  var out = String(tpl || '');
+  for (var k in map) { if (map.hasOwnProperty(k)) out = out.split('{' + k + '}').join(map[k]); }
+  return out;
+}
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Virtualized list — renders only visible items · 100,000+ rows · infinite scroll via onEndReached.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — 100,000 virtualized items';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — appendItems() — Simulated infinite scroll';
+
 function makeItems(count, offset) {
   offset = offset || 0;
+  var nameTpl = D.itemName || 'User #{n}';
   return Array.from({ length: count }, function(_, i) {
     var n = offset + i;
-    return { id:n, name:'Usuario #'+(n+1), email:'user'+n+'@empresa.com', active: n % 3 !== 0 };
+    return { id:n, name: fmt(nameTpl, { n: (n+1) }), email:'user'+n+'@empresa.com', active: n % 3 !== 0 };
   });
 }
 
@@ -146,7 +167,7 @@ var preview_vl1 = '' +
     '<button class="demo-btn-sm" onclick="vl1.scrollToIndex(99999)">scrollToIndex(100000)</button>' +
   '</div>' +
   '<div id="vl-big"></div>' +
-  '<div class="result-box" id="vl-result">— haz scroll en la lista —</div>';
+  '<div class="result-box" id="vl-result">' + (D.bigResultHint || '— scroll the list —') + '</div>';
 
 var js_vl1 = `const list = new MTS.VirtualList('#my-list', {
   items: Array.from({ length: 100000 }, (_, i) => ({
@@ -178,7 +199,7 @@ list.scrollToIndex(50000);`;
 
 var preview_vl2 = '' +
   '<div id="vl-infinite"></div>' +
-  '<div class="result-box" id="vl-inf-result">— haz scroll hasta el final para cargar más —</div>';
+  '<div class="result-box" id="vl-inf-result">' + (D.infResultHint || '— scroll to the bottom to load more —') + '</div>';
 
 var js_vl2 = `function fetchPage(page) {
   return Array.from({ length: 20 }, (_, i) => ({
@@ -220,10 +241,10 @@ vl1 = new MTS.VirtualList('#vl-big', {
   renderItem: function(item, idx){
     var el = document.createElement('div');
     el.className = 'vl-row';
-    el.innerHTML = '<span class="vl-idx">#'+(idx+1)+'</span><span class="vl-name">'+item.name+'</span><span class="vl-meta">'+item.email+'</span><span class="vl-badge '+(item.active?'vl-badge--active':'vl-badge--inactive')+'">'+(item.active?'Active':'Inactive')+'</span>';
+    el.innerHTML = '<span class="vl-idx">#'+(idx+1)+'</span><span class="vl-name">'+item.name+'</span><span class="vl-meta">'+item.email+'</span><span class="vl-badge '+(item.active?'vl-badge--active':'vl-badge--inactive')+'">'+(item.active?(D.badgeActive||'Active'):(D.badgeInactive||'Inactive'))+'</span>';
     return el;
   },
-  onScroll: function(e){ document.getElementById('vl-result').textContent = 'onScroll → firstVisible:'+e.detail.firstVisible+' lastVisible:'+e.detail.lastVisible; },
+  onScroll: function(e){ document.getElementById('vl-result').textContent = fmt(D.scrollEcho || 'onScroll → firstVisible:{first} lastVisible:{last}', { first: e.detail.firstVisible, last: e.detail.lastVisible }); },
 });
 
 vlInf = new MTS.VirtualList('#vl-infinite', {
@@ -234,13 +255,13 @@ vlInf = new MTS.VirtualList('#vl-infinite', {
   renderItem: function(item, idx){
     var el = document.createElement('div');
     el.className = 'vl-row';
-    el.innerHTML = '<span class="vl-idx">#'+(idx+1)+'</span><span class="vl-name">Post #'+item.id+'</span><span class="vl-meta">'+item.email+'</span>';
+    el.innerHTML = '<span class="vl-idx">#'+(idx+1)+'</span><span class="vl-name">'+fmt(D.postName||'Post #{n}', { n: item.id })+'</span><span class="vl-meta">'+item.email+'</span>';
     return el;
   },
   onEndReached: function(e){
     var more = getPage(infPage++);
     vlInf.appendItems(more);
-    document.getElementById('vl-inf-result').textContent = 'appendItems() → total: '+(e.detail.total + more.length)+' ítems';
+    document.getElementById('vl-inf-result').textContent = fmt(D.appendEcho || 'appendItems() → total: {total} items', { total: (e.detail.total + more.length) });
   }
 });
 </script>

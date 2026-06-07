@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -46,6 +46,8 @@
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-date-picker-i18n.js"></script>
   <script src="./matios-ui-date-picker-base.js"></script>
   <script src="./matios-ui-date-picker-date.js"></script>
   <script src="./matios-ui-date-picker-time.js"></script>
@@ -59,16 +61,16 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.DatePicker</h1>
-    <p>Selectores de fecha, hora, rango, mes y semana. Cada tipo es una clase independiente.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Date / Time / DateTime</div><div id="tabs-pk1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Date Range / Rango de fechas</div><div id="tabs-pk2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Month / Week</div><div id="tabs-pk3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — API común / Common API</div><div id="tabs-pk4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-pk1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-pk2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-pk3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-pk4"></div></div>
 </div>
 
 <script>
@@ -94,22 +96,37 @@ function showPickerOutput(id, val, fmt){
   if(el) el.textContent = fmt || String(val) || '—';
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.DatePicker']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Date, time, range, month and week pickers. Each type is an independent class.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Date / Time / DateTime';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Date Range';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Month / Week';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Common API';
+
 var preview1 =
   '<div class="demo-grid">' +
     '<div class="demo-col">' +
-      '<div class="demo-label">Fecha / Date</div>' +
+      '<div class="demo-label">' + (D.labelDate || 'Date') + '</div>' +
       '<input type="text" id="picker-date">' +
-      '<div class="result-box" id="out-picker-date">— selecciona una fecha —</div>' +
+      '<div class="result-box" id="out-picker-date">' + (D.outDate || '— pick a date —') + '</div>' +
     '</div>' +
     '<div class="demo-col">' +
-      '<div class="demo-label">Hora / Time</div>' +
+      '<div class="demo-label">' + (D.labelTime || 'Time') + '</div>' +
       '<input type="text" id="picker-time">' +
-      '<div class="result-box" id="out-picker-time">— selecciona una hora —</div>' +
+      '<div class="result-box" id="out-picker-time">' + (D.outTime || '— pick a time —') + '</div>' +
     '</div>' +
     '<div class="demo-col">' +
-      '<div class="demo-label">Fecha + Hora / DateTime</div>' +
+      '<div class="demo-label">' + (D.labelDateTime || 'DateTime') + '</div>' +
       '<input type="text" id="picker-datetime">' +
-      '<div class="result-box" id="out-picker-datetime">— selecciona fecha y hora —</div>' +
+      '<div class="result-box" id="out-picker-datetime">' + (D.outDateTime || '— pick date and time —') + '</div>' +
     '</div>' +
   '</div>';
 var js1 =
@@ -136,9 +153,9 @@ var js1 =
 
 var preview2 =
   '<div class="demo-col">' +
-    '<div class="demo-label">Date Range / Rango de fechas</div>' +
+    '<div class="demo-label">' + (D.labelRange || 'Date Range') + '</div>' +
     '<input type="text" id="picker-range">' +
-    '<div class="result-box" id="out-picker-range">— selecciona un rango —</div>' +
+    '<div class="result-box" id="out-picker-range">' + (D.outRange || '— pick a range —') + '</div>' +
   '</div>';
 var js2 =
   "new MTS.DatePicker.DateRange('#picker-range', {\n" +
@@ -155,14 +172,14 @@ var js2 =
 var preview3 =
   '<div class="demo-grid">' +
     '<div class="demo-col">' +
-      '<div class="demo-label">Mes / Month</div>' +
+      '<div class="demo-label">' + (D.labelMonth || 'Month') + '</div>' +
       '<input type="text" id="picker-month">' +
-      '<div class="result-box" id="out-picker-month">— selecciona un mes —</div>' +
+      '<div class="result-box" id="out-picker-month">' + (D.outMonth || '— pick a month —') + '</div>' +
     '</div>' +
     '<div class="demo-col">' +
-      '<div class="demo-label">Semana / Week</div>' +
+      '<div class="demo-label">' + (D.labelWeek || 'Week') + '</div>' +
       '<input type="text" id="picker-week">' +
-      '<div class="result-box" id="out-picker-week">— selecciona una semana —</div>' +
+      '<div class="result-box" id="out-picker-week">' + (D.outWeek || '— pick a week —') + '</div>' +
     '</div>' +
   '</div>';
 var js3 =
@@ -173,7 +190,7 @@ var js3 =
   "  onChange: function(e){ showPickerOutput('out-picker-week', null, e.detail.formatted); }\n" +
   "});";
 
-var preview4 = '<div class="result-box">API común disponible para todos los tipos de picker.</div>';
+var preview4 = '<div class="result-box">' + (D.apiHint || 'Common API available for every picker type.') + '</div>';
 var js4 =
   "var picker = new MTS.DatePicker.Date('#mi-picker', { format: 'DD/MM/YYYY' });\n\n" +
   "picker.open();\n" +
@@ -210,21 +227,22 @@ makeSection('tabs-pk1', preview1, js1, function(){
     onChange:function(e){ showPickerOutput('out-picker-date', e.detail.value, e.detail.formatted); }
   });
   new MTS.DatePicker.Time('#picker-time', {
-    timeStep:5, startHour:8, endHour:20, btnNow:'Ahora', btnAccept:'Aceptar',
+    timeStep:5, startHour:8, endHour:20, btnNow:(D.btnNow || 'Now'), btnAccept:(D.btnAccept || 'Accept'),
     onChange:function(e){ showPickerOutput('out-picker-time', null, e.detail.formatted); }
   });
   new MTS.DatePicker.DateTime('#picker-datetime', {
-    format:'DD/MM/YYYY', timeStep:5, btnToday:'Hoy', btnAccept:'Aceptar',
+    format:'DD/MM/YYYY', timeStep:5, btnToday:(D.btnToday || 'Today'), btnAccept:(D.btnAccept || 'Accept'),
     onChange:function(e){ showPickerOutput('out-picker-datetime', e.detail.value, e.detail.formatted); }
   });
 }, '460px');
 
 makeSection('tabs-pk2', preview2, js2, function(){
   new MTS.DatePicker.DateRange('#picker-range', {
-    format:'DD/MM/YYYY', btnClear:'Limpiar', btnAccept:'Aplicar',
+    format:'DD/MM/YYYY', btnClear:(D.btnClear || 'Clear'), btnAccept:(D.btnApply || 'Apply'),
     onChange:function(e){
       var v=e.detail.value;
-      var fmt=(v && v.start ? v.start.toLocaleDateString('es-CL') : '—') + ' → ' + (v && v.end ? v.end.toLocaleDateString('es-CL') : '—');
+      var loc=(D.localeCode || 'en-US');
+      var fmt=(v && v.start ? v.start.toLocaleDateString(loc) : '—') + ' → ' + (v && v.end ? v.end.toLocaleDateString(loc) : '—');
       showPickerOutput('out-picker-range', null, fmt);
     }
   });

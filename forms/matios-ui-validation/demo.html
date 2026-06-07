@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../matios-ui-input/matios-ui-input.js"></script>
   <script src="../matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-validation-i18n.js"></script>
   <script src="./matios-ui-validation.js"></script>
 </head>
 <body>
@@ -56,15 +58,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Validate</h1>
-    <p>Form validation with rules, messages and API helpers.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Formulario completo / Full form</div><div id="tabs-v1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Reglas avanzadas / Advanced rules</div><div id="tabs-v2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — API — errores del servidor / Server-side errors</div><div id="tabs-v3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-v1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-v2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-v3"></div></div>
 </div>
 
 <script>
@@ -86,6 +88,48 @@ function indentHtml(html){
   return result.trimEnd();
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Validate'].demo) || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Form validation with rules, messages and API helpers.';
+document.getElementById('s1-title').textContent = D.s1Title || '1 — Full form';
+document.getElementById('s2-title').textContent = D.s2Title || '2 — Advanced rules';
+document.getElementById('s3-title').textContent = D.s3Title || '3 — API — server-side errors';
+
+var t_nameLabel        = D.nameLabel        || 'Full name';
+var t_namePlaceholder  = D.namePlaceholder  || 'John Doe';
+var t_emailLabel       = D.emailLabel       || 'Email';
+var t_emailPlaceholder = D.emailPlaceholder || 'user@example.com';
+var t_passLabel        = D.passLabel        || 'Password';
+var t_passPlaceholder  = D.passPlaceholder  || 'Min 8 characters';
+var t_pass2Label       = D.pass2Label       || 'Confirm password';
+var t_pass2Placeholder = D.pass2Placeholder || 'Repeat the password';
+var t_submitLabel      = D.submitLabel      || 'Submit form';
+var t_msgNameRequired  = D.msgNameRequired  || 'Name is required';
+var t_msgNameMinLength = D.msgNameMinLength || 'At least 3 characters';
+var t_fullPlaceholder  = D.fullResultPlaceholder || '— fill in and submit the form —';
+
+var t_rutLabel         = D.rutLabel         || 'RUT';
+var t_ageLabel         = D.ageLabel         || 'Age';
+var t_urlLabel         = D.urlLabel         || 'Website';
+var t_customLabel      = D.customLabel      || 'Username';
+var t_customPlaceholder= D.customPlaceholder|| 'Do not use "admin"';
+var t_customMessage    = D.customMessage    || 'Username not allowed';
+var t_validateLabel    = D.validateLabel    || 'Validate';
+var t_advPlaceholder   = D.advResultPlaceholder || '— fill in and submit the form —';
+
+var t_apiEmailLabel    = D.apiEmailLabel    || 'Email';
+var t_registerLabel    = D.registerLabel    || 'Register';
+var t_apiAlreadyExists = D.apiAlreadyExists || 'Already exists';
+var t_echoSetError     = D.echoSetError     || 'setError() → Already exists';
+var t_echoClearErrors  = D.echoClearErrors  || 'clearErrors() ✓';
+var t_apiPlaceholder   = D.apiResultPlaceholder || '— use the buttons —';
+
 var preview1 =
   '<div class="demo-stack">' +
     '<form id="form-full">' +
@@ -95,7 +139,7 @@ var preview1 =
       '<div id="v-pass2"></div>' +
       '<div><button type="submit" id="v-submit"></button></div>' +
     '</form>' +
-    '<div class="result-box" id="v-result">— completa y envía el formulario —</div>' +
+    '<div class="result-box" id="v-result">' + t_fullPlaceholder + '</div>' +
   '</div>';
 var js1 =
   "new MTS.Input('#v-name', { name:'name', label:'Nombre completo', placeholder:'Juan Pérez', rules:{ required:true, minLength:3 } });\n" +
@@ -125,7 +169,7 @@ var preview2 =
       '<div id="v-custom"></div>' +
       '<div><button type="submit" id="v-adv-submit"></button></div>' +
     '</form>' +
-    '<div class="result-box" id="v-adv-result">— completa y envía el formulario —</div>' +
+    '<div class="result-box" id="v-adv-result">' + t_advPlaceholder + '</div>' +
   '</div>';
 var js2 =
   "new MTS.Input('#v-rut', { name:'rut', label:'RUT', placeholder:'12.345.678-9', rules:{ required:true, rut:true } });\n" +
@@ -146,12 +190,12 @@ var preview3 =
       '<div><button type="submit" id="v-api-submit"></button></div>' +
     '</form>' +
     '<div class="demo-row">' +
-      '<button class="demo-btn-sm" onclick="vApi.setError(\'email\',\'Already exists\'); document.getElementById(\'v-api-result\').textContent = \'setError() → Already exists\'">setError()</button>' +
-      '<button class="demo-btn-sm" onclick="vApi.clearErrors(); document.getElementById(\'v-api-result\').textContent = \'clearErrors() ✓\'">clearErrors()</button>' +
+      '<button class="demo-btn-sm" onclick="vApiSetError()">setError()</button>' +
+      '<button class="demo-btn-sm" onclick="vApiClearErrors()">clearErrors()</button>' +
       '<button class="demo-btn-sm" onclick="document.getElementById(\'v-api-result\').textContent = \'isValid() → \' + vApi.isValid()">isValid()</button>' +
       '<button class="demo-btn-sm" onclick="document.getElementById(\'v-api-result\').textContent = \'getData() → \' + JSON.stringify(vApi.getData())">getData()</button>' +
     '</div>' +
-    '<div class="result-box" id="v-api-result">— usa los botones —</div>' +
+    '<div class="result-box" id="v-api-result">' + t_apiPlaceholder + '</div>' +
   '</div>';
 var js3 =
   "new MTS.Input('#v-api-email', { name:'email', label:'Email', type:'email', rules:{ required:true, email:true }, placeholder:'user@example.com' });\n" +
@@ -183,11 +227,11 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 makeSection('tabs-v1', preview1, js1, function(){
-  new MTS.Input('#v-name',  { name:'name',      label:'Nombre completo',      placeholder:'Juan Pérez',              rules:{ required:true, minLength:3 } });
-  new MTS.Input('#v-email', { name:'email',     label:'Email',                placeholder:'user@ejemplo.com',        rules:{ required:true, email:true }, type:'email' });
-  new MTS.Input('#v-pass',  { name:'password',  label:'Contraseña',           placeholder:'Mín 8 caracteres',        rules:{ required:true, minLength:8 }, type:'password' });
-  new MTS.Input('#v-pass2', { name:'password2', label:'Confirmar contraseña', placeholder:'Repite la contraseña',    rules:{ required:true }, type:'password' });
-  new MTS.Button('#v-submit', { label:'Enviar formulario', variant:'primary' });
+  new MTS.Input('#v-name',  { name:'name',      label:t_nameLabel,  placeholder:t_namePlaceholder,  rules:{ required:true, minLength:3 } });
+  new MTS.Input('#v-email', { name:'email',     label:t_emailLabel, placeholder:t_emailPlaceholder, rules:{ required:true, email:true }, type:'email' });
+  new MTS.Input('#v-pass',  { name:'password',  label:t_passLabel,  placeholder:t_passPlaceholder,  rules:{ required:true, minLength:8 }, type:'password' });
+  new MTS.Input('#v-pass2', { name:'password2', label:t_pass2Label, placeholder:t_pass2Placeholder, rules:{ required:true }, type:'password' });
+  new MTS.Button('#v-submit', { label:t_submitLabel, variant:'primary' });
   new MTS.Validate('#form-full', {
     rules:{
       name:{ required:true, minLength:3 },
@@ -195,7 +239,7 @@ makeSection('tabs-v1', preview1, js1, function(){
       password:{ required:true, minLength:8 },
       password2:{ required:true }
     },
-    messages:{ name:{ required:'El nombre es requerido', minLength:'Mínimo 3 caracteres' } },
+    messages:{ name:{ required:t_msgNameRequired, minLength:t_msgNameMinLength } },
     validateOnBlur:true,
     onValid:function(data){ document.getElementById('v-result').textContent = 'onValid → ' + JSON.stringify(data); },
     onInvalid:function(errors){ document.getElementById('v-result').textContent = 'onInvalid → ' + JSON.stringify(errors); }
@@ -203,11 +247,11 @@ makeSection('tabs-v1', preview1, js1, function(){
 }, '520px');
 
 makeSection('tabs-v2', preview2, js2, function(){
-  new MTS.Input('#v-rut',    { name:'rut',    label:'RUT',       placeholder:'12.345.678-9',  rules:{ required:true, rut:true } });
-  new MTS.Input('#v-age',    { name:'age',    label:'Edad',      type:'number',               rules:{ required:true, min:18, max:99 } });
-  new MTS.Input('#v-url',    { name:'url',    label:'Sitio web', placeholder:'https://...',   rules:{ url:true } });
-  new MTS.Input('#v-custom', { name:'custom', label:'Usuario',   placeholder:'No uses "admin"', rules:{ required:true, custom:function(v){ return v !== 'admin' || 'Usuario no permitido'; } } });
-  new MTS.Button('#v-adv-submit', { label:'Validar', variant:'primary' });
+  new MTS.Input('#v-rut',    { name:'rut',    label:t_rutLabel,    placeholder:'12.345.678-9',  rules:{ required:true, rut:true } });
+  new MTS.Input('#v-age',    { name:'age',    label:t_ageLabel,    type:'number',               rules:{ required:true, min:18, max:99 } });
+  new MTS.Input('#v-url',    { name:'url',    label:t_urlLabel,    placeholder:'https://...',   rules:{ url:true } });
+  new MTS.Input('#v-custom', { name:'custom', label:t_customLabel, placeholder:t_customPlaceholder, rules:{ required:true, custom:function(v){ return v !== 'admin' || t_customMessage; } } });
+  new MTS.Button('#v-adv-submit', { label:t_validateLabel, variant:'primary' });
   new MTS.Validate('#form-advanced', {
     rules:{ rut:{ required:true, rut:true }, age:{ required:true, min:18, max:99 }, url:{ url:true }, custom:{ required:true } },
     onValid:function(data){ document.getElementById('v-adv-result').textContent = 'onValid → ' + JSON.stringify(data); },
@@ -216,9 +260,17 @@ makeSection('tabs-v2', preview2, js2, function(){
 }, '500px');
 
 var vApi;
+function vApiSetError(){
+  vApi.setError('email', t_apiAlreadyExists);
+  document.getElementById('v-api-result').textContent = t_echoSetError;
+}
+function vApiClearErrors(){
+  vApi.clearErrors();
+  document.getElementById('v-api-result').textContent = t_echoClearErrors;
+}
 makeSection('tabs-v3', preview3, js3, function(){
-  new MTS.Input('#v-api-email', { name:'email', label:'Email', type:'email', rules:{ required:true, email:true }, placeholder:'user@example.com' });
-  new MTS.Button('#v-api-submit', { label:'Register', variant:'primary' });
+  new MTS.Input('#v-api-email', { name:'email', label:t_apiEmailLabel, type:'email', rules:{ required:true, email:true }, placeholder:'user@example.com' });
+  new MTS.Button('#v-api-submit', { label:t_registerLabel, variant:'primary' });
   vApi = new MTS.Validate('#form-api', {
     rules:{ email:{ required:true, email:true } },
     onValid:function(data){ document.getElementById('v-api-result').textContent = 'onValid → ' + JSON.stringify(data); },

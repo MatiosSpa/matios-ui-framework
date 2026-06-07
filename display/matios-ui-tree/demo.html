@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-tree-i18n.js"></script>
   <script src="./matios-ui-tree.js"></script>
 </head>
 <body>
@@ -56,16 +58,16 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Tree</h1>
-    <p>Tree view con expand/collapse, selección, checkboxes y API básica para escenarios jerárquicos.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Básico colapsable — árbol de archivos / File tree</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Selectable + onSelect</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Checkable con propagación a hijos / Checkboxes with child propagation</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — Badges + íconos custom + API</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 
 <script>
@@ -109,13 +111,40 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
-var preview_s1 = "<div class=\"demo-grid\"><div class=\"demo-col\"><div class=\"demo-label\">showLines: true (default)</div><div class=\"result-box\" style=\"min-height:220px;color:inherit;font-family:inherit\"><div id=\"tree-files\"></div></div></div><div class=\"demo-col\"><div class=\"demo-label\">showLines: false</div><div class=\"result-box\" style=\"min-height:220px;color:inherit;font-family:inherit\"><div id=\"tree-nolines\"></div></div></div></div>";
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Tree']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Tree view with expand/collapse, selection, checkboxes and a basic API for hierarchical scenarios.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Collapsible basics — file tree';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Selectable + onSelect';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Checkable with child propagation';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Badges + custom icons + API';
+
+var labelLinesDefault = D.labelLinesDefault || 'showLines: true (default)';
+var labelLinesOff     = D.labelLinesOff     || 'showLines: false';
+var selectPlaceholder = D.selectPlaceholder || '— click a node —';
+var checkPlaceholder  = D.checkPlaceholder  || '— check/uncheck checkboxes —';
+var apiPlaceholder    = D.apiPlaceholder    || '— use the API —';
+var selectEchoPrefix  = D.selectEchoPrefix  || 'onSelect → id: ';
+var selectEchoPath    = D.selectEchoPath    || ' path: ';
+var checkEchoPrefix   = D.checkEchoPrefix   || 'onCheck → checked: ';
+var checkEchoIds      = D.checkEchoIds      || ' ids: ';
+var selectedPrefix    = D.selectedPrefix    || 'selected → ';
+var apiPrefix         = D.apiPrefix         || 'API → ';
+
+var preview_s1 = "<div class=\"demo-grid\"><div class=\"demo-col\"><div class=\"demo-label\">" + labelLinesDefault + "</div><div class=\"result-box\" style=\"min-height:220px;color:inherit;font-family:inherit\"><div id=\"tree-files\"></div></div></div><div class=\"demo-col\"><div class=\"demo-label\">" + labelLinesOff + "</div><div class=\"result-box\" style=\"min-height:220px;color:inherit;font-family:inherit\"><div id=\"tree-nolines\"></div></div></div></div>";
 var js_s1 = "const FILE_NODES = [\n  { id:'src', label:'src', expanded:true, children:[\n    { id:'components', label:'components', children:[\n      { id:'btn', label:'Button.js' },\n      { id:'inp', label:'Input.js' },\n      { id:'sel', label:'Select.js' },\n    ]},\n    { id:'utils', label:'utils', children:[\n      { id:'fmt', label:'format.js' },\n      { id:'api', label:'api.js' },\n    ]},\n    { id:'idx', label:'index.js' },\n    { id:'app', label:'App.js' },\n  ]},\n  { id:'public', label:'public', children:[\n    { id:'html', label:'index.html' },\n    { id:'fav', label:'favicon.ico' },\n  ]},\n  { id:'pkg', label:'package.json' },\n];\n\nnew MTS.Tree('#tree-files', {\n  showLines: true,\n  showIcons: true,\n  nodes: FILE_NODES,\n});\n\nnew MTS.Tree('#tree-nolines', {\n  showLines: false,\n  showIcons: true,\n  nodes: FILE_NODES,\n});";
-var preview_s2 = "<div class=\"demo-stack\" style=\"max-width:420px\"><div class=\"result-box\" style=\"color:inherit;font-family:inherit\"><div id=\"tree-selectable\"></div></div><div class=\"result-box\" id=\"tree-select-result\">\u2014 haz click en un nodo \u2014</div></div>";
+var preview_s2 = "<div class=\"demo-stack\" style=\"max-width:420px\"><div class=\"result-box\" style=\"color:inherit;font-family:inherit\"><div id=\"tree-selectable\"></div></div><div class=\"result-box\" id=\"tree-select-result\">" + selectPlaceholder + "</div></div>";
 var js_s2 = "new MTS.Tree('#tree-selectable', {\n  selectable: true,\n  showLines: true,\n  nodes: [\n    { id:'dashboard', label:'Dashboard', selected:true },\n    { id:'analytics', label:'Analytics' },\n    { id:'reports', label:'Reports', children:[\n      { id:'monthly', label:'Monthly report' },\n      { id:'annual', label:'Annual report' },\n    ]},\n    { id:'settings', label:'Settings', children:[\n      { id:'profile', label:'Profile' },\n      { id:'security', label:'Security' },\n      { id:'billing', label:'Billing', disabled:true },\n    ]},\n  ],\n  onSelect: function (e) {\n    document.getElementById('tree-select-result').textContent =\n      'onSelect \u2192 id: \"' + e.detail.node.id + '\" path: ' + JSON.stringify(e.detail.path);\n  },\n});";
-var preview_s3 = "<div class=\"demo-stack\" style=\"max-width:420px\"><div class=\"result-box\" style=\"color:inherit;font-family:inherit\"><div id=\"tree-checkable\"></div></div><div class=\"result-box\" id=\"tree-check-result\">\u2014 marca/desmarca checkboxes \u2014</div></div>";
+var preview_s3 = "<div class=\"demo-stack\" style=\"max-width:420px\"><div class=\"result-box\" style=\"color:inherit;font-family:inherit\"><div id=\"tree-checkable\"></div></div><div class=\"result-box\" id=\"tree-check-result\">" + checkPlaceholder + "</div></div>";
 var js_s3 = "new MTS.Tree('#tree-checkable', {\n  checkable: true,\n  expandAll: true,\n  showIcons: false,\n  nodes: [\n    { id:'users', label:'Users', children:[\n      { id:'users-read', label:'Read', checked:true },\n      { id:'users-write', label:'Write', checked:true },\n      { id:'users-delete', label:'Delete', disabled:true },\n    ]},\n    { id:'reports', label:'Reports', children:[\n      { id:'reports-view', label:'View' },\n      { id:'reports-export', label:'Export' },\n    ]},\n    { id:'settings', label:'Settings', children:[\n      { id:'settings-read', label:'Read' },\n      { id:'settings-write', label:'Write', checked:true },\n    ]},\n  ],\n  onCheck: function (e) {\n    document.getElementById('tree-check-result').textContent =\n      'onCheck \u2192 checked: ' + e.detail.checked + ' ids: ' + JSON.stringify(e.detail.checkedIds);\n  },\n});";
-var preview_s4 = "<div class=\"demo-stack\"><div class=\"result-box\" style=\"max-width:420px;color:inherit;font-family:inherit\"><div id=\"tree-badges\"></div></div><div class=\"demo-row\"><button id=\"tree-btn-expand\"></button><button id=\"tree-btn-collapse\"></button><button id=\"tree-btn-select\"></button></div><div class=\"result-box\" id=\"tree-api-result\">\u2014 usa la API \u2014</div></div>";
+var preview_s4 = "<div class=\"demo-stack\"><div class=\"result-box\" style=\"max-width:420px;color:inherit;font-family:inherit\"><div id=\"tree-badges\"></div></div><div class=\"demo-row\"><button id=\"tree-btn-expand\"></button><button id=\"tree-btn-collapse\"></button><button id=\"tree-btn-select\"></button></div><div class=\"result-box\" id=\"tree-api-result\">" + apiPlaceholder + "</div></div>";
 var js_s4 = "const treeBadges = new MTS.Tree('#tree-badges', {\n  selectable: true,\n  showLines: true,\n  nodes: [\n    { id:'eng', label:'Engineering', badge:'12', expanded:true, icon:\n      '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 2l1.7 4.4 4.7.4-3.6 3 1.1 4.6L12 12.8 8.1 14.4l1.1-4.6-3.6-3 4.7-.4L12 2z\"/></svg>',\n      children:[\n        { id:'frontend', label:'Frontend', badge:'4' },\n        { id:'backend', label:'Backend', badge:'8' },\n      ]\n    },\n    { id:'design', label:'Design', badge:'3', icon:\n      '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><circle cx=\"12\" cy=\"12\" r=\"9\"/></svg>' },\n    { id:'product', label:'Product', badge:'5', icon:\n      '<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><rect x=\"5\" y=\"5\" width=\"14\" height=\"14\" rx=\"3\"/></svg>' },\n  ],\n  onSelect: function (e) {\n    document.getElementById('tree-api-result').textContent =\n      'selected \u2192 ' + e.detail.node.id;\n  },\n});\n\nnew MTS.Button('#tree-btn-expand', {\n  label: \"expand('eng')\",\n  variant: 'secondary',\n  onClick: function () {\n    treeBadges.expand('eng');\n    document.getElementById('tree-api-result').textContent = \"API \u2192 expand('eng')\";\n  },\n});\n\nnew MTS.Button('#tree-btn-collapse', {\n  label: \"collapse('eng')\",\n  variant: 'ghost',\n  onClick: function () {\n    treeBadges.collapse('eng');\n    document.getElementById('tree-api-result').textContent = \"API \u2192 collapse('eng')\";\n  },\n});\n\nnew MTS.Button('#tree-btn-select', {\n  label: \"select('frontend')\",\n  variant: 'primary',\n  onClick: function () {\n    treeBadges.select('frontend');\n    document.getElementById('tree-api-result').textContent = \"API \u2192 select('frontend')\";\n  },\n});";
 
 makeSection('tabs-s1', preview_s1, js_s1, function () {
@@ -172,7 +201,7 @@ makeSection('tabs-s2', preview_s2, js_s2, function () {
     ],
     onSelect: function (e) {
       document.getElementById('tree-select-result').textContent =
-        'onSelect → id: "' + e.detail.node.id + '" path: ' + JSON.stringify(e.detail.path);
+        selectEchoPrefix + '"' + e.detail.node.id + '"' + selectEchoPath + JSON.stringify(e.detail.path);
     },
   });
 });
@@ -199,7 +228,7 @@ makeSection('tabs-s3', preview_s3, js_s3, function () {
     ],
     onCheck: function (e) {
       document.getElementById('tree-check-result').textContent =
-        'onCheck → checked: ' + e.detail.checked + ' ids: ' + JSON.stringify(e.detail.checkedIds);
+        checkEchoPrefix + e.detail.checked + checkEchoIds + JSON.stringify(e.detail.checkedIds);
     },
   });
 });
@@ -223,7 +252,7 @@ makeSection('tabs-s4', preview_s4, js_s4, function () {
     ],
     onSelect: function (e) {
       document.getElementById('tree-api-result').textContent =
-        'selected → ' + e.detail.node.id;
+        selectedPrefix + e.detail.node.id;
     },
   });
 
@@ -232,7 +261,7 @@ makeSection('tabs-s4', preview_s4, js_s4, function () {
     variant: 'secondary',
     onClick: function () {
       treeBadges.expand('eng');
-      document.getElementById('tree-api-result').textContent = "API → expand('eng')";
+      document.getElementById('tree-api-result').textContent = apiPrefix + "expand('eng')";
     },
   });
 
@@ -241,7 +270,7 @@ makeSection('tabs-s4', preview_s4, js_s4, function () {
     variant: 'ghost',
     onClick: function () {
       treeBadges.collapse('eng');
-      document.getElementById('tree-api-result').textContent = "API → collapse('eng')";
+      document.getElementById('tree-api-result').textContent = apiPrefix + "collapse('eng')";
     },
   });
 
@@ -250,7 +279,7 @@ makeSection('tabs-s4', preview_s4, js_s4, function () {
     variant: 'primary',
     onClick: function () {
       treeBadges.select('frontend');
-      document.getElementById('tree-api-result').textContent = "API → select('frontend')";
+      document.getElementById('tree-api-result').textContent = apiPrefix + "select('frontend')";
     },
   });
 });

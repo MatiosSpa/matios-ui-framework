@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -47,6 +47,8 @@
   <link rel="stylesheet" href="./matios-ui-formguard.css">
 
   <script src="../../support/demo-shared.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-formguard-i18n.js"></script>
   <script src="../../display/matios-ui-card/matios-ui-card.js"></script>
   <script src="../matios-ui-input/matios-ui-input.js"></script>
   <script src="../matios-ui-select/matios-ui-select.js"></script>
@@ -61,16 +63,13 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.FormGuard</h1>
-    <p>Dirty-tracking declarativo — snapshot, modal de navegación, beforeunload, indicadores visuales</p>
+    <p id="demo-subtitle"></p>
   </div>
 
   <!-- 1: Form básico con Input, Select, Toggle -->
   <section class="demo-section">
-    <h2 class="demo-section-title">1 — Form básico con componentes MTS</h2>
-    <p class="demo-section-desc">
-      Modifica cualquier campo. Aparece el asterisco en el título y el dot en el botón Guardar.
-      Revierte el cambio — el form vuelve a limpio automáticamente.
-    </p>
+    <h2 class="demo-section-title" id="s1-title"></h2>
+    <p class="demo-section-desc" id="s1-desc"></p>
 
     <div
       class="mts-card"
@@ -80,7 +79,7 @@
       style="max-width:560px;"
     >
       <div class="mts-card__header">
-        <span class="mts-card__title">Perfil de usuario</span>
+        <span class="mts-card__title" id="s1-card-title"></span>
       </div>
       <div class="mts-card__body" style="display:flex;flex-direction:column;gap:16px;">
         <div id="nombre-1"></div>
@@ -99,10 +98,8 @@
 
   <!-- 2: Dos forms independientes -->
   <section class="demo-section">
-    <h2 class="demo-section-title">2 — Dos formularios independientes</h2>
-    <p class="demo-section-desc">
-      Cada formulario tiene su propio snapshot. El contador global muestra cuántos están sucios.
-    </p>
+    <h2 class="demo-section-title" id="s2-title"></h2>
+    <p class="demo-section-desc" id="s2-desc"></p>
 
     <div style="display:flex;gap:24px;flex-wrap:wrap;">
 
@@ -113,7 +110,7 @@
         data-mts-form-save="#btn-save-a"
         style="flex:1;min-width:260px;"
       >
-        <div class="mts-card__header"><span class="mts-card__title">Formulario A</span></div>
+        <div class="mts-card__header"><span class="mts-card__title" id="s2-card-a-title"></span></div>
         <div class="mts-card__body" style="display:flex;flex-direction:column;gap:16px;">
           <div id="nombre-a"></div>
           <div id="email-a"></div>
@@ -131,7 +128,7 @@
         data-mts-form-save="#btn-save-b"
         style="flex:1;min-width:260px;"
       >
-        <div class="mts-card__header"><span class="mts-card__title">Formulario B</span></div>
+        <div class="mts-card__header"><span class="mts-card__title" id="s2-card-b-title"></span></div>
         <div class="mts-card__body" style="display:flex;flex-direction:column;gap:16px;">
           <div id="empresa-b"></div>
           <div id="pais-b"></div>
@@ -145,17 +142,14 @@
     </div>
 
     <div id="log-2" style="margin-top:12px;font-size:13px;color:var(--mts-text-secondary);min-height:20px;">
-      Formularios sucios: <strong id="dirty-count">0</strong>
+      <span id="s2-dirty-label"></span> <strong id="dirty-count">0</strong>
     </div>
   </section>
 
   <!-- 3: Form inyectado dinámicamente (SPA) -->
   <section class="demo-section">
-    <h2 class="demo-section-title">3 — Adopción dinámica (SPA / MutationObserver)</h2>
-    <p class="demo-section-desc">
-      El formulario se inyecta en el DOM después de que FormGuard ya está activo.
-      Es adoptado automáticamente por el MutationObserver.
-    </p>
+    <h2 class="demo-section-title" id="s3-title"></h2>
+    <p class="demo-section-desc" id="s3-desc"></p>
     <div style="display:flex;gap:8px;margin-bottom:16px;">
       <div id="btn-inject-form"></div>
       <div id="btn-remove-form"></div>
@@ -165,10 +159,9 @@
 
   <!-- 4: snapshot-sync programático -->
   <section class="demo-section">
-    <h2 class="demo-section-title">4 — snapshot-sync programático</h2>
+    <h2 class="demo-section-title" id="s4-title"></h2>
     <p class="demo-section-desc">
-      Carga datos vía <code>setValue()</code> y dispara <code>mts:form:snapshot-sync</code>
-      para que FormGuard re-tome el snapshot sin marcar dirty.
+      <span id="s4-desc-before"></span><code>setValue()</code><span id="s4-desc-middle"></span><code>mts:form:snapshot-sync</code><span id="s4-desc-after"></span>
     </p>
     <div
       class="mts-card"
@@ -177,7 +170,7 @@
       data-mts-form-save="#btn-save-4"
       style="max-width:480px;"
     >
-      <div class="mts-card__header"><span class="mts-card__title">Datos cargados</span></div>
+      <div class="mts-card__header"><span class="mts-card__title" id="s4-card-title"></span></div>
       <div class="mts-card__body" style="display:flex;flex-direction:column;gap:16px;">
         <div id="titulo-4"></div>
         <div id="estado-4"></div>
@@ -195,73 +188,99 @@
 <script>
 (function () {
 
+  /* — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar — */
+  (function () {
+    var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+    var lang = m ? m[1] : 'en';
+    if (window.MTS) { if (typeof MTS.setLocale === 'function') { MTS.setLocale(lang); } else { MTS._locale = lang; } }
+  })();
+  var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.FormGuard'].demo) || {};
+
+  /* ── Textos estáticos desde el locale ── */
+  document.getElementById('demo-subtitle').textContent  = D.subtitle    || 'Declarative dirty-tracking — snapshot, navigation modal, beforeunload, visual indicators';
+  document.getElementById('s1-title').textContent       = D.s1Title     || '1 — Basic form with MTS components';
+  document.getElementById('s1-desc').textContent        = D.s1Desc      || 'Change any field. The asterisk appears in the title and the dot on the Save button. Revert the change — the form returns to clean automatically.';
+  document.getElementById('s1-card-title').textContent  = D.s1CardTitle || 'User profile';
+  document.getElementById('s2-title').textContent       = D.s2Title     || '2 — Two independent forms';
+  document.getElementById('s2-desc').textContent        = D.s2Desc      || 'Each form has its own snapshot. The global counter shows how many are dirty.';
+  document.getElementById('s2-card-a-title').textContent = D.s2CardATitle || 'Form A';
+  document.getElementById('s2-card-b-title').textContent = D.s2CardBTitle || 'Form B';
+  document.getElementById('s2-dirty-label').textContent = D.s2DirtyLabel || 'Dirty forms:';
+  document.getElementById('s3-title').textContent       = D.s3Title     || '3 — Dynamic adoption (SPA / MutationObserver)';
+  document.getElementById('s3-desc').textContent        = D.s3Desc      || 'The form is injected into the DOM after FormGuard is already active. It is adopted automatically by the MutationObserver.';
+  document.getElementById('s4-title').textContent       = D.s4Title     || '4 — Programmatic snapshot-sync';
+  document.getElementById('s4-desc-before').textContent = D.s4DescBefore || 'Load data via ';
+  document.getElementById('s4-desc-middle').textContent = D.s4DescMiddle || ' and fire ';
+  document.getElementById('s4-desc-after').textContent  = D.s4DescAfter  || ' so FormGuard re-takes the snapshot without marking it dirty.';
+  document.getElementById('s4-card-title').textContent  = D.s4CardTitle || 'Loaded data';
+
   /* ── Iniciar FormGuard (una sola vez en el shell) ── */
   MTS.FormGuard.start();
 
   /* ══════════════════════════════════════════════════
      1 — Form básico
   ══════════════════════════════════════════════════ */
-  var inNombre  = new MTS.Input('#nombre-1', { label: 'Nombre', value: 'Ana López', placeholder: 'Nombre completo' });
+  var inNombre  = new MTS.Input('#nombre-1', { label: D.s1LabelNombre || 'Name', value: 'Ana López', placeholder: D.s1PlaceholderNombre || 'Full name' });
   var selRol    = new MTS.Select('#rol-1', {
-    label: 'Rol',
+    label: D.s1LabelRol || 'Role',
     value: 'editor',
     options: [
-      { value: 'admin',  label: 'Administrador' },
-      { value: 'editor', label: 'Editor' },
-      { value: 'viewer', label: 'Visualizador' }
+      { value: 'admin',  label: D.s1OptAdmin  || 'Administrator' },
+      { value: 'editor', label: D.s1OptEditor || 'Editor' },
+      { value: 'viewer', label: D.s1OptViewer || 'Viewer' }
     ]
   });
-  var togActivo = new MTS.Toggle('#activo-1', { label: 'Cuenta activa', checked: true });
-  var chkNotif  = new MTS.Checkbox('#notif-1', { label: 'Recibir notificaciones', checked: false, value: 'notif' });
+  var togActivo = new MTS.Toggle('#activo-1', { label: D.s1LabelActivo || 'Active account', checked: true });
+  var chkNotif  = new MTS.Checkbox('#notif-1', { label: D.s1LabelNotif || 'Receive notifications', checked: false, value: 'notif' });
 
   new MTS.Button('#btn-volver-1', {
-    label: 'Volver',
+    label: D.s1BtnBack || 'Back',
     variant: 'ghost',
     attrs: { 'data-mts-form-back': '' }
   });
 
   new MTS.Button('#btn-guardar-1', {
-    label: 'Guardar',
+    label: D.s1BtnSave || 'Save',
     variant: 'primary',
     onClick: function () {
       document.querySelector('[data-mts-form-id="profile-form"]').dispatchEvent(
         new CustomEvent('mts:form:save-ack', { bubbles: true, detail: { formId: 'profile-form' } })
       );
-      document.getElementById('log-1').textContent = 'Guardado exitoso — snapshot reseteado.';
+      document.getElementById('log-1').textContent = D.s1MsgSaved || 'Saved successfully — snapshot reset.';
     }
   });
 
   document.addEventListener('mts:form:dirty-change', function (e) {
     if (e.detail.formId !== 'profile-form') { return; }
     document.getElementById('log-1').textContent = e.detail.isDirty
-      ? 'El formulario tiene cambios sin guardar.'
-      : 'El formulario está limpio.';
+      ? (D.s1MsgDirty || 'The form has unsaved changes.')
+      : (D.s1MsgClean || 'The form is clean.');
   });
 
   /* ══════════════════════════════════════════════════
      2 — Dos formularios
   ══════════════════════════════════════════════════ */
-  new MTS.Input('#nombre-a',  { label: 'Nombre',  value: 'Carlos Díaz' });
-  new MTS.Input('#email-a',   { label: 'Email',   value: 'carlos@ejemplo.com', type: 'email' });
-  new MTS.Input('#empresa-b', { label: 'Empresa', value: 'Acme Corp' });
+  new MTS.Input('#nombre-a',  { label: D.s2LabelNombre  || 'Name',    value: 'Carlos Díaz' });
+  new MTS.Input('#email-a',   { label: D.s2LabelEmail   || 'Email',   value: 'carlos@ejemplo.com', type: 'email' });
+  new MTS.Input('#empresa-b', { label: D.s2LabelEmpresa || 'Company', value: 'Acme Corp' });
   new MTS.Select('#pais-b', {
-    label: 'País',
+    label: D.s2LabelPais || 'Country',
     value: 'cl',
     options: [
-      { value: 'cl', label: 'Chile' },
-      { value: 'ar', label: 'Argentina' },
-      { value: 'co', label: 'Colombia' }
+      { value: 'cl', label: D.s2OptChile     || 'Chile' },
+      { value: 'ar', label: D.s2OptArgentina || 'Argentina' },
+      { value: 'co', label: D.s2OptColombia  || 'Colombia' }
     ]
   });
 
-  new MTS.Button('#btn-back-a', { label: 'Volver',  variant: 'ghost',   attrs: { 'data-mts-form-back': '' } });
-  new MTS.Button('#btn-save-a', { label: 'Guardar', variant: 'primary', onClick: function () {
+  new MTS.Button('#btn-back-a', { label: D.s2BtnBack || 'Back',  variant: 'ghost',   attrs: { 'data-mts-form-back': '' } });
+  new MTS.Button('#btn-save-a', { label: D.s2BtnSave || 'Save', variant: 'primary', onClick: function () {
     document.querySelector('[data-mts-form-id="form-a"]').dispatchEvent(
       new CustomEvent('mts:form:save-ack', { bubbles: true, detail: { formId: 'form-a' } })
     );
   }});
-  new MTS.Button('#btn-back-b', { label: 'Volver',  variant: 'ghost',   attrs: { 'data-mts-form-back': '' } });
-  new MTS.Button('#btn-save-b', { label: 'Guardar', variant: 'primary', onClick: function () {
+  new MTS.Button('#btn-back-b', { label: D.s2BtnBack || 'Back',  variant: 'ghost',   attrs: { 'data-mts-form-back': '' } });
+  new MTS.Button('#btn-save-b', { label: D.s2BtnSave || 'Save', variant: 'primary', onClick: function () {
     document.querySelector('[data-mts-form-id="form-b"]').dispatchEvent(
       new CustomEvent('mts:form:save-ack', { bubbles: true, detail: { formId: 'form-b' } })
     );
@@ -278,7 +297,7 @@
   var _dynamicInput = null;
 
   new MTS.Button('#btn-inject-form', {
-    label: 'Inyectar formulario',
+    label: D.s3BtnInject || 'Inject form',
     variant: 'primary',
     onClick: function () {
       if (_dynamicForm) { return; }
@@ -287,12 +306,12 @@
       _dynamicForm.setAttribute('data-mts-form', '');
       _dynamicForm.setAttribute('data-mts-form-id', 'dynamic-form');
       _dynamicForm.innerHTML =
-        '<div class="mts-card__header"><span class="mts-card__title">Form dinámico</span></div>' +
+        '<div class="mts-card__header"><span class="mts-card__title">' + (D.s3CardTitle || 'Dynamic form') + '</span></div>' +
         '<div class="mts-card__body" style="padding:16px;"><div id="dyn-input-wrap"></div></div>';
       document.getElementById('dynamic-container').appendChild(_dynamicForm);
       /* esperar que el MutationObserver adopte el form, luego instanciar y sincronizar */
       setTimeout(function () {
-        _dynamicInput = new MTS.Input('#dyn-input-wrap', { label: 'Campo dinámico', value: '' });
+        _dynamicInput = new MTS.Input('#dyn-input-wrap', { label: D.s3LabelCampo || 'Dynamic field', value: '' });
         /* re-snapshot ahora que _mtsInstance ya está en el DOM */
         _dynamicForm.dispatchEvent(new CustomEvent('mts:form:snapshot-sync', { bubbles: true }));
       }, 50);
@@ -300,7 +319,7 @@
   });
 
   new MTS.Button('#btn-remove-form', {
-    label: 'Remover formulario',
+    label: D.s3BtnRemove || 'Remove form',
     variant: 'ghost',
     onClick: function () {
       if (!_dynamicForm) { return; }
@@ -313,19 +332,19 @@
   /* ══════════════════════════════════════════════════
      4 — snapshot-sync programático
   ══════════════════════════════════════════════════ */
-  var inTitulo  = new MTS.Input('#titulo-4', { label: 'Título del proyecto', value: '' });
+  var inTitulo  = new MTS.Input('#titulo-4', { label: D.s4LabelTitulo || 'Project title', value: '' });
   var selEstado = new MTS.Select('#estado-4', {
-    label: 'Estado',
+    label: D.s4LabelEstado || 'Status',
     value: null,
     options: [
-      { value: 'draft',    label: 'Borrador' },
-      { value: 'active',   label: 'Activo' },
-      { value: 'archived', label: 'Archivado' }
+      { value: 'draft',    label: D.s4OptDraft    || 'Draft' },
+      { value: 'active',   label: D.s4OptActive   || 'Active' },
+      { value: 'archived', label: D.s4OptArchived || 'Archived' }
     ]
   });
 
   new MTS.Button('#btn-load-4', {
-    label: 'Cargar datos',
+    label: D.s4BtnLoad || 'Load data',
     variant: 'secondary',
     onClick: function () {
       inTitulo.setValue('Proyecto Alpha');
@@ -333,25 +352,25 @@
       document.querySelector('[data-mts-form-id="sync-form"]').dispatchEvent(
         new CustomEvent('mts:form:snapshot-sync', { bubbles: true })
       );
-      document.getElementById('log-4').textContent = 'Datos cargados — snapshot sincronizado. El form está limpio.';
+      document.getElementById('log-4').textContent = D.s4MsgLoaded || 'Data loaded — snapshot synced. The form is clean.';
     }
   });
 
   new MTS.Button('#btn-save-4', {
-    label: 'Guardar',
+    label: D.s4BtnSave || 'Save',
     variant: 'primary',
     onClick: function () {
       document.querySelector('[data-mts-form-id="sync-form"]').dispatchEvent(
         new CustomEvent('mts:form:save-ack', { bubbles: true, detail: { formId: 'sync-form' } })
       );
-      document.getElementById('log-4').textContent = 'Guardado — snapshot reseteado.';
+      document.getElementById('log-4').textContent = D.s4MsgSaved || 'Saved — snapshot reset.';
     }
   });
 
   document.addEventListener('mts:form:dirty-change', function (e) {
     if (e.detail.formId !== 'sync-form') { return; }
     if (e.detail.isDirty) {
-      document.getElementById('log-4').textContent = 'Hay cambios sin guardar.';
+      document.getElementById('log-4').textContent = D.s4MsgDirty || 'There are unsaved changes.';
     }
   });
 

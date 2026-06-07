@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../overlays/matios-ui-alert/matios-ui-alert.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-transferlist-i18n.js"></script>
   <script src="./matios-ui-transferlist.js"></script>
 </head>
 <body>
@@ -56,18 +58,18 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.TransferList</h1>
-    <p>Transferencia entre listas con datasource origen/seleccionado, drag and drop, botones opcionales y validacion unica en destino. Los ejemplos combinan casos genericos y un caso real de negocio.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 - Basico</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 - Columnas visibles</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 - Participantes de evento</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 - Planes por region</div><div id="tabs-s4"></div></div>
-  <div class="demo-section"><div class="demo-section-title">5 - Roles por modulo</div><div id="tabs-s5"></div></div>
-  <div class="demo-section"><div class="demo-section-title">6 - Botones individuales + eliminar con x</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s6-title"></div><div id="tabs-s6"></div></div>
 </div>
 
 <script>
@@ -119,6 +121,33 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
+
+function fmt(tpl, vars) {
+  var out = String(tpl == null ? '' : tpl);
+  if (vars) {
+    Object.keys(vars).forEach(function (k) {
+      out = out.split('{' + k + '}').join(vars[k]);
+    });
+  }
+  return out;
+}
+
+// — Locale: muestra ingles por defecto (cara publica); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.TransferList']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Transfer between lists with origin/selected datasource, drag and drop, optional buttons and unique validation on the target. The examples combine generic cases and a real business case.';
+document.getElementById('s1-title').textContent = D.s1Title || '1 - Basic';
+document.getElementById('s2-title').textContent = D.s2Title || '2 - Visible columns';
+document.getElementById('s3-title').textContent = D.s3Title || '3 - Event attendees';
+document.getElementById('s4-title').textContent = D.s4Title || '4 - Plans by region';
+document.getElementById('s5-title').textContent = D.s5Title || '5 - Roles by module';
+document.getElementById('s6-title').textContent = D.s6Title || '6 - Individual buttons + remove with x';
 
 var preview_s1 =
   '<div class="demo-stack">' +
@@ -243,9 +272,9 @@ var js_s5 =
 
 makeSection('tabs-s1', preview_s1, js_s1, function () {
   new MTS.TransferList('#demo-basic-transfer', {
-    label: 'Categorias destacadas',
-    originTitle: 'Disponibles',
-    selectedTitle: 'Activas',
+    label: D.s1Label || 'Featured categories',
+    originTitle: D.s1OriginTitle || 'Available',
+    selectedTitle: D.s1SelectedTitle || 'Active',
     showMoveButtons: true,
     originDataSource: [
       { nombre: 'Design', detalle: 'Coleccion creativa para portada.' },
@@ -277,10 +306,10 @@ makeSection('tabs-s2', preview_s2, js_s2, function () {
   ];
 
   new MTS.TransferList('#demo-columns-transfer', {
-    label: 'Columnas visibles',
-    hint: 'Define que columnas apareceran en una tabla personalizada.',
-    originTitle: 'Biblioteca de columnas',
-    selectedTitle: 'Columnas activas',
+    label: D.s2Label || 'Visible columns',
+    hint: D.s2Hint || 'Define which columns will appear in a custom table.',
+    originTitle: D.s2OriginTitle || 'Column library',
+    selectedTitle: D.s2SelectedTitle || 'Active columns',
     originDataSource: columns,
     selectedDataSource: selectedColumns,
     renderItem: function (item) {
@@ -305,10 +334,10 @@ makeSection('tabs-s3', preview_s3, js_s3, function () {
   ];
 
   new MTS.TransferList('#demo-event-transfer', {
-    label: 'Participantes',
-    hint: 'Ejemplo sin botones laterales: solo arrastrar y soltar.',
-    originTitle: 'Lista de espera',
-    selectedTitle: 'Confirmados',
+    label: D.s3Label || 'Attendees',
+    hint: D.s3Hint || 'Example without side buttons: drag and drop only.',
+    originTitle: D.s3OriginTitle || 'Waiting list',
+    selectedTitle: D.s3SelectedTitle || 'Confirmed',
     showMoveButtons: false,
     originDataSource: attendees,
     selectedDataSource: confirmed,
@@ -333,25 +362,25 @@ makeSection('tabs-s4', preview_s4, js_s4, function () {
   ];
 
   new MTS.TransferList('#demo-region-transfer', {
-    label: 'Planes destacados',
-    hint: 'Solo se permite un plan por region en la lista derecha.',
-    originTitle: 'Planes candidatos',
-    selectedTitle: 'Portafolio activo',
+    label: D.s4Label || 'Featured plans',
+    hint: D.s4Hint || 'Only one plan per region is allowed in the right list.',
+    originTitle: D.s4OriginTitle || 'Candidate plans',
+    selectedTitle: D.s4SelectedTitle || 'Active portfolio',
     originDataSource: plans,
     selectedDataSource: [],
     itemLabel: 'name',
     itemDescription: 'description',
     validateUnique: true,
     validateKey: 'regionId',
-    duplicateMessage: 'Solo puede haber un plan por region.',
+    duplicateMessage: D.s4DuplicateMessage || 'There can only be one plan per region.',
     onRequestItem: function (item, moved) {
       document.getElementById('demo-region-alert').innerHTML = '';
 
       if (moved) {
         MTS.Alert.show('#demo-region-alert', {
           variant: 'success',
-          title: 'Plan agregado',
-          message: 'Se movio <strong>' + esc(item.name) + '</strong> al portafolio activo.',
+          title: D.s4AddedTitle || 'Plan added',
+          message: fmt(D.s4AddedMessage || '<strong>{name}</strong> was moved to the active portfolio.', { name: esc(item.name) }),
           closable: true
         });
         return;
@@ -359,8 +388,8 @@ makeSection('tabs-s4', preview_s4, js_s4, function () {
 
       MTS.Alert.show('#demo-region-alert', {
         variant: 'warning',
-        title: 'Transferencia bloqueada',
-        message: 'Ya existe un plan activo para la region <strong>' + esc(item.regionName) + '</strong>.',
+        title: D.s4BlockedTitle || 'Transfer blocked',
+        message: fmt(D.s4BlockedMessage || 'An active plan already exists for the <strong>{region}</strong> region.', { region: esc(item.regionName) }),
         closable: true
       });
     }
@@ -401,17 +430,17 @@ makeSection('tabs-s6', preview_s6, js_s6, function () {
   ];
 
   new MTS.TransferList('#s6-transfer', {
-    label: 'Perfiles del rol',
-    hint: 'Solo el boton › para agregar. La x quita el item del destino sin moverlo al origen.',
-    originTitle: 'Disponibles',
-    selectedTitle: 'Asignados',
+    label: D.s6Label || 'Role profiles',
+    hint: D.s6Hint || 'Only the button to add. The x removes the item from the target without moving it back to the origin.',
+    originTitle: D.s6OriginTitle || 'Available',
+    selectedTitle: D.s6SelectedTitle || 'Assigned',
     itemLabel: 'name',
     itemDescription: 'moduleName',
     originDataSource: profilesS6,
     selectedDataSource: [],
     validateUnique: true,
     validateKey: 'moduleId',
-    duplicateMessage: 'Ya hay un perfil de ese modulo en el rol.',
+    duplicateMessage: D.s6DuplicateMessage || 'There is already a profile from that module in the role.',
     draggable: false,
     showMoveButtons: true,
     buttons: { allToSelected: false, toSelected: true, toOrigin: false, allToOrigin: false },
@@ -429,25 +458,25 @@ makeSection('tabs-s5', preview_s5, js_s5, function () {
   ];
 
   new MTS.TransferList('#demo-role-transfer', {
-    label: 'Perfiles del rol',
-    hint: 'Arrastra o mueve entre listas. No se permite repetir modulo en seleccionados.',
-    originTitle: 'Perfiles disponibles',
-    selectedTitle: 'Perfiles del rol',
+    label: D.s5Label || 'Role profiles',
+    hint: D.s5Hint || 'Drag or move between lists. Repeating a module in the selected list is not allowed.',
+    originTitle: D.s5OriginTitle || 'Available profiles',
+    selectedTitle: D.s5SelectedTitle || 'Role profiles',
     originDataSource: profiles,
     selectedDataSource: [],
     itemLabel: 'name',
     itemDescription: 'description',
     validateUnique: true,
     validateKey: 'moduleId',
-    duplicateMessage: 'Solo se permite un perfil por modulo.',
+    duplicateMessage: D.s5DuplicateMessage || 'Only one profile per module is allowed.',
     onRequestItem: function (item, moved) {
       document.getElementById('demo-role-alert').innerHTML = '';
 
       if (moved) {
         MTS.Alert.show('#demo-role-alert', {
           variant: 'success',
-          title: 'Item transferido',
-          message: 'Se movio <strong>' + esc(item.name) + '</strong> correctamente.',
+          title: D.s5MovedTitle || 'Item transferred',
+          message: fmt(D.s5MovedMessage || '<strong>{name}</strong> was moved successfully.', { name: esc(item.name) }),
           closable: true
         });
         return;
@@ -455,8 +484,8 @@ makeSection('tabs-s5', preview_s5, js_s5, function () {
 
       MTS.Alert.show('#demo-role-alert', {
         variant: 'warning',
-        title: 'Transferencia bloqueada',
-        message: 'No se puede mover <strong>' + esc(item.name) + '</strong> porque ya existe un perfil del mismo modulo en destino.',
+        title: D.s5BlockedTitle || 'Transfer blocked',
+        message: fmt(D.s5BlockedMessage || 'Cannot move <strong>{name}</strong> because a profile from the same module already exists in the target.', { name: esc(item.name) }),
         closable: true
       });
     }

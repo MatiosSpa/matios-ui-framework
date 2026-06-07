@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -49,6 +49,8 @@
   <script src="../../support/demo-shared.js"></script>
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-toggle-i18n.js"></script>
   <script src="./matios-ui-toggle.js"></script>
 </head>
 <body>
@@ -56,15 +58,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Toggle</h1>
-    <p>Switch on/off en distintos tamaños, con label, disabled y API programática.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
-  <div class="demo-section"><div class="demo-section-title">1 — Tamaños</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Con label y eventos</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — Disabled</div><div id="tabs-s3"></div></div>
-  <div class="demo-section"><div class="demo-section-title">4 — API programática</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 
 <script>
@@ -114,6 +116,21 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Toggle']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'On/off switch in different sizes, with label, disabled and programmatic API.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Sizes';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — With label and events';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — Disabled';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — Programmatic API';
+
 var preview_s1 =
   '<div class="demo-row">' +
     '<div class="demo-col"><div class="demo-label">sm</div><div id="tgl-sm"></div></div>' +
@@ -131,7 +148,7 @@ var preview_s2 =
     '<div id="tgl-label1"></div>' +
     '<div id="tgl-label2"></div>' +
     '<div id="tgl-nolabel"></div>' +
-    '<div class="result-box" id="tgl-result">— interactúa con los toggles —</div>' +
+    '<div class="result-box" id="tgl-result">' + (D.resultS2Placeholder || '— interact with the toggles —') + '</div>' +
   '</div>';
 
 var js_s2 =
@@ -168,7 +185,7 @@ var preview_s4 =
       '<button class="demo-btn-sm" onclick="apiDemo(\'setFalse\')">setChecked(false)</button>' +
       '<button class="demo-btn-sm" onclick="apiDemo(\'toggle\')">toggle()</button>' +
     '</div>' +
-    '<div class="result-box" id="api-result">— usa los botones para llamar la API —</div>' +
+    '<div class="result-box" id="api-result">' + (D.resultApiPlaceholder || '— use the buttons to call the API —') + '</div>' +
   '</div>';
 
 var js_s4 =
@@ -185,34 +202,34 @@ var js_s4 =
 var tglApi;
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {
-  new MTS.Toggle('#tgl-sm', { label: 'Small', size: 'sm' });
-  new MTS.Toggle('#tgl-md', { label: 'Medium', size: 'md', checked: true });
-  new MTS.Toggle('#tgl-lg', { label: 'Large', size: 'lg' });
+  new MTS.Toggle('#tgl-sm', { label: D.labelSmall || 'Small', size: 'sm' });
+  new MTS.Toggle('#tgl-md', { label: D.labelMedium || 'Medium (default)', size: 'md', checked: true });
+  new MTS.Toggle('#tgl-lg', { label: D.labelLarge || 'Large', size: 'lg' });
 });
 makeSection('tabs-s2', preview_s2, js_s2, function() {
-  new MTS.Toggle('#tgl-label1', { label: 'Active notifications', checked: true, onChange: function(e) { setResult('tgl-result', 'Notifications: ' + e.detail.checked); } });
-  new MTS.Toggle('#tgl-label2', { label: 'Maintenance mode', onChange: function(e) { setResult('tgl-result', 'Maintenance: ' + e.detail.checked); } });
-  new MTS.Toggle('#tgl-nolabel', { checked: false, onChange: function(e) { setResult('tgl-result', 'No label: ' + e.detail.checked); } });
+  new MTS.Toggle('#tgl-label1', { label: D.labelNotifications || 'Active notifications', checked: true, onChange: function(e) { setResult('tgl-result', (D.echoNotifications || 'Notifications: ') + e.detail.checked); } });
+  new MTS.Toggle('#tgl-label2', { label: D.labelMaintenance || 'Maintenance mode', onChange: function(e) { setResult('tgl-result', (D.echoMaintenance || 'Maintenance: ') + e.detail.checked); } });
+  new MTS.Toggle('#tgl-nolabel', { checked: false, onChange: function(e) { setResult('tgl-result', (D.echoNoLabel || 'No label: ') + e.detail.checked); } });
 });
 makeSection('tabs-s3', preview_s3, js_s3, function() {
-  new MTS.Toggle('#tgl-dis-off', { label: 'Not available', disabled: true, checked: false });
-  new MTS.Toggle('#tgl-dis-on', { label: 'Forced active', disabled: true, checked: true });
+  new MTS.Toggle('#tgl-dis-off', { label: D.labelNotAvailable || 'Not available', disabled: true, checked: false });
+  new MTS.Toggle('#tgl-dis-on', { label: D.labelForcedActive || 'Forced active', disabled: true, checked: true });
 });
 makeSection('tabs-s4', preview_s4, js_s4, function() {
   tglApi = new MTS.Toggle('#tgl-api', {
-    label: 'Controlled toggle',
+    label: D.labelControlled || 'Controlled toggle',
     checked: false,
-    onChange: function(e) { setResult('api-result', 'changed: ' + e.detail.checked); }
+    onChange: function(e) { setResult('api-result', (D.echoChanged || 'changed: ') + e.detail.checked); }
   });
 });
 
 function apiDemo(action) {
   var res = document.getElementById('api-result');
   if (!tglApi || !res) return;
-  if (action === 'isChecked') res.textContent = 'isChecked() → ' + tglApi.isChecked();
-  if (action === 'setTrue')   { tglApi.setChecked(true);  res.textContent = 'setChecked(true) ✓'; }
-  if (action === 'setFalse')  { tglApi.setChecked(false); res.textContent = 'setChecked(false) ✓'; }
-  if (action === 'toggle')    { tglApi.toggle();          res.textContent = 'toggle() → now: ' + tglApi.isChecked(); }
+  if (action === 'isChecked') res.textContent = (D.echoIsChecked || 'isChecked() → ') + tglApi.isChecked();
+  if (action === 'setTrue')   { tglApi.setChecked(true);  res.textContent = D.echoSetTrue || 'setChecked(true) ✓'; }
+  if (action === 'setFalse')  { tglApi.setChecked(false); res.textContent = D.echoSetFalse || 'setChecked(false) ✓'; }
+  if (action === 'toggle')    { tglApi.toggle();          res.textContent = (D.echoToggle || 'toggle() → now: ') + tglApi.isChecked(); }
 }
 
 </script>

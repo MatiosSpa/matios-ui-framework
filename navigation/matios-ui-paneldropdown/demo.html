@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -42,6 +42,8 @@
   <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
   <link rel="stylesheet" href="./matios-ui-paneldropdown.css">
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-paneldropdown-i18n.js"></script>
   <script src="../../support/demo-shared.js"></script>
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../matios-ui-tabs/matios-ui-tabs.js"></script>
@@ -51,12 +53,23 @@
   <script src="./matios-ui-paneldropdown.js"></script>
 </head>
 <body>
+
+<script>
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.PanelDropdown'] && MTS.getLocale()['MTS.PanelDropdown'].demo) || {};
+</script>
+
 <div class="demo-page">
 
   <div class="demo-section">
     <div class="demo-section__header">
-      <h2>Panel de notificaciones</h2>
-      <p>Header con contador de no leídas · ítems con dot de color · timestamp · footer CTA.</p>
+      <h2 id="s1-title"></h2>
+      <p id="s1-subtitle"></p>
     </div>
     <div class="demo-section__body">
       <div id="tabs-s1"></div>
@@ -65,8 +78,8 @@
 
   <div class="demo-section">
     <div class="demo-section__header">
-      <h2>Menú de usuario</h2>
-      <p>Sin dot · sin timestamp · ícono por ítem · ítem danger · <code>position: 'bottom-end'</code>.</p>
+      <h2 id="s2-title"></h2>
+      <p id="s2-subtitle"></p>
     </div>
     <div class="demo-section__body">
       <div id="tabs-s2"></div>
@@ -75,8 +88,8 @@
 
   <div class="demo-section">
     <div class="demo-section__header">
-      <h2>Sin header · sin footer</h2>
-      <p>Solo cuerpo con ítems. Útil para menús contextuales simples con contenido enriquecido.</p>
+      <h2 id="s3-title"></h2>
+      <p id="s3-subtitle"></p>
     </div>
     <div class="demo-section__body">
       <div id="tabs-s3"></div>
@@ -113,6 +126,13 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode,                  language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
+
+document.getElementById('s1-title').textContent    = D.s1Title    || 'Notifications panel';
+document.getElementById('s1-subtitle').textContent = D.s1Subtitle || 'Header with unread counter · items with color dot · timestamp · footer CTA.';
+document.getElementById('s2-title').textContent    = D.s2Title    || 'User menu';
+document.getElementById('s2-subtitle').textContent = D.s2Subtitle || 'No dot · no timestamp · icon per item · danger item.';
+document.getElementById('s3-title').textContent    = D.s3Title    || 'No header · no footer';
+document.getElementById('s3-subtitle').textContent = D.s3Subtitle || 'Body with items only. Useful for simple context menus with rich content.';
 
 /* ════════════════════════════════════════════════════════
    SECCIÓN 1 — Notificaciones
@@ -158,31 +178,31 @@ var js_s1 =
 function initS1() {
   new MTS.PanelDropdown(document.getElementById('s1-notif-btn'), {
     position: 'bottom-end',
-    header:   { title: 'Notificaciones', badge: 3 },
+    header:   { title: D.notifHeader || 'Notifications', badge: 3 },
     items: [
       { id:'n1', dot:'#10b981', icon:'mts-icon-check-circle',
-        title: 'Pedido #1047 entregado',
-        description: 'Ana Torres recibió su pedido.',
-        timestamp: 'Hace 5 min', unread: true },
+        title: D.notif1Title || 'Order #1047 delivered',
+        description: D.notif1Desc || 'Ana Torres received her order.',
+        timestamp: D.notif1Time || '5 min ago', unread: true },
       { id:'n2', dot:'#6366f1', icon:'mts-icon-user-plus',
-        title: 'Nuevo usuario registrado',
-        description: 'Rodrigo Campos se registró.',
-        timestamp: 'Hace 18 min', unread: true },
+        title: D.notif2Title || 'New user registered',
+        description: D.notif2Desc || 'Rodrigo Campos signed up.',
+        timestamp: D.notif2Time || '18 min ago', unread: true },
       { id:'n3', dot:'#ef4444', icon:'mts-icon-x-circle',
-        title: 'Pedido #1044 cancelado',
-        description: 'Sofía Castro canceló el pedido.',
-        timestamp: 'Hace 42 min', unread: true },
+        title: D.notif3Title || 'Order #1044 cancelled',
+        description: D.notif3Desc || 'Sofía Castro cancelled the order.',
+        timestamp: D.notif3Time || '42 min ago', unread: true },
       { divider: true },
       { id:'n4', dot:'#f59e0b', icon:'mts-icon-dollar-sign',
-        title: 'Pago procesado',
-        description: '$4.200 recibidos de Luis Herrera.',
-        timestamp: 'Hace 1 hora' },
+        title: D.notif4Title || 'Payment processed',
+        description: D.notif4Desc || '$4,200 received from Luis Herrera.',
+        timestamp: D.notif4Time || '1 hour ago' },
       { id:'n5', dot:'#0ea5e9', icon:'mts-icon-file-text',
-        title: 'Reporte mensual generado',
-        description: 'Reporte de abril listo.',
-        timestamp: 'Hace 2 horas' },
+        title: D.notif5Title || 'Monthly report generated',
+        description: D.notif5Desc || 'April report is ready.',
+        timestamp: D.notif5Time || '2 hours ago' },
     ],
-    footer: { label: 'Ver todas las notificaciones', onClick: function() {} },
+    footer: { label: D.notifFooter || 'View all notifications', onClick: function() {} },
   });
   MTS.Icon.initAll();
 }
@@ -219,11 +239,11 @@ function initS2() {
     width:    260,
     header:   { title: 'Carlos Méndez' },
     items: [
-      { id:'perfil',  icon:'mts-icon-user',        title: 'Mi perfil' },
-      { id:'config',  icon:'mts-icon-settings',     title: 'Configuración' },
-      { id:'ayuda',   icon:'mts-icon-help-circle',  title: 'Ayuda' },
+      { id:'perfil',  icon:'mts-icon-user',        title: D.userProfile  || 'My profile' },
+      { id:'config',  icon:'mts-icon-settings',     title: D.userSettings || 'Settings' },
+      { id:'ayuda',   icon:'mts-icon-help-circle',  title: D.userHelp     || 'Help' },
       { divider: true },
-      { id:'logout',  icon:'mts-icon-log-out',      title: 'Cerrar sesión' },
+      { id:'logout',  icon:'mts-icon-log-out',      title: D.userLogout   || 'Log out' },
     ],
     footer: null,
   });
@@ -237,7 +257,7 @@ function initS2() {
 var preview_s3 =
   '<div style="display:flex;justify-content:flex-start;align-items:flex-start;padding:16px">' +
     '<button id="s3-ctx-btn" class="mts-btn mts-btn--secondary mts-btn--sm">' +
-      'Acciones <i class="mts-icon mts-icon-chevron-down"></i>' +
+      (D.actionsBtn || 'Actions') + ' <i class="mts-icon mts-icon-chevron-down"></i>' +
     '</button>' +
   '</div>';
 
@@ -259,11 +279,11 @@ function initS3() {
     position: 'bottom-start',
     width:    240,
     items: [
-      { id:'edit',   icon:'mts-icon-edit',     title: 'Editar',   description: 'Modificar el registro' },
-      { id:'dup',    icon:'mts-icon-copy',      title: 'Duplicar', description: 'Crear una copia' },
-      { id:'export', icon:'mts-icon-download',  title: 'Exportar', description: 'Descargar como CSV' },
+      { id:'edit',   icon:'mts-icon-edit',     title: D.actionEdit      || 'Edit',      description: D.actionEditDesc      || 'Modify the record' },
+      { id:'dup',    icon:'mts-icon-copy',      title: D.actionDuplicate || 'Duplicate', description: D.actionDuplicateDesc || 'Create a copy' },
+      { id:'export', icon:'mts-icon-download',  title: D.actionExport    || 'Export',    description: D.actionExportDesc    || 'Download as CSV' },
       { divider: true },
-      { id:'delete', icon:'mts-icon-trash-2',   title: 'Eliminar', description: 'Esta acción no se puede deshacer' },
+      { id:'delete', icon:'mts-icon-trash-2',   title: D.actionDelete    || 'Delete',    description: D.actionDeleteDesc    || 'This action cannot be undone' },
     ],
   });
   MTS.Icon.initAll();

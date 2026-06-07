@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -46,6 +46,8 @@
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
   <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-lightbox-i18n.js"></script>
   <script src="./matios-ui-lightbox.js"></script>
   <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
@@ -83,15 +85,15 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Lightbox</h1>
-    <p>Media viewer — images, video, YouTube, Vimeo · zoom · thumbnails · auto-bind.</p>
+    <p id="demo-subtitle"></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <div class="demo-section"><div class="demo-section-title">1 — Uso programático / Programmatic</div><div id="tabs-s1"></div></div>
-  <div class="demo-section"><div class="demo-section-title">2 — Auto-bind con selector CSS</div><div id="tabs-s2"></div></div>
-  <div class="demo-section"><div class="demo-section-title">3 — API + opciones</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 </div>
 
 <script>
@@ -135,13 +137,27 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
+// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Lightbox']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'Media viewer — images, video, YouTube, Vimeo · zoom · thumbnails · auto-bind.';
+document.getElementById('s1-title').textContent      = D.s1Title || '1 — Programmatic use';
+document.getElementById('s2-title').textContent      = D.s2Title || '2 — Auto-bind with a CSS selector';
+document.getElementById('s3-title').textContent      = D.s3Title || '3 — API + options';
+
 var preview_s1 = `
 <div class="demo-stack">
   <div class="demo-row">
-    <button id="btn-lb-open-0" data-label="Abrir índice 0" data-variant="secondary"></button>
-    <button id="btn-lb-open-2" data-label="Abrir índice 2" data-variant="secondary"></button>
+    <button id="btn-lb-open-0" data-label="${D.btnOpen0 || 'Open index 0'}" data-variant="secondary"></button>
+    <button id="btn-lb-open-2" data-label="${D.btnOpen2 || 'Open index 2'}" data-variant="secondary"></button>
   </div>
-  <div class="result-box" id="lb-result">— abre el lightbox —</div>
+  <div class="result-box" id="lb-result">${D.resultPlaceholder || '— open the lightbox —'}</div>
 </div>`;
 
 var js_s1 = `new MTS.Button('#btn-lb-open-0');
@@ -190,12 +206,12 @@ document.getElementById('btn-lb-open-2').addEventListener('click', function () {
 
 var preview_s2 = `
 <div class="gallery-grid">
-  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/10/1200/800" data-caption="Foto 1 — click para abrir" href="#"><span data-gallery-icon="image"></span></a>
-  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/20/1200/800" data-caption="Foto 2 — navegación con ← →" href="#"><span data-gallery-icon="images"></span></a>
-  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/30/1200/800" data-caption="Foto 3 — zoom con + / -" href="#"><span data-gallery-icon="camera"></span></a>
-  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/40/1200/800" data-caption="Foto 4" href="#"><span data-gallery-icon="aperture"></span></a>
-  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/50/1200/800" data-caption="Foto 5" href="#"><span data-gallery-icon="sunrise"></span></a>
-  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/60/1200/800" data-caption="Foto 6" href="#"><span data-gallery-icon="sunset"></span></a>
+  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/10/1200/800" data-caption="${D.photo1 || 'Photo 1 — click to open'}" href="#"><span data-gallery-icon="image"></span></a>
+  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/20/1200/800" data-caption="${D.photo2 || 'Photo 2 — navigate with ← →'}" href="#"><span data-gallery-icon="images"></span></a>
+  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/30/1200/800" data-caption="${D.photo3 || 'Photo 3 — zoom with + / -'}" href="#"><span data-gallery-icon="camera"></span></a>
+  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/40/1200/800" data-caption="${D.photo4 || 'Photo 4'}" href="#"><span data-gallery-icon="aperture"></span></a>
+  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/50/1200/800" data-caption="${D.photo5 || 'Photo 5'}" href="#"><span data-gallery-icon="sunrise"></span></a>
+  <a class="gallery-thumb" data-lightbox data-src="https://picsum.photos/seed/60/1200/800" data-caption="${D.photo6 || 'Photo 6'}" href="#"><span data-gallery-icon="sunset"></span></a>
 </div>`;
 
 var js_s2 = `document.querySelectorAll('[data-gallery-icon]').forEach(function (el) {
@@ -226,7 +242,7 @@ var preview_s3 = `
     <button id="btn-lb-api-1" data-label="open(1)" data-variant="secondary"></button>
     <button id="btn-lb-api-2" data-label="open(2)" data-variant="secondary"></button>
   </div>
-  <div class="result-box" id="lb-api-result">— usa los botones —</div>
+  <div class="result-box" id="lb-api-result">${D.apiResultPlaceholder || '— use the buttons —'}</div>
 </div>`;
 
 var js_s3 = `new MTS.Button('#btn-lb-api-0');
@@ -276,9 +292,9 @@ document.querySelectorAll('[data-gallery-icon]').forEach(function (el) {
 });
 
 var ITEMS = [
-  { src:'https://picsum.photos/seed/1/1200/800', caption:'Paisaje 1 — usa ← → para navegar', thumb:'https://picsum.photos/seed/1/120/80' },
-  { src:'https://picsum.photos/seed/2/1200/800', caption:'Paisaje 2 — usa + / - para zoom',  thumb:'https://picsum.photos/seed/2/120/80' },
-  { src:'https://picsum.photos/seed/3/1200/800', caption:'Paisaje 3 — Esc para cerrar',       thumb:'https://picsum.photos/seed/3/120/80' }
+  { src:'https://picsum.photos/seed/1/1200/800', caption:(D.cap1 || 'Landscape 1 — use ← → to navigate'), thumb:'https://picsum.photos/seed/1/120/80' },
+  { src:'https://picsum.photos/seed/2/1200/800', caption:(D.cap2 || 'Landscape 2 — use + / - to zoom'),  thumb:'https://picsum.photos/seed/2/120/80' },
+  { src:'https://picsum.photos/seed/3/1200/800', caption:(D.cap3 || 'Landscape 3 — Esc to close'),       thumb:'https://picsum.photos/seed/3/120/80' }
 ];
 
 var lb1 = new MTS.Lightbox(ITEMS, {
@@ -292,7 +308,7 @@ var lb1 = new MTS.Lightbox(ITEMS, {
     document.getElementById('lb-result').textContent = 'onChange → index: ' + e.detail.index;
   },
   onClose: function(){
-    document.getElementById('lb-result').textContent = 'onClose → cerrado';
+    document.getElementById('lb-result').textContent = (D.echoClosed || 'onClose → closed');
   }
 });
 
@@ -304,9 +320,9 @@ document.getElementById('btn-lb-open-2').addEventListener('click', function(){ l
 new MTS.Lightbox('[data-lightbox]', { thumbnails:true, zoom:true, loop:true });
 
 var lbApi = new MTS.Lightbox([
-  { src:'https://picsum.photos/seed/100/1200/800', caption:'Opción A — animation:slide' },
-  { src:'https://picsum.photos/seed/200/1200/800', caption:'Opción B — download:true' },
-  { src:'https://picsum.photos/seed/300/1200/800', caption:'Opción C — counter:true' }
+  { src:'https://picsum.photos/seed/100/1200/800', caption:(D.optA || 'Option A — animation: slide') },
+  { src:'https://picsum.photos/seed/200/1200/800', caption:(D.optB || 'Option B — download: true') },
+  { src:'https://picsum.photos/seed/300/1200/800', caption:(D.optC || 'Option C — counter: true') }
 ], {
   animation:'slide',
   download:true,
@@ -320,7 +336,7 @@ var lbApi = new MTS.Lightbox([
     document.getElementById('lb-api-result').textContent = 'onChange → index: ' + e.detail.index;
   },
   onClose: function(){
-    document.getElementById('lb-api-result').textContent = 'onClose → cerrado';
+    document.getElementById('lb-api-result').textContent = (D.echoClosed || 'onClose → closed');
   }
 });
 
