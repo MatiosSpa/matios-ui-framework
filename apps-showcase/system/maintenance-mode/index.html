@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -34,10 +34,10 @@
         <div class="maintenance-page__hero-grid">
           <div>
             <div class="maintenance-page__eyebrow">Scheduled maintenance</div>
-            <h1 class="maintenance-page__hero-title">Estamos aplicando una ventana de mantenimiento.</h1>
+            <h1 class="maintenance-page__hero-title">We are running a maintenance window.</h1>
             <p class="maintenance-page__hero-copy">
-              La UI entrega una salida clara para ventanas programadas: comunica impacto, tiempo
-              estimado y deja acciones utiles para usuarios o equipos internos.
+              The UI provides a clear status for scheduled windows: it communicates impact, estimated
+              time, and offers useful actions for users or internal teams.
             </p>
             <div class="maintenance-page__badges">
               <span id="maintenance-badge-state"></span>
@@ -86,46 +86,46 @@
     });
 
     new MTS.Button('#maintenance-status-button', {
-      label: 'Ver estado',
+      label: 'View status',
       variant: 'primary',
       iconLeft: MTS.Icon.get('activity'),
       onClick: function () {
-        notify('info', 'Estado abierto', 'Aqui normalmente redirigirias a la pagina de status del servicio.');
+        notify('info', 'Status opened', 'Here you would normally redirect to the service status page.');
       }
     });
 
     new MTS.Button('#maintenance-notify-button', {
-      label: 'Avisar al equipo',
+      label: 'Notify the team',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('send'),
       onClick: function () {
-        notify('success', 'Aviso enviado', 'Se simulo el envio de una notificacion al equipo afectado.');
+        notify('success', 'Notice sent', 'A notification to the affected team was simulated.');
       }
     });
 
     new MTS.Card('#maintenance-impact-card', {
-      title: 'Impacto esperado',
+      title: 'Expected impact',
       subtitle: 'Affected services',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="maintenance-page__detail-list">' +
-          detailRow('Auth', 'Sin impacto. Login y sesiones siguen activos.') +
-          detailRow('Billing', 'Lectura disponible, escritura pausada durante la migracion.') +
-          detailRow('Webhooks', 'Se encolan deliveries y se reprocesan al finalizar.') +
+          detailRow('Auth', 'No impact. Login and sessions remain active.') +
+          detailRow('Billing', 'Reads available, writes paused during the migration.') +
+          detailRow('Webhooks', 'Deliveries are queued and reprocessed once finished.') +
         '</div>'
     });
 
     new MTS.Card('#maintenance-next-card', {
-      title: 'Siguientes pasos',
+      title: 'Next steps',
       subtitle: 'What happens next',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="maintenance-page__detail-list">' +
-          detailRow('1', 'Finalizar migracion de datos y validar integridad.') +
-          detailRow('2', 'Reactivar trafico para operaciones de billing.') +
-          detailRow('3', 'Publicar cierre y validar backlog de eventos.') +
+          detailRow('1', 'Finish the data migration and validate integrity.') +
+          detailRow('2', 'Re-enable traffic for billing operations.') +
+          detailRow('3', 'Publish the closeout and validate the event backlog.') +
         '</div>'
     });
 

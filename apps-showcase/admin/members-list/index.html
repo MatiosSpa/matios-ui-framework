@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -42,7 +42,7 @@
         <div class="admin-members-page__logo">M</div>
         <div>
           <div class="admin-members-page__title">Members List</div>
-          <div class="admin-members-page__subtitle">Gestion real de usuarios, roles y acceso operativo del workspace</div>
+          <div class="admin-members-page__subtitle">Real-world management of users, roles and operational access across the workspace</div>
         </div>
       </div>
       <div class="admin-members-page__actions">
@@ -55,10 +55,10 @@
       <section class="admin-members-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="admin-members-page__eyebrow">Workspace admin</div>
-          <h1 class="admin-members-page__hero-title">Controla quien entra, que rol opera y donde conviene intervenir antes de que el acceso se vuelva ruido.</h1>
+          <h1 class="admin-members-page__hero-title">Control who gets in, which role operates and where to step in before access turns into noise.</h1>
           <p class="admin-members-page__hero-copy">
-            Esta vista sirve para revisar miembros activos, pendientes e invitados con foco operativo:
-            ultimo acceso, equipos, permisos base y acciones de seguimiento sin salir del listado.
+            This view lets you review active, pending and invited members with an operational focus:
+            last access, teams, base permissions and follow-up actions without leaving the list.
           </p>
         </div>
       </section>
@@ -74,8 +74,8 @@
       <aside class="mts-g-col-12 mts-g-col-xl-4">
         <div class="mts-form-card admin-members-page__filters-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Filtros</h2>
-            <p class="mts-form-card__subtitle">Busca por nombre, cargo, rol o estado del acceso.</p>
+            <h2 class="mts-form-card__title">Filters</h2>
+            <p class="mts-form-card__subtitle">Search by name, job title, role or access status.</p>
           </div>
 
           <div id="members-feedback"></div>
@@ -98,9 +98,9 @@
         <div class="admin-members-page__results-head">
           <div>
             <div class="admin-members-page__results-label">Workspace members</div>
-            <h2 class="admin-members-page__results-title">Lista operativa</h2>
+            <h2 class="admin-members-page__results-title">Operational list</h2>
           </div>
-          <div class="admin-members-page__results-meta" id="members-results-meta">0 resultados</div>
+          <div class="admin-members-page__results-meta" id="members-results-meta">0 results</div>
         </div>
 
         <div class="mts-grid mts-grid--gap-md" id="members-results"></div>
@@ -133,11 +133,11 @@
         role: 'owner',
         roleLabel: 'Owner',
         status: 'active',
-        statusLabel: 'Activo',
+        statusLabel: 'Active',
         job: 'Operations Lead',
         team: 'Ops + Billing',
-        lastAccess: 'Hace 12 min',
-        permissions: 'Workspace, billing y security',
+        lastAccess: '12 min ago',
+        permissions: 'Workspace, billing and security',
         avatarStatus: 'online'
       },
       {
@@ -147,11 +147,11 @@
         role: 'admin',
         roleLabel: 'Admin',
         status: 'active',
-        statusLabel: 'Activo',
+        statusLabel: 'Active',
         job: 'Support Manager',
         team: 'Support',
-        lastAccess: 'Hace 1 h',
-        permissions: 'Triage, macros y team settings',
+        lastAccess: '1 h ago',
+        permissions: 'Triage, macros and team settings',
         avatarStatus: 'busy'
       },
       {
@@ -161,11 +161,11 @@
         role: 'member',
         roleLabel: 'Member',
         status: 'active',
-        statusLabel: 'Activo',
+        statusLabel: 'Active',
         job: 'Product Designer',
         team: 'Product',
-        lastAccess: 'Ayer, 18:42',
-        permissions: 'Boards, comments y notifications',
+        lastAccess: 'Yesterday, 18:42',
+        permissions: 'Boards, comments and notifications',
         avatarStatus: 'away'
       },
       {
@@ -175,11 +175,11 @@
         role: 'billing',
         roleLabel: 'Billing',
         status: 'invited',
-        statusLabel: 'Invitado',
+        statusLabel: 'Invited',
         job: 'Finance Analyst',
         team: 'Finance',
-        lastAccess: 'Invitado hace 2 h',
-        permissions: 'Invoices y payment methods',
+        lastAccess: 'Invited 2 h ago',
+        permissions: 'Invoices and payment methods',
         avatarStatus: 'offline'
       },
       {
@@ -189,11 +189,11 @@
         role: 'member',
         roleLabel: 'Member',
         status: 'paused',
-        statusLabel: 'Pausado',
+        statusLabel: 'Paused',
         job: 'QA Lead',
         team: 'Platform',
-        lastAccess: 'Hace 14 dias',
-        permissions: 'Boards y release checklist',
+        lastAccess: '14 days ago',
+        permissions: 'Boards and release checklist',
         avatarStatus: 'offline'
       }
     ];
@@ -202,35 +202,35 @@
     var statusFilter;
 
     new MTS.Button('#members-export-button', {
-      label: 'Exportar acceso',
+      label: 'Export access',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('download'),
       onClick: function () {
-        showFeedback('success', 'Export listo', 'Se simulo la exportacion del snapshot actual de miembros y roles.');
+        showFeedback('success', 'Export ready', 'Exporting the current snapshot of members and roles was simulated.');
       }
     });
 
     new MTS.Button('#members-invite-button', {
-      label: 'Invitar miembro',
+      label: 'Invite member',
       variant: 'primary',
       iconLeft: MTS.Icon.get('user-plus'),
       onClick: function () { openScreen('../invite-member/index.html'); }
     });
 
     new MTS.KPICard('#members-kpi-active', {
-      label: 'Miembros activos',
+      label: 'Active members',
       value: '42',
       trend: 9,
-      trendLabel: 'vs mes anterior',
+      trendLabel: 'vs last month',
       variant: 'success',
       sparkline: [28, 30, 32, 35, 36, 39, 41, 42]
     });
 
     new MTS.KPICard('#members-kpi-pending', {
-      label: 'Invitaciones pendientes',
+      label: 'Pending invitations',
       value: '6',
       trend: -2,
-      trendLabel: 'vs semana pasada',
+      trendLabel: 'vs last week',
       variant: 'warning',
       sparkline: [9, 8, 7, 7, 8, 6, 6, 6]
     });
@@ -239,21 +239,21 @@
       label: 'Owners + admins',
       value: '5',
       trend: 0,
-      trendLabel: 'sin cambios',
+      trendLabel: 'no change',
       variant: 'primary',
       sparkline: [5, 5, 5, 5, 5, 5, 5, 5]
     });
 
     new MTS.Input('#members-search', {
       type: 'text',
-      label: 'Buscar miembro',
-      placeholder: 'Nombre, correo, cargo o equipo',
+      label: 'Search member',
+      placeholder: 'Name, email, job title or team',
       iconLeft: MTS.Icon.get('search')
     });
 
     roleFilter = new MTS.Select('#members-role-filter', {
-      label: 'Rol',
-      placeholder: 'Todos',
+      label: 'Role',
+      placeholder: 'All',
       clearable: true,
       options: [
         { value: 'owner', label: 'Owner' },
@@ -264,18 +264,18 @@
     });
 
     statusFilter = new MTS.Select('#members-status-filter', {
-      label: 'Estado',
-      placeholder: 'Todos',
+      label: 'Status',
+      placeholder: 'All',
       clearable: true,
       options: [
-        { value: 'active', label: 'Activo' },
-        { value: 'invited', label: 'Invitado' },
-        { value: 'paused', label: 'Pausado' }
+        { value: 'active', label: 'Active' },
+        { value: 'invited', label: 'Invited' },
+        { value: 'paused', label: 'Paused' }
       ]
     });
 
     new MTS.Button('#members-clear-button', {
-      label: 'Limpiar filtros',
+      label: 'Clear filters',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
@@ -290,17 +290,17 @@
     });
 
     new MTS.Card('#members-sidebar-card', {
-      title: 'Politica operativa',
-      subtitle: 'Acceso del workspace',
+      title: 'Operational policy',
+      subtitle: 'Workspace access',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="admin-members-page__sidebar-copy">' +
-          '<p>Owners y admins mantienen acceso fuerte sobre billing, settings y politicas. Los perfiles con foco operativo quedan delegados por rol.</p>' +
+          '<p>Owners and admins keep strong access over billing, settings and policies. Operations-focused profiles are delegated by role.</p>' +
           '<ul class="admin-members-page__sidebar-list">' +
-            '<li>Invitaciones expiran en 7 dias.</li>' +
-            '<li>Las cuentas pausadas conservan historial, pero no acceden.</li>' +
-            '<li>Billing y support pueden operar sin ser admins completos.</li>' +
+            '<li>Invitations expire in 7 days.</li>' +
+            '<li>Paused accounts keep their history but cannot sign in.</li>' +
+            '<li>Billing and support can operate without being full admins.</li>' +
           '</ul>' +
         '</div>'
     });
@@ -366,7 +366,7 @@
         return matchesQuery && matchesRole && matchesStatus;
       });
 
-      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+      meta.textContent = visible.length + (visible.length === 1 ? ' result' : ' results');
 
       if (!visible.length) {
         var emptyWrap = document.createElement('div');
@@ -375,11 +375,11 @@
         var emptyHost = document.createElement('div');
         emptyWrap.appendChild(emptyHost);
         new MTS.Card(emptyHost, {
-          title: 'Sin resultados',
-          subtitle: 'Ajusta filtros o busca otro miembro',
+          title: 'No results',
+          subtitle: 'Adjust filters or search for another member',
           variant: 'outlined',
           size: 'lg',
-          body: '<p class="admin-members-page__empty">No hay miembros que coincidan con la combinacion actual.</p>'
+          body: '<p class="admin-members-page__empty">No members match the current combination.</p>'
         });
         return;
       }
@@ -412,32 +412,32 @@
                 '<span id="member-status-' + member.id + '"></span>' +
               '</div>' +
               '<div class="admin-members-page__member-grid">' +
-                '<div><span>Ultimo acceso</span><strong>' + member.lastAccess + '</strong></div>' +
-                '<div><span>Permisos</span><strong>' + member.permissions + '</strong></div>' +
+                '<div><span>Last access</span><strong>' + member.lastAccess + '</strong></div>' +
+                '<div><span>Permissions</span><strong>' + member.permissions + '</strong></div>' +
               '</div>' +
             '</div>',
           footerAlign: 'between',
           footer: [
             {
-              label: member.status === 'invited' ? 'Reenviar invitacion' : 'Editar acceso',
+              label: member.status === 'invited' ? 'Resend invitation' : 'Edit access',
               variant: 'primary',
               icon: MTS.Icon.get(member.status === 'invited' ? 'send' : 'shield'),
               onClick: function () {
                 showFeedback(
                   'success',
-                  member.status === 'invited' ? 'Invitacion reenviada' : 'Acceso actualizado',
-                  member.name + ' quedo atendido desde el listado sin abrir un modal aparte.'
+                  member.status === 'invited' ? 'Invitation resent' : 'Access updated',
+                  member.name + ' was handled right from the list without opening a separate modal.'
                 );
               }
             },
             {
-              label: member.status === 'paused' ? 'Reactivar' : 'Pausar',
+              label: member.status === 'paused' ? 'Reactivate' : 'Pause',
               variant: 'ghost',
               icon: MTS.Icon.get(member.status === 'paused' ? 'play' : 'pause'),
               onClick: function () {
                 member.status = member.status === 'paused' ? 'active' : 'paused';
-                member.statusLabel = member.status === 'paused' ? 'Pausado' : 'Activo';
-                showFeedback('info', 'Estado ajustado', 'Se simulo el cambio de estado para ' + member.name + '.');
+                member.statusLabel = member.status === 'paused' ? 'Paused' : 'Active';
+                showFeedback('info', 'Status adjusted', 'The status change for ' + member.name + ' was simulated.');
                 renderMembers();
               }
             }

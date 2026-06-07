@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -42,22 +42,22 @@
     });
 
     var events = [
-      { id: 'AUD-141', actor: 'Camila Soto', action: 'Cambio de metodo de pago', target: 'Billing', severity: 'high', severityLabel: 'Alta', when: 'Hoy, 09:12', description: 'Se actualizo la tarjeta principal del workspace.' },
-      { id: 'AUD-137', actor: 'Diego Paredes', action: 'Invitacion aprobada', target: 'Admin', severity: 'medium', severityLabel: 'Media', when: 'Hoy, 08:22', description: 'Se habilito acceso a dos perfiles de soporte.' },
-      { id: 'AUD-129', actor: 'System', action: 'Nueva ubicacion detectada', target: 'Security', severity: 'high', severityLabel: 'Alta', when: 'Ayer, 18:10', description: 'Una sesion ingreso desde Bogota, CO.' },
-      { id: 'AUD-121', actor: 'Laura Herrera', action: 'Canal de integracion actualizado', target: 'Integrations', severity: 'low', severityLabel: 'Baja', when: '18 abril', description: 'La integracion de Slack cambio al canal #ops-alerts.' }
+      { id: 'AUD-141', actor: 'Camila Soto', action: 'Payment method changed', target: 'Billing', severity: 'high', severityLabel: 'High', when: 'Today, 09:12', description: 'The workspace primary card was updated.' },
+      { id: 'AUD-137', actor: 'Diego Paredes', action: 'Invitation approved', target: 'Admin', severity: 'medium', severityLabel: 'Medium', when: 'Today, 08:22', description: 'Access was granted to two support profiles.' },
+      { id: 'AUD-129', actor: 'System', action: 'New location detected', target: 'Security', severity: 'high', severityLabel: 'High', when: 'Yesterday, 18:10', description: 'A session signed in from Bogota, CO.' },
+      { id: 'AUD-121', actor: 'Laura Herrera', action: 'Integration channel updated', target: 'Integrations', severity: 'low', severityLabel: 'Low', when: 'April 18', description: 'The Slack integration switched to the #ops-alerts channel.' }
     ];
 
     new MTS.Card('#audit-log-panel', {
       title: 'Audit Log',
-      subtitle: 'Trazabilidad operativa',
+      subtitle: 'Operational traceability',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
-          '<p class="mts-text--md mts-text-color--muted mts-m-0">Revisa eventos sensibles del workspace por actor, modulo y severidad, con acciones simples de seguimiento.</p>' +
+          '<p class="mts-text--md mts-text-color--muted mts-m-0">Review sensitive workspace events by actor, module and severity, with simple follow-up actions.</p>' +
           '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3 mts-flex--wrap">' +
-            '<span id="audit-results-meta" class="mts-badge mts-badge--info mts-badge--sm">0 resultados</span>' +
+            '<span id="audit-results-meta" class="mts-badge mts-badge--info mts-badge--sm">0 results</span>' +
             '<div id="audit-export-button"></div>' +
           '</div>' +
           '<div id="audit-results"></div>' +
@@ -65,11 +65,11 @@
     });
 
     new MTS.Button('#audit-export-button', {
-      label: 'Exportar log',
+      label: 'Export log',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('download'),
       onClick: function () {
-        notify('success', 'Se simulo la exportacion del log de auditoria.');
+        notify('success', 'Audit log export was simulated.');
       }
     });
 
@@ -83,11 +83,11 @@
       if (!item) return;
 
       if (action === 'review') {
-        notify('success', item.id + ' quedo marcado como revisado.');
+        notify('success', item.id + ' was marked as reviewed.');
       }
 
       if (action === 'context') {
-        notify('info', 'Aqui abririas el contexto completo para ' + item.id + '.');
+        notify('info', 'Here you would open the full context for ' + item.id + '.');
       }
     });
 
@@ -133,20 +133,20 @@
       var meta = document.getElementById('audit-results-meta');
       var visible = events.slice();
 
-      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+      meta.textContent = visible.length + (visible.length === 1 ? ' result' : ' results');
 
       host.innerHTML =
         '<div class="mts-table-wrap">' +
           '<table class="mts-table mts-table--hover mts-table--striped">' +
             '<thead>' +
               '<tr>' +
-                '<th class="mts-table__th">Evento</th>' +
+                '<th class="mts-table__th">Event</th>' +
                 '<th class="mts-table__th">Actor</th>' +
-                '<th class="mts-table__th">Modulo</th>' +
-                '<th class="mts-table__th">Descripcion</th>' +
-                '<th class="mts-table__th">Fecha</th>' +
-                '<th class="mts-table__th">Severidad</th>' +
-                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+                '<th class="mts-table__th">Module</th>' +
+                '<th class="mts-table__th">Description</th>' +
+                '<th class="mts-table__th">Date</th>' +
+                '<th class="mts-table__th">Severity</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Actions</th>' +
               '</tr>' +
             '</thead>' +
             '<tbody>' +
@@ -165,8 +165,8 @@
                     '<td class="mts-table__td">' + escapeHtml(item.when) + '</td>' +
                     '<td class="mts-table__td"><span class="mts-badge mts-badge--' + severityVariant(item.severity) + ' mts-badge--sm">' + escapeHtml(item.severityLabel) + '</span></td>' +
                     '<td class="mts-table__td mts-table__td--actions">' +
-                      actionButton('review', item.id, 'check-circle', 'Revisar') +
-                      actionButton('context', item.id, 'file-text', 'Contexto') +
+                      actionButton('review', item.id, 'check-circle', 'Review') +
+                      actionButton('context', item.id, 'file-text', 'Context') +
                     '</td>' +
                   '</tr>';
               }).join('') +

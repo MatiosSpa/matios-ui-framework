@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -41,7 +41,7 @@
         <div class="task-board-page__logo">M</div>
         <div>
           <div class="task-board-page__title">Task Board</div>
-          <div class="task-board-page__subtitle">Trabajo activo por estado, prioridad y responsable</div>
+          <div class="task-board-page__subtitle">Active work by status, priority and owner</div>
         </div>
       </div>
       <div class="task-board-page__topbar-actions">
@@ -54,12 +54,12 @@
         <div class="task-board-page__hero-copy">
           <div class="task-board-page__eyebrow">
             <span class="task-board-page__eyebrow-dot"></span>
-            <span>Operacion diaria</span>
+            <span>Daily operations</span>
           </div>
-          <h1 class="task-board-page__hero-title">Ordena backlog, ejecucion y cierre sin perder contexto del equipo.</h1>
+          <h1 class="task-board-page__hero-title">Organize backlog, execution and closure without losing team context.</h1>
           <p class="task-board-page__hero-text">
-            El tablero concentra estado, prioridad y responsables para que el equipo vea rapido que
-            se esta moviendo hoy, que esta bloqueado y que ya puede cerrarse.
+            The board brings together status, priority and owners so the team can quickly see what
+            is moving today, what is blocked and what is ready to close.
           </p>
         </div>
 
@@ -122,26 +122,26 @@ function openScreen(path){
 </script>
 <script>
 var TASKS=[
-  {id:'TK-401',title:'Definir permisos para modulo Invoice',description:'Alinear perfiles efectivos antes del despliegue.',priority:'high',tags:['security','invoice'],assignee:'Camila',dueDate:'Hoy',owner:'camila',state:'backlog'},
-  {id:'TK-398',title:'Revisar copy de invitacion inicial',description:'Ajustar mensaje del onboarding para clientes nuevos.',priority:'medium',tags:['onboarding'],assignee:'Paula',dueDate:'Hoy',owner:'paula',state:'backlog'},
-  {id:'TK-390',title:'Corregir alta de empresa hija',description:'Flujo interno de nueva compania desde workspace activo.',priority:'critical',tags:['company','bug'],assignee:'Diego',dueDate:'Vence hoy',owner:'diego',state:'in-progress'},
-  {id:'TK-384',title:'Pulir selector de workspace',description:'Ajustar copy y estados de organizacion activa.',priority:'medium',tags:['login'],assignee:'Camila',dueDate:'Manana',owner:'camila',state:'in-progress'},
-  {id:'TK-372',title:'Validar permisos por boton en documents',description:'Revisar permiso fino para accion de aprobar.',priority:'high',tags:['documents','acl'],assignee:'Andres',dueDate:'Manana',owner:'andres',state:'review'},
-  {id:'TK-361',title:'Cerrar caso de soporte HD-201',description:'Documentar resolucion final y comunicar al cliente.',priority:'low',tags:['support'],assignee:'Paula',dueDate:'Viernes',owner:'paula',state:'done'}
+  {id:'TK-401',title:'Define permissions for Invoice module',description:'Align effective profiles before deployment.',priority:'high',tags:['security','invoice'],assignee:'Camila',dueDate:'Today',owner:'camila',state:'backlog'},
+  {id:'TK-398',title:'Review initial invitation copy',description:'Adjust the onboarding message for new clients.',priority:'medium',tags:['onboarding'],assignee:'Paula',dueDate:'Today',owner:'paula',state:'backlog'},
+  {id:'TK-390',title:'Fix child company creation',description:'Internal flow for a new company from the active workspace.',priority:'critical',tags:['company','bug'],assignee:'Diego',dueDate:'Due today',owner:'diego',state:'in-progress'},
+  {id:'TK-384',title:'Polish workspace selector',description:'Adjust copy and active organization states.',priority:'medium',tags:['login'],assignee:'Camila',dueDate:'Tomorrow',owner:'camila',state:'in-progress'},
+  {id:'TK-372',title:'Validate per-button permissions in documents',description:'Review fine-grained permission for the approve action.',priority:'high',tags:['documents','acl'],assignee:'Andres',dueDate:'Tomorrow',owner:'andres',state:'review'},
+  {id:'TK-361',title:'Close support case HD-201',description:'Document the final resolution and notify the client.',priority:'low',tags:['support'],assignee:'Paula',dueDate:'Friday',owner:'paula',state:'done'}
 ];
 
 var boardState={query:'',priority:'',owner:''};
 var boardInstance=null;
 
 new MTS.Button('#task-board-open-planner',{
-  label:'Abrir planner',
+  label:'Open planner',
   variant:'ghost',
   iconLeft:MTS.Icon.get('calendar'),
   onClick:function(){openScreen('../calendar-planner/index.html');}
 });
 
 new MTS.Button('#task-board-new-task',{
-  label:'Nueva tarea',
+  label:'New task',
   variant:'primary',
   iconLeft:MTS.Icon.get('plus'),
   onClick:function(){
@@ -150,7 +150,7 @@ new MTS.Button('#task-board-new-task',{
 });
 
 new MTS.Button('#task-board-focus-me',{
-  label:'Ver solo lo mio',
+  label:'Show only mine',
   variant:'secondary',
   iconLeft:MTS.Icon.get('user'),
   onClick:function(){
@@ -161,54 +161,54 @@ new MTS.Button('#task-board-focus-me',{
 });
 
 new MTS.KPICard('#task-kpi-open',{
-  label:'Abiertas',
+  label:'Open',
   value:5,
   trend:12,
-  trendLabel:'vs ayer',
+  trendLabel:'vs yesterday',
   variant:'primary',
   icon:MTS.Icon.get('layout')
 });
 
 new MTS.KPICard('#task-kpi-today',{
-  label:'Vencen hoy',
+  label:'Due today',
   value:3,
   trend:4,
-  trendLabel:'requieren foco',
+  trendLabel:'need focus',
   variant:'warning',
   icon:MTS.Icon.get('clock')
 });
 
 new MTS.KPICard('#task-kpi-blocked',{
-  label:'Bloqueadas',
+  label:'Blocked',
   value:1,
   trend:-2,
-  trendLabel:'vs semana pasada',
+  trendLabel:'vs last week',
   variant:'danger',
   icon:MTS.Icon.get('slash')
 });
 
 var searchInput=new MTS.Input('#task-board-search',{
   type:'text',
-  label:'Buscar tarea',
-  placeholder:'ID, titulo o tag',
+  label:'Search task',
+  placeholder:'ID, title or tag',
   iconLeft:MTS.Icon.get('search')
 });
 
 var prioritySelect=new MTS.Select('#task-board-priority',{
-  label:'Prioridad',
-  placeholder:'Todas',
+  label:'Priority',
+  placeholder:'All',
   clearable:true,
   options:[
-    {value:'critical',label:'Critica'},
-    {value:'high',label:'Alta'},
-    {value:'medium',label:'Media'},
-    {value:'low',label:'Baja'}
+    {value:'critical',label:'Critical'},
+    {value:'high',label:'High'},
+    {value:'medium',label:'Medium'},
+    {value:'low',label:'Low'}
   ]
 });
 
 var ownerSelect=new MTS.Select('#task-board-owner',{
-  label:'Responsable',
-  placeholder:'Todos',
+  label:'Owner',
+  placeholder:'All',
   clearable:true,
   options:[
     {value:'camila',label:'Camila'},
@@ -219,7 +219,7 @@ var ownerSelect=new MTS.Select('#task-board-owner',{
 });
 
 new MTS.Button('#task-board-clear',{
-  label:'Limpiar filtros',
+  label:'Clear filters',
   variant:'secondary',
   iconLeft:MTS.Icon.get('refresh-cw'),
   onClick:function(){
@@ -235,8 +235,8 @@ new MTS.Button('#task-board-clear',{
 
 MTS.Alert.show('#task-board-alert',{
   variant:'info',
-  title:'Board del equipo',
-  message:'La vista esta preparada para revisar carga, priorizar tarjetas y saltar a la planificacion temporal cuando haga falta.',
+  title:'Team board',
+  message:'The view is ready to review workload, prioritize cards and jump to time-based planning whenever needed.',
   closable:false
 });
 
@@ -262,8 +262,8 @@ function renderBoard(){
     emptyHost.innerHTML='';
     new MTS.Alert('#task-board-empty',{
       variant:'warning',
-      title:'Sin tareas visibles',
-      message:'La combinacion actual de filtros dejo el tablero sin tarjetas.',
+      title:'No visible tasks',
+      message:'The current filter combination left the board without cards.',
       closable:false
     });
     return;
@@ -288,8 +288,8 @@ function renderBoard(){
       if(moved) moved.state=e.toColId;
       MTS.Alert.show('#task-board-alert',{
         variant:'success',
-        title:'Estado actualizado',
-        message:'La tarea <strong>'+e.card.id+'</strong> se movio a <strong>'+e.toColId+'</strong> dentro del board.',
+        title:'Status updated',
+        message:'Task <strong>'+e.card.id+'</strong> moved to <strong>'+e.toColId+'</strong> on the board.',
         closable:true
       });
     },
@@ -303,7 +303,7 @@ function renderBoard(){
         priority:added.priority||'medium',
         assignee:added.assignee||'',
         owner:ownerValueFromName(added.assignee||'') || '',
-        dueDate:'Por definir',
+        dueDate:'To be defined',
         state:e.colId
       });
       openTaskModal(findTaskById(added.id), e.colId);
@@ -346,15 +346,15 @@ function openTaskModal(task,colId){
     '</div>';
 
   var modal=new MTS.Modal({
-    title:isNew ? 'Nueva tarea' : 'Detalle de tarea',
+    title:isNew ? 'New task' : 'Task detail',
     body:body,
     size:'lg',
     scrollable:true,
     buttons:[
-      { id:'task-modal-cancel', label:'Cerrar', variant:'ghost', close:true },
+      { id:'task-modal-cancel', label:'Close', variant:'ghost', close:true },
       {
         id:'task-modal-save',
-        label:isNew ? 'Crear tarea' : 'Guardar cambios',
+        label:isNew ? 'Create task' : 'Save changes',
         variant:'primary',
         onClick:function(){
           var title=titleInput.getValue().trim();
@@ -368,18 +368,18 @@ function openTaskModal(task,colId){
           titleInput.clearError();
           dueInput.clearError();
           if(!title){
-            titleInput.setError('Ingresa un titulo para la tarea');
+            titleInput.setError('Enter a title for the task');
             return;
           }
           if(!due){
-            dueInput.setError('Ingresa una fecha o referencia de vencimiento');
+            dueInput.setError('Enter a due date or reference');
             return;
           }
           if(!owner || !priority || !state){
             MTS.Alert.show('#task-modal-alert',{
               variant:'warning',
-              title:'Completa el contexto',
-              message:'Necesitamos responsable, prioridad y estado antes de guardar la tarea.',
+              title:'Complete the context',
+              message:'We need owner, priority and status before saving the task.',
               closable:true
             });
             return;
@@ -412,8 +412,8 @@ function openTaskModal(task,colId){
           modal.hide();
           MTS.Alert.show('#task-board-alert',{
             variant:'success',
-            title:isNew ? 'Tarea creada' : 'Tarea actualizada',
-            message:'La tarea ya quedo disponible dentro del board operativo.',
+            title:isNew ? 'Task created' : 'Task updated',
+            message:'The task is now available on the operational board.',
             closable:true
           });
         }
@@ -422,12 +422,12 @@ function openTaskModal(task,colId){
     onShown:function(){
       titleInput=new MTS.Input('#task-modal-title',{
         type:'text',
-        label:'Titulo',
-        placeholder:'Define la tarea',
+        label:'Title',
+        placeholder:'Define the task',
         value:(task&&task.title)||''
       });
       stateField=new MTS.Select('#task-modal-state',{
-        label:'Estado',
+        label:'Status',
         options:[
           {value:'backlog',label:'Backlog'},
           {value:'in-progress',label:'In Progress'},
@@ -437,7 +437,7 @@ function openTaskModal(task,colId){
         value:stateValue
       });
       ownerField=new MTS.Select('#task-modal-owner',{
-        label:'Responsable',
+        label:'Owner',
         options:[
           {value:'camila',label:'Camila'},
           {value:'paula',label:'Paula'},
@@ -447,19 +447,19 @@ function openTaskModal(task,colId){
         value:(task&&task.owner)||''
       });
       priorityField=new MTS.Select('#task-modal-priority',{
-        label:'Prioridad',
+        label:'Priority',
         options:[
-          {value:'critical',label:'Critica'},
-          {value:'high',label:'Alta'},
-          {value:'medium',label:'Media'},
-          {value:'low',label:'Baja'}
+          {value:'critical',label:'Critical'},
+          {value:'high',label:'High'},
+          {value:'medium',label:'Medium'},
+          {value:'low',label:'Low'}
         ],
         value:(task&&task.priority)||'medium'
       });
       dueInput=new MTS.Input('#task-modal-due',{
         type:'text',
-        label:'Vencimiento',
-        placeholder:'Hoy, manana o fecha concreta',
+        label:'Due date',
+        placeholder:'Today, tomorrow or a specific date',
         value:(task&&task.dueDate)||''
       });
       tagsInput=new MTS.Input('#task-modal-tags',{
@@ -470,8 +470,8 @@ function openTaskModal(task,colId){
       });
       descriptionInput=new MTS.Input('#task-modal-description',{
         type:'text',
-        label:'Descripcion',
-        placeholder:'Contexto y siguiente accion',
+        label:'Description',
+        placeholder:'Context and next action',
         value:(task&&task.description)||''
       });
     },

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -40,7 +40,7 @@
         <div class="account-profile-page__logo">M</div>
         <div>
           <div class="account-profile-page__title">Profile Overview</div>
-          <div class="account-profile-page__subtitle">Datos personales, preferencias base y contexto activo de la cuenta</div>
+          <div class="account-profile-page__subtitle">Personal details, base preferences and active account context</div>
         </div>
       </div>
       <div class="account-profile-page__topbar-actions">
@@ -52,10 +52,10 @@
     <main class="account-profile-page__main mts-grid mts-grid--gap-md">
       <section class="account-profile-page__hero mts-surface mts-g-col-12">
         <div>
-          <div class="account-profile-page__eyebrow">Cuenta personal</div>
-          <h1 class="account-profile-page__hero-title">Mantén tu perfil listo para trabajar entre empresas y módulos sin perder consistencia.</h1>
+          <div class="account-profile-page__eyebrow">Personal account</div>
+          <h1 class="account-profile-page__hero-title">Keep your profile ready to work across companies and modules without losing consistency.</h1>
           <p class="account-profile-page__hero-text">
-            Esta vista concentra datos base, lenguaje operativo y notificaciones personales para que el usuario final ajuste su cuenta sin entrar a configuración avanzada.
+            This view brings together base details, operating language and personal notifications so the end user can adjust their account without going into advanced settings.
           </p>
         </div>
       </section>
@@ -119,56 +119,56 @@
     var launchesCheckbox;
 
     new MTS.Button('#profile-save-button', {
-      label: 'Guardar cambios',
+      label: 'Save changes',
       variant: 'primary',
       iconLeft: MTS.Icon.get('save'),
       onClick: saveProfile
     });
 
     new MTS.Button('#profile-reset-button', {
-      label: 'Restablecer',
+      label: 'Reset',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: resetProfile
     });
 
     fullNameInput = new MTS.Input('#profile-full-name', {
-      label: 'Nombre completo',
+      label: 'Full name',
       type: 'text',
       value: profileState.fullName,
-      placeholder: 'Nombre y apellido'
+      placeholder: 'First and last name'
     });
 
     displayNameInput = new MTS.Input('#profile-display-name', {
-      label: 'Nombre visible',
+      label: 'Display name',
       type: 'text',
       value: profileState.displayName,
-      placeholder: 'Como apareces en la app'
+      placeholder: 'How you appear in the app'
     });
 
     emailInput = new MTS.Input('#profile-email', {
-      label: 'Correo',
+      label: 'Email',
       type: 'email',
       value: profileState.email,
-      placeholder: 'correo@empresa.com'
+      placeholder: 'name@company.com'
     });
 
     phoneInput = new MTS.Input('#profile-phone', {
-      label: 'Telefono',
+      label: 'Phone',
       type: 'text',
       value: profileState.phone,
       placeholder: '+56 9 0000 0000'
     });
 
     roleInput = new MTS.Input('#profile-role', {
-      label: 'Cargo o foco',
+      label: 'Role or focus',
       type: 'text',
       value: profileState.role,
       placeholder: 'Product Designer'
     });
 
     timezoneSelect = new MTS.Select('#profile-timezone', {
-      label: 'Zona horaria',
+      label: 'Time zone',
       options: [
         { value: 'America/Santiago', label: 'America/Santiago' },
         { value: 'America/Bogota', label: 'America/Bogota' },
@@ -179,17 +179,17 @@
     });
 
     languageSelect = new MTS.Select('#profile-language', {
-      label: 'Idioma',
+      label: 'Language',
       options: [
-        { value: 'es-CL', label: 'Español (Chile)' },
-        { value: 'es-MX', label: 'Español (Mexico)' },
+        { value: 'es-CL', label: 'Spanish (Chile)' },
+        { value: 'es-MX', label: 'Spanish (Mexico)' },
         { value: 'en-US', label: 'English (US)' }
       ],
       value: profileState.language
     });
 
     dateFormatSelect = new MTS.Select('#profile-date-format', {
-      label: 'Formato de fecha',
+      label: 'Date format',
       options: [
         { value: 'dd-mm-yyyy', label: 'DD-MM-YYYY' },
         { value: 'yyyy-mm-dd', label: 'YYYY-MM-DD' },
@@ -199,8 +199,8 @@
     });
 
     new MTS.Card('#profile-summary-card', {
-      title: 'Identidad activa',
-      subtitle: 'Cuenta personal',
+      title: 'Active identity',
+      subtitle: 'Personal account',
       variant: 'elevated',
       size: 'lg',
       body:
@@ -212,15 +212,15 @@
           '</div>' +
         '</div>' +
         '<div class="account-profile-page__summary-meta">' +
-          '<div><span>Workspace activo</span><strong>Matios Studio</strong></div>' +
-          '<div><span>Rol efectivo</span><strong>General</strong></div>' +
-          '<div><span>Perfiles</span><strong>Config Admin · Document View · Invoice Edit</strong></div>' +
+          '<div><span>Active workspace</span><strong>Matios Studio</strong></div>' +
+          '<div><span>Effective role</span><strong>General</strong></div>' +
+          '<div><span>Profiles</span><strong>Config Admin · Document View · Invoice Edit</strong></div>' +
         '</div>'
     });
 
     new MTS.Card('#profile-preferences-card', {
-      title: 'Preferencias',
-      subtitle: 'Notificaciones personales',
+      title: 'Preferences',
+      subtitle: 'Personal notifications',
       variant: 'outlined',
       size: 'lg',
       body:
@@ -232,15 +232,15 @@
     });
 
     new MTS.Card('#profile-context-card', {
-      title: 'Contexto de acceso',
-      subtitle: 'Resumen de cuenta',
+      title: 'Access context',
+      subtitle: 'Account summary',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="account-profile-page__context-list">' +
-          '<div><span>Empresas disponibles</span><strong>3</strong></div>' +
-          '<div><span>Ultima actividad</span><strong>Hoy · 09:10</strong></div>' +
-          '<div><span>Seguridad base</span><strong>2FA por correo activo</strong></div>' +
+          '<div><span>Available companies</span><strong>3</strong></div>' +
+          '<div><span>Last activity</span><strong>Today · 09:10</strong></div>' +
+          '<div><span>Base security</span><strong>Email 2FA enabled</strong></div>' +
         '</div>'
     });
 
@@ -251,17 +251,17 @@
     });
 
     digestCheckbox = new MTS.Checkbox('#profile-pref-digest', {
-      label: 'Resumen diario al inicio de jornada',
+      label: 'Daily summary at the start of the workday',
       checked: true
     });
 
     mentionsCheckbox = new MTS.Checkbox('#profile-pref-mentions', {
-      label: 'Avisos inmediatos por menciones',
+      label: 'Instant alerts for mentions',
       checked: true
     });
 
     launchesCheckbox = new MTS.Checkbox('#profile-pref-launches', {
-      label: 'Novedades de modulos y cambios mayores',
+      label: 'Module updates and major changes',
       checked: false
     });
 
@@ -279,8 +279,8 @@
 
       MTS.Alert.show('#profile-feedback', {
         variant: 'info',
-        title: 'Valores restablecidos',
-        message: 'La vista volvió al perfil base del ejemplo.',
+        title: 'Values reset',
+        message: 'The view returned to the example base profile.',
         closable: true
       });
     }
@@ -295,24 +295,24 @@
       emailInput.clearError();
 
       if (!fullName) {
-        fullNameInput.setError('Ingresa el nombre completo del usuario');
+        fullNameInput.setError('Enter the user full name');
         return;
       }
 
       if (!displayName) {
-        displayNameInput.setError('Define el nombre visible para la cuenta');
+        displayNameInput.setError('Set the display name for the account');
         return;
       }
 
       if (!email || email.indexOf('@') === -1) {
-        emailInput.setError('Ingresa un correo valido');
+        emailInput.setError('Enter a valid email');
         return;
       }
 
       MTS.Alert.show('#profile-feedback', {
         variant: 'success',
-        title: 'Perfil actualizado',
-        message: 'La cuenta quedo lista con idioma, zona horaria y preferencias personales guardadas.',
+        title: 'Profile updated',
+        message: 'The account is ready with language, time zone and personal preferences saved.',
         closable: true
       });
     }

@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Acceso Denegado - Matios UI</title>
+  <title>Access Denied - Matios UI</title>
   <script>
     (function () {
       var source = location.search || location.hash || '';
@@ -53,8 +53,8 @@
             <span class="mts-icon mts-icon--3xl" id="access-denied-icon"></span>
           </div>
           <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
-          <h1 class="mts-h1 mts-mt-2">Acceso denegado</h1>
-          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Tu cuenta está activa, pero este destino requiere otro contexto o más permisos.</p>
+          <h1 class="mts-h1 mts-mt-2">Access denied</h1>
+          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Your account is active, but this destination requires a different context or more permissions.</p>
         </div>
 
         <div class="mts-d-flex mts-flex--column mts-gap-4">
@@ -62,16 +62,16 @@
 
           <section class="mts-surface mts-d-flex mts-flex--column mts-gap-2">
             <div>
-              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Empresa activa</p>
+              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Active company</p>
               <p class="mts-text--md mts-text-color--primary mts-m-0">Acme Chile</p>
             </div>
             <div>
-              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Rol efectivo</p>
+              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Effective role</p>
               <p class="mts-text--md mts-text-color--primary mts-m-0">General</p>
             </div>
             <div>
-              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Intento</p>
-              <p class="mts-text--md mts-text-color--primary mts-m-0">Invoice / Ajustes avanzados</p>
+              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Attempt</p>
+              <p class="mts-text--md mts-text-color--primary mts-m-0">Invoice / Advanced settings</p>
             </div>
           </section>
 
@@ -115,13 +115,13 @@
 
     MTS.Alert.show('#denied-alert', {
       variant: 'danger',
-      title: 'Permisos insuficientes',
-      message: 'No tienes permisos suficientes para este destino con el contexto actual.',
+      title: 'Insufficient permissions',
+      message: 'You do not have enough permissions for this destination with the current context.',
       closable: true
     });
 
     new MTS.Button('#denied-workspace-btn', {
-      label: 'Cambiar empresa',
+      label: 'Switch company',
       variant: 'primary',
       block: true,
       onClick: function (event, instance) {
@@ -130,7 +130,7 @@
     });
 
     new MTS.Button('#denied-group-btn', {
-      label: 'Volver al grupo',
+      label: 'Back to group',
       variant: 'link',
       onClick: function () {
         goBack();
@@ -138,7 +138,7 @@
     });
 
     new MTS.Button('#denied-login-btn', {
-      label: 'Volver al login',
+      label: 'Back to login',
       variant: 'link',
       onClick: function () {
         openScreen('../login/index.html');
@@ -147,15 +147,15 @@
 
     function simulateContextChange(button) {
       button.setLoading(true);
-      button.setLabel('Preparando cambio...');
+      button.setLabel('Preparing switch...');
 
       setTimeout(function () {
         button.setLoading(false);
-        button.setLabel('Cambiar empresa');
+        button.setLabel('Switch company');
         MTS.Alert.show('#denied-alert', {
           variant: 'info',
-          title: 'Cambio de contexto sugerido',
-          message: 'El siguiente paso sería abrir el selector de workspace para probar con otro contexto.',
+          title: 'Context switch suggested',
+          message: 'The next step would be to open the workspace selector to try a different context.',
           closable: true
         });
       }, 800);

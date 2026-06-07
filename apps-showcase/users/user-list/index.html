@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Lista de usuarios - Matios UI</title>
+  <title>User list - Matios UI</title>
   <script>
     (function () {
       var source = location.search || location.hash || '';
@@ -71,29 +71,29 @@
     }
 
     var users = [
-      { id: 'USR-1024', firstName: 'Camila', lastName: 'Soto', email: 'camila.soto@matios.dev', username: 'csoto', area: 'Operaciones', role: 'Supervisor Operacional', status: 'active', statusLabel: 'Activo', statusClass: 'mts-badge--success', lastAccess: 'Hoy, 09:14' },
-      { id: 'USR-1058', firstName: 'Martin', lastName: 'Rojas', email: 'martin.rojas@matios.dev', username: 'mrojas', area: 'Finanzas', role: 'Analista Finance', status: 'blocked', statusLabel: 'Bloqueado', statusClass: 'mts-badge--danger', lastAccess: '18 abril, 16:22' },
-      { id: 'USR-1083', firstName: 'Paula', lastName: 'Garrido', email: 'paula.garrido@matios.dev', username: 'pgarrido', area: 'Soporte', role: 'Coordinadora de Mesa', status: 'pending', statusLabel: 'Pendiente', statusClass: 'mts-badge--warning', lastAccess: 'Sin acceso aun' },
-      { id: 'USR-1091', firstName: 'Diego', lastName: 'Araya', email: 'diego.araya@matios.dev', username: 'daraya', area: 'Tecnologia', role: 'Integraciones', status: 'active', statusLabel: 'Activo', statusClass: 'mts-badge--success', lastAccess: 'Ayer, 18:41' }
+      { id: 'USR-1024', firstName: 'Camila', lastName: 'Soto', email: 'camila.soto@matios.dev', username: 'csoto', area: 'Operations', role: 'Operations Supervisor', status: 'active', statusLabel: 'Active', statusClass: 'mts-badge--success', lastAccess: 'Today, 09:14' },
+      { id: 'USR-1058', firstName: 'Martin', lastName: 'Rojas', email: 'martin.rojas@matios.dev', username: 'mrojas', area: 'Finance', role: 'Finance Analyst', status: 'blocked', statusLabel: 'Blocked', statusClass: 'mts-badge--danger', lastAccess: 'April 18, 16:22' },
+      { id: 'USR-1083', firstName: 'Paula', lastName: 'Garrido', email: 'paula.garrido@matios.dev', username: 'pgarrido', area: 'Support', role: 'Help Desk Coordinator', status: 'pending', statusLabel: 'Pending', statusClass: 'mts-badge--warning', lastAccess: 'No access yet' },
+      { id: 'USR-1091', firstName: 'Diego', lastName: 'Araya', email: 'diego.araya@matios.dev', username: 'daraya', area: 'Technology', role: 'Integrations', status: 'active', statusLabel: 'Active', statusClass: 'mts-badge--success', lastAccess: 'Yesterday, 18:41' }
     ];
 
     new MTS.Card('#user-list-panel', {
-      title: 'Lista de usuarios',
-      subtitle: 'Gestion operativa de cuentas internas',
+      title: 'User list',
+      subtitle: 'Operational management of internal accounts',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div id="user-list-alert"></div>' +
           '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3">' +
-            '<p class="mts-text--md mts-text-color--muted mts-m-0">Tabla operativa de cuentas internas con acciones administrativas directas.</p>' +
-            '<span id="user-list-count" class="mts-badge mts-badge--info mts-badge--sm">0 usuarios</span>' +
+            '<p class="mts-text--md mts-text-color--muted mts-m-0">Operational table of internal accounts with direct administrative actions.</p>' +
+            '<span id="user-list-count" class="mts-badge mts-badge--info mts-badge--sm">0 users</span>' +
           '</div>' +
           '<div id="user-list-table"></div>' +
         '</div>',
       actions: [
         {
-          label: 'Nuevo usuario',
+          label: 'New user',
           variant: 'primary',
           icon: MTS.Icon.get('user-plus'),
           onClick: function () {
@@ -117,8 +117,8 @@
       if (action === 'block') {
         showAlert(
           user.status === 'blocked' ? 'success' : 'warning',
-          user.status === 'blocked' ? 'Usuario desbloqueado' : 'Usuario bloqueado',
-          'La accion se simularia sobre <strong>' + escapeHtml(user.firstName + ' ' + user.lastName) + '</strong>.'
+          user.status === 'blocked' ? 'User unblocked' : 'User blocked',
+          'The action would be simulated on <strong>' + escapeHtml(user.firstName + ' ' + user.lastName) + '</strong>.'
         );
       }
     });
@@ -141,20 +141,20 @@
     }
 
     function renderTable() {
-      document.getElementById('user-list-count').textContent = users.length + (users.length === 1 ? ' usuario' : ' usuarios');
+      document.getElementById('user-list-count').textContent = users.length + (users.length === 1 ? ' user' : ' users');
 
       document.getElementById('user-list-table').innerHTML =
         '<div class="mts-table-wrap">' +
           '<table class="mts-table mts-table--hover mts-table--striped">' +
             '<thead>' +
               '<tr>' +
-                '<th class="mts-table__th">Nombre</th>' +
-                '<th class="mts-table__th">Correo</th>' +
+                '<th class="mts-table__th">Name</th>' +
+                '<th class="mts-table__th">Email</th>' +
                 '<th class="mts-table__th">Username</th>' +
-                '<th class="mts-table__th">Rol</th>' +
+                '<th class="mts-table__th">Role</th>' +
                 '<th class="mts-table__th">Area</th>' +
-                '<th class="mts-table__th">Ultimo acceso</th>' +
-                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+                '<th class="mts-table__th">Last access</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Actions</th>' +
               '</tr>' +
             '</thead>' +
             '<tbody>' +
@@ -173,9 +173,9 @@
                     '<td class="mts-table__td">' + escapeHtml(user.area) + '</td>' +
                     '<td class="mts-table__td">' + escapeHtml(user.lastAccess) + '</td>' +
                     '<td class="mts-table__td mts-table__td--actions">' +
-                      actionButton('detail', user.id, 'arrow-right', 'Ver') +
-                      actionButton('edit', user.id, 'edit', 'Editar') +
-                      actionButton('block', user.id, user.status === 'blocked' ? 'check-circle' : 'slash', user.status === 'blocked' ? 'Desbloquear' : 'Bloquear') +
+                      actionButton('detail', user.id, 'arrow-right', 'View') +
+                      actionButton('edit', user.id, 'edit', 'Edit') +
+                      actionButton('block', user.id, user.status === 'blocked' ? 'check-circle' : 'slash', user.status === 'blocked' ? 'Unblock' : 'Block') +
                     '</td>' +
                   '</tr>';
               }).join('') +

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -49,7 +49,7 @@
         <div class="calendar-planner-page__logo">M</div>
         <div>
           <div class="calendar-planner-page__title">Calendar Planner</div>
-          <div class="calendar-planner-page__subtitle">Planificacion semanal con agenda y proximos hitos</div>
+          <div class="calendar-planner-page__subtitle">Weekly planning with agenda and upcoming milestones</div>
         </div>
       </div>
       <div class="calendar-planner-page__topbar-actions">
@@ -62,12 +62,12 @@
         <div class="calendar-planner-page__hero-copy">
           <div class="calendar-planner-page__eyebrow">
             <span class="calendar-planner-page__eyebrow-dot"></span>
-            <span>Tiempo y carga</span>
+            <span>Time and workload</span>
           </div>
-          <h1 class="calendar-planner-page__hero-title">Convierte tareas, reuniones y focos de ejecucion en una agenda clara.</h1>
+          <h1 class="calendar-planner-page__hero-title">Turn tasks, meetings and focus blocks into a clear agenda.</h1>
           <p class="calendar-planner-page__hero-text">
-            La vista mezcla `MTS.Calendar` con un resumen operativo para priorizar reuniones, bloques
-            de foco y entregas sin perder la semana completa.
+            The view blends `MTS.Calendar` with an operational summary to prioritize meetings, focus
+            blocks and deliverables without losing sight of the full week.
           </p>
         </div>
         <div class="calendar-planner-page__hero-actions">
@@ -117,92 +117,92 @@ function openScreen(path){
 </script>
 <script>
 var plannerEventsRaw=[
-  {uid:'ev-1',title:'Kickoff onboarding clientes',description:'Revision semanal del flujo publico.',startDate:'2026-04-20',endDate:'2026-04-20',startHour:'09:00',endHour:'10:00',color:'#2563eb',data:{responsable:'Camila',tipo:'Reunion',lugar:'Sala Norte'}},
-  {uid:'ev-2',title:'Bloque foco · permisos',description:'Definir ajustes del modelo role/profile.',startDate:'2026-04-20',endDate:'2026-04-20',startHour:'11:00',endHour:'13:00',color:'#16a34a',data:{responsable:'Diego',tipo:'Foco'}},
-  {uid:'ev-3',title:'Review ticket HD-201',description:'Analisis final y mensaje al cliente.',startDate:'2026-04-21',endDate:'2026-04-21',startHour:'15:00',endHour:'16:00',color:'#f59e0b',data:{responsable:'Paula',tipo:'Soporte'}},
-  {uid:'ev-4',title:'Entrega task-board',description:'Revision final del showcase de productividad.',startDate:'2026-04-22',endDate:'2026-04-22',startHour:'10:30',endHour:'11:30',color:'#ef4444',data:{responsable:'Andres',tipo:'Entrega'}},
-  {uid:'ev-5',title:'Plan semanal de documentos',description:'Aterrizar vistas futuras para biblioteca documental.',startDate:'2026-04-24',endDate:'2026-04-24',startHour:'09:30',endHour:'10:30',color:'#7c3aed',data:{responsable:'Camila',tipo:'Planificacion'}}
+  {uid:'ev-1',title:'Client onboarding kickoff',description:'Weekly review of the public flow.',startDate:'2026-04-20',endDate:'2026-04-20',startHour:'09:00',endHour:'10:00',color:'#2563eb',data:{responsable:'Camila',tipo:'Meeting',lugar:'North Room'}},
+  {uid:'ev-2',title:'Focus block · permissions',description:'Define adjustments to the role/profile model.',startDate:'2026-04-20',endDate:'2026-04-20',startHour:'11:00',endHour:'13:00',color:'#16a34a',data:{responsable:'Diego',tipo:'Focus'}},
+  {uid:'ev-3',title:'Review ticket HD-201',description:'Final analysis and message to the client.',startDate:'2026-04-21',endDate:'2026-04-21',startHour:'15:00',endHour:'16:00',color:'#f59e0b',data:{responsable:'Paula',tipo:'Support'}},
+  {uid:'ev-4',title:'Task-board delivery',description:'Final review of the productivity showcase.',startDate:'2026-04-22',endDate:'2026-04-22',startHour:'10:30',endHour:'11:30',color:'#ef4444',data:{responsable:'Andres',tipo:'Delivery'}},
+  {uid:'ev-5',title:'Weekly document plan',description:'Land upcoming views for the document library.',startDate:'2026-04-24',endDate:'2026-04-24',startHour:'09:30',endHour:'10:30',color:'#7c3aed',data:{responsable:'Camila',tipo:'Planning'}}
 ];
 var calendarInstance=null;
 
 new MTS.Button('#calendar-planner-open-board',{
-  label:'Abrir task board',
+  label:'Open task board',
   variant:'ghost',
   iconLeft:MTS.Icon.get('layout'),
   onClick:function(){openScreen('../task-board/index.html');}
 });
 
 new MTS.Button('#calendar-planner-today',{
-  label:'Ir a hoy',
+  label:'Go to today',
   variant:'primary',
   iconLeft:MTS.Icon.get('calendar'),
   onClick:function(){ if(calendarInstance) calendarInstance.today(); }
 });
 
 new MTS.Button('#calendar-planner-new-event',{
-  label:'Nuevo evento',
+  label:'New event',
   variant:'secondary',
   iconLeft:MTS.Icon.get('plus'),
   onClick:function(){ openEventModal(null); }
 });
 
 new MTS.KPICard('#planner-kpi-meetings',{
-  label:'Reuniones hoy',
+  label:'Meetings today',
   value:2,
   trend:8,
-  trendLabel:'vs ayer',
+  trendLabel:'vs yesterday',
   variant:'primary',
   icon:MTS.Icon.get('users')
 });
 
 new MTS.KPICard('#planner-kpi-focus',{
-  label:'Horas foco',
+  label:'Focus hours',
   value:'4.5',
   unit:'h',
   trend:10,
-  trendLabel:'reservadas',
+  trendLabel:'booked',
   variant:'success',
   icon:MTS.Icon.get('target')
 });
 
 new MTS.KPICard('#planner-kpi-deadlines',{
-  label:'Entregas cercanas',
+  label:'Upcoming deliverables',
   value:3,
   trend:2,
-  trendLabel:'esta semana',
+  trendLabel:'this week',
   variant:'warning',
   icon:MTS.Icon.get('flag')
 });
 
 MTS.Alert.show('#calendar-planner-alert',{
   variant:'info',
-  title:'Planner semanal',
-  message:'El calendario queda configurado en semana laboral para coordinar reuniones, bloques de foco y entregas del equipo.',
+  title:'Weekly planner',
+  message:'The calendar is set to the work week so you can coordinate meetings, focus blocks and team deliverables.',
   closable:false
 });
 
 new MTS.Card('#planner-card-next',{
-  title:'Proximo hito',
-  subtitle:'Hoy 15:00',
+  title:'Next milestone',
+  subtitle:'Today 15:00',
   variant:'elevated',
   size:'lg',
-  body:'<div class="calendar-planner-page__card-body"><div class="calendar-planner-page__card-icon"><i class="mts-icon mts-icon-message-circle"></i></div><p>Review del ticket HD-201 con Paula y traspaso de proxima respuesta al cliente.</p></div>'
+  body:'<div class="calendar-planner-page__card-body"><div class="calendar-planner-page__card-icon"><i class="mts-icon mts-icon-message-circle"></i></div><p>Review ticket HD-201 with Paula and hand off the next reply to the client.</p></div>'
 });
 
 new MTS.Card('#planner-card-deadline',{
-  title:'Entrega visible',
-  subtitle:'Miercoles',
+  title:'Visible delivery',
+  subtitle:'Wednesday',
   variant:'outlined',
   size:'lg',
-  body:'<div class="calendar-planner-page__card-body"><div class="calendar-planner-page__card-icon"><i class="mts-icon mts-icon-flag"></i></div><p>La pantalla `task-board` entra a revision final antes de pasar al siguiente grupo del showcase.</p></div>'
+  body:'<div class="calendar-planner-page__card-body"><div class="calendar-planner-page__card-icon"><i class="mts-icon mts-icon-flag"></i></div><p>The `task-board` screen enters final review before moving on to the next showcase group.</p></div>'
 });
 
 new MTS.Card('#planner-card-routine',{
-  title:'Rutina sugerida',
-  subtitle:'Bloques fijos',
+  title:'Suggested routine',
+  subtitle:'Fixed blocks',
   variant:'outlined',
   size:'lg',
-  body:'<div class="calendar-planner-page__card-body"><div class="calendar-planner-page__card-icon"><i class="mts-icon mts-icon-refresh"></i></div><p>Reserva manana y cierre de jornada para triage, foco y seguimiento del trabajo operativo.</p></div>'
+  body:'<div class="calendar-planner-page__card-body"><div class="calendar-planner-page__card-icon"><i class="mts-icon mts-icon-refresh"></i></div><p>Reserve mornings and end of day for triage, focus and follow-up on operational work.</p></div>'
 });
 
 calendarInstance=new MTS.Calendar('#calendar-planner-calendar',{
@@ -251,15 +251,15 @@ function openEventModal(eventItem){
     '</div>';
 
   var modal=new MTS.Modal({
-    title:isNew ? 'Nuevo evento' : 'Detalle del evento',
+    title:isNew ? 'New event' : 'Event details',
     body:body,
     size:'lg',
     scrollable:true,
     buttons:[
-      { id:'planner-modal-cancel', label:'Cerrar', variant:'ghost', close:true },
+      { id:'planner-modal-cancel', label:'Close', variant:'ghost', close:true },
       {
         id:'planner-modal-save',
-        label:isNew ? 'Crear evento' : 'Guardar cambios',
+        label:isNew ? 'Create event' : 'Save changes',
         variant:'primary',
         onClick:function(){
           var title=titleInput.getValue().trim();
@@ -276,23 +276,23 @@ function openEventModal(eventItem){
           endInput.clearError();
 
           if(!title){
-            titleInput.setError('Ingresa un titulo para el evento');
+            titleInput.setError('Enter a title for the event');
             return;
           }
           if(!date){
-            dateInput.setError('Ingresa la fecha del evento');
+            dateInput.setError('Enter the event date');
             return;
           }
           if(!start || !end){
-            if(!start) startInput.setError('Define hora de inicio');
-            if(!end) endInput.setError('Define hora de termino');
+            if(!start) startInput.setError('Set a start time');
+            if(!end) endInput.setError('Set an end time');
             return;
           }
           if(!type || !owner){
             MTS.Alert.show('#planner-modal-alert',{
               variant:'warning',
-              title:'Falta contexto del evento',
-              message:'Completa tipo de evento y responsable antes de guardar.',
+              title:'Missing event context',
+              message:'Complete the event type and owner before saving.',
               closable:true
             });
             return;
@@ -315,30 +315,30 @@ function openEventModal(eventItem){
           modal.hide();
           MTS.Alert.show('#calendar-planner-alert',{
             variant:'success',
-            title:isNew ? 'Evento creado' : 'Evento actualizado',
-            message:'La agenda ya refleja el cambio y queda disponible para seguir planificando.',
+            title:isNew ? 'Event created' : 'Event updated',
+            message:'The agenda now reflects the change and is ready for you to keep planning.',
             closable:true
           });
         }
       }
     ],
     onShown:function(){
-      titleInput=new MTS.Input('#planner-modal-title',{ type:'text', label:'Titulo', placeholder:'Nombre del evento', value:(eventItem&&eventItem.title)||'' });
-      dateInput=new MTS.Input('#planner-modal-date',{ type:'text', label:'Fecha', placeholder:'2026-04-20', value:(eventItem&&eventItem.startDate)||'2026-04-20' });
-      startInput=new MTS.Input('#planner-modal-start',{ type:'text', label:'Inicio', placeholder:'09:00', value:(eventItem&&eventItem.startHour)||'09:00' });
-      endInput=new MTS.Input('#planner-modal-end',{ type:'text', label:'Termino', placeholder:'10:00', value:(eventItem&&eventItem.endHour)||'10:00' });
+      titleInput=new MTS.Input('#planner-modal-title',{ type:'text', label:'Title', placeholder:'Event name', value:(eventItem&&eventItem.title)||'' });
+      dateInput=new MTS.Input('#planner-modal-date',{ type:'text', label:'Date', placeholder:'2026-04-20', value:(eventItem&&eventItem.startDate)||'2026-04-20' });
+      startInput=new MTS.Input('#planner-modal-start',{ type:'text', label:'Start', placeholder:'09:00', value:(eventItem&&eventItem.startHour)||'09:00' });
+      endInput=new MTS.Input('#planner-modal-end',{ type:'text', label:'End', placeholder:'10:00', value:(eventItem&&eventItem.endHour)||'10:00' });
       typeField=new MTS.Select('#planner-modal-type',{
-        label:'Tipo',
+        label:'Type',
         options:[
-          { value:'Reunion', label:'Reunion' },
-          { value:'Foco', label:'Bloque de foco' },
-          { value:'Entrega', label:'Entrega' },
-          { value:'Soporte', label:'Soporte' }
+          { value:'Meeting', label:'Meeting' },
+          { value:'Focus', label:'Focus block' },
+          { value:'Delivery', label:'Delivery' },
+          { value:'Support', label:'Support' }
         ],
         value:(eventItem&&eventItem.data&&eventItem.data.tipo)||''
       });
       ownerField=new MTS.Select('#planner-modal-owner',{
-        label:'Responsable',
+        label:'Owner',
         options:[
           { value:'Camila', label:'Camila' },
           { value:'Paula', label:'Paula' },
@@ -347,7 +347,7 @@ function openEventModal(eventItem){
         ],
         value:(eventItem&&eventItem.data&&eventItem.data.responsable)||''
       });
-      descriptionInput=new MTS.Input('#planner-modal-description',{ type:'text', label:'Descripcion', placeholder:'Contexto breve del evento', value:(eventItem&&eventItem.description)||'' });
+      descriptionInput=new MTS.Input('#planner-modal-description',{ type:'text', label:'Description', placeholder:'Brief event context', value:(eventItem&&eventItem.description)||'' });
     },
     onHidden:function(){ modal.destroy(); }
   });

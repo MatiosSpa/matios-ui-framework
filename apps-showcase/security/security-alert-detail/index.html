@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -42,7 +42,7 @@
     });
 
     new MTS.Card('#security-alert-detail-panel', {
-      title: 'Detalle de alerta',
+      title: 'Alert detail',
       subtitle: 'Security incident',
       variant: 'elevated',
       size: 'lg',
@@ -50,85 +50,85 @@
         '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
             '<div class="mts-d-flex mts-align-items--center mts-gap-2 mts-flex--wrap">' +
-              MTS.Badge.html('Riesgo alto', 'danger', 'sm') +
-              MTS.Badge.html('Abierta', 'warning', 'sm') +
+              MTS.Badge.html('High risk', 'danger', 'sm') +
+              MTS.Badge.html('Open', 'warning', 'sm') +
             '</div>' +
-            '<p class="mts-text--md mts-text-color--muted mts-m-0">La alerta se gatillo por un inicio de sesion desde Bogota para un usuario que normalmente opera desde Santiago.</p>' +
+            '<p class="mts-text--md mts-text-color--muted mts-m-0">The alert was triggered by a sign-in from Bogota for a user who normally operates from Santiago.</p>' +
           '</div>' +
           '<div class="mts-grid mts-grid--gap-md">' +
             '<section class="mts-surface mts-g-col-12 mts-g-col-xl-8 mts-d-flex mts-flex--column mts-gap-3">' +
               '<div>' +
-                '<strong class="mts-text--md mts-text-color--primary">Resumen del incidente</strong>' +
-                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Contexto base de la alerta antes de decidir contencion o cierre.</p>' +
+                '<strong class="mts-text--md mts-text-color--primary">Incident summary</strong>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Baseline context for the alert before deciding on containment or closure.</p>' +
               '</div>' +
               '<div class="mts-grid mts-grid--gap-md">' +
-                summaryCell('Usuario', 'Camila Soto') +
-                summaryCell('Ubicacion', 'Bogota, CO') +
-                summaryCell('Dispositivo', 'Windows Workstation') +
-                summaryCell('Metodo', 'SSO + 2FA') +
-                summaryCell('Hora', 'Ayer, 18:10') +
-                summaryCell('Senal principal', 'Nueva ubicacion') +
+                summaryCell('User', 'Camila Soto') +
+                summaryCell('Location', 'Bogota, CO') +
+                summaryCell('Device', 'Windows Workstation') +
+                summaryCell('Method', 'SSO + 2FA') +
+                summaryCell('Time', 'Yesterday, 18:10') +
+                summaryCell('Primary signal', 'New location') +
               '</div>' +
             '</section>' +
             '<section class="mts-surface mts-g-col-12 mts-g-col-xl-4 mts-d-flex mts-flex--column mts-gap-3">' +
               '<div>' +
-                '<strong class="mts-text--md mts-text-color--primary">Decision operativa</strong>' +
-                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Acciones rapidas sobre la alerta.</p>' +
+                '<strong class="mts-text--md mts-text-color--primary">Operational decision</strong>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Quick actions on the alert.</p>' +
               '</div>' +
               '<ul class="mts-d-flex mts-flex--column mts-gap-2 mts-p-0 mts-m-0">' +
-                '<li class="mts-text--sm mts-text-color--secondary">Validar si hubo viaje o VPN declarada.</li>' +
-                '<li class="mts-text--sm mts-text-color--secondary">Comparar con sesiones cercanas del mismo usuario.</li>' +
-                '<li class="mts-text--sm mts-text-color--secondary">Contener si no existe contexto valido.</li>' +
+                '<li class="mts-text--sm mts-text-color--secondary">Check whether there was a declared trip or VPN.</li>' +
+                '<li class="mts-text--sm mts-text-color--secondary">Compare with nearby sessions from the same user.</li>' +
+                '<li class="mts-text--sm mts-text-color--secondary">Contain if there is no valid context.</li>' +
               '</ul>' +
             '</section>' +
           '</div>' +
           '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text--md mts-text-color--primary">Analisis</strong>' +
-              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">La señal más fuerte es la ubicación fuera del patrón habitual. Aunque el segundo factor fue exitoso, conviene validar contexto antes de cerrar el incidente.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Analysis</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">The strongest signal is the location outside the usual pattern. Although the second factor succeeded, it is worth validating context before closing the incident.</p>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md">' +
-              analysisRow('Accion sugerida', 'Validar origen con la usuaria y revisar sesiones cercanas.') +
-              analysisRow('Contencion', 'Cerrar sesiones y forzar reautenticacion si no hay contexto valido.') +
-              analysisRow('Estado recomendado', 'Mantener abierta hasta confirmar origen.') +
+              analysisRow('Suggested action', 'Validate the origin with the user and review nearby sessions.') +
+              analysisRow('Containment', 'Close sessions and force re-authentication if there is no valid context.') +
+              analysisRow('Recommended status', 'Keep open until the origin is confirmed.') +
             '</div>' +
           '</section>' +
           '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text--md mts-text-color--primary">Linea de tiempo</strong>' +
-              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Eventos cercanos para evaluar el riesgo.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Timeline</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Nearby events to assess the risk.</p>' +
             '</div>' +
             '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
-              timelineRow('Ayer, 18:10', 'Inicio de sesion desde Bogota, CO', 'SSO + 2FA completado con exito.') +
-              timelineRow('Ayer, 18:13', 'Alerta abierta por Security', 'Se detecta ubicacion fuera del patron habitual.') +
-              timelineRow('Hoy, 08:20', 'Revision pendiente', 'Aun falta validar contexto con la usuaria.') +
+              timelineRow('Yesterday, 18:10', 'Sign-in from Bogota, CO', 'SSO + 2FA completed successfully.') +
+              timelineRow('Yesterday, 18:13', 'Alert opened by Security', 'A location outside the usual pattern was detected.') +
+              timelineRow('Today, 08:20', 'Review pending', 'Context with the user still needs to be validated.') +
             '</div>' +
           '</section>' +
         '</div>',
       footerAlign: 'between',
       footer: [
         {
-          label: 'Contener acceso',
+          label: 'Contain access',
           variant: 'secondary',
           icon: MTS.Icon.get('shield-check'),
           onClick: function () {
-            notify('warning', 'Se simulo la contencion de la alerta.');
+            notify('warning', 'Alert containment was simulated.');
           }
         },
         {
-          label: 'Escalar',
+          label: 'Escalate',
           variant: 'ghost',
           icon: MTS.Icon.get('alert'),
           onClick: function () {
-            notify('info', 'La alerta se escalo a un playbook mas estricto.');
+            notify('info', 'The alert was escalated to a stricter playbook.');
           }
         },
         {
-          label: 'Marcar segura',
+          label: 'Mark safe',
           variant: 'primary',
           icon: MTS.Icon.get('check-circle'),
           onClick: function () {
-            notify('success', 'La alerta quedo cerrada como origen valido.');
+            notify('success', 'The alert was closed as a valid origin.');
           }
         }
       ]

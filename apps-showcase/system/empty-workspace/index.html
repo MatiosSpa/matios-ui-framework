@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -32,10 +32,10 @@
     <main class="empty-workspace-page__main mts-grid mts-grid--gap-md">
       <section class="empty-workspace-page__hero mts-surface mts-g-col-12">
         <div class="empty-workspace-page__eyebrow">First-run state</div>
-        <h1 class="empty-workspace-page__hero-title">Tu workspace todavia no tiene datos.</h1>
+        <h1 class="empty-workspace-page__hero-title">Your workspace doesn't have any data yet.</h1>
         <p class="empty-workspace-page__hero-copy">
-          Este estado inicial ayuda a arrancar sin friccion: invita al equipo, importa contenido o
-          crea el primer espacio de trabajo sin dejar al usuario frente a una pantalla vacia.
+          This initial state helps you get started without friction: invite your team, import content, or
+          create the first workspace without leaving the user staring at an empty screen.
         </p>
         <div class="empty-workspace-page__badges">
           <span id="empty-badge-state"></span>
@@ -69,9 +69,9 @@
   </script>
   <script>
     var nextSteps = [
-      { id: 'ns1', title: 'Invitar equipo', subtitle: 'People', summary: 'Agrega owners, admins o miembros base para repartir el setup del workspace.' },
-      { id: 'ns2', title: 'Importar datos', subtitle: 'Migration', summary: 'Sube archivos, conecta una fuente externa o trae informacion desde otra herramienta.' },
-      { id: 'ns3', title: 'Crear primer espacio', subtitle: 'Operations', summary: 'Abre un proyecto, carpeta o modulo inicial para que el equipo empiece a trabajar.' }
+      { id: 'ns1', title: 'Invite team', subtitle: 'People', summary: 'Add owners, admins, or base members to share the workspace setup.' },
+      { id: 'ns2', title: 'Import data', subtitle: 'Migration', summary: 'Upload files, connect an external source, or bring information from another tool.' },
+      { id: 'ns3', title: 'Create first space', subtitle: 'Operations', summary: 'Open an initial project, folder, or module so your team can start working.' }
     ];
 
     new MTS.Badge('#empty-badge-state', {
@@ -87,20 +87,20 @@
     });
 
     new MTS.Button('#empty-create-button', {
-      label: 'Crear espacio',
+      label: 'Create space',
       variant: 'primary',
       iconLeft: MTS.Icon.get('folder-plus'),
       onClick: function () {
-        notify('success', 'Accion simulada', 'Aqui normalmente partiria el flujo para crear el primer espacio del workspace.');
+        notify('success', 'Simulated action', 'This is where the flow to create the first workspace space would normally begin.');
       }
     });
 
     new MTS.Button('#empty-import-button', {
-      label: 'Importar datos',
+      label: 'Import data',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('download'),
       onClick: function () {
-        notify('info', 'Importacion simulada', 'La vista deja cubierto el CTA para traer datos iniciales.');
+        notify('info', 'Simulated import', 'The view covers the CTA for bringing in initial data.');
       }
     });
 
@@ -133,11 +133,11 @@
           body: '<p class="empty-workspace-page__card-copy">' + item.summary + '</p>',
           footerAlign: 'start',
           footer: [{
-            label: 'Comenzar',
+            label: 'Get started',
             variant: 'ghost',
             icon: MTS.Icon.get('arrow-right'),
             onClick: function () {
-              notify('success', 'Paso simulado', 'Se activo el paso "' + item.title + '".');
+              notify('success', 'Simulated step', 'The "' + item.title + '" step was activated.');
             }
           }]
         });

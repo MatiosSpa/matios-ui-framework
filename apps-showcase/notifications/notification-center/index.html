@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -36,7 +36,7 @@
         <div class="notification-center-page__logo">N</div>
         <div>
           <div class="notification-center-page__title">Notification Center</div>
-          <div class="notification-center-page__subtitle">Alertas operativas, menciones y eventos recientes del producto</div>
+          <div class="notification-center-page__subtitle">Operational alerts, mentions and recent product events</div>
         </div>
       </div>
       <div class="notification-center-page__topbar-actions">
@@ -46,10 +46,10 @@
 
     <main class="notification-center-page__main mts-grid mts-grid--gap-md">
       <section class="notification-center-page__hero mts-surface mts-g-col-12">
-        <div class="notification-center-page__eyebrow">Centro de avisos</div>
-        <h1 class="notification-center-page__hero-title">Mantén visible lo importante sin perder tiempo en bandejas dispersas.</h1>
+        <div class="notification-center-page__eyebrow">Alerts center</div>
+        <h1 class="notification-center-page__hero-title">Keep what matters visible without wasting time on scattered inboxes.</h1>
         <p class="notification-center-page__hero-text">
-          Esta vista junta notificaciones del producto, acciones pendientes y avisos relevantes para que el usuario final pueda limpiar, priorizar y actuar rápido.
+          This view brings together product notifications, pending actions and relevant alerts so the end user can clear, prioritize and act fast.
         </p>
       </section>
 
@@ -86,15 +86,15 @@
   </script>
   <script>
     var NOTIFICATIONS = [
-      { id:'nt-1', title:'Permisos ajustados en Invoice', body:'Se actualizó el perfil efectivo del módulo Invoice para el workspace Matios Studio.', tag:'Security', variant:'danger', unread:true },
-      { id:'nt-2', title:'Mención en ticket HD-201', body:'Paula pidió validación final antes de cerrar el caso con el cliente.', tag:'Support', variant:'warning', unread:true },
-      { id:'nt-3', title:'Nuevo bloque de foco en planner', body:'Se reservó agenda para revisar alta de empresa hija y selector de workspace.', tag:'Planner', variant:'info', unread:false },
-      { id:'nt-4', title:'Signup With Company actualizado', body:'El flujo ya quedó alineado con tema, idioma y estructura de onboarding.', tag:'Onboarding', variant:'success', unread:false }
+      { id:'nt-1', title:'Permissions adjusted in Invoice', body:'The effective profile of the Invoice module was updated for the Matios Studio workspace.', tag:'Security', variant:'danger', unread:true },
+      { id:'nt-2', title:'Mention in ticket HD-201', body:'Paula requested a final validation before closing the case with the client.', tag:'Support', variant:'warning', unread:true },
+      { id:'nt-3', title:'New focus block in planner', body:'Time was reserved on the agenda to review the child company creation and workspace selector.', tag:'Planner', variant:'info', unread:false },
+      { id:'nt-4', title:'Signup With Company updated', body:'The flow is now aligned with theme, language and onboarding structure.', tag:'Onboarding', variant:'success', unread:false }
     ];
     var filters = { query:'', unread:false, critical:false };
 
     new MTS.Button('#notification-mark-all',{
-      label:'Marcar todo como leido',
+      label:'Mark all as read',
       variant:'secondary',
       iconLeft:MTS.Icon.get('check'),
       onClick:function(){
@@ -102,22 +102,22 @@
         renderNotifications();
         MTS.Alert.show('#notification-feedback',{
           variant:'success',
-          title:'Bandeja actualizada',
-          message:'Todas las notificaciones del ejemplo quedaron marcadas como leídas.',
+          title:'Inbox updated',
+          message:'All the example notifications were marked as read.',
           closable:true
         });
       }
     });
 
     var searchInput = new MTS.Input('#notification-search',{
-      label:'Buscar notificacion',
+      label:'Search notification',
       type:'text',
-      placeholder:'Titulo, tag o contenido',
+      placeholder:'Title, tag or content',
       iconLeft:MTS.Icon.get('search')
     });
 
     new MTS.Button('#notification-filter-unread',{
-      label:'Solo no leidas',
+      label:'Unread only',
       variant:'secondary',
       iconLeft:MTS.Icon.get('mail'),
       onClick:function(){
@@ -127,7 +127,7 @@
     });
 
     new MTS.Button('#notification-filter-critical',{
-      label:'Solo críticas',
+      label:'Critical only',
       variant:'secondary',
       iconLeft:MTS.Icon.get('alert-triangle'),
       onClick:function(){
@@ -137,28 +137,28 @@
     });
 
     new MTS.Card('#notification-summary-card',{
-      title:'Resumen de avisos',
-      subtitle:'Estado de la bandeja',
+      title:'Alerts summary',
+      subtitle:'Inbox status',
       variant:'elevated',
       size:'lg',
       body:
         '<div class="notification-center-page__meta-list">'+
-          '<div><span>No leidas</span><strong>2</strong></div>'+
-          '<div><span>Criticas</span><strong>1</strong></div>'+
-          '<div><span>Ultima limpieza</span><strong>Hoy · 09:28</strong></div>'+
+          '<div><span>Unread</span><strong>2</strong></div>'+
+          '<div><span>Critical</span><strong>1</strong></div>'+
+          '<div><span>Last cleanup</span><strong>Today · 09:28</strong></div>'+
         '</div>'
     });
 
     new MTS.Card('#notification-rules-card',{
-      title:'Reglas visibles',
-      subtitle:'Comportamiento esperado',
+      title:'Visible rules',
+      subtitle:'Expected behavior',
       variant:'outlined',
       size:'lg',
       body:
         '<div class="notification-center-page__rules">'+
-          '<div><i class="mts-icon mts-icon-bell"></i><span>Todo aviso importante debe tener salida clara.</span></div>'+
-          '<div><i class="mts-icon mts-icon-check-circle"></i><span>La limpieza de la bandeja no debe romper el contexto del usuario.</span></div>'+
-          '<div><i class="mts-icon mts-icon-activity"></i><span>Los eventos críticos deben seguir visibles aunque el resto se archive.</span></div>'+
+          '<div><i class="mts-icon mts-icon-bell"></i><span>Every important alert must have a clear exit.</span></div>'+
+          '<div><i class="mts-icon mts-icon-check-circle"></i><span>Clearing the inbox must not break the user context.</span></div>'+
+          '<div><i class="mts-icon mts-icon-activity"></i><span>Critical events must stay visible even when the rest is archived.</span></div>'+
         '</div>'
     });
 
@@ -180,8 +180,8 @@
       if (!visible.length) {
         MTS.Alert.show('#notification-items',{
           variant:'warning',
-          title:'Sin resultados',
-          message:'La combinación actual de filtros dejó la bandeja vacía.',
+          title:'No results',
+          message:'The current filter combination left the inbox empty.',
           closable:false
         });
         return;
@@ -194,7 +194,7 @@
 
         var footerActions = [];
         footerActions.push({
-          label: item.unread ? 'Marcar leida' : 'Reabrir',
+          label: item.unread ? 'Mark as read' : 'Reopen',
           variant: 'secondary',
           onClick: function(){
             item.unread = !item.unread;
@@ -202,14 +202,14 @@
           }
         });
         footerActions.push({
-          label:'Archivar',
+          label:'Archive',
           variant:'ghost',
           onClick:function(){
             item.unread = false;
             MTS.Alert.show('#notification-feedback',{
               variant:'info',
-              title:'Notificación archivada',
-              message:'El aviso quedó fuera del foco principal, pero mantiene su rastro en el ejemplo.',
+              title:'Notification archived',
+              message:'The alert moved out of the main focus, but keeps its trace in the example.',
               closable:true
             });
             renderNotifications();
@@ -218,7 +218,7 @@
 
         new MTS.Card(cardHost,{
           title:item.title,
-          subtitle:item.unread ? 'No leida' : 'Leida',
+          subtitle:item.unread ? 'Unread' : 'Read',
           variant:item.unread ? 'elevated' : 'outlined',
           size:'lg',
           body:

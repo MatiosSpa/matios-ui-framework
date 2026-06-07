@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -34,7 +34,7 @@
         <div class="sync-history-page__logo">M</div>
         <div>
           <div class="sync-history-page__title">Sync History</div>
-          <div class="sync-history-page__subtitle">Ejecuciones recientes y estado de sincronización por proveedor</div>
+          <div class="sync-history-page__subtitle">Recent runs and sync status by provider</div>
         </div>
       </div>
       <div class="sync-history-page__actions">
@@ -46,10 +46,10 @@
       <section class="sync-history-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="sync-history-page__eyebrow">Sync operations</div>
-          <h1 class="sync-history-page__hero-title">Visibilidad operativa sobre lo que sí sincronizó, lo que falló y qué conviene reintentar.</h1>
+          <h1 class="sync-history-page__hero-title">Operational visibility into what synced, what failed, and what's worth retrying.</h1>
           <p class="sync-history-page__hero-copy">
-            Esta vista resume ejecuciones recientes sin caer en una consola técnica compleja:
-            duración, volumen de registros, resultado y acciones básicas de soporte.
+            This view summarizes recent runs without turning into a complex technical console:
+            duration, record volume, result, and basic support actions.
           </p>
         </div>
       </section>
@@ -76,17 +76,17 @@
   </script>
   <script>
     var syncRuns = [
-      { id: 'sr1', provider: 'Slack', result: 'Exitosa', variant: 'success', volume: '34 eventos', duration: '1.8 s', when: 'Hoy, 09:08' },
-      { id: 'sr2', provider: 'HubSpot', result: 'Parcial', variant: 'warning', volume: '210 contactos / 3 errores', duration: '9.2 s', when: 'Hoy, 08:42' },
-      { id: 'sr3', provider: 'Stripe', result: 'Fallida', variant: 'danger', volume: '0 eventos', duration: '0.8 s', when: 'Ayer, 22:10' }
+      { id: 'sr1', provider: 'Slack', result: 'Successful', variant: 'success', volume: '34 events', duration: '1.8 s', when: 'Today, 09:08' },
+      { id: 'sr2', provider: 'HubSpot', result: 'Partial', variant: 'warning', volume: '210 contacts / 3 errors', duration: '9.2 s', when: 'Today, 08:42' },
+      { id: 'sr3', provider: 'Stripe', result: 'Failed', variant: 'danger', volume: '0 events', duration: '0.8 s', when: 'Yesterday, 22:10' }
     ];
 
     new MTS.Button('#sync-run-button', {
-      label: 'Ejecutar sync',
+      label: 'Run sync',
       variant: 'primary',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
-        notify('success', 'Sync lanzada', 'La UI deja cubierto el disparo manual de una sincronización.');
+        notify('success', 'Sync started', 'The UI covers manually triggering a sync.');
       }
     });
 
@@ -110,8 +110,8 @@
             '<div class="sync-history-page__run-body">' +
               '<div class="sync-history-page__run-meta"><span id="sync-badge-' + item.id + '"></span></div>' +
               '<div class="sync-history-page__run-grid">' +
-                '<div><span>Volumen</span><strong>' + item.volume + '</strong></div>' +
-                '<div><span>Duración</span><strong>' + item.duration + '</strong></div>' +
+                '<div><span>Volume</span><strong>' + item.volume + '</strong></div>' +
+                '<div><span>Duration</span><strong>' + item.duration + '</strong></div>' +
               '</div>' +
             '</div>',
           footerAlign: 'between',
@@ -121,15 +121,15 @@
               variant: 'primary',
               icon: MTS.Icon.get('send'),
               onClick: function () {
-                notify('info', 'Retry simulado', 'Se simuló el reintento de la última sincronización de ' + item.provider + '.');
+                notify('info', 'Retry simulated', 'Simulated retry of the last sync for ' + item.provider + '.');
               }
             },
             {
-              label: 'Ver detalle',
+              label: 'View detail',
               variant: 'ghost',
               icon: MTS.Icon.get('arrow-right'),
               onClick: function () {
-                notify('success', 'Detalle disponible', 'Aquí normalmente abrirías una vista más profunda del run.');
+                notify('success', 'Detail available', 'Here you would normally open a deeper view of the run.');
               }
             }
           ]

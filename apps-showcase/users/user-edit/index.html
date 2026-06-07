@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Editar usuario - Matios UI</title>
+  <title>Edit user - Matios UI</title>
   <script>
     (function () {
       var source = location.search || location.hash || '';
@@ -74,14 +74,14 @@
     }
 
     new MTS.Card('#user-edit-panel', {
-      title: 'Editar usuario',
-      subtitle: 'Ajuste administrativo de cuenta',
+      title: 'Edit user',
+      subtitle: 'Administrative account adjustment',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div id="user-edit-alert"></div>' +
-          '<p class="mts-text--md mts-text-color--muted mts-m-0">Aqui se ajustan datos base, area, estado y rol. El cambio de clave vive aparte en modal para no mezclarlo con el formulario principal.</p>' +
+          '<p class="mts-text--md mts-text-color--muted mts-m-0">This is where base data, area, status and role are adjusted. The password change lives separately in a modal so it is not mixed with the main form.</p>' +
           '<div class="mts-grid mts-grid--gap-md">' +
             '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-edit-first-name"></div></div>' +
             '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-edit-last-name"></div></div>' +
@@ -102,7 +102,7 @@
       footerAlign: 'between',
       footer: [
         {
-          label: 'Volver',
+          label: 'Back',
           variant: 'ghost',
           icon: MTS.Icon.get('arrow-left'),
           onClick: function () {
@@ -110,7 +110,7 @@
           }
         },
         {
-          label: 'Ver detalle',
+          label: 'View detail',
           variant: 'secondary',
           icon: MTS.Icon.get('arrow-right'),
           onClick: function () {
@@ -118,7 +118,7 @@
           }
         },
         {
-          label: 'Cambiar clave',
+          label: 'Change password',
           variant: 'secondary',
           icon: MTS.Icon.get('key'),
           onClick: function () {
@@ -126,7 +126,7 @@
           }
         },
         {
-          label: 'Guardar cambios',
+          label: 'Save changes',
           variant: 'primary',
           icon: MTS.Icon.get('save'),
           onClick: function () {
@@ -138,21 +138,21 @@
 
     var firstNameInput = new MTS.Input('#user-edit-first-name', {
       type: 'text',
-      label: 'Nombre',
+      label: 'First name',
       value: 'Camila',
       iconLeft: MTS.Icon.get('user')
     });
 
     var lastNameInput = new MTS.Input('#user-edit-last-name', {
       type: 'text',
-      label: 'Apellido',
+      label: 'Last name',
       value: 'Soto',
       iconLeft: MTS.Icon.get('user')
     });
 
     var emailInput = new MTS.Input('#user-edit-email', {
       type: 'email',
-      label: 'Correo',
+      label: 'Email',
       value: 'camila.soto@matios.dev',
       iconLeft: MTS.Icon.get('mail')
     });
@@ -166,25 +166,25 @@
 
     var phoneInput = new MTS.Input('#user-edit-phone', {
       type: 'text',
-      label: 'Telefono',
+      label: 'Phone',
       value: '+56 9 8765 4321',
       iconLeft: MTS.Icon.get('phone')
     });
 
     var areaSelect = new MTS.Select('#user-edit-area', {
       label: 'Area',
-      value: 'Operaciones',
+      value: 'Operations',
       options: [
-        { value: 'Operaciones', label: 'Operaciones' },
-        { value: 'Finanzas', label: 'Finanzas' },
-        { value: 'Soporte', label: 'Soporte' },
-        { value: 'Tecnologia', label: 'Tecnologia' }
+        { value: 'Operations', label: 'Operations' },
+        { value: 'Finance', label: 'Finance' },
+        { value: 'Support', label: 'Support' },
+        { value: 'Technology', label: 'Technology' }
       ]
     });
 
     var roleNameInput = new MTS.Input('#user-edit-role-name', {
       type: 'text',
-      label: 'Cargo',
+      label: 'Job title',
       value: 'Operations Lead',
       iconLeft: MTS.Icon.get('briefcase')
     });
@@ -197,33 +197,33 @@
     });
 
     var roleSelect = new MTS.Select('#user-edit-role', {
-      label: 'Rol',
+      label: 'Role',
       value: 'operations-lead',
-      hint: 'El rol controla los perfiles asociados al usuario.',
+      hint: 'The role controls the profiles associated with the user.',
       options: [
-        { value: 'workspace-user', label: 'Usuario workspace' },
-        { value: 'operations-lead', label: 'Supervisor Operacional' },
-        { value: 'finance-analyst', label: 'Analista Finance' },
-        { value: 'support-coordinator', label: 'Coordinador de Soporte' }
+        { value: 'workspace-user', label: 'Workspace user' },
+        { value: 'operations-lead', label: 'Operations Supervisor' },
+        { value: 'finance-analyst', label: 'Finance Analyst' },
+        { value: 'support-coordinator', label: 'Support Coordinator' }
       ]
     });
 
     var statusSelect = new MTS.Select('#user-edit-status', {
-      label: 'Estado',
+      label: 'Status',
       value: 'active',
       options: [
-        { value: 'active', label: 'Activo' },
-        { value: 'pending', label: 'Pendiente de acceso' },
-        { value: 'blocked', label: 'Bloqueado' }
+        { value: 'active', label: 'Active' },
+        { value: 'pending', label: 'Pending access' },
+        { value: 'blocked', label: 'Blocked' }
       ]
     });
 
     var forceResetCheckbox = new MTS.Checkbox('#user-edit-force-reset', {
-      label: 'Forzar cambio de clave al proximo inicio de sesion'
+      label: 'Force password change at next sign-in'
     });
 
     var notifyCheckbox = new MTS.Checkbox('#user-edit-notify', {
-      label: 'Notificar cambios al usuario por correo',
+      label: 'Notify the user of changes by email',
       checked: true
     });
 
@@ -259,40 +259,40 @@
       clearAlerts();
 
       if (!firstName) {
-        firstNameInput.setError('Ingresa el nombre');
+        firstNameInput.setError('Enter the first name');
         return;
       }
 
       if (!lastName) {
-        lastNameInput.setError('Ingresa el apellido');
+        lastNameInput.setError('Enter the last name');
         return;
       }
 
       if (!email) {
-        emailInput.setError('Ingresa el correo');
+        emailInput.setError('Enter the email');
         return;
       }
 
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        emailInput.setError('Ingresa un correo valido');
+        emailInput.setError('Enter a valid email');
         return;
       }
 
       if (!username) {
-        usernameInput.setError('Ingresa el username');
+        usernameInput.setError('Enter the username');
         return;
       }
 
       if (!role) {
-        showAlert('warning', 'Falta el rol', 'Selecciona un rol antes de guardar los cambios del usuario.');
+        showAlert('warning', 'Role missing', 'Select a role before saving the user changes.');
         return;
       }
 
       showAlert(
         'success',
-        'Usuario actualizado',
-        'Se guardarian cambios sobre <strong>' + escapeHtml(firstName + ' ' + lastName) + '</strong> con rol <strong>' + escapeHtml(getRoleLabel(role)) + '</strong>' +
-          (notifyCheckbox.isChecked() ? ' y se enviaria notificacion al correo.' : '.')
+        'User updated',
+        'Changes would be saved for <strong>' + escapeHtml(firstName + ' ' + lastName) + '</strong> with role <strong>' + escapeHtml(getRoleLabel(role)) + '</strong>' +
+          (notifyCheckbox.isChecked() ? ' and an email notification would be sent.' : '.')
       );
     }
 
@@ -314,14 +314,14 @@
       var forceChangeCheckbox;
 
       var modal = new MTS.Modal({
-        title: 'Cambiar clave',
+        title: 'Change password',
         body: body,
         size: 'md',
         scrollable: true,
         buttons: [
-          { label: 'Cancelar', variant: 'ghost', close: true },
+          { label: 'Cancel', variant: 'ghost', close: true },
           {
-            label: 'Guardar clave',
+            label: 'Save password',
             variant: 'primary',
             onClick: function () {
               submitPasswordChange();
@@ -330,11 +330,11 @@
         ],
         onShown: function () {
           modeSelect = new MTS.Select('#change-password-mode', {
-            label: 'Contexto',
+            label: 'Context',
             value: initialMode,
             options: [
-              { value: 'admin', label: 'Administrador cambia clave' },
-              { value: 'user', label: 'Usuario cambia su propia clave' }
+              { value: 'admin', label: 'Administrator changes password' },
+              { value: 'user', label: 'User changes their own password' }
             ],
             onChange: function () {
               syncPasswordMode();
@@ -343,30 +343,30 @@
 
           currentPasswordInput = new MTS.Input('#change-password-current', {
             type: 'password',
-            label: 'Clave actual',
-            placeholder: 'Ingresa la clave actual',
+            label: 'Current password',
+            placeholder: 'Enter the current password',
             iconLeft: MTS.Icon.get('lock'),
             showPassword: true
           });
 
           nextPasswordInput = new MTS.Input('#change-password-next', {
             type: 'password',
-            label: 'Nueva clave',
-            placeholder: 'Ingresa la nueva clave',
+            label: 'New password',
+            placeholder: 'Enter the new password',
             iconLeft: MTS.Icon.get('lock'),
             showPassword: true
           });
 
           confirmPasswordInput = new MTS.Input('#change-password-confirm', {
             type: 'password',
-            label: 'Confirmar nueva clave',
-            placeholder: 'Repite la nueva clave',
+            label: 'Confirm new password',
+            placeholder: 'Repeat the new password',
             iconLeft: MTS.Icon.get('lock'),
             showPassword: true
           });
 
           forceChangeCheckbox = new MTS.Checkbox('#change-password-force', {
-            label: 'Forzar cambio de clave al proximo inicio'
+            label: 'Force password change at next sign-in'
           });
 
           syncPasswordMode();
@@ -403,37 +403,37 @@
         clearPasswordErrors();
 
         if (mode === 'user' && !currentPassword) {
-          currentPasswordInput.setError('Ingresa la clave actual');
+          currentPasswordInput.setError('Enter the current password');
           return;
         }
 
         if (!nextPassword) {
-          nextPasswordInput.setError('Ingresa la nueva clave');
+          nextPasswordInput.setError('Enter the new password');
           return;
         }
 
         if (nextPassword.length < 8) {
-          nextPasswordInput.setError('La clave debe tener al menos 8 caracteres');
+          nextPasswordInput.setError('The password must be at least 8 characters');
           return;
         }
 
         if (!confirmPassword) {
-          confirmPasswordInput.setError('Confirma la nueva clave');
+          confirmPasswordInput.setError('Confirm the new password');
           return;
         }
 
         if (nextPassword !== confirmPassword) {
-          confirmPasswordInput.setError('Las claves no coinciden');
+          confirmPasswordInput.setError('The passwords do not match');
           return;
         }
 
         modal.hide();
         showAlert(
           'success',
-          'Clave actualizada',
+          'Password updated',
           mode === 'user'
-            ? 'Se simularia el cambio de clave validando la clave actual del usuario.'
-            : 'Se simularia el cambio de clave administrativo' + (forceChangeCheckbox.isChecked() ? ' forzando renovacion en el proximo acceso.' : '.')
+            ? 'The password change would be simulated by validating the user current password.'
+            : 'The administrative password change would be simulated' + (forceChangeCheckbox.isChecked() ? ', forcing renewal at the next sign-in.' : '.')
         );
       }
     }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="webhooks-page__logo">M</div>
         <div>
           <div class="webhooks-page__title">Webhooks</div>
-          <div class="webhooks-page__subtitle">Endpoints, deliveries y reintentos para eventos salientes</div>
+          <div class="webhooks-page__subtitle">Endpoints, deliveries and retries for outgoing events</div>
         </div>
       </div>
       <div class="webhooks-page__actions">
@@ -50,10 +50,10 @@
       <section class="webhooks-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="webhooks-page__eyebrow">Outgoing events</div>
-          <h1 class="webhooks-page__hero-title">Controla endpoints y deliveries sin necesitar una consola separada.</h1>
+          <h1 class="webhooks-page__hero-title">Manage endpoints and deliveries without needing a separate console.</h1>
           <p class="webhooks-page__hero-copy">
-            La pantalla cubre un caso muy real de integraciones: registrar un endpoint, revisar el
-            último delivery, ver el entorno activo y reintentar cuando algo falla.
+            This screen covers a very real integration use case: registering an endpoint, reviewing the
+            latest delivery, checking the active environment and retrying when something fails.
           </p>
         </div>
       </section>
@@ -66,8 +66,8 @@
       <aside class="mts-g-col-12 mts-g-col-xl-5 webhooks-page__sidebar">
         <div class="mts-form-card webhooks-page__form-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Nuevo endpoint</h2>
-            <p class="mts-form-card__subtitle">URL, entorno y eventos que recibira el consumidor.</p>
+            <h2 class="mts-form-card__title">New endpoint</h2>
+            <p class="mts-form-card__subtitle">URL, environment and events the consumer will receive.</p>
           </div>
           <div class="webhooks-page__form-grid">
             <div class="webhooks-page__full-row" id="webhook-url"></div>
@@ -96,17 +96,17 @@
   </script>
   <script>
     var hooks = [
-      { id: 'w1', name: 'billing-sync', url: 'https://ops.example.com/hooks/billing', env: 'Production', events: 'invoice.paid, plan.changed', last: '200 OK · Hace 5 min', status: 'Activo', variant: 'success' },
-      { id: 'w2', name: 'security-alerts', url: 'https://sec.example.com/hooks/alerts', env: 'Production', events: 'session.flagged, login.failed', last: '502 Bad Gateway · Hace 18 min', status: 'Con error', variant: 'danger' },
-      { id: 'w3', name: 'sandbox-ops', url: 'https://staging.example.com/hooks/ops', env: 'Staging', events: 'ticket.created, ticket.updated', last: '202 Accepted · Hace 2 h', status: 'Activo', variant: 'success' }
+      { id: 'w1', name: 'billing-sync', url: 'https://ops.example.com/hooks/billing', env: 'Production', events: 'invoice.paid, plan.changed', last: '200 OK · 5 min ago', status: 'Active', variant: 'success' },
+      { id: 'w2', name: 'security-alerts', url: 'https://sec.example.com/hooks/alerts', env: 'Production', events: 'session.flagged, login.failed', last: '502 Bad Gateway · 18 min ago', status: 'Error', variant: 'danger' },
+      { id: 'w3', name: 'sandbox-ops', url: 'https://staging.example.com/hooks/ops', env: 'Staging', events: 'ticket.created, ticket.updated', last: '202 Accepted · 2 h ago', status: 'Active', variant: 'success' }
     ];
 
     new MTS.Button('#webhooks-refresh', {
-      label: 'Verificar deliveries',
+      label: 'Check deliveries',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
-        notify('success', 'Deliveries verificadas', 'Se simulo la comprobacion de estado de todos los endpoints activos.');
+        notify('success', 'Deliveries checked', 'The status check for all active endpoints was simulated.');
       }
     });
 
@@ -118,7 +118,7 @@
     });
 
     new MTS.Select('#webhook-env', {
-      label: 'Entorno',
+      label: 'Environment',
       options: [
         { value: 'prod', label: 'Production' },
         { value: 'staging', label: 'Staging' },
@@ -128,34 +128,34 @@
     });
 
     new MTS.Input('#webhook-events', {
-      label: 'Eventos',
+      label: 'Events',
       type: 'text',
       value: 'invoice.paid, invoice.overdue',
       placeholder: 'invoice.paid, invoice.overdue'
     });
 
     new MTS.Button('#webhook-save', {
-      label: 'Guardar endpoint',
+      label: 'Save endpoint',
       variant: 'secondary',
       block: true,
       iconLeft: MTS.Icon.get('check-circle'),
       onClick: function () {
-        notify('info', 'Endpoint simulado', 'La pantalla deja cubierto el alta de nuevos webhooks.');
+        notify('info', 'Endpoint simulated', 'This screen covers the creation of new webhooks.');
       }
     });
 
     new MTS.Card('#webhooks-policy-card', {
-      title: 'Buenas practicas',
+      title: 'Best practices',
       subtitle: 'Webhook operations',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="webhooks-page__policy">' +
-          '<p>Los endpoints productivos deben responder rapido, validar firma y tener owner tecnico visible.</p>' +
+          '<p>Production endpoints should respond fast, validate the signature and have a visible technical owner.</p>' +
           '<ul class="webhooks-page__policy-list">' +
-            '<li>Usa entornos separados para staging y production.</li>' +
-            '<li>Reintenta solo cuando el endpoint sea idempotente.</li>' +
-            '<li>Monitorea secrets y rotacion por proveedor.</li>' +
+            '<li>Use separate environments for staging and production.</li>' +
+            '<li>Retry only when the endpoint is idempotent.</li>' +
+            '<li>Monitor secrets and rotation per provider.</li>' +
           '</ul>' +
         '</div>'
     });
@@ -201,15 +201,15 @@
               variant: 'primary',
               icon: MTS.Icon.get('send'),
               onClick: function () {
-                notify('success', 'Retry ejecutado', 'Se simulo el reintento del ultimo delivery para ' + item.name + '.');
+                notify('success', 'Retry executed', 'The retry of the latest delivery for ' + item.name + ' was simulated.');
               }
             },
             {
-              label: 'Desactivar',
+              label: 'Disable',
               variant: 'ghost',
               icon: MTS.Icon.get('alert'),
               onClick: function () {
-                notify('warning', 'Accion simulada', 'Aqui normalmente pedirias confirmacion antes de desactivar el endpoint.');
+                notify('warning', 'Action simulated', 'Here you would normally ask for confirmation before disabling the endpoint.');
               }
             }
           ]

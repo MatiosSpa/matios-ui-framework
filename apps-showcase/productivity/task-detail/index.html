@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="task-detail-page__logo">T</div>
         <div>
           <div class="task-detail-page__title">Task Detail</div>
-          <div class="task-detail-page__subtitle">Detalle ampliado con checklist, prioridad y siguiente acción operativa</div>
+          <div class="task-detail-page__subtitle">Expanded detail with checklist, priority and next operational action</div>
         </div>
       </div>
       <div class="task-detail-page__topbar-actions">
@@ -50,11 +50,11 @@
       <section class="task-detail-page__hero mts-g-col-12 mts-surface">
         <div class="task-detail-page__eyebrow">
           <span class="task-detail-page__eyebrow-dot"></span>
-          <span>Tarea TK-390</span>
+          <span>Task TK-390</span>
         </div>
-        <h1 class="task-detail-page__hero-title">Corregir alta de empresa hija sin perder trazabilidad del workspace.</h1>
+        <h1 class="task-detail-page__hero-title">Fix child company creation without losing workspace traceability.</h1>
         <p class="task-detail-page__hero-text">
-          La vista de detalle deja el contexto completo de la tarea en una sola pantalla para que el equipo revise prioridad, responsable, checklist y relación con planificación.
+          The detail view keeps the full task context on a single screen so the team can review priority, owner, checklist and relationship to planning.
         </p>
       </section>
 
@@ -70,7 +70,7 @@
           </div>
 
           <div class="task-detail-page__checklist">
-            <div class="task-detail-page__checklist-title">Checklist operativo</div>
+            <div class="task-detail-page__checklist-title">Operational checklist</div>
             <div id="task-detail-check-api"></div>
             <div id="task-detail-check-copy"></div>
             <div id="task-detail-check-workspace"></div>
@@ -106,24 +106,24 @@
   <script>
     var taskTitle = new MTS.Input('#task-detail-title',{
       type:'text',
-      label:'Titulo',
-      value:'Corregir alta de empresa hija',
-      placeholder:'Nombre de la tarea'
+      label:'Title',
+      value:'Fix child company creation',
+      placeholder:'Task name'
     });
 
     var taskPriority = new MTS.Select('#task-detail-priority',{
-      label:'Prioridad',
+      label:'Priority',
       options:[
-        {value:'critical',label:'Critica'},
-        {value:'high',label:'Alta'},
-        {value:'medium',label:'Media'},
-        {value:'low',label:'Baja'}
+        {value:'critical',label:'Critical'},
+        {value:'high',label:'High'},
+        {value:'medium',label:'Medium'},
+        {value:'low',label:'Low'}
       ],
       value:'critical'
     });
 
     var taskOwner = new MTS.Select('#task-detail-owner',{
-      label:'Responsable',
+      label:'Owner',
       options:[
         {value:'camila',label:'Camila'},
         {value:'diego',label:'Diego'},
@@ -134,7 +134,7 @@
     });
 
     var taskState = new MTS.Select('#task-detail-state',{
-      label:'Estado',
+      label:'Status',
       options:[
         {value:'backlog',label:'Backlog'},
         {value:'in-progress',label:'In Progress'},
@@ -146,35 +146,35 @@
 
     var taskDescription = new MTS.Input('#task-detail-description',{
       type:'text',
-      label:'Descripcion',
-      value:'El flujo interno debe permitir crear empresa hija desde el contexto activo y reflejar permisos efectivos sin romper el selector de workspace.',
-      placeholder:'Contexto y siguiente accion'
+      label:'Description',
+      value:'The internal flow must allow creating a child company from the active context and reflect effective permissions without breaking the workspace selector.',
+      placeholder:'Context and next action'
     });
 
     new MTS.Checkbox('#task-detail-check-api',{
-      label:'Validar contratos de API del flujo interno',
+      label:'Validate internal flow API contracts',
       checked:true
     });
 
     new MTS.Checkbox('#task-detail-check-copy',{
-      label:'Ajustar copy de alta y confirmacion',
+      label:'Adjust creation and confirmation copy',
       checked:false
     });
 
     new MTS.Checkbox('#task-detail-check-workspace',{
-      label:'Revisar impacto sobre workspace-selector',
+      label:'Review impact on workspace-selector',
       checked:true
     });
 
     new MTS.Button('#task-detail-back',{
-      label:'Volver al board',
+      label:'Back to board',
       variant:'ghost',
       iconLeft:MTS.Icon.get('arrow-left'),
       onClick:function(){openScreen('../task-board/index.html');}
     });
 
     new MTS.Button('#task-detail-save',{
-      label:'Guardar tarea',
+      label:'Save task',
       variant:'primary',
       iconLeft:MTS.Icon.get('save'),
       onClick:function(){
@@ -183,44 +183,44 @@
         taskTitle.clearError();
         taskDescription.clearError();
         if(!title){
-          taskTitle.setError('Ingresa el titulo de la tarea');
+          taskTitle.setError('Enter the task title');
           return;
         }
         if(!description){
-          taskDescription.setError('Describe el contexto operativo');
+          taskDescription.setError('Describe the operational context');
           return;
         }
         MTS.Alert.show('#task-detail-feedback',{
           variant:'success',
-          title:'Tarea actualizada',
-          message:'El detalle quedó guardado con prioridad, responsable y checklist operativo.',
+          title:'Task updated',
+          message:'The detail was saved with priority, owner and operational checklist.',
           closable:true
         });
       }
     });
 
     new MTS.Card('#task-detail-context-card',{
-      title:'Contexto actual',
-      subtitle:'Resumen rápido',
+      title:'Current context',
+      subtitle:'Quick summary',
       variant:'elevated',
       size:'lg',
       body:
         '<div class="task-detail-page__meta-list">'+
-          '<div><span>Proyecto</span><strong>Productividad interna</strong></div>'+
-          '<div><span>Deadline</span><strong>Hoy</strong></div>'+
-          '<div><span>Relacion</span><strong>Workspace + Account</strong></div>'+
+          '<div><span>Project</span><strong>Internal productivity</strong></div>'+
+          '<div><span>Deadline</span><strong>Today</strong></div>'+
+          '<div><span>Relationship</span><strong>Workspace + Account</strong></div>'+
         '</div>'
     });
 
     new MTS.Card('#task-detail-planner-card',{
-      title:'Relacion con agenda',
-      subtitle:'Siguiente bloque',
+      title:'Schedule relationship',
+      subtitle:'Next block',
       variant:'outlined',
       size:'lg',
       body:
         '<div class="task-detail-page__planner-copy">'+
-          '<strong>Hoy · 11:00 a 13:00</strong>'+
-          '<p>Esta tarea aparece en el planner como bloque de foco para cerrar permisos y copy antes de pasar a review.</p>'+
+          '<strong>Today · 11:00 to 13:00</strong>'+
+          '<p>This task appears in the planner as a focus block to close permissions and copy before moving to review.</p>'+
         '</div>'
     });
 

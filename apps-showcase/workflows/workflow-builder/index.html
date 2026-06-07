@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -53,21 +53,21 @@
     }
 
     var ASSIGNMENT_TYPE_OPTIONS = [
-      { value: 'user', label: 'Usuario' },
-      { value: 'group', label: 'Grupo' },
-      { value: 'role', label: 'Rol' },
+      { value: 'user', label: 'User' },
+      { value: 'group', label: 'Group' },
+      { value: 'role', label: 'Role' },
       { value: 'manager', label: 'Manager' },
       { value: 'owner', label: 'Owner' },
-      { value: 'policy', label: 'Politica automatica' }
+      { value: 'policy', label: 'Automatic policy' }
     ];
 
     var APPROVAL_RULE_OPTIONS = [
-      { value: 'single', label: 'Uno aprueba' },
-      { value: 'all', label: 'Todos aprueban' },
-      { value: 'majority', label: 'Mayoria' },
-      { value: 'sequential', label: 'Secuencial' },
-      { value: 'parallel', label: 'Paralelo' },
-      { value: 'automatic', label: 'Automatica' }
+      { value: 'single', label: 'One approves' },
+      { value: 'all', label: 'All approve' },
+      { value: 'majority', label: 'Majority' },
+      { value: 'sequential', label: 'Sequential' },
+      { value: 'parallel', label: 'Parallel' },
+      { value: 'automatic', label: 'Automatic' }
     ];
 
     var APPROVER_OPTIONS_BY_TYPE = {
@@ -90,14 +90,14 @@
         { value: 'ops-manager', label: 'Ops Manager' }
       ],
       manager: [
-        { value: 'manager-requester', label: 'Manager del solicitante' }
+        { value: 'manager-requester', label: 'Requester manager' }
       ],
       owner: [
-        { value: 'module-owner', label: 'Owner del modulo' },
-        { value: 'workspace-owner', label: 'Owner del workspace' }
+        { value: 'module-owner', label: 'Module owner' },
+        { value: 'workspace-owner', label: 'Workspace owner' }
       ],
       policy: [
-        { value: 'auto-policy', label: 'Politica automatica' }
+        { value: 'auto-policy', label: 'Automatic policy' }
       ]
     };
 
@@ -105,7 +105,7 @@
       name: 'Billing close access exception',
       type: 'access',
       origin: 'roles',
-      description: 'Workflow para acceso temporal de Billing Editor durante cierres operativos, con expiracion automatica y audit log.',
+      description: 'Workflow for temporary Billing Editor access during operational closes, with automatic expiration and audit log.',
       stages: [
         {
           id: 'stage-requester',
@@ -114,7 +114,7 @@
           approvers: ['manager-requester'],
           approvalRule: 'single',
           sla: '30 min',
-          note: 'Confirma necesidad operativa y ventana del permiso.'
+          note: 'Confirms the operational need and the permission window.'
         },
         {
           id: 'stage-security',
@@ -123,7 +123,7 @@
           approvers: ['security-reviewers'],
           approvalRule: 'parallel',
           sla: '2 h',
-          note: 'Valida alcance del permiso, expiracion y riesgo.'
+          note: 'Validates the permission scope, expiration and risk.'
         },
         {
           id: 'stage-close',
@@ -132,7 +132,7 @@
           approvers: ['auto-policy'],
           approvalRule: 'automatic',
           sla: 'Post close',
-          note: 'Revoca el permiso y registra la accion en audit log.'
+          note: 'Revokes the permission and records the action in the audit log.'
         }
       ]
     };
@@ -152,7 +152,7 @@
 
     new MTS.Card('#workflow-builder-panel', {
       title: 'Workflow Builder',
-      subtitle: 'Definicion de workflow',
+      subtitle: 'Workflow definition',
       variant: 'elevated',
       size: 'lg',
       body:
@@ -162,12 +162,12 @@
               '<span id="workflow-builder-badge-status"></span>' +
               '<span id="workflow-builder-badge-stages"></span>' +
             '</div>' +
-            '<p class="mts-text--md mts-text-color--muted mts-m-0">Define el flujo base, ordena las etapas y luego publica una version lista para generar tareas en la bandeja.</p>' +
+            '<p class="mts-text--md mts-text-color--muted mts-m-0">Define the base flow, order the stages and then publish a version ready to generate tasks in the inbox.</p>' +
           '</div>' +
           '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text--md mts-text-color--primary">Datos base</strong>' +
-              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Nombre, tipo, modulo origen y resumen general del workflow.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Base data</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Name, type, origin module and general summary of the workflow.</p>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md">' +
               '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-name"></div></div>' +
@@ -179,8 +179,8 @@
           '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3 mts-flex--wrap">' +
               '<div>' +
-                '<strong class="mts-text--md mts-text-color--primary">Etapas</strong>' +
-                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Ordena la secuencia y luego edita la etapa seleccionada.</p>' +
+                '<strong class="mts-text--md mts-text-color--primary">Stages</strong>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Order the sequence and then edit the selected stage.</p>' +
               '</div>' +
               '<div id="workflow-builder-add-stage"></div>' +
             '</div>' +
@@ -188,8 +188,8 @@
           '</section>' +
           '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text--md mts-text-color--primary">Editar etapa seleccionada</strong>' +
-              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0" id="workflow-builder-stage-caption">Selecciona una etapa para ajustar asignacion, aprobadores, regla y SLA.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Edit selected stage</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0" id="workflow-builder-stage-caption">Select a stage to adjust assignment, approvers, rule and SLA.</p>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md">' +
               '<div class="mts-g-col-12 mts-g-col-md-6"><div id="workflow-builder-stage-title"></div></div>' +
@@ -207,24 +207,24 @@
           '<div class="mts-grid mts-grid--gap-md">' +
             '<section class="mts-surface mts-g-col-12 mts-g-col-xl-7 mts-d-flex mts-flex--column mts-gap-3">' +
               '<div>' +
-                '<strong class="mts-text--md mts-text-color--primary">Reglas base</strong>' +
-                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Condiciones que modifican la definicion antes de publicar.</p>' +
+                '<strong class="mts-text--md mts-text-color--primary">Base rules</strong>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Conditions that modify the definition before publishing.</p>' +
               '</div>' +
               '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
-                ruleRow('Monto mayor a 5000 USD', 'Agrega una revision financiera extra antes del cierre final.') +
-                ruleRow('Permiso sensible', 'Fuerza aprobador de Security en modo any-1-of-2.') +
-                ruleRow('Owner del workspace es requester', 'Salta manager review para no duplicar la decision.') +
+                ruleRow('Amount over 5000 USD', 'Adds an extra financial review before the final close.') +
+                ruleRow('Sensitive permission', 'Forces a Security approver in any-1-of-2 mode.') +
+                ruleRow('Workspace owner is requester', 'Skips manager review to avoid duplicating the decision.') +
               '</div>' +
             '</section>' +
             '<section class="mts-surface mts-g-col-12 mts-g-col-xl-5 mts-d-flex mts-flex--column mts-gap-3">' +
               '<div>' +
-                '<strong class="mts-text--md mts-text-color--primary">Resumen</strong>' +
-                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Estado del borrador listo para guardar o publicar.</p>' +
+                '<strong class="mts-text--md mts-text-color--primary">Summary</strong>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Draft status ready to save or publish.</p>' +
               '</div>' +
               '<div class="mts-grid mts-grid--gap-md">' +
-                summaryCell('Tipo', 'Access') +
-                summaryCell('Etapas', String(builderState.stages.length)) +
-                summaryCell('Patron', 'Secuencial + paralelo') +
+                summaryCell('Type', 'Access') +
+                summaryCell('Stages', String(builderState.stages.length)) +
+                summaryCell('Pattern', 'Sequential + parallel') +
                 summaryCell('Fallback', 'Security lead') +
               '</div>' +
             '</section>' +
@@ -233,36 +233,36 @@
       footerAlign: 'between',
       footer: [
         {
-          label: 'Volver a lista',
+          label: 'Back to list',
           variant: 'ghost',
           icon: MTS.Icon.get('arrow-left'),
           onClick: function () { openScreen('../workflow-list/index.html'); }
         },
         {
-          label: 'Ver task detail',
+          label: 'View task detail',
           variant: 'secondary',
           icon: MTS.Icon.get('layout'),
           onClick: function () { openScreen('../workflow-task-detail/index.html'); }
         },
         {
-          label: 'Guardar borrador',
+          label: 'Save draft',
           variant: 'secondary',
           icon: MTS.Icon.get('save'),
           onClick: function () {
             syncBuilderState();
             if (saveSelectedStage(true)) {
-              notify('success', 'La definicion quedo guardada como borrador.');
+              notify('success', 'The definition was saved as a draft.');
             }
           }
         },
         {
-          label: 'Publicar',
+          label: 'Publish',
           variant: 'primary',
           icon: MTS.Icon.get('check-circle'),
           onClick: function () {
             syncBuilderState();
             if (saveSelectedStage(true)) {
-              notify('success', 'El workflow quedo listo para generar tareas.');
+              notify('success', 'The workflow is ready to generate tasks.');
             }
           }
         }
@@ -270,13 +270,13 @@
     });
 
     new MTS.Badge('#workflow-builder-badge-status', {
-      label: 'Borrador',
+      label: 'Draft',
       variant: 'warning',
       size: 'sm'
     });
 
     new MTS.Badge('#workflow-builder-badge-stages', {
-      label: builderState.stages.length + ' etapas',
+      label: builderState.stages.length + ' stages',
       variant: 'info',
       size: 'sm'
     });
@@ -316,13 +316,13 @@
       label: 'Definition summary',
       rows: 4,
       value: builderState.description,
-      placeholder: 'Describe objetivo, alcance y reglas generales...',
+      placeholder: 'Describe the goal, scope and general rules...',
       showCount: true,
       maxLength: 280
     });
 
     new MTS.Button('#workflow-builder-add-stage', {
-      label: 'Agregar etapa',
+      label: 'Add stage',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('plus'),
       onClick: function () {
@@ -333,12 +333,12 @@
           approvers: ['camila-soto'],
           approvalRule: 'single',
           sla: '4 h',
-          note: 'Nueva etapa agregada al ejemplo.'
+          note: 'New stage added to the example.'
         });
         selectedStageIndex = builderState.stages.length - 1;
         renderStages();
         syncStageEditor();
-        notify('info', 'Se agrego una nueva etapa al workflow.');
+        notify('info', 'A new stage was added to the workflow.');
       }
     });
 
@@ -350,7 +350,7 @@
     });
 
     stageAssignmentTypeSelect = new MTS.Select('#workflow-builder-stage-assignment-type', {
-      label: 'Tipo de asignacion',
+      label: 'Assignment type',
       value: 'user',
       options: ASSIGNMENT_TYPE_OPTIONS,
       onChange: function (e) {
@@ -364,18 +364,18 @@
     });
 
     stageApproversSelect = new MTS.Select('#workflow-builder-stage-approvers', {
-      label: 'Aprobador(es)',
+      label: 'Approver(s)',
       value: [],
       multiple: true,
       searchable: true,
       clearable: true,
       maxSelect: 3,
       options: APPROVER_OPTIONS_BY_TYPE.user,
-      hint: 'Selecciona uno o mas aprobadores segun el tipo de asignacion.'
+      hint: 'Select one or more approvers depending on the assignment type.'
     });
 
     stageApprovalRuleSelect = new MTS.Select('#workflow-builder-stage-approval-rule', {
-      label: 'Regla de aprobacion',
+      label: 'Approval rule',
       value: 'single',
       options: APPROVAL_RULE_OPTIONS
     });
@@ -392,11 +392,11 @@
       label: 'Stage note',
       rows: 3,
       value: '',
-      placeholder: 'Describe objetivo, alcance y salida de la etapa...'
+      placeholder: 'Describe the goal, scope and output of the stage...'
     });
 
     new MTS.Button('#workflow-builder-save-stage', {
-      label: 'Aplicar cambios',
+      label: 'Apply changes',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('save'),
       onClick: function () {
@@ -405,7 +405,7 @@
     });
 
     new MTS.Button('#workflow-builder-remove-stage', {
-      label: 'Eliminar etapa',
+      label: 'Remove stage',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('trash'),
       onClick: function () {
@@ -443,7 +443,7 @@
             if (selectedStageIndex < 0) selectedStageIndex = 0;
             renderStages();
             syncStageEditor();
-            notify('info', 'Se actualizo el orden de las etapas.');
+            notify('info', 'The stage order was updated.');
           },
           onItemClick: function (e) {
             selectedStageIndex = e.detail.index;
@@ -500,7 +500,7 @@
       if (!countBadgeHost) return;
       countBadgeHost.innerHTML = '';
       new MTS.Badge('#workflow-builder-badge-stages', {
-        label: builderState.stages.length + ' etapas',
+        label: builderState.stages.length + ' stages',
         variant: 'info',
         size: 'sm'
       });
@@ -523,7 +523,7 @@
 
       var caption = document.getElementById('workflow-builder-stage-caption');
       if (caption) {
-        caption.textContent = 'Editando la etapa ' + (selectedStageIndex + 1) + ': ' + stage.title + '. Aqui defines quien aprueba y bajo que regla.';
+        caption.textContent = 'Editing stage ' + (selectedStageIndex + 1) + ': ' + stage.title + '. Here you define who approves and under which rule.';
       }
     }
 
@@ -533,7 +533,7 @@
 
       var title = stageTitleInput.getValue().trim();
       if (!title) {
-        stageTitleInput.setError('Ingresa el titulo de la etapa');
+        stageTitleInput.setError('Enter the stage title');
         return false;
       }
 
@@ -548,7 +548,7 @@
       }
 
       if (assignmentType !== 'policy' && !approvers.length) {
-        notify('warning', 'Selecciona al menos un aprobador para esta etapa.');
+        notify('warning', 'Select at least one approver for this stage.');
         return false;
       }
 
@@ -557,13 +557,13 @@
       stage.approvers = approvers;
       stage.approvalRule = approvalRule;
       stage.sla = stageSlaInput.getValue().trim() || '4 h';
-      stage.note = stageNoteInput.getValue().trim() || 'Sin nota adicional.';
+      stage.note = stageNoteInput.getValue().trim() || 'No additional note.';
 
       renderStages();
       syncStageEditor();
 
       if (!silent) {
-        notify('success', 'La etapa seleccionada fue actualizada.');
+        notify('success', 'The selected stage was updated.');
       }
 
       return true;
@@ -571,7 +571,7 @@
 
     function removeSelectedStage() {
       if (builderState.stages.length === 1) {
-        notify('warning', 'El workflow debe conservar al menos una etapa.');
+        notify('warning', 'The workflow must keep at least one stage.');
         return;
       }
 
@@ -579,7 +579,7 @@
       selectedStageIndex = Math.max(0, selectedStageIndex - 1);
       renderStages();
       syncStageEditor();
-      notify('warning', 'La etapa seleccionada fue eliminada.');
+      notify('warning', 'The selected stage was removed.');
     }
 
     function highlightSelectedStage() {

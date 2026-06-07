@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -52,8 +52,8 @@
       <div class="mts-card__body mts-p-6">
         <div class="mts-text--center mts-mb-4">
           <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
-          <h1 class="mts-h1 mts-mt-2">Verificar OTP</h1>
-          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Ingresa el código enviado al correo asociado.</p>
+          <h1 class="mts-h1 mts-mt-2">Verify OTP</h1>
+          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Enter the code sent to the associated email.</p>
         </div>
 
         <div class="mts-d-flex mts-flex--column mts-gap-4">
@@ -87,21 +87,21 @@
 
     var codeInput = new MTS.Input('#otp-code', {
       type: 'text',
-      label: 'Código',
-      placeholder: 'Ingresa el código',
+      label: 'Code',
+      placeholder: 'Enter the code',
       iconLeft: MTS.Icon.get('key')
     });
 
     new MTS.Button('#otp-resend', {
-      label: 'Reenviar código',
+      label: 'Resend code',
       variant: 'link',
       onClick: function () {
-        showAlert('info', 'Código reenviado', 'Se reenviaría un nuevo código OTP al correo asociado.');
+        showAlert('info', 'Code resent', 'A new OTP code would be resent to the associated email.');
       }
     });
 
     new MTS.Button('#otp-login', {
-      label: 'Volver al login',
+      label: 'Back to login',
       variant: 'link',
       onClick: function () {
         openScreen('../login/index.html');
@@ -109,7 +109,7 @@
     });
 
     var submitButton = new MTS.Button('#otp-submit', {
-      label: 'Validar código',
+      label: 'Validate code',
       variant: 'primary',
       block: true,
       onClick: function (event, instance) {
@@ -137,17 +137,17 @@
       clearAlerts();
 
       if (!code) {
-        codeInput.setError('Ingresa el código OTP');
+        codeInput.setError('Enter the OTP code');
         return;
       }
 
       button.setLoading(true);
-      button.setLabel('Validando...');
+      button.setLabel('Validating...');
 
       setTimeout(function () {
         button.setLoading(false);
-        button.setLabel('Validar código');
-        showAlert('success', 'Código validado', 'El acceso quedaría completado con el OTP ingresado.');
+        button.setLabel('Validate code');
+        showAlert('success', 'Code validated', 'Access would be completed with the entered OTP.');
       }, 700);
     }
 

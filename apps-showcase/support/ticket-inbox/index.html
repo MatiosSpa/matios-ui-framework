@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -36,7 +36,7 @@
         <div class="ticket-inbox-page__logo">M</div>
         <div>
           <div class="ticket-inbox-page__title">Support Inbox</div>
-          <div class="ticket-inbox-page__subtitle">Bandeja operativa para triage inicial</div>
+          <div class="ticket-inbox-page__subtitle">Operational inbox for initial triage</div>
         </div>
       </div>
       <div class="ticket-inbox-page__topbar-actions">
@@ -48,13 +48,13 @@
       <section class="ticket-inbox-page__hero mts-g-col-12 mts-g-col-lg-4 mts-surface">
         <div class="ticket-inbox-page__eyebrow">
           <span class="ticket-inbox-page__eyebrow-dot"></span>
-          <span>Operacion diaria</span>
+          <span>Daily operations</span>
         </div>
 
-        <h1 class="ticket-inbox-page__hero-title">Ordena prioridades, responsables y casos calientes en una sola vista.</h1>
+        <h1 class="ticket-inbox-page__hero-title">Sort priorities, owners and hot cases in a single view.</h1>
         <p class="ticket-inbox-page__hero-copy">
-          Esta bandeja ayuda a tomar control rapido del soporte: identifica urgencias, mueve tickets
-          al analista correcto y deja claro que requiere respuesta hoy.
+          This inbox helps you take quick control of support: spot urgent items, move tickets
+          to the right analyst and make clear what needs a response today.
         </p>
 
         <div id="ticket-inbox-alert"></div>
@@ -62,15 +62,15 @@
         <div class="ticket-inbox-page__summary-list">
           <article class="ticket-inbox-page__summary-item">
             <strong>14</strong>
-            <span>Tickets abiertos</span>
+            <span>Open tickets</span>
           </article>
           <article class="ticket-inbox-page__summary-item">
             <strong>3</strong>
-            <span>Prioridad alta</span>
+            <span>High priority</span>
           </article>
           <article class="ticket-inbox-page__summary-item">
             <strong>2</strong>
-            <span>SLA en riesgo</span>
+            <span>SLA at risk</span>
           </article>
         </div>
       </section>
@@ -108,11 +108,11 @@ function openScreen(path){
 </script>
 <script>
 var inboxTickets=[
-  {id:'HD-201',title:'Factura duplicada enviada al cliente',company:'Northwind Retail',priority:'high',priorityLabel:'Alta',status:'open',statusLabel:'Abierto',owner:'camila',ownerLabel:'Camila Rojas',channel:'Email',age:'Hace 12 min'},
-  {id:'HD-198',title:'Usuario no puede firmar documento',company:'Acme Legal',priority:'high',priorityLabel:'Alta',status:'investigating',statusLabel:'Investigando',owner:'diego',ownerLabel:'Diego Paredes',channel:'Portal',age:'Hace 28 min'},
-  {id:'HD-193',title:'Solicitud de acceso a modulo de documentos',company:'Grupo Marea',priority:'medium',priorityLabel:'Media',status:'pending',statusLabel:'Pendiente cliente',owner:'camila',ownerLabel:'Camila Rojas',channel:'Chat',age:'Hace 42 min'},
-  {id:'HD-188',title:'Cambio de datos tributarios',company:'Linea Sur',priority:'low',priorityLabel:'Baja',status:'open',statusLabel:'Abierto',owner:'andres',ownerLabel:'Andres Soto',channel:'Email',age:'Hace 1 h'},
-  {id:'HD-181',title:'Error intermitente al generar PDF',company:'Atlas Ops',priority:'medium',priorityLabel:'Media',status:'investigating',statusLabel:'Investigando',owner:'diego',ownerLabel:'Diego Paredes',channel:'Portal',age:'Hace 2 h'}
+  {id:'HD-201',title:'Duplicate invoice sent to customer',company:'Northwind Retail',priority:'high',priorityLabel:'High',status:'open',statusLabel:'Open',owner:'camila',ownerLabel:'Camila Rojas',channel:'Email',age:'12 min ago'},
+  {id:'HD-198',title:'User cannot sign document',company:'Acme Legal',priority:'high',priorityLabel:'High',status:'investigating',statusLabel:'Investigating',owner:'diego',ownerLabel:'Diego Paredes',channel:'Portal',age:'28 min ago'},
+  {id:'HD-193',title:'Access request to documents module',company:'Grupo Marea',priority:'medium',priorityLabel:'Medium',status:'pending',statusLabel:'Pending customer',owner:'camila',ownerLabel:'Camila Rojas',channel:'Chat',age:'42 min ago'},
+  {id:'HD-188',title:'Tax data change',company:'Linea Sur',priority:'low',priorityLabel:'Low',status:'open',statusLabel:'Open',owner:'andres',ownerLabel:'Andres Soto',channel:'Email',age:'1 h ago'},
+  {id:'HD-181',title:'Intermittent error generating PDF',company:'Atlas Ops',priority:'medium',priorityLabel:'Medium',status:'investigating',statusLabel:'Investigating',owner:'diego',ownerLabel:'Diego Paredes',channel:'Portal',age:'2 h ago'}
 ];
 
 var inboxState={
@@ -123,25 +123,25 @@ var inboxState={
 
 var searchInput=new MTS.Input('#ticket-inbox-search',{
   type:'text',
-  label:'Buscar ticket',
-  placeholder:'ID, cliente o asunto',
+  label:'Search ticket',
+  placeholder:'ID, customer or subject',
   iconLeft:MTS.Icon.get('search')
 });
 
 var statusSelect=new MTS.Select('#ticket-inbox-status',{
-  label:'Estado',
-  placeholder:'Todos',
+  label:'Status',
+  placeholder:'All',
   clearable:true,
   options:[
-    {value:'open',label:'Abierto'},
-    {value:'investigating',label:'Investigando'},
-    {value:'pending',label:'Pendiente cliente'}
+    {value:'open',label:'Open'},
+    {value:'investigating',label:'Investigating'},
+    {value:'pending',label:'Pending customer'}
   ]
 });
 
 var ownerSelect=new MTS.Select('#ticket-inbox-owner',{
-  label:'Responsable',
-  placeholder:'Todos',
+  label:'Owner',
+  placeholder:'All',
   clearable:true,
   options:[
     {value:'camila',label:'Camila Rojas'},
@@ -151,14 +151,14 @@ var ownerSelect=new MTS.Select('#ticket-inbox-owner',{
 });
 
 new MTS.Button('#ticket-inbox-open-detail',{
-  label:'Ver ticket ejemplo',
+  label:'View sample ticket',
   variant:'ghost',
   iconLeft:MTS.Icon.get('arrow-right'),
   onClick:function(){openScreen('../ticket-detail/index.html');}
 });
 
 new MTS.Button('#ticket-inbox-clear',{
-  label:'Limpiar filtros',
+  label:'Clear filters',
   variant:'secondary',
   iconLeft:MTS.Icon.get('refresh-cw'),
   onClick:function(){
@@ -174,8 +174,8 @@ new MTS.Button('#ticket-inbox-clear',{
 
 MTS.Alert.show('#ticket-inbox-alert',{
   variant:'info',
-  title:'Bandeja de triage',
-  message:'La lista esta pensada para reasignar, priorizar y abrir el detalle del caso sin salir del flujo operativo.',
+  title:'Triage inbox',
+  message:'The list is designed to reassign, prioritize and open case details without leaving the operational flow.',
   closable:false
 });
 
@@ -198,11 +198,11 @@ function renderInbox(){
     var emptyHost=document.createElement('div');
     emptyWrap.appendChild(emptyHost);
     new MTS.Card(emptyHost,{
-      title:'Sin resultados',
-      subtitle:'Ajusta los filtros',
+      title:'No results',
+      subtitle:'Adjust the filters',
       variant:'outlined',
       size:'lg',
-      body:'<p class="ticket-inbox-page__empty">No hay tickets que coincidan con la combinacion actual.</p>'
+      body:'<p class="ticket-inbox-page__empty">No tickets match the current combination.</p>'
     });
     return;
   }
@@ -228,27 +228,27 @@ function renderInbox(){
             '<span class="ticket-inbox-page__chip">'+ticket.channel+'</span>'+
           '</div>'+
           '<div class="ticket-inbox-page__ticket-grid">'+
-            '<div><span>Responsable</span><strong>'+ticket.ownerLabel+'</strong></div>'+
-            '<div><span>Actividad</span><strong>'+ticket.age+'</strong></div>'+
+            '<div><span>Owner</span><strong>'+ticket.ownerLabel+'</strong></div>'+
+            '<div><span>Activity</span><strong>'+ticket.age+'</strong></div>'+
           '</div>'+
         '</div>',
       footerAlign:'between',
       footer:[
         {
-          label:'Abrir detalle',
+          label:'Open details',
           variant:'primary',
           icon:MTS.Icon.get('arrow-right'),
           onClick:function(){openScreen('../ticket-detail/index.html');}
         },
         {
-          label:'Reasignar',
+          label:'Reassign',
           variant:'ghost',
           icon:MTS.Icon.get('refresh'),
           onClick:function(){
             MTS.Alert.show('#ticket-inbox-alert',{
               variant:'success',
-              title:'Ticket actualizado',
-              message:'Se simulo la reasignacion rapida de <strong>'+ticket.id+'</strong> sin salir de la bandeja.',
+              title:'Ticket updated',
+              message:'A quick reassignment of <strong>'+ticket.id+'</strong> was simulated without leaving the inbox.',
               closable:true
             });
           }

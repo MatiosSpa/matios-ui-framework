@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="approval-inbox-page__logo">M</div>
         <div>
           <div class="approval-inbox-page__title">Approval Inbox</div>
-          <div class="approval-inbox-page__subtitle">Solicitudes pendientes con prioridad, owner y decision rapida</div>
+          <div class="approval-inbox-page__subtitle">Pending requests with priority, owner and quick decision</div>
         </div>
       </div>
       <div class="approval-inbox-page__actions">
@@ -50,10 +50,10 @@
       <section class="approval-inbox-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="approval-inbox-page__eyebrow">Pending decisions</div>
-          <h1 class="approval-inbox-page__hero-title">Procesa solicitudes con contexto suficiente para decidir sin abrir cinco pantallas más.</h1>
+          <h1 class="approval-inbox-page__hero-title">Process requests with enough context to decide without opening five more screens.</h1>
           <p class="approval-inbox-page__hero-copy">
-            La bandeja cubre escenarios comunes de productos internos: altas de acceso, cambios de
-            billing, excepciones de seguridad y aprobaciones con prioridad o SLA.
+            The inbox covers common internal product scenarios: access grants, billing
+            changes, security exceptions and approvals with priority or SLA.
           </p>
         </div>
       </section>
@@ -61,8 +61,8 @@
       <aside class="mts-g-col-12 mts-g-col-xl-4">
         <div class="mts-form-card approval-inbox-page__filters-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Filtros</h2>
-            <p class="mts-form-card__subtitle">Busca por solicitud, owner o prioridad.</p>
+            <h2 class="mts-form-card__title">Filters</h2>
+            <p class="mts-form-card__subtitle">Search by request, owner or priority.</p>
           </div>
           <div id="approval-feedback"></div>
           <div class="approval-inbox-page__filters">
@@ -77,9 +77,9 @@
         <div class="approval-inbox-page__results-head">
           <div>
             <div class="approval-inbox-page__results-label">Requests awaiting decision</div>
-            <h2 class="approval-inbox-page__results-title">Bandeja de aprobaciones</h2>
+            <h2 class="approval-inbox-page__results-title">Approvals inbox</h2>
           </div>
-          <div class="approval-inbox-page__results-meta" id="approval-results-meta">0 resultados</div>
+          <div class="approval-inbox-page__results-meta" id="approval-results-meta">0 results</div>
         </div>
         <div class="mts-grid mts-grid--gap-md" id="approval-results"></div>
       </section>
@@ -100,41 +100,41 @@
     var approvalState = { query: '', priority: '' };
     var prioritySelect;
     var approvals = [
-      { id: 'APR-401', title: 'Aprobar acceso Billing Editor', owner: 'Camila Soto', priority: 'high', priorityLabel: 'Alta', due: 'SLA 2 h', summary: 'Finance solicita acceso de edicion para invoices y metodos de pago.' },
-      { id: 'APR-397', title: 'Excepcion temporal de seguridad', owner: 'Diego Paredes', priority: 'medium', priorityLabel: 'Media', due: 'SLA hoy', summary: 'Se pide omitir segundo factor por 24 h para una migracion controlada.' },
-      { id: 'APR-388', title: 'Upgrade de plan Scale Plus', owner: 'Finance Ops', priority: 'high', priorityLabel: 'Alta', due: 'SLA 4 h', summary: 'El workspace supero el umbral de seats y requiere aprobar upgrade comercial.' },
-      { id: 'APR-372', title: 'Canal de integracion Slack', owner: 'Laura Herrera', priority: 'low', priorityLabel: 'Baja', due: 'SLA 48 h', summary: 'Se propone mover alertas de soporte al canal #ops-alerts.' }
+      { id: 'APR-401', title: 'Approve Billing Editor access', owner: 'Camila Soto', priority: 'high', priorityLabel: 'High', due: 'SLA 2 h', summary: 'Finance requests edit access for invoices and payment methods.' },
+      { id: 'APR-397', title: 'Temporary security exception', owner: 'Diego Paredes', priority: 'medium', priorityLabel: 'Medium', due: 'SLA today', summary: 'Request to skip second factor for 24 h during a controlled migration.' },
+      { id: 'APR-388', title: 'Scale Plus plan upgrade', owner: 'Finance Ops', priority: 'high', priorityLabel: 'High', due: 'SLA 4 h', summary: 'The workspace exceeded the seat threshold and requires approving a commercial upgrade.' },
+      { id: 'APR-372', title: 'Slack integration channel', owner: 'Laura Herrera', priority: 'low', priorityLabel: 'Low', due: 'SLA 48 h', summary: 'Proposal to move support alerts to the #ops-alerts channel.' }
     ];
 
     new MTS.Button('#approval-refresh', {
-      label: 'Refrescar',
+      label: 'Refresh',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
-        notify('success', 'Bandeja actualizada', 'Se simulo la sincronizacion de solicitudes pendientes.');
+        notify('success', 'Inbox updated', 'Synchronization of pending requests was simulated.');
       }
     });
 
     new MTS.Input('#approval-search', {
       type: 'text',
-      label: 'Buscar solicitud',
+      label: 'Search request',
       placeholder: 'APR-401, Billing, Camila...',
       iconLeft: MTS.Icon.get('search')
     });
 
     prioritySelect = new MTS.Select('#approval-priority', {
-      label: 'Prioridad',
-      placeholder: 'Todas',
+      label: 'Priority',
+      placeholder: 'All',
       clearable: true,
       options: [
-        { value: 'high', label: 'Alta' },
-        { value: 'medium', label: 'Media' },
-        { value: 'low', label: 'Baja' }
+        { value: 'high', label: 'High' },
+        { value: 'medium', label: 'Medium' },
+        { value: 'low', label: 'Low' }
       ]
     });
 
     new MTS.Button('#approval-clear', {
-      label: 'Limpiar filtros',
+      label: 'Clear filters',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
@@ -194,7 +194,7 @@
         return matchesQuery && matchesPriority;
       });
 
-      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+      meta.textContent = visible.length + (visible.length === 1 ? ' result' : ' results');
 
       visible.forEach(function (item, index) {
         var wrap = document.createElement('div');
@@ -219,19 +219,19 @@
           footerAlign: 'between',
           footer: [
             {
-              label: 'Aprobar',
+              label: 'Approve',
               variant: 'primary',
               icon: MTS.Icon.get('check-circle'),
               onClick: function () {
-                notify('success', 'Solicitud aprobada', item.id + ' quedo aprobada dentro del ejemplo.');
+                notify('success', 'Request approved', item.id + ' was approved within the example.');
               }
             },
             {
-              label: 'Rechazar',
+              label: 'Reject',
               variant: 'ghost',
               icon: MTS.Icon.get('alert'),
               onClick: function () {
-                notify('warning', 'Solicitud rechazada', item.id + ' quedo rechazada dentro del ejemplo.');
+                notify('warning', 'Request rejected', item.id + ' was rejected within the example.');
               }
             }
           ]

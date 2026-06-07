@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="connect-provider-page__logo">M</div>
         <div>
           <div class="connect-provider-page__title">Connect Provider</div>
-          <div class="connect-provider-page__subtitle">Alta inicial de una integracion con owner y permisos</div>
+          <div class="connect-provider-page__subtitle">Initial setup of an integration with owner and permissions</div>
         </div>
       </div>
       <div class="connect-provider-page__actions">
@@ -49,18 +49,18 @@
     <main class="connect-provider-page__main mts-grid mts-grid--gap-md">
       <section class="connect-provider-page__hero mts-surface mts-g-col-12">
         <div class="connect-provider-page__eyebrow">Provider onboarding</div>
-        <h1 class="connect-provider-page__hero-title">Conecta un proveedor con checklist y ownership claro.</h1>
+        <h1 class="connect-provider-page__hero-title">Connect a provider with a checklist and clear ownership.</h1>
         <p class="connect-provider-page__hero-copy">
-          La pantalla cubre un paso muy real en productos B2B: elegir entorno, definir responsable,
-          dejar permisos minimos y activar la conexion sin sorpresas.
+          This screen covers a very real step in B2B products: choosing the environment, defining an owner,
+          setting minimal permissions and activating the connection with no surprises.
         </p>
       </section>
 
       <section class="mts-g-col-12 mts-g-col-xl-7">
         <div class="mts-form-card connect-provider-page__form-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Configurar proveedor</h2>
-            <p class="mts-form-card__subtitle">Completa datos base antes de iniciar sync.</p>
+            <h2 class="mts-form-card__title">Configure provider</h2>
+            <p class="mts-form-card__subtitle">Fill in base data before starting sync.</p>
           </div>
           <div id="provider-feedback"></div>
           <div class="connect-provider-page__form-grid">
@@ -104,11 +104,11 @@
       label: 'Display name',
       type: 'text',
       value: 'Slack Billing Alerts',
-      placeholder: 'nombre de la integracion'
+      placeholder: 'integration name'
     });
 
     new MTS.Select('#provider-env', {
-      label: 'Entorno',
+      label: 'Environment',
       options: [
         { value: 'sandbox', label: 'Sandbox' },
         { value: 'staging', label: 'Staging' },
@@ -118,10 +118,10 @@
     });
 
     new MTS.Input('#provider-owner', {
-      label: 'Owner tecnico',
+      label: 'Technical owner',
       type: 'text',
       value: 'martin.perez@acme.com',
-      placeholder: 'owner responsable'
+      placeholder: 'responsible owner'
     });
 
     new MTS.Select('#provider-scope', {
@@ -138,49 +138,49 @@
       label: 'Client secret',
       type: 'password',
       value: 'sk_live_provider_secret',
-      placeholder: 'secret o token'
+      placeholder: 'secret or token'
     });
 
     new MTS.Button('#provider-connect-button', {
-      label: 'Conectar proveedor',
+      label: 'Connect provider',
       variant: 'primary',
       block: true,
       iconLeft: MTS.Icon.get('link'),
       onClick: function () {
-        notify('success', 'Conexion simulada', 'La UI deja cubierto el alta inicial del proveedor y su owner.');
+        notify('success', 'Simulated connection', 'The UI covers the initial setup of the provider and its owner.');
       }
     });
 
     new MTS.Card('#provider-checklist-card', {
-      title: 'Checklist previo',
+      title: 'Pre-flight checklist',
       subtitle: 'Before enabling sync',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="connect-provider-page__list">' +
-          rowItem('Credenciales validadas', 'Token vigente y entorno correcto.') +
-          rowItem('Owner asignado', 'Existe responsable tecnico para soporte.') +
-          rowItem('Permisos minimos', 'Solo scopes necesarios para billing alerts.') +
+          rowItem('Validated credentials', 'Active token and correct environment.') +
+          rowItem('Owner assigned', 'There is a technical owner for support.') +
+          rowItem('Minimal permissions', 'Only the scopes needed for billing alerts.') +
         '</div>'
     });
 
     new MTS.Card('#provider-notes-card', {
-      title: 'Notas operativas',
+      title: 'Operational notes',
       subtitle: 'Integration notes',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="connect-provider-page__list">' +
-          rowItem('Retry policy', 'Si falla la autenticacion, no activar auto-retry infinito.') +
-          rowItem('Rotation', 'Rotar secrets al cambiar owner o entorno productivo.') +
-          rowItem('Observability', 'Publicar primer sync en audit log y webhook history.') +
+          rowItem('Retry policy', 'If authentication fails, do not enable infinite auto-retry.') +
+          rowItem('Rotation', 'Rotate secrets when changing owner or production environment.') +
+          rowItem('Observability', 'Publish the first sync to the audit log and webhook history.') +
         '</div>',
       footerAlign: 'start',
       footer: [{
-        label: 'Guardar como borrador',
+        label: 'Save as draft',
         variant: 'ghost',
         icon: MTS.Icon.get('check-circle'),
-        onClick: function () { notify('info', 'Borrador simulado', 'La pantalla tambien cubre el caso de guardar antes de conectar.'); }
+        onClick: function () { notify('info', 'Simulated draft', 'The screen also covers the case of saving before connecting.'); }
       }]
     });
 

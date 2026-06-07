@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -40,7 +40,7 @@
         <div class="api-keys-page__logo">M</div>
         <div>
           <div class="api-keys-page__title">API Keys</div>
-          <div class="api-keys-page__subtitle">Credenciales tecnicas para integraciones y automatizaciones</div>
+          <div class="api-keys-page__subtitle">Technical credentials for integrations and automations</div>
         </div>
       </div>
       <div class="api-keys-page__actions">
@@ -52,10 +52,10 @@
       <section class="api-keys-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="api-keys-page__eyebrow">Developer access</div>
-          <h1 class="api-keys-page__hero-title">Entrega claves tecnicas con contexto, control y rotacion sin improvisar una UI aparte.</h1>
+          <h1 class="api-keys-page__hero-title">Deliver technical keys with context, control and rotation without improvising a separate UI.</h1>
           <p class="api-keys-page__hero-copy">
-            Esta pantalla concentra los casos más comunes: crear una key, copiarla, definir entorno,
-            revisar último uso y ejecutar rotación o revocación.
+            This screen brings together the most common cases: create a key, copy it, set the environment,
+            review last usage and run rotation or revocation.
           </p>
         </div>
       </section>
@@ -68,8 +68,8 @@
       <aside class="mts-g-col-12 mts-g-col-xl-5 api-keys-page__sidebar">
         <div class="mts-form-card api-keys-page__form-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Nueva key</h2>
-            <p class="mts-form-card__subtitle">Nombre interno, entorno y scope inicial de la credencial.</p>
+            <h2 class="mts-form-card__title">New key</h2>
+            <p class="mts-form-card__subtitle">Internal name, environment and initial scope of the credential.</p>
           </div>
           <div class="api-keys-page__form-grid">
             <div id="api-key-name"></div>
@@ -98,29 +98,29 @@
   </script>
   <script>
     var apiKeys = [
-      { id: 'k1', name: 'billing-prod', key: 'sk_live_••••••A82Q', env: 'Production', scope: 'billing:read billing:write', lastUse: 'Hoy, 08:44', status: 'Activa', variant: 'success' },
-      { id: 'k2', name: 'support-bot', key: 'sk_live_••••••F91P', env: 'Production', scope: 'tickets:read tickets:write', lastUse: 'Ayer, 21:10', status: 'Activa', variant: 'success' },
-      { id: 'k3', name: 'sandbox-internal', key: 'sk_test_••••••M12Z', env: 'Sandbox', scope: 'workspace:read', lastUse: 'Hace 9 dias', status: 'Pendiente rotacion', variant: 'warning' }
+      { id: 'k1', name: 'billing-prod', key: 'sk_live_••••••A82Q', env: 'Production', scope: 'billing:read billing:write', lastUse: 'Today, 08:44', status: 'Active', variant: 'success' },
+      { id: 'k2', name: 'support-bot', key: 'sk_live_••••••F91P', env: 'Production', scope: 'tickets:read tickets:write', lastUse: 'Yesterday, 21:10', status: 'Active', variant: 'success' },
+      { id: 'k3', name: 'sandbox-internal', key: 'sk_test_••••••M12Z', env: 'Sandbox', scope: 'workspace:read', lastUse: '9 days ago', status: 'Rotation pending', variant: 'warning' }
     ];
 
     new MTS.Button('#api-keys-create', {
-      label: 'Crear key',
+      label: 'Create key',
       variant: 'primary',
       iconLeft: MTS.Icon.get('key'),
       onClick: function () {
-        notify('success', 'Formulario listo', 'La UI deja cubierto el punto de entrada para nuevas credenciales.');
+        notify('success', 'Form ready', 'The UI covers the entry point for new credentials.');
       }
     });
 
     new MTS.Input('#api-key-name', {
-      label: 'Nombre interno',
+      label: 'Internal name',
       type: 'text',
       value: 'notifications-worker',
-      placeholder: 'Nombre de la integracion'
+      placeholder: 'Integration name'
     });
 
     new MTS.Select('#api-key-env', {
-      label: 'Entorno',
+      label: 'Environment',
       options: [
         { value: 'prod', label: 'Production' },
         { value: 'staging', label: 'Staging' },
@@ -137,27 +137,27 @@
     });
 
     new MTS.Button('#api-key-generate', {
-      label: 'Generar credencial',
+      label: 'Generate credential',
       variant: 'secondary',
       block: true,
       iconLeft: MTS.Icon.get('check-circle'),
       onClick: function () {
-        notify('info', 'Credencial simulada', 'Aqui normalmente mostrarías la key solo una vez para copiarla.');
+        notify('info', 'Simulated credential', 'Here you would normally show the key only once so it can be copied.');
       }
     });
 
     new MTS.Card('#api-keys-policy-card', {
-      title: 'Politica de claves',
+      title: 'Key policy',
       subtitle: 'Developer access',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="api-keys-page__policy">' +
-          '<p>Las claves productivas deben rotarse cada 90 dias y quedar asociadas a un owner tecnico claro.</p>' +
+          '<p>Production keys must be rotated every 90 days and tied to a clear technical owner.</p>' +
           '<ul class="api-keys-page__policy-list">' +
-            '<li>Produccion y sandbox no comparten scopes.</li>' +
-            '<li>El ultimo uso ayuda a detectar credenciales huerfanas.</li>' +
-            '<li>Revocar siempre antes de borrar una integracion.</li>' +
+            '<li>Production and sandbox do not share scopes.</li>' +
+            '<li>Last usage helps detect orphaned credentials.</li>' +
+            '<li>Always revoke before deleting an integration.</li>' +
           '</ul>' +
         '</div>'
     });
@@ -202,19 +202,19 @@
           footerAlign: 'between',
           footer: [
             {
-              label: 'Rotar',
+              label: 'Rotate',
               variant: 'primary',
               icon: MTS.Icon.get('refresh-cw'),
               onClick: function () {
-                notify('warning', 'Rotacion simulada', 'La key ' + item.name + ' quedo marcada para rotacion.');
+                notify('warning', 'Simulated rotation', 'Key ' + item.name + ' has been marked for rotation.');
               }
             },
             {
-              label: 'Revocar',
+              label: 'Revoke',
               variant: 'ghost',
               icon: MTS.Icon.get('alert'),
               onClick: function () {
-                notify('info', 'Revocacion simulada', 'Aqui normalmente pedirias confirmacion fuerte antes de revocar.');
+                notify('info', 'Simulated revocation', 'Here you would normally require strong confirmation before revoking.');
               }
             }
           ]

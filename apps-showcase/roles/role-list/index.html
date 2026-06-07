@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Lista de roles - Matios UI</title>
+  <title>Role list - Matios UI</title>
   <script>
     (function () {
       var source = location.search || location.hash || '';
@@ -67,28 +67,28 @@
     }
 
     var roles = [
-      { id: 'ROL-001', name: 'Operador integral', description: 'Agrupa perfiles de usuarios, documentos y soporte para operacion diaria.' },
-      { id: 'ROL-002', name: 'Coordinador financiero', description: 'Combina perfiles de billing y consulta transversal para control financiero.' },
-      { id: 'ROL-003', name: 'Backoffice documental', description: 'Agrupa perfiles documentales y de trazabilidad interna.' }
+      { id: 'ROL-001', name: 'Integrated operator', description: 'Groups user, document and support profiles for daily operation.' },
+      { id: 'ROL-002', name: 'Financial coordinator', description: 'Combines billing and cross-cutting query profiles for financial control.' },
+      { id: 'ROL-003', name: 'Document backoffice', description: 'Groups document and internal traceability profiles.' }
     ];
 
     new MTS.Card('#role-list-panel', {
-      title: 'Lista de roles',
-      subtitle: 'Catalogo operativo de roles',
+      title: 'Role list',
+      subtitle: 'Operational role catalog',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div id="role-list-alert"></div>' +
           '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3">' +
-            '<p class="mts-text--md mts-text-color--muted mts-m-0">Cada rol agrupa perfiles y solo admite un perfil por modulo.</p>' +
+            '<p class="mts-text--md mts-text-color--muted mts-m-0">Each role groups profiles and allows only one profile per module.</p>' +
             '<span id="role-list-count" class="mts-badge mts-badge--info mts-badge--sm">0 roles</span>' +
           '</div>' +
           '<div id="role-list-table"></div>' +
         '</div>',
       actions: [
         {
-          label: 'Nuevo rol',
+          label: 'New role',
           variant: 'primary',
           icon: MTS.Icon.get('plus-circle'),
           onClick: function () {
@@ -111,8 +111,8 @@
       if (action === 'clone') {
         showAlert(
           'info',
-          'Rol duplicado',
-          'Se duplicaria el rol <strong>' + escapeHtml(role.name) + '</strong> para crear una nueva variante.'
+          'Role duplicated',
+          'The role <strong>' + escapeHtml(role.name) + '</strong> would be duplicated to create a new variant.'
         );
       }
     });
@@ -135,16 +135,16 @@
     }
 
     function renderTable() {
-      document.getElementById('role-list-count').textContent = roles.length + (roles.length === 1 ? ' rol' : ' roles');
+      document.getElementById('role-list-count').textContent = roles.length + (roles.length === 1 ? ' role' : ' roles');
 
       document.getElementById('role-list-table').innerHTML =
         '<div class="mts-table-wrap">' +
           '<table class="mts-table mts-table--hover mts-table--striped">' +
             '<thead>' +
               '<tr>' +
-                '<th class="mts-table__th">Nombre</th>' +
-                '<th class="mts-table__th">Descripcion</th>' +
-                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+                '<th class="mts-table__th">Name</th>' +
+                '<th class="mts-table__th">Description</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Actions</th>' +
               '</tr>' +
             '</thead>' +
             '<tbody>' +
@@ -154,8 +154,8 @@
                     '<td class="mts-table__td"><strong class="mts-text--sm mts-text-color--primary">' + escapeHtml(role.name) + '</strong></td>' +
                     '<td class="mts-table__td">' + escapeHtml(role.description) + '</td>' +
                     '<td class="mts-table__td mts-table__td--actions">' +
-                      actionButton('edit', role.id, 'edit', 'Editar') +
-                      actionButton('clone', role.id, 'copy', 'Duplicar') +
+                      actionButton('edit', role.id, 'edit', 'Edit') +
+                      actionButton('clone', role.id, 'copy', 'Duplicate') +
                     '</td>' +
                   '</tr>';
               }).join('') +

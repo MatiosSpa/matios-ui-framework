@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -36,7 +36,7 @@
         <div class="security-settings-page__logo">S</div>
         <div>
           <div class="security-settings-page__title">Security Settings</div>
-          <div class="security-settings-page__subtitle">Controles personales para acceso, alertas y sesiones activas</div>
+          <div class="security-settings-page__subtitle">Personal controls for access, alerts and active sessions</div>
         </div>
       </div>
       <div class="security-settings-page__topbar-actions">
@@ -47,10 +47,10 @@
 
     <main class="security-settings-page__main mts-grid mts-grid--gap-md">
       <section class="security-settings-page__hero mts-surface mts-g-col-12">
-        <div class="security-settings-page__eyebrow">Seguridad personal</div>
-        <h1 class="security-settings-page__hero-title">Refuerza el acceso de la cuenta sin salir del flujo principal del producto.</h1>
+        <div class="security-settings-page__eyebrow">Personal security</div>
+        <h1 class="security-settings-page__hero-title">Strengthen account access without leaving the product's main flow.</h1>
         <p class="security-settings-page__hero-text">
-          Esta pantalla concentra cambio de contraseña, segundo factor y alertas de acceso para que la seguridad básica no quede escondida en settings secundarios.
+          This screen brings together password changes, second factor and access alerts so that basic security is not buried in secondary settings.
         </p>
       </section>
 
@@ -64,11 +64,11 @@
           </div>
 
           <div class="security-settings-page__rules">
-            <div class="security-settings-page__rules-title">Reglas base de la clave</div>
+            <div class="security-settings-page__rules-title">Base password rules</div>
             <ul>
-              <li>Minimo 8 caracteres</li>
-              <li>Al menos una mayuscula y un numero</li>
-              <li>Debe ser distinta a la clave anterior</li>
+              <li>Minimum 8 characters</li>
+              <li>At least one uppercase letter and one number</li>
+              <li>Must be different from the previous password</li>
             </ul>
           </div>
 
@@ -106,82 +106,82 @@
     var deviceCheckToggle;
 
     new MTS.Button('#security-save', {
-      label: 'Guardar seguridad',
+      label: 'Save security',
       variant: 'primary',
       iconLeft: MTS.Icon.get('shield'),
       onClick: saveSecurity
     });
 
     new MTS.Button('#security-close-sessions', {
-      label: 'Cerrar otras sesiones',
+      label: 'Close other sessions',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('log-out'),
       onClick: function () {
         MTS.Alert.show('#security-feedback', {
           variant: 'warning',
-          title: 'Sesiones cerradas',
-          message: 'Se simulo el cierre de las otras sesiones activas del usuario.',
+          title: 'Sessions closed',
+          message: 'The closing of the user\'s other active sessions was simulated.',
           closable: true
         });
       }
     });
 
     currentPasswordInput = new MTS.Input('#security-current-password', {
-      label: 'Contraseña actual',
+      label: 'Current password',
       type: 'password',
-      placeholder: 'Ingresa tu clave actual'
+      placeholder: 'Enter your current password'
     });
 
     newPasswordInput = new MTS.Input('#security-new-password', {
-      label: 'Nueva contraseña',
+      label: 'New password',
       type: 'password',
-      placeholder: 'Define una nueva clave'
+      placeholder: 'Set a new password'
     });
 
     confirmPasswordInput = new MTS.Input('#security-confirm-password', {
-      label: 'Confirmar nueva contraseña',
+      label: 'Confirm new password',
       type: 'password',
-      placeholder: 'Repite la nueva clave'
+      placeholder: 'Repeat the new password'
     });
 
     email2faToggle = new MTS.Toggle('#security-toggle-email-2fa', {
-      label: 'Segundo factor por correo',
+      label: 'Email second factor',
       checked: true
     });
 
     loginAlertsToggle = new MTS.Toggle('#security-toggle-login-alerts', {
-      label: 'Alertas por inicio de sesión',
+      label: 'Login alerts',
       checked: true
     });
 
     deviceCheckToggle = new MTS.Toggle('#security-toggle-device-check', {
-      label: 'Verificación de dispositivo nuevo',
+      label: 'New device verification',
       checked: false
     });
 
     new MTS.Card('#security-summary-card', {
-      title: 'Estado actual',
-      subtitle: 'Resumen de seguridad',
+      title: 'Current status',
+      subtitle: 'Security summary',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="security-settings-page__summary-list">' +
-          '<div><span>2FA</span><strong>Correo activo</strong></div>' +
-          '<div><span>Ultimo cambio de clave</span><strong>Hace 36 dias</strong></div>' +
-          '<div><span>Alertas de acceso</span><strong>Encendidas</strong></div>' +
+          '<div><span>2FA</span><strong>Email active</strong></div>' +
+          '<div><span>Last password change</span><strong>36 days ago</strong></div>' +
+          '<div><span>Access alerts</span><strong>On</strong></div>' +
         '</div>'
     });
 
     new MTS.Card('#security-session-card', {
-      title: 'Sesiones activas',
-      subtitle: 'Actividad reciente',
+      title: 'Active sessions',
+      subtitle: 'Recent activity',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="security-settings-page__sessions">' +
-          '<div><strong>MacBook Pro · Chrome</strong><span>Ahora · Santiago</span></div>' +
-          '<div><strong>iPhone 15 · Safari</strong><span>Hoy · 08:15</span></div>' +
-          '<div><strong>Windows · Edge</strong><span>Ayer · 19:42</span></div>' +
+          '<div><strong>MacBook Pro · Chrome</strong><span>Now · Santiago</span></div>' +
+          '<div><strong>iPhone 15 · Safari</strong><span>Today · 08:15</span></div>' +
+          '<div><strong>Windows · Edge</strong><span>Yesterday · 19:42</span></div>' +
         '</div>'
     });
 
@@ -197,29 +197,29 @@
       confirmPasswordInput.clearError();
 
       if (!currentPassword) {
-        currentPasswordInput.setError('Ingresa la contraseña actual');
+        currentPasswordInput.setError('Enter the current password');
         return;
       }
 
       if (newPassword.length < 8) {
-        newPasswordInput.setError('La nueva clave debe tener al menos 8 caracteres');
+        newPasswordInput.setError('The new password must have at least 8 characters');
         return;
       }
 
       if (newPassword === currentPassword) {
-        newPasswordInput.setError('La nueva clave debe ser distinta a la actual');
+        newPasswordInput.setError('The new password must be different from the current one');
         return;
       }
 
       if (newPassword !== confirmPassword) {
-        confirmPasswordInput.setError('La confirmación no coincide con la nueva clave');
+        confirmPasswordInput.setError('The confirmation does not match the new password');
         return;
       }
 
       MTS.Alert.show('#security-feedback', {
         variant: 'success',
-        title: 'Seguridad actualizada',
-        message: 'La cuenta quedo lista con nueva clave y controles de acceso personales guardados.',
+        title: 'Security updated',
+        message: 'The account is ready with a new password and personal access controls saved.',
         closable: true
       });
     }

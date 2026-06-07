@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -51,8 +51,8 @@
       <div class="mts-card__body mts-p-6">
         <div class="mts-text--center mts-mb-4">
           <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
-          <h1 class="mts-h1 mts-mt-2">Unirme a un workspace</h1>
-          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Ingresa el código o enlace que te compartieron para entrar.</p>
+          <h1 class="mts-h1 mts-mt-2">Join a workspace</h1>
+          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Enter the code or link that was shared with you to get in.</p>
         </div>
 
         <div class="mts-d-flex mts-flex--column mts-gap-4">
@@ -87,20 +87,20 @@
 
     var codeInput = new MTS.Input('#join-workspace-code', {
       type: 'text',
-      label: 'Código o enlace',
-      placeholder: 'WKSP-ACME-2026 o enlace de invitación',
+      label: 'Code or link',
+      placeholder: 'WKSP-ACME-2026 or invitation link',
       iconLeft: MTS.Icon.get('link')
     });
 
     var emailInput = new MTS.Input('#join-workspace-email', {
       type: 'email',
-      label: 'Correo',
-      placeholder: 'equipo@matios.dev',
+      label: 'Email',
+      placeholder: 'team@matios.dev',
       iconLeft: MTS.Icon.get('mail')
     });
 
     new MTS.Button('#join-workspace-back', {
-      label: 'Volver al onboarding',
+      label: 'Back to onboarding',
       variant: 'link',
       onClick: function () {
         openScreen('../onboarding-complete/index.html');
@@ -108,7 +108,7 @@
     });
 
     new MTS.Button('#join-workspace-login', {
-      label: 'Ir al login',
+      label: 'Go to login',
       variant: 'link',
       onClick: function () {
         openScreen('../../login/login/index.html');
@@ -116,7 +116,7 @@
     });
 
     var submitButton = new MTS.Button('#join-workspace-submit', {
-      label: 'Unirme al workspace',
+      label: 'Join workspace',
       variant: 'primary',
       block: true,
       onClick: function (event, instance) {
@@ -147,22 +147,22 @@
       clearAlerts();
 
       if (!code) {
-        codeInput.setError('Ingresa el código o enlace del workspace');
+        codeInput.setError('Enter the workspace code or link');
         return;
       }
 
       if (!email) {
-        emailInput.setError('Ingresa tu correo');
+        emailInput.setError('Enter your email');
         return;
       }
 
       button.setLoading(true);
-      button.setLabel('Validando...');
+      button.setLabel('Validating...');
 
       setTimeout(function () {
         button.setLoading(false);
-        button.setLabel('Unirme al workspace');
-        showAlert('success', 'Acceso listo', 'El acceso se validaría para <strong>' + escapeHtml(email) + '</strong> usando el código ingresado.');
+        button.setLabel('Join workspace');
+        showAlert('success', 'Access ready', 'Access would be validated for <strong>' + escapeHtml(email) + '</strong> using the entered code.');
       }, 800);
     }
 

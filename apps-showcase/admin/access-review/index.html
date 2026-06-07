@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="access-review-page__logo">M</div>
         <div>
           <div class="access-review-page__title">Access Review</div>
-          <div class="access-review-page__subtitle">Permisos efectivos, perfiles heredados y ajustes de acceso</div>
+          <div class="access-review-page__subtitle">Effective permissions, inherited profiles and access adjustments</div>
         </div>
       </div>
       <div class="access-review-page__actions">
@@ -50,10 +50,10 @@
       <section class="access-review-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="access-review-page__eyebrow">Permission review</div>
-          <h1 class="access-review-page__hero-title">Revisa acceso efectivo sin perder de vista de dónde viene cada permiso.</h1>
+          <h1 class="access-review-page__hero-title">Review effective access without losing sight of where each permission comes from.</h1>
           <p class="access-review-page__hero-copy">
-            La vista está pensada para detectar exceso de acceso, entender herencia por equipos y
-            hacer ajustes rápidos antes de que el permiso se convierta en deuda operativa.
+            This view is designed to spot excess access, understand inheritance by team, and
+            make quick adjustments before a permission turns into operational debt.
           </p>
         </div>
       </section>
@@ -61,8 +61,8 @@
       <aside class="mts-g-col-12 mts-g-col-xl-4">
         <div class="mts-form-card access-review-page__filters-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Filtros</h2>
-            <p class="mts-form-card__subtitle">Busca por usuario, equipo o modulo.</p>
+            <h2 class="mts-form-card__title">Filters</h2>
+            <p class="mts-form-card__subtitle">Search by user, team or module.</p>
           </div>
           <div id="access-feedback"></div>
           <div class="access-review-page__filters">
@@ -77,9 +77,9 @@
         <div class="access-review-page__results-head">
           <div>
             <div class="access-review-page__results-label">Effective permissions</div>
-            <h2 class="access-review-page__results-title">Revision de acceso</h2>
+            <h2 class="access-review-page__results-title">Access review</h2>
           </div>
-          <div class="access-review-page__results-meta" id="access-results-meta">0 resultados</div>
+          <div class="access-review-page__results-meta" id="access-results-meta">0 results</div>
         </div>
         <div class="mts-grid mts-grid--gap-md" id="access-results"></div>
       </section>
@@ -105,30 +105,30 @@
     var accessState = { query: '', module: '' };
     var moduleSelect;
     var reviews = [
-      { id: 'r1', user: 'Camila Soto', team: 'Operations', role: 'Owner', module: 'billing', moduleLabel: 'Billing', profile: 'billing-admin + owner', status: 'Completo', statusVariant: 'success', summary: 'Puede editar metodo de pago, invoices y plan del workspace.' },
-      { id: 'r2', user: 'Diego Paredes', team: 'Support', role: 'Admin', module: 'support', moduleLabel: 'Support', profile: 'support-triage + workspace-admin', status: 'Amplio', statusVariant: 'warning', summary: 'Mantiene visibilidad fuerte sobre tickets, macros y usuarios de soporte.' },
-      { id: 'r3', user: 'Laura Herrera', team: 'Product', role: 'Member', module: 'notifications', moduleLabel: 'Notifications', profile: 'product-member + notification-editor', status: 'Ajustado', statusVariant: 'info', summary: 'Edita flujos de notificaciones y tiene lectura de activity feed.' }
+      { id: 'r1', user: 'Camila Soto', team: 'Operations', role: 'Owner', module: 'billing', moduleLabel: 'Billing', profile: 'billing-admin + owner', status: 'Full', statusVariant: 'success', summary: 'Can edit payment method, invoices and workspace plan.' },
+      { id: 'r2', user: 'Diego Paredes', team: 'Support', role: 'Admin', module: 'support', moduleLabel: 'Support', profile: 'support-triage + workspace-admin', status: 'Broad', statusVariant: 'warning', summary: 'Keeps strong visibility over tickets, macros and support users.' },
+      { id: 'r3', user: 'Laura Herrera', team: 'Product', role: 'Member', module: 'notifications', moduleLabel: 'Notifications', profile: 'product-member + notification-editor', status: 'Scoped', statusVariant: 'info', summary: 'Edits notification flows and has read access to the activity feed.' }
     ];
 
     new MTS.Button('#access-review-export', {
-      label: 'Exportar revision',
+      label: 'Export review',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('download'),
       onClick: function () {
-        notify('success', 'Revision exportada', 'Se simulo la exportacion del snapshot actual de permisos efectivos.');
+        notify('success', 'Review exported', 'Exporting the current snapshot of effective permissions has been simulated.');
       }
     });
 
     new MTS.Input('#access-search', {
       type: 'text',
-      label: 'Buscar acceso',
-      placeholder: 'Usuario, equipo o perfil',
+      label: 'Search access',
+      placeholder: 'User, team or profile',
       iconLeft: MTS.Icon.get('search')
     });
 
     moduleSelect = new MTS.Select('#access-module', {
-      label: 'Modulo',
-      placeholder: 'Todos',
+      label: 'Module',
+      placeholder: 'All',
       clearable: true,
       options: [
         { value: 'billing', label: 'Billing' },
@@ -138,7 +138,7 @@
     });
 
     new MTS.Button('#access-clear', {
-      label: 'Limpiar filtros',
+      label: 'Clear filters',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
@@ -192,7 +192,7 @@
         return matchesQuery && matchesModule;
       });
 
-      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+      meta.textContent = visible.length + (visible.length === 1 ? ' result' : ' results');
 
       visible.forEach(function (item, index) {
         var wrap = document.createElement('div');
@@ -218,15 +218,15 @@
           footerAlign: 'between',
           footer: [
             {
-              label: 'Ajustar acceso',
+              label: 'Adjust access',
               variant: 'primary',
               icon: MTS.Icon.get('sliders'),
               onClick: function () {
-                notify('info', 'Ajuste simulado', 'La UI deja planteado el siguiente paso para recortar o ampliar permisos.');
+                notify('info', 'Adjustment simulated', 'The UI lays out the next step to narrow or broaden permissions.');
               }
             },
             {
-              label: 'Ver miembro',
+              label: 'View member',
               variant: 'ghost',
               icon: MTS.Icon.get('arrow-right'),
               onClick: function () { openScreen('../member-detail/index.html'); }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="integrations-hub-page__logo">M</div>
         <div>
           <div class="integrations-hub-page__title">Integrations Hub</div>
-          <div class="integrations-hub-page__subtitle">Catalogo de conexiones externas y estado de sincronizacion</div>
+          <div class="integrations-hub-page__subtitle">Catalog of external connections and sync status</div>
         </div>
       </div>
       <div class="integrations-hub-page__actions">
@@ -50,10 +50,10 @@
       <section class="integrations-hub-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="integrations-hub-page__eyebrow">External providers</div>
-          <h1 class="integrations-hub-page__hero-title">Conecta sistemas reales y entiende rapido cuales estan sanos, pendientes o requieren soporte.</h1>
+          <h1 class="integrations-hub-page__hero-title">Connect real systems and quickly understand which ones are healthy, pending or need support.</h1>
           <p class="integrations-hub-page__hero-copy">
-            El hub funciona como punto de entrada para proveedores de mensajeria, storage, CRM y
-            pagos, con foco en estado de sync, propietario y accion principal.
+            The hub works as an entry point for messaging, storage, CRM and
+            payment providers, focused on sync status, owner and primary action.
           </p>
         </div>
       </section>
@@ -61,8 +61,8 @@
       <aside class="mts-g-col-12 mts-g-col-xl-4">
         <div class="mts-form-card integrations-hub-page__filters-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Filtros</h2>
-            <p class="mts-form-card__subtitle">Busca por proveedor o categoria de integracion.</p>
+            <h2 class="mts-form-card__title">Filters</h2>
+            <p class="mts-form-card__subtitle">Search by provider or integration category.</p>
           </div>
           <div id="integrations-feedback"></div>
           <div class="integrations-hub-page__filters">
@@ -77,9 +77,9 @@
         <div class="integrations-hub-page__results-head">
           <div>
             <div class="integrations-hub-page__results-label">Available providers</div>
-            <h2 class="integrations-hub-page__results-title">Integraciones del workspace</h2>
+            <h2 class="integrations-hub-page__results-title">Workspace integrations</h2>
           </div>
-          <div class="integrations-hub-page__results-meta" id="integrations-results-meta">0 resultados</div>
+          <div class="integrations-hub-page__results-meta" id="integrations-results-meta">0 results</div>
         </div>
         <div class="mts-grid mts-grid--gap-md" id="integrations-results"></div>
       </section>
@@ -105,31 +105,31 @@
     var integrationState = { query: '', category: '' };
     var categorySelect;
     var integrations = [
-      { id: 'slack', title: 'Slack', category: 'messaging', categoryLabel: 'Messaging', owner: 'Support team', status: 'connected', statusLabel: 'Conectada', icon: 'message-circle', detail: 'Notificaciones, alertas y reacciones de soporte.' },
-      { id: 'drive', title: 'Google Drive', category: 'storage', categoryLabel: 'Storage', owner: 'Operations', status: 'connected', statusLabel: 'Conectada', icon: 'cloud', detail: 'Backup documental y adjuntos de procesos.' },
-      { id: 'hubspot', title: 'HubSpot', category: 'crm', categoryLabel: 'CRM', owner: 'Growth team', status: 'attention', statusLabel: 'Requiere atencion', icon: 'database', detail: 'Sync de contactos y etapas comerciales.' },
-      { id: 'stripe', title: 'Stripe', category: 'payments', categoryLabel: 'Payments', owner: 'Finance', status: 'pending', statusLabel: 'Pendiente', icon: 'credit-card', detail: 'Cobros recurrentes y eventos de billing.' }
+      { id: 'slack', title: 'Slack', category: 'messaging', categoryLabel: 'Messaging', owner: 'Support team', status: 'connected', statusLabel: 'Connected', icon: 'message-circle', detail: 'Support notifications, alerts and reactions.' },
+      { id: 'drive', title: 'Google Drive', category: 'storage', categoryLabel: 'Storage', owner: 'Operations', status: 'connected', statusLabel: 'Connected', icon: 'cloud', detail: 'Document backup and process attachments.' },
+      { id: 'hubspot', title: 'HubSpot', category: 'crm', categoryLabel: 'CRM', owner: 'Growth team', status: 'attention', statusLabel: 'Needs attention', icon: 'database', detail: 'Sync of contacts and sales stages.' },
+      { id: 'stripe', title: 'Stripe', category: 'payments', categoryLabel: 'Payments', owner: 'Finance', status: 'pending', statusLabel: 'Pending', icon: 'credit-card', detail: 'Recurring charges and billing events.' }
     ];
 
     new MTS.Button('#integrations-refresh-button', {
-      label: 'Verificar conexiones',
+      label: 'Check connections',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
-        notify('success', 'Chequeo completado', 'Se simulo la verificacion del estado de todas las integraciones visibles.');
+        notify('success', 'Check completed', 'The status verification of all visible integrations was simulated.');
       }
     });
 
     new MTS.Input('#integrations-search', {
       type: 'text',
-      label: 'Buscar provider',
+      label: 'Search provider',
       placeholder: 'Slack, Drive, Stripe...',
       iconLeft: MTS.Icon.get('search')
     });
 
     categorySelect = new MTS.Select('#integrations-category', {
-      label: 'Categoria',
-      placeholder: 'Todas',
+      label: 'Category',
+      placeholder: 'All',
       clearable: true,
       options: [
         { value: 'messaging', label: 'Messaging' },
@@ -140,7 +140,7 @@
     });
 
     new MTS.Button('#integrations-clear', {
-      label: 'Limpiar filtros',
+      label: 'Clear filters',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
@@ -200,7 +200,7 @@
         return matchesQuery && matchesCategory;
       });
 
-      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+      meta.textContent = visible.length + (visible.length === 1 ? ' result' : ' results');
 
       visible.forEach(function (item) {
         var wrap = document.createElement('div');
@@ -226,7 +226,7 @@
           footerAlign: 'between',
           footer: [
             {
-              label: item.status === 'pending' ? 'Conectar' : 'Abrir detalle',
+              label: item.status === 'pending' ? 'Connect' : 'Open detail',
               variant: 'primary',
               icon: MTS.Icon.get(item.status === 'pending' ? 'link' : 'arrow-right'),
               onClick: function () {
@@ -234,11 +234,11 @@
               }
             },
             {
-              label: 'Verificar',
+              label: 'Check',
               variant: 'ghost',
               icon: MTS.Icon.get('refresh-cw'),
               onClick: function () {
-                notify('info', 'Chequeo manual', 'Se simulo una verificacion puntual para ' + item.title + '.');
+                notify('info', 'Manual check', 'A one-off verification was simulated for ' + item.title + '.');
               }
             }
           ]

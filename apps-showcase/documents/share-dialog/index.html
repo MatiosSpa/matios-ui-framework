@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="share-dialog-page__logo">M</div>
         <div>
           <div class="share-dialog-page__title">Share Dialog</div>
-          <div class="share-dialog-page__subtitle">Permisos por persona y links con alcance controlado</div>
+          <div class="share-dialog-page__subtitle">Per-person permissions and links with controlled scope</div>
         </div>
       </div>
       <div class="share-dialog-page__actions">
@@ -49,18 +49,18 @@
     <main class="share-dialog-page__main mts-grid mts-grid--gap-md">
       <section class="share-dialog-page__hero mts-surface mts-g-col-12">
         <div class="share-dialog-page__eyebrow">Document permissions</div>
-        <h1 class="share-dialog-page__hero-title">Comparte sin perder control de acceso.</h1>
+        <h1 class="share-dialog-page__hero-title">Share without losing access control.</h1>
         <p class="share-dialog-page__hero-copy">
-          Esta vista cubre un caso muy comun de producto real: compartir un archivo con personas o
-          mediante link, controlando permiso, expiracion y owner responsable.
+          This view covers a very common real-product case: sharing a file with people or
+          through a link, controlling permission, expiration and the responsible owner.
         </p>
       </section>
 
       <section class="mts-g-col-12 mts-g-col-xl-7">
         <div class="mts-form-card share-dialog-page__form-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Nuevo acceso</h2>
-            <p class="mts-form-card__subtitle">Define quien entra y con que nivel de permiso.</p>
+            <h2 class="mts-form-card__title">New access</h2>
+            <p class="mts-form-card__subtitle">Define who gets in and with what permission level.</p>
           </div>
           <div id="share-feedback"></div>
           <div class="share-dialog-page__form-grid">
@@ -99,14 +99,14 @@
     });
 
     new MTS.Input('#share-recipient', {
-      label: 'Personas o equipos',
+      label: 'People or teams',
       type: 'text',
       value: 'camila@acme.com, legal@acme.com',
-      placeholder: 'correo o equipo'
+      placeholder: 'email or team'
     });
 
     new MTS.Select('#share-permission', {
-      label: 'Permiso',
+      label: 'Permission',
       options: [
         { value: 'view', label: 'Can view' },
         { value: 'comment', label: 'Can comment' },
@@ -116,28 +116,28 @@
     });
 
     new MTS.Select('#share-expiration', {
-      label: 'Expira',
+      label: 'Expires',
       options: [
-        { value: '7', label: '7 dias' },
-        { value: '14', label: '14 dias' },
-        { value: '30', label: '30 dias' },
-        { value: 'never', label: 'Sin expiracion' }
+        { value: '7', label: '7 days' },
+        { value: '14', label: '14 days' },
+        { value: '30', label: '30 days' },
+        { value: 'never', label: 'No expiration' }
       ],
       value: '14'
     });
 
     new MTS.Button('#share-send-button', {
-      label: 'Enviar acceso',
+      label: 'Send access',
       variant: 'primary',
       block: true,
       iconLeft: MTS.Icon.get('send'),
       onClick: function () {
-        notify('success', 'Invitacion simulada', 'La pantalla deja cubierto el envio de acceso con permiso y expiracion.');
+        notify('success', 'Simulated invitation', 'The screen covers sending access with permission and expiration.');
       }
     });
 
     new MTS.Card('#share-link-card', {
-      title: 'Link compartible',
+      title: 'Shareable link',
       subtitle: 'Access link',
       variant: 'outlined',
       size: 'lg',
@@ -150,30 +150,30 @@
       footerAlign: 'between',
       footer: [
         {
-          label: 'Copiar link',
+          label: 'Copy link',
           variant: 'secondary',
           icon: MTS.Icon.get('share-2'),
-          onClick: function () { notify('info', 'Link copiado', 'El enlace compartible quedo listo para distribuir.'); }
+          onClick: function () { notify('info', 'Link copied', 'The shareable link is ready to distribute.'); }
         },
         {
-          label: 'Desactivar',
+          label: 'Disable',
           variant: 'ghost',
           icon: MTS.Icon.get('alert'),
-          onClick: function () { notify('warning', 'Accion simulada', 'Aqui normalmente revocarias el link publico.'); }
+          onClick: function () { notify('warning', 'Simulated action', 'Here you would normally revoke the public link.'); }
         }
       ]
     });
 
     new MTS.Card('#share-people-card', {
-      title: 'Accesos vigentes',
+      title: 'Active access',
       subtitle: 'People and teams',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="share-dialog-page__people">' +
-          personRow('Camila Soto', 'Can edit', 'Owner del contrato') +
-          personRow('Legal Team', 'Can comment', 'Revision de clausulas') +
-          personRow('Finance Ops', 'Can view', 'Seguimiento comercial') +
+          personRow('Camila Soto', 'Can edit', 'Contract owner') +
+          personRow('Legal Team', 'Can comment', 'Clause review') +
+          personRow('Finance Ops', 'Can view', 'Commercial follow-up') +
         '</div>'
     });
 

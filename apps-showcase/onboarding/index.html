@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="en" data-mts-theme="dark">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Onboarding — Matios UI</title>
@@ -52,7 +52,7 @@ body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-fam
 </style>
 </head>
 <body>
-<div class="app-topbar"><button class="app-topbar-back" onclick="goBack()">&#8592; Volver</button><span class="app-topbar-title">Onboarding</span><span class="app-topbar-badge">Wizard</span></div>
+<div class="app-topbar"><button class="app-topbar-back" onclick="goBack()">&#8592; Back</button><span class="app-topbar-title">Onboarding</span><span class="app-topbar-badge">Wizard</span></div>
 <style>
 .onb-wrap{min-height:calc(100vh - 50px);display:flex;align-items:center;justify-content:center;padding:32px 24px;}
 .onb-card{width:100%;max-width:520px;}
@@ -65,19 +65,19 @@ body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-fam
   <div class="onb-card">
     <div id="onb-stepper" style="margin-bottom:28px;"></div>
     <div class="app-card">
-      <!-- Paso 1: Bienvenida -->
+      <!-- Step 1: Welcome -->
       <div class="onb-step active" id="onb-0">
         <div style="text-align:center;padding:12px 0;">
           <div class="onb-icon">👋</div>
-          <h2 style="margin:0 0 8px;font-size:22px;font-weight:800;">¡Bienvenido a Matios!</h2>
-          <p style="margin:0 0 24px;font-size:14px;color:var(--mts-text-color--muted);">Vamos a configurar tu espacio de trabajo en 3 pasos simples.</p>
+          <h2 style="margin:0 0 8px;font-size:22px;font-weight:800;">Welcome to Matios!</h2>
+          <p style="margin:0 0 24px;font-size:14px;color:var(--mts-text-color--muted);">Let's set up your workspace in 3 simple steps.</p>
           <div id="btn-onb-start"></div>
         </div>
       </div>
-      <!-- Paso 2: Workspace -->
+      <!-- Step 2: Workspace -->
       <div class="onb-step" id="onb-1">
-        <div><h3 style="margin:0 0 4px;font-size:16px;font-weight:700;">Tu workspace</h3>
-        <p style="margin:0;font-size:13px;color:var(--mts-text-color--muted);">Personaliza tu espacio de trabajo</p></div>
+        <div><h3 style="margin:0 0 4px;font-size:16px;font-weight:700;">Your workspace</h3>
+        <p style="margin:0;font-size:13px;color:var(--mts-text-color--muted);">Customize your workspace</p></div>
         <div id="onb-workspace-name"></div>
         <div id="onb-industry"></div>
         <div id="onb-team-size"></div>
@@ -86,10 +86,10 @@ body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-fam
           <div id="btn-onb-next1"></div>
         </div>
       </div>
-      <!-- Paso 3: Equipo -->
+      <!-- Step 3: Team -->
       <div class="onb-step" id="onb-2">
-        <div><h3 style="margin:0 0 4px;font-size:16px;font-weight:700;">Invita a tu equipo</h3>
-        <p style="margin:0;font-size:13px;color:var(--mts-text-color--muted);">Agrega los emails de tus colaboradores</p></div>
+        <div><h3 style="margin:0 0 4px;font-size:16px;font-weight:700;">Invite your team</h3>
+        <p style="margin:0;font-size:13px;color:var(--mts-text-color--muted);">Add your collaborators' emails</p></div>
         <div id="onb-emails"></div>
         <div id="onb-rol"></div>
         <div class="onb-actions">
@@ -97,13 +97,13 @@ body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-fam
           <div id="btn-onb-next2"></div>
         </div>
       </div>
-      <!-- Paso 4: Listo -->
+      <!-- Step 4: Done -->
       <div class="onb-step" id="onb-3">
         <div style="text-align:center;padding:16px 0;">
           <div class="onb-icon">🚀</div>
-          <h2 style="margin:0 0 8px;font-size:22px;font-weight:800;">¡Todo listo!</h2>
-          <p style="margin:0 0 8px;font-size:14px;color:var(--mts-text-color--muted);">Tu workspace <strong id="onb-ws-name-final"></strong> está configurado.</p>
-          <p style="margin:0 0 24px;font-size:13px;color:var(--mts-text-color--muted);">Las invitaciones fueron enviadas a tu equipo.</p>
+          <h2 style="margin:0 0 8px;font-size:22px;font-weight:800;">All set!</h2>
+          <p style="margin:0 0 8px;font-size:14px;color:var(--mts-text-color--muted);">Your workspace <strong id="onb-ws-name-final"></strong> is configured.</p>
+          <p style="margin:0 0 24px;font-size:13px;color:var(--mts-text-color--muted);">Invitations have been sent to your team.</p>
           <div id="btn-onb-finish"></div>
         </div>
       </div>
@@ -126,34 +126,34 @@ var onbStep=0;
 var stepper=new MTS.Stepper('#onb-stepper',{
   direction:'horizontal',
   steps:[
-    {id:'s0',label:'Inicio'},
+    {id:'s0',label:'Start'},
     {id:'s1',label:'Workspace'},
-    {id:'s2',label:'Equipo'},
-    {id:'s3',label:'Listo'},
+    {id:'s2',label:'Team'},
+    {id:'s3',label:'Done'},
   ],
   active:0,
 });
-new MTS.Button('#btn-onb-start',{label:'Comenzar →',variant:'primary',onClick:function(){goOnb(1);}});
-var wsNameInp=new MTS.Input('#onb-workspace-name',{label:'Nombre del workspace',placeholder:'Ej: Acme Corp',value:''});
-var industSel=new MTS.Select('#onb-industry',{label:'Industria',placeholder:'Selecciona...',options:[
-  {value:'tech',label:'Tecnología'},{value:'salud',label:'Salud'},{value:'edu',label:'Educación'},
-  {value:'fin',label:'Finanzas'},{value:'retail',label:'Retail'},{value:'otro',label:'Otro'},
+new MTS.Button('#btn-onb-start',{label:'Get started →',variant:'primary',onClick:function(){goOnb(1);}});
+var wsNameInp=new MTS.Input('#onb-workspace-name',{label:'Workspace name',placeholder:'e.g. Acme Corp',value:''});
+var industSel=new MTS.Select('#onb-industry',{label:'Industry',placeholder:'Select...',options:[
+  {value:'tech',label:'Technology'},{value:'salud',label:'Healthcare'},{value:'edu',label:'Education'},
+  {value:'fin',label:'Finance'},{value:'retail',label:'Retail'},{value:'otro',label:'Other'},
 ]});
-var teamSel=new MTS.Select('#onb-team-size',{label:'Tamaño del equipo',placeholder:'Selecciona...',options:[
-  {value:'1',label:'Solo yo'},{value:'2-5',label:'2-5 personas'},{value:'6-20',label:'6-20 personas'},
-  {value:'21+',label:'21+ personas'},
+var teamSel=new MTS.Select('#onb-team-size',{label:'Team size',placeholder:'Select...',options:[
+  {value:'1',label:'Just me'},{value:'2-5',label:'2-5 people'},{value:'6-20',label:'6-20 people'},
+  {value:'21+',label:'21+ people'},
 ]});
-new MTS.Button('#btn-onb-back1',{label:'← Atrás',variant:'ghost',onClick:function(){goOnb(0);}});
-new MTS.Button('#btn-onb-next1',{label:'Siguiente →',variant:'primary',onClick:function(e,inst){
-  if(!wsNameInp.getValue().trim()){wsNameInp.setError('El nombre es obligatorio');return;}
+new MTS.Button('#btn-onb-back1',{label:'← Back',variant:'ghost',onClick:function(){goOnb(0);}});
+new MTS.Button('#btn-onb-next1',{label:'Next →',variant:'primary',onClick:function(e,inst){
+  if(!wsNameInp.getValue().trim()){wsNameInp.setError('Name is required');return;}
   goOnb(2);
 }});
-var emailInp=new MTS.Input('#onb-emails',{label:'Emails del equipo',placeholder:'juan@empresa.com, ana@empresa.com'});
-var rolSel=new MTS.Select('#onb-rol',{label:'Rol por defecto',options:[
-  {value:'admin',label:'Administrador'},{value:'editor',label:'Editor'},{value:'viewer',label:'Visualizador'},
+var emailInp=new MTS.Input('#onb-emails',{label:'Team emails',placeholder:'juan@empresa.com, ana@empresa.com'});
+var rolSel=new MTS.Select('#onb-rol',{label:'Default role',options:[
+  {value:'admin',label:'Administrator'},{value:'editor',label:'Editor'},{value:'viewer',label:'Viewer'},
 ],value:'editor'});
-new MTS.Button('#btn-onb-back2',{label:'← Atrás',variant:'ghost',onClick:function(){goOnb(1);}});
-new MTS.Button('#btn-onb-next2',{label:'Finalizar configuración',variant:'primary',onClick:function(e,inst){
+new MTS.Button('#btn-onb-back2',{label:'← Back',variant:'ghost',onClick:function(){goOnb(1);}});
+new MTS.Button('#btn-onb-next2',{label:'Finish setup',variant:'primary',onClick:function(e,inst){
   inst.setLoading(true);
   setTimeout(function(){
     inst.setLoading(false);
@@ -161,7 +161,7 @@ new MTS.Button('#btn-onb-next2',{label:'Finalizar configuración',variant:'prima
     goOnb(3);
   },1500);
 }});
-new MTS.Button('#btn-onb-finish',{label:'Ir al dashboard →',variant:'primary',onClick:function(){goBack();}});
+new MTS.Button('#btn-onb-finish',{label:'Go to dashboard →',variant:'primary',onClick:function(){goBack();}});
 
 function goOnb(n){
   document.querySelectorAll('.onb-step').forEach(function(el){el.classList.remove('active');});

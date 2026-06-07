@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="en" data-mts-theme="dark">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Dashboard — Matios UI</title>
@@ -51,7 +51,7 @@ body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-fam
 </style>
 </head>
 <body>
-<div class="app-topbar"><button class="app-topbar-back" onclick="goBack()">&#8592; Volver</button><span class="app-topbar-title">Dashboard</span><span class="app-topbar-badge">Métricas</span></div>
+<div class="app-topbar"><button class="app-topbar-back" onclick="goBack()">&#8592; Back</button><span class="app-topbar-title">Dashboard</span><span class="app-topbar-badge">Metrics</span></div>
 <style>
 .dash-content{padding:20px 24px;max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:24px;}
 .dash-kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
@@ -64,12 +64,12 @@ body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-fam
 @media(max-width:640px){.dash-row{grid-template-columns:1fr;}}
 </style>
 <div class="dash-content">
-  <!-- Saludo -->
+  <!-- Greeting -->
   <div style="display:flex;align-items:center;gap:12px;">
     <div id="dash-av"></div>
     <div>
-      <div style="font-size:18px;font-weight:800;">Buenos días, Juan 👋</div>
-      <div style="font-size:13px;color:var(--mts-text-color--muted);">Lunes 30 de marzo, 2026</div>
+      <div style="font-size:18px;font-weight:800;">Good morning, Juan 👋</div>
+      <div style="font-size:13px;color:var(--mts-text-color--muted);">Monday, March 30, 2026</div>
     </div>
   </div>
 
@@ -79,16 +79,16 @@ body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-fam
     <div id="kpi-3"></div><div id="kpi-4"></div>
   </div>
 
-  <!-- Fila principal -->
+  <!-- Main row -->
   <div class="dash-row">
-    <!-- Actividad reciente -->
+    <!-- Recent activity -->
     <div class="app-card">
-      <div class="app-label" style="margin-bottom:14px;">Actividad reciente</div>
+      <div class="app-label" style="margin-bottom:14px;">Recent activity</div>
       <div id="dash-timeline"></div>
     </div>
-    <!-- Estado de servicios -->
+    <!-- Service status -->
     <div class="app-card">
-      <div class="app-label" style="margin-bottom:16px;">Estado de servicios</div>
+      <div class="app-label" style="margin-bottom:16px;">Service status</div>
       <div style="display:flex;flex-direction:column;gap:16px;">
         <div id="prog-api"></div>
         <div id="prog-db"></div>
@@ -98,12 +98,12 @@ body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-fam
     </div>
   </div>
 
-  <!-- Tabla últimos proyectos -->
+  <!-- Recent projects table -->
   <div class="app-card">
-    <div class="app-label" style="margin-bottom:14px;">Proyectos recientes</div>
+    <div class="app-label" style="margin-bottom:14px;">Recent projects</div>
     <table class="dash-table">
       <thead><tr>
-        <th>Proyecto</th><th>Estado</th><th>Progreso</th><th>Equipo</th><th>Vence</th>
+        <th>Project</th><th>Status</th><th>Progress</th><th>Team</th><th>Due</th>
       </tr></thead>
       <tbody id="dash-projects"></tbody>
     </table>
@@ -123,32 +123,32 @@ function goBack(){try{if(window.parent&&window.parent!==window){window.parent.po
 
 new MTS.Avatar('#dash-av',{name:'Juan Pérez',size:'lg',status:'online'});
 
-new MTS.KPICard('#kpi-1',{label:'Ingresos del mes',value:'$84,320',unit:'',trend:12.5,trendLabel:'vs mes anterior',sparkline:[42,38,55,60,48,72,65,84],variant:'success',onClick:function(){}});
-new MTS.KPICard('#kpi-2',{label:'Usuarios activos',value:'3,842',trend:8.3,trendLabel:'vs semana pasada',sparkline:[90,85,92,88,95,91,98,100],variant:'primary'});
-new MTS.KPICard('#kpi-3',{label:'Proyectos activos',value:'24',trend:-2.1,trendLabel:'vs ayer',sparkline:[28,25,27,26,24,23,24,24],variant:'warning'});
-new MTS.KPICard('#kpi-4',{label:'Tickets abiertos',value:'7',trend:41.0,trendLabel:'últimas 24h',sparkline:[2,1,3,2,4,5,6,7],variant:'danger'});
+new MTS.KPICard('#kpi-1',{label:'Monthly revenue',value:'$84,320',unit:'',trend:12.5,trendLabel:'vs last month',sparkline:[42,38,55,60,48,72,65,84],variant:'success',onClick:function(){}});
+new MTS.KPICard('#kpi-2',{label:'Active users',value:'3,842',trend:8.3,trendLabel:'vs last week',sparkline:[90,85,92,88,95,91,98,100],variant:'primary'});
+new MTS.KPICard('#kpi-3',{label:'Active projects',value:'24',trend:-2.1,trendLabel:'vs yesterday',sparkline:[28,25,27,26,24,23,24,24],variant:'warning'});
+new MTS.KPICard('#kpi-4',{label:'Open tickets',value:'7',trend:41.0,trendLabel:'last 24h',sparkline:[2,1,3,2,4,5,6,7],variant:'danger'});
 
 new MTS.Timeline('#dash-timeline',{
   direction:'vertical',align:'left',
   events:[
-    {id:'t1',title:'Nuevo usuario registrado',date:'Hace 5 min',badge:{label:'Nuevo',variant:'success'}},
-    {id:'t2',title:'Deploy completado — v2.1.4',date:'Hace 1h',badge:{label:'Deploy',variant:'primary'}},
-    {id:'t3',title:'Backup automático ejecutado',date:'Hace 3h',badge:{label:'Sistema',variant:'default'}},
-    {id:'t4',title:'Error 500 en API /payments',date:'Hace 4h',badge:{label:'Error',variant:'danger'}},
-    {id:'t5',title:'Informe mensual generado',date:'Ayer 09:00',badge:{label:'Reporte',variant:'info'}},
+    {id:'t1',title:'New user registered',date:'5 min ago',badge:{label:'New',variant:'success'}},
+    {id:'t2',title:'Deploy completed — v2.1.4',date:'1h ago',badge:{label:'Deploy',variant:'primary'}},
+    {id:'t3',title:'Automatic backup run',date:'3h ago',badge:{label:'System',variant:'default'}},
+    {id:'t4',title:'Error 500 in API /payments',date:'4h ago',badge:{label:'Error',variant:'danger'}},
+    {id:'t5',title:'Monthly report generated',date:'Yesterday 09:00',badge:{label:'Report',variant:'info'}},
   ],
 });
 
-new MTS.Progress('#prog-api',   {value:99,label:'API Principal',   showLabel:true,showValue:true,variant:'success'});
-new MTS.Progress('#prog-db',    {value:87,label:'Base de datos',   showLabel:true,showValue:true,variant:'success'});
+new MTS.Progress('#prog-api',   {value:99,label:'Main API',        showLabel:true,showValue:true,variant:'success'});
+new MTS.Progress('#prog-db',    {value:87,label:'Database',        showLabel:true,showValue:true,variant:'success'});
 new MTS.Progress('#prog-cdn',   {value:62,label:'CDN / Storage',   showLabel:true,showValue:true,variant:'warning'});
-new MTS.Progress('#prog-queue', {value:34,label:'Cola de trabajos',showLabel:true,showValue:true,variant:'danger'});
+new MTS.Progress('#prog-queue', {value:34,label:'Job queue',       showLabel:true,showValue:true,variant:'danger'});
 
 var PROJECTS=[
-  {name:'Portal Clientes',status:'En curso',   statusV:'info',   progress:68, team:['Juan P.','María A.','Carlos R.'], due:'15 Abr'},
-  {name:'App Mobile v2',  status:'Revisión',   statusV:'warning',progress:91, team:['Ana T.','Pedro D.'],              due:'05 Abr'},
-  {name:'API Gateway',    status:'Completado', statusV:'success',progress:100,team:['Rosa M.'],                        due:'28 Mar'},
-  {name:'Dashboard BI',   status:'Pausado',    statusV:'default',progress:42, team:['Luis G.','Sofía C.'],             due:'30 May'},
+  {name:'Customer Portal',status:'In progress', statusV:'info',   progress:68, team:['Juan P.','María A.','Carlos R.'], due:'Apr 15'},
+  {name:'App Mobile v2',  status:'In review',   statusV:'warning',progress:91, team:['Ana T.','Pedro D.'],              due:'Apr 05'},
+  {name:'API Gateway',    status:'Completed',   statusV:'success',progress:100,team:['Rosa M.'],                        due:'Mar 28'},
+  {name:'Dashboard BI',   status:'Paused',      statusV:'default',progress:42, team:['Luis G.','Sofía C.'],             due:'May 30'},
 ];
 var tbody=document.getElementById('dash-projects');
 PROJECTS.forEach(function(p){

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -34,7 +34,7 @@
         <div class="usage-limits-page__logo">M</div>
         <div>
           <div class="usage-limits-page__title">Usage and Limits</div>
-          <div class="usage-limits-page__subtitle">Consumo real de recursos y umbrales del plan actual</div>
+          <div class="usage-limits-page__subtitle">Real resource consumption and thresholds for the current plan</div>
         </div>
       </div>
       <div class="usage-limits-page__actions">
@@ -47,10 +47,10 @@
       <section class="usage-limits-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="usage-limits-page__eyebrow">Operational consumption</div>
-          <h1 class="usage-limits-page__hero-title">Entiende rápido dónde se acerca el límite antes de que el plan se vuelva fricción.</h1>
+          <h1 class="usage-limits-page__hero-title">Quickly understand where you're approaching the limit before the plan becomes friction.</h1>
           <p class="usage-limits-page__hero-copy">
-            Esta pantalla separa uso ejecutivo de dashboard: muestra umbrales concretos, recursos
-            con riesgo y la próxima decisión de negocio u operación.
+            This screen separates executive usage from the dashboard: it shows concrete thresholds,
+            at-risk resources and the next business or operations decision.
           </p>
         </div>
       </section>
@@ -81,60 +81,60 @@
   </script>
   <script>
     new MTS.Button('#usage-export-button', {
-      label: 'Exportar uso',
+      label: 'Export usage',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('download'),
       onClick: function () {
-        notify('success', 'Uso exportado', 'Se simulo la exportacion de consumo y limites del ciclo actual.');
+        notify('success', 'Usage exported', 'The export of consumption and limits for the current cycle was simulated.');
       }
     });
 
     new MTS.Button('#usage-upgrade-button', {
-      label: 'Evaluar cambio',
+      label: 'Evaluate change',
       variant: 'primary',
       iconLeft: MTS.Icon.get('arrow-up-right'),
       onClick: function () {
-        notify('info', 'Cambio de plan', 'La UI deja claro el siguiente paso para ampliar limites o mover de plan.');
+        notify('info', 'Plan change', 'The UI makes clear the next step to expand limits or switch plans.');
       }
     });
 
     new MTS.Card('#usage-overview-card', {
-      title: 'Uso actual del ciclo',
+      title: 'Current cycle usage',
       subtitle: 'Scale Annual',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="usage-limits-page__usage-stack">' +
-          usageRow('Seats', '42 de 50', 84) +
-          usageRow('API requests', '780k de 1M', 78) +
-          usageRow('Storage', '186 de 250 GB', 74) +
-          usageRow('Automations', '138 de 150', 92) +
+          usageRow('Seats', '42 of 50', 84) +
+          usageRow('API requests', '780k of 1M', 78) +
+          usageRow('Storage', '186 of 250 GB', 74) +
+          usageRow('Automations', '138 of 150', 92) +
         '</div>'
     });
 
     new MTS.Card('#usage-risk-card', {
-      title: 'Recursos en vigilancia',
-      subtitle: 'Prioridad operativa',
+      title: 'Resources under watch',
+      subtitle: 'Operational priority',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="usage-limits-page__risk-list">' +
-          riskRow('Automations', 'Quedan 12 ejecuciones antes del limite del plan.', 'Alta') +
-          riskRow('Seats', 'Finance y Support proyectan 5 altas durante la semana.', 'Media') +
-          riskRow('API requests', 'El ritmo actual se mantiene dentro del umbral, pero ya consume 78%.', 'Media') +
+          riskRow('Automations', '12 runs remain before the plan limit.', 'High') +
+          riskRow('Seats', 'Finance and Support project 5 new seats during the week.', 'Medium') +
+          riskRow('API requests', 'The current pace stays within the threshold, but already consumes 78%.', 'Medium') +
         '</div>'
     });
 
     new MTS.Card('#usage-next-step-card', {
-      title: 'Siguiente paso sugerido',
-      subtitle: 'Decision recomendada',
+      title: 'Suggested next step',
+      subtitle: 'Recommended decision',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="usage-limits-page__next-step">' +
-          '<p>Si se aprueba una nueva tanda de automatizaciones y el equipo suma seats, conviene preparar ampliacion de plan antes del cierre del ciclo.</p>' +
-          '<div class="usage-limits-page__next-chip">Plan sugerido: Scale Plus</div>' +
-          '<div class="usage-limits-page__next-chip">Riesgo inmediato: automations</div>' +
+          '<p>If a new batch of automations is approved and the team adds seats, it is wise to prepare a plan upgrade before the cycle closes.</p>' +
+          '<div class="usage-limits-page__next-chip">Suggested plan: Scale Plus</div>' +
+          '<div class="usage-limits-page__next-chip">Immediate risk: automations</div>' +
         '</div>'
     });
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -29,10 +29,10 @@
     <main class="system-error-page__panel mts-surface">
       <div class="system-error-page__icon"><i class="mts-icon mts-icon-activity"></i></div>
       <div class="system-error-page__badge"><span id="error-500-badge"></span></div>
-      <h1>Algo fallo del lado del servicio.</h1>
+      <h1>Something went wrong on the service side.</h1>
       <p>
-        Esta pantalla cubre una falla inesperada con el tono correcto para producto real: explica
-        que paso, ofrece reintento y da una salida hacia estado o soporte.
+        This screen handles an unexpected failure with the right tone for a real product: it explains
+        what happened, offers a retry, and provides a path to status or support.
       </p>
       <div class="system-error-page__actions">
         <div id="error-500-retry"></div>
@@ -60,20 +60,20 @@
     });
 
     new MTS.Button('#error-500-retry', {
-      label: 'Reintentar',
+      label: 'Retry',
       variant: 'primary',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
-        notify('warning', 'Reintento simulado', 'Aqui normalmente repetiras la ultima accion del usuario.');
+        notify('warning', 'Simulated retry', 'This is normally where you would repeat the user\'s last action.');
       }
     });
 
     new MTS.Button('#error-500-status', {
-      label: 'Ver estado',
+      label: 'View status',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('activity'),
       onClick: function () {
-        notify('info', 'Estado simulado', 'La salida hacia status page o soporte quedo cubierta.');
+        notify('info', 'Simulated status', 'The path to a status page or support is covered.');
       }
     });
 

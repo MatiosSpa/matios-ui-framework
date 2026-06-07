@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -65,7 +65,7 @@
         stages: 3,
         owner: 'Security Ops',
         module: 'Roles',
-        summary: 'Permite acceso temporal de Billing Editor durante cierres operativos con expiracion automatica.'
+        summary: 'Grants temporary Billing Editor access during operational closes with automatic expiration.'
       },
       {
         id: 'WFD-026',
@@ -78,7 +78,7 @@
         stages: 4,
         owner: 'Legal Ops',
         module: 'Documents',
-        summary: 'Coordina revision legal, aprobacion final y publicacion escalonada en el knowledge hub.'
+        summary: 'Coordinates legal review, final approval and staged publication in the knowledge hub.'
       },
       {
         id: 'WFD-019',
@@ -91,7 +91,7 @@
         stages: 4,
         owner: 'Finance Governance',
         module: 'Billing',
-        summary: 'Activa doble aprobacion financiera cuando el monto supera el umbral del plan base.'
+        summary: 'Triggers dual financial approval when the amount exceeds the base plan threshold.'
       },
       {
         id: 'WFD-014',
@@ -104,19 +104,19 @@
         stages: 3,
         owner: 'Admin Ops',
         module: 'Admin',
-        summary: 'Agrupa revision contractual, acceso inicial y confirmacion de data-processing antes del alta.'
+        summary: 'Bundles contract review, initial access and data-processing confirmation before activation.'
       }
     ];
 
     new MTS.Card('#workflow-list-panel', {
       title: 'Workflow List',
-      subtitle: 'Catalogo de definiciones',
+      subtitle: 'Definitions catalog',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
           '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3 mts-flex--wrap">' +
-            '<p class="mts-text--sm mts-text-color--muted mts-m-0">Tabla base de definiciones publicadas y borradores activos.</p>' +
+            '<p class="mts-text--sm mts-text-color--muted mts-m-0">Base table of published definitions and active drafts.</p>' +
             '<span id="workflow-list-results-meta" class="mts-badge mts-badge--info mts-badge--sm">0 workflows</span>' +
           '</div>' +
           '<div id="workflow-list-table"></div>' +
@@ -124,7 +124,7 @@
       ,
       actions: [
         {
-          label: 'Nuevo workflow',
+          label: 'New workflow',
           variant: 'primary',
           icon: MTS.Icon.get('plus'),
           onClick: function () { openScreen('../workflow-builder/index.html'); }
@@ -159,13 +159,13 @@
             '<thead>' +
               '<tr>' +
                 '<th class="mts-table__th">Workflow</th>' +
-                '<th class="mts-table__th">Tipo</th>' +
-                '<th class="mts-table__th">Modulo</th>' +
+                '<th class="mts-table__th">Type</th>' +
+                '<th class="mts-table__th">Module</th>' +
                 '<th class="mts-table__th">Owner</th>' +
                 '<th class="mts-table__th">Version</th>' +
-                '<th class="mts-table__th">Etapas</th>' +
-                '<th class="mts-table__th">Estado</th>' +
-                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+                '<th class="mts-table__th">Stages</th>' +
+                '<th class="mts-table__th">Status</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Actions</th>' +
               '</tr>' +
             '</thead>' +
             '<tbody>' +
@@ -185,8 +185,8 @@
                     '<td class="mts-table__td">' + escapeHtml(String(item.stages)) + '</td>' +
                     '<td class="mts-table__td"><span class="mts-badge mts-badge--' + badgeVariant(item.status) + ' mts-badge--sm">' + escapeHtml(item.statusLabel) + '</span></td>' +
                     '<td class="mts-table__td mts-table__td--actions">' +
-                      actionButton('edit', item.id, 'edit', 'Editar') +
-                      actionButton('publish', item.id, 'git-branch', 'Publicar') +
+                      actionButton('edit', item.id, 'edit', 'Edit') +
+                      actionButton('publish', item.id, 'git-branch', 'Publish') +
                     '</td>' +
                   '</tr>';
               }).join('') +
@@ -211,7 +211,7 @@
       }
 
       if (action === 'publish') {
-        notify('success', workflow.id + ' quedo lista para una nueva iteracion dentro del ejemplo.');
+        notify('success', workflow.id + ' is ready for a new iteration within the example.');
       }
     });
 

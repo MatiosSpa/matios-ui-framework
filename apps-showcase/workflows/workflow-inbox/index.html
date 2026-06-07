@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Bandeja de workflows - Matios UI</title>
+  <title>Workflow inbox - Matios UI</title>
   <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../base/matios-ui-base.css">
@@ -53,7 +53,7 @@
         stage: 'Security review',
         workflowTypeLabel: 'Access',
         priority: 'high',
-        priorityLabel: 'Alta',
+        priorityLabel: 'High',
         due: 'SLA 2 h'
       },
       {
@@ -64,8 +64,8 @@
         stage: 'Parallel review',
         workflowTypeLabel: 'Document',
         priority: 'medium',
-        priorityLabel: 'Media',
-        due: 'SLA hoy'
+        priorityLabel: 'Medium',
+        due: 'SLA today'
       },
       {
         id: 'WF-082',
@@ -75,8 +75,8 @@
         stage: 'Finance owner approval',
         workflowTypeLabel: 'Budget',
         priority: 'high',
-        priorityLabel: 'Alta',
-        due: 'Expirada 45 m'
+        priorityLabel: 'High',
+        due: 'Expired 45 m'
       },
       {
         id: 'WF-061',
@@ -86,31 +86,31 @@
         stage: 'Final confirmation',
         workflowTypeLabel: 'Vendor',
         priority: 'low',
-        priorityLabel: 'Baja',
+        priorityLabel: 'Low',
         due: 'SLA 48 h'
       }
     ];
 
     new MTS.Card('#workflow-inbox-panel', {
-      title: 'Bandeja de workflows',
-      subtitle: 'Tareas pendientes',
+      title: 'Workflow inbox',
+      subtitle: 'Pending tasks',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
           '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3 mts-flex--wrap">' +
-            '<p class="mts-text--sm mts-text-color--muted mts-m-0">Tabla operativa de tareas pendientes con prioridad, modulo y etapa actual.</p>' +
-            '<span id="workflow-inbox-count" class="mts-badge mts-badge--info mts-badge--sm">0 tareas</span>' +
+            '<p class="mts-text--sm mts-text-color--muted mts-m-0">Operational table of pending tasks with priority, module and current stage.</p>' +
+            '<span id="workflow-inbox-count" class="mts-badge mts-badge--info mts-badge--sm">0 tasks</span>' +
           '</div>' +
           '<div id="workflow-inbox-table"></div>' +
         '</div>',
       actions: [
         {
-          label: 'Refrescar',
+          label: 'Refresh',
           variant: 'secondary',
           icon: MTS.Icon.get('refresh-cw'),
           onClick: function () {
-            showToast('success', 'La lista se sincronizo con el ultimo estado de tareas pendientes.');
+            showToast('success', 'The list synced with the latest pending task status.');
           }
         }
       ]
@@ -127,7 +127,7 @@
 
       if (action === 'detail') openScreen('../workflow-task-detail/index.html');
       if (action === 'approve') {
-        showToast('success', 'La accion se simularia sobre ' + task.title + '.');
+        showToast('success', 'The action would be simulated on ' + task.title + '.');
       }
     });
 
@@ -169,7 +169,7 @@
     }
 
     function renderTable() {
-      document.getElementById('workflow-inbox-count').textContent = tasks.length + (tasks.length === 1 ? ' tarea' : ' tareas');
+      document.getElementById('workflow-inbox-count').textContent = tasks.length + (tasks.length === 1 ? ' task' : ' tasks');
 
       document.getElementById('workflow-inbox-table').innerHTML =
         '<div class="mts-table-wrap">' +
@@ -177,13 +177,13 @@
             '<thead>' +
               '<tr>' +
                 '<th class="mts-table__th">Workflow</th>' +
-                '<th class="mts-table__th">Solicitante</th>' +
-                '<th class="mts-table__th">Modulo</th>' +
-                '<th class="mts-table__th">Etapa</th>' +
-                '<th class="mts-table__th">Tipo</th>' +
-                '<th class="mts-table__th">Prioridad</th>' +
+                '<th class="mts-table__th">Requester</th>' +
+                '<th class="mts-table__th">Module</th>' +
+                '<th class="mts-table__th">Stage</th>' +
+                '<th class="mts-table__th">Type</th>' +
+                '<th class="mts-table__th">Priority</th>' +
                 '<th class="mts-table__th">SLA</th>' +
-                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Actions</th>' +
               '</tr>' +
             '</thead>' +
             '<tbody>' +
@@ -203,8 +203,8 @@
                     '<td class="mts-table__td"><span class="mts-badge ' + priorityBadgeClass(task.priority) + ' mts-badge--sm">' + escapeHtml(task.priorityLabel) + '</span></td>' +
                     '<td class="mts-table__td">' + escapeHtml(task.due) + '</td>' +
                     '<td class="mts-table__td mts-table__td--actions">' +
-                      actionButton('detail', task.id, 'arrow-right', 'Ver') +
-                      actionButton('approve', task.id, 'check-circle', 'Aprobar') +
+                      actionButton('detail', task.id, 'arrow-right', 'View') +
+                      actionButton('approve', task.id, 'check-circle', 'Approve') +
                     '</td>' +
                   '</tr>';
               }).join('') +

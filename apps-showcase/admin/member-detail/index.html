@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -36,7 +36,7 @@
         <div class="member-detail-page__logo">M</div>
         <div>
           <div class="member-detail-page__title">Member Detail</div>
-          <div class="member-detail-page__subtitle">Acceso efectivo, sesiones y contexto operativo del miembro</div>
+          <div class="member-detail-page__subtitle">Effective access, sessions and operational context for the member</div>
         </div>
       </div>
       <div class="member-detail-page__actions">
@@ -52,7 +52,7 @@
           <div>
             <div class="member-detail-page__eyebrow">Admin member profile</div>
             <h1 class="member-detail-page__hero-title">Camila Soto</h1>
-            <p class="member-detail-page__hero-copy">Owner del workspace con foco en operaciones, billing y coordinacion de acceso para equipos internos.</p>
+            <p class="member-detail-page__hero-copy">Workspace owner focused on operations, billing and access coordination for internal teams.</p>
             <div class="member-detail-page__badges">
               <span id="member-badge-role"></span>
               <span id="member-badge-status"></span>
@@ -92,18 +92,18 @@
   </script>
   <script>
     new MTS.Button('#member-detail-back', {
-      label: 'Volver a members',
+      label: 'Back to members',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('arrow-left'),
       onClick: function () { openScreen('../members-list/index.html'); }
     });
 
     new MTS.Button('#member-detail-edit', {
-      label: 'Editar acceso',
+      label: 'Edit access',
       variant: 'primary',
       iconLeft: MTS.Icon.get('shield'),
       onClick: function () {
-        notify('success', 'Acceso revisado', 'La ficha deja planteado el punto de partida para editar rol, estado o perfiles.');
+        notify('success', 'Access reviewed', 'This profile sets the starting point for editing role, status or profiles.');
       }
     });
 
@@ -120,35 +120,35 @@
     });
 
     new MTS.Badge('#member-badge-status', {
-      label: 'Activo',
+      label: 'Active',
       variant: 'success',
       size: 'sm'
     });
 
     new MTS.Card('#member-detail-summary-card', {
-      title: 'Resumen del miembro',
-      subtitle: 'Contexto base',
+      title: 'Member summary',
+      subtitle: 'Base context',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="member-detail-page__info-grid">' +
-          infoCell('Correo', 'camila@matios.dev') +
-          infoCell('Cargo', 'Operations Lead') +
+          infoCell('Email', 'camila@matios.dev') +
+          infoCell('Title', 'Operations Lead') +
           infoCell('Workspace', 'Matios Studio') +
-          infoCell('Ultimo acceso', 'Hoy, 09:14') +
-          infoCell('Autenticacion', 'SSO + segundo factor') +
-          infoCell('Invitada por', 'Founder account') +
+          infoCell('Last access', 'Today, 09:14') +
+          infoCell('Authentication', 'SSO + second factor') +
+          infoCell('Invited by', 'Founder account') +
         '</div>'
     });
 
     new MTS.Card('#member-detail-access-card', {
-      title: 'Acceso efectivo',
-      subtitle: 'Permisos y ownership',
+      title: 'Effective access',
+      subtitle: 'Permissions and ownership',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="member-detail-page__access">' +
-          '<p>Camila mantiene ownership del workspace, billing, seguridad y configuracion compartida. El acceso fino a modulos operativos se reparte por equipos y perfiles.</p>' +
+          '<p>Camila keeps ownership of the workspace, billing, security and shared configuration. Fine-grained access to operational modules is distributed by teams and profiles.</p>' +
           '<div class="member-detail-page__pill-list">' +
             pill('Workspace owner') +
             pill('Billing admin') +
@@ -160,60 +160,60 @@
       footerAlign: 'between',
       footer: [
         {
-          label: 'Forzar logout',
+          label: 'Force logout',
           variant: 'secondary',
           icon: MTS.Icon.get('refresh-cw'),
           onClick: function () {
-            notify('warning', 'Sesion forzada', 'La accion simula un cierre remoto de sesiones activas.');
+            notify('warning', 'Session forced', 'This action simulates a remote sign-out of active sessions.');
           }
         },
         {
-          label: 'Pausar acceso',
+          label: 'Pause access',
           variant: 'ghost',
           icon: MTS.Icon.get('pause'),
           onClick: function () {
-            notify('info', 'Accion simulada', 'Aqui entraria una confirmacion antes de pausar el acceso.');
+            notify('info', 'Simulated action', 'A confirmation would appear here before pausing access.');
           }
         }
       ]
     });
 
     new MTS.Card('#member-detail-activity-card', {
-      title: 'Actividad administrativa',
-      subtitle: 'Ultimos eventos',
+      title: 'Administrative activity',
+      subtitle: 'Latest events',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="member-detail-page__timeline">' +
-          timelineRow('Hoy, 09:14', 'Ingreso validado por SSO', 'Accedio desde MacBook Pro con segundo factor correcto.') +
-          timelineRow('Ayer, 17:42', 'Cambio de metodo de pago', 'Reviso el metodo principal de billing y dejo la tarjeta verificada.') +
-          timelineRow('18 abril', 'Invitacion aprobada', 'Autorizo el ingreso de dos perfiles para Finance.') +
+          timelineRow('Today, 09:14', 'Login validated by SSO', 'Signed in from MacBook Pro with the correct second factor.') +
+          timelineRow('Yesterday, 17:42', 'Payment method changed', 'Reviewed the primary billing method and left the card verified.') +
+          timelineRow('April 18', 'Invitation approved', 'Authorized the addition of two profiles for Finance.') +
         '</div>'
     });
 
     new MTS.Card('#member-detail-sessions-card', {
-      title: 'Sesiones recientes',
-      subtitle: 'Dispositivos',
+      title: 'Recent sessions',
+      subtitle: 'Devices',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="member-detail-page__session-list">' +
-          sessionRow('MacBook Pro', 'Chrome · Santiago', 'Activa ahora') +
-          sessionRow('iPhone 15', 'Safari · Santiago', 'Hace 2 h') +
-          sessionRow('Windows workstation', 'Edge · Remote office', 'Hace 3 dias') +
+          sessionRow('MacBook Pro', 'Chrome · Santiago', 'Active now') +
+          sessionRow('iPhone 15', 'Safari · Santiago', '2 h ago') +
+          sessionRow('Windows workstation', 'Edge · Remote office', '3 days ago') +
         '</div>'
     });
 
     new MTS.Card('#member-detail-teams-card', {
-      title: 'Equipos y perfiles',
-      subtitle: 'Asignacion',
+      title: 'Teams and profiles',
+      subtitle: 'Assignment',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="member-detail-page__team-stack">' +
-          teamRow('Operations', 'Owner operativo del flujo base') +
-          teamRow('Billing', 'Aprobacion y seguimiento de invoices') +
-          teamRow('Security council', 'Revision de politicas y sessions') +
+          teamRow('Operations', 'Operational owner of the base flow') +
+          teamRow('Billing', 'Approval and tracking of invoices') +
+          teamRow('Security council', 'Review of policies and sessions') +
         '</div>'
     });
 

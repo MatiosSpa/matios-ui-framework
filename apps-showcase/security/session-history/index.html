@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Historial de sesiones - Matios UI</title>
+  <title>Session History - Matios UI</title>
   <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../base/matios-ui-base.css">
@@ -42,22 +42,22 @@
     });
 
     var sessions = [
-      { id: 'SES-201', device: 'MacBook Pro', browser: 'Chrome', city: 'Santiago, CL', lastSeen: 'Activa ahora', status: 'active', statusLabel: 'Activa', risk: 'Reconocida', user: 'Camila Soto' },
-      { id: 'SES-184', device: 'iPhone 15', browser: 'Safari', city: 'Santiago, CL', lastSeen: 'Hace 2 h', status: 'recent', statusLabel: 'Reciente', risk: 'Confiable', user: 'Camila Soto' },
-      { id: 'SES-173', device: 'Windows Workstation', browser: 'Edge', city: 'Bogota, CO', lastSeen: 'Hace 3 dias', status: 'attention', statusLabel: 'Revisar', risk: 'Nueva ubicacion', user: 'Camila Soto' },
-      { id: 'SES-165', device: 'iPad Air', browser: 'Safari', city: 'Lima, PE', lastSeen: 'Hace 5 dias', status: 'recent', statusLabel: 'Reciente', risk: 'Viaje declarado', user: 'Camila Soto' }
+      { id: 'SES-201', device: 'MacBook Pro', browser: 'Chrome', city: 'Santiago, CL', lastSeen: 'Active now', status: 'active', statusLabel: 'Active', risk: 'Recognized', user: 'Camila Soto' },
+      { id: 'SES-184', device: 'iPhone 15', browser: 'Safari', city: 'Santiago, CL', lastSeen: '2 h ago', status: 'recent', statusLabel: 'Recent', risk: 'Trusted', user: 'Camila Soto' },
+      { id: 'SES-173', device: 'Windows Workstation', browser: 'Edge', city: 'Bogota, CO', lastSeen: '3 days ago', status: 'attention', statusLabel: 'Review', risk: 'New location', user: 'Camila Soto' },
+      { id: 'SES-165', device: 'iPad Air', browser: 'Safari', city: 'Lima, PE', lastSeen: '5 days ago', status: 'recent', statusLabel: 'Recent', risk: 'Declared travel', user: 'Camila Soto' }
     ];
 
     new MTS.Card('#session-history-panel', {
-      title: 'Historial de sesiones',
-      subtitle: 'Monitoreo de acceso',
+      title: 'Session History',
+      subtitle: 'Access monitoring',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
-          '<p class="mts-text--md mts-text-color--muted mts-m-0">Revisa sesiones activas y recientes por dispositivo, ubicacion y riesgo, con acciones directas sobre cada fila.</p>' +
+          '<p class="mts-text--md mts-text-color--muted mts-m-0">Review active and recent sessions by device, location and risk, with direct actions on each row.</p>' +
           '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3 mts-flex--wrap">' +
-            '<span id="sessions-results-meta" class="mts-badge mts-badge--info mts-badge--sm">0 resultados</span>' +
+            '<span id="sessions-results-meta" class="mts-badge mts-badge--info mts-badge--sm">0 results</span>' +
             '<div id="sessions-signout-all"></div>' +
           '</div>' +
           '<div id="sessions-results"></div>' +
@@ -65,11 +65,11 @@
     });
 
     new MTS.Button('#sessions-signout-all', {
-      label: 'Cerrar todo',
+      label: 'Sign out all',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
-        notify('warning', 'Se simulo el cierre remoto de todas las sesiones activas.');
+        notify('warning', 'Remote sign-out of all active sessions was simulated.');
       }
     });
 
@@ -83,11 +83,11 @@
       if (!session) return;
 
       if (action === 'close') {
-        notify('success', 'Se simulo el cierre de la sesion en ' + session.device + '.');
+        notify('success', 'Sign-out of the session on ' + session.device + ' was simulated.');
       }
 
       if (action === 'trust') {
-        notify('info', session.device + ' quedo marcado como origen conocido.');
+        notify('info', session.device + ' was marked as a known origin.');
       }
     });
 
@@ -133,21 +133,21 @@
       var meta = document.getElementById('sessions-results-meta');
       var visible = sessions.slice();
 
-      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+      meta.textContent = visible.length + (visible.length === 1 ? ' result' : ' results');
 
       host.innerHTML =
         '<div class="mts-table-wrap">' +
           '<table class="mts-table mts-table--hover mts-table--striped">' +
             '<thead>' +
               '<tr>' +
-                '<th class="mts-table__th">Dispositivo</th>' +
-                '<th class="mts-table__th">Navegador</th>' +
-                '<th class="mts-table__th">Ubicacion</th>' +
-                '<th class="mts-table__th">Usuario</th>' +
-                '<th class="mts-table__th">Ultima actividad</th>' +
-                '<th class="mts-table__th">Riesgo</th>' +
-                '<th class="mts-table__th">Estado</th>' +
-                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+                '<th class="mts-table__th">Device</th>' +
+                '<th class="mts-table__th">Browser</th>' +
+                '<th class="mts-table__th">Location</th>' +
+                '<th class="mts-table__th">User</th>' +
+                '<th class="mts-table__th">Last activity</th>' +
+                '<th class="mts-table__th">Risk</th>' +
+                '<th class="mts-table__th">Status</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Actions</th>' +
               '</tr>' +
             '</thead>' +
             '<tbody>' +
@@ -167,8 +167,8 @@
                     '<td class="mts-table__td">' + escapeHtml(session.risk) + '</td>' +
                     '<td class="mts-table__td"><span class="mts-badge mts-badge--' + badgeVariant(session.status) + ' mts-badge--sm">' + escapeHtml(session.statusLabel) + '</span></td>' +
                     '<td class="mts-table__td mts-table__td--actions">' +
-                      actionButton('close', session.id, 'refresh-cw', 'Cerrar') +
-                      actionButton('trust', session.id, 'check-circle', 'Confiable') +
+                      actionButton('close', session.id, 'refresh-cw', 'Sign out') +
+                      actionButton('trust', session.id, 'check-circle', 'Trust') +
                     '</td>' +
                   '</tr>';
               }).join('') +

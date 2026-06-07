@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="security-policies-page__logo">P</div>
         <div>
           <div class="security-policies-page__title">Security Policies</div>
-          <div class="security-policies-page__subtitle">Politicas compartidas para sesión, credenciales y endurecimiento del acceso</div>
+          <div class="security-policies-page__subtitle">Shared policies for sessions, credentials and access hardening</div>
         </div>
       </div>
       <div class="security-policies-page__topbar-actions">
@@ -49,10 +49,10 @@
 
     <main class="security-policies-page__main mts-grid mts-grid--gap-md">
       <section class="security-policies-page__hero mts-surface mts-g-col-12">
-        <div class="security-policies-page__eyebrow">Politicas de acceso</div>
-        <h1 class="security-policies-page__hero-title">Define reglas comunes del workspace sin dejar la experiencia operativa en manos del azar.</h1>
+        <div class="security-policies-page__eyebrow">Access policies</div>
+        <h1 class="security-policies-page__hero-title">Define common workspace rules without leaving the operational experience to chance.</h1>
         <p class="security-policies-page__hero-text">
-          La vista deja listas sesiones, OTP, bloqueos y mínimos de credenciales para que seguridad base y experiencia de acceso vivan en el mismo módulo.
+          This view sets up sessions, OTP, lockouts and credential minimums so that baseline security and access experience live in the same module.
         </p>
       </section>
 
@@ -99,97 +99,97 @@
     var maxAttemptsInput;
 
     new MTS.Button('#policies-save', {
-      label: 'Guardar politicas',
+      label: 'Save policies',
       variant: 'primary',
       iconLeft: MTS.Icon.get('shield'),
       onClick: savePolicies
     });
 
     new MTS.Button('#policies-reset', {
-      label: 'Restablecer',
+      label: 'Reset',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: resetPolicies
     });
 
     sessionTimeoutInput = new MTS.Select('#policies-session-timeout', {
-      label: 'Caducidad total de sesion',
+      label: 'Total session expiry',
       options: [
-        { value: '4h', label: '4 horas' },
-        { value: '8h', label: '8 horas' },
-        { value: '12h', label: '12 horas' },
-        { value: '24h', label: '24 horas' }
+        { value: '4h', label: '4 hours' },
+        { value: '8h', label: '8 hours' },
+        { value: '12h', label: '12 hours' },
+        { value: '24h', label: '24 hours' }
       ],
       value: '8h'
     });
 
     idleTimeoutInput = new MTS.Select('#policies-idle-timeout', {
-      label: 'Cierre por inactividad',
+      label: 'Idle timeout',
       options: [
-        { value: '15m', label: '15 minutos' },
-        { value: '30m', label: '30 minutos' },
-        { value: '60m', label: '60 minutos' }
+        { value: '15m', label: '15 minutes' },
+        { value: '30m', label: '30 minutes' },
+        { value: '60m', label: '60 minutes' }
       ],
       value: '30m'
     });
 
     passwordMinInput = new MTS.Input('#policies-password-min', {
-      label: 'Minimo de caracteres',
+      label: 'Minimum characters',
       type: 'text',
       value: '8',
       placeholder: '8'
     });
 
     maxAttemptsInput = new MTS.Input('#policies-max-attempts', {
-      label: 'Intentos fallidos antes de bloqueo',
+      label: 'Failed attempts before lockout',
       type: 'text',
       value: '5',
       placeholder: '5'
     });
 
     new MTS.Toggle('#policies-toggle-otp', {
-      label: 'Forzar OTP para todos los usuarios',
+      label: 'Enforce OTP for all users',
       checked: true
     });
 
     new MTS.Toggle('#policies-toggle-uppercase', {
-      label: 'Exigir mayusculas y numeros en la clave',
+      label: 'Require uppercase and numbers in the password',
       checked: true
     });
 
     new MTS.Toggle('#policies-toggle-login-alerts', {
-      label: 'Avisar a admins por acceso sospechoso',
+      label: 'Notify admins of suspicious access',
       checked: true
     });
 
     new MTS.Toggle('#policies-toggle-device-review', {
-      label: 'Pedir validacion al detectar dispositivo nuevo',
+      label: 'Request validation when a new device is detected',
       checked: false
     });
 
     new MTS.Card('#policies-summary-card', {
-      title: 'Postura actual',
-      subtitle: 'Seguridad compartida',
+      title: 'Current posture',
+      subtitle: 'Shared security',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="security-policies-page__summary-list">' +
-          '<div><span>OTP global</span><strong>Obligatorio</strong></div>' +
-          '<div><span>Caducidad de sesion</span><strong>8 horas</strong></div>' +
-          '<div><span>Bloqueo por intentos</span><strong>5 fallos</strong></div>' +
+          '<div><span>Global OTP</span><strong>Required</strong></div>' +
+          '<div><span>Session expiry</span><strong>8 hours</strong></div>' +
+          '<div><span>Attempt lockout</span><strong>5 failures</strong></div>' +
         '</div>'
     });
 
     new MTS.Card('#policies-impact-card', {
-      title: 'Impacto esperado',
-      subtitle: 'Experiencia de acceso',
+      title: 'Expected impact',
+      subtitle: 'Access experience',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="security-policies-page__impact-list">' +
-          '<div><strong>Menos riesgo</strong><span>Las cuentas nuevas parten con postureo base consistente.</span></div>' +
-          '<div><strong>Mas friccion controlada</strong><span>El login puede pedir OTP o validacion extra segun politica.</span></div>' +
-          '<div><strong>Mejor trazabilidad</strong><span>Los accesos sensibles disparan alertas visibles al equipo admin.</span></div>' +
+          '<div><strong>Less risk</strong><span>New accounts start with a consistent baseline posture.</span></div>' +
+          '<div><strong>More controlled friction</strong><span>Login may request OTP or extra validation depending on policy.</span></div>' +
+          '<div><strong>Better traceability</strong><span>Sensitive access events trigger alerts visible to the admin team.</span></div>' +
         '</div>'
     });
 
@@ -203,8 +203,8 @@
 
       MTS.Alert.show('#policies-feedback', {
         variant: 'info',
-        title: 'Politicas restablecidas',
-        message: 'La vista volvió al baseline de seguridad del workspace.',
+        title: 'Policies reset',
+        message: 'The view returned to the workspace security baseline.',
         closable: true
       });
     }
@@ -217,19 +217,19 @@
       maxAttemptsInput.clearError();
 
       if (isNaN(passwordMin) || passwordMin < 8) {
-        passwordMinInput.setError('El minimo recomendado para la clave es 8');
+        passwordMinInput.setError('The recommended minimum for the password is 8');
         return;
       }
 
       if (isNaN(maxAttempts) || maxAttempts < 3) {
-        maxAttemptsInput.setError('Define al menos 3 intentos antes del bloqueo');
+        maxAttemptsInput.setError('Set at least 3 attempts before lockout');
         return;
       }
 
       MTS.Alert.show('#policies-feedback', {
         variant: 'success',
-        title: 'Politicas actualizadas',
-        message: 'Las reglas del workspace quedaron listas para el flujo de acceso compartido.',
+        title: 'Policies updated',
+        message: 'The workspace rules are ready for the shared access flow.',
         closable: true
       });
     }

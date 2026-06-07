@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="integration-detail-page__logo">M</div>
         <div>
           <div class="integration-detail-page__title">Integration Detail</div>
-          <div class="integration-detail-page__subtitle">Configuracion operativa y estado de sync de Slack</div>
+          <div class="integration-detail-page__subtitle">Operational configuration and Slack sync status</div>
         </div>
       </div>
       <div class="integration-detail-page__actions">
@@ -51,10 +51,10 @@
       <section class="integration-detail-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="integration-detail-page__eyebrow">Provider configuration</div>
-          <h1 class="integration-detail-page__hero-title">Slack workspace conectado para alertas y eventos operativos.</h1>
+          <h1 class="integration-detail-page__hero-title">Slack workspace connected for operational alerts and events.</h1>
           <p class="integration-detail-page__hero-copy">
-            La pantalla cubre el caso real de revisar credenciales base, frecuencia de sync,
-            responsable y los ultimos eventos asociados a la integracion.
+            This screen covers the real case of reviewing base credentials, sync frequency,
+            the owner, and the latest events associated with the integration.
           </p>
           <div class="integration-detail-page__hero-badges">
             <span id="integration-detail-status"></span>
@@ -66,8 +66,8 @@
       <section class="mts-g-col-12 mts-g-col-xl-7">
         <div class="mts-form-card integration-detail-page__form-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Configuracion base</h2>
-            <p class="mts-form-card__subtitle">Datos visibles para soporte, owner tecnico y frecuencia de sincronizacion.</p>
+            <h2 class="mts-form-card__title">Base configuration</h2>
+            <p class="mts-form-card__subtitle">Data visible for support, technical owner, and sync frequency.</p>
           </div>
 
           <div class="integration-detail-page__form-grid">
@@ -111,7 +111,7 @@
   </script>
   <script>
     new MTS.Button('#integration-detail-back', {
-      label: 'Volver al hub',
+      label: 'Back to hub',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('arrow-left'),
       onClick: function () { openScreen('../integrations-hub/index.html'); }
@@ -122,12 +122,12 @@
       variant: 'primary',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
-        notify('success', 'Sync ejecutada', 'Se simulo una corrida manual de sincronizacion para Slack.');
+        notify('success', 'Sync executed', 'A manual sync run for Slack was simulated.');
       }
     });
 
     new MTS.Badge('#integration-detail-status', {
-      label: 'Conectada',
+      label: 'Connected',
       variant: 'success',
       size: 'sm'
     });
@@ -139,31 +139,31 @@
     });
 
     new MTS.Input('#integration-name', {
-      label: 'Workspace conectado',
+      label: 'Connected workspace',
       type: 'text',
       value: 'matios-support',
       placeholder: 'Slack workspace'
     });
 
     new MTS.Input('#integration-owner', {
-      label: 'Owner tecnico',
+      label: 'Technical owner',
       type: 'text',
       value: 'Diego Paredes',
-      placeholder: 'Owner tecnico'
+      placeholder: 'Technical owner'
     });
 
     var frequencySelect = new MTS.Select('#integration-frequency', {
-      label: 'Frecuencia de sync',
+      label: 'Sync frequency',
       options: [
-        { value: '5m', label: 'Cada 5 minutos' },
-        { value: '15m', label: 'Cada 15 minutos' },
-        { value: '60m', label: 'Cada 60 minutos' }
+        { value: '5m', label: 'Every 5 minutes' },
+        { value: '15m', label: 'Every 15 minutes' },
+        { value: '60m', label: 'Every 60 minutes' }
       ],
       value: '15m'
     });
 
     new MTS.Input('#integration-channel', {
-      label: 'Canal principal',
+      label: 'Main channel',
       type: 'text',
       value: '#ops-alerts',
       placeholder: '#ops-alerts'
@@ -177,46 +177,46 @@
     });
 
     new MTS.Button('#integration-save', {
-      label: 'Guardar configuracion',
+      label: 'Save configuration',
       variant: 'secondary',
       block: true,
       iconLeft: MTS.Icon.get('save'),
       onClick: function () {
-        notify('info', 'Configuracion guardada', 'La pantalla deja cubierto el caso de editar parametros base y persistirlos.');
+        notify('info', 'Configuration saved', 'This screen covers the case of editing base parameters and persisting them.');
       }
     });
 
     new MTS.Card('#integration-health-card', {
-      title: 'Estado de salud',
+      title: 'Health status',
       subtitle: 'Provider status',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="integration-detail-page__health">' +
-          healthRow('Ultima sync', 'Hoy, 09:08') +
-          healthRow('Duracion', '1.8 s') +
-          healthRow('Eventos procesados', '34 mensajes') +
+          healthRow('Last sync', 'Today, 09:08') +
+          healthRow('Duration', '1.8 s') +
+          healthRow('Processed events', '34 messages') +
           healthRow('Error rate', '0.2%') +
         '</div>'
     });
 
     new MTS.Card('#integration-actions-card', {
-      title: 'Acciones operativas',
+      title: 'Operational actions',
       subtitle: 'Support tools',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="integration-detail-page__action-copy">' +
-          '<p>Desde aqui normalmente se revalida el webhook, se vuelve a autorizar el provider o se desactiva temporalmente la integracion.</p>' +
+          '<p>From here you would normally revalidate the webhook, re-authorize the provider, or temporarily disable the integration.</p>' +
         '</div>',
       footerAlign: 'between',
       footer: [
         {
-          label: 'Revalidar webhook',
+          label: 'Revalidate webhook',
           variant: 'primary',
           icon: MTS.Icon.get('check-circle'),
           onClick: function () {
-            notify('success', 'Webhook validado', 'La URL respondio correctamente dentro del flujo de ejemplo.');
+            notify('success', 'Webhook validated', 'The URL responded correctly within the example flow.');
           }
         },
         {
@@ -224,22 +224,22 @@
           variant: 'ghost',
           icon: MTS.Icon.get('external-link'),
           onClick: function () {
-            notify('warning', 'Accion simulada', 'Aqui normalmente redirigirias al proveedor para renovar autorizacion.');
+            notify('warning', 'Simulated action', 'Here you would normally redirect to the provider to renew authorization.');
           }
         }
       ]
     });
 
     new MTS.Card('#integration-events-card', {
-      title: 'Eventos recientes',
+      title: 'Recent events',
       subtitle: 'Sync log',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="integration-detail-page__events">' +
-          eventRow('09:08', 'Sync completada', '34 alertas reconciliadas con Slack sin errores bloqueantes.') +
-          eventRow('08:52', 'Webhook validado', 'El endpoint principal devolvio 200 OK.') +
-          eventRow('Ayer, 18:10', 'Canal actualizado', 'El destino principal paso a #ops-alerts.') +
+          eventRow('09:08', 'Sync completed', '34 alerts reconciled with Slack with no blocking errors.') +
+          eventRow('08:52', 'Webhook validated', 'The main endpoint returned 200 OK.') +
+          eventRow('Yesterday, 18:10', 'Channel updated', 'The main destination changed to #ops-alerts.') +
         '</div>'
     });
 

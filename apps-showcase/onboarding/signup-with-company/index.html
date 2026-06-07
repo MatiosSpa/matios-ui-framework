@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -57,7 +57,7 @@
       <div class="mts-card__body mts-p-6">
         <div class="mts-text--center mts-mb-4">
           <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
-          <h1 class="mts-h1 mts-mt-2">Crear cuenta + empresa</h1>
+          <h1 class="mts-h1 mts-mt-2">Create account + company</h1>
         </div>
 
         <div class="mts-d-flex mts-flex--column mts-gap-4">
@@ -72,8 +72,8 @@
 
           <section class="mts-surface mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-4">
             <div class="mts-d-flex mts-flex--column mts-gap-1">
-              <strong class="mts-text--sm mts-fw--semibold mts-text-color--primary">Clave automatica</strong>
-              <span class="mts-text--sm mts-text-color--muted">Generar una clave temporal y enviarla al correo de trabajo</span>
+              <strong class="mts-text--sm mts-fw--semibold mts-text-color--primary">Automatic password</strong>
+              <span class="mts-text--sm mts-text-color--muted">Generate a temporary password and send it to the work email</span>
             </div>
             <div id="signup-company-auto-password"></div>
           </section>
@@ -87,7 +87,7 @@
       </div>
 
       <div class="mts-card__footer mts-card__footer--center">
-        <span class="mts-text--md mts-text-color--muted">Ya tienes cuenta?</span>
+        <span class="mts-text--md mts-text-color--muted">Already have an account?</span>
         <div id="signup-company-login"></div>
       </div>
     </section>
@@ -112,59 +112,59 @@
 
     var firstNameInput = new MTS.Input('#signup-company-first-name', {
       type: 'text',
-      label: 'Nombre',
-      placeholder: 'Ingresa tu nombre',
+      label: 'First name',
+      placeholder: 'Enter your first name',
       iconLeft: MTS.Icon.get('user')
     });
 
     var lastNameInput = new MTS.Input('#signup-company-last-name', {
       type: 'text',
-      label: 'Apellido',
-      placeholder: 'Ingresa tu apellido',
+      label: 'Last name',
+      placeholder: 'Enter your last name',
       iconLeft: MTS.Icon.get('user')
     });
 
     var emailInput = new MTS.Input('#signup-company-email', {
       type: 'email',
-      label: 'Correo de trabajo',
-      placeholder: 'Ingresa tu correo',
+      label: 'Work email',
+      placeholder: 'Enter your email',
       iconLeft: MTS.Icon.get('mail')
     });
 
     var phoneInput = new MTS.Input('#signup-company-phone', {
       type: 'text',
-      label: 'Telefono',
+      label: 'Phone',
       placeholder: '+56 9 1234 5678',
       iconLeft: MTS.Icon.get('phone')
     });
 
     var companyNameInput = new MTS.Input('#signup-company-name', {
       type: 'text',
-      label: 'Empresa',
-      placeholder: 'Ingresa el nombre de la empresa',
+      label: 'Company',
+      placeholder: 'Enter the company name',
       iconLeft: MTS.Icon.get('briefcase')
     });
 
     var industrySelect = new MTS.Select('#signup-company-industry', {
-      label: 'Industria',
-      placeholder: 'Selecciona una industria',
+      label: 'Industry',
+      placeholder: 'Select an industry',
       options: [
-        { value: 'saas', label: 'Software y SaaS' },
-        { value: 'services', label: 'Servicios profesionales' },
-        { value: 'retail', label: 'Retail y eCommerce' },
-        { value: 'finance', label: 'Finanzas y seguros' },
-        { value: 'logistics', label: 'Logistica y operaciones' }
+        { value: 'saas', label: 'Software and SaaS' },
+        { value: 'services', label: 'Professional services' },
+        { value: 'retail', label: 'Retail and eCommerce' },
+        { value: 'finance', label: 'Finance and insurance' },
+        { value: 'logistics', label: 'Logistics and operations' }
       ]
     });
 
     var teamSizeSelect = new MTS.Select('#signup-company-team-size', {
-      label: 'Tamano del equipo',
-      placeholder: 'Selecciona un rango',
+      label: 'Team size',
+      placeholder: 'Select a range',
       options: [
-        { value: '1-10', label: '1 a 10 personas' },
-        { value: '11-50', label: '11 a 50 personas' },
-        { value: '51-200', label: '51 a 200 personas' },
-        { value: '200+', label: 'Mas de 200 personas' }
+        { value: '1-10', label: '1 to 10 people' },
+        { value: '11-50', label: '11 to 50 people' },
+        { value: '51-200', label: '51 to 200 people' },
+        { value: '200+', label: 'More than 200 people' }
       ]
     });
 
@@ -178,30 +178,30 @@
 
     var passwordInput = new MTS.Input('#signup-company-password', {
       type: 'password',
-      label: 'Clave',
-      placeholder: 'Crea una clave',
+      label: 'Password',
+      placeholder: 'Create a password',
       iconLeft: MTS.Icon.get('lock'),
       showPassword: true
     });
 
     var confirmPasswordInput = new MTS.Input('#signup-company-password-confirm', {
       type: 'password',
-      label: 'Confirmar clave',
-      placeholder: 'Repite tu clave',
+      label: 'Confirm password',
+      placeholder: 'Repeat your password',
       iconLeft: MTS.Icon.get('lock'),
       showPassword: true
     });
 
     var termsCheckbox = new MTS.Checkbox('#signup-company-terms', {
-      label: 'Acepto los terminos y condiciones'
+      label: 'I accept the terms and conditions'
     });
 
     new MTS.Checkbox('#signup-company-updates', {
-      label: 'Quiero recibir novedades de producto'
+      label: 'I want to receive product updates'
     });
 
     new MTS.Button('#signup-company-login', {
-      label: 'Ir al login',
+      label: 'Go to login',
       variant: 'link',
       size: 'sm',
       onClick: function () {
@@ -210,7 +210,7 @@
     });
 
     var submitButton = new MTS.Button('#signup-company-submit', {
-      label: 'Crear cuenta y empresa',
+      label: 'Create account and company',
       variant: 'primary',
       block: true,
       onClick: function (event, instance) {
@@ -265,78 +265,78 @@
       clearAlerts();
 
       if (!firstName) {
-        firstNameInput.setError('Ingresa tu nombre');
+        firstNameInput.setError('Enter your first name');
         return;
       }
 
       if (!lastName) {
-        lastNameInput.setError('Ingresa tu apellido');
+        lastNameInput.setError('Enter your last name');
         return;
       }
 
       if (!email) {
-        emailInput.setError('Ingresa tu correo');
+        emailInput.setError('Enter your email');
         return;
       }
 
       if (phone && !/^[+\d\s()-]{8,}$/.test(phone)) {
-        phoneInput.setError('Ingresa un telefono valido o dejalo vacio');
+        phoneInput.setError('Enter a valid phone number or leave it empty');
         return;
       }
 
       if (!companyName) {
-        companyNameInput.setError('Ingresa el nombre de la empresa');
+        companyNameInput.setError('Enter the company name');
         return;
       }
 
       if (!industry) {
-        showAlert('warning', 'Falta industria', 'Selecciona la industria para continuar.');
+        showAlert('warning', 'Industry missing', 'Select the industry to continue.');
         return;
       }
 
       if (!teamSize) {
-        showAlert('warning', 'Falta equipo', 'Selecciona el tamano del equipo para continuar.');
+        showAlert('warning', 'Team missing', 'Select the team size to continue.');
         return;
       }
 
       if (!isChecked(termsCheckbox)) {
-        showAlert('warning', 'Faltan terminos', 'Debes aceptar los terminos para continuar.');
+        showAlert('warning', 'Terms missing', 'You must accept the terms to continue.');
         return;
       }
 
       if (!autoPassword) {
         if (!password) {
-          passwordInput.setError('Crea una clave');
+          passwordInput.setError('Create a password');
           return;
         }
 
         if (password.length < 8) {
-          passwordInput.setError('La clave debe tener al menos 8 caracteres');
+          passwordInput.setError('The password must be at least 8 characters long');
           return;
         }
 
         if (!confirmPassword) {
-          confirmPasswordInput.setError('Confirma tu clave');
+          confirmPasswordInput.setError('Confirm your password');
           return;
         }
 
         if (password !== confirmPassword) {
-          confirmPasswordInput.setError('Las claves no coinciden');
+          confirmPasswordInput.setError('The passwords do not match');
           return;
         }
       }
 
       button.setLoading(true);
-      button.setLabel('Creando...');
+      button.setLabel('Creating...');
 
       setTimeout(function () {
         button.setLoading(false);
-        button.setLabel('Crear cuenta y empresa');
+        button.setLabel('Create account and company');
 
         if (autoPassword) {
-          showAlert('success', 'Empresa creada', 'Se crearia <strong>' + escapeHtml(companyName) + '</strong> y se enviaria una clave temporal a <strong>' + escapeHtml(email) + '</strong>.');
+          showAlert('success', 'Company created', 'Would create <strong>' + escapeHtml(companyName) + '</strong> and send a temporary password to <strong>' + escapeHtml(email) + '</strong>.');
         } else {
-          showAlert('success', 'Empresa creada', 'Se crearia <strong>' + escapeHtml(companyName) + '</strong> con cuenta administradora para <strong>' + escapeHtml(email) + '</strong>.');
+          showAlert('success', 'Company created', 'Would create <strong>' + escapeHtml(companyName) + '</strong> with an admin account for <strong>' + escapeHtml(email) + '</strong>.');
         }
       }, 700);
     }

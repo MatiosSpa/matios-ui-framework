@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -36,7 +36,7 @@
         <div class="ticket-resolution-page__logo">R</div>
         <div>
           <div class="ticket-resolution-page__title">Ticket Resolution</div>
-          <div class="ticket-resolution-page__subtitle">Cierre del caso con motivo, confirmación al cliente y siguiente rastro operativo</div>
+          <div class="ticket-resolution-page__subtitle">Case closure with reason, customer confirmation, and the next operational trail</div>
         </div>
       </div>
       <div class="ticket-resolution-page__topbar-actions">
@@ -48,11 +48,11 @@
       <section class="ticket-resolution-page__hero mts-g-col-12 mts-surface">
         <div class="ticket-resolution-page__eyebrow">
           <span class="ticket-resolution-page__eyebrow-dot"></span>
-          <span>Resolución final · HD-201</span>
+          <span>Final resolution · HD-201</span>
         </div>
-        <h1 class="ticket-resolution-page__hero-title">Cierra el caso sin perder el contexto de soporte y la comunicación final al cliente.</h1>
+        <h1 class="ticket-resolution-page__hero-title">Close the case without losing support context or the final communication to the customer.</h1>
         <p class="ticket-resolution-page__hero-text">
-          La pantalla concentra resolución, severidad final y confirmación de salida para que el analista deje el caso cerrado y trazable en un solo paso.
+          The screen brings together resolution, final severity, and exit confirmation so the analyst can leave the case closed and traceable in a single step.
         </p>
       </section>
 
@@ -95,46 +95,46 @@
   </script>
   <script>
     var resolutionStatus = new MTS.Select('#ticket-resolution-status',{
-      label:'Estado final',
+      label:'Final status',
       options:[
-        {value:'resolved',label:'Resuelto'},
-        {value:'closed',label:'Cerrado'},
-        {value:'pending-monitoring',label:'Monitoreo'}
+        {value:'resolved',label:'Resolved'},
+        {value:'closed',label:'Closed'},
+        {value:'pending-monitoring',label:'Monitoring'}
       ],
       value:'resolved'
     });
 
     var resolutionReason = new MTS.Select('#ticket-resolution-reason',{
-      label:'Motivo de cierre',
+      label:'Closure reason',
       options:[
-        {value:'duplicate-email',label:'Duplicado por envío automático'},
-        {value:'manual-reprocess',label:'Reproceso manual'},
-        {value:'customer-confirmed',label:'Cliente confirma normalización'}
+        {value:'duplicate-email',label:'Duplicate from automated send'},
+        {value:'manual-reprocess',label:'Manual reprocess'},
+        {value:'customer-confirmed',label:'Customer confirms normalization'}
       ],
       value:'duplicate-email'
     });
 
     var resolutionSummary = new MTS.Input('#ticket-resolution-summary',{
       type:'text',
-      label:'Resumen interno',
-      placeholder:'Resume la causa y la decisión tomada'
+      label:'Internal summary',
+      placeholder:'Summarize the cause and the decision made'
     });
 
     var resolutionMessage = new MTS.Input('#ticket-resolution-message',{
       type:'text',
-      label:'Mensaje final al cliente',
-      placeholder:'Texto breve de cierre y confirmación'
+      label:'Final message to the customer',
+      placeholder:'Short closing and confirmation text'
     });
 
     new MTS.Button('#ticket-resolution-back',{
-      label:'Volver a detalle',
+      label:'Back to detail',
       variant:'ghost',
       iconLeft:MTS.Icon.get('arrow-left'),
       onClick:function(){openScreen('../ticket-detail/index.html');}
     });
 
     new MTS.Button('#ticket-resolution-save',{
-      label:'Cerrar ticket',
+      label:'Close ticket',
       variant:'primary',
       iconLeft:MTS.Icon.get('check-circle'),
       onClick:function(e,inst){
@@ -143,22 +143,22 @@
         resolutionSummary.clearError();
         resolutionMessage.clearError();
         if(!summary){
-          resolutionSummary.setError('Ingresa el resumen final del caso');
+          resolutionSummary.setError('Enter the final summary of the case');
           return;
         }
         if(!message){
-          resolutionMessage.setError('Escribe el mensaje de salida al cliente');
+          resolutionMessage.setError('Write the exit message to the customer');
           return;
         }
         inst.setLoading(true);
-        inst.setLabel('Cerrando...');
+        inst.setLabel('Closing...');
         setTimeout(function(){
           inst.setLoading(false);
-          inst.setLabel('Cerrar ticket');
+          inst.setLabel('Close ticket');
           MTS.Alert.show('#ticket-resolution-feedback',{
             variant:'success',
-            title:'Caso cerrado',
-            message:'El ticket quedó resuelto y con confirmación final lista para el cliente.',
+            title:'Case closed',
+            message:'The ticket is resolved and a final confirmation is ready for the customer.',
             closable:true
           });
         },900);
@@ -166,28 +166,28 @@
     });
 
     new MTS.Card('#ticket-resolution-context-card',{
-      title:'Contexto final',
-      subtitle:'Resumen del caso',
+      title:'Final context',
+      subtitle:'Case summary',
       variant:'elevated',
       size:'lg',
       body:
         '<div class="ticket-resolution-page__meta-list">'+
-          '<div><span>Cliente</span><strong>Northwind Retail</strong></div>'+
-          '<div><span>Canal</span><strong>Email automatizado</strong></div>'+
-          '<div><span>SLA cumplido</span><strong>Si · 42 min</strong></div>'+
+          '<div><span>Customer</span><strong>Northwind Retail</strong></div>'+
+          '<div><span>Channel</span><strong>Automated email</strong></div>'+
+          '<div><span>SLA met</span><strong>Yes · 42 min</strong></div>'+
         '</div>'
     });
 
     new MTS.Card('#ticket-resolution-checklist-card',{
-      title:'Checklist de salida',
-      subtitle:'Antes del cierre',
+      title:'Exit checklist',
+      subtitle:'Before closing',
       variant:'outlined',
       size:'lg',
       body:
         '<div class="ticket-resolution-page__checklist">'+
-          '<div><i class="mts-icon mts-icon-check"></i><span>Se validó la causa raíz del duplicado.</span></div>'+
-          '<div><i class="mts-icon mts-icon-check"></i><span>Se notificó al cliente con mensaje final.</span></div>'+
-          '<div><i class="mts-icon mts-icon-check"></i><span>Se dejó siguiente acción documentada para soporte.</span></div>'+
+          '<div><i class="mts-icon mts-icon-check"></i><span>The root cause of the duplicate was validated.</span></div>'+
+          '<div><i class="mts-icon mts-icon-check"></i><span>The customer was notified with a final message.</span></div>'+
+          '<div><i class="mts-icon mts-icon-check"></i><span>The next action was documented for support.</span></div>'+
         '</div>'
     });
 

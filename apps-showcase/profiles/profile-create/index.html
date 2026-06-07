@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Crear perfil - Matios UI</title>
+  <title>Create profile - Matios UI</title>
   <script>
     (function () {
       var source = location.search || location.hash || '';
@@ -73,44 +73,44 @@
 
     var MODULE_PERMISSIONS = {
       users: [
-        { value: 'users.view', label: 'Ver listado de usuarios' },
-        { value: 'users.create', label: 'Crear usuarios' },
-        { value: 'users.edit', label: 'Editar usuarios' },
-        { value: 'users.block', label: 'Bloquear o desbloquear usuarios' },
-        { value: 'users.password', label: 'Cambiar claves de usuarios' }
+        { value: 'users.view', label: 'View user list' },
+        { value: 'users.create', label: 'Create users' },
+        { value: 'users.edit', label: 'Edit users' },
+        { value: 'users.block', label: 'Block or unblock users' },
+        { value: 'users.password', label: 'Change user passwords' }
       ],
       documents: [
-        { value: 'documents.view', label: 'Ver documentos' },
-        { value: 'documents.upload', label: 'Subir documentos' },
-        { value: 'documents.edit', label: 'Editar metadata de documentos' },
-        { value: 'documents.download', label: 'Descargar documentos' },
-        { value: 'documents.share', label: 'Compartir documentos' }
+        { value: 'documents.view', label: 'View documents' },
+        { value: 'documents.upload', label: 'Upload documents' },
+        { value: 'documents.edit', label: 'Edit document metadata' },
+        { value: 'documents.download', label: 'Download documents' },
+        { value: 'documents.share', label: 'Share documents' }
       ],
       billing: [
-        { value: 'billing.plan', label: 'Ver plan actual' },
-        { value: 'billing.invoices', label: 'Ver historial de facturas' },
-        { value: 'billing.methods', label: 'Gestionar medios de pago' },
-        { value: 'billing.usage', label: 'Revisar consumo y limites' }
+        { value: 'billing.plan', label: 'View current plan' },
+        { value: 'billing.invoices', label: 'View invoice history' },
+        { value: 'billing.methods', label: 'Manage payment methods' },
+        { value: 'billing.usage', label: 'Review usage and limits' }
       ],
       support: [
-        { value: 'support.inbox', label: 'Ver bandeja de tickets' },
-        { value: 'support.assign', label: 'Asignar tickets' },
-        { value: 'support.resolve', label: 'Resolver tickets' },
-        { value: 'support.export', label: 'Exportar casos' }
+        { value: 'support.inbox', label: 'View ticket inbox' },
+        { value: 'support.assign', label: 'Assign tickets' },
+        { value: 'support.resolve', label: 'Resolve tickets' },
+        { value: 'support.export', label: 'Export cases' }
       ]
     };
 
     var permissionGroup = null;
 
     new MTS.Card('#profile-create-panel', {
-      title: 'Crear perfil',
-      subtitle: 'Alta de perfil por modulo',
+      title: 'Create profile',
+      subtitle: 'Create a profile by module',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div id="profile-create-alert"></div>' +
-          '<p class="mts-text--md mts-text-color--muted mts-m-0">Cada perfil se construye sobre un modulo y sus permisos finos chequeables.</p>' +
+          '<p class="mts-text--md mts-text-color--muted mts-m-0">Each profile is built on a module and its fine-grained, selectable permissions.</p>' +
           '<div class="mts-grid mts-grid--gap-md">' +
             '<div class="mts-g-col-12 mts-g-col-md-6"><div id="profile-create-name"></div></div>' +
             '<div class="mts-g-col-12 mts-g-col-md-6"><div id="profile-create-module"></div></div>' +
@@ -119,8 +119,8 @@
           '<div class="mts-surface mts-p-4">' +
             '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
               '<div>' +
-                '<h3 class="mts-h4 mts-m-0">Permisos del modulo</h3>' +
-                '<p id="profile-create-permissions-copy" class="mts-text--sm mts-text-color--muted mts-mt-2 mts-mb-0">Selecciona un modulo para cargar sus permisos.</p>' +
+                '<h3 class="mts-h4 mts-m-0">Module permissions</h3>' +
+                '<p id="profile-create-permissions-copy" class="mts-text--sm mts-text-color--muted mts-mt-2 mts-mb-0">Select a module to load its permissions.</p>' +
               '</div>' +
               '<div id="profile-create-permissions"></div>' +
             '</div>' +
@@ -129,7 +129,7 @@
       footerAlign: 'between',
       footer: [
         {
-          label: 'Volver a perfiles',
+          label: 'Back to profiles',
           variant: 'ghost',
           icon: MTS.Icon.get('arrow-left'),
           onClick: function () {
@@ -137,7 +137,7 @@
           }
         },
         {
-          label: 'Crear perfil',
+          label: 'Create profile',
           variant: 'primary',
           icon: MTS.Icon.get('plus-circle'),
           onClick: function () {
@@ -149,19 +149,19 @@
 
     var nameInput = new MTS.Input('#profile-create-name', {
       type: 'text',
-      label: 'Nombre',
-      placeholder: 'Ej: Operaciones documental',
+      label: 'Name',
+      placeholder: 'e.g. Document Operations',
       iconLeft: MTS.Icon.get('layers')
     });
 
     var moduleSelect = new MTS.Select('#profile-create-module', {
-      label: 'Modulo',
-      placeholder: 'Selecciona un modulo',
+      label: 'Module',
+      placeholder: 'Select a module',
       options: [
-        { value: 'users', label: 'Usuarios' },
-        { value: 'documents', label: 'Documentos' },
+        { value: 'users', label: 'Users' },
+        { value: 'documents', label: 'Documents' },
         { value: 'billing', label: 'Billing' },
-        { value: 'support', label: 'Soporte' }
+        { value: 'support', label: 'Support' }
       ],
       onChange: function (event) {
         renderPermissionGroup(event.detail.value);
@@ -170,8 +170,8 @@
 
     var descriptionInput = new MTS.Input('#profile-create-description', {
       type: 'text',
-      label: 'Descripcion',
-      placeholder: 'Describe el alcance operativo del perfil',
+      label: 'Description',
+      placeholder: 'Describe the operational scope of the profile',
       iconLeft: MTS.Icon.get('file-text')
     });
 
@@ -202,11 +202,11 @@
       permissionGroup = null;
 
       if (!moduleValue) {
-        copy.textContent = 'Selecciona un modulo para cargar sus permisos.';
+        copy.textContent = 'Select a module to load its permissions.';
         return;
       }
 
-      copy.textContent = 'Permisos disponibles para el modulo ' + getModuleLabel(moduleValue) + '.';
+      copy.textContent = 'Permissions available for the ' + getModuleLabel(moduleValue) + ' module.';
       permissionGroup = new MTS.CheckboxGroup('#profile-create-permissions', {
         options: options,
         value: selectedValues || []
@@ -223,29 +223,29 @@
       clearAlerts();
 
       if (!name) {
-        nameInput.setError('Ingresa el nombre del perfil');
+        nameInput.setError('Enter the profile name');
         return;
       }
 
       if (!description) {
-        descriptionInput.setError('Ingresa la descripcion del perfil');
+        descriptionInput.setError('Enter the profile description');
         return;
       }
 
       if (!moduleValue) {
-        showAlert('warning', 'Falta el modulo', 'Selecciona el modulo al que pertenecera el perfil.');
+        showAlert('warning', 'Module missing', 'Select the module the profile will belong to.');
         return;
       }
 
       if (!permissions.length) {
-        showAlert('warning', 'Faltan permisos', 'Selecciona al menos un permiso del modulo antes de guardar.');
+        showAlert('warning', 'Permissions missing', 'Select at least one module permission before saving.');
         return;
       }
 
       showAlert(
         'success',
-        'Perfil preparado',
-        'Se registraria el perfil <strong>' + escapeHtml(name) + '</strong> para el modulo <strong>' + escapeHtml(getModuleLabel(moduleValue)) + '</strong> con <strong>' + permissions.length + '</strong> permisos seleccionados.'
+        'Profile ready',
+        'The profile <strong>' + escapeHtml(name) + '</strong> would be registered for the <strong>' + escapeHtml(getModuleLabel(moduleValue)) + '</strong> module with <strong>' + permissions.length + '</strong> selected permissions.'
       );
     }
 

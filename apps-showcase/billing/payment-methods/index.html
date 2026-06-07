@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="payment-methods-page__logo">M</div>
         <div>
           <div class="payment-methods-page__title">Payment Methods</div>
-          <div class="payment-methods-page__subtitle">Tarjetas, respaldo y datos de facturacion del workspace</div>
+          <div class="payment-methods-page__subtitle">Cards, backup and billing details for the workspace</div>
         </div>
       </div>
       <div class="payment-methods-page__topbar-actions">
@@ -50,10 +50,10 @@
       <section class="payment-methods-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="payment-methods-page__eyebrow">Billing operations</div>
-          <h1 class="payment-methods-page__hero-title">Administra el metodo principal y la informacion fiscal sin salir del flujo operativo.</h1>
+          <h1 class="payment-methods-page__hero-title">Manage the primary method and tax information without leaving the operational flow.</h1>
           <p class="payment-methods-page__hero-copy">
-            Esta pantalla agrupa lo que normalmente consulta finance o un owner: metodo activo,
-            respaldo, direccion de facturacion y contacto que recibe comprobantes.
+            This screen groups what finance or an owner usually checks: active method,
+            backup, billing address and the contact that receives invoices.
           </p>
         </div>
       </section>
@@ -66,8 +66,8 @@
       <aside class="mts-g-col-12 mts-g-col-xl-5 payment-methods-page__sidebar">
         <div class="mts-form-card payment-methods-page__form-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Datos de facturacion</h2>
-            <p class="mts-form-card__subtitle">Contacto visible en invoice, pais y direccion legal del workspace.</p>
+            <h2 class="mts-form-card__title">Billing details</h2>
+            <p class="mts-form-card__subtitle">Contact shown on the invoice, country and legal address of the workspace.</p>
           </div>
 
           <div class="payment-methods-page__form-grid">
@@ -102,49 +102,49 @@
     var paymentMethods = [
       {
         id: 'pm-1',
-        label: 'Visa terminada en 4242',
-        type: 'Principal',
+        label: 'Visa ending in 4242',
+        type: 'Primary',
         typeVariant: 'success',
         owner: 'Camila Soto',
         expiry: '08/28',
-        status: 'Verificada'
+        status: 'Verified'
       },
       {
         id: 'pm-2',
-        label: 'Mastercard terminada en 1881',
-        type: 'Respaldo',
+        label: 'Mastercard ending in 1881',
+        type: 'Backup',
         typeVariant: 'primary',
         owner: 'Finance Team',
         expiry: '11/27',
-        status: 'Lista para fallback'
+        status: 'Ready for fallback'
       }
     ];
 
     new MTS.Button('#payment-methods-add', {
-      label: 'Agregar metodo',
+      label: 'Add method',
       variant: 'primary',
       iconLeft: MTS.Icon.get('plus-circle'),
       onClick: function () {
-        notify('success', 'Metodo agregado', 'La UI deja planteado el alta de una nueva tarjeta o metodo alternativo.');
+        notify('success', 'Method added', 'The UI sets up adding a new card or alternative method.');
       }
     });
 
     var billingName = new MTS.Input('#payment-billing-name', {
-      label: 'Nombre legal',
+      label: 'Legal name',
       type: 'text',
       value: 'Matios Studio LLC',
-      placeholder: 'Nombre legal'
+      placeholder: 'Legal name'
     });
 
     var billingEmail = new MTS.Input('#payment-billing-email', {
-      label: 'Correo de facturacion',
+      label: 'Billing email',
       type: 'email',
       value: 'finance@matios.dev',
-      placeholder: 'finance@empresa.com'
+      placeholder: 'finance@company.com'
     });
 
     var billingCountry = new MTS.Select('#payment-billing-country', {
-      label: 'Pais',
+      label: 'Country',
       options: [
         { value: 'cl', label: 'Chile' },
         { value: 'us', label: 'United States' },
@@ -161,34 +161,34 @@
     });
 
     var billingAddress = new MTS.Input('#payment-billing-address', {
-      label: 'Direccion legal',
+      label: 'Legal address',
       type: 'text',
       value: '500 Market St, Suite 200, San Francisco, CA',
-      placeholder: 'Direccion legal'
+      placeholder: 'Legal address'
     });
 
     new MTS.Button('#payment-billing-save', {
-      label: 'Guardar datos',
+      label: 'Save details',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('save'),
       block: true,
       onClick: function () {
-        notify('info', 'Datos actualizados', 'Se simulo el guardado del contacto y direccion de facturacion.');
+        notify('info', 'Details updated', 'Saving the billing contact and address was simulated.');
       }
     });
 
     new MTS.Card('#payment-methods-policy-card', {
-      title: 'Politica de cobro',
+      title: 'Charge policy',
       subtitle: 'Workspace billing',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="payment-methods-page__policy">' +
-          '<p>Los cargos automaticos usan el metodo principal. Si falla, se intenta una vez con el metodo de respaldo antes de pausar el workspace.</p>' +
+          '<p>Automatic charges use the primary method. If it fails, the backup method is tried once before pausing the workspace.</p>' +
           '<ul class="payment-methods-page__policy-list">' +
-            '<li>Invoice al correo finance@matios.dev</li>' +
-            '<li>Reintento automatico cada 24 horas</li>' +
-            '<li>Notificacion al owner y billing contact</li>' +
+            '<li>Invoice sent to finance@matios.dev</li>' +
+            '<li>Automatic retry every 24 hours</li>' +
+            '<li>Notification to the owner and billing contact</li>' +
           '</ul>' +
         '</div>'
     });
@@ -226,33 +226,33 @@
                 '<span class="payment-methods-page__status">' + method.status + '</span>' +
               '</div>' +
               '<div class="payment-methods-page__method-grid">' +
-                '<div><span>Expira</span><strong>' + method.expiry + '</strong></div>' +
-                '<div><span>Uso</span><strong>' + method.type + '</strong></div>' +
+                '<div><span>Expires</span><strong>' + method.expiry + '</strong></div>' +
+                '<div><span>Usage</span><strong>' + method.type + '</strong></div>' +
               '</div>' +
             '</div>',
           footerAlign: 'between',
           footer: [
             {
-              label: method.type === 'Principal' ? 'Editar metodo' : 'Definir principal',
+              label: method.type === 'Primary' ? 'Edit method' : 'Set as primary',
               variant: 'primary',
-              icon: MTS.Icon.get(method.type === 'Principal' ? 'edit' : 'check-circle'),
+              icon: MTS.Icon.get(method.type === 'Primary' ? 'edit' : 'check-circle'),
               onClick: function () {
-                if (method.type !== 'Principal') {
+                if (method.type !== 'Primary') {
                   paymentMethods.forEach(function (item) {
-                    item.type = item.id === method.id ? 'Principal' : 'Respaldo';
+                    item.type = item.id === method.id ? 'Primary' : 'Backup';
                     item.typeVariant = item.id === method.id ? 'success' : 'primary';
                   });
                   renderMethods();
                 }
-                notify('success', 'Metodo actualizado', method.label + ' quedo listo para el flujo de cobro.');
+                notify('success', 'Method updated', method.label + ' is now ready for the charge flow.');
               }
             },
             {
-              label: 'Eliminar',
+              label: 'Delete',
               variant: 'ghost',
               icon: MTS.Icon.get('trash'),
               onClick: function () {
-                notify('warning', 'Accion simulada', 'Aqui normalmente pedirias confirmacion antes de remover un metodo.');
+                notify('warning', 'Simulated action', 'Here you would normally ask for confirmation before removing a method.');
               }
             }
           ]

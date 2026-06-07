@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="invoice-history-page__logo">M</div>
         <div>
           <div class="invoice-history-page__title">Invoice History</div>
-          <div class="invoice-history-page__subtitle">Facturas emitidas, estado de cobro y acciones para finance</div>
+          <div class="invoice-history-page__subtitle">Issued invoices, payment status and actions for finance</div>
         </div>
       </div>
       <div class="invoice-history-page__actions">
@@ -50,10 +50,10 @@
       <section class="invoice-history-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="invoice-history-page__eyebrow">Finance operations</div>
-          <h1 class="invoice-history-page__hero-title">Revisa invoices emitidas, estados de pago y reenvios sin salir del flujo de billing.</h1>
+          <h1 class="invoice-history-page__hero-title">Review issued invoices, payment statuses and resends without leaving the billing flow.</h1>
           <p class="invoice-history-page__hero-copy">
-            Esta vista prioriza consultas reales de equipos financieros: periodo, estado, monto,
-            descarga del PDF y reenvio del comprobante al contacto de facturacion.
+            This view prioritizes the real queries finance teams run: period, status, amount,
+            PDF download and resending the receipt to the billing contact.
           </p>
         </div>
       </section>
@@ -61,8 +61,8 @@
       <aside class="mts-g-col-12 mts-g-col-xl-4">
         <div class="mts-form-card invoice-history-page__filters-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Filtros</h2>
-            <p class="mts-form-card__subtitle">Busca por numero, periodo o estado de cobro.</p>
+            <h2 class="mts-form-card__title">Filters</h2>
+            <p class="mts-form-card__subtitle">Search by number, period or payment status.</p>
           </div>
           <div id="invoice-feedback"></div>
           <div class="invoice-history-page__filters">
@@ -78,9 +78,9 @@
         <div class="invoice-history-page__results-head">
           <div>
             <div class="invoice-history-page__results-label">Billing documents</div>
-            <h2 class="invoice-history-page__results-title">Historial de invoices</h2>
+            <h2 class="invoice-history-page__results-title">Invoice history</h2>
           </div>
-          <div class="invoice-history-page__results-meta" id="invoice-results-meta">0 resultados</div>
+          <div class="invoice-history-page__results-meta" id="invoice-results-meta">0 results</div>
         </div>
         <div class="mts-grid mts-grid--gap-md" id="invoice-results"></div>
       </section>
@@ -100,56 +100,56 @@
   <script>
     var invoiceState = { query: '', status: '', period: '' };
     var invoices = [
-      { id: 'INV-2026-041', period: 'Abril 2026', amount: 'USD 1,240', status: 'paid', statusLabel: 'Pagada', due: '03 mayo 2026', contact: 'finance@matios.dev' },
-      { id: 'INV-2026-040', period: 'Marzo 2026', amount: 'USD 1,180', status: 'paid', statusLabel: 'Pagada', due: '03 abril 2026', contact: 'finance@matios.dev' },
-      { id: 'INV-2026-039', period: 'Febrero 2026', amount: 'USD 1,180', status: 'processing', statusLabel: 'Procesando', due: '03 marzo 2026', contact: 'finance@matios.dev' },
-      { id: 'INV-2026-038', period: 'Enero 2026', amount: 'USD 1,090', status: 'overdue', statusLabel: 'Vencida', due: '03 febrero 2026', contact: 'billing@matios.dev' }
+      { id: 'INV-2026-041', period: 'April 2026', amount: 'USD 1,240', status: 'paid', statusLabel: 'Paid', due: 'May 03, 2026', contact: 'finance@matios.dev' },
+      { id: 'INV-2026-040', period: 'March 2026', amount: 'USD 1,180', status: 'paid', statusLabel: 'Paid', due: 'April 03, 2026', contact: 'finance@matios.dev' },
+      { id: 'INV-2026-039', period: 'February 2026', amount: 'USD 1,180', status: 'processing', statusLabel: 'Processing', due: 'March 03, 2026', contact: 'finance@matios.dev' },
+      { id: 'INV-2026-038', period: 'January 2026', amount: 'USD 1,090', status: 'overdue', statusLabel: 'Overdue', due: 'February 03, 2026', contact: 'billing@matios.dev' }
     ];
 
     var statusSelect;
     var periodSelect;
 
     new MTS.Button('#invoice-export-button', {
-      label: 'Exportar ledger',
+      label: 'Export ledger',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('download'),
       onClick: function () {
-        notify('success', 'Export listo', 'Se simulo la exportacion del ledger de invoices del periodo actual.');
+        notify('success', 'Export ready', 'The invoice ledger export for the current period was simulated.');
       }
     });
 
     new MTS.Input('#invoice-search', {
       type: 'text',
-      label: 'Buscar invoice',
-      placeholder: 'INV-2026-041 o Abril 2026',
+      label: 'Search invoice',
+      placeholder: 'INV-2026-041 or April 2026',
       iconLeft: MTS.Icon.get('search')
     });
 
     statusSelect = new MTS.Select('#invoice-status', {
-      label: 'Estado',
-      placeholder: 'Todos',
+      label: 'Status',
+      placeholder: 'All',
       clearable: true,
       options: [
-        { value: 'paid', label: 'Pagada' },
-        { value: 'processing', label: 'Procesando' },
-        { value: 'overdue', label: 'Vencida' }
+        { value: 'paid', label: 'Paid' },
+        { value: 'processing', label: 'Processing' },
+        { value: 'overdue', label: 'Overdue' }
       ]
     });
 
     periodSelect = new MTS.Select('#invoice-period', {
-      label: 'Periodo',
-      placeholder: 'Todos',
+      label: 'Period',
+      placeholder: 'All',
       clearable: true,
       options: [
-        { value: 'Abril 2026', label: 'Abril 2026' },
-        { value: 'Marzo 2026', label: 'Marzo 2026' },
-        { value: 'Febrero 2026', label: 'Febrero 2026' },
-        { value: 'Enero 2026', label: 'Enero 2026' }
+        { value: 'April 2026', label: 'April 2026' },
+        { value: 'March 2026', label: 'March 2026' },
+        { value: 'February 2026', label: 'February 2026' },
+        { value: 'January 2026', label: 'January 2026' }
       ]
     });
 
     new MTS.Button('#invoice-clear', {
-      label: 'Limpiar filtros',
+      label: 'Clear filters',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
@@ -217,7 +217,7 @@
         return matchesQuery && matchesStatus && matchesPeriod;
       });
 
-      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+      meta.textContent = visible.length + (visible.length === 1 ? ' result' : ' results');
 
       if (!visible.length) {
         var emptyWrap = document.createElement('div');
@@ -226,11 +226,11 @@
         var emptyHost = document.createElement('div');
         emptyWrap.appendChild(emptyHost);
         new MTS.Card(emptyHost, {
-          title: 'Sin invoices',
-          subtitle: 'Ajusta filtros',
+          title: 'No invoices',
+          subtitle: 'Adjust filters',
           variant: 'outlined',
           size: 'lg',
-          body: '<p class="invoice-history-page__empty">No hay invoices que coincidan con la consulta actual.</p>'
+          body: '<p class="invoice-history-page__empty">There are no invoices matching the current query.</p>'
         });
         return;
       }
@@ -254,26 +254,26 @@
                 '<span class="invoice-history-page__invoice-amount">' + invoice.amount + '</span>' +
               '</div>' +
               '<div class="invoice-history-page__invoice-grid">' +
-                '<div><span>Vencimiento</span><strong>' + invoice.due + '</strong></div>' +
-                '<div><span>Contacto</span><strong>' + invoice.contact + '</strong></div>' +
+                '<div><span>Due date</span><strong>' + invoice.due + '</strong></div>' +
+                '<div><span>Contact</span><strong>' + invoice.contact + '</strong></div>' +
               '</div>' +
             '</div>',
           footerAlign: 'between',
           footer: [
             {
-              label: 'Descargar PDF',
+              label: 'Download PDF',
               variant: 'primary',
               icon: MTS.Icon.get('download'),
               onClick: function () {
-                notify('success', 'Descarga simulada', 'La invoice ' + invoice.id + ' quedo lista para descarga.');
+                notify('success', 'Download simulated', 'Invoice ' + invoice.id + ' is ready for download.');
               }
             },
             {
-              label: 'Reenviar',
+              label: 'Resend',
               variant: 'ghost',
               icon: MTS.Icon.get('mail'),
               onClick: function () {
-                notify('info', 'Invoice reenviada', 'Se simulo el reenvio de ' + invoice.id + ' a ' + invoice.contact + '.');
+                notify('info', 'Invoice resent', 'The resend of ' + invoice.id + ' to ' + invoice.contact + ' was simulated.');
               }
             }
           ]

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -34,7 +34,7 @@
         <div class="approval-detail-page__logo">M</div>
         <div>
           <div class="approval-detail-page__title">Approval Detail</div>
-          <div class="approval-detail-page__subtitle">Contexto completo para decidir una solicitud sensible</div>
+          <div class="approval-detail-page__subtitle">Full context to decide on a sensitive request</div>
         </div>
       </div>
       <div class="approval-detail-page__actions">
@@ -46,10 +46,10 @@
       <section class="approval-detail-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="approval-detail-page__eyebrow">Request detail</div>
-          <h1 class="approval-detail-page__hero-title">APR-401 · Aprobar acceso Billing Editor para Finance</h1>
+          <h1 class="approval-detail-page__hero-title">APR-401 · Approve Billing Editor access for Finance</h1>
           <p class="approval-detail-page__hero-copy">
-            La solicitud viene desde Operations para habilitar edicion de invoices y metodo de pago
-            a un perfil de Finance durante el cierre de ciclo actual.
+            The request comes from Operations to enable invoice editing and payment method access
+            for a Finance profile during the current cycle close.
           </p>
           <div class="approval-detail-page__hero-badges">
             <span id="approval-detail-priority"></span>
@@ -89,48 +89,48 @@
   </script>
   <script>
     new MTS.Button('#approval-detail-back', {
-      label: 'Volver a inbox',
+      label: 'Back to inbox',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('arrow-left'),
       onClick: function () { openScreen('../approval-inbox/index.html'); }
     });
 
     new MTS.Badge('#approval-detail-priority', {
-      label: 'Alta',
+      label: 'High',
       variant: 'danger',
       size: 'sm'
     });
 
     new MTS.Badge('#approval-detail-state', {
-      label: 'Pendiente',
+      label: 'Pending',
       variant: 'warning',
       size: 'sm'
     });
 
     new MTS.Card('#approval-detail-summary-card', {
-      title: 'Resumen de la solicitud',
-      subtitle: 'Contexto base',
+      title: 'Request summary',
+      subtitle: 'Base context',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="approval-detail-page__summary-grid">' +
-          detailCell('Solicitante', 'Camila Soto') +
-          detailCell('Equipo destino', 'Finance') +
-          detailCell('Rol solicitado', 'Billing Editor') +
-          detailCell('Ventana de uso', 'Cierre del ciclo mayo 2026') +
-          detailCell('Motivo', 'Gestión directa de invoices y cobros') +
-          detailCell('Estado actual', 'Pendiente de aprobación') +
+          detailCell('Requester', 'Camila Soto') +
+          detailCell('Target team', 'Finance') +
+          detailCell('Requested role', 'Billing Editor') +
+          detailCell('Usage window', 'May 2026 cycle close') +
+          detailCell('Reason', 'Direct management of invoices and payments') +
+          detailCell('Current status', 'Pending approval') +
         '</div>'
     });
 
     new MTS.Card('#approval-detail-impact-card', {
-      title: 'Impacto del cambio',
-      subtitle: 'Permisos incluidos',
+      title: 'Change impact',
+      subtitle: 'Included permissions',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="approval-detail-page__impact">' +
-          '<p>Si se aprueba, el perfil podrá editar invoices, revisar pagos y actualizar el método principal del workspace durante el cierre de ciclo.</p>' +
+          '<p>If approved, the profile will be able to edit invoices, review payments and update the workspace primary payment method during the cycle close.</p>' +
           '<div class="approval-detail-page__pill-list">' +
             pill('Invoice edit') +
             pill('Payment method access') +
@@ -141,56 +141,56 @@
     });
 
     new MTS.Card('#approval-detail-notes-card', {
-      title: 'Notas y antecedentes',
-      subtitle: 'Contexto adicional',
+      title: 'Notes and background',
+      subtitle: 'Additional context',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="approval-detail-page__notes">' +
-          noteRow('Hoy, 08:10', 'Finance reportó bloqueo para reconciliar invoices pendientes del mes.') +
-          noteRow('Ayer, 19:40', 'Operations validó que el acceso puede acotarse a Billing Editor.') +
-          noteRow('18 abril', 'Security indicó que no se deben extender permisos a settings compartidos.') +
+          noteRow('Today, 08:10', 'Finance reported a blocker reconciling the pending invoices for the month.') +
+          noteRow('Yesterday, 19:40', 'Operations confirmed access can be scoped to Billing Editor.') +
+          noteRow('April 18', 'Security advised not to extend permissions to shared settings.') +
         '</div>'
     });
 
     new MTS.Card('#approval-detail-decision-card', {
       title: 'Decision',
-      subtitle: 'Accion final',
+      subtitle: 'Final action',
       variant: 'outlined',
       size: 'lg',
       body:
-        '<p class="approval-detail-page__decision-copy">La recomendacion actual es aprobar con alcance acotado a Billing Editor y fecha de revision al cierre del ciclo.</p>',
+        '<p class="approval-detail-page__decision-copy">The current recommendation is to approve with scope limited to Billing Editor and a review date at the cycle close.</p>',
       footerAlign: 'between',
       footer: [
         {
-          label: 'Aprobar',
+          label: 'Approve',
           variant: 'primary',
           icon: MTS.Icon.get('check-circle'),
           onClick: function () {
-            notify('success', 'Solicitud aprobada', 'APR-401 quedó aprobada con alcance acotado al ejemplo.');
+            notify('success', 'Request approved', 'APR-401 was approved with limited scope in this example.');
           }
         },
         {
-          label: 'Rechazar',
+          label: 'Reject',
           variant: 'ghost',
           icon: MTS.Icon.get('alert'),
           onClick: function () {
-            notify('warning', 'Solicitud rechazada', 'APR-401 quedó rechazada dentro del flujo de ejemplo.');
+            notify('warning', 'Request rejected', 'APR-401 was rejected within the example flow.');
           }
         }
       ]
     });
 
     new MTS.Card('#approval-detail-sla-card', {
-      title: 'SLA y seguimiento',
-      subtitle: 'Prioridad operativa',
+      title: 'SLA and tracking',
+      subtitle: 'Operational priority',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="approval-detail-page__sla">' +
-          '<div><span>SLA</span><strong>2 horas</strong></div>' +
-          '<div><span>Reviewer sugerido</span><strong>Owner de Billing</strong></div>' +
-          '<div><span>Revision posterior</span><strong>Cierre de ciclo</strong></div>' +
+          '<div><span>SLA</span><strong>2 hours</strong></div>' +
+          '<div><span>Suggested reviewer</span><strong>Billing owner</strong></div>' +
+          '<div><span>Follow-up review</span><strong>Cycle close</strong></div>' +
         '</div>'
     });
 

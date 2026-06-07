@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Editar rol - Matios UI</title>
+  <title>Edit role - Matios UI</title>
   <script>
     (function () {
       var source = location.search || location.hash || '';
@@ -76,68 +76,68 @@
       users: [
         {
           id: 'users-workspace-base',
-          name: 'Workspace base',
-          description: 'Acceso operativo base para la administracion diaria de usuarios.',
+          name: 'Base workspace',
+          description: 'Baseline operational access for day-to-day user administration.',
           moduleId: 'users',
-          moduleName: 'Usuarios'
+          moduleName: 'Users'
         },
         {
           id: 'users-supervisor-operacional',
-          name: 'Supervisor operacional',
-          description: 'Gestion avanzada de usuarios, trazabilidad y aprobaciones internas.',
+          name: 'Operations supervisor',
+          description: 'Advanced user management, traceability and internal approvals.',
           moduleId: 'users',
-          moduleName: 'Usuarios'
+          moduleName: 'Users'
         },
         {
           id: 'users-auditor-usuarios',
-          name: 'Auditor de usuarios',
-          description: 'Consulta historica, revision de cambios y evidencia de auditoria.',
+          name: 'User auditor',
+          description: 'Historical lookup, change review and audit evidence.',
           moduleId: 'users',
-          moduleName: 'Usuarios'
+          moduleName: 'Users'
         }
       ],
       documents: [
         {
           id: 'documents-lector-documental',
-          name: 'Lector documental',
-          description: 'Consulta documentos y seguimiento del flujo sin capacidad de edicion.',
+          name: 'Document reader',
+          description: 'View documents and track the workflow without edit capabilities.',
           moduleId: 'documents',
-          moduleName: 'Documentos'
+          moduleName: 'Documents'
         },
         {
           id: 'documents-editor-documental',
-          name: 'Editor documental',
-          description: 'Edicion de contenido, metadatos y gestion de versiones activas.',
+          name: 'Document editor',
+          description: 'Content and metadata editing and management of active versions.',
           moduleId: 'documents',
-          moduleName: 'Documentos'
+          moduleName: 'Documents'
         },
         {
           id: 'documents-aprobador-documental',
-          name: 'Aprobador documental',
-          description: 'Validacion final del circuito documental y autorizacion de cambios.',
+          name: 'Document approver',
+          description: 'Final validation of the document circuit and change authorization.',
           moduleId: 'documents',
-          moduleName: 'Documentos'
+          moduleName: 'Documents'
         }
       ],
       billing: [
         {
           id: 'billing-consulta-financiera',
-          name: 'Consulta financiera',
-          description: 'Lectura de indicadores de billing, conciliacion y seguimiento basico.',
+          name: 'Financial viewer',
+          description: 'Read billing indicators, reconciliation and basic tracking.',
           moduleId: 'billing',
           moduleName: 'Billing'
         },
         {
           id: 'billing-administrador-cobros',
-          name: 'Administrador de cobros',
-          description: 'Operacion de cobranzas, regularizaciones y excepciones de facturacion.',
+          name: 'Collections administrator',
+          description: 'Collections operation, adjustments and billing exceptions.',
           moduleId: 'billing',
           moduleName: 'Billing'
         },
         {
           id: 'billing-auditor-billing',
-          name: 'Auditor billing',
-          description: 'Revision de movimientos, desvios y consistencia operativa del modulo.',
+          name: 'Billing auditor',
+          description: 'Review of movements, deviations and operational consistency of the module.',
           moduleId: 'billing',
           moduleName: 'Billing'
         }
@@ -145,24 +145,24 @@
       support: [
         {
           id: 'support-agente-mesa',
-          name: 'Agente de mesa',
-          description: 'Gestion de tickets entrantes, seguimiento y atencion de primer nivel.',
+          name: 'Desk agent',
+          description: 'Handle incoming tickets, follow-up and first-level support.',
           moduleId: 'support',
-          moduleName: 'Soporte'
+          moduleName: 'Support'
         },
         {
           id: 'support-coordinador-soporte',
-          name: 'Coordinador de soporte',
-          description: 'Priorizacion operativa, escalamiento y control del backlog del modulo.',
+          name: 'Support coordinator',
+          description: 'Operational prioritization, escalation and control of the module backlog.',
           moduleId: 'support',
-          moduleName: 'Soporte'
+          moduleName: 'Support'
         },
         {
           id: 'support-qa-soporte',
-          name: 'QA soporte',
-          description: 'Revision de cierres, calidad de respuesta y mejora del flujo de soporte.',
+          name: 'Support QA',
+          description: 'Review of closures, response quality and support workflow improvement.',
           moduleId: 'support',
-          moduleName: 'Soporte'
+          moduleName: 'Support'
         }
       ]
     };
@@ -186,8 +186,8 @@
     var moduleFilterSelect = null;
 
     new MTS.Card('#role-edit-panel', {
-      title: 'Editar rol',
-      subtitle: 'Ajuste de perfiles por modulo',
+      title: 'Edit role',
+      subtitle: 'Adjust profiles by module',
       variant: 'elevated',
       size: 'lg',
       body:
@@ -195,11 +195,11 @@
           '<div id="role-edit-alert"></div>' +
           '<section class="mts-surface mts-p-4 mts-d-flex mts-justify-content--between mts-gap-4 mts-flex--wrap">' +
             '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
-              '<p class="mts-text--md mts-m-0">Ajusta un rol existente con la misma experiencia visual que ya usamos en la alta. Cada modulo conserva un unico perfil activo.</p>' +
-              '<p class="mts-text--sm mts-text-color--muted mts-m-0">Para reemplazar un perfil, quita el actual y mueve el nuevo desde disponibles. Si intentas repetir modulo, la transferencia se bloquea y rebota al origen.</p>' +
+              '<p class="mts-text--md mts-m-0">Adjust an existing role with the same visual experience used when creating one. Each module keeps a single active profile.</p>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-m-0">To replace a profile, remove the current one and move the new one from the available list. If you try to repeat a module, the transfer is blocked and bounces back to the origin.</p>' +
             '</div>' +
             '<div>' +
-              '<span id="role-edit-status" class="mts-badge mts-badge--info mts-badge--sm">0 perfiles activos</span>' +
+              '<span id="role-edit-status" class="mts-badge mts-badge--info mts-badge--sm">0 active profiles</span>' +
             '</div>' +
           '</section>' +
           '<div class="mts-grid mts-grid--gap-md">' +
@@ -209,8 +209,8 @@
           '<section class="mts-surface mts-p-4 mts-d-flex mts-flex--column mts-gap-4">' +
             '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3 mts-flex--wrap">' +
               '<div>' +
-                '<h3 class="mts-h4 mts-m-0">Perfiles del rol</h3>' +
-                '<p class="mts-text--sm mts-text-color--muted mts-m-0">Version de edicion alineada con la experiencia de `role-create`.</p>' +
+                '<h3 class="mts-h4 mts-m-0">Role profiles</h3>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-m-0">Edit view aligned with the `role-create` experience.</p>' +
               '</div>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md mts-grid--center">' +
@@ -218,7 +218,7 @@
                 '<div id="role-edit-module-filter"></div>' +
               '</div>' +
               '<div class="mts-g-col-12 mts-g-col-md-6 mts-d-flex mts-align-items--center mts-justify-content--between">' +
-                '<span id="role-edit-filter-count" class="mts-badge mts-badge--neutral mts-badge--sm">0 perfiles visibles</span>' +
+                '<span id="role-edit-filter-count" class="mts-badge mts-badge--neutral mts-badge--sm">0 visible profiles</span>' +
               '</div>' +
             '</div>' +
             '<div id="role-edit-transfer"></div>' +
@@ -226,10 +226,10 @@
           '<section class="mts-surface mts-p-4">' +
             '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3 mts-flex--wrap">' +
               '<div>' +
-                '<h3 class="mts-h4 mts-m-0">Cobertura actual</h3>' +
-                '<p class="mts-text--sm mts-text-color--muted mts-m-0">Resumen del rol luego de cada ajuste para revisar rapido que modulos siguen cubiertos.</p>' +
+                '<h3 class="mts-h4 mts-m-0">Current coverage</h3>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-m-0">Role summary after each adjustment to quickly check which modules are still covered.</p>' +
               '</div>' +
-              '<span id="role-edit-count" class="mts-badge mts-badge--info mts-badge--sm">0 modulos</span>' +
+              '<span id="role-edit-count" class="mts-badge mts-badge--info mts-badge--sm">0 modules</span>' +
             '</div>' +
             '<div id="role-edit-summary" class="mts-grid mts-grid--gap-md mts-mt-4"></div>' +
           '</section>' +
@@ -237,7 +237,7 @@
       footerAlign: 'between',
       footer: [
         {
-          label: 'Volver a roles',
+          label: 'Back to roles',
           variant: 'ghost',
           icon: MTS.Icon.get('arrow-left'),
           onClick: function () {
@@ -245,7 +245,7 @@
           }
         },
         {
-          label: 'Guardar cambios',
+          label: 'Save changes',
           variant: 'primary',
           icon: MTS.Icon.get('save'),
           onClick: function () {
@@ -257,27 +257,27 @@
 
     var nameInput = new MTS.Input('#role-edit-name', {
       type: 'text',
-      label: 'Nombre',
-      value: 'Operador integral',
+      label: 'Name',
+      value: 'Full operator',
       iconLeft: MTS.Icon.get('shield')
     });
 
     var descriptionInput = new MTS.Input('#role-edit-description', {
       type: 'text',
-      label: 'Descripcion',
-      value: 'Agrupa perfiles de usuarios, documentos y soporte para operacion diaria.',
+      label: 'Description',
+      value: 'Groups users, documents and support profiles for daily operations.',
       iconLeft: MTS.Icon.get('file-text')
     });
 
     moduleFilterSelect = new MTS.Select('#role-edit-module-filter', {
-      label: 'Filtrar disponibles por modulo',
+      label: 'Filter available by module',
       value: 'all',
       options: [
-        { value: 'all', label: 'Todos los modulos' },
-        { value: 'users', label: 'Usuarios' },
-        { value: 'documents', label: 'Documentos' },
+        { value: 'all', label: 'All modules' },
+        { value: 'users', label: 'Users' },
+        { value: 'documents', label: 'Documents' },
         { value: 'billing', label: 'Billing' },
-        { value: 'support', label: 'Soporte' }
+        { value: 'support', label: 'Support' }
       ],
       onChange: function () {
         applyProfileFilter();
@@ -285,19 +285,19 @@
     });
 
     roleProfilesTransfer = new MTS.TransferList('#role-edit-transfer', {
-      label: 'Perfiles del rol',
-      hint: 'El rol ya parte con perfiles activos. Usa el filtro para explorar disponibles y mover cambios de forma controlada.',
-      originTitle: 'Perfiles disponibles',
-      selectedTitle: 'Perfiles activos',
-      originEmptyText: 'No quedan perfiles disponibles para este filtro.',
-      selectedEmptyText: 'El rol quedo sin perfiles activos.',
+      label: 'Role profiles',
+      hint: 'The role starts with active profiles. Use the filter to explore the available list and move changes in a controlled way.',
+      originTitle: 'Available profiles',
+      selectedTitle: 'Active profiles',
+      originEmptyText: 'No profiles available for this filter.',
+      selectedEmptyText: 'The role has no active profiles left.',
       originDataSource: ALL_PROFILES.filter(function (item) {
         return INITIAL_SELECTED_PROFILE_IDS.indexOf(item.id) === -1;
       }),
       selectedDataSource: INITIAL_SELECTED_PROFILES,
       validateUnique: true,
       validateKey: 'moduleId',
-      duplicateMessage: 'Ya existe un perfil activo para este modulo.',
+      duplicateMessage: 'An active profile already exists for this module.',
       renderItem: function (item) {
         return '' +
           '<div class="mts-transferlist__item-main">' +
@@ -318,16 +318,16 @@
       if (detail.to === 'selected') {
         showAlert(
           'success',
-          'Perfil aplicado',
-          'El rol ahora usa <strong>' + escapeHtml(item.name) + '</strong> para el modulo <strong>' + escapeHtml(item.moduleName) + '</strong>.'
+          'Profile applied',
+          'The role now uses <strong>' + escapeHtml(item.name) + '</strong> for the <strong>' + escapeHtml(item.moduleName) + '</strong> module.'
         );
         return;
       }
 
       showAlert(
         'info',
-        'Perfil retirado',
-        'Se retiro <strong>' + escapeHtml(item.name) + '</strong> del modulo <strong>' + escapeHtml(item.moduleName) + '</strong>.'
+        'Profile removed',
+        'Removed <strong>' + escapeHtml(item.name) + '</strong> from the <strong>' + escapeHtml(item.moduleName) + '</strong> module.'
       );
     });
 
@@ -336,8 +336,8 @@
 
       showAlert(
         'warning',
-        'Transferencia bloqueada',
-        'El rol ya tiene un perfil activo para <strong>' + escapeHtml(item.moduleName) + '</strong>. Quita el actual antes de mover <strong>' + escapeHtml(item.name) + '</strong>.'
+        'Transfer blocked',
+        'The role already has an active profile for <strong>' + escapeHtml(item.moduleName) + '</strong>. Remove the current one before moving <strong>' + escapeHtml(item.name) + '</strong>.'
       );
     });
 
@@ -370,7 +370,7 @@
       });
 
       document.getElementById('role-edit-filter-count').textContent =
-        filteredOriginProfiles.length + (filteredOriginProfiles.length === 1 ? ' perfil visible' : ' perfiles visibles');
+        filteredOriginProfiles.length + (filteredOriginProfiles.length === 1 ? ' visible profile' : ' visible profiles');
     }
 
     function renderSelectedProfilesSummary() {
@@ -378,17 +378,17 @@
         .map(function (moduleId) { return selectedProfiles[moduleId]; })
         .sort(function (a, b) { return a.moduleName.localeCompare(b.moduleName); });
 
-      document.getElementById('role-edit-count').textContent = items.length + (items.length === 1 ? ' modulo' : ' modulos');
+      document.getElementById('role-edit-count').textContent = items.length + (items.length === 1 ? ' module' : ' modules');
       document.getElementById('role-edit-status').textContent = items.length
-        ? items.length + (items.length === 1 ? ' perfil activo' : ' perfiles activos')
-        : 'Sin perfiles activos';
+        ? items.length + (items.length === 1 ? ' active profile' : ' active profiles')
+        : 'No active profiles';
 
       if (!items.length) {
         document.getElementById('role-edit-summary').innerHTML =
           '<div class="mts-g-col-12">' +
             '<div class="mts-surface mts-p-4 mts-d-flex mts-flex--column mts-gap-2 mts-align-items--center mts-justify-content--center mts-text--center">' +
-            '<strong>El rol quedo vacio.</strong>' +
-            '<span>Vuelve a mover perfiles desde la lista izquierda para recuperar cobertura por modulo.</span>' +
+            '<strong>The role is empty.</strong>' +
+            '<span>Move profiles back from the left list to restore coverage by module.</span>' +
             '</div>' +
           '</div>';
         return;
@@ -432,24 +432,24 @@
       clearAlerts();
 
       if (!name) {
-        nameInput.setError('Ingresa el nombre del rol');
+        nameInput.setError('Enter the role name');
         return;
       }
 
       if (!description) {
-        descriptionInput.setError('Ingresa la descripcion del rol');
+        descriptionInput.setError('Enter the role description');
         return;
       }
 
       if (!modules.length) {
-        showAlert('warning', 'Faltan perfiles', 'El rol debe conservar al menos un perfil asociado.');
+        showAlert('warning', 'Missing profiles', 'The role must keep at least one associated profile.');
         return;
       }
 
       showAlert(
         'success',
-        'Rol actualizado',
-        'Se guardarian cambios sobre <strong>' + escapeHtml(name) + '</strong> con <strong>' + modules.length + '</strong> modulos activos.'
+        'Role updated',
+        'Changes would be saved for <strong>' + escapeHtml(name) + '</strong> with <strong>' + modules.length + '</strong> active modules.'
       );
     }
 

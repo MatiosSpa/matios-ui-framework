@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="recent-files-page__logo">M</div>
         <div>
           <div class="recent-files-page__title">Recent Files</div>
-          <div class="recent-files-page__subtitle">Archivos recientes con owner, estado y accion siguiente</div>
+          <div class="recent-files-page__subtitle">Recent files with owner, status and next action</div>
         </div>
       </div>
       <div id="recent-upload-button"></div>
@@ -47,18 +47,18 @@
     <main class="recent-files-page__main mts-grid mts-grid--gap-md">
       <section class="recent-files-page__hero mts-surface mts-g-col-12">
         <div class="recent-files-page__eyebrow">Recent activity</div>
-        <h1 class="recent-files-page__hero-title">Lo ultimo que toco el equipo.</h1>
+        <h1 class="recent-files-page__hero-title">The latest the team touched.</h1>
         <p class="recent-files-page__hero-copy">
-          Esta UI sirve para aterrizar actividad documental real sin depender de un gestor pesado:
-          ver que se movio, quien es owner y que hacer despues.
+          This UI grounds real document activity without relying on a heavy manager:
+          see what moved, who owns it and what to do next.
         </p>
       </section>
 
       <aside class="mts-g-col-12 mts-g-col-xl-4">
         <div class="mts-form-card recent-files-page__filters-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Filtros</h2>
-            <p class="mts-form-card__subtitle">Recorta por nombre, tipo y estado.</p>
+            <h2 class="mts-form-card__title">Filters</h2>
+            <p class="mts-form-card__subtitle">Narrow by name, type and status.</p>
           </div>
           <div id="recent-feedback"></div>
           <div class="recent-files-page__filters">
@@ -74,9 +74,9 @@
         <div class="recent-files-page__results-head">
           <div>
             <div class="recent-files-page__results-label">File activity</div>
-            <h2 class="recent-files-page__results-title">Archivos recientes</h2>
+            <h2 class="recent-files-page__results-title">Recent files</h2>
           </div>
-          <div class="recent-files-page__results-meta" id="recent-results-meta">0 archivos</div>
+          <div class="recent-files-page__results-meta" id="recent-results-meta">0 files</div>
         </div>
         <div class="mts-grid mts-grid--gap-md" id="recent-results"></div>
       </section>
@@ -98,30 +98,30 @@
     var typeSelect;
     var stateSelect;
     var files = [
-      { id: 'rf1', title: 'Contract-Renewal-Q2.pdf', owner: 'Finance Ops', type: 'pdf', typeLabel: 'PDF', state: 'review', stateLabel: 'In review', variant: 'warning', summary: 'Actualizado hoy a las 08:30 por Camila Soto.' },
-      { id: 'rf2', title: 'Customer-escalation-playbook.docx', owner: 'Support', type: 'doc', typeLabel: 'DOCX', state: 'ready', stateLabel: 'Ready', variant: 'success', summary: 'Compartido ayer con leadership para feedback.' },
-      { id: 'rf3', title: 'April-renewals.csv', owner: 'Billing', type: 'csv', typeLabel: 'CSV', state: 'draft', stateLabel: 'Draft', variant: 'default', summary: 'Export generado para seguimiento de pagos.' }
+      { id: 'rf1', title: 'Contract-Renewal-Q2.pdf', owner: 'Finance Ops', type: 'pdf', typeLabel: 'PDF', state: 'review', stateLabel: 'In review', variant: 'warning', summary: 'Updated today at 08:30 by Camila Soto.' },
+      { id: 'rf2', title: 'Customer-escalation-playbook.docx', owner: 'Support', type: 'doc', typeLabel: 'DOCX', state: 'ready', stateLabel: 'Ready', variant: 'success', summary: 'Shared yesterday with leadership for feedback.' },
+      { id: 'rf3', title: 'April-renewals.csv', owner: 'Billing', type: 'csv', typeLabel: 'CSV', state: 'draft', stateLabel: 'Draft', variant: 'default', summary: 'Export generated for payment follow-up.' }
     ];
 
     new MTS.Button('#recent-upload-button', {
-      label: 'Subir archivo',
+      label: 'Upload file',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('upload'),
       onClick: function () {
-        notify('info', 'Carga simulada', 'El grupo Documents ya tiene cubierto el CTA de subir archivo.');
+        notify('info', 'Simulated upload', 'The Documents group already covers the upload file CTA.');
       }
     });
 
     new MTS.Input('#recent-search', {
-      label: 'Buscar archivo',
+      label: 'Search file',
       type: 'text',
-      placeholder: 'nombre, owner o nota',
+      placeholder: 'name, owner or note',
       iconLeft: MTS.Icon.get('search')
     });
 
     typeSelect = new MTS.Select('#recent-type', {
-      label: 'Tipo',
-      placeholder: 'Todos',
+      label: 'Type',
+      placeholder: 'All',
       clearable: true,
       options: [
         { value: 'pdf', label: 'PDF' },
@@ -131,8 +131,8 @@
     });
 
     stateSelect = new MTS.Select('#recent-state', {
-      label: 'Estado',
-      placeholder: 'Todos',
+      label: 'Status',
+      placeholder: 'All',
       clearable: true,
       options: [
         { value: 'review', label: 'In review' },
@@ -142,7 +142,7 @@
     });
 
     new MTS.Button('#recent-clear', {
-      label: 'Limpiar filtros',
+      label: 'Clear filters',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
@@ -202,7 +202,7 @@
         return matchesQuery && matchesType && matchesState;
       });
 
-      meta.textContent = visible.length + (visible.length === 1 ? ' archivo' : ' archivos');
+      meta.textContent = visible.length + (visible.length === 1 ? ' file' : ' files');
 
       visible.forEach(function (item, index) {
         var wrap = document.createElement('div');
@@ -228,16 +228,16 @@
           footerAlign: 'between',
           footer: [
             {
-              label: 'Abrir',
+              label: 'Open',
               variant: 'primary',
               icon: MTS.Icon.get('arrow-right'),
-              onClick: function () { notify('info', 'Accion simulada', 'Aqui normalmente abririas el preview del archivo.'); }
+              onClick: function () { notify('info', 'Simulated action', 'This is where you would normally open the file preview.'); }
             },
             {
-              label: 'Compartir',
+              label: 'Share',
               variant: 'ghost',
               icon: MTS.Icon.get('share-2'),
-              onClick: function () { notify('success', 'Share listo', 'El archivo puede pasar al flujo de compartir.'); }
+              onClick: function () { notify('success', 'Share ready', 'The file can move into the sharing flow.'); }
             }
           ]
         });

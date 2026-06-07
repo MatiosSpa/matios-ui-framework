@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -40,7 +40,7 @@
         <div class="invite-member-page__logo">M</div>
         <div>
           <div class="invite-member-page__title">Invite Member</div>
-          <div class="invite-member-page__subtitle">Alta real de usuarios con rol base y contexto inicial de acceso</div>
+          <div class="invite-member-page__subtitle">Real user onboarding with a base role and initial access context</div>
         </div>
       </div>
       <div class="invite-member-page__topbar-actions">
@@ -53,10 +53,10 @@
       <section class="invite-member-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="invite-member-page__eyebrow">Access onboarding</div>
-          <h1 class="invite-member-page__hero-title">Invita personas sin perder control del rol, el equipo de aterrizaje y la experiencia de entrada.</h1>
+          <h1 class="invite-member-page__hero-title">Invite people without losing control of the role, the landing team and the entry experience.</h1>
           <p class="invite-member-page__hero-copy">
-            La idea de esta pantalla es resolver el caso real de invitar uno o varios miembros desde
-            admin, dejando claro que acceso base reciben y que mensaje acompana el ingreso.
+            This screen solves the real case of inviting one or several members from
+            admin, making clear what base access they get and what message accompanies the entry.
           </p>
         </div>
       </section>
@@ -65,8 +65,8 @@
         <div class="mts-form-card invite-member-page__form-card">
           <div class="invite-member-page__form-view" id="invite-member-form-view">
             <div class="mts-form-card__header">
-              <h2 class="mts-form-card__title">Nuevo lote de invitaciones</h2>
-              <p class="mts-form-card__subtitle">Carga correos, define el rol base y deja claro a que equipo llegan.</p>
+              <h2 class="mts-form-card__title">New invitation batch</h2>
+              <p class="mts-form-card__subtitle">Load emails, set the base role and make clear which team they join.</p>
             </div>
 
             <div id="invite-member-alert"></div>
@@ -93,22 +93,22 @@
             <div class="invite-member-page__success-icon">
               <i class="mts-icon mts-icon-check-circle"></i>
             </div>
-            <h2 class="invite-member-page__success-title">Invitaciones preparadas</h2>
+            <h2 class="invite-member-page__success-title">Invitations ready</h2>
             <p class="invite-member-page__success-copy">
-              El lote quedo listo con el rol base y una nota de contexto para el primer acceso.
+              The batch is ready with the base role and a context note for the first access.
             </p>
 
             <div class="invite-member-page__success-summary">
               <div class="invite-member-page__summary-row">
-                <span>Correos</span>
+                <span>Emails</span>
                 <strong id="invite-member-summary-total">-</strong>
               </div>
               <div class="invite-member-page__summary-row">
-                <span>Rol base</span>
+                <span>Base role</span>
                 <strong id="invite-member-summary-role">-</strong>
               </div>
               <div class="invite-member-page__summary-row">
-                <span>Equipo</span>
+                <span>Team</span>
                 <strong id="invite-member-summary-team">-</strong>
               </div>
               <div class="invite-member-page__summary-list" id="invite-member-summary-list"></div>
@@ -155,8 +155,8 @@
     };
 
     var emailsInput = new MTS.TagInput('#invite-member-emails', {
-      label: 'Correos',
-      placeholder: 'Agrega un correo y presiona Enter',
+      label: 'Emails',
+      placeholder: 'Add an email and press Enter',
       allowCustom: true,
       suggestions: [
         { uid: 'ana@northwind.io', name: 'ana@northwind.io' },
@@ -171,8 +171,8 @@
     });
 
     var roleSelect = new MTS.Select('#invite-member-role', {
-      label: 'Rol base',
-      placeholder: 'Selecciona un rol',
+      label: 'Base role',
+      placeholder: 'Select a role',
       options: [
         { value: 'member', label: 'Member' },
         { value: 'support', label: 'Support' },
@@ -182,8 +182,8 @@
     });
 
     var teamSelect = new MTS.Select('#invite-member-team', {
-      label: 'Equipo de aterrizaje',
-      placeholder: 'Selecciona un equipo',
+      label: 'Landing team',
+      placeholder: 'Select a team',
       options: [
         { value: 'operations', label: 'Operations' },
         { value: 'support', label: 'Support' },
@@ -193,8 +193,8 @@
     });
 
     var profileSelect = new MTS.Select('#invite-member-profile', {
-      label: 'Perfil de acceso',
-      placeholder: 'Selecciona un perfil',
+      label: 'Access profile',
+      placeholder: 'Select a profile',
       options: [
         { value: 'workspace-general', label: 'Workspace General' },
         { value: 'support-triage', label: 'Support Triage' },
@@ -205,35 +205,35 @@
 
     var messageInput = new MTS.Input('#invite-member-message', {
       type: 'text',
-      label: 'Mensaje de bienvenida',
-      placeholder: 'Te dejamos acceso inicial para que puedas partir hoy',
+      label: 'Welcome message',
+      placeholder: 'We are giving you initial access so you can get started today',
       iconLeft: MTS.Icon.get('mail')
     });
 
     new MTS.Checkbox('#invite-member-copy', {
-      label: 'Quiero recibir copia del resumen de invitaciones'
+      label: 'I want to receive a copy of the invitation summary'
     });
 
     new MTS.Checkbox('#invite-member-2fa', {
-      label: 'Forzar enrolamiento de segundo factor al primer ingreso'
+      label: 'Force second-factor enrollment on first login'
     });
 
     new MTS.Button('#invite-member-back', {
-      label: 'Volver a miembros',
+      label: 'Back to members',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('arrow-left'),
       onClick: function () { openScreen('../members-list/index.html'); }
     });
 
     new MTS.Button('#invite-member-submit-top', {
-      label: 'Preparar invitacion',
+      label: 'Prepare invitation',
       variant: 'primary',
       iconLeft: MTS.Icon.get('send'),
       onClick: submitInvites
     });
 
     new MTS.Button('#invite-member-submit-bottom', {
-      label: 'Preparar invitacion',
+      label: 'Prepare invitation',
       variant: 'primary',
       block: true,
       iconLeft: MTS.Icon.get('send'),
@@ -241,14 +241,14 @@
     });
 
     new MTS.Button('#invite-member-edit', {
-      label: 'Editar lote',
+      label: 'Edit batch',
       variant: 'secondary',
       block: true,
       onClick: resetFlow
     });
 
     new MTS.Button('#invite-member-go-members', {
-      label: 'Ir a members list',
+      label: 'Go to members list',
       variant: 'primary',
       block: true,
       iconLeft: MTS.Icon.get('arrow-right'),
@@ -256,17 +256,17 @@
     });
 
     new MTS.Card('#invite-member-guidelines', {
-      title: 'Lineamientos',
-      subtitle: 'Acceso inicial',
+      title: 'Guidelines',
+      subtitle: 'Initial access',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="invite-member-page__sidebar-copy">' +
-          '<p>La invitacion define un rol base, pero el acceso fino puede ajustarse cuando la persona ya este dentro del workspace.</p>' +
+          '<p>The invitation sets a base role, but fine-grained access can be adjusted once the person is already inside the workspace.</p>' +
           '<ul class="invite-member-page__sidebar-list">' +
-            '<li>Usa perfiles cortos y entendibles.</li>' +
-            '<li>No conviertas todos los ingresos en admin.</li>' +
-            '<li>Billing y support suelen vivir mejor como perfiles operativos.</li>' +
+            '<li>Use short, understandable profiles.</li>' +
+            '<li>Do not turn every entry into an admin.</li>' +
+            '<li>Billing and support usually work better as operational profiles.</li>' +
           '</ul>' +
         '</div>'
     });
@@ -274,17 +274,17 @@
     function previewBody() {
       return (
         '<div class="invite-member-page__preview">' +
-          '<div class="invite-member-page__preview-item"><span>Rol</span><strong id="invite-preview-role">Aun sin definir</strong></div>' +
-          '<div class="invite-member-page__preview-item"><span>Equipo</span><strong id="invite-preview-team">Aun sin definir</strong></div>' +
-          '<div class="invite-member-page__preview-item"><span>Perfil</span><strong id="invite-preview-profile">Aun sin definir</strong></div>' +
-          '<div class="invite-member-page__preview-item"><span>Invitados</span><strong id="invite-preview-total">0 correos</strong></div>' +
+          '<div class="invite-member-page__preview-item"><span>Role</span><strong id="invite-preview-role">Not set yet</strong></div>' +
+          '<div class="invite-member-page__preview-item"><span>Team</span><strong id="invite-preview-team">Not set yet</strong></div>' +
+          '<div class="invite-member-page__preview-item"><span>Profile</span><strong id="invite-preview-profile">Not set yet</strong></div>' +
+          '<div class="invite-member-page__preview-item"><span>Invitees</span><strong id="invite-preview-total">0 emails</strong></div>' +
         '</div>'
       );
     }
 
     new MTS.Card('#invite-member-preview-card', {
-      title: 'Resumen del lote',
-      subtitle: 'Preview operativo',
+      title: 'Batch summary',
+      subtitle: 'Operational preview',
       variant: 'elevated',
       size: 'lg',
       body: previewBody()
@@ -306,10 +306,10 @@
     });
 
     function syncPreviewCard() {
-      updateText('invite-preview-role', inviteState.roleLabel || 'Aun sin definir');
-      updateText('invite-preview-team', inviteState.teamLabel || 'Aun sin definir');
-      updateText('invite-preview-profile', inviteState.profileLabel || 'Aun sin definir');
-      updateText('invite-preview-total', inviteState.tags.length + (inviteState.tags.length === 1 ? ' correo' : ' correos'));
+      updateText('invite-preview-role', inviteState.roleLabel || 'Not set yet');
+      updateText('invite-preview-team', inviteState.teamLabel || 'Not set yet');
+      updateText('invite-preview-profile', inviteState.profileLabel || 'Not set yet');
+      updateText('invite-preview-total', inviteState.tags.length + (inviteState.tags.length === 1 ? ' email' : ' emails'));
     }
 
     function updateText(id, text) {
@@ -332,17 +332,17 @@
       var team = teamSelect.getValue ? teamSelect.getValue() : '';
 
       if (!tags.length) {
-        showAlert('#invite-member-alert', 'danger', 'Faltan correos', 'Agrega al menos una persona antes de preparar la invitacion.');
+        showAlert('#invite-member-alert', 'danger', 'Missing emails', 'Add at least one person before preparing the invitation.');
         return;
       }
 
       if (!role) {
-        showAlert('#invite-member-alert', 'warning', 'Falta rol base', 'Selecciona el rol inicial que recibira este lote.');
+        showAlert('#invite-member-alert', 'warning', 'Missing base role', 'Select the initial role this batch will receive.');
         return;
       }
 
       if (!team) {
-        showAlert('#invite-member-alert', 'warning', 'Falta equipo', 'Selecciona el equipo donde aterrizara el usuario al primer ingreso.');
+        showAlert('#invite-member-alert', 'warning', 'Missing team', 'Select the team where the user will land on first login.');
         return;
       }
 
@@ -355,13 +355,13 @@
         return '<span class="invite-member-page__summary-chip">' + tag.name + '</span>';
       }).join('');
 
-      showAlert('#invite-member-success-alert', 'success', 'Lote visualmente listo', 'La preparacion simula el envio del mail y el acceso base para cada invitado.');
+      showAlert('#invite-member-success-alert', 'success', 'Batch visually ready', 'This preparation simulates sending the email and the base access for each invitee.');
     }
 
     function resetFlow() {
       document.getElementById('invite-member-form-view').hidden = false;
       document.getElementById('invite-member-success-view').hidden = true;
-      showAlert('#invite-member-alert', 'info', 'Puedes seguir ajustando', 'Modifica rol, equipo o correos antes del siguiente envio.');
+      showAlert('#invite-member-alert', 'info', 'You can keep adjusting', 'Change the role, team or emails before the next send.');
     }
 
     syncPreviewCard();

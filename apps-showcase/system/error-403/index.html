@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -29,10 +29,10 @@
     <main class="system-error-page__panel mts-surface">
       <div class="system-error-page__icon"><i class="mts-icon mts-icon-shield"></i></div>
       <div class="system-error-page__badge"><span id="error-403-badge"></span></div>
-      <h1>No tienes permiso para entrar aqui.</h1>
+      <h1>You don't have permission to access this page.</h1>
       <p>
-        Esta pantalla sirve para rutas protegidas o modulos con acceso restringido. Entrega contexto
-        claro y una salida util en vez de dejar al usuario bloqueado sin siguiente paso.
+        This screen is for protected routes or modules with restricted access. It provides clear
+        context and a useful way out instead of leaving the user stuck with no next step.
       </p>
       <div class="system-error-page__actions">
         <div id="error-403-request"></div>
@@ -60,20 +60,20 @@
     });
 
     new MTS.Button('#error-403-request', {
-      label: 'Solicitar acceso',
+      label: 'Request access',
       variant: 'primary',
       iconLeft: MTS.Icon.get('send'),
       onClick: function () {
-        notify('success', 'Solicitud simulada', 'Aqui normalmente pedirias aprobacion o acceso temporal.');
+        notify('success', 'Simulated request', 'Here you would normally request approval or temporary access.');
       }
     });
 
     new MTS.Button('#error-403-exit', {
-      label: 'Volver',
+      label: 'Go back',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('arrow-right'),
       onClick: function () {
-        notify('info', 'Salida simulada', 'La pantalla deja cubierto el camino de salida segura.');
+        notify('info', 'Simulated exit', 'The screen keeps the safe exit path covered.');
       }
     });
 

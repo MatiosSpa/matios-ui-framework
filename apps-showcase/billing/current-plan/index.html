@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -36,7 +36,7 @@
         <div class="billing-plan-page__logo">M</div>
         <div>
           <div class="billing-plan-page__title">Current Plan</div>
-          <div class="billing-plan-page__subtitle">Plan actual, consumo y siguiente accion comercial del workspace</div>
+          <div class="billing-plan-page__subtitle">Current plan, usage and next commercial action for the workspace</div>
         </div>
       </div>
       <div class="billing-plan-page__actions">
@@ -49,10 +49,10 @@
       <section class="billing-plan-page__hero mts-surface mts-g-col-12">
         <div class="billing-plan-page__hero-copy">
           <div class="billing-plan-page__eyebrow">Billing overview</div>
-          <h1 class="billing-plan-page__hero-title">Ten visibilidad real del plan sin depender de un dashboard aparte.</h1>
+          <h1 class="billing-plan-page__hero-title">Get real visibility into your plan without relying on a separate dashboard.</h1>
           <p class="billing-plan-page__hero-text">
-            Esta pantalla resume lo que un owner o finance lead necesita revisar rapido:
-            plan contratado, fecha de renovacion, consumo actual y recomendacion del siguiente paso.
+            This screen summarizes what an owner or finance lead needs to review quickly:
+            contracted plan, renewal date, current usage and a recommendation for the next step.
           </p>
         </div>
         <div class="billing-plan-page__hero-badges">
@@ -94,28 +94,28 @@
   </script>
   <script>
     new MTS.Button('#billing-plan-contact', {
-      label: 'Hablar con ventas',
+      label: 'Talk to sales',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('message-circle'),
       onClick: function () {
-        showInfo('Se simulo la apertura del flujo comercial para renegociar plan o volumen.');
+        showInfo('Opening the commercial flow to renegotiate plan or volume has been simulated.');
       }
     });
 
     new MTS.Button('#billing-plan-upgrade', {
-      label: 'Evaluar upgrade',
+      label: 'Evaluate upgrade',
       variant: 'primary',
       iconLeft: MTS.Icon.get('arrow-up-right'),
       onClick: function () {
-        showInfo('La UI deja planteado el CTA principal para mover de plan cuando crece el workspace.');
+        showInfo('The UI lays out the main CTA to switch plans as the workspace grows.');
       }
     });
 
     new MTS.KPICard('#billing-plan-kpi-seats', {
-      label: 'Seats activos',
+      label: 'Active seats',
       value: '42 / 50',
       trend: 14,
-      trendLabel: 'ultimo trimestre',
+      trendLabel: 'last quarter',
       variant: 'primary',
       sparkline: [24, 26, 28, 31, 34, 37, 40, 42]
     });
@@ -124,33 +124,33 @@
       label: 'API requests',
       value: '78%',
       trend: 6,
-      trendLabel: 'vs mes pasado',
+      trendLabel: 'vs last month',
       variant: 'warning',
       sparkline: [42, 48, 50, 56, 60, 66, 71, 78]
     });
 
     new MTS.KPICard('#billing-plan-kpi-storage', {
-      label: 'Storage usado',
+      label: 'Storage used',
       value: '186 GB',
       trend: 9,
-      trendLabel: 'sobre cuota incluida',
+      trendLabel: 'over included quota',
       variant: 'success',
       sparkline: [98, 110, 122, 135, 150, 164, 172, 186]
     });
 
     new MTS.Card('#billing-plan-summary-card', {
       title: 'Scale Annual',
-      subtitle: 'Renueva el 12 de mayo de 2026',
+      subtitle: 'Renews on May 12, 2026',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="billing-plan-page__plan-summary">' +
-          '<p>Plan pensado para equipos que ya operan con varias areas, automatizaciones y gobierno basico sobre acceso y billing.</p>' +
+          '<p>A plan designed for teams already operating across several areas, with automations and basic governance over access and billing.</p>' +
           '<div class="billing-plan-page__plan-grid">' +
             '<div><span>Workspace</span><strong>Matios Studio</strong></div>' +
-            '<div><span>Owner de contrato</span><strong>Camila Soto</strong></div>' +
-            '<div><span>Facturacion</span><strong>USD 1,240 / mes</strong></div>' +
-            '<div><span>Descuento anual</span><strong>12%</strong></div>' +
+            '<div><span>Contract owner</span><strong>Camila Soto</strong></div>' +
+            '<div><span>Billing</span><strong>USD 1,240 / month</strong></div>' +
+            '<div><span>Annual discount</span><strong>12%</strong></div>' +
           '</div>' +
           '<div class="billing-plan-page__feature-list">' +
             '<span class="billing-plan-page__feature">Unlimited projects</span>' +
@@ -162,46 +162,46 @@
     });
 
     new MTS.Card('#billing-plan-usage-card', {
-      title: 'Uso incluido',
-      subtitle: 'Consumo principal del ciclo actual',
+      title: 'Included usage',
+      subtitle: 'Main consumption for the current cycle',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="billing-plan-page__usage-stack">' +
-          usageRow('Seats', '42 de 50', 84) +
-          usageRow('API requests', '780k de 1M', 78) +
-          usageRow('Storage', '186 de 250 GB', 74) +
-          usageRow('Support hours', '6 de 8', 75) +
+          usageRow('Seats', '42 of 50', 84) +
+          usageRow('API requests', '780k of 1M', 78) +
+          usageRow('Storage', '186 of 250 GB', 74) +
+          usageRow('Support hours', '6 of 8', 75) +
         '</div>'
     });
 
     new MTS.Card('#billing-plan-next-card', {
-      title: 'Siguiente decision',
-      subtitle: 'Recomendacion',
+      title: 'Next decision',
+      subtitle: 'Recommendation',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="billing-plan-page__next-step">' +
-          '<p>Si el equipo sigue sumando seats y uso de API al ritmo actual, conviene preparar upgrade antes de la renovacion.</p>' +
+          '<p>If the team keeps adding seats and API usage at the current pace, it is worth preparing an upgrade before renewal.</p>' +
           '<div class="billing-plan-page__next-highlight">' +
-            '<span>Plan sugerido</span><strong>Scale Plus</strong>' +
+            '<span>Suggested plan</span><strong>Scale Plus</strong>' +
           '</div>' +
           '<div class="billing-plan-page__next-highlight">' +
-            '<span>Motivo</span><strong>Mayor techo de seats, auditoria y API</strong>' +
+            '<span>Reason</span><strong>Higher seat, audit and API ceiling</strong>' +
           '</div>' +
         '</div>'
     });
 
     new MTS.Card('#billing-plan-events-card', {
-      title: 'Eventos de billing',
-      subtitle: 'Actividad reciente',
+      title: 'Billing events',
+      subtitle: 'Recent activity',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="billing-plan-page__events">' +
-          eventItem('03 mayo', 'Invoice emitida', 'Se genero la factura del ciclo anual en revision.') +
-          eventItem('28 abril', 'Seat agregado', 'Se sumo una licencia para Finance.') +
-          eventItem('20 abril', 'Metodo verificado', 'La tarjeta principal quedo validada para cargos automaticos.') +
+          eventItem('May 03', 'Invoice issued', 'The annual cycle invoice under review was generated.') +
+          eventItem('Apr 28', 'Seat added', 'A license was added for Finance.') +
+          eventItem('Apr 20', 'Method verified', 'The primary card was validated for automatic charges.') +
         '</div>'
     });
 
@@ -234,7 +234,7 @@
     function showInfo(message) {
       MTS.Alert.show('#billing-plan-feedback', {
         variant: 'info',
-        title: 'Accion simulada',
+        title: 'Simulated action',
         message: message,
         closable: true
       });

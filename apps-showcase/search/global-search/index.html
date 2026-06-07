@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="global-search-page__logo">M</div>
         <div>
           <div class="global-search-page__title">Global Search</div>
-          <div class="global-search-page__subtitle">Discovery transversal para personas, archivos y settings</div>
+          <div class="global-search-page__subtitle">Cross-product discovery for people, files and settings</div>
         </div>
       </div>
       <div class="global-search-page__actions">
@@ -50,10 +50,10 @@
       <section class="global-search-page__hero mts-surface mts-g-col-12">
         <div>
           <div class="global-search-page__eyebrow">Cross-product lookup</div>
-          <h1 class="global-search-page__hero-title">Busca una vez y entiende rapido donde seguir.</h1>
+          <h1 class="global-search-page__hero-title">Search once and quickly understand where to go next.</h1>
           <p class="global-search-page__hero-copy">
-            Esta UI resuelve un caso muy real: discovery transversal sin depender de dashboards ni de
-            modulos aislados. Agrupa resultados por tipo y deja atajos utiles para continuar.
+            This UI solves a very real case: cross-product discovery without relying on dashboards or
+            isolated modules. It groups results by type and surfaces useful shortcuts to continue.
           </p>
           <div class="global-search-page__query" id="global-search-query"></div>
           <div class="global-search-page__badges">
@@ -88,19 +88,19 @@
   </script>
   <script>
     new MTS.Button('#search-save-button', {
-      label: 'Guardar busqueda',
+      label: 'Save search',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('check-circle'),
       onClick: function () {
-        notify('success', 'Busqueda guardada', 'La vista deja cubierto el patron de guardar una consulta frecuente.');
+        notify('success', 'Search saved', 'The view covers the pattern of saving a frequent query.');
       }
     });
 
     new MTS.Input('#global-search-query', {
-      label: 'Buscar',
+      label: 'Search',
       type: 'text',
       value: 'invoice overdue',
-      placeholder: 'Personas, tickets, archivos o settings',
+      placeholder: 'People, tickets, files or settings',
       iconLeft: MTS.Icon.get('search')
     });
 
@@ -117,15 +117,15 @@
     });
 
     new MTS.Card('#global-search-insights', {
-      title: 'Atajos utiles',
+      title: 'Useful shortcuts',
       subtitle: 'Search guidance',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="global-search-page__insights">' +
-          insightRow('Recientes', 'invoice history, pending approval, api keys') +
-          insightRow('Sugeridos', 'billing owner, webhook failures, session review') +
-          insightRow('Filtros rapidos', 'People, Files, Settings') +
+          insightRow('Recent', 'invoice history, pending approval, api keys') +
+          insightRow('Suggested', 'billing owner, webhook failures, session review') +
+          insightRow('Quick filters', 'People, Files, Settings') +
         '</div>'
     });
 
@@ -133,20 +133,20 @@
       variant: 'card',
       active: 'people',
       tabs: [
-        { id: 'people', label: 'People', badge: '6', icon: MTS.Icon.get('users'), content: buildTab('Personas relacionadas', [
-          resultRow('Camila Soto', 'Billing owner - ultima accion hace 12 min', 'Abrir miembro'),
-          resultRow('Diego Paredes', 'Support admin - gestiona alerts de cobro', 'Ver acceso'),
-          resultRow('Laura Herrera', 'Product lead - ajusto notificaciones de invoices', 'Ver perfil')
+        { id: 'people', label: 'People', badge: '6', icon: MTS.Icon.get('users'), content: buildTab('Related people', [
+          resultRow('Camila Soto', 'Billing owner - last action 12 min ago', 'Open member'),
+          resultRow('Diego Paredes', 'Support admin - manages billing alerts', 'View access'),
+          resultRow('Laura Herrera', 'Product lead - adjusted invoice notifications', 'View profile')
         ])},
-        { id: 'files', label: 'Files', badge: '9', icon: MTS.Icon.get('folder'), content: buildTab('Archivos y documentos', [
-          resultRow('Invoice-Overdue-Policy.pdf', 'Documento legal actualizado hoy a las 08:30', 'Preview'),
-          resultRow('Billing Escalation Playbook', 'Guia operativa compartida con soporte', 'Abrir guia'),
-          resultRow('Q2 renewal list.csv', 'Export reciente de cuentas con deuda', 'Descargar')
+        { id: 'files', label: 'Files', badge: '9', icon: MTS.Icon.get('folder'), content: buildTab('Files and documents', [
+          resultRow('Invoice-Overdue-Policy.pdf', 'Legal document updated today at 08:30', 'Preview'),
+          resultRow('Billing Escalation Playbook', 'Operational guide shared with support', 'Open guide'),
+          resultRow('Q2 renewal list.csv', 'Recent export of accounts with debt', 'Download')
         ])},
-        { id: 'settings', label: 'Settings', badge: '9', icon: MTS.Icon.get('settings'), content: buildTab('Configuraciones relacionadas', [
-          resultRow('Retry policy for webhooks', 'Developer settings - production', 'Ver ajuste'),
-          resultRow('Invoice reminder cadence', 'Notifications settings - workspace', 'Editar'),
-          resultRow('Payment method fallback', 'Billing settings - owner required', 'Abrir billing')
+        { id: 'settings', label: 'Settings', badge: '9', icon: MTS.Icon.get('settings'), content: buildTab('Related settings', [
+          resultRow('Retry policy for webhooks', 'Developer settings - production', 'View setting'),
+          resultRow('Invoice reminder cadence', 'Notifications settings - workspace', 'Edit'),
+          resultRow('Payment method fallback', 'Billing settings - owner required', 'Open billing')
         ])}
       ]
     });

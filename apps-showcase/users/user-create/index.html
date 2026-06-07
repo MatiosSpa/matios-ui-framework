@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Crear usuario - Matios UI</title>
+  <title>Create user - Matios UI</title>
   <script>
     (function () {
       var source = location.search || location.hash || '';
@@ -72,14 +72,14 @@
     }
 
     new MTS.Card('#user-create-panel', {
-      title: 'Crear usuario',
-      subtitle: 'Alta base de cuenta interna',
+      title: 'Create user',
+      subtitle: 'Base setup for an internal account',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div id="user-create-alert"></div>' +
-          '<p class="mts-text--md mts-text-color--muted mts-m-0">Nombre, apellido, correo y username son obligatorios. El rol define los perfiles asociados que despues administraremos por separado.</p>' +
+          '<p class="mts-text--md mts-text-color--muted mts-m-0">First name, last name, email and username are required. The role defines the associated profiles that we will manage separately later.</p>' +
           '<div class="mts-grid mts-grid--gap-md">' +
             '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-create-first-name"></div></div>' +
             '<div class="mts-g-col-12 mts-g-col-md-6"><div id="user-create-last-name"></div></div>' +
@@ -100,7 +100,7 @@
       footerAlign: 'between',
       footer: [
         {
-          label: 'Volver a usuarios',
+          label: 'Back to users',
           variant: 'ghost',
           icon: MTS.Icon.get('arrow-left'),
           onClick: function () {
@@ -108,7 +108,7 @@
           }
         },
         {
-          label: 'Crear usuario',
+          label: 'Create user',
           variant: 'primary',
           icon: MTS.Icon.get('user-plus'),
           onClick: function () {
@@ -120,93 +120,93 @@
 
     var firstNameInput = new MTS.Input('#user-create-first-name', {
       type: 'text',
-      label: 'Nombre',
-      placeholder: 'Ingresa el nombre',
+      label: 'First name',
+      placeholder: 'Enter the first name',
       iconLeft: MTS.Icon.get('user')
     });
 
     var lastNameInput = new MTS.Input('#user-create-last-name', {
       type: 'text',
-      label: 'Apellido',
-      placeholder: 'Ingresa el apellido',
+      label: 'Last name',
+      placeholder: 'Enter the last name',
       iconLeft: MTS.Icon.get('user')
     });
 
     var emailInput = new MTS.Input('#user-create-email', {
       type: 'email',
-      label: 'Correo',
-      placeholder: 'nombre@empresa.cl',
+      label: 'Email',
+      placeholder: 'name@company.cl',
       iconLeft: MTS.Icon.get('mail')
     });
 
     var usernameInput = new MTS.Input('#user-create-username', {
       type: 'text',
       label: 'Username',
-      placeholder: 'usuario interno',
+      placeholder: 'internal username',
       iconLeft: MTS.Icon.get('user')
     });
 
     var phoneInput = new MTS.Input('#user-create-phone', {
       type: 'text',
-      label: 'Telefono',
+      label: 'Phone',
       placeholder: '+56 9 0000 0000',
       iconLeft: MTS.Icon.get('phone')
     });
 
     var areaSelect = new MTS.Select('#user-create-area', {
       label: 'Area',
-      placeholder: 'Selecciona un area',
+      placeholder: 'Select an area',
       options: [
-        { value: 'Operaciones', label: 'Operaciones' },
-        { value: 'Finanzas', label: 'Finanzas' },
-        { value: 'Soporte', label: 'Soporte' },
-        { value: 'Tecnologia', label: 'Tecnologia' }
+        { value: 'Operaciones', label: 'Operations' },
+        { value: 'Finanzas', label: 'Finance' },
+        { value: 'Soporte', label: 'Support' },
+        { value: 'Tecnologia', label: 'Technology' }
       ]
     });
 
     var roleNameInput = new MTS.Input('#user-create-role-name', {
       type: 'text',
-      label: 'Cargo',
-      placeholder: 'Ej: Analista senior',
+      label: 'Job title',
+      placeholder: 'e.g. Senior analyst',
       iconLeft: MTS.Icon.get('briefcase')
     });
 
     var supervisorInput = new MTS.Input('#user-create-supervisor', {
       type: 'text',
       label: 'Supervisor',
-      placeholder: 'Nombre del supervisor',
+      placeholder: 'Supervisor name',
       iconLeft: MTS.Icon.get('user')
     });
 
     var roleSelect = new MTS.Select('#user-create-role', {
-      label: 'Rol',
-      placeholder: 'Selecciona un rol',
-      hint: 'El rol define perfiles y permisos asociados.',
+      label: 'Role',
+      placeholder: 'Select a role',
+      hint: 'The role defines associated profiles and permissions.',
       options: [
-        { value: 'workspace-user', label: 'Usuario workspace' },
-        { value: 'operations-lead', label: 'Supervisor Operacional' },
-        { value: 'finance-analyst', label: 'Analista Finance' },
-        { value: 'support-coordinator', label: 'Coordinador de Soporte' }
+        { value: 'workspace-user', label: 'Workspace user' },
+        { value: 'operations-lead', label: 'Operations supervisor' },
+        { value: 'finance-analyst', label: 'Finance analyst' },
+        { value: 'support-coordinator', label: 'Support coordinator' }
       ]
     });
 
     var statusSelect = new MTS.Select('#user-create-status', {
-      label: 'Estado inicial',
+      label: 'Initial status',
       value: 'active',
       options: [
-        { value: 'active', label: 'Activo' },
-        { value: 'pending', label: 'Pendiente de acceso' },
-        { value: 'blocked', label: 'Bloqueado' }
+        { value: 'active', label: 'Active' },
+        { value: 'pending', label: 'Pending access' },
+        { value: 'blocked', label: 'Blocked' }
       ]
     });
 
     var generatePasswordCheckbox = new MTS.Checkbox('#user-create-generate-password', {
-      label: 'Generar clave automatica',
+      label: 'Generate password automatically',
       checked: true
     });
 
     var sendAccessCheckbox = new MTS.Checkbox('#user-create-send-access', {
-      label: 'Enviar acceso por correo al guardar',
+      label: 'Send access by email on save',
       checked: true
     });
 
@@ -243,41 +243,41 @@
       clearAlerts();
 
       if (!firstName) {
-        firstNameInput.setError('Ingresa el nombre');
+        firstNameInput.setError('Enter the first name');
         return;
       }
 
       if (!lastName) {
-        lastNameInput.setError('Ingresa el apellido');
+        lastNameInput.setError('Enter the last name');
         return;
       }
 
       if (!email) {
-        emailInput.setError('Ingresa el correo');
+        emailInput.setError('Enter the email');
         return;
       }
 
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        emailInput.setError('Ingresa un correo valido');
+        emailInput.setError('Enter a valid email');
         return;
       }
 
       if (!username) {
-        usernameInput.setError('Ingresa el username');
+        usernameInput.setError('Enter the username');
         return;
       }
 
       if (!role) {
-        showAlert('warning', 'Falta el rol', 'Selecciona un rol para determinar el acceso base del usuario.');
+        showAlert('warning', 'Role is missing', 'Select a role to determine the base access for the user.');
         return;
       }
 
       showAlert(
         'success',
-        'Usuario preparado',
-        'Se registraria a <strong>' + escapeHtml(firstName + ' ' + lastName) + '</strong> con username <strong>@' + escapeHtml(username) + '</strong>, rol <strong>' + escapeHtml(getRoleLabel(role)) + '</strong> y estado <strong>' + escapeHtml(getStatusLabel(status)) + '</strong>' +
-          (generatePasswordCheckbox.isChecked() ? ' con clave automatica.' : '.') +
-          (sendAccessCheckbox.isChecked() ? ' Tambien se enviaria el correo de acceso.' : '')
+        'User ready',
+        '<strong>' + escapeHtml(firstName + ' ' + lastName) + '</strong> would be registered with username <strong>@' + escapeHtml(username) + '</strong>, role <strong>' + escapeHtml(getRoleLabel(role)) + '</strong> and status <strong>' + escapeHtml(getStatusLabel(status)) + '</strong>' +
+          (generatePasswordCheckbox.isChecked() ? ' with an automatic password.' : '.') +
+          (sendAccessCheckbox.isChecked() ? ' The access email would also be sent.' : '')
       );
     }
 
@@ -290,9 +290,9 @@
     }
 
     function getStatusLabel(value) {
-      if (value === 'pending') return 'Pendiente de acceso';
-      if (value === 'blocked') return 'Bloqueado';
-      return 'Activo';
+      if (value === 'pending') return 'Pending access';
+      if (value === 'blocked') return 'Blocked';
+      return 'Active';
     }
 
     function escapeHtml(value) {

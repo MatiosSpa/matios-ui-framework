@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Lista de perfiles - Matios UI</title>
+  <title>Profile list - Matios UI</title>
   <script>
     (function () {
       var source = location.search || location.hash || '';
@@ -69,38 +69,38 @@
     var profiles = [
       {
         id: 'PRF-001',
-        name: 'Operaciones documental',
-        description: 'Gestiona usuarios, documentos y trazabilidad para operaciones internas.'
+        name: 'Document operations',
+        description: 'Manages users, documents and traceability for internal operations.'
       },
       {
         id: 'PRF-002',
-        name: 'Cobranza y billing',
-        description: 'Consulta plan, facturas y medios de pago con alcance financiero.'
+        name: 'Collections and billing',
+        description: 'Reviews plan, invoices and payment methods with financial scope.'
       },
       {
         id: 'PRF-003',
-        name: 'Mesa de soporte',
-        description: 'Gestiona bandeja de tickets, reasignacion y resolucion de casos.'
+        name: 'Support desk',
+        description: 'Manages the ticket queue, reassignment and case resolution.'
       }
     ];
 
     new MTS.Card('#profile-list-panel', {
-      title: 'Lista de perfiles',
-      subtitle: 'Catalogo operativo de perfiles por modulo',
+      title: 'Profile list',
+      subtitle: 'Operational catalog of profiles by module',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div id="profile-list-alert"></div>' +
           '<div class="mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-3">' +
-            '<p class="mts-text--md mts-text-color--muted mts-m-0">Cada perfil concentra permisos detallados de un modulo especifico.</p>' +
-            '<span id="profile-list-count" class="mts-badge mts-badge--info mts-badge--sm">0 perfiles</span>' +
+            '<p class="mts-text--md mts-text-color--muted mts-m-0">Each profile groups detailed permissions for a specific module.</p>' +
+            '<span id="profile-list-count" class="mts-badge mts-badge--info mts-badge--sm">0 profiles</span>' +
           '</div>' +
           '<div id="profile-list-table"></div>' +
         '</div>',
       actions: [
         {
-          label: 'Nuevo perfil',
+          label: 'New profile',
           variant: 'primary',
           icon: MTS.Icon.get('plus-circle'),
           onClick: function () {
@@ -123,8 +123,8 @@
       if (action === 'clone') {
         showAlert(
           'info',
-          'Perfil clonado',
-          'Se duplicaria el perfil <strong>' + escapeHtml(profile.name) + '</strong> para crear una nueva variante.'
+          'Profile cloned',
+          'The profile <strong>' + escapeHtml(profile.name) + '</strong> would be duplicated to create a new variant.'
         );
       }
     });
@@ -147,16 +147,16 @@
     }
 
     function renderTable() {
-      document.getElementById('profile-list-count').textContent = profiles.length + (profiles.length === 1 ? ' perfil' : ' perfiles');
+      document.getElementById('profile-list-count').textContent = profiles.length + (profiles.length === 1 ? ' profile' : ' profiles');
 
       document.getElementById('profile-list-table').innerHTML =
         '<div class="mts-table-wrap">' +
           '<table class="mts-table mts-table--hover mts-table--striped">' +
             '<thead>' +
               '<tr>' +
-                '<th class="mts-table__th">Nombre</th>' +
-                '<th class="mts-table__th">Descripcion</th>' +
-                '<th class="mts-table__th mts-table__th--actions">Acciones</th>' +
+                '<th class="mts-table__th">Name</th>' +
+                '<th class="mts-table__th">Description</th>' +
+                '<th class="mts-table__th mts-table__th--actions">Actions</th>' +
               '</tr>' +
             '</thead>' +
             '<tbody>' +
@@ -166,8 +166,8 @@
                     '<td class="mts-table__td"><strong class="mts-text--sm mts-text-color--primary">' + escapeHtml(profile.name) + '</strong></td>' +
                     '<td class="mts-table__td">' + escapeHtml(profile.description) + '</td>' +
                     '<td class="mts-table__td mts-table__td--actions">' +
-                      actionButton('edit', profile.id, 'edit', 'Editar') +
-                      actionButton('clone', profile.id, 'copy', 'Duplicar') +
+                      actionButton('edit', profile.id, 'edit', 'Edit') +
+                      actionButton('clone', profile.id, 'copy', 'Duplicate') +
                     '</td>' +
                   '</tr>';
               }).join('') +

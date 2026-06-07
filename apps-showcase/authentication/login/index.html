@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -56,7 +56,7 @@
       <div class="mts-card__body mts-p-6">
         <div class="mts-text--center mts-mb-4">
           <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
-          <h1 class="mts-h1 mts-mt-2">Acceso</h1>
+          <h1 class="mts-h1 mts-mt-2">Sign in</h1>
         </div>
 
         <div class="mts-d-flex mts-flex--column mts-gap-4">
@@ -67,7 +67,7 @@
           <section class="mts-surface mts-d-flex mts-align-items--center mts-justify-content--between mts-gap-4">
             <div class="mts-d-flex mts-flex--column mts-gap-1 mts-flex--1">
               <strong class="mts-text--sm mts-fw--semibold mts-text-color--primary">OTP</strong>
-              <span class="mts-text--sm mts-text-color--muted">Enviar codigo al correo</span>
+              <span class="mts-text--sm mts-text-color--muted">Send code to email</span>
             </div>
             <div id="otp-toggle"></div>
           </section>
@@ -82,7 +82,7 @@
       </div>
 
       <div class="mts-card__footer mts-card__footer--center">
-        <span class="mts-text--md mts-text-color--muted">No tienes cuenta?</span>
+        <span class="mts-text--md mts-text-color--muted">Don't have an account?</span>
         <div id="create-account-button"></div>
       </div>
     </section>
@@ -103,16 +103,16 @@
 
     var identityInput = new MTS.Input('#identity-field', {
       type: 'text',
-      label: 'Usuario',
-      placeholder: 'Ingresa tu usuario',
+      label: 'Username',
+      placeholder: 'Enter your username',
       iconLeft: MTS.Icon.get('user'),
       autocomplete: 'username'
     });
 
     var passwordInput = new MTS.Input('#password-field', {
       type: 'password',
-      label: 'Clave',
-      placeholder: 'Ingresa tu clave',
+      label: 'Password',
+      placeholder: 'Enter your password',
       iconLeft: MTS.Icon.get('lock'),
       showPassword: true,
       autocomplete: 'current-password'
@@ -127,24 +127,24 @@
     });
 
     new MTS.Checkbox('#remember-check', {
-      label: 'Recordarme'
+      label: 'Remember me'
     });
 
     new MTS.Button('#forgot-button', {
-      label: 'Olvide mi clave',
+      label: 'Forgot my password',
       variant: 'link',
       onClick: function () {}
     });
 
     new MTS.Button('#create-account-button', {
-      label: 'Crear cuenta',
+      label: 'Create account',
       variant: 'link',
       size: 'sm',
       onClick: function () {}
     });
 
     var submitButton = new MTS.Button('#submit-button', {
-      label: 'Iniciar sesion',
+      label: 'Sign in',
       variant: 'primary',
       block: true,
       onClick: function (event, instance) {
@@ -170,7 +170,7 @@
       var passwordField = document.getElementById('password-field');
 
       passwordField.classList.toggle('mts-d-none', otpMode);
-      submitButton.setLabel(otpMode ? 'Enviar codigo' : 'Iniciar sesion');
+      submitButton.setLabel(otpMode ? 'Send code' : 'Sign in');
       passwordInput.clearError();
       identityInput.clearError();
       clearAlerts();
@@ -186,29 +186,30 @@
       clearAlerts();
 
       if (!identity) {
-        identityInput.setError('Ingresa tu usuario');
+        identityInput.setError('Enter your username');
         return;
       }
 
       if (!otpMode && !password) {
-        passwordInput.setError('Ingresa tu clave');
+        passwordInput.setError('Enter your password');
         return;
       }
 
       button.setLoading(true);
-      button.setLabel(otpMode ? 'Enviando codigo...' : 'Validando...');
+      button.setLabel(otpMode ? 'Sending code...' : 'Validating...');
 
       setTimeout(function () {
         button.setLoading(false);
-        button.setLabel(otpMode ? 'Enviar codigo' : 'Iniciar sesion');
+        button.setLabel(otpMode ? 'Send code' : 'Sign in');
 
         if (otpMode) {
-          showAlert('success', 'Codigo enviado', 'Revisa el correo asociado a <strong>' + escapeHtml(identity) + '</strong>.');
+          showAlert('success', 'Code sent', 'Check the email associated with <strong>' + escapeHtml(identity) + '</strong>.');
         } else {
-          showAlert('info', 'Acceso listo', 'Inicio de sesion validado para <strong>' + escapeHtml(identity) + '</strong>.');
+          showAlert('info', 'Access granted', 'Sign-in validated for <strong>' + escapeHtml(identity) + '</strong>.');
         }
       }, 700);
     }
+... 
 
     function escapeHtml(value) {
       return String(value)

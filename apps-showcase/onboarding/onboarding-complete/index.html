@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -52,8 +52,8 @@
             <span class="mts-icon mts-icon--3xl" id="onboarding-complete-icon"></span>
           </div>
           <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
-          <h1 class="mts-h1 mts-mt-2">Onboarding listo</h1>
-          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">La cuenta, la empresa y el acceso inicial ya están preparados.</p>
+          <h1 class="mts-h1 mts-mt-2">Onboarding complete</h1>
+          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">The account, company, and initial access are now set up.</p>
         </div>
 
         <div class="mts-d-flex mts-flex--column mts-gap-4">
@@ -61,16 +61,16 @@
 
           <section class="mts-surface mts-d-flex mts-flex--column mts-gap-2">
             <div>
-              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Cuenta administradora</p>
-              <p class="mts-text--md mts-text-color--primary mts-m-0">Lista para iniciar sesión</p>
+              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Admin account</p>
+              <p class="mts-text--md mts-text-color--primary mts-m-0">Ready to sign in</p>
             </div>
             <div>
-              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Empresa inicial</p>
-              <p class="mts-text--md mts-text-color--primary mts-m-0">Contexto principal creado</p>
+              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Initial company</p>
+              <p class="mts-text--md mts-text-color--primary mts-m-0">Main context created</p>
             </div>
             <div>
-              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Equipo</p>
-              <p class="mts-text--md mts-text-color--primary mts-m-0">Las invitaciones pueden enviarse ahora o más tarde</p>
+              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Team</p>
+              <p class="mts-text--md mts-text-color--primary mts-m-0">Invitations can be sent now or later</p>
             </div>
           </section>
 
@@ -104,13 +104,13 @@
 
     MTS.Alert.show('#onboarding-complete-alert', {
       variant: 'success',
-      title: 'Configuración inicial finalizada',
-      message: 'El siguiente paso natural es entrar o unirse al workspace correcto.',
+      title: 'Initial setup finished',
+      message: 'The natural next step is to sign in or join the right workspace.',
       closable: false
     });
 
     new MTS.Button('#onboarding-complete-primary', {
-      label: 'Ir al login',
+      label: 'Go to login',
       variant: 'primary',
       block: true,
       onClick: function () {
@@ -119,7 +119,7 @@
     });
 
     new MTS.Button('#onboarding-complete-secondary', {
-      label: 'Invitar equipo',
+      label: 'Invite team',
       variant: 'link',
       onClick: function () {
         openScreen('../invite-team/index.html');
@@ -127,7 +127,7 @@
     });
 
     new MTS.Button('#onboarding-complete-login', {
-      label: 'Unirme a un workspace',
+      label: 'Join a workspace',
       variant: 'link',
       onClick: function () {
         openScreen('../join-workspace/index.html');

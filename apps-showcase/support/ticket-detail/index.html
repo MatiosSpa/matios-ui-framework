@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -39,7 +39,7 @@
         <div class="ticket-detail-page__logo">M</div>
         <div>
           <div class="ticket-detail-page__title">Ticket Detail</div>
-          <div class="ticket-detail-page__subtitle">Caso activo con trazabilidad y respuesta</div>
+          <div class="ticket-detail-page__subtitle">Active case with traceability and response</div>
         </div>
       </div>
       <div class="ticket-detail-page__topbar-actions">
@@ -54,16 +54,16 @@
           <span>Ticket HD-201</span>
         </div>
 
-        <h1 class="ticket-detail-page__hero-title">Factura duplicada enviada al cliente final</h1>
+        <h1 class="ticket-detail-page__hero-title">Duplicate invoice sent to the end customer</h1>
         <p class="ticket-detail-page__hero-copy">
-          El detalle del caso concentra contexto, proxima accion y la linea completa de actividad para
-          que el analista no pierda el hilo entre diagnostico y respuesta.
+          The case detail brings together context, next action and the full activity line so the
+          analyst never loses the thread between diagnosis and response.
         </p>
 
         <div id="ticket-detail-alert"></div>
 
         <div class="ticket-detail-page__meta">
-          <span class="ticket-detail-page__chip ticket-detail-page__chip--high">Prioridad alta</span>
+          <span class="ticket-detail-page__chip ticket-detail-page__chip--high">High priority</span>
           <span class="ticket-detail-page__chip">Northwind Retail</span>
           <span class="ticket-detail-page__chip">SLA 1h</span>
         </div>
@@ -92,7 +92,7 @@
       <section class="ticket-detail-page__timeline-wrap mts-g-col-12">
         <div class="mts-form-card ticket-detail-page__timeline-card">
           <div class="ticket-detail-page__timeline-head">
-            <h2 class="ticket-detail-page__timeline-title">Actividad del caso</h2>
+            <h2 class="ticket-detail-page__timeline-title">Case activity</h2>
             <div id="ticket-detail-open-inbox"></div>
           </div>
           <div id="ticket-detail-timeline"></div>
@@ -117,8 +117,8 @@ function openScreen(path){
 </script>
 <script>
 var ownerSelect=new MTS.Select('#ticket-detail-owner',{
-  label:'Responsable',
-  placeholder:'Selecciona responsable',
+  label:'Owner',
+  placeholder:'Select owner',
   options:[
     {value:'camila',label:'Camila Rojas'},
     {value:'diego',label:'Diego Paredes'},
@@ -128,33 +128,33 @@ var ownerSelect=new MTS.Select('#ticket-detail-owner',{
 });
 
 var statusSelect=new MTS.Select('#ticket-detail-status',{
-  label:'Estado',
-  placeholder:'Selecciona estado',
+  label:'Status',
+  placeholder:'Select status',
   options:[
-    {value:'open',label:'Abierto'},
-    {value:'investigating',label:'Investigando'},
-    {value:'pending',label:'Pendiente cliente'},
-    {value:'resolved',label:'Resuelto'}
+    {value:'open',label:'Open'},
+    {value:'investigating',label:'Investigating'},
+    {value:'pending',label:'Pending customer'},
+    {value:'resolved',label:'Resolved'}
   ],
   value:'investigating'
 });
 
 var replyInput=new MTS.Input('#ticket-detail-reply',{
   type:'text',
-  label:'Proxima respuesta',
-  placeholder:'Indica la accion que enviarias al cliente',
+  label:'Next response',
+  placeholder:'State the action you would send to the customer',
   iconLeft:MTS.Icon.get('message')
 });
 
 new MTS.Button('#ticket-detail-back',{
-  label:'Volver a bandeja',
+  label:'Back to inbox',
   variant:'ghost',
   iconLeft:MTS.Icon.get('arrow-left'),
   onClick:function(){openScreen('../ticket-inbox/index.html');}
 });
 
 new MTS.Button('#ticket-detail-open-inbox',{
-  label:'Abrir bandeja',
+  label:'Open inbox',
   variant:'secondary',
   size:'sm',
   iconLeft:MTS.Icon.get('arrow-left'),
@@ -162,7 +162,7 @@ new MTS.Button('#ticket-detail-open-inbox',{
 });
 
 new MTS.Button('#ticket-detail-save',{
-  label:'Guardar avance',
+  label:'Save progress',
   variant:'primary',
   block:true,
   iconLeft:MTS.Icon.get('save'),
@@ -170,18 +170,18 @@ new MTS.Button('#ticket-detail-save',{
     var reply=replyInput.getValue().trim();
     replyInput.clearError();
     if(!reply){
-      replyInput.setError('Escribe la proxima accion antes de guardar');
+      replyInput.setError('Enter the next action before saving');
       return;
     }
     inst.setLoading(true);
-    inst.setLabel('Guardando...');
+    inst.setLabel('Saving...');
     setTimeout(function(){
       inst.setLoading(false);
-      inst.setLabel('Guardar avance');
+      inst.setLabel('Save progress');
       MTS.Alert.show('#ticket-detail-alert',{
         variant:'success',
-        title:'Caso actualizado',
-        message:'Se simulo el guardado del ticket con nuevo responsable, estado y respuesta sugerida.',
+        title:'Case updated',
+        message:'Ticket save was simulated with a new owner, status and suggested response.',
         closable:true
       });
     },900);
@@ -189,16 +189,16 @@ new MTS.Button('#ticket-detail-save',{
 });
 
 new MTS.Card('#ticket-detail-summary-card',{
-  title:'Resumen operativo',
-  subtitle:'Contexto del caso',
+  title:'Operations summary',
+  subtitle:'Case context',
   variant:'elevated',
   size:'lg',
   body:
     '<div class="ticket-detail-page__summary-body">'+
-      '<div><span>Cliente</span><strong>Northwind Retail</strong></div>'+
-      '<div><span>Origen</span><strong>Email automatizado</strong></div>'+
-      '<div><span>Impacto</span><strong>Riesgo de cobro duplicado</strong></div>'+
-      '<div><span>Ultima actualizacion</span><strong>Hace 8 minutos</strong></div>'+
+      '<div><span>Customer</span><strong>Northwind Retail</strong></div>'+
+      '<div><span>Source</span><strong>Automated email</strong></div>'+
+      '<div><span>Impact</span><strong>Risk of duplicate charge</strong></div>'+
+      '<div><span>Last update</span><strong>8 minutes ago</strong></div>'+
     '</div>'
 });
 
@@ -206,40 +206,40 @@ new MTS.Timeline('#ticket-detail-timeline',{
   events:[
     {
       id:'created',
-      title:'Ticket creado por regla automatica',
-      description:'El motor detecto dos facturas con el mismo folio y disparo el caso para revision.',
+      title:'Ticket created by automatic rule',
+      description:'The engine detected two invoices with the same number and triggered the case for review.',
       date:'08:14',
-      badge:{label:'Nuevo',variant:'info'},
+      badge:{label:'New',variant:'info'},
       color:'var(--mts-color-primary)'
     },
     {
       id:'assigned',
-      title:'Asignado a Camila Rojas',
-      description:'El caso quedo en cola de facturacion por impacto directo en cliente final.',
+      title:'Assigned to Camila Rojas',
+      description:'The case was queued in billing due to direct impact on the end customer.',
       date:'08:19',
       badge:{label:'Owner',variant:'primary'}
     },
     {
       id:'customer',
-      title:'Cliente confirma recepcion duplicada',
-      description:'Se recibio respuesta indicando que el documento llego dos veces al mismo destinatario.',
+      title:'Customer confirms duplicate receipt',
+      description:'A reply was received stating that the document arrived twice to the same recipient.',
       date:'08:27',
-      badge:{label:'Cliente',variant:'warning'}
+      badge:{label:'Customer',variant:'warning'}
     },
     {
       id:'pending',
-      title:'Analisis en curso',
-      description:'Pendiente validar si el duplicado salio desde automatizacion o reproceso manual.',
+      title:'Analysis in progress',
+      description:'Pending validation of whether the duplicate came from automation or manual reprocessing.',
       date:'08:35',
-      badge:{label:'Investigando',variant:'default'}
+      badge:{label:'Investigating',variant:'default'}
     }
   ]
 });
 
 MTS.Alert.show('#ticket-detail-alert',{
   variant:'warning',
-  title:'SLA comprometido',
-  message:'El caso aun esta dentro de ventana, pero requiere respuesta hoy para evitar escalamiento.',
+  title:'SLA at risk',
+  message:'The case is still within window, but it requires a response today to avoid escalation.',
   closable:false
 });
 

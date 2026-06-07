@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-theme="dark">
+<html lang="en" data-mts-theme="dark">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Mesa de Ayuda — Matios UI</title>
+  <title>Help Desk — Matios UI</title>
   <script>(function(){var m=(location.hash||"").match(/mts-theme=([a-z-]+)/);if(m)document.documentElement.setAttribute("data-mts-theme",m[1]);try{var p=window.parent;if(p&&p!==window){var pt=p.currentThemeVal||p.document.documentElement.getAttribute("data-mts-theme");if(pt)document.documentElement.setAttribute("data-mts-theme",pt);}}catch(e){}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
@@ -57,7 +57,7 @@ body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-fam
 </style>
 </head>
 <body>
-<div class="app-topbar"><button class="app-topbar-back" onclick="goBack()">&#8592; Volver</button><span class="app-topbar-title">Mesa de Ayuda</span><span class="app-topbar-badge">Helpdesk</span></div>
+<div class="app-topbar"><button class="app-topbar-back" onclick="goBack()">&#8592; Back</button><span class="app-topbar-title">Help Desk</span><span class="app-topbar-badge">Helpdesk</span></div>
 <style>
 .hd-content{padding:20px 24px;max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:20px;}
 .hd-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
@@ -75,14 +75,14 @@ body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-fam
 <div class="hd-content">
   <!-- Stats -->
   <div class="hd-stats">
-    <div class="hd-stat"><div class="hd-stat-val">47</div><div class="hd-stat-lbl">Tickets totales</div></div>
-    <div class="hd-stat"><div class="hd-stat-val" style="color:var(--mts-color-warning);">12</div><div class="hd-stat-lbl">Sin asignar</div></div>
-    <div class="hd-stat"><div class="hd-stat-val" style="color:var(--mts-color-primary);">18</div><div class="hd-stat-lbl">En progreso</div></div>
-    <div class="hd-stat"><div class="hd-stat-val" style="color:var(--mts-color-success,#22c55e);">17</div><div class="hd-stat-lbl">Resueltos hoy</div></div>
+    <div class="hd-stat"><div class="hd-stat-val">47</div><div class="hd-stat-lbl">Total tickets</div></div>
+    <div class="hd-stat"><div class="hd-stat-val" style="color:var(--mts-color-warning);">12</div><div class="hd-stat-lbl">Unassigned</div></div>
+    <div class="hd-stat"><div class="hd-stat-val" style="color:var(--mts-color-primary);">18</div><div class="hd-stat-lbl">In progress</div></div>
+    <div class="hd-stat"><div class="hd-stat-val" style="color:var(--mts-color-success,#22c55e);">17</div><div class="hd-stat-lbl">Resolved today</div></div>
   </div>
   <!-- Toolbar -->
   <div class="hd-toolbar">
-    <span style="font-size:15px;font-weight:700;">Tickets recientes</span>
+    <span style="font-size:15px;font-weight:700;">Recent tickets</span>
     <span style="flex:1;"></span>
     <div id="hd-filter-sel" style="width:160px;"></div>
     <div id="hd-btn-nuevo"></div>
@@ -91,7 +91,7 @@ body{background:var(--mts-bg-body);color:var(--mts-text-color--primary);font-fam
   <div class="app-card" style="padding:0;overflow:hidden;">
     <table class="hd-table">
       <thead><tr>
-        <th>#</th><th>Asunto</th><th>Usuario</th><th>Estado</th><th>Prioridad</th><th>Asignado</th><th>Creado</th>
+        <th>#</th><th>Subject</th><th>User</th><th>Status</th><th>Priority</th><th>Assigned</th><th>Created</th>
       </tr></thead>
       <tbody id="hd-tbody"></tbody>
     </table>
@@ -110,41 +110,41 @@ function goBack(){try{if(window.parent&&window.parent!==window){window.parent.po
 <script>
 
 var TICKETS=[
-  {id:1048,subject:'Error al subir archivos PDF',    user:'María Torres', status:'open',     priority:'high',   agent:'Carlos R.',   created:'Hace 10 min'},
-  {id:1047,subject:'No puedo acceder al módulo',      user:'Juan Martínez',status:'progress', priority:'high',   agent:'Ana López',   created:'Hace 25 min'},
-  {id:1046,subject:'Solicitud de nueva funcionalidad',user:'Rosa Silva',  status:'open',     priority:'medium', agent:'—',           created:'Hace 1h'},
-  {id:1045,subject:'Error 404 en dashboard',          user:'Pedro Díaz',  status:'progress', priority:'medium', agent:'Luis G.',     created:'Hace 2h'},
-  {id:1044,subject:'Problema con exportación Excel',  user:'Sofía Castro',status:'resolved', priority:'low',    agent:'Carlos R.',   created:'Hace 3h'},
-  {id:1043,subject:'Actualizar datos de facturación', user:'Diego Herrera',status:'open',    priority:'low',    agent:'—',           created:'Hace 4h'},
-  {id:1042,subject:'Doble cobro en suscripción',      user:'Valentina L.', status:'progress',priority:'high',   agent:'Ana López',   created:'Ayer'},
-  {id:1041,subject:'App mobile se cierra sola',       user:'Andrés Muñoz', status:'resolved',priority:'medium', agent:'Luis G.',     created:'Ayer'},
+  {id:1048,subject:'Error uploading PDF files',       user:'María Torres', status:'open',     priority:'high',   agent:'Carlos R.',   created:'10 min ago'},
+  {id:1047,subject:'Cannot access the module',        user:'Juan Martínez',status:'progress', priority:'high',   agent:'Ana López',   created:'25 min ago'},
+  {id:1046,subject:'New feature request',             user:'Rosa Silva',  status:'open',     priority:'medium', agent:'—',           created:'1h ago'},
+  {id:1045,subject:'404 error on dashboard',          user:'Pedro Díaz',  status:'progress', priority:'medium', agent:'Luis G.',     created:'2h ago'},
+  {id:1044,subject:'Problem with Excel export',       user:'Sofía Castro',status:'resolved', priority:'low',    agent:'Carlos R.',   created:'3h ago'},
+  {id:1043,subject:'Update billing information',      user:'Diego Herrera',status:'open',    priority:'low',    agent:'—',           created:'4h ago'},
+  {id:1042,subject:'Double charge on subscription',   user:'Valentina L.', status:'progress',priority:'high',   agent:'Ana López',   created:'Yesterday'},
+  {id:1041,subject:'Mobile app closes by itself',     user:'Andrés Muñoz', status:'resolved',priority:'medium', agent:'Luis G.',     created:'Yesterday'},
 ];
-var STATUS_MAP={open:{label:'Abierto',v:'warning'},progress:{label:'En progreso',v:'info'},resolved:{label:'Resuelto',v:'success'}};
-var PRIO_MAP={high:{label:'Alta',v:'danger'},medium:{label:'Media',v:'warning'},low:{label:'Baja',v:'default'}};
+var STATUS_MAP={open:{label:'Open',v:'warning'},progress:{label:'In progress',v:'info'},resolved:{label:'Resolved',v:'success'}};
+var PRIO_MAP={high:{label:'High',v:'danger'},medium:{label:'Medium',v:'warning'},low:{label:'Low',v:'default'}};
 
-new MTS.Select('#hd-filter-sel',{placeholder:'Filtrar por estado...',clearable:true,options:[
-  {value:'open',label:'Abiertos'},{value:'progress',label:'En progreso'},{value:'resolved',label:'Resueltos'},
+new MTS.Select('#hd-filter-sel',{placeholder:'Filter by status...',clearable:true,options:[
+  {value:'open',label:'Open'},{value:'progress',label:'In progress'},{value:'resolved',label:'Resolved'},
 ],onSelect:function(e){renderTickets(e.detail.value);}});
 
 var hdModal=null;
-new MTS.Button('#hd-btn-nuevo',{label:'+ Nuevo ticket',variant:'primary',size:'sm',onClick:function(){
+new MTS.Button('#hd-btn-nuevo',{label:'+ New ticket',variant:'primary',size:'sm',onClick:function(){
   if(!hdModal){
     hdModal=new MTS.Modal({
-      title:'Nuevo ticket de soporte',
+      title:'New support ticket',
       body:'<div style="display:flex;flex-direction:column;gap:14px;">'
         +'<div id="hd-m-subject"></div>'
         +'<div id="hd-m-desc"></div>'
         +'<div id="hd-m-prio"></div>'
         +'</div>',
       buttons:[
-        {label:'Cancelar',variant:'ghost',close:true},
-        {label:'Crear ticket',variant:'primary',close:true,onClick:function(){alert('Demo: ticket creado');}}
+        {label:'Cancel',variant:'ghost',close:true},
+        {label:'Create ticket',variant:'primary',close:true,onClick:function(){alert('Demo: ticket created');}}
       ],
       onShow:function(){
         setTimeout(function(){
-          new MTS.Input('#hd-m-subject',{label:'Asunto',placeholder:'Describe el problema brevemente'});
-          new MTS.Input('#hd-m-desc',{type:'textarea',label:'Descripción',placeholder:'Detalla el problema...',rows:3});
-          new MTS.Select('#hd-m-prio',{label:'Prioridad',options:[{value:'low',label:'Baja'},{value:'medium',label:'Media'},{value:'high',label:'Alta'}],value:'medium'});
+          new MTS.Input('#hd-m-subject',{label:'Subject',placeholder:'Briefly describe the problem'});
+          new MTS.Input('#hd-m-desc',{type:'textarea',label:'Description',placeholder:'Provide problem details...',rows:3});
+          new MTS.Select('#hd-m-prio',{label:'Priority',options:[{value:'low',label:'Low'},{value:'medium',label:'Medium'},{value:'high',label:'High'}],value:'medium'});
         },50);
       }
     });
@@ -175,22 +175,22 @@ var ticketDrawer=null;
 function openTicket(t){
   var sm=STATUS_MAP[t.status];var pm=PRIO_MAP[t.priority];
   var content='<div style="display:flex;flex-direction:column;gap:20px;font-size:13px;">'
-    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:6px;">ASUNTO</div>'
+    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:6px;">SUBJECT</div>'
     +'<div style="font-weight:600;">'+t.subject+'</div></div>'
     +'<div style="display:flex;gap:16px;flex-wrap:wrap;">'
-    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:4px;">ESTADO</div>'
+    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:4px;">STATUS</div>'
     +'<span class="mts-badge mts-badge--'+sm.v+'">'+sm.label+'</span></div>'
-    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:4px;">PRIORIDAD</div>'
+    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:4px;">PRIORITY</div>'
     +'<span class="mts-badge mts-badge--'+pm.v+'">'+pm.label+'</span></div>'
-    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:4px;">USUARIO</div>'
+    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:4px;">USER</div>'
     +'<span>'+t.user+'</span></div></div>'
-    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:8px;">HISTORIAL</div>'
+    +'<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mts-text-color--muted);margin-bottom:8px;">HISTORY</div>'
     +'<div id="ticket-tl-'+t.id+'"></div></div>'
     +'</div>';
 
   if(!ticketDrawer){
     ticketDrawer=new MTS.Drawer({position:'right',size:'md',title:'Ticket #'+t.id,content:content,
-      footer:'<div style="display:flex;gap:8px;"><button class="mts-btn mts-btn--primary mts-btn--sm" onclick="ticketDrawer.hide()">Cerrar ticket</button><button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="ticketDrawer.hide()">Asignar</button></div>'
+      footer:'<div style="display:flex;gap:8px;"><button class="mts-btn mts-btn--primary mts-btn--sm" onclick="ticketDrawer.hide()">Close ticket</button><button class="mts-btn mts-btn--ghost mts-btn--sm" onclick="ticketDrawer.hide()">Assign</button></div>'
     });
   } else {
     ticketDrawer.title=t.id;
@@ -202,8 +202,8 @@ function openTicket(t){
     var tlEl=document.getElementById('ticket-tl-'+t.id);
     if(!tlEl)return;
     new MTS.Timeline(tlEl,{direction:'vertical',align:'left',events:[
-      {id:'ev1',title:'Ticket abierto',date:t.created,badge:{label:'Abierto',variant:'warning'}},
-      {id:'ev2',title:'Asignado a '+t.agent,date:'Hace 5 min',badge:{label:'Asignado',variant:'info'}},
+      {id:'ev1',title:'Ticket opened',date:t.created,badge:{label:'Open',variant:'warning'}},
+      {id:'ev2',title:'Assigned to '+t.agent,date:'5 min ago',badge:{label:'Assigned',variant:'info'}},
     ]});
   },100);
 }

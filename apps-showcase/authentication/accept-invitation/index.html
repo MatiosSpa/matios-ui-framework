@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Aceptar Invitacion - Matios UI</title>
+  <title>Accept Invitation - Matios UI</title>
   <script>
     (function () {
       var source = location.search || location.hash || '';
@@ -54,8 +54,8 @@
       <div class="mts-card__body mts-p-6">
         <div class="mts-text--center mts-mb-4">
           <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
-          <h1 class="mts-h1 mts-mt-2">Aceptar invitación</h1>
-          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Confirma tu acceso al workspace invitado.</p>
+          <h1 class="mts-h1 mts-mt-2">Accept invitation</h1>
+          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Confirm your access to the invited workspace.</p>
         </div>
 
         <div class="mts-d-flex mts-flex--column mts-gap-4">
@@ -65,15 +65,15 @@
 
           <section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">
             <div>
-              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Empresa</p>
+              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Company</p>
               <p class="mts-text--md mts-text-color--primary mts-m-0">Acme Chile</p>
             </div>
             <div>
-              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Rol efectivo</p>
+              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Effective role</p>
               <p class="mts-text--md mts-text-color--primary mts-m-0">General</p>
             </div>
             <div>
-              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Perfiles incluidos</p>
+              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Included profiles</p>
               <p class="mts-text--md mts-text-color--primary mts-m-0">ConfigSystem Admin, Document View, Invoice Edit</p>
             </div>
           </section>
@@ -117,7 +117,7 @@
 
     var emailInput = new MTS.Input('#invite-email', {
       type: 'email',
-      label: 'Correo invitado',
+      label: 'Invited email',
       placeholder: 'equipo@matios.dev',
       value: 'equipo@matios.dev',
       iconLeft: MTS.Icon.get('mail')
@@ -125,17 +125,17 @@
 
     var nameInput = new MTS.Input('#invite-name', {
       type: 'text',
-      label: 'Nombre visible',
-      placeholder: 'Ingresa tu nombre',
+      label: 'Display name',
+      placeholder: 'Enter your name',
       iconLeft: MTS.Icon.get('user')
     });
 
     var termsCheckbox = new MTS.Checkbox('#invite-terms', {
-      label: 'Confirmo que acepto esta invitación y el acceso asociado'
+      label: 'I confirm that I accept this invitation and the associated access'
     });
 
     new MTS.Button('#invite-login-btn', {
-      label: 'Volver al login',
+      label: 'Back to login',
       variant: 'link',
       onClick: function () {
         openScreen('../login/index.html');
@@ -143,7 +143,7 @@
     });
 
     new MTS.Button('#invite-back-btn', {
-      label: 'Volver al grupo',
+      label: 'Back to group',
       variant: 'link',
       onClick: function () {
         goBack();
@@ -151,7 +151,7 @@
     });
 
     var submitButton = new MTS.Button('#invite-submit', {
-      label: 'Aceptar invitación',
+      label: 'Accept invitation',
       variant: 'primary',
       block: true,
       onClick: function (event, instance) {
@@ -181,35 +181,35 @@
       nameInput.clearError();
 
       if (!email) {
-        emailInput.setError('Debe existir un correo asociado a la invitación');
+        emailInput.setError('An email must be associated with the invitation');
         return;
       }
 
       if (!name) {
-        nameInput.setError('Debes ingresar tu nombre visible');
+        nameInput.setError('You must enter your display name');
         return;
       }
 
       if (!isChecked(termsCheckbox)) {
         showAlert({
           variant: 'warning',
-          title: 'Confirma la invitación',
-          message: 'Debes confirmar que aceptas la invitación antes de continuar.',
+          title: 'Confirm the invitation',
+          message: 'You must confirm that you accept the invitation before continuing.',
           closable: true
         });
         return;
       }
 
       button.setLoading(true);
-      button.setLabel('Aceptando...');
+      button.setLabel('Accepting...');
 
       setTimeout(function () {
         button.setLoading(false);
-        button.setLabel('Aceptar invitación');
+        button.setLabel('Accept invitation');
         showAlert({
           variant: 'success',
-          title: 'Invitación aceptada',
-          message: 'El acceso quedaría listo para <strong>' + escapeHtml(name) + '</strong> en <strong>Acme Chile</strong>.',
+          title: 'Invitation accepted',
+          message: 'Access would be ready for <strong>' + escapeHtml(name) + '</strong> at <strong>Acme Chile</strong>.',
           closable: true
         });
       }, 800);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -29,10 +29,10 @@
     <main class="system-error-page__panel mts-surface">
       <div class="system-error-page__icon"><i class="mts-icon mts-icon-search"></i></div>
       <div class="system-error-page__badge"><span id="error-404-badge"></span></div>
-      <h1>La pagina que buscas no existe.</h1>
+      <h1>The page you're looking for doesn't exist.</h1>
       <p>
-        Esta salida sirve para enlaces rotos, recursos borrados o rutas antiguas. La idea es dar
-        contexto y redirigir al usuario hacia algo util sin friccion.
+        This screen handles broken links, deleted resources, or outdated routes. The goal is to give
+        context and redirect the user toward something useful without friction.
       </p>
       <div class="system-error-page__actions">
         <div id="error-404-search"></div>
@@ -60,20 +60,20 @@
     });
 
     new MTS.Button('#error-404-search', {
-      label: 'Ir a buscar',
+      label: 'Search',
       variant: 'primary',
       iconLeft: MTS.Icon.get('search'),
       onClick: function () {
-        notify('info', 'Busqueda simulada', 'Aqui normalmente redirigirias a una busqueda global o al catalogo.');
+        notify('info', 'Simulated search', 'Here you would normally redirect to a global search or the catalog.');
       }
     });
 
     new MTS.Button('#error-404-home', {
-      label: 'Volver al inicio',
+      label: 'Back to home',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('arrow-right'),
       onClick: function () {
-        notify('success', 'Salida simulada', 'La UI deja cubierto el retorno a una pantalla segura.');
+        notify('success', 'Simulated exit', 'The UI covers the return to a safe screen.');
       }
     });
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="workspace-settings-page__logo">W</div>
         <div>
           <div class="workspace-settings-page__title">Workspace Settings</div>
-          <div class="workspace-settings-page__subtitle">Nombre, idioma, comportamiento base y preferencias del entorno compartido</div>
+          <div class="workspace-settings-page__subtitle">Name, language, base behavior and preferences for the shared environment</div>
         </div>
       </div>
       <div class="workspace-settings-page__topbar-actions">
@@ -49,10 +49,10 @@
 
     <main class="workspace-settings-page__main mts-grid mts-grid--gap-md">
       <section class="workspace-settings-page__hero mts-surface mts-g-col-12">
-        <div class="workspace-settings-page__eyebrow">Configuracion general</div>
-        <h1 class="workspace-settings-page__hero-title">Ajusta el contexto operativo del workspace sin abrir pantallas auxiliares.</h1>
+        <div class="workspace-settings-page__eyebrow">General settings</div>
+        <h1 class="workspace-settings-page__hero-title">Adjust the workspace operating context without opening auxiliary screens.</h1>
         <p class="workspace-settings-page__hero-text">
-          Esta vista deja listos nombre visible, idioma, zona horaria y preferencias compartidas para que el producto arranque con una configuracion clara y reusable.
+          This view sets the display name, language, time zone and shared preferences so the product starts with a clear, reusable configuration.
         </p>
       </section>
 
@@ -111,42 +111,42 @@
     var workspaceWeekStartSelect;
 
     new MTS.Button('#workspace-save', {
-      label: 'Guardar workspace',
+      label: 'Save workspace',
       variant: 'primary',
       iconLeft: MTS.Icon.get('save'),
       onClick: saveWorkspace
     });
 
     new MTS.Button('#workspace-reset', {
-      label: 'Restablecer',
+      label: 'Reset',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: resetWorkspace
     });
 
     workspaceNameInput = new MTS.Input('#workspace-name', {
-      label: 'Nombre del workspace',
+      label: 'Workspace name',
       type: 'text',
       value: workspaceDefaults.name,
-      placeholder: 'Nombre visible del entorno'
+      placeholder: 'Visible name of the environment'
     });
 
     workspaceSlugInput = new MTS.Input('#workspace-slug', {
       label: 'Slug',
       type: 'text',
       value: workspaceDefaults.slug,
-      placeholder: 'slug-del-workspace'
+      placeholder: 'workspace-slug'
     });
 
     workspaceSupportEmailInput = new MTS.Input('#workspace-support-email', {
-      label: 'Correo de soporte',
+      label: 'Support email',
       type: 'email',
       value: workspaceDefaults.supportEmail,
-      placeholder: 'soporte@empresa.com'
+      placeholder: 'support@company.com'
     });
 
     workspaceTimezoneSelect = new MTS.Select('#workspace-timezone', {
-      label: 'Zona horaria',
+      label: 'Time zone',
       options: [
         { value: 'America/Santiago', label: 'America/Santiago' },
         { value: 'America/Bogota', label: 'America/Bogota' },
@@ -157,55 +157,55 @@
     });
 
     workspaceLanguageSelect = new MTS.Select('#workspace-language', {
-      label: 'Idioma base',
+      label: 'Base language',
       options: [
-        { value: 'es-CL', label: 'Español (Chile)' },
-        { value: 'es-MX', label: 'Español (Mexico)' },
+        { value: 'es-CL', label: 'Spanish (Chile)' },
+        { value: 'es-MX', label: 'Spanish (Mexico)' },
         { value: 'en-US', label: 'English (US)' }
       ],
       value: workspaceDefaults.language
     });
 
     workspaceWeekStartSelect = new MTS.Select('#workspace-week-start', {
-      label: 'Inicio de semana',
+      label: 'Week start',
       options: [
-        { value: 'monday', label: 'Lunes' },
-        { value: 'sunday', label: 'Domingo' }
+        { value: 'monday', label: 'Monday' },
+        { value: 'sunday', label: 'Sunday' }
       ],
       value: workspaceDefaults.weekStart
     });
 
     new MTS.Toggle('#workspace-toggle-public-signup', {
-      label: 'Permitir signup publico',
+      label: 'Allow public signup',
       checked: true
     });
 
     new MTS.Toggle('#workspace-toggle-compact-ui', {
-      label: 'Usar densidad compacta por defecto',
+      label: 'Use compact density by default',
       checked: false
     });
 
     new MTS.Toggle('#workspace-toggle-announcements', {
-      label: 'Mostrar avisos del sistema al iniciar',
+      label: 'Show system announcements on startup',
       checked: true
     });
 
     new MTS.Card('#workspace-summary-card', {
-      title: 'Resumen actual',
-      subtitle: 'Contexto del tenant',
+      title: 'Current summary',
+      subtitle: 'Tenant context',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="workspace-settings-page__summary-list">' +
-          '<div><span>Plan activo</span><strong>Business</strong></div>' +
-          '<div><span>Usuarios activos</span><strong>28</strong></div>' +
-          '<div><span>Modulo principal</span><strong>Documents + Invoice</strong></div>' +
+          '<div><span>Active plan</span><strong>Business</strong></div>' +
+          '<div><span>Active users</span><strong>28</strong></div>' +
+          '<div><span>Main module</span><strong>Documents + Invoice</strong></div>' +
         '</div>'
     });
 
     new MTS.Card('#workspace-brand-card', {
-      title: 'Branding base',
-      subtitle: 'Referencia operacional',
+      title: 'Base branding',
+      subtitle: 'Operational reference',
       variant: 'outlined',
       size: 'lg',
       body:
@@ -213,7 +213,7 @@
           '<div class="workspace-settings-page__brand-mark">MS</div>' +
           '<div>' +
             '<strong>Matios Studio</strong>' +
-            '<p>El logo, favicon y dominio personalizado pueden colgar despues sobre este mismo flujo.</p>' +
+            '<p>The logo, favicon and custom domain can plug into this same flow later.</p>' +
           '</div>' +
         '</div>'
     });
@@ -230,8 +230,8 @@
 
       MTS.Alert.show('#workspace-feedback', {
         variant: 'info',
-        title: 'Valores restablecidos',
-        message: 'La configuracion volvió al baseline del workspace de ejemplo.',
+        title: 'Values reset',
+        message: 'The configuration was reverted to the sample workspace baseline.',
         closable: true
       });
     }
@@ -246,24 +246,24 @@
       workspaceSupportEmailInput.clearError();
 
       if (!name) {
-        workspaceNameInput.setError('Ingresa el nombre visible del workspace');
+        workspaceNameInput.setError('Enter the visible workspace name');
         return;
       }
 
       if (!slug || slug.indexOf(' ') !== -1) {
-        workspaceSlugInput.setError('El slug debe existir y no puede tener espacios');
+        workspaceSlugInput.setError('The slug is required and cannot contain spaces');
         return;
       }
 
       if (!supportEmail || supportEmail.indexOf('@') === -1) {
-        workspaceSupportEmailInput.setError('Ingresa un correo de soporte valido');
+        workspaceSupportEmailInput.setError('Enter a valid support email');
         return;
       }
 
       MTS.Alert.show('#workspace-feedback', {
         variant: 'success',
-        title: 'Workspace actualizado',
-        message: 'La configuracion general del tenant ya quedó guardada para el ejemplo.',
+        title: 'Workspace updated',
+        message: 'The tenant general configuration has been saved for the example.',
         closable: true
       });
     }

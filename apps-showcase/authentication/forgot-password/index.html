@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -52,8 +52,8 @@
       <div class="mts-card__body mts-p-6">
         <div class="mts-text--center mts-mb-4">
           <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
-          <h1 class="mts-h1 mts-mt-2">Recuperar clave</h1>
-          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Te enviamos un enlace para continuar.</p>
+          <h1 class="mts-h1 mts-mt-2">Reset password</h1>
+          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">We'll send you a link to continue.</p>
         </div>
 
         <div class="mts-d-flex mts-flex--column mts-gap-4">
@@ -87,13 +87,13 @@
 
     var identityInput = new MTS.Input('#forgot-identity', {
       type: 'text',
-      label: 'Correo o usuario',
-      placeholder: 'Ingresa tu correo o usuario',
+      label: 'Email or username',
+      placeholder: 'Enter your email or username',
       iconLeft: MTS.Icon.get('mail')
     });
 
     new MTS.Button('#forgot-login', {
-      label: 'Volver al login',
+      label: 'Back to login',
       variant: 'link',
       onClick: function () {
         openScreen('../login/index.html');
@@ -101,7 +101,7 @@
     });
 
     new MTS.Button('#forgot-signup', {
-      label: 'Crear cuenta',
+      label: 'Create account',
       variant: 'link',
       onClick: function () {
         openScreen('../signup/index.html');
@@ -109,7 +109,7 @@
     });
 
     var submitButton = new MTS.Button('#forgot-submit', {
-      label: 'Enviar enlace',
+      label: 'Send link',
       variant: 'primary',
       block: true,
       onClick: function (event, instance) {
@@ -137,17 +137,17 @@
       clearAlerts();
 
       if (!identity) {
-        identityInput.setError('Ingresa tu correo o usuario');
+        identityInput.setError('Enter your email or username');
         return;
       }
 
       button.setLoading(true);
-      button.setLabel('Enviando...');
+      button.setLabel('Sending...');
 
       setTimeout(function () {
         button.setLoading(false);
-        button.setLabel('Enviar enlace');
-        showAlert('success', 'Enlace enviado', 'Revisa el correo asociado a <strong>' + escapeHtml(identity) + '</strong>.');
+        button.setLabel('Send link');
+        showAlert('success', 'Link sent', 'Check the inbox associated with <strong>' + escapeHtml(identity) + '</strong>.');
       }, 700);
     }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -34,7 +34,7 @@
         <div class="plan-change-page__logo">M</div>
         <div>
           <div class="plan-change-page__title">Plan Change Preview</div>
-          <div class="plan-change-page__subtitle">Impacto y prorrateo antes de confirmar un cambio de plan</div>
+          <div class="plan-change-page__subtitle">Impact and proration before confirming a plan change</div>
         </div>
       </div>
       <div class="plan-change-page__actions">
@@ -48,8 +48,8 @@
           <div class="plan-change-page__eyebrow">Billing decision</div>
           <h1 class="plan-change-page__hero-title">Scale Annual → Scale Plus</h1>
           <p class="plan-change-page__hero-copy">
-            Vista previa para entender el impacto del cambio antes de confirmar: costo incremental,
-            fecha efectiva, recursos añadidos y efecto en el ciclo de facturación actual.
+            Preview to understand the impact of the change before confirming: incremental cost,
+            effective date, added resources, and effect on the current billing cycle.
           </p>
           <div class="plan-change-page__badges">
             <span id="plan-change-badge-current"></span>
@@ -82,45 +82,45 @@
   </script>
   <script>
     new MTS.Button('#plan-change-confirm', {
-      label: 'Confirmar cambio',
+      label: 'Confirm change',
       variant: 'primary',
       iconLeft: MTS.Icon.get('check-circle'),
       onClick: function () {
-        notify('success', 'Cambio simulado', 'La pantalla deja cubierto el paso final para aplicar el nuevo plan.');
+        notify('success', 'Change simulated', 'The screen covers the final step to apply the new plan.');
       }
     });
 
     new MTS.Badge('#plan-change-badge-current', {
-      label: 'Plan actual',
+      label: 'Current plan',
       variant: 'default',
       size: 'sm'
     });
 
     new MTS.Badge('#plan-change-badge-next', {
-      label: 'Plan sugerido',
+      label: 'Suggested plan',
       variant: 'primary',
       size: 'sm'
     });
 
     new MTS.Card('#plan-change-summary-card', {
-      title: 'Resumen del cambio',
-      subtitle: 'Antes de confirmar',
+      title: 'Change summary',
+      subtitle: 'Before confirming',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="plan-change-page__summary-grid">' +
-          infoCell('Plan actual', 'Scale Annual') +
-          infoCell('Nuevo plan', 'Scale Plus') +
-          infoCell('Fecha efectiva', 'Hoy, 11:00') +
-          infoCell('Prorrateo', 'USD 186') +
-          infoCell('Próxima renovación', '12 mayo 2026') +
-          infoCell('Owner del cambio', 'Finance Ops') +
+          infoCell('Current plan', 'Scale Annual') +
+          infoCell('New plan', 'Scale Plus') +
+          infoCell('Effective date', 'Today, 11:00') +
+          infoCell('Proration', 'USD 186') +
+          infoCell('Next renewal', 'May 12, 2026') +
+          infoCell('Change owner', 'Finance Ops') +
         '</div>'
     });
 
     new MTS.Card('#plan-change-impact-card', {
-      title: 'Qué cambia',
-      subtitle: 'Capacidad y límites',
+      title: 'What changes',
+      subtitle: 'Capacity and limits',
       variant: 'outlined',
       size: 'lg',
       body:
@@ -133,15 +133,15 @@
     });
 
     new MTS.Card('#plan-change-cost-card', {
-      title: 'Impacto económico',
-      subtitle: 'Este ciclo',
+      title: 'Financial impact',
+      subtitle: 'This cycle',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="plan-change-page__cost">' +
-          '<div><span>Cargo inmediato</span><strong>USD 186</strong></div>' +
-          '<div><span>Nuevo mensual equivalente</span><strong>USD 1,520</strong></div>' +
-          '<div><span>Notas</span><strong>Incluye prorrateo por días restantes del ciclo</strong></div>' +
+          '<div><span>Immediate charge</span><strong>USD 186</strong></div>' +
+          '<div><span>New monthly equivalent</span><strong>USD 1,520</strong></div>' +
+          '<div><span>Notes</span><strong>Includes proration for the remaining days in the cycle</strong></div>' +
         '</div>'
     });
 

@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Detalle de tarea - Matios UI</title>
+  <title>Task detail - Matios UI</title>
   <script>(function(){var sp=location.search||location.hash||'';var mm=sp.match(/mts-mode=([a-z-]+)/);var ma=sp.match(/mts-accent=([a-z-]+)/);if(mm)document.documentElement.setAttribute('data-mts-mode',mm[1]);if(ma)document.documentElement.setAttribute('data-mts-accent',ma[1]);try{var p=window.parent;if(p&&p!==window){var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');if(pm)document.documentElement.setAttribute('data-mts-mode',pm);if(pa)document.documentElement.setAttribute('data-mts-accent',pa);else document.documentElement.removeAttribute('data-mts-accent');}}catch(e){}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../base/matios-ui-base.css">
@@ -47,124 +47,124 @@
     }
 
     new MTS.Card('#workflow-task-detail-panel', {
-      title: 'Detalle de tarea',
-      subtitle: 'Revision de workflow',
+      title: 'Task detail',
+      subtitle: 'Workflow review',
       variant: 'elevated',
       size: 'lg',
       body:
         '<div class="mts-d-flex mts-flex--column mts-gap-4">' +
           '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
             '<div class="mts-d-flex mts-align-items--center mts-gap-2 mts-flex--wrap">' +
-              MTS.Badge.html('Alta prioridad', 'danger', 'sm') +
-              MTS.Badge.html('Pendiente', 'warning', 'sm') +
-              MTS.Badge.html('Acceso temporal', 'info', 'sm') +
+              MTS.Badge.html('High priority', 'danger', 'sm') +
+              MTS.Badge.html('Pending', 'warning', 'sm') +
+              MTS.Badge.html('Temporary access', 'info', 'sm') +
             '</div>' +
-            '<p class="mts-text--md mts-text-color--muted mts-m-0">WF-104 llega desde Roles y hoy espera tu revision de seguridad para habilitar Billing Editor solo durante el cierre operativo.</p>' +
+            '<p class="mts-text--md mts-text-color--muted mts-m-0">WF-104 comes in from Roles and is now waiting on your security review to enable Billing Editor only during the operational close.</p>' +
           '</div>' +
           '<div class="mts-grid mts-grid--gap-md">' +
             '<section class="mts-surface mts-g-col-12 mts-g-col-xl-8 mts-d-flex mts-flex--column mts-gap-3">' +
               '<div>' +
-                '<strong class="mts-text--md mts-text-color--primary">Resumen</strong>' +
-                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Datos base de la tarea que llega a la bandeja.</p>' +
+                '<strong class="mts-text--md mts-text-color--primary">Summary</strong>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Base data for the task that lands in the inbox.</p>' +
               '</div>' +
               '<div class="mts-grid mts-grid--gap-md">' +
                 infoCell('Workflow', 'Billing close exception') +
-                infoCell('Solicitante', 'Camila Soto') +
-                infoCell('Modulo origen', 'Roles') +
-                infoCell('Etapa actual', 'Security review') +
-                infoCell('Modo de decision', 'Any 1 of 2 approvers') +
-                infoCell('SLA', '2 horas') +
+                infoCell('Requester', 'Camila Soto') +
+                infoCell('Source module', 'Roles') +
+                infoCell('Current stage', 'Security review') +
+                infoCell('Decision mode', 'Any 1 of 2 approvers') +
+                infoCell('SLA', '2 hours') +
               '</div>' +
             '</section>' +
             '<section class="mts-surface mts-g-col-12 mts-g-col-xl-4 mts-d-flex mts-flex--column mts-gap-3">' +
               '<div>' +
-                '<strong class="mts-text--md mts-text-color--primary">Routing actual</strong>' +
-                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Como cae esta tarea en tu bandeja.</p>' +
+                '<strong class="mts-text--md mts-text-color--primary">Current routing</strong>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">How this task lands in your inbox.</p>' +
               '</div>' +
               '<div class="mts-grid mts-grid--gap-md">' +
-                routeCell('Aprobadores', 'Tu usuario y Security lead') +
-                routeCell('Escalacion', 'Security lead despues de 45 min') +
-                routeCell('Siguiente paso', 'Revocacion automatica y audit log') +
+                routeCell('Approvers', 'You and the Security lead') +
+                routeCell('Escalation', 'Security lead after 45 min') +
+                routeCell('Next step', 'Automatic revocation and audit log') +
               '</div>' +
             '</section>' +
           '</div>' +
           '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text--md mts-text-color--primary">Contexto para decidir</strong>' +
-              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Lo minimo necesario para aprobar, rechazar o pedir cambios sin salir del detalle.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Context to decide</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">The minimum needed to approve, reject or request changes without leaving the detail.</p>' +
             '</div>' +
-            '<p class="mts-text--sm mts-text-color--muted mts-m-0">Finance necesita editar invoices y revisar el metodo principal del workspace durante una ventana acotada al cierre. El permiso pedido no abre settings globales ni cambios de seguridad.</p>' +
+            '<p class="mts-text--sm mts-text-color--muted mts-m-0">Finance needs to edit invoices and review the workspace primary method during a window limited to the close. The requested permission does not open global settings or security changes.</p>' +
             '<ul class="mts-d-flex mts-flex--column mts-gap-2 mts-p-0 mts-m-0">' +
-              '<li class="mts-text--sm mts-text-color--secondary">Alcance: invoice edit y payment method review.</li>' +
-              '<li class="mts-text--sm mts-text-color--secondary">Restriccion: sin acceso a security settings.</li>' +
-              '<li class="mts-text--sm mts-text-color--secondary">Control: expiracion automatica al cierre del ciclo.</li>' +
+              '<li class="mts-text--sm mts-text-color--secondary">Scope: invoice edit and payment method review.</li>' +
+              '<li class="mts-text--sm mts-text-color--secondary">Restriction: no access to security settings.</li>' +
+              '<li class="mts-text--sm mts-text-color--secondary">Control: automatic expiration at the end of the cycle.</li>' +
             '</ul>' +
             '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
-              noteRow('Hoy 08:10', 'Finance reporto bloqueo para reconciliar invoices pendientes del mes.') +
-              noteRow('Hoy 08:22', 'Ops confirmo que Billing Editor cubre el caso sin ampliar el alcance.') +
-              noteRow('Ayer 19:40', 'Security pidio expiracion automatica si la tarea se aprueba.') +
+              noteRow('Today 08:10', 'Finance reported a blocker reconciling the month\'s pending invoices.') +
+              noteRow('Today 08:22', 'Ops confirmed that Billing Editor covers the case without expanding the scope.') +
+              noteRow('Yesterday 19:40', 'Security requested automatic expiration if the task is approved.') +
             '</div>' +
           '</section>' +
           '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text--md mts-text-color--primary">Etapas del workflow</strong>' +
-              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Secuencia de la instancia actual.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Workflow stages</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Sequence of the current instance.</p>' +
             '</div>' +
             '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
-              timelineRow('completed', 'Solicitud creada', 'Camila Soto', 'Hoy 08:00', 'La solicitud se abrio desde Roles con motivo y alcance temporal.') +
-              timelineRow('completed', 'Validacion manager', 'Laura Herrera', 'Hoy 08:07', 'Manager valido la necesidad operativa para el cierre actual.') +
-              timelineRow('current', 'Security review', 'Tu tarea', 'Ahora', 'La instancia espera tu decision o una derivacion al segundo reviewer.') +
-              timelineRow('pending', 'Revocar y cerrar', 'Politica automatica', 'Post cierre', 'Si se aprueba, el acceso vence y deja registro en auditoria.') +
+              timelineRow('completed', 'Request created', 'Camila Soto', 'Today 08:00', 'The request was opened from Roles with a reason and temporary scope.') +
+              timelineRow('completed', 'Manager validation', 'Laura Herrera', 'Today 08:07', 'The manager validated the operational need for the current close.') +
+              timelineRow('current', 'Security review', 'Your task', 'Now', 'The instance is waiting on your decision or a handoff to the second reviewer.') +
+              timelineRow('pending', 'Revoke and close', 'Automatic policy', 'Post close', 'If approved, the access expires and leaves an audit record.') +
             '</div>' +
           '</section>' +
           '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
               '<strong class="mts-text--md mts-text-color--primary">Decision</strong>' +
-              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">La recomendacion operativa es aprobar con expiracion automatica y sin ampliar el permiso fuera de Billing Editor.</p>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">The operational recommendation is to approve with automatic expiration and without expanding the permission beyond Billing Editor.</p>' +
             '</div>' +
             '<ul class="mts-d-flex mts-flex--column mts-gap-2 mts-p-0 mts-m-0">' +
-              '<li class="mts-text--sm mts-text-color--secondary">Aprueba si el acceso temporal alcanza para el cierre sin tocar settings globales.</li>' +
-              '<li class="mts-text--sm mts-text-color--secondary">Pide cambios si falta acotar vigencia o justificar mejor el alcance.</li>' +
-              '<li class="mts-text--sm mts-text-color--secondary">Rechaza si el requester necesita un permiso mas amplio que el acordado.</li>' +
+              '<li class="mts-text--sm mts-text-color--secondary">Approve if the temporary access is enough for the close without touching global settings.</li>' +
+              '<li class="mts-text--sm mts-text-color--secondary">Request changes if the validity period needs to be narrowed or the scope better justified.</li>' +
+              '<li class="mts-text--sm mts-text-color--secondary">Reject if the requester needs a broader permission than agreed.</li>' +
             '</ul>' +
           '</section>' +
         '</div>',
       footerAlign: 'between',
       footer: [
         {
-          label: 'Volver a inbox',
+          label: 'Back to inbox',
           variant: 'ghost',
           icon: MTS.Icon.get('arrow-left'),
           onClick: function () { openScreen('../workflow-inbox/index.html'); }
         },
         {
-          label: 'Abrir modulo origen',
+          label: 'Open source module',
           variant: 'secondary',
           icon: MTS.Icon.get('external-link'),
           onClick: function () { openScreen('../../roles/role-edit/index.html'); }
         },
         {
-          label: 'Solicitar cambios',
+          label: 'Request changes',
           variant: 'secondary',
           icon: MTS.Icon.get('edit-3'),
           onClick: function () {
-            notify('info', 'Se solicitaron cambios para WF-104.');
+            notify('info', 'Changes were requested for WF-104.');
           }
         },
         {
-          label: 'Rechazar',
+          label: 'Reject',
           variant: 'ghost',
           icon: MTS.Icon.get('alert'),
           onClick: function () {
-            notify('danger', 'WF-104 quedo rechazada en el ejemplo.');
+            notify('danger', 'WF-104 was rejected in the example.');
           }
         },
         {
-          label: 'Aprobar',
+          label: 'Approve',
           variant: 'primary',
           icon: MTS.Icon.get('check-circle'),
           onClick: function () {
-            notify('success', 'WF-104 quedo aprobada con expiracion automatica.');
+            notify('success', 'WF-104 was approved with automatic expiration.');
           }
         }
       ]

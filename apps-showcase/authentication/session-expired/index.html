@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Sesion Expirada - Matios UI</title>
+  <title>Session Expired - Matios UI</title>
   <script>
     (function () {
       var source = location.search || location.hash || '';
@@ -53,8 +53,8 @@
             <span class="mts-icon mts-icon--3xl" id="session-expired-icon"></span>
           </div>
           <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
-          <h1 class="mts-h1 mts-mt-2">Sesión expirada</h1>
-          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Necesitas volver a ingresar para continuar.</p>
+          <h1 class="mts-h1 mts-mt-2">Session expired</h1>
+          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">You need to sign in again to continue.</p>
         </div>
 
         <div class="mts-d-flex mts-flex--column mts-gap-4">
@@ -62,16 +62,16 @@
 
           <section class="mts-surface mts-d-flex mts-flex--column mts-gap-2">
             <div>
-              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Estado</p>
-              <p class="mts-text--md mts-text-color--primary mts-m-0">Sesión cerrada</p>
+              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Status</p>
+              <p class="mts-text--md mts-text-color--primary mts-m-0">Session closed</p>
             </div>
             <div>
-              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Motivo</p>
-              <p class="mts-text--md mts-text-color--primary mts-m-0">Inactividad prolongada</p>
+              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Reason</p>
+              <p class="mts-text--md mts-text-color--primary mts-m-0">Extended inactivity</p>
             </div>
             <div>
-              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Siguiente paso</p>
-              <p class="mts-text--md mts-text-color--primary mts-m-0">Volver al login y retomar el flujo</p>
+              <p class="mts-text--sm mts-text-color--muted mts-mb-1 mts-mt-0">Next step</p>
+              <p class="mts-text--md mts-text-color--primary mts-m-0">Return to login and resume the flow</p>
             </div>
           </section>
 
@@ -115,13 +115,13 @@
 
     MTS.Alert.show('#session-alert', {
       variant: 'warning',
-      title: 'Sesión expirada',
-      message: 'Por seguridad, debes autenticarte nuevamente antes de continuar.',
+      title: 'Session expired',
+      message: 'For security reasons, you must authenticate again before continuing.',
       closable: true
     });
 
     var reloginButton = new MTS.Button('#session-login-btn', {
-      label: 'Volver a iniciar sesión',
+      label: 'Sign in again',
       variant: 'primary',
       block: true,
       onClick: function (event, instance) {
@@ -130,7 +130,7 @@
     });
 
     new MTS.Button('#session-group-btn', {
-      label: 'Volver al grupo',
+      label: 'Back to group',
       variant: 'link',
       onClick: function () {
         goBack();
@@ -138,7 +138,7 @@
     });
 
     new MTS.Button('#session-return-btn', {
-      label: 'Ir al login',
+      label: 'Go to login',
       variant: 'link',
       onClick: function () {
         openScreen('../login/index.html');
@@ -147,15 +147,15 @@
 
     function simulateRelogin(button) {
       button.setLoading(true);
-      button.setLabel('Preparando reingreso...');
+      button.setLabel('Preparing sign-in...');
 
       setTimeout(function () {
         button.setLoading(false);
-        button.setLabel('Volver a iniciar sesión');
+        button.setLabel('Sign in again');
         MTS.Alert.show('#session-alert', {
           variant: 'success',
-          title: 'Reingreso listo',
-          message: 'El siguiente paso sería abrir el login con una sesión nueva.',
+          title: 'Ready to sign in',
+          message: 'The next step would be to open the login with a fresh session.',
           closable: true
         });
       }, 800);

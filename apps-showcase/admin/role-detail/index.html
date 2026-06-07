@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -34,7 +34,7 @@
         <div class="role-detail-page__logo">M</div>
         <div>
           <div class="role-detail-page__title">Role Detail</div>
-          <div class="role-detail-page__subtitle">Permisos, alcance y miembros asignados a un rol</div>
+          <div class="role-detail-page__subtitle">Permissions, scope and members assigned to a role</div>
         </div>
       </div>
       <div class="role-detail-page__actions">
@@ -47,8 +47,8 @@
         <div class="role-detail-page__eyebrow">Role governance</div>
         <h1 class="role-detail-page__hero-title">Billing Admin</h1>
         <p class="role-detail-page__hero-copy">
-          Vista para entender de forma rapida que permite un rol, donde aplica y a quienes afecta
-          antes de modificar acceso dentro del workspace.
+          A view to quickly understand what a role allows, where it applies and who it affects
+          before changing access within the workspace.
         </p>
         <div class="role-detail-page__badges">
           <span id="role-scope-badge"></span>
@@ -82,11 +82,11 @@
   </script>
   <script>
     new MTS.Button('#role-edit-button', {
-      label: 'Editar rol',
+      label: 'Edit role',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('shield'),
       onClick: function () {
-        notify('info', 'Edicion simulada', 'Aqui partiria el flujo de editar permisos del rol.');
+        notify('info', 'Simulated edit', 'This is where the role permission editing flow would start.');
       }
     });
 
@@ -103,56 +103,56 @@
     });
 
     new MTS.Card('#role-permissions-card', {
-      title: 'Permisos clave',
+      title: 'Key permissions',
       subtitle: 'Effective access',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="role-detail-page__list">' +
-          permRow('Invoices', 'Puede ver, reenviar y descargar facturas emitidas.') +
-          permRow('Payment methods', 'Puede cambiar tarjeta principal y backup.') +
-          permRow('Plan changes', 'Puede previsualizar cambios y escalar aprobaciones.') +
+          permRow('Invoices', 'Can view, resend and download issued invoices.') +
+          permRow('Payment methods', 'Can change the primary and backup card.') +
+          permRow('Plan changes', 'Can preview changes and escalate approvals.') +
         '</div>'
     });
 
     new MTS.Card('#role-actions-card', {
-      title: 'Acciones recomendadas',
+      title: 'Recommended actions',
       subtitle: 'Governance',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="role-detail-page__list">' +
-          permRow('Revision trimestral', 'Confirma que los miembros asignados siguen siendo dueños del proceso.') +
-          permRow('Separacion de funciones', 'Evita combinar este rol con permisos de security policy.') +
-          permRow('Alertas de cambio', 'Notifica cuando se agreguen permisos sensibles al rol.') +
+          permRow('Quarterly review', 'Confirm that the assigned members still own the process.') +
+          permRow('Separation of duties', 'Avoid combining this role with security policy permissions.') +
+          permRow('Change alerts', 'Notify when sensitive permissions are added to the role.') +
         '</div>',
       footerAlign: 'between',
       footer: [
         {
-          label: 'Exportar snapshot',
+          label: 'Export snapshot',
           variant: 'secondary',
           icon: MTS.Icon.get('download'),
-          onClick: function () { notify('success', 'Snapshot listo', 'Se simulo la exportacion del rol con sus permisos actuales.'); }
+          onClick: function () { notify('success', 'Snapshot ready', 'The export of the role with its current permissions was simulated.'); }
         },
         {
-          label: 'Revisar acceso',
+          label: 'Review access',
           variant: 'ghost',
           icon: MTS.Icon.get('arrow-right'),
-          onClick: function () { notify('info', 'Revision abierta', 'La pantalla se conecta bien con Access Review.'); }
+          onClick: function () { notify('info', 'Review opened', 'The screen connects well with Access Review.'); }
         }
       ]
     });
 
     new MTS.Card('#role-members-card', {
-      title: 'Miembros asignados',
+      title: 'Assigned members',
       subtitle: 'Current assignees',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="role-detail-page__members">' +
-          memberRow('Camila Soto', 'Owner de billing y renovaciones') +
-          memberRow('Martin Perez', 'Finance ops con foco en cobro recurrente') +
-          memberRow('Laura Herrera', 'Cobertura temporal para auditoria de pagos') +
+          memberRow('Camila Soto', 'Billing and renewals owner') +
+          memberRow('Martin Perez', 'Finance ops focused on recurring billing') +
+          memberRow('Laura Herrera', 'Temporary coverage for payment audits') +
         '</div>'
     });
 

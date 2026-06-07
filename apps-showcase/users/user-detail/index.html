@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Detalle de usuario - Matios UI</title>
+  <title>User detail - Matios UI</title>
   <script>
     (function () {
       var source = location.search || location.hash || '';
@@ -78,8 +78,8 @@
     }
 
     new MTS.Card('#user-detail-panel', {
-      title: 'Detalle de usuario',
-      subtitle: 'Ficha administrativa de cuenta interna',
+      title: 'User detail',
+      subtitle: 'Administrative record for an internal account',
       variant: 'elevated',
       size: 'lg',
       body:
@@ -89,81 +89,81 @@
             '<div class="mts-d-flex mts-align-items--center mts-gap-3">' +
               '<div id="user-detail-avatar"></div>' +
               '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
-                '<p class="mts-text--sm mts-text-color--muted mts-m-0">Usuarios</p>' +
+                '<p class="mts-text--sm mts-text-color--muted mts-m-0">Users</p>' +
                 '<div class="mts-d-flex mts-align-items--center mts-gap-2 mts-flex--wrap">' +
                   '<h1 class="mts-h1 mts-m-0">Camila Soto</h1>' +
                   '<span id="user-detail-status-badge"></span>' +
                   '<span id="user-detail-area-badge"></span>' +
                 '</div>' +
-                '<p class="mts-text--md mts-text-color--muted mts-m-0">Cuenta administrativa con foco en operaciones, documentos y trazabilidad interna.</p>' +
+                '<p class="mts-text--md mts-text-color--muted mts-m-0">Administrative account focused on operations, documents and internal traceability.</p>' +
               '</div>' +
             '</div>' +
           '</div>' +
           '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text--md mts-text-color--primary">Datos personales</strong>' +
-              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Identidad base del usuario dentro del sistema.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Personal information</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Base identity of the user within the system.</p>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md">' +
-              infoCell('Nombre', 'Camila') +
-              infoCell('Apellido', 'Soto') +
-              infoCell('Correo', 'camila.soto@matios.dev') +
+              infoCell('First name', 'Camila') +
+              infoCell('Last name', 'Soto') +
+              infoCell('Email', 'camila.soto@matios.dev') +
               infoCell('Username', 'csoto') +
-              infoCell('Telefono', '+56 9 8765 4321') +
-              infoCell('Codigo interno', 'USR-1024') +
+              infoCell('Phone', '+56 9 8765 4321') +
+              infoCell('Internal code', 'USR-1024') +
             '</div>' +
           '</section>' +
           '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text--md mts-text-color--primary">Organizacion y acceso</strong>' +
-              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Contexto interno, rol asignado y estado operativo actual.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Organization and access</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Internal context, assigned role and current operational status.</p>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md">' +
-              infoCell('Area', 'Operaciones') +
-              infoCell('Cargo', 'Operations Lead') +
-              infoCell('Rol', 'Supervisor Operacional') +
+              infoCell('Area', 'Operations') +
+              infoCell('Position', 'Operations Lead') +
+              infoCell('Role', 'Operations Supervisor') +
               infoCell('Supervisor', 'Founder account') +
-              infoCell('Empresa', 'Matios Studio') +
-              infoCell('Estado actual', 'Activo') +
-              infoCell('Fecha de alta', '12 marzo 2026') +
-              infoCell('Ultimo acceso', 'Hoy, 09:14') +
+              infoCell('Company', 'Matios Studio') +
+              infoCell('Current status', 'Active') +
+              infoCell('Created on', 'March 12, 2026') +
+              infoCell('Last access', 'Today, 09:14') +
             '</div>' +
           '</section>' +
           '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text--md mts-text-color--primary">Rol y perfiles asociados</strong>' +
-              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Los perfiles visibles se entienden como derivados del rol actual.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Role and associated profiles</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">The visible profiles are understood as derived from the current role.</p>' +
             '</div>' +
             '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
               '<div class="mts-d-flex mts-flex--column mts-gap-1">' +
-                '<span class="mts-text--sm mts-text-color--muted">Rol actual</span>' +
-                '<strong class="mts-text--md mts-text-color--primary">Supervisor Operacional</strong>' +
+                '<span class="mts-text--sm mts-text-color--muted">Current role</span>' +
+                '<strong class="mts-text--md mts-text-color--primary">Operations Supervisor</strong>' +
               '</div>' +
               '<div class="mts-d-flex mts-gap-2 mts-flex--wrap">' +
-                MTS.Badge.html('Workspace base', 'primary', 'sm') +
-                MTS.Badge.html('Operaciones', 'accent', 'sm') +
-                MTS.Badge.html('Documentos', 'info', 'sm') +
+                MTS.Badge.html('Base workspace', 'primary', 'sm') +
+                MTS.Badge.html('Operations', 'accent', 'sm') +
+                MTS.Badge.html('Documents', 'info', 'sm') +
               '</div>' +
             '</div>' +
           '</section>' +
           '<section class="mts-surface mts-d-flex mts-flex--column mts-gap-3">' +
             '<div>' +
-              '<strong class="mts-text--md mts-text-color--primary">Seguridad y actividad</strong>' +
-              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Control de acceso, sesiones recientes y eventos relevantes.</p>' +
+              '<strong class="mts-text--md mts-text-color--primary">Security and activity</strong>' +
+              '<p class="mts-text--sm mts-text-color--muted mts-mt-1 mts-mb-0">Access control, recent sessions and relevant events.</p>' +
             '</div>' +
             '<div class="mts-grid mts-grid--gap-md">' +
               '<div class="mts-g-col-12 mts-g-col-xl-4">' +
                 '<div class="mts-d-flex mts-flex--column mts-gap-2">' +
-                  securityRow('MFA', 'Activo') +
-                  securityRow('Cambio obligatorio de clave', 'No') +
-                  securityRow('Sesion actual', 'Chrome · Santiago') +
+                  securityRow('MFA', 'Active') +
+                  securityRow('Mandatory password change', 'No') +
+                  securityRow('Current session', 'Chrome · Santiago') +
                 '</div>' +
               '</div>' +
               '<div class="mts-g-col-12 mts-g-col-xl-8">' +
                 '<div class="mts-d-flex mts-flex--column mts-gap-3">' +
-                  timelineRow('Hoy, 09:14', 'Ingreso exitoso por OTP', 'Valido usuario, codigo y workspace principal.') +
-                  timelineRow('Ayer, 18:41', 'Actualizacion de perfiles', 'Se agrego el perfil de documentos para aprobaciones internas.') +
-                  timelineRow('18 abril, 16:22', 'Cambio de datos de contacto', 'Se normalizo telefono y supervisor del registro.') +
+                  timelineRow('Today, 09:14', 'Successful OTP login', 'Validated user, code and primary workspace.') +
+                  timelineRow('Yesterday, 18:41', 'Profile update', 'The documents profile was added for internal approvals.') +
+                  timelineRow('April 18, 16:22', 'Contact details change', 'The record phone and supervisor were normalized.') +
                 '</div>' +
               '</div>' +
             '</div>' +
@@ -172,7 +172,7 @@
       footerAlign: 'between',
       footer: [
         {
-          label: 'Volver',
+          label: 'Back',
           variant: 'ghost',
           icon: MTS.Icon.get('arrow-left'),
           onClick: function () {
@@ -180,7 +180,7 @@
           }
         },
         {
-          label: 'Editar',
+          label: 'Edit',
           variant: 'secondary',
           icon: MTS.Icon.get('edit'),
           onClick: function () {
@@ -188,23 +188,23 @@
           }
         },
         {
-          label: 'Forzar cierre de sesion',
+          label: 'Force sign-out',
           variant: 'secondary',
           icon: MTS.Icon.get('refresh-cw'),
           onClick: function () {
-            showAlert('warning', 'Sesion invalidada', 'Se simularia el cierre remoto de las sesiones activas del usuario.');
+            showAlert('warning', 'Session invalidated', 'The remote sign-out of the user active sessions would be simulated.');
           }
         },
         {
-          label: 'Bloquear usuario',
+          label: 'Block user',
           variant: 'ghost',
           icon: MTS.Icon.get('slash'),
           onClick: function () {
-            showAlert('warning', 'Usuario bloqueado', 'La accion se simularia sobre Camila Soto y quedaria registrada en auditoria.');
+            showAlert('warning', 'User blocked', 'The action would be simulated on Camila Soto and logged in the audit trail.');
           }
         },
         {
-          label: 'Cambiar clave',
+          label: 'Change password',
           variant: 'primary',
           icon: MTS.Icon.get('key'),
           onClick: function () {
@@ -221,13 +221,13 @@
     });
 
     new MTS.Badge('#user-detail-status-badge', {
-      label: 'Activo',
+      label: 'Active',
       variant: 'success',
       size: 'sm'
     });
 
     new MTS.Badge('#user-detail-area-badge', {
-      label: 'Operaciones',
+      label: 'Operations',
       variant: 'accent',
       size: 'sm'
     });
@@ -260,14 +260,14 @@
       var forceChangeCheckbox;
 
       var modal = new MTS.Modal({
-        title: 'Cambiar clave',
+        title: 'Change password',
         body: body,
         size: 'md',
         scrollable: true,
         buttons: [
-          { label: 'Cancelar', variant: 'ghost', close: true },
+          { label: 'Cancel', variant: 'ghost', close: true },
           {
-            label: 'Guardar clave',
+            label: 'Save password',
             variant: 'primary',
             onClick: function () {
               submitPasswordChange();
@@ -276,11 +276,11 @@
         ],
         onShown: function () {
           modeSelect = new MTS.Select('#change-password-mode', {
-            label: 'Contexto',
+            label: 'Context',
             value: initialMode,
             options: [
-              { value: 'admin', label: 'Administrador cambia clave' },
-              { value: 'user', label: 'Usuario cambia su propia clave' }
+              { value: 'admin', label: 'Administrator changes password' },
+              { value: 'user', label: 'User changes their own password' }
             ],
             onChange: function () {
               syncPasswordMode();
@@ -289,30 +289,30 @@
 
           currentPasswordInput = new MTS.Input('#change-password-current', {
             type: 'password',
-            label: 'Clave actual',
-            placeholder: 'Ingresa la clave actual',
+            label: 'Current password',
+            placeholder: 'Enter the current password',
             iconLeft: MTS.Icon.get('lock'),
             showPassword: true
           });
 
           nextPasswordInput = new MTS.Input('#change-password-next', {
             type: 'password',
-            label: 'Nueva clave',
-            placeholder: 'Ingresa la nueva clave',
+            label: 'New password',
+            placeholder: 'Enter the new password',
             iconLeft: MTS.Icon.get('lock'),
             showPassword: true
           });
 
           confirmPasswordInput = new MTS.Input('#change-password-confirm', {
             type: 'password',
-            label: 'Confirmar nueva clave',
-            placeholder: 'Repite la nueva clave',
+            label: 'Confirm new password',
+            placeholder: 'Repeat the new password',
             iconLeft: MTS.Icon.get('lock'),
             showPassword: true
           });
 
           forceChangeCheckbox = new MTS.Checkbox('#change-password-force', {
-            label: 'Forzar cambio de clave al proximo inicio'
+            label: 'Force password change at next sign-in'
           });
 
           syncPasswordMode();
@@ -349,37 +349,37 @@
         clearPasswordErrors();
 
         if (mode === 'user' && !currentPassword) {
-          currentPasswordInput.setError('Ingresa la clave actual');
+          currentPasswordInput.setError('Enter the current password');
           return;
         }
 
         if (!nextPassword) {
-          nextPasswordInput.setError('Ingresa la nueva clave');
+          nextPasswordInput.setError('Enter the new password');
           return;
         }
 
         if (nextPassword.length < 8) {
-          nextPasswordInput.setError('La clave debe tener al menos 8 caracteres');
+          nextPasswordInput.setError('The password must be at least 8 characters long');
           return;
         }
 
         if (!confirmPassword) {
-          confirmPasswordInput.setError('Confirma la nueva clave');
+          confirmPasswordInput.setError('Confirm the new password');
           return;
         }
 
         if (nextPassword !== confirmPassword) {
-          confirmPasswordInput.setError('Las claves no coinciden');
+          confirmPasswordInput.setError('The passwords do not match');
           return;
         }
 
         modal.hide();
         showAlert(
           'success',
-          'Clave actualizada',
+          'Password updated',
           mode === 'user'
-            ? 'Se simularia el cambio de clave validando la clave actual del usuario.'
-            : 'Se simularia el cambio de clave administrativo' + (forceChangeCheckbox.isChecked() ? ' forzando renovacion en el proximo acceso.' : '.')
+            ? 'The password change would be simulated by validating the user current password.'
+            : 'The administrative password change would be simulated' + (forceChangeCheckbox.isChecked() ? ', forcing renewal at the next sign-in.' : '.')
         );
       }
     }

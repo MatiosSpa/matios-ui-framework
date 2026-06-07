@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -38,7 +38,7 @@
         <div class="search-results-page__logo">M</div>
         <div>
           <div class="search-results-page__title">Search Results</div>
-          <div class="search-results-page__subtitle">Resultados filtrables para vistas completas de busqueda</div>
+          <div class="search-results-page__subtitle">Filterable results for full search views</div>
         </div>
       </div>
       <div id="search-results-save"></div>
@@ -47,18 +47,18 @@
     <main class="search-results-page__main mts-grid mts-grid--gap-md">
       <section class="search-results-page__hero mts-surface mts-g-col-12">
         <div class="search-results-page__eyebrow">Refined discovery</div>
-        <h1 class="search-results-page__hero-title">Resultados para "workspace billing"</h1>
+        <h1 class="search-results-page__hero-title">Results for "workspace billing"</h1>
         <p class="search-results-page__hero-copy">
-          Vista completa para revisar resultados por tipo, aplicar filtros y ejecutar acciones
-          rapidas sin abandonar el contexto de busqueda.
+          A full view to review results by type, apply filters and run quick
+          actions without leaving the search context.
         </p>
       </section>
 
       <aside class="mts-g-col-12 mts-g-col-xl-4">
         <div class="mts-form-card search-results-page__filters-card">
           <div class="mts-form-card__header">
-            <h2 class="mts-form-card__title">Filtros</h2>
-            <p class="mts-form-card__subtitle">Refina por tipo de contenido y recencia.</p>
+            <h2 class="mts-form-card__title">Filters</h2>
+            <p class="mts-form-card__subtitle">Refine by content type and recency.</p>
           </div>
           <div id="search-results-feedback"></div>
           <div class="search-results-page__filters">
@@ -74,9 +74,9 @@
         <div class="search-results-page__results-head">
           <div>
             <div class="search-results-page__results-label">Search index</div>
-            <h2 class="search-results-page__results-title">Coincidencias disponibles</h2>
+            <h2 class="search-results-page__results-title">Available matches</h2>
           </div>
-          <div class="search-results-page__results-meta" id="results-meta">0 resultados</div>
+          <div class="search-results-page__results-meta" id="results-meta">0 results</div>
         </div>
         <div class="mts-grid mts-grid--gap-md" id="results-list"></div>
       </section>
@@ -98,31 +98,31 @@
     var kindSelect;
     var timeSelect;
     var results = [
-      { id: 'sr1', title: 'Workspace billing owner', subtitle: 'Member profile', kind: 'people', kindLabel: 'People', time: 'today', status: 'Relevant', variant: 'success', summary: 'Camila Soto aparece como owner de billing y aprueba cambios de plan.' },
-      { id: 'sr2', title: 'Workspace billing policy', subtitle: 'Document', kind: 'files', kindLabel: 'Files', time: 'week', status: 'Updated', variant: 'info', summary: 'Politica interna para escalaciones de cobro y ownership operativo.' },
-      { id: 'sr3', title: 'Billing workspace settings', subtitle: 'Setting', kind: 'settings', kindLabel: 'Settings', time: 'month', status: 'Config', variant: 'default', summary: 'Configuracion de prorrateo, fallback de pago y recordatorios de facturas.' }
+      { id: 'sr1', title: 'Workspace billing owner', subtitle: 'Member profile', kind: 'people', kindLabel: 'People', time: 'today', status: 'Relevant', variant: 'success', summary: 'Camila Soto appears as the billing owner and approves plan changes.' },
+      { id: 'sr2', title: 'Workspace billing policy', subtitle: 'Document', kind: 'files', kindLabel: 'Files', time: 'week', status: 'Updated', variant: 'info', summary: 'Internal policy for billing escalations and operational ownership.' },
+      { id: 'sr3', title: 'Billing workspace settings', subtitle: 'Setting', kind: 'settings', kindLabel: 'Settings', time: 'month', status: 'Config', variant: 'default', summary: 'Proration, payment fallback and invoice reminder settings.' }
     ];
 
     new MTS.Button('#search-results-save', {
-      label: 'Guardar vista',
+      label: 'Save view',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('check-circle'),
       onClick: function () {
-        notify('success', 'Vista guardada', 'Se simulo guardar esta combinacion de filtros como acceso rapido.');
+        notify('success', 'View saved', 'Saving this filter combination as a quick access was simulated.');
       }
     });
 
     new MTS.Input('#results-query', {
-      label: 'Consulta',
+      label: 'Query',
       type: 'text',
       value: resultsState.query,
-      placeholder: 'Buscar por titulo o resumen',
+      placeholder: 'Search by title or summary',
       iconLeft: MTS.Icon.get('search')
     });
 
     kindSelect = new MTS.Select('#results-kind', {
-      label: 'Tipo',
-      placeholder: 'Todos',
+      label: 'Type',
+      placeholder: 'All',
       clearable: true,
       options: [
         { value: 'people', label: 'People' },
@@ -132,18 +132,18 @@
     });
 
     timeSelect = new MTS.Select('#results-time', {
-      label: 'Recencia',
-      placeholder: 'Todo',
+      label: 'Recency',
+      placeholder: 'Any',
       clearable: true,
       options: [
-        { value: 'today', label: 'Hoy' },
-        { value: 'week', label: 'Ultimos 7 dias' },
-        { value: 'month', label: 'Ultimos 30 dias' }
+        { value: 'today', label: 'Today' },
+        { value: 'week', label: 'Last 7 days' },
+        { value: 'month', label: 'Last 30 days' }
       ]
     });
 
     new MTS.Button('#results-clear', {
-      label: 'Limpiar filtros',
+      label: 'Clear filters',
       variant: 'ghost',
       iconLeft: MTS.Icon.get('refresh-cw'),
       onClick: function () {
@@ -203,10 +203,10 @@
         return matchesQuery && matchesKind && matchesTime;
       });
 
-      meta.textContent = visible.length + (visible.length === 1 ? ' resultado' : ' resultados');
+      meta.textContent = visible.length + (visible.length === 1 ? ' result' : ' results');
 
       if (!visible.length) {
-        host.innerHTML = '<div class="mts-g-col-12"><div class="search-results-page__empty mts-surface"><strong>Sin coincidencias</strong><p>Prueba con otro termino o quita filtros para recuperar resultados.</p></div></div>';
+        host.innerHTML = '<div class="mts-g-col-12"><div class="search-results-page__empty mts-surface"><strong>No matches</strong><p>Try another term or remove filters to recover results.</p></div></div>';
         return;
       }
 
@@ -234,19 +234,19 @@
           footerAlign: 'between',
           footer: [
             {
-              label: 'Abrir',
+              label: 'Open',
               variant: 'primary',
               icon: MTS.Icon.get('arrow-right'),
               onClick: function () {
-                notify('info', 'Accion simulada', 'Aqui el producto navegaria al recurso seleccionado.');
+                notify('info', 'Simulated action', 'Here the product would navigate to the selected resource.');
               }
             },
             {
-              label: 'Guardar',
+              label: 'Save',
               variant: 'ghost',
               icon: MTS.Icon.get('check-circle'),
               onClick: function () {
-                notify('success', 'Resultado guardado', 'El item quedo fijado dentro de una busqueda guardada.');
+                notify('success', 'Result saved', 'The item was pinned inside a saved search.');
               }
             }
           ]

@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -53,9 +53,9 @@
             <span class="mts-icon mts-icon--3xl" id="verify-mail-icon"></span>
           </div>
           <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
-          <h1 class="mts-h1 mts-mt-2">Verifica tu correo</h1>
+          <h1 class="mts-h1 mts-mt-2">Verify your email</h1>
           <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">
-            Enviamos una verificación a <strong id="verify-email-target">equipo@matios.dev</strong>.
+            We sent a verification to <strong id="verify-email-target">equipo@matios.dev</strong>.
           </p>
         </div>
 
@@ -90,7 +90,7 @@
     MTS.Icon.render('mail', document.getElementById('verify-mail-icon'));
 
     new MTS.Button('#verify-login', {
-      label: 'Ir al login',
+      label: 'Go to login',
       variant: 'link',
       onClick: function () {
         openScreen('../login/index.html');
@@ -98,7 +98,7 @@
     });
 
     new MTS.Button('#verify-signup', {
-      label: 'Crear cuenta',
+      label: 'Create account',
       variant: 'link',
       onClick: function () {
         openScreen('../signup/index.html');
@@ -106,7 +106,7 @@
     });
 
     var resendButton = new MTS.Button('#verify-resend', {
-      label: 'Reenviar correo',
+      label: 'Resend email',
       variant: 'primary',
       block: true,
       onClick: function (event, instance) {
@@ -130,12 +130,12 @@
 
     function resendEmail(button) {
       button.setLoading(true);
-      button.setLabel('Reenviando...');
+      button.setLabel('Resending...');
 
       setTimeout(function () {
         button.setLoading(false);
-        button.setLabel('Reenviar correo');
-        showAlert('info', 'Correo reenviado', 'Se reenviaría la verificación a <strong>' + document.getElementById('verify-email-target').textContent + '</strong>.');
+        button.setLabel('Resend email');
+        showAlert('info', 'Email resent', 'The verification would be resent to <strong>' + document.getElementById('verify-email-target').textContent + '</strong>.');
       }, 700);
     }
 

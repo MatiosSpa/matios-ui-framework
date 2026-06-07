@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Invitar Equipo - Matios UI</title>
+  <title>Invite Team - Matios UI</title>
   <script>
     (function () {
       var source = location.search || location.hash || '';
@@ -57,8 +57,8 @@
       <div class="mts-card__body mts-p-6">
         <div class="mts-text--center mts-mb-4">
           <p class="mts-text--sm mts-text-color--muted mts-m-0">Matios UI</p>
-          <h1 class="mts-h1 mts-mt-2">Invita a tu equipo</h1>
-          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Deja listo el acceso inicial de las primeras personas.</p>
+          <h1 class="mts-h1 mts-mt-2">Invite your team</h1>
+          <p class="mts-text--md mts-text-color--muted mts-mt-2 mts-mb-0">Set up initial access for your first teammates.</p>
         </div>
 
         <div class="mts-d-flex mts-flex--column mts-gap-4">
@@ -94,8 +94,8 @@
     }
 
     var membersInput = new MTS.TagInput('#invite-team-members', {
-      label: 'Correos del equipo',
-      placeholder: 'Agrega un correo y presiona Enter',
+      label: 'Team emails',
+      placeholder: 'Add an email and press Enter',
       allowCustom: true,
       suggestions: [
         { uid: 'ana@acme.com', name: 'ana@acme.com' },
@@ -105,8 +105,8 @@
     });
 
     var roleSelect = new MTS.Select('#invite-team-role', {
-      label: 'Rol inicial',
-      placeholder: 'Selecciona un rol base',
+      label: 'Initial role',
+      placeholder: 'Select a base role',
       options: [
         { value: 'general', label: 'General' },
         { value: 'operations', label: 'Operations' },
@@ -117,17 +117,17 @@
 
     var messageInput = new MTS.Input('#invite-team-message', {
       type: 'text',
-      label: 'Mensaje de bienvenida',
-      placeholder: 'Te compartimos acceso para que empieces hoy mismo',
+      label: 'Welcome message',
+      placeholder: 'We are sharing access so you can get started today',
       iconLeft: MTS.Icon.get('mail')
     });
 
     var copyCheckbox = new MTS.Checkbox('#invite-team-copy', {
-      label: 'Quiero recibir una copia del resumen de invitaciones'
+      label: 'I want to receive a copy of the invitations summary'
     });
 
     new MTS.Button('#invite-team-skip', {
-      label: 'Continuar sin invitar',
+      label: 'Continue without inviting',
       variant: 'link',
       onClick: function () {
         openScreen('../onboarding-complete/index.html');
@@ -135,7 +135,7 @@
     });
 
     new MTS.Button('#invite-team-back', {
-      label: 'Volver',
+      label: 'Back',
       variant: 'link',
       onClick: function () {
         openScreen('../signup-with-company/index.html');
@@ -143,7 +143,7 @@
     });
 
     var submitButton = new MTS.Button('#invite-team-submit', {
-      label: 'Enviar invitaciones',
+      label: 'Send invitations',
       variant: 'primary',
       block: true,
       onClick: function (event, instance) {
@@ -186,38 +186,38 @@
       clearAlerts();
 
       if (!tags.length) {
-        showAlert('warning', 'Agrega al menos un correo', 'Necesitamos por lo menos una persona en el lote inicial.');
+        showAlert('warning', 'Add at least one email', 'We need at least one person in the initial batch.');
         return;
       }
 
       for (var i = 0; i < tags.length; i++) {
         if (!isValidEmail(tags[i].uid)) {
-          showAlert('warning', 'Hay correos inválidos', 'Revisa las invitaciones y deja solo correos válidos.');
+          showAlert('warning', 'There are invalid emails', 'Review the invitations and keep only valid emails.');
           return;
         }
       }
 
       if (!roleValue) {
-        showAlert('warning', 'Falta el rol inicial', 'Selecciona el paquete de acceso base para el equipo.');
+        showAlert('warning', 'Initial role is missing', 'Select the base access package for the team.');
         return;
       }
 
       if (message && message.length > 96) {
-        messageInput.setError('Mantén el mensaje bajo 96 caracteres');
+        messageInput.setError('Keep the message under 96 characters');
         return;
       }
 
       button.setLoading(true);
-      button.setLabel('Preparando invitaciones...');
+      button.setLabel('Preparing invitations...');
 
       setTimeout(function () {
         button.setLoading(false);
-        button.setLabel('Enviar invitaciones');
+        button.setLabel('Send invitations');
         showAlert(
           'success',
-          'Lote preparado',
-          'Se simularía el envío para <strong>' + tags.length + ' personas</strong> con el rol <strong>' + escapeHtml(getRoleLabel(roleValue)) + '</strong>' +
-            (copyCheckbox.isChecked() ? ' y copia al administrador.' : '.')
+          'Batch ready',
+          'Sending would be simulated for <strong>' + tags.length + ' people</strong> with the <strong>' + escapeHtml(getRoleLabel(roleValue)) + '</strong> role' +
+            (copyCheckbox.isChecked() ? ' and a copy to the administrator.' : '.')
         );
       }, 800);
     }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -34,7 +34,7 @@
         <div class="file-preview-page__logo">M</div>
         <div>
           <div class="file-preview-page__title">File Preview</div>
-          <div class="file-preview-page__subtitle">Vista previa de documento con metadata y acciones comunes</div>
+          <div class="file-preview-page__subtitle">Document preview with metadata and common actions</div>
         </div>
       </div>
       <div class="file-preview-page__actions">
@@ -49,8 +49,8 @@
           <div class="file-preview-page__eyebrow">Document preview</div>
           <h1 class="file-preview-page__hero-title">Contract-Renewal-Q2.pdf</h1>
           <p class="file-preview-page__hero-copy">
-            Vista ligera para revisar un documento, entender su contexto y ejecutar acciones
-            frecuentes como compartir, descargar o revisar actividad reciente.
+            A lightweight view to review a document, understand its context and run
+            frequent actions such as sharing, downloading or checking recent activity.
           </p>
           <div class="file-preview-page__badges">
             <span id="file-badge-type"></span>
@@ -92,20 +92,20 @@
   </script>
   <script>
     new MTS.Button('#file-share-button', {
-      label: 'Compartir',
+      label: 'Share',
       variant: 'secondary',
       iconLeft: MTS.Icon.get('send'),
       onClick: function () {
-        notify('success', 'Compartido', 'La UI deja cubierto el flujo de compartir este documento.');
+        notify('success', 'Shared', 'The UI covers the flow for sharing this document.');
       }
     });
 
     new MTS.Button('#file-download-button', {
-      label: 'Descargar',
+      label: 'Download',
       variant: 'primary',
       iconLeft: MTS.Icon.get('download'),
       onClick: function () {
-        notify('info', 'Descarga simulada', 'El documento quedó listo para descarga.');
+        notify('info', 'Simulated download', 'The document is ready to download.');
       }
     });
 
@@ -130,7 +130,7 @@
         '<div class="file-preview-page__meta-grid">' +
           metaCell('Owner', 'Finance Ops') +
           metaCell('Version', 'v4') +
-          metaCell('Updated', 'Hoy, 08:30') +
+          metaCell('Updated', 'Today, 08:30') +
           metaCell('Size', '2.4 MB') +
           metaCell('Folder', 'Contracts / Renewals') +
           metaCell('Visibility', 'Internal shared') +
@@ -138,15 +138,15 @@
     });
 
     new MTS.Card('#file-activity-card', {
-      title: 'Actividad reciente',
-      subtitle: 'Timeline breve',
+      title: 'Recent activity',
+      subtitle: 'Brief timeline',
       variant: 'outlined',
       size: 'lg',
       body:
         '<div class="file-preview-page__activity">' +
-          activityRow('Hoy, 08:30', 'Finance actualizó la versión del contrato.') +
-          activityRow('Ayer, 19:10', 'Legal dejó comentarios sobre cláusulas de renovación.') +
-          activityRow('18 abril', 'Operations compartió el archivo con billing.') +
+          activityRow('Today, 08:30', 'Finance updated the contract version.') +
+          activityRow('Yesterday, 19:10', 'Legal left comments on the renewal clauses.') +
+          activityRow('April 18', 'Operations shared the file with billing.') +
         '</div>'
     });
 
