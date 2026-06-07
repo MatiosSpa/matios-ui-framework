@@ -92,25 +92,25 @@
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- ── 1 · HORIZONTAL en Topbar ── -->
+  <!-- ── 1 · HORIZONTAL in Topbar ── -->
   <div class="demo-section">
     <div class="demo-section-title" id="s1-title"></div>
     <div id="s1"></div>
   </div>
 
-  <!-- ── 2 · ÁRBOL en SideNav ── -->
+  <!-- ── 2 · TREE in SideNav ── -->
   <div class="demo-section">
     <div class="demo-section-title" id="s2-title"></div>
     <div id="s2"></div>
   </div>
 
-  <!-- ── 3 · N NIVELES + badges + disabled ── -->
+  <!-- ── 3 · N LEVELS + badges + disabled ── -->
   <div class="demo-section">
     <div class="demo-section-title" id="s3-title"></div>
     <div id="s3"></div>
   </div>
 
-  <!-- ── 4 · MISMA INSTANCIA: topbar + sidenav ── -->
+  <!-- ── 4 · SAME INSTANCE: topbar + sidenav ── -->
   <div class="demo-section">
     <div class="demo-section-title" id="s4-title"></div>
     <div id="s4"></div>
@@ -120,7 +120,7 @@
 
 <script>
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public face); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -167,7 +167,7 @@ function mk(id, html, js, h) {
 var LOGO = '<div style="width:28px;height:28px;background:linear-gradient(135deg,var(--mts-color-primary),var(--mts-color-accent));border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px">M</div>';
 
 /* ════════════════════════════════════
-   1 · HORIZONTAL en Topbar
+   1 · HORIZONTAL in Topbar
    ════════════════════════════════════ */
 mk('s1',
 '<div class="demo-topbar-wrap">\n' +
@@ -178,19 +178,19 @@ mk('s1',
 "  active: 'dashboard',\n" +
 "  items: [\n" +
 "    { key: 'dashboard', label: 'Dashboard', icon: 'mts-icon-home' },\n" +
-"    { key: 'reportes',  label: 'Reportes',  icon: 'mts-icon-bar-chart-2', children: [\n" +
-"      { key: 'ventas',    label: 'Ventas' },\n" +
-"      { key: 'compras',   label: 'Compras' },\n" +
-"      { key: 'logistica', label: 'Logística' },\n" +
+"    { key: 'reportes',  label: 'Reports',   icon: 'mts-icon-bar-chart-2', children: [\n" +
+"      { key: 'ventas',    label: 'Sales' },\n" +
+"      { key: 'compras',   label: 'Purchases' },\n" +
+"      { key: 'logistica', label: 'Logistics' },\n" +
 "    ]},\n" +
-"    { key: 'usuarios', label: 'Usuarios', icon: 'mts-icon-users' },\n" +
+"    { key: 'usuarios', label: 'Users', icon: 'mts-icon-users' },\n" +
 "    { divider: true },\n" +
 "    { key: 'config',   label: 'Config',   icon: 'mts-icon-settings' },\n" +
 "  ],\n" +
 "  onClick: function(item) { console.log(item.key); }\n" +
 "});\n\n" +
 "new MTS.Topbar('#tb1', {\n" +
-"  brand: { logo: '...', title: 'Mi<span style=\"color:var(--mts-color-primary)\">App</span>' },\n" +
+"  brand: { logo: '...', title: 'My<span style=\"color:var(--mts-color-primary)\">App</span>' },\n" +
 "  menu: menu1\n" +
 "});",
 '200px');
@@ -215,12 +215,12 @@ var menu1 = new MTS.Menu({
 });
 
 new MTS.Topbar('#tb1', {
-  brand: { logo: LOGO, title: 'Mi<span style="color:var(--mts-color-primary)">App</span>' },
+  brand: { logo: LOGO, title: 'My<span style="color:var(--mts-color-primary)">App</span>' },
   menu: menu1
 });
 
 /* ════════════════════════════════════
-   2 · ÁRBOL en SideNav
+   2 · TREE in SideNav
    ════════════════════════════════════ */
 mk('s2',
 '<div class="demo-sidebar-wrap">\n' +
@@ -231,9 +231,9 @@ mk('s2',
 "  active: 'dashboard',\n" +
 "  items: [\n" +
 "    { key: 'dashboard', label: 'Dashboard', icon: 'mts-icon-home' },\n" +
-"    { key: 'reportes',  label: 'Reportes',  icon: 'mts-icon-bar-chart-2', children: [\n" +
-"      { key: 'ventas',  label: 'Ventas' },\n" +
-"      { key: 'compras', label: 'Compras' },\n" +
+"    { key: 'reportes',  label: 'Reports',   icon: 'mts-icon-bar-chart-2', children: [\n" +
+"      { key: 'ventas',  label: 'Sales' },\n" +
+"      { key: 'compras', label: 'Purchases' },\n" +
 "    ]},\n" +
 "    { divider: true },\n" +
 "    { key: 'config',   label: 'Config',    icon: 'mts-icon-settings' },\n" +
@@ -265,7 +265,7 @@ var menu2 = new MTS.Menu({
 new MTS.SideNav('#sn2', { menu: menu2 });
 
 /* ════════════════════════════════════
-   3 · N NIVELES + badges + disabled
+   3 · N LEVELS + badges + disabled
    ════════════════════════════════════ */
 mk('s3',
 '<div class="demo-sidebar-wrap">\n' +
@@ -274,13 +274,13 @@ mk('s3',
 '</div>',
 "var menu3 = new MTS.Menu({\n" +
 "  items: [\n" +
-"    { key: 'home',  label: 'Inicio',       icon: 'mts-icon-home' },\n" +
-"    { key: 'ops',   label: 'Operaciones',  icon: 'mts-icon-layers', badge: '3', children: [\n" +
+"    { key: 'home',  label: 'Home',        icon: 'mts-icon-home' },\n" +
+"    { key: 'ops',   label: 'Operations',  icon: 'mts-icon-layers', badge: '3', children: [\n" +
 "      { key: 'ops-ar', label: 'Argentina', children: [\n" +
 "        { key: 'ops-ar-bs',  label: 'Buenos Aires' },\n" +
 "        { key: 'ops-ar-cba', label: 'Córdoba' },\n" +
 "      ]},\n" +
-"      { key: 'ops-br', label: 'Brasil' },\n" +
+"      { key: 'ops-br', label: 'Brazil' },\n" +
 "      { key: 'ops-cl', label: 'Chile', disabled: true },\n" +
 "    ]},\n" +
 "    { divider: true },\n" +
@@ -314,7 +314,7 @@ var menu3 = new MTS.Menu({
 new MTS.SideNav('#sn3', { menu: menu3 });
 
 /* ════════════════════════════════════
-   4 · MISMA INSTANCIA: topbar + sidenav
+   4 · SAME INSTANCE: topbar + sidenav
    ════════════════════════════════════ */
 mk('s4',
 '<div style="display:flex;flex-direction:column;border-radius:var(--mts-radius-lg);border:1px solid var(--mts-border-color)">\n' +
@@ -324,16 +324,16 @@ mk('s4',
 '    <div class="demo-content-mock" id="content4">' + (D.selectHint || 'Select an item') + '</div>\n' +
 '  </div>\n' +
 '</div>',
-"// Una sola instancia — activo sincronizado en topbar y sidebar\n" +
+"// A single instance — active state synced across topbar and sidebar\n" +
 "var menu4 = new MTS.Menu({\n" +
 "  active: 'inicio',\n" +
 "  items: [\n" +
-"    { key: 'inicio',   label: 'Inicio',   icon: 'mts-icon-home' },\n" +
-"    { key: 'reportes', label: 'Reportes', icon: 'mts-icon-bar-chart-2', children: [\n" +
-"      { key: 'ventas',  label: 'Ventas' },\n" +
-"      { key: 'compras', label: 'Compras' },\n" +
+"    { key: 'inicio',   label: 'Home',    icon: 'mts-icon-home' },\n" +
+"    { key: 'reportes', label: 'Reports', icon: 'mts-icon-bar-chart-2', children: [\n" +
+"      { key: 'ventas',  label: 'Sales' },\n" +
+"      { key: 'compras', label: 'Purchases' },\n" +
 "    ]},\n" +
-"    { key: 'usuarios', label: 'Usuarios', icon: 'mts-icon-users', badge: '5' },\n" +
+"    { key: 'usuarios', label: 'Users', icon: 'mts-icon-users', badge: '5' },\n" +
 "  ],\n" +
 "  onClick: function(item) {\n" +
 "    document.getElementById('content4').textContent = item.label;\n" +

@@ -96,7 +96,7 @@ function showPickerOutput(id, val, fmt){
   if(el) el.textContent = fmt || String(val) || '—';
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -139,15 +139,15 @@ var js1 =
   "  timeStep: 5,\n" +
   "  startHour: 8,\n" +
   "  endHour: 20,\n" +
-  "  btnNow: 'Ahora',\n" +
-  "  btnAccept: 'Aceptar',\n" +
+  "  btnNow: 'Now',\n" +
+  "  btnAccept: 'Accept',\n" +
   "  onChange: function(e){ showPickerOutput('out-picker-time', null, e.detail.formatted); }\n" +
   "});\n\n" +
   "new MTS.DatePicker.DateTime('#picker-datetime', {\n" +
   "  format: 'DD/MM/YYYY',\n" +
   "  timeStep: 5,\n" +
-  "  btnToday: 'Hoy',\n" +
-  "  btnAccept: 'Aceptar',\n" +
+  "  btnToday: 'Today',\n" +
+  "  btnAccept: 'Accept',\n" +
   "  onChange: function(e){ showPickerOutput('out-picker-datetime', e.detail.value, e.detail.formatted); }\n" +
   "});";
 
@@ -160,11 +160,11 @@ var preview2 =
 var js2 =
   "new MTS.DatePicker.DateRange('#picker-range', {\n" +
   "  format: 'DD/MM/YYYY',\n" +
-  "  btnClear: 'Limpiar',\n" +
-  "  btnAccept: 'Aplicar',\n" +
+  "  btnClear: 'Clear',\n" +
+  "  btnAccept: 'Apply',\n" +
   "  onChange: function(e){\n" +
   "    var v = e.detail.value;\n" +
-  "    var fmt = (v && v.start ? v.start.toLocaleDateString('es-CL') : '—') + ' → ' + (v && v.end ? v.end.toLocaleDateString('es-CL') : '—');\n" +
+  "    var fmt = (v && v.start ? v.start.toLocaleDateString('en-US') : '—') + ' → ' + (v && v.end ? v.end.toLocaleDateString('en-US') : '—');\n" +
   "    showPickerOutput('out-picker-range', null, fmt);\n" +
   "  }\n" +
   "});";

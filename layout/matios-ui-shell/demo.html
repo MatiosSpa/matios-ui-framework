@@ -58,7 +58,7 @@
   <script src="./matios-ui-shell.js"></script>
 
   <style>
-    /* ── Maqueta visual de layouts ──────────────────── */
+    /* ── Visual layout mockup ──────────────────── */
     .shell-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -91,7 +91,7 @@
       color: var(--mts-color-primary);
     }
 
-    /* Miniatura del layout */
+    /* Layout thumbnail */
     .mini-shell {
       display: grid;
       height: 80px;
@@ -114,7 +114,7 @@
       border-top: 1px solid var(--mts-border-color);
     }
 
-    /* Templates para cada variante */
+    /* Templates for each variant */
     .mini-shell--main-only {
       grid-template: "main" 1fr / 1fr;
     }
@@ -140,7 +140,7 @@
       grid-template: "topbar topbar" 12px "sidenav main" 1fr "sidenav status" 10px / 22px 1fr;
     }
 
-    /* ── Preview interactivo ────────────────────────── */
+    /* ── Interactive preview ────────────────────────── */
     .preview-wrap {
       border: 1px solid var(--mts-border-color);
       border-radius: var(--mts-radius-lg);
@@ -149,7 +149,7 @@
       position: relative;
     }
 
-    /* Shell en el preview */
+    /* Shell in the preview */
     #previewShell-s2,
     #previewShell-s3 {
       height: 100%;
@@ -237,7 +237,7 @@
 </div>
 
 <script>
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -273,8 +273,8 @@ function indentHtml(html) {
 }
 
 /* ════════════════════════════════════════════════════
-   makeSection — patrón estándar de demos
-   htmlCode opcional: si se omite usa indentHtml(previewHtml)
+   makeSection — standard demo pattern
+   htmlCode optional: if omitted, uses indentHtml(previewHtml)
 ════════════════════════════════════════════════════ */
 function makeSection(id, previewHtml, jsCode, initFn, htmlCode) {
   new MTS.Tabs('#' + id, {
@@ -293,7 +293,7 @@ function makeSection(id, previewHtml, jsCode, initFn, htmlCode) {
 }
 
 /* ════════════════════════════════════════════════════
-   S1 — Combinaciones de layout
+   S1 — Layout combinations
 ════════════════════════════════════════════════════ */
 var s1Html = [
   '<div class="shell-grid">',
@@ -361,26 +361,26 @@ var s1Html = [
 ].join('\n');
 
 var s1Js = [
-  '// 1. Inicializar componentes en sus elementos',
-  "var topbar    = new MTS.Topbar('#topbar', { brand: { title: 'Mi App' }, end: '...' });",
+  '// 1. Initialize components on their elements',
+  "var topbar    = new MTS.Topbar('#topbar', { brand: { title: 'My App' }, end: '...' });",
   "var sidenav   = new MTS.SideNav('#sidenav', { menu: mainMenu });",
   "var statusbar = new MTS.StatusBar('#statusbar', { start: '...', end: '...' });",
   '',
-  '// 2. Shell los une — acepta cualquier combinacion de los tres',
+  '// 2. Shell joins them — accepts any combination of the three',
   "new MTS.Shell('#app', {",
   '  topbar:    topbar,      // MTS.Topbar instance',
   '  sidenav:   sidenav,     // MTS.SideNav instance',
   '  statusbar: statusbar,   // MTS.StatusBar instance',
-  "  main:      '#main'      // selector del contenido principal",
+  "  main:      '#main'      // main content selector",
   '});'
 ].join('\n');
 
 /* ════════════════════════════════════════════════════
-   HTML real de cada sección (separado del preview visual)
+   Actual HTML for each section (separate from the visual preview)
 ════════════════════════════════════════════════════ */
 var s1HtmlCode = [
-  '<!-- Shell no crea elementos — trabaja sobre los que ya existen. -->',
-  '<!-- Asigna clases MTS a cada hijo según su rol.                 -->',
+  '<!-- Shell does not create elements — it works on the ones that already exist. -->',
+  '<!-- It assigns MTS classes to each child according to its role.              -->',
   '<div id="app">',
   '  <div id="topbar"></div>',
   '  <div id="sidenav"></div>',
@@ -388,7 +388,7 @@ var s1HtmlCode = [
   '  <div id="statusbar"></div>',
   '</div>',
   '',
-  '<!-- Shell agrega automáticamente estas clases: -->',
+  '<!-- Shell automatically adds these classes: -->',
   '<!-- #app       → mts-shell  mts-shell--top  mts-shell--side  mts-shell--status -->',
   '<!-- #topbar    → mts-shell__topbar    -->',
   '<!-- #sidenav   → mts-shell__sidenav   -->',
@@ -397,41 +397,41 @@ var s1HtmlCode = [
 ].join('\n');
 
 var s2HtmlCode = [
-  '<!-- Estado del DOM después de new MTS.Shell() con top + side activos -->',
+  '<!-- DOM state after new MTS.Shell() with top + side active -->',
   '<div id="app" class="mts-shell mts-shell--top mts-shell--side">',
   '  <div id="topbar"  class="mts-shell__topbar"></div>',
   '  <div id="sidenav" class="mts-shell__sidenav"></div>',
   '  <div id="main"    class="mts-shell__main"></div>',
   '</div>',
   '',
-  '<!-- Al llamar destroy(), Shell limpia todas las clases que agregó -->'
+  '<!-- When destroy() is called, Shell removes all the classes it added -->'
 ].join('\n');
 
 var s3HtmlCode = [
   '<!DOCTYPE html>',
-  '<html lang="es" data-mts-mode="dark">',
+  '<html lang="en" data-mts-mode="dark">',
   '<head>',
-  '  <!-- Base obligatorio -->',
+  '  <!-- Required base -->',
   '  <link rel="stylesheet" href="matios-ui-base.css">',
   '',
-  '  <!-- Temas: incluir todos para soportar cambio dinámico -->',
+  '  <!-- Themes: include all to support dynamic switching -->',
   '  <link rel="stylesheet" href="matios-ui-mode-dark.css">',
   '  <link rel="stylesheet" href="matios-ui-mode-light.css">',
   '',
-  '  <!-- Acento (opcional — incluir los que necesites) -->',
+  '  <!-- Accent (optional — include the ones you need) -->',
   '  <link rel="stylesheet" href="matios-ui-accent-violet.css">',
   '  <link rel="stylesheet" href="matios-ui-accent-blue.css">',
   '',
-  '  <!-- Componentes del shell -->',
+  '  <!-- Shell components -->',
   '  <link rel="stylesheet" href="matios-ui-shell.css">',
   '</head>',
   '<body>',
-  '  <!-- Estructura fija — Shell persiste entre navegaciones -->',
+  '  <!-- Fixed structure — Shell persists across navigations -->',
   '  <div id="app">',
   '    <div id="topbar"></div>',
   '    <div id="sidenav"></div>',
   '    <div id="main">',
-  '      <!-- Contenido dinámico via setMain() o router SPA -->',
+  '      <!-- Dynamic content via setMain() or SPA router -->',
   '    </div>',
   '  </div>',
   '</' + 'body>',
@@ -450,7 +450,7 @@ makeSection('tabs-s1', s1Html, s1Js, function() {
 }, s1HtmlCode);
 
 /* ════════════════════════════════════════════════════
-   S2 — Preview interactivo
+   S2 — Interactive preview
 ════════════════════════════════════════════════════ */
 var s2Html = [
   '<div class="slot-toggles">',
@@ -478,19 +478,19 @@ var s2Html = [
 ].join('\n');
 
 var s2Js = [
-  '// Instancias MTS, selectores string y Elements: todos validos',
+  '// MTS instances, string selectors and Elements: all valid',
   "new MTS.Shell('#app', {",
-  '  topbar:    topbarInstance,                    // instancia MTS',
-  "  sidenav:   '#sidenav',                        // selector string",
-  "  statusbar: document.getElementById('status'), // Element directo",
+  '  topbar:    topbarInstance,                    // MTS instance',
+  "  sidenav:   '#sidenav',                        // string selector",
+  "  statusbar: document.getElementById('status'), // direct Element",
   "  main:      '#main',",
   '});',
   '',
-  "// getSlot() devuelve el Element del slot para manipulacion directa",
+  "// getSlot() returns the slot Element for direct manipulation",
   "var mainEl = shell.getSlot('main');",
-  "mainEl.innerHTML = '<p>Contenido dinamico</p>';",
+  "mainEl.innerHTML = '<p>Dynamic content</p>';",
   '',
-  '// destroy() limpia las clases que Shell agrego',
+  '// destroy() removes the classes Shell added',
   'shell.destroy();'
 ].join('\n');
 
@@ -540,7 +540,7 @@ makeSection('tabs-s2', s2Html, s2Js, function() {
 }, s2HtmlCode);
 
 /* ════════════════════════════════════════════════════
-   S3 — Patron Masterpage
+   S3 — Masterpage pattern
 ════════════════════════════════════════════════════ */
 var s3Html = [
   '<div class="slot-toggles">',
@@ -568,8 +568,8 @@ var s3Html = [
 ].join('\n');
 
 var s3Js = [
-  '// -- Setup unico (masterpage) -------------------------------------------',
-  "var topbar    = new MTS.Topbar('#topbar', { brand: { title: 'Mi App' } });",
+  '// -- One-time setup (masterpage) ----------------------------------------',
+  "var topbar    = new MTS.Topbar('#topbar', { brand: { title: 'My App' } });",
   "var sidenav   = new MTS.SideNav('#sidenav', { menu: appMenu });",
   "var statusbar = new MTS.StatusBar('#statusbar', { start: '● Online' });",
   '',
@@ -580,9 +580,9 @@ var s3Js = [
   "  main:      '#main'",
   '});',
   '',
-  '// -- Navegacion — solo cambia el main, el shell persiste -----------------',
+  '// -- Navigation — only the main changes, the shell persists -------------',
   '',
-  '// Opcion A: setMain() con HTML puro',
+  '// Option A: setMain() with raw HTML',
   'appMenu = new MTS.Menu({',
   '  onClick: function(item) {',
   '    shell.setMain(renderPage(item.key));',
@@ -592,19 +592,19 @@ var s3Js = [
   '',
   'function renderPage(key) {',
   '  var pages = {',
-  "    dashboard: '<h1>Dashboard</h1><p>Bienvenido.</p>',",
-  "    usuarios:  '<h1>Usuarios</h1><ul>...</ul>',",
-  "    config:    '<h1>Configuracion</h1><form>...</form>',",
+  "    dashboard: '<h1>Dashboard</h1><p>Welcome.</p>',",
+  "    users:     '<h1>Users</h1><ul>...</ul>',",
+  "    config:    '<h1>Settings</h1><form>...</form>',",
   '  };',
-  "  return pages[key] || '<p>Pagina no encontrada</p>';",
+  "  return pages[key] || '<p>Page not found</p>';",
   '}',
   '',
-  '// Opcion B: setMain() con un Element creado por JS',
+  '// Option B: setMain() with an Element created in JS',
   'shell.setMain(new DashboardView().render());',
   '',
-  '// Opcion C: acceso directo al viewport para montar un router',
+  '// Option C: direct access to the viewport to mount a router',
   "var viewport = shell.getSlot('main');",
-  'myRouter.mount(viewport);  // cualquier router SPA'
+  'myRouter.mount(viewport);  // any SPA router'
 ].join('\n');
 
 makeSection('tabs-s3', s3Html, s3Js, function() {

@@ -68,7 +68,7 @@
 
 <script>
 /* ============================================================
-   LOCALE — muestra inglés por defecto (cara pública); ?lang=es|en|pt
+   LOCALE — shows English by default (public-facing); ?lang=es|en|pt
    ============================================================ */
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
@@ -84,7 +84,7 @@ document.getElementById('s3-title').textContent      = D.s3Title || '3 — API �
 document.getElementById('s4-title').textContent      = D.s4Title || '4 — siblings — visible pages on each side';
 
 /* ============================================================
-   UTILIDADES
+   UTILITIES
    ============================================================ */
 
 function indentHtml(html) {
@@ -112,13 +112,13 @@ function indentHtml(html) {
 }
 
 /*
- * makeSection — crea las 3 tabs: Preview, HTML y JavaScript.
- * Con lazy:false todos los paneles están en el DOM al salir de esta función.
+ * makeSection — creates the 3 tabs: Preview, HTML and JavaScript.
+ * With lazy:false all panels are in the DOM when this function returns.
  *
- * @param {string} id          — id del contenedor de tabs
- * @param {string} previewHtml — HTML del preview
- * @param {string} jsCode      — código JS de ejemplo
- * @param {string} [htmlCode]  — snippet HTML representativo (opcional)
+ * @param {string} id          — id of the tabs container
+ * @param {string} previewHtml — preview HTML
+ * @param {string} jsCode      — example JS code
+ * @param {string} [htmlCode]  — representative HTML snippet (optional)
  */
 function makeSection(id, previewHtml, jsCode, htmlCode) {
   new MTS.Tabs('#' + id, {
@@ -146,7 +146,7 @@ function makeSection(id, previewHtml, jsCode, htmlCode) {
 }
 
 /* ============================================================
-   S1 — Básico con onChange
+   S1 — Basic with onChange
    ============================================================ */
 
 const preview_s1 =
@@ -170,9 +170,9 @@ const js_s1 =
   '  total:     250,\n' +
   '  page:      1,\n' +
   '  pageSize:  25,\n' +
-  '  showSizes: true,   // page size selector / selector de page size\n' +
+  '  showSizes: true,   // page size selector\n' +
   '  showInfo:  true,   // "Showing 1-25 of 250"\n' +
-  '  // Fires on page or page size change / Se dispara al cambiar página o page size\n' +
+  '  // Fires on page or page size change\n' +
   '  onChange: (e) => {\n' +
   '    console.log(e.detail.page);      // → current page\n' +
   '    console.log(e.detail.pageSize);  // → current page size\n' +
@@ -196,7 +196,7 @@ new MTS.Pagination('#pag-basic', {
 });
 
 /* ============================================================
-   S2 — Con jump + tamaños
+   S2 — With jump + sizes
    ============================================================ */
 
 const preview_s2 =
@@ -221,15 +221,15 @@ const html_s2 =
   '<div id="pag-lg" data-total="500" data-size="lg"></div>';
 
 const js_s2 =
-  '// Small with jump-to-page / Pequeño con ir a página\n' +
+  '// Small with jump-to-page\n' +
   'new MTS.Pagination(\'#pag-sm\', {\n' +
   '  total:    500,\n' +
   '  size:     \'sm\',\n' +
-  '  showJump: true,  // input to jump to any page / input para ir a cualquier página\n' +
+  '  showJump: true,  // input to jump to any page\n' +
   '});\n\n' +
-  '// Medium (default) / Mediano\n' +
+  '// Medium (default)\n' +
   'new MTS.Pagination(\'#pag-md\', { total: 500, size: \'md\' });\n\n' +
-  '// Large / Grande\n' +
+  '// Large\n' +
   'new MTS.Pagination(\'#pag-lg\', { total: 500, size: \'lg\' });';
 
 makeSection('tabs-s2', preview_s2, js_s2, html_s2);
@@ -239,7 +239,7 @@ new MTS.Pagination('#pag-md', { total: 500, size: 'md' });
 new MTS.Pagination('#pag-lg', { total: 500, size: 'lg' });
 
 /* ============================================================
-   S3 — API programática
+   S3 — Programmatic API
    ============================================================ */
 
 const preview_s3 =
@@ -262,13 +262,13 @@ const js_s3 =
   '  pageSize: 25,\n' +
   '  onChange: (e) => fetchData(e.detail.page, e.detail.pageSize),\n' +
   '});\n\n' +
-  '// Navigate / Navegar\n' +
+  '// Navigate\n' +
   'pag.setPage(3);\n\n' +
-  '// Update total after data load / Actualizar total tras cargar datos\n' +
+  '// Update total after data load\n' +
   'pag.setTotal(500);\n\n' +
-  '// Change page size (resets to page 1) / Cambiar page size (resetea a página 1)\n' +
+  '// Change page size (resets to page 1)\n' +
   'pag.setPageSize(50);\n\n' +
-  '// Get current state / Obtener estado actual\n' +
+  '// Get current state\n' +
   'pag.getState();\n' +
   '// → { page: 1, pageSize: 50, total: 500, from: 1, to: 50 }';
 
@@ -321,7 +321,6 @@ const html_s4 =
 
 const js_s4 =
   '// siblings: pages shown on each side of the active page\n' +
-  '// siblings: páginas mostradas a cada lado de la activa\n' +
   'new MTS.Pagination(\'#pag-sib1\', {\n' +
   '  total: 500, page: 5,\n' +
   '  siblings:  1,  // default — «... 4 [5] 6 ...»\n' +

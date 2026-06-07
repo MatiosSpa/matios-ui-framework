@@ -87,7 +87,7 @@ function indentHtml(html) {
   return result.trimEnd();
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -143,11 +143,11 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 var preview_s1 = "<div class=\"demo-grid\"><div id=\"es-nodata\"></div><div id=\"es-search\"></div><div id=\"es-error\"></div><div id=\"es-perms\"></div></div>";
-var js_s1 = "new MTS.EmptyState('#es-nodata', { variant:'no-data', action:'Agregar \u00edtem' });\nnew MTS.EmptyState('#es-search', { variant:'search', title:'Sin resultados para \"dashboard\"', description:'Prueba con otras palabras.', action:'Limpiar b\u00fasqueda' });\nnew MTS.EmptyState('#es-error', { variant:'error', action:'Reintentar' });\nnew MTS.EmptyState('#es-perms', { variant:'permissions', description:'Contacta al administrador.' });";
+var js_s1 = "new MTS.EmptyState('#es-nodata', { variant:'no-data', action:'Add item' });\nnew MTS.EmptyState('#es-search', { variant:'search', title:'No results for \"dashboard\"', description:'Try different keywords.', action:'Clear search' });\nnew MTS.EmptyState('#es-error', { variant:'error', action:'Retry' });\nnew MTS.EmptyState('#es-perms', { variant:'permissions', description:'Contact your administrator.' });";
 var preview_s2 = "<div class=\"demo-grid\"><div id=\"es-sm\"></div><div id=\"es-md\"></div><div id=\"es-lg\"></div></div>";
 var js_s2 = "['sm','md','lg'].forEach(function(size) { new MTS.EmptyState('#es-' + size, { variant:'no-data', size:size, action:'Add item' }); });";
 var preview_s3 = "<div class=\"demo-stack\"><div id=\"es-dynamic\"></div><div class=\"demo-row\"><button class=\"demo-btn-sm\" onclick=\"esDynamic.update({ variant:'search', title:T.dynNoResults, description:T.dynAdjustFilters, action:T.actionClear })\">search</button><button class=\"demo-btn-sm\" onclick=\"esDynamic.update({ variant:'error', action:T.actionRetry })\">error</button><button class=\"demo-btn-sm\" onclick=\"esDynamic.update({ variant:'no-data', action:T.actionAdd })\">restore</button></div><div class=\"result-box\" id=\"es-result\">" + T.resultPlaceholder + "</div></div>";
-var js_s3 = "var esDynamic = new MTS.EmptyState('#es-dynamic', { variant:'no-data', action:'Agregar', onAction:function(){ document.getElementById('es-result').textContent='click \u2192 Agregar'; } });\nesDynamic.update({ variant:'search', title:'Sin resultados', description:'Ajusta los filtros', action:'Limpiar' });";
+var js_s3 = "var esDynamic = new MTS.EmptyState('#es-dynamic', { variant:'no-data', action:'Add', onAction:function(){ document.getElementById('es-result').textContent='click \u2192 Add'; } });\nesDynamic.update({ variant:'search', title:'No results', description:'Adjust the filters', action:'Clear' });";
 var esDynamic;
 makeSection('tabs-s1', preview_s1, js_s1, function() {
   new MTS.EmptyState('#es-nodata', { variant:'no-data', action:T.actionAddItem, onAction:cb(T.actionAddItem) });

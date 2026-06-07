@@ -71,7 +71,7 @@
 </div>
 
 <script>
-/* ── Helpers estándar de demo ── */
+/* ── Standard demo helpers ── */
 function indentHtml(html){
   var indent=0, step=2;
   var voids=/^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
@@ -88,7 +88,7 @@ function indentHtml(html){
   return result.trimEnd();
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -105,7 +105,7 @@ document.getElementById('s4-title').textContent = D.s4Title || '4 — Integratio
 document.getElementById('s5-title').textContent = D.s5Title || '5 — onChange callback';
 
 /* ══════════════════════════════════════════════════════════════
-   1 — Básico
+   1 — Basic
 ══════════════════════════════════════════════════════════════ */
 var preview1 =
   '<div class="demo-stack" style="max-width:320px;">' +
@@ -115,7 +115,7 @@ var preview1 =
 
 var js1 =
   "const inPass = new MTS.Input('#s1-pass', {\n" +
-  "  label:       'Contraseña',\n" +
+  "  label:       'Password',\n" +
   "  type:        'password',\n" +
   "  placeholder: '••••••••',\n" +
   "});\n\n" +
@@ -150,7 +150,7 @@ makeSection('tabs-s1', preview1, js1, function() {
 }, '280px');
 
 /* ══════════════════════════════════════════════════════════════
-   2 — Reglas completas
+   2 — Full rules
 ══════════════════════════════════════════════════════════════ */
 var preview2 =
   '<div class="demo-stack" style="max-width:360px;">' +
@@ -160,7 +160,7 @@ var preview2 =
 
 var js2 =
   "const inPass = new MTS.Input('#s2-pass', {\n" +
-  "  label:       'Nueva contraseña',\n" +
+  "  label:       'New password',\n" +
   "  type:        'password',\n" +
   "  placeholder: '••••••••',\n" +
   "});\n\n" +
@@ -186,7 +186,7 @@ makeSection('tabs-s2', preview2, js2, function() {
 }, '360px');
 
 /* ══════════════════════════════════════════════════════════════
-   3 — Solo barra (sin checklist)
+   3 — Bar only (no checklist)
 ══════════════════════════════════════════════════════════════ */
 var preview3 =
   '<div class="demo-stack" style="max-width:320px;">' +
@@ -196,7 +196,7 @@ var preview3 =
 
 var js3 =
   "const inPass = new MTS.Input('#s3-pass', {\n" +
-  "  label:       'Contraseña',\n" +
+  "  label:       'Password',\n" +
   "  type:        'password',\n" +
   "  placeholder: '••••••••',\n" +
   "});\n\n" +
@@ -206,7 +206,7 @@ var js3 =
   "  minNumbers:     1,\n" +
   "  minSpecial:     1,\n" +
   "  allowedSpecial: '!@#$%',\n" +
-  "  showChecklist:  false,   // solo barra, sin lista\n" +
+  "  showChecklist:  false,   // bar only, no list\n" +
   "});";
 
 makeSection('tabs-s3', preview3, js3, function() {
@@ -221,7 +221,7 @@ makeSection('tabs-s3', preview3, js3, function() {
 }, '240px');
 
 /* ══════════════════════════════════════════════════════════════
-   4 — Integración con MTS.Validate
+   4 — Integration with MTS.Validate
 ══════════════════════════════════════════════════════════════ */
 var preview4 =
   '<div class="demo-stack" style="max-width:360px;">' +
@@ -235,25 +235,25 @@ var preview4 =
 
 var js4 =
   "const inPass = new MTS.Input('#s4-pass', {\n" +
-  "  name: 'password', label: 'Nueva contraseña', type: 'password',\n" +
+  "  name: 'password', label: 'New password', type: 'password',\n" +
   "});\n\n" +
   "const meter = new MTS.PasswordStrength('#s4-meter', {\n" +
   "  input: inPass, minLength: 8, minUppercase: 1,\n" +
   "  minNumbers: 1, minSpecial: 1, allowedSpecial: '!@#$%^&*',\n" +
   "});\n\n" +
   "const inConfirm = new MTS.Input('#s4-confirm', {\n" +
-  "  name: 'confirm', label: 'Confirmar contraseña', type: 'password',\n" +
+  "  name: 'confirm', label: 'Confirm password', type: 'password',\n" +
   "});\n\n" +
-  "// meter.isValid() como regla custom en MTS.Validate:\n" +
+  "// meter.isValid() as a custom rule in MTS.Validate:\n" +
   "new MTS.Button('#s4-btn', {\n" +
-  "  label: 'Guardar contraseña', variant: 'primary', block: true,\n" +
+  "  label: 'Save password', variant: 'primary', block: true,\n" +
   "  onClick: function() {\n" +
   "    var ok = true;\n" +
-  "    if (!meter.isValid()) { inPass.setError('No cumple los requisitos.'); ok = false; }\n" +
+  "    if (!meter.isValid()) { inPass.setError('Does not meet the requirements.'); ok = false; }\n" +
   "    else                  { inPass.clearError(); }\n" +
-  "    if (inConfirm.getValue() !== inPass.getValue()) { inConfirm.setError('No coinciden.'); ok = false; }\n" +
+  "    if (inConfirm.getValue() !== inPass.getValue()) { inConfirm.setError('Do not match.'); ok = false; }\n" +
   "    else                                            { inConfirm.clearError(); }\n" +
-  "    if (ok) alert('✓ score: ' + meter.getScore() + '% — nivel: ' + meter.getLevel());\n" +
+  "    if (ok) alert('✓ score: ' + meter.getScore() + '% — level: ' + meter.getLevel());\n" +
   "  },\n" +
   "});";
 

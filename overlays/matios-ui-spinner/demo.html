@@ -100,7 +100,7 @@
 </style>
 
 <script>
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -174,7 +174,7 @@ function buildGroup(label, cardsHtml) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   1 — Variantes
+   1 — Variants
    ════════════════════════════════════════════════════════════ */
 var preview_s1 =
   '<div style="display:flex;flex-wrap:wrap;gap:12px;padding:16px 0">' +
@@ -195,7 +195,7 @@ makeSection('tabs-s1', preview_s1, js_s1, function() {
 }, '260px');
 
 /* ════════════════════════════════════════════════════════════
-   2 — Tamaños
+   2 — Sizes
    ════════════════════════════════════════════════════════════ */
 var SIZES = ['xs','sm','md','lg','xl'];
 
@@ -224,7 +224,7 @@ makeSection('tabs-s2', preview_s2, js_s2, function() {
 }, '560px');
 
 /* ════════════════════════════════════════════════════════════
-   3 — Colores
+   3 — Colors
    ════════════════════════════════════════════════════════════ */
 var COLOR_DEFS = [
   { key: 'primary', label: 'primary (default)', color: null       },
@@ -272,8 +272,8 @@ makeSection('tabs-s3', preview_s3, js_s3, function() {
 
 /* ════════════════════════════════════════════════════════════
    4 — Multi-color
-   orbital usa color2 · triple usa color2 + color3
-   el resto solo color (se muestran con success para distinguir)
+   orbital uses color2 · triple uses color2 + color3
+   the rest only use color (shown with success to distinguish them)
    ════════════════════════════════════════════════════════════ */
 var preview_s4 =
   '<div style="display:flex;flex-wrap:wrap;gap:12px;padding:16px 0">' +

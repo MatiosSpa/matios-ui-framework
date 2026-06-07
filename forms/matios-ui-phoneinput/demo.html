@@ -118,7 +118,7 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -163,9 +163,9 @@ var preview_s1 =
   '<div class="result-box" id="res-ph">' + L_resultPlaceholder + '</div>';
 
 var js_s1 =
-  "new MTS.PhoneInput('#ph-basic', { label: 'Teléfono', country: 'CL', onChange: function(v) { setResult('res-ph', 'full: ' + v.full + ' | country: ' + v.country.name); } });\n" +
-  "new MTS.PhoneInput('#ph-hint', { label: 'Con hint', country: 'CL', hint: 'Incluye el código de área' });\n" +
-  "new MTS.PhoneInput('#ph-disabled', { label: 'Deshabilitado', country: 'CL', value: '912345678', disabled: true });";
+  "new MTS.PhoneInput('#ph-basic', { label: 'Phone', country: 'CL', onChange: function(v) { setResult('res-ph', 'full: ' + v.full + ' | country: ' + v.country.name); } });\n" +
+  "new MTS.PhoneInput('#ph-hint', { label: 'With hint', country: 'CL', hint: 'Include the area code' });\n" +
+  "new MTS.PhoneInput('#ph-disabled', { label: 'Disabled', country: 'CL', value: '912345678', disabled: true });";
 
 var preview_s2 =
   '<div class="demo-grid">' +
@@ -175,9 +175,9 @@ var preview_s2 =
   '</div>';
 
 var js_s2 =
-  "new MTS.PhoneInput('#ph-mx', { country: 'MX', label: 'México' });\n" +
+  "new MTS.PhoneInput('#ph-mx', { country: 'MX', label: 'Mexico' });\n" +
   "new MTS.PhoneInput('#ph-ar', { country: 'AR', label: 'Argentina' });\n" +
-  "new MTS.PhoneInput('#ph-us', { country: 'US', label: 'EE.UU.' });";
+  "new MTS.PhoneInput('#ph-us', { country: 'US', label: 'USA' });";
 
 var preview_s3 =
   '<div class="demo-stack">' +
@@ -199,7 +199,7 @@ var js_s3 =
   "new MTS.PhoneInput('#ph-sm', { label: 'SM', size: 'sm', country: 'CL' });\n" +
   "new MTS.PhoneInput('#ph-md', { label: 'MD', size: 'md', country: 'CL' });\n\n" +
   "var phApi = new MTS.PhoneInput('#ph-lg', { label: 'LG + API', size: 'lg', country: 'CL', onChange: function(v) { setResult('res-ph-api', 'full: ' + v.full); } });\n\n" +
-  "phApi.getValue();\nphApi.setCountry('BR');\nphApi.setError('Número inválido');\nphApi.clearError();";
+  "phApi.getValue();\nphApi.setCountry('BR');\nphApi.setError('Invalid number');\nphApi.clearError();";
 
 var preview_s4 =
   '<div class="demo-stack">' +

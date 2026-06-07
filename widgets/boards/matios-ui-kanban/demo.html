@@ -66,13 +66,13 @@
 <div class="mts-flex-1 mts-min-h-0 mts-d-flex mts-flex-col mts-overflow-hidden"><div id="kanban" class="mts-flex-1 mts-min-h-0"></div></div>
 
 <script>
-/* ═══ LOCALE ═══ Todo texto del demo sale del locale del componente (MTS.Kanban). */
+/* ═══ LOCALE ═══ All demo text comes from the component locale (MTS.Kanban). */
 /* Public demo: default English; ?lang=es|en|pt to switch. */
 (function () { var m = (location.search || '').match(/[?&]lang=(es|en|pt)/); if (window.MTS && MTS.setLocale) MTS.setLocale(m ? m[1] : 'en'); })();
 var LK = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Kanban']) || {};
 var UI = LK.ui || {};
 
-/* ═══ DATOS ═══ */
+/* ═══ DATA ═══ */
 var TEAM = ['Ana García', 'Luis Pérez', 'María Torres', 'Carlos Ruiz', 'Pedro Mora'];
 
 function buildColumns() {
@@ -99,7 +99,7 @@ function mockDS() {
 
 function logEv(badge, msg, detail) { if (dev) dev.log(badge, msg, detail); }
 
-/* Simula el envío al backend (console.log + Activity Log). En real: fetch(path, {method, body}). */
+/* Simulates sending to the backend (console.log + Activity Log). In production: fetch(path, {method, body}). */
 function apiSim(method, path, payload) {
   if (window.console && console.log) {
     console.log('%c→ API ' + method + ' ' + path, 'color:#10b981;font-weight:700', payload);
@@ -108,11 +108,11 @@ function apiSim(method, path, payload) {
   return Promise.resolve({ ok: true, status: 200 });
 }
 
-/* ═══ ESTADO ═══ */
+/* ═══ STATE ═══ */
 var kanban = null, dev = null, mode = 'add', editId = null;
 var titleInput = null, prioSelect = null, assigneeSelect = null, descInput = null;
 
-/* ═══ MODAL DE ALTA / EDICIÓN (único; el botón Guardar decide por modo) ═══ */
+/* ═══ ADD / EDIT MODAL (single modal; the Save button decides by mode) ═══ */
 var form = document.createElement('form');
 form.id = 'kb-form';
 form.className = 'mts-form';
@@ -123,7 +123,7 @@ form.innerHTML =
   '<div id="kb-desc" name="description"></div>';
 
 function saveHandler() {
-  if (!titleInput.getValue().trim()) { titleInput.setError(UI.needTitle || 'Ingresa un título'); return; }
+  if (!titleInput.getValue().trim()) { titleInput.setError(UI.needTitle || 'Enter a title'); return; }
   titleInput.clearError();
   if (mode === 'add') { kanban.submitAddTask(); return; }
   if (mode === 'edit' && editId) {
@@ -138,26 +138,26 @@ function saveHandler() {
 }
 
 var modal = new MTS.Modal({
-  title: UI.cardTitle || 'Tarjeta', body: form, size: 'sm', scrollable: true,
+  title: UI.cardTitle || 'Card', body: form, size: 'sm', scrollable: true,
   buttons: [
-    { label: UI.cancel || 'Cancelar', variant: 'ghost', close: true },
-    { label: UI.del || 'Eliminar', variant: 'danger', onClick: function () {
+    { label: UI.cancel || 'Cancel', variant: 'ghost', close: true },
+    { label: UI.del || 'Delete', variant: 'danger', onClick: function () {
         if (mode === 'edit' && editId) kanban.removeCard(editId);
         modal.hide();
     } },
-    { label: UI.save || 'Guardar', variant: 'primary', onClick: saveHandler },
+    { label: UI.save || 'Save', variant: 'primary', onClick: saveHandler },
   ],
 });
 
-titleInput     = new MTS.Input('#kb-title', { label: UI.fTitle || 'Título', autocomplete: 'browser-off' });
-prioSelect     = new MTS.Select('#kb-priority', { label: UI.fPriority || 'Prioridad', value: 'medium', options: [
-  { value: 'low',    label: LK.priorityLow    || 'Baja' },
-  { value: 'medium', label: LK.priorityMedium || 'Media' },
-  { value: 'high',   label: LK.priorityHigh   || 'Alta' },
+titleInput     = new MTS.Input('#kb-title', { label: UI.fTitle || 'Title', autocomplete: 'browser-off' });
+prioSelect     = new MTS.Select('#kb-priority', { label: UI.fPriority || 'Priority', value: 'medium', options: [
+  { value: 'low',    label: LK.priorityLow    || 'Low' },
+  { value: 'medium', label: LK.priorityMedium || 'Medium' },
+  { value: 'high',   label: LK.priorityHigh   || 'High' },
 ] });
-assigneeSelect = new MTS.Select('#kb-assignee', { label: UI.fAssignee || 'Responsable', value: '', options:
+assigneeSelect = new MTS.Select('#kb-assignee', { label: UI.fAssignee || 'Assignee', value: '', options:
   [{ value: '', label: '—' }].concat(TEAM.map(function (n) { return { value: n, label: n }; })) });
-descInput      = new MTS.Input('#kb-desc', { label: UI.fDesc || 'Descripción', autocomplete: 'browser-off' });
+descInput      = new MTS.Input('#kb-desc', { label: UI.fDesc || 'Description', autocomplete: 'browser-off' });
 
 function openForAdd() {
   mode = 'add'; editId = null;
@@ -180,7 +180,7 @@ kanban = new MTS.Kanban('#kanban', {
   dataSource:  mockDS,
   editColumns: true,
   addTask: { showButton: false, form: '#kb-form', open: openForAdd, close: function () { modal.hide(); } },
-  onLoad:         function (e) { logEv('view', 'Cargado', e.columns.length + ' columnas'); },
+  onLoad:         function (e) { logEv('view', 'Loaded', e.columns.length + ' columns'); },
   onAddTask:      function (e) { e.resolve(e.data); },
   onCardAdd:      function (e) { apiSim('POST', '/api/cards', e.card); },
   onCardChange:   function (e) { apiSim('PATCH', '/api/cards/' + e.card.id, e.fields); },
@@ -189,7 +189,7 @@ kanban = new MTS.Kanban('#kanban', {
   onColumnAdd:    function (e) { apiSim('POST', '/api/columns', { id: e.column.id, title: e.column.title, index: e.index }); },
   onColumnRemove: function (e) { apiSim('DELETE', '/api/columns/' + e.column.id, { id: e.column.id }); },
   onColumnChange: function (e) { apiSim('PATCH', '/api/columns/' + e.column.id, e.fields); },
-  onCardClick:    function (e) { logEv('click', 'Abrir', e.card.title); openForEdit(e.card); },
+  onCardClick:    function (e) { logEv('click', 'Open', e.card.title); openForEdit(e.card); },
 });
 
 /* ═══ DEV PANEL (Config · Log · Code) ═══ */
@@ -201,7 +201,7 @@ endEl.className = 'mts-d-flex mts-gap-2 mts-items-center';
 endEl.innerHTML = '<div id="kb-btn-add"></div>';
 
 new MTS.Topbar('#kb-toolbar', { brand: { title: UI.brand || 'MTS.Kanban' }, end: endEl, shadow: false, sticky: false });
-new MTS.Button('#kb-btn-add', { label: UI.addCard || '+ Tarjeta', iconLeft: '<i class="mts-icon mts-icon-add"></i>', size: 'sm', variant: 'ghost', onClick: openForAdd });
+new MTS.Button('#kb-btn-add', { label: UI.addCard || '+ Card', iconLeft: '<i class="mts-icon mts-icon-add"></i>', size: 'sm', variant: 'ghost', onClick: openForAdd });
 
 if (window.MTS && MTS.Icon) MTS.Icon.initAll();
 </script>

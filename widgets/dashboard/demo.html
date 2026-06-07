@@ -48,7 +48,7 @@
 <!-- Forms -->
 <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
 
-<!-- DataTable y sus dependencias CSS -->
+<!-- DataTable and its CSS dependencies -->
 <link rel="stylesheet" href="../../data/matios-ui-table/matios-ui-table.css">
 <link rel="stylesheet" href="../../forms/matios-ui-input/matios-ui-input.css">
 <link rel="stylesheet" href="../../forms/matios-ui-checkbox/matios-ui-checkbox.css">
@@ -85,7 +85,7 @@
         </div>
       </div>
 
-      <!-- KPI cards — 4 columnas (3/12 cada una) -->
+      <!-- KPI cards — 4 columns (3/12 each) -->
       <div class="mts-grid mts-grid--gap-md">
         <div class="mts-g-col-3" id="kpi-revenue"></div>
         <div class="mts-g-col-3" id="kpi-users"></div>
@@ -93,13 +93,13 @@
         <div class="mts-g-col-3" id="kpi-conversion"></div>
       </div>
 
-      <!-- Contenido: tabla + panel lateral -->
+      <!-- Content: table + side panel -->
       <div style="display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start;min-width:0">
 
-        <!-- Tabla de pedidos -->
+        <!-- Orders table -->
         <div id="orders-table"></div>
 
-        <!-- Panel lateral -->
+        <!-- Side panel -->
         <div class="mts-d-flex mts-flex--column mts-gap-4">
           <div id="card-products"></div>
           <div id="card-activity"></div>
@@ -136,7 +136,7 @@
 <script>
 
 /* ============================================================
-   DATOS FALSOS
+   FAKE DATA
    ============================================================ */
 
 const CUSTOMERS = [
@@ -190,7 +190,7 @@ const ORDERS = buildOrders();
 
 /* ============================================================
    SIDENAV + MENU
-   (antes que Shell para que _syncClasses no borre grid-area)
+   (before Shell so _syncClasses does not clear grid-area)
    ============================================================ */
 
 const navMenu = new MTS.Menu({
@@ -214,14 +214,14 @@ new MTS.SideNav('#nav', {
 });
 
 /* ============================================================
-   TOPBAR — slot end con MTS.Button + MTS.Badge + MTS.Avatar
-   (antes que Shell — _build() reemplaza className)
+   TOPBAR — end slot with MTS.Button + MTS.Badge + MTS.Avatar
+   (before Shell — _build() replaces className)
    ============================================================ */
 
 const topbarEndEl = document.createElement('div');
 topbarEndEl.className = 'mts-d-flex mts-align-items--center mts-gap-2';
 
-/* Botón modo */
+/* Mode button */
 const modeBtnEl = document.createElement('button');
 modeBtnEl.id    = 'btn-mode-toggle';
 modeBtnEl.title = 'Toggle mode';
@@ -232,7 +232,7 @@ new MTS.Button(modeBtnEl, {
 });
 topbarEndEl.appendChild(modeBtnEl);
 
-/* Notificaciones */
+/* Notifications */
 const notifWrap = document.createElement('div');
 notifWrap.className    = 'mts-d-inline-flex mts-align-items--center';
 notifWrap.style.position = 'relative';
@@ -269,7 +269,7 @@ new MTS.Topbar('#tb', {
   shadow: false,
 });
 
-/* Avatar en el slot end */
+/* Avatar in the end slot */
 const avatarWrap = document.getElementById('topbar-avatar-wrap');
 if (avatarWrap) {
   const avatarEl = document.createElement('div');
@@ -283,7 +283,7 @@ if (avatarWrap) {
 
 /* ============================================================
    STATUSBAR
-   (antes que Shell — _syncClasses() reemplaza className)
+   (before Shell — _syncClasses() replaces className)
    ============================================================ */
 
 new MTS.StatusBar('#sb', {
@@ -294,8 +294,8 @@ new MTS.StatusBar('#sb', {
 });
 
 /* ============================================================
-   SHELL — siempre al último para que classList.add()
-   no sea pisado por las inicializaciones anteriores
+   SHELL — always last so classList.add()
+   is not overwritten by the earlier initializations
    ============================================================ */
 
 new MTS.Shell('#shell', {
@@ -308,7 +308,7 @@ new MTS.Shell('#shell', {
 
 /* ============================================================
    DROPDOWNS — MTS.Dropdown
-   (después de Shell para que los triggers estén en el DOM)
+   (after Shell so the triggers are in the DOM)
    ============================================================ */
 
 new MTS.Dropdown(notifBtnEl, {
@@ -385,7 +385,7 @@ new MTS.Dropdown(avatarTrigger, {
   ],
 });
 
-/* ── Toggle modo oscuro/claro ───────────────────────────── */
+/* ── Dark/light mode toggle ─────────────────────────────── */
 
 document.addEventListener('click', function(e) {
   if (!e.target.closest('#btn-mode-toggle')) return;
@@ -396,14 +396,14 @@ document.addEventListener('click', function(e) {
   if (icon) icon.className = 'mts-icon ' + (isDark ? 'mts-icon-sun' : 'mts-icon-moon');
 });
 
-/* ── Botón Exportar ─────────────────────────────────────── */
+/* ── Export button ──────────────────────────────────────── */
 
 document.addEventListener('click', function(e) {
   if (!e.target.closest('#btn-export')) return;
   MTS.Toast.show({ message: 'Exporting data...', variant: 'success', duration: 2500 });
 });
 
-/* ── Botón Nuevo pedido ─────────────────────────────────── */
+/* ── New order button ───────────────────────────────────── */
 
 document.addEventListener('click', function(e) {
   if (!e.target.closest('#btn-new-order')) return;
@@ -468,7 +468,7 @@ new MTS.KPICard('#kpi-conversion', {
 });
 
 /* ============================================================
-   DATA TABLE — PEDIDOS
+   DATA TABLE — ORDERS
    ============================================================ */
 
 new MTS.DataTable({
@@ -529,7 +529,7 @@ new MTS.DataTable({
 });
 
 /* ============================================================
-   CARD TOP PRODUCTOS
+   TOP PRODUCTS CARD
    ============================================================ */
 
 const TOP_PRODUCTS = [
@@ -584,7 +584,7 @@ new MTS.Card('#card-products', {
 });
 
 /* ============================================================
-   CARD ACTIVIDAD RECIENTE
+   RECENT ACTIVITY CARD
    ============================================================ */
 
 const activityBodyEl = document.createElement('div');
@@ -609,7 +609,7 @@ new MTS.Card('#card-activity', {
   }}],
 });
 
-/* ── Iconos finales ─────────────────────────────────────── */
+/* ── Final icons ────────────────────────────────────────── */
 MTS.Icon.initAll();
 
 </script>

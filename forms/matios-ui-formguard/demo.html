@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
   <link rel="stylesheet" href="../../support/demo-shared.css">
-  <!-- Componentes MTS usados en la demo -->
+  <!-- MTS components used in the demo -->
   <link rel="stylesheet" href="../../display/matios-ui-card/matios-ui-card.css">
   <link rel="stylesheet" href="../matios-ui-input/matios-ui-input.css">
   <link rel="stylesheet" href="../matios-ui-select/matios-ui-select.css">
@@ -66,7 +66,7 @@
     <p id="demo-subtitle"></p>
   </div>
 
-  <!-- 1: Form básico con Input, Select, Toggle -->
+  <!-- 1: Basic form with Input, Select, Toggle -->
   <section class="demo-section">
     <h2 class="demo-section-title" id="s1-title"></h2>
     <p class="demo-section-desc" id="s1-desc"></p>
@@ -96,7 +96,7 @@
     <div id="log-1" style="margin-top:12px;font-size:13px;color:var(--mts-text-secondary);min-height:20px;"></div>
   </section>
 
-  <!-- 2: Dos forms independientes -->
+  <!-- 2: Two independent forms -->
   <section class="demo-section">
     <h2 class="demo-section-title" id="s2-title"></h2>
     <p class="demo-section-desc" id="s2-desc"></p>
@@ -146,7 +146,7 @@
     </div>
   </section>
 
-  <!-- 3: Form inyectado dinámicamente (SPA) -->
+  <!-- 3: Dynamically injected form (SPA) -->
   <section class="demo-section">
     <h2 class="demo-section-title" id="s3-title"></h2>
     <p class="demo-section-desc" id="s3-desc"></p>
@@ -157,7 +157,7 @@
     <div id="dynamic-container"></div>
   </section>
 
-  <!-- 4: snapshot-sync programático -->
+  <!-- 4: programmatic snapshot-sync -->
   <section class="demo-section">
     <h2 class="demo-section-title" id="s4-title"></h2>
     <p class="demo-section-desc">
@@ -188,7 +188,7 @@
 <script>
 (function () {
 
-  /* — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar — */
+  /* — Locale: shows English by default (public face); ?lang=es|en|pt to switch — */
   (function () {
     var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
     var lang = m ? m[1] : 'en';
@@ -196,7 +196,7 @@
   })();
   var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.FormGuard'].demo) || {};
 
-  /* ── Textos estáticos desde el locale ── */
+  /* ── Static texts from the locale ── */
   document.getElementById('demo-subtitle').textContent  = D.subtitle    || 'Declarative dirty-tracking — snapshot, navigation modal, beforeunload, visual indicators';
   document.getElementById('s1-title').textContent       = D.s1Title     || '1 — Basic form with MTS components';
   document.getElementById('s1-desc').textContent        = D.s1Desc      || 'Change any field. The asterisk appears in the title and the dot on the Save button. Revert the change — the form returns to clean automatically.';
@@ -214,11 +214,11 @@
   document.getElementById('s4-desc-after').textContent  = D.s4DescAfter  || ' so FormGuard re-takes the snapshot without marking it dirty.';
   document.getElementById('s4-card-title').textContent  = D.s4CardTitle || 'Loaded data';
 
-  /* ── Iniciar FormGuard (una sola vez en el shell) ── */
+  /* ── Start FormGuard (only once in the shell) ── */
   MTS.FormGuard.start();
 
   /* ══════════════════════════════════════════════════
-     1 — Form básico
+     1 — Basic form
   ══════════════════════════════════════════════════ */
   var inNombre  = new MTS.Input('#nombre-1', { label: D.s1LabelNombre || 'Name', value: 'Ana López', placeholder: D.s1PlaceholderNombre || 'Full name' });
   var selRol    = new MTS.Select('#rol-1', {
@@ -258,10 +258,10 @@
   });
 
   /* ══════════════════════════════════════════════════
-     2 — Dos formularios
+     2 — Two forms
   ══════════════════════════════════════════════════ */
   new MTS.Input('#nombre-a',  { label: D.s2LabelNombre  || 'Name',    value: 'Carlos Díaz' });
-  new MTS.Input('#email-a',   { label: D.s2LabelEmail   || 'Email',   value: 'carlos@ejemplo.com', type: 'email' });
+  new MTS.Input('#email-a',   { label: D.s2LabelEmail   || 'Email',   value: 'carlos@example.com', type: 'email' });
   new MTS.Input('#empresa-b', { label: D.s2LabelEmpresa || 'Company', value: 'Acme Corp' });
   new MTS.Select('#pais-b', {
     label: D.s2LabelPais || 'Country',
@@ -291,7 +291,7 @@
   });
 
   /* ══════════════════════════════════════════════════
-     3 — Form dinámico
+     3 — Dynamic form
   ══════════════════════════════════════════════════ */
   var _dynamicForm  = null;
   var _dynamicInput = null;
@@ -309,10 +309,10 @@
         '<div class="mts-card__header"><span class="mts-card__title">' + (D.s3CardTitle || 'Dynamic form') + '</span></div>' +
         '<div class="mts-card__body" style="padding:16px;"><div id="dyn-input-wrap"></div></div>';
       document.getElementById('dynamic-container').appendChild(_dynamicForm);
-      /* esperar que el MutationObserver adopte el form, luego instanciar y sincronizar */
+      /* wait for the MutationObserver to adopt the form, then instantiate and sync */
       setTimeout(function () {
         _dynamicInput = new MTS.Input('#dyn-input-wrap', { label: D.s3LabelCampo || 'Dynamic field', value: '' });
-        /* re-snapshot ahora que _mtsInstance ya está en el DOM */
+        /* re-snapshot now that _mtsInstance is already in the DOM */
         _dynamicForm.dispatchEvent(new CustomEvent('mts:form:snapshot-sync', { bubbles: true }));
       }, 50);
     }
@@ -330,7 +330,7 @@
   });
 
   /* ══════════════════════════════════════════════════
-     4 — snapshot-sync programático
+     4 — programmatic snapshot-sync
   ══════════════════════════════════════════════════ */
   var inTitulo  = new MTS.Input('#titulo-4', { label: D.s4LabelTitulo || 'Project title', value: '' });
   var selEstado = new MTS.Select('#estado-4', {
@@ -347,7 +347,7 @@
     label: D.s4BtnLoad || 'Load data',
     variant: 'secondary',
     onClick: function () {
-      inTitulo.setValue('Proyecto Alpha');
+      inTitulo.setValue('Project Alpha');
       selEstado.setValue('active');
       document.querySelector('[data-mts-form-id="sync-form"]').dispatchEvent(
         new CustomEvent('mts:form:snapshot-sync', { bubbles: true })

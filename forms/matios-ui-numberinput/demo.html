@@ -120,7 +120,7 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -181,16 +181,16 @@ var preview_s1 =
 
 var js_s1 =
   "new MTS.NumberInput('#ni-basic', {\n" +
-  "  label: 'Cantidad',\n" +
+  "  label: 'Quantity',\n" +
   "  value: 1,\n" +
   "  min: 0,\n" +
   "  max: 10,\n" +
   "  onChange: function(value, formatted) {\n" +
-  "    setResult('res-basic', 'valor: ' + value + ' | formateado: ' + formatted);\n" +
+  "    setResult('res-basic', 'value: ' + value + ' | formatted: ' + formatted);\n" +
   "  }\n" +
   "});\n\n" +
-  "new MTS.NumberInput('#ni-step', { label: 'Cada 5 unidades', value: 0, min: 0, max: 100, step: 5 });\n" +
-  "new MTS.NumberInput('#ni-decimals', { label: 'Con 2 decimales', value: 1.5, step: 0.1, decimals: 2 });";
+  "new MTS.NumberInput('#ni-step', { label: 'Every 5 units', value: 0, min: 0, max: 100, step: 5 });\n" +
+  "new MTS.NumberInput('#ni-decimals', { label: 'With 2 decimals', value: 1.5, step: 0.1, decimals: 2 });";
 
 var preview_s2 =
   '<div class="demo-grid">' +
@@ -201,9 +201,9 @@ var preview_s2 =
   '<div class="result-box" id="res-format">' + resFormatTxt + '</div>';
 
 var js_s2 =
-  "new MTS.NumberInput('#ni-clp', { label: 'Precio (CLP)', value: 15000, format: 'currency', currency: 'CLP', locale: 'es-CL', step: 500, min: 0, onChange: function(v, f) { setResult('res-format', 'CLP → ' + f); } });\n" +
-  "new MTS.NumberInput('#ni-usd', { label: 'Precio (USD)', value: 99, format: 'currency', currency: 'USD', locale: 'en-US', step: 1, decimals: 2, min: 0, onChange: function(v, f) { setResult('res-format', 'USD → ' + f); } });\n" +
-  "new MTS.NumberInput('#ni-pct', { label: 'Descuento', value: 10, format: 'percent', min: 0, max: 100, step: 5, onChange: function(v, f) { setResult('res-format', 'Porcentaje → ' + f); } });";
+  "new MTS.NumberInput('#ni-clp', { label: 'Price (CLP)', value: 15000, format: 'currency', currency: 'CLP', locale: 'es-CL', step: 500, min: 0, onChange: function(v, f) { setResult('res-format', 'CLP → ' + f); } });\n" +
+  "new MTS.NumberInput('#ni-usd', { label: 'Price (USD)', value: 99, format: 'currency', currency: 'USD', locale: 'en-US', step: 1, decimals: 2, min: 0, onChange: function(v, f) { setResult('res-format', 'USD → ' + f); } });\n" +
+  "new MTS.NumberInput('#ni-pct', { label: 'Discount', value: 10, format: 'percent', min: 0, max: 100, step: 5, onChange: function(v, f) { setResult('res-format', 'Percentage → ' + f); } });";
 
 var preview_s3 =
   '<div class="demo-grid">' +
@@ -213,9 +213,9 @@ var preview_s3 =
   '</div>';
 
 var js_s3 =
-  "new MTS.NumberInput('#ni-prefix', { label: 'Monto', prefix: '$', value: 500, step: 100, min: 0 });\n" +
-  "new MTS.NumberInput('#ni-suffix', { label: 'Peso', suffix: 'kg', value: 75, step: 0.5, decimals: 1, min: 0 });\n" +
-  "new MTS.NumberInput('#ni-both', { label: 'Temperatura', prefix: '~', suffix: '°C', value: 20, min: -20, max: 50 });";
+  "new MTS.NumberInput('#ni-prefix', { label: 'Amount', prefix: '$', value: 500, step: 100, min: 0 });\n" +
+  "new MTS.NumberInput('#ni-suffix', { label: 'Weight', suffix: 'kg', value: 75, step: 0.5, decimals: 1, min: 0 });\n" +
+  "new MTS.NumberInput('#ni-both', { label: 'Temperature', prefix: '~', suffix: '°C', value: 20, min: -20, max: 50 });";
 
 var preview_s4 =
   '<div class="demo-row">' +
@@ -225,9 +225,9 @@ var preview_s4 =
   '</div>';
 
 var js_s4 =
-  "new MTS.NumberInput('#ni-sm', { label: 'Tamaño SM', size: 'sm', value: 1, min: 0 });\n" +
-  "new MTS.NumberInput('#ni-md', { label: 'Tamaño MD', size: 'md', value: 1, min: 0 });\n" +
-  "new MTS.NumberInput('#ni-lg', { label: 'Tamaño LG', size: 'lg', value: 1, min: 0 });";
+  "new MTS.NumberInput('#ni-sm', { label: 'Size SM', size: 'sm', value: 1, min: 0 });\n" +
+  "new MTS.NumberInput('#ni-md', { label: 'Size MD', size: 'md', value: 1, min: 0 });\n" +
+  "new MTS.NumberInput('#ni-lg', { label: 'Size LG', size: 'lg', value: 1, min: 0 });";
 
 var preview_s5 =
   '<div class="demo-stack">' +
@@ -245,10 +245,10 @@ var preview_s5 =
   '</div>';
 
 var js_s5 =
-  "var niApi = new MTS.NumberInput('#ni-api', { label: 'Puntos acumulados', value: 50, min: 0, max: 100, hint: 'Mínimo 0, máximo 100' });\n\n" +
+  "var niApi = new MTS.NumberInput('#ni-api', { label: 'Accumulated points', value: 50, min: 0, max: 100, hint: 'Minimum 0, maximum 100' });\n\n" +
   "niApi.getValue();\n" +
   "niApi.setValue(0);\n" +
-  "niApi.setError('Valor inválido');\n" +
+  "niApi.setError('Invalid value');\n" +
   "niApi.clearError();\n" +
   "niApi.disable();\n" +
   "niApi.enable();\n" +
@@ -271,7 +271,7 @@ var js_s6 =
   "new MTS.NumberInput('#ni-declarative');\n\n" +
   "new MTS.NumberInput('#ni-enhanced', {\n" +
   "  onChange: function(value, formatted) {\n" +
-  "    setResult('res-enhance', 'valor: ' + value + ' | formateado: ' + formatted);\n" +
+  "    setResult('res-enhance', 'value: ' + value + ' | formatted: ' + formatted);\n" +
   "  }\n" +
   "});";
 

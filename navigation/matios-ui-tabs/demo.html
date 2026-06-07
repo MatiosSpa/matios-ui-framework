@@ -74,7 +74,7 @@
    LOCALE
    ============================================================ */
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -92,7 +92,7 @@ document.getElementById('s5-title').textContent      = D.s5Title  || '5 — With
 document.getElementById('s6-title').textContent      = D.s6Title  || '6 — API — programmatic setActive()';
 
 /* ============================================================
-   UTILIDADES
+   UTILITIES
    ============================================================ */
 
 function indentHtml(html) {
@@ -120,17 +120,17 @@ function indentHtml(html) {
 }
 
 /*
- * makeShellSection — crea el shell manual Preview | HTML | JavaScript.
- * Se usa un shell propio (en lugar de MTS.Tabs) para evitar conflicto
- * entre las pestañas del demo y el componente MTS.Tabs que se está demostrando.
- * El código se muestra con MTS.CodeBlock.
+ * makeShellSection — builds the manual Preview | HTML | JavaScript shell.
+ * A custom shell is used (instead of MTS.Tabs) to avoid a clash
+ * between the demo tabs and the MTS.Tabs component being demonstrated.
+ * The code is shown with MTS.CodeBlock.
  *
- * @param {string} hostId  — id del contenedor
+ * @param {string} hostId  — id of the container
  * @param {object} config
- *   @param {string}   config.previewHtml — HTML del preview
- *   @param {string}   [config.htmlCode]  — snippet HTML para la pestaña HTML
- *   @param {string}   [config.jsCode]    — código JS de ejemplo
- *   @param {function} [config.mount]     — callback que recibe previewEl al montar
+ *   @param {string}   config.previewHtml — preview HTML
+ *   @param {string}   [config.htmlCode]  — HTML snippet for the HTML tab
+ *   @param {string}   [config.jsCode]    — example JS code
+ *   @param {function} [config.mount]     — callback that receives previewEl on mount
  */
 function makeShellSection(hostId, config) {
   const host = document.getElementById(hostId);
@@ -180,10 +180,10 @@ function makeShellSection(hostId, config) {
   panelNames.forEach(function(name) { stack.appendChild(panelEls[name]); });
   host.appendChild(stack);
 
-  // Preview content (string de HTML de componente — excepción aceptada)
+  // Preview content (component HTML string — accepted exception)
   panelEls.preview.innerHTML = config.previewHtml;
 
-  // MTS.CodeBlock para HTML y JavaScript
+  // MTS.CodeBlock for HTML and JavaScript
   const htmlRaw = config.htmlCode || indentHtml(config.previewHtml);
   const jsRaw   = config.jsCode   || '// No JavaScript required for this example.';
 
@@ -220,7 +220,7 @@ const iconInbox = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" s
 const iconSent  = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';
 
 /* ============================================================
-   SECCIONES
+   SECTIONS
    ============================================================ */
 
 // S1 — Underline (default)
@@ -346,7 +346,7 @@ makeShellSection('shell-s4', {
   },
 });
 
-// S5 — Íconos y badges
+// S5 — Icons and badges
 makeShellSection('shell-s5', {
   previewHtml: '<div id="tabs-icons"></div>',
   htmlCode:
@@ -374,7 +374,7 @@ makeShellSection('shell-s5', {
   },
 });
 
-// S6 — API programática
+// S6 — Programmatic API
 makeShellSection('shell-s6', {
   previewHtml:
     '<div id="tabs-api"></div>' +

@@ -22,49 +22,49 @@
   </script>
   <meta charset="UTF-8">
   <script>
-    /* Registrar Mock API Service Worker */
+    /* Register Mock API Service Worker */
     if ('serviceWorker' in navigator) {
-      /* SW encapsulado en la carpeta del componente.
-         Archivo: widgets/calendar/sw-calendar.js
-         Scope:   ./ (relativo = /widgets/calendar/) */
+      /* SW encapsulated in the component folder.
+         File:  widgets/calendar/sw-calendar.js
+         Scope: ./ (relative = /widgets/calendar/) */
       async function _initSW() {
-        /* 1. Limpiar SWs viejos con scope o ruta distinta */
+        /* 1. Clean up old SWs with a different scope or path */
         const regs = await navigator.serviceWorker.getRegistrations();
         for (const r of regs) {
           if (r.scope.includes('widgets/calendar') || r.scope.includes('mock-api')) {
             if (!r.scope.endsWith('/widgets/calendar/') && !r.scriptURL?.includes('widgets/calendar/sw-calendar')) {
-              console.log('[sw-calendar] Desregistrando SW viejo:', r.scope);
+              console.log('[sw-calendar] Unregistering old SW:', r.scope);
               await r.unregister();
             }
           }
         }
-        /* 2. Registrar SW desde la carpeta del componente */
+        /* 2. Register SW from the component folder */
         const reg = await navigator.serviceWorker.register('./sw-calendar.js', { scope: './' });
-        console.log('[sw-calendar] Registrado — scope:', reg.scope);
+        console.log('[sw-calendar] Registered — scope:', reg.scope);
         if (reg.active) {
           _markSwReady();
         } else {
-          /* Esperar activación */
+          /* Wait for activation */
           const sw = reg.installing || reg.waiting;
           if (sw) {
             sw.addEventListener('statechange', e => {
               if (e.target.state === 'activated') _markSwReady();
             });
           }
-          /* También escuchar controllerchange */
+          /* Also listen for controllerchange */
           navigator.serviceWorker.addEventListener('controllerchange', _markSwReady, { once: true });
         }
       }
-      _initSW().catch(err => console.warn('[sw-calendar] No disponible (necesita servidor HTTP):', err.message));
+      _initSW().catch(err => console.warn('[sw-calendar] Not available (requires HTTP server):', err.message));
     }
     function _markSwReady() {
       const opt = document.querySelector('#cfgMockApi option[value="events"]');
-      if (opt) opt.textContent = '⚡ sw-calendar ✓ (activo)';
-      console.log('[sw-calendar] ✓ Activo — interceptando /widgets/calendar/mock-api/*');
+      if (opt) opt.textContent = '⚡ sw-calendar ✓ (active)';
+      console.log('[sw-calendar] ✓ Active — intercepting /widgets/calendar/mock-api/*');
     }
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MTS Calendar v2 — App Completa</title>
+  <title>MTS Calendar v2 — Full App</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../base/matios-ui-base.css">
   <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
@@ -142,16 +142,16 @@
 </script>
 <script src="app.js"></script>
 <!-- ══════════════════════════════════════════════════════════
-     EJEMPLO DE USO — copiar, descomentar y adaptar
+     USAGE EXAMPLE — copy, uncomment and adapt
      ══════════════════════════════════════════════════════════
 
-<div id="mi-calendario" style="height:100vh"></div>
+<div id="my-calendar" style="height:100vh"></div>
 
 <script>
 (async () => {
 
-  // Uso minimo - modales por defecto del CalendarUI
-  const ui = new MTS.CalendarUI('#mi-calendario', {
+  // Minimal usage - default CalendarUI modals
+  const ui = new MTS.CalendarUI('#my-calendar', {
     calendarOptions: {
       view:      'week',
       days:      MTS.Calendar.DAYS_MON_FRI,
@@ -159,10 +159,10 @@
       endTime:   '19:00',
     },
 
-    // onEvent - se llama DESPUES de que el modal confirma
+    // onEvent - called AFTER the modal confirms
     // action: 'create' | 'update' | 'delete' | 'drop' | 'resize'
-    // event:  datos del evento ya con los cambios
-    // cal:    instancia MTS.Calendar
+    // event:  event data already with the changes applied
+    // cal:    MTS.Calendar instance
     onEvent: async (action, event, cal) => {
       switch (action) {
         case 'create':
@@ -187,26 +187,26 @@
   await ui.init();
 
 
-  // Uso avanzado - modales propios
-  // renderXXXEventModal recibe (cal, event) y debe retornar:
-  //   el evento modificado si confirma  -> CalendarUI llama onEvent automaticamente
-  //   null / undefined si cancela       -> CalendarUI no hace nada
+  // Advanced usage - custom modals
+  // renderXXXEventModal receives (cal, event) and must return:
+  //   the modified event if confirmed   -> CalendarUI calls onEvent automatically
+  //   null / undefined if cancelled      -> CalendarUI does nothing
 
-  const uiCustom = new MTS.CalendarUI('#mi-calendario', {
+  const uiCustom = new MTS.CalendarUI('#my-calendar', {
 
     renderNewEventModal: async (cal, event) => {
-      // event contiene: date, dayNumber, startH, endH (datos de la celda clickeada)
+      // event contains: date, dayNumber, startH, endH (data from the clicked cell)
       return new Promise((resolve) => {
         const modal = new MTS.Modal({
-          title: 'Nuevo evento',
-          body:  document.getElementById('mi-form-nuevo'), // tu HTML
+          title: 'New event',
+          body:  document.getElementById('my-new-form'), // your HTML
           buttons: [
-            { label:'Cancelar', variant:'ghost',  onClick: () => { modal.hide(); resolve(null); } },
-            { label:'Guardar',  variant:'primary', onClick: () => {
-                const titulo = document.getElementById('mi-titulo').value.trim();
-                if (!titulo) return;
+            { label:'Cancel', variant:'ghost',  onClick: () => { modal.hide(); resolve(null); } },
+            { label:'Save',   variant:'primary', onClick: () => {
+                const title = document.getElementById('my-title').value.trim();
+                if (!title) return;
                 modal.hide();
-                resolve({ ...event, title: titulo }); // CalendarUI llamara onEvent('create', result, cal)
+                resolve({ ...event, title: title }); // CalendarUI will call onEvent('create', result, cal)
             }},
           ],
         });
@@ -216,12 +216,12 @@
 
     renderEventDeleteModal: async (cal, event) => {
       return new Promise((resolve) => {
-        resolve(confirm('Eliminar "' + event.title + '"?') ? event : null);
+        resolve(confirm('Delete "' + event.title + '"?') ? event : null);
       });
     },
 
     onEvent: async (action, event, cal) => {
-      // Solo llega aqui si el modal retorno datos (usuario no cancelo)
+      // Only reaches here if the modal returned data (user did not cancel)
       if (action === 'create') {
         const res = await fetch('/api/events', { method:'POST', body:JSON.stringify(event) });
         const saved = await res.json();

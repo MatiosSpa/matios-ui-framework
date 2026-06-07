@@ -126,7 +126,7 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public face); ?lang=es|en|pt to change —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -180,8 +180,8 @@ var js_s3 =
   "new MTS.Input('#inp-readonly');\n" +
   "new MTS.Input('#inp-clearable');\n" +
   "new MTS.Input('#inp-icon', {\n" +
-  "  label: 'Buscar',\n" +
-  "  placeholder: 'Buscar...',\n" +
+  "  label: 'Search',\n" +
+  "  placeholder: 'Search...',\n" +
   "  iconLeft: MTS.Icon.get('search'),\n" +
   "  clearable: true\n" +
   "});";
@@ -198,14 +198,14 @@ var preview_s4 =
 var js_s4 =
   "new MTS.Input('#inp-valid-email', {\n" +
   "  label: 'Email',\n" +
-  "  placeholder: 'usuario@ejemplo.com',\n" +
+  "  placeholder: 'user@example.com',\n" +
   "  required: true,\n" +
   "  rules: { email: true },\n" +
-  "  onBlur: function() { setResult('valid-result', 'Validado — válido: ' + this.isValid()); }\n" +
+  "  onBlur: function() { setResult('valid-result', 'Validated — valid: ' + this.isValid()); }\n" +
   "});\n\n" +
   "new MTS.Input('#inp-valid-len', {\n" +
-  "  label: 'Usuario',\n" +
-  "  placeholder: 'mínimo 4, máximo 20 caracteres',\n" +
+  "  label: 'Username',\n" +
+  "  placeholder: 'minimum 4, maximum 20 characters',\n" +
   "  rules: { minLength: 4, maxLength: 20 },\n" +
   "  showCount: true,\n" +
   "  maxLength: 20\n" +
@@ -223,7 +223,7 @@ var js_s5 =
   "  onFocus: function() { setResult('events-result', 'focus'); },\n" +
   "  onBlur: function(e) { setResult('events-result', 'blur → \"' + e.detail.value + '\"'); },\n" +
   "  onValidate: function(e) {\n" +
-  "    setResult('events-result', 'validate → válido: ' + e.detail.valid + (e.detail.errors.length ? ' | ' + e.detail.errors[0] : ''));\n" +
+  "    setResult('events-result', 'validate → valid: ' + e.detail.valid + (e.detail.errors.length ? ' | ' + e.detail.errors[0] : ''));\n" +
   "  }\n" +
   "});";
 
@@ -232,7 +232,7 @@ var preview_s6 =
     '<div id="inp-api" data-label="' + (D.apiLabel || 'Controlled field') + '" data-placeholder="' + (D.apiPlaceholder || 'Controlled by API') + '"></div>' +
     '<div class="demo-row">' +
       '<button class="demo-btn-sm" onclick="apiDemo(\'getValue\')">getValue()</button>' +
-      '<button class="demo-btn-sm" onclick="apiDemo(\'setValue\')">setValue(\'Hola!\')</button>' +
+      '<button class="demo-btn-sm" onclick="apiDemo(\'setValue\')">setValue(\'Hi!\')</button>' +
       '<button class="demo-btn-sm" onclick="apiDemo(\'clear\')">clear()</button>' +
       '<button class="demo-btn-sm" onclick="apiDemo(\'disable\')">disable()</button>' +
       '<button class="demo-btn-sm" onclick="apiDemo(\'enable\')">enable()</button>' +
@@ -246,11 +246,11 @@ var preview_s6 =
 var js_s6 =
   "var inpApi = new MTS.Input('#inp-api');\n\n" +
   "inpApi.getValue();\n" +
-  "inpApi.setValue('Hola!');\n" +
+  "inpApi.setValue('Hi!');\n" +
   "inpApi.clear();\n" +
   "inpApi.disable();\n" +
   "inpApi.enable();\n" +
-  "inpApi.setError('Mensaje de error externo');\n" +
+  "inpApi.setError('External error message');\n" +
   "inpApi.clearError();\n" +
   "inpApi.focus();";
 
@@ -272,7 +272,7 @@ var js_s7 =
   "new MTS.Input('#inp-enhanced', {\n" +
   "  onChange: function(e) { setResult('enhancement-result', 'change → ' + e.detail.value); },\n" +
   "  onValidate: function(e) {\n" +
-  "    setResult('enhancement-result', 'validate → válido: ' + e.detail.valid + (e.detail.errors.length ? ' | ' + e.detail.errors[0] : ''));\n" +
+  "    setResult('enhancement-result', 'validate → valid: ' + e.detail.valid + (e.detail.errors.length ? ' | ' + e.detail.errors[0] : ''));\n" +
   "  }\n" +
   "});";
 
@@ -348,24 +348,24 @@ var preview_s8 =
     '<div class="demo-grid">' +
       '<div id="inp-sof-name" data-label="' + (D.sofNameLabel || 'Full name') + '" data-value="Juan Pérez" data-hint="' + (D.sofNameHint || 'Click to select all') + '" data-select-on-focus></div>' +
       '<div id="inp-sof-qty" data-type="number" data-label="' + (D.sofQtyLabel || 'Quantity') + '" data-value="42" data-hint="' + (D.sofQtyHint || 'Useful for editing numbers quickly') + '" data-select-on-focus></div>' +
-      '<div id="inp-sof-pwd" data-type="password" data-label="' + (D.sofPwdLabel || 'Password (excluded)') + '" data-value="secreto123" data-show-password data-hint="' + (D.sofPwdHint || 'selectOnFocus does not apply to password') + '"></div>' +
+      '<div id="inp-sof-pwd" data-type="password" data-label="' + (D.sofPwdLabel || 'Password (excluded)') + '" data-value="secret123" data-show-password data-hint="' + (D.sofPwdHint || 'selectOnFocus does not apply to password') + '"></div>' +
     '</div>' +
     '<div class="result-box" id="sof-result">' + (D.sofResultPlaceholder || '— click the fields to see the behavior —') + '</div>' +
   '</div>';
 
 var js_s8 =
-  "// selectOnFocus: true → selecciona todo al enfocar\n" +
+  "// selectOnFocus: true → selects all text on focus\n" +
   "new MTS.Input('#inp-sof-name', {\n" +
   "  selectOnFocus: true,\n" +
-  "  onFocus: function() { setResult('sof-result', 'focus en Nombre → texto seleccionado'); }\n" +
+  "  onFocus: function() { setResult('sof-result', 'focus on Name → text selected'); }\n" +
   "});\n\n" +
   "new MTS.Input('#inp-sof-qty', {\n" +
   "  selectOnFocus: true,\n" +
-  "  onFocus: function() { setResult('sof-result', 'focus en Cantidad → texto seleccionado'); }\n" +
+  "  onFocus: function() { setResult('sof-result', 'focus on Quantity → text selected'); }\n" +
   "});\n\n" +
-  "// type='password' → selectOnFocus se ignora automáticamente\n" +
+  "// type='password' → selectOnFocus is ignored automatically\n" +
   "new MTS.Input('#inp-sof-pwd', {\n" +
-  "  onFocus: function() { setResult('sof-result', 'focus en Contraseña → selectOnFocus no aplica'); }\n" +
+  "  onFocus: function() { setResult('sof-result', 'focus on Password → selectOnFocus does not apply'); }\n" +
   "});";
 
 makeSection('tabs-s8', preview_s8, js_s8, function() {
@@ -388,19 +388,19 @@ var preview_s9 =
     '<div class="demo-grid">' +
       '<div id="inp-noe-name" data-label="' + (D.noeNameLabel || 'First name') + '" data-placeholder="Juan" data-next-on-enter></div>' +
       '<div id="inp-noe-last" data-label="' + (D.noeLastLabel || 'Last name') + '" data-placeholder="Pérez" data-next-on-enter></div>' +
-      '<div id="inp-noe-email" data-type="email" data-label="' + (D.noeEmailLabel || 'Email') + '" data-placeholder="juan@ejemplo.com" data-next-on-enter data-required></div>' +
+      '<div id="inp-noe-email" data-type="email" data-label="' + (D.noeEmailLabel || 'Email') + '" data-placeholder="juan@example.com" data-next-on-enter data-required></div>' +
       '<div id="inp-noe-age" data-type="number" data-label="' + (D.noeAgeLabel || 'Age') + '" data-placeholder="25" data-next-on-enter></div>' +
     '</div>' +
     '<div class="result-box" id="noe-result">' + (D.noeResultPlaceholder || '— press Enter in each field to move to the next one —') + '</div>' +
   '</div>';
 
 var js_s9 =
-  "// nextOnEnter: true → Enter funciona como Tab\n" +
-  "// El último campo del formulario no hace nada al presionar Enter\n\n" +
-  "new MTS.Input('#inp-noe-name',  { nextOnEnter: true, onFocus: function() { setResult('noe-result', 'foco en Nombre'); } });\n" +
-  "new MTS.Input('#inp-noe-last',  { nextOnEnter: true, onFocus: function() { setResult('noe-result', 'foco en Apellido'); } });\n" +
-  "new MTS.Input('#inp-noe-email', { nextOnEnter: true, onFocus: function() { setResult('noe-result', 'foco en Email'); } });\n" +
-  "new MTS.Input('#inp-noe-age',   { nextOnEnter: true, onFocus: function() { setResult('noe-result', 'foco en Edad — último campo'); } });";
+  "// nextOnEnter: true → Enter works like Tab\n" +
+  "// The last field in the form does nothing when Enter is pressed\n\n" +
+  "new MTS.Input('#inp-noe-name',  { nextOnEnter: true, onFocus: function() { setResult('noe-result', 'focus on First name'); } });\n" +
+  "new MTS.Input('#inp-noe-last',  { nextOnEnter: true, onFocus: function() { setResult('noe-result', 'focus on Last name'); } });\n" +
+  "new MTS.Input('#inp-noe-email', { nextOnEnter: true, onFocus: function() { setResult('noe-result', 'focus on Email'); } });\n" +
+  "new MTS.Input('#inp-noe-age',   { nextOnEnter: true, onFocus: function() { setResult('noe-result', 'focus on Age — last field'); } });";
 
 makeSection('tabs-s9', preview_s9, js_s9, function() {
   new MTS.Input('#inp-noe-name',  { nextOnEnter: true, onFocus: function() { setResult('noe-result', D.noeFocusName || 'focus on First name'); } });
@@ -409,7 +409,7 @@ makeSection('tabs-s9', preview_s9, js_s9, function() {
   new MTS.Input('#inp-noe-age',   { nextOnEnter: true, onFocus: function() { setResult('noe-result', D.noeFocusAge || 'focus on Age — last field'); } });
 });
 
-/* ── 10 — Autocomplete estático ──────────────────────────── */
+/* ── 10 — Static autocomplete ──────────────────────────── */
 
 var preview_s10 =
   '<div class="demo-stack" style="max-width:360px;margin:0 auto">' +
@@ -423,9 +423,9 @@ var js_s10 =
   "  datasource: [\n" +
   "    { value: 'CL', text: 'Chile'     },\n" +
   "    { value: 'AR', text: 'Argentina' },\n" +
-  "    { value: 'PE', text: 'Perú'      },\n" +
+  "    { value: 'PE', text: 'Peru'      },\n" +
   "    { value: 'CO', text: 'Colombia'  },\n" +
-  "    { value: 'MX', text: 'México'    },\n" +
+  "    { value: 'MX', text: 'Mexico'    },\n" +
   "    { value: 'UY', text: 'Uruguay'   },\n" +
   "    { value: 'BO', text: 'Bolivia'   },\n" +
   "    { value: 'EC', text: 'Ecuador'   }\n" +
@@ -441,9 +441,9 @@ makeSection('tabs-s10', preview_s10, js_s10, function() {
     datasource: [
       { value: 'CL', text: 'Chile'     },
       { value: 'AR', text: 'Argentina' },
-      { value: 'PE', text: 'Perú'      },
+      { value: 'PE', text: 'Peru'      },
       { value: 'CO', text: 'Colombia'  },
-      { value: 'MX', text: 'México'    },
+      { value: 'MX', text: 'Mexico'    },
       { value: 'UY', text: 'Uruguay'   },
       { value: 'BO', text: 'Bolivia'   },
       { value: 'EC', text: 'Ecuador'   }
@@ -459,17 +459,17 @@ makeSection('tabs-s10', preview_s10, js_s10, function() {
   });
 }, '360px');
 
-/* ── 11 — Autocomplete async simulado ───────────────────── */
+/* ── 11 — Simulated async autocomplete ───────────────────── */
 
 var _USERS_DB = [
-  { id: 1,  name: 'Ana Pérez',      email: 'ana@empresa.cl'     },
-  { id: 2,  name: 'Luis Soto',      email: 'luis@empresa.cl'    },
-  { id: 3,  name: 'María Lagos',    email: 'maria@empresa.cl'   },
-  { id: 4,  name: 'Carlos Ruiz',    email: 'carlos@empresa.cl'  },
-  { id: 5,  name: 'Sofía Vega',     email: 'sofia@empresa.cl'   },
-  { id: 6,  name: 'Diego Mora',     email: 'diego@empresa.cl'   },
-  { id: 7,  name: 'Camila Torres',  email: 'camila@empresa.cl'  },
-  { id: 8,  name: 'Andrés Fuentes', email: 'andres@empresa.cl'  }
+  { id: 1,  name: 'Ana Pérez',      email: 'ana@company.cl'     },
+  { id: 2,  name: 'Luis Soto',      email: 'luis@company.cl'    },
+  { id: 3,  name: 'María Lagos',    email: 'maria@company.cl'   },
+  { id: 4,  name: 'Carlos Ruiz',    email: 'carlos@company.cl'  },
+  { id: 5,  name: 'Sofía Vega',     email: 'sofia@company.cl'   },
+  { id: 6,  name: 'Diego Mora',     email: 'diego@company.cl'   },
+  { id: 7,  name: 'Camila Torres',  email: 'camila@company.cl'  },
+  { id: 8,  name: 'Andrés Fuentes', email: 'andres@company.cl'  }
 ];
 
 var preview_s11 =
@@ -484,8 +484,8 @@ var preview_s11 =
 
 var js_s11 =
   "new MTS.Input('#ac-async', {\n" +
-  "  label:       'Asignar usuario',\n" +
-  "  placeholder: 'Buscar por nombre...'\n" +
+  "  label:       'Assign user',\n" +
+  "  placeholder: 'Search by name...'\n" +
   "});\n\n" +
   "var ac = new MTS.Autocomplete('#ac-async', {\n" +
   "  datasource: function(query, done) {\n" +
@@ -544,7 +544,7 @@ makeSection('tabs-s11', preview_s11, js_s11, function() {
 function apiDemo(action) {
   if (!inpApi) return;
   if (action === 'getValue')   setResult('api-result', 'getValue() → "' + inpApi.getValue() + '"');
-  if (action === 'setValue')   { inpApi.setValue('Hola!'); setResult('api-result', 'setValue("Hola!") ✓'); }
+  if (action === 'setValue')   { inpApi.setValue('Hi!'); setResult('api-result', 'setValue("Hi!") ✓'); }
   if (action === 'clear')      { inpApi.clear(); setResult('api-result', 'clear() ✓'); }
   if (action === 'disable')    { inpApi.disable(); setResult('api-result', 'disable() ✓'); }
   if (action === 'enable')     { inpApi.enable(); setResult('api-result', 'enable() ✓'); }

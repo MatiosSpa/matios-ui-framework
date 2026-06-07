@@ -80,7 +80,7 @@
 
 <script>
 /* ============================================================
-   LOCALE — muestra inglés por defecto (cara pública); ?lang=es|en|pt
+   LOCALE — English by default (public-facing); ?lang=es|en|pt
    ============================================================ */
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
@@ -105,7 +105,7 @@ document.getElementById('s12-title').textContent = D.s12Title || '12 — Respons
 document.getElementById('s13-title').textContent = D.s13Title || '13 — Loading skeleton';
 
 /* ============================================================
-   UTILIDADES
+   UTILITIES
    ============================================================ */
 
 function esc(str) {
@@ -140,14 +140,14 @@ function indentHtml(html) {
 }
 
 /*
- * makeSection — crea las 3 tabs: Preview, HTML y JavaScript.
- * Con lazy:false todos los paneles están en el DOM al salir de esta función,
- * por lo que MTS.CodeBlock puede inicializarse directo sin setTimeout.
+ * makeSection — creates the 3 tabs: Preview, HTML and JavaScript.
+ * With lazy:false all panels are in the DOM when this function returns,
+ * so MTS.CodeBlock can be initialized directly without setTimeout.
  *
- * @param {string} id          — id del contenedor de tabs
- * @param {string} previewHtml — HTML del preview (string para el sistema de tabs)
- * @param {string} jsCode      — código JS de ejemplo
- * @param {string} [htmlCode]  — HTML alternativo para el tab HTML (opcional)
+ * @param {string} id          — id of the tabs container
+ * @param {string} previewHtml — preview HTML (string for the tabs system)
+ * @param {string} jsCode      — sample JS code
+ * @param {string} [htmlCode]  — alternative HTML for the HTML tab (optional)
  */
 function makeSection(id, previewHtml, jsCode, htmlCode) {
   new MTS.Tabs('#' + id, {
@@ -175,23 +175,23 @@ function makeSection(id, previewHtml, jsCode, htmlCode) {
 }
 
 /* ============================================================
-   DATOS MOCK
+   MOCK DATA
    ============================================================ */
 const USERS = [
-  { id:1, name:'Ana García',     email:'ana@empresa.com',    role:'Admin',  status:'active',    date:'01 Dic 2024' },
-  { id:2, name:'Pedro Martínez', email:'pedro@empresa.com',  role:'Editor', status:'pending',   date:'28 Nov 2024' },
-  { id:3, name:'Laura Sánchez',  email:'laura@empresa.com',  role:'Viewer', status:'suspended', date:'15 Nov 2024' },
-  { id:4, name:'Carlos Ruiz',    email:'carlos@empresa.com', role:'Viewer', status:'inactive',  date:'03 Oct 2024' },
-  { id:5, name:'Sofía Torres',   email:'sofia@empresa.com',  role:'Editor', status:'active',    date:'20 Sep 2024' },
+  { id:1, name:'Ana García',     email:'ana@company.com',    role:'Admin',  status:'active',    date:'01 Dec 2024' },
+  { id:2, name:'Pedro Martínez', email:'pedro@company.com',  role:'Editor', status:'pending',   date:'28 Nov 2024' },
+  { id:3, name:'Laura Sánchez',  email:'laura@company.com',  role:'Viewer', status:'suspended', date:'15 Nov 2024' },
+  { id:4, name:'Carlos Ruiz',    email:'carlos@company.com', role:'Viewer', status:'inactive',  date:'03 Oct 2024' },
+  { id:5, name:'Sofía Torres',   email:'sofia@company.com',  role:'Editor', status:'active',    date:'20 Sep 2024' },
 ];
 
 const PRODUCTS = [
-  { id:1, name:'Notebook Pro 15"',  sku:'NB-PRO-15',  category:'Computación', stock:42,  price:1299.00 },
-  { id:2, name:'Mouse Inalámbrico', sku:'MS-WL-01',   category:'Periféricos',  stock:128, price:34.90  },
-  { id:3, name:'Monitor 27" 4K',    sku:'MN-27-4K',   category:'Pantallas',    stock:15,  price:749.00 },
-  { id:4, name:'Teclado Mecánico',  sku:'KB-MEC-BL',  category:'Periféricos',  stock:0,   price:129.00 },
-  { id:5, name:'Webcam HD 1080p',   sku:'WC-HD-01',   category:'Accesorios',   stock:67,  price:89.90  },
-  { id:6, name:'Hub USB-C 7 in 1',  sku:'HB-USBC-7',  category:'Accesorios',   stock:33,  price:54.90  },
+  { id:1, name:'Notebook Pro 15"',  sku:'NB-PRO-15',  category:'Computing',     stock:42,  price:1299.00 },
+  { id:2, name:'Wireless Mouse',    sku:'MS-WL-01',   category:'Peripherals',   stock:128, price:34.90  },
+  { id:3, name:'Monitor 27" 4K',    sku:'MN-27-4K',   category:'Displays',      stock:15,  price:749.00 },
+  { id:4, name:'Mechanical Keyboard', sku:'KB-MEC-BL', category:'Peripherals',  stock:0,   price:129.00 },
+  { id:5, name:'Webcam HD 1080p',   sku:'WC-HD-01',   category:'Accessories',   stock:67,  price:89.90  },
+  { id:6, name:'Hub USB-C 7 in 1',  sku:'HB-USBC-7',  category:'Accessories',   stock:33,  price:54.90  },
 ];
 
 const BADGES = {
@@ -212,7 +212,7 @@ function fmtPrice(n) {
   return '$' + n.toLocaleString('es-CL', { minimumFractionDigits: 2 });
 }
 
-/* ── Helpers DOM — para manipulación real del DOM ── */
+/* ── DOM helpers — for real DOM manipulation ── */
 function makeBadge(status) {
   const span = document.createElement('span');
   span.className = 'mts-badge' + (BADGE_VARIANTS[status] ? ' ' + BADGE_VARIANTS[status] : '');
@@ -229,7 +229,7 @@ function makeIconBtn(icon) {
   return btn;
 }
 
-/* ── Helpers string — solo para preview strings de los tabs (excepción aceptada) ── */
+/* ── String helpers — only for the tabs' preview strings (accepted exception) ── */
 function badgeHtml(status) {
   const cls = 'mts-badge' + (BADGE_VARIANTS[status] ? ' ' + BADGE_VARIANTS[status] : '');
   return '<span class="' + cls + '">' + (BADGES[status] || status) + '</span>';
@@ -273,20 +273,20 @@ const html_s1 =
 '  <table class="mts-table">\n' +
 '    <thead>\n' +
 '      <tr>\n' +
-'        <th class="mts-table__th">Nombre</th>\n' +
+'        <th class="mts-table__th">Name</th>\n' +
 '        <th class="mts-table__th">Email</th>\n' +
-'        <th class="mts-table__th mts-table__th--center">Estado</th>\n' +
-'        <th class="mts-table__th mts-table__th--end">Fecha</th>\n' +
+'        <th class="mts-table__th mts-table__th--center">Status</th>\n' +
+'        <th class="mts-table__th mts-table__th--end">Date</th>\n' +
 '      </tr>\n' +
 '    </thead>\n' +
 '    <tbody>\n' +
 '      <tr class="mts-table__row">\n' +
 '        <td class="mts-table__td">Ana García</td>\n' +
-'        <td class="mts-table__td">ana@empresa.com</td>\n' +
+'        <td class="mts-table__td">ana@company.com</td>\n' +
 '        <td class="mts-table__td mts-table__td--center">\n' +
-'          <span class="mts-badge mts-badge--success">Activo</span>\n' +
+'          <span class="mts-badge mts-badge--success">Active</span>\n' +
 '        </td>\n' +
-'        <td class="mts-table__td mts-table__td--end">01 Dic 2024</td>\n' +
+'        <td class="mts-table__td mts-table__td--end">01 Dec 2024</td>\n' +
 '      </tr>\n' +
 '    </tbody>\n' +
 '  </table>\n' +
@@ -323,7 +323,7 @@ html_s1
 );
 
 /* ============================================================
-   S2 — Variantes
+   S2 — Variants
    ============================================================ */
 function variantBlock(modifier, label) {
   return '<p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;' +
@@ -355,18 +355,18 @@ const preview_s2 =
   variantBlock('mts-table--compact',  '.mts-table--compact');
 
 const html_s2 =
-'<!-- Aplicar variante al elemento <table> -->\n' +
+'<!-- Apply the variant to the <table> element -->\n' +
 '<table class="mts-table mts-table--hover">...</table>\n' +
 '<table class="mts-table mts-table--striped">...</table>\n' +
 '<table class="mts-table mts-table--bordered">...</table>\n' +
 '<table class="mts-table mts-table--compact">...</table>\n' +
 '\n' +
-'<!-- Variantes combinables entre sí -->\n' +
+'<!-- Variants can be combined with each other -->\n' +
 '<table class="mts-table mts-table--striped mts-table--hover mts-table--compact">\n' +
 '  ...\n' +
 '</table>\n' +
 '\n' +
-'<!-- Sin padding lateral (dentro de un card o panel) -->\n' +
+'<!-- No side padding (inside a card or panel) -->\n' +
 '<table class="mts-table mts-table--compact mts-table--flush">\n' +
 '  ...\n' +
 '</table>';
@@ -374,20 +374,20 @@ const html_s2 =
 makeSection('tabs-s2', preview_s2,
 'const table = document.querySelector(".mts-table");\n' +
 '\n' +
-'table.classList.add("mts-table--striped");    // activar\n' +
-'table.classList.remove("mts-table--striped"); // desactivar\n' +
+'table.classList.add("mts-table--striped");    // enable\n' +
+'table.classList.remove("mts-table--striped"); // disable\n' +
 'table.classList.toggle("mts-table--hover");   // toggle\n' +
 '\n' +
-'// Variantes combinadas\n' +
+'// Combined variants\n' +
 'table.classList.add("mts-table--striped", "mts-table--hover", "mts-table--compact");\n' +
 '\n' +
-'// Compacto dentro de un modal o panel\n' +
+'// Compact inside a modal or panel\n' +
 'table.classList.add("mts-table--compact", "mts-table--flush");',
 html_s2
 );
 
 /* ============================================================
-   S3 — Combinadas (toggle interactivo)
+   S3 — Combined (interactive toggle)
    ============================================================ */
 const preview_s3 =
   '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">' +
@@ -420,12 +420,12 @@ const preview_s3 =
   '</div>';
 
 const html_s3 =
-'<!-- Los botones hacen toggle de cada variante sobre la misma tabla -->\n' +
+'<!-- The buttons toggle each variant on the same table -->\n' +
 '<button onclick="toggleVariant(\'mts-table--striped\')">--striped</button>\n' +
 '<button onclick="toggleVariant(\'mts-table--hover\')">--hover</button>\n' +
 '\n' +
 '<div class="mts-table-wrap">\n' +
-'  <!-- Inicial: mts-table--hover (se puede combinar en tiempo real) -->\n' +
+'  <!-- Initial: mts-table--hover (can be combined in real time) -->\n' +
 '  <table class="mts-table mts-table--hover" id="demo-toggle-table">\n' +
 '    <thead>...</thead>\n' +
 '    <tbody>...</tbody>\n' +
@@ -433,16 +433,16 @@ const html_s3 =
 '</div>';
 
 makeSection('tabs-s3', preview_s3,
-'// Cada botón llama a toggleVariant con la clase correspondiente\n' +
+'// Each button calls toggleVariant with the matching class\n' +
 'function toggleVariant(cls) {\n' +
 '  document.querySelector(".mts-table").classList.toggle(cls);\n' +
 '}\n' +
 '\n' +
-'// Las variantes son combinables entre sí\n' +
-'// .mts-table--striped   → filas alternadas\n' +
-'// .mts-table--hover     → highlight al pasar el mouse\n' +
-'// .mts-table--bordered  → bordes en todas las celdas\n' +
-'// .mts-table--compact   → padding reducido',
+'// Variants can be combined with each other\n' +
+'// .mts-table--striped   → alternating rows\n' +
+'// .mts-table--hover     → highlight on mouse over\n' +
+'// .mts-table--bordered  → borders on all cells\n' +
+'// .mts-table--compact   → reduced padding',
 html_s3
 );
 
@@ -478,14 +478,14 @@ const preview_s4 =
   '</div>';
 
 const html_s4 =
-'<!-- Estados de fila: agregar clase al <tr class="mts-table__row"> -->\n' +
+'<!-- Row states: add a class to the <tr class="mts-table__row"> -->\n' +
 '<tr class="mts-table__row mts-table__row--selected">...</tr>\n' +
 '<tr class="mts-table__row mts-table__row--success">...</tr>\n' +
 '<tr class="mts-table__row mts-table__row--warning">...</tr>\n' +
 '<tr class="mts-table__row mts-table__row--danger">...</tr>\n' +
 '<tr class="mts-table__row mts-table__row--info">...</tr>\n' +
 '\n' +
-'<!-- Fila clickeable (cursor pointer + hover) -->\n' +
+'<!-- Clickable row (pointer cursor + hover) -->\n' +
 '<tr class="mts-table__row mts-table__row--clickable">\n' +
 '  ...\n' +
 '</tr>';
@@ -614,19 +614,19 @@ function doSort(col) {
 }
 
 const html_s5 =
-'<!-- --sortable habilita el cursor y estilos de orden -->\n' +
-'<!-- --asc / --desc indica la dirección activa -->\n' +
+'<!-- --sortable enables the cursor and sort styles -->\n' +
+'<!-- --asc / --desc indicates the active direction -->\n' +
 '<th class="mts-table__th mts-table__th--sortable mts-table__th--asc">\n' +
-'  Nombre\n' +
+'  Name\n' +
 '  <span class="mts-table__sort">\n' +
 '    <span class="mts-table__sort-up"></span>\n' +
 '    <span class="mts-table__sort-down"></span>\n' +
 '  </span>\n' +
 '</th>\n' +
 '\n' +
-'<!-- Columna inactiva (sin dirección) -->\n' +
+'<!-- Inactive column (no direction) -->\n' +
 '<th class="mts-table__th mts-table__th--sortable">\n' +
-'  Precio\n' +
+'  Price\n' +
 '  <span class="mts-table__sort">\n' +
 '    <span class="mts-table__sort-up"></span>\n' +
 '    <span class="mts-table__sort-down"></span>\n' +
@@ -648,12 +648,12 @@ makeSection('tabs-s5', '<div id="sort-host"></div>',
 html_s5
 );
 
-/* lazy:false → el panel ya está en el DOM al salir de makeSection */
+/* lazy:false → the panel is already in the DOM when makeSection returns */
 const sortHost = document.getElementById('sort-host');
 if (sortHost) sortHost.appendChild(buildSortTable());
 
 /* ============================================================
-   S6 — Checkbox + selección múltiple
+   S6 — Checkbox + multiple selection
    ============================================================ */
 const preview_s6 =
   '<div class="mts-table-wrap">' +
@@ -689,30 +689,30 @@ const html_s6 =
 '  <table class="mts-table mts-table--hover">\n' +
 '    <thead>\n' +
 '      <tr>\n' +
-'        <!-- th--check: columna de ancho fijo para el checkbox -->\n' +
+'        <!-- th--check: fixed-width column for the checkbox -->\n' +
 '        <th class="mts-table__th mts-table__th--check">\n' +
 '          <input type="checkbox" class="mts-table__checkbox" id="chk-all">\n' +
 '        </th>\n' +
-'        <th class="mts-table__th">Nombre</th>\n' +
+'        <th class="mts-table__th">Name</th>\n' +
 '        <th class="mts-table__th">Email</th>\n' +
 '      </tr>\n' +
 '    </thead>\n' +
 '    <tbody>\n' +
-'      <!-- Fila normal -->\n' +
+'      <!-- Normal row -->\n' +
 '      <tr class="mts-table__row">\n' +
 '        <td class="mts-table__td mts-table__td--check">\n' +
 '          <input type="checkbox" class="mts-table__checkbox row-chk">\n' +
 '        </td>\n' +
 '        <td class="mts-table__td">Ana García</td>\n' +
-'        <td class="mts-table__td">ana@empresa.com</td>\n' +
+'        <td class="mts-table__td">ana@company.com</td>\n' +
 '      </tr>\n' +
-'      <!-- Fila seleccionada (clase --selected via JS) -->\n' +
+'      <!-- Selected row (--selected class via JS) -->\n' +
 '      <tr class="mts-table__row mts-table__row--selected">\n' +
 '        <td class="mts-table__td mts-table__td--check">\n' +
 '          <input type="checkbox" class="mts-table__checkbox row-chk" checked>\n' +
 '        </td>\n' +
 '        <td class="mts-table__td">Pedro Martínez</td>\n' +
-'        <td class="mts-table__td">pedro@empresa.com</td>\n' +
+'        <td class="mts-table__td">pedro@company.com</td>\n' +
 '      </tr>\n' +
 '    </tbody>\n' +
 '  </table>\n' +
@@ -745,7 +745,7 @@ html_s6
 );
 
 /* ============================================================
-   S7 — Columna de acciones
+   S7 — Actions column
    ============================================================ */
 const preview_s7 =
   '<div class="mts-table-wrap">' +
@@ -772,10 +772,10 @@ const preview_s7 =
   '</div>';
 
 const html_s7 =
-'<!-- th--actions: columna de ancho automático, alineada a la derecha -->\n' +
-'<th class="mts-table__th mts-table__th--actions">Acciones</th>\n' +
+'<!-- th--actions: auto-width column, right-aligned -->\n' +
+'<th class="mts-table__th mts-table__th--actions">Actions</th>\n' +
 '\n' +
-'<!-- td--actions: contiene los botones icon-only -->\n' +
+'<!-- td--actions: holds the icon-only buttons -->\n' +
 '<td class="mts-table__td mts-table__td--actions">\n' +
 '  <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">\n' +
 '    <i class="mts-icon mts-icon-eye mts-icon--sm"></i>\n' +
@@ -842,11 +842,11 @@ const preview_s8 =
 const html_s8 =
 '<tbody>\n' +
 '  <tr>\n' +
-'    <!-- colspan = número de columnas de la tabla -->\n' +
+'    <!-- colspan = number of columns in the table -->\n' +
 '    <td colspan="4" class="mts-table__empty">\n' +
 '      <i class="mts-icon mts-icon-inbox mts-icon--xl mts-table__empty-icon"></i>\n' +
-'      <div class="mts-table__empty-title">No se encontraron registros</div>\n' +
-'      <div class="mts-table__empty-msg">Intenta con otros filtros o agrega un nuevo elemento.</div>\n' +
+'      <div class="mts-table__empty-title">No records found</div>\n' +
+'      <div class="mts-table__empty-msg">Try other filters or add a new item.</div>\n' +
 '    </td>\n' +
 '  </tr>\n' +
 '</tbody>';
@@ -863,11 +863,11 @@ makeSection('tabs-s8', preview_s8,
 '\n' +
 '  const title = document.createElement("div");\n' +
 '  title.className = "mts-table__empty-title";\n' +
-'  title.textContent = "Sin resultados";\n' +
+'  title.textContent = "No results";\n' +
 '\n' +
 '  const msg = document.createElement("div");\n' +
 '  msg.className = "mts-table__empty-msg";\n' +
-'  msg.textContent = "Intenta con otros filtros.";\n' +
+'  msg.textContent = "Try other filters.";\n' +
 '\n' +
 '  td.appendChild(icon);\n' +
 '  td.appendChild(title);\n' +
@@ -877,7 +877,7 @@ makeSection('tabs-s8', preview_s8,
 '}\n' +
 '\n' +
 'function renderTable(data) {\n' +
-'  const tbody = document.querySelector("#mi-tabla tbody");\n' +
+'  const tbody = document.querySelector("#my-table tbody");\n' +
 '  if (!data || data.length === 0) { renderEmpty(tbody, 4); return; }\n' +
 '  tbody.replaceChildren(...data.map(renderRow));\n' +
 '}',
@@ -924,7 +924,7 @@ const html_s9 =
 '  <table class="mts-table mts-table--hover">\n' +
 '    <thead>...</thead>\n' +
 '    <tbody>...</tbody>\n' +
-'    <!-- tfoot fuera del tbody, antes del cierre de table -->\n' +
+'    <!-- tfoot outside the tbody, before the closing table tag -->\n' +
 '    <tfoot>\n' +
 '      <tr class="mts-table__tfoot">\n' +
 '        <td class="mts-table__td" colspan="2"><strong>Total</strong></td>\n' +
@@ -958,12 +958,12 @@ makeSection('tabs-s9', preview_s9,
 'tr.appendChild(tdLabel);\n' +
 'tr.appendChild(tdTotal);\n' +
 'tfoot.appendChild(tr);\n' +
-'document.getElementById("mi-tabla").appendChild(tfoot);',
+'document.getElementById("my-table").appendChild(tfoot);',
 html_s9
 );
 
 /* ============================================================
-   S10 — Header fijo
+   S10 — Fixed header
    ============================================================ */
 const fixedRows = Array.from({ length: 12 }, function(_, i) { return USERS[i % USERS.length]; });
 
@@ -992,29 +992,29 @@ const preview_s10 =
   '</div>';
 
 const html_s10 =
-'<!-- Requisitos:\n' +
-'     1. max-height + overflow-y: auto en el .mts-table-wrap\n' +
-'     2. .mts-table--fixed en la <table>           -->\n' +
+'<!-- Requirements:\n' +
+'     1. max-height + overflow-y: auto on the .mts-table-wrap\n' +
+'     2. .mts-table--fixed on the <table>           -->\n' +
 '<div class="mts-table-wrap" style="max-height: 260px; overflow-y: auto;">\n' +
 '  <table class="mts-table mts-table--hover mts-table--fixed">\n' +
 '    <thead>\n' +
-'      <!-- El thead queda sticky al hacer scroll -->\n' +
+'      <!-- The thead stays sticky while scrolling -->\n' +
 '      <tr>\n' +
-'        <th class="mts-table__th">Nombre</th>\n' +
+'        <th class="mts-table__th">Name</th>\n' +
 '        <th class="mts-table__th">Email</th>\n' +
-'        <th class="mts-table__th mts-table__th--center">Estado</th>\n' +
+'        <th class="mts-table__th mts-table__th--center">Status</th>\n' +
 '      </tr>\n' +
 '    </thead>\n' +
 '    <tbody>\n' +
-'      <!-- muchas filas -->\n' +
+'      <!-- many rows -->\n' +
 '    </tbody>\n' +
 '  </table>\n' +
 '</div>';
 
 makeSection('tabs-s10', preview_s10,
-'// Requisitos:\n' +
-'//   1. .mts-table--fixed en la <table>\n' +
-'//   2. max-height + overflow-y: auto en el .mts-table-wrap\n' +
+'// Requirements:\n' +
+'//   1. .mts-table--fixed on the <table>\n' +
+'//   2. max-height + overflow-y: auto on the .mts-table-wrap\n' +
 '\n' +
 'const wrap = document.createElement("div");\n' +
 'wrap.className = "mts-table-wrap";\n' +
@@ -1024,20 +1024,20 @@ makeSection('tabs-s10', preview_s10,
 'const table = document.createElement("table");\n' +
 'table.className = "mts-table mts-table--hover mts-table--fixed";\n' +
 '\n' +
-'// thead + tbody igual que cualquier tabla MTS\n' +
-'// El header queda pegado al hacer scroll gracias a --fixed\n' +
+'// thead + tbody same as any MTS table\n' +
+'// The header stays pinned while scrolling thanks to --fixed\n' +
 'wrap.appendChild(table);\n' +
 'container.appendChild(wrap);',
 html_s10
 );
 
 /* ============================================================
-   S11 — Texto truncado
+   S11 — Truncated text
    ============================================================ */
 const TRUNC_DATA = [
-  { name: 'Notebook Pro 15"', desc: 'Procesador Intel Core i7 de 12ª generación, 16GB RAM DDR5, SSD NVMe 512GB, pantalla IPS 1920×1080 antirreflejo con cobertura sRGB 100%.', price: 1299.00 },
-  { name: 'Monitor 27" 4K',   desc: 'Panel IPS Ultra HD 3840×2160, 144Hz, HDR400, cobertura DCI-P3 95%, puertos HDMI 2.1 y DisplayPort 1.4, ajuste de altura y rotación pivot.', price: 749.00  },
-  { name: 'Teclado Mecánico', desc: 'Switches Cherry MX Red, retroiluminación RGB por zona, construcción aluminio CNC, cable USB-C desmontable, compatible Win/Mac/Linux.', price: 129.00  },
+  { name: 'Notebook Pro 15"', desc: '12th-generation Intel Core i7 processor, 16GB DDR5 RAM, 512GB NVMe SSD, anti-glare 1920×1080 IPS display with 100% sRGB coverage.', price: 1299.00 },
+  { name: 'Monitor 27" 4K',   desc: 'Ultra HD 3840×2160 IPS panel, 144Hz, HDR400, 95% DCI-P3 coverage, HDMI 2.1 and DisplayPort 1.4 ports, height adjustment and pivot rotation.', price: 749.00  },
+  { name: 'Mechanical Keyboard', desc: 'Cherry MX Red switches, per-zone RGB backlighting, CNC aluminum build, detachable USB-C cable, Win/Mac/Linux compatible.', price: 129.00  },
 ];
 
 const preview_s11 =
@@ -1061,15 +1061,15 @@ const preview_s11 =
   '</div>';
 
 const html_s11 =
-'<!-- max-width en el <th> y en el <td> (deben coincidir) -->\n' +
-'<th class="mts-table__th" style="max-width: 200px">Descripción</th>\n' +
+'<!-- max-width on the <th> and the <td> (they must match) -->\n' +
+'<th class="mts-table__th" style="max-width: 200px">Description</th>\n' +
 '\n' +
-'<!-- td--truncate aplica: white-space:nowrap + overflow:hidden + text-overflow:ellipsis -->\n' +
-'<!-- title muestra el texto completo como tooltip nativo del navegador               -->\n' +
+'<!-- td--truncate applies: white-space:nowrap + overflow:hidden + text-overflow:ellipsis -->\n' +
+'<!-- title shows the full text as the browser native tooltip                            -->\n' +
 '<td class="mts-table__td mts-table__td--truncate"\n' +
 '    style="max-width: 200px"\n' +
-'    title="Procesador Intel Core i7 de 12ª generación, 16GB RAM DDR5...">\n' +
-'  Procesador Intel Core i7 de 12ª generación, 16GB RAM DDR5...\n' +
+'    title="12th-generation Intel Core i7 processor, 16GB DDR5 RAM...">\n' +
+'  12th-generation Intel Core i7 processor, 16GB DDR5 RAM...\n' +
 '</td>';
 
 makeSection('tabs-s11', preview_s11,
@@ -1077,8 +1077,8 @@ makeSection('tabs-s11', preview_s11,
 '  const td = document.createElement("td");\n' +
 '  td.className = "mts-table__td mts-table__td--truncate";\n' +
 '  td.style.maxWidth = maxWidth || "200px";\n' +
-'  td.title = text;       // tooltip nativo con el texto completo\n' +
-'  td.textContent = text; // textContent escapa HTML automáticamente\n' +
+'  td.title = text;       // native tooltip with the full text\n' +
+'  td.textContent = text; // textContent escapes HTML automatically\n' +
 '  return td;\n' +
 '}\n' +
 '\n' +
@@ -1116,23 +1116,23 @@ const preview_s12 =
   '</div>';
 
 const html_s12 =
-'<!-- .mts-table--responsive en la tabla -->\n' +
-'<!-- data-label en cada <td> (CSS lo usa como etiqueta en móvil) -->\n' +
+'<!-- .mts-table--responsive on the table -->\n' +
+'<!-- data-label on each <td> (CSS uses it as the label on mobile) -->\n' +
 '<div class="mts-table-wrap">\n' +
 '  <table class="mts-table mts-table--hover mts-table--responsive">\n' +
 '    <thead>\n' +
 '      <tr>\n' +
-'        <th class="mts-table__th">Nombre</th>\n' +
+'        <th class="mts-table__th">Name</th>\n' +
 '        <th class="mts-table__th">Email</th>\n' +
-'        <th class="mts-table__th mts-table__th--center">Estado</th>\n' +
+'        <th class="mts-table__th mts-table__th--center">Status</th>\n' +
 '      </tr>\n' +
 '    </thead>\n' +
 '    <tbody>\n' +
 '      <tr class="mts-table__row">\n' +
-'        <td class="mts-table__td" data-label="Nombre">Ana García</td>\n' +
-'        <td class="mts-table__td" data-label="Email">ana@empresa.com</td>\n' +
-'        <td class="mts-table__td mts-table__td--center" data-label="Estado">\n' +
-'          <span class="mts-badge mts-badge--success">Activo</span>\n' +
+'        <td class="mts-table__td" data-label="Name">Ana García</td>\n' +
+'        <td class="mts-table__td" data-label="Email">ana@company.com</td>\n' +
+'        <td class="mts-table__td mts-table__td--center" data-label="Status">\n' +
+'          <span class="mts-badge mts-badge--success">Active</span>\n' +
 '        </td>\n' +
 '      </tr>\n' +
 '    </tbody>\n' +
@@ -1140,10 +1140,10 @@ const html_s12 =
 '</div>';
 
 makeSection('tabs-s12', preview_s12,
-'// .mts-table--responsive + data-label en cada <td>\n' +
-'// En móvil cada celda muestra su label como pseudo-elemento :before\n' +
+'// .mts-table--responsive + data-label on each <td>\n' +
+'// On mobile each cell shows its label as a :before pseudo-element\n' +
 '\n' +
-'const cols = ["Nombre", "Email", "Rol", "Estado"];\n' +
+'const cols = ["Name", "Email", "Role", "Status"];\n' +
 '\n' +
 'users.forEach(function(u) {\n' +
 '  const row = document.createElement("tr");\n' +
@@ -1160,7 +1160,7 @@ makeSection('tabs-s12', preview_s12,
 '  const tdStatus = document.createElement("td");\n' +
 '  tdStatus.className = "mts-table__td mts-table__td--center";\n' +
 '  tdStatus.dataset.label = cols[3];\n' +
-'  tdStatus.appendChild(makeBadge(u.status)); // retorna nodo DOM\n' +
+'  tdStatus.appendChild(makeBadge(u.status)); // returns a DOM node\n' +
 '  row.appendChild(tdStatus);\n' +
 '\n' +
 '  tbody.appendChild(row);\n' +
@@ -1169,7 +1169,7 @@ html_s12
 );
 
 /* ============================================================
-   LÓGICA INTERACTIVA
+   INTERACTIVE LOGIC
    ============================================================ */
 function toggleAll(master) {
   document.querySelectorAll('.row-chk').forEach(function(chk) {
@@ -1280,27 +1280,27 @@ const preview_s13 =
   '</div>';
 
 const js_s13 =
-  "// 1. Mostrar skeleton mientras llegan los datos\n" +
-  "const sk = new MTS.Skeleton('#mi-tabla-host', {\n" +
+  "// 1. Show skeleton while the data arrives\n" +
+  "const sk = new MTS.Skeleton('#my-table-host', {\n" +
   "  variant:   'table',\n" +
   "  rows:      5,\n" +
   "  cols:      5,\n" +
   "  animation: 'wave',\n" +
   "});\n\n" +
-  "// 2. Simular fetch (reemplazar con fetch/axios real)\n" +
+  "// 2. Simulate fetch (replace with a real fetch/axios call)\n" +
   "setTimeout(function() {\n" +
-  "  sk.destroy(); // limpia el contenedor\n" +
-  "  const host = document.getElementById('mi-tabla-host');\n" +
-  "  host.appendChild(buildTable()); // buildTable() retorna un nodo DOM\n" +
+  "  sk.destroy(); // clears the container\n" +
+  "  const host = document.getElementById('my-table-host');\n" +
+  "  host.appendChild(buildTable()); // buildTable() returns a DOM node\n" +
   "}, 2000);";
 
 const html_s13 =
-'<!-- Contenedor vacío: MTS.Skeleton lo llena mientras cargan los datos -->\n' +
-'<div id="mi-tabla-host"></div>\n' +
+'<!-- Empty container: MTS.Skeleton fills it while the data loads -->\n' +
+'<div id="my-table-host"></div>\n' +
 '\n' +
-'<!-- MTS.Skeleton genera el placeholder de tabla -->\n' +
-'<!-- sk.destroy() limpia el contenedor -->\n' +
-'<!-- Luego se hace appendChild con la tabla real -->';
+'<!-- MTS.Skeleton generates the table placeholder -->\n' +
+'<!-- sk.destroy() clears the container -->\n' +
+'<!-- Then appendChild is called with the real table -->';
 
 makeSection('tabs-s13', preview_s13, js_s13, html_s13);
 
@@ -1320,7 +1320,7 @@ function reloadSkeleton() {
   }, 2000);
 }
 
-/* Arrancar con skeleton al cargar */
+/* Start with the skeleton on load */
 setTimeout(function() {
   reloadSkeleton();
 }, 100);

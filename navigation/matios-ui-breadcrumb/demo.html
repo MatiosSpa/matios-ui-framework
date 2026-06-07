@@ -96,7 +96,7 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -145,8 +145,8 @@ var preview_s2 =
 var js_s2 =
   "var ITEMS = [\n" +
   "  { label: 'Home', href: '/' },\n" +
-  "  { label: 'Categoría', href: '/cat' },\n" +
-  "  { label: 'Página actual' }\n" +
+  "  { label: 'Category', href: '/cat' },\n" +
+  "  { label: 'Current page' }\n" +
   "];\n\n" +
   "new MTS.Breadcrumb('#bc-sep1', { separator: '→', items: ITEMS });\n" +
   "new MTS.Breadcrumb('#bc-sep2', { separator: '·', items: ITEMS });\n" +

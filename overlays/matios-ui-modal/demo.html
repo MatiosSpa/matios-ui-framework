@@ -114,7 +114,7 @@ function setText(id, value) {
   if (el) el.textContent = value;
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -142,12 +142,12 @@ var js_s1 = `// Sizes: 'sm' | 'md' | 'lg' | 'xl' | 'fullscreen'
 function openModal(size) {
   new MTS.Modal({
     title: 'Modal — size: ' + size,
-    body: '<p style="color:var(--mts-text-muted);font-size:13px">Contenido del modal con tamaño <strong>' + size + '</strong>.</p>',
+    body: '<p style="color:var(--mts-text-muted);font-size:13px">Modal content with size <strong>' + size + '</strong>.</p>',
     size: size,
     buttons: [
-      { label: 'Cancelar', variant: 'ghost', close: true },
+      { label: 'Cancel', variant: 'ghost', close: true },
       {
-        label: 'Aceptar',
+        label: 'Accept',
         variant: 'primary',
         close: true,
         onClick: function () {
@@ -172,43 +172,43 @@ var preview_s2 = `
 </div>
 <div class="result-box" id="modal-helper-result">` + (D.helperPlaceholder || '— use the helpers —') + `</div>`;
 
-var js_s2 = `// Confirm dialog / Diálogo de confirmación
+var js_s2 = `// Confirm dialog
 function showConfirm() {
   MTS.Modal.confirm({
-    title: 'Eliminar registro',
-    message: 'Esta acción no se puede deshacer.',
-    confirm: 'Eliminar',
-    cancel: 'Cancelar',
+    title: 'Delete record',
+    message: 'This action cannot be undone.',
+    confirm: 'Delete',
+    cancel: 'Cancel',
     danger: true,
     onConfirm: function () {
-      document.getElementById('modal-helper-result').textContent = 'onConfirm → confirmado';
+      document.getElementById('modal-helper-result').textContent = 'onConfirm → confirmed';
     },
     onCancel: function () {
-      document.getElementById('modal-helper-result').textContent = 'onCancel → cancelado';
+      document.getElementById('modal-helper-result').textContent = 'onCancel → cancelled';
     }
   });
 }
 
 function showAlert() {
   MTS.Modal.alert({
-    title: 'Listo',
-    message: 'Los cambios fueron guardados correctamente.',
+    title: 'Done',
+    message: 'Your changes were saved successfully.',
     onClose: function () {
-      document.getElementById('modal-helper-result').textContent = 'onClose → aceptado';
+      document.getElementById('modal-helper-result').textContent = 'onClose → accepted';
     }
   });
 }
 
 function showPrompt() {
   MTS.Modal.prompt({
-    title: 'Renombrar archivo',
-    placeholder: 'Nuevo nombre...',
-    value: 'documento.pdf',
+    title: 'Rename file',
+    placeholder: 'New name...',
+    value: 'document.pdf',
     onConfirm: function (value) {
       document.getElementById('modal-helper-result').textContent = 'onConfirm → "' + value + '"';
     },
     onCancel: function () {
-      document.getElementById('modal-helper-result').textContent = 'onCancel → cancelado';
+      document.getElementById('modal-helper-result').textContent = 'onCancel → cancelled';
     }
   });
 }`;
@@ -221,26 +221,26 @@ var preview_s3 = `
 
 var js_s3 = `function showStatic() {
   new MTS.Modal({
-    title: 'Acción requerida',
-    body: '<p style="color:var(--mts-text-muted);font-size:13px">Este modal no cierra con Esc ni haciendo click fuera.</p>',
+    title: 'Action required',
+    body: '<p style="color:var(--mts-text-muted);font-size:13px">This modal does not close with Esc or by clicking outside.</p>',
     static: true,
     buttons: [
-      { label: 'Entendido', variant: 'primary', close: true }
+      { label: 'Got it', variant: 'primary', close: true }
     ]
   }).show();
 }
 
 function showScrollable() {
   new MTS.Modal({
-    title: 'Términos y condiciones',
+    title: 'Terms and conditions',
     size: 'lg',
     scrollable: true,
     body: '<p style="color:var(--mts-text-muted);font-size:13px">' +
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '.repeat(20) +
       '</p>',
     buttons: [
-      { label: 'Rechazar', variant: 'ghost', close: true },
-      { label: 'Aceptar', variant: 'primary', close: true }
+      { label: 'Reject', variant: 'ghost', close: true },
+      { label: 'Accept', variant: 'primary', close: true }
     ]
   }).show();
 }`;
@@ -283,11 +283,11 @@ var preview_s4 =
   '</div>';
 
 var js_s4 =
-  "// Sin radius (default)\n" +
-  "new MTS.Modal({ title: 'Sin radius', radius: 'none', ... });\n\n" +
-  "// Redondeado pequeño\n" +
+  "// No radius (default)\n" +
+  "new MTS.Modal({ title: 'No radius', radius: 'none', ... });\n\n" +
+  "// Small rounding\n" +
   "new MTS.Modal({ title: 'Radius sm', radius: 'sm', ... });\n\n" +
-  "// Redondeado grande\n" +
+  "// Large rounding\n" +
   "new MTS.Modal({ title: 'Radius xl', radius: 'xl', ... });";
 
 makeSection('tabs-s4', preview_s4, js_s4, function () {

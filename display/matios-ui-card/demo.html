@@ -73,7 +73,7 @@
 </div>
 
 <script>
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -165,7 +165,7 @@ var preview_s1 = `
   </div>
 </div>`;
 
-var js_s1 = `// CSS only example / Ejemplo solo CSS
+var js_s1 = `// CSS only example
 // No JavaScript is required for this block.
 
 // Useful classes:
@@ -216,7 +216,7 @@ new MTS.Card('#card-click', {
   clickable: true,
   hoverable: true,
   onClick: function () {
-    document.getElementById('card-result').textContent = 'onClick → card clickeada ✓';
+    document.getElementById('card-result').textContent = 'onClick → card clicked ✓';
   }
 });`;
 
@@ -235,17 +235,17 @@ var js_s4 = `new MTS.Card('#card-img', {
   body: '<p style="font-size:13px;color:var(--mts-text-muted)">Premium hiking boots for rough terrain.</p>',
   actions: [
     {
-      label: 'Editar',
+      label: 'Edit',
       variant: 'ghost',
       onClick: function () {
-        document.getElementById('card-action-result').textContent = 'action → Editar';
+        document.getElementById('card-action-result').textContent = 'action → Edit';
       }
     },
     {
-      label: 'Borrar',
+      label: 'Delete',
       variant: 'danger',
       onClick: function () {
-        document.getElementById('card-action-result').textContent = 'action → Borrar';
+        document.getElementById('card-action-result').textContent = 'action → Delete';
       }
     }
   ]
@@ -253,20 +253,20 @@ var js_s4 = `new MTS.Card('#card-img', {
 
 new MTS.Card('#card-actions', {
   title: 'Checkout',
-  body: '<p style="font-size:13px;color:var(--mts-text-muted)">Completa tu compra.</p>',
+  body: '<p style="font-size:13px;color:var(--mts-text-muted)">Complete your purchase.</p>',
   footer: [
     {
-      label: 'Cancelar',
+      label: 'Cancel',
       variant: 'ghost',
       onClick: function () {
-        document.getElementById('card-action-result').textContent = 'footer → Cancelar';
+        document.getElementById('card-action-result').textContent = 'footer → Cancel';
       }
     },
     {
-      label: 'Comprar',
+      label: 'Buy',
       variant: 'primary',
       onClick: function () {
-        document.getElementById('card-action-result').textContent = 'footer → Comprar';
+        document.getElementById('card-action-result').textContent = 'footer → Buy';
       }
     }
   ],
@@ -362,17 +362,17 @@ var preview_s5 = `<div class="cards-grid">
 </div>`;
 
 var js_s5 =
-`new MTS.Card('#card-br1', { title: 'Default', body: 'radius-lg + border base (igual que hoy)' });
+`new MTS.Card('#card-br1', { title: 'Default', body: 'radius-lg + base border (same as today)' });
 
 new MTS.Card('#card-br2', { title: 'Sharp', body: 'radius:none + border:1', radius: 'none', border: '1' });
 
-new MTS.Card('#card-br3', { title: 'Sharp sin borde', body: 'radius:none + border:none', radius: 'none', border: 'none' });
+new MTS.Card('#card-br3', { title: 'Sharp no border', body: 'radius:none + border:none', radius: 'none', border: 'none' });
 
-new MTS.Card('#card-br4', { title: 'Chico + grueso', body: 'radius:sm + border:2', radius: 'sm', border: '2' });
+new MTS.Card('#card-br4', { title: 'Small + thick', body: 'radius:sm + border:2', radius: 'sm', border: '2' });
 
 new MTS.Card('#card-br5', { title: 'Pill', body: 'radius:full', radius: 'full' });
 
-new MTS.Card('#card-br6', { title: 'Elevated + sharp', body: 'variant elevated + radius:none (el modifier gana)', variant: 'elevated', radius: 'none' });`;
+new MTS.Card('#card-br6', { title: 'Elevated + sharp', body: 'variant elevated + radius:none (modifier wins)', variant: 'elevated', radius: 'none' });`;
 
 makeSection('tabs-s5', preview_s5, js_s5, function () {
   new MTS.Card('#card-br1', { title: D.brDefaultTitle || 'Default', body: D.brDefaultBody || 'radius-lg + base border (same as today)' });

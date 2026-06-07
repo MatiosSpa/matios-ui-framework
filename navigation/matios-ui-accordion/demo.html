@@ -100,7 +100,7 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -127,10 +127,10 @@ var preview_s1 =
 var js_s1 =
   "new MTS.Accordion('#my-accordion', {\n" +
   "  items: [\n" +
-  "    { id: 'q1', title: '¿Qué es Matios UI?',  content: '<div style=\"padding:12px 16px\"><p>Una librería sin dependencias.</p></div>', open: true },\n" +
-  "    { id: 'q2', title: '¿Cómo se instala?',   content: '<div style=\"padding:12px 16px\"><p>Agrega los archivos CSS y JS.</p></div>' },\n" +
-  "    { id: 'q3', title: '¿Es gratuito?',       content: '<div style=\"padding:12px 16px\"><p>Sí, licencia MIT.</p></div>' },\n" +
-  "    { id: 'q4', title: 'Funciones premium',   content: '<div style=\"padding:12px 16px\"><p>Próximamente.</p></div>', disabled: true }\n" +
+  "    { id: 'q1', title: 'What is Matios UI?',  content: '<div style=\"padding:12px 16px\"><p>A dependency-free library.</p></div>', open: true },\n" +
+  "    { id: 'q2', title: 'How do I install it?', content: '<div style=\"padding:12px 16px\"><p>Add the CSS and JS files.</p></div>' },\n" +
+  "    { id: 'q3', title: 'Is it free?',          content: '<div style=\"padding:12px 16px\"><p>Yes, MIT license.</p></div>' },\n" +
+  "    { id: 'q4', title: 'Premium features',     content: '<div style=\"padding:12px 16px\"><p>Coming soon.</p></div>', disabled: true }\n" +
   "  ],\n" +
   "  onOpen:  function(e){ console.log('opened:', e.detail.id); },\n" +
   "  onClose: function(e){ console.log('closed:', e.detail.id); }\n" +
@@ -158,9 +158,9 @@ var preview_s3 =
 var js_s3 =
   "new MTS.Accordion('#acc-icons', {\n" +
   "  items: [\n" +
-  "    { id: 'settings', icon: ICON_COG,  title: 'Settings',      content: '<div style=\"padding:12px 16px\">Configuración.</div>', open: true },\n" +
-  "    { id: 'profile',  icon: ICON_USER, title: 'Profile',       content: '<div style=\"padding:12px 16px\">Perfil del usuario.</div>' },\n" +
-  "    { id: 'notif',    icon: ICON_BELL, title: 'Notifications',  content: '<div style=\"padding:12px 16px\">Preferencias de notificaciones.</div>' }\n" +
+  "    { id: 'settings', icon: ICON_COG,  title: 'Settings',      content: '<div style=\"padding:12px 16px\">Application settings.</div>', open: true },\n" +
+  "    { id: 'profile',  icon: ICON_USER, title: 'Profile',       content: '<div style=\"padding:12px 16px\">User profile.</div>' },\n" +
+  "    { id: 'notif',    icon: ICON_BELL, title: 'Notifications',  content: '<div style=\"padding:12px 16px\">Notification preferences.</div>' }\n" +
   "  ]\n" +
   "});";
 
@@ -187,11 +187,11 @@ var js_s4 =
   "  onOpen:  function(e){ console.log('opened:', e.detail.id); },\n" +
   "  onClose: function(e){ console.log('closed:', e.detail.id); }\n" +
   "});\n\n" +
-  "accApi.open('p1')    // abrir panel\n" +
-  "accApi.close('p1')   // cerrar panel\n" +
-  "accApi.toggle('p2')  // alternar panel\n" +
-  "accApi.openAll()     // abrir todos\n" +
-  "accApi.closeAll()    // cerrar todos\n" +
+  "accApi.open('p1')    // open panel\n" +
+  "accApi.close('p1')   // close panel\n" +
+  "accApi.toggle('p2')  // toggle panel\n" +
+  "accApi.openAll()     // open all\n" +
+  "accApi.closeAll()    // close all\n" +
   "accApi.isOpen('p1')  // → true | false";
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {

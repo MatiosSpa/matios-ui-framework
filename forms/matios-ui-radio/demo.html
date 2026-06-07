@@ -116,7 +116,7 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public face); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -142,14 +142,14 @@ var preview_s1 =
 
 var js_s1 =
   "new MTS.Radio('#radio-v', {\n" +
-  "  name: 'prioridad',\n" +
+  "  name: 'priority',\n" +
   "  value: 'medium',\n" +
   "  options: [\n" +
-  "    { value: 'high', label: 'Alta' },\n" +
-  "    { value: 'medium', label: 'Media' },\n" +
-  "    { value: 'low', label: 'Baja' }\n" +
+  "    { value: 'high', label: 'High' },\n" +
+  "    { value: 'medium', label: 'Medium' },\n" +
+  "    { value: 'low', label: 'Low' }\n" +
   "  ],\n" +
-  "  onChange: function(e) { setResult('radio-v-result', 'valor: ' + e.detail.value); }\n" +
+  "  onChange: function(e) { setResult('radio-v-result', 'value: ' + e.detail.value); }\n" +
   "});";
 
 var preview_s2 =
@@ -161,14 +161,14 @@ var preview_s2 =
 var js_s2 =
   "new MTS.Radio('#radio-h', {\n" +
   "  horizontal: true,\n" +
-  "  name: 'vista',\n" +
-  "  value: 'tabla',\n" +
+  "  name: 'view',\n" +
+  "  value: 'table',\n" +
   "  options: [\n" +
-  "    { value: 'tabla', label: 'Tabla' },\n" +
-  "    { value: 'tarjetas', label: 'Tarjetas' },\n" +
-  "    { value: 'lista', label: 'Lista' }\n" +
+  "    { value: 'table', label: 'Table' },\n" +
+  "    { value: 'cards', label: 'Cards' },\n" +
+  "    { value: 'list', label: 'List' }\n" +
   "  ],\n" +
-  "  onChange: function(e) { setResult('radio-h-result', 'valor: ' + e.detail.value); }\n" +
+  "  onChange: function(e) { setResult('radio-h-result', 'value: ' + e.detail.value); }\n" +
   "});";
 
 var preview_s3 = '<div id="radio-dis-opt"></div>';
@@ -181,7 +181,7 @@ var js_s3 =
   "  options: [\n" +
   "    { value: 'free', label: 'Free' },\n" +
   "    { value: 'pro', label: 'Pro' },\n" +
-  "    { value: 'enterprise', label: 'Enterprise (próximamente)', disabled: true }\n" +
+  "    { value: 'enterprise', label: 'Enterprise (coming soon)', disabled: true }\n" +
   "  ]\n" +
   "});";
 
@@ -190,18 +190,18 @@ var preview_s4 = '<div id="radio-dis-all"></div>';
 var js_s4 =
   "new MTS.Radio('#radio-dis-all', {\n" +
   "  disabled: true,\n" +
-  "  name: 'estado',\n" +
-  "  value: 'activo',\n" +
+  "  name: 'status',\n" +
+  "  value: 'active',\n" +
   "  options: [\n" +
-  "    { value: 'activo', label: 'Activo' },\n" +
-  "    { value: 'inactivo', label: 'Inactivo' },\n" +
-  "    { value: 'pendiente', label: 'Pendiente' }\n" +
+  "    { value: 'active', label: 'Active' },\n" +
+  "    { value: 'inactive', label: 'Inactive' },\n" +
+  "    { value: 'pending', label: 'Pending' }\n" +
   "  ]\n" +
   "});";
 
 makeSection('tabs-s1', preview_s1, js_s1, function() {
   new MTS.Radio('#radio-v', {
-    name: 'prioridad',
+    name: 'priority',
     value: 'medium',
     options: [
       { value: 'high', label: D.optHigh || 'High' },
@@ -214,12 +214,12 @@ makeSection('tabs-s1', preview_s1, js_s1, function() {
 makeSection('tabs-s2', preview_s2, js_s2, function() {
   new MTS.Radio('#radio-h', {
     horizontal: true,
-    name: 'vista',
-    value: 'tabla',
+    name: 'view',
+    value: 'table',
     options: [
-      { value: 'tabla', label: D.optTable || 'Table' },
-      { value: 'tarjetas', label: D.optCards || 'Cards' },
-      { value: 'lista', label: D.optList || 'List' }
+      { value: 'table', label: D.optTable || 'Table' },
+      { value: 'cards', label: D.optCards || 'Cards' },
+      { value: 'list', label: D.optList || 'List' }
     ],
     onChange: function(e) { setResult('radio-h-result', valuePrefix + e.detail.value); }
   });
@@ -239,12 +239,12 @@ makeSection('tabs-s3', preview_s3, js_s3, function() {
 makeSection('tabs-s4', preview_s4, js_s4, function() {
   new MTS.Radio('#radio-dis-all', {
     disabled: true,
-    name: 'estado',
-    value: 'activo',
+    name: 'status',
+    value: 'active',
     options: [
-      { value: 'activo', label: D.optActive || 'Active' },
-      { value: 'inactivo', label: D.optInactive || 'Inactive' },
-      { value: 'pendiente', label: D.optPending || 'Pending' }
+      { value: 'active', label: D.optActive || 'Active' },
+      { value: 'inactive', label: D.optInactive || 'Inactive' },
+      { value: 'pending', label: D.optPending || 'Pending' }
     ]
   });
 });

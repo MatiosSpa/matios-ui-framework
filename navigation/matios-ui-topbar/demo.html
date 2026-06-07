@@ -71,25 +71,25 @@
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
-  <!-- ── 1 · BÁSICO ── -->
+  <!-- ── 1 · BASIC ── -->
   <div class="demo-section">
     <div class="demo-section-title" id="s1-title"></div>
     <div id="s1"></div>
   </div>
 
-  <!-- ── 2 · SLOTS START + END ── -->
+  <!-- ── 2 · START + END SLOTS ── -->
   <div class="demo-section">
     <div class="demo-section-title" id="s2-title"></div>
     <div id="s2"></div>
   </div>
 
-  <!-- ── 3 · DIVIDER Y ACCIONES AGRUPADAS ── -->
+  <!-- ── 3 · DIVIDER AND GROUPED ACTIONS ── -->
   <div class="demo-section">
     <div class="demo-section-title" id="s3-title"></div>
     <div id="s3"></div>
   </div>
 
-  <!-- ── 4 · LAYOUT COMPLETO ── -->
+  <!-- ── 4 · FULL LAYOUT ── -->
   <div class="demo-section">
     <div class="demo-section-title" id="s4-title"></div>
     <div id="s4"></div>
@@ -107,7 +107,7 @@ window.addEventListener('message', function(e) {
   }
 });
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public face); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -142,15 +142,15 @@ function mk(id, html, js, h) {
 var LOGO_HTML = '<div style="width:28px;height:28px;background:linear-gradient(135deg,var(--mts-color-primary),var(--mts-color-accent));border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex-shrink:0">M</div>';
 
 /* ════════════════════════════════════
-   1 · BÁSICO
+   1 · BASIC
    ════════════════════════════════════ */
 mk('s1',
 '<div id="tb1" style="border-radius:var(--mts-radius-lg);overflow:hidden"></div>',
 "new MTS.Topbar('#tb1', {\n" +
 "  brand: {\n" +
-"    logo: '<!-- div con gradiente -->',\n" +
-"    title: 'Mi<span style=\"color:var(--mts-color-primary)\">App</span>',\n" +
-"    onClick: function() { alert('Brand clickeado'); }\n" +
+"    logo: '<!-- div with gradient -->',\n" +
+"    title: 'My<span style=\"color:var(--mts-color-primary)\">App</span>',\n" +
+"    onClick: function() { alert('Brand clicked'); }\n" +
 "  }\n" +
 "});",
 '160px');
@@ -158,13 +158,13 @@ mk('s1',
 new MTS.Topbar('#tb1', {
   brand: {
     logo: LOGO_HTML,
-    title: 'Mi<span style="color:var(--mts-color-primary)">App</span>',
+    title: 'My<span style="color:var(--mts-color-primary)">App</span>',
     onClick: function() { alert(D.brandAlert || 'Brand clicked'); }
   }
 });
 
 /* ════════════════════════════════════
-   2 · SLOTS START + END
+   2 · START + END SLOTS
    ════════════════════════════════════ */
 mk('s2',
 '<div id="tb2" style="border-radius:var(--mts-radius-lg);overflow:hidden"></div>',
@@ -174,8 +174,8 @@ mk('s2',
 "    title: 'Dashboard',\n" +
 "    subtitle: 'v1.0.0'\n" +
 "  },\n" +
-"  end: '<button class=\"mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon\" title=\"Notificaciones\">...</button>' +\n" +
-"       '<button class=\"mts-btn mts-btn--secondary mts-btn--sm\">Mi cuenta</button>'\n" +
+"  end: '<button class=\"mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon\" title=\"Notifications\">...</button>' +\n" +
+"       '<button class=\"mts-btn mts-btn--secondary mts-btn--sm\">My account</button>'\n" +
 "});",
 '160px');
 
@@ -190,18 +190,18 @@ new MTS.Topbar('#tb2', {
 });
 
 /* ════════════════════════════════════
-   3 · DIVIDER Y ACCIONES AGRUPADAS
+   3 · DIVIDER AND GROUPED ACTIONS
    ════════════════════════════════════ */
 mk('s3',
 '<div id="tb3" style="border-radius:var(--mts-radius-lg);overflow:hidden"></div>',
 "new MTS.Topbar('#tb3', {\n" +
 "  brand: { logo: '...', title: 'CRM' },\n" +
-"  start: '<span style=\"font-size:11px;color:var(--mts-text-muted)\">Clientes / Lista</span>',\n" +
+"  start: '<span style=\"font-size:11px;color:var(--mts-text-muted)\">Customers / List</span>',\n" +
 "  end:\n" +
 "    '<button class=\"mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon\">...</button>' +\n" +
 "    '<button class=\"mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon\">...</button>' +\n" +
 "    '<span class=\"mts-topbar__divider\"></span>' +\n" +
-"    '<button class=\"mts-btn mts-btn--primary mts-btn--sm\">+ Nuevo</button>'\n" +
+"    '<button class=\"mts-btn mts-btn--primary mts-btn--sm\">+ New</button>'\n" +
 "});",
 '160px');
 
@@ -216,7 +216,7 @@ new MTS.Topbar('#tb3', {
 });
 
 /* ════════════════════════════════════
-   4 · LAYOUT COMPLETO
+   4 · FULL LAYOUT
    ════════════════════════════════════ */
 mk('s4',
 '<div style="height:260px;display:flex;flex-direction:column;border-radius:var(--mts-radius-lg);overflow:hidden;border:1px solid var(--mts-border-color)">\n' +
@@ -230,11 +230,11 @@ mk('s4',
 '</div>',
 "var sn4Menu = new MTS.Menu({\n" +
 "  items: [\n" +
-"    { key: 'home',      label: 'Inicio',    icon: 'mts-icon-home' },\n" +
+"    { key: 'home',      label: 'Home',      icon: 'mts-icon-home' },\n" +
 "    { key: 'analytics', label: 'Analytics', icon: 'mts-icon-bar-chart-2' },\n" +
-"    { key: 'users',     label: 'Usuarios',  icon: 'mts-icon-users', badge: '3' },\n" +
+"    { key: 'users',     label: 'Users',     icon: 'mts-icon-users', badge: '3' },\n" +
 "    { divider: true },\n" +
-"    { key: 'settings',  label: 'Config',    icon: 'mts-icon-settings' }\n" +
+"    { key: 'settings',  label: 'Settings',  icon: 'mts-icon-settings' }\n" +
 "  ],\n" +
 "  active: 'home',\n" +
 "  onClick: function(item) { console.log('nav:', item.key); }\n" +

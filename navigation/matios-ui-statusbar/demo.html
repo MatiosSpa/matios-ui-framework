@@ -56,7 +56,7 @@
   <script src="./matios-ui-statusbar-i18n.js"></script>
   <script src="./matios-ui-statusbar.js"></script>
   <style>
-    /* Marco simulado para mostrar la statusbar en contexto */
+    /* Simulated frame to show the statusbar in context */
     .demo-frame {
       border: 1px solid var(--mts-border-color);
       border-radius: var(--mts-radius-lg);
@@ -93,7 +93,7 @@
 </div>
 
 <script>
-/* ── Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar ── */
+/* ── Locale: shows English by default (public face); ?lang=es|en|pt to switch ── */
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -109,7 +109,7 @@ document.getElementById('s4-title').textContent = D.s4Title || '4 — Center slo
 document.getElementById('s5-title').textContent = D.s5Title || '5 — Helper elements';
 document.getElementById('s6-title').textContent = D.s6Title || '6 — Dynamic API';
 
-/* ── Helpers de contenido ─────────────────────────── */
+/* ── Content helpers ──────────────────────────────── */
 function buildStatus(label, dot) {
   return '<span class="mts-statusbar__item">' +
     '<span class="mts-statusbar__dot mts-statusbar__dot--' + dot + '"></span>' +
@@ -176,7 +176,7 @@ var js_s1 =
 '  start:\n' +
 '    \'<span class="mts-statusbar__item">\' +\n' +
 '      \'<span class="mts-statusbar__dot mts-statusbar__dot--success"></span>\' +\n' +
-'      \'Conectado\' +\n' +
+'      \'Connected\' +\n' +
 '    \'</span>\' +\n' +
 '    \'<span class="mts-statusbar__sep"></span>\' +\n' +
 '    \'<span class="mts-statusbar__item">\' +\n' +
@@ -285,7 +285,7 @@ var js_s4 =
 '  center:\n' +
 '    \'<span class="mts-statusbar__item">\' +\n' +
 '      \'<i class="mts-icon mts-icon-clock"></i>\' +\n' +
-'      \'Última sincronización: hace 2 min\' +\n' +
+'      \'Last sync: 2 min ago\' +\n' +
 '    \'</span>\',\n' +
 '  end: \'...\'\n' +
 '});';
@@ -310,7 +310,7 @@ makeSection('tabs-s4', preview_s4, js_s4, function() {
   });
 });
 
-/* ── S5 — Elementos helper ────────────────────────── */
+/* ── S5 — Helper elements ─────────────────────────── */
 var preview_s5 =
   '<div class="demo-frame">' +
     '<div class="demo-frame__body">' + appContent + '</div>' +
@@ -318,7 +318,7 @@ var preview_s5 =
   '</div>';
 
 var js_s5 =
-'<!-- Dots de estado -->\n' +
+'<!-- Status dots -->\n' +
 '<span class="mts-statusbar__dot mts-statusbar__dot--success"></span>\n' +
 '<span class="mts-statusbar__dot mts-statusbar__dot--warning"></span>\n' +
 '<span class="mts-statusbar__dot mts-statusbar__dot--danger"></span>\n' +
@@ -330,12 +330,12 @@ var js_s5 =
 '<span class="mts-statusbar__tag mts-statusbar__tag--warning">warning</span>\n' +
 '<span class="mts-statusbar__tag mts-statusbar__tag--danger">danger</span>\n' +
 '\n' +
-'<!-- Separador vertical -->\n' +
+'<!-- Vertical separator -->\n' +
 '<span class="mts-statusbar__sep"></span>\n' +
 '\n' +
-'<!-- Item clickeable -->\n' +
+'<!-- Clickable item -->\n' +
 '<button class="mts-statusbar__item mts-statusbar__item--clickable">\n' +
-'  <i class="mts-icon mts-icon-settings"></i> Ajustes\n' +
+'  <i class="mts-icon mts-icon-settings"></i> Settings\n' +
 '</button>';
 
 makeSection('tabs-s5', preview_s5, js_s5, function() {
@@ -361,7 +361,7 @@ makeSection('tabs-s5', preview_s5, js_s5, function() {
   });
 });
 
-/* ── S6 — API dinámica ────────────────────────────── */
+/* ── S6 — Dynamic API ─────────────────────────────── */
 var preview_s6 =
   '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">' +
     '<button id="btn-s6-conectado" class="mts-btn mts-btn--secondary mts-btn--sm">' + (D.btnConnected || 'State: Connected') + '</button>' +
@@ -377,18 +377,18 @@ var preview_s6 =
   '</div>';
 
 var js_s6 =
-'// Actualizar slots individualmente\n' +
+'// Update slots individually\n' +
 'sb.setStart(\'<span class="mts-statusbar__item">...</span>\');\n' +
 'sb.setCenter(\'<span class="mts-statusbar__item">...</span>\');\n' +
 'sb.setEnd(\'<span class="mts-statusbar__item">...</span>\');\n' +
 '\n' +
-'// Cambiar variante en caliente\n' +
+'// Change variant on the fly\n' +
 'sb.setVariant(\'primary\');   // \'default\' | \'primary\' | \'inverse\'\n' +
 '\n' +
-'// Referencia directa al elemento del slot\n' +
+'// Direct reference to the slot element\n' +
 'var el = sb.getSlot(\'start\');  // returns .mts-statusbar__start\n' +
 '\n' +
-'// Destruir\n' +
+'// Destroy\n' +
 'sb.destroy();';
 
 makeSection('tabs-s6', preview_s6, js_s6, function() {

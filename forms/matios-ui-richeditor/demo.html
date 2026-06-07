@@ -80,8 +80,8 @@ function indentHtml(html) {
   return result.trimEnd();
 }
 
-/* makeSection — con lazy:false los panels ya están en el DOM al salir del
-   constructor de Tabs, así que CodeBlock y el initFn se crean sincrónicamente. */
+/* makeSection — with lazy:false the panels are already in the DOM when the
+   Tabs constructor returns, so CodeBlock and initFn are created synchronously. */
 function makeSection(id, previewHtml, codeHtml, jsCode, initFn, height) {
   new MTS.Tabs('#' + id, {
     variant: 'card',
@@ -99,7 +99,7 @@ function makeSection(id, previewHtml, codeHtml, jsCode, initFn, height) {
   if (typeof initFn === 'function') initFn();
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -111,7 +111,7 @@ document.getElementById('demo-subtitle').textContent = D.subtitle || 'Template e
 document.getElementById('s1-title').textContent      = D.s1Title || 'Full editor — all options';
 
 /* ════════════════════════════════════════════════════════════
-   CATÁLOGO — 10 campos en 5 grupos (demo multilenguaje: inglés)
+   CATALOG — 10 fields in 5 groups (multilingual demo: English)
 ════════════════════════════════════════════════════════════ */
 var CATALOG = [
   { token: '{{user.firstName}}',  label: 'First name',   group: 'User'    },
@@ -127,21 +127,21 @@ var CATALOG = [
 ];
 
 /* ════════════════════════════════════════════════════════════
-   DEMO ÚNICO — Editor completo con todas las opciones
+   SINGLE DEMO — Full editor with all options
 ════════════════════════════════════════════════════════════ */
 var DEMO_HTML =
   '<textarea id="mfe-main"></textarea>';
 
 var DEMO_JS =
   "var BTN = MTS.RichEditor.ToolbarButton;\n\n" +
-  "// Cada entrada del toolbar puede ser:\n" +
-  "//   BTN.XXX  — constante directa (label/tooltip del componente por defecto)\n" +
+  "// Each toolbar entry can be:\n" +
+  "//   BTN.XXX  — direct constant (component default label/tooltip)\n" +
   "//   { button, label, tooltip, options, show }\n" +
-  "//     button  — constante BTN requerida\n" +
-  "//     label   — texto visible en el botón (sobreescribe el default)\n" +
-  "//     tooltip — title del hover (default: igual que label)\n" +
-  "//     options — opciones del select (FONT_SIZE, FONT_FAMILY, FORMAT_BLOCK)\n" +
-  "//     show    — false para ocultar sin borrar la entrada del array\n\n" +
+  "//     button  — required BTN constant\n" +
+  "//     label   — text shown on the button (overrides the default)\n" +
+  "//     tooltip — hover title (default: same as label)\n" +
+  "//     options — select options (FONT_SIZE, FONT_FAMILY, FORMAT_BLOCK)\n" +
+  "//     show    — false to hide without removing the array entry\n\n" +
   "var catalog = [\n" +
   "  { token: '{{user.firstName}}',  label: 'First name',   group: 'User'    },\n" +
   "  { token: '{{user.email}}',      label: 'Email',        group: 'User'    },\n" +
@@ -156,7 +156,7 @@ var DEMO_JS =
   "  height:            '280px',\n" +
   "  maxLength:         2000,\n\n" +
   "  toolbar: [\n" +
-  "    // ── constantes directas ────────────────────────────────────────\n" +
+  "    // ── direct constants ───────────────────────────────────────────\n" +
   "    BTN.BOLD, BTN.ITALIC, BTN.UNDERLINE, BTN.STRIKE, BTN.FORMAT_BLOCK,\n" +
   "    BTN.SEP,\n\n" +
   "    // ── label + tooltip + options ──────────────────────────────────\n" +
@@ -176,29 +176,29 @@ var DEMO_JS =
   "    BTN.SEP,\n" +
   "    BTN.LINK, BTN.UNLINK, BTN.TEXT_COLOR, BTN.BG_COLOR,\n" +
   "    BTN.SEP,\n\n" +
-  "    // ── show:false — excluir sin borrar la entrada ─────────────────\n" +
+  "    // ── show:false — exclude without removing the entry ────────────\n" +
   "    BTN.TABLE, BTN.HTML_SOURCE, BTN.UNDO, BTN.CLEAN_FORMAT,\n" +
   "    { button: BTN.REDO, show: false },\n" +
   "    BTN.SEP,\n\n" +
-  "    // ── label explícito en botones tipo toggle ─────────────────────\n" +
+  "    // ── explicit label on toggle-type buttons ──────────────────────\n" +
   "    { button: BTN.FIELDS, label: 'Fields', tooltip: 'Toggle merge field palette' },\n" +
   "  ],\n\n" +
   "  onChange: function(e) { console.log(e.detail.value); },\n" +
   "});\n\n" +
   "// ── API ──────────────────────────────────────────────────────────────\n" +
   "editor.getValue();                                  // → Handlebars HTML string\n" +
-  "editor.setValue('<p>Hello {{user.firstName}}</p>'); // carga + tokeniza chips\n" +
-  "editor.insertField('{{user.email}}');               // inserta chip en el cursor\n" +
-  "editor.setCatalog(newCatalog);                      // reemplaza catálogo (async)\n" +
+  "editor.setValue('<p>Hello {{user.firstName}}</p>'); // load + tokenize chips\n" +
+  "editor.insertField('{{user.email}}');               // insert chip at the cursor\n" +
+  "editor.setCatalog(newCatalog);                      // replace catalog (async)\n" +
   "editor.getCustomFields();                           // [{token, label, defaultValue}]\n" +
-  "editor.setPreview(true);                            // modo lectura (sin toolbar)\n" +
-  "editor.setPreview(false);                           // volver a editar\n" +
-  "editor.focus();                                     // enfoca el área de texto\n" +
-  "editor.destroy();                                   // restaura el <textarea> original\n\n" +
-  "// ── Guardar al backend ───────────────────────────────────────────────\n" +
+  "editor.setPreview(true);                            // read mode (no toolbar)\n" +
+  "editor.setPreview(false);                           // back to editing\n" +
+  "editor.focus();                                     // focus the text area\n" +
+  "editor.destroy();                                   // restore the original <textarea>\n\n" +
+  "// ── Save to the backend ──────────────────────────────────────────────\n" +
   "var payload = {\n" +
   "  body:         editor.getValue(),        // Handlebars string\n" +
-  "  customFields: editor.getCustomFields(), // campos definidos por el usuario\n" +
+  "  customFields: editor.getCustomFields(), // user-defined fields\n" +
   "};";
 
 makeSection('tabs-demo',

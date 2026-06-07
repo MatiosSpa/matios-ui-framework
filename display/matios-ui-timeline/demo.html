@@ -63,7 +63,7 @@
   <div class="demo-section"><div class="demo-section-title" id="s3-title">3 — addEvent() / setEvents()</div><div id="tabs-s3"></div></div>
 </div>
 <script>
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function(){
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -132,7 +132,7 @@ var js_s1 = "new MTS.Timeline('#tl-basic', { events:[{ title:'Order charged', da
 var preview_s2 = "<div class=\"demo-grid\"><div id=\"tl-left\"></div><div id=\"tl-alternate\"></div></div>";
 var js_s2 = "new MTS.Timeline('#tl-left', { align:'left', events:[{ title:'Kickoff', date:'Week 1' },{ title:'Build', date:'Week 2' },{ title:'Launch', date:'Week 3' }] });\nnew MTS.Timeline('#tl-alternate', { align:'alternate', events:[{ title:'Kickoff', date:'Week 1' },{ title:'Build', date:'Week 2' },{ title:'Launch', date:'Week 3' }] });";
 var preview_s3 = "<div class=\"demo-stack\"><div id=\"tl-api\"></div><div class=\"demo-row\"><button class=\"demo-btn-sm\" onclick=\"addRandom()\">addEvent()</button><button class=\"demo-btn-sm\" onclick=\"tlApi.setEvents([])\">setEvents([])</button></div></div>";
-var js_s3 = "var tlApi = new MTS.Timeline('#tl-api', { events:[{ title:'Evento inicial', date:'Inicio' }] });\ntlApi.addEvent({ title:'Nuevo evento', date:'Ahora' });\ntlApi.setEvents([]);";
+var js_s3 = "var tlApi = new MTS.Timeline('#tl-api', { events:[{ title:'Initial event', date:'Start' }] });\ntlApi.addEvent({ title:'New event', date:'Now' });\ntlApi.setEvents([]);";
 var tlApi;
 function addRandom() {
   var n = Math.floor(Math.random() * 1000);

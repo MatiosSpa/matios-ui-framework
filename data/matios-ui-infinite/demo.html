@@ -70,7 +70,7 @@
 </div>
 
 <script>
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -141,8 +141,8 @@ var jsS1 = [
   "    await new Promise(r => setTimeout(r, 300));",
   "    const items = Array.from({ length: pageSize }, (_, i) => ({",
   "      id: (page - 1) * pageSize + i,",
-  "      name: 'Usuario ' + ((page - 1) * pageSize + i + 1),",
-  "      email: 'user' + ((page - 1) * pageSize + i) + '@empresa.com'",
+  "      name: 'User ' + ((page - 1) * pageSize + i + 1),",
+  "      email: 'user' + ((page - 1) * pageSize + i) + '@company.com'",
   "    }));",
   "    return { items, hasMore: page < 4 };",
   "  },",
@@ -171,7 +171,7 @@ var jsS2 = [
   "    await new Promise(r => setTimeout(r, 250));",
   "    const items = Array.from({ length: pageSize }, (_, i) => ({",
   "      id: (page - 1) * pageSize + i,",
-  "      title: 'Producto ' + ((page - 1) * pageSize + i + 1),",
+  "      title: 'Product ' + ((page - 1) * pageSize + i + 1),",
   "      price: (Math.random() * 300 + 20).toFixed(2)",
   "    }));",
   "    return { items, hasMore: page < 3 };",
@@ -198,7 +198,7 @@ var jsS3 = [
   "    await new Promise(r => setTimeout(r, 200));",
   "    const items = Array.from({ length: pageSize }, (_, i) => ({",
   "      id: (page - 1) * pageSize + i,",
-  "      label: 'Registro ' + ((page - 1) * pageSize + i + 1)",
+  "      label: 'Record ' + ((page - 1) * pageSize + i + 1)",
   "    }));",
   "    return { items, hasMore: page < 2 };",
   "  },",

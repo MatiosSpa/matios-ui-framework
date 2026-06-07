@@ -69,14 +69,14 @@
 <div class="mts-flex-1 mts-min-h-0 mts-d-flex mts-flex-col mts-overflow-hidden"><div id="sprint" class="mts-flex-1 mts-min-h-0"></div></div>
 
 <script>
-/* ═══ LOCALE ═══ Todo texto del demo sale del locale del componente (MTS.SprintBoard). */
+/* ═══ LOCALE ═══ All demo text comes from the component locale (MTS.SprintBoard). */
 /* Public demo: default English; ?lang=es|en|pt to switch. */
 (function () { var m = (location.search || '').match(/[?&]lang=(es|en|pt)/); if (window.MTS && MTS.setLocale) MTS.setLocale(m ? m[1] : 'en'); })();
 var LS = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.SprintBoard']) || {};
 var UI = LS.ui || {};
 var TYPES = UI.types || {}, PRIOS = UI.priorities || {};
 
-/* ═══ DATOS ═══ */
+/* ═══ DATA ═══ */
 var TEAM = ['Ana Torres', 'Luis Pérez', 'María Soto', 'Carlos Ruiz', 'Pedro Díaz'];
 var SP_VALUES = [1, 2, 3, 5, 8, 13, 21];
 
@@ -111,7 +111,7 @@ function mockDS() {
 
 function logEv(badge, msg, detail) { if (dev) dev.log(badge, msg, detail); }
 
-/* Simula el envío al backend (console.log + Activity Log). En real: fetch(path, {method, body}). */
+/* Simulates the request to the backend (console.log + Activity Log). In real life: fetch(path, {method, body}). */
 function apiSim(method, path, payload) {
   if (window.console && console.log) {
     console.log('%c→ API ' + method + ' ' + path, 'color:#10b981;font-weight:700', payload);
@@ -120,11 +120,11 @@ function apiSim(method, path, payload) {
   return Promise.resolve({ ok: true, status: 200 });
 }
 
-/* ═══ ESTADO ═══ */
+/* ═══ STATE ═══ */
 var sprint = null, dev = null, mode = 'add', editId = null;
 var titleInput = null, typeSelect = null, prioSelect = null, pointsSelect = null, assigneeSelect = null, descInput = null;
 
-/* ═══ MODAL DE ALTA / EDICIÓN ═══ */
+/* ═══ ADD / EDIT MODAL ═══ */
 var form = document.createElement('form');
 form.id = 'sb-form';
 form.className = 'mts-form';
@@ -135,7 +135,7 @@ form.innerHTML =
   '<div id="sb-desc" name="description"></div>';
 
 function saveHandler() {
-  if (!titleInput.getValue().trim()) { titleInput.setError(UI.needTitle || 'Ingresa un título'); return; }
+  if (!titleInput.getValue().trim()) { titleInput.setError(UI.needTitle || 'Enter a title'); return; }
   titleInput.clearError();
   if (mode === 'add') { sprint.submitAddTask(); return; }
   if (mode === 'edit' && editId) {
@@ -152,14 +152,14 @@ function saveHandler() {
 }
 
 var modal = new MTS.Modal({
-  title: UI.cardTitle || 'Historia', body: form, size: 'md', scrollable: true,
+  title: UI.cardTitle || 'Story', body: form, size: 'md', scrollable: true,
   buttons: [
-    { label: UI.cancel || 'Cancelar', variant: 'ghost', close: true },
-    { label: UI.del || 'Eliminar', variant: 'danger', onClick: function () {
+    { label: UI.cancel || 'Cancel', variant: 'ghost', close: true },
+    { label: UI.del || 'Delete', variant: 'danger', onClick: function () {
         if (mode === 'edit' && editId) sprint.deleteStory(editId);
         modal.hide();
     } },
-    { label: UI.save || 'Guardar', variant: 'primary', onClick: saveHandler },
+    { label: UI.save || 'Save', variant: 'primary', onClick: saveHandler },
   ],
 });
 
@@ -167,16 +167,16 @@ function selOpts(map, order) {
   return order.map(function (k) { return { value: k, label: map[k] || k }; });
 }
 
-titleInput     = new MTS.Input('#sb-title', { label: UI.fTitle || 'Título', autocomplete: 'browser-off' });
-typeSelect     = new MTS.Select('#sb-type', { label: UI.fType || 'Tipo', value: 'userstory',
+titleInput     = new MTS.Input('#sb-title', { label: UI.fTitle || 'Title', autocomplete: 'browser-off' });
+typeSelect     = new MTS.Select('#sb-type', { label: UI.fType || 'Type', value: 'userstory',
   options: selOpts(TYPES, ['userstory', 'task', 'bug', 'epic', 'spike']) });
-prioSelect     = new MTS.Select('#sb-priority', { label: UI.fPriority || 'Prioridad', value: 'medium',
+prioSelect     = new MTS.Select('#sb-priority', { label: UI.fPriority || 'Priority', value: 'medium',
   options: selOpts(PRIOS, ['low', 'medium', 'high', 'critical']) });
-pointsSelect   = new MTS.Select('#sb-points', { label: UI.fPoints || 'Puntos (SP)', value: '',
+pointsSelect   = new MTS.Select('#sb-points', { label: UI.fPoints || 'Points (SP)', value: '',
   options: [{ value: '', label: '—' }].concat(SP_VALUES.map(function (v) { return { value: String(v), label: String(v) }; })) });
-assigneeSelect = new MTS.Select('#sb-assignee', { label: UI.fAssignee || 'Responsable', value: '',
+assigneeSelect = new MTS.Select('#sb-assignee', { label: UI.fAssignee || 'Assignee', value: '',
   options: [{ value: '', label: '—' }].concat(TEAM.map(function (n) { return { value: n, label: n }; })) });
-descInput      = new MTS.Input('#sb-desc', { label: UI.fDesc || 'Descripción', autocomplete: 'browser-off' });
+descInput      = new MTS.Input('#sb-desc', { label: UI.fDesc || 'Description', autocomplete: 'browser-off' });
 
 function openForAdd() {
   mode = 'add'; editId = null;
@@ -202,7 +202,7 @@ sprint = new MTS.SprintBoard('#sprint', {
   dataSource:   mockDS,
   showVelocity: true,
   addTask: { form: '#sb-form', open: openForAdd, close: function () { modal.hide(); } },
-  onLoad:           function (e) { logEv('view', 'Cargado', e.stories.length + ' historias · ' + e.sprints.length + ' sprints'); },
+  onLoad:           function (e) { logEv('view', 'Loaded', e.stories.length + ' stories · ' + e.sprints.length + ' sprints'); },
   onAddTask:        function (e) { e.resolve(e.data); },
   onStoryAdd:       function (e) { apiSim('POST', '/api/stories', e.story); },
   onStoryChange:    function (e) { apiSim('PATCH', '/api/stories/' + e.story.id, e.fields); },

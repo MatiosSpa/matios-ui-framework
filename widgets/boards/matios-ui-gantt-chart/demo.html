@@ -88,13 +88,13 @@
 
 <script>
 /* ═══ LOCALE ═══ */
-/* Todo texto visible del demo sale del locale del componente (MTS.GanttChart.ui). Cero strings en duro. */
+/* All visible demo text comes from the component locale (MTS.GanttChart.ui). Zero hard-coded strings. */
 /* Public demo: default English; ?lang=es|en|pt to switch. */
 (function () { var m = (location.search || '').match(/[?&]lang=(es|en|pt)/); if (window.MTS && MTS.setLocale) MTS.setLocale(m ? m[1] : 'en'); })();
 var UI = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.GanttChart'] && MTS.getLocale()['MTS.GanttChart'].ui) || {};
 
-/* ═══ DATOS ═══ */
-/* Equipo con uid — el uid viaja en cada assignee para que el BE identifique a la persona. */
+/* ═══ DATA ═══ */
+/* Team with uid — the uid travels in each assignee so the BE can identify the person. */
 var TEAM = [
   { uid: 'u1', name: 'Ana García' },
   { uid: 'u2', name: 'Luis Pérez' },
@@ -148,15 +148,15 @@ var TASKS = [
     predecessors:['4.3'], assignees:[{ name:'Ana García' }] },
 ];
 
-/* El "BE" entrega assignees con uid: lo completamos en el seed desde TEAM (por nombre). */
+/* The "BE" returns assignees with uid: we fill it in the seed from TEAM (by name). */
 TASKS.forEach(function (t) {
   (t.assignees || []).forEach(function (a) { if (!a.uid) { var u = teamUid(a.name); if (u) a.uid = u; } });
 });
 
-/* Línea base de ejemplo (como si ya viniera del BE): plan original de algunas tareas.
-   La barra real va por encima; la diferencia con la fantasma = el desvío. */
+/* Sample baseline (as if it already came from the BE): original plan of some tasks.
+   The real bar sits on top; the difference from the ghost bar = the variance. */
 var BASELINE = {
-  t4:  ['2025-01-20', '2025-01-28'],   // se planificó hasta el 28; el real se corrió al 31 (atraso)
+  t4:  ['2025-01-20', '2025-01-28'],   // planned through the 28th; the actual slipped to the 31st (delay)
   t7:  ['2025-02-10', '2025-02-18'],
   t13: ['2025-03-17', '2025-04-25'],
   t17: ['2025-06-09', '2025-06-18'],
@@ -188,9 +188,9 @@ function parseProjectCSV(text) {
 }
 function logEv(badge, msg, detail) { if (dev) dev.log(badge, msg, detail); }
 
-/* Simula el envío al backend. En real sería:
+/* Simulates the send to the backend. In real life it would be:
    fetch(path, { method, headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
-   Acá lo mostramos claro en consola + en el Activity Log para ver EXACTO qué iría al BE. */
+   Here we show it clearly in the console + in the Activity Log to see EXACTLY what would go to the BE. */
 function apiSim(method, path, payload) {
   if (window.console && console.log) {
     console.log('%c→ API ' + method + ' ' + path, 'color:#10b981;font-weight:700', payload);
@@ -199,11 +199,11 @@ function apiSim(method, path, payload) {
   return Promise.resolve({ ok: true, status: 200 });
 }
 
-/* ═══ ESTADO ═══ */
+/* ═══ STATE ═══ */
 var gantt = null, dev = null, mode = 'add', editSave = null, depsInput = null;
 var input = null, startPicker = null, endPicker = null, slider = null, colorPicker = null, respAC = null, respList = null;
 
-/* Dependencias: nombre legible (WBS — tarea) y sugerencias para el TagInput, desde el set de tareas. */
+/* Dependencies: readable name (WBS — task) and suggestions for the TagInput, from the task set. */
 function depName(wbs) {
   for (var i = 0; i < TASKS.length; i++) { if (TASKS[i].wbs === wbs) return wbs + ' — ' + TASKS[i].label; }
   return wbs;
@@ -216,7 +216,7 @@ function depTags(list) {
   return (list || []).map(function (w) { return { uid: w, name: depName(w) }; });
 }
 
-/* ═══ MODAL DE ALTA / EDICIÓN (2 columnas, FormLayout) ═══ */
+/* ═══ ADD / EDIT MODAL (2 columns, FormLayout) ═══ */
 var form = document.createElement('form');
 form.id = 'g-form';
 form.className = 'mts-form';
@@ -254,7 +254,7 @@ var modal = new MTS.Modal({
     { label: UI.save, variant: 'primary', onClick: function () {
         var valid = true;
         if (!input.getValue().trim()) { input.setError(UI.needName); valid = false; } else { input.clearError(); }
-        if (!startPicker.getValue() || !endPicker.getValue()) { valid = false; logEv('view', 'Validación', 'faltan fechas'); }
+        if (!startPicker.getValue() || !endPicker.getValue()) { valid = false; logEv('view', 'Validation', 'missing dates'); }
         if (!valid) return;
         if (mode === 'add') { gantt.submitAddTask(); return; }
         if (editSave) {
@@ -287,7 +287,7 @@ respAC      = new MTS.Autocomplete('#g-resp-ac', {
   datasource: TEAM.map(function (m) { return { value: m.uid, text: m.name }; }),
   minChars: 1,
   onSelect: function (item) {
-    // value = uid, text = nombre. El ItemList guarda ambos → al guardar mandamos { uid, name }.
+    // value = uid, text = name. The ItemList stores both → on save we send { uid, name }.
     var exists = respList.getDatasource().some(function (it) { return it.value === item.value; });
     if (!exists) respList.addItem({ value: item.value, name: item.text });
     respAC.clear();
@@ -311,14 +311,14 @@ function openForAdd() {
   modal.show();
 }
 
-/* ═══ "ABRIR" (importar) ═══ */
+/* ═══ "OPEN" (import) ═══ */
 var fileInput = document.getElementById('g-file');
 fileInput.addEventListener('change', function () {
   if (fileInput.files[0]) gantt.importFile(fileInput.files[0]);
   fileInput.value = '';
 });
 
-/* ═══ "GUARDAR COMO" (exportar) ═══ */
+/* ═══ "SAVE AS" (export) ═══ */
 var expForm = document.createElement('form');
 expForm.className = 'mts-form';
 expForm.innerHTML = '<div id="g-exp-name"></div><div id="g-exp-fmt"></div>';
@@ -342,8 +342,8 @@ var expFmt  = new MTS.Select('#g-exp-fmt', { label: UI.format, value: 'csv', opt
   { value: 'msproject', label: UI.fmtMsproject },
 ] });
 
-/* ═══ EDITOR POR CELDA (doble clic) — MTS.Popover anclado a la celda ═══ */
-/* El componente emite onCellEdit({task, field, anchorEl, updateTask}); acá decidimos el control. */
+/* ═══ PER-CELL EDITOR (double click) — MTS.Popover anchored to the cell ═══ */
+/* The component emits onCellEdit({task, field, anchorEl, updateTask}); here we decide the control. */
 var cellPop = null, cellPopOutside = null, cellPopCommit = null;
 
 function closeCellPopover() { if (cellPop) cellPop.hide(); }
@@ -352,7 +352,7 @@ function openCellEditor(e) {
   closeCellPopover();
 
   var t = e.task;
-  // Si el commit anterior re-renderizó la grilla, la celda ancla quedó suelta → la re-ubicamos por task+campo.
+  // If the previous commit re-rendered the grid, the anchor cell got detached → we re-locate it by task+field.
   if (e.anchorEl && !e.anchorEl.isConnected) {
     var row = document.querySelector('[data-task-id="' + t.id + '"]');
     var cell = row && row.querySelector('.mts-gantt__td--' + e.field);
@@ -398,12 +398,12 @@ function openCellEditor(e) {
       if (cellPopCommit) { var commit = cellPopCommit; cellPopCommit = null; commit(); }
       if (cellPopOutside) { document.removeEventListener('mousedown', cellPopOutside, true); cellPopOutside = null; }
       cellPop = null;
-      logEv('change', 'Editar celda', t.label + ' · ' + e.field);
+      logEv('change', 'Edit cell', t.label + ' · ' + e.field);
     },
   });
   cellPop.show();
 
-  // Cerrar al clic fuera; ignora el propio popover, el calendario portal del DatePicker y la celda ancla.
+  // Close on outside click; ignores the popover itself, the DatePicker portal calendar and the anchor cell.
   cellPopOutside = function (ev) {
     if (ev.target.closest('.mts-popover') || ev.target.closest('.mts-picker-popup')) return;
     if (e.anchorEl && e.anchorEl.contains(ev.target)) return;
@@ -431,7 +431,7 @@ gantt = new MTS.GanttChart('#gantt', {
     { field: 'predecessors', label: UI.cols.deps,      width: 110, editable: true },
     { field: 'variance',     label: UI.cols.variance,  width: 72 },
   ],
-  onLoad:      function (e) { logEv('view', 'Cargado', e.tasks.length + ' tareas'); },
+  onLoad:      function (e) { logEv('view', 'Loaded', e.tasks.length + ' tasks'); },
   onAddTask: function (e) {
     e.resolve({
       name:            e.data.name,
@@ -448,7 +448,7 @@ gantt = new MTS.GanttChart('#gantt', {
     var t = e.task;
     mode = 'edit';
     editSave = e.updateTask;
-    logEv('click', 'Editar', t.label);
+    logEv('click', 'Edit', t.label);
     input.setValue(t.label || ''); input.clearError();
     startPicker.setValue(t.start ? parseISO(t.start) : null);
     endPicker.setValue(t.end ? parseISO(t.end) : null);
@@ -468,7 +468,7 @@ gantt = new MTS.GanttChart('#gantt', {
                      }); },
   onAssigneesChange: function (e) { apiSim('PUT', '/api/tasks/' + e.task.id + '/assignees', e.assignees); },
   onBaselineSave:    function (e) { apiSim('POST', '/api/projects/p1/baseline', { baseline: e.baseline }); },
-  onScaleChange:     function (e) { logEv('view',   'Escala', e.scale); },
+  onScaleChange:     function (e) { logEv('view',   'Scale', e.scale); },
   onExport: function (e) {
     if (e.format === 'csv' && e.csv) {
       var blob = new Blob([e.csv], { type: 'text/csv;charset=utf-8' });
@@ -477,9 +477,9 @@ gantt = new MTS.GanttChart('#gantt', {
       a.download = e.filename || 'project.csv';
       a.click();
       URL.revokeObjectURL(a.href);
-      logEv('api', 'Guardar como (CSV)', e.filename);
+      logEv('api', 'Save as (CSV)', e.filename);
     } else {
-      // Excel / MS Project → el backend serializa desde el payload canónico (fase 2).
+      // Excel / MS Project → the backend serializes from the canonical payload (phase 2).
       apiSim('POST', '/api/projects/export?format=' + e.format, { filename: e.filename, tasks: e.tasks });
     }
   },
@@ -488,23 +488,23 @@ gantt = new MTS.GanttChart('#gantt', {
       var reader = new FileReader();
       reader.onload = function () { gantt.setTasks(parseProjectCSV(String(reader.result))); };
       reader.readAsText(e.file);
-      logEv('api', 'Abrir (CSV)', e.name);
+      logEv('api', 'Open (CSV)', e.name);
     } else {
-      // Excel / MS Project → el backend parsea (adapters) y devuelve el modelo canónico (fase 2).
+      // Excel / MS Project → the backend parses (adapters) and returns the canonical model (phase 2).
       apiSim('POST', '/api/projects/import?format=' + e.format, { name: e.name });
     }
   },
 });
 
-/* ═══ DEV PANEL (Config · Log · Code) — envuelve el Gantt ═══ */
+/* ═══ DEV PANEL (Config · Log · Code) — wraps the Gantt ═══ */
 dev = new MTS.DevPanel('#gantt', {
   watch:  gantt,
   panels: ['config', 'log', 'code'],
 });
 
 /* ═══ TOOLBAR: Topbar + Menu + Button ═══ */
-/* Items del menú. "Columnas" se arma desde gantt.getColumns() con un check por columna visible
-   (el nombre de la tarea queda siempre visible, no se puede ocultar). */
+/* Menu items. "Columns" is built from gantt.getColumns() with a check per visible column
+   (the task name is always visible, it cannot be hidden). */
 function buildMenuItems() {
   var colChildren = gantt.getColumns()
     .filter(function (c) { return c.field !== 'label'; })
@@ -537,19 +537,19 @@ var menu = new MTS.Menu({
     if (item.key === 'open')          fileInput.click();
     else if (item.key === 'saveas')   exportModal.show();
     else if (item.key === 'day' || item.key === 'week' || item.key === 'month') gantt.setScale(item.key);
-    else if (item.key === 'collapse') { gantt.collapseAll(); logEv('nav', 'Colapsar todo'); }
-    else if (item.key === 'expand')   { gantt.expandAll();   logEv('nav', 'Expandir todo'); }
-    else if (item.key === 'undo')     { gantt.undo(); logEv('nav', 'Deshacer'); }
-    else if (item.key === 'redo')     { gantt.redo(); logEv('nav', 'Rehacer'); }
+    else if (item.key === 'collapse') { gantt.collapseAll(); logEv('nav', 'Collapse all'); }
+    else if (item.key === 'expand')   { gantt.expandAll();   logEv('nav', 'Expand all'); }
+    else if (item.key === 'undo')     { gantt.undo(); logEv('nav', 'Undo'); }
+    else if (item.key === 'redo')     { gantt.redo(); logEv('nav', 'Redo'); }
     else if (item.key === 'baseline') { gantt.saveBaseline(); }
     else if (item.key === 'clearbaseline') { gantt.clearBaseline(); apiSim('DELETE', '/api/projects/p1/baseline', { project: 'p1' }); }
     else if (item.key && item.key.indexOf('col:') === 0) {
       var field = item.key.slice(4);
       var col   = gantt.getColumns().filter(function (c) { return c.field === field; })[0];
-      gantt.setColumnVisible(field, !!(col && col.hidden));   // toggle: si está oculta → mostrar
+      gantt.setColumnVisible(field, !!(col && col.hidden));   // toggle: if hidden → show
       menu.setItems(buildMenuItems());
       if (window.MTS && MTS.Icon) MTS.Icon.initAll();
-      logEv('view', 'Columna', field + (col && col.hidden ? ' (mostrar)' : ' (ocultar)'));
+      logEv('view', 'Column', field + (col && col.hidden ? ' (show)' : ' (hide)'));
     }
   },
 });

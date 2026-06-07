@@ -132,7 +132,7 @@ function fmt(tpl, vars) {
   return out;
 }
 
-// — Locale: muestra ingles por defecto (cara publica); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public face); ?lang=es|en|pt to change —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -156,20 +156,20 @@ var preview_s1 =
 
 var js_s1 =
   "new MTS.TransferList('#demo-basic-transfer', {\n" +
-  "  label: 'Categorias destacadas',\n" +
-  "  originTitle: 'Disponibles',\n" +
-  "  selectedTitle: 'Activas',\n" +
+  "  label: 'Featured categories',\n" +
+  "  originTitle: 'Available',\n" +
+  "  selectedTitle: 'Active',\n" +
   "  showMoveButtons: true,\n" +
   "  originDataSource: [\n" +
-  "    { nombre: 'Design', detalle: 'Coleccion creativa para portada.' },\n" +
-  "    { nombre: 'Operations', detalle: 'Etiquetas operativas de seguimiento.' },\n" +
-  "    { nombre: 'Support', detalle: 'Mensajes de ayuda y acompanamiento.' }\n" +
+  "    { name: 'Design', detail: 'Creative collection for the cover.' },\n" +
+  "    { name: 'Operations', detail: 'Operational tracking labels.' },\n" +
+  "    { name: 'Support', detail: 'Help and assistance messages.' }\n" +
   "  ],\n" +
   "  selectedDataSource: [\n" +
-  "    { nombre: 'Billing', detalle: 'Indicadores financieros del periodo.' }\n" +
+  "    { name: 'Billing', detail: 'Financial indicators for the period.' }\n" +
   "  ],\n" +
-  "  itemLabel: 'nombre',\n" +
-  "  itemDescription: 'detalle',\n" +
+  "  itemLabel: 'name',\n" +
+  "  itemDescription: 'detail',\n" +
   "  onRequestItem: function(item, moved) {\n" +
   "    console.log(item, moved);\n" +
   "  }\n" +
@@ -182,10 +182,10 @@ var preview_s2 =
 
 var js_s2 =
   "new MTS.TransferList('#demo-columns-transfer', {\n" +
-  "  label: 'Columnas visibles',\n" +
-  "  hint: 'Define que columnas apareceran en una tabla personalizada.',\n" +
-  "  originTitle: 'Biblioteca de columnas',\n" +
-  "  selectedTitle: 'Columnas activas',\n" +
+  "  label: 'Visible columns',\n" +
+  "  hint: 'Define which columns will appear in a custom table.',\n" +
+  "  originTitle: 'Column library',\n" +
+  "  selectedTitle: 'Active columns',\n" +
   "  originDataSource: columns,\n" +
   "  selectedDataSource: selectedColumns,\n" +
   "  renderItem: function(item) {\n" +
@@ -205,10 +205,10 @@ var preview_s3 =
 
 var js_s3 =
   "new MTS.TransferList('#demo-event-transfer', {\n" +
-  "  label: 'Participantes',\n" +
-  "  hint: 'Ejemplo sin botones laterales: solo arrastrar y soltar.',\n" +
-  "  originTitle: 'Lista de espera',\n" +
-  "  selectedTitle: 'Confirmados',\n" +
+  "  label: 'Attendees',\n" +
+  "  hint: 'Example without side buttons: drag and drop only.',\n" +
+  "  originTitle: 'Waiting list',\n" +
+  "  selectedTitle: 'Confirmed',\n" +
   "  showMoveButtons: false,\n" +
   "  originDataSource: attendees,\n" +
   "  selectedDataSource: confirmed,\n" +
@@ -230,17 +230,17 @@ var preview_s4 =
 
 var js_s4 =
   "new MTS.TransferList('#demo-region-transfer', {\n" +
-  "  label: 'Planes destacados',\n" +
-  "  hint: 'Solo se permite un plan por region en la lista derecha.',\n" +
-  "  originTitle: 'Planes candidatos',\n" +
-  "  selectedTitle: 'Portafolio activo',\n" +
+  "  label: 'Featured plans',\n" +
+  "  hint: 'Only one plan per region is allowed in the right list.',\n" +
+  "  originTitle: 'Candidate plans',\n" +
+  "  selectedTitle: 'Active portfolio',\n" +
   "  originDataSource: plans,\n" +
   "  selectedDataSource: [],\n" +
   "  itemLabel: 'name',\n" +
   "  itemDescription: 'description',\n" +
   "  validateUnique: true,\n" +
   "  validateKey: 'regionId',\n" +
-  "  duplicateMessage: 'Solo puede haber un plan por region.',\n" +
+  "  duplicateMessage: 'There can only be one plan per region.',\n" +
   "  onRequestItem: function(item, moved) {\n" +
   "    console.log(item, moved);\n" +
   "  }\n" +
@@ -254,17 +254,17 @@ var preview_s5 =
 
 var js_s5 =
   "new MTS.TransferList('#demo-role-transfer', {\n" +
-  "  label: 'Perfiles del rol',\n" +
-  "  hint: 'No se permite repetir modulo en la lista derecha.',\n" +
-  "  originTitle: 'Perfiles disponibles',\n" +
-  "  selectedTitle: 'Perfiles del rol',\n" +
+  "  label: 'Role profiles',\n" +
+  "  hint: 'Repeating a module in the right list is not allowed.',\n" +
+  "  originTitle: 'Available profiles',\n" +
+  "  selectedTitle: 'Role profiles',\n" +
   "  originDataSource: profiles,\n" +
   "  selectedDataSource: [],\n" +
   "  itemLabel: 'name',\n" +
   "  itemDescription: 'description',\n" +
   "  validateUnique: true,\n" +
   "  validateKey: 'moduleId',\n" +
-  "  duplicateMessage: 'Solo se permite un perfil por modulo.',\n" +
+  "  duplicateMessage: 'Only one profile per module is allowed.',\n" +
   "  onRequestItem: function(item, moved) {\n" +
   "    console.log(item, moved);\n" +
   "  }\n" +
@@ -277,15 +277,15 @@ makeSection('tabs-s1', preview_s1, js_s1, function () {
     selectedTitle: D.s1SelectedTitle || 'Active',
     showMoveButtons: true,
     originDataSource: [
-      { nombre: 'Design', detalle: 'Coleccion creativa para portada.' },
-      { nombre: 'Operations', detalle: 'Etiquetas operativas de seguimiento.' },
-      { nombre: 'Support', detalle: 'Mensajes de ayuda y acompanamiento.' }
+      { name: 'Design', detail: 'Creative collection for the cover.' },
+      { name: 'Operations', detail: 'Operational tracking labels.' },
+      { name: 'Support', detail: 'Help and assistance messages.' }
     ],
     selectedDataSource: [
-      { nombre: 'Billing', detalle: 'Indicadores financieros del periodo.' }
+      { name: 'Billing', detail: 'Financial indicators for the period.' }
     ],
-    itemLabel: 'nombre',
-    itemDescription: 'detalle',
+    itemLabel: 'name',
+    itemDescription: 'detail',
     onRequestItem: function (item, moved) {
       console.log('[basic.request]', item, moved);
     }
@@ -294,15 +294,15 @@ makeSection('tabs-s1', preview_s1, js_s1, function () {
 
 makeSection('tabs-s2', preview_s2, js_s2, function () {
   var columns = [
-    { id: 'order-id', name: 'ID de orden', description: 'Identificador corto para lectura rapida.', group: 'Base', width: '80px' },
-    { id: 'customer-name', name: 'Cliente', description: 'Nombre comercial o razon social.', group: 'Base', width: '220px' },
-    { id: 'owner', name: 'Responsable', description: 'Persona a cargo del seguimiento.', group: 'Operacion', width: '180px' },
-    { id: 'last-touch', name: 'Ultimo contacto', description: 'Fecha del ultimo movimiento registrado.', group: 'Operacion', width: '140px' },
-    { id: 'sla-risk', name: 'Riesgo SLA', description: 'Indicador preventivo de incumplimiento.', group: 'Alertas', width: '120px' }
+    { id: 'order-id', name: 'Order ID', description: 'Short identifier for quick reading.', group: 'Base', width: '80px' },
+    { id: 'customer-name', name: 'Customer', description: 'Trade name or legal entity.', group: 'Base', width: '220px' },
+    { id: 'owner', name: 'Owner', description: 'Person in charge of follow-up.', group: 'Operations', width: '180px' },
+    { id: 'last-touch', name: 'Last contact', description: 'Date of the last recorded activity.', group: 'Operations', width: '140px' },
+    { id: 'sla-risk', name: 'SLA risk', description: 'Preventive breach indicator.', group: 'Alerts', width: '120px' }
   ];
   var selectedColumns = [
-    { id: 'status', name: 'Estado', description: 'Etapa actual del caso.', group: 'Base', width: '120px' },
-    { id: 'amount', name: 'Monto', description: 'Valor consolidado del negocio.', group: 'Finanzas', width: '120px' }
+    { id: 'status', name: 'Status', description: 'Current stage of the case.', group: 'Base', width: '120px' },
+    { id: 'amount', name: 'Amount', description: 'Consolidated value of the deal.', group: 'Finance', width: '120px' }
   ];
 
   new MTS.TransferList('#demo-columns-transfer', {
@@ -325,12 +325,12 @@ makeSection('tabs-s2', preview_s2, js_s2, function () {
 
 makeSection('tabs-s3', preview_s3, js_s3, function () {
   var attendees = [
-    { id: 'ana-v', name: 'Ana Vega', description: 'Workshop de onboarding para partners.', ticket: 'Virtual' },
-    { id: 'diego-p', name: 'Diego Perez', description: 'Mesa de producto para lideres regionales.', ticket: 'VIP' },
-    { id: 'lucia-r', name: 'Lucia Rojas', description: 'Panel de operaciones con foco en escalabilidad.', ticket: 'Presencial' }
+    { id: 'ana-v', name: 'Ana Vega', description: 'Onboarding workshop for partners.', ticket: 'Virtual' },
+    { id: 'diego-p', name: 'Diego Perez', description: 'Product roundtable for regional leaders.', ticket: 'VIP' },
+    { id: 'lucia-r', name: 'Lucia Rojas', description: 'Operations panel focused on scalability.', ticket: 'In person' }
   ];
   var confirmed = [
-    { id: 'matias-c', name: 'Matias Cruz', description: 'Sesiones uno a uno con clientes enterprise.', ticket: 'Speaker' }
+    { id: 'matias-c', name: 'Matias Cruz', description: 'One-on-one sessions with enterprise clients.', ticket: 'Speaker' }
   ];
 
   new MTS.TransferList('#demo-event-transfer', {
@@ -354,11 +354,11 @@ makeSection('tabs-s3', preview_s3, js_s3, function () {
 
 makeSection('tabs-s4', preview_s4, js_s4, function () {
   var plans = [
-    { id: 'north-core', name: 'Plan Core North', description: 'Version principal para cuentas nuevas del norte.', regionId: 'north', regionName: 'Norte' },
-    { id: 'north-growth', name: 'Plan Growth North', description: 'Paquete con automatizaciones comerciales.', regionId: 'north', regionName: 'Norte' },
-    { id: 'south-starter', name: 'Plan Starter South', description: 'Entrada simple para pilotos en region sur.', regionId: 'south', regionName: 'Sur' },
-    { id: 'south-premium', name: 'Plan Premium South', description: 'Cobertura ampliada para operaciones maduras.', regionId: 'south', regionName: 'Sur' },
-    { id: 'central-scale', name: 'Plan Scale Central', description: 'Modelo orientado a volumen y autoservicio.', regionId: 'central', regionName: 'Centro' }
+    { id: 'north-core', name: 'Plan Core North', description: 'Main version for new northern accounts.', regionId: 'north', regionName: 'North' },
+    { id: 'north-growth', name: 'Plan Growth North', description: 'Package with commercial automations.', regionId: 'north', regionName: 'North' },
+    { id: 'south-starter', name: 'Plan Starter South', description: 'Simple entry for pilots in the southern region.', regionId: 'south', regionName: 'South' },
+    { id: 'south-premium', name: 'Plan Premium South', description: 'Extended coverage for mature operations.', regionId: 'south', regionName: 'South' },
+    { id: 'central-scale', name: 'Plan Scale Central', description: 'Model geared toward volume and self-service.', regionId: 'central', regionName: 'Central' }
   ];
 
   new MTS.TransferList('#demo-region-transfer', {
@@ -403,17 +403,17 @@ var preview_s6 =
 
 var js_s6 =
   "new MTS.TransferList('#s6-transfer', {\n" +
-  "  label: 'Perfiles del rol',\n" +
-  "  hint: 'Solo el boton › para agregar. La x quita el item del destino sin moverlo al origen.',\n" +
-  "  originTitle: 'Disponibles',\n" +
-  "  selectedTitle: 'Asignados',\n" +
+  "  label: 'Role profiles',\n" +
+  "  hint: 'Only the › button to add. The x removes the item from the target without moving it back to the origin.',\n" +
+  "  originTitle: 'Available',\n" +
+  "  selectedTitle: 'Assigned',\n" +
   "  itemLabel: 'name',\n" +
   "  itemDescription: 'moduleName',\n" +
   "  originDataSource: profilesS6,\n" +
   "  selectedDataSource: [],\n" +
   "  validateUnique: true,\n" +
   "  validateKey: 'moduleId',\n" +
-  "  duplicateMessage: 'Ya hay un perfil de ese modulo en el rol.',\n" +
+  "  duplicateMessage: 'There is already a profile from that module in the role.',\n" +
   "  draggable: false,\n" +
   "  showMoveButtons: true,\n" +
   "  buttons: { allToSelected: false, toSelected: true, toOrigin: false, allToOrigin: false },\n" +
@@ -422,11 +422,11 @@ var js_s6 =
 
 makeSection('tabs-s6', preview_s6, js_s6, function () {
   var profilesS6 = [
-    { id: 'u-base',   name: 'Workspace base',        moduleName: 'Usuarios',    moduleId: 'users' },
-    { id: 'u-sup',    name: 'Supervisor operacional', moduleName: 'Usuarios',    moduleId: 'users' },
-    { id: 'd-editor', name: 'Editor documental',      moduleName: 'Documentos',  moduleId: 'documents' },
-    { id: 'd-aprob',  name: 'Aprobador documental',   moduleName: 'Documentos',  moduleId: 'documents' },
-    { id: 'b-view',   name: 'Consulta financiera',    moduleName: 'Billing',     moduleId: 'billing' }
+    { id: 'u-base',   name: 'Base workspace',          moduleName: 'Users',      moduleId: 'users' },
+    { id: 'u-sup',    name: 'Operations supervisor',   moduleName: 'Users',      moduleId: 'users' },
+    { id: 'd-editor', name: 'Document editor',         moduleName: 'Documents',  moduleId: 'documents' },
+    { id: 'd-aprob',  name: 'Document approver',       moduleName: 'Documents',  moduleId: 'documents' },
+    { id: 'b-view',   name: 'Financial reader',        moduleName: 'Billing',    moduleId: 'billing' }
   ];
 
   new MTS.TransferList('#s6-transfer', {
@@ -450,11 +450,11 @@ makeSection('tabs-s6', preview_s6, js_s6, function () {
 
 makeSection('tabs-s5', preview_s5, js_s5, function () {
   var profiles = [
-    { id: 'users-base', name: 'Workspace base', description: 'Acceso base a usuarios.', moduleId: 'users', moduleName: 'Usuarios' },
-    { id: 'users-supervisor', name: 'Supervisor operacional', description: 'Gestion avanzada de usuarios.', moduleId: 'users', moduleName: 'Usuarios' },
-    { id: 'docs-editor', name: 'Editor documental', description: 'Edicion de documentos.', moduleId: 'documents', moduleName: 'Documentos' },
-    { id: 'docs-approver', name: 'Aprobador documental', description: 'Aprobacion de documentos.', moduleId: 'documents', moduleName: 'Documentos' },
-    { id: 'billing-view', name: 'Consulta financiera', description: 'Lectura de billing.', moduleId: 'billing', moduleName: 'Billing' }
+    { id: 'users-base', name: 'Base workspace', description: 'Base access to users.', moduleId: 'users', moduleName: 'Users' },
+    { id: 'users-supervisor', name: 'Operations supervisor', description: 'Advanced user management.', moduleId: 'users', moduleName: 'Users' },
+    { id: 'docs-editor', name: 'Document editor', description: 'Document editing.', moduleId: 'documents', moduleName: 'Documents' },
+    { id: 'docs-approver', name: 'Document approver', description: 'Document approval.', moduleId: 'documents', moduleName: 'Documents' },
+    { id: 'billing-view', name: 'Financial reader', description: 'Billing read access.', moduleId: 'billing', moduleName: 'Billing' }
   ];
 
   new MTS.TransferList('#demo-role-transfer', {

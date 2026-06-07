@@ -88,7 +88,7 @@ function indentHtml(html){
   return result.trimEnd();
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -142,11 +142,11 @@ var preview1 =
     '<div class="result-box" id="v-result">' + t_fullPlaceholder + '</div>' +
   '</div>';
 var js1 =
-  "new MTS.Input('#v-name', { name:'name', label:'Nombre completo', placeholder:'Juan Pérez', rules:{ required:true, minLength:3 } });\n" +
-  "new MTS.Input('#v-email', { name:'email', label:'Email', placeholder:'user@ejemplo.com', rules:{ required:true, email:true }, type:'email' });\n" +
-  "new MTS.Input('#v-pass', { name:'password', label:'Contraseña', placeholder:'Mín 8 caracteres', rules:{ required:true, minLength:8 }, type:'password' });\n" +
-  "new MTS.Input('#v-pass2', { name:'password2', label:'Confirmar contraseña', placeholder:'Repite la contraseña', rules:{ required:true }, type:'password' });\n" +
-  "new MTS.Button('#v-submit', { label:'Enviar formulario', variant:'primary' });\n\n" +
+  "new MTS.Input('#v-name', { name:'name', label:'Full name', placeholder:'John Doe', rules:{ required:true, minLength:3 } });\n" +
+  "new MTS.Input('#v-email', { name:'email', label:'Email', placeholder:'user@example.com', rules:{ required:true, email:true }, type:'email' });\n" +
+  "new MTS.Input('#v-pass', { name:'password', label:'Password', placeholder:'Min 8 characters', rules:{ required:true, minLength:8 }, type:'password' });\n" +
+  "new MTS.Input('#v-pass2', { name:'password2', label:'Confirm password', placeholder:'Repeat the password', rules:{ required:true }, type:'password' });\n" +
+  "new MTS.Button('#v-submit', { label:'Submit form', variant:'primary' });\n\n" +
   "new MTS.Validate('#form-full', {\n" +
   "  rules:{\n" +
   "    name:{ required:true, minLength:3 },\n" +
@@ -154,7 +154,7 @@ var js1 =
   "    password:{ required:true, minLength:8 },\n" +
   "    password2:{ required:true }\n" +
   "  },\n" +
-  "  messages:{ name:{ required:'El nombre es requerido', minLength:'Mínimo 3 caracteres' } },\n" +
+  "  messages:{ name:{ required:'Name is required', minLength:'At least 3 characters' } },\n" +
   "  validateOnBlur:true,\n" +
   "  onValid:function(data){ document.getElementById('v-result').textContent = 'onValid → ' + JSON.stringify(data); },\n" +
   "  onInvalid:function(errors){ document.getElementById('v-result').textContent = 'onInvalid → ' + JSON.stringify(errors); }\n" +
@@ -173,10 +173,10 @@ var preview2 =
   '</div>';
 var js2 =
   "new MTS.Input('#v-rut', { name:'rut', label:'RUT', placeholder:'12.345.678-9', rules:{ required:true, rut:true } });\n" +
-  "new MTS.Input('#v-age', { name:'age', label:'Edad', type:'number', rules:{ required:true, min:18, max:99 } });\n" +
-  "new MTS.Input('#v-url', { name:'url', label:'Sitio web', placeholder:'https://...', rules:{ url:true } });\n" +
-  "new MTS.Input('#v-custom', { name:'custom', label:'Usuario', placeholder:'No uses \"admin\"', rules:{ required:true, custom:function(v){ return v !== 'admin' || 'Usuario no permitido'; } } });\n" +
-  "new MTS.Button('#v-adv-submit', { label:'Validar', variant:'primary' });\n\n" +
+  "new MTS.Input('#v-age', { name:'age', label:'Age', type:'number', rules:{ required:true, min:18, max:99 } });\n" +
+  "new MTS.Input('#v-url', { name:'url', label:'Website', placeholder:'https://...', rules:{ url:true } });\n" +
+  "new MTS.Input('#v-custom', { name:'custom', label:'Username', placeholder:'Do not use \"admin\"', rules:{ required:true, custom:function(v){ return v !== 'admin' || 'Username not allowed'; } } });\n" +
+  "new MTS.Button('#v-adv-submit', { label:'Validate', variant:'primary' });\n\n" +
   "new MTS.Validate('#form-advanced', {\n" +
   "  rules:{ rut:{ required:true, rut:true }, age:{ required:true, min:18, max:99 }, url:{ url:true }, custom:{ required:true } },\n" +
   "  onValid:function(data){ document.getElementById('v-adv-result').textContent = 'onValid → ' + JSON.stringify(data); },\n" +

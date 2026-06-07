@@ -111,7 +111,7 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -125,29 +125,29 @@ document.getElementById('s1-title').textContent      = D.s1Title || '1 — With 
 document.getElementById('s2-title').textContent      = D.s2Title || '2 — Collapsible';
 
 /* ════════════════════════════════════
-   1 — CON MTS.MENU
+   1 — WITH MTS.MENU
    ════════════════════════════════════ */
 var js_s1 =
 "var navMenu = new MTS.Menu({\n" +
 "  items: [\n" +
-"    { group: 'Principal' },\n" +
+"    { group: 'Main' },\n" +
 "    { key: 'dashboard', label: 'Dashboard',  icon: 'mts-icon-home' },\n" +
 "    { key: 'analytics', label: 'Analytics',  icon: 'mts-icon-bar-chart-2', badge: 'NEW' },\n" +
 "    { key: 'products',  label: 'Products',   icon: 'mts-icon-package', children: [\n" +
-"      { key: 'all-products', label: 'Todos los productos' },\n" +
-"      { key: 'add-product',  label: 'Agregar producto' }\n" +
+"      { key: 'all-products', label: 'All products' },\n" +
+"      { key: 'add-product',  label: 'Add product' }\n" +
 "    ]},\n" +
 "    { divider: true },\n" +
-"    { group: 'Ajustes' },\n" +
+"    { group: 'Settings' },\n" +
 "    { key: 'settings', label: 'Settings', icon: 'mts-icon-settings' }\n" +
 "  ],\n" +
 "  active: 'dashboard',\n" +
-"  onClick: function(item) { /* tu lógica aquí */ }\n" +
+"  onClick: function(item) { /* your logic here */ }\n" +
 "});\n\n" +
 "new MTS.SideNav('#sidenav-basic', {\n" +
 "  brand: {\n" +
 "    logo:  '<!-- logo html -->',\n" +
-"    title: 'MiApp',\n" +
+"    title: 'MyApp',\n" +
 "    onClick: function() { navMenu.setActive(''); }\n" +
 "  },\n" +
 "  menu:   navMenu,\n" +
@@ -181,7 +181,7 @@ makeSection('tabs-s1',
     new MTS.SideNav('#sidenav-basic', {
       brand: {
         logo:  LOGO_HTML,
-        title: 'MiApp',
+        title: 'MyApp',
         onClick: function() { navMenu.setActive(''); }
       },
       menu:   navMenu,
@@ -191,7 +191,7 @@ makeSection('tabs-s1',
 '440px');
 
 /* ════════════════════════════════════
-   2 — COLAPSABLE
+   2 — COLLAPSIBLE
    ════════════════════════════════════ */
 var sidenavApi;
 var menuApi;
@@ -199,21 +199,21 @@ var menuApi;
 var js_s2 =
 "var menuApi = new MTS.Menu({\n" +
 "  items: [\n" +
-"    { key: 'home',     label: 'Inicio',    icon: 'mts-icon-home' },\n" +
-"    { key: 'messages', label: 'Mensajes',  icon: 'mts-icon-message-circle', badge: '5' },\n" +
+"    { key: 'home',     label: 'Home',      icon: 'mts-icon-home' },\n" +
+"    { key: 'messages', label: 'Messages',  icon: 'mts-icon-message-circle', badge: '5' },\n" +
 "    { key: 'settings', label: 'Settings',  icon: 'mts-icon-settings' }\n" +
 "  ],\n" +
 "  active: 'home',\n" +
-"  onClick: function(item) { /* tu lógica */ }\n" +
+"  onClick: function(item) { /* your logic */ }\n" +
 "});\n\n" +
 "var sidenavApi = new MTS.SideNav('#sidenav-api', {\n" +
-"  brand:     { logo: '<!-- logo -->', title: 'MiApp' },\n" +
+"  brand:     { logo: '<!-- logo -->', title: 'MyApp' },\n" +
 "  menu:      menuApi,\n" +
 "  collapsed: true,\n" +
 "  onCollapse: function(e) { console.log('collapsed:', e.detail.collapsed); }\n" +
 "});\n\n" +
-"// Hover sobre los íconos para ver el tooltip de label\n" +
-"// API de colapso:\n" +
+"// Hover over the icons to see the label tooltip\n" +
+"// Collapse API:\n" +
 "sidenavApi.collapse();\n" +
 "sidenavApi.expand();\n" +
 "sidenavApi.toggleCollapse();\n" +
@@ -243,7 +243,7 @@ makeSection('tabs-s2',
     });
 
     sidenavApi = new MTS.SideNav('#sidenav-api', {
-      brand:     { logo: LOGO_HTML, title: 'MiApp' },
+      brand:     { logo: LOGO_HTML, title: 'MyApp' },
       menu:      menuApi,
       collapsed: true,
       onCollapse: function(e) { setResult('sidenav-api-result', (D.collapsedPrefix || 'collapsed: ') + e.detail.collapsed); }

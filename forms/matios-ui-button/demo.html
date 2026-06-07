@@ -122,7 +122,7 @@ function setResult(id, text) {
   if (el) el.textContent = text;
 }
 
-// — Locale: muestra inglés por defecto (cara pública); ?lang=es|en|pt para cambiar —
+// — Locale: shows English by default (public-facing); ?lang=es|en|pt to switch —
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
@@ -200,11 +200,11 @@ var preview_s3 =
   '</div>';
 
 var js_s3 =
-  "new MTS.Button('#btn-i-save', { label: 'Guardar', iconLeft: MTS.Icon.get('save') });\n" +
-  "new MTS.Button('#btn-i-edit', { label: 'Editar', variant: 'secondary', iconLeft: MTS.Icon.get('edit-2') });\n" +
-  "new MTS.Button('#btn-i-trash', { label: 'Eliminar', variant: 'danger', iconLeft: MTS.Icon.get('trash') });\n\n" +
-  "new MTS.Button('#btn-i-next', { label: 'Siguiente', iconRight: MTS.Icon.get('arrow-right') });\n" +
-  "new MTS.Button('#btn-i-export', { label: 'Exportar', variant: 'ghost', iconRight: MTS.Icon.get('download') });\n\n" +
+  "new MTS.Button('#btn-i-save', { label: 'Save', iconLeft: MTS.Icon.get('save') });\n" +
+  "new MTS.Button('#btn-i-edit', { label: 'Edit', variant: 'secondary', iconLeft: MTS.Icon.get('edit-2') });\n" +
+  "new MTS.Button('#btn-i-trash', { label: 'Delete', variant: 'danger', iconLeft: MTS.Icon.get('trash') });\n\n" +
+  "new MTS.Button('#btn-i-next', { label: 'Next', iconRight: MTS.Icon.get('arrow-right') });\n" +
+  "new MTS.Button('#btn-i-export', { label: 'Export', variant: 'ghost', iconRight: MTS.Icon.get('download') });\n\n" +
   "new MTS.Button('#btn-i-heart', { iconLeft: MTS.Icon.get('heart'), iconOnly: true, variant: 'secondary' });\n" +
   "new MTS.Button('#btn-i-search', { iconLeft: MTS.Icon.get('search'), iconOnly: true, variant: 'ghost' });";
 
@@ -251,23 +251,23 @@ var preview_s6 =
 
 var js_s6 =
   "new MTS.MenuButton('#menu-button-demo', {\n" +
-  "  label: 'Acciones',\n" +
+  "  label: 'Actions',\n" +
   "  variant: 'secondary',\n" +
   "  items: [\n" +
-  "    { label: 'Editar', icon: MTS.Icon.get('edit-2'), onClick: function() { setResult('result-s6', 'Editar'); } },\n" +
-  "    { label: 'Duplicar', icon: MTS.Icon.get('copy'), onClick: function() { setResult('result-s6', 'Duplicar'); } },\n" +
+  "    { label: 'Edit', icon: MTS.Icon.get('edit-2'), onClick: function() { setResult('result-s6', 'Edit'); } },\n" +
+  "    { label: 'Duplicate', icon: MTS.Icon.get('copy'), onClick: function() { setResult('result-s6', 'Duplicate'); } },\n" +
   "    '---',\n" +
-  "    { label: 'Eliminar', icon: MTS.Icon.get('trash'), danger: true, onClick: function() { setResult('result-s6', 'Eliminar'); } }\n" +
+  "    { label: 'Delete', icon: MTS.Icon.get('trash'), danger: true, onClick: function() { setResult('result-s6', 'Delete'); } }\n" +
   "  ]\n" +
   "});\n\n" +
   "new MTS.SplitButton('#split-button-demo', {\n" +
-  "  label: 'Guardar',\n" +
+  "  label: 'Save',\n" +
   "  variant: 'primary',\n" +
   "  iconLeft: MTS.Icon.get('save'),\n" +
-  "  onClick: function() { setResult('result-s6', 'Guardar'); },\n" +
+  "  onClick: function() { setResult('result-s6', 'Save'); },\n" +
   "  items: [\n" +
-  "    { label: 'Guardar borrador', onClick: function() { setResult('result-s6', 'Guardar borrador'); } },\n" +
-  "    { label: 'Guardar y publicar', onClick: function() { setResult('result-s6', 'Guardar y publicar'); } }\n" +
+  "    { label: 'Save draft', onClick: function() { setResult('result-s6', 'Save draft'); } },\n" +
+  "    { label: 'Save and publish', onClick: function() { setResult('result-s6', 'Save and publish'); } }\n" +
   "  ]\n" +
   "});";
 
@@ -283,13 +283,13 @@ var preview_s7 =
 
 var js_s7 =
   "new MTS.Button('#btn-e-save', {\n" +
-  "  onClick: function() { setResult('result-s7', 'Guardar'); }\n" +
+  "  onClick: function() { setResult('result-s7', 'Save'); }\n" +
   "});\n\n" +
   "new MTS.Button('#btn-e-cancel', {\n" +
-  "  onClick: function() { setResult('result-s7', 'Cancelar'); }\n" +
+  "  onClick: function() { setResult('result-s7', 'Cancel'); }\n" +
   "});\n\n" +
   "new MTS.Button('#btn-e-archive', {\n" +
-  "  onClick: function() { setResult('result-s7', 'Archivar'); }\n" +
+  "  onClick: function() { setResult('result-s7', 'Archive'); }\n" +
   "});";
 
 var preview_s8 =
