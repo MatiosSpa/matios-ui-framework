@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -22,7 +22,7 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DataTable — 2 — Selección múltiple con checkboxes</title>
+  <title>DataTable — 2 — Multiple selection with checkboxes</title>
   <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
   <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dark.css">
   <link rel="stylesheet" href="../../../../themes/matios-ui-mode-high-contrast.css">
@@ -86,16 +86,16 @@ function makeSection(id, previewHtml, jsCode, initFn) {
 
 const preview_s2 =
   '<div id="table2"></div>' +
-  '<div class="result-box" id="selectionStatus">Sin selección</div>';
+  '<div class="result-box" id="selectionStatus">No selection</div>';
 
 const js_s2 =
 `new MTS.DataTable({
   elementId: 'table2',
   columns: [
     { field: 'id',    label: '#',      sortable: true, align: 'end', width: '60px' },
-    { field: 'name',  label: 'Nombre', sortable: true },
-    { field: 'email', label: 'Email',  sortable: true },
-    { field: 'role',  label: 'Rol',    sortable: true },
+    { field: 'name',  label: 'Name',  sortable: true },
+    { field: 'email', label: 'Email', sortable: true },
+    { field: 'role',  label: 'Role',  sortable: true },
   ],
   dataSource: { url: '/widgets/datatable/mock-api/items', method: 'GET' },
   rowId:    'id',
@@ -107,8 +107,8 @@ const js_s2 =
     console.log('[selectionTable.onSelectionChange]', items);
     const el = document.getElementById('selectionStatus');
     el.textContent = items.length === 0
-      ? 'Sin selección'
-      : \`\${items.length} seleccionado\${items.length > 1 ? 's' : ''}: \${items.map(i => i.name).join(', ')}\`;
+      ? 'No selection'
+      : \`\${items.length} selected: \${items.map(i => i.name).join(', ')}\`;
   },
 });`;
 
@@ -118,9 +118,9 @@ function initTables() {
       elementId: 'table2',
       columns: [
         { field: 'id',    label: '#',      sortable: true, align: 'end', width: '60px' },
-        { field: 'name',  label: 'Nombre', sortable: true },
-        { field: 'email', label: 'Email',  sortable: true },
-        { field: 'role',  label: 'Rol',    sortable: true },
+        { field: 'name',  label: 'Name',  sortable: true },
+        { field: 'email', label: 'Email', sortable: true },
+        { field: 'role',  label: 'Role',  sortable: true },
       ],
       dataSource: { url: '/widgets/datatable/mock-api/items', method: 'GET' },
       rowId:    'id',
@@ -132,8 +132,8 @@ function initTables() {
         console.log('[selectionTable.onSelectionChange]', items);
         const el = document.getElementById('selectionStatus');
         el.textContent = items.length === 0
-          ? 'Sin selección'
-          : `${items.length} seleccionado${items.length > 1 ? 's' : ''}: ${items.map(i => i.name).join(', ')}`;
+          ? 'No selection'
+          : `${items.length} selected: ${items.map(i => i.name).join(', ')}`;
       },
     });
   });

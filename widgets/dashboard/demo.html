@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,14 +73,14 @@
       <div class="mts-d-flex mts-align-items--end mts-justify-content--between mts-gap-3">
         <div>
           <div style="font-size:22px;font-weight:700;color:var(--mts-text-primary);line-height:1.2">Dashboard</div>
-          <div style="font-size:13px;color:var(--mts-text-muted);margin-top:3px">Resumen de actividad — mayo 2026</div>
+          <div style="font-size:13px;color:var(--mts-text-muted);margin-top:3px">Activity summary — May 2026</div>
         </div>
         <div class="mts-d-flex mts-align-items--center mts-gap-2 mts-flex-shrink--0">
           <button id="btn-export" class="mts-btn mts-btn--ghost mts-btn--sm">
-            <i class="mts-icon mts-icon-download"></i> Exportar
+            <i class="mts-icon mts-icon-download"></i> Export
           </button>
           <button id="btn-new-order" class="mts-btn mts-btn--primary mts-btn--sm">
-            <i class="mts-icon mts-icon-plus"></i> Nuevo pedido
+            <i class="mts-icon mts-icon-plus"></i> New order
           </button>
         </div>
       </div>
@@ -139,26 +139,26 @@
    DATOS FALSOS
    ============================================================ */
 
-const CLIENTES = [
+const CUSTOMERS = [
   'Ana Torres','Luis Herrera','María Gómez','Carlos Ríos','Paula Vargas',
   'Diego Morales','Sofía Castro','Andrés Ruiz','Valentina Ortiz','Matías Peña',
   'Camila Soto','Sebastián Díaz','Isabella Flores','Emilio Reyes','Natalia Vega',
   'Rodrigo Campos','Fernanda Luna','Javier Mendoza','Daniela Aguirre','Tomás Silva',
 ];
 
-const PRODUCTOS = [
-  'Laptop Pro 15"','Monitor UltraWide','Teclado Mecánico','Mouse Inalámbrico','Auriculares BT',
-  'Webcam HD','Hub USB-C','SSD 1TB','RAM 32GB','Silla Ergonómica',
-  'Escritorio Ajustable','Micrófono Condensador','Luz de Ring','Cable HDMI 4K','Impresora Láser',
+const PRODUCTS = [
+  'Laptop Pro 15"','UltraWide Monitor','Mechanical Keyboard','Wireless Mouse','BT Headphones',
+  'HD Webcam','USB-C Hub','SSD 1TB','RAM 32GB','Ergonomic Chair',
+  'Adjustable Desk','Condenser Microphone','Ring Light','HDMI 4K Cable','Laser Printer',
 ];
 
-const ESTADOS = ['Pendiente','En proceso','Entregado','Cancelado'];
+const STATUSES = ['Pending','In progress','Delivered','Cancelled'];
 
-const ESTADO_VARIANT = {
-  'Pendiente':   'warning',
-  'En proceso':  'primary',
-  'Entregado':   'success',
-  'Cancelado':   'danger',
+const STATUS_VARIANT = {
+  'Pending':      'warning',
+  'In progress':  'primary',
+  'Delivered':    'success',
+  'Cancelled':    'danger',
 };
 
 function seededRand(seed) {
@@ -176,11 +176,11 @@ function buildOrders() {
     const dd   = String(d.getDate()).padStart(2, '0');
     rows.push({
       id:       '#' + String(1000 + i).padStart(4, '0'),
-      cliente:  CLIENTES[Math.floor(seededRand(i * 7  + 3) * CLIENTES.length)],
-      producto: PRODUCTOS[Math.floor(seededRand(i * 11 + 5) * PRODUCTOS.length)],
-      total:    '$' + (Math.floor(seededRand(i * 13 + 7) * 9800) + 200).toLocaleString('es-CL'),
-      estado:   ESTADOS[Math.floor(seededRand(i * 17 + 9) * ESTADOS.length)],
-      fecha:    dd + '/' + mm + '/' + d.getFullYear(),
+      customer: CUSTOMERS[Math.floor(seededRand(i * 7  + 3) * CUSTOMERS.length)],
+      product:  PRODUCTS[Math.floor(seededRand(i * 11 + 5) * PRODUCTS.length)],
+      total:    '$' + (Math.floor(seededRand(i * 13 + 7) * 9800) + 200).toLocaleString('en-US'),
+      status:   STATUSES[Math.floor(seededRand(i * 17 + 9) * STATUSES.length)],
+      date:     mm + '/' + dd + '/' + d.getFullYear(),
     });
   }
   return rows;
@@ -197,15 +197,15 @@ const navMenu = new MTS.Menu({
   active: 'dashboard',
   items: [
     { key: 'dashboard',     label: 'Dashboard',     icon: 'mts-icon-bar-chart-2' },
-    { key: 'usuarios',      label: 'Usuarios',      icon: 'mts-icon-users' },
-    { key: 'productos',     label: 'Productos',      icon: 'mts-icon-package' },
-    { key: 'pedidos',       label: 'Pedidos',        icon: 'mts-icon-shopping-cart', badge: '48' },
-    { key: 'reportes',      label: 'Reportes',       icon: 'mts-icon-file-text' },
+    { key: 'users',         label: 'Users',         icon: 'mts-icon-users' },
+    { key: 'products',      label: 'Products',      icon: 'mts-icon-package' },
+    { key: 'orders',        label: 'Orders',         icon: 'mts-icon-shopping-cart', badge: '48' },
+    { key: 'reports',       label: 'Reports',        icon: 'mts-icon-file-text' },
     { key: 'sep-1',         divider: true },
-    { key: 'configuracion', label: 'Configuración',  icon: 'mts-icon-settings' },
+    { key: 'settings',      label: 'Settings',       icon: 'mts-icon-settings' },
   ],
   onClick: function(item) {
-    MTS.Toast.show({ message: 'Navegando a: ' + item.label, variant: 'info', duration: 2000 });
+    MTS.Toast.show({ message: 'Navigating to: ' + item.label, variant: 'info', duration: 2000 });
   },
 });
 
@@ -224,7 +224,7 @@ topbarEndEl.className = 'mts-d-flex mts-align-items--center mts-gap-2';
 /* Botón modo */
 const modeBtnEl = document.createElement('button');
 modeBtnEl.id    = 'btn-mode-toggle';
-modeBtnEl.title = 'Cambiar modo';
+modeBtnEl.title = 'Toggle mode';
 new MTS.Button(modeBtnEl, {
   variant:  'ghost',
   iconOnly: true,
@@ -239,7 +239,7 @@ notifWrap.style.position = 'relative';
 
 const notifBtnEl = document.createElement('button');
 notifBtnEl.id    = 'btn-notifications';
-notifBtnEl.title = 'Notificaciones';
+notifBtnEl.title = 'Notifications';
 new MTS.Button(notifBtnEl, {
   variant:  'ghost',
   iconOnly: true,
@@ -257,7 +257,7 @@ topbarEndEl.appendChild(notifWrap);
 const avatarTrigger = document.createElement('div');
 avatarTrigger.id         = 'topbar-avatar-wrap';
 avatarTrigger.style.cssText = 'cursor:pointer;border-radius:50%';
-avatarTrigger.title      = 'Mi cuenta';
+avatarTrigger.title      = 'My account';
 topbarEndEl.appendChild(avatarTrigger);
 
 new MTS.Topbar('#tb', {
@@ -289,7 +289,7 @@ if (avatarWrap) {
 new MTS.StatusBar('#sb', {
   variant: 'default',
   start:   '<i class="mts-icon mts-icon-git-branch"></i>&nbsp;production',
-  center:  '<span class="mts-badge mts-badge--success mts-badge--xs mts-badge--dot"></span>&nbsp;En línea',
+  center:  '<span class="mts-badge mts-badge--success mts-badge--xs mts-badge--dot"></span>&nbsp;Online',
   end:     '<span class="mts-badge mts-badge--primary mts-badge--xs mts-badge--square">PROD</span>&nbsp;&nbsp;v1.0.0',
 });
 
@@ -316,39 +316,39 @@ new MTS.Dropdown(notifBtnEl, {
   items: [
     {
       id:    'n1',
-      label: 'Pedido #1047 entregado',
+      label: 'Order #1047 delivered',
       icon:  '<i class="mts-icon mts-icon-check-circle"></i>',
-      onClick: function() { MTS.Toast.show({ message: 'Pedido #1047 entregado', variant: 'success', duration: 2000 }); },
+      onClick: function() { MTS.Toast.show({ message: 'Order #1047 delivered', variant: 'success', duration: 2000 }); },
     },
     {
       id:    'n2',
-      label: 'Nuevo usuario: Rodrigo Campos',
+      label: 'New user: Rodrigo Campos',
       icon:  '<i class="mts-icon mts-icon-user-plus"></i>',
-      onClick: function() { MTS.Toast.show({ message: 'Nuevo usuario registrado', variant: 'info', duration: 2000 }); },
+      onClick: function() { MTS.Toast.show({ message: 'New user registered', variant: 'info', duration: 2000 }); },
     },
     {
       id:    'n3',
-      label: 'Pedido #1044 cancelado',
+      label: 'Order #1044 cancelled',
       icon:  '<i class="mts-icon mts-icon-x-circle"></i>',
-      onClick: function() { MTS.Toast.show({ message: 'Pedido #1044 cancelado', variant: 'danger', duration: 2000 }); },
+      onClick: function() { MTS.Toast.show({ message: 'Order #1044 cancelled', variant: 'danger', duration: 2000 }); },
     },
     {
       id:    'n4',
-      label: 'Pago recibido de Luis Herrera',
+      label: 'Payment received from Luis Herrera',
       icon:  '<i class="mts-icon mts-icon-dollar-sign"></i>',
-      onClick: function() { MTS.Toast.show({ message: 'Pago procesado correctamente', variant: 'success', duration: 2000 }); },
+      onClick: function() { MTS.Toast.show({ message: 'Payment processed successfully', variant: 'success', duration: 2000 }); },
     },
     {
       id:    'n5',
-      label: 'Reporte mensual generado',
+      label: 'Monthly report generated',
       icon:  '<i class="mts-icon mts-icon-file-text"></i>',
-      onClick: function() { MTS.Toast.show({ message: 'Reporte listo para descargar', variant: 'info', duration: 2000 }); },
+      onClick: function() { MTS.Toast.show({ message: 'Report ready to download', variant: 'info', duration: 2000 }); },
     },
     { divider: true },
     {
-      id:    'ver-todas',
-      label: 'Ver todas las notificaciones',
-      onClick: function() { MTS.Toast.show({ message: 'Centro de notificaciones en construcción.', variant: 'info', duration: 2500 }); },
+      id:    'view-all',
+      label: 'View all notifications',
+      onClick: function() { MTS.Toast.show({ message: 'Notification center under construction.', variant: 'info', duration: 2500 }); },
     },
   ],
 });
@@ -357,30 +357,30 @@ new MTS.Dropdown(avatarTrigger, {
   position: 'bottom-end',
   items: [
     {
-      id:    'perfil',
-      label: 'Mi perfil',
+      id:    'profile',
+      label: 'My profile',
       icon:  '<i class="mts-icon mts-icon-user"></i>',
-      onClick: function() { MTS.Toast.show({ message: 'Mi perfil — en construcción.', variant: 'info', duration: 2000 }); },
+      onClick: function() { MTS.Toast.show({ message: 'My profile — under construction.', variant: 'info', duration: 2000 }); },
     },
     {
       id:    'config',
-      label: 'Configuración',
+      label: 'Settings',
       icon:  '<i class="mts-icon mts-icon-settings"></i>',
-      onClick: function() { MTS.Toast.show({ message: 'Configuración — en construcción.', variant: 'info', duration: 2000 }); },
+      onClick: function() { MTS.Toast.show({ message: 'Settings — under construction.', variant: 'info', duration: 2000 }); },
     },
     {
-      id:    'ayuda',
-      label: 'Ayuda',
+      id:    'help',
+      label: 'Help',
       icon:  '<i class="mts-icon mts-icon-help-circle"></i>',
-      onClick: function() { MTS.Toast.show({ message: 'Ayuda — en construcción.', variant: 'info', duration: 2000 }); },
+      onClick: function() { MTS.Toast.show({ message: 'Help — under construction.', variant: 'info', duration: 2000 }); },
     },
     { divider: true },
     {
       id:    'logout',
-      label: 'Cerrar sesión',
+      label: 'Log out',
       icon:  '<i class="mts-icon mts-icon-log-out"></i>',
       danger: true,
-      onClick: function() { MTS.Toast.show({ message: 'Sesión cerrada.', variant: 'warning', duration: 2500 }); },
+      onClick: function() { MTS.Toast.show({ message: 'Signed out.', variant: 'warning', duration: 2500 }); },
     },
   ],
 });
@@ -400,14 +400,14 @@ document.addEventListener('click', function(e) {
 
 document.addEventListener('click', function(e) {
   if (!e.target.closest('#btn-export')) return;
-  MTS.Toast.show({ message: 'Exportando datos...', variant: 'success', duration: 2500 });
+  MTS.Toast.show({ message: 'Exporting data...', variant: 'success', duration: 2500 });
 });
 
 /* ── Botón Nuevo pedido ─────────────────────────────────── */
 
 document.addEventListener('click', function(e) {
   if (!e.target.closest('#btn-new-order')) return;
-  MTS.Toast.show({ message: 'Formulario de nuevo pedido en construcción.', variant: 'info', duration: 3000 });
+  MTS.Toast.show({ message: 'New order form under construction.', variant: 'info', duration: 3000 });
 });
 
 MTS.Icon.initAll();
@@ -418,7 +418,7 @@ MTS.Icon.initAll();
 
 new MTS.Breadcrumb('#breadcrumb-el', {
   items: [
-    { label: 'Inicio' },
+    { label: 'Home' },
     { label: 'Dashboard' },
   ],
 });
@@ -428,40 +428,40 @@ new MTS.Breadcrumb('#breadcrumb-el', {
    ============================================================ */
 
 new MTS.KPICard('#kpi-revenue', {
-  label:      'Ingresos del mes',
-  value:      '$24.580',
+  label:      'Monthly revenue',
+  value:      '$24,580',
   trend:      12.4,
-  trendLabel: 'vs mes anterior',
+  trendLabel: 'vs last month',
   sparkline:  [14200, 16800, 15400, 18200, 19600, 21000, 20400, 22800, 24580],
   variant:    'default',
   icon:       '<i class="mts-icon mts-icon-trending-up"></i>',
 });
 
 new MTS.KPICard('#kpi-users', {
-  label:      'Usuarios activos',
-  value:      '1.284',
+  label:      'Active users',
+  value:      '1,284',
   trend:      8.2,
-  trendLabel: 'vs mes anterior',
+  trendLabel: 'vs last month',
   sparkline:  [980, 1020, 1080, 1100, 1150, 1200, 1180, 1240, 1284],
   variant:    'default',
   icon:       '<i class="mts-icon mts-icon-users"></i>',
 });
 
 new MTS.KPICard('#kpi-orders', {
-  label:      'Pedidos hoy',
+  label:      'Orders today',
   value:      '48',
   trend:      -3.1,
-  trendLabel: 'vs ayer',
+  trendLabel: 'vs yesterday',
   sparkline:  [55, 62, 58, 49, 51, 60, 57, 50, 48],
   variant:    'default',
   icon:       '<i class="mts-icon mts-icon-shopping-cart"></i>',
 });
 
 new MTS.KPICard('#kpi-conversion', {
-  label:      'Tasa de conversión',
+  label:      'Conversion rate',
   value:      '3.24%',
   trend:      0.8,
-  trendLabel: 'vs semana anterior',
+  trendLabel: 'vs last week',
   sparkline:  [2.8, 2.9, 3.0, 2.95, 3.1, 3.15, 3.08, 3.20, 3.24],
   variant:    'default',
   icon:       '<i class="mts-icon mts-icon-percent"></i>',
@@ -475,20 +475,20 @@ new MTS.DataTable({
   elementId: 'orders-table',
   columns: [
     { field: 'id',       label: 'ID',       sortable: true,  align: 'end', width: '90px'  },
-    { field: 'cliente',  label: 'Cliente',  sortable: true                                 },
-    { field: 'producto', label: 'Producto', sortable: true                                 },
+    { field: 'customer', label: 'Customer', sortable: true                                 },
+    { field: 'product',  label: 'Product',  sortable: true                                 },
     { field: 'total',    label: 'Total',    sortable: false,               width: '110px'  },
     {
-      field:    'estado',
-      label:    'Estado',
+      field:    'status',
+      label:    'Status',
       sortable: true,
       width:    '130px',
       render:   function(v) {
-        const variant = ESTADO_VARIANT[v] || 'default';
+        const variant = STATUS_VARIANT[v] || 'default';
         return MTS.Badge.html(v, variant, 'sm', 'pill');
       },
     },
-    { field: 'fecha', label: 'Fecha', sortable: true, width: '110px' },
+    { field: 'date', label: 'Date', sortable: true, width: '110px' },
   ],
   dataSource: function(query) {
     let src = ORDERS.slice();
@@ -498,9 +498,9 @@ new MTS.DataTable({
       src = src.filter(function(row) {
         return (
           row.id.toLowerCase().indexOf(s) >= 0      ||
-          row.cliente.toLowerCase().indexOf(s) >= 0  ||
-          row.producto.toLowerCase().indexOf(s) >= 0 ||
-          row.estado.toLowerCase().indexOf(s) >= 0
+          row.customer.toLowerCase().indexOf(s) >= 0  ||
+          row.product.toLowerCase().indexOf(s) >= 0 ||
+          row.status.toLowerCase().indexOf(s) >= 0
         );
       });
     }
@@ -510,7 +510,7 @@ new MTS.DataTable({
       src.sort(function(a, b) {
         const av = (a[query.orderBy] || '').toString();
         const bv = (b[query.orderBy] || '').toString();
-        return dir * av.localeCompare(bv, 'es');
+        return dir * av.localeCompare(bv, 'en');
       });
     }
 
@@ -525,7 +525,7 @@ new MTS.DataTable({
   hover:    true,
   striped:  true,
   search:   { enabled: true, minChars: 1 },
-  locale:   'es',
+  locale:   'en',
 });
 
 /* ============================================================
@@ -533,11 +533,11 @@ new MTS.DataTable({
    ============================================================ */
 
 const TOP_PRODUCTS = [
-  { name: 'Laptop Pro 15"',    units: 34, pct: 100 },
-  { name: 'Monitor UltraWide', units: 28, pct: 82  },
-  { name: 'Teclado Mecánico',  units: 22, pct: 65  },
-  { name: 'Mouse Inalámbrico', units: 19, pct: 56  },
-  { name: 'Auriculares BT',    units: 15, pct: 44  },
+  { name: 'Laptop Pro 15"',     units: 34, pct: 100 },
+  { name: 'UltraWide Monitor',  units: 28, pct: 82  },
+  { name: 'Mechanical Keyboard',units: 22, pct: 65  },
+  { name: 'Wireless Mouse',     units: 19, pct: 56  },
+  { name: 'BT Headphones',      units: 15, pct: 44  },
 ];
 
 const PROGRESS_VARIANTS = ['primary', 'success', 'info', 'warning', 'danger'];
@@ -556,7 +556,7 @@ TOP_PRODUCTS.forEach(function(p, idx) {
   nameSpan.textContent = p.name;
 
   const unitSpan = document.createElement('span');
-  unitSpan.textContent = p.units + ' uds.';
+  unitSpan.textContent = p.units + ' units';
 
   labelRow.appendChild(nameSpan);
   labelRow.appendChild(unitSpan);
@@ -575,11 +575,11 @@ TOP_PRODUCTS.forEach(function(p, idx) {
 });
 
 new MTS.Card('#card-products', {
-  title:   'Top productos',
+  title:   'Top products',
   body:    productBodyEl,
   variant: 'outlined',
-  actions: [{ label: 'Ver todos', variant: 'ghost', onClick: function() {
-    MTS.Toast.show({ message: 'Sección de productos en construcción.', variant: 'info', duration: 2000 });
+  actions: [{ label: 'View all', variant: 'ghost', onClick: function() {
+    MTS.Toast.show({ message: 'Products section under construction.', variant: 'info', duration: 2000 });
   }}],
 });
 
@@ -592,20 +592,20 @@ new MTS.Timeline(activityBodyEl, {
   direction: 'vertical',
   align:     'left',
   events: [
-    { id: 'a1', title: 'Pedido #1047 entregado',    description: 'Ana Torres recibió su pedido.',     date: 'Hace 5 min',   color: 'var(--mts-color-success, #22c55e)' },
-    { id: 'a2', title: 'Nuevo usuario registrado',  description: 'Rodrigo Campos se registró.',       date: 'Hace 18 min',  color: 'var(--mts-color-primary, #6366f1)' },
-    { id: 'a3', title: 'Pedido #1044 cancelado',    description: 'Sofía Castro canceló el pedido.',   date: 'Hace 42 min',  color: 'var(--mts-color-danger, #ef4444)'  },
-    { id: 'a4', title: 'Pago procesado',            description: '$4.200 recibidos de Luis Herrera.', date: 'Hace 1 hora',  color: 'var(--mts-color-warning, #f59e0b)' },
-    { id: 'a5', title: 'Reporte mensual generado',  description: 'Reporte de abril listo para descargar.', date: 'Hace 2 horas', color: 'var(--mts-color-info, #0ea5e9)' },
+    { id: 'a1', title: 'Order #1047 delivered',     description: 'Ana Torres received her order.',         date: '5 min ago',   color: 'var(--mts-color-success, #22c55e)' },
+    { id: 'a2', title: 'New user registered',       description: 'Rodrigo Campos signed up.',              date: '18 min ago',  color: 'var(--mts-color-primary, #6366f1)' },
+    { id: 'a3', title: 'Order #1044 cancelled',     description: 'Sofía Castro cancelled the order.',      date: '42 min ago',  color: 'var(--mts-color-danger, #ef4444)'  },
+    { id: 'a4', title: 'Payment processed',         description: '$4,200 received from Luis Herrera.',     date: '1 hour ago',  color: 'var(--mts-color-warning, #f59e0b)' },
+    { id: 'a5', title: 'Monthly report generated',  description: 'April report ready to download.',        date: '2 hours ago', color: 'var(--mts-color-info, #0ea5e9)' },
   ],
 });
 
 new MTS.Card('#card-activity', {
-  title:   'Actividad reciente',
+  title:   'Recent activity',
   body:    activityBodyEl,
   variant: 'outlined',
-  actions: [{ label: 'Ver todo', variant: 'ghost', onClick: function() {
-    MTS.Toast.show({ message: 'Log de actividad en construcción.', variant: 'info', duration: 2000 });
+  actions: [{ label: 'View all', variant: 'ghost', onClick: function() {
+    MTS.Toast.show({ message: 'Activity log under construction.', variant: 'info', duration: 2000 });
   }}],
 });
 

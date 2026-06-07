@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -94,16 +94,16 @@ const js_s8 =
   filters: [
     {
       field:   'status',
-      label:   'Estado',
+      label:   'Status',
       type:    'select',
       options: [
-        { value: 'active',   label: 'Activo'   },
-        { value: 'inactive', label: 'Inactivo' },
+        { value: 'active',   label: 'Active'   },
+        { value: 'inactive', label: 'Inactive' },
       ],
     },
     {
       field:         'department',
-      label:         'Área',
+      label:         'Department',
       type:          'async',
       optionsSource: {
         url:        '/widgets/datatable/mock-api/departments',
@@ -116,7 +116,7 @@ const js_s8 =
     },
     {
       field:         'role',
-      label:         'Rol',
+      label:         'Role',
       type:          'async',
       optionsSource: {
         url:        '/widgets/datatable/mock-api/roles',
@@ -133,16 +133,16 @@ const js_s8 =
 new MTS.DataTable({
   elementId: 'table8',
   columns: [
-    { field: 'id',         label: '#',      sortable: true, align: 'end', width: '60px' },
-    { field: 'name',       label: 'Nombre', sortable: true },
-    { field: 'email',      label: 'Email',  sortable: true },
-    { field: 'department', label: 'Área',   sortable: true },
-    { field: 'role',       label: 'Rol',    sortable: true },
+    { field: 'id',         label: '#',          sortable: true, align: 'end', width: '60px' },
+    { field: 'name',       label: 'Name',       sortable: true },
+    { field: 'email',      label: 'Email',      sortable: true },
+    { field: 'department', label: 'Department', sortable: true },
+    { field: 'role',       label: 'Role',       sortable: true },
     {
-      field: 'status', label: 'Estado', sortable: true, align: 'center', width: '110px',
+      field: 'status', label: 'Status', sortable: true, align: 'center', width: '110px',
       render: (value) => {
         const cls = value === 'active' ? 'mts-badge--success' : 'mts-badge--danger';
-        const lbl = value === 'active' ? 'Activo' : 'Inactivo';
+        const lbl = value === 'active' ? 'Active' : 'Inactive';
         return \`<span class="mts-badge \${cls}">\${lbl}</span>\`;
       },
     },
@@ -155,7 +155,7 @@ new MTS.DataTable({
   search:   { enabled: true, minChars: 1, width: '240px' },
   plugins:  [filterPlugin],
   onAfterLoad: (result) => {
-    console.log('[filterTable.onAfterLoad]', result.total, 'registros');
+    console.log('[filterTable.onAfterLoad]', result.total, 'records');
   },
 });`;
 
@@ -165,16 +165,16 @@ function initTables() {
       filters: [
         {
           field:   'status',
-          label:   'Estado',
+          label:   'Status',
           type:    'select',
           options: [
-            { value: 'active',   label: 'Activo'   },
-            { value: 'inactive', label: 'Inactivo' },
+            { value: 'active',   label: 'Active'   },
+            { value: 'inactive', label: 'Inactive' },
           ],
         },
         {
           field:        'department',
-          label:        'Área',
+          label:        'Department',
           type:         'async',
           optionsSource: {
             url:        '/widgets/datatable/mock-api/departments',
@@ -187,7 +187,7 @@ function initTables() {
         },
         {
           field:        'role',
-          label:        'Rol',
+          label:        'Role',
           type:         'async',
           optionsSource: {
             url:        '/widgets/datatable/mock-api/roles',
@@ -204,20 +204,20 @@ function initTables() {
     new MTS.DataTable({
       elementId: 'table8',
       columns: [
-        { field: 'id',         label: '#',      sortable: true, align: 'end', width: '60px' },
-        { field: 'name',       label: 'Nombre', sortable: true },
-        { field: 'email',      label: 'Email',  sortable: true },
-        { field: 'department', label: 'Área',   sortable: true },
-        { field: 'role',       label: 'Rol',    sortable: true },
+        { field: 'id',         label: '#',          sortable: true, align: 'end', width: '60px' },
+        { field: 'name',       label: 'Name',       sortable: true },
+        { field: 'email',      label: 'Email',      sortable: true },
+        { field: 'department', label: 'Department', sortable: true },
+        { field: 'role',       label: 'Role',       sortable: true },
         {
           field: 'status',
-          label: 'Estado',
+          label: 'Status',
           sortable: true,
           align: 'center',
           width: '110px',
           render: (value) => {
             const cls = value === 'active' ? 'mts-badge--success' : 'mts-badge--danger';
-            const lbl = value === 'active' ? 'Activo' : 'Inactivo';
+            const lbl = value === 'active' ? 'Active' : 'Inactive';
             return `<span class="mts-badge ${cls}">${lbl}</span>`;
           },
         },
@@ -230,7 +230,7 @@ function initTables() {
       search:    { enabled: true, minChars: 1, width: '240px' },
       plugins:   [filterPlugin],
       onAfterLoad: (result) => {
-        console.log('[filterTable.onAfterLoad]', result.total, 'registros');
+        console.log('[filterTable.onAfterLoad]', result.total, 'records');
       },
     });
   });

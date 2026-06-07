@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -91,29 +91,29 @@ function makeSection(id, previewHtml, jsCode, initFn) {
 
 const preview_s7 =
   '<div id="table7"></div>' +
-  '<div class="result-box" id="toolbarStatus">Sin acción</div>';
+  '<div class="result-box" id="toolbarStatus">No action</div>';
 
 const js_s7 =
 `const toolbarBtns = new MTS.DataTableToolbarPlugin({
   buttons: [
-    { label: 'Nuevo',   icon: 'plus',     tooltip: 'Crear un nuevo registro',
-      action: (table) => { toolbarStatus.textContent = 'onNuevo'; } },
-    { label: 'Exportar', icon: 'download', tooltip: 'Exportar datos visibles',
-      action: () => { toolbarStatus.textContent = 'onExportar'; } },
-    { icon: 'refresh',  tooltip: 'Recargar tabla',
-      action: (table) => { table.reload(); toolbarStatus.textContent = 'onRecargar'; } },
+    { label: 'New',   icon: 'plus',     tooltip: 'Create a new record',
+      action: (table) => { toolbarStatus.textContent = 'onNew'; } },
+    { label: 'Export', icon: 'download', tooltip: 'Export visible data',
+      action: () => { toolbarStatus.textContent = 'onExport'; } },
+    { icon: 'refresh',  tooltip: 'Reload table',
+      action: (table) => { table.reload(); toolbarStatus.textContent = 'onReload'; } },
     { separator: true },
-    { label: 'Importar', tooltip: 'Importar desde archivo',
-      action: () => { toolbarStatus.textContent = 'onImportar'; } },
+    { label: 'Import', tooltip: 'Import from file',
+      action: () => { toolbarStatus.textContent = 'onImport'; } },
     { separator: true },
     {
-      label:     'Eliminar selección',
+      label:     'Delete selection',
       icon:      'trash',
       danger:    true,
-      tooltip:   'Eliminar los registros seleccionados',
+      tooltip:   'Delete the selected records',
       condition: (table) => table.getSelection().length > 0,
       action: (table) => {
-        toolbarStatus.textContent = 'onEliminar → ' + table.getSelection().map(i => i.name).join(', ');
+        toolbarStatus.textContent = 'onDelete → ' + table.getSelection().map(i => i.name).join(', ');
       },
     },
   ],
@@ -123,14 +123,14 @@ new MTS.DataTable({
   elementId: 'table7',
   columns: [
     { field: 'id',         label: '#',      sortable: true, align: 'end', width: '60px' },
-    { field: 'name',       label: 'Nombre', sortable: true },
+    { field: 'name',       label: 'Name',   sortable: true },
     { field: 'email',      label: 'Email',  sortable: true },
-    { field: 'department', label: 'Área',   sortable: true },
+    { field: 'department', label: 'Area',   sortable: true },
     {
-      field: 'status', label: 'Estado', sortable: true, align: 'center', width: '110px',
+      field: 'status', label: 'Status', sortable: true, align: 'center', width: '110px',
       render: (value) => {
         const cls = value === 'active' ? 'mts-badge--success' : 'mts-badge--danger';
-        const lbl = value === 'active' ? 'Activo' : 'Inactivo';
+        const lbl = value === 'active' ? 'Active' : 'Inactive';
         return \`<span class="mts-badge \${cls}">\${lbl}</span>\`;
       },
     },
@@ -152,52 +152,52 @@ function initTables() {
     const toolbarBtns = new MTS.DataTableToolbarPlugin({
       buttons: [
         {
-          label:   'Nuevo',
+          label:   'New',
           icon:    'plus',
-          tooltip: 'Crear un nuevo registro',
+          tooltip: 'Create a new record',
           action:  (table) => {
-            console.log('[toolbarTable.onNuevo]', table.getSelection());
-            toolbarStatus.textContent = 'onNuevo';
+            console.log('[toolbarTable.onNew]', table.getSelection());
+            toolbarStatus.textContent = 'onNew';
           },
         },
         {
-          label:   'Exportar',
+          label:   'Export',
           icon:    'download',
-          tooltip: 'Exportar datos visibles',
+          tooltip: 'Export visible data',
           action:  () => {
-            console.log('[toolbarTable.onExportar]');
-            toolbarStatus.textContent = 'onExportar';
+            console.log('[toolbarTable.onExport]');
+            toolbarStatus.textContent = 'onExport';
           },
         },
         {
           icon:    'refresh',
-          tooltip: 'Recargar tabla',
+          tooltip: 'Reload table',
           action:  (table) => {
-            console.log('[toolbarTable.onRecargar]');
-            toolbarStatus.textContent = 'onRecargar';
+            console.log('[toolbarTable.onReload]');
+            toolbarStatus.textContent = 'onReload';
             table.reload();
           },
         },
         { separator: true },
         {
-          label:   'Importar',
-          tooltip: 'Importar desde archivo',
+          label:   'Import',
+          tooltip: 'Import from file',
           action:  () => {
-            console.log('[toolbarTable.onImportar]');
-            toolbarStatus.textContent = 'onImportar';
+            console.log('[toolbarTable.onImport]');
+            toolbarStatus.textContent = 'onImport';
           },
         },
         { separator: true },
         {
-          label:     'Eliminar selección',
+          label:     'Delete selection',
           icon:      'trash',
           danger:    true,
-          tooltip:   'Eliminar los registros seleccionados',
+          tooltip:   'Delete the selected records',
           condition: (table) => table.getSelection().length > 0,
           action:    (table) => {
             const sel = table.getSelection();
-            console.log('[toolbarTable.onEliminar]', sel);
-            toolbarStatus.textContent = 'onEliminar → ' + sel.map(i => i.name).join(', ');
+            console.log('[toolbarTable.onDelete]', sel);
+            toolbarStatus.textContent = 'onDelete → ' + sel.map(i => i.name).join(', ');
           },
         },
       ],
@@ -207,18 +207,18 @@ function initTables() {
       elementId: 'table7',
       columns: [
         { field: 'id',         label: '#',      sortable: true, align: 'end', width: '60px' },
-        { field: 'name',       label: 'Nombre', sortable: true },
+        { field: 'name',       label: 'Name',   sortable: true },
         { field: 'email',      label: 'Email',  sortable: true },
-        { field: 'department', label: 'Área',   sortable: true },
+        { field: 'department', label: 'Area',   sortable: true },
         {
           field: 'status',
-          label: 'Estado',
+          label: 'Status',
           sortable: true,
           align: 'center',
           width: '110px',
           render: (value) => {
             const cls = value === 'active' ? 'mts-badge--success' : 'mts-badge--danger';
-            const lbl = value === 'active' ? 'Activo' : 'Inactivo';
+            const lbl = value === 'active' ? 'Active' : 'Inactive';
             return `<span class="mts-badge ${cls}">${lbl}</span>`;
           },
         },

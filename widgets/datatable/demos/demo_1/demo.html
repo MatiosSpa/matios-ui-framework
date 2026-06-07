@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -22,7 +22,7 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DataTable — 1 — Básico con búsqueda y paginación</title>
+  <title>DataTable — 1 — Basic with search and pagination</title>
   <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
   <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dark.css">
   <link rel="stylesheet" href="../../../../themes/matios-ui-mode-high-contrast.css">
@@ -91,10 +91,10 @@ const js_s1 =
   elementId: 'table1',
   columns: [
     { field: 'id',         label: '#',      sortable: true, align: 'end', width: '60px' },
-    { field: 'name',       label: 'Nombre', sortable: true },
-    { field: 'email',      label: 'Email',  sortable: true },
-    { field: 'department', label: 'Área',   sortable: true },
-    { field: 'role',       label: 'Rol',    sortable: true },
+    { field: 'name',       label: 'Name',       sortable: true },
+    { field: 'email',      label: 'Email',      sortable: true },
+    { field: 'department', label: 'Department', sortable: true },
+    { field: 'role',       label: 'Role',       sortable: true },
   ],
   dataSource: { url: '/widgets/datatable/mock-api/items', method: 'GET' },
   rowId:    'id',
@@ -104,14 +104,14 @@ const js_s1 =
   search:   { enabled: true, minChars: 2, width: '260px' },
   pagination: { pageSizeOptions: [5, 8, 15, 25] },
   texts: {
-    search:   'Buscar usuario...',
-    noData:   'No se encontraron usuarios',
-    showing:  'Mostrando {start}–{end} de {total} usuarios',
-    previous: '← Anterior',
-    next:     'Siguiente →',
+    search:   'Search user...',
+    noData:   'No users found',
+    showing:  'Showing {start}–{end} of {total} users',
+    previous: '← Previous',
+    next:     'Next →',
   },
   onAfterLoad: (result) => {
-    console.log('[usersTable.onAfterLoad]', result.total, 'registros');
+    console.log('[usersTable.onAfterLoad]', result.total, 'records');
   },
 });`;
 
@@ -121,10 +121,10 @@ function initTables() {
       elementId: 'table1',
       columns: [
         { field: 'id',         label: '#',      sortable: true, align: 'end', width: '60px' },
-        { field: 'name',       label: 'Nombre', sortable: true },
-        { field: 'email',      label: 'Email',  sortable: true },
-        { field: 'department', label: 'Área',   sortable: true },
-        { field: 'role',       label: 'Rol',    sortable: true },
+        { field: 'name',       label: 'Name',       sortable: true },
+        { field: 'email',      label: 'Email',      sortable: true },
+        { field: 'department', label: 'Department', sortable: true },
+        { field: 'role',       label: 'Role',       sortable: true },
       ],
       dataSource: { url: '/widgets/datatable/mock-api/items', method: 'GET' },
       rowId:    'id',
@@ -134,14 +134,14 @@ function initTables() {
       search:   { enabled: true, minChars: 2, width: '260px' },
       pagination: { pageSizeOptions: [5, 8, 15, 25] },
       texts: {
-        search:   'Buscar usuario...',
-        noData:   'No se encontraron usuarios',
-        showing:  'Mostrando {start}–{end} de {total} usuarios',
-        previous: '← Anterior',
-        next:     'Siguiente →',
+        search:   'Search user...',
+        noData:   'No users found',
+        showing:  'Showing {start}–{end} of {total} users',
+        previous: '← Previous',
+        next:     'Next →',
       },
       onAfterLoad: (result) => {
-        console.log('[usersTable.onAfterLoad]', result.total, 'registros');
+        console.log('[usersTable.onAfterLoad]', result.total, 'records');
       },
     });
   });

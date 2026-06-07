@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -92,21 +92,21 @@ const js_s3 =
   elementId: 'table3',
   columns: [
     { field: 'id',   label: '#',      sortable: true, align: 'end', width: '60px' },
-    { field: 'name', label: 'Nombre', sortable: true },
+    { field: 'name', label: 'Name', sortable: true },
     {
       field: 'status',
-      label: 'Estado',
+      label: 'Status',
       sortable: true,
       align: 'center',
       width: '120px',
       render: (value) => {
         const cls = value === 'active' ? 'mts-badge--success' : 'mts-badge--danger';
-        const lbl = value === 'active' ? 'Activo' : 'Inactivo';
+        const lbl = value === 'active' ? 'Active' : 'Inactive';
         return \`<span class="mts-badge \${cls}">\${lbl}</span>\`;
       },
     },
-    { field: 'joinDate',   label: 'Fecha ingreso', sortable: true, align: 'end', width: '140px' },
-    { field: 'department', label: 'Área',          sortable: true },
+    { field: 'joinDate',   label: 'Join date', sortable: true, align: 'end', width: '140px' },
+    { field: 'department', label: 'Department',          sortable: true },
   ],
   dataSource:        { url: '/widgets/datatable/mock-api/items', method: 'GET' },
   rowId:             'id',
@@ -125,21 +125,21 @@ function initTables() {
       elementId: 'table3',
       columns: [
         { field: 'id',   label: '#',      sortable: true, align: 'end', width: '60px' },
-        { field: 'name', label: 'Nombre', sortable: true },
+        { field: 'name', label: 'Name', sortable: true },
         {
           field: 'status',
-          label: 'Estado',
+          label: 'Status',
           sortable: true,
           align: 'center',
           width: '120px',
           render: (value) => {
             const cls = value === 'active' ? 'mts-badge--success' : 'mts-badge--danger';
-            const lbl = value === 'active' ? 'Activo' : 'Inactivo';
+            const lbl = value === 'active' ? 'Active' : 'Inactive';
             return `<span class="mts-badge ${cls}">${lbl}</span>`;
           },
         },
-        { field: 'joinDate',   label: 'Fecha ingreso', sortable: true, align: 'end', width: '140px' },
-        { field: 'department', label: 'Área',          sortable: true },
+        { field: 'joinDate',   label: 'Join date', sortable: true, align: 'end', width: '140px' },
+        { field: 'department', label: 'Department',          sortable: true },
       ],
       dataSource:        { url: '/widgets/datatable/mock-api/items', method: 'GET' },
       rowId:             'id',

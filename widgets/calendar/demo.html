@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -134,6 +134,12 @@
 
 <!-- Toast inline -->
 
+<script>
+  (function () {
+    var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+    if (window.MTS && MTS.setLocale) MTS.setLocale(m ? m[1] : 'en');
+  })();
+</script>
 <script src="app.js"></script>
 <!-- ══════════════════════════════════════════════════════════
      EJEMPLO DE USO — copiar, descomentar y adaptar

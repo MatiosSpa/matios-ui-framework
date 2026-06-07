@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -95,10 +95,10 @@ const js_s10 =
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
         <div><strong>ID</strong><br>\${item.id ?? '—'}</div>
         <div><strong>Email</strong><br>\${item.email ?? '—'}</div>
-        <div><strong>Área</strong><br>\${item.department ?? '—'}</div>
-        <div><strong>Rol</strong><br>\${item.role ?? '—'}</div>
-        <div><strong>Fecha ingreso</strong><br>\${item.joinDate ?? '—'}</div>
-        <div><strong>Estado</strong><br>\${item.status ?? '—'}</div>
+        <div><strong>Department</strong><br>\${item.department ?? '—'}</div>
+        <div><strong>Role</strong><br>\${item.role ?? '—'}</div>
+        <div><strong>Join date</strong><br>\${item.joinDate ?? '—'}</div>
+        <div><strong>Status</strong><br>\${item.status ?? '—'}</div>
       </div>
     </div>\`,
 });
@@ -106,11 +106,11 @@ const js_s10 =
 new MTS.DataTable({
   elementId: 'table10',
   columns: [
-    { field: 'id',         label: '#',      sortable: true, align: 'end', width: '60px' },
-    { field: 'name',       label: 'Nombre', sortable: true },
-    { field: 'email',      label: 'Email',  sortable: true },
-    { field: 'department', label: 'Área',   sortable: true },
-    { field: 'role',       label: 'Rol',    sortable: true },
+    { field: 'id',         label: '#',          sortable: true, align: 'end', width: '60px' },
+    { field: 'name',       label: 'Name',       sortable: true },
+    { field: 'email',      label: 'Email',      sortable: true },
+    { field: 'department', label: 'Department', sortable: true },
+    { field: 'role',       label: 'Role',       sortable: true },
   ],
   dataSource: { url: '/widgets/datatable/mock-api/items', method: 'GET' },
   rowId:    'id',
@@ -128,10 +128,10 @@ function initTables() {
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
             <div><strong>ID</strong><br>${item.id ?? '—'}</div>
             <div><strong>Email</strong><br>${item.email ?? '—'}</div>
-            <div><strong>Área</strong><br>${item.department ?? '—'}</div>
-            <div><strong>Rol</strong><br>${item.role ?? '—'}</div>
-            <div><strong>Fecha ingreso</strong><br>${item.joinDate ?? '—'}</div>
-            <div><strong>Estado</strong><br>${item.status ?? '—'}</div>
+            <div><strong>Department</strong><br>${item.department ?? '—'}</div>
+            <div><strong>Role</strong><br>${item.role ?? '—'}</div>
+            <div><strong>Join date</strong><br>${item.joinDate ?? '—'}</div>
+            <div><strong>Status</strong><br>${item.status ?? '—'}</div>
           </div>
         </div>`,
     });
@@ -139,11 +139,11 @@ function initTables() {
     new MTS.DataTable({
       elementId: 'table10',
       columns: [
-        { field: 'id',         label: '#',      sortable: true, align: 'end', width: '60px' },
-        { field: 'name',       label: 'Nombre', sortable: true },
-        { field: 'email',      label: 'Email',  sortable: true },
-        { field: 'department', label: 'Área',   sortable: true },
-        { field: 'role',       label: 'Rol',    sortable: true },
+        { field: 'id',         label: '#',          sortable: true, align: 'end', width: '60px' },
+        { field: 'name',       label: 'Name',       sortable: true },
+        { field: 'email',      label: 'Email',      sortable: true },
+        { field: 'department', label: 'Department', sortable: true },
+        { field: 'role',       label: 'Role',       sortable: true },
       ],
       dataSource: { url: '/widgets/datatable/mock-api/items', method: 'GET' },
       rowId:    'id',

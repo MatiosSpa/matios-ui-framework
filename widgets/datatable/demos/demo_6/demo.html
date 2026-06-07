@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -90,38 +90,38 @@ function makeSection(id, previewHtml, jsCode, initFn) {
 
 const preview_s6 =
   '<div id="table6"></div>' +
-  '<div class="result-box" id="rowActionsStatus">Sin acción</div>';
+  '<div class="result-box" id="rowActionsStatus">No action</div>';
 
 const js_s6 =
 `const colActions = new MTS.DataTableColumnActionsPlugin({
   items: [
     {
-      label: 'Ver detalle',
+      label: 'View detail',
       icon:  'eye',
       action: (items) => { rowActionsStatus.textContent = \`onView → \${items.map(i => i.name).join(', ')}\`; },
     },
     {
-      label:     'Editar',
+      label:     'Edit',
       icon:      'edit',
       condition: (item) => item.status === 'active',
       action: (items) => { rowActionsStatus.textContent = \`onEdit → \${items.map(i => i.name).join(', ')}\`; },
     },
     { separator: true },
     {
-      label:     'Activar',
+      label:     'Activate',
       icon:      'check-circle',
       condition: (item) => item.status === 'inactive',
       action: (items) => { rowActionsStatus.textContent = \`onActivate → \${items.map(i => i.name).join(', ')}\`; },
     },
     {
-      label:     'Desactivar',
+      label:     'Deactivate',
       icon:      'pause',
       condition: (item) => item.status === 'active',
       action: (items) => { rowActionsStatus.textContent = \`onDeactivate → \${items.map(i => i.name).join(', ')}\`; },
     },
     { separator: true },
     {
-      label:  'Eliminar',
+      label:  'Delete',
       icon:   'trash',
       danger: true,
       action: (items) => { rowActionsStatus.textContent = \`onDelete → \${items.map(i => i.name).join(', ')}\`; },
@@ -134,19 +134,19 @@ const js_s6 =
 new MTS.DataTable({
   elementId: 'table6',
   columns: [
-    { field: 'id',         label: '#',      sortable: true, align: 'end', width: '60px' },
-    { field: 'name',       label: 'Nombre', sortable: true },
-    { field: 'email',      label: 'Email',  sortable: true },
-    { field: 'role',       label: 'Rol',    sortable: true },
+    { field: 'id',         label: '#',     sortable: true, align: 'end', width: '60px' },
+    { field: 'name',       label: 'Name',  sortable: true },
+    { field: 'email',      label: 'Email', sortable: true },
+    { field: 'role',       label: 'Role',  sortable: true },
     {
       field: 'status',
-      label: 'Estado',
+      label: 'Status',
       sortable: true,
       align: 'center',
       width: '110px',
       render: (value) => {
         const cls = value === 'active' ? 'mts-badge--success' : 'mts-badge--danger';
-        const lbl = value === 'active' ? 'Activo' : 'Inactivo';
+        const lbl = value === 'active' ? 'Active' : 'Inactive';
         return \`<span class="mts-badge \${cls}">\${lbl}</span>\`;
       },
     },
@@ -167,7 +167,7 @@ function initTables() {
     const colActions = new MTS.DataTableColumnActionsPlugin({
       items: [
         {
-          label: 'Ver detalle',
+          label: 'View detail',
           icon:  'eye',
           action: (items) => {
             console.log('[colActionsTable.onView]', items);
@@ -175,7 +175,7 @@ function initTables() {
           },
         },
         {
-          label:     'Editar',
+          label:     'Edit',
           icon:      'edit',
           condition: (item) => item.status === 'active',
           action: (items) => {
@@ -185,7 +185,7 @@ function initTables() {
         },
         { separator: true },
         {
-          label:     'Activar',
+          label:     'Activate',
           icon:      'check-circle',
           condition: (item) => item.status === 'inactive',
           action: (items) => {
@@ -194,7 +194,7 @@ function initTables() {
           },
         },
         {
-          label:     'Desactivar',
+          label:     'Deactivate',
           icon:      'pause',
           condition: (item) => item.status === 'active',
           action: (items) => {
@@ -204,7 +204,7 @@ function initTables() {
         },
         { separator: true },
         {
-          label:  'Eliminar',
+          label:  'Delete',
           icon:   'trash',
           danger: true,
           action: (items) => {
@@ -220,19 +220,19 @@ function initTables() {
     new MTS.DataTable({
       elementId: 'table6',
       columns: [
-        { field: 'id',         label: '#',      sortable: true, align: 'end', width: '60px' },
-        { field: 'name',       label: 'Nombre', sortable: true },
-        { field: 'email',      label: 'Email',  sortable: true },
-        { field: 'role',       label: 'Rol',    sortable: true },
+        { field: 'id',         label: '#',     sortable: true, align: 'end', width: '60px' },
+        { field: 'name',       label: 'Name',  sortable: true },
+        { field: 'email',      label: 'Email', sortable: true },
+        { field: 'role',       label: 'Role',  sortable: true },
         {
           field: 'status',
-          label: 'Estado',
+          label: 'Status',
           sortable: true,
           align: 'center',
           width: '110px',
           render: (value) => {
             const cls = value === 'active' ? 'mts-badge--success' : 'mts-badge--danger';
-            const lbl = value === 'active' ? 'Activo' : 'Inactivo';
+            const lbl = value === 'active' ? 'Active' : 'Inactive';
             return `<span class="mts-badge ${cls}">${lbl}</span>`;
           },
         },

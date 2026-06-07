@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -91,42 +91,42 @@ function makeSection(id, previewHtml, jsCode, initFn) {
 
 const preview_s4 =
   '<div id="table4"></div>' +
-  '<div class="result-box" id="ctxStatus">Sin acción — clic derecho o botón "Acciones"</div>';
+  '<div class="result-box" id="ctxStatus">No action — right-click or the "Actions" button</div>';
 
 const js_s4 =
 `const ctxMenu = new MTS.DataTableContextMenuPlugin({
   items: [
     {
-      label: 'Ver detalle',
+      label: 'View detail',
       icon:  'eye',
-      action: (item) => { ctxStatus.textContent = \`Ver: \${item.name} — \${item.email}\`; },
+      action: (item) => { ctxStatus.textContent = \`View: \${item.name} — \${item.email}\`; },
     },
     {
-      label:     'Editar',
+      label:     'Edit',
       icon:      'edit',
       shortcut:  'E',
       condition: (item) => item.status === 'active',
-      action: (item) => { ctxStatus.textContent = \`Editar: \${item.name}\`; },
+      action: (item) => { ctxStatus.textContent = \`Edit: \${item.name}\`; },
     },
     { separator: true },
     {
-      label:     'Activar',
+      label:     'Activate',
       icon:      'check-circle',
       condition: (item) => item.status === 'inactive',
-      action: (item) => { ctxStatus.textContent = \`Activar: \${item.name}\`; },
+      action: (item) => { ctxStatus.textContent = \`Activate: \${item.name}\`; },
     },
     {
-      label:     'Desactivar',
+      label:     'Deactivate',
       icon:      'pause',
       condition: (item) => item.status === 'active',
-      action: (item) => { ctxStatus.textContent = \`Desactivar: \${item.name}\`; },
+      action: (item) => { ctxStatus.textContent = \`Deactivate: \${item.name}\`; },
     },
     { separator: true },
     {
-      label:  'Eliminar',
+      label:  'Delete',
       icon:   'trash',
       danger: true,
-      action: (item) => { ctxStatus.textContent = \`Eliminar: \${item.name}\`; },
+      action: (item) => { ctxStatus.textContent = \`Delete: \${item.name}\`; },
     },
   ],
   onOpen:  (item) => console.log('[ctxMenuTable.onOpen]',  item),
@@ -137,18 +137,18 @@ new MTS.DataTable({
   elementId: 'table4',
   columns: [
     { field: 'id',         label: '#',      sortable: true, align: 'end', width: '60px' },
-    { field: 'name',       label: 'Nombre', sortable: true },
-    { field: 'role',       label: 'Rol',    sortable: true },
-    { field: 'department', label: 'Área',   sortable: true },
+    { field: 'name',       label: 'Name',       sortable: true },
+    { field: 'role',       label: 'Role',       sortable: true },
+    { field: 'department', label: 'Department', sortable: true },
     {
       field: 'status',
-      label: 'Estado',
+      label: 'Status',
       sortable: true,
       align: 'center',
       width: '110px',
       render: (value) => {
         const cls = value === 'active' ? 'mts-badge--success' : 'mts-badge--danger';
-        const lbl = value === 'active' ? 'Activo' : 'Inactivo';
+        const lbl = value === 'active' ? 'Active' : 'Inactive';
         return \`<span class="mts-badge \${cls}">\${lbl}</span>\`;
       },
     },
@@ -169,50 +169,50 @@ function initTables() {
     const ctxMenu = new MTS.DataTableContextMenuPlugin({
       items: [
         {
-          label: 'Ver detalle',
+          label: 'View detail',
           icon:  'eye',
           action: (item) => {
             console.log('[ctxMenuTable.onView]', item);
-            ctxStatus.textContent = `Ver: ${item.name} — ${item.email}`;
+            ctxStatus.textContent = `View: ${item.name} — ${item.email}`;
           },
         },
         {
-          label:     'Editar',
+          label:     'Edit',
           icon:      'edit',
           shortcut:  'E',
           condition: (item) => item.status === 'active',
           action: (item) => {
             console.log('[ctxMenuTable.onEdit]', item);
-            ctxStatus.textContent = `Editar: ${item.name}`;
+            ctxStatus.textContent = `Edit: ${item.name}`;
           },
         },
         { separator: true },
         {
-          label:     'Activar',
+          label:     'Activate',
           icon:      'check-circle',
           condition: (item) => item.status === 'inactive',
           action: (item) => {
             console.log('[ctxMenuTable.onActivate]', item);
-            ctxStatus.textContent = `Activar: ${item.name}`;
+            ctxStatus.textContent = `Activate: ${item.name}`;
           },
         },
         {
-          label:     'Desactivar',
+          label:     'Deactivate',
           icon:      'pause',
           condition: (item) => item.status === 'active',
           action: (item) => {
             console.log('[ctxMenuTable.onDeactivate]', item);
-            ctxStatus.textContent = `Desactivar: ${item.name}`;
+            ctxStatus.textContent = `Deactivate: ${item.name}`;
           },
         },
         { separator: true },
         {
-          label:  'Eliminar',
+          label:  'Delete',
           icon:   'trash',
           danger: true,
           action: (item) => {
             console.log('[ctxMenuTable.onDelete]', item);
-            ctxStatus.textContent = `Eliminar: ${item.name}`;
+            ctxStatus.textContent = `Delete: ${item.name}`;
           },
         },
       ],
@@ -224,18 +224,18 @@ function initTables() {
       elementId: 'table4',
       columns: [
         { field: 'id',         label: '#',      sortable: true, align: 'end', width: '60px' },
-        { field: 'name',       label: 'Nombre', sortable: true },
-        { field: 'role',       label: 'Rol',    sortable: true },
-        { field: 'department', label: 'Área',   sortable: true },
+        { field: 'name',       label: 'Name',       sortable: true },
+        { field: 'role',       label: 'Role',       sortable: true },
+        { field: 'department', label: 'Department', sortable: true },
         {
           field: 'status',
-          label: 'Estado',
+          label: 'Status',
           sortable: true,
           align: 'center',
           width: '110px',
           render: (value) => {
             const cls = value === 'active' ? 'mts-badge--success' : 'mts-badge--danger';
-            const lbl = value === 'active' ? 'Activo' : 'Inactivo';
+            const lbl = value === 'active' ? 'Active' : 'Inactive';
             return `<span class="mts-badge ${cls}">${lbl}</span>`;
           },
         },
