@@ -70,6 +70,8 @@
 
 <script>
 /* ═══ LOCALE ═══ Todo texto del demo sale del locale del componente (MTS.SprintBoard). */
+/* Public demo: default English; ?lang=es|en|pt to switch. */
+(function () { var m = (location.search || '').match(/[?&]lang=(es|en|pt)/); if (window.MTS && MTS.setLocale) MTS.setLocale(m ? m[1] : 'en'); })();
 var LS = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.SprintBoard']) || {};
 var UI = LS.ui || {};
 var TYPES = UI.types || {}, PRIOS = UI.priorities || {};

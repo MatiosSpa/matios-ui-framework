@@ -89,6 +89,8 @@
 <script>
 /* ═══ LOCALE ═══ */
 /* Todo texto visible del demo sale del locale del componente (MTS.GanttChart.ui). Cero strings en duro. */
+/* Public demo: default English; ?lang=es|en|pt to switch. */
+(function () { var m = (location.search || '').match(/[?&]lang=(es|en|pt)/); if (window.MTS && MTS.setLocale) MTS.setLocale(m ? m[1] : 'en'); })();
 var UI = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.GanttChart'] && MTS.getLocale()['MTS.GanttChart'].ui) || {};
 
 /* ═══ DATOS ═══ */

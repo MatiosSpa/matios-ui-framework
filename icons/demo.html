@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -84,14 +84,14 @@
 <div class="demo-page">
   <div class="demo-header">
     <h1><span>MTS</span>.Icons</h1>
-    <p>278 íconos SVG · outline + filled · 7 tamaños · colores semánticos · cero dependencias</p>
+    <p>278 SVG icons · outline + filled · 7 sizes · semantic colors · zero dependencies</p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">1 — Tamaños / Sizes — xs · sm · md · lg · xl · 2xl · 3xl</div>
+    <div class="demo-section-title">1 — Sizes — xs · sm · md · lg · xl · 2xl · 3xl</div>
     <div id="tabs-s1"></div>
   </div>
 
@@ -101,23 +101,23 @@
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">3 — Colores semánticos / Semantic colors</div>
+    <div class="demo-section-title">3 — Semantic colors</div>
     <div id="tabs-s3"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">4 — Uso en componentes / Usage in components</div>
+    <div class="demo-section-title">4 — Usage in components</div>
     <div id="tabs-s4"></div>
   </div>
 
   <div class="demo-section">
-    <div class="demo-section-title">5 — Galería completa / Full gallery — click para copiar nombre</div>
+    <div class="demo-section-title">5 — Full gallery — click to copy name</div>
     <div class="demo-row" style="gap:12px;align-items:center;flex-wrap:wrap">
-      <input class="icon-search-input" id="iconSearch" placeholder="Buscar ícono... (ej: arrow, check, user)" oninput="filterIcons(this.value)">
+      <input class="icon-search-input" id="iconSearch" placeholder="Search icon... (e.g.: arrow, check, user)" oninput="filterIcons(this.value)">
       <span class="icon-counter" id="iconCounter"></span>
     </div>
     <div class="icon-gallery" id="iconGallery"></div>
-    <div class="result-box" id="icon-result">— click en un ícono para copiar su nombre —</div>
+    <div class="result-box" id="icon-result">— click an icon to copy its name —</div>
   </div>
 </div>
 
@@ -234,8 +234,8 @@ var preview_s4 =
     '<button id="btn-use-download"></button>' +
     '<button id="btn-use-edit"></button>' +
     '<button id="btn-use-delete"></button>' +
-    '<div class="usage-item"><i class="mts-icon mts-icon-check-circle mts-icon--md mts-icon--success"></i>Operación exitosa</div>' +
-    '<div class="usage-item"><i class="mts-icon mts-icon-alert-circle mts-icon--md mts-icon--warning"></i>Advertencia</div>' +
+    '<div class="usage-item"><i class="mts-icon mts-icon-check-circle mts-icon--md mts-icon--success"></i>Operation successful</div>' +
+    '<div class="usage-item"><i class="mts-icon mts-icon-alert-circle mts-icon--md mts-icon--warning"></i>Warning</div>' +
   '</div>';
 
 var js_s4 =
@@ -262,7 +262,7 @@ function buildGallery(filter) {
   }
   var gallery = document.getElementById('iconGallery');
   var counter  = document.getElementById('iconCounter');
-  counter.textContent = names.length + ' íconos';
+  counter.textContent = names.length + ' icons';
 
   gallery.innerHTML = names.map(function(name) {
     return '<div class="icon-card" onclick="copyIcon(\'' + name + '\')" id="card-' + name + '">' +
@@ -277,7 +277,7 @@ function filterIcons(v) { buildGallery(v); }
 function copyIcon(name) {
   var text = 'mts-icon-' + name;
   navigator.clipboard && navigator.clipboard.writeText(text);
-  document.getElementById('icon-result').textContent = 'Copiado: ' + text;
+  document.getElementById('icon-result').textContent = 'Copied: ' + text;
   var card = document.getElementById('card-' + name);
   if (card) {
     card.classList.add('copied');

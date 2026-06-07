@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTS Temas — Demo</title>
+  <title>MTS Themes — Demo</title>
   <script>
     (function () {
       var sp = location.search || location.hash || '';
@@ -435,7 +435,7 @@
 
 <div class="themes-toolbar" id="themeSwitcher">
   <div class="themes-toolbar__row">
-    <span class="themes-toolbar__label">Modo</span>
+    <span class="themes-toolbar__label">Mode</span>
     <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-mode="dark" onclick="applyMode('dark')">Dark</button>
     <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-mode="light" onclick="applyMode('light')">Light</button>
     <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-mode="high-contrast" onclick="applyMode('high-contrast')">High Contrast</button>
@@ -455,32 +455,32 @@
 
 <div class="themes-page">
   <header class="themes-header">
-    <h1>MTS <span>Temas</span></h1>
-    <p>Arquitectura <strong>modo + accent</strong>. <code>light</code> y <code>dark</code> usan accent opcional. El accent redefine al menos la familia primaria y, si hace falta, puede ajustar tambien el accent decorativo. <code>high-contrast</code> funciona completo por sí solo y el integrador decide si superpone un accent.</p>
+    <h1>MTS <span>Themes</span></h1>
+    <p><strong>Mode + accent</strong> architecture. <code>light</code> and <code>dark</code> use an optional accent. The accent redefines at least the primary family and, if needed, can also adjust the decorative accent. <code>high-contrast</code> works fully on its own and the integrator decides whether to layer an accent on top.</p>
   </header>
 
   <section>
-    <div class="themes-kicker">Combinaciones disponibles</div>
+    <div class="themes-kicker">Available combinations</div>
     <div class="themes-grid" id="themesGrid"></div>
   </section>
 
   <section class="theme-section">
-    <div class="theme-section__header">Cómo usar / How to use</div>
+    <div class="theme-section__header">How to use</div>
     <div class="theme-section__body">
-      <p class="theme-section__desc">Aplica <code>data-mts-mode</code> en <code>&lt;html&gt;</code>. El accent es opcional y redefine como minimo la familia primaria; algunos accents tambien ajustan el color decorativo secundario.</p>
-      <pre>&lt;!-- Solo modo / Mode only --&gt;
+      <p class="theme-section__desc">Apply <code>data-mts-mode</code> on <code>&lt;html&gt;</code>. The accent is optional and redefines at least the primary family; some accents also adjust the secondary decorative color.</p>
+      <pre>&lt;!-- Mode only --&gt;
 &lt;html data-mts-mode="dark"&gt;
 &lt;html data-mts-mode="light"&gt;
 &lt;html data-mts-mode="high-contrast"&gt;
 
-&lt;!-- Modo + accent / Mode + accent --&gt;
+&lt;!-- Mode + accent --&gt;
 &lt;html data-mts-mode="dark" data-mts-accent="violet"&gt;
 &lt;html data-mts-mode="light" data-mts-accent="olive"&gt;
 
-&lt;!-- High contrast + accent (opcional, decisión del integrador) --&gt;
+&lt;!-- High contrast + accent (optional, integrator's choice) --&gt;
 &lt;html data-mts-mode="high-contrast" data-mts-accent="blue"&gt;
 
-&lt;!-- CSS a importar --&gt;
+&lt;!-- CSS to import --&gt;
 &lt;link rel="stylesheet" href="themes/matios-ui-mode-dark.css"&gt;
 &lt;link rel="stylesheet" href="themes/matios-ui-mode-light.css"&gt;
 &lt;link rel="stylesheet" href="themes/matios-ui-mode-high-contrast.css"&gt;
@@ -491,31 +491,31 @@
 &lt;link rel="stylesheet" href="themes/matios-ui-accent-violet.css"&gt;
 &lt;link rel="stylesheet" href="themes/matios-ui-accent-olive.css"&gt;
 &lt;link rel="stylesheet" href="themes/matios-ui-accent-blue.css"&gt;</pre>
-      <div class="theme-note"><strong>Nota:</strong> <code>matios-ui-mode-high-contrast.css</code> ya trae su propia paleta de accesibilidad. Si alguien además carga un accent encima, la mezcla queda bajo responsabilidad del integrador.</div>
+      <div class="theme-note"><strong>Note:</strong> <code>matios-ui-mode-high-contrast.css</code> already ships its own accessibility palette. If someone also loads an accent on top, the resulting mix is the integrator's responsibility.</div>
     </div>
   </section>
 
   <section class="theme-section">
-    <div class="theme-section__header">Crear un mode custom</div>
+    <div class="theme-section__header">Create a custom mode</div>
     <div class="theme-section__body">
-      <p class="theme-section__desc">Crea un archivo CSS y redefine solo las variables que necesites en tu propio selector.</p>
-      <pre>[data-mts-mode="mi-empresa"] {
-  /* Fondos / Backgrounds */
+      <p class="theme-section__desc">Create a CSS file and redefine only the variables you need in your own selector.</p>
+      <pre>[data-mts-mode="my-company"] {
+  /* Backgrounds */
   --mts-bg-body:      #1a0a0a;
   --mts-bg-surface:   #220d0d;
   --mts-bg-surface-2: #2d1010;
 
-  /* Texto / Text */
+  /* Text */
   --mts-text-primary:   #f8eaea;
   --mts-text-secondary: #c9aaaa;
   --mts-text-muted:     #7a5555;
 
-  /* Bordes / Borders */
+  /* Borders */
   --mts-border-color:       #3d1515;
   --mts-border-color-focus: #e63946;
 }
 
-/* Accent custom / Accent custom */
+/* Custom accent */
 [data-mts-accent="brand"] {
   --mts-color-primary:        #e63946;
   --mts-color-primary-hover:  #c1121f;
@@ -532,19 +532,19 @@
   </section>
 
   <section class="theme-section">
-    <div class="theme-section__header">Variables CSS disponibles</div>
+    <div class="theme-section__header">Available CSS variables</div>
     <table class="vars-table" id="varsTable"></table>
   </section>
 </div>
 
 <script>
   var MODES = [
-    { id:'dark',  name:'Dark',  desc:'Oscuro neutro', detail:'Accent opcional', previewMode:'dark', previewAccent:null },
-    { id:'light', name:'Light', desc:'Claro', detail:'Accent opcional', previewMode:'light', previewAccent:null }
+    { id:'dark',  name:'Dark',  desc:'Neutral dark', detail:'Optional accent', previewMode:'dark', previewAccent:null },
+    { id:'light', name:'Light', desc:'Light', detail:'Optional accent', previewMode:'light', previewAccent:null }
   ];
 
   var ACCENTS = [
-    { id:null,     name:'Default', label:'azul default' },
+    { id:null,     name:'Default', label:'default blue' },
     { id:'corporate', name:'Corporate', label:'Corporate (amber + navy)' },
     { id:'navy',      name:'Navy',      label:'Navy + amber' },
     { id:'emerald',   name:'Emerald',   label:'Emerald + amber' },
@@ -555,29 +555,29 @@
   ];
 
   var CSS_VARS = [
-    { name:'--mts-color-primary', desc:'Color primario — botones, links, activos' },
-    { name:'--mts-color-primary-hover', desc:'Primary en hover' },
-    { name:'--mts-color-primary-light', desc:'Primary translúcido — fondos de ítem activo' },
-    { name:'--mts-bg-body', desc:'Fondo de la página' },
+    { name:'--mts-color-primary', desc:'Primary color — buttons, links, active states' },
+    { name:'--mts-color-primary-hover', desc:'Primary on hover' },
+    { name:'--mts-color-primary-light', desc:'Translucent primary — active item backgrounds' },
+    { name:'--mts-bg-body', desc:'Page background' },
     { name:'--mts-bg-surface', desc:'Sidebar, topbar, cards' },
-    { name:'--mts-bg-surface-2', desc:'Superficie elevada — hover, inputs' },
-    { name:'--mts-text-primary', desc:'Texto principal' },
-    { name:'--mts-text-secondary', desc:'Texto secundario' },
-    { name:'--mts-text-muted', desc:'Texto apagado / hints' },
-    { name:'--mts-border-color', desc:'Color de bordes' },
-    { name:'--mts-border-color-focus', desc:'Borde/ring de foco' },
-    { name:'--mts-color-success', desc:'Verde — éxito' },
-    { name:'--mts-color-warning', desc:'Amarillo — advertencia' },
-    { name:'--mts-color-danger', desc:'Rojo — error' },
-    { name:'--mts-color-info', desc:'Azul — información' },
-    { name:'--mts-shadow-sm', desc:'Sombra pequeña' },
-    { name:'--mts-shadow-md', desc:'Sombra mediana' },
-    { name:'--mts-shadow-lg', desc:'Sombra grande' },
-    { name:'--mts-btn-shadow-primary', desc:'Sombra del botón primary' },
-    { name:'--mts-btn-ring-primary', desc:'Ring/focus del botón primary' },
-    { name:'--mts-font-family', desc:'Fuente principal' },
-    { name:'--mts-radius-md', desc:'Radio de borde medio' },
-    { name:'--mts-radius-lg', desc:'Radio de borde grande' }
+    { name:'--mts-bg-surface-2', desc:'Elevated surface — hover, inputs' },
+    { name:'--mts-text-primary', desc:'Primary text' },
+    { name:'--mts-text-secondary', desc:'Secondary text' },
+    { name:'--mts-text-muted', desc:'Muted text / hints' },
+    { name:'--mts-border-color', desc:'Border color' },
+    { name:'--mts-border-color-focus', desc:'Focus border/ring' },
+    { name:'--mts-color-success', desc:'Green — success' },
+    { name:'--mts-color-warning', desc:'Yellow — warning' },
+    { name:'--mts-color-danger', desc:'Red — error' },
+    { name:'--mts-color-info', desc:'Blue — information' },
+    { name:'--mts-shadow-sm', desc:'Small shadow' },
+    { name:'--mts-shadow-md', desc:'Medium shadow' },
+    { name:'--mts-shadow-lg', desc:'Large shadow' },
+    { name:'--mts-btn-shadow-primary', desc:'Primary button shadow' },
+    { name:'--mts-btn-ring-primary', desc:'Primary button ring/focus' },
+    { name:'--mts-font-family', desc:'Primary font' },
+    { name:'--mts-radius-md', desc:'Medium border radius' },
+    { name:'--mts-radius-lg', desc:'Large border radius' }
   ];
 
   function currentMode() {
@@ -622,7 +622,7 @@
   function renderRegularCard(mode, accent) {
     var palette = currentPalette(mode.id, accent.id);
     var active = currentMode() === mode.id && (currentAccent() || null) === (accent.id || null);
-    var accentText = accent.id ? ' + ' + accent.label : ' + azul default';
+    var accentText = accent.id ? ' + ' + accent.label : ' + default blue';
 
     return '' +
       '<article class="theme-option' + (active ? ' is-active' : '') + '" data-mode="' + mode.id + '" data-accent="' + (accent.id || '') + '" onclick="applyCombo(\'' + mode.id + '\',' + (accent.id ? '\'' + accent.id + '\'' : 'null') + ')">' +
@@ -644,7 +644,7 @@
           '<div class="theme-option__title">' +
             '<span>' + mode.name + '</span>' +
             (accent.id ? '<span class="theme-option__pill">+' + accent.name + '</span>' : '') +
-            (active ? '<span class="theme-option__pill">Activo</span>' : '') +
+            (active ? '<span class="theme-option__pill">Active</span>' : '') +
           '</div>' +
           '<p class="theme-option__desc">' + mode.desc + accentText + '</p>' +
         '</div>' +
@@ -670,15 +670,15 @@
               '<button type="button" class="mts-btn mts-btn--primary mts-btn--sm theme-option__button" style="background:' + palette.primary + ';border-color:' + palette.primary + ';color:' + palette.primaryText + ';">Action</button>' +
             '</div>' +
           '</div>' +
-          '<p class="theme-option__hc-note">Modo accesible autosuficiente. Si el integrador le superpone un accent, la mezcla queda a su criterio.</p>' +
+          '<p class="theme-option__hc-note">Self-sufficient accessible mode. If the integrator layers an accent on top, the resulting mix is at their discretion.</p>' +
         '</div>' +
         '<div class="theme-option__info">' +
           '<div class="theme-option__title">' +
             '<span>High Contrast</span>' +
             '<span class="theme-option__pill">Mode</span>' +
-            (active ? '<span class="theme-option__pill">Activo</span>' : '') +
+            (active ? '<span class="theme-option__pill">Active</span>' : '') +
           '</div>' +
-          '<p class="theme-option__desc">Negro puro, bordes visibles y foco reforzado' + accentLabel + '.</p>' +
+          '<p class="theme-option__desc">Pure black, visible borders and reinforced focus' + accentLabel + '.</p>' +
         '</div>' +
       '</article>';
   }
@@ -752,7 +752,7 @@
   function renderVarsTable() {
     var table = document.getElementById('varsTable');
     table.innerHTML =
-      '<thead><tr><th>Variable</th><th>Descripción</th></tr></thead><tbody>' +
+      '<thead><tr><th>Variable</th><th>Description</th></tr></thead><tbody>' +
       CSS_VARS.map(function (item) {
         return '<tr><td><span class="var-name">' + item.name + '</span></td><td class="var-desc">' + item.desc + '</td></tr>';
       }).join('') +

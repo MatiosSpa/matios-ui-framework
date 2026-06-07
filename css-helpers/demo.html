@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="dark">
+<html lang="en" data-mts-mode="dark">
 <head>
   <script>
     (function(){
@@ -55,7 +55,7 @@
 
   <div class="demo-header">
     <h1><span>CSS</span> Helpers</h1>
-    <p>Clases utilitarias CSS puras (sin JS) con convención BEM · Complementan <code>matios-ui-base.css</code></p>
+    <p>Pure CSS utility classes (no JS) with BEM convention · Complement <code>matios-ui-base.css</code></p>
     <div class="demo-header-actions">
     </div>
     <div class="demo-docs-panel" id="docs-panel"></div>
@@ -75,7 +75,7 @@
   <!-- ── 2 · DISPLAY ── -->
   <div class="demo-section">
     <div class="demo-section-title">2 — Display · helpers-display.css</div>
-    <div class="demo-label">Valores principales</div>
+    <div class="demo-label">Main values</div>
     <div id="s2a"></div>
     <div class="demo-label">mts-d-none</div>
     <div id="s2b"></div>
@@ -106,11 +106,11 @@
   <!-- ── 5 · TEXT ── -->
   <div class="demo-section">
     <div class="demo-section-title">5 — Text · helpers-text.css</div>
-    <div class="demo-label">Alineación</div>
+    <div class="demo-label">Alignment</div>
     <div id="s5a"></div>
-    <div class="demo-label">Tamaño</div>
+    <div class="demo-label">Size</div>
     <div id="s5b"></div>
-    <div class="demo-label">Peso</div>
+    <div class="demo-label">Weight</div>
     <div id="s5c"></div>
     <div class="demo-label">Transform · Decoration · Truncate</div>
     <div id="s5d"></div>
@@ -347,7 +347,7 @@ mk('s3c', `
 
 mk('s3d', `
 <div class="mts-d-flex mts-gap-2 mts-border mts-p-2 mts-mb-3">
-  <div class="mts-flex--1 mts-border mts-p-2">mts-flex--1 (se expande)</div>
+  <div class="mts-flex--1 mts-border mts-p-2">mts-flex--1 (expands)</div>
   <div class="mts-border mts-p-2">B</div>
   <div class="mts-border mts-p-2">C</div>
 </div>
@@ -422,7 +422,7 @@ mk('s5d', `
   <span class="mts-fst--italic">mts-fst--italic</span>
 </div>
 <div class="mts-text--truncate mts-border mts-p-2" style="width:260px">
-  mts-text--truncate: texto largo cortado con ellipsis al desbordar el contenedor
+  mts-text--truncate: long text cut off with an ellipsis when it overflows the container
 </div>
 `, '200px');
 
@@ -526,7 +526,7 @@ mk('s10a', `
 
 mk('s10b', `
 <div class="mts-position--relative mts-border mts-p-4" style="height:100px">
-  contenedor relative
+  relative container
   <span class="mts-position--absolute mts-top--0 mts-end--0 mts-bg-color--primary mts-p-2" style="color:#fff">top-0 end-0</span>
   <span class="mts-position--absolute mts-bottom--0 mts-start--0 mts-bg-color--success mts-p-2" style="color:#fff">bottom-0 start-0</span>
 </div>
@@ -539,13 +539,13 @@ mk('s10b', `
 mk('s11', `
 <div class="mts-d-flex mts-gap-4 mts-flex--wrap mts-align-items--start">
   <div class="mts-overflow-hidden mts-border mts-p-2" style="width:150px;height:64px">
-    overflow-hidden<br>línea 2<br>línea 3<br>línea 4 (oculta)
+    overflow-hidden<br>line 2<br>line 3<br>line 4 (hidden)
   </div>
   <div class="mts-overflow-auto mts-border mts-p-2" style="width:150px;height:64px">
-    overflow-auto<br>línea 2<br>línea 3<br>línea 4 (scroll)
+    overflow-auto<br>line 2<br>line 3<br>line 4 (scroll)
   </div>
   <div class="mts-overflow-scroll mts-border mts-p-2" style="width:150px;height:64px">
-    overflow-scroll<br>línea 2<br>línea 3<br>línea 4 (siempre)
+    overflow-scroll<br>line 2<br>line 3<br>line 4 (always)
   </div>
 </div>
 `, '180px');
@@ -566,8 +566,8 @@ mk('s12a', `
 
 mk('s12b', `
 <div class="mts-d-flex mts-gap-3 mts-flex--wrap mts-align-items--center">
-  <div class="mts-pe--none mts-border mts-p-3 mts-opacity--50">mts-pe--none (sin eventos)</div>
-  <div class="mts-user-select--none mts-border mts-p-3">mts-user-select--none (intenta seleccionar)</div>
+  <div class="mts-pe--none mts-border mts-p-3 mts-opacity--50">mts-pe--none (no events)</div>
+  <div class="mts-user-select--none mts-border mts-p-3">mts-user-select--none (try to select)</div>
 </div>
 `, '110px');
 
@@ -578,7 +578,7 @@ mk('s12b', `
 mk('s13a', `
 <div class="mts-d-flex mts-gap-3 mts-align-items--center">
   <div class="mts-visible mts-border mts-p-3">mts-visible</div>
-  <div class="mts-invisible mts-border mts-p-3">mts-invisible (ocupa espacio)</div>
+  <div class="mts-invisible mts-border mts-p-3">mts-invisible (takes up space)</div>
   <div class="mts-visible mts-border mts-p-3">mts-visible</div>
 </div>
 `, '110px');
@@ -604,7 +604,7 @@ mk('s14', `
   <span class="mts-align--bottom mts-border mts-px-2">align--bottom</span>
   <span class="mts-align--text-top mts-border mts-px-2">align--text-top</span>
   <span class="mts-align--baseline mts-border mts-px-2">align--baseline</span>
-  <span style="font-size:1.4em"> — referencia</span>
+  <span style="font-size:1.4em"> — reference</span>
 </div>
 `, '150px');
 
@@ -616,7 +616,7 @@ mk('s15', `
 <div class="mts-clearfix mts-border mts-p-3" style="min-height:80px">
   <div class="mts-float--left mts-bg-color--primary mts-p-3 mts-mr-3" style="color:#fff">mts-float--left</div>
   <div class="mts-float--right mts-bg-color--primary mts-p-3 mts-ml-3" style="color:#fff">mts-float--right</div>
-  <p>mts-clearfix — el contenedor no colapsa.</p>
+  <p>mts-clearfix — the container does not collapse.</p>
 </div>
 `, '170px');
 

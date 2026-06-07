@@ -67,6 +67,8 @@
 
 <script>
 /* ═══ LOCALE ═══ Todo texto del demo sale del locale del componente (MTS.Kanban). */
+/* Public demo: default English; ?lang=es|en|pt to switch. */
+(function () { var m = (location.search || '').match(/[?&]lang=(es|en|pt)/); if (window.MTS && MTS.setLocale) MTS.setLocale(m ? m[1] : 'en'); })();
 var LK = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Kanban']) || {};
 var UI = LK.ui || {};
 
