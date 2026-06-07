@@ -133,8 +133,8 @@ var preview_s1 =
 
 var js_s1 = `new MTS.Alert('#alert-info', {
   variant: 'info',
-  title: 'Nueva versión disponible',
-  message: 'Actualiza para obtener las últimas funciones.',
+  title: 'New version available',
+  message: 'Update to get the latest features.',
   onClose: function () {
     document.getElementById('alert-result').textContent = 'onClose → info';
   }
@@ -142,8 +142,8 @@ var js_s1 = `new MTS.Alert('#alert-info', {
 
 new MTS.Alert('#alert-success', {
   variant: 'success',
-  title: 'Cambios guardados',
-  message: 'Tus datos se guardaron correctamente.',
+  title: 'Changes saved',
+  message: 'Your data was saved successfully.',
   onClose: function () {
     document.getElementById('alert-result').textContent = 'onClose → success';
   }
@@ -151,8 +151,8 @@ new MTS.Alert('#alert-success', {
 
 new MTS.Alert('#alert-warning', {
   variant: 'warning',
-  title: 'Sesión por expirar',
-  message: 'Tu sesión expira en 5 minutos.',
+  title: 'Session about to expire',
+  message: 'Your session expires in 5 minutes.',
   onClose: function () {
     document.getElementById('alert-result').textContent = 'onClose → warning';
   }
@@ -160,8 +160,8 @@ new MTS.Alert('#alert-warning', {
 
 new MTS.Alert('#alert-danger', {
   variant: 'danger',
-  title: 'Error de conexión',
-  message: 'No se pudo conectar con el servidor.',
+  title: 'Connection error',
+  message: 'Could not connect to the server.',
   onClose: function () {
     document.getElementById('alert-result').textContent = 'onClose → danger';
   }
@@ -185,25 +185,25 @@ document.getElementById('btn-show-action').addEventListener('click', function ()
 
   new MTS.Alert('#alert-action', {
     variant: 'warning',
-    title: 'Sesión por expirar',
-    message: 'Tu sesión expira en 5 minutos.',
-    action: 'Renovar ahora',
+    title: 'Session about to expire',
+    message: 'Your session expires in 5 minutes.',
+    action: 'Renew now',
     onAction: function () {
-      document.getElementById('alert-action-result').textContent = 'onAction → renovar';
+      document.getElementById('alert-action-result').textContent = 'onAction → renew';
     },
     onClose: function () {
-      document.getElementById('alert-action-result').textContent = 'onClose → descartado';
+      document.getElementById('alert-action-result').textContent = 'onClose → dismissed';
     }
   });
 });
 
 document.getElementById('btn-show-autodismiss').addEventListener('click', function () {
   document.getElementById('alert-action').innerHTML = '';
-  document.getElementById('alert-action-result').textContent = 'Auto-dismiss en 3 segundos...';
+  document.getElementById('alert-action-result').textContent = 'Auto-dismiss in 3 seconds...';
 
   new MTS.Alert('#alert-action', {
     variant: 'success',
-    message: 'Archivo subido correctamente.',
+    message: 'File uploaded successfully.',
     autoDismiss: 3000,
     closable: false,
     onClose: function () {
@@ -238,7 +238,7 @@ var preview_s3 =
   '</div>';
 
 var js_s3 = `// No JavaScript needed.
-// Esta variante usa solo clases CSS del componente.`;
+// This variant uses only the component's CSS classes.`;
 
 makeSection('tabs-s1', preview_s1, js_s1);
 makeSection('tabs-s2', preview_s2, js_s2);

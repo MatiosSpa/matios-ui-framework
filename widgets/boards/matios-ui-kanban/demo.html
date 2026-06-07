@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="mts-h-full" data-mts-mode="light">
+<html lang="en" class="mts-h-full" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -78,16 +78,16 @@ var TEAM = ['Ana García', 'Luis Pérez', 'María Torres', 'Carlos Ruiz', 'Pedro
 function buildColumns() {
   var c = UI.cols || {};
   return [
-    { id:'todo',   title:c.todo   || 'Por hacer',  color:'#64748b', cards:[
-      { id:'c1', title:'Configurar repositorio', priority:'high',   assignee:'Ana García' },
-      { id:'c2', title:'Definir alcance del MVP', priority:'medium', assignee:'Luis Pérez' } ] },
-    { id:'doing',  title:c.doing  || 'En curso',   color:'#f59e0b', wip:3, cards:[
-      { id:'c3', title:'Diseño de la API',        priority:'medium', assignee:'María Torres' },
-      { id:'c4', title:'Modelo de datos',         priority:'low',    assignee:'Carlos Ruiz' } ] },
-    { id:'review', title:c.review || 'En revisión', color:'#3b82f6', cards:[
-      { id:'c5', title:'Revisión de seguridad',   priority:'high',   assignee:'Pedro Mora' } ] },
-    { id:'done',   title:c.done   || 'Hecho',      color:'#10b981', cards:[
-      { id:'c6', title:'Setup del proyecto',      priority:'low',    assignee:'Ana García' } ] },
+    { id:'todo',   title:c.todo   || 'To do',      color:'#64748b', cards:[
+      { id:'c1', title:'Set up repository',       priority:'high',   assignee:'Ana García' },
+      { id:'c2', title:'Define MVP scope',        priority:'medium', assignee:'Luis Pérez' } ] },
+    { id:'doing',  title:c.doing  || 'In progress', color:'#f59e0b', wip:3, cards:[
+      { id:'c3', title:'API design',              priority:'medium', assignee:'María Torres' },
+      { id:'c4', title:'Data model',              priority:'low',    assignee:'Carlos Ruiz' } ] },
+    { id:'review', title:c.review || 'In review',  color:'#3b82f6', cards:[
+      { id:'c5', title:'Security review',         priority:'high',   assignee:'Pedro Mora' } ] },
+    { id:'done',   title:c.done   || 'Done',       color:'#10b981', cards:[
+      { id:'c6', title:'Project setup',           priority:'low',    assignee:'Ana García' } ] },
   ];
 }
 

@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="es" data-mts-mode="light">
+<html lang="en" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -22,7 +22,7 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DataTable — DocumentManager (completo)</title>
+  <title>DataTable — DocumentManager (complete)</title>
 
   <!-- Temas y base -->
   <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
@@ -150,8 +150,8 @@ const http = new MTS.HttpClient({
   headers: { 'X-App-Name': 'matios-ui-demo' },
 });
 
-// URL de un PDF público para demostrar la vista previa real en el iframe.
-// Se usa Google Docs Viewer como visor universal.
+// Public PDF URL to demonstrate a real preview in the iframe.
+// Google Docs Viewer is used as a universal viewer.
 const PDF_DEMO_URL = 'https://docs.google.com/viewer'
   + '?url=' + encodeURIComponent('https://www.africau.edu/images/default/sample.pdf')
   + '&embedded=true';
@@ -159,39 +159,39 @@ const PDF_DEMO_URL = 'https://docs.google.com/viewer'
 // ── Plugin 1: Toolbar ─────────────────────────────────────────────────────
 const toolbar = new MTS.DataTableToolbarPlugin({
   buttons: [
-    { label: 'Subir',         icon: 'upload',      tooltip: 'Subir archivo a la carpeta actual',
+    { label: 'Upload',     icon: 'upload',      tooltip: 'Upload a file to the current folder',
       action: () => dmUpload.open() },
-    { label: 'Nueva carpeta', icon: 'folder-plus', tooltip: 'Crear una nueva carpeta aquí',
-      action: () => console.log('[dm.onNuevaCarpeta]') },
+    { label: 'New folder', icon: 'folder-plus', tooltip: 'Create a new folder here',
+      action: () => console.log('[dm.onNewFolder]') },
     { separator: true },
-    { label: 'Descargar', icon: 'download', tooltip: 'Descargar los archivos seleccionados',
+    { label: 'Download', icon: 'download', tooltip: 'Download the selected files',
       condition: (table) => table.getSelection().length > 0,
-      action: (table) => console.log('[dm.onDescargar]', table.getSelection()) },
-    { label: 'Renombrar', icon: 'edit',     tooltip: 'Renombrar el elemento seleccionado',
+      action: (table) => console.log('[dm.onDownload]', table.getSelection()) },
+    { label: 'Rename',   icon: 'edit',     tooltip: 'Rename the selected item',
       condition: (table) => table.getSelection().length === 1,
-      action: (table) => console.log('[dm.onRenombrar]', table.getSelection()[0]) },
-    { label: 'Mover',     icon: 'move',     tooltip: 'Mover los elementos seleccionados',
+      action: (table) => console.log('[dm.onRename]', table.getSelection()[0]) },
+    { label: 'Move',     icon: 'move',     tooltip: 'Move the selected items',
       condition: (table) => table.getSelection().length > 0,
-      action: (table) => console.log('[dm.onMover]', table.getSelection()) },
-    { label: 'Eliminar',  icon: 'trash',    danger: true, tooltip: 'Eliminar los elementos seleccionados',
+      action: (table) => console.log('[dm.onMove]', table.getSelection()) },
+    { label: 'Delete',   icon: 'trash',    danger: true, tooltip: 'Delete the selected items',
       condition: (table) => table.getSelection().length > 0,
-      action: (table) => console.log('[dm.onEliminar]', table.getSelection()) },
+      action: (table) => console.log('[dm.onDelete]', table.getSelection()) },
   ],
 });
 
 // ── Plugin 2: Filter ──────────────────────────────────────────────────────
 const filter = new MTS.DataTableFilterPlugin({
   filters: [
-    { field: 'status',         label: 'Estado',   type: 'select',
-      options: [{ value: 'active', label: 'Activo' }, { value: 'archived', label: 'Archivado' }] },
+    { field: 'status',         label: 'Status',   type: 'select',
+      options: [{ value: 'active', label: 'Active' }, { value: 'archived', label: 'Archived' }] },
     { field: 'workflowStatus', label: 'Workflow', type: 'select',
       options: [
-        { value: 'draft',    label: 'Borrador'    },
-        { value: 'pending',  label: 'Pendiente'   },
-        { value: 'review',   label: 'En revisión' },
-        { value: 'approved', label: 'Aprobado'    },
-        { value: 'signed',   label: 'Firmado'     },
-        { value: 'rejected', label: 'Rechazado'   },
+        { value: 'draft',    label: 'Draft'        },
+        { value: 'pending',  label: 'Pending'      },
+        { value: 'review',   label: 'In review'    },
+        { value: 'approved', label: 'Approved'     },
+        { value: 'signed',   label: 'Signed'       },
+        { value: 'rejected', label: 'Rejected'     },
       ],
     },
   ],
@@ -213,16 +213,16 @@ const dmUpload = new MTS.DocumentManagerUploadPlugin({
 });
 
 // ── Plugin 5: Preview ─────────────────────────────────────────────────────
-// Se instancia antes de dm para poder pasarlo como plugin y usarlo en
-// onFileClick / onPrev / onNext. dm se declara después; los callbacks lo
-// cierran por referencia (seguro en runtime).
+// Instantiated before dm so it can be passed as a plugin and used in
+// onFileClick / onPrev / onNext. dm is declared afterwards; the callbacks
+// close over it by reference (safe at runtime).
 const dmPreview = new MTS.DocumentManagerPreviewPlugin({
 
   panels: [
     new MTS.DocumentManagerPreviewBasicInfoPanel(),
   ],
 
-  // Fallback cuando show() no recibe URL explícita.
+  // Fallback when show() does not receive an explicit URL.
   urlResolver: (item) => 'preview.html?name=' + encodeURIComponent(item.name || ''),
 
   onDownload: (item) => {
@@ -230,7 +230,7 @@ const dmPreview = new MTS.DocumentManagerPreviewPlugin({
     // window.open('/api/documents/' + item.id + '/download');
   },
 
-  // Reemplazar documento: retornar Promise activa la barra indeterminada.
+  // Replace document: returning a Promise activates the indeterminate bar.
   onReplace: (item, file, version) => {
     console.log('[dmPreview.onReplace]', item, file, version);
     return http.upload('/widgets/datatable/mock-api/documents/' + item.id + '/replace', file, {
@@ -240,7 +240,7 @@ const dmPreview = new MTS.DocumentManagerPreviewPlugin({
     });
   },
 
-  // Navegación entre archivos de la carpeta actual.
+  // Navigation between files in the current folder.
   onPrev: (currentItem) => {
     console.log('[dmPreview.onPrev]', currentItem);
     const files = dm.getItems().filter((i) => i.type === 'file');
@@ -260,7 +260,7 @@ const dmPreview = new MTS.DocumentManagerPreviewPlugin({
 
 // ── Plugin 6: DocumentManager ─────────────────────────────────────────────
 const dm = new MTS.DocumentManagerPlugin({
-  rootLabel:   'Documentos',
+  rootLabel:   'Documents',
   breadcrumb:  true,
   dragDrop:    true,
 
@@ -280,15 +280,15 @@ const dm = new MTS.DocumentManagerPlugin({
     fd.append('action',         action         ?? '');
     fd.append('currentVersion', currentVersion ?? '');
     const res = await http.post('/widgets/datatable/mock-api/documents/upload', fd);
-    if (!res.success) throw new Error(res.message ?? 'Error al subir el archivo');
+    if (!res.success) throw new Error(res.message ?? 'Error uploading the file');
   },
   onUploaded: (files, folder) => console.log('[dm.onUploaded]', { files, folder }),
   onError:    (err, file, folder) => console.log('[dm.onError]', { err, file, folder }),
 
-  // onFileClick conecta explícitamente con el preview.
+  // onFileClick explicitly connects to the preview.
   onFileClick: (item) => {
     console.log('[dm.onFileClick]', item);
-    // Los PDFs usan Google Docs Viewer para mostrar un documento real en el iframe.
+    // PDFs use Google Docs Viewer to show a real document in the iframe.
     if (item.ext === 'pdf') {
       dmPreview.show(item, PDF_DEMO_URL);
     } else {
@@ -328,13 +328,13 @@ const dm = new MTS.DocumentManagerPlugin({
 new MTS.DataTable({
   elementId: 'table11',
   columns: [
-    { field: 'name',           label: 'Nombre',     sortable: true, alwaysVisible: true,
+    { field: 'name',           label: 'Name',     sortable: true, alwaysVisible: true,
       render: (v, row) => MTS.DocumentManagerPlugin.renderName(v, row) },
-    { field: 'sizeFormatted',  label: 'Tamaño',     align: 'end',    width: '100px' },
-    { field: 'modifiedAt',     label: 'Modificado', sortable: true,  align: 'end', width: '130px' },
-    { field: 'status',         label: 'Estado',     align: 'center', width: '110px',
+    { field: 'sizeFormatted',  label: 'Size',     align: 'end',    width: '100px' },
+    { field: 'modifiedAt',     label: 'Modified', sortable: true,  align: 'end', width: '130px' },
+    { field: 'status',         label: 'Status',   align: 'center', width: '110px',
       render: MTS.DocumentManagerPlugin.renderStatus },
-    { field: 'workflowStatus', label: 'Workflow',   align: 'center', width: '130px',
+    { field: 'workflowStatus', label: 'Workflow', align: 'center', width: '130px',
       render: MTS.DocumentManagerPlugin.renderWorkflowStatus },
   ],
   dataSource: async (query) => {
@@ -345,7 +345,7 @@ new MTS.DataTable({
   rowId:             'id',
   pageSize:          5,
   hover:             true,
-  locale:            'es',
+  locale:            'en',
   fixedHeader:       true,
   fixedHeaderHeight: '480px',
   sort:      { column: 'name', direction: 'asc' },
@@ -378,46 +378,46 @@ function initTables() {
     var toolbar = new MTS.DataTableToolbarPlugin({
       buttons: [
         {
-          label:   'Subir',
+          label:   'Upload',
           icon:    'upload',
-          tooltip: 'Subir archivo a la carpeta actual',
+          tooltip: 'Upload a file to the current folder',
           action:  function() { dmUpload.open(); },
         },
         {
-          label:   'Nueva carpeta',
+          label:   'New folder',
           icon:    'folder-plus',
-          tooltip: 'Crear una nueva carpeta aquí',
-          action:  function() { console.log('[dm.onNuevaCarpeta]'); },
+          tooltip: 'Create a new folder here',
+          action:  function() { console.log('[dm.onNewFolder]'); },
         },
         { separator: true },
         {
-          label:     'Descargar',
+          label:     'Download',
           icon:      'download',
-          tooltip:   'Descargar los archivos seleccionados',
+          tooltip:   'Download the selected files',
           condition: function(table) { return table.getSelection().length > 0; },
-          action:    function(table) { console.log('[dm.onDescargar]', table.getSelection()); },
+          action:    function(table) { console.log('[dm.onDownload]', table.getSelection()); },
         },
         {
-          label:     'Renombrar',
+          label:     'Rename',
           icon:      'edit',
-          tooltip:   'Renombrar el elemento seleccionado',
+          tooltip:   'Rename the selected item',
           condition: function(table) { return table.getSelection().length === 1; },
-          action:    function(table) { console.log('[dm.onRenombrar]', table.getSelection()[0]); },
+          action:    function(table) { console.log('[dm.onRename]', table.getSelection()[0]); },
         },
         {
-          label:     'Mover',
+          label:     'Move',
           icon:      'move',
-          tooltip:   'Mover los elementos seleccionados',
+          tooltip:   'Move the selected items',
           condition: function(table) { return table.getSelection().length > 0; },
-          action:    function(table) { console.log('[dm.onMover]', table.getSelection()); },
+          action:    function(table) { console.log('[dm.onMove]', table.getSelection()); },
         },
         {
-          label:     'Eliminar',
+          label:     'Delete',
           icon:      'trash',
           danger:    true,
-          tooltip:   'Eliminar los elementos seleccionados',
+          tooltip:   'Delete the selected items',
           condition: function(table) { return table.getSelection().length > 0; },
-          action:    function(table) { console.log('[dm.onEliminar]', table.getSelection()); },
+          action:    function(table) { console.log('[dm.onDelete]', table.getSelection()); },
         },
       ],
     });
@@ -427,11 +427,11 @@ function initTables() {
       filters: [
         {
           field:   'status',
-          label:   'Estado',
+          label:   'Status',
           type:    'select',
           options: [
-            { value: 'active',   label: 'Activo'    },
-            { value: 'archived', label: 'Archivado' },
+            { value: 'active',   label: 'Active'   },
+            { value: 'archived', label: 'Archived' },
           ],
         },
         {
@@ -439,12 +439,12 @@ function initTables() {
           label:   'Workflow',
           type:    'select',
           options: [
-            { value: 'draft',    label: 'Borrador'    },
-            { value: 'pending',  label: 'Pendiente'   },
-            { value: 'review',   label: 'En revisión' },
-            { value: 'approved', label: 'Aprobado'    },
-            { value: 'signed',   label: 'Firmado'     },
-            { value: 'rejected', label: 'Rechazado'   },
+            { value: 'draft',    label: 'Draft'     },
+            { value: 'pending',  label: 'Pending'   },
+            { value: 'review',   label: 'In review' },
+            { value: 'approved', label: 'Approved'  },
+            { value: 'signed',   label: 'Signed'    },
+            { value: 'rejected', label: 'Rejected'  },
           ],
         },
       ],
@@ -469,14 +469,14 @@ function initTables() {
     var dmWorkflow = new MTS.DocumentManagerWorkflowPlugin({
       statusField:   'workflowStatus',
       showInToolbar: true,
-      currentUser:   'crojas',   // usuario logueado — es su turno en el mock
+      currentUser:   'crojas',   // logged-in user — it is their turn in the mock
 
       onLoadParticipants: function(item) {
         return http.get('/widgets/datatable/mock-api/documents/' + item.id + '/participants')
           .then(function(res) { return res.data && res.data.data ? res.data.data : []; });
       },
       onReorder: function(participants, item) {
-        console.log('[dm.onReorder] nuevo orden:', participants.map(function(p) { return { order: p.order, user: p.user, status: p.status }; }));
+        console.log('[dm.onReorder] new order:', participants.map(function(p) { return { order: p.order, user: p.user, status: p.status }; }));
         return http.post(
           '/widgets/datatable/mock-api/documents/' + item.id + '/participants/reorder',
           { order: participants.map(function(p) { return p.id; }) }
@@ -503,7 +503,7 @@ function initTables() {
           fields:   fields,
           document: item,
         }).then(function(res) {
-          if (!res.data || !res.data.success) throw new Error('Error al guardar');
+          if (!res.data || !res.data.success) throw new Error('Error saving');
         });
       },
     });
@@ -519,7 +519,7 @@ function initTables() {
           text:     text,
           document: item,
         }).then(function(res) {
-          if (!res.data || !res.data.data) throw new Error('Sin respuesta');
+          if (!res.data || !res.data.data) throw new Error('No response');
           return res.data.data;
         });
       },
@@ -579,7 +579,7 @@ function initTables() {
 
     // ── Plugin 6: DocumentManager ─────────────────────────────────────────
     var dm = new MTS.DocumentManagerPlugin({
-      rootLabel:   'Documentos',
+      rootLabel:   'Documents',
       breadcrumb:  true,
       dragDrop:    true,
 
@@ -601,7 +601,7 @@ function initTables() {
         fd.append('action',         action);
         fd.append('currentVersion', currentVersion);
         var res = await http.post('/widgets/datatable/mock-api/documents/upload', fd);
-        if (!res.success) throw new Error(res.message || 'Error al subir el archivo');
+        if (!res.success) throw new Error(res.message || 'Error uploading the file');
       },
       onUploaded: function(files, folder) { console.log('[dm.onUploaded]', { files: files, folder: folder }); },
       onError:    function(err, file, folder) { console.log('[dm.onError]', { err: err, file: file, folder: folder }); },
@@ -637,13 +637,13 @@ function initTables() {
     new MTS.DataTable({
       elementId: 'table11',
       columns: [
-        { field: 'name',           label: 'Nombre',     sortable: true, alwaysVisible: true,
+        { field: 'name',           label: 'Name',     sortable: true, alwaysVisible: true,
           render: function(v, row) { return MTS.DocumentManagerPlugin.renderName(v, row); } },
-        { field: 'sizeFormatted',  label: 'Tamaño',     align: 'end',    width: '100px' },
-        { field: 'modifiedAt',     label: 'Modificado', sortable: true,  align: 'end', width: '130px' },
-        { field: 'status',         label: 'Estado',     align: 'center', width: '110px',
+        { field: 'sizeFormatted',  label: 'Size',     align: 'end',    width: '100px' },
+        { field: 'modifiedAt',     label: 'Modified', sortable: true,  align: 'end', width: '130px' },
+        { field: 'status',         label: 'Status',   align: 'center', width: '110px',
           render: MTS.DocumentManagerPlugin.renderStatus },
-        { field: 'workflowStatus', label: 'Workflow',   align: 'center', width: '130px',
+        { field: 'workflowStatus', label: 'Workflow', align: 'center', width: '130px',
           render: MTS.DocumentManagerPlugin.renderWorkflowStatus },
       ],
       dataSource: async function(query) {
@@ -654,7 +654,7 @@ function initTables() {
       rowId:             'id',
       pageSize:          5,
       hover:             true,
-      locale:            'es',
+      locale:            'en',
       fixedHeader:       true,
       fixedHeaderHeight: '480px',
       sort:      { column: 'name', direction: 'asc' },

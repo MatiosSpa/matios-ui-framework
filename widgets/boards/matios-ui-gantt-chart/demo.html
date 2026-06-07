@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="mts-h-full" data-mts-mode="light">
+<html lang="en" class="mts-h-full" data-mts-mode="light">
 <head>
   <script>
     (function(){
@@ -108,43 +108,43 @@ function teamUid(name) {
 }
 
 var TASKS = [
-  { id:'t1',  wbs:'1',     label:'Fase 1 — Planificación',          start:'2025-01-06', end:'2025-01-31', color:'#1d4ed8',
+  { id:'t1',  wbs:'1',     label:'Phase 1 — Planning',              start:'2025-01-06', end:'2025-01-31', color:'#1d4ed8',
     assignees:[{ name:'Ana García' },{ name:'Luis Pérez' }] },
-  { id:'t2',  wbs:'1.1',   label:'Levantamiento de requerimientos', start:'2025-01-06', end:'2025-01-10', color:'#3b82f6',
+  { id:'t2',  wbs:'1.1',   label:'Requirements gathering',          start:'2025-01-06', end:'2025-01-10', color:'#3b82f6',
     progress:1, assignees:[{ name:'Ana García' }] },
-  { id:'t3',  wbs:'1.2',   label:'Análisis y alcance',              start:'2025-01-13', end:'2025-01-17', color:'#3b82f6',
+  { id:'t3',  wbs:'1.2',   label:'Analysis and scope',              start:'2025-01-13', end:'2025-01-17', color:'#3b82f6',
     predecessors:['1.1'], progress:1, assignees:[{ name:'Luis Pérez' }] },
-  { id:'t4',  wbs:'1.3',   label:'Validación con stakeholders',     start:'2025-01-20', end:'2025-01-31', color:'#3b82f6',
+  { id:'t4',  wbs:'1.3',   label:'Stakeholder validation',         start:'2025-01-20', end:'2025-01-31', color:'#3b82f6',
     predecessors:['1.2'], progress:0.7, assignees:[{ name:'Ana García' },{ name:'Carlos Ruiz' }] },
-  { id:'t5',  wbs:'2',     label:'Fase 2 — Diseño',                 start:'2025-02-03', end:'2025-02-28', color:'#0f766e',
+  { id:'t5',  wbs:'2',     label:'Phase 2 — Design',                start:'2025-02-03', end:'2025-02-28', color:'#0f766e',
     assignees:[{ name:'María Torres' }] },
-  { id:'t6',  wbs:'2.1',   label:'Arquitectura del sistema',        start:'2025-02-03', end:'2025-02-14', color:'#10b981',
+  { id:'t6',  wbs:'2.1',   label:'System architecture',             start:'2025-02-03', end:'2025-02-14', color:'#10b981',
     predecessors:['1.3'], progress:0.5, assignees:[{ name:'María Torres' },{ name:'Carlos Ruiz' }] },
-  { id:'t7',  wbs:'2.2',   label:'Diseño de base de datos',         start:'2025-02-10', end:'2025-02-21', color:'#10b981',
+  { id:'t7',  wbs:'2.2',   label:'Database design',                 start:'2025-02-10', end:'2025-02-21', color:'#10b981',
     predecessors:['2.1'], progress:0.3, assignees:[{ name:'Carlos Ruiz' }] },
-  { id:'t8',  wbs:'2.3',   label:'Prototipo UI/UX',                 start:'2025-02-17', end:'2025-02-28', color:'#10b981',
+  { id:'t8',  wbs:'2.3',   label:'UI/UX prototype',                 start:'2025-02-17', end:'2025-02-28', color:'#10b981',
     predecessors:['2.1'], progress:0.2, assignees:[{ name:'María Torres' }] },
-  { id:'t9',  wbs:'3',     label:'Fase 3 — Desarrollo',             start:'2025-03-03', end:'2025-05-30', color:'#7c3aed',
+  { id:'t9',  wbs:'3',     label:'Phase 3 — Development',           start:'2025-03-03', end:'2025-05-30', color:'#7c3aed',
     assignees:[{ name:'Pedro Mora' },{ name:'Ana García' },{ name:'Luis Pérez' }] },
-  { id:'t10', wbs:'3.1',   label:'Backend — API REST',              start:'2025-03-03', end:'2025-04-11', color:'#a78bfa',
+  { id:'t10', wbs:'3.1',   label:'Backend — REST API',              start:'2025-03-03', end:'2025-04-11', color:'#a78bfa',
     predecessors:['2.2'], progress:0.1, assignees:[{ name:'Pedro Mora' }] },
-  { id:'t11', wbs:'3.1.1', label:'Módulo de autenticación',         start:'2025-03-03', end:'2025-03-21', color:'#a78bfa',
+  { id:'t11', wbs:'3.1.1', label:'Authentication module',          start:'2025-03-03', end:'2025-03-21', color:'#a78bfa',
     assignees:[{ name:'Pedro Mora' }] },
-  { id:'t12', wbs:'3.1.2', label:'Módulo de reportes',              start:'2025-03-24', end:'2025-04-11', color:'#a78bfa',
+  { id:'t12', wbs:'3.1.2', label:'Reporting module',               start:'2025-03-24', end:'2025-04-11', color:'#a78bfa',
     predecessors:['3.1.1'], assignees:[{ name:'Luis Pérez' }] },
   { id:'t13', wbs:'3.2',   label:'Frontend — React',                start:'2025-03-17', end:'2025-05-09', color:'#a78bfa',
     predecessors:['2.3'], assignees:[{ name:'Ana García' }] },
-  { id:'t14', wbs:'3.3',   label:'Integraciones',                   start:'2025-04-14', end:'2025-05-09', color:'#a78bfa',
+  { id:'t14', wbs:'3.3',   label:'Integrations',                    start:'2025-04-14', end:'2025-05-09', color:'#a78bfa',
     predecessors:['3.1','3.2'], assignees:[{ name:'Carlos Ruiz' }] },
-  { id:'t15', wbs:'4',     label:'Fase 4 — Despliegue',             start:'2025-06-02', end:'2025-06-27', color:'#cc0000',
+  { id:'t15', wbs:'4',     label:'Phase 4 — Deployment',            start:'2025-06-02', end:'2025-06-27', color:'#cc0000',
     assignees:[{ name:'Carlos Ruiz' }] },
-  { id:'t16', wbs:'4.1',   label:'Entorno de staging',              start:'2025-06-02', end:'2025-06-06', color:'#e53935',
+  { id:'t16', wbs:'4.1',   label:'Staging environment',             start:'2025-06-02', end:'2025-06-06', color:'#e53935',
     predecessors:['3.3'], assignees:[{ name:'Carlos Ruiz' }] },
-  { id:'t17', wbs:'4.2',   label:'UAT con cliente',                 start:'2025-06-09', end:'2025-06-20', color:'#e53935',
+  { id:'t17', wbs:'4.2',   label:'Client UAT',                      start:'2025-06-09', end:'2025-06-20', color:'#e53935',
     predecessors:['4.1'], assignees:[{ name:'Ana García' },{ name:'Carlos Ruiz' }] },
-  { id:'t18', wbs:'4.3',   label:'Go-live producción',              start:'2025-06-23', end:'2025-06-27', color:'#e53935',
+  { id:'t18', wbs:'4.3',   label:'Production go-live',              start:'2025-06-23', end:'2025-06-27', color:'#e53935',
     predecessors:['4.2'], assignees:[{ name:'Carlos Ruiz' }] },
-  { id:'t19', wbs:'5',     label:'Cierre del proyecto',             start:'2025-06-30', end:'2025-06-30',
+  { id:'t19', wbs:'5',     label:'Project closure',                 start:'2025-06-30', end:'2025-06-30',
     predecessors:['4.3'], assignees:[{ name:'Ana García' }] },
 ];
 
@@ -327,7 +327,7 @@ var exportModal = new MTS.Modal({
   buttons: [
     { label: UI.cancel, variant: 'ghost', close: true },
     { label: UI.save, variant: 'primary', onClick: function () {
-        var base = (expName.getValue() || 'proyecto').replace(/\.[^.]+$/, '');
+        var base = (expName.getValue() || 'project').replace(/\.[^.]+$/, '');
         var fmt  = expFmt.getValue();
         var ext  = fmt === 'csv' ? 'csv' : (fmt === 'excel' ? 'xlsx' : 'xml');
         gantt.exportTasks(fmt, base + '.' + ext);
@@ -335,7 +335,7 @@ var exportModal = new MTS.Modal({
     } },
   ],
 });
-var expName = new MTS.Input('#g-exp-name', { label: UI.fileName, value: 'proyecto', autocomplete: 'browser-off' });
+var expName = new MTS.Input('#g-exp-name', { label: UI.fileName, value: 'project', autocomplete: 'browser-off' });
 var expFmt  = new MTS.Select('#g-exp-fmt', { label: UI.format, value: 'csv', options: [
   { value: 'csv',       label: UI.fmtCsv },
   { value: 'excel',     label: UI.fmtExcel },
@@ -474,7 +474,7 @@ gantt = new MTS.GanttChart('#gantt', {
       var blob = new Blob([e.csv], { type: 'text/csv;charset=utf-8' });
       var a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = e.filename || 'proyecto.csv';
+      a.download = e.filename || 'project.csv';
       a.click();
       URL.revokeObjectURL(a.href);
       logEv('api', 'Guardar como (CSV)', e.filename);
