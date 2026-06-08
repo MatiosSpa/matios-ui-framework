@@ -375,6 +375,164 @@ MTS.Locales = {
 
   },
 
+  /* ── Português ────────────────────────────────────────────── */
+  pt: {
+
+    'MTS.DataTable': {
+      search:   'Pesquisar...',
+      noData:   'Sem resultados',
+      loading:  'Carregando...',
+      error:    'Erro ao carregar dados.',
+      retry:    'Tentar novamente',
+      showing:  'Mostrando {start}–{end} de {total}',
+      perPage:  'Linhas:',
+      previous: 'Anterior',
+      next:     'Próximo',
+    },
+
+    'MTS.DataTableFilterPlugin': {
+      button:     'Filtrar',
+      clearAll:   'Limpar tudo',
+      searchHint: 'Pesquisar {label}...',
+      noResults:  'Sem resultados',
+      loadError:  'Erro ao carregar opções',
+      removeChip: 'Remover filtro {label}',
+    },
+
+    'MTS.DataTableColumnVisibilityPlugin': {
+      toggle: 'Mostrar / ocultar colunas',
+      empty:  'Não há colunas configuráveis',
+    },
+
+    'MTS.DocumentManagerPlugin': {
+      nav:      'Navegação de pastas',
+      dropzone: 'Solte os arquivos aqui',
+      status: {
+        active:   'Ativo',
+        archived: 'Arquivado',
+        deleted:  'Excluído',
+      },
+      workflowStatus: {
+        draft:    'Rascunho',
+        pending:  'Pendente',
+        review:   'Em revisão',
+        approved: 'Aprovado',
+        rejected: 'Rejeitado',
+        signed:   'Assinado',
+      },
+    },
+
+    'MTS.DocumentManagerContextMenuPlugin': {
+      view:     'Ver',
+      download: 'Baixar',
+      rename:   'Renomear',
+      move:     'Mover',
+      delete:   'Excluir',
+      open:     'Abrir',
+    },
+
+    'MTS.DocumentManagerWorkflowPlugin': {
+      start:           'Iniciar workflow',
+      sendForApproval: 'Enviar para aprovação',
+      approve:         'Aprovar',
+      sign:            'Assinar',
+      reject:          'Rejeitar',
+      restart:         'Reiniciar workflow',
+      participants:    'Participantes',
+      noParticipants:  'Sem participantes.',
+      statusPending:   'Pendente',
+      statusApproved:  'Aprovado',
+      statusRejected:  'Rejeitado',
+      statusSigned:    'Assinado',
+    },
+
+    'MTS.DocumentManagerUploadPlugin': {
+      title:              'Enviar arquivos',
+      cancel:             'Cancelar',
+      upload:             'Enviar',
+      retry:              'Tentar novamente os que falharam',
+      dropHint:           'Arraste arquivos aqui',
+      selectFiles:        'Selecionar arquivos',
+      noFiles:            'Nenhum arquivo selecionado',
+      removeFile:         'Remover arquivo da lista',
+      fileTooLarge:       'Arquivo muito grande',
+      fileTypeNotAllowed: 'Tipo de arquivo não permitido',
+      maxFiles:           'Máx. {n} arquivos',
+      maxSize:            'Máx. {n} MB por arquivo',
+      actionReplace:      'Substituir',
+      actionVersion:      'Nova versão',
+      actionSkip:         'Ignorar',
+      statusPending:      'Pendente',
+      statusChecking:     'Verificando...',
+      statusExists:       'Já existe',
+      statusReady:        'Pronto',
+      statusDone:         'Enviado',
+      statusError:        'Erro ao enviar',
+      statusSkipped:      'Ignorado',
+    },
+
+    'MTS.DocumentManagerPreviewPlugin': {
+      download:           'Baixar',
+      replace:            'Substituir',
+      prevDoc:            'Documento anterior',
+      nextDoc:            'Próximo documento',
+      panelToggle:        'Mostrar ou ocultar painel lateral',
+      iframeTitle:        'Pré-visualização do documento',
+      confirmTitle:       'Substituir documento',
+      confirmVersionLabel: 'Nova versão:',
+      confirmVersionAriaLabel: 'Nova versão do documento',
+      confirmUpload:      'Enviar',
+      confirmCancel:      'Cancelar',
+      confirmUploading:   'Enviando...',
+      confirmSuccess:     'Documento substituído.',
+      confirmError:       'Erro ao enviar o arquivo.',
+      confirmRetry:       'Tentar novamente',
+      confirmClose:       'Fechar',
+      confirmExtWarning:  'O arquivo selecionado tem uma extensão diferente do documento atual.',
+    },
+
+    'MTS.DocumentManagerPreviewBasicInfoPanel': {
+      panelLabel:     'Informações básicas',
+      fieldName:      'Nome',
+      fieldType:      'Tipo',
+      fieldSize:      'Tamanho',
+      fieldVersion:   'Versão',
+      fieldCreatedAt:  'Criado',
+      fieldModifiedAt: 'Modificado',
+      fieldStatus:    'Situação',
+      fieldOwner:     'Proprietário',
+    },
+
+    'MTS.DocumentManagerPreviewVersionsPanel': {
+      panelLabel:  'Versões',
+      noVersions:  'Sem versões.',
+      current:     'Atual',
+    },
+
+    'MTS.DocumentManagerPreviewNotesPanel': {
+      panelLabel:  'Notas',
+      noNotes:     'Sem notas.',
+      addTitle:    'Nova nota',
+      placeholder: 'Escreva uma nota...',
+      send:        'Adicionar',
+      cancel:      'Cancelar',
+      delete:      'Excluir nota',
+      errorSave:   'Erro ao salvar a nota.',
+      errorDelete: 'Erro ao excluir a nota.',
+    },
+
+    'MTS.DocumentManagerPreviewMetadataPanel': {
+      panelLabel:  'Metadados',
+      noFields:    'Nenhum metadado configurado.',
+      editTitle:   'Editar metadados',
+      edit:        'Editar',
+      save:        'Salvar',
+      cancel:      'Cancelar',
+      errorSave:   'Erro ao salvar.',
+    },
+
+  },
+
 };
 
 /* ── API global ───────────────────────────────────────────── */

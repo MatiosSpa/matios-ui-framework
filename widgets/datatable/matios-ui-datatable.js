@@ -651,8 +651,16 @@ MTS.DataTable = class DataTable {
   _buildEmpty() {
     const wrap  = document.createElement('div')
     wrap.className = 'mts-table-wrap'
+    /* Igual que _buildTableWrapper: con fixedHeader el wrapper debe ocupar
+       fixedHeaderHeight también en el empty-state, para que el layout no
+       colapse ni "salte" al alternar entre estados con/sin datos. */
+    if (this._cfg.fixedHeader) {
+      wrap.style.height    = this._cfg.fixedHeaderHeight
+      wrap.style.overflowY = 'auto'
+    }
     const table = document.createElement('table')
     table.className = 'mts-table'
+    if (this._cfg.fixedHeader) table.classList.add('mts-table--fixed')
     table.appendChild(this._buildHeader())
     const tbody = document.createElement('tbody')
     const row   = document.createElement('tr')

@@ -370,6 +370,10 @@ MTS.Kanban = class MtsKanban {
 
   _buildColumn(col) {
     var self  = this;
+    // Modo B (cards aparte por colId): una columna sin tarjetas queda sin `cards`
+    // tras la distribución de _load(). Garantizamos siempre un array para no
+    // romper el contador ni el listado de abajo (col.cards.length / forEach).
+    if (!Array.isArray(col.cards)) col.cards = [];
     var colEl = document.createElement('div');
     colEl.className    = 'mts-kanban__col';
     colEl.dataset.colId = col.id;
