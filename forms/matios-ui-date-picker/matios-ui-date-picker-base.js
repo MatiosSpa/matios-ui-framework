@@ -22,6 +22,7 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     this.clearable    = options.clearable   ?? true;
     this.readonly     = options.readonly    ?? true;
     this.placeholder  = options.placeholder || "";
+    this.label        = options.label       || "";
     this.closeOnSelect = options.closeOnSelect ?? true;
     this._listeners   = {};
     this._isOpen      = false;
@@ -82,7 +83,11 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
 
   destroy() {
     this._popupEl?.remove();
-    this._wrapperEl?.replaceWith(this._input);
+    if (this._containerEl) {
+      this._containerEl.replaceChildren(); // canónico: limpiamos lo que construimos
+    } else {
+      this._wrapperEl?.replaceWith(this._input); // legacy: restauramos el <input> en su lugar
+    }
     document.removeEventListener("click", this._outsideClick);
     document.removeEventListener("keydown", this._onKeyDown);
   }
@@ -92,10 +97,38 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
 
   /* ── Setup ── */
   _setupInput() {
-    this._wrapperEl = document.createElement("div");
-    this._wrapperEl.className = "mts-picker-wrap";
-    this._input.parentNode.insertBefore(this._wrapperEl, this._input);
-    this._wrapperEl.appendChild(this._input);
+    /* El host puede ser:
+       (a) un <input> existente — patrón legacy: lo envolvemos en su lugar.
+       (b) un contenedor (<div>, etc.) — patrón canónico, igual que MTS.Input/
+           MTS.Select: construimos <label> + <input> visibles adentro. */
+    const host = this._input;
+    const hostIsInput = host && host.tagName === "INPUT";
+
+    if (hostIsInput) {
+      this._wrapperEl = document.createElement("div");
+      this._wrapperEl.className = "mts-picker-wrap";
+      host.parentNode.insertBefore(this._wrapperEl, host);
+      this._wrapperEl.appendChild(host);
+      this._input = host;
+    } else {
+      /* Contenedor: lo limpiamos y armamos label + wrap + input propios. */
+      this._containerEl = host;
+      host.classList.add("mts-picker");
+      host.replaceChildren(); // safe: clearing
+      if (this.label) {
+        const lbl = document.createElement("label");
+        lbl.className   = "mts-picker-label";
+        lbl.textContent = this.label;
+        host.appendChild(lbl);
+      }
+      this._wrapperEl = document.createElement("div");
+      this._wrapperEl.className = "mts-picker-wrap";
+      this._input = document.createElement("input");
+      this._input.type = "text";
+      this._wrapperEl.appendChild(this._input);
+      host.appendChild(this._wrapperEl);
+    }
+
     this._input.classList.add("mts-picker-input");
     this._input.placeholder = this.placeholder;
     if (this.readonly) this._input.readOnly = true;

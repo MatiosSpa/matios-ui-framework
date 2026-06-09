@@ -10,6 +10,19 @@
    1. WRAPPER E INPUT
    ============================================================ */
 
+/* Montaje canónico: al instanciar sobre un <div>, el componente construye
+   su propio label + input (igual que MTS.Input / MTS.Select). El label es
+   propio del picker para no depender de matios-ui-input.css. */
+.mts-picker { display: block; }
+
+.mts-picker-label {
+  display: block;
+  margin-bottom: var(--mts-space-1);
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-medium);
+  color: var(--mts-text-secondary);
+}
+
 .mts-picker-wrap {
   position: relative;
   display: inline-flex;
@@ -98,7 +111,7 @@
   border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
   border-radius: var(--mts-radius-lg);
   box-shadow: var(--mts-shadow-xl);
-  z-index: var(--mts-z-dropdown);
+  z-index: var(--mts-z-popover);
   padding: var(--mts-space-3);
   min-width: 280px;
 
