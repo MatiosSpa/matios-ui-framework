@@ -12,6 +12,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
   the public release.
 - `README.es.md` — Spanish entry page (the component docs themselves are English single-language).
 - `MTS.Card`: opt-in `radius` / `border` (modifiers + `setRadius` / `setBorder`), without changing defaults.
+- `MTS.Menu`: **Priority+ Navigation** — `overflow: "auto"` collapses horizontal items that don't fit into a "More"
+  dropdown, recalculated on container resize (`ResizeObserver`). New `overflowLabel` / `overflowIcon` options and a
+  localized `more` key (es/en/pt).
+- Portuguese (`pt`) locale added to the base i18n catalog for every component (DataTable + plugins + DocumentManager\*) —
+  previously only `es` / `en`.
 
 ### Changed
 - **Documentation normalized to English, single-language**, with one canonical template per component
@@ -21,6 +26,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Fixed
 - DocumentManager preview: the title icon rendered as escaped text — now built as DOM nodes.
+- `MTS.Kanban`: Mode B (cards supplied separately with `colId`) no longer crashes when a column ends up with no cards.
+- `MTS.DataTable`: the empty state now applies `fixedHeaderHeight`, so the layout no longer collapses/jumps between the
+  data and no-data states.
+- `MTS.DatePicker.*`: when mounted on a `<div>` with the canonical API, it now renders a `<label>` and a visible input
+  (consistent with `MTS.Input` / `MTS.Select`); mounting on an existing `<input>` still works.
 
 ---
 
