@@ -25,6 +25,17 @@ MTS.Menu = class MtsMenu {
     this.trigger  = options.trigger || 'click';
     this._onClick = options.onClick || null;
 
+    // Priority+ Navigation (solo modo horizontal): 'none' (default) | 'auto'.
+    // Con 'auto', los items que no caben se agrupan en un dropdown "Más".
+    this.overflow      = options.overflow      || 'none';
+    this.overflowLabel = options.overflowLabel || null;   // fallback: i18n 'more'
+    this.overflowIcon  = options.overflowIcon  || null;   // clase mts-icon opcional
+    this._resizeObs    = null;
+    this._overflowRaf  = null;
+    this._moreNode     = null;
+    this._moreDropdown = null;
+    this._hItems       = null;
+
     // Lista de hosts montados: [{ el, mode }]
     this._mounts    = [];
     // Keys de items de árbol abiertos
@@ -89,6 +100,7 @@ MTS.Menu = class MtsMenu {
 
   /** Desmonta de todos los hosts y limpia */
   destroy() {
+    this._teardownOverflow();
     this._mounts.forEach(function(m) { m.el.innerHTML = ''; });
     this._mounts = [];
     this._removeDocHandler();
@@ -111,6 +123,7 @@ MTS.Menu = class MtsMenu {
 
   /** Desmonta de un host específico */
   _unmount(el) {
+    if (this._moreNode && el.contains(this._moreNode)) this._teardownOverflow();
     this._mounts = this._mounts.filter(function(m) { return m.el !== el; });
     el.innerHTML = '';
     if (this._mounts.length === 0) this._removeDocHandler();
@@ -143,21 +156,161 @@ MTS.Menu = class MtsMenu {
   _renderHorizontal(container) {
     var self = this;
     container.className = 'mts-menu mts-menu--horizontal';
+    var useOverflow = (this.overflow === 'auto');
+    if (useOverflow) container.classList.add('mts-menu--overflow');
 
+    // Construir los nodos inline guardando la referencia item↔node (para el overflow).
+    this._hItems = [];
     this.items.forEach(function(item) {
+      var node;
       if (item.divider) {
-        var div = document.createElement('span');
-        div.className = 'mts-menu__divider';
-        container.appendChild(div);
-        return;
+        node = document.createElement('span');
+        node.className = 'mts-menu__divider';
+      } else {
+        node = self._buildHorizontalItem(item);
       }
-      container.appendChild(self._buildHorizontalItem(item));
+      container.appendChild(node);
+      self._hItems.push({ item: item, node: node, divider: !!item.divider });
     });
 
     // Cerrar dropdowns al click fuera
     if (this.trigger === 'click') {
       this._addDocHandler(container);
     }
+
+    // Priority+ Navigation: lo que no entra se agrupa en un dropdown "Más".
+    if (useOverflow) {
+      this._buildOverflowNode(container);
+      this._setupResizeObserver(container);
+      var selfRaf = this;
+      requestAnimationFrame(function() { selfRaf._distributeOverflow(container); });
+    }
+  }
+
+  /* ────────────────────────────────────────
+     OVERFLOW — Priority+ Navigation (horizontal)
+     ──────────────────────────────────────── */
+
+  // Nodo "Más" (label/ícono + dropdown) al final; oculto mientras todo entre.
+  _buildOverflowNode(container) {
+    var self = this;
+    var node = document.createElement('div');
+    node.className = 'mts-menu__node mts-menu__overflow';
+    node.setAttribute('hidden', '');
+
+    var label = this.overflowLabel || this._t('more', 'More');
+    var btn = this._buildBtn({ label: label, icon: this.overflowIcon }, 'mts-menu__item');
+    btn.setAttribute('aria-haspopup', 'true');
+    btn.setAttribute('aria-expanded', 'false');
+    this._appendChevron(btn, 'down');
+    node.appendChild(btn);
+
+    var dropdown = document.createElement('div');
+    dropdown.className = 'mts-menu__dropdown';
+    node.appendChild(dropdown);
+
+    function openNode() {
+      var menu = node.closest('.mts-menu');
+      if (menu) menu.querySelectorAll('.mts-menu__node--open').forEach(function(n) { n.classList.remove('mts-menu__node--open'); });
+      node.classList.add('mts-menu__node--open');
+      btn.setAttribute('aria-expanded', 'true');
+      self._positionDropdown(dropdown, node);
+    }
+    function closeNode() {
+      node.classList.remove('mts-menu__node--open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+
+    if (this.trigger === 'hover') {
+      node.addEventListener('mouseenter', openNode);
+      node.addEventListener('mouseleave', closeNode);
+    } else {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (node.classList.contains('mts-menu__node--open')) closeNode();
+        else openNode();
+      });
+    }
+
+    container.appendChild(node);
+    this._moreNode = node;
+    this._moreDropdown = dropdown;
+  }
+
+  // Mide y reparte: lo que no entra (reservando el ancho del "Más") va al dropdown.
+  // O(n) por pasada. Respeta el orden original de los items.
+  _distributeOverflow(container) {
+    if (!this._moreNode || !this._hItems) return;
+    var moreNode = this._moreNode;
+    var moreDrop = this._moreDropdown;
+
+    // 1. Reset — todos los nodos inline antes del "Más"; dropdown vacío; "Más" oculto.
+    moreNode.setAttribute('hidden', '');
+    moreDrop.innerHTML = '';
+    for (var i = 0; i < this._hItems.length; i++) {
+      container.insertBefore(this._hItems[i].node, moreNode);
+    }
+
+    var avail = container.clientWidth;
+    if (!avail || !this._hItems.length) return;
+    var cLeft = container.getBoundingClientRect().left;
+
+    // 2. ¿Entra todo? (borde derecho del último <= ancho disponible)
+    var lastRight = this._hItems[this._hItems.length - 1].node.getBoundingClientRect().right - cLeft;
+    if (lastRight <= avail + 1) return; // todo cabe → "Más" queda oculto
+
+    // 3. Hay overflow: mostrar "Más" para medir su ancho y reservarlo.
+    moreNode.removeAttribute('hidden');
+    var limit = avail - (moreNode.offsetWidth + 4);
+
+    // 4. Primer nodo cuyo borde derecho se pasa del límite.
+    var cut = -1;
+    for (var j = 0; j < this._hItems.length; j++) {
+      if (this._hItems[j].node.getBoundingClientRect().right - cLeft > limit) { cut = j; break; }
+    }
+    if (cut < 0) return;
+
+    // 5. Mover los sobrantes (en orden) al dropdown "Más".
+    for (var k = cut; k < this._hItems.length; k++) {
+      var rec = this._hItems[k];
+      if (rec.node.parentNode === container) container.removeChild(rec.node);
+      if (rec.divider) moreDrop.appendChild(this._mkDivider());
+      else moreDrop.appendChild(this._buildDropdownItem(rec.item));
+    }
+    if (window.MTS && MTS.Icon) MTS.Icon.initAll();
+  }
+
+  // Recalcula el overflow cuando cambia el ancho del contenedor.
+  _setupResizeObserver(container) {
+    var self = this;
+    if (this._resizeObs) { this._resizeObs.disconnect(); this._resizeObs = null; }
+    if (typeof ResizeObserver === 'undefined') return;
+    this._resizeObs = new ResizeObserver(function() {
+      if (self._overflowRaf) return; // ya hay un recalc agendado
+      self._overflowRaf = requestAnimationFrame(function() {
+        self._overflowRaf = null;
+        self._distributeOverflow(container);
+      });
+    });
+    this._resizeObs.observe(container);
+  }
+
+  _teardownOverflow() {
+    if (this._resizeObs) { this._resizeObs.disconnect(); this._resizeObs = null; }
+    if (this._overflowRaf) { cancelAnimationFrame(this._overflowRaf); this._overflowRaf = null; }
+    this._moreNode = null;
+    this._moreDropdown = null;
+    this._hItems = null;
+  }
+
+  // Lee el locale del componente (namespace MTS.Menu) con fallback.
+  _t(key, fallback) {
+    try {
+      var loc = (window.MTS && MTS.getLocale) ? MTS.getLocale() : null;
+      var ns = loc && loc['MTS.Menu'];
+      if (ns && ns[key] != null) return ns[key];
+    } catch (e) {}
+    return fallback;
   }
 
   _buildHorizontalItem(item) {

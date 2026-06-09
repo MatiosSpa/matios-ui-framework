@@ -10,6 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.Menu': {
+      more: 'Más',
       demo: {
         subtitleHtml:   'Menú de navegación con n niveles, íconos y un único <code>onClick</code> — para <strong>MTS.Topbar</strong> (horizontal) y <strong>MTS.SideNav</strong> (árbol).',
         s1Title:        '1 — Horizontal · MTS.Topbar + MTS.Menu',
@@ -41,6 +42,7 @@
 
   MTS.registerLocale('en', {
     'MTS.Menu': {
+      more: 'More',
       demo: {
         subtitleHtml:   'Navigation menu with n levels, icons and a single <code>onClick</code> — for <strong>MTS.Topbar</strong> (horizontal) and <strong>MTS.SideNav</strong> (tree).',
         s1Title:        '1 — Horizontal · MTS.Topbar + MTS.Menu',
@@ -72,6 +74,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.Menu': {
+      more: 'Mais',
       demo: {
         subtitleHtml:   'Menu de navegação com n níveis, ícones e um único <code>onClick</code> — para <strong>MTS.Topbar</strong> (horizontal) e <strong>MTS.SideNav</strong> (árvore).',
         s1Title:        '1 — Horizontal · MTS.Topbar + MTS.Menu',

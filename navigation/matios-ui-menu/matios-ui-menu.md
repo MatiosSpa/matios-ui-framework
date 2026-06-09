@@ -49,6 +49,9 @@ new MTS.SideNav('#sidebar', { menu: menu });
 | `items` | `array` | `[]` | Navigation item tree (see schema below) |
 | `active` | `string` | auto | Key of the initially active item (auto-detected from `href` if omitted) |
 | `trigger` | `string` | `'click'` | Horizontal mode only — `'click'` · `'hover'` |
+| `overflow` | `string` | `'none'` | Horizontal mode only — `'auto'` enables Priority+ Navigation: items that don't fit collapse into a "More" dropdown, recalculated on container resize (`ResizeObserver`). The host container must be width-bounded (`flex:1; min-width:0`). |
+| `overflowLabel` | `string` | i18n `more` | Label for the overflow trigger (defaults to the localized "More" / "Más" / "Mais") |
+| `overflowIcon` | `string` | — | Optional `mts-icon` class for the overflow trigger |
 | `onClick` | `function` | — | `function(item)` — receives the full item, including any extra props |
 
 ### Item schema

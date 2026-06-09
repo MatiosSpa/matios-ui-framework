@@ -23,6 +23,13 @@
   height: 100%;
 }
 
+/* Priority+ Navigation (overflow:"auto"): el menú clipea su contenido y el
+   algoritmo JS mueve lo que no entra al nodo "Más". Los dropdowns usan
+   position:fixed, así que escapan este overflow:hidden. */
+.mts-menu--overflow { overflow: hidden; }
+.mts-menu--horizontal .mts-menu__overflow { flex-shrink: 0; }        /* el "Más" nunca se encoge */
+.mts-menu--horizontal .mts-menu__overflow[hidden] { display: none; } /* gana al display:flex del nodo */
+
 /* Nodo (ítem + dropdown) */
 .mts-menu--horizontal .mts-menu__node {
   position: relative;

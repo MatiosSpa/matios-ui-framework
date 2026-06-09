@@ -84,6 +84,8 @@
 /* Slot de MTS.Menu montado en topbar */
 .mts-topbar__menu {
   flex: 1;
+  min-width: 0; /* permite que el menú se encoja y mida el ancho real disponible
+                   (sin esto el menú nowrap empuja/tapa el end-slot del avatar) */
   display: flex;
   align-items: center;
   /* overflow: visible — necesario para que el dropdown salga del topbar */
