@@ -121,8 +121,12 @@
   display: block;
 }
 
-/* Sub-dropdown (aparece a la derecha) */
+/* Sub-dropdown (aparece a la derecha del ítem padre).
+   IMPORTANTE: position:absolute (no fixed). El dropdown raíz es fixed porque JS
+   le calcula top/left contra el viewport; el sub se posiciona contra su NODO padre
+   (que tiene position:relative), por eso left:100% = al lado del ítem, no del viewport. */
 .mts-menu--horizontal .mts-menu__dropdown--sub {
+  position: absolute;
   top: -4px;
   left: calc(100% + 2px);
 }
