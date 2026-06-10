@@ -10,14 +10,17 @@
 </p>
 
 <p align="center">
-  <a href="./README.md">English</a> &nbsp;·&nbsp; <a href="./LICENSE">MIT</a>
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT">
+  <img src="https://img.shields.io/badge/dependencies-0-brightgreen.svg" alt="Cero dependencias">
+  <img src="https://img.shields.io/badge/build-none-lightgrey.svg" alt="Sin build">
+  &nbsp;·&nbsp; <a href="./README.md">English</a>
 </p>
 
 ---
 
-> **Nota de idioma.** La documentación completa del framework (este README en inglés y los `.md` de cada componente)
-> está en **inglés**, el estándar de la comunidad open source. Esta página es la **puerta de entrada en español**.
-> La interfaz de los componentes sí es multi-idioma en runtime (es/en/pt).
+> **Nota de idioma.** La documentación completa del framework (el `README.md` en inglés y los `.md` de cada componente)
+> está en **inglés**, el estándar de la comunidad open source. Esta página es la **puerta de entrada en español** y espeja
+> el contenido del README en inglés. La interfaz de los componentes sí es multi-idioma en runtime (es/en/pt).
 
 ---
 
@@ -32,13 +35,33 @@ adaptar a proyectos reales. Matios UI toma otro camino:
 | **Agnóstico de framework** | Funciona en sitios estáticos, apps server-rendered, sistemas legacy y microfrontends |
 | **Componentes autónomos** | Cada componente trae su propio `.css`, `.js`, doc `.md` y `demo.html` |
 | **Theming real** | Modelo modo + acento con soporte completo de alto contraste |
-| **Fácil de inspeccionar** | Código abierto y legible — sin bundles minificados |
+| **Fácil de inspeccionar** | Código abierto y legible — sin bundles minificados para revertir |
 
 ---
 
 ## Inicio rápido
 
 Abre `index.html` en tu navegador para explorar la librería completa de componentes.
+
+```
+matios-ui-framework/
+├── index.html
+├── base/
+├── forms/
+├── navigation/
+├── overlays/
+├── display/
+├── layout/
+├── data/
+├── icons/
+├── utilities/
+├── widgets/
+├── themes/
+├── support/
+└── apps-showcase/
+```
+
+### Uso mínimo
 
 ```html
 <!-- Base + tema -->
@@ -51,8 +74,12 @@ Abre `index.html` en tu navegador para explorar la librería completa de compone
 <script src="forms/matios-ui-input/matios-ui-input.js"></script>
 
 <div id="mi-input"></div>
+
 <script>
-  new MTS.Input('#mi-input', { label: 'Nombre', placeholder: 'Ingresa tu nombre' });
+  new MTS.Input('#mi-input', {
+    label: 'Nombre',
+    placeholder: 'Ingresa tu nombre'
+  });
 </script>
 ```
 
@@ -60,42 +87,167 @@ Abre `index.html` en tu navegador para explorar la librería completa de compone
 
 ## Theming
 
-Matios UI usa un modelo **modo + acento** controlado por atributos HTML:
+Matios UI usa un modelo **modo + acento** controlado por atributos HTML.
+
+### Modos
 
 ```html
 <html data-mts-mode="light">
-<html data-mts-mode="dark" data-mts-accent="violet">
+<html data-mts-mode="dark">
 <html data-mts-mode="high-contrast">
 ```
 
-Acentos disponibles: `violet` · `olive` · `blue` · `corporate` · `navy` · `emerald` · `petrol`.
-`high-contrast` es un modo independiente — no requiere acento.
+### Acentos
+
+```html
+<html data-mts-mode="dark" data-mts-accent="violet">
+<html data-mts-mode="light" data-mts-accent="blue">
+```
+
+Acentos disponibles: `violet` · `olive` · `blue` · `corporate` · `navy` · `emerald` · `petrol`
+
+> `high-contrast` es un modo independiente — no requiere acento.
 
 ---
 
 ## Grupos de componentes
 
-- **Forms** — Button, Input, Select, Checkbox, Radio, Toggle, Slider, TagInput, Rating, DatePicker, FileUpload, NumberInput, PhoneInput, ColorPicker, RichEditor, FormLayout, FormGuard, CopyButton, ConfirmButton, Label, PasswordStrength, TransferList, Validate
-- **Navigation** — Tabs, Accordion, Breadcrumb, Stepper, Drawer, Dropdown, PanelDropdown, Pagination, CommandPalette, ContextMenu, SideNav, TabBar, Topbar, Menu
-- **Overlays** — Alert, Badge, Tooltip, Modal, Popover, Toast, Progress, Skeleton, Spinner, Lightbox
-- **Display** — Avatar, Card, KPICard, EmptyState, Timeline, SortableList, Countdown, RatingReview, Tree, ImageGallery, VirtualList, MarkdownViewer
-- **Layout** — Grid, Scroll, Splitter, ScrollSpy, IntersectionReveal
-- **Data** — Table (CSS), DataTable (widget)
-- **Utilities** — HttpClient, CodeBlock, DevPanel, DiagnosticsPanel, JsonViewer, SessionTimeout, PageLoader, Sanitize, Browser
-- **Widgets** — DataTable (+ plugins), Calendar, Boards (Gantt · Kanban · SprintBoard)
-- **Icons** — 278 íconos (outline/filled, colores semánticos, tamaños, animación spin)
+### Forms
+`Button` · `Input` · `Select` · `Checkbox` · `Radio` · `Toggle` · `Slider` · `TagInput` · `Rating` · `DatePicker` · `FileUpload` · `NumberInput` · `PhoneInput` · `ColorPicker` · `RichEditor` · `FormLayout` · `FormGuard` · `CopyButton` · `ConfirmButton` · `Label` · `PasswordStrength` · `TransferList` · `Validate`
+
+### Navigation
+`Tabs` · `Accordion` · `Breadcrumb` · `Stepper` · `StepProgress` · `Drawer` · `Dropdown` · `PanelDropdown` · `Pagination` · `CommandPalette` · `ContextMenu` · `SideNav` · `TabBar` · `Topbar` · `Menu`
+
+### Overlays
+`Alert` · `Badge` · `Tooltip` · `Modal` · `Popover` · `Toast` · `Progress` · `Skeleton` · `Spinner` · `Lightbox`
+
+### Display
+`Avatar` · `Card` · `KPICard` · `EmptyState` · `Timeline` · `SortableList` · `Countdown` · `RatingReview` · `Tree` · `ImageGallery` · `VirtualList` · `MarkdownViewer`
+
+### Layout
+`Grid` · `Scroll` · `Splitter` · `ScrollSpy` · `IntersectionReveal`
+
+### Data
+`Table` · `DataTable` (widget)
+
+### Utilities
+`HttpClient` · `CodeBlock` · `DevPanel` · `DiagnosticsPanel` · `JsonViewer` · `SessionTimeout` · `PageLoader` · `Sanitize` · `Browser`
+
+### Icons
+**278 íconos** — outline / filled · variantes de color semántico · variantes de tamaño · animación spin
+
+```html
+<i class="mts-icon mts-icon-trash"></i>
+<i class="mts-icon mts-icon-trash mts-icon--filled mts-icon--danger"></i>
+<i class="mts-icon mts-icon-loader mts-icon--spin"></i>
+```
+
+---
+
+## Widgets
+
+Componentes de mayor nivel compuestos a partir de primitivas.
+
+| Widget | Descripción |
+|---|---|
+| **DataTable** | Grilla de datos completa — orden, filtros, paginación, plugins (DocumentManager, Toolbar, ColumnVisibility, ExpandRow, Filter) |
+| **Calendar** | Vistas mes / semana / día / agenda con gestión de eventos, drag & drop y datasource async |
+| **Boards** | `GanttChart` (Gantt SVG + WBS, baseline, undo/redo) · `Kanban` · `SprintBoard` — cada uno con su doc de contrato FE↔BE |
+| **Dashboard** | Template de admin — _en desarrollo_ |
+
+---
+
+## Estructura de un componente
+
+Todo componente sigue el mismo patrón:
+
+```
+matios-ui-xxx/
+├── matios-ui-xxx.css
+├── matios-ui-xxx.js
+├── matios-ui-xxx.md
+└── demo.html
+```
+
+---
+
+## Apps Showcase
+
+`apps-showcase/` contiene pantallas de UI completas y realistas, construidas exclusivamente con componentes de Matios UI.
+
+**Grupos disponibles:**
+- **Authentication** — login, forgot-password, reset-password, verify-email, workspace-selector, session-expired, access-denied, accept-invitation
+- **Onboarding** — signup-basic, signup-with-company, invite-team, onboarding-complete
+- **Account** — profile-overview, security-settings
+- **Settings** — workspace-settings, security-policies
+- **Support** — ticket-inbox, ticket-detail, ticket-resolution
+- **Productivity** — task-board, calendar-planner, task-detail
+- **Notifications** — notification-center, activity-feed
+- **Admin** — members-list, member-detail, invite-member, access-review, role-detail
+- **Billing** — current-plan, invoice-history, payment-methods, usage-and-limits, plan-change-preview
+- **Developers** — api-keys, webhooks
+- **Integrations** — integrations-hub, integration-detail, connect-provider, sync-history
+- **Documents** — recent-files, file-preview, share-dialog
+- **Search** — global-search, search-results
+- **System** — error-404, error-403, error-500, maintenance-mode, empty-workspace
+
+---
+
+## Puntos de entrada
+
+| Archivo | Propósito |
+|---|---|
+| `index.html` | Explorador principal del framework |
+| `themes/demo.html` | Preview de theming modo + acento |
+| `icons/demo.html` | Catálogo completo de íconos |
+| `apps-showcase/index.html` | Catálogo de pantallas del showcase |
+| `<grupo>/demo.html` | Navegación de componentes por grupo |
+| `<componente>/demo.html` | Demo aislado del componente |
+
+---
+
+## Eventos
+
+Los componentes emiten eventos usando el namespace `mts:*`:
+
+```javascript
+document.getElementById('mi-calendario')
+  .addEventListener('mts:calendar:eventDrop', function(e) {
+    console.log(e.detail);
+  });
+```
+
+---
+
+## Principios de diseño
+
+- Usar componentes Matios primero — evitar UI ad-hoc cuando ya existe un componente real
+- Cada componente es autónomo e independiente
+- Los demos son consistentes, realistas e inspeccionables
+- El código es legible — sin pipeline de build
+- Nombres, agrupación y estructura siguen las mismas convenciones en todo el proyecto
+
+Ver [`CONTRIBUTING.md`](./CONTRIBUTING.md) para las convenciones de código, reglas y flujo de desarrollo completos.
+
+---
+
+## Estado
+
+Matios UI está **listo para producción** como framework — estructura coherente, theming consistente, cobertura completa
+de componentes y documentación real por componente.
 
 ---
 
 ## Documentación
 
-Cada componente tiene su `.md` (Installation · Usage · Options · API · Events · CSS Variables · Accessibility ·
-Changelog) junto a su `.css`/`.js`/`demo.html`. Los docs detallados están en inglés; el `README.md` raíz es el
-punto de entrada principal.
+- Cada componente tiene su propio `.md` (Installation · Usage · Options · API · Events · CSS Variables · Accessibility ·
+  Changelog) junto a su `.css`/`.js`/`demo.html`.
+- Cada grupo de componentes tiene un `README.md` índice que lista sus componentes.
+- Los docs detallados están en inglés; el `README.md` raíz es el punto de entrada principal.
 
 ## Contribuir
 
-Ver [`CONTRIBUTING.md`](./CONTRIBUTING.md) y el [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md).
+Ver [`CONTRIBUTING.md`](./CONTRIBUTING.md) y el [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md). Issues y pull requests son bienvenidos.
 
 ## Licencia
 
