@@ -73,6 +73,15 @@
 }
 
 /* ── Slots ─────────────────────────────────────────── */
+/* Zonas laterales INAMOVIBLES (tamaño según contenido). Solo el slot
+   menu/center (flex:1) cede espacio. Sin esto, con los ítems del menú en
+   flex-shrink:0 (Priority+), la presión de ancho comprimía start/end y el
+   avatar desaparecía. */
+.mts-topbar__start,
+.mts-topbar__end {
+  flex-shrink: 0;
+}
+
 .mts-topbar__start {
   display: flex;
   align-items: center;
