@@ -77,6 +77,20 @@
       border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);
       padding:6px 12px;min-height:28px;margin-top:8px;
     }
+    /* Panel redimensible para demostrar el overflow:"auto" (Priority+ Navigation).
+       resize:horizontal necesita overflow!=visible; los dropdowns son position:fixed
+       y escapan igual. */
+    .demo-resize {
+      resize:horizontal; overflow:hidden;
+      min-width:320px; max-width:100%; width:680px;
+      border:1px solid var(--mts-border-color); border-radius:var(--mts-radius-lg);
+    }
+    .demo-avatar {
+      width:30px; height:30px; border-radius:50%;
+      background:var(--mts-color-primary); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:12px; flex-shrink:0;
+    }
   </style>
 </head>
 <body>
@@ -116,6 +130,12 @@
     <div id="s4"></div>
   </div>
 
+  <!-- ── 5 · PRIORITY+ NAVIGATION (overflow:"auto") ── -->
+  <div class="demo-section">
+    <div class="demo-section-title" id="s5-title"></div>
+    <div id="s5"></div>
+  </div>
+
 </div>
 
 <script>
@@ -134,6 +154,7 @@ document.getElementById('s1-title').textContent    = D.s1Title || '1 — Horizon
 document.getElementById('s2-title').textContent    = D.s2Title || '2 — Tree · MTS.SideNav + MTS.Menu';
 document.getElementById('s3-title').textContent    = D.s3Title || '3 — N levels · badges · disabled';
 document.getElementById('s4-title').textContent    = D.s4Title || '4 — One instance · Horizontal Topbar + Tree SideNav synced';
+document.getElementById('s5-title').textContent    = D.s5Title || '5 — Priority+ Navigation · overflow:"auto"';
 
 function fmt(tpl, item) {
   return String(tpl).replace('{key}', item.key).replace('{label}', item.label);
@@ -373,6 +394,53 @@ new MTS.Topbar('#tb4', {
 new MTS.SideNav('#sn4', {
   collapsed: true,
   menu: menu4
+});
+
+/* ════════════════════════════════════
+   5 · PRIORITY+ NAVIGATION (overflow:"auto")
+   ════════════════════════════════════ */
+mk('s5',
+'<div class="demo-resize">\n' +
+'  <div id="tb5"></div>\n' +
+'</div>\n' +
+'<div class="demo-log" id="hint5">' + (D.s5Hint || 'Resize the panel (drag the right edge →) — items that overflow collapse into "More".') + '</div>',
+"// 13 módulos en un topbar — overflow agrupa lo que no entra en un \"Más\".\n" +
+"var menu5 = new MTS.Menu({\n" +
+"  items: modules,        // [{ key, label, icon }, …] ×13\n" +
+"  overflow: 'auto'       // ← Priority+ Navigation (ResizeObserver)\n" +
+"});\n\n" +
+"new MTS.Topbar('#tb5', {\n" +
+"  brand: { logo: '…', title: 'MatiosSPA' },\n" +
+"  menu:  menu5,\n" +
+"  end:   avatarEl        // el end-slot SIEMPRE queda reservado\n" +
+"});",
+'240px');
+
+var ICON_POOL = ['mts-icon-home','mts-icon-bar-chart-2','mts-icon-users','mts-icon-settings','mts-icon-layers','mts-icon-shield'];
+var modLabels = [
+  D.lblDashboard || 'Dashboard', D.lblReports || 'Reports', D.lblSales || 'Sales',
+  D.lblPurchases || 'Purchases', D.lblLogistics || 'Logistics', D.lblUsers || 'Users',
+  D.lblConfig || 'Config', D.lblHome || 'Home', D.lblOperations || 'Operations',
+  D.lblArgentina || 'Argentina', D.lblBrazil || 'Brazil', D.lblChile || 'Chile', D.lblAdmin || 'Admin'
+];
+var items5 = modLabels.map(function (lbl, i) {
+  return { key: 'm' + i, label: lbl, icon: ICON_POOL[i % ICON_POOL.length] };
+});
+
+var menu5 = new MTS.Menu({
+  active: 'm0',
+  items: items5,
+  overflow: 'auto',
+  onClick: function (item) {
+    var h = document.getElementById('hint5');
+    if (h) h.textContent = fmt(D.logResult || 'key: {key} · label: {label}', item);
+  }
+});
+
+new MTS.Topbar('#tb5', {
+  brand: { logo: LOGO, title: 'Matios<span style="color:var(--mts-color-primary)">SPA</span>' },
+  menu: menu5,
+  end: '<div class="demo-avatar">GC</div>'
 });
 
 MTS.Icon.initAll();
