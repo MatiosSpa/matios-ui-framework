@@ -251,7 +251,7 @@ MTS.Menu = class MtsMenu {
       container.insertBefore(this._hItems[i].node, moreNode);
     }
 
-    var avail = container.clientWidth;
+    var avail = this._availableWidth(container);
     if (!avail || !this._hItems.length) return;
     var cLeft = container.getBoundingClientRect().left;
 
@@ -293,6 +293,27 @@ MTS.Menu = class MtsMenu {
       });
     });
     this._resizeObs.observe(container);
+    // También el padre (ej. topbar): al redimensionar la ventana cambia el ancho
+    // del padre aunque el menú —si está expandido a su contenido— no cambie.
+    if (container.parentElement) this._resizeObs.observe(container.parentElement);
+  }
+
+  // Ancho REALMENTE disponible para el menú: ancho del padre menos los slots
+  // hermanos fijos (brand/start/end) y los gaps. Necesario porque el menú, con
+  // los items en flex-shrink:0, puede expandirse a min-content y entonces
+  // container.clientWidth mide el ancho EXPANDIDO, no el disponible.
+  _availableWidth(container) {
+    var parent = container.parentElement;
+    if (!parent) return container.clientWidth;
+    var gap = 0;
+    if (window.getComputedStyle) { gap = parseFloat(getComputedStyle(parent).gap) || 0; }
+    var taken = 0;
+    Array.prototype.forEach.call(parent.children, function(sib) {
+      if (sib === container) return;
+      taken += sib.offsetWidth + gap;
+    });
+    var avail = parent.clientWidth - taken;
+    return avail > 0 ? avail : container.clientWidth;
   }
 
   _teardownOverflow() {

@@ -100,6 +100,14 @@
   /* overflow: visible — necesario para que el dropdown salga del topbar */
 }
 
+/* MTS.Menu se monta SOBRE el slot y reemplaza su clase por mts-menu--horizontal
+   (pierde .mts-topbar__menu). Lo acotamos acá para que llene el centro y NO
+   empuje el end-slot fuera del viewport (Priority+ overflow). */
+.mts-topbar > .mts-menu--horizontal {
+  flex: 1;
+  min-width: 0;
+}
+
 .mts-topbar__center {
   display: flex;
   align-items: center;
