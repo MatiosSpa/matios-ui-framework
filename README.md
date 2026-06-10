@@ -249,6 +249,8 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and the [`CODE_OF_CONDUCT.md`](./CODE
 
 Matios UI is free and MIT-licensed. If it saves you time, you can support its ongoing development:
 
+[![Donate with PayPal](https://img.shields.io/badge/PayPal-Donate-00457C?logo=paypal&logoColor=white)](https://paypal.me/GContrerasGomez)
+
 <details>
 <summary><strong>🪙 Donate with crypto</strong></summary>
 
