@@ -30,6 +30,20 @@
 .mts-menu--horizontal .mts-menu__overflow { flex-shrink: 0; }        /* el "Más" nunca se encoge */
 .mts-menu--horizontal .mts-menu__overflow[hidden] { display: none; } /* gana al display:flex del nodo */
 
+/* CLAVE del overflow: en modo overflow los nodos inline NO se encogen, así
+   conservan su ancho natural y _distributeOverflow() (que mide el NODO) detecta
+   el sobrante. Sin esto los ítems se comprimen con ellipsis → "todo cabe" → el
+   "Más" nunca aparece. Solo aplica a los nodos inline directos (no al dropdown,
+   donde el ellipsis sí se quiere). Scopeado a overflow:"auto" para no alterar
+   los menús horizontales clásicos. */
+.mts-menu--overflow > .mts-menu__node,
+.mts-menu--overflow > .mts-menu__node > .mts-menu__item { flex-shrink: 0; }
+.mts-menu--overflow > .mts-menu__node > .mts-menu__item > .mts-menu__label {
+  flex: 0 0 auto;
+  overflow: visible;
+  text-overflow: clip;
+}
+
 /* Nodo (ítem + dropdown) */
 .mts-menu--horizontal .mts-menu__node {
   position: relative;
