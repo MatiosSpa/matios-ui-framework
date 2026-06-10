@@ -245,6 +245,26 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and the [`CODE_OF_CONDUCT.md`](./CODE
 
 [MIT](./LICENSE) © Matios SpA.
 
+## 💛 Support
+
+Matios UI is free and MIT-licensed. If it saves you time, you can support its ongoing development:
+
+<details>
+<summary><strong>🪙 Donate with crypto</strong></summary>
+
+<br>
+
+| Network | Address |
+|---|---|
+| **Ethereum / EVM** (ETH, USDC, …) | `0x5ea6F302Fb8a9865540FfCC42F7264c996532dC3` |
+| **Bitcoin** (native SegWit) | `bc1qv43are3facy6lyuzp5qpdqpt8x7tcz2cx3aspe` |
+| **Solana** (SOL, SPL) | `BYtfMGEoxBLf5DMPoLyebUJpEh1hW9jGEvjiaEiuRmjw` |
+| **TRON** (USDT-TRC20) | `TFHuJKpPNZcdEPsfCknDpvY6CzQbpWYGUv` |
+
+</details>
+
+Every contribution helps keep the project maintained — thank you 🙏
+
 ## Español
 
 ¿Prefieres español? Lee la [guía de inicio en español](./README.es.md).
