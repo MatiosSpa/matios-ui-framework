@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="light">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/); var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{ var p=window.parent; if(p&&p!==window){
+        var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+        var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+        if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+        if(pa) document.documentElement.setAttribute('data-mts-accent',pa); else document.documentElement.removeAttribute('data-mts-accent');
+      }}catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.NationalId — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="./matios-ui-nationalid.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-nationalid-i18n.js"></script>
+  <script src="./matios-ui-nationalid.js"></script>
+  <style>
+    .nid-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; }
+    .nid-field__badge { display:inline-block; margin-top:6px; font-size:12px; font-weight:600; }
+    .nid-field__badge--valid   { color:var(--mts-color-success); }
+    .nid-field__badge--invalid { color:var(--mts-color-danger); }
+    .nid-field__badge--empty   { color:var(--mts-text-muted); font-weight:400; }
+    .nid-countries { display:flex; flex-wrap:wrap; gap:8px; }
+    .nid-country { padding:4px 10px; border:1px solid var(--mts-border-color); border-radius:var(--mts-radius-md); background:var(--mts-bg-surface-2); font-size:13px; font-weight:600; color:var(--mts-text-primary); }
+    .nid-note { margin-top:12px; font-size:13px; color:var(--mts-text-muted); }
+  </style>
+</head>
+<body>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.NationalId</h1>
+    <p id="demo-subtitle"></p>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title" id="s1-title"></div>
+    <div class="nid-grid" id="s1"></div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title" id="s2-title"></div>
+    <div class="nid-countries" id="countries"></div>
+    <p class="nid-note" id="countries-note"></p>
+  </div>
+</div>
+
+<script>
+// — Locale: English default (public face); ?lang=es|en|pt to switch —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.NationalId']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').innerHTML = D.subtitleHtml || 'Formats and validates legal IDs per country as you type.';
+document.getElementById('s1-title').textContent    = D.s1Title || '1 — By country';
+document.getElementById('s2-title').textContent    = D.s2Title || '2 — Available countries';
+
+function field(parent, country, labelText) {
+  var f = document.createElement('div');
+  f.className = 'nid-field';
+  var host = document.createElement('div');
+  var badge = document.createElement('span');
+  badge.className = 'nid-field__badge nid-field__badge--empty';
+  badge.textContent = D.empty || '— enter an ID —';
+  f.appendChild(host);
+  f.appendChild(badge);
+  parent.appendChild(f);
+
+  new MTS.NationalId.Input(host, {
+    country: country,
+    label: labelText,
+    onChange: function (e) {
+      if (!e.raw) { badge.className = 'nid-field__badge nid-field__badge--empty'; badge.textContent = D.empty || '— enter an ID —'; return; }
+      if (e.valid) { badge.className = 'nid-field__badge nid-field__badge--valid'; badge.textContent = '✓ ' + (D.valid || 'Valid') + ' · ' + e.type.toUpperCase(); }
+      else         { badge.className = 'nid-field__badge nid-field__badge--invalid'; badge.textContent = '✕ ' + (D.invalid || 'Invalid'); }
+    }
+  });
+}
+
+var s1 = document.getElementById('s1');
+field(s1, 'CL', D.lblCL || 'Chile · RUT');
+field(s1, 'BR', D.lblBR || 'Brazil · CPF / CNPJ (auto)');
+field(s1, 'AR', D.lblAR || 'Argentina · CUIT');
+field(s1, 'ES', D.lblES || 'Spain · DNI / NIE');
+
+var cc = document.getElementById('countries');
+MTS.NationalId.countries().forEach(function (code) {
+  var c = MTS.NationalId.getCountry(code);
+  var el = document.createElement('span');
+  el.className = 'nid-country';
+  el.textContent = code + ' · ' + Object.keys(c.types).map(function (t) { return c.types[t].label; }).join(' / ');
+  cc.appendChild(el);
+});
+document.getElementById('countries-note').innerHTML = D.countriesNote || 'Extensible registry: add more with <code>MTS.NationalId.registerCountry(code, def)</code>.';
+
+if (window.MTS && MTS.Icon) MTS.Icon.initAll();
+</script>
+</body>
+</html>

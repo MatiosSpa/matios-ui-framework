@@ -1,0 +1,64 @@
+/* ============================================================
+   MATIOS UI — matios-ui-nationalid.css
+   MTS.NationalId.Input — estilos (espeja MTS.Input)
+   Requiere: matios-ui-base.css
+   ============================================================ */
+
+.mts-nationalid { display: block; }
+
+/* ── Label ── */
+.mts-nationalid__label {
+  display: block;
+  margin-bottom: var(--mts-space-1);
+  font-size: var(--mts-font-size-sm);
+  font-weight: var(--mts-font-weight-medium);
+  color: var(--mts-text-secondary);
+}
+.mts-nationalid__label--required::after { content: ' *'; color: var(--mts-color-danger); }
+
+/* ── Wrap (fondo enabled, igual que MTS.Input) ── */
+.mts-nationalid__wrap {
+  display: flex;
+  align-items: center;
+  background: var(--mts-bg-surface);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  transition: border-color .15s, box-shadow .15s;
+}
+.mts-nationalid__wrap--focus {
+  border-color: var(--mts-color-primary);
+  box-shadow: 0 0 0 3px var(--mts-color-primary-light);
+}
+.mts-nationalid__wrap--error { border-color: var(--mts-color-danger); }
+.mts-nationalid__wrap--error.mts-nationalid__wrap--focus {
+  box-shadow: 0 0 0 3px var(--mts-color-danger-light, rgba(248, 113, 113, .25));
+}
+.mts-nationalid__wrap--disabled { opacity: .5; pointer-events: none; }
+
+/* ── Input ── */
+.mts-nationalid__input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: none;
+  background: none;
+  outline: none;
+  font-family: var(--mts-font-family);
+  color: var(--mts-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.mts-nationalid__input::placeholder { color: var(--mts-text-muted); }
+
+/* ── Tamaños ── */
+.mts-nationalid__wrap--sm .mts-nationalid__input { height: 32px; padding: 0 10px; font-size: var(--mts-font-size-sm); }
+.mts-nationalid__wrap--md .mts-nationalid__input { height: 40px; padding: 0 12px; font-size: var(--mts-font-size-md); }
+.mts-nationalid__wrap--lg .mts-nationalid__input { height: 48px; padding: 0 14px; font-size: var(--mts-font-size-md); }
+
+/* ── Mensaje de error ── */
+.mts-nationalid__error {
+  display: block;
+  min-height: 16px;
+  margin-top: var(--mts-space-1);
+  font-size: var(--mts-font-size-xs);
+  color: var(--mts-color-danger);
+}

@@ -22,6 +22,7 @@ Input and form components. From primitive controls (input, checkbox, radio) to a
 | `matios-ui-numberinput` | `MTS.NumberInput` | Numeric input with +/− buttons, min/max, step and currency/percentage formats. |
 | `matios-ui-passwordstrength` | `MTS.PasswordStrength` | Real-time password-strength meter with configurable rules. |
 | `matios-ui-phoneinput` | `MTS.PhoneInput` | Phone input with country selector and automatic regional formatting. |
+| `matios-ui-nationalid` | `MTS.NationalId` | National/tax ID input per country (RUT, CPF, CUIT, DNI…) — format-as-you-type + checksum validation. |
 | `matios-ui-radio` | `MTS.Radio` | Vertical/horizontal radio groups with disabled states and a programmatic API. |
 | `matios-ui-rating` | `MTS.Rating` | Star rating with size variants, read-only mode and progressive enhancement. |
 | `matios-ui-richeditor` | `MTS.RichEditor` | Template editor with merge fields — WYSIWYG, no dependencies, no iframe. |
