@@ -197,12 +197,29 @@ MTS.PhoneInput = class MtsPhoneInput {
     this._input = input;
 
     input.addEventListener('input', () => {
-      this._raw = input.value.replace(/\D/g,'');
+      // Caret estable por CONTEO DE DÍGITOS: el reformateo inserta/quita separadores,
+      // así que el índice de carácter viejo queda corrido. Contamos los dígitos a la
+      // izquierda del caret y, tras reformatear, ubicamos el caret después de esa misma
+      // cantidad de dígitos en el string formateado.
+      const digitsLeft = input.value.slice(0, input.selectionStart).replace(/\D/g, '').length;
+      this._raw = input.value.replace(/\D/g, '');
       const formatted = this._format(this._raw);
-      const cursor = input.selectionStart;
       input.value = formatted;
-      // Restaurar cursor aproximado
-      try { input.setSelectionRange(cursor, cursor); } catch(e){}
+
+      let pos = formatted.length;
+      if (digitsLeft <= 0) {
+        pos = 0;
+      } else {
+        let seen = 0;
+        for (let i = 0; i < formatted.length; i++) {
+          const ch = formatted.charCodeAt(i);
+          if (ch >= 48 && ch <= 57) { // 0-9
+            seen++;
+            if (seen === digitsLeft) { pos = i + 1; break; }
+          }
+        }
+      }
+      try { input.setSelectionRange(pos, pos); } catch(e){}
       this._emit('change', this.getValue());
     });
     input.addEventListener('focus', () => wrap.classList.add('mts-phoneinput__wrap--focus'));
