@@ -80,6 +80,26 @@ matios-ui-framework/
 
 ---
 
+## Running locally
+
+The framework has **no build step**, but the explorer and demos load files over HTTP (component docs, demos, mock data) — so serve the folder instead of opening files directly via `file://`.
+
+**VS Code + Live Server (recommended)**
+
+1. Install the **Live Server** extension by *Ritwick Dey* — [marketplace](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer).
+2. Right-click `index.html` → **Open with Live Server**.
+3. The browser opens at `http://127.0.0.1:5500` with live reload on save.
+
+**Or any static server**
+
+```bash
+npx serve .
+# or
+python -m http.server 5500
+```
+
+---
+
 ## Theming
 
 Matios UI uses a **mode + accent** model controlled by HTML attributes.

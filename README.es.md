@@ -85,6 +85,26 @@ matios-ui-framework/
 
 ---
 
+## Levantar localmente
+
+El framework **no tiene paso de build**, pero el explorador y los demos cargan archivos por HTTP (docs de componentes, demos, datos mock) — así que conviene servir la carpeta en lugar de abrir los archivos directamente con `file://`.
+
+**VS Code + Live Server (recomendado)**
+
+1. Instala la extensión **Live Server** de *Ritwick Dey* — [marketplace](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer).
+2. Click derecho en `index.html` → **Open with Live Server**.
+3. El navegador abre en `http://127.0.0.1:5500` con recarga en vivo al guardar.
+
+**O cualquier servidor estático**
+
+```bash
+npx serve .
+# o
+python -m http.server 5500
+```
+
+---
+
 ## Theming
 
 Matios UI usa un modelo **modo + acento** controlado por atributos HTML.
