@@ -11,6 +11,7 @@
   MTS.registerLocale('es', {
     'MTS.NationalId': {
       invalid: '{doc} inválido',
+      required: 'Requerido',
       demo: {
         subtitleHtml: 'Formatea y valida IDs legales por país (RUN·RUT, CPF·CNPJ, CUIT, DNI·NIE…) mientras se tipea. Núcleo puro validable + componente <code>.Input</code>.',
         s1Title:   '1 — Por país (formatea + valida al tipear)',
@@ -31,6 +32,7 @@
   MTS.registerLocale('en', {
     'MTS.NationalId': {
       invalid: 'Invalid {doc}',
+      required: 'Required',
       demo: {
         subtitleHtml: 'Formats and validates legal IDs per country (RUN·RUT, CPF·CNPJ, CUIT, DNI·NIE…) as you type. Pure validatable core + <code>.Input</code> component.',
         s1Title:   '1 — By country (formats + validates as you type)',
@@ -51,6 +53,7 @@
   MTS.registerLocale('pt', {
     'MTS.NationalId': {
       invalid: '{doc} inválido',
+      required: 'Obrigatório',
       demo: {
         subtitleHtml: 'Formata e valida IDs legais por país (RUN·RUT, CPF·CNPJ, CUIT, DNI·NIE…) enquanto se digita. Núcleo puro validável + componente <code>.Input</code>.',
         s1Title:   '1 — Por país (formata + valida ao digitar)',

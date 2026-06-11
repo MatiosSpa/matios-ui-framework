@@ -80,6 +80,7 @@ MTS.PhoneInput = class MtsPhoneInput {
     if (_ds.country !== undefined) _fromHTML.country = _ds.country;
     if (_ds.disabled !== undefined) _fromHTML.disabled = true;
     if (_ds.size !== undefined) _fromHTML.size = _ds.size;
+    if (_ds.required !== undefined) _fromHTML.required = true;
     options = { ..._fromHTML, ...options };
 
     this._countryCode = options.country     || 'CL';
@@ -89,6 +90,8 @@ MTS.PhoneInput = class MtsPhoneInput {
     this.hint         = options.hint        || '';
     this.disabled     = options.disabled    ?? false;
     this.size         = options.size        || 'md';
+    this.required     = options.required    ?? false;
+    this.errorMessage = options.errorMessage != null ? options.errorMessage : null;
     this.renderMode   = options.renderMode  || 'auto';
     this._error     = '';
     this._listeners = {};
@@ -107,7 +110,24 @@ MTS.PhoneInput = class MtsPhoneInput {
   }
 
   /* ── API ── */
-  getValue()         { return { raw: this._raw, formatted: this._format(this._raw), full: this._country().dial + this._raw, country: this._country() }; }
+  getValue()         { return { raw: this._raw, formatted: this._format(this._raw), full: this._country().dial + this._raw, country: this._country(), valid: this.isValid() }; }
+  /* Validez por LARGO (los teléfonos no tienen checksum): la cantidad de dígitos
+     debe coincidir con la del formato del país. Vacío es válido salvo que sea requerido. */
+  _expectedLen()     { return (this._country().fmt.match(/#/g) || []).length; }
+  isValid()          { return this._raw ? (this._raw.length === this._expectedLen()) : !this.required; }
+  _t(key, fallback)  { try { var ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.PhoneInput'] : null; if (ns && ns[key] != null) return ns[key]; } catch (e) {} return fallback; }
+  _validateNow() {
+    if (!this._raw) {
+      if (this.required) this.setError(this._t('required', 'Required')); else this.clearError();
+      return !this.required;
+    }
+    if (this._raw.length !== this._expectedLen()) {
+      this.setError(this.errorMessage != null ? this.errorMessage : this._t('invalid', 'Invalid phone number'));
+      return false;
+    }
+    this.clearError();
+    return true;
+  }
   setValue(v)        { this._raw = v.replace(/\D/g,''); if(this._input) this._input.value = this._format(this._raw); return this; }
   setCountry(code)   { this._countryCode = code; this._build(); return this; }
   setError(msg)      { this._error = msg; this._renderError(); return this; }
@@ -220,10 +240,11 @@ MTS.PhoneInput = class MtsPhoneInput {
         }
       }
       try { input.setSelectionRange(pos, pos); } catch(e){}
+      this.clearError(); // limpiar mientras edita; se revalida en blur
       this._emit('change', this.getValue());
     });
     input.addEventListener('focus', () => wrap.classList.add('mts-phoneinput__wrap--focus'));
-    input.addEventListener('blur',  () => wrap.classList.remove('mts-phoneinput__wrap--focus'));
+    input.addEventListener('blur',  () => { wrap.classList.remove('mts-phoneinput__wrap--focus'); this._validateNow(); });
     input.addEventListener('keydown', (e) => { if (e.key === 'Escape') this._closeDd(); });
     wrap.appendChild(input);
 

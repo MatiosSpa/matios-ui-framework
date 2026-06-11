@@ -55,8 +55,12 @@ Available `data-*`: `data-label`, `data-placeholder`, `data-hint`, `data-value`,
 | `hint` | `string` | `''` | Helper text |
 | `disabled` | `boolean` | `false` | Disables interaction |
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
+| `required` | `boolean` | `false` | Also via `data-required`. Gates validity: empty is valid **unless** required |
+| `errorMessage` | `string` | i18n `invalid` | Error text when the number length doesn't match the country |
 | `onChange` | `function` | — | Fires on value or country change |
 | `onCountryChange` | `function` | — | Fires only when the country changes |
+
+> **Validation.** Phone numbers have no checksum, so validity is by **length** — the digit count must match the country's format. Empty is valid unless `required`. The validation does **not** use the native HTML `required` attribute (no browser bubble); it is shown with the component's own error.
 
 ---
 
@@ -64,7 +68,8 @@ Available `data-*`: `data-label`, `data-placeholder`, `data-hint`, `data-value`,
 
 | Method | Description |
 |--------|-------------|
-| `getValue()` | Returns `{ raw, formatted, full, country }` |
+| `getValue()` | Returns `{ raw, formatted, full, country, valid }` |
+| `isValid()` | `boolean` — length matches the country (empty → valid unless `required`) |
 | `setValue(digits)` | Set the phone digits programmatically |
 | `setCountry(code)` | Change the country programmatically |
 | `setError(msg)` / `clearError()` | Set / clear the error state |

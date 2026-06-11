@@ -10,6 +10,8 @@
 
   MTS.registerLocale('es', {
     'MTS.PhoneInput': {
+      invalid:  'Teléfono inválido',
+      required: 'Requerido',
       demo: {
         subtitle:               'Input de teléfono con selector de país, formato automático y enhancement progresivo desde HTML declarativo.',
         s1Title:                '1 — Básico — Chile por defecto',
@@ -50,6 +52,8 @@
 
   MTS.registerLocale('en', {
     'MTS.PhoneInput': {
+      invalid:  'Invalid phone number',
+      required: 'Required',
       demo: {
         subtitle:               'Phone input with country selector, automatic formatting and progressive enhancement from declarative HTML.',
         s1Title:                '1 — Basic — Chile default',
@@ -90,6 +94,8 @@
 
   MTS.registerLocale('pt', {
     'MTS.PhoneInput': {
+      invalid:  'Telefone inválido',
+      required: 'Obrigatório',
       demo: {
         subtitle:               'Campo de telefone com seletor de país, formatação automática e enhancement progressivo a partir de HTML declarativo.',
         s1Title:                '1 — Básico — Chile padrão',

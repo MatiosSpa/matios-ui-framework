@@ -397,7 +397,9 @@ MTS.NationalId.Input = class MtsNationalIdInput {
     this.type         = options.type || 'auto';
     this.label        = options.label || '';
     this.placeholder  = options.placeholder != null ? options.placeholder : null;
-    this.required     = !!options.required;
+    this.required     = options.required != null
+      ? !!options.required
+      : !!(this._el && this._el.dataset && this._el.dataset.required !== undefined);
     this.size         = options.size || 'md';
     this.disabled     = !!options.disabled;
     this.errorMessage = options.errorMessage != null ? options.errorMessage : null;
@@ -519,8 +521,15 @@ MTS.NationalId.Input = class MtsNationalIdInput {
   }
 
   _validateNow() {
-    const res = this.getValue();
-    if (this._raw && !res.valid) {
+    /* Vacío: error sólo si es requerido. */
+    if (!this._raw) {
+      if (this.required) this.setError(this._t('required', 'Required'));
+      else this.clearError();
+      return !this.required;
+    }
+    /* Con contenido: se valida el formato/checksum (sea requerido u opcional). */
+    const res = MTS.NationalId.validate(this.country, this._raw, this.type);
+    if (!res.valid) {
       const def = this._typeDef();
       const doc = def && def.label ? def.label : 'ID';
       const msg = this.errorMessage != null ? this.errorMessage : this._t('invalid', 'Invalid {doc}').replace('{doc}', doc);
@@ -532,7 +541,12 @@ MTS.NationalId.Input = class MtsNationalIdInput {
   }
 
   /* ── API pública ── */
-  getValue() { return MTS.NationalId.validate(this.country, this._raw, this.type); }
+  getValue() {
+    const res = MTS.NationalId.validate(this.country, this._raw, this.type);
+    /* Gate de required: vacío es válido salvo que sea requerido. */
+    res.valid = this._raw ? res.valid : !this.required;
+    return res;
+  }
   isValid()  { return this.getValue().valid; }
 
   setValue(v) {

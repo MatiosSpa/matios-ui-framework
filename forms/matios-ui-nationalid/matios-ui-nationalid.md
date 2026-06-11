@@ -54,7 +54,7 @@ MTS.NationalId.countries();                    // → ['AR','BR','CL', …]
 | `label` | `string` | — | Field label |
 | `placeholder` | `string` | country default | Override the placeholder |
 | `value` | `string` | — | Initial value |
-| `required` | `boolean` | `false` | Marks the label and validates emptiness |
+| `required` | `boolean` | `false` | Also via `data-required`. Gates validity: empty is valid **unless** required. Does **not** set the native HTML `required` (no browser bubble) |
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
 | `disabled` | `boolean` | `false` | Disables the field |
 | `errorMessage` | `string` | i18n `invalid` | Error text; `{doc}` is replaced by the doc label (RUT, CPF…) |
