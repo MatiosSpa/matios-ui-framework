@@ -73,6 +73,27 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
 
   getValue() { return this._value; }
 
+  /* Normaliza Date | string | null → Date | null */
+  _toDate(v) {
+    if (v == null || v === "") return null;
+    if (v instanceof Date) return isNaN(v.getTime()) ? null : v;
+    const d = new Date(v);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  /* Límites dinámicos: actualizan minDate/maxDate y refrescan el popup si está abierto
+     (sin esto, cambiar el límite con el calendario abierto no deshabilitaba las fechas). */
+  setMinDate(date) {
+    this.minDate = this._toDate(date);
+    if (this._isOpen) this._updatePopupContent();
+    return this;
+  }
+  setMaxDate(date) {
+    this.maxDate = this._toDate(date);
+    if (this._isOpen) this._updatePopupContent();
+    return this;
+  }
+
   clear() {
     this._value = null;
     this._input.value = "";
@@ -577,6 +598,46 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     }));
     return !cancelled;
   }
+};
+
+/* ────────────────────────────────────────────────────────────
+   linkRange — enlaza dos pickers como rango "Desde / Hasta".
+   El "to" no puede ser anterior al "from" (y el "from" no puede pasar del "to").
+   Reúsa setMinDate/setMaxDate (refresco en vivo). Layout libre: los dos campos
+   se montan donde el dev quiera.
+   ──────────────────────────────────────────────────────────── */
+MTS.DatePicker.linkRange = function (from, to, opts) {
+  opts = opts || {};
+  var allowSameDay = opts.allowSameDay !== false; // default true
+  var clampTo      = opts.clampTo      !== false; // default true
+
+  function offset(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+
+  function syncTo() {
+    var t = to.getValue();
+    from.setMaxDate(t ? (allowSameDay ? t : offset(t, -1)) : null);
+  }
+  function syncFrom() {
+    var f = from.getValue();
+    to.setMinDate(f ? (allowSameDay ? f : offset(f, 1)) : null);
+    if (clampTo && f) {
+      var minAllowed = allowSameDay ? f : offset(f, 1);
+      var t = to.getValue();
+      if (t && t < minAllowed) to.setValue(minAllowed);
+    }
+    syncTo();
+  }
+
+  from.on("change", syncFrom);
+  to.on("change", syncTo);
+  syncFrom(); // aplica restricciones con los valores actuales
+
+  return {
+    destroy: function () {
+      if (from.off) from.off("change", syncFrom);
+      if (to.off) to.off("change", syncTo);
+    }
+  };
 };
 
 /* Alias de compatibilidad / Compatibility alias */

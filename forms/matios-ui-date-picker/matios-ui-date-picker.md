@@ -125,9 +125,29 @@ Shared by every picker type:
 | `open()` / `close()` | Open / close the popup |
 | `getValue()` | Value by type (`Date`, string, or `{ start, end }`) |
 | `setValue(value)` | Set the value (chainable) |
+| `setMinDate(date)` / `setMaxDate(date)` | Update the bounds at runtime (`Date` \| string \| `null`) — **refreshes the open calendar live** (chainable) |
 | `clear()` | Clear the value |
 | `destroy()` | Destroy the instance |
 | `on(event, cb)` | Listen to `'change'`, `'open'`, `'close'` |
+
+---
+
+## Linked range (`linkRange`)
+
+Link two **independent** pickers as a "From / To" range — the *to* can't be earlier than the *from* (and the *from* can't go past the *to*). The two fields are laid out wherever you want.
+
+```js
+var from = new MTS.DatePicker.Date('#from', { label: 'From' });
+var to   = new MTS.DatePicker.Date('#to',   { label: 'To' });
+
+var link = MTS.DatePicker.linkRange(from, to, {
+  allowSameDay: true,   // allow from === to (default true)
+  clampTo: true         // if changing 'from' leaves 'to' earlier, snap 'to' to 'from' (default true)
+});
+// link.destroy() to unlink
+```
+
+It wires `to.setMinDate(from)` and `from.setMaxDate(to)` on each change, with live calendar refresh. For a single combined two-calendar control, use `MTS.DatePicker.DateRange` instead.
 
 ---
 
@@ -155,6 +175,10 @@ document.getElementById('my-input')
 ---
 
 ## Changelog
+
+### 2026-06-12
+- `setMinDate(date)` / `setMaxDate(date)` — runtime bounds with **live refresh** of the open calendar.
+- `MTS.DatePicker.linkRange(from, to, opts)` — link two independent pickers as a "From / To" range.
 
 ### Initial
 - Independent picker classes (`Date`, `Time`, `DateTime`, `DateRange`, `Month`, `Week`) over a shared base, with

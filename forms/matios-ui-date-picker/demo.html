@@ -71,6 +71,7 @@
   <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-pk2"></div></div>
   <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-pk3"></div></div>
   <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-pk4"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-pk5"></div></div>
 </div>
 
 <script>
@@ -110,6 +111,7 @@ document.getElementById('s1-title').textContent      = D.s1Title || '1 — Date 
 document.getElementById('s2-title').textContent      = D.s2Title || '2 — Date Range';
 document.getElementById('s3-title').textContent      = D.s3Title || '3 — Month / Week';
 document.getElementById('s4-title').textContent      = D.s4Title || '4 — Common API';
+document.getElementById('s5-title').textContent      = D.s5Title || '5 — Linked range (From / To) · linkRange';
 
 var preview1 =
   '<div class="demo-grid">' +
@@ -254,6 +256,33 @@ makeSection('tabs-pk3', preview3, js3, function(){
 }, '400px');
 
 makeSection('tabs-pk4', preview4, js4, null, '280px');
+
+var preview5 =
+  '<div class="demo-grid">' +
+    '<div class="demo-col">' +
+      '<div class="demo-label">' + (D.labelFrom || 'From') + '</div>' +
+      '<input type="text" id="pk-from">' +
+      '<div class="result-box" id="out-pk-from">' + (D.outFrom || '— start —') + '</div>' +
+    '</div>' +
+    '<div class="demo-col">' +
+      '<div class="demo-label">' + (D.labelTo || 'To') + '</div>' +
+      '<input type="text" id="pk-to">' +
+      '<div class="result-box" id="out-pk-to">' + (D.outTo || '— end —') + '</div>' +
+    '</div>' +
+  '</div>';
+var js5 =
+  "// Two independent fields, linked: 'to' can't be before 'from'\n" +
+  "var from = new MTS.DatePicker.Date('#pk-from', { format: 'DD/MM/YYYY' });\n" +
+  "var to   = new MTS.DatePicker.Date('#pk-to',   { format: 'DD/MM/YYYY' });\n\n" +
+  "MTS.DatePicker.linkRange(from, to);\n" +
+  "// → to.minDate = from · from.maxDate = to · live calendar refresh";
+makeSection('tabs-pk5', preview5, js5, function(){
+  var from = new MTS.DatePicker.Date('#pk-from', { format:'DD/MM/YYYY', clearable:true,
+    onChange:function(e){ showPickerOutput('out-pk-from', e.detail.value, e.detail.formatted); } });
+  var to = new MTS.DatePicker.Date('#pk-to', { format:'DD/MM/YYYY', clearable:true,
+    onChange:function(e){ showPickerOutput('out-pk-to', e.detail.value, e.detail.formatted); } });
+  MTS.DatePicker.linkRange(from, to);
+}, '420px');
 </script>
 </body>
 </html>
