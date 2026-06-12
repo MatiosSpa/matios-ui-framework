@@ -26,16 +26,25 @@
   <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
   <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../css-helpers/matios-ui-css-helpers.css">
   <link rel="stylesheet" href="../../support/demo-shared.css">
   <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
   <link rel="stylesheet" href="./matios-ui-nationalid.css">
   <script src="../../icons/matios-ui-icons.js"></script>
   <script src="../../support/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <script src="../../base/matios-ui-i18n.js"></script>
   <script src="./matios-ui-nationalid-i18n.js"></script>
   <script src="./matios-ui-nationalid.js"></script>
   <style>
-    .nid-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; }
+    .nid-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; }
     .nid-field__badge { display:inline-block; margin-top:6px; font-size:12px; font-weight:600; }
     .nid-field__badge--valid   { color:var(--mts-color-success); }
     .nid-field__badge--invalid { color:var(--mts-color-danger); }
@@ -55,7 +64,7 @@
 
   <div class="demo-section">
     <div class="demo-section-title" id="s1-title"></div>
-    <div class="nid-grid" id="s1"></div>
+    <div id="s1"></div>
   </div>
 
   <div class="demo-section">
@@ -79,34 +88,81 @@ document.getElementById('demo-subtitle').innerHTML = D.subtitleHtml || 'Formats 
 document.getElementById('s1-title').textContent    = D.s1Title || '1 — By country';
 document.getElementById('s2-title').textContent    = D.s2Title || '2 — Available countries';
 
-function field(parent, country, labelText) {
-  var f = document.createElement('div');
-  f.className = 'nid-field';
-  var host = document.createElement('div');
-  var badge = document.createElement('span');
-  badge.className = 'nid-field__badge nid-field__badge--empty';
-  badge.textContent = D.empty || '— enter an ID —';
-  f.appendChild(host);
-  f.appendChild(badge);
-  parent.appendChild(f);
+// live theme from the explorer iframe
+window.addEventListener('message', function (e) {
+  if (!e.data) return;
+  if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+  if (e.data.type === 'setAccent') {
+    if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
 
-  new MTS.NationalId.Input(host, {
+// Preview/HTML/JS tabs + copyable code (same helper as the other demos)
+function mk(id, html, js, h) {
+  var cbHtml = id + '-cb-html';
+  var cbJs   = id + '-cb-js';
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: h || '300px',
+    tabs: [
+      { id: id + '-p',    label: 'Preview',    content: '<div class="mts-p-4">' + html + '</div>' },
+      { id: id + '-html', label: 'HTML',       content: '<div id="' + cbHtml + '" style="height:100%"></div>' },
+      { id: id + '-js',   label: 'JavaScript', content: '<div id="' + cbJs   + '" style="height:100%"></div>' }
+    ]
+  });
+  new MTS.CodeBlock('#' + cbHtml, { code: html.trim(), language: 'html', copyable: true, height: '100%' });
+  new MTS.CodeBlock('#' + cbJs,   { code: js.trim(),   language: 'js',   copyable: true, height: '100%' });
+}
+
+function setBadge(badgeId, e) {
+  var b = document.getElementById(badgeId);
+  if (!b) return;
+  if (!e.raw)      { b.className = 'nid-field__badge nid-field__badge--empty';   b.textContent = D.empty || '— enter an ID —'; }
+  else if (e.valid){ b.className = 'nid-field__badge nid-field__badge--valid';   b.textContent = '✓ ' + (D.valid || 'Valid') + ' · ' + e.type.toUpperCase(); }
+  else             { b.className = 'nid-field__badge nid-field__badge--invalid'; b.textContent = '✕ ' + (D.invalid || 'Invalid'); }
+}
+
+function mountField(hostId, badgeId, country, label) {
+  setBadge(badgeId, { raw: '' });
+  new MTS.NationalId.Input('#' + hostId, {
     country: country,
-    label: labelText,
-    onChange: function (e) {
-      if (!e.raw) { badge.className = 'nid-field__badge nid-field__badge--empty'; badge.textContent = D.empty || '— enter an ID —'; return; }
-      if (e.valid) { badge.className = 'nid-field__badge nid-field__badge--valid'; badge.textContent = '✓ ' + (D.valid || 'Valid') + ' · ' + e.type.toUpperCase(); }
-      else         { badge.className = 'nid-field__badge nid-field__badge--invalid'; badge.textContent = '✕ ' + (D.invalid || 'Invalid'); }
-    }
+    label: label,
+    onChange: function (e) { setBadge(badgeId, e); }
   });
 }
 
-var s1 = document.getElementById('s1');
-field(s1, 'CL', D.lblCL || 'Chile · RUT');
-field(s1, 'BR', D.lblBR || 'Brazil · CPF / CNPJ (auto)');
-field(s1, 'AR', D.lblAR || 'Argentina · CUIT');
-field(s1, 'ES', D.lblES || 'Spain · DNI / NIE');
+/* ── 1 · By country (with Preview / HTML / JS tabs) ── */
+var FIELDS = [
+  { host: 'ex-cl', badge: 'bd-cl', country: 'CL', label: D.lblCL || 'Chile · RUT' },
+  { host: 'ex-br', badge: 'bd-br', country: 'BR', label: D.lblBR || 'Brazil · CPF / CNPJ (auto)' },
+  { host: 'ex-ar', badge: 'bd-ar', country: 'AR', label: D.lblAR || 'Argentina · CUIT' },
+  { host: 'ex-es', badge: 'bd-es', country: 'ES', label: D.lblES || 'Spain · DNI / NIE' }
+];
+var s1html = '<div class="nid-grid">\n' + FIELDS.map(function (f) {
+  return '  <div class="nid-field"><div id="' + f.host + '"></div><span class="nid-field__badge nid-field__badge--empty" id="' + f.badge + '"></span></div>';
+}).join('\n') + '\n</div>';
 
+var s1js =
+  "// Country by prop (like MTS.PhoneInput) — formats + validates as you type\n" +
+  "new MTS.NationalId.Input('#rut', {\n" +
+  "  country: 'CL',\n" +
+  "  label: 'RUT',\n" +
+  "  required: true,\n" +
+  "  onChange: function (v) {\n" +
+  "    // { raw, formatted, valid, dv, type, country }\n" +
+  "    saveBtn.disabled = !v.valid;\n" +
+  "  }\n" +
+  "});\n\n" +
+  "// BR auto-detects CPF (11) vs CNPJ (14)\n" +
+  "new MTS.NationalId.Input('#doc', { country: 'BR' });\n\n" +
+  "// also: AR (CUIT) · ES (DNI/NIE) · PE · CO · UY · EC · PT …\n" +
+  "// pure core (no UI): MTS.NationalId.validate('CL', '12.345.678-5')";
+
+mk('s1', s1html, s1js, '360px');
+FIELDS.forEach(function (f) { mountField(f.host, f.badge, f.country, f.label); });
+
+/* ── 2 · Available countries ── */
 var cc = document.getElementById('countries');
 MTS.NationalId.countries().forEach(function (code) {
   var c = MTS.NationalId.getCountry(code);
