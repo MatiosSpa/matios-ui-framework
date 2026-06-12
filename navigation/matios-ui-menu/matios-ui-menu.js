@@ -454,11 +454,18 @@ MTS.Menu = class MtsMenu {
         return;
       }
 
-      if (item.group) {
-        var grpEl = document.createElement('div');
-        grpEl.className = 'mts-menu__group-label';
-        grpEl.textContent = item.group;
-        container.appendChild(grpEl);
+      if (item.group !== undefined) {
+        /* Item de grupo: detectado por la PRESENCIA de `group` (no por truthiness),
+           para que `{ group: '' }` no caiga al render de item normal. Si el label
+           queda vacío tras trim (''/' '/'\t'), no se emite header — señal declarativa
+           de "grupo sin título visible" (consistente en sidenav y topbar). */
+        var grpLabel = String(item.group == null ? '' : item.group).trim();
+        if (grpLabel) {
+          var grpEl = document.createElement('div');
+          grpEl.className = 'mts-menu__group-label';
+          grpEl.textContent = grpLabel;
+          container.appendChild(grpEl);
+        }
         return;
       }
 

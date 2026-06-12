@@ -66,6 +66,7 @@ new MTS.SideNav('#sidebar', { menu: menu });
 | `children` | `array` | Nested items (submenu) |
 | `disabled` | `boolean` | Disables the item |
 | `divider` | `boolean` | Renders a separator |
+| `group` | `string` | Tree mode — renders a group-label header. An **empty/whitespace** value (`''`, `' '`) renders **no header** (declarative "group without a visible title") |
 
 Any extra property added to an item is passed through intact to `onClick`.
 
