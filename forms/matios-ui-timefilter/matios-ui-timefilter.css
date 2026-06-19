@@ -1,0 +1,79 @@
+/* ============================================================
+   MATIOS UI — matios-ui-timefilter.css
+   MTS.TimeFilter — time-window filter (trigger + popover panel)
+   Tokens only (--mts-*). No satellite styles.
+   ============================================================ */
+
+/* ── trigger ── */
+.mts-timefilter { display: inline-block; }
+
+.mts-timefilter__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mts-space-2, 8px);
+}
+.mts-timefilter__icon {
+  display: inline-flex;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+}
+.mts-timefilter__icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+.mts-timefilter__label { white-space: nowrap; }
+
+/* ── panel (rendered inside the MTS.Popover body) ── */
+.mts-timefilter__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-3, 12px);
+}
+
+.mts-timefilter__tabs {
+  display: flex;
+  gap: var(--mts-space-1, 4px);
+}
+.mts-timefilter__tab { flex: 1; }
+
+.mts-timefilter__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mts-space-2, 8px);
+}
+
+/* relative tab: amount + unit side by side */
+.mts-timefilter__row {
+  display: flex;
+  gap: var(--mts-space-2, 8px);
+  align-items: flex-end;
+}
+.mts-timefilter__field-n   { width: 110px; flex: 0 0 auto; }
+.mts-timefilter__field-unit { flex: 1 1 auto; min-width: 0; }
+
+/* absolute tab: stacked date fields */
+.mts-timefilter__field { width: 100%; }
+
+/* quick tab: wrapped preset buttons */
+.mts-timefilter__quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mts-space-1, 4px);
+}
+
+/* apply / actions */
+.mts-timefilter__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--mts-space-2, 8px);
+}
+
+/* inline error (fallback when MTS.Toast is not loaded) */
+.mts-timefilter__error {
+  min-height: 1em;
+  font-size: var(--mts-font-size-sm, 13px);
+  color: var(--mts-color-danger, #dc2626);
+}
+.mts-timefilter__error:empty { display: none; }

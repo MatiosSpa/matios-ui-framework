@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="light">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/); var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{ var p=window.parent; if(p&&p!==window){
+        var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+        var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+        if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+        if(pa) document.documentElement.setAttribute('data-mts-accent',pa); else document.documentElement.removeAttribute('data-mts-accent');
+      }}catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.TimeFilter — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../css-helpers/matios-ui-css-helpers.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-numberinput/matios-ui-numberinput.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-select/matios-ui-select.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-date-picker/matios-ui-date-picker.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-popover/matios-ui-popover.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-toast/matios-ui-toast.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="./matios-ui-timefilter.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../forms/matios-ui-numberinput/matios-ui-numberinput.js"></script>
+  <script src="../../forms/matios-ui-select/matios-ui-select.js"></script>
+  <script src="../../forms/matios-ui-date-picker/matios-ui-date-picker-base.js"></script>
+  <script src="../../forms/matios-ui-date-picker/matios-ui-date-picker-date.js"></script>
+  <script src="../../overlays/matios-ui-popover/matios-ui-popover.js"></script>
+  <script src="../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-timefilter-i18n.js"></script>
+  <script src="./matios-ui-timefilter.js"></script>
+  <style>
+    .tf-out {
+      margin-top: 14px; padding: 12px 14px;
+      border: 1px solid var(--mts-border-color); border-radius: var(--mts-radius-md);
+      background: var(--mts-bg-surface-2); font-size: 13px;
+    }
+    .tf-out__label { font-weight: 600; color: var(--mts-text-primary); }
+    .tf-out__iso   { color: var(--mts-text-muted); display: block; margin-top: 4px; word-break: break-all; }
+    .tf-live { font-variant-numeric: tabular-nums; }
+    .tf-note { margin-top: 12px; font-size: 13px; color: var(--mts-text-muted); }
+  </style>
+</head>
+<body>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.TimeFilter</h1>
+    <p id="demo-subtitle"></p>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title" id="s1-title"></div>
+    <div id="s1"></div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-section-title" id="s2-title"></div>
+    <div id="s2"></div>
+    <p class="tf-note" id="s2-note"></p>
+  </div>
+</div>
+
+<script>
+// — Locale: English default (public face); ?lang=es|en|pt to switch —
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.TimeFilter']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').innerHTML = D.subtitleHtml || 'Kibana-style time-window filter.';
+document.getElementById('s1-title').textContent    = D.s1Title || '1 — Time filter';
+document.getElementById('s2-title').textContent    = D.s2Title || '2 — Auto-refresh';
+
+// live theme from the explorer iframe
+window.addEventListener('message', function (e) {
+  if (!e.data) return;
+  if (e.data.type === 'setMode') document.documentElement.setAttribute('data-mts-mode', e.data.mode);
+  if (e.data.type === 'setAccent') {
+    if (e.data.accent) document.documentElement.setAttribute('data-mts-accent', e.data.accent);
+    else document.documentElement.removeAttribute('data-mts-accent');
+  }
+});
+
+// Preview/HTML/JS tabs + copyable code (same helper as the other demos)
+function mk(id, html, js, h) {
+  var cbHtml = id + '-cb-html';
+  var cbJs   = id + '-cb-js';
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height: h || '300px',
+    tabs: [
+      { id: id + '-p',    label: 'Preview',    content: '<div class="mts-p-4">' + html + '</div>' },
+      { id: id + '-html', label: 'HTML',       content: '<div id="' + cbHtml + '" style="height:100%"></div>' },
+      { id: id + '-js',   label: 'JavaScript', content: '<div id="' + cbJs   + '" style="height:100%"></div>' }
+    ]
+  });
+  new MTS.CodeBlock('#' + cbHtml, { code: html.trim(), language: 'html', copyable: true, height: '100%' });
+  new MTS.CodeBlock('#' + cbJs,   { code: js.trim(),   language: 'js',   copyable: true, height: '100%' });
+}
+
+/* ── 1 · Time filter with Preview / HTML / JS tabs ── */
+var s1html =
+  '<div id="tf-main"></div>\n' +
+  '<div class="tf-out"><span class="tf-out__label" id="tf-main-label">—</span><span class="tf-out__iso" id="tf-main-iso"></span></div>';
+
+var s1js =
+  "var tf = new MTS.TimeFilter('#tf-main', {\n" +
+  "  value: { mode: 'relative', n: 1, unit: 'h' },\n" +
+  "  quickRanges: [\n" +
+  "    { n: 15, unit: 'm' }, { n: 1, unit: 'h' }, { n: 24, unit: 'h' },\n" +
+  "    { preset: 'today' }, { preset: 'yesterday' }, { preset: 'thisWeek' }\n" +
+  "  ],\n" +
+  "  onChange: function (range) {\n" +
+  "    // range = { mode, n, unit, preset, from, to, fromIso, toIso, label }\n" +
+  "    fetch('/api/logs?' + tf.query());          // from=<iso>&to=<iso>\n" +
+  "    console.log(range.label, range.fromIso, range.toIso);\n" +
+  "  }\n" +
+  "});\n\n" +
+  "// swap the presets at runtime:\n" +
+  "tf.setQuickRanges([{ preset: 'thisMonth' }, { preset: 'lastMonth' }]);\n\n" +
+  "// read the current window any time (relative recomputes to=now):\n" +
+  "var r = tf.get();";
+
+mk('s1', s1html, s1js, '320px');
+
+(function () {
+  var labelEl = document.getElementById('tf-main-label');
+  var isoEl   = document.getElementById('tf-main-iso');
+  function paint(r) {
+    labelEl.textContent = (D.applied || 'Applied range') + ': ' + r.label;
+    isoEl.textContent   = r.fromIso + '  →  ' + r.toIso;
+  }
+  var tf = new MTS.TimeFilter('#tf-main', {
+    value: { mode: 'relative', n: 1, unit: 'h' },
+    quickRanges: [
+      { n: 15, unit: 'm' }, { n: 1, unit: 'h' }, { n: 24, unit: 'h' },
+      { preset: 'today' }, { preset: 'yesterday' }, { preset: 'thisWeek' }
+    ],
+    onChange: function (r) { paint(r); }
+  });
+  paint(tf.get());
+})();
+
+/* ── 2 · Auto-refresh: relative window advances on its own ── */
+var s2html =
+  '<div id="tf-live"></div>\n' +
+  '<div class="tf-out"><span class="tf-live" id="s2-live">—</span></div>';
+
+var s2js =
+  "var tf = new MTS.TimeFilter('#filter', {\n" +
+  "  value: { mode: 'relative', n: 15, unit: 'm' }\n" +
+  "});\n\n" +
+  "// poll get() on a timer — relative recomputes to=now on each call,\n" +
+  "// so the window advances on its own:\n" +
+  "setInterval(function () {\n" +
+  "  var r = tf.get();\n" +
+  "  console.log(r.label, r.fromIso, '→', r.toIso);\n" +
+  "}, 2000);";
+
+mk('s2', s2html, s2js, '300px');
+
+(function () {
+  var live = document.getElementById('s2-live');
+  var tf2 = new MTS.TimeFilter('#tf-live', {
+    value: { mode: 'relative', n: 15, unit: 'm' }
+  });
+  function tick() {
+    var r = tf2.get();
+    live.textContent = r.label + '  ·  ' + r.fromIso + '  →  ' + r.toIso;
+  }
+  tick();
+  setInterval(tick, 2000);
+})();
+document.getElementById('s2-note').innerHTML = D.liveNote || 'In relative mode every <code>get()</code> recomputes <code>to = now</code>.';
+
+if (window.MTS && MTS.Icon) MTS.Icon.initAll();
+</script>
+</body>
+</html>
