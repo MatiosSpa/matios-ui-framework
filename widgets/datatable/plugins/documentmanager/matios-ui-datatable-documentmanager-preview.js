@@ -657,24 +657,36 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     if (!this._modal || !item) return;
 
     var iconName = this._fileIconName(item);
-    var iconHtml = '';
+    var name = item.name || '';
+    var titleEl = this._modal._titleEl;
+
+    // Sin acceso al nodo del título → fallback al API público (texto plano).
+    // MTS.Modal.setTitle() con un string usa textContent, así que un SVG en
+    // ese string se mostraría escapado (como texto). Por eso armamos nodos.
+    if (!titleEl) { this._modal.setTitle(name); return; }
+
+    titleEl.innerHTML = ''; // safe: clearing
 
     if (window.MTS && MTS.Icon) {
       var svg = MTS.Icon.get(iconName);
       if (svg) {
-        iconHtml = '<span class="dm-preview__title-icon">' + svg + '</span>';
+        var iconEl = document.createElement('span');
+        iconEl.className = 'dm-preview__title-icon';
+        iconEl.innerHTML = svg; // fuente confiable (MTS.Icon)
+        titleEl.appendChild(iconEl);
       }
     }
 
-    var name = this._escHtml(item.name || '');
-    this._modal.setTitle(
-      iconHtml + '<span class="dm-preview__title-text">' + name + '</span>'
-    );
+    var textEl = document.createElement('span');
+    textEl.className = 'dm-preview__title-text';
+    textEl.textContent = name; // textContent escapa solo
+    titleEl.appendChild(textEl);
 
-    // Re-adjuntar el badge al span del nombre (setTitle reconstruye el innerHTML)
-    if (this._versionBadgeEl && this._modal._titleEl) {
-      var textEl = this._modal._titleEl.querySelector('.dm-preview__title-text');
-      if (textEl) textEl.insertAdjacentElement('afterend', this._versionBadgeEl);
+    this._modal.title = name; // mantener sincronizada la prop del modal
+
+    // Re-adjuntar el badge de versión junto al nombre.
+    if (this._versionBadgeEl) {
+      textEl.insertAdjacentElement('afterend', this._versionBadgeEl);
     }
   }
 
