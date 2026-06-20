@@ -1,89 +1,89 @@
-# MTS.GanttChart — Contrato Frontend ↔ Backend
+# MTS.GanttChart — Frontend ↔ Backend Contract
 
-> Para el desarrollador **backend**. Define qué consume y qué emite `MTS.GanttChart`, para que el BE
-> sepa exactamente **qué endpoints exponer, qué payloads recibe y qué forma debe devolver**.
+> For the **backend** developer. Defines what `MTS.GanttChart` consumes and emits, so the BE
+> knows exactly **which endpoints to expose, what payloads it receives, and what shape it must return**.
 >
-> Principio: **el FE no persiste nada.** El BE es la fuente de verdad. El FE (1) pide los datos
-> (`dataSource`), (2) los dibuja, y (3) cuando el usuario hace una acción, emite un evento `onXxxx` con un
-> payload listo para mandar al BE. El consumer (la pantalla) es quien hace el `fetch`.
+> Principle: **the FE persists nothing.** The BE is the source of truth. The FE (1) requests the data
+> (`dataSource`), (2) renders it, and (3) when the user performs an action, emits an `onXxxx` event with a
+> payload ready to send to the BE. The consumer (the screen) is the one that does the `fetch`.
 >
-> Modelo canónico de dominio (alineado a MS Project): `internal-docs/spec_modelo-canonico-proyectos.md`.
+> Canonical domain model (aligned with MS Project): `internal-docs/spec_modelo-canonico-proyectos.md`.
 
 ---
 
-## 1. Carga de datos — `dataSource`
+## 1. Data loading — `dataSource`
 
-El FE pide las tareas vía `dataSource` (función o `{url, method, headers, params}`). El BE debe responder:
+The FE requests the tasks via `dataSource` (a function or `{url, method, headers, params}`). The BE must respond:
 
 ```jsonc
 // GET /api/projects/:id/tasks   →
 {
   "data":  [ /* Task[] */ ],
-  "links": [ /* Link[] (opcional, dependencias explícitas) */ ]
+  "links": [ /* Link[] (optional, explicit dependencies) */ ]
 }
 ```
 
 ---
 
-## 2. Forma de la tarea (Task)
+## 2. Task shape (Task)
 
 ```jsonc
 {
-  "id":           "t4",                  // string, único (PK)
-  "wbs":          "1.3",                 // jerarquía plana por WBS ('1', '1.1', '1.1.1')
-  "label":        "Validación",          // nombre visible
+  "id":           "t4",                  // string, unique (PK)
+  "wbs":          "1.3",                 // flat hierarchy by WBS ('1', '1.1', '1.1.1')
+  "label":        "Validación",          // visible name
   "start":        "2025-01-20",          // 'YYYY-MM-DD'
   "end":          "2025-01-31",          // 'YYYY-MM-DD'
   "progress":     0.7,                   // 0..1
-  "color":        "#3b82f6",             // opcional
-  "status":       "wip",                 // libre
-  "predecessors": ["1.2"],               // WBS de las dependencias (modo plano)
+  "color":        "#3b82f6",             // optional
+  "status":       "wip",                 // free-form
+  "predecessors": ["1.2"],               // WBS of the dependencies (flat mode)
   "assignees":    [ { "uid": "u4", "name": "Carlos Ruiz", "avatar": "url?" } ],
 
-  // — Línea base (foto del plan). Ver §4 —
+  // — Baseline (snapshot of the plan). See §4 —
   "baselineStart":    "2025-01-20",
   "baselineEnd":      "2025-01-28",
   "baselineProgress": 0.0
 }
 ```
 
-**Notas para el BE:**
-- **Jerarquía**: modo plano por `wbs` (recomendado, lo usa el FE) **o** anidado con `children: [...]`. Elegir uno.
-- **`predecessors`**: referencian **WBS** (no IDs) en modo plano. Al reordenar, el FE recalcula WBS y remapea.
-- **`assignees[].uid`**: id de la persona en tu BD (FK a usuarios). `name` es display, `avatar` opcional.
-- Campos con prefijo `_` que veas en el FE (`_level`, `_startTs`, etc.) son **derivados** — NO los persistas.
+**Notes for the BE:**
+- **Hierarchy**: flat mode by `wbs` (recommended, used by the FE) **or** nested with `children: [...]`. Choose one.
+- **`predecessors`**: reference **WBS** (not IDs) in flat mode. When reordering, the FE recomputes the WBS and remaps.
+- **`assignees[].uid`**: the person's id in your DB (FK to users). `name` is for display, `avatar` is optional.
+- Fields prefixed with `_` that you may see in the FE (`_level`, `_startTs`, etc.) are **derived** — do NOT persist them.
 
-### Link (opcional — dependencias explícitas con tipo)
+### Link (optional — explicit dependencies with a type)
 ```jsonc
 { "id": "l1", "from": "t1", "to": "t2", "type": "FS", "lag": 0 }   // FS | FF | SS | SF
 ```
 
-### DDL sugerido (PostgreSQL)
+### Suggested DDL (PostgreSQL)
 ```sql
 CREATE TABLE task (
   id           text PRIMARY KEY,
   project_id   text NOT NULL REFERENCES project(id),
-  wbs          text NOT NULL,            -- '1', '1.1', '1.1.1' (jerarquía + orden)
+  wbs          text NOT NULL,            -- '1', '1.1', '1.1.1' (hierarchy + order)
   label        text NOT NULL,
   start        date,
   "end"        date,
   progress     numeric DEFAULT 0,        -- 0..1
   color        text,
   status       text,
-  predecessors jsonb DEFAULT '[]',       -- WBS de dependencias
-  -- línea base (§4, modelo A):
+  predecessors jsonb DEFAULT '[]',       -- WBS of dependencies
+  -- baseline (§4, model A):
   baseline_start    date,
   baseline_end      date,
   baseline_progress numeric,
   baseline_set_at   timestamptz,
   extras       jsonb DEFAULT '{}'
 );
-CREATE TABLE task_assignee (             -- N:M tarea ↔ usuario
+CREATE TABLE task_assignee (             -- N:M task ↔ user
   task_id text REFERENCES task(id),
   uid     text REFERENCES app_user(uid),
   PRIMARY KEY (task_id, uid)
 );
-CREATE TABLE task_link (                 -- dependencias explícitas (opcional)
+CREATE TABLE task_link (                 -- explicit dependencies (optional)
   id   text PRIMARY KEY,
   from_id text REFERENCES task(id),
   to_id   text REFERENCES task(id),
@@ -94,22 +94,22 @@ CREATE TABLE task_link (                 -- dependencias explícitas (opcional)
 
 ---
 
-## 3. Eventos del FE → endpoints del BE
+## 3. FE events → BE endpoints
 
-Cada acción del usuario emite un evento con el payload ya listo. Mapeo sugerido:
+Each user action emits an event with the payload already prepared. Suggested mapping:
 
-| Evento FE | Endpoint sugerido | Body que recibe el BE |
+| FE event | Suggested endpoint | Body the BE receives |
 |-----------|-------------------|------------------------|
-| `onTaskAdd` | `POST /api/tasks` | la **tarea completa** creada (con `assignees[].uid`, `predecessors` WBS) |
-| `onTaskChange` | `PATCH /api/tasks/:id` | **solo los campos que cambiaron** (`fields`) |
-| `onTaskMove` / `onTaskResize` | `PATCH /api/tasks/:id` | `{ start, end }` (al soltar la barra) |
-| `onTaskDelete` | `DELETE /api/tasks/:id` | `{ id }` (borra la tarea y sus hijas WBS) |
+| `onTaskAdd` | `POST /api/tasks` | the **full task** that was created (with `assignees[].uid`, `predecessors` WBS) |
+| `onTaskChange` | `PATCH /api/tasks/:id` | **only the fields that changed** (`fields`) |
+| `onTaskMove` / `onTaskResize` | `PATCH /api/tasks/:id` | `{ start, end }` (when the bar is dropped) |
+| `onTaskDelete` | `DELETE /api/tasks/:id` | `{ id }` (deletes the task and its WBS children) |
 | `onAssigneesChange` | `PUT /api/tasks/:id/assignees` | `[{ uid, name }]` |
-| `onReorder` | `PUT /api/tasks/reorder` | orden + WBS nuevo de TODAS las tareas |
-| `onBaselineSave` | `POST /api/projects/:id/baseline` | snapshot del plan (ver §4) |
-| `onExport` / `onImport` | `POST /api/projects/:id/export\|import` | tareas / archivo (ver §5) |
+| `onReorder` | `PUT /api/tasks/reorder` | new order + WBS of ALL the tasks |
+| `onBaselineSave` | `POST /api/projects/:id/baseline` | snapshot of the plan (see §4) |
+| `onExport` / `onImport` | `POST /api/projects/:id/export\|import` | tasks / file (see §5) |
 
-### Ejemplos de payload
+### Payload examples
 
 ```jsonc
 // onTaskAdd  →  POST /api/tasks
@@ -117,36 +117,36 @@ Cada acción del usuario emite un evento con el payload ya listo. Mapeo sugerido
   "progress":0, "predecessors":["5"], "assignees":[{ "uid":"u1", "name":"Ana García" }] }
 
 // onTaskChange  →  PATCH /api/tasks/t4
-{ "end":"2025-02-04", "progress":0.8 }            // solo lo que cambió
+{ "end":"2025-02-04", "progress":0.8 }            // only what changed
 
 // onReorder  →  PUT /api/tasks/reorder
 { "moved":"t12", "mode":"into", "target":"t10",
   "order":[ { "id":"t1","wbs":"1","predecessors":[] },
-            { "id":"t2","wbs":"1.1","predecessors":["1"] }, /* ...todas... */ ] }
+            { "id":"t2","wbs":"1.1","predecessors":["1"] }, /* ...all of them... */ ] }
 ```
 
 ---
 
-## 4. Línea base (baseline) — la "foto" del plan
+## 4. Baseline — the "snapshot" of the plan
 
-La línea base es una **foto congelada del cronograma** (fechas planificadas) tomada en un momento. Sirve para
-comparar **plan vs real** (desvío). Se persiste en la BD (es la fuente de verdad); el FE solo la dispara y la dibuja.
+The baseline is a **frozen snapshot of the schedule** (planned dates) taken at a point in time. It is used to
+compare **plan vs actual** (variance). It is persisted in the DB (it is the source of truth); the FE only triggers and draws it.
 
-### Cómo guardarla en la BD — 2 modelos
+### How to store it in the DB — 2 models
 
-**Modelo A — columnas en la propia tabla `task` (recomendado para empezar; 1 línea base):**
+**Model A — columns in the `task` table itself (recommended to start; 1 baseline):**
 ```sql
 ALTER TABLE task ADD COLUMN baseline_start    date;
 ALTER TABLE task ADD COLUMN baseline_end      date;
-ALTER TABLE task ADD COLUMN baseline_progress numeric;   -- opcional
+ALTER TABLE task ADD COLUMN baseline_progress numeric;   -- optional
 ALTER TABLE task ADD COLUMN baseline_set_at   timestamptz;
 ```
-Al recibir `POST /baseline`, el BE copia `start/end/progress` actuales a las columnas `baseline_*` y sella `baseline_set_at`. Inmutables hasta re-tomar.
+When it receives `POST /baseline`, the BE copies the current `start/end/progress` into the `baseline_*` columns and stamps `baseline_set_at`. Immutable until re-taken.
 
-**Modelo B — tabla aparte (múltiples líneas base / historial, estilo MS Project B0..B10):**
+**Model B — separate table (multiple baselines / history, MS Project B0..B10 style):**
 ```sql
 project_baseline( id PK, project_id FK, name, created_at, created_by )
-baseline_task   ( baseline_id FK, task_id FK, start, end, progress )   -- detalle congelado
+baseline_task   ( baseline_id FK, task_id FK, start, end, progress )   -- frozen detail
 ```
 
 ### Endpoint
@@ -155,69 +155,69 @@ baseline_task   ( baseline_id FK, task_id FK, start, end, progress )   -- detall
 { "baseline": [
     { "id":"t1", "start":"2025-01-06", "end":"2025-01-31", "progress":0 },
     { "id":"t4", "start":"2025-01-20", "end":"2025-01-28", "progress":0 }
-    /* ...una entrada por tarea... */
+    /* ...one entry per task... */
 ] }
 ```
-El FE manda el snapshot que ve (reflejo inmediato). El BE puede tomarlo tal cual, o re-congelar desde su propia
-data (más seguro ante discrepancias). Respuesta: `200 OK`.
+The FE sends the snapshot it sees (immediate reflection). The BE can take it as-is, or re-freeze from its own
+data (safer against discrepancies). Response: `200 OK`.
 
-### Cómo vuelve y se dibuja
-En el `GET` de tareas, cada Task incluye `baselineStart` / `baselineEnd` (y opcional `baselineProgress`).
-El FE dibuja una **barra fantasma fina (gris) bajo la barra real** entre esas fechas; la separación es el desvío.
-Si la tarea **no** trae `baseline*`, no se dibuja nada (la feature es opcional por tarea).
+### How it comes back and is drawn
+In the `GET` of tasks, each Task includes `baselineStart` / `baselineEnd` (and optionally `baselineProgress`).
+The FE draws a **thin ghost bar (gray) below the actual bar** between those dates; the gap is the variance.
+If the task does **not** carry `baseline*`, nothing is drawn (the feature is optional per task).
 
-> Desvío: lo **calcula y muestra el FE** (columna "Desvío" = `end − baselineEnd` en días, + = atraso). El BE
-> NO necesita persistirlo (es derivado). Si querés exponerlo para reportes server-side, es opcional.
+> Variance: it is **computed and shown by the FE** (the "Variance" column = `end − baselineEnd` in days, + = delay). The BE
+> does NOT need to persist it (it is derived). If you want to expose it for server-side reports, that is optional.
 
 ---
 
-## 5. Importar / Exportar (formatos conocidos)
+## 5. Import / Export (known formats)
 
-- **CSV**: se resuelve 100% en el FE (no requiere BE).
-- **Excel (.xlsx)** y **MS Project (MSPDI .xml)**: el BE serializa/parsea contra el **modelo canónico**
-  (adapters `fromMSProject` / `toMSProject`, etc. — fase 2, `matios-platform-projects`).
+- **CSV**: resolved 100% in the FE (does not require the BE).
+- **Excel (.xlsx)** and **MS Project (MSPDI .xml)**: the BE serializes/parses against the **canonical model**
+  (adapters `fromMSProject` / `toMSProject`, etc. — phase 2, `matios-platform-projects`).
 
 ```jsonc
-// onExport (no-CSV)  →  POST /api/projects/:id/export?format=msproject
-{ "filename":"proyecto.xml", "tasks":[ /* Task[] */ ] }      // el BE devuelve el archivo
+// onExport (non-CSV)  →  POST /api/projects/:id/export?format=msproject
+{ "filename":"proyecto.xml", "tasks":[ /* Task[] */ ] }      // the BE returns the file
 
-// onImport (no-CSV)  →  POST /api/projects/:id/import?format=excel
-// multipart con el archivo → el BE responde { data: Task[], links?: Link[] } (mismo shape que §1)
+// onImport (non-CSV)  →  POST /api/projects/:id/import?format=excel
+// multipart with the file → the BE responds { data: Task[], links?: Link[] } (same shape as §1)
 ```
 
 ---
 
-## 6. Convenciones transversales (aplican a los 3 boards)
+## 6. Cross-cutting conventions (apply to all 3 boards)
 
-**Auth / headers.** El `dataSource` acepta `{ headers }`; mandá ahí el token (`Authorization: Bearer …`).
-Los `fetch` de las mutaciones (POST/PATCH/DELETE/PUT) los hace el consumer → agregale los mismos headers.
+**Auth / headers.** The `dataSource` accepts `{ headers }`; send the token there (`Authorization: Bearer …`).
+The mutation `fetch` calls (POST/PATCH/DELETE/PUT) are made by the consumer → add the same headers to them.
 
-**Generación y reconciliación de `id`.** Si el usuario crea una tarea, el FE le pone un id temporal (`t-<ts>`).
-El BE debería responder al `POST` con el **id canónico**; el consumer reemplaza el temporal (`updateTask`) para
-mantener coherencia (predecesores referencian WBS, no id, así que no se rompen). Si tu BD acepta el id del FE, devolvé el mismo.
+**`id` generation and reconciliation.** If the user creates a task, the FE assigns it a temporary id (`t-<ts>`).
+The BE should respond to the `POST` with the **canonical id**; the consumer replaces the temporary one (`updateTask`) to
+keep consistency (predecessors reference WBS, not id, so they don't break). If your DB accepts the FE's id, return the same one.
 
-**UI optimista + rollback.** El FE aplica el cambio en pantalla al instante (y soporta undo/redo local) y luego
-emite el evento. Si el `fetch` falla, el consumer debe **revertir** (`reload()` desde el `dataSource`, o `undo()`).
-El componente no hace rollback contra el BE solo.
+**Optimistic UI + rollback.** The FE applies the change on screen instantly (and supports local undo/redo) and then
+emits the event. If the `fetch` fails, the consumer must **revert** (`reload()` from the `dataSource`, or `undo()`).
+The component does not roll back against the BE on its own.
 
-**Manejo de errores.** En la carga, error → **`onError({ error })`**. En mutaciones, el consumer maneja el `.catch`.
-Forma sugerida del error del BE:
+**Error handling.** On load, an error → **`onError({ error })`**. On mutations, the consumer handles the `.catch`.
+Suggested shape of the BE error:
 ```jsonc
-{ "error": { "code": "VALIDATION", "message": "Fecha fin < fecha inicio", "fields": { "end": "inválida" } } }
+{ "error": { "code": "VALIDATION", "message": "End date < start date", "fields": { "end": "invalid" } } }
 ```
 
-**Validaciones mínimas (server-side, no confíes solo en el FE).**
-- `label` no vacío; `end >= start`; `progress ∈ [0,1]`; `wbs` único por proyecto y bien formado.
-- `predecessors` referencian WBS existentes; sin ciclos. `baselineEnd >= baselineStart`.
+**Minimum validations (server-side, do not rely on the FE alone).**
+- `label` not empty; `end >= start`; `progress ∈ [0,1]`; `wbs` unique per project and well-formed.
+- `predecessors` reference existing WBS; no cycles. `baselineEnd >= baselineStart`.
 
-**Códigos de estado.** `200` (update ok), `201` (created + id), `204` (deleted), `409` (conflicto WBS/orden),
-`422` (validación). El consumer reacciona según el código.
+**Status codes.** `200` (update ok), `201` (created + id), `204` (deleted), `409` (WBS/order conflict),
+`422` (validation). The consumer reacts according to the code.
 
 ---
 
-## Resumen para el BE
-1. Exponer `GET /tasks` con `{ data, links? }` y la Task de §2 (incluí `baseline*` y `assignees[].uid`).
-2. Implementar los endpoints de §3 (POST/PATCH/DELETE/PUT) con los payloads indicados.
-3. Para baseline: columnas `baseline_*` (modelo A) + `POST /baseline`, y devolver esos campos en el GET.
-4. Para Excel/MSProject: adapters contra el modelo canónico.
-5. Reconciliación de `id`, UI optimista, errores y validaciones → §6.
+## Summary for the BE
+1. Expose `GET /tasks` with `{ data, links? }` and the Task from §2 (include `baseline*` and `assignees[].uid`).
+2. Implement the endpoints from §3 (POST/PATCH/DELETE/PUT) with the indicated payloads.
+3. For baseline: `baseline_*` columns (model A) + `POST /baseline`, and return those fields in the GET.
+4. For Excel/MSProject: adapters against the canonical model.
+5. `id` reconciliation, optimistic UI, errors and validations → §6.

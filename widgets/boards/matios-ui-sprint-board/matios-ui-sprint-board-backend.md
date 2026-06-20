@@ -1,67 +1,67 @@
-# MTS.SprintBoard — Contrato Frontend ↔ Backend
+# MTS.SprintBoard — Frontend ↔ Backend Contract
 
-> Para el desarrollador **backend**. Define qué consume y qué emite `MTS.SprintBoard`, para que el BE
-> sepa exactamente **qué endpoints exponer, qué payloads recibe y qué forma debe devolver**.
+> For the **backend** developer. Defines what `MTS.SprintBoard` consumes and emits, so the BE
+> knows exactly **which endpoints to expose, which payloads it receives and what shape it must return**.
 >
-> Principio: **el FE no persiste nada.** El BE es la fuente de verdad. El FE (1) pide los datos
-> (`dataSource`), (2) los dibuja (Backlog ↔ Sprint), y (3) cuando el usuario hace una acción (crear/editar/
-> mover/borrar historia, iniciar/cerrar sprint) emite un evento `onXxxx` con un payload **listo para el BE**.
-> El consumer (la pantalla) es quien hace el `fetch`.
+> Principle: **the FE persists nothing.** The BE is the source of truth. The FE (1) requests the data
+> (`dataSource`), (2) renders it (Backlog ↔ Sprint), and (3) when the user performs an action (create/edit/
+> move/delete story, start/close sprint) it emits an `onXxxx` event with a payload **ready for the BE**.
+> The consumer (the screen) is the one that performs the `fetch`.
 >
-> Modelo canónico de dominio (alineado a **Jira**): `_claude_summary/spec_modelo-canonico-proyectos.md`.
-> Convenciones transversales (auth, errores, UI optimista, ids) → §6.
+> Canonical domain model (aligned with **Jira**): `_claude_summary/spec_modelo-canonico-proyectos.md`.
+> Cross-cutting conventions (auth, errors, optimistic UI, ids) → §6.
 
 ---
 
-## 1. Carga de datos — `dataSource`
+## 1. Data loading — `dataSource`
 
-El FE pide los datos vía `dataSource` (`fn(query) => Promise` o `{url, method, headers, params}`). El BE responde:
+The FE requests the data via `dataSource` (`fn(query) => Promise` or `{url, method, headers, params}`). The BE responds:
 
 ```jsonc
 // GET /api/projects/:id/sprintboard   →
 {
-  "stories": [ /* Story[] */ ],   // backlog + las del sprint (se distinguen por sprintId/status)
-  "sprints": [ /* Sprint[] */ ]   // el sprint activo se detecta por status:'active'
+  "stories": [ /* Story[] */ ],   // backlog + the sprint's stories (distinguished by sprintId/status)
+  "sprints": [ /* Sprint[] */ ]   // the active sprint is detected by status:'active'
 }
 ```
 
-- `query`: filtros/auth (`{ params, headers }`, ver §6).
-- En error, el componente emite **`onError({ error })`** (a diferencia del Kanban). Forma del error en §6.
-- El **sprint actual** se autodetecta como el primero con `status:'active'` (o se fija con `currentSprintId`).
+- `query`: filters/auth (`{ params, headers }`, see §6).
+- On error, the component emits **`onError({ error })`** (unlike the Kanban). Error shape in §6.
+- The **current sprint** is auto-detected as the first one with `status:'active'` (or set via `currentSprintId`).
 
 ---
 
-## 2. Formas (Story / Sprint)
+## 2. Shapes (Story / Sprint)
 
-### Story (canónico Jira + alias)
-| Campo | Tipo | Req | Notas |
+### Story (canonical Jira + aliases)
+| Field | Type | Req | Notes |
 |-------|------|-----|-------|
-| `id` | string | ✔ | PK. Sin id → el FE autogenera `s-<ts>` y el BE devuelve el canónico (§6) |
-| `code` | string | — | Clave visible tipo `PRJ-42`. Acepta alias `key` (Jira) |
-| `title` | string | ✔ | Acepta alias `summary` (Jira) |
+| `id` | string | ✔ | PK. Without an id → the FE auto-generates `s-<ts>` and the BE returns the canonical one (§6) |
+| `code` | string | — | Visible key like `PRJ-42`. Accepts alias `key` (Jira) |
+| `title` | string | ✔ | Accepts alias `summary` (Jira) |
 | `description` | string | — | |
-| `type` | string | — | `userstory` \| `task` \| `bug` \| `epic` \| `spike`. Acepta alias `issuetype`. Default `userstory` |
-| `storyPoints` | number | — | Estimación (escala Fibonacci 1,2,3,5,8,13,21) |
+| `type` | string | — | `userstory` \| `task` \| `bug` \| `epic` \| `spike`. Accepts alias `issuetype`. Default `userstory` |
+| `storyPoints` | number | — | Estimate (Fibonacci scale 1,2,3,5,8,13,21) |
 | `priority` | string | — | `low` \| `medium` \| `high` \| `critical`. Default `medium` |
-| `status` | string | — | Columna del sprint: `todo` \| `wip` \| `done` (null = en backlog) |
-| `sprintId` | string | — | Sprint al que pertenece (null = backlog) |
-| `assignees` | object[] | — | `[{ uid, name, avatar? }]`. Acepta `assignee` (string) → lo envuelve |
-| `tags` | string[] | — | Etiquetas |
-| `extras` | object | — | Campos no reconocidos (round-trip) |
+| `status` | string | — | Sprint column: `todo` \| `wip` \| `done` (null = in backlog) |
+| `sprintId` | string | — | Sprint it belongs to (null = backlog) |
+| `assignees` | object[] | — | `[{ uid, name, avatar? }]`. Accepts `assignee` (string) → wraps it |
+| `tags` | string[] | — | Labels |
+| `extras` | object | — | Unrecognized fields (round-trip) |
 
 ### Sprint
-| Campo | Tipo | Req | Notas |
+| Field | Type | Req | Notes |
 |-------|------|-----|-------|
 | `id` | string | ✔ | PK |
-| `number` | number | — | Nº de sprint (display) |
-| `name` | string | — | Ej. `Sprint 7` |
-| `goal` | string | — | Objetivo del sprint (se muestra junto al nombre) |
+| `number` | number | — | Sprint number (display) |
+| `name` | string | — | E.g. `Sprint 7` |
+| `goal` | string | — | Sprint goal (shown next to the name) |
 | `startDate` / `endDate` | string | — | `'YYYY-MM-DD'` |
-| `status` | string | ✔ | `planning` \| `active` \| `completed` (el `active` se muestra; `planning` habilita "Iniciar") |
-| `capacity` | number | — | Capacidad en SP (para la barra de velocity) |
-| `committed` | number | — | SP comprometidos (denominador de la barra; cae a `capacity` si falta) |
+| `status` | string | ✔ | `planning` \| `active` \| `completed` (the `active` one is shown; `planning` enables "Start") |
+| `capacity` | number | — | Capacity in SP (for the velocity bar) |
+| `committed` | number | — | Committed SP (the bar's denominator; falls back to `capacity` if missing) |
 
-### DDL sugerido (PostgreSQL)
+### Suggested DDL (PostgreSQL)
 ```sql
 CREATE TABLE sprint (
   id        text PRIMARY KEY,
@@ -89,7 +89,7 @@ CREATE TABLE story (
   tags         jsonb DEFAULT '[]',
   extras       jsonb DEFAULT '{}'
 );
-CREATE TABLE story_assignee (             -- N:M historia ↔ usuario
+CREATE TABLE story_assignee (             -- N:M story ↔ user
   story_id text REFERENCES story(id),
   uid      text REFERENCES app_user(uid),
   PRIMARY KEY (story_id, uid)
@@ -98,33 +98,33 @@ CREATE TABLE story_assignee (             -- N:M historia ↔ usuario
 
 ---
 
-## 3. Eventos del FE → endpoints del BE
+## 3. FE events → BE endpoints
 
-| Evento FE | Endpoint sugerido | Body | Respuesta |
+| FE event | Suggested endpoint | Body | Response |
 |-----------|-------------------|------|-----------|
-| `onStoryAdd` | `POST /api/stories` | la **historia completa** creada (con `assignees[].uid`, `type`, `storyPoints`, `_location`) | `201` + `{ id }` |
-| `onStoryChange` | `PATCH /api/stories/:id` | **solo los campos que cambiaron** (`fields`) | `200` |
-| `onStoryMove` | `PATCH /api/stories/:id` | `{ from, to }` (origen/destino: backlog ↔ sprint+columna) | `200` |
+| `onStoryAdd` | `POST /api/stories` | the **full story** created (with `assignees[].uid`, `type`, `storyPoints`, `_location`) | `201` + `{ id }` |
+| `onStoryChange` | `PATCH /api/stories/:id` | **only the fields that changed** (`fields`) | `200` |
+| `onStoryMove` | `PATCH /api/stories/:id` | `{ from, to }` (source/destination: backlog ↔ sprint+column) | `200` |
 | `onStoryDelete` | `DELETE /api/stories/:id` | `{ id }` | `204` |
 | `onSprintStart` | `POST /api/sprints/:id/start` | `{ id }` | `200` (status → `active`) |
-| `onSprintComplete` | `POST /api/sprints/:id/complete` | `{ done, pending }` (conteos) | `200` (status → `completed`; el BE decide qué hace con las `pending`) |
-| `onSelect` | — | (no persiste; el FE abre el detalle/edición de la historia) | — |
+| `onSprintComplete` | `POST /api/sprints/:id/complete` | `{ done, pending }` (counts) | `200` (status → `completed`; the BE decides what to do with the `pending` ones) |
+| `onSelect` | — | (does not persist; the FE opens the story detail/edit view) | — |
 
-> El `onStoryMove` lleva `from`/`to` como descriptores de ubicación:
-> `to = { type:'sprint', columnId:'todo' }` (al sprint, columna) o `to = { type:'backlog' }`.
-> El BE traduce a `sprint_id` + `status` (ej. `to.type==='backlog'` → `sprint_id=null, status=null`).
+> The `onStoryMove` carries `from`/`to` as location descriptors:
+> `to = { type:'sprint', columnId:'todo' }` (to the sprint, column) or `to = { type:'backlog' }`.
+> The BE translates this into `sprint_id` + `status` (e.g. `to.type==='backlog'` → `sprint_id=null, status=null`).
 
-### Ejemplos de payload
+### Payload examples
 ```jsonc
 // onStoryAdd  →  POST /api/stories
-{ "id":"s-1717000000000", "title":"Login con Google", "type":"userstory",
+{ "id":"s-1717000000000", "title":"Login with Google", "type":"userstory",
   "storyPoints":5, "priority":"high", "assignees":[{ "uid":"u1", "name":"Ana Torres" }],
   "_location":"backlog" }
 
 // onStoryChange  →  PATCH /api/stories/s2
-{ "storyPoints":8, "priority":"critical" }                 // solo lo que cambió
+{ "storyPoints":8, "priority":"critical" }                 // only what changed
 
-// onStoryMove  →  PATCH /api/stories/s5   (del backlog al sprint, columna 'todo')
+// onStoryMove  →  PATCH /api/stories/s5   (from backlog to the sprint, column 'todo')
 { "from": { "type":"backlog" }, "to": { "type":"sprint", "columnId":"todo" } }
 
 // onSprintComplete  →  POST /api/sprints/sprint-7/complete
@@ -133,55 +133,55 @@ CREATE TABLE story_assignee (             -- N:M historia ↔ usuario
 
 ---
 
-## 4. Ciclo de vida del Sprint + Velocity
+## 4. Sprint lifecycle + Velocity
 
-- **Iniciar** (`status:'planning'` → botón "Iniciar Sprint" → `onSprintStart`): el BE pone `status='active'`.
-- **Cerrar** (`status:'active'` → botón "Cerrar Sprint" → `onSprintComplete`): el BE pone `status='completed'`.
-  Decisión de negocio del BE: ¿qué pasa con las historias **pending** (no `done`)? → moverlas al backlog,
-  o al próximo sprint. El componente solo informa los conteos (`done`/`pending`).
-- **Velocity** (opción `showVelocity`): el FE calcula `Σ storyPoints / committed` para la barra. El BE solo
-  necesita exponer `sprint.committed` (o `capacity`). El total real se deriva en el FE.
-
----
-
-## 5. (No aplica import/export)
-
-`MTS.SprintBoard` no expone import/export propio. Si se necesita (CSV de backlog, sync con Jira), se resuelve
-en el consumer/BE contra el modelo canónico Jira.
+- **Start** (`status:'planning'` → "Start Sprint" button → `onSprintStart`): the BE sets `status='active'`.
+- **Close** (`status:'active'` → "Close Sprint" button → `onSprintComplete`): the BE sets `status='completed'`.
+  BE business decision: what happens to the **pending** stories (not `done`)? → move them to the backlog,
+  or to the next sprint. The component only reports the counts (`done`/`pending`).
+- **Velocity** (`showVelocity` option): the FE computes `Σ storyPoints / committed` for the bar. The BE only
+  needs to expose `sprint.committed` (or `capacity`). The real total is derived on the FE.
 
 ---
 
-## 6. Convenciones transversales (aplican a los 3 boards)
+## 5. (Import/export not applicable)
 
-**Auth / headers.** El `dataSource` acepta `{ headers }` (token `Authorization: Bearer …`). Los `fetch` de las
-mutaciones los hace el consumer → mismos headers.
+`MTS.SprintBoard` does not expose its own import/export. If it is needed (backlog CSV, Jira sync), it is resolved
+in the consumer/BE against the canonical Jira model.
 
-**Generación y reconciliación de `id`.** Si el usuario crea una historia, el FE le pone id temporal (`s-<ts>`).
-El BE debería devolver el **id canónico** en el `POST`; el consumer reemplaza el temporal (`updateStory`) para
-mantener coherencia. Si tu BD acepta el id del FE, devolvé el mismo.
+---
 
-**UI optimista + rollback.** El FE aplica el cambio en pantalla al instante y luego emite el evento. Si el
-`fetch` falla, el consumer debe **revertir** (`reload()` desde el `dataSource` o deshacer local). El componente
-no hace rollback solo.
+## 6. Cross-cutting conventions (apply to all 3 boards)
 
-**Manejo de errores.** En la carga, error → `onError({ error })`. En mutaciones, el consumer maneja el `.catch`.
-Forma sugerida del error del BE:
+**Auth / headers.** The `dataSource` accepts `{ headers }` (token `Authorization: Bearer …`). The mutation `fetch`
+calls are made by the consumer → same headers.
+
+**`id` generation and reconciliation.** If the user creates a story, the FE assigns it a temporary id (`s-<ts>`).
+The BE should return the **canonical id** in the `POST`; the consumer replaces the temporary one (`updateStory`) to
+keep consistency. If your DB accepts the FE id, return the same one.
+
+**Optimistic UI + rollback.** The FE applies the change on screen instantly and then emits the event. If the
+`fetch` fails, the consumer must **revert** (`reload()` from the `dataSource` or undo locally). The component
+does not roll back on its own.
+
+**Error handling.** On load, error → `onError({ error })`. On mutations, the consumer handles the `.catch`.
+Suggested BE error shape:
 ```jsonc
-{ "error": { "code": "VALIDATION", "message": "Título requerido", "fields": { "title": "requerido" } } }
+{ "error": { "code": "VALIDATION", "message": "Title required", "fields": { "title": "required" } } }
 ```
 
-**Validaciones mínimas (server-side).** `title` no vacío; `type ∈ {userstory,task,bug,epic,spike}`;
-`priority ∈ {low,medium,high,critical}`; `status ∈ {todo,wip,done}|null`; `storyPoints` numérico;
-`sprintId` existente; coherencia `status`↔`sprintId` (backlog ⇒ ambos null).
+**Minimum validations (server-side).** `title` not empty; `type ∈ {userstory,task,bug,epic,spike}`;
+`priority ∈ {low,medium,high,critical}`; `status ∈ {todo,wip,done}|null`; `storyPoints` numeric;
+`sprintId` exists; `status`↔`sprintId` consistency (backlog ⇒ both null).
 
-**Códigos de estado.** `200` (update/transición ok), `201` (created + id), `204` (deleted),
-`409` (conflicto de estado de sprint), `422` (validación).
+**Status codes.** `200` (update/transition ok), `201` (created + id), `204` (deleted),
+`409` (sprint state conflict), `422` (validation).
 
 ---
 
-## Resumen para el BE
-1. Exponer `GET …/sprintboard` con `{ stories, sprints }` y las formas de §2.
-2. Implementar §3 (stories + sprint start/complete) con payloads/respuestas indicados.
-3. Devolver el **id canónico** en los `POST` (reconciliación).
-4. Definir la política de cierre de sprint (qué pasa con las `pending`).
-5. Validar server-side (§6) y responder errores con el shape de §6.
+## Summary for the BE
+1. Expose `GET …/sprintboard` with `{ stories, sprints }` and the shapes from §2.
+2. Implement §3 (stories + sprint start/complete) with the indicated payloads/responses.
+3. Return the **canonical id** in the `POST`s (reconciliation).
+4. Define the sprint close policy (what happens to the `pending` ones).
+5. Validate server-side (§6) and respond with errors using the §6 shape.
