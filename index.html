@@ -15,6 +15,14 @@
 <link rel="stylesheet" href="themes/matios-ui-accent-navy.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-emerald.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-petrol.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-crimson.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-rose.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-orange.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-sky.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-indigo.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-teal.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-slate.css">
+<link rel="stylesheet" href="themes/matios-ui-accent-bronze.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-high-contrast.css">
 <link rel="stylesheet" href="icons/matios-ui-icons.css">
 <link rel="stylesheet" href="forms/matios-ui-button/matios-ui-button.css">
@@ -47,17 +55,6 @@ body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:'DM
 /* ── TOPBAR — override de fuente para brand ─────── */
 #mainTopbar .mts-topbar__title{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;}
 
-/* ── Theme picker ─────────────────────────────────── */
-.theme-picker{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
-.theme-picker__group{display:flex;align-items:center;gap:6px;}
-.theme-picker__label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mts-text-muted);}
-.theme-picker .mts-btn-group{background:var(--mts-bg-surface-2);border:1px solid var(--mts-border-color);border-radius:var(--mts-radius-md);overflow:hidden;}
-.theme-picker .mts-btn-group .mts-btn{min-height:auto;padding:4px 10px;font-size:11px;line-height:1.2;box-shadow:none;}
-.theme-picker .mts-btn-group .mts-btn:not(.mts-btn--active){background:transparent;color:var(--mts-text-muted);}
-.theme-picker .mts-btn-group .mts-btn:not(.mts-btn--active):hover{color:var(--mts-text-primary);background:var(--mts-bg-surface);}
-.theme-picker .mts-btn-group .mts-btn--active{background:var(--mts-color-primary) !important;border-color:var(--mts-color-primary) !important;color:var(--mts-color-primary-text, #fff) !important;}
-.theme-picker .mts-btn-group .mts-btn--ghost:not(.mts-btn--active),
-.theme-picker .mts-btn-group .mts-btn--secondary:not(.mts-btn--active){border-color:transparent !important;}
 
 /* ── CONTENT — implementación específica de este index ───────
    Shell gestiona overflow/position del slot main.
@@ -264,6 +261,14 @@ const ACCENT_OPTIONS = [
   { id:'violet',         label:'Violet' },
   { id:'olive',          label:'Olive'  },
   { id:'blue',           label:'Blue'   },
+  { id:'indigo',         label:'Indigo' },
+  { id:'sky',            label:'Sky'    },
+  { id:'teal',           label:'Teal'   },
+  { id:'crimson',        label:'Crimson'},
+  { id:'rose',           label:'Rose'   },
+  { id:'orange',         label:'Orange' },
+  { id:'bronze',         label:'Bronze' },
+  { id:'slate',          label:'Slate'  },
 ];
 
 function syncThemePicker() {
@@ -279,6 +284,9 @@ function syncThemePicker() {
 
 function initThemePicker() {
   if (!(window.MTS && MTS.ButtonGroup)) return;
+  /* Mode/accent ahora viven en la página de themes (botón "Change theme").
+     Si los contenedores no están en el topbar, no hay nada que construir. */
+  if (!document.getElementById('themeModeGroup')) return;
 
   modeGroup = new MTS.ButtonGroup('#themeModeGroup',
     MODE_OPTIONS.map(function(item) {
@@ -356,16 +364,10 @@ var END_HTML =
     '<i class="mts-icon mts-icon-heart mts-icon--sm"></i>' +
     '<span class="mts-btn__label">Sponsor</span>' +
   '</a>' +
-  '<div class="theme-picker">' +
-    '<div class="theme-picker__group">' +
-      '<span class="theme-picker__label">Mode</span>' +
-      '<div id="themeModeGroup"></div>' +
-    '</div>' +
-    '<div class="theme-picker__group">' +
-      '<span class="theme-picker__label">Accent</span>' +
-      '<div id="themeAccentGroup"></div>' +
-    '</div>' +
-  '</div>';
+  '<button id="themeBtn" class="mts-btn mts-btn--secondary mts-btn--sm" onclick="loadById(\'themes\')" title="Change theme — mode & accent">' +
+    '<i class="mts-icon mts-icon-palette mts-icon--sm"></i>' +
+    '<span class="mts-btn__label">Change theme</span>' +
+  '</button>';
 
 var mainTopbar = new MTS.Topbar('#mainTopbar', {
   shadow: false,  /* en layout dashboard la sombra se superpone al sidenav — border-bottom es suficiente */
@@ -626,7 +628,7 @@ function showWelcome() {
     '<div class="welcome__stats">' +
       '<div class="welcome__stat"><div class="welcome__stat-val">80+</div><div class="welcome__stat-lbl">Components</div></div>' +
       '<div class="welcome__stat"><div class="welcome__stat-val">278</div><div class="welcome__stat-lbl">Icons</div></div>' +
-      '<div class="welcome__stat"><div class="welcome__stat-val">3×8</div><div class="welcome__stat-lbl">Modes × accents</div></div>' +
+      '<div class="welcome__stat"><div class="welcome__stat-val">3×16</div><div class="welcome__stat-lbl">Modes × accents</div></div>' +
     '</div>' +
     '<div class="welcome__chips">' +
       '<div class="welcome__chip" onclick="loadById(\'forms\')"><i class="mts-icon mts-icon-form"></i>Forms</div>' +
