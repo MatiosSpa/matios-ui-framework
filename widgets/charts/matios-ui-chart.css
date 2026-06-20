@@ -1,0 +1,260 @@
+/* ── MTS.Chart ──────────────────────────────────────────────────────────────── */
+.mts-chart {
+  position: relative;
+  display: block;
+  width: 100%;
+  font-family: inherit;
+}
+
+.mts-chart__svg {
+  display: block;
+  overflow: visible;
+}
+
+/* ── Ejes ───────────────────────────────────────────────────────────────────── */
+.mts-chart__axis-line {
+  stroke: var(--mts-border-color, #e2e8f0);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.mts-chart__axis-tick {
+  stroke: var(--mts-border-color, #e2e8f0);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.mts-chart__axis-label {
+  font-size: 11px;
+  fill: var(--mts-text-muted, #94a3b8);
+  font-family: inherit;
+}
+
+/* ── Grid ───────────────────────────────────────────────────────────────────── */
+.mts-chart__grid-line {
+  stroke: var(--mts-border-color, #e2e8f0);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  shape-rendering: crispEdges;
+}
+
+/* ── Línea del cero ─────────────────────────────────────────────────────────── */
+.mts-chart__zero-line {
+  stroke: var(--mts-text-muted, #94a3b8);
+  stroke-width: 1.5;
+  shape-rendering: crispEdges;
+}
+
+/* ── Barras ─────────────────────────────────────────────────────────────────── */
+.mts-chart__bar {
+  cursor: pointer;
+  transition: opacity 0.1s;
+}
+
+/* ── Tooltip ────────────────────────────────────────────────────────────────── */
+.mts-chart__tooltip {
+  position: absolute;
+  display: none;
+  background: var(--mts-bg-surface, #ffffff);
+  border: 1px solid var(--mts-border-color, #e2e8f0);
+  border-radius: var(--mts-radius-md, 6px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+  padding: 8px 12px;
+  pointer-events: none;
+  z-index: 100;
+  min-width: 110px;
+  white-space: nowrap;
+}
+
+.mts-chart__tooltip--visible {
+  display: block;
+}
+
+.mts-chart__tooltip-dataset {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-size: 11px;
+  color: var(--mts-text-muted, #94a3b8);
+}
+
+.mts-chart__tooltip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.mts-chart__tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.mts-chart__tooltip-label {
+  font-size: 12px;
+  color: var(--mts-text-secondary, #64748b);
+}
+
+.mts-chart__tooltip-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mts-text-primary, #1e293b);
+}
+
+/* ── Líneas ─────────────────────────────────────────────────────────────────── */
+.mts-chart__line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Área (fill) ────────────────────────────────────────────────────────────── */
+.mts-chart__fill {
+  stroke: none;
+}
+
+/* ── Dots ───────────────────────────────────────────────────────────────────── */
+.mts-chart__dot {
+  fill: var(--mts-bg-surface, #ffffff);
+  cursor: pointer;
+}
+
+/* ── Leyenda ────────────────────────────────────────────────────────────────── */
+.mts-chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  justify-content: center;
+  padding: 10px 0 2px;
+}
+
+.mts-chart__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--mts-text-secondary, #64748b);
+}
+
+.mts-chart__legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* Variante circular — usada en Line / Area / Pie */
+.mts-chart__legend-dot--circle {
+  border-radius: 50%;
+}
+
+/* ── Pie / Donut ────────────────────────────────────────────────────────────── */
+.mts-chart__sector {
+  cursor: pointer;
+}
+
+.mts-chart__pie-callout {
+  fill: none;
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+.mts-chart__pie-label-text {
+  font-size: 11px;
+  fill: var(--mts-text-muted, #94a3b8);
+  font-family: inherit;
+}
+
+.mts-chart__pie-center-text {
+  font-size: 22px;
+  font-weight: 600;
+  fill: var(--mts-text-primary, #1e293b);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-family: inherit;
+}
+
+.mts-chart__pie-center-sub {
+  font-size: 12px;
+  fill: var(--mts-text-muted, #94a3b8);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-family: inherit;
+}
+
+/* ── Gauge lineal ───────────────────────────────────────────────────────────── */
+.mts-chart__gauge-track {
+  fill: var(--mts-bg-surface-2, #1e293b);
+}
+
+.mts-chart__gauge-fill {
+  cursor: default;
+}
+
+.mts-chart__gauge-label {
+  font-size: 13px;
+  font-weight: 600;
+  fill: var(--mts-text, #f1f5f9);
+  font-family: inherit;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+/* ── Gauge radial ───────────────────────────────────────────────────────────── */
+.mts-chart__gauge-arc-track {
+  fill: none;
+  stroke: var(--mts-bg-surface-2, #1e293b);
+  stroke-linecap: round;
+}
+
+.mts-chart__gauge-arc-fill {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.mts-chart__gauge-arc-tick {
+  stroke: var(--mts-bg-base, #0f172a);
+  stroke-width: 2;
+  stroke-linecap: butt;
+}
+
+.mts-chart__gauge-center-text {
+  font-size: 22px;
+  font-weight: 700;
+  fill: var(--mts-text, #f1f5f9);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-family: inherit;
+}
+
+.mts-chart__gauge-center-sub {
+  font-size: 12px;
+  fill: var(--mts-text-muted, #94a3b8);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-family: inherit;
+}
+
+/* ── Treemap ────────────────────────────────────────────────────────────────── */
+.mts-chart__treemap-label {
+  font-size: 12px;
+  font-weight: 600;
+  fill: #ffffff;
+  font-family: inherit;
+}
+
+.mts-chart__treemap-sub {
+  font-size: 10px;
+  fill: rgba(255, 255, 255, 0.75);
+  font-family: inherit;
+}
+
+/* ── Heatmap ────────────────────────────────────────────────────────────────── */
+.mts-chart__heatmap-cell {
+  transition: opacity 0.1s;
+}

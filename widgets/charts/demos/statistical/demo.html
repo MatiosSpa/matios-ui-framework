@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Chart — Statistical</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-rose.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-orange.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-sky.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-indigo.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-teal.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-slate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-bronze.css">
+  <link rel="stylesheet" href="../../../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../matios-ui-chart.css">
+  <script src="../../../../support/demo-shared.js"></script>
+  <script src="../../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../matios-ui-chart.js"></script>
+  <script src="../../matios-ui-chart-statistical.js"></script>
+</head>
+<body>
+<div class="demo-page">
+  <div class="demo-section"><div class="demo-section-title">1 — Scatter · Basic</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Scatter · Multi-dataset</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Scatter · Axis formatter</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Bubble · Basic</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Bubble · Multi-dataset</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Histogram · Basic</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title">7 — Histogram · fixed bins + multi-dataset</div><div id="tabs-s7"></div></div>
+  <div class="demo-section"><div class="demo-section-title">8 — Box Plot · Basic</div><div id="tabs-s8"></div></div>
+  <div class="demo-section"><div class="demo-section-title">9 — Box Plot · Grouped multi-dataset</div><div id="tabs-s9"></div></div>
+  <div class="demo-section"><div class="demo-section-title">10 — Statistical · onClick event</div><div id="tabs-s10"></div></div>
+</div>
+<script>
+function indentHtml(html) {
+  const step  = 2;
+  const voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  let indent  = 0;
+  let result  = '';
+  const tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function (tok) {
+    const t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      const tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      const text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height:  height || '400px',
+    lazy:    false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' },
+    ],
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+// ── Shared data ───────────────────────────────────────────────────────────────
+
+// Approximate normal distribution for histograms
+function gaussianSample(mean, std, n) {
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const u1 = Math.random(), u2 = Math.random();
+    const z  = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+    out.push(Math.round((mean + z * std) * 10) / 10);
+  }
+  return out;
+}
+
+// ── 1 · Scatter basic ─────────────────────────────────────────────────────────
+const preview_s1 = '<div id="chart-s1" style="padding:16px"></div>';
+const js_s1 = [
+  "new MTS.ChartScatter('#chart-s1', {",
+  "  data: {",
+  "    datasets: [{",
+  "      label: 'Correlation',",
+  "      color: '#3b82f6',",
+  "      values: [",
+  "        {x:10,y:22},{x:15,y:31},{x:20,y:28},{x:25,y:45},{x:30,y:38},",
+  "        {x:35,y:52},{x:40,y:49},{x:45,y:61},{x:50,y:58},{x:55,y:70},",
+  "        {x:60,y:65},{x:65,y:78},{x:70,y:74},{x:75,y:85},{x:80,y:91},",
+  "      ],",
+  "    }],",
+  "  },",
+  "  options: { height: 300 },",
+  "});",
+].join('\n');
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  new MTS.ChartScatter('#chart-s1', {
+    data: {
+      datasets: [{
+        label: 'Correlation', color: '#3b82f6',
+        values: [
+          {x:10,y:22},{x:15,y:31},{x:20,y:28},{x:25,y:45},{x:30,y:38},
+          {x:35,y:52},{x:40,y:49},{x:45,y:61},{x:50,y:58},{x:55,y:70},
+          {x:60,y:65},{x:65,y:78},{x:70,y:74},{x:75,y:85},{x:80,y:91},
+        ],
+      }],
+    },
+    options: { height: 300 },
+  });
+}, '380px');
+
+// ── 2 · Scatter multi-dataset ─────────────────────────────────────────────────
+const preview_s2 = '<div id="chart-s2" style="padding:16px"></div>';
+const js_s2 = [
+  "new MTS.ChartScatter('#chart-s2', {",
+  "  data: {",
+  "    datasets: [",
+  "      {",
+  "        label: 'Group A',",
+  "        color: '#3b82f6',",
+  "        values: [{x:5,y:10},{x:10,y:14},{x:12,y:9},{x:15,y:18},{x:18,y:12},{x:22,y:20}],",
+  "      },",
+  "      {",
+  "        label: 'Group B',",
+  "        color: '#10b981',",
+  "        values: [{x:30,y:40},{x:35,y:38},{x:38,y:44},{x:42,y:50},{x:45,y:47},{x:50,y:55}],",
+  "      },",
+  "      {",
+  "        label: 'Group C',",
+  "        color: '#f59e0b',",
+  "        values: [{x:60,y:20},{x:65,y:25},{x:68,y:18},{x:72,y:30},{x:75,y:22},{x:80,y:28}],",
+  "      },",
+  "    ],",
+  "  },",
+  "  options: { height: 300, pointRadius: 6 },",
+  "});",
+].join('\n');
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  new MTS.ChartScatter('#chart-s2', {
+    data: {
+      datasets: [
+        { label: 'Group A', color: '#3b82f6', values: [{x:5,y:10},{x:10,y:14},{x:12,y:9},{x:15,y:18},{x:18,y:12},{x:22,y:20}] },
+        { label: 'Group B', color: '#10b981', values: [{x:30,y:40},{x:35,y:38},{x:38,y:44},{x:42,y:50},{x:45,y:47},{x:50,y:55}] },
+        { label: 'Group C', color: '#f59e0b', values: [{x:60,y:20},{x:65,y:25},{x:68,y:18},{x:72,y:30},{x:75,y:22},{x:80,y:28}] },
+      ],
+    },
+    options: { height: 300, pointRadius: 6 },
+  });
+}, '400px');
+
+// ── 3 · Scatter axis formatter ────────────────────────────────────────────────
+const preview_s3 = '<div id="chart-s3" style="padding:16px"></div>';
+const js_s3 = [
+  "new MTS.ChartScatter('#chart-s3', {",
+  "  data: {",
+  "    datasets: [{",
+  "      label: 'Revenue vs Employees',",
+  "      color: '#7c3aed',",
+  "      values: [",
+  "        {x:50,y:1.2},{x:120,y:2.8},{x:200,y:4.1},{x:350,y:7.5},{x:500,y:9.8},",
+  "        {x:750,y:15.2},{x:1000,y:18.9},{x:1500,y:24.3},{x:2000,y:31.1},",
+  "      ],",
+  "    }],",
+  "  },",
+  "  options: {",
+  "    height: 300,",
+  "    pointRadius: 7,",
+  "    xAxis: { formatter: function(v) { return v + ' emp'; } },",
+  "    yAxis: { formatter: function(v) { return '$' + v + 'M'; } },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.ChartScatter('#chart-s3', {
+    data: {
+      datasets: [{
+        label: 'Revenue vs Employees', color: '#7c3aed',
+        values: [
+          {x:50,y:1.2},{x:120,y:2.8},{x:200,y:4.1},{x:350,y:7.5},{x:500,y:9.8},
+          {x:750,y:15.2},{x:1000,y:18.9},{x:1500,y:24.3},{x:2000,y:31.1},
+        ],
+      }],
+    },
+    options: {
+      height: 300,
+      pointRadius: 7,
+      xAxis: { formatter: function (v) { return v + ' emp'; } },
+      yAxis: { formatter: function (v) { return '$' + v + 'M'; } },
+    },
+  });
+}, '380px');
+
+// ── 4 · Bubble basic ──────────────────────────────────────────────────────────
+const preview_s4 = '<div id="chart-s4" style="padding:16px"></div>';
+const js_s4 = [
+  "new MTS.ChartBubble('#chart-s4', {",
+  "  data: {",
+  "    datasets: [{",
+  "      label: 'Markets',",
+  "      color: '#3b82f6',",
+  "      values: [",
+  "        {x:10, y:20, r:5},",
+  "        {x:25, y:35, r:15},",
+  "        {x:40, y:15, r:30},",
+  "        {x:55, y:45, r:10},",
+  "        {x:70, y:30, r:50},",
+  "        {x:85, y:60, r:20},",
+  "      ],",
+  "    }],",
+  "  },",
+  "  options: { height: 300, rMin: 6, rMax: 30 },",
+  "});",
+].join('\n');
+makeSection('tabs-s4', preview_s4, js_s4, function () {
+  new MTS.ChartBubble('#chart-s4', {
+    data: {
+      datasets: [{
+        label: 'Markets', color: '#3b82f6',
+        values: [
+          {x:10,y:20,r:5},{x:25,y:35,r:15},{x:40,y:15,r:30},
+          {x:55,y:45,r:10},{x:70,y:30,r:50},{x:85,y:60,r:20},
+        ],
+      }],
+    },
+    options: { height: 300, rMin: 6, rMax: 30 },
+  });
+}, '380px');
+
+// ── 5 · Bubble multi-dataset ──────────────────────────────────────────────────
+const preview_s5 = '<div id="chart-s5" style="padding:16px"></div>';
+const js_s5 = [
+  "new MTS.ChartBubble('#chart-s5', {",
+  "  data: {",
+  "    datasets: [",
+  "      {",
+  "        label: 'LATAM',",
+  "        color: '#3b82f6',",
+  "        values: [",
+  "          {x:20,y:15,r:80},{x:35,y:28,r:200},{x:50,y:12,r:120},{x:65,y:35,r:300},",
+  "        ],",
+  "      },",
+  "      {",
+  "        label: 'EMEA',",
+  "        color: '#10b981',",
+  "        values: [",
+  "          {x:15,y:40,r:150},{x:30,y:55,r:400},{x:55,y:45,r:250},{x:70,y:60,r:500},",
+  "        ],",
+  "      },",
+  "      {",
+  "        label: 'APAC',",
+  "        color: '#f59e0b',",
+  "        values: [",
+  "          {x:40,y:70,r:600},{x:60,y:80,r:350},{x:75,y:65,r:180},{x:85,y:75,r:450},",
+  "        ],",
+  "      },",
+  "    ],",
+  "  },",
+  "  options: {",
+  "    height: 320,",
+  "    rMin: 5, rMax: 32,",
+  "    xAxis: { formatter: function(v) { return v + '%'; } },",
+  "    yAxis: { formatter: function(v) { return v + '%'; } },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s5', preview_s5, js_s5, function () {
+  new MTS.ChartBubble('#chart-s5', {
+    data: {
+      datasets: [
+        { label: 'LATAM', color: '#3b82f6', values: [{x:20,y:15,r:80},{x:35,y:28,r:200},{x:50,y:12,r:120},{x:65,y:35,r:300}] },
+        { label: 'EMEA',  color: '#10b981', values: [{x:15,y:40,r:150},{x:30,y:55,r:400},{x:55,y:45,r:250},{x:70,y:60,r:500}] },
+        { label: 'APAC',  color: '#f59e0b', values: [{x:40,y:70,r:600},{x:60,y:80,r:350},{x:75,y:65,r:180},{x:85,y:75,r:450}] },
+      ],
+    },
+    options: {
+      height: 320,
+      rMin: 5, rMax: 32,
+      xAxis: { formatter: function (v) { return v + '%'; } },
+      yAxis: { formatter: function (v) { return v + '%'; } },
+    },
+  });
+}, '420px');
+
+// ── 6 · Histogram basic ───────────────────────────────────────────────────────
+const preview_s6 = '<div id="chart-s6" style="padding:16px"></div>';
+const js_s6 = [
+  "// bins = automatic (Sturges: ceil(log2(n)+1))",
+  "const data = gaussianSample(50, 12, 300);",
+  "",
+  "new MTS.ChartHistogram('#chart-s6', {",
+  "  data: { values: data },",
+  "  options: {",
+  "    height: 300,",
+  "    color: '#3b82f6',",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s6', preview_s6, js_s6, function () {
+  const data6 = gaussianSample(50, 12, 300);
+  new MTS.ChartHistogram('#chart-s6', {
+    data: { values: data6 },
+    options: { height: 300, color: '#3b82f6' },
+  });
+}, '380px');
+
+// ── 7 · Histogram fixed bins + multi-dataset ──────────────────────────────────
+const preview_s7 = '<div id="chart-s7" style="padding:16px"></div>';
+const js_s7 = [
+  "new MTS.ChartHistogram('#chart-s7', {",
+  "  data: {",
+  "    datasets: [",
+  "      { label: 'Control Group', color: '#3b82f6', values: gaussianSample(45, 10, 200) },",
+  "      { label: 'Treatment Group', color: '#10b981', values: gaussianSample(60, 8,  200) },",
+  "    ],",
+  "  },",
+  "  options: {",
+  "    height: 300,",
+  "    bins: 20,",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s7', preview_s7, js_s7, function () {
+  new MTS.ChartHistogram('#chart-s7', {
+    data: {
+      datasets: [
+        { label: 'Control Group', color: '#3b82f6', values: gaussianSample(45, 10, 200) },
+        { label: 'Treatment Group', color: '#10b981', values: gaussianSample(60, 8,  200) },
+      ],
+    },
+    options: { height: 300, bins: 20 },
+  });
+}, '400px');
+
+// ── 8 · Box Plot basic ────────────────────────────────────────────────────────
+const preview_s8 = '<div id="chart-s8" style="padding:16px"></div>';
+const js_s8 = [
+  "new MTS.ChartBoxPlot('#chart-s8', {",
+  "  data: {",
+  "    labels: ['Q1', 'Q2', 'Q3', 'Q4'],",
+  "    datasets: [{",
+  "      label: 'Response time (ms)',",
+  "      color: '#3b82f6',",
+  "      values: [",
+  "        [120,145,132,98,167,88,201,115,140,155,92,178,110,130,125],",
+  "        [95,110,88,142,76,165,102,118,95,130,72,155,108,122,99],",
+  "        [180,210,195,165,240,175,220,190,160,230,170,200,185,215,195],",
+  "        [145,160,138,175,125,190,152,168,142,183,130,172,148,162,155],",
+  "      ],",
+  "    }],",
+  "  },",
+  "  options: {",
+  "    height: 320,",
+  "    yAxis: { formatter: function(v) { return v + 'ms'; } },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s8', preview_s8, js_s8, function () {
+  new MTS.ChartBoxPlot('#chart-s8', {
+    data: {
+      labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+      datasets: [{
+        label: 'Response time (ms)', color: '#3b82f6',
+        values: [
+          [120,145,132,98,167,88,201,115,140,155,92,178,110,130,125],
+          [95,110,88,142,76,165,102,118,95,130,72,155,108,122,99],
+          [180,210,195,165,240,175,220,190,160,230,170,200,185,215,195],
+          [145,160,138,175,125,190,152,168,142,183,130,172,148,162,155],
+        ],
+      }],
+    },
+    options: { height: 320, yAxis: { formatter: function (v) { return v + 'ms'; } } },
+  });
+}, '400px');
+
+// ── 9 · Box Plot grouped multi-dataset ────────────────────────────────────────
+const preview_s9 = '<div id="chart-s9" style="padding:16px"></div>';
+const js_s9 = [
+  "new MTS.ChartBoxPlot('#chart-s9', {",
+  "  data: {",
+  "    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],",
+  "    datasets: [",
+  "      {",
+  "        label: 'API v1',",
+  "        color: '#3b82f6',",
+  "        values: [",
+  "          [230,245,215,260,195,280,225,250,235,270],",
+  "          [220,238,208,252,185,268,218,242,228,260],",
+  "          [240,258,222,275,205,290,235,262,248,278],",
+  "          [215,232,200,245,180,262,210,238,222,255],",
+  "          [225,242,210,258,192,275,220,248,235,265],",
+  "        ],",
+  "      },",
+  "      {",
+  "        label: 'API v2',",
+  "        color: '#10b981',",
+  "        values: [",
+  "          [120,132,108,145,95,158,118,138,125,148],",
+  "          [115,128,102,138,90,150,112,132,118,142],",
+  "          [125,138,112,152,100,165,122,144,132,155],",
+  "          [110,122,98,135,88,148,108,128,115,138],",
+  "          [118,130,105,142,94,156,115,136,122,145],",
+  "        ],",
+  "      },",
+  "    ],",
+  "  },",
+  "  options: {",
+  "    height: 340,",
+  "    yAxis: { formatter: function(v) { return v + 'ms'; } },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s9', preview_s9, js_s9, function () {
+  new MTS.ChartBoxPlot('#chart-s9', {
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+      datasets: [
+        {
+          label: 'API v1', color: '#3b82f6',
+          values: [
+            [230,245,215,260,195,280,225,250,235,270],
+            [220,238,208,252,185,268,218,242,228,260],
+            [240,258,222,275,205,290,235,262,248,278],
+            [215,232,200,245,180,262,210,238,222,255],
+            [225,242,210,258,192,275,220,248,235,265],
+          ],
+        },
+        {
+          label: 'API v2', color: '#10b981',
+          values: [
+            [120,132,108,145,95,158,118,138,125,148],
+            [115,128,102,138,90,150,112,132,118,142],
+            [125,138,112,152,100,165,122,144,132,155],
+            [110,122,98,135,88,148,108,128,115,138],
+            [118,130,105,142,94,156,115,136,122,145],
+          ],
+        },
+      ],
+    },
+    options: { height: 340, yAxis: { formatter: function (v) { return v + 'ms'; } } },
+  });
+}, '430px');
+
+// ── 10 · onClick event ────────────────────────────────────────────────────────
+var preview_s10 = [
+  '<div class="demo-stack" style="padding:16px">',
+  '  <div id="chart-s10"></div>',
+  '  <div class="result-box" id="chart-s10-result">— click a point —</div>',
+  '</div>',
+].join('\n');
+var js_s10 = [
+  "var chartS10 = new MTS.ChartScatter('#chart-s10', {",
+  "  data: {",
+  "    datasets: [",
+  "      { label: 'Product A', color: '#1d4ed8', values: [",
+  "        {x:12,y:38},{x:18,y:52},{x:25,y:44},{x:31,y:67},{x:40,y:59},{x:48,y:72},{x:55,y:81},",
+  "      ]},",
+  "      { label: 'Product B', color: '#10b981', values: [",
+  "        {x:10,y:25},{x:20,y:30},{x:28,y:48},{x:35,y:55},{x:45,y:63},{x:52,y:70},{x:60,y:75},",
+  "      ]},",
+  "    ],",
+  "  },",
+  "  options: {",
+  "    height: 260,",
+  "    xAxis: { formatter: function(v){ return v + ' wk'; } },",
+  "    yAxis: { formatter: function(v){ return '$' + v + 'k'; } },",
+  "  },",
+  "});",
+  "",
+  "chartS10.onClick(function(e) {",
+  "  document.getElementById('chart-s10-result').textContent =",
+  "    (e.datasetIndex === 0 ? 'Product A' : 'Product B') +",
+  "    '  |  Week: ' + e.x + '  |  Sales: $' + e.y + 'k';",
+  "});",
+].join('\n');
+makeSection('tabs-s10', preview_s10, js_s10, function () {
+  var chartS10 = new MTS.ChartScatter('#chart-s10', {
+    data: {
+      datasets: [
+        { label: 'Product A', color: '#1d4ed8', values: [
+          {x:12,y:38},{x:18,y:52},{x:25,y:44},{x:31,y:67},{x:40,y:59},{x:48,y:72},{x:55,y:81},
+        ]},
+        { label: 'Product B', color: '#10b981', values: [
+          {x:10,y:25},{x:20,y:30},{x:28,y:48},{x:35,y:55},{x:45,y:63},{x:52,y:70},{x:60,y:75},
+        ]},
+      ],
+    },
+    options: {
+      height: 260,
+      xAxis: { formatter: function (v) { return v + ' wk'; } },
+      yAxis: { formatter: function (v) { return '$' + v + 'k'; } },
+    },
+  });
+  chartS10.onClick(function (e) {
+    document.getElementById('chart-s10-result').textContent =
+      (e.datasetIndex === 0 ? 'Product A' : 'Product B') +
+      '  |  Week: ' + e.x + '  |  Sales: $' + e.y + 'k';
+  });
+}, '400px');
+</script>
+</body>
+</html>

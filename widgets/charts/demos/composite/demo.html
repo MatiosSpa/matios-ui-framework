@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Chart — Composite</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-rose.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-orange.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-sky.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-indigo.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-teal.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-slate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-bronze.css">
+  <link rel="stylesheet" href="../../../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../matios-ui-chart.css">
+  <script src="../../../../support/demo-shared.js"></script>
+  <script src="../../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../matios-ui-chart.js"></script>
+  <script src="../../matios-ui-chart-composite.js"></script>
+</head>
+<body>
+<div class="demo-page">
+  <div class="demo-section"><div class="demo-section-title">1 — Heatmap · Basic</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Heatmap · With values + custom colors</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Treemap · Basic</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Treemap · With values and percentage</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Radar · Basic</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Radar · Multi-dataset</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title">7 — Waterfall · Basic</div><div id="tabs-s7"></div></div>
+  <div class="demo-section"><div class="demo-section-title">8 — Waterfall · With total bar</div><div id="tabs-s8"></div></div>
+  <div class="demo-section"><div class="demo-section-title">9 — Funnel · Basic</div><div id="tabs-s9"></div></div>
+  <div class="demo-section"><div class="demo-section-title">10 — Funnel · Custom colors</div><div id="tabs-s10"></div></div>
+  <div class="demo-section"><div class="demo-section-title">11 — Composite · onClick event</div><div id="tabs-s11"></div></div>
+</div>
+<script>
+function indentHtml(html) {
+  const step  = 2;
+  const voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  let indent  = 0;
+  let result  = '';
+  const tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function (tok) {
+    const t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      const tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      const text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height:  height || '400px',
+    lazy:    false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' },
+    ],
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+// ── 1 · Heatmap basic ────────────────────────────────────────────────────────
+const preview_s1 = '<div id="chart-s1" style="padding:16px"></div>';
+const js_s1 = [
+  "new MTS.ChartHeatmap('#chart-s1', {",
+  "  data: {",
+  "    xLabels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],",
+  "    yLabels: ['00h','04h','08h','12h','16h','20h'],",
+  "    values: [",
+  "      [12, 8, 15, 22, 18, 5,  3 ],",
+  "      [6,  4,  8, 12, 10, 2,  1 ],",
+  "      [45, 38, 60, 72, 65, 20, 10],",
+  "      [80, 70, 95, 110,98, 45, 30],",
+  "      [65, 55, 82, 88, 78, 38, 22],",
+  "      [30, 25, 40, 50, 45, 18, 12],",
+  "    ],",
+  "  },",
+  "  options: { cellHeight: 36 },",
+  "});",
+].join('\n');
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  new MTS.ChartHeatmap('#chart-s1', {
+    data: {
+      xLabels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      yLabels: ['00h','04h','08h','12h','16h','20h'],
+      values: [
+        [12, 8,  15, 22, 18, 5,  3 ],
+        [6,  4,  8,  12, 10, 2,  1 ],
+        [45, 38, 60, 72, 65, 20, 10],
+        [80, 70, 95, 110,98, 45, 30],
+        [65, 55, 82, 88, 78, 38, 22],
+        [30, 25, 40, 50, 45, 18, 12],
+      ],
+    },
+    options: { cellHeight: 36 },
+  });
+}, '340px');
+
+// ── 2 · Heatmap with values + colors ─────────────────────────────────────────
+const preview_s2 = '<div id="chart-s2" style="padding:16px"></div>';
+const js_s2 = [
+  "new MTS.ChartHeatmap('#chart-s2', {",
+  "  data: {",
+  "    xLabels: ['Q1','Q2','Q3','Q4'],",
+  "    yLabels: ['2022','2023','2024','2025'],",
+  "    values: [",
+  "      [82, 76, 91, 88],",
+  "      [74, 85, 79, 93],",
+  "      [68, 90, 87, 95],",
+  "      [71, 83, 92, 97],",
+  "    ],",
+  "  },",
+  "  options: {",
+  "    colorLow:  '#451a00',",
+  "    colorHigh: '#f59e0b',",
+  "    cellHeight: 44,",
+  "    showValues: true,",
+  "    formatter: function(v) { return v + '%'; },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  new MTS.ChartHeatmap('#chart-s2', {
+    data: {
+      xLabels: ['Q1','Q2','Q3','Q4'],
+      yLabels: ['2022','2023','2024','2025'],
+      values: [
+        [82, 76, 91, 88],
+        [74, 85, 79, 93],
+        [68, 90, 87, 95],
+        [71, 83, 92, 97],
+      ],
+    },
+    options: {
+      colorLow: '#451a00', colorHigh: '#f59e0b',
+      cellHeight: 44, showValues: true,
+      formatter: function (v) { return v + '%'; },
+    },
+  });
+}, '320px');
+
+// ── 3 · Treemap basic ────────────────────────────────────────────────────────
+const preview_s3 = '<div id="chart-s3" style="padding:16px"></div>';
+const js_s3 = [
+  "new MTS.ChartTreemap('#chart-s3', {",
+  "  data: {",
+  "    datasets: [",
+  "      { label: 'Frontend',   value: 420, color: '#3b82f6' },",
+  "      { label: 'Backend',    value: 380, color: '#10b981' },",
+  "      { label: 'Mobile',     value: 260, color: '#7c3aed' },",
+  "      { label: 'DevOps',     value: 180, color: '#f59e0b' },",
+  "      { label: 'QA',         value: 140, color: '#e53935' },",
+  "      { label: 'Design',     value: 110, color: '#0f766e' },",
+  "      { label: 'Data',       value: 95,  color: '#92400e' },",
+  "      { label: 'Security',   value: 70,  color: '#4c1d95' },",
+  "    ],",
+  "  },",
+  "  options: { height: 320 },",
+  "});",
+].join('\n');
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.ChartTreemap('#chart-s3', {
+    data: {
+      datasets: [
+        { label: 'Frontend', value: 420, color: '#3b82f6' },
+        { label: 'Backend',  value: 380, color: '#10b981' },
+        { label: 'Mobile',   value: 260, color: '#7c3aed' },
+        { label: 'DevOps',   value: 180, color: '#f59e0b' },
+        { label: 'QA',       value: 140, color: '#e53935' },
+        { label: 'Design',   value: 110, color: '#0f766e' },
+        { label: 'Data',     value: 95,  color: '#92400e' },
+        { label: 'Security', value: 70,  color: '#4c1d95' },
+      ],
+    },
+    options: { height: 320 },
+  });
+}, '400px');
+
+// ── 4 · Treemap with values ───────────────────────────────────────────────────
+const preview_s4 = '<div id="chart-s4" style="padding:16px"></div>';
+const js_s4 = [
+  "new MTS.ChartTreemap('#chart-s4', {",
+  "  data: {",
+  "    datasets: [",
+  "      { label: 'React',      value: 850  },",
+  "      { label: 'Vue',        value: 520  },",
+  "      { label: 'Angular',    value: 480  },",
+  "      { label: 'Svelte',     value: 220  },",
+  "      { label: 'Solid',      value: 130  },",
+  "      { label: 'Qwik',       value: 85   },",
+  "      { label: 'Lit',        value: 60   },",
+  "    ],",
+  "  },",
+  "  options: {",
+  "    height: 300,",
+  "    showValues: true,",
+  "    formatter: function(v) { return v + 'K'; },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s4', preview_s4, js_s4, function () {
+  new MTS.ChartTreemap('#chart-s4', {
+    data: {
+      datasets: [
+        { label: 'React',   value: 850 },
+        { label: 'Vue',     value: 520 },
+        { label: 'Angular', value: 480 },
+        { label: 'Svelte',  value: 220 },
+        { label: 'Solid',   value: 130 },
+        { label: 'Qwik',    value: 85  },
+        { label: 'Lit',     value: 60  },
+      ],
+    },
+    options: { height: 300, showValues: true, formatter: function (v) { return v + 'K'; } },
+  });
+}, '380px');
+
+// ── 5 · Radar basic ──────────────────────────────────────────────────────────
+const preview_s5 = '<div id="chart-s5" style="padding:16px"></div>';
+const js_s5 = [
+  "new MTS.ChartRadar('#chart-s5', {",
+  "  data: {",
+  "    labels: ['Speed','Accuracy','Stamina','Strength','Agility','Technique'],",
+  "    datasets: [{",
+  "      label: 'Player A',",
+  "      color: '#3b82f6',",
+  "      values: [85, 72, 90, 68, 78, 82],",
+  "    }],",
+  "  },",
+  "  options: { height: 340 },",
+  "});",
+].join('\n');
+makeSection('tabs-s5', preview_s5, js_s5, function () {
+  new MTS.ChartRadar('#chart-s5', {
+    data: {
+      labels: ['Speed','Accuracy','Stamina','Strength','Agility','Technique'],
+      datasets: [{ label: 'Player A', color: '#3b82f6', values: [85, 72, 90, 68, 78, 82] }],
+    },
+    options: { height: 340 },
+  });
+}, '420px');
+
+// ── 6 · Radar multi-dataset ───────────────────────────────────────────────────
+const preview_s6 = '<div id="chart-s6" style="padding:16px"></div>';
+const js_s6 = [
+  "new MTS.ChartRadar('#chart-s6', {",
+  "  data: {",
+  "    labels: ['Speed','Accuracy','Stamina','Strength','Agility','Technique'],",
+  "    datasets: [",
+  "      { label: 'Team A', color: '#3b82f6', values: [85, 72, 90, 68, 78, 82] },",
+  "      { label: 'Team B', color: '#10b981', values: [70, 88, 65, 92, 85, 74] },",
+  "      { label: 'Team C', color: '#f59e0b', values: [60, 65, 80, 75, 60, 95] },",
+  "    ],",
+  "  },",
+  "  options: { height: 340, fillOpacity: 0.12 },",
+  "});",
+].join('\n');
+makeSection('tabs-s6', preview_s6, js_s6, function () {
+  new MTS.ChartRadar('#chart-s6', {
+    data: {
+      labels: ['Speed','Accuracy','Stamina','Strength','Agility','Technique'],
+      datasets: [
+        { label: 'Team A', color: '#3b82f6', values: [85, 72, 90, 68, 78, 82] },
+        { label: 'Team B', color: '#10b981', values: [70, 88, 65, 92, 85, 74] },
+        { label: 'Team C', color: '#f59e0b', values: [60, 65, 80, 75, 60, 95] },
+      ],
+    },
+    options: { height: 340, fillOpacity: 0.12 },
+  });
+}, '440px');
+
+// ── 7 · Waterfall basic ──────────────────────────────────────────────────────
+const preview_s7 = '<div id="chart-s7" style="padding:16px"></div>';
+const js_s7 = [
+  "new MTS.ChartWaterfall('#chart-s7', {",
+  "  data: {",
+  "    labels: ['Start','Sales','Returns','Costs','Taxes','Result'],",
+  "    datasets: [{",
+  "      values: [",
+  "        { value: 0,    type: 'start'  },",
+  "        { value: 500              },",
+  "        { value: -80              },",
+  "        { value: -150             },",
+  "        { value: -60              },",
+  "        { type: 'total'           },",
+  "      ],",
+  "    }],",
+  "  },",
+  "  options: {",
+  "    height: 320,",
+  "    yAxis: { formatter: function(v) { return '$' + v + 'K'; } },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s7', preview_s7, js_s7, function () {
+  new MTS.ChartWaterfall('#chart-s7', {
+    data: {
+      labels: ['Start','Sales','Returns','Costs','Taxes','Result'],
+      datasets: [{
+        values: [
+          { value: 0,    type: 'start' },
+          { value: 500 },
+          { value: -80 },
+          { value: -150 },
+          { value: -60 },
+          { type: 'total' },
+        ],
+      }],
+    },
+    options: { height: 320, yAxis: { formatter: function (v) { return '$' + v + 'K'; } } },
+  });
+}, '400px');
+
+// ── 8 · Waterfall with multiple totals ───────────────────────────────────────
+const preview_s8 = '<div id="chart-s8" style="padding:16px"></div>';
+const js_s8 = [
+  "new MTS.ChartWaterfall('#chart-s8', {",
+  "  data: {",
+  "    labels: ['Revenue','COGS','Gross','OpEx','R&D','EBIT','Taxes','Net Income'],",
+  "    datasets: [{",
+  "      values: [",
+  "        { value: 1200, type: 'start' },",
+  "        { value: -480              },",
+  "        { type:  'total'           },",
+  "        { value: -180              },",
+  "        { value: -95               },",
+  "        { type:  'total'           },",
+  "        { value: -88               },",
+  "        { type:  'total'           },",
+  "      ],",
+  "    }],",
+  "  },",
+  "  options: {",
+  "    height: 320,",
+  "    yAxis: { formatter: function(v) { return '$' + v + 'M'; } },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s8', preview_s8, js_s8, function () {
+  new MTS.ChartWaterfall('#chart-s8', {
+    data: {
+      labels: ['Revenue','COGS','Gross','OpEx','R&D','EBIT','Taxes','Net Income'],
+      datasets: [{
+        values: [
+          { value: 1200, type: 'start' },
+          { value: -480 },
+          { type:  'total' },
+          { value: -180 },
+          { value: -95  },
+          { type:  'total' },
+          { value: -88  },
+          { type:  'total' },
+        ],
+      }],
+    },
+    options: { height: 320, yAxis: { formatter: function (v) { return '$' + v + 'M'; } } },
+  });
+}, '400px');
+
+// ── 9 · Funnel basic ─────────────────────────────────────────────────────────
+const preview_s9 = '<div id="chart-s9" style="padding:16px"></div>';
+const js_s9 = [
+  "new MTS.ChartFunnel('#chart-s9', {",
+  "  data: {",
+  "    labels: ['Visitors','Signups','Active','Paying','Premium'],",
+  "    values: [12500, 4800, 2200, 880, 210],",
+  "  },",
+  "  options: { height: 280 },",
+  "});",
+].join('\n');
+makeSection('tabs-s9', preview_s9, js_s9, function () {
+  new MTS.ChartFunnel('#chart-s9', {
+    data: {
+      labels: ['Visitors','Signups','Active','Paying','Premium'],
+      values: [12500, 4800, 2200, 880, 210],
+    },
+    options: { height: 280 },
+  });
+}, '360px');
+
+// ── 10 · Funnel custom colors ────────────────────────────────────────
+const preview_s10 = '<div id="chart-s10" style="padding:16px"></div>';
+const js_s10 = [
+  "new MTS.ChartFunnel('#chart-s10', {",
+  "  data: {",
+  "    labels: ['Leads','Contacted','Demos','Proposals','Closed'],",
+  "    values: [3200, 1400, 620, 290, 115],",
+  "  },",
+  "  options: {",
+  "    height: 280,",
+  "    colors: ['#1d4ed8','#0f766e','#7c3aed','#f59e0b','#10b981'],",
+  "    formatter: function(v) { return v.toLocaleString(); },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s10', preview_s10, js_s10, function () {
+  new MTS.ChartFunnel('#chart-s10', {
+    data: {
+      labels: ['Leads','Contacted','Demos','Proposals','Closed'],
+      values: [3200, 1400, 620, 290, 115],
+    },
+    options: {
+      height: 280,
+      colors: ['#1d4ed8','#0f766e','#7c3aed','#f59e0b','#10b981'],
+      formatter: function (v) { return v.toLocaleString(); },
+    },
+  });
+}, '360px');
+
+// ── 11 · onClick event ───────────────────────────────────────────────────────
+var preview_s11 = [
+  '<div class="demo-stack" style="padding:16px">',
+  '  <div id="chart-s11"></div>',
+  '  <div class="result-box" id="chart-s11-result">— click on a block —</div>',
+  '</div>',
+].join('\n');
+var js_s11 = [
+  "var chartS11 = new MTS.ChartTreemap('#chart-s11', {",
+  "  data: {",
+  "    datasets: [",
+  "      { label: 'Mobile',   value: 420, color: '#1d4ed8' },",
+  "      { label: 'Desktop',  value: 310, color: '#0f766e' },",
+  "      { label: 'Tablet',   value: 180, color: '#7c3aed' },",
+  "      { label: 'Smart TV', value: 95,  color: '#f59e0b' },",
+  "      { label: 'Others',   value: 55,  color: '#334155' },",
+  "    ],",
+  "  },",
+  "  options: { height: 260, animate: true },",
+  "});",
+  "",
+  "chartS11.onClick(function(e) {",
+  "  var total = 420 + 310 + 180 + 95 + 55;",
+  "  var pct   = (e.value / total * 100).toFixed(1);",
+  "  document.getElementById('chart-s11-result').textContent =",
+  "    e.label + '  |  Sessions: ' + e.value.toLocaleString('en-US') + '  |  Share: ' + pct + '%';",
+  "});",
+].join('\n');
+makeSection('tabs-s11', preview_s11, js_s11, function () {
+  var chartS11 = new MTS.ChartTreemap('#chart-s11', {
+    data: {
+      datasets: [
+        { label: 'Mobile',   value: 420, color: '#1d4ed8' },
+        { label: 'Desktop',  value: 310, color: '#0f766e' },
+        { label: 'Tablet',   value: 180, color: '#7c3aed' },
+        { label: 'Smart TV', value: 95,  color: '#f59e0b' },
+        { label: 'Others',   value: 55,  color: '#334155' },
+      ],
+    },
+    options: { height: 260, animate: true },
+  });
+  chartS11.onClick(function (e) {
+    var total = 420 + 310 + 180 + 95 + 55;
+    var pct   = (e.value / total * 100).toFixed(1);
+    document.getElementById('chart-s11-result').textContent =
+      e.label + '  |  Sessions: ' + e.value.toLocaleString('en-US') + '  |  Share: ' + pct + '%';
+  });
+}, '400px');
+</script>
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Chart — Lines</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-rose.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-orange.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-sky.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-indigo.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-teal.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-slate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-bronze.css">
+  <link rel="stylesheet" href="../../../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../matios-ui-chart.css">
+  <script src="../../../../support/demo-shared.js"></script>
+  <script src="../../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../matios-ui-chart.js"></script>
+  <script src="../../matios-ui-chart-line.js"></script>
+  <script src="../../matios-ui-chart-area-stacked.js"></script>
+</head>
+<body>
+<div class="demo-page">
+  <div class="demo-section"><div class="demo-section-title">1 — Line · Basic</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Line · Custom color</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Line · Multi-line</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Line · smooth: false</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Line · showDots: false</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Area · fill: true</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title">7 — Area · Multi-area</div><div id="tabs-s7"></div></div>
+  <div class="demo-section"><div class="demo-section-title">8 — Line · Negative values</div><div id="tabs-s8"></div></div>
+  <div class="demo-section"><div class="demo-section-title">9 — Line · Formatter (Y axis + tooltip)</div><div id="tabs-s9"></div></div>
+  <div class="demo-section"><div class="demo-section-title">10 — Line · API update()</div><div id="tabs-s10"></div></div>
+  <div class="demo-section"><div class="demo-section-title">11 — Line · onClick event</div><div id="tabs-s11"></div></div>
+  <div class="demo-section"><div class="demo-section-title">12 — Stacked Area · Cumulative multi-dataset</div><div id="tabs-s12"></div></div>
+</div>
+
+<script>
+function indentHtml(html) {
+  const step  = 2;
+  const voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  let indent  = 0;
+  let result  = '';
+  const tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function (tok) {
+    const t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      const tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      const text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height:  height || '400px',
+    lazy:    false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' },
+    ],
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// ── 1 · Basic ────────────────────────────────────────────────────────────────
+const preview_s1 = '<div id="chart-s1" style="padding:16px"></div>';
+const js_s1 = [
+  "new MTS.ChartLine('#chart-s1', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],",
+  "    datasets: [{",
+  "      label: 'Sales 2025',",
+  "      values: [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128],",
+  "    }],",
+  "  },",
+  "  options: { height: 280 },",
+  "});",
+].join('\n');
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  new MTS.ChartLine('#chart-s1', {
+    data: {
+      labels:   MONTHS,
+      datasets: [{ label: 'Sales 2025', values: [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128] }],
+    },
+    options: { height: 280 },
+  });
+}, '360px');
+
+// ── 2 · Custom color ───────────────────────────────────────────────────
+const preview_s2 = '<div id="chart-s2" style="padding:16px"></div>';
+const js_s2 = [
+  "// No explicit color → automatic internal palette.",
+  "// With color → applied to the line, the dots and the area fill.",
+  "new MTS.ChartLine('#chart-s2', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],",
+  "    datasets: [",
+  "      {",
+  "        label:       'Revenue',",
+  "        values:      [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128],",
+  "        color:       '#10b981',   // green — affects line + dots + area",
+  "        fill:        true,",
+  "        fillOpacity: 0.12,",
+  "        lineWidth:   2.5,",
+  "      },",
+  "    ],",
+  "  },",
+  "  options: { height: 280 },",
+  "});",
+].join('\n');
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  new MTS.ChartLine('#chart-s2', {
+    data: {
+      labels:   MONTHS,
+      datasets: [{
+        label:       'Revenue',
+        values:      [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128],
+        color:       '#10b981',
+        fill:        true,
+        fillOpacity: 0.12,
+        lineWidth:   2.5,
+      }],
+    },
+    options: { height: 280 },
+  });
+}, '360px');
+
+// ── 3 · Multi-line ───────────────────────────────────────────────────────────
+const preview_s3 = '<div id="chart-s3" style="padding:16px"></div>';
+const js_s3 = [
+  "// No explicit color → internal palette assigned automatically by dataset index.",
+  "// With explicit color → set independently per dataset.",
+  "new MTS.ChartLine('#chart-s3', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],",
+  "    datasets: [",
+  "      { label: '2023', values: [30, 45, 40, 55, 50, 68, 60, 75, 70, 85,  95, 108], color: '#7c3aed' },",
+  "      { label: '2024', values: [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128], color: '#3b82f6' },",
+  "      { label: '2025', values: [55, 70, 62, 80, 78, 98, 88, 105, 96, 115, 125, 142], color: '#10b981' },",
+  "    ],",
+  "  },",
+  "  options: { height: 300 },",
+  "});",
+].join('\n');
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.ChartLine('#chart-s3', {
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: '2023', values: [30, 45, 40, 55, 50, 68, 60, 75, 70, 85,  95, 108], color: '#7c3aed' },
+        { label: '2024', values: [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128], color: '#3b82f6' },
+        { label: '2025', values: [55, 70, 62, 80, 78, 98, 88, 105, 96, 115, 125, 142], color: '#10b981' },
+      ],
+    },
+    options: { height: 300 },
+  });
+}, '400px');
+
+// ── 4 · smooth: false ─────────────────────────────────────────────────────────
+const preview_s4 = [
+  '<div class="demo-grid" style="grid-template-columns:1fr 1fr;align-items:start;gap:24px;padding:16px">',
+  '  <div>',
+  '    <p style="font-size:12px;color:var(--mts-text-muted);margin:0 0 8px">smooth: true (default)</p>',
+  '    <div id="chart-s4a"></div>',
+  '  </div>',
+  '  <div>',
+  '    <p style="font-size:12px;color:var(--mts-text-muted);margin:0 0 8px">smooth: false</p>',
+  '    <div id="chart-s4b"></div>',
+  '  </div>',
+  '</div>',
+].join('\n');
+const js_s4 = [
+  "// smooth: true — Catmull-Rom curves (default)",
+  "new MTS.ChartLine('#chart-s4a', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun'],",
+  "    datasets: [{ label: 'Sales', values: [42, 80, 35, 90, 55, 110], smooth: true }],",
+  "  },",
+  "  options: { height: 220 },",
+  "});",
+  "",
+  "// smooth: false — straight segments between points",
+  "new MTS.ChartLine('#chart-s4b', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun'],",
+  "    datasets: [{ label: 'Sales', values: [42, 80, 35, 90, 55, 110], smooth: false }],",
+  "  },",
+  "  options: { height: 220 },",
+  "});",
+].join('\n');
+makeSection('tabs-s4', preview_s4, js_s4, function () {
+  const vals4 = [42, 80, 35, 90, 55, 110];
+  const lbls4 = ['Jan','Feb','Mar','Apr','May','Jun'];
+  new MTS.ChartLine('#chart-s4a', {
+    data: { labels: lbls4, datasets: [{ label: 'Sales', values: vals4, smooth: true  }] },
+    options: { height: 220 },
+  });
+  new MTS.ChartLine('#chart-s4b', {
+    data: { labels: lbls4, datasets: [{ label: 'Sales', values: vals4, smooth: false }] },
+    options: { height: 220 },
+  });
+}, '380px');
+
+// ── 5 · showDots: false ───────────────────────────────────────────────────────
+const preview_s5 = [
+  '<div class="demo-grid" style="grid-template-columns:1fr 1fr;align-items:start;gap:24px;padding:16px">',
+  '  <div>',
+  '    <p style="font-size:12px;color:var(--mts-text-muted);margin:0 0 8px">showDots: true (default)</p>',
+  '    <div id="chart-s5a"></div>',
+  '  </div>',
+  '  <div>',
+  '    <p style="font-size:12px;color:var(--mts-text-muted);margin:0 0 8px">showDots: false · lineWidth: 2.5</p>',
+  '    <div id="chart-s5b"></div>',
+  '  </div>',
+  '</div>',
+].join('\n');
+const js_s5 = [
+  "// showDots: true (default)",
+  "new MTS.ChartLine('#chart-s5a', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],",
+  "    datasets: [{ label: 'Sales', values: [42, 58, 51, 70, 65, 88, 74, 91], showDots: true }],",
+  "  },",
+  "  options: { height: 220 },",
+  "});",
+  "",
+  "// showDots: false — clean line, useful for many points",
+  "new MTS.ChartLine('#chart-s5b', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],",
+  "    datasets: [{ label: 'Sales', values: [42, 58, 51, 70, 65, 88, 74, 91], showDots: false, lineWidth: 2.5 }],",
+  "  },",
+  "  options: { height: 220 },",
+  "});",
+].join('\n');
+makeSection('tabs-s5', preview_s5, js_s5, function () {
+  const vals5 = [42, 58, 51, 70, 65, 88, 74, 91];
+  const lbls5 = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'];
+  new MTS.ChartLine('#chart-s5a', {
+    data: { labels: lbls5, datasets: [{ label: 'Sales', values: vals5, showDots: true }] },
+    options: { height: 220 },
+  });
+  new MTS.ChartLine('#chart-s5b', {
+    data: { labels: lbls5, datasets: [{ label: 'Sales', values: vals5, showDots: false, lineWidth: 2.5 }] },
+    options: { height: 220 },
+  });
+}, '380px');
+
+// ── 6 · Area · fill: true ─────────────────────────────────────────────────────
+const preview_s6 = '<div id="chart-s6" style="padding:16px"></div>';
+const js_s6 = [
+  "new MTS.ChartLine('#chart-s6', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],",
+  "    datasets: [{",
+  "      label:       'Sales 2025',",
+  "      values:      [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128],",
+  "      color:       '#3b82f6',",
+  "      fill:        true,    // enables the area fill",
+  "      fillOpacity: 0.15,",
+  "    }],",
+  "  },",
+  "  options: { height: 280 },",
+  "});",
+].join('\n');
+makeSection('tabs-s6', preview_s6, js_s6, function () {
+  new MTS.ChartLine('#chart-s6', {
+    data: {
+      labels:   MONTHS,
+      datasets: [{ label: 'Sales 2025', values: [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128], color: '#3b82f6', fill: true, fillOpacity: 0.15 }],
+    },
+    options: { height: 280 },
+  });
+}, '360px');
+
+// ── 7 · Multi-area ────────────────────────────────────────────────────────────
+const preview_s7 = '<div id="chart-s7" style="padding:16px"></div>';
+const js_s7 = [
+  "new MTS.ChartLine('#chart-s7', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],",
+  "    datasets: [",
+  "      { label: '2023', values: [30, 45, 40, 55, 50, 68, 60, 75, 70, 85,  95, 108], color: '#7c3aed', fill: true, fillOpacity: 0.10 },",
+  "      { label: '2024', values: [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128], color: '#3b82f6', fill: true, fillOpacity: 0.10 },",
+  "      { label: '2025', values: [55, 70, 62, 80, 78, 98, 88, 105, 96, 115, 125, 142], color: '#10b981', fill: true, fillOpacity: 0.10 },",
+  "    ],",
+  "  },",
+  "  options: { height: 300 },",
+  "});",
+].join('\n');
+makeSection('tabs-s7', preview_s7, js_s7, function () {
+  new MTS.ChartLine('#chart-s7', {
+    data: {
+      labels: MONTHS,
+      datasets: [
+        { label: '2023', values: [30, 45, 40, 55, 50, 68, 60, 75, 70, 85,  95, 108], color: '#7c3aed', fill: true, fillOpacity: 0.10 },
+        { label: '2024', values: [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128], color: '#3b82f6', fill: true, fillOpacity: 0.10 },
+        { label: '2025', values: [55, 70, 62, 80, 78, 98, 88, 105, 96, 115, 125, 142], color: '#10b981', fill: true, fillOpacity: 0.10 },
+      ],
+    },
+    options: { height: 300 },
+  });
+}, '400px');
+
+// ── 8 · Negative values ─────────────────────────────────────────────────────
+const preview_s8 = '<div id="chart-s8" style="padding:16px"></div>';
+const js_s8 = [
+  "// When there are negative values, the zero line appears as a reference.",
+  "new MTS.ChartLine('#chart-s8', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],",
+  "    datasets: [{",
+  "      label:       'Monthly balance',",
+  "      values:      [12, -5, 8, -18, 3, 25, 15, -8, 30, 18, -12, 40],",
+  "      color:       '#3b82f6',",
+  "      fill:        true,",
+  "      fillOpacity: 0.12,",
+  "    }],",
+  "  },",
+  "  options: { height: 280 },",
+  "});",
+].join('\n');
+makeSection('tabs-s8', preview_s8, js_s8, function () {
+  new MTS.ChartLine('#chart-s8', {
+    data: {
+      labels:   MONTHS,
+      datasets: [{ label: 'Monthly balance', values: [12, -5, 8, -18, 3, 25, 15, -8, 30, 18, -12, 40], color: '#3b82f6', fill: true, fillOpacity: 0.12 }],
+    },
+    options: { height: 280 },
+  });
+}, '360px');
+
+// ── 9 · Formatter ─────────────────────────────────────────────────────────────
+const preview_s9 = '<div id="chart-s9" style="padding:16px"></div>';
+const js_s9 = [
+  "new MTS.ChartLine('#chart-s9', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],",
+  "    datasets: [{",
+  "      label:       'Revenue',",
+  "      values:      [12500, 18200, 15600, 22400, 19800, 31000, 27500, 35000, 31200, 40800, 44500, 52000],",
+  "      color:       '#f59e0b',",
+  "      fill:        true,",
+  "      fillOpacity: 0.12,",
+  "    }],",
+  "  },",
+  "  options: {",
+  "    height: 280,",
+  "    yAxis: {",
+  "      formatter: function(v) { return '$' + (v / 1000).toFixed(0) + 'K'; },",
+  "    },",
+  "    tooltip: {",
+  "      formatter: function(v, lbl) { return lbl + ': $' + v.toLocaleString(); },",
+  "    },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s9', preview_s9, js_s9, function () {
+  new MTS.ChartLine('#chart-s9', {
+    data: {
+      labels:   MONTHS,
+      datasets: [{ label: 'Revenue', values: [12500, 18200, 15600, 22400, 19800, 31000, 27500, 35000, 31200, 40800, 44500, 52000], color: '#f59e0b', fill: true, fillOpacity: 0.12 }],
+    },
+    options: {
+      height: 280,
+      yAxis:   { formatter: function (v) { return '$' + (v / 1000).toFixed(0) + 'K'; } },
+      tooltip: { formatter: function (v, lbl) { return lbl + ': $' + v.toLocaleString(); } },
+    },
+  });
+}, '360px');
+
+// ── 10 · update() ─────────────────────────────────────────────────────────────
+const preview_s10 = [
+  '<div class="demo-stack">',
+  '  <div id="chart-s10" style="padding:16px"></div>',
+  '  <div class="demo-row">',
+  '    <div id="s10-btn1"></div>',
+  '    <div id="s10-btn2"></div>',
+  '    <div id="s10-btn3"></div>',
+  '  </div>',
+  '</div>',
+].join('\n');
+const js_s10 = [
+  "const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];",
+  "",
+  "const dataS10_1 = { labels: MONTHS, datasets: [{ label: 'Dataset 1', values: [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128], color: '#3b82f6', fill: true }] };",
+  "const dataS10_2 = { labels: MONTHS, datasets: [{ label: 'Dataset 2', values: [80, 72, 85, 68, 91, 77, 95, 83, 102, 89, 115,  97], color: '#10b981', fill: true }] };",
+  "const dataS10_3 = { labels: MONTHS, datasets: [{ label: 'Dataset 3', values: [20, 35, 28, 45, 38, 55,  48, 60,  52, 70,  65,  80], color: '#f59e0b', fill: true }] };",
+  "",
+  "const chartS10 = new MTS.ChartLine('#chart-s10', {",
+  "  data: dataS10_1,",
+  "  options: { height: 260 },",
+  "});",
+  "",
+  "new MTS.Button('#s10-btn1', { label: 'Dataset 1', variant: 'primary', size: 'sm', onClick: function() { chartS10.update({ data: dataS10_1 }); } });",
+  "new MTS.Button('#s10-btn2', { label: 'Dataset 2', variant: 'ghost',   size: 'sm', onClick: function() { chartS10.update({ data: dataS10_2 }); } });",
+  "new MTS.Button('#s10-btn3', { label: 'Dataset 3', variant: 'ghost',   size: 'sm', onClick: function() { chartS10.update({ data: dataS10_3 }); } });",
+].join('\n');
+makeSection('tabs-s10', preview_s10, js_s10, function () {
+  window.dataS10_1 = { labels: MONTHS, datasets: [{ label: 'Dataset 1', values: [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128], color: '#3b82f6', fill: true, fillOpacity: 0.12 }] };
+  window.dataS10_2 = { labels: MONTHS, datasets: [{ label: 'Dataset 2', values: [80, 72, 85, 68, 91, 77, 95, 83, 102, 89, 115,  97], color: '#10b981', fill: true, fillOpacity: 0.12 }] };
+  window.dataS10_3 = { labels: MONTHS, datasets: [{ label: 'Dataset 3', values: [20, 35, 28, 45, 38, 55,  48, 60,  52, 70,  65,  80], color: '#f59e0b', fill: true, fillOpacity: 0.12 }] };
+  window.chartS10  = new MTS.ChartLine('#chart-s10', {
+    data: window.dataS10_1,
+    options: { height: 260 },
+  });
+  new MTS.Button('#s10-btn1', { label: 'Dataset 1', variant: 'primary', size: 'sm', onClick: function () { window.chartS10.update({ data: window.dataS10_1 }); } });
+  new MTS.Button('#s10-btn2', { label: 'Dataset 2', variant: 'ghost',   size: 'sm', onClick: function () { window.chartS10.update({ data: window.dataS10_2 }); } });
+  new MTS.Button('#s10-btn3', { label: 'Dataset 3', variant: 'ghost',   size: 'sm', onClick: function () { window.chartS10.update({ data: window.dataS10_3 }); } });
+}, '400px');
+
+// ── 11 · onClick ──────────────────────────────────────────────────────────────
+const preview_s11 = [
+  '<div class="demo-stack">',
+  '  <div id="chart-s11" style="padding:16px"></div>',
+  '  <div class="result-box" id="chart-s11-result">— click a point —</div>',
+  '</div>',
+].join('\n');
+const js_s11 = [
+  "const chartS11 = new MTS.ChartLine('#chart-s11', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],",
+  "    datasets: [{",
+  "      label:  'Sales 2025',",
+  "      values: [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128],",
+  "    }],",
+  "  },",
+  "  options: { height: 260 },",
+  "});",
+  "",
+  "chartS11.onClick(function(detail) {",
+  "  document.getElementById('chart-s11-result').textContent =",
+  "    detail.label + ': ' + detail.value + '  |  index: ' + detail.index;",
+  "});",
+].join('\n');
+makeSection('tabs-s11', preview_s11, js_s11, function () {
+  const chartS11 = new MTS.ChartLine('#chart-s11', {
+    data: {
+      labels:   MONTHS,
+      datasets: [{ label: 'Sales 2025', values: [42, 58, 51, 70, 65, 88, 74, 91, 84, 99, 110, 128] }],
+    },
+    options: { height: 260 },
+  });
+  chartS11.onClick(function (detail) {
+    document.getElementById('chart-s11-result').textContent =
+      detail.label + ': ' + detail.value + '  |  index: ' + detail.index;
+  });
+}, '400px');
+
+// ── 12 · Stacked Area ─────────────────────────────────────────────────────────
+const preview_s12 = '<div id="chart-s12" style="padding:16px"></div>';
+const js_s12 = [
+  "// MTS.ChartAreaStacked — cumulative areas, each dataset stacks on top of the previous one.",
+  "// fillOpacity higher than a simple area so the layers stay legible.",
+  "new MTS.ChartAreaStacked('#chart-s12', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],",
+  "    datasets: [",
+  "      { label: 'Product A', values: [30, 42, 38, 55, 48, 65, 58, 72, 66, 80, 88, 102], color: '#3b82f6', fillOpacity: 0.55 },",
+  "      { label: 'Product B', values: [20, 28, 24, 32, 28, 38, 34, 44, 40, 50, 56, 64], color: '#10b981', fillOpacity: 0.55 },",
+  "      { label: 'Product C', values: [12, 15, 13, 18, 16, 22, 20, 26, 24, 30, 32, 38], color: '#f59e0b', fillOpacity: 0.55 },",
+  "    ],",
+  "  },",
+  "  options: { height: 300 },",
+  "});",
+].join('\n');
+makeSection('tabs-s12', preview_s12, js_s12, function () {
+  new MTS.ChartAreaStacked('#chart-s12', {
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      datasets: [
+        { label: 'Product A', values: [30, 42, 38, 55, 48, 65, 58, 72, 66, 80, 88, 102], color: '#3b82f6', fillOpacity: 0.55 },
+        { label: 'Product B', values: [20, 28, 24, 32, 28, 38, 34, 44, 40, 50, 56,  64], color: '#10b981', fillOpacity: 0.55 },
+        { label: 'Product C', values: [12, 15, 13, 18, 16, 22, 20, 26, 24, 30, 32,  38], color: '#f59e0b', fillOpacity: 0.55 },
+      ],
+    },
+    options: { height: 300 },
+  });
+}, '400px');
+</script>
+</body>
+</html>

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Chart — Flow / Topology</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-rose.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-orange.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-sky.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-indigo.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-teal.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-slate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-bronze.css">
+  <link rel="stylesheet" href="../../../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../matios-ui-chart.css">
+  <script src="../../../../support/demo-shared.js"></script>
+  <script src="../../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../matios-ui-chart.js"></script>
+  <script src="../../matios-ui-chart-flow.js"></script>
+</head>
+<body>
+<div class="demo-page">
+  <div class="demo-section"><div class="demo-section-title">1 — Sankey · Energy flow</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Sankey · Multi-level funnel conversion</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Sankey · Corporate budget</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Network · Simple graph</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Network · Social network</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Network · Module dependencies</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title">7 — Flow · onClick event</div><div id="tabs-s7"></div></div>
+</div>
+<script>
+function indentHtml(html) {
+  var step  = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var indent  = 0;
+  var result  = '';
+  var tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function (tok) {
+    var t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      var text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height:  height || '400px',
+    lazy:    false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' },
+    ],
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+// ── 1 · Sankey — Energy flow ─────────────────────────────────────────────────
+var preview_s1 = '<div id="chart-s1" style="padding:16px"></div>';
+var js_s1 = [
+  "new MTS.ChartSankey('#chart-s1', {",
+  "  data: {",
+  "    nodes: [",
+  "      { id: 'coal',    label: 'Coal'         },",
+  "      { id: 'gas',     label: 'Natural gas'  },",
+  "      { id: 'nuclear', label: 'Nuclear'      },",
+  "      { id: 'solar',   label: 'Solar'        },",
+  "      { id: 'wind',    label: 'Wind'         },",
+  "      { id: 'elec',    label: 'Electricity'  },",
+  "      { id: 'heat',    label: 'Heat'         },",
+  "      { id: 'indust',  label: 'Industry'     },",
+  "      { id: 'home',    label: 'Households'    },",
+  "      { id: 'trans',   label: 'Transport'    },",
+  "      { id: 'loss',    label: 'Losses'       },",
+  "    ],",
+  "    links: [",
+  "      { source: 'coal',    target: 'elec',   value: 280 },",
+  "      { source: 'coal',    target: 'heat',   value: 120 },",
+  "      { source: 'gas',     target: 'elec',   value: 200 },",
+  "      { source: 'gas',     target: 'heat',   value: 180 },",
+  "      { source: 'nuclear', target: 'elec',   value: 340 },",
+  "      { source: 'solar',   target: 'elec',   value: 90  },",
+  "      { source: 'wind',    target: 'elec',   value: 70  },",
+  "      { source: 'elec',    target: 'indust', value: 310 },",
+  "      { source: 'elec',    target: 'home',   value: 260 },",
+  "      { source: 'elec',    target: 'trans',  value: 140 },",
+  "      { source: 'elec',    target: 'loss',   value: 270 },",
+  "      { source: 'heat',    target: 'indust', value: 180 },",
+  "      { source: 'heat',    target: 'home',   value: 120 },",
+  "    ],",
+  "  },",
+  "  options: { height: 360, nodePadding: 14, animate: true },",
+  "});",
+].join('\n');
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  new MTS.ChartSankey('#chart-s1', {
+    data: {
+      nodes: [
+        { id: 'coal',    label: 'Coal'         },
+        { id: 'gas',     label: 'Natural gas'  },
+        { id: 'nuclear', label: 'Nuclear'      },
+        { id: 'solar',   label: 'Solar'        },
+        { id: 'wind',    label: 'Wind'         },
+        { id: 'elec',    label: 'Electricity'  },
+        { id: 'heat',    label: 'Heat'         },
+        { id: 'indust',  label: 'Industry'     },
+        { id: 'home',    label: 'Households'    },
+        { id: 'trans',   label: 'Transport'    },
+        { id: 'loss',    label: 'Losses'       },
+      ],
+      links: [
+        { source: 'coal',    target: 'elec',   value: 280 },
+        { source: 'coal',    target: 'heat',   value: 120 },
+        { source: 'gas',     target: 'elec',   value: 200 },
+        { source: 'gas',     target: 'heat',   value: 180 },
+        { source: 'nuclear', target: 'elec',   value: 340 },
+        { source: 'solar',   target: 'elec',   value: 90  },
+        { source: 'wind',    target: 'elec',   value: 70  },
+        { source: 'elec',    target: 'indust', value: 310 },
+        { source: 'elec',    target: 'home',   value: 260 },
+        { source: 'elec',    target: 'trans',  value: 140 },
+        { source: 'elec',    target: 'loss',   value: 270 },
+        { source: 'heat',    target: 'indust', value: 180 },
+        { source: 'heat',    target: 'home',   value: 120 },
+      ],
+    },
+    options: { height: 360, nodePadding: 14, animate: true },
+  });
+}, '440px');
+
+// ── 2 · Sankey — Multi-level funnel conversion ────────────────────────────────
+var preview_s2 = '<div id="chart-s2" style="padding:16px"></div>';
+var js_s2 = [
+  "new MTS.ChartSankey('#chart-s2', {",
+  "  data: {",
+  "    nodes: [",
+  "      { id: 'seo',    label: 'SEO',      color: '#1d4ed8' },",
+  "      { id: 'paid',   label: 'Paid Ads', color: '#0f766e' },",
+  "      { id: 'ref',    label: 'Referrals',color: '#7c3aed' },",
+  "      { id: 'direct', label: 'Direct',   color: '#f59e0b' },",
+  "      { id: 'blog',   label: 'Blog',     color: '#1d4ed8' },",
+  "      { id: 'social', label: 'Social',   color: '#0f766e' },",
+  "      { id: 'mql',    label: 'MQL',      color: '#cc0000' },",
+  "      { id: 'sql',    label: 'SQL',      color: '#7c3aed' },",
+  "      { id: 'trial',  label: 'Trial',    color: '#f59e0b' },",
+  "      { id: 'closed', label: 'Won',      color: '#10b981' },",
+  "      { id: 'lost',   label: 'Lost',     color: '#334155' },",
+  "    ],",
+  "    links: [",
+  "      { source: 'seo',    target: 'blog',  value: 3200 },",
+  "      { source: 'seo',    target: 'mql',   value: 800  },",
+  "      { source: 'paid',   target: 'mql',   value: 1200 },",
+  "      { source: 'paid',   target: 'sql',   value: 400  },",
+  "      { source: 'ref',    target: 'sql',   value: 600  },",
+  "      { source: 'direct', target: 'mql',   value: 500  },",
+  "      { source: 'direct', target: 'sql',   value: 300  },",
+  "      { source: 'blog',   target: 'mql',   value: 900  },",
+  "      { source: 'social', target: 'mql',   value: 700  },",
+  "      { source: 'mql',    target: 'sql',   value: 1400 },",
+  "      { source: 'mql',    target: 'lost',  value: 2700 },",
+  "      { source: 'sql',    target: 'trial', value: 1800 },",
+  "      { source: 'sql',    target: 'lost',  value: 900  },",
+  "      { source: 'trial',  target: 'closed',value: 1100 },",
+  "      { source: 'trial',  target: 'lost',  value: 700  },",
+  "    ],",
+  "  },",
+  "  options: { height: 400, nodePadding: 10, linkOpacity: 0.4, animate: true },",
+  "});",
+].join('\n');
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  new MTS.ChartSankey('#chart-s2', {
+    data: {
+      nodes: [
+        { id: 'seo',    label: 'SEO',      color: '#1d4ed8' },
+        { id: 'paid',   label: 'Paid Ads', color: '#0f766e' },
+        { id: 'ref',    label: 'Referrals',color: '#7c3aed' },
+        { id: 'direct', label: 'Direct',   color: '#f59e0b' },
+        { id: 'blog',   label: 'Blog',     color: '#1d4ed8' },
+        { id: 'social', label: 'Social',   color: '#0f766e' },
+        { id: 'mql',    label: 'MQL',      color: '#cc0000' },
+        { id: 'sql',    label: 'SQL',      color: '#7c3aed' },
+        { id: 'trial',  label: 'Trial',    color: '#f59e0b' },
+        { id: 'closed', label: 'Won',      color: '#10b981' },
+        { id: 'lost',   label: 'Lost',     color: '#334155' },
+      ],
+      links: [
+        { source: 'seo',    target: 'blog',   value: 3200 },
+        { source: 'seo',    target: 'mql',    value: 800  },
+        { source: 'paid',   target: 'mql',    value: 1200 },
+        { source: 'paid',   target: 'sql',    value: 400  },
+        { source: 'ref',    target: 'sql',    value: 600  },
+        { source: 'direct', target: 'mql',    value: 500  },
+        { source: 'direct', target: 'sql',    value: 300  },
+        { source: 'blog',   target: 'mql',    value: 900  },
+        { source: 'social', target: 'mql',    value: 700  },
+        { source: 'mql',    target: 'sql',    value: 1400 },
+        { source: 'mql',    target: 'lost',   value: 2700 },
+        { source: 'sql',    target: 'trial',  value: 1800 },
+        { source: 'sql',    target: 'lost',   value: 900  },
+        { source: 'trial',  target: 'closed', value: 1100 },
+        { source: 'trial',  target: 'lost',   value: 700  },
+      ],
+    },
+    options: { height: 400, nodePadding: 10, linkOpacity: 0.4, animate: true },
+  });
+}, '480px');
+
+// ── 3 · Sankey — Corporate budget ────────────────────────────────────────────
+var preview_s3 = '<div id="chart-s3" style="padding:16px"></div>';
+var js_s3 = [
+  "new MTS.ChartSankey('#chart-s3', {",
+  "  data: {",
+  "    nodes: [",
+  "      { id: 'rev',    label: 'Revenue',         color: '#10b981' },",
+  "      { id: 'prod',   label: 'Product',         color: '#1d4ed8' },",
+  "      { id: 'ops',    label: 'Operations',      color: '#0f766e' },",
+  "      { id: 'sales',  label: 'Sales',           color: '#7c3aed' },",
+  "      { id: 'admin',  label: 'Administration', color: '#f59e0b' },",
+  "      { id: 'rd',     label: 'R&D',             color: '#3b82f6' },",
+  "      { id: 'salary', label: 'Salaries',        color: '#cc0000' },",
+  "      { id: 'infra',  label: 'Infrastructure',  color: '#0f766e' },",
+  "      { id: 'mkt',    label: 'Marketing',       color: '#7c3aed' },",
+  "      { id: 'profit', label: 'Profit',          color: '#10b981' },",
+  "      { id: 'tax',    label: 'Taxes',           color: '#334155' },",
+  "    ],",
+  "    links: [",
+  "      { source: 'rev',    target: 'prod',   value: 1800 },",
+  "      { source: 'rev',    target: 'ops',    value: 1200 },",
+  "      { source: 'rev',    target: 'sales',  value: 900  },",
+  "      { source: 'rev',    target: 'admin',  value: 600  },",
+  "      { source: 'rev',    target: 'rd',     value: 500  },",
+  "      { source: 'prod',   target: 'salary', value: 1000 },",
+  "      { source: 'prod',   target: 'infra',  value: 500  },",
+  "      { source: 'prod',   target: 'profit', value: 300  },",
+  "      { source: 'ops',    target: 'infra',  value: 700  },",
+  "      { source: 'ops',    target: 'salary', value: 500  },",
+  "      { source: 'sales',  target: 'mkt',    value: 600  },",
+  "      { source: 'sales',  target: 'salary', value: 300  },",
+  "      { source: 'admin',  target: 'salary', value: 400  },",
+  "      { source: 'admin',  target: 'tax',    value: 200  },",
+  "      { source: 'rd',     target: 'salary', value: 400  },",
+  "      { source: 'rd',     target: 'profit', value: 100  },",
+  "      { source: 'profit', target: 'tax',    value: 120  },",
+  "    ],",
+  "  },",
+  "  options: { height: 380, nodeWidth: 20, nodePadding: 12, linkOpacity: 0.42, animate: true },",
+  "});",
+].join('\n');
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.ChartSankey('#chart-s3', {
+    data: {
+      nodes: [
+        { id: 'rev',    label: 'Revenue',         color: '#10b981' },
+        { id: 'prod',   label: 'Product',         color: '#1d4ed8' },
+        { id: 'ops',    label: 'Operations',      color: '#0f766e' },
+        { id: 'sales',  label: 'Sales',           color: '#7c3aed' },
+        { id: 'admin',  label: 'Administration', color: '#f59e0b' },
+        { id: 'rd',     label: 'R&D',             color: '#3b82f6' },
+        { id: 'salary', label: 'Salaries',        color: '#cc0000' },
+        { id: 'infra',  label: 'Infrastructure',  color: '#0f766e' },
+        { id: 'mkt',    label: 'Marketing',       color: '#7c3aed' },
+        { id: 'profit', label: 'Profit',          color: '#10b981' },
+        { id: 'tax',    label: 'Taxes',           color: '#334155' },
+      ],
+      links: [
+        { source: 'rev',    target: 'prod',   value: 1800 },
+        { source: 'rev',    target: 'ops',    value: 1200 },
+        { source: 'rev',    target: 'sales',  value: 900  },
+        { source: 'rev',    target: 'admin',  value: 600  },
+        { source: 'rev',    target: 'rd',     value: 500  },
+        { source: 'prod',   target: 'salary', value: 1000 },
+        { source: 'prod',   target: 'infra',  value: 500  },
+        { source: 'prod',   target: 'profit', value: 300  },
+        { source: 'ops',    target: 'infra',  value: 700  },
+        { source: 'ops',    target: 'salary', value: 500  },
+        { source: 'sales',  target: 'mkt',    value: 600  },
+        { source: 'sales',  target: 'salary', value: 300  },
+        { source: 'admin',  target: 'salary', value: 400  },
+        { source: 'admin',  target: 'tax',    value: 200  },
+        { source: 'rd',     target: 'salary', value: 400  },
+        { source: 'rd',     target: 'profit', value: 100  },
+        { source: 'profit', target: 'tax',    value: 120  },
+      ],
+    },
+    options: { height: 380, nodeWidth: 20, nodePadding: 12, linkOpacity: 0.42, animate: true },
+  });
+}, '460px');
+
+// ── 4 · Network — Simple graph ────────────────────────────────────────────────
+var preview_s4 = '<div id="chart-s4" style="padding:16px"></div>';
+var js_s4 = [
+  "new MTS.ChartNetwork('#chart-s4', {",
+  "  data: {",
+  "    nodes: [",
+  "      { id: 'A', label: 'Alpha'   },",
+  "      { id: 'B', label: 'Beta'    },",
+  "      { id: 'C', label: 'Gamma'   },",
+  "      { id: 'D', label: 'Delta'   },",
+  "      { id: 'E', label: 'Epsilon' },",
+  "      { id: 'F', label: 'Zeta'    },",
+  "    ],",
+  "    links: [",
+  "      { source: 'A', target: 'B', value: 2 },",
+  "      { source: 'A', target: 'C', value: 3 },",
+  "      { source: 'B', target: 'D', value: 1 },",
+  "      { source: 'C', target: 'D', value: 2 },",
+  "      { source: 'D', target: 'E', value: 2 },",
+  "      { source: 'E', target: 'F', value: 1 },",
+  "      { source: 'B', target: 'F', value: 2 },",
+  "    ],",
+  "  },",
+  "  options: { height: 340, animate: true },",
+  "});",
+].join('\n');
+makeSection('tabs-s4', preview_s4, js_s4, function () {
+  new MTS.ChartNetwork('#chart-s4', {
+    data: {
+      nodes: [
+        { id: 'A', label: 'Alpha'   },
+        { id: 'B', label: 'Beta'    },
+        { id: 'C', label: 'Gamma'   },
+        { id: 'D', label: 'Delta'   },
+        { id: 'E', label: 'Epsilon' },
+        { id: 'F', label: 'Zeta'    },
+      ],
+      links: [
+        { source: 'A', target: 'B', value: 2 },
+        { source: 'A', target: 'C', value: 3 },
+        { source: 'B', target: 'D', value: 1 },
+        { source: 'C', target: 'D', value: 2 },
+        { source: 'D', target: 'E', value: 2 },
+        { source: 'E', target: 'F', value: 1 },
+        { source: 'B', target: 'F', value: 2 },
+      ],
+    },
+    options: { height: 340, animate: true },
+  });
+}, '420px');
+
+// ── 5 · Network — Social network ──────────────────────────────────────────────
+var preview_s5 = '<div id="chart-s5" style="padding:16px"></div>';
+var js_s5 = [
+  "new MTS.ChartNetwork('#chart-s5', {",
+  "  data: {",
+  "    nodes: [",
+  "      { id: 'alice', label: 'Alice', size: 4.0, color: '#1d4ed8' },",
+  "      { id: 'bob',   label: 'Bob',   size: 2.5, color: '#0f766e' },",
+  "      { id: 'carol', label: 'Carol', size: 3.0, color: '#7c3aed' },",
+  "      { id: 'dan',   label: 'Dan',   size: 1.5, color: '#f59e0b' },",
+  "      { id: 'eve',   label: 'Eve',   size: 2.0, color: '#cc0000' },",
+  "      { id: 'frank', label: 'Frank', size: 1.2, color: '#10b981' },",
+  "      { id: 'grace', label: 'Grace', size: 1.8, color: '#3b82f6' },",
+  "      { id: 'heidi', label: 'Heidi', size: 1.0, color: '#0d2b6b' },",
+  "      { id: 'ivan',  label: 'Ivan',  size: 2.2, color: '#92400e' },",
+  "      { id: 'judy',  label: 'Judy',  size: 1.5, color: '#4c1d95' },",
+  "      { id: 'karl',  label: 'Karl',  size: 1.0, color: '#115e59' },",
+  "      { id: 'lisa',  label: 'Lisa',  size: 3.5, color: '#7f0000' },",
+  "    ],",
+  "    links: [",
+  "      { source: 'alice', target: 'bob',   value: 3 },",
+  "      { source: 'alice', target: 'carol', value: 4 },",
+  "      { source: 'alice', target: 'ivan',  value: 2 },",
+  "      { source: 'alice', target: 'lisa',  value: 3 },",
+  "      { source: 'bob',   target: 'dan',   value: 2 },",
+  "      { source: 'bob',   target: 'grace', value: 1 },",
+  "      { source: 'carol', target: 'eve',   value: 2 },",
+  "      { source: 'carol', target: 'frank', value: 1 },",
+  "      { source: 'carol', target: 'heidi', value: 1 },",
+  "      { source: 'dan',   target: 'eve',   value: 2 },",
+  "      { source: 'eve',   target: 'frank', value: 1 },",
+  "      { source: 'grace', target: 'heidi', value: 1 },",
+  "      { source: 'ivan',  target: 'judy',  value: 2 },",
+  "      { source: 'ivan',  target: 'karl',  value: 1 },",
+  "      { source: 'lisa',  target: 'carol', value: 2 },",
+  "      { source: 'lisa',  target: 'judy',  value: 3 },",
+  "      { source: 'judy',  target: 'karl',  value: 1 },",
+  "      { source: 'karl',  target: 'frank', value: 1 },",
+  "    ],",
+  "  },",
+  "  options: {",
+  "    height: 420,",
+  "    nodeRadius: 16,",
+  "    repulsion: 5000,",
+  "    springLen: 130,",
+  "    iterations: 200,",
+  "    animate: true,",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s5', preview_s5, js_s5, function () {
+  new MTS.ChartNetwork('#chart-s5', {
+    data: {
+      nodes: [
+        { id: 'alice', label: 'Alice', size: 4.0, color: '#1d4ed8' },
+        { id: 'bob',   label: 'Bob',   size: 2.5, color: '#0f766e' },
+        { id: 'carol', label: 'Carol', size: 3.0, color: '#7c3aed' },
+        { id: 'dan',   label: 'Dan',   size: 1.5, color: '#f59e0b' },
+        { id: 'eve',   label: 'Eve',   size: 2.0, color: '#cc0000' },
+        { id: 'frank', label: 'Frank', size: 1.2, color: '#10b981' },
+        { id: 'grace', label: 'Grace', size: 1.8, color: '#3b82f6' },
+        { id: 'heidi', label: 'Heidi', size: 1.0, color: '#0d2b6b' },
+        { id: 'ivan',  label: 'Ivan',  size: 2.2, color: '#92400e' },
+        { id: 'judy',  label: 'Judy',  size: 1.5, color: '#4c1d95' },
+        { id: 'karl',  label: 'Karl',  size: 1.0, color: '#115e59' },
+        { id: 'lisa',  label: 'Lisa',  size: 3.5, color: '#7f0000' },
+      ],
+      links: [
+        { source: 'alice', target: 'bob',   value: 3 },
+        { source: 'alice', target: 'carol', value: 4 },
+        { source: 'alice', target: 'ivan',  value: 2 },
+        { source: 'alice', target: 'lisa',  value: 3 },
+        { source: 'bob',   target: 'dan',   value: 2 },
+        { source: 'bob',   target: 'grace', value: 1 },
+        { source: 'carol', target: 'eve',   value: 2 },
+        { source: 'carol', target: 'frank', value: 1 },
+        { source: 'carol', target: 'heidi', value: 1 },
+        { source: 'dan',   target: 'eve',   value: 2 },
+        { source: 'eve',   target: 'frank', value: 1 },
+        { source: 'grace', target: 'heidi', value: 1 },
+        { source: 'ivan',  target: 'judy',  value: 2 },
+        { source: 'ivan',  target: 'karl',  value: 1 },
+        { source: 'lisa',  target: 'carol', value: 2 },
+        { source: 'lisa',  target: 'judy',  value: 3 },
+        { source: 'judy',  target: 'karl',  value: 1 },
+        { source: 'karl',  target: 'frank', value: 1 },
+      ],
+    },
+    options: {
+      height: 420,
+      nodeRadius: 16,
+      repulsion: 5000,
+      springLen: 130,
+      iterations: 200,
+      animate: true,
+    },
+  });
+}, '500px');
+
+// ── 6 · Network — Module dependencies ─────────────────────────────────────────
+var preview_s6 = '<div id="chart-s6" style="padding:16px"></div>';
+var js_s6 = [
+  "new MTS.ChartNetwork('#chart-s6', {",
+  "  data: {",
+  "    nodes: [",
+  "      { id: 'app',    label: 'app',        size: 3.0, color: '#1d4ed8' },",
+  "      { id: 'router', label: 'router',     size: 2.0, color: '#0f766e' },",
+  "      { id: 'store',  label: 'store',      size: 2.5, color: '#7c3aed' },",
+  "      { id: 'api',    label: 'api',        size: 2.0, color: '#cc0000' },",
+  "      { id: 'auth',   label: 'auth',       size: 1.8, color: '#f59e0b' },",
+  "      { id: 'ui',     label: 'ui-kit',     size: 2.2, color: '#3b82f6' },",
+  "      { id: 'utils',  label: 'utils',      size: 1.5, color: '#10b981' },",
+  "      { id: 'logger', label: 'logger',     size: 1.2, color: '#334155' },",
+  "      { id: 'config', label: 'config',     size: 1.5, color: '#92400e' },",
+  "      { id: 'i18n',   label: 'i18n',       size: 1.2, color: '#4c1d95' },",
+  "      { id: 'test',   label: 'test-utils', size: 1.0, color: '#0d2b6b' },",
+  "    ],",
+  "    links: [",
+  "      { source: 'app',    target: 'router', value: 2 },",
+  "      { source: 'app',    target: 'store',  value: 3 },",
+  "      { source: 'app',    target: 'ui',     value: 2 },",
+  "      { source: 'app',    target: 'i18n',   value: 1 },",
+  "      { source: 'router', target: 'auth',   value: 2 },",
+  "      { source: 'router', target: 'store',  value: 1 },",
+  "      { source: 'store',  target: 'api',    value: 3 },",
+  "      { source: 'store',  target: 'logger', value: 1 },",
+  "      { source: 'api',    target: 'auth',   value: 2 },",
+  "      { source: 'api',    target: 'utils',  value: 1 },",
+  "      { source: 'api',    target: 'config', value: 1 },",
+  "      { source: 'auth',   target: 'utils',  value: 1 },",
+  "      { source: 'auth',   target: 'config', value: 1 },",
+  "      { source: 'ui',     target: 'utils',  value: 1 },",
+  "      { source: 'ui',     target: 'i18n',   value: 1 },",
+  "      { source: 'utils',  target: 'logger', value: 1 },",
+  "      { source: 'config', target: 'logger', value: 1 },",
+  "      { source: 'test',   target: 'utils',  value: 1 },",
+  "      { source: 'test',   target: 'api',    value: 1 },",
+  "    ],",
+  "  },",
+  "  options: {",
+  "    height: 400,",
+  "    nodeRadius: 18,",
+  "    repulsion: 6000,",
+  "    springLen: 160,",
+  "    springK: 0.035,",
+  "    iterations: 220,",
+  "    animate: true,",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s6', preview_s6, js_s6, function () {
+  new MTS.ChartNetwork('#chart-s6', {
+    data: {
+      nodes: [
+        { id: 'app',    label: 'app',        size: 3.0, color: '#1d4ed8' },
+        { id: 'router', label: 'router',     size: 2.0, color: '#0f766e' },
+        { id: 'store',  label: 'store',      size: 2.5, color: '#7c3aed' },
+        { id: 'api',    label: 'api',        size: 2.0, color: '#cc0000' },
+        { id: 'auth',   label: 'auth',       size: 1.8, color: '#f59e0b' },
+        { id: 'ui',     label: 'ui-kit',     size: 2.2, color: '#3b82f6' },
+        { id: 'utils',  label: 'utils',      size: 1.5, color: '#10b981' },
+        { id: 'logger', label: 'logger',     size: 1.2, color: '#334155' },
+        { id: 'config', label: 'config',     size: 1.5, color: '#92400e' },
+        { id: 'i18n',   label: 'i18n',       size: 1.2, color: '#4c1d95' },
+        { id: 'test',   label: 'test-utils', size: 1.0, color: '#0d2b6b' },
+      ],
+      links: [
+        { source: 'app',    target: 'router', value: 2 },
+        { source: 'app',    target: 'store',  value: 3 },
+        { source: 'app',    target: 'ui',     value: 2 },
+        { source: 'app',    target: 'i18n',   value: 1 },
+        { source: 'router', target: 'auth',   value: 2 },
+        { source: 'router', target: 'store',  value: 1 },
+        { source: 'store',  target: 'api',    value: 3 },
+        { source: 'store',  target: 'logger', value: 1 },
+        { source: 'api',    target: 'auth',   value: 2 },
+        { source: 'api',    target: 'utils',  value: 1 },
+        { source: 'api',    target: 'config', value: 1 },
+        { source: 'auth',   target: 'utils',  value: 1 },
+        { source: 'auth',   target: 'config', value: 1 },
+        { source: 'ui',     target: 'utils',  value: 1 },
+        { source: 'ui',     target: 'i18n',   value: 1 },
+        { source: 'utils',  target: 'logger', value: 1 },
+        { source: 'config', target: 'logger', value: 1 },
+        { source: 'test',   target: 'utils',  value: 1 },
+        { source: 'test',   target: 'api',    value: 1 },
+      ],
+    },
+    options: {
+      height: 400,
+      nodeRadius: 18,
+      repulsion: 6000,
+      springLen: 160,
+      springK: 0.035,
+      iterations: 220,
+      animate: true,
+    },
+  });
+}, '480px');
+
+// ── 7 · onClick event ─────────────────────────────────────────────────────────
+var preview_s7 = [
+  '<div class="demo-stack" style="padding:16px">',
+  '  <div id="chart-s7"></div>',
+  '  <div class="result-box" id="chart-s7-result">— click a node in the Sankey —</div>',
+  '</div>',
+].join('\n');
+var js_s7 = [
+  "var chartS7 = new MTS.ChartSankey('#chart-s7', {",
+  "  data: {",
+  "    nodes: [",
+  "      { id: 'web',    label: 'Web'      },",
+  "      { id: 'app',    label: 'App'      },",
+  "      { id: 'ads',    label: 'Ads'      },",
+  "      { id: 'leads',  label: 'Leads'    },",
+  "      { id: 'demo',   label: 'Demo'     },",
+  "      { id: 'closed', label: 'Closed'   },",
+  "      { id: 'lost',   label: 'Lost'     },",
+  "    ],",
+  "    links: [",
+  "      { source: 'web',   target: 'leads',  value: 800 },",
+  "      { source: 'app',   target: 'leads',  value: 600 },",
+  "      { source: 'ads',   target: 'leads',  value: 400 },",
+  "      { source: 'leads', target: 'demo',   value: 900 },",
+  "      { source: 'leads', target: 'lost',   value: 900 },",
+  "      { source: 'demo',  target: 'closed', value: 420 },",
+  "      { source: 'demo',  target: 'lost',   value: 480 },",
+  "    ],",
+  "  },",
+  "  options: { height: 300, animate: true },",
+  "});",
+  "",
+  "chartS7.onClick(function(e) {",
+  "  document.getElementById('chart-s7-result').textContent =",
+  "    'Node: ' + e.label + '  |  Total flow: ' + e.value.toLocaleString('en-US') + '  |  ID: ' + e.id;",
+  "});",
+].join('\n');
+makeSection('tabs-s7', preview_s7, js_s7, function () {
+  var chartS7 = new MTS.ChartSankey('#chart-s7', {
+    data: {
+      nodes: [
+        { id: 'web',    label: 'Web'      },
+        { id: 'app',    label: 'App'      },
+        { id: 'ads',    label: 'Ads'      },
+        { id: 'leads',  label: 'Leads'    },
+        { id: 'demo',   label: 'Demo'     },
+        { id: 'closed', label: 'Closed'   },
+        { id: 'lost',   label: 'Lost'     },
+      ],
+      links: [
+        { source: 'web',   target: 'leads',  value: 800 },
+        { source: 'app',   target: 'leads',  value: 600 },
+        { source: 'ads',   target: 'leads',  value: 400 },
+        { source: 'leads', target: 'demo',   value: 900 },
+        { source: 'leads', target: 'lost',   value: 900 },
+        { source: 'demo',  target: 'closed', value: 420 },
+        { source: 'demo',  target: 'lost',   value: 480 },
+      ],
+    },
+    options: { height: 300, animate: true },
+  });
+  chartS7.onClick(function (e) {
+    document.getElementById('chart-s7-result').textContent =
+      'Node: ' + e.label + '  |  Total flow: ' + e.value.toLocaleString('en-US') + '  |  ID: ' + e.id;
+  });
+}, '440px');
+</script>
+</body>
+</html>

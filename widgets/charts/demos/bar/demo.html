@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Chart — Bars</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-rose.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-orange.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-sky.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-indigo.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-teal.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-slate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-bronze.css">
+  <link rel="stylesheet" href="../../../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../matios-ui-chart.css">
+  <script src="../../../../support/demo-shared.js"></script>
+  <script src="../../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../matios-ui-chart.js"></script>
+  <script src="../../matios-ui-chart-bar.js"></script>
+  <script src="../../matios-ui-chart-bar-grouped.js"></script>
+  <script src="../../matios-ui-chart-bar-stacked.js"></script>
+</head>
+<body>
+<div class="demo-page">
+  <div class="demo-section"><div class="demo-section-title">1 — Vertical bar · Basic</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Vertical bar · Custom color</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Vertical bar · Negative values + negativeColor</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Vertical bar · Overlapping (multiple overlaid datasets)</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Vertical bar · Formatter + custom tooltip</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Vertical bar · API update()</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title">7 — Vertical bar · Click event</div><div id="tabs-s7"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4b — Vertical bar · Overlapping with per-series color + negativeColor</div><div id="tabs-s4b"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4c — Vertical bar · Both series negative</div><div id="tabs-s4c"></div></div>
+  <div class="demo-section"><div class="demo-section-title">8 — Horizontal bar · Basic</div><div id="tabs-s8"></div></div>
+  <div class="demo-section"><div class="demo-section-title">9 — Horizontal bar · Negative values + negativeColor</div><div id="tabs-s9"></div></div>
+  <div class="demo-section"><div class="demo-section-title">10 — Horizontal bar · Overlapping (multiple overlaid datasets)</div><div id="tabs-s10"></div></div>
+  <div class="demo-section"><div class="demo-section-title">10b — Horizontal bar · Overlapping with per-series color + negativeColor</div><div id="tabs-s10b"></div></div>
+  <div class="demo-section"><div class="demo-section-title">11 — Grouped Bar · Basic</div><div id="tabs-s11"></div></div>
+  <div class="demo-section"><div class="demo-section-title">12 — Stacked Bar · Vertical</div><div id="tabs-s12"></div></div>
+  <div class="demo-section"><div class="demo-section-title">13 — Stacked Bar · Horizontal</div><div id="tabs-s13"></div></div>
+</div>
+<script>
+function indentHtml(html) {
+  const step  = 2;
+  const voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  let indent  = 0;
+  let result  = '';
+  const tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function (tok) {
+    const t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      const tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      const text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height:  height || '400px',
+    lazy:    false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' },
+    ],
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+// ── 1 · Basic ────────────────────────────────────────────────────────────────
+const preview_s1 = '<div id="chart-s1" style="padding:16px"></div>';
+const js_s1 = [
+  "new MTS.ChartBar('#chart-s1', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],",
+  "    datasets: [{",
+  "      label: 'Sales 2025',",
+  "      values: [42,58,37,85,72,91,64,78,88,55,69,103],",
+  "    }],",
+  "  },",
+  "  options: { height: 300 },",
+  "});",
+].join('\n');
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  new MTS.ChartBar('#chart-s1', {
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      datasets: [{ label: 'Sales 2025', values: [42,58,37,85,72,91,64,78,88,55,69,103] }],
+    },
+    options: { height: 300 },
+  });
+}, '380px');
+
+// ── 2 · Custom color ───────────────────────────────────────────────────
+const preview_s2 = '<div id="chart-s2" style="padding:16px"></div>';
+const js_s2 = [
+  "new MTS.ChartBar('#chart-s2', {",
+  "  data: {",
+  "    labels: ['Q1','Q2','Q3','Q4'],",
+  "    datasets: [{",
+  "      label: 'EBITDA',",
+  "      values: [120, 245, 198, 310],",
+  "      color: '#10b981',",
+  "    }],",
+  "  },",
+  "  options: {",
+  "    height: 280,",
+  "    paddingInner: 0.45,",
+  "    paddingOuter: 0.12,",
+  "    yAxis: { formatter: function(v) { return '$' + v + 'K'; } },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  new MTS.ChartBar('#chart-s2', {
+    data: {
+      labels: ['Q1','Q2','Q3','Q4'],
+      datasets: [{ label: 'EBITDA', values: [120, 245, 198, 310], color: '#10b981' }],
+    },
+    options: {
+      height: 280,
+      paddingInner: 0.45,
+      paddingOuter: 0.12,
+      yAxis: { formatter: function (v) { return '$' + v + 'K'; } },
+    },
+  });
+}, '360px');
+
+// ── 3 · Negative values ─────────────────────────────────────────────────────
+const preview_s3 = [
+  '<div class="demo-grid" style="grid-template-columns:1fr 1fr;align-items:start;gap:24px;padding:16px">',
+  '  <div>',
+  '    <p style="font-size:12px;color:var(--mts-text-muted);margin:0 0 8px">default negativeColor (#e53935)</p>',
+  '    <div id="chart-s3a"></div>',
+  '  </div>',
+  '  <div>',
+  '    <p style="font-size:12px;color:var(--mts-text-muted);margin:0 0 8px">custom negativeColor</p>',
+  '    <div id="chart-s3b"></div>',
+  '  </div>',
+  '</div>',
+].join('\n');
+const js_s3 = [
+  "// default negativeColor: '#e53935'",
+  "new MTS.ChartBar('#chart-s3a', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun'],",
+  "    datasets: [{",
+  "      label: 'Net change',",
+  "      values: [12, -8, 25, -15, 38, -4],",
+  "      color: '#3b82f6',",
+  "    }],",
+  "  },",
+  "  options: { height: 240 },",
+  "});",
+  "",
+  "// custom negativeColor",
+  "new MTS.ChartBar('#chart-s3b', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun'],",
+  "    datasets: [{",
+  "      label: 'Net change',",
+  "      values: [12, -8, 25, -15, 38, -4],",
+  "      color:         '#10b981',",
+  "      negativeColor: '#f59e0b',",
+  "    }],",
+  "  },",
+  "  options: { height: 240 },",
+  "});",
+].join('\n');
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.ChartBar('#chart-s3a', {
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+      datasets: [{ label: 'Net change', values: [12, -8, 25, -15, 38, -4], color: '#3b82f6' }],
+    },
+    options: { height: 240 },
+  });
+  new MTS.ChartBar('#chart-s3b', {
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+      datasets: [{ label: 'Net change', values: [12, -8, 25, -15, 38, -4], color: '#10b981', negativeColor: '#f59e0b' }],
+    },
+    options: { height: 240 },
+  });
+}, '360px');
+
+// ── 4 · Multiple datasets + legend ─────────────────────────────────────────
+const preview_s4 = '<div id="chart-s4" style="padding:16px"></div>';
+const js_s4 = [
+  "// Overlapping: datasets are drawn on top of each other at the same position.",
+  "// The smaller dataset may be partially hidden by the larger one.",
+  "// For side-by-side bars use Grouped Bar (3.1 — coming soon).",
+  "new MTS.ChartBar('#chart-s4', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun'],",
+  "    datasets: [",
+  "      { label: '2024', values: [38, 52, 61, 45, 70, 83] },",
+  "      { label: '2025', values: [55, 68, 47, 91, 62, 105] },",
+  "    ],",
+  "  },",
+  "  options: { height: 300 },",
+  "});",
+].join('\n');
+makeSection('tabs-s4', preview_s4, js_s4, function () {
+  new MTS.ChartBar('#chart-s4', {
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+      datasets: [
+        { label: '2024', values: [38, 52, 61, 45, 70, 83] },
+        { label: '2025', values: [55, 68, 47, 91, 62, 105] },
+      ],
+    },
+    options: { height: 300 },
+  });
+}, '400px');
+
+// ── 5 · Formatter + custom tooltip ────────────────────────────────────
+const preview_s5 = '<div id="chart-s5" style="padding:16px"></div>';
+const js_s5 = [
+  "new MTS.ChartBar('#chart-s5', {",
+  "  data: {",
+  "    labels: ['App','Web','API','SDK','CLI'],",
+  "    datasets: [{",
+  "      label: 'Requests / day',",
+  "      values: [18400, 52000, 234000, 7600, 1200],",
+  "      color: '#f59e0b',",
+  "    }],",
+  "  },",
+  "  options: {",
+  "    height: 300,",
+  "    yAxis: {",
+  "      formatter: function(v) {",
+  "        return v >= 1000 ? (v/1000).toFixed(0) + 'K' : String(v);",
+  "      },",
+  "    },",
+  "    tooltip: {",
+  "      formatter: function(value) {",
+  "        return value.toLocaleString('es-MX') + ' req';",
+  "      },",
+  "    },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s5', preview_s5, js_s5, function () {
+  new MTS.ChartBar('#chart-s5', {
+    data: {
+      labels: ['App','Web','API','SDK','CLI'],
+      datasets: [{ label: 'Requests / day', values: [18400, 52000, 234000, 7600, 1200], color: '#f59e0b' }],
+    },
+    options: {
+      height: 300,
+      yAxis: { formatter: function (v) { return v >= 1000 ? (v / 1000).toFixed(0) + 'K' : String(v); } },
+      tooltip: { formatter: function (value) { return value.toLocaleString('es-MX') + ' req'; } },
+    },
+  });
+}, '380px');
+
+// ── 6 · API update() ──────────────────────────────────────────────────────────
+const preview_s6 = [
+  '<div class="demo-stack">',
+  '  <div id="chart-s6" style="padding:16px"></div>',
+  '  <div class="demo-row">',
+  '    <div id="s6-btn-2025"></div>',
+  '    <div id="s6-btn-2024"></div>',
+  '    <div id="s6-btn-2023"></div>',
+  '  </div>',
+  '</div>',
+].join('\n');
+const js_s6 = [
+  "const dataS6_2025 = { labels:['Q1','Q2','Q3','Q4'], datasets:[{ label:'2025', values:[210,340,285,430], color:'#3b82f6' }] };",
+  "const dataS6_2024 = { labels:['Q1','Q2','Q3','Q4'], datasets:[{ label:'2024', values:[180,260,310,390], color:'#10b981' }] };",
+  "const dataS6_2023 = { labels:['Q1','Q2','Q3','Q4'], datasets:[{ label:'2023', values:[140,195,220,280], color:'#e53935' }] };",
+  "",
+  "const chartS6 = new MTS.ChartBar('#chart-s6', {",
+  "  data: dataS6_2025,",
+  "  options: { height: 280 },",
+  "});",
+  "",
+  "new MTS.Button('#s6-btn-2025', { label: '2025', variant: 'primary', size: 'sm', onClick: function() { chartS6.update({ data: dataS6_2025 }); } });",
+  "new MTS.Button('#s6-btn-2024', { label: '2024', variant: 'ghost',   size: 'sm', onClick: function() { chartS6.update({ data: dataS6_2024 }); } });",
+  "new MTS.Button('#s6-btn-2023', { label: '2023', variant: 'ghost',   size: 'sm', onClick: function() { chartS6.update({ data: dataS6_2023 }); } });",
+].join('\n');
+makeSection('tabs-s6', preview_s6, js_s6, function () {
+  window.dataS6_2025 = { labels: ['Q1','Q2','Q3','Q4'], datasets: [{ label: '2025', values: [210,340,285,430], color: '#3b82f6' }] };
+  window.dataS6_2024 = { labels: ['Q1','Q2','Q3','Q4'], datasets: [{ label: '2024', values: [180,260,310,390], color: '#10b981' }] };
+  window.dataS6_2023 = { labels: ['Q1','Q2','Q3','Q4'], datasets: [{ label: '2023', values: [140,195,220,280], color: '#e53935' }] };
+  window.chartS6 = new MTS.ChartBar('#chart-s6', { data: window.dataS6_2025, options: { height: 280 } });
+  new MTS.Button('#s6-btn-2025', { label: '2025', variant: 'primary', size: 'sm', onClick: function () { window.chartS6.update({ data: window.dataS6_2025 }); } });
+  new MTS.Button('#s6-btn-2024', { label: '2024', variant: 'ghost',   size: 'sm', onClick: function () { window.chartS6.update({ data: window.dataS6_2024 }); } });
+  new MTS.Button('#s6-btn-2023', { label: '2023', variant: 'ghost',   size: 'sm', onClick: function () { window.chartS6.update({ data: window.dataS6_2023 }); } });
+}, '400px');
+
+// ── 7 · Click event ──────────────────────────────────────────────────────────
+const preview_s7 = [
+  '<div class="demo-stack">',
+  '  <div id="chart-s7" style="padding:16px"></div>',
+  '  <div class="result-box" id="chart-s7-result">— click a bar —</div>',
+  '</div>',
+].join('\n');
+const js_s7 = [
+  "const chartS7 = new MTS.ChartBar('#chart-s7', {",
+  "  data: {",
+  "    labels: ['Bogotá','CDMX','Lima','Santiago','Buenos Aires'],",
+  "    datasets: [{ label: 'Active users', values: [8400, 12300, 6700, 5100, 9200] }],",
+  "  },",
+  "  options: { height: 280 },",
+  "});",
+  "",
+  "chartS7.onClick(function(detail) {",
+  "  document.getElementById('chart-s7-result').textContent =",
+  "    detail.label + ': ' + detail.value.toLocaleString('es-MX') + ' users';",
+  "});",
+].join('\n');
+makeSection('tabs-s7', preview_s7, js_s7, function () {
+  const chartS7 = new MTS.ChartBar('#chart-s7', {
+    data: {
+      labels: ['Bogotá','CDMX','Lima','Santiago','Buenos Aires'],
+      datasets: [{ label: 'Active users', values: [8400, 12300, 6700, 5100, 9200] }],
+    },
+    options: { height: 280 },
+  });
+  chartS7.onClick(function (detail) {
+    document.getElementById('chart-s7-result').textContent =
+      detail.label + ': ' + detail.value.toLocaleString('es-MX') + ' users';
+  });
+}, '400px');
+
+// ── 4b · Overlapping with per-series color + negativeColor ─────────────────────
+const preview_s4b = '<div id="chart-s4b" style="padding:16px"></div>';
+const js_s4b = [
+  "// Each series defines its own color (positive) and negativeColor (negative).",
+  "// They are completely independent of each other.",
+  "new MTS.ChartBar('#chart-s4b', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun'],",
+  "    datasets: [",
+  "      {",
+  "        label:         '2024',",
+  "        values:        [38, -12, 61, 45, -18, 83],",
+  "        color:         '#3b82f6',",
+  "        negativeColor: '#93c5fd',",
+  "      },",
+  "      {",
+  "        label:         '2025',",
+  "        values:        [55, 68, -20, 91, 62, -15],",
+  "        color:         '#10b981',",
+  "        negativeColor: '#f59e0b',",
+  "      },",
+  "    ],",
+  "  },",
+  "  options: { height: 300 },",
+  "});",
+].join('\n');
+makeSection('tabs-s4b', preview_s4b, js_s4b, function () {
+  new MTS.ChartBar('#chart-s4b', {
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+      datasets: [
+        { label: '2024', values: [38, -12, 61, 45, -18, 83], color: '#3b82f6', negativeColor: '#93c5fd' },
+        { label: '2025', values: [55,  68, -20, 91, 62, -15], color: '#10b981', negativeColor: '#f59e0b' },
+      ],
+    },
+    options: { height: 300 },
+  });
+}, '380px');
+
+// ── 4c · Both series negative ───────────────────────────────────────────────
+const preview_s4c = '<div id="chart-s4c" style="padding:16px"></div>';
+const js_s4c = [
+  "// Both datasets with negative values.",
+  "// Each series uses its negativeColor. Bars extend downward from zero.",
+  "// The most negative one sticks out below the least negative (downward overlapping).",
+  "new MTS.ChartBar('#chart-s4c', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun'],",
+  "    datasets: [",
+  "      {",
+  "        label:         '2024',",
+  "        values:        [-38, -55, -20, -45, -30, -60],",
+  "        color:         '#3b82f6',",
+  "        negativeColor: '#93c5fd',",
+  "      },",
+  "      {",
+  "        label:         '2025',",
+  "        values:        [-55, -30, -48, -20, -65, -25],",
+  "        color:         '#10b981',",
+  "        negativeColor: '#f59e0b',",
+  "      },",
+  "    ],",
+  "  },",
+  "  options: { height: 300 },",
+  "});",
+].join('\n');
+makeSection('tabs-s4c', preview_s4c, js_s4c, function () {
+  new MTS.ChartBar('#chart-s4c', {
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+      datasets: [
+        { label: '2024', values: [-38, -55, -20, -45, -30, -60], color: '#3b82f6', negativeColor: '#93c5fd' },
+        { label: '2025', values: [-55, -30, -48, -20, -65, -25], color: '#10b981', negativeColor: '#f59e0b' },
+      ],
+    },
+    options: { height: 300 },
+  });
+}, '380px');
+
+// ── 8 · Horizontal bar — Basic ───────────────────────────────────────────────
+const preview_s8 = '<div id="chart-s8" style="padding:16px"></div>';
+const js_s8 = [
+  "new MTS.ChartBar('#chart-s8', {",
+  "  data: {",
+  "    labels: ['Bogotá','Mexico City','Lima','Santiago','Buenos Aires','Medellín','Guadalajara'],",
+  "    datasets: [{",
+  "      label: 'Active users',",
+  "      values: [8400, 12300, 6700, 5100, 9200, 4300, 7800],",
+  "    }],",
+  "  },",
+  "  options: {",
+  "    orientation: 'horizontal',",
+  "    height: 320,",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s8', preview_s8, js_s8, function () {
+  new MTS.ChartBar('#chart-s8', {
+    data: {
+      labels: ['Bogotá','Mexico City','Lima','Santiago','Buenos Aires','Medellín','Guadalajara'],
+      datasets: [{ label: 'Active users', values: [8400, 12300, 6700, 5100, 9200, 4300, 7800] }],
+    },
+    options: { orientation: 'horizontal', height: 320 },
+  });
+}, '400px');
+
+// ── 9 · Horizontal bar — Negative values ────────────────────────────────────
+const preview_s9 = '<div id="chart-s9" style="padding:16px"></div>';
+const js_s9 = [
+  "new MTS.ChartBar('#chart-s9', {",
+  "  data: {",
+  "    labels: ['App','Web','API','Support','Marketing','Ops'],",
+  "    datasets: [{",
+  "      label: 'Monthly change %',",
+  "      values: [14, -6, 22, -11, 8, -3],",
+  "      color:         '#3b82f6',",
+  "      negativeColor: '#e53935',",
+  "    }],",
+  "  },",
+  "  options: {",
+  "    orientation: 'horizontal',",
+  "    height: 300,",
+  "    xAxis: { formatter: function(v) { return v + '%'; } },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s9', preview_s9, js_s9, function () {
+  new MTS.ChartBar('#chart-s9', {
+    data: {
+      labels: ['App','Web','API','Support','Marketing','Ops'],
+      datasets: [{
+        label: 'Monthly change %',
+        values: [14, -6, 22, -11, 8, -3],
+        color: '#3b82f6', negativeColor: '#e53935',
+      }],
+    },
+    options: {
+      orientation: 'horizontal',
+      height: 300,
+      xAxis: { formatter: function (v) { return v + '%'; } },
+    },
+  });
+}, '380px');
+
+// ── 10 · Horizontal bar — Multiple datasets + legend ────────────────────────
+const preview_s10 = '<div id="chart-s10" style="padding:16px"></div>';
+const js_s10 = [
+  "// Overlapping: same position, overlaid datasets.",
+  "// For side-by-side bars use horizontal Grouped Bar (3.1 — coming soon).",
+  "new MTS.ChartBar('#chart-s10', {",
+  "  data: {",
+  "    labels: ['Q1','Q2','Q3','Q4'],",
+  "    datasets: [",
+  "      { label: '2024', values: [180, 260, 310, 390] },",
+  "      { label: '2025', values: [210, 340, 285, 430] },",
+  "    ],",
+  "  },",
+  "  options: {",
+  "    orientation: 'horizontal',",
+  "    height: 260,",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s10', preview_s10, js_s10, function () {
+  new MTS.ChartBar('#chart-s10', {
+    data: {
+      labels: ['Q1','Q2','Q3','Q4'],
+      datasets: [
+        { label: '2024', values: [180, 260, 310, 390] },
+        { label: '2025', values: [210, 340, 285, 430] },
+      ],
+    },
+    options: { orientation: 'horizontal', height: 260 },
+  });
+}, '360px');
+
+// ── 10b · Horizontal bar — Overlapping with per-series color + negativeColor ────
+const preview_s10b = '<div id="chart-s10b" style="padding:16px"></div>';
+const js_s10b = [
+  "new MTS.ChartBar('#chart-s10b', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun'],",
+  "    datasets: [",
+  "      {",
+  "        label:         '2024',",
+  "        values:        [38, -12, 61, 45, -18, 83],",
+  "        color:         '#3b82f6',",
+  "        negativeColor: '#93c5fd',",
+  "      },",
+  "      {",
+  "        label:         '2025',",
+  "        values:        [55, 68, -20, 91, 62, -15],",
+  "        color:         '#10b981',",
+  "        negativeColor: '#f59e0b',",
+  "      },",
+  "    ],",
+  "  },",
+  "  options: {",
+  "    orientation: 'horizontal',",
+  "    height: 320,",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s10b', preview_s10b, js_s10b, function () {
+  new MTS.ChartBar('#chart-s10b', {
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+      datasets: [
+        { label: '2024', values: [38, -12, 61, 45, -18, 83],  color: '#3b82f6', negativeColor: '#93c5fd' },
+        { label: '2025', values: [55,  68, -20, 91, 62, -15], color: '#10b981', negativeColor: '#f59e0b' },
+      ],
+    },
+    options: { orientation: 'horizontal', height: 320 },
+  });
+}, '400px');
+
+// ── 11 · Grouped Bar ──────────────────────────────────────────────────────────
+const preview_s11 = '<div id="chart-s11" style="padding:16px"></div>';
+const js_s11 = [
+  "// MTS.ChartBarGrouped — multiple side-by-side datasets per category.",
+  "new MTS.ChartBarGrouped('#chart-s11', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun'],",
+  "    datasets: [",
+  "      { label: '2023', values: [30, 45, 38, 52, 41, 60], color: '#7c3aed' },",
+  "      { label: '2024', values: [42, 58, 51, 70, 65, 88], color: '#3b82f6' },",
+  "      { label: '2025', values: [55, 70, 62, 80, 78, 98], color: '#10b981' },",
+  "    ],",
+  "  },",
+  "  options: { height: 300 },",
+  "});",
+].join('\n');
+makeSection('tabs-s11', preview_s11, js_s11, function () {
+  new MTS.ChartBarGrouped('#chart-s11', {
+    data: {
+      labels:   ['Jan','Feb','Mar','Apr','May','Jun'],
+      datasets: [
+        { label: '2023', values: [30, 45, 38, 52, 41, 60], color: '#7c3aed' },
+        { label: '2024', values: [42, 58, 51, 70, 65, 88], color: '#3b82f6' },
+        { label: '2025', values: [55, 70, 62, 80, 78, 98], color: '#10b981' },
+      ],
+    },
+    options: { height: 300 },
+  });
+}, '400px');
+
+// ── 12 · Stacked Bar vertical ─────────────────────────────────────────────────
+const preview_s12 = '<div id="chart-s12" style="padding:16px"></div>';
+const js_s12 = [
+  "// MTS.ChartBarStacked — accumulated segments per category (positive values).",
+  "new MTS.ChartBarStacked('#chart-s12', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun'],",
+  "    datasets: [",
+  "      { label: 'Product A', values: [30, 45, 38, 52, 41, 60], color: '#3b82f6' },",
+  "      { label: 'Product B', values: [20, 28, 22, 35, 30, 42], color: '#10b981' },",
+  "      { label: 'Product C', values: [12, 15, 18, 20, 16, 24], color: '#f59e0b' },",
+  "    ],",
+  "  },",
+  "  options: { height: 300 },",
+  "});",
+].join('\n');
+makeSection('tabs-s12', preview_s12, js_s12, function () {
+  new MTS.ChartBarStacked('#chart-s12', {
+    data: {
+      labels:   ['Jan','Feb','Mar','Apr','May','Jun'],
+      datasets: [
+        { label: 'Product A', values: [30, 45, 38, 52, 41, 60], color: '#3b82f6' },
+        { label: 'Product B', values: [20, 28, 22, 35, 30, 42], color: '#10b981' },
+        { label: 'Product C', values: [12, 15, 18, 20, 16, 24], color: '#f59e0b' },
+      ],
+    },
+    options: { height: 300 },
+  });
+}, '400px');
+
+// ── 13 · Stacked Bar horizontal ───────────────────────────────────────────────
+const preview_s13 = '<div id="chart-s13" style="padding:16px"></div>';
+const js_s13 = [
+  "// MTS.ChartBarStackedH — horizontal variant of the stacked chart.",
+  "new MTS.ChartBarStackedH('#chart-s13', {",
+  "  data: {",
+  "    labels: ['North', 'South', 'East', 'West', 'Center'],",
+  "    datasets: [",
+  "      { label: 'Product A', values: [42, 35, 28, 50, 38], color: '#3b82f6' },",
+  "      { label: 'Product B', values: [28, 22, 18, 32, 25], color: '#10b981' },",
+  "      { label: 'Product C', values: [15, 12, 10, 18, 14], color: '#f59e0b' },",
+  "    ],",
+  "  },",
+  "  options: { height: 280 },",
+  "});",
+].join('\n');
+makeSection('tabs-s13', preview_s13, js_s13, function () {
+  new MTS.ChartBarStackedH('#chart-s13', {
+    data: {
+      labels:   ['North', 'South', 'East', 'West', 'Center'],
+      datasets: [
+        { label: 'Product A', values: [42, 35, 28, 50, 38], color: '#3b82f6' },
+        { label: 'Product B', values: [28, 22, 18, 32, 25], color: '#10b981' },
+        { label: 'Product C', values: [15, 12, 10, 18, 14], color: '#f59e0b' },
+      ],
+    },
+    options: { height: 280 },
+  });
+}, '380px');
+</script>
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Chart — Pie / Donut</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-rose.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-orange.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-sky.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-indigo.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-teal.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-slate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-bronze.css">
+  <link rel="stylesheet" href="../../../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../matios-ui-chart.css">
+  <script src="../../../../support/demo-shared.js"></script>
+  <script src="../../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../matios-ui-chart.js"></script>
+  <script src="../../matios-ui-chart-pie.js"></script>
+</head>
+<body>
+<div class="demo-page">
+  <div class="demo-section"><div class="demo-section-title">1 — Pie · Basic</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Pie · Custom colors</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Donut · Basic</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Donut · Center text</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Pie · No callouts — legend only</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Pie · Label formatter</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title">7 — Pie · API update()</div><div id="tabs-s7"></div></div>
+  <div class="demo-section"><div class="demo-section-title">8 — Pie · onClick event</div><div id="tabs-s8"></div></div>
+</div>
+
+<script>
+function indentHtml(html) {
+  const step  = 2;
+  const voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  let indent  = 0;
+  let result  = '';
+  const tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function (tok) {
+    const t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      const tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      const text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height:  height || '400px',
+    lazy:    false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' },
+    ],
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+// ── 1 · Pie basic ────────────────────────────────────────────────────────────
+const preview_s1 = '<div id="chart-s1" style="padding:16px"></div>';
+const js_s1 = [
+  "new MTS.ChartPie('#chart-s1', {",
+  "  data: {",
+  "    labels: ['Sales', 'Marketing', 'Support', 'R&D', 'Operations'],",
+  "    datasets: [{",
+  "      values: [42, 18, 15, 14, 11],",
+  "    }],",
+  "  },",
+  "  options: { height: 320 },",
+  "});",
+].join('\n');
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  new MTS.ChartPie('#chart-s1', {
+    data: {
+      labels:   ['Sales', 'Marketing', 'Support', 'R&D', 'Operations'],
+      datasets: [{ values: [42, 18, 15, 14, 11] }],
+    },
+    options: { height: 320 },
+  });
+}, '420px');
+
+// ── 2 · Custom colors ────────────────────────────────────────────────
+const preview_s2 = '<div id="chart-s2" style="padding:16px"></div>';
+const js_s2 = [
+  "// colors: array of colors per slice — if omitted, uses the internal palette.",
+  "new MTS.ChartPie('#chart-s2', {",
+  "  data: {",
+  "    labels: ['Q1', 'Q2', 'Q3', 'Q4'],",
+  "    datasets: [{",
+  "      values: [25, 30, 28, 17],",
+  "      colors: ['#3b82f6', '#10b981', '#f59e0b', '#e53935'],",
+  "    }],",
+  "  },",
+  "  options: { height: 300 },",
+  "});",
+].join('\n');
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  new MTS.ChartPie('#chart-s2', {
+    data: {
+      labels:   ['Q1', 'Q2', 'Q3', 'Q4'],
+      datasets: [{ values: [25, 30, 28, 17], colors: ['#3b82f6', '#10b981', '#f59e0b', '#e53935'] }],
+    },
+    options: { height: 300 },
+  });
+}, '400px');
+
+// ── 3 · Donut basic ──────────────────────────────────────────────────────────
+const preview_s3 = '<div id="chart-s3" style="padding:16px"></div>';
+const js_s3 = [
+  "// innerRadius > 0 turns the Pie into a Donut.",
+  "// Value in absolute px or a 0–1 fraction of the radius (e.g.: 0.55 = 55% of the radius).",
+  "new MTS.ChartPie('#chart-s3', {",
+  "  data: {",
+  "    labels: ['Sales', 'Marketing', 'Support', 'R&D', 'Operations'],",
+  "    datasets: [{ values: [42, 18, 15, 14, 11] }],",
+  "  },",
+  "  options: {",
+  "    height: 320,",
+  "    innerRadius: 0.55,   // 55% of the radius → donut",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.ChartPie('#chart-s3', {
+    data: {
+      labels:   ['Sales', 'Marketing', 'Support', 'R&D', 'Operations'],
+      datasets: [{ values: [42, 18, 15, 14, 11] }],
+    },
+    options: { height: 320, innerRadius: 0.55 },
+  });
+}, '420px');
+
+// ── 4 · Donut with center text ───────────────────────────────────────────────
+const preview_s4 = '<div id="chart-s4" style="padding:16px"></div>';
+const js_s4 = [
+  "// centerText and centerSubText are shown in the donut hole.",
+  "new MTS.ChartPie('#chart-s4', {",
+  "  data: {",
+  "    labels: ['Completed', 'In progress', 'Pending'],",
+  "    datasets: [{",
+  "      values: [62, 23, 15],",
+  "      colors: ['#10b981', '#3b82f6', '#94a3b8'],",
+  "    }],",
+  "  },",
+  "  options: {",
+  "    height: 320,",
+  "    innerRadius: 0.60,",
+  "    centerText:    '62%',",
+  "    centerSubText: 'Completed',",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s4', preview_s4, js_s4, function () {
+  new MTS.ChartPie('#chart-s4', {
+    data: {
+      labels:   ['Completed', 'In progress', 'Pending'],
+      datasets: [{ values: [62, 23, 15], colors: ['#10b981', '#3b82f6', '#94a3b8'] }],
+    },
+    options: {
+      height: 320, innerRadius: 0.60,
+      centerText: '62%', centerSubText: 'Completed',
+    },
+  });
+}, '420px');
+
+// ── 5 · No callouts — legend only ───────────────────────────────────────────
+const preview_s5 = '<div id="chart-s5" style="padding:16px"></div>';
+const js_s5 = [
+  "// labels: false hides the external callouts.",
+  "// The bottom legend stays visible (legend: true by default).",
+  "new MTS.ChartPie('#chart-s5', {",
+  "  data: {",
+  "    labels: ['Sales', 'Marketing', 'Support', 'R&D', 'Operations'],",
+  "    datasets: [{ values: [42, 18, 15, 14, 11] }],",
+  "  },",
+  "  options: {",
+  "    height: 300,",
+  "    innerRadius: 0.50,",
+  "    labels: false,   // no callouts",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s5', preview_s5, js_s5, function () {
+  new MTS.ChartPie('#chart-s5', {
+    data: {
+      labels:   ['Sales', 'Marketing', 'Support', 'R&D', 'Operations'],
+      datasets: [{ values: [42, 18, 15, 14, 11] }],
+    },
+    options: { height: 300, innerRadius: 0.50, labels: false },
+  });
+}, '400px');
+
+// ── 6 · Label formatter ───────────────────────────────────────────────────
+const preview_s6 = '<div id="chart-s6" style="padding:16px"></div>';
+const js_s6 = [
+  "// labels.formatter(value, label, pct) → string",
+  "// pct is the 0–1 fraction; Math.round(pct * 100) gives the whole percentage.",
+  "new MTS.ChartPie('#chart-s6', {",
+  "  data: {",
+  "    labels: ['Python', 'JavaScript', 'Java', 'Go', 'Others'],",
+  "    datasets: [{ values: [38, 29, 17, 10, 6] }],",
+  "  },",
+  "  options: {",
+  "    height: 320,",
+  "    labels: {",
+  "      formatter: function(value, label, pct) {",
+  "        return label + ' (' + value + '%)';",
+  "      },",
+  "    },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s6', preview_s6, js_s6, function () {
+  new MTS.ChartPie('#chart-s6', {
+    data: {
+      labels:   ['Python', 'JavaScript', 'Java', 'Go', 'Others'],
+      datasets: [{ values: [38, 29, 17, 10, 6] }],
+    },
+    options: {
+      height: 320,
+      labels: {
+        formatter: function (value, label, pct) {
+          return label + ' (' + value + '%)';
+        },
+      },
+    },
+  });
+}, '420px');
+
+// ── 7 · API update() ──────────────────────────────────────────────────────────
+const preview_s7 = [
+  '<div class="demo-stack">',
+  '  <div id="chart-s7" style="padding:16px"></div>',
+  '  <div class="demo-row">',
+  '    <div id="s7-btn1"></div>',
+  '    <div id="s7-btn2"></div>',
+  '  </div>',
+  '</div>',
+].join('\n');
+const js_s7 = [
+  "const data2024 = {",
+  "  labels: ['Sales', 'Marketing', 'Support', 'R&D', 'Operations'],",
+  "  datasets: [{ values: [42, 18, 15, 14, 11] }],",
+  "};",
+  "const data2025 = {",
+  "  labels: ['Sales', 'Marketing', 'Support', 'R&D', 'Operations'],",
+  "  datasets: [{ values: [50, 15, 12, 17, 6] }],",
+  "};",
+  "",
+  "const chartS7 = new MTS.ChartPie('#chart-s7', {",
+  "  data: data2024,",
+  "  options: { height: 280, innerRadius: 0.55 },",
+  "});",
+  "",
+  "new MTS.Button('#s7-btn1', { label: '2024', variant: 'primary', size: 'sm',",
+  "  onClick: function() { chartS7.update({ data: data2024 }); } });",
+  "new MTS.Button('#s7-btn2', { label: '2025', variant: 'ghost',   size: 'sm',",
+  "  onClick: function() { chartS7.update({ data: data2025 }); } });",
+].join('\n');
+makeSection('tabs-s7', preview_s7, js_s7, function () {
+  window.dataS7_2024 = {
+    labels:   ['Sales', 'Marketing', 'Support', 'R&D', 'Operations'],
+    datasets: [{ values: [42, 18, 15, 14, 11] }],
+  };
+  window.dataS7_2025 = {
+    labels:   ['Sales', 'Marketing', 'Support', 'R&D', 'Operations'],
+    datasets: [{ values: [50, 15, 12, 17, 6] }],
+  };
+  window.chartS7 = new MTS.ChartPie('#chart-s7', {
+    data:    window.dataS7_2024,
+    options: { height: 280, innerRadius: 0.55 },
+  });
+  new MTS.Button('#s7-btn1', { label: '2024', variant: 'primary', size: 'sm',
+    onClick: function () { window.chartS7.update({ data: window.dataS7_2024 }); } });
+  new MTS.Button('#s7-btn2', { label: '2025', variant: 'ghost',   size: 'sm',
+    onClick: function () { window.chartS7.update({ data: window.dataS7_2025 }); } });
+}, '420px');
+
+// ── 8 · onClick event ────────────────────────────────────────────────────────
+const preview_s8 = [
+  '<div class="demo-stack">',
+  '  <div id="chart-s8" style="padding:16px"></div>',
+  '  <div class="result-box" id="chart-s8-result">— click a slice —</div>',
+  '</div>',
+].join('\n');
+const js_s8 = [
+  "const chartS8 = new MTS.ChartPie('#chart-s8', {",
+  "  data: {",
+  "    labels: ['Sales', 'Marketing', 'Support', 'R&D', 'Operations'],",
+  "    datasets: [{ values: [42, 18, 15, 14, 11] }],",
+  "  },",
+  "  options: { height: 280, innerRadius: 0.55 },",
+  "});",
+  "",
+  "// detail: { label, value, index, color, pct }",
+  "chartS8.onClick(function(detail) {",
+  "  document.getElementById('chart-s8-result').textContent =",
+  "    detail.label + ': ' + detail.value + '  |  ' + Math.round(detail.pct * 100) + '%';",
+  "});",
+].join('\n');
+makeSection('tabs-s8', preview_s8, js_s8, function () {
+  const chartS8 = new MTS.ChartPie('#chart-s8', {
+    data: {
+      labels:   ['Sales', 'Marketing', 'Support', 'R&D', 'Operations'],
+      datasets: [{ values: [42, 18, 15, 14, 11] }],
+    },
+    options: { height: 280, innerRadius: 0.55 },
+  });
+  chartS8.onClick(function (detail) {
+    document.getElementById('chart-s8-result').textContent =
+      detail.label + ': ' + detail.value + '  |  ' + Math.round(detail.pct * 100) + '%';
+  });
+}, '420px');
+</script>
+</body>
+</html>

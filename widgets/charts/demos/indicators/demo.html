@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Chart — Indicators</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-rose.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-orange.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-sky.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-indigo.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-teal.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-slate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-bronze.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../matios-ui-chart.css">
+  <link rel="stylesheet" href="../../../../support/demo-shared.css">
+  <script src="../../../../support/demo-shared.js"></script>
+  <script src="../../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../matios-ui-chart.js"></script>
+  <script src="../../matios-ui-chart-sparkline.js"></script>
+  <script src="../../matios-ui-chart-gauge.js"></script>
+</head>
+<body>
+<div class="demo-page">
+  <div class="demo-section"><div class="demo-section-title">1 — Sparkline · Basic line</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Sparkline · With area</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Sparkline · Multi-series</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Linear gauge · Basic</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Linear gauge · With thresholds</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Radial gauge 180° · Basic</div><div id="tabs-s6"></div></div>
+  <div class="demo-section"><div class="demo-section-title">7 — Radial gauge 180° · With thresholds and center text</div><div id="tabs-s7"></div></div>
+  <div class="demo-section"><div class="demo-section-title">8 — Radial gauge 270°</div><div id="tabs-s8"></div></div>
+  <div class="demo-section"><div class="demo-section-title">9 — Indicators · onClick event</div><div id="tabs-s9"></div></div>
+</div>
+<script>
+function indentHtml(html) {
+  const step  = 2;
+  const voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  let indent  = 0;
+  let result  = '';
+  const tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function (tok) {
+    const t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      const tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      const text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height:  height || '400px',
+    lazy:    false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' },
+    ],
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+// ── 1 · Basic sparkline ──────────────────────────────────────────────────────
+var VALS_UP   = [18,22,19,30,27,35,32,40,38,45,50,48];
+var VALS_DOWN = [90,85,78,82,70,65,72,60,55,58,50,45];
+var VALS_FLAT = [30,32,28,35,31,29,33,30,36,32,34,30];
+
+var preview_s1 = [
+  '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px">',
+  '  <div style="padding:16px;background:var(--mts-bg-surface-1);border:1px solid var(--mts-border-color);border-radius:8px">',
+  '    <div style="font-size:11px;color:var(--mts-text-muted);margin-bottom:4px">Revenue</div>',
+  '    <div style="font-size:20px;font-weight:600;color:var(--mts-text);margin-bottom:8px">$48,200</div>',
+  '    <div id="chart-s1a"></div>',
+  '  </div>',
+  '  <div style="padding:16px;background:var(--mts-bg-surface-1);border:1px solid var(--mts-border-color);border-radius:8px">',
+  '    <div style="font-size:11px;color:var(--mts-text-muted);margin-bottom:4px">Churn</div>',
+  '    <div style="font-size:20px;font-weight:600;color:var(--mts-text);margin-bottom:8px">4.5%</div>',
+  '    <div id="chart-s1b"></div>',
+  '  </div>',
+  '  <div style="padding:16px;background:var(--mts-bg-surface-1);border:1px solid var(--mts-border-color);border-radius:8px">',
+  '    <div style="font-size:11px;color:var(--mts-text-muted);margin-bottom:4px">Retention</div>',
+  '    <div style="font-size:20px;font-weight:600;color:var(--mts-text);margin-bottom:8px">92%</div>',
+  '    <div id="chart-s1c"></div>',
+  '  </div>',
+  '</div>',
+].join('');
+var js_s1 = [
+  "new MTS.ChartSparkline('#chart-s1a', {",
+  "  data: { values: [18,22,19,30,27,35,32,40,38,45,50,48] },",
+  "  options: { color: '#10b981', height: 48 },",
+  "});",
+  "new MTS.ChartSparkline('#chart-s1b', {",
+  "  data: { values: [90,85,78,82,70,65,72,60,55,58,50,45] },",
+  "  options: { color: '#e53935', height: 48 },",
+  "});",
+  "new MTS.ChartSparkline('#chart-s1c', {",
+  "  data: { values: [30,32,28,35,31,29,33,30,36,32,34,30] },",
+  "  options: { color: '#3b82f6', height: 48 },",
+  "});",
+].join('\n');
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  new MTS.ChartSparkline('#chart-s1a', { data: { values: VALS_UP   }, options: { color: '#10b981', height: 48 } });
+  new MTS.ChartSparkline('#chart-s1b', { data: { values: VALS_DOWN }, options: { color: '#e53935', height: 48 } });
+  new MTS.ChartSparkline('#chart-s1c', { data: { values: VALS_FLAT }, options: { color: '#3b82f6', height: 48 } });
+}, '200px');
+
+// ── 2 · Sparkline with area ────────────────────────────────────────────────────
+var preview_s2 = [
+  '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:16px">',
+  '  <div style="padding:16px;background:var(--mts-bg-surface-1);border:1px solid var(--mts-border-color);border-radius:8px">',
+  '    <div style="font-size:11px;color:var(--mts-text-muted);margin-bottom:4px">Active users</div>',
+  '    <div style="font-size:20px;font-weight:600;color:var(--mts-text);margin-bottom:8px">12,450</div>',
+  '    <div id="chart-s2a"></div>',
+  '  </div>',
+  '  <div style="padding:16px;background:var(--mts-bg-surface-1);border:1px solid var(--mts-border-color);border-radius:8px">',
+  '    <div style="font-size:11px;color:var(--mts-text-muted);margin-bottom:4px">Open tickets</div>',
+  '    <div style="font-size:20px;font-weight:600;color:var(--mts-text);margin-bottom:8px">38</div>',
+  '    <div id="chart-s2b"></div>',
+  '  </div>',
+  '</div>',
+].join('');
+var js_s2 = [
+  "new MTS.ChartSparkline('#chart-s2a', {",
+  "  data: { values: [80,95,110,105,130,140,128,155,162,170,180,185] },",
+  "  options: {",
+  "    color: '#7c3aed',",
+  "    fill: true,",
+  "    fillOpacity: 0.2,",
+  "    height: 60,",
+  "  },",
+  "});",
+  "new MTS.ChartSparkline('#chart-s2b', {",
+  "  data: { values: [20,28,35,30,42,38,45,40,48,44,41,38] },",
+  "  options: {",
+  "    color: '#f59e0b',",
+  "    fill: true,",
+  "    fillOpacity: 0.2,",
+  "    height: 60,",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  new MTS.ChartSparkline('#chart-s2a', { data: { values: [80,95,110,105,130,140,128,155,162,170,180,185] }, options: { color: '#7c3aed', fill: true, fillOpacity: 0.2, height: 60 } });
+  new MTS.ChartSparkline('#chart-s2b', { data: { values: [20,28,35,30,42,38,45,40,48,44,41,38] }, options: { color: '#f59e0b', fill: true, fillOpacity: 0.2, height: 60 } });
+}, '220px');
+
+// ── 3 · Multi-series sparkline ─────────────────────────────────────────────────
+var preview_s3 = '<div style="padding:16px"><div id="chart-s3"></div></div>';
+var js_s3 = [
+  "new MTS.ChartSparkline('#chart-s3', {",
+  "  data: {",
+  "    datasets: [",
+  "      { values: [20,35,28,45,40,55,50,65,60,75,70,80], color: '#3b82f6' },",
+  "      { values: [15,20,25,22,30,28,35,32,40,38,45,42], color: '#10b981' },",
+  "      { values: [50,45,42,48,40,38,35,30,28,32,25,20], color: '#e53935' },",
+  "    ],",
+  "  },",
+  "  options: { height: 80, lineWidth: 1.5 },",
+  "});",
+].join('\n');
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.ChartSparkline('#chart-s3', {
+    data: { datasets: [
+      { values: [20,35,28,45,40,55,50,65,60,75,70,80], color: '#3b82f6' },
+      { values: [15,20,25,22,30,28,35,32,40,38,45,42], color: '#10b981' },
+      { values: [50,45,42,48,40,38,35,30,28,32,25,20], color: '#e53935' },
+    ] },
+    options: { height: 80, lineWidth: 1.5 },
+  });
+}, '200px');
+
+// ── 4 · Basic linear gauge ───────────────────────────────────────────────────
+var preview_s4 = [
+  '<div style="display:grid;gap:24px;padding:24px">',
+  '  <div><div style="font-size:12px;color:var(--mts-text-muted);margin-bottom:8px">Storage used · 25%</div><div id="chart-s4a"></div></div>',
+  '  <div><div style="font-size:12px;color:var(--mts-text-muted);margin-bottom:8px">CPU · 62%</div><div id="chart-s4b"></div></div>',
+  '  <div><div style="font-size:12px;color:var(--mts-text-muted);margin-bottom:8px">Memory · 88%</div><div id="chart-s4c"></div></div>',
+  '</div>',
+].join('');
+var js_s4 = [
+  "new MTS.ChartGaugeLinear('#chart-s4a', { options: { value: 25,  color: '#3b82f6' } });",
+  "new MTS.ChartGaugeLinear('#chart-s4b', { options: { value: 62,  color: '#f59e0b' } });",
+  "new MTS.ChartGaugeLinear('#chart-s4c', { options: { value: 88,  color: '#e53935' } });",
+].join('\n');
+makeSection('tabs-s4', preview_s4, js_s4, function () {
+  new MTS.ChartGaugeLinear('#chart-s4a', { options: { value: 25, color: '#3b82f6' } });
+  new MTS.ChartGaugeLinear('#chart-s4b', { options: { value: 62, color: '#f59e0b' } });
+  new MTS.ChartGaugeLinear('#chart-s4c', { options: { value: 88, color: '#e53935' } });
+}, '260px');
+
+// ── 5 · Linear gauge with thresholds ──────────────────────────────────────────
+var TH_TRAFFIC = [
+  { value: 33,  color: '#10b981' },
+  { value: 66,  color: '#f59e0b' },
+  { value: 100, color: '#e53935' },
+];
+var preview_s5 = [
+  '<div style="display:grid;gap:24px;padding:24px">',
+  '  <div><div style="font-size:12px;color:var(--mts-text-muted);margin-bottom:8px">Temperature · 28°C</div><div id="chart-s5a"></div></div>',
+  '  <div><div style="font-size:12px;color:var(--mts-text-muted);margin-bottom:8px">System load · 74%</div><div id="chart-s5b"></div></div>',
+  '</div>',
+].join('');
+var js_s5 = [
+  "var TH = [",
+  "  { value: 33,  color: '#10b981' },",
+  "  { value: 66,  color: '#f59e0b' },",
+  "  { value: 100, color: '#e53935' },",
+  "];",
+  "new MTS.ChartGaugeLinear('#chart-s5a', {",
+  "  options: { value: 28, max: 100, thresholds: TH, trackHeight: 16 },",
+  "});",
+  "new MTS.ChartGaugeLinear('#chart-s5b', {",
+  "  options: { value: 74, max: 100, thresholds: TH, trackHeight: 16 },",
+  "});",
+].join('\n');
+makeSection('tabs-s5', preview_s5, js_s5, function () {
+  new MTS.ChartGaugeLinear('#chart-s5a', { options: { value: 28, max: 100, thresholds: TH_TRAFFIC, trackHeight: 16 } });
+  new MTS.ChartGaugeLinear('#chart-s5b', { options: { value: 74, max: 100, thresholds: TH_TRAFFIC, trackHeight: 16 } });
+}, '220px');
+
+// ── 6 · Basic radial gauge 180° ─────────────────────────────────────────────
+var preview_s6 = [
+  '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px">',
+  '  <div id="chart-s6a"></div>',
+  '  <div id="chart-s6b"></div>',
+  '  <div id="chart-s6c"></div>',
+  '</div>',
+].join('');
+var js_s6 = [
+  "new MTS.ChartGaugeRadial('#chart-s6a', {",
+  "  options: { value: 35, color: '#3b82f6', centerSubText: 'Completed' },",
+  "});",
+  "new MTS.ChartGaugeRadial('#chart-s6b', {",
+  "  options: { value: 68, color: '#10b981', centerSubText: 'Uptime' },",
+  "});",
+  "new MTS.ChartGaugeRadial('#chart-s6c', {",
+  "  options: { value: 91, color: '#e53935', centerSubText: 'Risk' },",
+  "});",
+].join('\n');
+makeSection('tabs-s6', preview_s6, js_s6, function () {
+  new MTS.ChartGaugeRadial('#chart-s6a', { options: { value: 35, color: '#3b82f6', centerSubText: 'Completed' } });
+  new MTS.ChartGaugeRadial('#chart-s6b', { options: { value: 68, color: '#10b981', centerSubText: 'Uptime' } });
+  new MTS.ChartGaugeRadial('#chart-s6c', { options: { value: 91, color: '#e53935', centerSubText: 'Risk' } });
+}, '280px');
+
+// ── 7 · Radial gauge 180° with thresholds and center text ─────────────────────
+var TH_RADIAL = [
+  { value: 40,  color: '#10b981' },
+  { value: 70,  color: '#f59e0b' },
+  { value: 100, color: '#e53935' },
+];
+var preview_s7 = [
+  '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:16px">',
+  '  <div id="chart-s7a"></div>',
+  '  <div id="chart-s7b"></div>',
+  '</div>',
+].join('');
+var js_s7 = [
+  "var TH = [",
+  "  { value: 40,  color: '#10b981' },",
+  "  { value: 70,  color: '#f59e0b' },",
+  "  { value: 100, color: '#e53935' },",
+  "];",
+  "new MTS.ChartGaugeRadial('#chart-s7a', {",
+  "  options: {",
+  "    value: 54,",
+  "    thresholds: TH,",
+  "    centerSubText: 'Score',",
+  "  },",
+  "});",
+  "new MTS.ChartGaugeRadial('#chart-s7b', {",
+  "  options: {",
+  "    value: 87,",
+  "    thresholds: TH,",
+  "    centerSubText: 'Risk',",
+  "    formatter: function(v) { return v + '%'; },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s7', preview_s7, js_s7, function () {
+  new MTS.ChartGaugeRadial('#chart-s7a', { options: { value: 54, thresholds: TH_RADIAL, centerSubText: 'Score' } });
+  new MTS.ChartGaugeRadial('#chart-s7b', { options: { value: 87, thresholds: TH_RADIAL, centerSubText: 'Risk', formatter: function (v) { return v + '%'; } } });
+}, '280px');
+
+// ── 8 · Radial gauge 270° ────────────────────────────────────────────────────
+var preview_s8 = [
+  '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:16px">',
+  '  <div id="chart-s8a"></div>',
+  '  <div id="chart-s8b"></div>',
+  '</div>',
+].join('');
+var js_s8 = [
+  "var TH = [",
+  "  { value: 40,  color: '#10b981' },",
+  "  { value: 70,  color: '#f59e0b' },",
+  "  { value: 100, color: '#e53935' },",
+  "];",
+  "new MTS.ChartGaugeRadial('#chart-s8a', {",
+  "  options: {",
+  "    value: 62,",
+  "    angle: 270,",
+  "    color: '#7c3aed',",
+  "    centerSubText: 'Performance',",
+  "    formatter: function(v) { return v + '%'; },",
+  "  },",
+  "});",
+  "new MTS.ChartGaugeRadial('#chart-s8b', {",
+  "  options: {",
+  "    value: 78,",
+  "    angle: 270,",
+  "    thresholds: TH,",
+  "    centerSubText: 'CPU',",
+  "    formatter: function(v) { return v + '%'; },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s8', preview_s8, js_s8, function () {
+  new MTS.ChartGaugeRadial('#chart-s8a', { options: { value: 62, angle: 270, color: '#7c3aed', centerSubText: 'Performance', formatter: function (v) { return v + '%'; } } });
+  new MTS.ChartGaugeRadial('#chart-s8b', { options: { value: 78, angle: 270, thresholds: TH_RADIAL, centerSubText: 'CPU', formatter: function (v) { return v + '%'; } } });
+}, '380px');
+
+// ── 9 · onClick event ────────────────────────────────────────────────────────
+var preview_s9 = [
+  '<div class="demo-stack" style="padding:16px">',
+  '  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">',
+  '    <div>',
+  '      <div style="font-size:11px;color:var(--mts-text-muted);margin-bottom:8px">Linear gauge — click it</div>',
+  '      <div id="chart-s9a"></div>',
+  '    </div>',
+  '    <div>',
+  '      <div style="font-size:11px;color:var(--mts-text-muted);margin-bottom:8px">Radial gauge — click it</div>',
+  '      <div id="chart-s9b"></div>',
+  '    </div>',
+  '  </div>',
+  '  <div class="result-box" id="chart-s9-result">— click any gauge —</div>',
+  '</div>',
+].join('\n');
+var js_s9 = [
+  "var TH = [",
+  "  { value: 40, color: '#10b981' },",
+  "  { value: 70, color: '#f59e0b' },",
+  "  { value: 100, color: '#e53935' },",
+  "];",
+  "",
+  "var gaugeLinear = new MTS.ChartGaugeLinear('#chart-s9a', {",
+  "  options: { value: 58, thresholds: TH, animate: true },",
+  "});",
+  "",
+  "var gaugeRadial = new MTS.ChartGaugeRadial('#chart-s9b', {",
+  "  options: { value: 58, thresholds: TH, centerSubText: 'CPU', animate: true },",
+  "});",
+  "",
+  "function handleGaugeClick(e) {",
+  "  document.getElementById('chart-s9-result').textContent =",
+  "    'Value: ' + e.value + '  |  Range: ' + e.min + '–' + e.max + '  |  Active color: ' + e.color;",
+  "}",
+  "",
+  "gaugeLinear.onClick(handleGaugeClick);",
+  "gaugeRadial.onClick(handleGaugeClick);",
+].join('\n');
+makeSection('tabs-s9', preview_s9, js_s9, function () {
+  var TH = [
+    { value: 40, color: '#10b981' },
+    { value: 70, color: '#f59e0b' },
+    { value: 100, color: '#e53935' },
+  ];
+  var gaugeLinear = new MTS.ChartGaugeLinear('#chart-s9a', {
+    options: { value: 58, thresholds: TH, animate: true },
+  });
+  var gaugeRadial = new MTS.ChartGaugeRadial('#chart-s9b', {
+    options: { value: 58, thresholds: TH, centerSubText: 'CPU', animate: true },
+  });
+  function handleGaugeClick(e) {
+    document.getElementById('chart-s9-result').textContent =
+      'Value: ' + e.value + '  |  Range: ' + e.min + '–' + e.max + '  |  Active color: ' + e.color;
+  }
+  gaugeLinear.onClick(handleGaugeClick);
+  gaugeRadial.onClick(handleGaugeClick);
+}, '360px');
+</script>
+</body>
+</html>

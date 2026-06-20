@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.Chart — Financial / Temporal</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-rose.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-orange.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-sky.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-indigo.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-teal.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-slate.css">
+  <link rel="stylesheet" href="../../../../themes/matios-ui-accent-bronze.css">
+  <link rel="stylesheet" href="../../../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../../../overlays/matios-ui-badge/matios-ui-badge.css">
+  <link rel="stylesheet" href="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../matios-ui-chart.css">
+  <script src="../../../../support/demo-shared.js"></script>
+  <script src="../../../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../../../overlays/matios-ui-badge/matios-ui-badge.js"></script>
+  <script src="../../../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../matios-ui-chart.js"></script>
+  <script src="../../matios-ui-chart-temporal.js"></script>
+</head>
+<body>
+<div class="demo-page">
+  <div class="demo-section"><div class="demo-section-title">1 — Candlestick · Basic</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 — Candlestick · Custom colors + formatter</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 — Candlestick · Long series (30 candles)</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 — Gantt · Real dates · weekly scale</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 — Gantt · Interactive — drag and resize</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 — Gantt · Software project with dependencies</div><div id="tabs-s6"></div></div>
+</div>
+<script>
+function indentHtml(html) {
+  const step  = 2;
+  const voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  let indent  = 0;
+  let result  = '';
+  const tokens = html.match(/<[^>]+>|[^<]+/g) || [];
+  tokens.forEach(function (tok) {
+    const t = tok.trim();
+    if (!t) return;
+    if (/^<\//.test(t)) {
+      indent = Math.max(0, indent - step);
+      result += ' '.repeat(indent) + t + '\n';
+    } else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      const tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else {
+      const text = t.replace(/\s+/g, ' ');
+      if (text) result += ' '.repeat(indent) + text + '\n';
+    }
+  });
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card',
+    height:  height || '400px',
+    lazy:    false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' },
+    ],
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+// ── Random candle generator ──────────────────────────────────────────────────
+function genCandles(n, startPrice, volatility) {
+  const out = [];
+  let price = startPrice;
+  for (let i = 0; i < n; i++) {
+    const change = (Math.random() - 0.48) * volatility;
+    const open   = Math.round(price * 100) / 100;
+    const close  = Math.round((price + change) * 100) / 100;
+    const high   = Math.round((Math.max(open, close) + Math.random() * volatility * 0.6) * 100) / 100;
+    const low    = Math.round((Math.min(open, close) - Math.random() * volatility * 0.6) * 100) / 100;
+    out.push({ open: open, high: high, low: low, close: close });
+    price = close;
+  }
+  return out;
+}
+
+// ── 1 · Basic candlestick ─────────────────────────────────────────────────────
+const preview_s1 = '<div id="chart-s1" style="padding:16px"></div>';
+const js_s1 = [
+  "new MTS.ChartCandlestick('#chart-s1', {",
+  "  data: {",
+  "    labels: ['Mon','Tue','Wed','Thu','Fri','Mon','Tue','Wed','Thu','Fri'],",
+  "    datasets: [{",
+  "      values: [",
+  "        {open:100, high:108, low:97,  close:105},",
+  "        {open:105, high:112, low:103, close:109},",
+  "        {open:109, high:110, low:101, close:103},",
+  "        {open:103, high:107, low:99,  close:106},",
+  "        {open:106, high:115, low:104, close:113},",
+  "        {open:113, high:116, low:108, close:110},",
+  "        {open:110, high:114, low:105, close:107},",
+  "        {open:107, high:112, low:104, close:111},",
+  "        {open:111, high:118, low:109, close:116},",
+  "        {open:116, high:120, low:112, close:118},",
+  "      ],",
+  "    }],",
+  "  },",
+  "  options: { height: 300 },",
+  "});",
+].join('\n');
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  new MTS.ChartCandlestick('#chart-s1', {
+    data: {
+      labels: ['Mon','Tue','Wed','Thu','Fri','Mon','Tue','Wed','Thu','Fri'],
+      datasets: [{
+        values: [
+          {open:100,high:108,low:97, close:105},
+          {open:105,high:112,low:103,close:109},
+          {open:109,high:110,low:101,close:103},
+          {open:103,high:107,low:99, close:106},
+          {open:106,high:115,low:104,close:113},
+          {open:113,high:116,low:108,close:110},
+          {open:110,high:114,low:105,close:107},
+          {open:107,high:112,low:104,close:111},
+          {open:111,high:118,low:109,close:116},
+          {open:116,high:120,low:112,close:118},
+        ],
+      }],
+    },
+    options: { height: 300 },
+  });
+}, '380px');
+
+// ── 2 · Candlestick colors + formatter ────────────────────────────────────────
+const preview_s2 = '<div id="chart-s2" style="padding:16px"></div>';
+const js_s2 = [
+  "new MTS.ChartCandlestick('#chart-s2', {",
+  "  data: {",
+  "    labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],",
+  "    datasets: [{",
+  "      values: [",
+  "        {open:42.10,high:45.80,low:40.20,close:44.50},",
+  "        {open:44.50,high:47.20,low:43.10,close:46.80},",
+  "        {open:46.80,high:48.00,low:43.50,close:44.20},",
+  "        {open:44.20,high:46.10,low:41.80,close:45.60},",
+  "        {open:45.60,high:50.20,low:44.90,close:49.30},",
+  "        {open:49.30,high:51.00,low:46.80,close:47.90},",
+  "        {open:47.90,high:49.50,low:45.20,close:48.60},",
+  "        {open:48.60,high:52.30,low:47.80,close:51.40},",
+  "        {open:51.40,high:54.10,low:50.20,close:53.70},",
+  "        {open:53.70,high:55.80,low:51.90,close:52.40},",
+  "        {open:52.40,high:54.00,low:49.60,close:53.10},",
+  "        {open:53.10,high:57.20,low:52.30,close:56.80},",
+  "      ],",
+  "    }],",
+  "  },",
+  "  options: {",
+  "    height: 300,",
+  "    bullColor: '#10b981',",
+  "    bearColor: '#7c3aed',",
+  "    yAxis: { formatter: function(v) { return '$' + v.toFixed(2); } },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  new MTS.ChartCandlestick('#chart-s2', {
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      datasets: [{
+        values: [
+          {open:42.10,high:45.80,low:40.20,close:44.50},
+          {open:44.50,high:47.20,low:43.10,close:46.80},
+          {open:46.80,high:48.00,low:43.50,close:44.20},
+          {open:44.20,high:46.10,low:41.80,close:45.60},
+          {open:45.60,high:50.20,low:44.90,close:49.30},
+          {open:49.30,high:51.00,low:46.80,close:47.90},
+          {open:47.90,high:49.50,low:45.20,close:48.60},
+          {open:48.60,high:52.30,low:47.80,close:51.40},
+          {open:51.40,high:54.10,low:50.20,close:53.70},
+          {open:53.70,high:55.80,low:51.90,close:52.40},
+          {open:52.40,high:54.00,low:49.60,close:53.10},
+          {open:53.10,high:57.20,low:52.30,close:56.80},
+        ],
+      }],
+    },
+    options: {
+      height: 300,
+      bullColor: '#10b981', bearColor: '#7c3aed',
+      yAxis: { formatter: function (v) { return '$' + v.toFixed(2); } },
+    },
+  });
+}, '380px');
+
+// ── 3 · Candlestick long series ────────────────────────────────────────────────
+const preview_s3 = '<div id="chart-s3" style="padding:16px"></div>';
+const js_s3 = [
+  "// Generates 30 candles with start price 150 and volatility 4",
+  "const candles30 = genCandles(30, 150, 4);",
+  "const days30    = Array.from({length: 30}, function(_, i) {",
+  "  const d = new Date(2025, 0, 2 + i);",
+  "  return d.getDate() + '/' + (d.getMonth()+1);",
+  "});",
+  "",
+  "new MTS.ChartCandlestick('#chart-s3', {",
+  "  data: { labels: days30, datasets: [{ values: candles30 }] },",
+  "  options: {",
+  "    height: 320,",
+  "    paddingInner: 0.15,",
+  "    yAxis: { formatter: function(v) { return '$' + v.toFixed(0); } },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  const candles30 = genCandles(30, 150, 4);
+  const days30    = Array.from({length: 30}, function(_, i) {
+    const d = new Date(2025, 0, 2 + i);
+    return d.getDate() + '/' + (d.getMonth() + 1);
+  });
+  new MTS.ChartCandlestick('#chart-s3', {
+    data: { labels: days30, datasets: [{ values: candles30 }] },
+    options: { height: 320, paddingInner: 0.15, yAxis: { formatter: function (v) { return '$' + v.toFixed(0); } } },
+  });
+}, '400px');
+
+// ── 4 · Gantt — real dates, weekly scale ─────────────────────────────────────
+const preview_s4 = '<div id="chart-s4"></div>';
+const js_s4 = [
+  "new MTS.ChartGantt('#chart-s4', {",
+  "  data: {",
+  "    tasks: [",
+  "      { id:'T1', label:'Analysis',    start:'2026-06-01', end:'2026-06-15', color:'#3b82f6' },",
+  "      { id:'T2', label:'Design',      start:'2026-06-08', end:'2026-06-29', color:'#7c3aed' },",
+  "      { id:'T3', label:'Development', start:'2026-06-22', end:'2026-07-27', color:'#10b981' },",
+  "      { id:'T4', label:'Testing',     start:'2026-07-20', end:'2026-08-10', color:'#f59e0b' },",
+  "      { id:'T5', label:'Deployment',  start:'2026-08-10', end:'2026-08-17', color:'#e53935' },",
+  "    ],",
+  "  },",
+  "  options: { scale: 'week', rowHeight: 36 },",
+  "});",
+].join('\n');
+makeSection('tabs-s4', preview_s4, js_s4, function () {
+  new MTS.ChartGantt('#chart-s4', {
+    data: {
+      tasks: [
+        { id: 'T1', label: 'Analysis',    start: '2026-06-01', end: '2026-06-15', color: '#3b82f6' },
+        { id: 'T2', label: 'Design',      start: '2026-06-08', end: '2026-06-29', color: '#7c3aed' },
+        { id: 'T3', label: 'Development', start: '2026-06-22', end: '2026-07-27', color: '#10b981' },
+        { id: 'T4', label: 'Testing',     start: '2026-07-20', end: '2026-08-10', color: '#f59e0b' },
+        { id: 'T5', label: 'Deployment',  start: '2026-08-10', end: '2026-08-17', color: '#e53935' },
+      ],
+    },
+    options: { scale: 'week', rowHeight: 36 },
+  });
+}, '320px');
+
+// ── 5 · Interactive Gantt — drag and resize ──────────────────────────────────
+const preview_s5 = [
+  '<div style="display:flex;flex-direction:column;gap:8px">',
+    '<div id="log-s5" style="font-size:11px;padding:6px 10px;',
+    'background:var(--mts-bg-surface-2);border-radius:6px;min-height:26px;',
+    'color:var(--mts-text-muted);font-family:monospace">',
+    'Drag a bar to move it · Drag the edge to resize</div>',
+    '<div id="chart-s5"></div>',
+  '</div>',
+].join('');
+const js_s5 = [
+  "new MTS.ChartGantt('#chart-s5', {",
+  "  data: {",
+  "    tasks: [",
+  "      { id:'P1', label:'Planning',  group:'Q3 2026', start:'2026-07-01', end:'2026-07-15', color:'#1d4ed8' },",
+  "      { id:'P2', label:'UX Design', group:'Q3 2026', start:'2026-07-08', end:'2026-07-29', color:'#7c3aed' },",
+  "      { id:'P3', label:'Backend',   group:'Q3 2026', start:'2026-07-15', end:'2026-08-26', color:'#0f766e' },",
+  "      { id:'P4', label:'Frontend',  group:'Q3 2026', start:'2026-07-22', end:'2026-09-02', color:'#10b981' },",
+  "      { id:'P5', label:'QA',        group:'Q4 2026', start:'2026-08-26', end:'2026-09-16', color:'#f59e0b' },",
+  "      { id:'P6', label:'Go-live',   group:'Q4 2026', start:'2026-09-16', end:'2026-09-23', color:'#e53935' },",
+  "    ],",
+  "  },",
+  "  options: {",
+  "    scale: 'week',",
+  "    editable: true,",
+  "    rowHeight: 36,",
+  "    onTaskMove:   function(t) {",
+  "      document.getElementById('log-s5').textContent =",
+  "        'Moved: ' + t.label + '  →  ' + t.start + ' / ' + t.end;",
+  "    },",
+  "    onTaskResize: function(t) {",
+  "      document.getElementById('log-s5').textContent =",
+  "        'Resized: ' + t.label + '  →  ' + t.start + ' / ' + t.end;",
+  "    },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s5', preview_s5, js_s5, function () {
+  new MTS.ChartGantt('#chart-s5', {
+    data: {
+      tasks: [
+        { id: 'P1', label: 'Planning',  group: 'Q3 2026', start: '2026-07-01', end: '2026-07-15', color: '#1d4ed8' },
+        { id: 'P2', label: 'UX Design', group: 'Q3 2026', start: '2026-07-08', end: '2026-07-29', color: '#7c3aed' },
+        { id: 'P3', label: 'Backend',   group: 'Q3 2026', start: '2026-07-15', end: '2026-08-26', color: '#0f766e' },
+        { id: 'P4', label: 'Frontend',  group: 'Q3 2026', start: '2026-07-22', end: '2026-09-02', color: '#10b981' },
+        { id: 'P5', label: 'QA',        group: 'Q4 2026', start: '2026-08-26', end: '2026-09-16', color: '#f59e0b' },
+        { id: 'P6', label: 'Go-live',   group: 'Q4 2026', start: '2026-09-16', end: '2026-09-23', color: '#e53935' },
+      ],
+    },
+    options: {
+      scale:    'week',
+      editable: true,
+      rowHeight: 36,
+      onTaskMove: function(t) {
+        document.getElementById('log-s5').textContent = 'Moved: ' + t.label + '  →  ' + t.start + ' / ' + t.end;
+      },
+      onTaskResize: function(t) {
+        document.getElementById('log-s5').textContent = 'Resized: ' + t.label + '  →  ' + t.start + ' / ' + t.end;
+      },
+    },
+  });
+}, '520px');
+
+// ── 6 · Gantt software project with dependencies ──────────────────────────────
+const preview_s6 = [
+  '<div style="display:flex;flex-direction:column;gap:8px">',
+    '<div id="log-s6" style="font-size:11px;padding:6px 10px;',
+    'background:var(--mts-bg-surface-2);border-radius:6px;min-height:26px;',
+    'color:var(--mts-text-muted);font-family:monospace">',
+    'Interactive — drag or resize · Arrows follow the tasks</div>',
+    '<div id="chart-s6"></div>',
+  '</div>',
+].join('');
+const js_s6 = [
+  "new MTS.ChartGantt('#chart-s6', {",
+  "  data: {",
+  "    tasks: [",
+  "      { id:'A1', label:'Kick-off',      group:'Start',        start:'2026-05-04', end:'2026-05-11', deps:[] },",
+  "      { id:'A2', label:'Discovery',     group:'Start',        start:'2026-05-04', end:'2026-05-25', deps:[] },",
+  "      { id:'B1', label:'Architecture',  group:'Design',       start:'2026-05-18', end:'2026-06-08', deps:['A1','A2'] },",
+  "      { id:'C1', label:'DB & APIs',     group:'Development',   start:'2026-06-01', end:'2026-07-06', deps:['B1'] },",
+  "      { id:'C2', label:'Frontend core', group:'Development',   start:'2026-06-08', end:'2026-07-13', deps:['B1'] },",
+  "      { id:'C3', label:'Integrations',  group:'Development',   start:'2026-07-06', end:'2026-07-27', deps:['C1'] },",
+  "      { id:'D1', label:'Testing',       group:'Quality',       start:'2026-07-13', end:'2026-08-03', deps:['C2','C3'] },",
+  "      { id:'D2', label:'Client UAT',    group:'Quality',       start:'2026-08-03', end:'2026-08-17', deps:['D1'] },",
+  "      { id:'E1', label:'Go-live',       group:'Closure',       start:'2026-08-17', end:'2026-08-24', deps:['D2'] },",
+  "    ],",
+  "  },",
+  "  options: {",
+  "    scale: 'week',",
+  "    editable: true,",
+  "    rowHeight: 34,",
+  "    labelWidth: 160,",
+  "    onTaskMove:   function(t) {",
+  "      document.getElementById('log-s6').textContent =",
+  "        'Moved: ' + t.label + '  →  ' + t.start + ' / ' + t.end;",
+  "    },",
+  "    onTaskResize: function(t) {",
+  "      document.getElementById('log-s6').textContent =",
+  "        'Resized: ' + t.label + '  →  ' + t.start + ' / ' + t.end;",
+  "    },",
+  "  },",
+  "});",
+].join('\n');
+makeSection('tabs-s6', preview_s6, js_s6, function () {
+  new MTS.ChartGantt('#chart-s6', {
+    data: {
+      tasks: [
+        { id: 'A1', label: 'Kick-off',      group: 'Start',       start: '2026-05-04', end: '2026-05-11', deps: [] },
+        { id: 'A2', label: 'Discovery',     group: 'Start',       start: '2026-05-04', end: '2026-05-25', deps: [] },
+        { id: 'B1', label: 'Architecture',  group: 'Design',      start: '2026-05-18', end: '2026-06-08', deps: ['A1', 'A2'] },
+        { id: 'C1', label: 'DB & APIs',     group: 'Development', start: '2026-06-01', end: '2026-07-06', deps: ['B1'] },
+        { id: 'C2', label: 'Frontend core', group: 'Development', start: '2026-06-08', end: '2026-07-13', deps: ['B1'] },
+        { id: 'C3', label: 'Integrations',  group: 'Development', start: '2026-07-06', end: '2026-07-27', deps: ['C1'] },
+        { id: 'D1', label: 'Testing',       group: 'Quality',     start: '2026-07-13', end: '2026-08-03', deps: ['C2', 'C3'] },
+        { id: 'D2', label: 'Client UAT',    group: 'Quality',     start: '2026-08-03', end: '2026-08-17', deps: ['D1'] },
+        { id: 'E1', label: 'Go-live',       group: 'Closure',     start: '2026-08-17', end: '2026-08-24', deps: ['D2'] },
+      ],
+    },
+    options: {
+      scale:       'week',
+      editable:    true,
+      rowHeight:   34,
+      labelWidth:  160,
+      onTaskMove: function(t) {
+        document.getElementById('log-s6').textContent = 'Moved: ' + t.label + '  →  ' + t.start + ' / ' + t.end;
+      },
+      onTaskResize: function(t) {
+        document.getElementById('log-s6').textContent = 'Resized: ' + t.label + '  →  ' + t.start + ' / ' + t.end;
+      },
+    },
+  });
+}, '560px');
+</script>
+</body>
+</html>
