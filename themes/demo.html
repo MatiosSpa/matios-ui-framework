@@ -30,6 +30,12 @@
   <link rel="stylesheet" href="matios-ui-mode-dark.css">
   <link rel="stylesheet" href="matios-ui-mode-light.css">
   <link rel="stylesheet" href="matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="matios-ui-mode-dune.css">
   <link rel="stylesheet" href="matios-ui-accent-violet.css">
   <link rel="stylesheet" href="matios-ui-accent-olive.css">
   <link rel="stylesheet" href="matios-ui-accent-blue.css">
@@ -46,6 +52,14 @@
   <link rel="stylesheet" href="matios-ui-accent-slate.css">
   <link rel="stylesheet" href="matios-ui-accent-bronze.css">
   <link rel="stylesheet" href="matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <script src="../icons/matios-ui-icons.js"></script>
+  <script src="../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
   <style>
     *{box-sizing:border-box}
     body{
@@ -380,6 +394,30 @@
 
     .theme-note strong{color:var(--mts-text-primary)}
 
+    .theme-howto{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin:14px 0;
+      padding:14px 16px;
+      border:1px solid var(--mts-color-primary);
+      border-left-width:4px;
+      border-radius:10px;
+      background:var(--mts-color-primary-light);
+    }
+    .theme-howto__tag{
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--mts-color-primary);
+    }
+    .theme-howto code{
+      font-size:14px;
+      color:var(--mts-text-primary);
+      word-break:break-all;
+    }
+
     .vars-table{
       width:100%;
       border-collapse:collapse;
@@ -447,6 +485,12 @@
     <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-mode="dark" onclick="applyMode('dark')">Dark</button>
     <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-mode="light" onclick="applyMode('light')">Light</button>
     <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-mode="high-contrast" onclick="applyMode('high-contrast')">High Contrast</button>
+    <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-mode="midnight" onclick="applyMode('midnight')">Midnight</button>
+    <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-mode="obsidian" onclick="applyMode('obsidian')">Obsidian</button>
+    <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-mode="forest" onclick="applyMode('forest')">Forest</button>
+    <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-mode="abyss" onclick="applyMode('abyss')">Abyss</button>
+    <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-mode="ember" onclick="applyMode('ember')">Ember</button>
+    <button type="button" class="mts-btn mts-btn--sm mts-btn--ghost" data-mode="dune" onclick="applyMode('dune')">Dune</button>
   </div>
   <div class="themes-toolbar__row">
     <span class="themes-toolbar__label">Accent</span>
@@ -483,38 +527,9 @@
   <section class="theme-section">
     <div class="theme-section__header">How to use</div>
     <div class="theme-section__body">
-      <p class="theme-section__desc">Apply <code>data-mts-mode</code> on <code>&lt;html&gt;</code>. The accent is optional and redefines at least the primary family; some accents also adjust the secondary decorative color.</p>
-      <pre>&lt;!-- Mode only --&gt;
-&lt;html data-mts-mode="dark"&gt;
-&lt;html data-mts-mode="light"&gt;
-&lt;html data-mts-mode="high-contrast"&gt;
-
-&lt;!-- Mode + accent --&gt;
-&lt;html data-mts-mode="dark" data-mts-accent="violet"&gt;
-&lt;html data-mts-mode="light" data-mts-accent="olive"&gt;
-
-&lt;!-- High contrast + accent (optional, integrator's choice) --&gt;
-&lt;html data-mts-mode="high-contrast" data-mts-accent="blue"&gt;
-
-&lt;!-- CSS to import --&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-mode-dark.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-mode-light.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-mode-high-contrast.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-corporate.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-navy.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-emerald.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-petrol.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-violet.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-olive.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-blue.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-indigo.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-sky.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-teal.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-crimson.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-rose.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-orange.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-bronze.css"&gt;
-&lt;link rel="stylesheet" href="themes/matios-ui-accent-slate.css"&gt;</pre>
+      <p class="theme-section__desc">Just <strong>two steps</strong>: import the CSS for the modes / accents you need, then set the theme with <strong>two attributes on your <code>&lt;html&gt;</code> tag</strong> — <code>data-mts-mode</code> (required: <code>light</code> / <code>dark</code> / <code>high-contrast</code>) and <code>data-mts-accent</code> (optional). That single line is the whole switch — every component re-themes from the CSS variables.</p>
+      <div class="theme-howto"><span class="theme-howto__tag">This one line switches everything</span><code>&lt;html data-mts-mode="light" data-mts-accent="olive"&gt;</code></div>
+      <div id="code-usage"></div>
       <div class="theme-note"><strong>Note:</strong> <code>matios-ui-mode-high-contrast.css</code> already ships its own accessibility palette. If someone also loads an accent on top, the resulting mix is the integrator's responsibility.</div>
     </div>
   </section>
@@ -523,35 +538,7 @@
     <div class="theme-section__header">Create a custom mode</div>
     <div class="theme-section__body">
       <p class="theme-section__desc">Create a CSS file and redefine only the variables you need in your own selector.</p>
-      <pre>[data-mts-mode="my-company"] {
-  /* Backgrounds */
-  --mts-bg-body:      #1a0a0a;
-  --mts-bg-surface:   #220d0d;
-  --mts-bg-surface-2: #2d1010;
-
-  /* Text */
-  --mts-text-primary:   #f8eaea;
-  --mts-text-secondary: #c9aaaa;
-  --mts-text-muted:     #7a5555;
-
-  /* Borders */
-  --mts-border-color:       #3d1515;
-  --mts-border-color-focus: #e63946;
-}
-
-/* Custom accent */
-[data-mts-accent="brand"] {
-  --mts-color-primary:        #e63946;
-  --mts-color-primary-hover:  #c1121f;
-  --mts-color-primary-light:  rgba(230,57,70,.12);
-  --mts-color-primary-text:   #ffffff;
-  --mts-btn-shadow-primary:   0 4px 14px rgba(230,57,70,.4);
-  --mts-btn-ring-primary:     0 0 0 3px rgba(230,57,70,.25);
-  --mts-border-color-focus:   #e63946;
-  --mts-color-accent:         #7c3aed;
-  --mts-color-accent-hover:   #6d28d9;
-  --mts-color-accent-text:    #ffffff;
-}</pre>
+      <div id="code-custom"></div>
     </div>
   </section>
 
@@ -565,6 +552,17 @@
   var MODES = [
     { id:'dark',  name:'Dark',  desc:'Neutral dark', detail:'Optional accent', previewMode:'dark', previewAccent:null },
     { id:'light', name:'Light', desc:'Light', detail:'Optional accent', previewMode:'light', previewAccent:null }
+  ];
+
+  /* Tinted darks: self-contained tonal looks (near-black + a hue + tonal
+     primary). Shown as standalone cards (not multiplied by accents). */
+  var TINTED = [
+    { id:'midnight', name:'Midnight', desc:'Deep blue dark',   tonal:true },
+    { id:'obsidian', name:'Obsidian', desc:'Deep violet dark', tonal:true },
+    { id:'forest',   name:'Forest',   desc:'Deep green dark',  tonal:true },
+    { id:'abyss',    name:'Abyss',    desc:'Deep cyan dark',   tonal:true },
+    { id:'ember',    name:'Ember',    desc:'Warm red dark',    tonal:true },
+    { id:'dune',     name:'Dune',     desc:'Warm amber dark',  tonal:true }
   ];
 
   var ACCENTS = [
@@ -654,7 +652,7 @@
   function renderRegularCard(mode, accent) {
     var palette = currentPalette(mode.id, accent.id);
     var active = currentMode() === mode.id && (currentAccent() || null) === (accent.id || null);
-    var accentText = accent.id ? ' + ' + accent.label : ' + default blue';
+    var accentText = accent.id ? ' + ' + accent.label : (mode.tonal ? ' · tonal primary' : ' + default blue');
 
     return '' +
       '<article class="theme-option' + (active ? ' is-active' : '') + '" data-mode="' + mode.id + '" data-accent="' + (accent.id || '') + '" onclick="applyCombo(\'' + mode.id + '\',' + (accent.id ? '\'' + accent.id + '\'' : 'null') + ')">' +
@@ -721,6 +719,9 @@
       ACCENTS.forEach(function (accent) {
         html.push(renderRegularCard(mode, accent));
       });
+    });
+    TINTED.forEach(function (mode) {
+      html.push(renderRegularCard(mode, { id: null }));
     });
     html.push(renderHighContrastCard());
     document.getElementById('themesGrid').innerHTML = html.join('');
@@ -796,9 +797,68 @@
     if (switcher) switcher.style.display = 'none';
   }
 
+  var USAGE_CODE = [
+    '<!-- 1. Import the modes + the accents you want -->',
+    '<link rel="stylesheet" href="themes/matios-ui-mode-light.css">',
+    '<link rel="stylesheet" href="themes/matios-ui-mode-dark.css">',
+    '<link rel="stylesheet" href="themes/matios-ui-mode-high-contrast.css">',
+    '<link rel="stylesheet" href="themes/matios-ui-mode-midnight.css">',
+    '<!-- ...tinted darks: midnight | obsidian | forest | abyss | ember | dune -->',
+    '<link rel="stylesheet" href="themes/matios-ui-accent-olive.css">',
+    '<link rel="stylesheet" href="themes/matios-ui-accent-violet.css">',
+    '<!-- ...add any other accent file you need (16 available) -->',
+    '',
+    '<!-- 2. Set the theme with two attributes on <html> -->',
+    '<html data-mts-mode="light" data-mts-accent="olive">',
+    '',
+    '<!-- mode (required):  light | dark | high-contrast | midnight | obsidian | forest | abyss | ember | dune -->',
+    '<!-- accent (optional): olive | violet | blue | sky | teal | indigo | navy',
+    '                        emerald | petrol | corporate | crimson | rose |',
+    '                        orange | bronze | slate -->'
+  ].join('\n');
+
+  var CUSTOM_CODE = [
+    '[data-mts-mode="my-company"] {',
+    '  /* Backgrounds */',
+    '  --mts-bg-body:      #1a0a0a;',
+    '  --mts-bg-surface:   #220d0d;',
+    '  --mts-bg-surface-2: #2d1010;',
+    '',
+    '  /* Text */',
+    '  --mts-text-primary:   #f8eaea;',
+    '  --mts-text-secondary: #c9aaaa;',
+    '  --mts-text-muted:     #7a5555;',
+    '',
+    '  /* Borders */',
+    '  --mts-border-color:       #3d1515;',
+    '  --mts-border-color-focus: #e63946;',
+    '}',
+    '',
+    '/* Custom accent */',
+    '[data-mts-accent="brand"] {',
+    '  --mts-color-primary:        #e63946;',
+    '  --mts-color-primary-hover:  #c1121f;',
+    '  --mts-color-primary-light:  rgba(230,57,70,.12);',
+    '  --mts-color-primary-text:   #ffffff;',
+    '  --mts-btn-shadow-primary:   0 4px 14px rgba(230,57,70,.4);',
+    '  --mts-btn-ring-primary:     0 0 0 3px rgba(230,57,70,.25);',
+    '  --mts-border-color-focus:   #e63946;',
+    '  --mts-color-accent:         #7c3aed;',
+    '  --mts-color-accent-hover:   #6d28d9;',
+    '  --mts-color-accent-text:    #ffffff;',
+    '}'
+  ].join('\n');
+
+  function renderCodeBlocks() {
+    if (!(window.MTS && MTS.CodeBlock)) return;
+    new MTS.CodeBlock('#code-usage',  { code: USAGE_CODE,  language: 'html', copyable: true });
+    new MTS.CodeBlock('#code-custom', { code: CUSTOM_CODE, language: 'css',  copyable: true });
+  }
+
   syncToolbar();
   renderThemes();
   renderVarsTable();
+  renderCodeBlocks();
 </script>
 </body>
 </html>

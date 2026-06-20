@@ -8,6 +8,12 @@
 <link rel="stylesheet" href="themes/matios-ui-mode-dark.css">
 <link rel="stylesheet" href="themes/matios-ui-mode-light.css">
 <link rel="stylesheet" href="themes/matios-ui-mode-high-contrast.css">
+<link rel="stylesheet" href="themes/matios-ui-mode-midnight.css">
+<link rel="stylesheet" href="themes/matios-ui-mode-obsidian.css">
+<link rel="stylesheet" href="themes/matios-ui-mode-forest.css">
+<link rel="stylesheet" href="themes/matios-ui-mode-abyss.css">
+<link rel="stylesheet" href="themes/matios-ui-mode-ember.css">
+<link rel="stylesheet" href="themes/matios-ui-mode-dune.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-violet.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-olive.css">
 <link rel="stylesheet" href="themes/matios-ui-accent-blue.css">
@@ -246,9 +252,15 @@ Object.defineProperty(window, 'currentAccentVal', { get(){ return currentAccent;
 
 /* ── Mode + Accent ───────────────────────────────── */
 const MODE_OPTIONS = [
-  { id:'dark',          label:'Dark'  },
-  { id:'light',         label:'Light' },
-  { id:'high-contrast', label:'HC'    },
+  { id:'dark',          label:'Dark'     },
+  { id:'light',         label:'Light'    },
+  { id:'high-contrast', label:'HC'       },
+  { id:'midnight',      label:'Midnight' },
+  { id:'obsidian',      label:'Obsidian' },
+  { id:'forest',        label:'Forest'   },
+  { id:'abyss',         label:'Abyss'    },
+  { id:'ember',         label:'Ember'    },
+  { id:'dune',          label:'Dune'     },
 ];
 
 const ACCENT_OPTIONS = [
@@ -628,7 +640,7 @@ function showWelcome() {
     '<div class="welcome__stats">' +
       '<div class="welcome__stat"><div class="welcome__stat-val">80+</div><div class="welcome__stat-lbl">Components</div></div>' +
       '<div class="welcome__stat"><div class="welcome__stat-val">278</div><div class="welcome__stat-lbl">Icons</div></div>' +
-      '<div class="welcome__stat"><div class="welcome__stat-val">3×16</div><div class="welcome__stat-lbl">Modes × accents</div></div>' +
+      '<div class="welcome__stat"><div class="welcome__stat-val">9×16</div><div class="welcome__stat-lbl">Modes × accents</div></div>' +
     '</div>' +
     '<div class="welcome__chips">' +
       '<div class="welcome__chip" onclick="loadById(\'forms\')"><i class="mts-icon mts-icon-form"></i>Forms</div>' +
