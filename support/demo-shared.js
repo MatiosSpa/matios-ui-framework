@@ -204,9 +204,7 @@ function showSelOutput(id, v, t) {
 /* ── Global code highlighting + copy experiment / Experimento global ─────── */
 /* Appended at end on purpose: easy to remove if needed */
 (function () {
-  function log(label, payload) {
-    try { console.log('[MTS.CodeHL]', label, payload); } catch (e) {}
-  }
+  function log() { /* debug logging disabled */ }
 
   var sharedScript = document.currentScript || Array.prototype.find.call(document.scripts || [], function (s) {
     return s.src && /\/support\/demo-shared\.js(?:\?|#|$)/.test(s.src);

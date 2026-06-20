@@ -143,7 +143,6 @@ MTS.DocumentManagerContextMenuPlugin = class DocumentManagerContextMenuPlugin {
     if (typeof plugin.install === 'function') {
       plugin.install(this)
       if (d.provides) this._registeredMap.set(d.provides, name)
-      console.log(`[MTS.DocumentManagerContextMenuPlugin] Sub-plugin instalado: ${name}`)
     }
   }
 
