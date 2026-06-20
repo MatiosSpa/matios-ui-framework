@@ -9,12 +9,12 @@
   display: flex;
   flex-direction: column;
   width: 240px;
-  /* As a grid/flex item the parent stretches it to the slot height; min-height:0
-     overrides the default min-height:auto so it never grows past the slot and the
-     inner __nav scrolls instead of clipping. Do NOT set height:100% — on a
-     row-spanning grid item the % resolves against the whole container, overflowing. */
+  /* Standalone: fill a fixed-height parent. min-height:0 lets the inner __nav
+     scroll instead of the whole sidenav growing. In the MTS.Shell the sidenav is
+     a row-spanning grid item where height:100% would resolve against the whole
+     container (overflowing by the topbar height) — that case is overridden below. */
+  height: 100%;
   min-height: 0;
-  align-self: stretch;
   background: var(--mts-bg-surface);
   border-right: 1px solid var(--mts-border-color);
   transition: width .25s cubic-bezier(.4,0,.2,1);
@@ -23,6 +23,16 @@
   flex-shrink: 0;
 }
 .mts-sidenav--collapsed { width: 60px; }
+
+/* In the MTS.Shell the sidenav is a row-spanning grid item: let the grid stretch
+   it to its area (height:auto) instead of height:100% (which would resolve against
+   the whole 100vh container and overflow by the topbar height). The inner __nav
+   then scrolls when sections overflow. */
+.mts-shell .mts-shell__sidenav.mts-sidenav {
+  height: auto;
+  min-height: 0;
+  align-self: stretch;
+}
 
 /* ── Brand ─────────────────────────────────────────── */
 .mts-sidenav__brand {
