@@ -26,6 +26,7 @@ MTS.Input = class MtsInput {
    * @param {number}   options.maxLength
    * @param {boolean}  options.showCount   Muestra contador de caracteres
    * @param {number}   options.rows        Para textarea â€” default: 4
+   * @param {string}   options.resize      Para textarea â€” 'none' | 'vertical' | 'horizontal' | 'both'. Default: 'vertical' (mismo que default del browser).
    * @param {object}   options.rules       Reglas de validaciÃ³n { required, min, max, minLength, maxLength, pattern, custom }
    * @param {boolean}  options.selectOnFocus   Selecciona todo el texto al recibir foco — default: false
    * @param {boolean}  options.nextOnEnter     Enter mueve el foco al siguiente input en el DOM — default: false. No aplica a textarea
@@ -77,6 +78,13 @@ MTS.Input = class MtsInput {
     this.maxLength       = options.maxLength      || null;
     this.showCount       = options.showCount      ?? false;
     this.rows            = options.rows           ?? 4;
+    /* T-COMPANY-WUI-PHASE-J (2026-06-13): control de redimensionado para textarea.
+       Acepta 'none' | 'vertical' | 'horizontal' | 'both'. Default 'vertical' preserva
+       el comportamiento previo del browser. Solo aplica cuando type='textarea'. */
+    {
+      const _r = (options.resize != null) ? String(options.resize).toLowerCase() : 'vertical';
+      this.resize = (_r === 'none' || _r === 'vertical' || _r === 'horizontal' || _r === 'both') ? _r : 'vertical';
+    }
     this.name            = options.name           || null;
     this.autocomplete    = options.autocomplete   ?? null;
     this.selectOnFocus   = options.selectOnFocus  ?? false;
@@ -168,7 +176,11 @@ MTS.Input = class MtsInput {
       if (this.name)      this._inputEl.name = this.name;
       if (this.maxLength)     this._inputEl.maxLength   = this.maxLength;
       if (this.autocomplete) this._inputEl.setAttribute('autocomplete', this.autocomplete);
-      if (this.type === 'textarea') this._inputEl.rows = this.rows;
+      if (this.type === 'textarea') {
+        this._inputEl.rows = this.rows;
+        /* T-COMPANY-WUI-PHASE-J (2026-06-13): aplica el modo de resize del textarea. */
+        this._inputEl.style.resize = this.resize;
+      }
       this._container.appendChild(this._inputEl);
       this._wrapEl = this._container;
       this._feedbackEl = document.createElement('span');
