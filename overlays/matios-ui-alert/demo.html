@@ -79,6 +79,7 @@
   <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
   <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
   <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
 </div>
 
 <script>
@@ -95,6 +96,7 @@ document.getElementById('demo-subtitle').textContent = D.subtitle || 'Inline ale
 document.getElementById('s1-title').textContent      = D.s1Title || '1 — Variants';
 document.getElementById('s2-title').textContent      = D.s2Title || '2 — With action and auto-dismiss';
 document.getElementById('s3-title').textContent      = D.s3Title || '3 — CSS only';
+document.getElementById('s4-title').textContent      = D.s4Title || '4 — showBorders (subtle border on all sides)';
 
 function indentHtml(html) {
   var indent = 0;
@@ -254,9 +256,32 @@ var preview_s3 =
 var js_s3 = `// No JavaScript needed.
 // This variant uses only the component's CSS classes.`;
 
+var preview_s4 =
+  '<div class="demo-stack">' +
+    '<div id="alert-b-info"></div>' +
+    '<div id="alert-b-success"></div>' +
+    '<div id="alert-b-warning"></div>' +
+    '<div id="alert-b-danger"></div>' +
+  '</div>';
+
+var js_s4 = `// showBorders adds a subtle 0.5px border on the other 3 sides.
+// The 4px left accent border is always present.
+new MTS.Alert('#a1', {
+  variant: 'info',
+  title: 'Heads up',
+  message: 'A subtle border outlines the whole card.',
+  showBorders: true,
+  closable: false
+});
+
+new MTS.Alert('#a2', { variant: 'success', message: 'All good.',     showBorders: true, closable: false });
+new MTS.Alert('#a3', { variant: 'warning', message: 'Double-check.', showBorders: true, closable: false });
+new MTS.Alert('#a4', { variant: 'danger',  message: 'Something failed.', showBorders: true, closable: false });`;
+
 makeSection('tabs-s1', preview_s1, js_s1);
 makeSection('tabs-s2', preview_s2, js_s2);
 makeSection('tabs-s3', preview_s3, js_s3);
+makeSection('tabs-s4', preview_s4, js_s4);
 
 function mountVariants() {
   ['info', 'success', 'warning', 'danger'].forEach(function(v) {
@@ -340,8 +365,22 @@ function bindActionButtons() {
   });
 }
 
+function mountBordered() {
+  new MTS.Alert('#alert-b-info', {
+    variant: 'info',
+    title: D.infoTitle || 'New version available',
+    message: D.infoMessage || 'Update to get the latest features.',
+    showBorders: true,
+    closable: false
+  });
+  new MTS.Alert('#alert-b-success', { variant: 'success', message: D.successMessage || 'Your data was saved successfully.', showBorders: true, closable: false });
+  new MTS.Alert('#alert-b-warning', { variant: 'warning', message: D.warningMessage || 'Your session expires in 5 minutes.',  showBorders: true, closable: false });
+  new MTS.Alert('#alert-b-danger',  { variant: 'danger',  message: D.dangerMessage  || 'Could not connect to the server.',   showBorders: true, closable: false });
+}
+
 mountVariants();
 bindActionButtons();
+mountBordered();
 </script>
 </body>
 </html>
