@@ -512,6 +512,7 @@ gantt = new MTS.GanttChart('#gantt', {
 
 /* ═══ DEV PANEL (Config · Log · Code) — wraps the Gantt ═══ */
 dev = new MTS.DevPanel('#gantt', {
+  enabled: new URLSearchParams(location.search).has('dev'), /* off by default; add ?dev to show */
   watch:  gantt,
   panels: ['config', 'log', 'code'],
 });

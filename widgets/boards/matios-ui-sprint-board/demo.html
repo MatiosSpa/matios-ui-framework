@@ -228,7 +228,7 @@ sprint = new MTS.SprintBoard('#sprint', {
 });
 
 /* ═══ DEV PANEL (Config · Log · Code) ═══ */
-dev = new MTS.DevPanel('#sprint', { watch: sprint, panels: ['config', 'log', 'code'] });
+dev = new MTS.DevPanel('#sprint', { enabled: new URLSearchParams(location.search).has('dev'), watch: sprint, panels: ['config', 'log', 'code'] });
 
 /* ═══ TOOLBAR (brand) ═══ */
 new MTS.Topbar('#sb-toolbar', { brand: { title: UI.brand || 'MTS.SprintBoard' }, shadow: false, sticky: false });

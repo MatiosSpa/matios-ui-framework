@@ -946,9 +946,7 @@ function importICal(input){
 
 /* ── DevPanel ────────────────────────────────────────────── */
 function initDevPanel() {
-  const isDev = new URLSearchParams(location.search).has('dev') ||
-                location.hostname === 'localhost' ||
-                location.hostname === '127.0.0.1';
+  const isDev = new URLSearchParams(location.search).has('dev'); /* off by default; add ?dev to show */
   if (!isDev || !MTS.DevPanel) return;
   devPanel = new MTS.DevPanel(document.getElementById('calendario'), {
     enabled: true,

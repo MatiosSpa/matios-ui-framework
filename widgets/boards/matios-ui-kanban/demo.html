@@ -207,7 +207,7 @@ kanban = new MTS.Kanban('#kanban', {
 });
 
 /* ═══ DEV PANEL (Config · Log · Code) ═══ */
-dev = new MTS.DevPanel('#kanban', { watch: kanban, panels: ['config', 'log', 'code'] });
+dev = new MTS.DevPanel('#kanban', { enabled: new URLSearchParams(location.search).has('dev'), watch: kanban, panels: ['config', 'log', 'code'] });
 
 /* ═══ TOOLBAR: Topbar + Button ═══ */
 var endEl = document.createElement('div');
