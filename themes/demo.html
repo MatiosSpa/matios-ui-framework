@@ -56,10 +56,12 @@
   <link rel="stylesheet" href="../forms/matios-ui-button/matios-ui-button.css">
   <link rel="stylesheet" href="../forms/matios-ui-copybutton/matios-ui-copybutton.css">
   <link rel="stylesheet" href="../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../overlays/matios-ui-alert/matios-ui-alert.css">
   <script src="../icons/matios-ui-icons.js"></script>
   <script src="../forms/matios-ui-button/matios-ui-button.js"></script>
   <script src="../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
   <script src="../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../overlays/matios-ui-alert/matios-ui-alert.js"></script>
   <style>
     *{box-sizing:border-box}
     body{
@@ -394,30 +396,6 @@
 
     .theme-note strong{color:var(--mts-text-primary)}
 
-    .theme-howto{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      margin:14px 0;
-      padding:14px 16px;
-      border:1px solid var(--mts-color-primary);
-      border-left-width:4px;
-      border-radius:10px;
-      background:var(--mts-color-primary-light);
-    }
-    .theme-howto__tag{
-      font-size:10px;
-      font-weight:700;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color:var(--mts-color-primary);
-    }
-    .theme-howto code{
-      font-size:14px;
-      color:var(--mts-text-primary);
-      word-break:break-all;
-    }
-
     .vars-table{
       width:100%;
       border-collapse:collapse;
@@ -528,7 +506,7 @@
     <div class="theme-section__header">How to use</div>
     <div class="theme-section__body">
       <p class="theme-section__desc">Just <strong>two steps</strong>: import the CSS for the modes / accents you need, then set the theme with <strong>two attributes on your <code>&lt;html&gt;</code> tag</strong> — <code>data-mts-mode</code> (required: <code>light</code> / <code>dark</code> / <code>high-contrast</code>) and <code>data-mts-accent</code> (optional). That single line is the whole switch — every component re-themes from the CSS variables.</p>
-      <div class="theme-howto"><span class="theme-howto__tag">This one line switches everything</span><code>&lt;html data-mts-mode="light" data-mts-accent="olive"&gt;</code></div>
+      <div id="how-to-set"></div>
       <div id="code-usage"></div>
       <div class="theme-note"><strong>Note:</strong> <code>matios-ui-mode-high-contrast.css</code> already ships its own accessibility palette. If someone also loads an accent on top, the resulting mix is the integrator's responsibility.</div>
     </div>
@@ -855,10 +833,21 @@
     new MTS.CodeBlock('#code-custom', { code: CUSTOM_CODE, language: 'css',  copyable: true });
   }
 
+  function renderHowToSet() {
+    if (!(window.MTS && MTS.Alert)) return;
+    new MTS.Alert('#how-to-set', {
+      variant:  'info',
+      title:    'This one line switches everything',
+      message:  '<html data-mts-mode="light" data-mts-accent="olive">',
+      closable: false
+    });
+  }
+
   syncToolbar();
   renderThemes();
   renderVarsTable();
   renderCodeBlocks();
+  renderHowToSet();
 </script>
 </body>
 </html>
