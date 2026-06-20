@@ -43,6 +43,7 @@ const ICONS = {
   'sort-asc':     { o: `<path d="M3 6h18M7 12h10M11 18h2M17 3v6M17 3l-2 2M17 3l2 2" stroke-linecap="round" stroke-linejoin="round"/>` },
   'sort-desc':    { o: `<path d="M3 6h18M7 12h10M11 18h2M17 21v-6M17 21l-2-2M17 21l2-2" stroke-linecap="round" stroke-linejoin="round"/>` },
   'add':          { o: `<path d="M12 4v16M4 12h16" stroke-linecap="round"/>` },
+  'plus':         { o: `<path d="M12 4v16M4 12h16" stroke-linecap="round"/>` },
   'add-circle':   { o: `<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8" stroke-linecap="round"/>`,
                     f: `<path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>` },
   'minus':        { o: `<path d="M4 12h16" stroke-linecap="round"/>` },
@@ -52,6 +53,7 @@ const ICONS = {
   'check-circle': { o: `<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/>`,
                     f: `<path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm-1 14-4-4 1.4-1.4 2.6 2.6 6.6-6.6L19 8l-8 8z"/>` },
   'check-all':    { o: `<path d="M2 12l4 4L14 8M7 12l4 4 7-8" stroke-linecap="round" stroke-linejoin="round"/>` },
+  'check-square': { o: `<polyline points="9 11 12 14 22 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke-linecap="round" stroke-linejoin="round"/>` },
   'copy':         { o: `<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>` },
   'cut':          { o: `<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="m20 4-8.12 8.12M14.47 14.48 20 20M8.41 13.41l-1.88 1.88" stroke-linecap="round"/>` },
   'paste':        { o: `<path d="M9 2h6a1 1 0 0 1 1 1v1H8V3a1 1 0 0 1 1-1z"/><rect x="4" y="4" width="16" height="17" rx="2"/><path d="M9 12h6M9 16h4" stroke-linecap="round"/>` },
@@ -68,6 +70,8 @@ const ICONS = {
   'download-cloud':{ o: `<polyline points="8 17 12 21 16 17"/><line x1="12" y1="21" x2="12" y2="12"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/>` },
   'refresh':      { o: `<path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" stroke-linecap="round"/>` },
   'refresh-cw':   { o: `<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>` },
+  'rotate-ccw':   { o: `<polyline points="1 4 1 10 7 10" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" stroke-linecap="round" stroke-linejoin="round"/>` },
+  'rotate-cw':    { o: `<polyline points="23 4 23 10 17 10" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10" stroke-linecap="round" stroke-linejoin="round"/>` },
   'sync':         { o: `<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>` },
   'undo':         { o: `<path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" stroke-linecap="round"/>` },
   'redo':         { o: `<path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13" stroke-linecap="round"/>` },
@@ -92,6 +96,7 @@ const ICONS = {
   'lock':         { o: `<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
                     f: `<path d="M17 11V7A5 5 0 0 0 7 7v4H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-2z" fill="currentColor" stroke="none"/>` },
   'lock-open':    { o: `<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>` },
+  'unlock':       { o: `<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>` },
   'key':          { o: `<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"/>` },
   'eye':          { o: `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>` },
   'eye-off':      { o: `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>` },
@@ -120,6 +125,7 @@ const ICONS = {
   'arrow-right':  { o: `<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>` },
   'arrow-up':     { o: `<line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>` },
   'arrow-down':   { o: `<line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>` },
+  'arrow-down-circle': { o: `<circle cx="12" cy="12" r="10"/><polyline points="8 12 12 16 16 12"/><line x1="12" y1="8" x2="12" y2="16"/>` },
   'arrow-up-right':{ o: `<line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>` },
   'arrow-back':   { o: `<path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>` },
   'chevron-left': { o: `<polyline points="15 18 9 12 15 6"/>` },
@@ -144,6 +150,8 @@ const ICONS = {
                     f: `<path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm-1 14-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4-7 7z" fill="currentColor" stroke="none"/>` },
   'help':         { o: `<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>` },
   'alert':        { o: `<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>` },
+  'alert-circle': { o: `<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>` },
+  'alert-triangle': { o: `<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>` },
   'ban':          { o: `<circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>` },
   'shield':       { o: `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>`,
                     f: `<path d="M12 1 4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-4z" fill="currentColor" stroke="none"/>` },
@@ -156,6 +164,9 @@ const ICONS = {
   /* ── ARCHIVO ─────────────────────────────────────────── */
   'file':         { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>` },
   'file-text':    { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>` },
+  'book':         { o: `<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>` },
+  'graduation-cap': { o: `<path d="M22 10 12 5 2 10l10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5" stroke-linecap="round" stroke-linejoin="round"/><line x1="22" y1="10" x2="22" y2="16"/>` },
+  'academic-cap': { o: `<path d="M22 10 12 5 2 10l10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5" stroke-linecap="round" stroke-linejoin="round"/><line x1="22" y1="10" x2="22" y2="16"/>` },
   'file-plus':    { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>` },
   'file-minus':   { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/>` },
   'file-check':   { o: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 15 11 17 15 13"/>` },
@@ -294,6 +305,9 @@ const ICONS = {
   'user-x':       { o: `<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="18" y1="8" x2="23" y2="13"/><line x1="23" y1="8" x2="18" y2="13"/>` },
   'contact':      { o: `<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 11a8 8 0 0 0-11.99-.04"/>` },
   'briefcase':    { o: `<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>` },
+  'building':     { o: `<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01" stroke-linecap="round"/>` },
+  'building-2':   { o: `<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4" stroke-linecap="round" stroke-linejoin="round"/>` },
+  'bank':         { o: `<line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/>` },
   'badge':        { o: `<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>` },
   'award':        { o: `<circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>` },
   'team':         { o: `<path d="M12 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM3 22a9 9 0 1 1 18 0H3z"/>` },
@@ -405,7 +419,20 @@ MTS.Icon = {
      get('trash')               → outline SVG
      get('trash', true)         → filled SVG           */
   get(name, filled = false) {
-    const icon = ICONS[name];
+    /* Búsqueda tolerante + defensiva:
+       - Acepta el nombre pelado ('trash') y la forma de clase CSS
+         ('mts-icon-trash'), recortando espacios → funciona con y sin prefijo.
+       - Valida charset y largo: un nombre real es [a-z0-9-] y a lo sumo ~26
+         chars con prefijo ('mts-icon-arrow-down-circle'); cualquier cosa rara
+         (markup, strings enormes, prefijos inválidos) se rechaza temprano.
+       - Lookup por propiedad PROPIA: evita que claves heredadas del prototipo
+         ('constructor', '__proto__', 'toString') resuelvan a basura.
+       Nota: el `name` nunca se interpola en el SVG devuelto → sin vector XSS. */
+    let key = String(name == null ? '' : name).trim();
+    if (key.indexOf('mts-icon-') === 0) key = key.slice(9); // 'mts-icon-' = 9 chars
+
+    const valid = /^[a-z0-9-]{1,32}$/.test(key);
+    const icon = (valid && Object.prototype.hasOwnProperty.call(ICONS, key)) ? ICONS[key] : null;
     if (!icon) {
       console.warn(`[MTS.Icon] Ícono no encontrado: "${name}"`);
       return this._svg(`<circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/>`, false);
