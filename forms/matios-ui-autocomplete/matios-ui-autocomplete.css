@@ -1,0 +1,123 @@
+/* ============================================================
+   MATIOS UI — matios-ui-autocomplete.css
+   ============================================================ */
+
+/* ── Wrap ────────────────────────────────────────────────── */
+
+.mts-ac__wrap {
+  position: relative;
+  display:  block;
+  width:    100%;
+}
+
+/* El input debe llenar el wrap — el × vive dentro */
+.mts-ac__wrap input {
+  width:         100%;
+  box-sizing:    border-box;
+  padding-right: 32px !important;
+}
+
+/* Cuando el wrap vive dentro de un mts-input-wrap, hereda el ancho */
+.mts-input-wrap .mts-ac__wrap {
+  display: block;
+  width:   100%;
+}
+
+/* ── Botón X ─────────────────────────────────────────────── */
+
+.mts-ac__clear {
+  position:   absolute;
+  right:      10px;
+  top:        50%;
+  transform:  translateY(-50%);
+  width:      20px;
+  height:     20px;
+  border:     none;
+  border-radius: var(--mts-radius-sm);
+  background: transparent;
+  color:      var(--mts-text-muted);
+  cursor:     pointer;
+  font-size:  18px;
+  line-height: 1;
+  display:    flex;
+  align-items: center;
+  justify-content: center;
+  padding:    0;
+  transition: color var(--mts-transition-fast);
+  z-index:    1;
+}
+
+.mts-ac__clear:hover {
+  color: var(--mts-text-primary);
+}
+
+/* ── Spinner (loading) ───────────────────────────────────── */
+
+.mts-ac__wrap--loading::after {
+  content:      '';
+  position:     absolute;
+  right:        10px;
+  top:          50%;
+  transform:    translateY(-50%);
+  width:        16px;
+  height:       16px;
+  border:       2px solid var(--mts-border-color);
+  border-top-color: var(--mts-color-primary);
+  border-radius: 50%;
+  animation:    mts-ac-spin 0.65s linear infinite;
+  pointer-events: none;
+}
+
+.mts-ac__wrap--loading .mts-ac__clear {
+  display: none !important;
+}
+
+@keyframes mts-ac-spin {
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* ── Dropdown ────────────────────────────────────────────── */
+
+.mts-ac__dropdown {
+  position:    fixed;
+  z-index:     var(--mts-z-popover, 9000);
+  list-style:  none;
+  margin:      0;
+  padding:     var(--mts-space-1) 0;
+  background:  var(--mts-bg-surface);
+  border:      1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  box-shadow:  var(--mts-shadow-md);
+  max-height:  260px;
+  overflow-y:  auto;
+}
+
+/* ── Ítem ────────────────────────────────────────────────── */
+
+.mts-ac__item {
+  padding:       var(--mts-space-2) var(--mts-space-4);
+  cursor:        pointer;
+  font-size:     var(--mts-font-size-sm);
+  font-family:   var(--mts-font-family);
+  color:         var(--mts-text-primary);
+  white-space:   nowrap;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  transition:    background var(--mts-transition-fast);
+}
+
+.mts-ac__item:hover,
+.mts-ac__item--active {
+  background: var(--mts-bg-surface-2);
+}
+
+/* ── Estado vacío ────────────────────────────────────────── */
+
+.mts-ac__empty {
+  padding:    var(--mts-space-3) var(--mts-space-4);
+  font-size:  var(--mts-font-size-sm);
+  font-family: var(--mts-font-family);
+  color:      var(--mts-text-muted);
+  font-style: italic;
+  text-align: center;
+}

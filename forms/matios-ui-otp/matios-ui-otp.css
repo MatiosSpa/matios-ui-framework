@@ -1,0 +1,115 @@
+/* ============================================================
+   MATIOS UI — matios-ui-otp.css
+   ============================================================ */
+
+/* ── Contenedor ──────────────────────────────────────────── */
+
+.mts-otp {
+  display:         inline-flex;
+  flex-direction:  column;
+  align-items:     center;
+  gap:             var(--mts-space-3);
+}
+
+/* ── Cajas ───────────────────────────────────────────────── */
+
+.mts-otp__boxes {
+  display:     flex;
+  gap:         var(--mts-space-2);
+  align-items: center;
+}
+
+.mts-otp__box {
+  width:           52px;
+  height:          60px;
+  text-align:      center;
+  font-size:       26px;
+  font-weight:     var(--mts-font-weight-bold);
+  font-family:     var(--mts-font-family);
+  color:           var(--mts-text-primary);
+  caret-color:     var(--mts-color-primary);
+  background:      var(--mts-bg-surface);
+  border:          2px solid var(--mts-border-color);
+  border-radius:   var(--mts-radius-md);
+  outline:         none;
+  transition:      border-color var(--mts-transition-fast),
+                   box-shadow   var(--mts-transition-fast),
+                   background   var(--mts-transition-fast);
+}
+
+.mts-otp__box:focus {
+  border-color: var(--mts-color-primary);
+  box-shadow:   0 0 0 3px var(--mts-color-primary-light);
+}
+
+.mts-otp__box--filled {
+  border-color: var(--mts-color-primary);
+  background:   color-mix(in srgb, var(--mts-bg-surface) 88%, var(--mts-color-primary) 12%);
+}
+
+/* ── Estado error ────────────────────────────────────────── */
+
+.mts-otp--error .mts-otp__box {
+  border-color: var(--mts-color-danger, #ef4444);
+}
+
+.mts-otp--error .mts-otp__box:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, transparent 72%, var(--mts-color-danger, #ef4444) 28%);
+}
+
+.mts-otp--error .mts-otp__box--filled {
+  background: color-mix(in srgb, var(--mts-bg-surface) 90%, var(--mts-color-danger, #ef4444) 10%);
+}
+
+/* ── Estado disabled ─────────────────────────────────────── */
+
+.mts-otp--disabled .mts-otp__box {
+  opacity:    0.55;
+  cursor:     not-allowed;
+  background: var(--mts-bg-surface-2);
+}
+
+/* ── Timer ───────────────────────────────────────────────── */
+
+.mts-otp__timer {
+  font-size:             var(--mts-font-size-sm);
+  font-weight:           var(--mts-font-weight-semibold);
+  color:                 var(--mts-text-muted);
+  font-variant-numeric:  tabular-nums;
+  letter-spacing:        .5px;
+  min-width:             40px;
+  text-align:            center;
+}
+
+.mts-otp__timer--expired {
+  color: var(--mts-color-danger, #ef4444);
+}
+
+/* ── Mensaje de error ────────────────────────────────────── */
+
+.mts-otp__error {
+  font-size:  var(--mts-font-size-xs);
+  color:      var(--mts-color-danger, #ef4444);
+  min-height: 16px;
+  text-align: center;
+}
+
+/* ── Link reenvío ────────────────────────────────────────── */
+
+.mts-otp__resend {
+  background:           none;
+  border:               none;
+  padding:              0;
+  font-size:            var(--mts-font-size-sm);
+  font-family:          var(--mts-font-family);
+  font-weight:          var(--mts-font-weight-medium);
+  color:                var(--mts-color-primary);
+  cursor:               pointer;
+  text-decoration:      underline;
+  text-underline-offset: 2px;
+  transition:           opacity var(--mts-transition-fast);
+}
+
+.mts-otp__resend:hover {
+  opacity: 0.75;
+}

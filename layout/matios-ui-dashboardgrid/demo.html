@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.DashboardGrid — Demo</title>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-rose.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-orange.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-sky.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-indigo.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-teal.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-slate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-bronze.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../layout/matios-ui-grid/matios-ui-grid.css">
+  <link rel="stylesheet" href="./matios-ui-dashboardgrid.css">
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="./matios-ui-dashboardgrid.js"></script>
+</head>
+<body>
+<div class="demo-page">
+
+  <style>
+    /* ── Widget content ─────────────────────────────────────── */
+    .dg-w            { padding: 12px 14px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: 4px; }
+    .dg-w__label     { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--mts-text-muted); }
+    .dg-w__value     { font-size: 26px; font-weight: 800; color: var(--mts-text-primary); line-height: 1.1; }
+    .dg-w__sub       { font-size: 11px; color: var(--mts-text-muted); margin-top: 2px; }
+    .dg-w__positive  { color: #22c55e; }
+    .dg-w__negative  { color: #ef4444; }
+    .dg-w__bars      { display: flex; align-items: flex-end; gap: 5px; flex: 1; padding-top: 8px; }
+    .dg-w__bar       { flex: 1; border-radius: 3px 3px 0 0; background: var(--mts-color-primary); opacity: .7; }
+    .dg-w__alerts    { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; overflow: hidden; }
+    .dg-w__alert     { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--mts-text-secondary); }
+    .dg-w__dot       { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .dg-w__dot--red  { background: #ef4444; }
+    .dg-w__dot--yel  { background: #f59e0b; }
+    .dg-w__dot--grn  { background: #22c55e; }
+
+    /* ── Output pre ─────────────────────────────────────────── */
+    .dg-output       { background: var(--mts-bg-surface); border: 1px solid var(--mts-border-color); border-radius: var(--mts-radius-md); padding: 10px 14px; font-size: 11px; font-family: var(--mts-font-mono); color: var(--mts-color-primary); min-height: 48px; max-height: 160px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; }
+
+    /* ── Controls bar ────────────────────────────────────────── */
+    .dg-controls     { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .dg-controls-sep { width: 1px; height: 20px; background: var(--mts-border-color); }
+    .dg-mode-badge   { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--mts-text-muted); padding: 2px 8px; border: 1px solid var(--mts-border-color); border-radius: var(--mts-radius-sm); }
+  </style>
+
+  <div class="demo-header">
+    <h1><span>MTS</span>.DashboardGrid</h1>
+    <p>Bento grid with drag & drop, a tray of available widgets, resize and collision modes (displace / block).</p>
+    <div class="demo-header-actions" id="hdr-actions"></div>
+    <div class="demo-docs-panel" id="dp"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 1 — Displace mode
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="demo-section">
+    <div class="demo-section-title">1 — Displace mode — drag, resize or use the keyboard (Tab → Enter/Arrows → Enter)</div>
+    <div id="dg-controls-1" class="dg-controls"></div>
+    <div id="dg-code-1"></div>
+    <div class="demo-label">onWidgetsChange</div>
+    <pre class="dg-output" id="dg-out-1">— enable editing and move a widget —</pre>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SECTION 2 — Block mode
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="demo-section">
+    <div class="demo-section-title">2 — Block mode — the drop is rejected on collision (red placeholder)</div>
+    <div id="dg-controls-2" class="dg-controls"></div>
+    <div id="dg-code-2"></div>
+  </div>
+
+</div><!-- /demo-page -->
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   HELPERS
+   ══════════════════════════════════════════════════════════════ */
+
+function mdToHtml(md) {
+  if (!md) return '';
+  var blocks = [];
+  var h = md
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, function(_,l,c){ blocks.push(c.trim()); return '\x00B'+(blocks.length-1)+'\x00'; })
+    .replace(/^---+$/gm,'<hr>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm,function(_,hdr,rows){
+      var ths=hdr.split('|').filter(function(c){return c.trim();}).map(function(c){return'<th>'+c.trim()+'</th>';}).join('');
+      var trs=rows.trim().split('\n').map(function(r){return'<tr>'+r.split('|').filter(function(c){return c.trim();}).map(function(c){return'<td>'+c.trim()+'</td>';}).join('')+'</tr>';}).join('');
+      return'<table><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';
+    })
+    .replace(/^[*-] (.+)$/gm,'<li>$1</li>').replace(/((?:<li>[^<]*<\/li>\n?)+)/g,'<ul>$1</ul>')
+    .replace(/^(?!<)(.+)$/gm,'<p>$1</p>');
+  return h.replace(/\x00B(\d+)\x00/g,function(_,i){return'<pre><code>'+blocks[+i]+'</code></pre>';});
+}
+
+function buildDGSection(target, previewHtml, htmlCode, jsCode, cbHtmlId, cbJsId) {
+  new MTS.Tabs(target, {
+    variant: 'card',
+    lazy: false,
+    active: 'preview',
+    tabs: [
+      { id: 'preview',  label: 'Preview',     content: previewHtml },
+      { id: 'html',     label: 'HTML',         content: '<div id="' + cbHtmlId + '"></div>' },
+      { id: 'js',       label: 'JavaScript',   content: '<div id="' + cbJsId + '"></div>' }
+    ]
+  });
+  new MTS.CodeBlock('#' + cbHtmlId, { code: htmlCode, language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + cbJsId,   { code: jsCode,   language: 'javascript', copyable: true });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   WIDGET HTML BUILDERS
+   ══════════════════════════════════════════════════════════════ */
+
+function wKpi(label, value, sub, subClass) {
+  return '<div class="dg-w">'
+    + '<div class="dg-w__label">' + label + '</div>'
+    + '<div class="dg-w__value">' + value + '</div>'
+    + '<div class="dg-w__sub' + (subClass ? ' ' + subClass : '') + '">' + sub + '</div>'
+    + '</div>';
+}
+
+function wBars(label, heights) {
+  var bars = heights.map(function(h){
+    return '<div class="dg-w__bar" style="height:' + h + '%"></div>';
+  }).join('');
+  return '<div class="dg-w">'
+    + '<div class="dg-w__label">' + label + '</div>'
+    + '<div class="dg-w__bars">' + bars + '</div>'
+    + '</div>';
+}
+
+function wAlerts(label) {
+  return '<div class="dg-w">'
+    + '<div class="dg-w__label">' + label + '</div>'
+    + '<div class="dg-w__alerts">'
+    + '<div class="dg-w__alert"><span class="dg-w__dot dg-w__dot--red"></span><span>Server #3 unresponsive since 14:32</span></div>'
+    + '<div class="dg-w__alert"><span class="dg-w__dot dg-w__dot--yel"></span><span>Disk usage &gt; 80% in production</span></div>'
+    + '<div class="dg-w__alert"><span class="dg-w__dot dg-w__dot--grn"></span><span>Daily backup completed successfully</span></div>'
+    + '</div></div>';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MOCK FETCH
+   ══════════════════════════════════════════════════════════════ */
+
+function mockFetch() {
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve({
+        items: [
+          { id: 'sales',     col: 1, row: 1, w: 3, h: 2, title: 'Monthly sales',      html: wKpi('Monthly sales',      '$84,200',    '↑ +12.4% vs last month', 'dg-w__positive') },
+          { id: 'users',     col: 4, row: 1, w: 2, h: 1, title: 'Active users',       html: wKpi('Active users',       '1,284',      '↑ +38 in the last 24 h', 'dg-w__positive') },
+          { id: 'orders',    col: 6, row: 1, w: 3, h: 1, title: 'Orders today',       html: wKpi('Orders today',       '47',         '↓ -5 vs yesterday', 'dg-w__negative') },
+          { id: 'activity',  col: 4, row: 2, w: 5, h: 2, title: 'Weekly activity',    html: wBars('Weekly activity',   [40, 65, 55, 80, 70, 90, 60]) },
+          { id: 'revenue',   col: 1, row: 3, w: 3, h: 2, title: 'Net revenue',        html: wKpi('Net revenue',        '$31,500',    '↑ +8.1% vs last month', 'dg-w__positive') },
+          { id: 'alerts',    col: 4, row: 4, w: 5, h: 2, title: 'Recent alerts',      html: wAlerts('Recent alerts') }
+        ],
+        availableItems: [
+          { id: 'tasks',         w: 2, h: 2, title: 'Pending tasks',     html: wKpi('Pending tasks',     '12',   '3 due today') },
+          { id: 'calendar',      w: 3, h: 2, title: 'Calendar',          html: wKpi('Next event',        'Today','Team meeting 18:00') },
+          { id: 'notifications', w: 2, h: 1, title: 'Notifications',     html: wKpi('Notifications',     '5',    '2 unread') },
+          { id: 'stats',         w: 4, h: 2, title: 'Global stats',      html: wBars('Global stats',     [50, 72, 68, 85, 75, 91, 80]) }
+        ]
+      });
+    }, 60);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DEMO 1 — DISPLACE
+   ══════════════════════════════════════════════════════════════ */
+
+var dg1;
+var dg1Editable = false;
+
+var previewHtml1 = '<div id="dg-root-1" style="min-height:520px;"></div>';
+
+var htmlCode1 = '<div id="my-dashboard"></div>';
+
+var jsCode1 = [
+  'function fetchDashboard() {',
+  '  return fetch(\'/api/dashboard/layout\')',
+  '    .then(function(r) { return r.json(); })',
+  '    .then(function(data) {',
+  '      return {',
+  '        items: [',
+  '          { id: \'sales\',    col: 1, row: 1, w: 3, h: 2, title: \'Monthly sales\',   html: \'...\' },',
+  '          { id: \'users\',    col: 4, row: 1, w: 2, h: 1, title: \'Active users\',    html: \'...\' },',
+  '          { id: \'orders\',   col: 6, row: 1, w: 3, h: 1, title: \'Orders today\',    html: \'...\' },',
+  '          { id: \'activity\', col: 4, row: 2, w: 5, h: 2, title: \'Weekly activity\', html: \'...\' },',
+  '          { id: \'revenue\',  col: 1, row: 3, w: 3, h: 2, title: \'Net revenue\',     html: \'...\' },',
+  '          { id: \'alerts\',   col: 4, row: 4, w: 5, h: 2, title: \'Recent alerts\',   html: \'...\' }',
+  '        ],',
+  '        availableItems: [',
+  '          { id: \'tasks\',         w: 2, h: 2, title: \'Pending tasks\',  html: \'...\' },',
+  '          { id: \'calendar\',      w: 3, h: 2, title: \'Calendar\',       html: \'...\' },',
+  '          { id: \'notifications\', w: 2, h: 1, title: \'Notifications\',  html: \'...\' },',
+  '          { id: \'stats\',         w: 4, h: 2, title: \'Global stats\',   html: \'...\' }',
+  '        ]',
+  '      };',
+  '    });',
+  '}',
+  '',
+  'fetchDashboard().then(function(data) {',
+  '  var dg = new MTS.DashboardGrid(\'#my-dashboard\', {',
+  '    columns:       8,',
+  '    rowHeight:     90,',
+  '    gap:           12,',
+  '    editable:      false,',
+  '    debug:         true,',
+  '    collisionMode: \'displace\',',
+  '    items:          data.items,',
+  '    availableItems: data.availableItems,',
+  '    onWidgetsChange: function(layout) {',
+  '      console.log(layout);',
+  '    }',
+  '  });',
+  '});'
+].join('\n');
+
+buildDGSection('#dg-code-1', previewHtml1, htmlCode1, jsCode1, 'dg1-cb-html', 'dg1-cb-js');
+
+/* Initialize the DashboardGrid after the preview tab is in the DOM */
+mockFetch().then(function(data) {
+  dg1 = new MTS.DashboardGrid('#dg-root-1', {
+    columns:       8,
+    rowHeight:     90,
+    gap:           12,
+    editable:      false,
+    debug:         true,
+    collisionMode: 'displace',
+    items:          data.items,
+    availableItems: data.availableItems,
+    onWidgetsChange: function(layout) {
+      var pre = document.getElementById('dg-out-1');
+      if (pre) pre.textContent = JSON.stringify(layout, null, 2);
+    }
+  });
+});
+
+/* Section 1 controls */
+(function() {
+  var bar = document.getElementById('dg-controls-1');
+
+  var btnEdit = document.createElement('button');
+  btnEdit.className = 'demo-btn-sm';
+  btnEdit.textContent = 'Enable editing';
+  btnEdit.addEventListener('click', function() {
+    if (!dg1) return;
+    dg1Editable = !dg1Editable;
+    dg1.setEditable(dg1Editable);
+    btnEdit.textContent = dg1Editable ? 'Disable editing' : 'Enable editing';
+  });
+  bar.appendChild(btnEdit);
+
+  var sep = document.createElement('div');
+  sep.className = 'dg-controls-sep';
+  bar.appendChild(sep);
+
+  var btnReset = document.createElement('button');
+  btnReset.className = 'demo-btn-sm';
+  btnReset.textContent = 'Reset';
+  btnReset.addEventListener('click', function() {
+    if (!dg1) return;
+    mockFetch().then(function(data) {
+      dg1.setItems(data.items);
+      dg1.setAvailableItems(data.availableItems);
+      dg1Editable = false;
+      dg1.setEditable(false);
+      btnEdit.textContent = 'Enable editing';
+      var pre = document.getElementById('dg-out-1');
+      if (pre) pre.textContent = '— enable editing and move a widget —';
+    });
+  });
+  bar.appendChild(btnReset);
+
+  var sep2 = document.createElement('div');
+  sep2.className = 'dg-controls-sep';
+  bar.appendChild(sep2);
+
+  var badge = document.createElement('span');
+  badge.className = 'dg-mode-badge';
+  badge.textContent = 'collisionMode: displace';
+  bar.appendChild(badge);
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   DEMO 2 — BLOCK
+   ══════════════════════════════════════════════════════════════ */
+
+var dg2;
+var dg2Editable = false;
+
+var previewHtml2 = '<div id="dg-root-2" style="min-height:340px;"></div>';
+
+var htmlCode2 = '<div id="my-dashboard-block"></div>';
+
+var jsCode2 = [
+  'function fetchDashboard() {',
+  '  return fetch(\'/api/dashboard/layout\')',
+  '    .then(function(r) { return r.json(); })',
+  '    .then(function(data) {',
+  '      return {',
+  '        items: [',
+  '          { id: \'a\', col: 1, row: 1, w: 2, h: 2, title: \'Widget A\', html: \'...\' },',
+  '          { id: \'b\', col: 3, row: 1, w: 2, h: 1, title: \'Widget B\', html: \'...\' },',
+  '          { id: \'c\', col: 5, row: 1, w: 2, h: 2, title: \'Widget C\', html: \'...\' },',
+  '          { id: \'d\', col: 3, row: 2, w: 2, h: 2, title: \'Widget D\', html: \'...\' }',
+  '        ],',
+  '        availableItems: []',
+  '      };',
+  '    });',
+  '}',
+  '',
+  'fetchDashboard().then(function(data) {',
+  '  var dg = new MTS.DashboardGrid(\'#my-dashboard-block\', {',
+  '    columns:       6,',
+  '    rowHeight:     90,',
+  '    gap:           12,',
+  '    editable:      true,',
+  '    collisionMode: \'block\',',
+  '    items:          data.items,',
+  '    availableItems: data.availableItems,',
+  '    onWidgetsChange: function(layout) { console.log(layout); }',
+  '  });',
+  '});'
+].join('\n');
+
+buildDGSection('#dg-code-2', previewHtml2, htmlCode2, jsCode2, 'dg2-cb-html', 'dg2-cb-js');
+
+(function() {
+  var items2 = [
+    { id: 'b-a', col: 1, row: 1, w: 2, h: 2, title: 'Widget A', html: wKpi('Widget A', '100', 'drag onto another — red placeholder') },
+    { id: 'b-b', col: 3, row: 1, w: 2, h: 1, title: 'Widget B', html: wKpi('Widget B', '200', 'the drop is rejected') },
+    { id: 'b-c', col: 5, row: 1, w: 2, h: 2, title: 'Widget C', html: wKpi('Widget C', '300', 'no automatic displacement') },
+    { id: 'b-d', col: 3, row: 2, w: 2, h: 2, title: 'Widget D', html: wKpi('Widget D', '400', 'placed only on free space') }
+  ];
+
+  dg2 = new MTS.DashboardGrid('#dg-root-2', {
+    columns:       6,
+    rowHeight:     90,
+    gap:           12,
+    editable:      false,
+    collisionMode: 'block',
+    items:          items2,
+    availableItems: [],
+    onWidgetsChange: function() {}
+  });
+
+  var bar = document.getElementById('dg-controls-2');
+
+  var btnEdit2 = document.createElement('button');
+  btnEdit2.className = 'demo-btn-sm';
+  btnEdit2.textContent = 'Enable editing';
+  btnEdit2.addEventListener('click', function() {
+    if (!dg2) return;
+    dg2Editable = !dg2Editable;
+    dg2.setEditable(dg2Editable);
+    btnEdit2.textContent = dg2Editable ? 'Disable editing' : 'Enable editing';
+  });
+  bar.appendChild(btnEdit2);
+
+  var sep = document.createElement('div');
+  sep.className = 'dg-controls-sep';
+  bar.appendChild(sep);
+
+  var badge = document.createElement('span');
+  badge.className = 'dg-mode-badge';
+  badge.textContent = 'collisionMode: block';
+  bar.appendChild(badge);
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   HEADER — Docs + theme
+   ══════════════════════════════════════════════════════════════ */
+
+(function() {
+  var actions = document.getElementById('hdr-actions');
+
+  var btnDocs = document.createElement('button');
+  btnDocs.className = 'demo-docs-btn';
+  btnDocs.textContent = 'View documentation';
+  btnDocs.addEventListener('click', function() {
+    var panel = document.getElementById('dp');
+    panel.classList.toggle('open');
+    if (!panel.classList.contains('open') || panel.dataset.loaded) return;
+    panel.innerHTML = '<em style="color:var(--mts-text-muted)">Loading...</em>';
+    fetch('./matios-ui-dashboardgrid.md')
+      .then(function(r) { return r.text(); })
+      .then(function(md) { panel.innerHTML = mdToHtml(md); panel.dataset.loaded = '1'; })
+      .catch(function() { panel.innerHTML = '<em>Failed to load.</em>'; });
+  });
+  actions.appendChild(btnDocs);
+
+  var btnDark  = document.createElement('button');
+  var btnLight = document.createElement('button');
+  btnDark.className  = 'demo-btn-sm';
+  btnLight.className = 'demo-btn-sm';
+  btnDark.textContent  = 'Dark';
+  btnLight.textContent = 'Light';
+  btnDark.addEventListener('click',  function() { setMode('dark');  });
+  btnLight.addEventListener('click', function() { setMode('light'); });
+  actions.appendChild(btnDark);
+  actions.appendChild(btnLight);
+})();
+</script>
+</body>
+</html>

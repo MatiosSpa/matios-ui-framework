@@ -1,0 +1,238 @@
+/* ============================================================
+   MATIOS UI — matios-ui-itemlist.css
+   ============================================================ */
+
+/* ── Root ────────────────────────────────────────────────── */
+
+.mts-itemlist {
+  list-style:     none;
+  margin:         0;
+  padding:        0;
+  display:        flex;
+  flex-direction: column;
+  width:          100%;
+  border:         1px solid var(--mts-border-color);
+  border-radius:  var(--mts-radius-md);
+  background:     var(--mts-bg-surface);
+  overflow:       hidden;
+}
+
+/* ── Scroll ──────────────────────────────────────────────── */
+
+.mts-itemlist--scroll {
+  overflow-y: auto;
+  max-height: var(--mts-il-max-height, 300px);
+}
+
+/* ── Ítem ────────────────────────────────────────────────── */
+
+.mts-itemlist__item {
+  display:        flex;
+  align-items:    center;
+  gap:            var(--mts-space-3);
+  padding:        var(--mts-space-3) var(--mts-space-4);
+  border-bottom:  1px solid var(--mts-border-color);
+  transition:     background var(--mts-transition-fast);
+  position:       relative;
+  min-height:     52px;
+}
+
+.mts-itemlist__item:last-child {
+  border-bottom: none;
+}
+
+.mts-itemlist__item--selectable {
+  cursor: pointer;
+}
+
+.mts-itemlist__item--selectable:hover {
+  background: var(--mts-bg-surface-2);
+}
+
+.mts-itemlist__item--selected {
+  background: color-mix(in srgb, var(--mts-bg-surface) 88%, var(--mts-color-primary) 12%);
+}
+
+.mts-itemlist__item--selected:hover {
+  background: color-mix(in srgb, var(--mts-bg-surface) 82%, var(--mts-color-primary) 18%);
+}
+
+.mts-itemlist__item--disabled {
+  opacity:        0.5;
+  pointer-events: none;
+}
+
+/* ── Leading / Trailing ──────────────────────────────────── */
+
+.mts-itemlist__leading,
+.mts-itemlist__trailing {
+  flex-shrink: 0;
+  display:     flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Avatar ──────────────────────────────────────────────── */
+
+.mts-itemlist__avatar {
+  width:         36px;
+  height:        36px;
+  border-radius: 50%;
+  object-fit:    cover;
+  flex-shrink:   0;
+}
+
+/* ── Iniciales ───────────────────────────────────────────── */
+
+.mts-itemlist__initials {
+  width:           36px;
+  height:          36px;
+  border-radius:   50%;
+  background:      var(--mts-color-primary);
+  color:           #fff;
+  font-size:       var(--mts-font-size-xs);
+  font-weight:     var(--mts-font-weight-semibold);
+  font-family:     var(--mts-font-family);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  flex-shrink:     0;
+  letter-spacing:  .5px;
+}
+
+/* ── Icono ───────────────────────────────────────────────── */
+
+.mts-itemlist__icon {
+  width:   20px;
+  height:  20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:   var(--mts-text-muted);
+  flex-shrink: 0;
+}
+
+.mts-itemlist__icon svg {
+  width:  100%;
+  height: 100%;
+}
+
+/* ── Body ────────────────────────────────────────────────── */
+
+.mts-itemlist__body {
+  flex:       1;
+  min-width:  0;
+  display:    flex;
+  flex-direction: column;
+  gap:        2px;
+}
+
+.mts-itemlist__primary {
+  font-size:     var(--mts-font-size-sm);
+  font-weight:   var(--mts-font-weight-medium);
+  color:         var(--mts-text-primary);
+  white-space:   nowrap;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+}
+
+.mts-itemlist__secondary {
+  font-size:     var(--mts-font-size-xs);
+  color:         var(--mts-text-muted);
+  white-space:   nowrap;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Controls ────────────────────────────────────────────── */
+
+.mts-itemlist__controls {
+  display:     flex;
+  align-items: center;
+  gap:         var(--mts-space-2);
+  flex-shrink: 0;
+}
+
+.mts-itemlist__ctrl-select {
+  font-size:    var(--mts-font-size-xs);
+  font-family:  var(--mts-font-family);
+  color:        var(--mts-text-primary);
+  background:   var(--mts-bg-surface-2);
+  border:       1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-sm);
+  padding:      0 var(--mts-space-2);
+  height:       28px;
+  outline:      none;
+  cursor:       pointer;
+  transition:   border-color var(--mts-transition-fast);
+}
+
+.mts-itemlist__ctrl-select:focus {
+  border-color: var(--mts-color-primary);
+}
+
+.mts-itemlist__ctrl-btn {
+  width:        28px;
+  height:       28px;
+  border:       none;
+  border-radius: var(--mts-radius-sm);
+  background:   transparent;
+  color:        var(--mts-text-muted);
+  cursor:       pointer;
+  display:      flex;
+  align-items:  center;
+  justify-content: center;
+  padding:      0;
+  flex-shrink:  0;
+  transition:   background var(--mts-transition-fast),
+                color      var(--mts-transition-fast);
+}
+
+.mts-itemlist__ctrl-btn:hover {
+  background: var(--mts-bg-surface-2);
+  color:      var(--mts-text-primary);
+}
+
+.mts-itemlist__ctrl-icon,
+.mts-itemlist__ctrl-btn .mts-itemlist__icon {
+  width:  15px;
+  height: 15px;
+  pointer-events: none;
+}
+
+/* ── Botón remove (canRemove) ────────────────────────────── */
+
+.mts-itemlist__remove {
+  flex-shrink:  0;
+  width:        26px;
+  height:       26px;
+  border:       none;
+  border-radius: var(--mts-radius-sm);
+  background:   transparent;
+  color:        var(--mts-text-muted);
+  cursor:       pointer;
+  font-size:    18px;
+  line-height:  1;
+  display:      flex;
+  align-items:  center;
+  justify-content: center;
+  padding:      0;
+  transition:   background var(--mts-transition-fast),
+                color      var(--mts-transition-fast);
+}
+
+.mts-itemlist__remove:hover {
+  background: color-mix(in srgb, transparent 78%, var(--mts-color-danger, #ef4444) 22%);
+  color:      var(--mts-color-danger, #ef4444);
+}
+
+/* ── Estado vacío ────────────────────────────────────────── */
+
+.mts-itemlist__empty {
+  padding:     var(--mts-space-6) var(--mts-space-4);
+  text-align:  center;
+  font-size:   var(--mts-font-size-sm);
+  color:       var(--mts-text-muted);
+  font-style:  italic;
+  list-style:  none;
+}

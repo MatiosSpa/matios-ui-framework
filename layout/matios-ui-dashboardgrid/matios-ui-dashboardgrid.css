@@ -1,0 +1,458 @@
+/* ============================================================
+   MATIOS UI — matios-ui-dashboardgrid.css
+   MTS.DashboardGrid — Grid de dashboard con drag-drop y tray
+   ============================================================ */
+
+/* ════════════════════════════════════════════════════════
+   WRAPPER
+   ════════════════════════════════════════════════════════ */
+
+.mts-dashboardgrid {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  width: 100%;
+  position: relative;
+}
+
+/* ════════════════════════════════════════════════════════
+   GRID (compone con .mts-grid del base)
+   ════════════════════════════════════════════════════════ */
+
+.mts-dashboardgrid__grid {
+  flex: 1;
+  min-width: 0;
+  /* Override grid-template-rows de mts-grid — queremos filas automáticas */
+  grid-template-rows: unset;
+  grid-auto-rows: var(--mts-dg-row-height, 80px);
+  position: relative;
+}
+
+/* ════════════════════════════════════════════════════════
+   ITEM
+   ════════════════════════════════════════════════════════ */
+
+.mts-dashboardgrid__item {
+  grid-column: var(--mts-dg-col) / span var(--mts-dg-w, 1);
+  grid-row:    var(--mts-dg-row) / span var(--mts-dg-h, 1);
+  position: relative;
+  background: var(--mts-bg-surface);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  overflow: hidden;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* ════════════════════════════════════════════════════════
+   TITLE BAR — slot opcional arriba del content
+   ════════════════════════════════════════════════════════
+
+   Se renderiza automaticamente cuando el item declara `title`.
+   Aporta padding + border-bottom (divisor) + tipografia. El
+   consumidor no necesita poner header alguno en su html — el
+   grid se encarga. */
+
+.mts-dashboardgrid__title-bar {
+  padding: var(--mts-space-4) var(--mts-space-5);
+  border-bottom: 1px solid var(--mts-border-color);
+  flex-shrink: 0;
+}
+
+.mts-dashboardgrid__title {
+  font-size: var(--mts-font-size-md);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+  margin: 0;
+  line-height: var(--mts-line-height-tight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ════════════════════════════════════════════════════════
+   CONTENT — slot principal del widget
+   ════════════════════════════════════════════════════════
+
+   El consumidor inyecta su html aqui. El componente garantiza:
+     - Padding consistente con el resto del framework.
+     - Toma todo el espacio vertical disponible (`flex: 1 1 auto`
+       respecto al padre `__item` que es flex-column).
+
+   Nota: el content es `display: block` (default). No es flex.
+   Si fuera flex-column, cada hijo (incluidos text nodes!) se
+   trataria como flex item separado, rompiendo texto inline tipo
+   `<strong>--</strong> contador` en dos lineas. El consumidor que
+   necesite layout flex internamente lo aplica en su propio HTML. */
+
+.mts-dashboardgrid__content {
+  padding: var(--mts-space-5);
+  flex: 1 1 auto;
+  color: var(--mts-text-secondary);
+  font-size: var(--mts-font-size-sm);
+  line-height: var(--mts-line-height-base);
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+/* Wrapper del item: layout flex-column para que title-bar + content
+   compongan vertical y content tome el espacio restante. */
+.mts-dashboardgrid__item {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ════════════════════════════════════════════════════════
+   ACCENT LINE — modifier de identidad visual del dashboard
+   ════════════════════════════════════════════════════════
+
+   Activado por options.accent = 'primary' | 'success' | 'warning' |
+   'danger' | 'info' en el constructor. Pinta franja superior de 3px
+   en CADA item del grid. Z-index sobre el contenido pero debajo del
+   drag handle. */
+
+.mts-dashboardgrid[class*="mts-dashboardgrid--accent-"] .mts-dashboardgrid__item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.mts-dashboardgrid--accent-primary .mts-dashboardgrid__item::before { background: var(--mts-color-primary); }
+.mts-dashboardgrid--accent-success .mts-dashboardgrid__item::before { background: var(--mts-color-success); }
+.mts-dashboardgrid--accent-warning .mts-dashboardgrid__item::before { background: var(--mts-color-warning); }
+.mts-dashboardgrid--accent-danger  .mts-dashboardgrid__item::before { background: var(--mts-color-danger);  }
+.mts-dashboardgrid--accent-info    .mts-dashboardgrid__item::before { background: var(--mts-color-info, var(--mts-color-primary)); }
+
+/* Animación de entrada — widget agregado desde el tray */
+@keyframes mts-dg-enter {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+
+.mts-dashboardgrid__item--entering {
+  animation: mts-dg-enter 0.18s ease-out forwards;
+}
+
+/* Animación de desplazamiento (displace mode) — transform GPU, spring curve */
+.mts-dashboardgrid--editable .mts-dashboardgrid__item {
+  transition: transform 0.32s cubic-bezier(0.34, 1.2, 0.64, 1),
+              opacity 0.18s ease,
+              box-shadow 0.15s ease;
+  will-change: transform;
+}
+
+.mts-dashboardgrid__item--dragging {
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.mts-dashboardgrid__item--resizing {
+  opacity: 0.75;
+}
+
+.mts-dashboardgrid__item--locked {
+  cursor: default;
+}
+
+/* Focus visible */
+.mts-dashboardgrid__item:focus-visible {
+  outline: 2px solid var(--mts-color-primary);
+  outline-offset: 2px;
+}
+
+/* ────────────────────────────────────────
+   DRAG HANDLE
+   ──────────────────────────────────────── */
+
+.mts-dashboardgrid__drag-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 32px; /* deja espacio al botón X */
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.15s;
+  user-select: none;
+}
+
+.mts-dashboardgrid__item:hover .mts-dashboardgrid__drag-handle,
+.mts-dashboardgrid__item:focus-within .mts-dashboardgrid__drag-handle {
+  opacity: 1;
+}
+
+.mts-dashboardgrid__drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Ícono de puntos (grip) */
+.mts-dashboardgrid__drag-icon {
+  display: block;
+  width: 18px;
+  height: 12px;
+  background-image: radial-gradient(circle, var(--mts-text-muted) 1.5px, transparent 1.5px);
+  background-size: 5px 4px;
+  background-repeat: repeat;
+  opacity: 0.6;
+}
+
+/* ────────────────────────────────────────
+   REMOVE BUTTON
+   ──────────────────────────────────────── */
+
+.mts-dashboardgrid__remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--mts-radius-sm);
+  color: var(--mts-text-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+  z-index: 4;
+  padding: 0;
+  font-family: inherit;
+}
+
+.mts-dashboardgrid__item:hover .mts-dashboardgrid__remove-btn,
+.mts-dashboardgrid__item:focus-within .mts-dashboardgrid__remove-btn {
+  opacity: 1;
+}
+
+.mts-dashboardgrid__remove-btn:hover {
+  color: var(--mts-color-danger, #ef4444);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.mts-dashboardgrid__remove-btn:focus-visible {
+  outline: 2px solid var(--mts-color-primary);
+  outline-offset: 1px;
+  opacity: 1;
+}
+
+/* ────────────────────────────────────────
+   RESIZE HANDLE
+   ──────────────────────────────────────── */
+
+.mts-dashboardgrid__resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  cursor: se-resize;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.mts-dashboardgrid__item:hover .mts-dashboardgrid__resize-handle,
+.mts-dashboardgrid__item:focus-within .mts-dashboardgrid__resize-handle {
+  opacity: 1;
+}
+
+/* Icono de resize (2 líneas en esquina) */
+.mts-dashboardgrid__resize-handle::before,
+.mts-dashboardgrid__resize-handle::after {
+  content: '';
+  position: absolute;
+  background: var(--mts-text-muted);
+  border-radius: 1px;
+  opacity: 0.6;
+}
+
+.mts-dashboardgrid__resize-handle::before {
+  bottom: 5px;
+  right: 2px;
+  width: 10px;
+  height: 2px;
+  transform: rotate(-45deg);
+  transform-origin: right center;
+}
+
+.mts-dashboardgrid__resize-handle::after {
+  bottom: 2px;
+  right: 5px;
+  width: 6px;
+  height: 2px;
+  transform: rotate(-45deg);
+  transform-origin: right center;
+}
+
+/* En modo editable, el content cede espacio al drag handle */
+.mts-dashboardgrid--editable .mts-dashboardgrid__content {
+  padding-top: 28px;
+}
+
+.mts-dashboardgrid--editable .mts-dashboardgrid__item--locked .mts-dashboardgrid__content {
+  padding-top: 0;
+}
+
+/* ════════════════════════════════════════════════════════
+   PLACEHOLDER
+   ════════════════════════════════════════════════════════ */
+
+.mts-dashboardgrid__placeholder {
+  grid-column: var(--mts-dg-col) / span var(--mts-dg-w, 1);
+  grid-row:    var(--mts-dg-row) / span var(--mts-dg-h, 1);
+  border: 2px dashed var(--mts-color-primary);
+  background: var(--mts-color-primary-light, rgba(99, 102, 241, 0.08));
+  border-radius: var(--mts-radius-md);
+  pointer-events: none;
+  z-index: 10;
+  transition: grid-column 0.08s ease, grid-row 0.08s ease;
+}
+
+.mts-dashboardgrid__placeholder--block {
+  border-color: var(--mts-color-danger, #ef4444);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+/* ════════════════════════════════════════════════════════
+   CURSOR GHOST (drag desde tray)
+   ════════════════════════════════════════════════════════ */
+
+.mts-dashboardgrid__ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--mts-bg-surface);
+  border: 1px solid var(--mts-color-primary);
+  border-radius: var(--mts-radius-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  font-size: 12px;
+  color: var(--mts-text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  opacity: 0.92;
+}
+
+.mts-dashboardgrid__ghost-icon {
+  width: 16px;
+  height: 16px;
+  background: var(--mts-color-primary-light, rgba(99, 102, 241, 0.15));
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════════════════════
+   TRAY
+   ════════════════════════════════════════════════════════ */
+
+.mts-dashboardgrid__tray {
+  width: 210px;
+  flex-shrink: 0;
+  background: var(--mts-bg-surface);
+  border: 1px solid var(--mts-border-color);
+  border-radius: var(--mts-radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.mts-dashboardgrid__tray-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--mts-text-muted);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--mts-border-color);
+  margin-bottom: 2px;
+}
+
+.mts-dashboardgrid__tray-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  border-radius: var(--mts-radius-sm);
+  border: 1px solid var(--mts-border-color);
+  background: var(--mts-bg-surface-2, var(--mts-bg-surface));
+  cursor: grab;
+  user-select: none;
+  transition: border-color 0.12s, background 0.12s, opacity 0.12s;
+}
+
+.mts-dashboardgrid__tray-item:hover {
+  border-color: var(--mts-color-primary);
+  background: var(--mts-color-primary-light, rgba(99, 102, 241, 0.06));
+}
+
+.mts-dashboardgrid__tray-item:active {
+  cursor: grabbing;
+}
+
+.mts-dashboardgrid__tray-item:focus-visible {
+  outline: 2px solid var(--mts-color-primary);
+  outline-offset: 1px;
+}
+
+.mts-dashboardgrid__tray-item--dragging {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.mts-dashboardgrid__tray-icon {
+  width: 22px;
+  height: 22px;
+  background: var(--mts-color-primary-light, rgba(99, 102, 241, 0.15));
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.mts-dashboardgrid__tray-label {
+  flex: 1;
+  font-size: 12px;
+  color: var(--mts-text-primary);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.mts-dashboardgrid__tray-size {
+  font-size: 10px;
+  color: var(--mts-text-muted);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.mts-dashboardgrid__tray-empty {
+  font-size: 12px;
+  color: var(--mts-text-muted);
+  text-align: center;
+  padding: 20px 0;
+  margin: 0;
+}

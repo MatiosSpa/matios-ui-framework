@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else    document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.ItemList — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-rose.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-orange.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-sky.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-indigo.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-teal.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-slate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-bronze.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-toast/matios-ui-toast.css">
+  <link rel="stylesheet" href="./matios-ui-itemlist.css">
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+  <script src="./matios-ui-itemlist.js"></script>
+</head>
+<body>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.ItemList</h1>
+    <p>Rich list — avatar · primary · secondary · inline controls · selectable · canRemove · scroll with maxItems. Supports pure JS init, HTML + enhancement, or mixed.</p>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <div class="demo-section"><div class="demo-section-title">1 - Basic list — avatar + primary + secondary</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 - Inline controls — select + badge + action button</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 - Selectable + getSelected()</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 - canRemove + addItem() + empty state</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 - HTML mode + scroll maxItems</div><div id="tabs-s5"></div></div>
+</div>
+
+<script>
+
+function indentHtml(html) {
+  var indent = 0, step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  (html.match(/<[^>]+>|[^<]+/g) || []).forEach(function (tok) {
+    var t = tok.trim(); if (!t) return;
+    if (/^<\//.test(t)) { indent = Math.max(0, indent - step); result += ' '.repeat(indent) + t + '\n'; }
+    else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else { var text = t.replace(/\s+/g, ' '); if (text) result += ' '.repeat(indent) + text + '\n'; }
+  });
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card', height: height || '380px', lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' }
+    ]
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode,                  language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+/* ── 1 — Basic list ──────────────────────────────────────── */
+
+var preview_s1 =
+  '<div class="demo-stack" style="max-width:420px;margin:0 auto">' +
+    '<div id="s1-list"></div>' +
+  '</div>';
+
+var js_s1 =
+  "new MTS.ItemList('#s1-list', {\n" +
+  "  datasource: [\n" +
+  "    { value: 1, text: 'Ana Perez',   email: 'ana@company.com'    },\n" +
+  "    { value: 2, text: 'Luis Soto',   email: 'luis@company.com'   },\n" +
+  "    { value: 3, text: 'Maria Lagos', email: 'maria@company.com'  },\n" +
+  "    { value: 4, text: 'Carlos Ruiz', email: 'carlos@company.com' }\n" +
+  "  ],\n" +
+  "  row: {\n" +
+  "    leading:   { type: 'initials', bind: 'text' },\n" +
+  "    primary:   'text',\n" +
+  "    secondary: 'email'\n" +
+  "  }\n" +
+  "});";
+
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  new MTS.ItemList('#s1-list', {
+    datasource: [
+      { value: 1, text: 'Ana Perez',    email: 'ana@company.com'    },
+      { value: 2, text: 'Luis Soto',    email: 'luis@company.com'   },
+      { value: 3, text: 'Maria Lagos',  email: 'maria@company.com'  },
+      { value: 4, text: 'Carlos Ruiz',  email: 'carlos@company.com' }
+    ],
+    row: {
+      leading:   { type: 'initials', bind: 'text' },
+      primary:   'text',
+      secondary: 'email'
+    }
+  });
+});
+
+/* ── 2 — Inline controls ─────────────────────────────────── */
+
+var preview_s2 =
+  '<div class="demo-stack" style="max-width:520px;margin:0 auto">' +
+    '<div id="s2-list"></div>' +
+    '<div id="s2-log" style="font-size:12px;color:var(--mts-text-muted)">Change a role to see the event...</div>' +
+  '</div>';
+
+var js_s2 =
+  "new MTS.ItemList('#s2-list', {\n" +
+  "  datasource: [\n" +
+  "    { value: 1, text: 'Ana Perez',  role: 2, badge: 'Owner' },\n" +
+  "    { value: 2, text: 'Luis Soto',  role: 1 },\n" +
+  "    { value: 3, text: 'Paz Mora',   role: 1 }\n" +
+  "  ],\n" +
+  "  row: {\n" +
+  "    leading: { type: 'initials', bind: 'text' },\n" +
+  "    primary: 'text',\n" +
+  "    controls: [\n" +
+  "      {\n" +
+  "        type: 'select', bind: 'role',\n" +
+  "        options: [\n" +
+  "          { value: 1, label: 'Reader' },\n" +
+  "          { value: 2, label: 'Editor' },\n" +
+  "          { value: 3, label: 'Admin'  }\n" +
+  "        ]\n" +
+  "      },\n" +
+  "      { type: 'badge', bind: 'badge', variant: 'primary' },\n" +
+  "      { type: 'button', icon: 'trash', action: 'delete', tooltip: 'Remove access' }\n" +
+  "    ]\n" +
+  "  },\n" +
+  "  onChange: function (ev) {\n" +
+  "    console.log('onChange', ev.detail);\n" +
+  "  },\n" +
+  "  onAction: function (ev) {\n" +
+  "    console.log('onAction', ev.detail);\n" +
+  "  }\n" +
+  "});";
+
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  new MTS.ItemList('#s2-list', {
+    datasource: [
+      { value: 1, text: 'Ana Perez',  role: 2, badge: 'Owner' },
+      { value: 2, text: 'Luis Soto',  role: 1 },
+      { value: 3, text: 'Paz Mora',   role: 1 }
+    ],
+    row: {
+      leading: { type: 'initials', bind: 'text' },
+      primary: 'text',
+      controls: [
+        {
+          type: 'select', bind: 'role',
+          options: [
+            { value: 1, label: 'Reader' },
+            { value: 2, label: 'Editor' },
+            { value: 3, label: 'Admin'  }
+          ]
+        },
+        { type: 'badge', bind: 'badge', variant: 'primary' },
+        { type: 'button', icon: 'trash', action: 'delete', tooltip: 'Remove access' }
+      ]
+    },
+    onChange: function (ev) {
+      document.getElementById('s2-log').textContent =
+        'onChange — ' + ev.detail.item.text + ' → role ' + ev.detail.value;
+    },
+    onAction: function (ev) {
+      MTS.Toast.show({ message: 'Action "' + ev.detail.action + '" on ' + ev.detail.item.text, variant: 'info' });
+    }
+  });
+}, '400px');
+
+/* ── 3 — Selectable ──────────────────────────────────────── */
+
+var preview_s3 =
+  '<div class="demo-stack" style="max-width:420px;margin:0 auto">' +
+    '<div id="s3-list"></div>' +
+    '<div style="display:flex;gap:8px">' +
+      '<button id="s3-get" class="mts-btn mts-btn--outline mts-btn--sm">getSelected()</button>' +
+      '<button id="s3-clear" class="mts-btn mts-btn--ghost mts-btn--sm">clearSelection()</button>' +
+    '</div>' +
+    '<div id="s3-log" style="font-size:12px;color:var(--mts-text-muted)">Click an item...</div>' +
+  '</div>';
+
+var js_s3 =
+  "var list3 = new MTS.ItemList('#s3-list', {\n" +
+  "  selectable: true,\n" +
+  "  datasource: [\n" +
+  "    { value: 1, text: 'General settings', desc: 'System and preferences' },\n" +
+  "    { value: 2, text: 'Users',            desc: 'Access management'      },\n" +
+  "    { value: 3, text: 'Notifications',    desc: 'Alerts and emails'      },\n" +
+  "    { value: 4, text: 'Security',         desc: 'Passwords and 2FA'      }\n" +
+  "  ],\n" +
+  "  row: {\n" +
+  "    leading:  { type: 'icon', value: 'user' },\n" +
+  "    primary:  'text',\n" +
+  "    secondary:'desc',\n" +
+  "    trailing: { type: 'icon', value: 'chevron-right' }\n" +
+  "  },\n" +
+  "  onSelect: function (ev) {\n" +
+  "    console.log('onSelect', ev.detail.item);\n" +
+  "  }\n" +
+  "});";
+
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  var list3 = new MTS.ItemList('#s3-list', {
+    selectable: true,
+    datasource: [
+      { value: 1, text: 'General settings', desc: 'System and preferences' },
+      { value: 2, text: 'Users',            desc: 'Access management'      },
+      { value: 3, text: 'Notifications',    desc: 'Alerts and emails'      },
+      { value: 4, text: 'Security',         desc: 'Passwords and 2FA'      }
+    ],
+    row: {
+      leading:   { type: 'icon', value: 'user'          },
+      primary:   'text',
+      secondary: 'desc',
+      trailing:  { type: 'icon', value: 'chevron-right' }
+    },
+    onSelect: function (ev) {
+      var log = document.getElementById('s3-log');
+      log.textContent = ev.detail.item
+        ? 'Selected: ' + ev.detail.item.text
+        : 'Selection cleared';
+    }
+  });
+
+  document.getElementById('s3-get').addEventListener('click', function () {
+    var sel = list3.getSelected();
+    MTS.Toast.show({
+      message: sel ? 'Selected: ' + sel.item.text : 'Nothing selected',
+      variant: sel ? 'success' : 'info'
+    });
+  });
+
+  document.getElementById('s3-clear').addEventListener('click', function () {
+    list3.clearSelection();
+    document.getElementById('s3-log').textContent = 'Selection cleared';
+  });
+}, '440px');
+
+/* ── 4 — canRemove + addItem ─────────────────────────────── */
+
+var preview_s4 =
+  '<div class="demo-stack" style="max-width:420px;margin:0 auto">' +
+    '<div id="s4-list"></div>' +
+    '<div style="display:flex;gap:8px">' +
+      '<button id="s4-add" class="mts-btn mts-btn--primary mts-btn--sm">+ Add item</button>' +
+    '</div>' +
+  '</div>';
+
+var js_s4 =
+  "var list4 = new MTS.ItemList('#s4-list', {\n" +
+  "  canRemove: true,\n" +
+  "  empty: 'Empty list — add an item.',\n" +
+  "  datasource: [\n" +
+  "    { value: 1, text: 'Ana Perez',  email: 'ana@company.com'  },\n" +
+  "    { value: 2, text: 'Luis Soto',  email: 'luis@company.com' }\n" +
+  "  ],\n" +
+  "  row: {\n" +
+  "    leading:   { type: 'initials', bind: 'text' },\n" +
+  "    primary:   'text',\n" +
+  "    secondary: 'email'\n" +
+  "  },\n" +
+  "  onRemove: function (ev) {\n" +
+  "    console.log('onRemove', ev.detail.item);\n" +
+  "  }\n" +
+  "});\n\n" +
+  "var _next = 3;\n" +
+  "document.getElementById('s4-add').addEventListener('click', function () {\n" +
+  "  list4.addItem({ value: _next, text: 'User ' + _next, email: 'u' + _next + '@company.com' });\n" +
+  "  _next++;\n" +
+  "});";
+
+makeSection('tabs-s4', preview_s4, js_s4, function () {
+  var list4 = new MTS.ItemList('#s4-list', {
+    canRemove: true,
+    empty: 'Empty list — add an item.',
+    datasource: [
+      { value: 1, text: 'Ana Perez',  email: 'ana@company.com'  },
+      { value: 2, text: 'Luis Soto',  email: 'luis@company.com' }
+    ],
+    row: {
+      leading:   { type: 'initials', bind: 'text' },
+      primary:   'text',
+      secondary: 'email'
+    },
+    onRemove: function (ev) {
+      MTS.Toast.show({ message: ev.detail.item.text + ' removed', variant: 'warning' });
+    }
+  });
+
+  var next = 3;
+  document.getElementById('s4-add').addEventListener('click', function () {
+    list4.addItem({ value: next, text: 'User ' + next, email: 'u' + next + '@company.com' });
+    next++;
+  });
+}, '420px');
+
+/* ── 5 — HTML mode + scroll maxItems ─────────────────────── */
+
+var preview_s5 =
+  '<div class="demo-stack" style="max-width:400px;margin:0 auto">' +
+    '<p style="font-size:12px;color:var(--mts-text-muted);margin:0">The &lt;ul&gt; exists in the HTML — the component enhances it and reads the data-* of each &lt;li&gt;. Scroll kicks in past 4 items.</p>' +
+    '<ul id="s5-list" data-scroll="true" data-max-items="4" data-empty="No items.">' +
+      '<li data-value="1" data-text="Dashboard"     data-desc="General overview"></li>' +
+      '<li data-value="2" data-text="Users"         data-desc="Account management"></li>' +
+      '<li data-value="3" data-text="Reports"       data-desc="Analytics and export"></li>' +
+      '<li data-value="4" data-text="Settings"      data-desc="System preferences"></li>' +
+      '<li data-value="5" data-text="Notifications" data-desc="Alerts and webhooks"></li>' +
+      '<li data-value="6" data-text="Security"      data-desc="Access and audit"></li>' +
+    '</ul>' +
+  '</div>';
+
+var js_s5 =
+  "new MTS.ItemList('#s5-list', {\n" +
+  "  row: {\n" +
+  "    leading:   { type: 'icon', value: 'chevron-right' },\n" +
+  "    primary:   'text',\n" +
+  "    secondary: 'desc'\n" +
+  "  }\n" +
+  "});\n\n" +
+  "// scroll + maxItems come from the HTML via data-scroll and data-max-items";
+
+makeSection('tabs-s5', preview_s5, js_s5, function () {
+  new MTS.ItemList('#s5-list', {
+    row: {
+      leading:   { type: 'icon', value: 'chevron-right' },
+      primary:   'text',
+      secondary: 'desc'
+    }
+  });
+}, '420px');
+
+</script>
+</body>
+</html>

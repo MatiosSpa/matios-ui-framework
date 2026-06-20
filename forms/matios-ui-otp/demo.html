@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else    document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.OTP — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-high-contrast.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-rose.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-orange.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-sky.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-indigo.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-teal.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-slate.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-bronze.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../overlays/matios-ui-toast/matios-ui-toast.css">
+  <link rel="stylesheet" href="./matios-ui-otp.css">
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../utilities/matios-ui-sanitize/matios-ui-sanitize.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
+  <script src="./matios-ui-otp.js"></script>
+</head>
+<body>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.OTP</h1>
+    <p>One-time code input. Individual boxes, auto-advance, smart paste from box 0, optional timer, native resend and error state.</p>
+    <div class="demo-docs-panel" id="docs-panel"></div>
+  </div>
+
+  <div class="demo-section"><div class="demo-section-title">1 - 4-digit numeric</div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title">2 - 6-digit + timer + onResend</div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title">3 - 9-digit numeric</div><div id="tabs-s3"></div></div>
+  <div class="demo-section"><div class="demo-section-title">4 - 6-char alphanumeric</div><div id="tabs-s4"></div></div>
+  <div class="demo-section"><div class="demo-section-title">5 - Error state</div><div id="tabs-s5"></div></div>
+  <div class="demo-section"><div class="demo-section-title">6 - onResend without timer (always visible)</div><div id="tabs-s6"></div></div>
+</div>
+
+<script>
+
+function indentHtml(html) {
+  var indent = 0, step = 2;
+  var voids = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result = '';
+  (html.match(/<[^>]+>|[^<]+/g) || []).forEach(function (tok) {
+    var t = tok.trim(); if (!t) return;
+    if (/^<\//.test(t)) { indent = Math.max(0, indent - step); result += ' '.repeat(indent) + t + '\n'; }
+    else if (/^<[^!]/.test(t)) {
+      result += ' '.repeat(indent) + t + '\n';
+      var tag = (t.match(/^<([a-z][a-z0-9-]*)/i) || [])[1] || '';
+      if (!voids.test(tag) && !/\/>$/.test(t)) indent += step;
+    } else { var text = t.replace(/\s+/g, ' '); if (text) result += ' '.repeat(indent) + text + '\n'; }
+  });
+  return result.trimEnd();
+}
+
+function makeSection(id, previewHtml, jsCode, initFn, height) {
+  new MTS.Tabs('#' + id, {
+    variant: 'card', height: height || '320px', lazy: false,
+    tabs: [
+      { id: id + '-preview', label: 'Preview',    content: previewHtml },
+      { id: id + '-html',    label: 'HTML',       content: '<div id="' + id + '-cb-html"></div>' },
+      { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cb-js"></div>' }
+    ]
+  });
+  new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode,                  language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+/* ── 1 — 4-digit numeric ─────────────────────────────────── */
+
+var preview_s1 =
+  '<div class="demo-stack" style="align-items:center">' +
+    '<div id="s1-otp"></div>' +
+    '<div id="s1-result" style="font-size:13px;color:var(--mts-text-muted)">Enter the code...</div>' +
+  '</div>';
+
+var js_s1 =
+  "new MTS.OTP('#s1-otp', {\n" +
+  "  length: 4,\n" +
+  "  type: 'numeric',\n" +
+  "  onComplete: function (code) {\n" +
+  "    console.log('Code:', code);\n" +
+  "  }\n" +
+  "});";
+
+makeSection('tabs-s1', preview_s1, js_s1, function () {
+  new MTS.OTP('#s1-otp', {
+    length: 4,
+    type: 'numeric',
+    onComplete: function (code) {
+      document.getElementById('s1-result').textContent = 'Code: ' + code;
+    },
+    onChange: function (code) {
+      if (code.length < 4) {
+        document.getElementById('s1-result').textContent = 'Enter the code...';
+      }
+    }
+  });
+});
+
+/* ── 2 — 6-digit numeric + timer + onResend ──────────────── */
+
+var preview_s2 =
+  '<div class="demo-stack" style="align-items:center">' +
+    '<div id="s2-otp"></div>' +
+  '</div>';
+
+var js_s2 =
+  "new MTS.OTP('#s2-otp', {\n" +
+  "  length: 6,\n" +
+  "  type: 'numeric',\n" +
+  "  timer: 60,\n" +
+  "  onComplete: function (code) {\n" +
+  "    console.log('Verifying:', code);\n" +
+  "  },\n" +
+  "  onExpire: function () {\n" +
+  "    console.log('Code expired');\n" +
+  "  },\n" +
+  "  onResend: function (reset) {\n" +
+  "    // call the API here, then reset()\n" +
+  "    reset();\n" +
+  "  }\n" +
+  "});";
+
+makeSection('tabs-s2', preview_s2, js_s2, function () {
+  new MTS.OTP('#s2-otp', {
+    length: 6,
+    type: 'numeric',
+    timer: 60,
+    onComplete: function (code) {
+      MTS.Toast.show({ message: 'Verifying code: ' + code, variant: 'success' });
+    },
+    onExpire: function () {
+      MTS.Toast.show({ message: 'Code expired. Click resend.', variant: 'warning' });
+    },
+    onResend: function (reset) {
+      MTS.Toast.show({ message: 'Code resent', variant: 'info' });
+      reset();
+    }
+  });
+}, '340px');
+
+/* ── 3 — 9-digit numeric ─────────────────────────────────── */
+
+var preview_s3 =
+  '<div class="demo-stack" style="align-items:center">' +
+    '<div id="s3-otp"></div>' +
+    '<div id="s3-result" style="font-size:13px;color:var(--mts-text-muted)">Enter the code...</div>' +
+  '</div>';
+
+var js_s3 =
+  "new MTS.OTP('#s3-otp', {\n" +
+  "  length: 9,\n" +
+  "  type: 'numeric',\n" +
+  "  onComplete: function (code) {\n" +
+  "    console.log('Full code:', code);\n" +
+  "  }\n" +
+  "});";
+
+makeSection('tabs-s3', preview_s3, js_s3, function () {
+  new MTS.OTP('#s3-otp', {
+    length: 9,
+    type: 'numeric',
+    onComplete: function (code) {
+      document.getElementById('s3-result').textContent = 'Code: ' + code;
+    },
+    onChange: function (code) {
+      if (code.length < 9) {
+        document.getElementById('s3-result').textContent = 'Enter the code...';
+      }
+    }
+  });
+});
+
+/* ── 4 — 6-char alphanumeric ─────────────────────────────── */
+
+var preview_s4 =
+  '<div class="demo-stack" style="align-items:center">' +
+    '<p style="font-size:12px;color:var(--mts-text-muted);margin:0">Activation code — accepts letters and numbers</p>' +
+    '<div id="s4-otp"></div>' +
+    '<div id="s4-result" style="font-size:13px;color:var(--mts-text-muted)">Enter the code...</div>' +
+  '</div>';
+
+var js_s4 =
+  "new MTS.OTP('#s4-otp', {\n" +
+  "  length: 6,\n" +
+  "  type: 'alphanumeric',\n" +
+  "  onComplete: function (code) {\n" +
+  "    console.log('Code:', code);\n" +
+  "  }\n" +
+  "});";
+
+makeSection('tabs-s4', preview_s4, js_s4, function () {
+  new MTS.OTP('#s4-otp', {
+    length: 6,
+    type: 'alphanumeric',
+    onComplete: function (code) {
+      document.getElementById('s4-result').textContent = 'Code: ' + code;
+    },
+    onChange: function (code) {
+      if (code.length < 6) {
+        document.getElementById('s4-result').textContent = 'Enter the code...';
+      }
+    }
+  });
+}, '340px');
+
+/* ── 5 — Error state ─────────────────────────────────────── */
+
+var preview_s5 =
+  '<div class="demo-stack" style="align-items:center">' +
+    '<div id="s5-otp"></div>' +
+    '<div style="display:flex;gap:8px">' +
+      '<button id="s5-verify" class="mts-btn mts-btn--primary mts-btn--sm">Verify</button>' +
+      '<button id="s5-clear"  class="mts-btn mts-btn--outline mts-btn--sm">Clear</button>' +
+    '</div>' +
+  '</div>';
+
+var js_s5 =
+  "var otp5 = new MTS.OTP('#s5-otp', {\n" +
+  "  length: 6,\n" +
+  "  type: 'numeric'\n" +
+  "});\n\n" +
+  "document.getElementById('s5-verify').addEventListener('click', function () {\n" +
+  "  var code = otp5.getValue();\n" +
+  "  if (code !== '123456') {\n" +
+  "    otp5.setError('Incorrect code. Try again.');\n" +
+  "  }\n" +
+  "});\n\n" +
+  "document.getElementById('s5-clear').addEventListener('click', function () {\n" +
+  "  otp5.reset();\n" +
+  "});";
+
+makeSection('tabs-s5', preview_s5, js_s5, function () {
+  var otp5 = new MTS.OTP('#s5-otp', {
+    length: 6,
+    type: 'numeric'
+  });
+
+  document.getElementById('s5-verify').addEventListener('click', function () {
+    var code = otp5.getValue();
+    if (!otp5.isComplete()) {
+      otp5.setError('Enter all 6 digits to verify.');
+      return;
+    }
+    if (code !== '123456') {
+      otp5.setError('Incorrect code. Try again.');
+    } else {
+      otp5.clearError();
+      MTS.Toast.show({ message: 'Correct code', variant: 'success' });
+    }
+  });
+
+  document.getElementById('s5-clear').addEventListener('click', function () {
+    otp5.reset();
+  });
+}, '360px');
+
+/* ── 6 — onResend without timer (always visible) ─────────── */
+
+var preview_s6 =
+  '<div class="demo-stack" style="align-items:center">' +
+    '<p style="font-size:12px;color:var(--mts-text-muted);margin:0">The link shows from the start — no timer</p>' +
+    '<div id="s6-otp"></div>' +
+  '</div>';
+
+var js_s6 =
+  "new MTS.OTP('#s6-otp', {\n" +
+  "  length: 6,\n" +
+  "  type: 'numeric',\n" +
+  "  resendLabel: 'Didn\\'t get the code? Resend',\n" +
+  "  onResend: function (reset) {\n" +
+  "    // call the API here, then reset() on success\n" +
+  "    reset();\n" +
+  "  },\n" +
+  "  onComplete: function (code) {\n" +
+  "    console.log('Code:', code);\n" +
+  "  }\n" +
+  "});";
+
+makeSection('tabs-s6', preview_s6, js_s6, function () {
+  new MTS.OTP('#s6-otp', {
+    length: 6,
+    type: 'numeric',
+    resendLabel: 'Didn\'t get the code? Resend',
+    onResend: function (reset) {
+      MTS.Toast.show({ message: 'New code sent', variant: 'info' });
+      reset();
+    },
+    onComplete: function (code) {
+      MTS.Toast.show({ message: 'Code: ' + code, variant: 'success' });
+    }
+  });
+}, '340px');
+
+</script>
+</body>
+</html>
