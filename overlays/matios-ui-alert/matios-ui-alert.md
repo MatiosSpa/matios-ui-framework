@@ -66,6 +66,7 @@ new MTS.Alert('#my-alert', {
 | `message` | `string` | `''` | Main message |
 | `closable` | `boolean` | `true` | Show the × close button |
 | `icon` | `boolean` | `true` | Show the variant icon |
+| `showBorders` | `boolean` | `false` | Add a subtle `0.5px` border on the other three sides (the `4px` left accent border is always present). Also via `data-show-borders`. |
 | `action` | `string` | `null` | Inline action button label |
 | `onAction` | `function` | `null` | Fires when the action button is clicked |
 | `onClose` | `function` | `null` | Fires when the alert is closed |
@@ -119,6 +120,9 @@ document.getElementById('my-alert')
 ---
 
 ## Changelog
+
+### 2026-06-20
+- `showBorders` option (`data-show-borders`): adds a subtle `0.5px` border on the other three sides; the `4px` left accent border stays.
 
 ### 2026-05-17
 - Fix: the action button never rendered — `_build()` checked `this.onAction` instead of the registered listener.

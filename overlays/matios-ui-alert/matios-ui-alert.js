@@ -32,6 +32,7 @@ MTS.Alert = class MtsAlert {
     if (_ds.message !== undefined) _fromHTML.message = _ds.message;
     if (_ds.closable !== undefined) _fromHTML.closable = true;
     if (_ds.autoDismiss !== undefined) _fromHTML.autoDismiss = parseInt(_ds.autoDismiss);
+    if (_ds.showBorders !== undefined) _fromHTML.showBorders = true;
     options = { ..._fromHTML, ...options };
 
     // Alert variant: 'info' | 'success' | 'warning' | 'danger' / Variante de la alerta
@@ -48,6 +49,10 @@ MTS.Alert = class MtsAlert {
 
     // Show icon / Mostrar ícono
     this.showIcon = options.icon ?? true;
+
+    // Show subtle border on the other 3 sides (left accent border is always there)
+    // Borde sutil en los otros 3 lados (el borde izquierdo de acento siempre está)
+    this.showBorders = options.showBorders ?? false;
 
     // Action button label / Label del botón de acción
     this.action = options.action || null;
@@ -78,7 +83,7 @@ MTS.Alert = class MtsAlert {
 
   _build() {
     this._el = document.createElement('div');
-    this._el.className = `mts-alert mts-alert--${this.variant}`;
+    this._el.className = `mts-alert mts-alert--${this.variant}` + (this.showBorders ? ' mts-alert--bordered' : '');
     this._el.setAttribute('role', this.variant === 'danger' ? 'alert' : 'status');
 
     if (this.showIcon) {
