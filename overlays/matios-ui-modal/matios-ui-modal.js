@@ -143,6 +143,20 @@ MTS.Modal = class MtsModal {
     this._prevFocus = document.activeElement;
     this._isOpen    = true;
 
+    // Stacked modals: each new modal sits above the previous one (its backdrop must
+    // cover the modal below). Without this, all modals share z-index and you can click
+    // through to the buttons of the modal underneath.
+    const _stack = (MTS.Modal._stack = MTS.Modal._stack || []);
+    if (_stack.indexOf(this) < 0) {
+      const _top = _stack[_stack.length - 1];
+      this._level = (_top ? _top._level : 0) + 1;
+      _stack.push(this);
+    }
+    const _base = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mts-z-modal'), 10) || 400;
+    const _z = _base + (this._level - 1) * 10;
+    this._dialogEl.style.zIndex   = _z;
+    this._backdropEl.style.zIndex = _z - 1;
+
     // Registrar Esc solo mientras el modal está abierto
     document.addEventListener('keydown', this._onKeyDown);
 
@@ -174,6 +188,12 @@ MTS.Modal = class MtsModal {
     this._isOpen = false;
     this._dialogEl.classList.remove('mts-modal--visible');
 
+    // Pop this modal off the stack now so the body scroll-lock is only released
+    // when the LAST modal closes (not when an inner one closes over an outer one).
+    const _stack = MTS.Modal._stack || [];
+    const _i = _stack.indexOf(this);
+    if (_i >= 0) _stack.splice(_i, 1);
+
     // Remover Esc listener inmediatamente al cerrar
     document.removeEventListener('keydown', this._onKeyDown);
 
@@ -181,7 +201,7 @@ MTS.Modal = class MtsModal {
       this._dialogEl.setAttribute('aria-hidden', 'true');
       this._dialogEl.setAttribute('hidden', '');
       this._backdropEl.classList.remove('mts-modal-backdrop--visible');
-      document.body.classList.remove('mts-modal-open');
+      if ((MTS.Modal._stack || []).length === 0) document.body.classList.remove('mts-modal-open');
       this._releaseFocus();
       this._emit('hidden');
     });

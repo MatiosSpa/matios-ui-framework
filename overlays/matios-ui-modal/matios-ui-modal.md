@@ -134,6 +134,9 @@ document.addEventListener('mts:modal:shown', function (e) { console.log('shown')
 
 ## Changelog
 
+### 2026-06-21
+- Fix: stacked modals — a modal opened over another now gets an incremental z-index so its backdrop covers the modal below (you could previously click through to the lower modal's buttons). The body scroll-lock is released only when the last modal closes.
+
 ### Initial
 - Dialog modal with sizes/radius, scrollable/centered/static modes, footer buttons or custom footer, lifecycle
   hooks, `confirm` / `alert` / `prompt` helpers, focus trap, and `show` / `hide` / `setTitle` / `setBody` / `setButtonState`.
