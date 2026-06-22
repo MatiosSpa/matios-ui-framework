@@ -189,8 +189,36 @@ MTS.DocumentManagerPreviewMetadataPanel = class DocumentManagerPreviewMetadataPa
         controlWrap.appendChild(ta);
         controlInstances[field.id] = { type: 'textarea', el: ta };
 
+      } else if (field.type === 'number' && typeof MTS.NumberInput === 'function') {
+        /* Rich numeric input (theme + step + decimals) instead of the native number spinner. */
+        var numInst = new MTS.NumberInput(controlWrap, {
+          id:       'dm-meta-' + field.id,
+          value:    (field.value != null && field.value !== '') ? Number(field.value) : 0,
+          decimals: field.decimals != null ? field.decimals : 0,
+        });
+        controlInstances[field.id] = { type: 'number', inst: numInst };
+
+      } else if ((field.type === 'date' || field.type === 'datetime') &&
+                 MTS.DatePicker && (MTS.DatePicker.Date || MTS.DatePicker.DateTime)) {
+        /* Mount the picker on an <input> host so it stays in place — this group already
+           renders its own <label>, so a <div> host (which would build a second label) is avoided. */
+        var dpInput = document.createElement('input');
+        dpInput.id = 'dm-meta-' + field.id;
+        controlWrap.appendChild(dpInput);
+        var DPClass = (field.type === 'datetime' && MTS.DatePicker.DateTime)
+          ? MTS.DatePicker.DateTime
+          : MTS.DatePicker.Date;
+        var dpInst = new DPClass(dpInput, {});
+        if (field.value) {
+          var _dv = field.value;
+          /* parse a plain yyyy-MM-dd as local midnight to avoid a timezone day-shift */
+          if (typeof _dv === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(_dv)) _dv = _dv + 'T00:00:00';
+          dpInst.setValue(_dv);
+        }
+        controlInstances[field.id] = { type: 'date', inst: dpInst, datetime: field.type === 'datetime' };
+
       } else {
-        /* input / date / number */
+        /* Fallback: native input (text, or native date/number when the rich component isn't loaded). */
         var inputType = field.type === 'date' ? 'date' : (field.type === 'number' ? 'number' : 'text');
         var inputInst = new MTS.Input(controlWrap, {
           id:    'dm-meta-' + field.id,
@@ -237,6 +265,11 @@ MTS.DocumentManagerPreviewMetadataPanel = class DocumentManagerPreviewMetadataPa
               if (ctrl) {
                 if (ctrl.type === 'textarea') {
                   newValue = ctrl.el.value;
+                } else if (ctrl.type === 'number') {
+                  newValue = ctrl.inst.getValue ? ctrl.inst.getValue() : ctrl.inst.value; // number
+                } else if (ctrl.type === 'date') {
+                  var dv = ctrl.inst.getValue ? ctrl.inst.getValue() : null; // Date | null
+                  newValue = (dv instanceof Date) ? self._serializeDate(dv, ctrl.datetime) : (dv || '');
                 } else if (ctrl.type === 'select' || ctrl.type === 'input') {
                   newValue = ctrl.inst.getValue ? ctrl.inst.getValue() : ctrl.inst.value;
                 }
@@ -266,6 +299,13 @@ MTS.DocumentManagerPreviewMetadataPanel = class DocumentManagerPreviewMetadataPa
 
   /* ── Helpers ──────────────────────────────────────────── */
 
+  /* Serialize a Date from MTS.DatePicker to a persistable string (yyyy-MM-dd or yyyy-MM-ddTHH:mm). */
+  _serializeDate(d, withTime) {
+    var p = function(n) { return String(n).padStart(2, '0'); };
+    var ymd = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+    return withTime ? (ymd + 'T' + p(d.getHours()) + ':' + p(d.getMinutes())) : ymd;
+  }
+
   _buildEmptyEl() {
     var loc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewMetadataPanel'] ?? {};
     var p = document.createElement('p');
@@ -278,6 +318,12 @@ MTS.DocumentManagerPreviewMetadataPanel = class DocumentManagerPreviewMetadataPa
     if (field.type === 'select' && Array.isArray(field.options)) {
       var match = field.options.find(function(o) { return o.value === field.value; });
       return match ? match.text : (field.value || '—');
+    }
+    if ((field.type === 'date' || field.type === 'datetime') && field.value) {
+      /* parse yyyy-MM-dd as local midnight, then show with the user's locale */
+      var raw = String(field.value);
+      var d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(raw) ? raw + 'T00:00:00' : raw);
+      if (!isNaN(d.getTime())) return field.type === 'datetime' ? d.toLocaleString() : d.toLocaleDateString();
     }
     return field.value || '—';
   }
