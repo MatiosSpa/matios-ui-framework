@@ -15,6 +15,12 @@ MTS.Button = class MtsButton {
       : selector;
     if (!this._el) { console.error('[MTS.Button] Not found / No encontrado:', selector); return; }
 
+    // Native interactive element (<button>/<a>) → keyboard, focus and disabled work on their own.
+    // Any other host (span/div/…) → we add button semantics (role/tabindex/keyboard/aria-disabled)
+    // WITHOUT changing the DOM, so existing consumers stay unaffected.
+    const _tag = (this._el.tagName || '').toLowerCase();
+    this._interactive = (_tag === 'button' || _tag === 'a');
+
     // Read data-* attributes from HTML for declarative initialization
     // Lee atributos data-* del HTML para inicializaciÃ³n declarativa
     const _ds = this._el?.dataset || {};
@@ -85,10 +91,10 @@ MTS.Button = class MtsButton {
   /* â”€â”€ API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   // Enable interaction / Habilitar interacciÃ³n
-  enable()  { this.disabled = false; this._el.disabled = false; this._el.classList.remove('mts-btn--disabled'); return this; }
+  enable()  { this.disabled = false; this._el.disabled = false; this._el.classList.remove('mts-btn--disabled'); this._refreshA11y(); return this; }
 
   // Disable interaction / Deshabilitar interacciÃ³n
-  disable() { this.disabled = true;  this._el.disabled = true;  this._el.classList.add('mts-btn--disabled');    return this; }
+  disable() { this.disabled = true;  this._el.disabled = true;  this._el.classList.add('mts-btn--disabled');    this._refreshA11y(); return this; }
 
   // Show or hide loading spinner / Mostrar u ocultar spinner de carga
   setLoading(v) {
@@ -102,6 +108,7 @@ MTS.Button = class MtsButton {
     } else if (!v && sp) {
       sp.remove();
     }
+    this._refreshA11y();
     return this;
   }
 
@@ -169,6 +176,18 @@ MTS.Button = class MtsButton {
       ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.iconRight) : this.iconRight;
       this._el.appendChild(ic);
     }
+
+    this._refreshA11y();
+  }
+
+  /* Non-native hosts (span/div/…): expose button semantics without touching the DOM.
+     No-op on native <button>/<a> (they already have role/keyboard/focus). */
+  _refreshA11y() {
+    if (this._interactive) return;
+    this._el.setAttribute('role', 'button');
+    const off = !!(this.disabled || this.loading);
+    this._el.setAttribute('aria-disabled', off ? 'true' : 'false');
+    this._el.setAttribute('tabindex', off ? '-1' : '0');
   }
 
   _syncClasses() {
@@ -198,6 +217,16 @@ MTS.Button = class MtsButton {
         bubbles: true, detail: { button: this },
       }));
     });
+
+    // Non-native hosts don't fire click on Enter/Space — wire it so they behave like a real button.
+    if (!this._interactive) {
+      this._el.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+        e.preventDefault();
+        if (this.disabled || this.loading) return;
+        this._el.click();
+      });
+    }
   }
 };
 

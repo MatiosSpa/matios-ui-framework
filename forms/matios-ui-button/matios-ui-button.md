@@ -135,13 +135,19 @@ document.getElementById('my-btn')
 
 ## Accessibility
 
-- Renders a real `<button>` — focusable and activatable with `Enter`/`Space` out of the box.
+- When the host is a native `<button>`/`<a>`, it stays in place — focusable and activatable with `Enter`/`Space` out of the box, and `disabled` works natively.
+- When the host is any other element (`<span>`, `<div>`, …), the component adds button semantics **without changing the DOM**: `role="button"`, `tabindex` (`0` enabled / `-1` disabled), `Enter`/`Space` → click, and `aria-disabled`. So a non-native host is still keyboard-operable and announced as a button.
 - For `iconOnly` buttons, provide an accessible name (e.g. `aria-label`) since there is no visible text.
 - `disabled` and `loading` block interaction; `loading` should keep the accessible name meaningful.
+
+> **Host note:** `MTS.Button` operates on the element you pass (element-first). Passing a native `<button>` is recommended; non-native hosts now get full button semantics instead of just the visual styling.
 
 ---
 
 ## Changelog
+
+### 2026-06-21
+- Non-native hosts (`<span>`/`<div>`/…) now receive button semantics — `role="button"`, `tabindex`, `Enter`/`Space` activation and `aria-disabled` — applied without changing the DOM, so existing consumers are unaffected. Native `<button>`/`<a>` keep working in place.
 
 ### Initial
 - Button with 7 variants, 5 sizes, left/right icons, `iconOnly`, `block`, `round`, `loading`, `shadow`, `ring`,
