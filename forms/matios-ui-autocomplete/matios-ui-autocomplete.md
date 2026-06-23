@@ -51,6 +51,8 @@ new MTS.Autocomplete('#user-search', {
 | `onSelect` | `function` | — | Fires when an item is selected. Receives the full item object |
 | `onChange` | `function` | — | Fires when an item is selected or cleared. Receives the item or `null` |
 | `onClear` | `function` | — | Fires when the `×` button is pressed |
+| `required` | `boolean` | `false` | Opt-in `validate()` — empty = no selected value (see [Form Field Contract](../FORM-FIELD-CONTRACT.md)) |
+| `errorMessage` | `string` | `null` | Overrides the `required` message (localized default when `null`) |
 
 ---
 
@@ -103,6 +105,8 @@ ac.getItem()               // → full object of the last selected item, or null
 
 ac.setValue(value, text)   // programmatic selection
 ac.clear()                 // clears input + data-mts-value + fires onClear/onChange
+ac.validate()              // → boolean; required = a value must be selected (inline error)
+ac.setError(msg)           // ac.clearError()
 ac.destroy()               // clears DOM, event listeners and unwraps the input
 ```
 
@@ -119,6 +123,9 @@ ac.destroy()               // clears DOM, event listeners and unwraps the input
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract: `required` + `errorMessage` + `validate()` + `setError`/`clearError` (inline error, localized message via new i18n). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### Initial
 - Component created. Async function datasource + static array, `valueField`/`textField`, debounce, loading spinner, keyboard navigation, `×` button, `data-mts-value` on the input, `_mtsInstance` for FormGuard. Demo in `forms/matios-ui-input/demo.html`.

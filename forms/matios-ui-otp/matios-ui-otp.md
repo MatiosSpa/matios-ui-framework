@@ -43,6 +43,8 @@ new MTS.OTP('#otp', {
 | `type` | `string` | `'numeric'` | `'numeric'` (digits only) · `'alphanumeric'` (letters and numbers) |
 | `timer` | `number` | `null` | Expiry in seconds (`null` = no timer) |
 | `disabled` | `boolean` | `false` | Start disabled |
+| `required` | `boolean` | `false` | Opt-in `validate()` — fails until the code is complete (see [Form Field Contract](../FORM-FIELD-CONTRACT.md)) |
+| `errorMessage` | `string` | `null` | Overrides the `required` message (localized default when `null`) |
 | `onComplete` | `function` | — | Fires when all boxes are filled — `(code)` |
 | `onChange` | `function` | — | Fires on every change — `(code, isComplete)` |
 | `onExpire` | `function` | — | Fires when the timer reaches 0 |
@@ -58,6 +60,7 @@ new MTS.OTP('#otp', {
 | `getValue()` | Partial or complete string |
 | `isComplete()` | Whether all boxes are filled |
 | `reset()` | Clear boxes + restart timer |
+| `validate()` | Validates `required` (fails until complete), inline error + `'validate'` event → `boolean` |
 | `setError(msg)` / `clearError()` | Set / clear the error state |
 | `focus()` | Focus the first empty box |
 | `disable()` / `enable()` | Toggle interaction |
@@ -92,6 +95,9 @@ new MTS.OTP('#otp', {
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract: `required` + `errorMessage` + `validate()` (required = complete code) + own i18n (es/en/pt). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### 2026-05-24
 - `onResend` + `resendLabel`: native resend link (appears on expiry with a timer; always visible without one).

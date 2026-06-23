@@ -33,6 +33,10 @@
     this._wrap         = null;
     this._activeIndex  = -1;
     this._results      = [];
+    /* Form-field contract */
+    this._required     = options.required === true;
+    this._errorMessage = options.errorMessage != null ? options.errorMessage : null;
+    this._error        = '';
 
     this._build();
     this._bindEvents();
@@ -48,6 +52,13 @@
     this._input.parentNode.insertBefore(wrap, this._input);
     wrap.appendChild(this._input);
     this._wrap = wrap;
+
+    /* Form-field error slot — below the field */
+    var errEl = document.createElement('span');
+    errEl.className = 'mts-form-error';
+    errEl.style.display = 'none';
+    wrap.insertAdjacentElement('afterend', errEl);
+    this._errEl = errEl;
 
     /* Botón × */
     var clearBtn = document.createElement('button');
@@ -74,6 +85,7 @@
 
     /* Input */
     this._input.addEventListener('input', function () {
+      if (self._error) { self.clearError(); }   // auto-clear while editing
       var val = self._input.value;
       self._clearBtn.style.display = val ? '' : 'none';
 
@@ -251,6 +263,31 @@
 
   Autocomplete.prototype.getValue = function () {
     return this._input.getAttribute('data-mts-value');
+  };
+
+  /* ── Form-field validation contract ── */
+  Autocomplete.prototype.setError = function (msg) {
+    this._error = msg || '';
+    if (this._errEl) { this._errEl.textContent = this._error; this._errEl.style.display = this._error ? '' : 'none'; }
+    if (this._wrap)  { this._wrap.classList.toggle('mts-ac__wrap--error', !!this._error); }
+    return this;
+  };
+  Autocomplete.prototype.clearError = function () { return this.setError(''); };
+  Autocomplete.prototype.validate = function () {
+    var v  = this.getValue();
+    var ok = !this._required || (v != null && v !== '');
+    if (ok) { this.clearError(); }
+    else    { this.setError(this._errorMessage || this._t('required', 'This field is required')); }
+    try { this._input.dispatchEvent(new CustomEvent('mts:autocomplete:validate', { bubbles: true, detail: { valid: ok, errors: ok ? [] : [this._error] } })); } catch (e) {}
+    return ok;
+  };
+  Autocomplete.prototype._t = function (key, fallback) {
+    try {
+      var ns = (global.MTS && global.MTS.getLocale) ? global.MTS.getLocale()['MTS.Autocomplete'] : null;
+      var m  = ns && ns.messages;
+      if (m && m[key] != null) { return m[key]; }
+    } catch (e) {}
+    return fallback;
   };
 
   Autocomplete.prototype.getText = function () {

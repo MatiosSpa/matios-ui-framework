@@ -18,6 +18,9 @@
     this._type        = options.type === 'alphanumeric' ? 'alphanumeric' : 'numeric';
     this._timer       = options.timer ? parseInt(options.timer) : null;
     this._disabled    = options.disabled === true;
+    /* Form-field contract */
+    this._required     = options.required === true;
+    this._errorMessage = options.errorMessage != null ? options.errorMessage : null;
 
     this._onComplete  = typeof options.onComplete === 'function' ? options.onComplete : null;
     this._onExpire    = typeof options.onExpire   === 'function' ? options.onExpire   : null;
@@ -86,6 +89,24 @@
     this._root.classList.remove('mts-otp--error');
     if (this._errorEl) { this._errorEl.textContent = ''; }
     return this;
+  };
+
+  /* Form-field contract: required = the code must be complete. */
+  OTP.prototype.validate = function () {
+    var ok = !this._required || this.isComplete();
+    if (ok) { this.clearError(); }
+    else    { this.setError(this._errorMessage || this._t('required', 'This field is required')); }
+    this._emit('validate', { valid: ok, errors: ok ? [] : [(this._errorEl && this._errorEl.textContent) || ''] });
+    return ok;
+  };
+
+  OTP.prototype._t = function (key, fallback) {
+    try {
+      var ns = (global.MTS && global.MTS.getLocale) ? global.MTS.getLocale()['MTS.OTP'] : null;
+      var m  = ns && ns.messages;
+      if (m && m[key] != null) { return m[key]; }
+    } catch (e) {}
+    return fallback;
   };
 
   OTP.prototype.focus = function () {

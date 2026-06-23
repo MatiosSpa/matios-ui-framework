@@ -41,10 +41,17 @@ MTS.ColorPicker = class MtsColorPicker {
     if (_ds.inline !== undefined) _fromHTML.inline = true;
     if (_ds.disabled !== undefined) _fromHTML.disabled = true;
     if (_ds.size !== undefined) _fromHTML.size = _ds.size;
+    if (_ds.required !== undefined) _fromHTML.required = true;
+    if (_ds.errorMessage !== undefined) _fromHTML.errorMessage = _ds.errorMessage;
     options = { ..._fromHTML, ...options };
 
-    // Initial color value (hex) / Valor de color inicial (hex)
-    this._hex = this._toHex(options.value) || '#4f8eff';
+    // Initial color value (hex) / Valor de color inicial (hex). Explicit null = empty (for required).
+    this._hex = (options.value === null) ? null : (this._toHex(options.value) || '#4f8eff');
+
+    // Form-field contract
+    this.required     = options.required     ?? false;
+    this.errorMessage = options.errorMessage ?? null;
+    this._error       = '';
 
     // Field label / Etiqueta del campo
     this.label = options.label || '';
@@ -112,6 +119,10 @@ MTS.ColorPicker = class MtsColorPicker {
     // Fires when picker closes / Se dispara al cerrar el picker
     if (options.onClose) this.on('close', options.onClose);
 
+    // Auto-clear a standing validation error whenever the color changes
+    var self = this;
+    this.on('change', function () { if (self._error) self.clearError(); });
+
     this._open       = false;
     this._popEl      = null;
     this._build();
@@ -122,7 +133,32 @@ MTS.ColorPicker = class MtsColorPicker {
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   getValue()       { return this._formatOutput(); }
   getHex()         { return this._hex; }
-  setValue(color)  { this._hex = this._toHex(color) || color; this._updateTrigger(); if (this._open) this._renderPop(); return this; }
+  setValue(color)  { this._hex = (color == null || color === '') ? null : (this._toHex(color) || color); this._updateTrigger(); if (this._open) this._renderPop(); return this; }
+
+  // ── Form-field validation contract ──
+  setError(msg) {
+    this._error = msg || '';
+    if (!this._errEl || !this._errEl.isConnected) {
+      this._errEl = document.createElement('span');
+      this._errEl.className = 'mts-form-error';
+      this._el.appendChild(this._errEl);
+    }
+    this._errEl.textContent = this._error;
+    this._errEl.style.display = this._error ? '' : 'none';
+    if (this._triggerWrap) this._triggerWrap.classList.toggle('mts-colorpicker__trigger-wrap--error', !!this._error);
+    return this;
+  }
+  clearError() { return this.setError(''); }
+  validate() {
+    const ok = !this.required || this._hex != null;
+    if (ok) this.clearError(); else this.setError(this.errorMessage || this._t('required', 'This field is required'));
+    this._emit('validate', { valid: ok, errors: ok ? [] : [this._error] });
+    return ok;
+  }
+  _t(key, fallback) {
+    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.ColorPicker'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    return fallback;
+  }
   setFormat(f)     { this.format = f; this._updateTrigger(); return this; }
   open()           { this._openPop(); return this; }
   close()          { this._closePop(); return this; }
@@ -437,6 +473,7 @@ MTS.ColorPicker = class MtsColorPicker {
 
   /* â”€â”€ Formatos â”€â”€ */
   _formatOutput() {
+    if (this._hex == null) return '';
     if (this.format === 'rgb') return this._hexToRGB(this._hex);
     if (this.format === 'hsl') {
       const [h,s,l] = this._hexToHSL(this._hex);

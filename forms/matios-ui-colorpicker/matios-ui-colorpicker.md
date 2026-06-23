@@ -68,6 +68,8 @@ Available `data-*`: `data-value`, `data-label`, `data-format`, `data-inline`, `d
 | `inline` | `boolean` | `false` | Always visible, no trigger |
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
 | `disabled` | `boolean` | `false` | Disables interaction |
+| `required` | `boolean` | `false` | Opt-in `validate()`. Pass `value: null` for an empty start so `required` is meaningful (see [Form Field Contract](../FORM-FIELD-CONTRACT.md)) |
+| `errorMessage` | `string` | `null` | Overrides the `required` message (localized default when `null`) |
 | `onChange` | `function` | — | Fires when the color changes — `{ hex, value, formatted }` |
 | `onOpen` | `function` | — | Fires when the popup opens |
 | `onClose` | `function` | — | Fires when the popup closes |
@@ -82,6 +84,8 @@ Available `data-*`: `data-value`, `data-label`, `data-format`, `data-inline`, `d
 | `getHex()` | Always returns the hex value |
 | `setValue(color)` | Set the color programmatically |
 | `setFormat(fmt)` | Change the output format |
+| `validate()` | Validates `required` (empty = no color / `value: null`), inline error + `'validate'` event → `boolean` |
+| `setError(msg)` / `clearError()` | Set / clear the error state |
 | `open()` / `close()` | Control the popup (trigger mode) |
 | `enable()` / `disable()` | Enable / disable interaction |
 | `destroy()` | Destroy the instance |
@@ -116,6 +120,9 @@ document.getElementById('my-picker')
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract: `required` + `errorMessage` + `validate()` + `setError`/`clearError` (inline error, localized message). Now supports `value: null` (empty state) so `required` is meaningful. See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### Initial
 - Color picker with HSL sliders, preset palette, hex input, hex/rgb/hsl output, trigger and inline modes,
