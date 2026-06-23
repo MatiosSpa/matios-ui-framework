@@ -79,6 +79,7 @@ Any extra property added to an item is passed through intact to `onClick`.
 | `setItems(items)` | Replace the whole tree and re-render all hosts (chainable) |
 | `setActive(key)` | Mark an item active (auto-opens ancestors), re-render (chainable) |
 | `getActive()` | Returns the active key |
+| `getItems()` | Top-level items as a shallow copy (each may carry `children`) |
 | `setBadge(key, value)` | Update an item badge (chainable) |
 | `disable(key)` / `enable(key)` | Toggle an item's disabled state (chainable) |
 | `destroy()` | Unmount from every host and clean up |
@@ -87,6 +88,7 @@ Any extra property added to an item is passed through intact to `onClick`.
 const menu = new MTS.Menu({ items: [/* … */] });
 menu.setActive('reports-sales');
 menu.setBadge('reports', 5);
+menu.getItems();   // → [{ key, label, children? }, …] (copy)
 ```
 
 ---
@@ -106,6 +108,9 @@ their own DOM events for active-item changes.
 ---
 
 ## Changelog
+
+### 2026-06-23
+- `getItems()` — read back the top-level items as a shallow copy (collection-API symmetry across the framework).
 
 ### Initial
 - Shared navigation model for `MTS.Topbar` and `MTS.SideNav`: item tree with keys/icons/badges/href/children,

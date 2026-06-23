@@ -1107,6 +1107,12 @@ MTS.DataTable = class DataTable {
     return this._getSelectedItems()
   }
 
+  /* Returns the rows currently loaded/rendered (current page), as a shallow copy.
+     DataTable is paged/data-source driven, so this reflects the active page — not the whole dataset. */
+  getData() {
+    return Array.isArray(this._currentData) ? this._currentData.slice() : []
+  }
+
   clearSelection() {
     this._log('[api] clearSelection()')
     this._clearAllSelections()

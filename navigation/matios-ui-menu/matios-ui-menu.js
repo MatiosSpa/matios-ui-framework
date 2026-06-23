@@ -77,6 +77,11 @@ MTS.Menu = class MtsMenu {
     return this.active;
   }
 
+  /** Retorna los items de nivel superior (copia superficial; cada item puede traer children). */
+  getItems() {
+    return this.items.slice();
+  }
+
   /** Actualiza el badge de un item */
   setBadge(key, value) {
     var item = this._findItem(key, this.items);

@@ -103,6 +103,7 @@ new MTS.Select('#users', {
 | `setValue(value)` | Set the value programmatically |
 | `clear()` | Clear the selection |
 | `setOptions(array[, enable])` | Replace the options list (`enable=true` also enables the field) |
+| `getOptions()` | Current option list as a shallow copy |
 | `open()` / `close()` / `toggle()` | Control the dropdown |
 | `enable()` / `disable()` | Enable / disable interaction |
 | `destroy()` | Destroy the instance |
@@ -147,6 +148,9 @@ shadow tokens. Theme via `data-mts-mode` / `data-mts-accent`.
 ---
 
 ## Changelog
+
+### 2026-06-23
+- `getOptions()` — read back the current option list as a shallow copy (collection-API symmetry with `setOptions`).
 
 ### 2026-06-22
 - Fix: the dropdown now flips up when there's more room above than below (previously a fixed `>= 120px` threshold forced it downward, clipping options off the bottom of the viewport near the screen/modal edge). Its list height is also capped to the available space and scrolls when options don't fit.

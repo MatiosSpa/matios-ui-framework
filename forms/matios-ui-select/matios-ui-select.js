@@ -98,6 +98,9 @@ MTS.Select = class MtsSelect {
   // Returns selected option label / Retorna el label de la opción seleccionada
   getText()  { return this._getText(); }
 
+  // Returns the current option list (shallow copy) / Retorna la lista de opciones actual (copia superficial)
+  getOptions() { return this.options.slice(); }
+
   get value() { return this._value; }
   get text()  { return this._getText(); }
 

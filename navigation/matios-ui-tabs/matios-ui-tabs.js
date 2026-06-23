@@ -78,6 +78,7 @@ MTS.Tabs = class MtsTabs {
   }
   addTab(tab)    { this.tabs.push(tab); this._build(); return this; }
   removeTab(id)  { this.tabs = this.tabs.filter(t => t.id !== id); if (this.active === id) this.active = this.tabs[0]?.id; this._build(); return this; }
+  getTabs()      { return this.tabs.slice(); }
   on(e, cb)      { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   destroy()      { this._el.replaceChildren(); }
 

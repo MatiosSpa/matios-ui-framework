@@ -134,8 +134,18 @@ The FE does not persist — event payloads are ready to send to the BE:
 | `removeCard(cardId)` | Remove a card; emits `onCardDelete` |
 | `setColumns(cols)` | Replace ALL columns and rebuild |
 | `addColumn(col[, index])` / `removeColumn(id)` / `renameColumn(id, title)` | Column management; emit the column events |
+| `getColumns()` | Current columns (with their cards) as a shallow copy |
+| `getCards([colId])` | Cards of a column by id, or every card flattened when `colId` is omitted |
 | `reload()` | Re-invoke dataSource or rebuild |
 | `destroy()` | Clear DOM and listeners |
+
+```js
+const board = new MTS.Kanban('#board', { columns: [/* … */] });
+board.addCard('todo', { id: 'c9', title: 'New card' });
+board.getColumns();        // → [{ id, title, cards: [...] }, …] (copy)
+board.getCards('todo');    // → cards of the "todo" column
+board.getCards();          // → every card across all columns
+```
 
 ---
 
@@ -154,6 +164,10 @@ component-specific tokens to override.
 ---
 
 ## Changelog
+
+### 2026-06-23
+- `getColumns()` and `getCards([colId])` — read back the board state (columns with cards, or cards by column / all
+  flattened) as shallow copies. Completes the mutate-and-read collection API.
 
 ### 2026-05-31 — Consolidated demo + DevPanel + i18n + BE integration
 - Own i18n `matios-ui-kanban-i18n.js` (es/en/pt, namespace `MTS.Kanban`) + `_t()`; all internal strings localized.

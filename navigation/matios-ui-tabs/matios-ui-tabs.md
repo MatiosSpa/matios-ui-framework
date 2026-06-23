@@ -79,6 +79,7 @@ new MTS.Tabs('#tabs-icons', {
 | `setActive(id)` | Activate a tab programmatically |
 | `addTab(tab)` | Add a tab |
 | `removeTab(id)` | Remove a tab |
+| `getTabs()` | Current tabs as a shallow-copied array |
 | `on(event, cb)` | Listen to `'change'` |
 | `destroy()` | Destroy the instance |
 
@@ -86,6 +87,7 @@ new MTS.Tabs('#tabs-icons', {
 const tabs = new MTS.Tabs('#my-tabs', { tabs: [/* … */] });
 tabs.setActive('details');
 tabs.addTab({ id: 'new', label: 'New Tab', content: '<p>...</p>' });
+tabs.getTabs();   // → [{ id, label, … }, …] (copy)
 ```
 
 ---
@@ -111,6 +113,10 @@ document.getElementById('my-tabs')
 ---
 
 ## Changelog
+
+### 2026-06-23
+- `getTabs()` — read back the current tabs as a shallow copy (collection-API symmetry with `MTS.Accordion.getItems`,
+  `MTS.ItemList.getDatasource`).
 
 ### Initial
 - Tabs with underline/pill/card/bordered variants, horizontal/vertical layout, lazy panels, icons and badges,

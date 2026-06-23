@@ -157,6 +157,7 @@ new MTS.DataTable({
 | `setSearch(text)` | Set the search text and reload |
 | `setParams(params)` / `clearParams(...keys)` | Merge / remove extra query params and reload |
 | `redraw()` | Re-render with the latest data without a new request |
+| `getData()` | Rows currently loaded/rendered (the active page) as a shallow copy. The table is paged/data-source driven, so this is the current page — not the whole dataset |
 
 ### Selection
 
@@ -212,6 +213,9 @@ table.unregisterHook('onReady', onReady);
 ---
 
 ## Changelog
+
+### 2026-06-23
+- `getData()` — read back the rows currently rendered (active page) as a shallow copy, mirroring `getSelection()`.
 
 ### Initial
 - Dynamic data table: async/URL dataSource with a fixed response contract, pagination, sorting, search, single/multi

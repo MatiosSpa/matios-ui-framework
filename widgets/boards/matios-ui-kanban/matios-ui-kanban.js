@@ -220,6 +220,22 @@ MTS.Kanban = class MtsKanban {
     return this;
   }
 
+  /** Retorna las columnas con sus cards (copia superficial del arreglo de columnas). */
+  getColumns() {
+    return this.columns.slice();
+  }
+
+  /** Retorna las cards de una columna por id, o todas las cards si no se pasa colId. */
+  getCards(colId) {
+    if (colId != null) {
+      var col = this.columns.find(function(c) { return c.id === colId; });
+      return col ? col.cards.slice() : [];
+    }
+    var all = [];
+    this.columns.forEach(function(col) { all = all.concat(col.cards); });
+    return all;
+  }
+
   moveCard(cardId, toColId, idx) {
     idx = idx != null ? idx : 0;
     var card = null, fromCol = null;
