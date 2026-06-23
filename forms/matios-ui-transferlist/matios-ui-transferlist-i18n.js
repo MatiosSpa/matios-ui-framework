@@ -10,6 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.TransferList': {
+      messages: { required: 'Este campo es obligatorio' },
       demo: {
         subtitle:              'Transferencia entre listas con datasource origen/seleccionado, arrastrar y soltar, botones opcionales y validacion unica en destino. Los ejemplos combinan casos genericos y un caso real de negocio.',
         s1Title:               '1 - Basico',
@@ -64,6 +65,7 @@
 
   MTS.registerLocale('en', {
     'MTS.TransferList': {
+      messages: { required: 'This field is required' },
       demo: {
         subtitle:              'Transfer between lists with origin/selected datasource, drag and drop, optional buttons and unique validation on the target. The examples combine generic cases and a real business case.',
         s1Title:               '1 - Basic',
@@ -118,6 +120,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.TransferList': {
+      messages: { required: 'Este campo é obrigatório' },
       demo: {
         subtitle:              'Transferencia entre listas com datasource origem/selecionado, arrastar e soltar, botoes opcionais e validacao unica no destino. Os exemplos combinam casos genericos e um caso real de negocio.',
         s1Title:               '1 - Basico',

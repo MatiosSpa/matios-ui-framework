@@ -10,6 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.Slider': {
+      messages: { required: 'Este campo es obligatorio' },
       demo: {
         subtitle:            'Slider simple, rango doble y control programático usando el patrón de demo estándar.',
         s1Title:             '1 — Slider simple',
@@ -37,6 +38,7 @@
 
   MTS.registerLocale('en', {
     'MTS.Slider': {
+      messages: { required: 'This field is required' },
       demo: {
         subtitle:            'Simple slider, dual range and programmatic control using the standard demo pattern.',
         s1Title:             '1 — Simple slider',
@@ -64,6 +66,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.Slider': {
+      messages: { required: 'Este campo é obrigatório' },
       demo: {
         subtitle:            'Slider simples, intervalo duplo e controle programático usando o padrão de demo padrão.',
         s1Title:             '1 — Slider simples',

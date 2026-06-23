@@ -46,6 +46,12 @@ MTS.Slider = class MtsSlider {
     // Fires when value changes / Se dispara al cambiar el valor
     if (options.onChange) this.on('change', options.onChange);
 
+    // Form-field contract (a slider always holds a value → required is a no-op,
+    // but the API is kept uniform with the rest of the form fields)
+    this.required     = options.required     ?? false;
+    this.errorMessage = options.errorMessage ?? null;
+    this._error       = '';
+
     this._build();
     this._el._mtsInstance = this;
   }
@@ -53,6 +59,29 @@ MTS.Slider = class MtsSlider {
   // Returns current value — number for simple, [min, max] for range
   // Retorna el valor actual — número para simple, [min, max] para rango
   getValue() { return this.range ? [this._v1, this._v2] : this._v1; }
+
+  /* ── Form-field validation contract — a slider always has a value, so validate() is always true ── */
+  setError(msg) {
+    this._error = msg || '';
+    if (!this._errEl || !this._errEl.isConnected) {
+      this._errEl = document.createElement('span');
+      this._errEl.className = 'mts-form-error';
+      this._el.appendChild(this._errEl);
+    }
+    this._errEl.textContent = this._error;
+    this._errEl.style.display = this._error ? '' : 'none';
+    return this;
+  }
+  clearError() { return this.setError(''); }
+  validate() {
+    this.clearError();
+    this._emit('validate', { valid: true, errors: [] });
+    return true;
+  }
+  _t(key, fallback) {
+    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.Slider'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    return fallback;
+  }
 
   // Sets value programmatically / Establece el valor programáticamente
   setValue(v) {

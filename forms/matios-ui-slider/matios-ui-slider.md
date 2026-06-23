@@ -69,6 +69,8 @@ The container only needs to exist in the DOM (`<div id="slider-volume"></div>`).
 |--------|-------------|
 | `getValue()` | Returns the current value — `number` (simple) or `[number, number]` (range) |
 | `setValue(value)` | Set the value programmatically (number or `[min, max]`) |
+| `validate()` | Always `true` — a slider always holds a value, so `required` is a no-op. Provided for API uniformity ([Form Field Contract](../FORM-FIELD-CONTRACT.md)) |
+| `setError(msg)` / `clearError()` | Set / clear an external error (e.g. server-side) |
 
 ```js
 const slider = new MTS.Slider('#my-slider', { min: 0, max: 100 });
@@ -98,6 +100,9 @@ document.getElementById('my-slider')
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract for API uniformity: `setError`/`clearError` + `validate()` (always `true` — a slider always has a value). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### Initial
 - Slider with single value or dual-thumb range, configurable min/max/step, label with live value, custom

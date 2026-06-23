@@ -60,9 +60,40 @@ MTS.TransferList = class MtsTransferList {
       options.selectedDataSource || options.selectedItems || options.value || []
     );
 
+    /* Form-field contract */
+    this.required     = options.required     != null ? !!options.required : false;
+    this.errorMessage = options.errorMessage != null ? options.errorMessage : null;
+    this._error       = '';
+    var self = this;
+    this.on('change', function () { if (self._error) self.clearError(); });
+
     this._build();
     this._bindEvents();
     this._render();
+  }
+
+  /* ── Form-field validation contract — required = at least one selected ── */
+  setError(msg) {
+    this._error = msg || '';
+    if (!this._errEl || !this._errEl.isConnected) {
+      this._errEl = document.createElement('span');
+      this._errEl.className = 'mts-form-error';
+      this._el.appendChild(this._errEl);
+    }
+    this._errEl.textContent = this._error;
+    this._errEl.style.display = this._error ? '' : 'none';
+    return this;
+  }
+  clearError() { return this.setError(''); }
+  validate() {
+    var ok = !this.required || this.getSelectedItems().length > 0;
+    if (ok) { this.clearError(); } else { this.setError(this.errorMessage || this._t('required', 'This field is required')); }
+    this._emit('validate', { valid: ok, errors: ok ? [] : [this._error] });
+    return ok;
+  }
+  _t(key, fallback) {
+    try { var ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.TransferList'] : null; var m = ns && ns.messages; if (m && m[key] != null) { return m[key]; } } catch (e) {}
+    return fallback;
   }
 
   on(event, cb) {

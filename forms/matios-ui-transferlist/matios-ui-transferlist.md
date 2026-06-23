@@ -92,6 +92,10 @@ validateKey: function (item) { return item.id + '_' + item.creationDate; }
 |--------|-------------|
 | `getValue()` / `setValue(array)` | Get / set the selected values |
 | `getSelectedItems()` / `getOriginItems()` / `getAvailableItems()` | Read each list |
+| `validate()` | Validates `required` (empty = nothing selected), inline error + `'validate'` event → `boolean` |
+| `setError(msg)` / `clearError()` | Set / clear the error state |
+
+Accepts `required` + `errorMessage` (localized default) — see [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 | `setItems({ originDataSource, selectedDataSource })` | Replace both data sources |
 | `moveToSelected(item)` / `moveToOrigin(item)` / `moveToAvailable(item)` | Move one (item or internal key) |
 | `moveAllToSelected()` / `moveAllToOrigin()` / `moveAllToAvailable()` | Move all |
@@ -125,6 +129,9 @@ The component imposes no fixed business field names — it takes the real data s
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract: `required` (empty = nothing selected) + `errorMessage` + `validate()` + `setError`/`clearError` (localized). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### 2026-05-22
 - `buttons` — per-button control (`allToSelected`, `toSelected`, `toOrigin`, `allToOrigin`); omit the object to keep
