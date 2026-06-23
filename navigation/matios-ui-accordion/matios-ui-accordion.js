@@ -79,6 +79,70 @@ MTS.Accordion = class MtsAccordion {
     return item ? (item.disabled ?? false) : false;
   }
 
+  /**
+   * Agrega un ítem al final en runtime, montándolo quirúrgicamente (no reconstruye el resto).
+   * Respeta single-open: si se abre y `multiple` es false, colapsa los demás.
+   * @param {object}  item            — { id, title, content, icon?, open?, disabled? } (mismo shape que options.items)
+   * @param {object} [opts]           — { open?: boolean } atajo para abrirlo al insertar
+   */
+  addItem(item, opts) {
+    opts = opts || {};
+    if (!item || item.id == null) return this;
+    if (this.items.some(i => i.id === item.id)) return this;   // id único → no-op
+    this.items.push(item);
+    this._buildItem(item);                                     // _buildItem ya hace el appendChild al contenedor
+    if (opts.open || item.open) this.open(item.id);            // open() colapsa el resto si !multiple
+    return this;
+  }
+
+  /** Quita un ítem por id: lo saca del DOM, del registro y del set de abiertos. */
+  removeItem(id) {
+    const idx = this.items.findIndex(i => i.id === id);
+    if (idx < 0) return this;
+    this.items.splice(idx, 1);
+    this._open.delete(id);
+    const wrap = this._el.querySelector(`#mts-acc-${id}`);
+    if (wrap) wrap.remove();
+    return this;
+  }
+
+  /**
+   * Actualiza un ítem ya renderizado in-place, sin reconstruir su contenido
+   * (no pierde foco ni estado de los controles internos del item).
+   * @param {string} id
+   * @param {object} patch — { title?, icon?, disabled? }
+   */
+  updateItem(id, patch) {
+    const item = this.items.find(i => i.id === id);
+    if (!item || !patch) return this;
+    const wrap = this._el.querySelector(`#mts-acc-${id}`);
+    if (patch.title != null) {
+      item.title = patch.title;
+      const titleEl = wrap ? wrap.querySelector('.mts-accordion__title') : null;
+      if (titleEl) titleEl.textContent = patch.title;
+    }
+    if (patch.icon != null && wrap) {
+      item.icon = patch.icon;
+      const header = wrap.querySelector('.mts-accordion__header');
+      const safe   = (typeof MTS !== 'undefined' && MTS.Sanitize) ? MTS.Sanitize.html(patch.icon) : patch.icon;
+      let iconEl   = header ? header.querySelector('.mts-accordion__icon') : null;
+      if (!iconEl && header) {
+        iconEl = document.createElement('span');
+        iconEl.className = 'mts-accordion__icon';
+        header.insertBefore(iconEl, header.firstChild);
+      }
+      if (iconEl) iconEl.innerHTML = safe;
+    }
+    if (typeof patch.disabled === 'boolean') this.setItemDisabled(id, patch.disabled);
+    return this;
+  }
+
+  /** Retorna true si existe un ítem con ese id. */
+  hasItem(id) { return this.items.some(i => i.id === id); }
+
+  /** Retorna una copia superficial del arreglo de ítems actual. */
+  getItems() { return this.items.slice(); }
+
   on(e, cb)   { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   destroy()   { this._el.innerHTML = ''; }
 

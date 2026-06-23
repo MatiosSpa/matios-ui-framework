@@ -81,6 +81,8 @@
 <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
 <!-- 4. API -->
 <div class="demo-section"><div class="demo-section-title" id="s4-title"></div><div id="tabs-s4"></div></div>
+<!-- 5. Dynamic items -->
+<div class="demo-section"><div class="demo-section-title" id="s5-title"></div><div id="tabs-s5"></div></div>
 </div>
 <script>
 function indentHtml(html) {
@@ -128,6 +130,7 @@ document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic
 document.getElementById('s2-title').textContent      = D.s2Title || '2 — Multiple + Flush (no card borders)';
 document.getElementById('s3-title').textContent      = D.s3Title || '3 — With icons';
 document.getElementById('s4-title').textContent      = D.s4Title || '4 — API — programmatic control';
+document.getElementById('s5-title').textContent      = D.s5Title || '5 — Dynamic items — addItem / removeItem / updateItem';
 
 var IC = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
 var IU = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
@@ -208,6 +211,31 @@ var js_s4 =
   "accApi.closeAll()    // close all\n" +
   "accApi.isOpen('p1')  // → true | false";
 
+var preview_s5 =
+  '<div id="acc-dyn"></div>' +
+  '<div class="demo-row" style="margin-top:8px;flex-wrap:wrap">' +
+    '<button class="demo-btn-sm" onclick="dynAdd()">addItem()</button>' +
+    '<button class="demo-btn-sm" onclick="dynRenameLast()">updateItem({ title })</button>' +
+    '<button class="demo-btn-sm" onclick="dynToggleDisabledLast()">updateItem({ disabled })</button>' +
+    '<button class="demo-btn-sm" onclick="dynRemoveLast()">removeItem()</button>' +
+  '</div>' +
+  '<div class="result-box" id="acc-dyn-res">' + (D.resultDyn || '— add, rename or remove items at runtime —') + '</div>';
+
+var js_s5 =
+  "var acc = new MTS.Accordion('#builder', { items: [] });\n\n" +
+  "// add an item at runtime — content as an Element is mounted live\n" +
+  "// (keeps focus/state; the rest of the accordion is not rebuilt)\n" +
+  "acc.addItem({\n" +
+  "  id:      'f1',\n" +
+  "  title:   'Field 1',\n" +
+  "  content: fieldEl   // string | Element | function\n" +
+  "}, { open: true });   // open on insert (collapses others if !multiple)\n\n" +
+  "acc.updateItem('f1', { title: 'Name' });   // rename in-place, no rebuild\n" +
+  "acc.updateItem('f1', { disabled: true });  // also: { icon }\n" +
+  "acc.removeItem('f1');                       // out of DOM + state\n\n" +
+  "acc.hasItem('f1')   // → false\n" +
+  "acc.getItems()      // → current items (shallow copy)";
+
 makeSection('tabs-s1', preview_s1, js_s1, function() {
   new MTS.Accordion('#acc-basic', {
     items: [
@@ -253,6 +281,44 @@ makeSection('tabs-s4', preview_s4, js_s4, function() {
     onOpen:  function(e){ document.getElementById('acc-api-res').textContent = (D.onOpenPrefix || 'onOpen → ') + e.detail.id; },
     onClose: function(e){ document.getElementById('acc-api-res').textContent = (D.onClosePrefix || 'onClose → ') + e.detail.id; },
   });
+}, '380px');
+
+// — Section 5: dynamic items (form-builder style) —
+var dynAcc, dynN = 0;
+function dynRes(text) { document.getElementById('acc-dyn-res').textContent = text; }
+function dynLastId()  { var its = dynAcc.getItems(); return its.length ? its[its.length - 1].id : null; }
+function dynAdd() {
+  dynN += 1;
+  var fid = 'dyn-' + dynN;
+  dynAcc.addItem({
+    id:      fid,
+    title:   (D.dynField || 'Field') + ' ' + dynN,
+    content: '<div style="padding:12px 16px">' + (D.dynBody || 'Live content — added at runtime, never rebuilt.') + '</div>',
+  }, { open: true });
+  dynRes("addItem('" + fid + "') — " + dynAcc.getItems().length + ' ' + (D.dynItems || 'items'));
+}
+function dynRemoveLast() {
+  var id = dynLastId();
+  if (!id) { dynRes(D.dynEmpty || 'no items'); return; }
+  dynAcc.removeItem(id);
+  dynRes("removeItem('" + id + "') — " + dynAcc.getItems().length + ' ' + (D.dynItems || 'items'));
+}
+function dynRenameLast() {
+  var id = dynLastId();
+  if (!id) { dynRes(D.dynEmpty || 'no items'); return; }
+  dynAcc.updateItem(id, { title: (D.dynRenamed || 'Renamed field') + ' ✎' });
+  dynRes("updateItem('" + id + "', { title }) ✓");
+}
+function dynToggleDisabledLast() {
+  var id = dynLastId();
+  if (!id) { dynRes(D.dynEmpty || 'no items'); return; }
+  var now = !dynAcc.isDisabled(id);
+  dynAcc.updateItem(id, { disabled: now });
+  dynRes("updateItem('" + id + "', { disabled: " + now + ' }) ✓');
+}
+makeSection('tabs-s5', preview_s5, js_s5, function() {
+  dynAcc = new MTS.Accordion('#acc-dyn', { items: [] });
+  dynAdd();
 }, '380px');
 </script>
 </body>

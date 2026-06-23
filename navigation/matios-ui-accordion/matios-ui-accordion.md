@@ -38,6 +38,12 @@ new MTS.Accordion('#accordion-flush', { flush: true, items: [/* … */] });
 new MTS.Accordion('#accordion-icons', {
   items: [{ id: 'a', icon: '<svg>...</svg>', title: 'Settings', content: '...' }],
 });
+
+// Dynamic items — add / update / remove at runtime (no full rebuild)
+const acc = new MTS.Accordion('#builder', { items: [] });
+acc.addItem({ id: 'f1', title: 'Field 1', content: fieldEl }, { open: true });
+acc.updateItem('f1', { title: 'Name' });   // rename in-place — keeps content/focus
+acc.removeItem('f1');                       // out of DOM + state
 ```
 
 ---
@@ -74,6 +80,11 @@ new MTS.Accordion('#accordion-icons', {
 | `isOpen(id)` | Whether a panel is open |
 | `setItemDisabled(id, bool)` | Disable / enable an item at runtime (closes it if it was open) |
 | `isDisabled(id)` | Current disabled state |
+| `addItem(item[, { open }])` | Append an item at runtime (same shape as `options.items`); mounts only the new node. Duplicate `id` is a no-op. With `{ open: true }` it opens on insert (collapsing others if `multiple` is false). |
+| `removeItem(id)` | Remove an item — out of the DOM, the registry and the open set |
+| `updateItem(id, patch)` | Update a rendered item in-place (`{ title?, icon?, disabled? }`) without rebuilding its content — keeps focus/state of inner controls |
+| `hasItem(id)` | Whether an item with that id exists |
+| `getItems()` | Shallow copy of the current items array |
 | `on(event, cb)` | Listen to `'open'` / `'close'` |
 | `destroy()` | Destroy the instance |
 
@@ -81,6 +92,11 @@ new MTS.Accordion('#accordion-icons', {
 const acc = new MTS.Accordion('#my-accordion', { items: [/* … */] });
 acc.open('panel-id');
 acc.setItemDisabled('panel-id', true);
+
+// Runtime items — surgical, no full rebuild
+acc.addItem({ id: 'x', title: 'New', content: someEl }, { open: true });
+acc.updateItem('x', { title: 'Renamed' });
+acc.removeItem('x');
 ```
 
 ---
@@ -107,6 +123,12 @@ document.getElementById('my-accordion')
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Dynamic items: `addItem(item[, { open }])`, `removeItem(id)` and `updateItem(id, patch)` — add, remove and update
+  items at runtime with surgical DOM (only the affected node), so inner live controls keep their focus and state
+  (no full rebuild). Plus `hasItem(id)` and `getItems()`. Brings `MTS.Accordion` in line with the other collection
+  components (`MTS.ItemList`, `MTS.Tabs`). Non-breaking.
 
 ### 2026-05-21
 - `setItemDisabled(id, bool)` — disable/enable an item at runtime without rebuilding the DOM; an open item closes
