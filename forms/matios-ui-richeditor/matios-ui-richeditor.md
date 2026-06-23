@@ -136,6 +136,8 @@ new MTS.RichEditor('#my-editor', {
 | `insertField(token)` | Insert a chip at the current cursor position |
 | `setPreview(bool)` | `true` = visual read-only (toolbar + palette hidden) |
 | `getCustomFields()` | `[{ token, label, defaultValue }]` of user-defined custom fields |
+| `validate()` | Validates `required` (empty = no visible text), inline error + `'validate'` event → `boolean` ([Form Field Contract](../FORM-FIELD-CONTRACT.md)) |
+| `setError(msg)` / `clearError()` | Set / clear the error state |
 | `focus()` | Focus the editor |
 | `destroy()` | Restore the original textarea with the current value and remove the editor |
 | `on(event, fn)` / `off(event, fn)` | Listen / unlisten — `'change'` (`e.detail.value`), `'focus'`, `'blur'` |
@@ -200,6 +202,9 @@ Handlebars string. The consumer can submit the form unchanged — the value stay
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract: `required` + `errorMessage` + `validate()` (empty = no visible text) + `setError`/`clearError` (localized message). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### 2026-05-21
 - Fix: palette items capture `_saveRange()` on `mousedown` (like toolbar buttons) so subsequent fields insert at the

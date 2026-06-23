@@ -10,6 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.Radio': {
+      messages: { required: 'Este campo es obligatorio' },
       demo: {
         subtitle:            'Grupo de radio buttons vertical y horizontal, con opción deshabilitada y grupo completo deshabilitado.',
         s1Title:             '1 — Vertical (por defecto)',
@@ -36,6 +37,7 @@
 
   MTS.registerLocale('en', {
     'MTS.Radio': {
+      messages: { required: 'This field is required' },
       demo: {
         subtitle:            'Vertical and horizontal radio button group, with a disabled option and a fully disabled group.',
         s1Title:             '1 — Vertical (default)',
@@ -62,6 +64,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.Radio': {
+      messages: { required: 'Este campo é obrigatório' },
       demo: {
         subtitle:            'Grupo de radio buttons vertical e horizontal, com opção desabilitada e grupo totalmente desabilitado.',
         s1Title:             '1 — Vertical (padrão)',

@@ -34,12 +34,43 @@ MTS.Checkbox = class MtsCheckbox {
     // Fires when the checkbox state changes / Se dispara al cambiar el estado
     if (options.onChange) this.on('change', options.onChange);
 
+    // Form-field contract
+    this.required     = options.required     ?? false;
+    this.errorMessage = options.errorMessage ?? null;
+    this._error       = '';
+    const self = this;
+    this.on('change', function () { if (self._error) self.clearError(); });
+
     this._build();
     this._el._mtsInstance = this;
   }
 
   // Returns true if checked / Retorna true si está marcado
   isChecked() { return this._inputEl?.checked ?? false; }
+
+  /* ── Form-field validation contract — required = must be checked ── */
+  setError(msg) {
+    this._error = msg || '';
+    if (!this._errEl || !this._errEl.isConnected) {
+      this._errEl = document.createElement('span');
+      this._errEl.className = 'mts-form-error';
+      this._el.appendChild(this._errEl);
+    }
+    this._errEl.textContent = this._error;
+    this._errEl.style.display = this._error ? '' : 'none';
+    return this;
+  }
+  clearError() { return this.setError(''); }
+  validate() {
+    const ok = !this.required || this.isChecked();
+    if (ok) this.clearError(); else this.setError(this.errorMessage || this._t('required', 'This field is required'));
+    this._emit('validate', { valid: ok, errors: ok ? [] : [this._error] });
+    return ok;
+  }
+  _t(key, fallback) {
+    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.Checkbox'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    return fallback;
+  }
 
   // Sets checked state programmatically / Establece el estado marcado programáticamente
   setChecked(v) {
@@ -115,12 +146,43 @@ MTS.CheckboxGroup = class MtsCheckboxGroup {
     // Fires when selection changes / Se dispara al cambiar la selección
     if (options.onChange) this.on('change', options.onChange);
 
+    // Form-field contract
+    this.required     = options.required     ?? false;
+    this.errorMessage = options.errorMessage ?? null;
+    this._error       = '';
+    const self = this;
+    this.on('change', function () { if (self._error) self.clearError(); });
+
     this._build();
     this._el._mtsInstance = this;
   }
 
   // Returns array of selected values / Retorna arreglo de valores seleccionados
   getValue() { return [...this.value]; }
+
+  /* ── Form-field validation contract — required = at least one selected ── */
+  setError(msg) {
+    this._error = msg || '';
+    if (!this._errEl || !this._errEl.isConnected) {
+      this._errEl = document.createElement('span');
+      this._errEl.className = 'mts-form-error';
+      this._el.appendChild(this._errEl);
+    }
+    this._errEl.textContent = this._error;
+    this._errEl.style.display = this._error ? '' : 'none';
+    return this;
+  }
+  clearError() { return this.setError(''); }
+  validate() {
+    const ok = !this.required || this.getValue().length > 0;
+    if (ok) this.clearError(); else this.setError(this.errorMessage || this._t('required', 'This field is required'));
+    this._emit('validate', { valid: ok, errors: ok ? [] : [this._error] });
+    return ok;
+  }
+  _t(key, fallback) {
+    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.Checkbox'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    return fallback;
+  }
 
   // Registers an event listener / Registra un listener de evento
   on(e, cb) { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }

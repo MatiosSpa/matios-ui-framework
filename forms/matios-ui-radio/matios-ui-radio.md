@@ -65,6 +65,10 @@ The container only needs to exist in the DOM (`<div id="radio-priority"></div>`)
 |--------|-------------|
 | `getValue()` | Returns the selected value (`string \| null`) |
 | `setValue(value)` | Set the selected value programmatically |
+| `validate()` | Validates `required` (empty = none selected), inline error + `'validate'` event → `boolean` |
+| `setError(msg)` / `clearError()` | Set / clear the error state |
+
+Accepts `required` + `errorMessage` (localized default) — see [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ```js
 const radio = new MTS.Radio('#my-radio', { options: [/* … */], value: 'a' });
@@ -94,6 +98,9 @@ document.getElementById('my-radio')
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract: `required` + `errorMessage` + `validate()` + `setError`/`clearError` (localized message). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### Initial
 - Radio group with single selection, vertical/horizontal layout, per-option disable, auto group name,

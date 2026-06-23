@@ -90,6 +90,13 @@ MTS.RichEditor = class MtsRichEditor {
     if (options.onFocus)  this.on('focus',  options.onFocus);
     if (options.onBlur)   this.on('blur',   options.onBlur);
 
+    /* Form-field contract */
+    this.required     = options.required     != null ? options.required : false;
+    this.errorMessage = options.errorMessage != null ? options.errorMessage : null;
+    this._error       = '';
+    var self = this;
+    this.on('change', function () { if (self._error) self.clearError(); });
+
     this._build();
     if (this._el) { this._el._mtsInstance = this; }
 
@@ -107,6 +114,30 @@ MTS.RichEditor = class MtsRichEditor {
   getText()   { return this._editor ? this._editor.innerText || '' : ''; }
   focus()     { if (this._editor) this._editor.focus(); return this; }
   clear()     { if (this._editor) { this._editor.innerHTML = ''; this._syncTextarea(); this._updateStatus(); } return this; }
+
+  /* ── Form-field validation contract — required = has visible text ── */
+  setError(msg) {
+    this._error = msg || '';
+    if (!this._errEl || !this._errEl.isConnected) {
+      this._errEl = document.createElement('span');
+      this._errEl.className = 'mts-form-error';
+      if (this._el) { this._el.appendChild(this._errEl); }
+    }
+    this._errEl.textContent = this._error;
+    this._errEl.style.display = this._error ? '' : 'none';
+    return this;
+  }
+  clearError() { return this.setError(''); }
+  validate() {
+    var ok = !this.required || (this.getText() || '').trim() !== '';
+    if (ok) { this.clearError(); } else { this.setError(this.errorMessage || this._t('required', 'This field is required')); }
+    this._emit('validate', { valid: ok, errors: ok ? [] : [this._error] });
+    return ok;
+  }
+  _t(key, fallback) {
+    try { var ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.RichEditor'] : null; var m = ns && ns.messages; if (m && m[key] != null) { return m[key]; } } catch (e) {}
+    return fallback;
+  }
 
   setValue(html) {
     this._setEditorContent(html || '');

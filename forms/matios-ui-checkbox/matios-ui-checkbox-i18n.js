@@ -10,6 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.Checkbox': {
+      messages: { required: 'Este campo es obligatorio' },
       demo: {
         subtitle:                'Checkbox individual, estados básicos, grupos vertical y horizontal, y grupo disabled.',
         s1Title:                 '1 — Checkbox individual',
@@ -42,6 +43,7 @@
 
   MTS.registerLocale('en', {
     'MTS.Checkbox': {
+      messages: { required: 'This field is required' },
       demo: {
         subtitle:                'Single checkbox, basic states, vertical and horizontal groups, and a disabled group.',
         s1Title:                 '1 — Single checkbox',
@@ -74,6 +76,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.Checkbox': {
+      messages: { required: 'Este campo é obrigatório' },
       demo: {
         subtitle:                'Checkbox individual, estados básicos, grupos vertical e horizontal, e grupo desabilitado.',
         s1Title:                 '1 — Checkbox individual',

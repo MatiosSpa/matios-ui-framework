@@ -85,6 +85,10 @@ The container only needs to exist in the DOM (e.g. `<div id="chk-terms"></div>`)
 | `toggle()` | Invert the current state |
 | `setIndeterminate(bool)` | Set the indeterminate state |
 | `MTS.CheckboxGroup#getValue()` | Returns the selected values array |
+| `validate()` | Validates `required` — single: must be checked; group: ≥1 selected. Inline error + `'validate'` event → `boolean`. See [Form Field Contract](../FORM-FIELD-CONTRACT.md) |
+| `setError(msg)` / `clearError()` | Set / clear the error state |
+
+Both `MTS.Checkbox` and `MTS.CheckboxGroup` accept `required` + `errorMessage` (localized default).
 
 ```js
 const chk = new MTS.Checkbox('#my-checkbox', { label: 'Accept terms' });
@@ -115,6 +119,9 @@ document.getElementById('my-checkbox').querySelector('input')
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract on `MTS.Checkbox` (required = checked) and `MTS.CheckboxGroup` (required = ≥1 selected): `required` + `errorMessage` + `validate()` + `setError`/`clearError` (localized message). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### Initial
 - Checkbox with checked/indeterminate/disabled states and `MTS.CheckboxGroup` (vertical/horizontal, per-option

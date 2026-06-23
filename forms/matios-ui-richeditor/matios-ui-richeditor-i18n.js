@@ -10,6 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.RichEditor': {
+      messages: { required: 'Este campo es obligatorio' },
       demo: {
         subtitle:          'Editor de plantillas con merge fields — chips atómicos, paleta de campos, formato básico y progressive enhancement sobre un <textarea>.',
         s1Title:           'Editor completo — todas las opciones',
@@ -22,6 +23,7 @@
 
   MTS.registerLocale('en', {
     'MTS.RichEditor': {
+      messages: { required: 'This field is required' },
       demo: {
         subtitle:          'Template editor with merge fields — atomic chips, field palette, basic formatting and progressive enhancement over a <textarea>.',
         s1Title:           'Full editor — all options',
@@ -34,6 +36,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.RichEditor': {
+      messages: { required: 'Este campo é obrigatório' },
       demo: {
         subtitle:          'Editor de modelos com merge fields — chips atômicos, paleta de campos, formatação básica e progressive enhancement sobre um <textarea>.',
         s1Title:           'Editor completo — todas as opções',
