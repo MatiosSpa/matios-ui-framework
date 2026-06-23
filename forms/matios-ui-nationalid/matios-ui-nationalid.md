@@ -81,6 +81,7 @@ MTS.NationalId.countries();                    // → ['AR','BR','CL', …]
 |--------|-------------|
 | `getValue()` | `{ raw, formatted, valid, dv, type, country }` |
 | `isValid()` | `boolean` |
+| `validate()` | Validates required + format, renders the error inline, emits `'validate'`, returns `boolean` ([Form Field Contract](../FORM-FIELD-CONTRACT.md)) |
 | `setValue(v)` | Set value (re-formats + re-validates), chainable |
 | `setCountry(code)` | Switch country, chainable |
 | `setError(msg)` / `clearError()` | Manual error control |
@@ -156,4 +157,5 @@ All colors/spacing use `--mts-*` tokens; the enabled background is `--mts-bg-sur
 
 ## Changelog
 
+- **2026-06-23** — Added the public `validate()` method (required + format → inline error + `'validate'` event), aligning `MTS.NationalId.Input` with the [Form Field Contract](../FORM-FIELD-CONTRACT.md). Already had `required` + `errorMessage` + `setError`/`clearError`.
 - **2026-06-10** — Initial version. Core (registry + format + validate) with CL, BR, ES, EC, AR, PE, CO, UY, PT, US; `MTS.NationalId.Input` (format-as-you-type with digit-count caret restore, validation, configurable error message, derived `maxLength`); es/en/pt locale.

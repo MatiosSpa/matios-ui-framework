@@ -10,6 +10,17 @@
 
   MTS.registerLocale('es', {
     'MTS.Input': {
+      messages: {
+        required:     'Este campo es obligatorio',
+        minLength:    'Mínimo {n} caracteres',
+        maxLength:    'Máximo {n} caracteres',
+        min:          'Valor mínimo: {n}',
+        max:          'Valor máximo: {n}',
+        pattern:      'Formato inválido',
+        email:        'Email inválido',
+        clear:        'Limpiar',
+        showPassword: 'Mostrar contraseña'
+      },
       demo: {
         subtitle:               'Campos de texto, textarea, validación, estados y enhancement progresivo desde HTML declarativo.',
 
@@ -119,6 +130,17 @@
 
   MTS.registerLocale('en', {
     'MTS.Input': {
+      messages: {
+        required:     'This field is required',
+        minLength:    'Minimum {n} characters',
+        maxLength:    'Maximum {n} characters',
+        min:          'Minimum value: {n}',
+        max:          'Maximum value: {n}',
+        pattern:      'Invalid format',
+        email:        'Invalid email',
+        clear:        'Clear',
+        showPassword: 'Show password'
+      },
       demo: {
         subtitle:               'Text fields, textarea, validation, states and progressive enhancement from declarative HTML.',
 
@@ -228,6 +250,17 @@
 
   MTS.registerLocale('pt', {
     'MTS.Input': {
+      messages: {
+        required:     'Este campo é obrigatório',
+        minLength:    'Mínimo {n} caracteres',
+        maxLength:    'Máximo {n} caracteres',
+        min:          'Valor mínimo: {n}',
+        max:          'Valor máximo: {n}',
+        pattern:      'Formato inválido',
+        email:        'Email inválido',
+        clear:        'Limpar',
+        showPassword: 'Mostrar senha'
+      },
       demo: {
         subtitle:               'Campos de texto, textarea, validação, estados e enhancement progressivo a partir de HTML declarativo.',
 

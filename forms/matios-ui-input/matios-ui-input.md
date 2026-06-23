@@ -63,6 +63,7 @@ All options are passed as the second argument to the constructor.
 | `hint` | `string` | `''` | Helper text below the field |
 | `value` | `string` | `''` | Initial value |
 | `required` | `boolean` | `false` | Marks the field as required |
+| `errorMessage` | `string` | `null` | Overrides the `required` message; when `null` the localized default is used (see [Form Field Contract](../FORM-FIELD-CONTRACT.md)) |
 | `disabled` | `boolean` | `false` | Disables all interaction |
 | `readonly` | `boolean` | `false` | Read-only, not editable |
 | `clearable` | `boolean` | `false` | Shows a × button to clear |
@@ -151,6 +152,11 @@ disabled style, plus `--mts-danger-*` for the error state. Theme via `data-mts-m
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation messages are now **localized** (es/en/pt) via the component i18n `messages` namespace — previously they
+  were hardcoded in Spanish. New `errorMessage` option overrides the `required` message. The clear/show-password
+  `aria-label`s are localized too. Aligns with the [Form Field Contract](../FORM-FIELD-CONTRACT.md). No API/behavior change.
 
 ### Initial
 - Input with text/email/password/number/textarea types, validation rules + manual `validate()`/`setError()`,

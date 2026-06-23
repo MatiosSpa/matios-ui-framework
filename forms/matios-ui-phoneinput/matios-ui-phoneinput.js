@@ -134,6 +134,8 @@ MTS.PhoneInput = class MtsPhoneInput {
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   clearError()       { this._error = ''; this._renderError(); return this; }
+  /* Form-field contract: validates required + phone length, renders the error inline and returns the result. */
+  validate()         { var valid = this._validateNow(); this._emit('validate', { valid: valid, errors: valid ? [] : [this._error] }); return valid; }
   disable()          { this.disabled = true;  this._build(); return this; }
   enable()           { this.disabled = false; this._build(); return this; }
 

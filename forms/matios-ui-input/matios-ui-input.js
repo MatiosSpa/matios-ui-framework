@@ -69,6 +69,7 @@ MTS.Input = class MtsInput {
     this.hint            = options.hint           || '';
     this.value           = options.value          ?? '';
     this.required        = options.required       ?? false;
+    this.errorMessage    = options.errorMessage    ?? null;
     this.disabled        = options.disabled       ?? false;
     this.readonly        = options.readonly       ?? false;
     this.iconLeft        = options.iconLeft       || null;
@@ -121,13 +122,13 @@ MTS.Input = class MtsInput {
     this._errors = [];
     const r      = this.rules;
 
-    if ((this.required || r.required) && !val.trim()) this._errors.push('Este campo es obligatorio');
-    if (r.minLength && val.length < r.minLength) this._errors.push(`MÃ­nimo ${r.minLength} caracteres`);
-    if (r.maxLength && val.length > r.maxLength) this._errors.push(`MÃ¡ximo ${r.maxLength} caracteres`);
-    if (r.min !== undefined && Number(val) < r.min) this._errors.push(`Valor mÃ­nimo: ${r.min}`);
-    if (r.max !== undefined && Number(val) > r.max) this._errors.push(`Valor mÃ¡ximo: ${r.max}`);
-    if (r.pattern && val && !r.pattern.test(val)) this._errors.push(r.patternMessage || 'Formato invÃ¡lido');
-    if (r.email && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) this._errors.push('Email invÃ¡lido');
+    if ((this.required || r.required) && !val.trim()) this._errors.push(this.errorMessage || this._t('required', 'This field is required'));
+    if (r.minLength && val.length < r.minLength) this._errors.push(this._t('minLength', 'Minimum {n} characters').replace('{n}', r.minLength));
+    if (r.maxLength && val.length > r.maxLength) this._errors.push(this._t('maxLength', 'Maximum {n} characters').replace('{n}', r.maxLength));
+    if (r.min !== undefined && Number(val) < r.min) this._errors.push(this._t('min', 'Minimum value: {n}').replace('{n}', r.min));
+    if (r.max !== undefined && Number(val) > r.max) this._errors.push(this._t('max', 'Maximum value: {n}').replace('{n}', r.max));
+    if (r.pattern && val && !r.pattern.test(val)) this._errors.push(r.patternMessage || this._t('pattern', 'Invalid format'));
+    if (r.email && val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) this._errors.push(this._t('email', 'Invalid email'));
     if (r.custom) { const msg = r.custom(val); if (msg) this._errors.push(msg); }
 
     this._isValid = this._errors.length === 0;
@@ -148,6 +149,16 @@ MTS.Input = class MtsInput {
     this._errors  = [];
     this._renderValidation();
     return this;
+  }
+
+  /* Localized message lookup — MTS.Input → messages namespace; falls back to the given default. */
+  _t(key, fallback) {
+    try {
+      const ns = (typeof window !== 'undefined' && window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.Input'] : null;
+      const m  = ns && ns.messages;
+      if (m && m[key] != null) return m[key];
+    } catch (e) {}
+    return fallback;
   }
 
   on(event, cb)  { if (!this._listeners[event]) this._listeners[event] = []; this._listeners[event].push(cb); return this; }
@@ -226,7 +237,7 @@ MTS.Input = class MtsInput {
     if (this.clearable) {
       this._clearBtn = document.createElement('button');
       this._clearBtn.className = 'mts-input__icon mts-input__icon--right mts-input__clear';
-      this._clearBtn.setAttribute('aria-label', 'Limpiar');
+      this._clearBtn.setAttribute('aria-label', this._t('clear', 'Clear'));
       this._clearBtn.innerHTML = '&times;';
       this._clearBtn.style.display = 'none';
       this._clearBtn.addEventListener('click', () => this.clear());
@@ -236,7 +247,7 @@ MTS.Input = class MtsInput {
     if (this.type === 'password' && this.showPassword) {
       this._eyeBtn = document.createElement('button');
       this._eyeBtn.className = 'mts-input__icon mts-input__icon--right mts-input__eye';
-      this._eyeBtn.setAttribute('aria-label', 'Mostrar contraseÃ±a');
+      this._eyeBtn.setAttribute('aria-label', this._t('showPassword', 'Show password'));
       // TODO: reemplazar con MTS.Icons cuando estÃ©n listos
       this._eyeBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
       this._eyeBtn.addEventListener('click', () => {

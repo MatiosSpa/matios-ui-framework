@@ -549,6 +549,14 @@ MTS.NationalId.Input = class MtsNationalIdInput {
   }
   isValid()  { return this.getValue().valid; }
 
+  /* Form-field contract: validates required + format, renders the error inline and returns the result. */
+  validate() {
+    const valid = this._validateNow();
+    const msg   = (this._errEl && this._errEl.textContent) || '';
+    this._emit('validate', { valid: valid, errors: valid ? [] : (msg ? [msg] : []) });
+    return valid;
+  }
+
   setValue(v) {
     this._raw = MTS.NationalId.clean(v || '');
     const def = this._typeDef();

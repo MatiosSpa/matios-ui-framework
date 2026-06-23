@@ -70,6 +70,7 @@ Available `data-*`: `data-label`, `data-placeholder`, `data-hint`, `data-value`,
 |--------|-------------|
 | `getValue()` | Returns `{ raw, formatted, full, country, valid }` |
 | `isValid()` | `boolean` — length matches the country (empty → valid unless `required`) |
+| `validate()` | Validates required + phone length, renders the error inline, emits `'validate'`, returns `boolean` ([Form Field Contract](../FORM-FIELD-CONTRACT.md)) |
 | `setValue(digits)` | Set the phone digits programmatically |
 | `setCountry(code)` | Change the country programmatically |
 | `setError(msg)` / `clearError()` | Set / clear the error state |
@@ -131,6 +132,9 @@ Europe (ES, PT, GB, FR, DE, IT); Asia/Pacific (CN, JP).
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Added the public `validate()` method (required + length → inline error + `'validate'` event), aligning `MTS.PhoneInput` with the [Form Field Contract](../FORM-FIELD-CONTRACT.md). Already had `required` + `errorMessage` + `setError`/`clearError`.
 
 ### Initial
 - Phone input with integrated country selector (38 countries), emoji flags, automatic per-country formatting,
