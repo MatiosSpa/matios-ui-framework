@@ -71,6 +71,10 @@ new MTS.TagInput('#el3', { tags: [{ uid: 'ana@mail.com', name: 'Ana López' }] }
 | `setTags(array)` | Replace all tags |
 | `addTag({ uid, name })` | Add one tag |
 | `removeTag(uid)` | Remove a tag by uid |
+| `validate()` | Validates `required` (empty = no tags), inline error + `'validate'` event → `boolean` |
+| `setError(msg)` / `clearError()` | Set / clear the error state |
+
+Accepts `required` + `errorMessage` (localized default) — see [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 | `setSuggestions(array)` | Replace the suggestions |
 | `destroy()` | Destroy the instance |
 
@@ -100,6 +104,9 @@ ti.on('add', function (e) { console.log(e.detail.tag); });
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract: `required` (empty = no tags) + `errorMessage` + `validate()` + `setError`/`clearError` (localized). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### Initial
 - Tag input with `{ uid, name }` objects, async `onSearch` (debounced) or static suggestions, `allowCustom`,

@@ -51,6 +51,10 @@ new MTS.Toggle('#my-toggle-disabled', { label: 'Not available', disabled: true, 
 | `isChecked()` | Returns the current state |
 | `setChecked(bool)` | Set the state programmatically |
 | `toggle()` | Invert the current state |
+| `validate()` | Validates `required` (must be on), inline error + `'validate'` event → `boolean` |
+| `setError(msg)` / `clearError()` | Set / clear the error state |
+
+Accepts `required` + `errorMessage` (localized default) — see [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ```js
 const toggle = new MTS.Toggle('#my-toggle', { label: 'Notifications' });
@@ -81,6 +85,9 @@ document.getElementById('my-toggle').querySelector('input')
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract: `required` (must be on) + `errorMessage` + `validate()` + `setError`/`clearError` (localized). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### Initial
 - On/off switch with `sm` / `md` / `lg` sizes, optional label, disabled state, `onChange`, and

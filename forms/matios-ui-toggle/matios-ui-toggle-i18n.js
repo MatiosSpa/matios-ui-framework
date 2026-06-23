@@ -10,6 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.Toggle': {
+      messages: { required: 'Este campo es obligatorio' },
       demo: {
         subtitle:               'Switch on/off en distintos tamaños, con label, disabled y API programática.',
         s1Title:                '1 — Tamaños',
@@ -40,6 +41,7 @@
 
   MTS.registerLocale('en', {
     'MTS.Toggle': {
+      messages: { required: 'This field is required' },
       demo: {
         subtitle:               'On/off switch in different sizes, with label, disabled and programmatic API.',
         s1Title:                '1 — Sizes',
@@ -70,6 +72,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.Toggle': {
+      messages: { required: 'Este campo é obrigatório' },
       demo: {
         subtitle:               'Interruptor on/off em diferentes tamanhos, com label, desabilitado e API programática.',
         s1Title:                '1 — Tamanhos',

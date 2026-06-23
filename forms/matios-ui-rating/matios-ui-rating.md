@@ -51,6 +51,10 @@ The container only needs to exist in the DOM (`<div id="rating-product"></div>`)
 |--------|-------------|
 | `getValue()` | Get the current value (e.g. `3.5`) |
 | `setValue(n)` | Set the value programmatically (`.5` requires `halfStars: true`) |
+| `validate()` | Validates `required` (empty = `value === 0`), inline error + `'validate'` event → `boolean` |
+| `setError(msg)` / `clearError()` | Set / clear the error state |
+
+Accepts `required` + `errorMessage` (localized default) — see [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 | `destroy()` | Destroy the instance |
 
 ```js
@@ -82,6 +86,9 @@ document.getElementById('my-rating')
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract: `required` (empty = `value === 0`) + `errorMessage` + `validate()` + `setError`/`clearError` (localized). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### Initial
 - Star rating input with hover preview, half-star support, configurable `max`, sizes, read-only mode,

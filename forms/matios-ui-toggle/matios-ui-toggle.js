@@ -34,6 +34,13 @@ MTS.Toggle = class MtsToggle {
     // Se dispara cada vez que el estado del switch cambia
     if (options.onChange) this.on('change', options.onChange);
 
+    // Form-field contract
+    this.required     = options.required     ?? false;
+    this.errorMessage = options.errorMessage ?? null;
+    this._error       = '';
+    const self = this;
+    this.on('change', function () { if (self._error) self.clearError(); });
+
     this._build();
     this._el._mtsInstance = this;
   }
@@ -41,6 +48,30 @@ MTS.Toggle = class MtsToggle {
   // Returns true if the switch is currently on
   // Retorna true si el switch está actualmente encendido
   isChecked() { return this._inputEl?.checked ?? false; }
+
+  /* ── Form-field validation contract — required = must be on ── */
+  setError(msg) {
+    this._error = msg || '';
+    if (!this._errEl || !this._errEl.isConnected) {
+      this._errEl = document.createElement('span');
+      this._errEl.className = 'mts-form-error';
+      this._el.appendChild(this._errEl);
+    }
+    this._errEl.textContent = this._error;
+    this._errEl.style.display = this._error ? '' : 'none';
+    return this;
+  }
+  clearError() { return this.setError(''); }
+  validate() {
+    const ok = !this.required || this.isChecked();
+    if (ok) this.clearError(); else this.setError(this.errorMessage || this._t('required', 'This field is required'));
+    this._emit('validate', { valid: ok, errors: ok ? [] : [this._error] });
+    return ok;
+  }
+  _t(key, fallback) {
+    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.Toggle'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    return fallback;
+  }
 
   // Sets the switch state programmatically
   // Establece el estado del switch programáticamente
