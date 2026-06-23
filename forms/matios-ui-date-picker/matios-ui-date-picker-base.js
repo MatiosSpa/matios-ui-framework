@@ -28,6 +28,10 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     this._isOpen      = false;
     this._popupEl     = null;
     this._value       = null;
+    /* Form-field contract */
+    this.required     = options.required     ?? false;
+    this.errorMessage = options.errorMessage ?? null;
+    this._error       = "";
     /* Vista del calendario: 'days' | 'months' | 'years' */
     this._calView     = 'days';
     this._calViewYear = new Date().getFullYear(); // año visible en la vista years
@@ -36,6 +40,10 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     if (options.onSelect)  this.on("change", options.onSelect);
     if (options.onOpen)    this.on("open",   options.onOpen);
     if (options.onClose)   this.on("close",  options.onClose);
+
+    /* Auto-clear a standing validation error whenever the value changes */
+    var self = this;
+    this.on("change", function () { if (self._error) self.clearError(); });
 
     /* Textos de botones configurables */
     this.btnToday  = options.btnToday  || null;
@@ -72,6 +80,25 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
   }
 
   getValue() { return this._value; }
+
+  /* ── Form-field validation contract ── */
+  setError(msg) {
+    this._error = msg || "";
+    if (this._errEl) { this._errEl.textContent = this._error; this._errEl.style.display = this._error ? "" : "none"; }
+    if (this._wrapperEl) this._wrapperEl.classList.toggle("mts-picker-wrap--error", !!this._error);
+    return this;
+  }
+  clearError() { return this.setError(""); }
+  validate() {
+    const ok = !this.required || this._value != null;
+    if (ok) this.clearError(); else this.setError(this.errorMessage || this._t("required", "This field is required"));
+    this._emit("validate", { valid: ok, errors: ok ? [] : [this._error] });
+    return ok;
+  }
+  _t(key, fallback) {
+    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()["MTS.DatePicker"] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    return fallback;
+  }
 
   /* Normaliza Date | string | null → Date | null */
   _toDate(v) {
@@ -170,6 +197,13 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
       this._wrapperEl.appendChild(clear);
       this._clearBtn = clear;
     }
+
+    /* Form-field error slot — sits right below the field wrapper */
+    this._errEl = document.createElement("span");
+    this._errEl.className = "mts-form-error";
+    this._errEl.style.display = this._error ? "" : "none";
+    this._errEl.textContent = this._error || "";
+    this._wrapperEl.insertAdjacentElement("afterend", this._errEl);
   }
 
   _iconClass() { return "mts-picker-icon--date"; }

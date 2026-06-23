@@ -51,11 +51,15 @@ MTS.NumberInput = class MtsNumberInput {
     if (_ds.suffix !== undefined) _fromHTML.suffix = _ds.suffix;
     if (_ds.disabled !== undefined) _fromHTML.disabled = true;
     if (_ds.readonly !== undefined) _fromHTML.readonly = true;
+    if (_ds.required !== undefined) _fromHTML.required = true;
+    if (_ds.errorMessage !== undefined) _fromHTML.errorMessage = _ds.errorMessage;
     if (_ds.size !== undefined) _fromHTML.size = _ds.size;
     options = { ..._fromHTML, ...options };
 
 
-    this.value       = options.value       ?? 0;
+    this.value       = (options.value !== undefined) ? options.value : 0;   // explicit null = empty (for required)
+    this.required    = options.required    ?? false;
+    this.errorMessage = options.errorMessage ?? null;
     this.min         = options.min         ?? null;
     this.max         = options.max         ?? null;
     this.step        = options.step        ?? 1;
@@ -94,7 +98,7 @@ MTS.NumberInput = class MtsNumberInput {
   /*â”€â”€ API pÃºblica â”€â”€ */
   getValue()       { return this.value; }
   setValue(v, silent = false) {
-    this.value = this._clamp(Number(v));
+    this.value = (v == null || v === '') ? null : this._clamp(Number(v));
     if (this._input) this._input.value = this._formatDisplay(this.value);
     this._updateBtns();
     if (!silent) this._emit('change', { value: this.value, formatted: this._formatDisplay(this.value) });
@@ -106,6 +110,17 @@ MTS.NumberInput = class MtsNumberInput {
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   clearError()     { this._error = ''; this._renderError(); return this; }
+  /* Form-field contract: required = a value must be entered (null = empty). */
+  validate() {
+    var ok = !this.required || this.value != null;
+    if (ok) this.clearError(); else this.setError(this.errorMessage || this._t('required', 'This field is required'));
+    this._emit('validate', { valid: ok, errors: ok ? [] : [this._error] });
+    return ok;
+  }
+  _t(key, fallback) {
+    try { var ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.NumberInput'] : null; var m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    return fallback;
+  }
   disable()        { this.disabled = true;  this._build(); return this; }
   enable()         { this.disabled = false; this._build(); return this; }
   focus()          { this._input?.focus(); return this; }
@@ -160,15 +175,21 @@ MTS.NumberInput = class MtsNumberInput {
     this._input = input;
 
     input.addEventListener('focus', (e) => {
+      if (this._error) this.clearError();   // auto-clear while editing
       /* Mostrar valor numÃ©rico puro al editar */
-      input.value = this.value === 0 ? '' : String(this.value);
+      input.value = (this.value == null || this.value === 0) ? '' : String(this.value);
       input.select();
       wrap.classList.add('mts-numberinput__wrap--focus');
       this._emit('focus', { event: e });
     });
     input.addEventListener('blur', (e) => {
-      const parsed = parseFloat(input.value.replace(/[^0-9.,-]/g, '').replace(',', '.'));
-      this.value = this._clamp(isNaN(parsed) ? this.value : parsed);
+      const raw = input.value.trim();
+      if (raw === '') {
+        this.value = null;   // empty input → not entered
+      } else {
+        const parsed = parseFloat(raw.replace(/[^0-9.,-]/g, '').replace(',', '.'));
+        this.value = this._clamp(isNaN(parsed) ? (this.value == null ? null : this.value) : parsed);
+      }
       input.value = this._formatDisplay(this.value);
       wrap.classList.remove('mts-numberinput__wrap--focus');
       this._updateBtns();
@@ -238,12 +259,14 @@ MTS.NumberInput = class MtsNumberInput {
   }
 
   _clamp(v) {
+    if (v == null || isNaN(v)) return v;
     if (this.min !== null && v < this.min) return this.min;
     if (this.max !== null && v > this.max) return this.max;
     return parseFloat(v.toFixed(this.decimals + 2));
   }
 
   _formatDisplay(v) {
+    if (v == null || v === '') return '';   // empty render for "not entered"
     if (this.format === 'currency') {
       return new Intl.NumberFormat(this.locale, {
         style: 'currency', currency: this.currency,

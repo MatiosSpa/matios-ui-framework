@@ -67,6 +67,8 @@ new MTS.NumberInput('#inp-weight', { label: 'Weight', suffix: 'kg', decimals: 2,
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
 | `disabled` | `boolean` | `false` | Disables interaction |
 | `readonly` | `boolean` | `false` | Read only |
+| `required` | `boolean` | `false` | Opt-in `validate()`; "empty" = `value` is `null` (see [Form Field Contract](../FORM-FIELD-CONTRACT.md)) |
+| `errorMessage` | `string` | `null` | Overrides the `required` message (localized default when `null`) |
 | `onChange` | `function` | — | `(value, formatted)` — fires on change |
 | `onFocus` | `function` | — | Fires on focus |
 | `onBlur` | `function` | — | Fires on blur |
@@ -77,9 +79,10 @@ new MTS.NumberInput('#inp-weight', { label: 'Weight', suffix: 'kg', decimals: 2,
 
 | Method | Description |
 |--------|-------------|
-| `getValue()` | Get the value (number) |
-| `setValue(value[, silent])` | Set the value (`silent=true` skips `onChange`) |
+| `getValue()` | Get the value — `number` or `null` when empty |
+| `setValue(value[, silent])` | Set the value (`silent=true` skips `onChange`); `null` / `''` clears it to empty |
 | `setMin(n)` / `setMax(n)` | Set the boundaries |
+| `validate()` | Validates `required` (empty = `null`), inline error + `'validate'` event → `boolean` |
 | `setError(msg)` / `clearError()` | Set / clear the error state |
 | `disable()` / `enable()` | Disable / enable interaction |
 | `focus()` | Focus the field |
@@ -114,6 +117,11 @@ document.getElementById('my-input')
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract: `required` + `errorMessage` + `validate()` (inline error, localized message). `value` now
+  supports `null` ("empty") so `required` is meaningful — `getValue()` returns `null` for an empty field and an empty
+  input no longer coerces to `0`. See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### Initial
 - Numeric input with +/− steppers, min/max/step, decimals, plain/currency/percent formats via `Intl.NumberFormat`,

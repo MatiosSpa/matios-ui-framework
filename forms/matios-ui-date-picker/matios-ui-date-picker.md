@@ -112,6 +112,8 @@ Common across types (each type adds its own — see the examples above):
 | `timeStep` | `number` | Minute step (Time / DateTime) |
 | `startHour` / `endHour` | `number` | Hour bounds (Time) |
 | `btnNow` / `btnToday` / `btnAccept` / `btnClear` | `string` | Action button labels (localizable) |
+| `required` | `boolean` | Opt-in `validate()` — empty = `getValue() === null` (see [Form Field Contract](../FORM-FIELD-CONTRACT.md)) |
+| `errorMessage` | `string` | Overrides the `required` message (localized default when unset) |
 | `onChange` / `onOpen` / `onClose` | `function` | Lifecycle callbacks |
 
 ---
@@ -127,6 +129,8 @@ Shared by every picker type:
 | `setValue(value)` | Set the value (chainable) |
 | `setMinDate(date)` / `setMaxDate(date)` | Update the bounds at runtime (`Date` \| string \| `null`) — **refreshes the open calendar live** (chainable) |
 | `clear()` | Clear the value |
+| `validate()` | Validates `required` (empty = `getValue() === null`), inline error + `'validate'` event → `boolean` |
+| `setError(msg)` / `clearError()` | Set / clear the error state |
 | `destroy()` | Destroy the instance |
 | `on(event, cb)` | Listen to `'change'`, `'open'`, `'close'` |
 
@@ -175,6 +179,9 @@ document.getElementById('my-input')
 ---
 
 ## Changelog
+
+### 2026-06-23
+- Validation contract (all picker types via `Base`): `required` + `errorMessage` + `validate()` + `setError`/`clearError` (inline error, localized message). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
 ### 2026-06-12
 - `setMinDate(date)` / `setMaxDate(date)` — runtime bounds with **live refresh** of the open calendar.

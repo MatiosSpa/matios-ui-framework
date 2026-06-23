@@ -86,6 +86,8 @@ new MTS.Select('#users', {
 | `searchable` | `boolean` | `false` | Enable search inside the list |
 | `clearable` | `boolean` | `false` | Show the clear button |
 | `disabled` | `boolean` | `false` | Disables interaction |
+| `required` | `boolean` | `false` | Opt-in `validate()` — see [Form Field Contract](../FORM-FIELD-CONTRACT.md) |
+| `errorMessage` | `string` | `null` | Overrides the `required` message (localized default when `null`) |
 | `maxSelect` | `number` | `null` | Max selections in multi mode |
 | `debounce` | `number` | `300` | Debounce delay for `onSearch` (ms) |
 | `minChars` | `number` | `1` | Min chars to trigger `onSearch` |
@@ -104,6 +106,8 @@ new MTS.Select('#users', {
 | `clear()` | Clear the selection |
 | `setOptions(array[, enable])` | Replace the options list (`enable=true` also enables the field) |
 | `getOptions()` | Current option list as a shallow copy |
+| `validate()` | Validates `required` (empty = no selection), inline error + `'validate'` event → `boolean` |
+| `setError(msg)` / `clearError()` | Set / clear the error state |
 | `open()` / `close()` / `toggle()` | Control the dropdown |
 | `enable()` / `disable()` | Enable / disable interaction |
 | `destroy()` | Destroy the instance |
@@ -150,6 +154,7 @@ shadow tokens. Theme via `data-mts-mode` / `data-mts-accent`.
 ## Changelog
 
 ### 2026-06-23
+- Validation contract: `required` + `errorMessage` + `validate()` + `setError`/`clearError` (inline error, localized message). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 - `getOptions()` — read back the current option list as a shallow copy (collection-API symmetry with `setOptions`).
 
 ### 2026-06-22

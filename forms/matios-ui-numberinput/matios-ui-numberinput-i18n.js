@@ -10,6 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.NumberInput': {
+      messages: { required: 'Este campo es obligatorio' },
       demo: {
         subtitle:            'Input numérico con botones +/−, min/max, step y formatos de moneda y porcentaje.',
         s1Title:             '1 — Básico con min/max/step',
@@ -64,6 +65,7 @@
 
   MTS.registerLocale('en', {
     'MTS.NumberInput': {
+      messages: { required: 'This field is required' },
       demo: {
         subtitle:            'Number input with +/− buttons, min/max, step and currency and percentage formats.',
         s1Title:             '1 — Basic with min/max/step',
@@ -118,6 +120,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.NumberInput': {
+      messages: { required: 'Este campo é obrigatório' },
       demo: {
         subtitle:            'Input numérico com botões +/−, min/max, step e formatos de moeda e porcentagem.',
         s1Title:             '1 — Básico com min/max/step',

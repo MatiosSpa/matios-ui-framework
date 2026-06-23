@@ -10,6 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.DatePicker': {
+      messages: { required: 'Este campo es obligatorio' },
       demo: {
         subtitle:            'Selectores de fecha, hora, rango, mes y semana. Cada tipo es una clase independiente.',
         s1Title:             '1 — Fecha / Hora / Fecha y hora',
@@ -46,6 +47,7 @@
 
   MTS.registerLocale('en', {
     'MTS.DatePicker': {
+      messages: { required: 'This field is required' },
       demo: {
         subtitle:            'Date, time, range, month and week pickers. Each type is an independent class.',
         s1Title:             '1 — Date / Time / DateTime',
@@ -82,6 +84,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.DatePicker': {
+      messages: { required: 'Este campo é obrigatório' },
       demo: {
         subtitle:            'Seletores de data, hora, intervalo, mês e semana. Cada tipo é uma classe independente.',
         s1Title:             '1 — Data / Hora / Data e hora',

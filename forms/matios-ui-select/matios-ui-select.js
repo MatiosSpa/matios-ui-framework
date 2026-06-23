@@ -26,6 +26,8 @@ MTS.Select = class MtsSelect {
     if (_ds.searchable  !== undefined) _fromHTML.searchable  = true;
     if (_ds.clearable   !== undefined) _fromHTML.clearable   = true;
     if (_ds.disabled    !== undefined) _fromHTML.disabled    = true;
+    if (_ds.required    !== undefined) _fromHTML.required    = true;
+    if (_ds.errorMessage !== undefined) _fromHTML.errorMessage = _ds.errorMessage;
     if (_ds.maxSelect   !== undefined) _fromHTML.maxSelect   = parseInt(_ds.maxSelect);
     options = { ..._fromHTML, ...options };
 
@@ -53,6 +55,11 @@ MTS.Select = class MtsSelect {
 
     // Disables all interaction / Deshabilita toda interacción
     this.disabled = options.disabled ?? false;
+
+    // Form-field contract: required + overridable error message
+    this.required     = options.required     ?? false;
+    this.errorMessage = options.errorMessage ?? null;
+    this._error       = '';
 
     // Maximum number of selections in multi mode / Máximo de selecciones en modo multi
     this.maxSelect = options.maxSelect || null;
@@ -85,6 +92,10 @@ MTS.Select = class MtsSelect {
     // onSelect is an alias for onChange / onSelect es un alias de onChange
     if (options.onSelect) this.on('change', options.onSelect);
 
+    // Auto-clear a standing validation error whenever the value changes
+    var self = this;
+    this.on('change', function () { if (self._error) self.clearError(); });
+
     this._build();
     this._bindEvents();
     this._container._mtsInstance = this;
@@ -100,6 +111,28 @@ MTS.Select = class MtsSelect {
 
   // Returns the current option list (shallow copy) / Retorna la lista de opciones actual (copia superficial)
   getOptions() { return this.options.slice(); }
+
+  // ── Form-field validation contract ──
+  setError(msg) {
+    this._error = msg || '';
+    if (this._errEl) { this._errEl.textContent = this._error; this._errEl.style.display = this._error ? '' : 'none'; }
+    if (this._triggerEl) this._triggerEl.classList.toggle('mts-select__trigger--error', !!this._error);
+    return this;
+  }
+  clearError() { return this.setError(''); }
+  validate() {
+    const empty = this.multiple
+      ? (!Array.isArray(this._value) || this._value.length === 0)
+      : (this._value == null || this._value === '');
+    const ok = !this.required || !empty;
+    if (ok) this.clearError(); else this.setError(this.errorMessage || this._t('required', 'This field is required'));
+    this._emit('validate', { valid: ok, errors: ok ? [] : [this._error] });
+    return ok;
+  }
+  _t(key, fallback) {
+    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.Select'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    return fallback;
+  }
 
   get value() { return this._value; }
   get text()  { return this._getText(); }
@@ -259,6 +292,12 @@ MTS.Select = class MtsSelect {
       h.textContent = this.hint;
       this._container.appendChild(h);
     }
+
+    this._errEl = document.createElement('span');
+    this._errEl.className   = 'mts-form-error';
+    this._errEl.style.display = this._error ? '' : 'none';
+    this._errEl.textContent = this._error || '';
+    this._container.appendChild(this._errEl);
 
     this._hiddenInput      = document.createElement('input');
     this._hiddenInput.type = 'hidden';
