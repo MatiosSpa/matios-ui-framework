@@ -484,14 +484,29 @@ MTS.Select = class MtsSelect {
     drop.style.zIndex   = '9999';
     drop.style.width    = rect.width + 'px';
     drop.style.left     = rect.left  + 'px';
+    const gap        = 2;
+    const edge       = 8;   // keep the dropdown off the viewport edge
     const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
     const dropH      = drop.offsetHeight || 240;
-    if (spaceBelow >= dropH || spaceBelow >= 120) {
-      drop.style.top    = (rect.bottom + 2) + 'px';
+
+    // Open below if it fits whole, or if there is more room below than above; otherwise flip up.
+    const openBelow = (spaceBelow >= dropH) || (spaceBelow >= spaceAbove);
+    if (openBelow) {
+      drop.style.top    = (rect.bottom + gap) + 'px';
       drop.style.bottom = 'auto';
     } else {
-      drop.style.bottom = (window.innerHeight - rect.top + 2) + 'px';
+      drop.style.bottom = (window.innerHeight - rect.top + gap) + 'px';
       drop.style.top    = 'auto';
+    }
+
+    // Cap the scrollable list to the available space so the dropdown never spills past
+    // the viewport; the list (overflow-y:auto) scrolls when the options don't fit.
+    if (this._listEl) {
+      const avail   = (openBelow ? spaceBelow : spaceAbove) - gap - edge;
+      const searchH = (this._searchEl && this._searchEl.parentElement && this._searchEl.parentElement.offsetHeight)
+        || (this._searchEl ? 44 : 0); // measured when visible; approx on first open (still hidden)
+      this._listEl.style.maxHeight = Math.max(80, Math.min(260, avail - searchH)) + 'px';
     }
   }
 

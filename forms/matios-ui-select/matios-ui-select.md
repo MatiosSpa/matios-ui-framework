@@ -148,6 +148,9 @@ shadow tokens. Theme via `data-mts-mode` / `data-mts-accent`.
 
 ## Changelog
 
+### 2026-06-22
+- Fix: the dropdown now flips up when there's more room above than below (previously a fixed `>= 120px` threshold forced it downward, clipping options off the bottom of the viewport near the screen/modal edge). Its list height is also capped to the available space and scrolls when options don't fit.
+
 ### Initial
 - Select with single/multiple selection, in-list search, async external search (`onSearch` + debounce/minChars),
   option groups, icons, per-option disable, `maxSelect`, clearable, and full programmatic API.
