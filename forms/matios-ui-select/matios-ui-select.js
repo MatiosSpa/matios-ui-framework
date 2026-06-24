@@ -276,7 +276,7 @@ MTS.Select = class MtsSelect {
 
     if (this.label) {
       const lbl = document.createElement('label');
-      lbl.className   = 'mts-label';
+      lbl.className   = 'mts-label' + (this.required ? ' mts-label--required' : '');
       lbl.textContent = this.label;
       this._container.appendChild(lbl);
     }

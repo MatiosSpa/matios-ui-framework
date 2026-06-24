@@ -947,3 +947,9 @@ button {
 .mts-rounded-full{ border-radius: var(--mts-radius-full); }
 .mts-relative    { position: relative; }
 .mts-absolute    { position: absolute; }
+
+/* ── Required field indicator (single source of truth) ──────────────
+   Any form-field label carrying .mts-label--required gets the red asterisk.
+   Standalone selector → works on any label class (mts-label, mts-picker-label,
+   mts-numberinput__label, …) when the component adds this modifier on required. */
+.mts-label--required::after { content: " *"; color: var(--mts-color-danger); }

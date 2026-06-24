@@ -154,7 +154,7 @@ MTS.TagInput = class MtsTagInput {
 
     if (!fieldOnly && this.label) {
       const lbl = document.createElement('label');
-      lbl.className   = 'mts-label';
+      lbl.className   = 'mts-label' + (this.required ? ' mts-label--required' : '');
       lbl.textContent = this.label;
       this._el.appendChild(lbl);
     }

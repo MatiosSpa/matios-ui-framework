@@ -111,7 +111,7 @@ MTS.Toggle = class MtsToggle {
 
     if (this.label) {
       const lbl = document.createElement('span');
-      lbl.className   = 'mts-toggle__label';
+      lbl.className   = 'mts-toggle__label' + (this.required ? ' mts-label--required' : '');
       lbl.textContent = this.label;
       this._el.appendChild(lbl);
     }

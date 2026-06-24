@@ -128,7 +128,7 @@ MTS.Slider = class MtsSlider {
       this._header.className = 'mts-slider__header';
       if (this.label) {
         var lbl = document.createElement('span');
-        lbl.className   = 'mts-label';
+        lbl.className   = 'mts-label' + (this.required ? ' mts-label--required' : '');
         lbl.textContent = this.label;
         this._header.appendChild(lbl);
       }

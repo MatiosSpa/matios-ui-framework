@@ -79,6 +79,37 @@ What "empty" means for `required` in each field (what makes `validate()` fail):
 
 ---
 
+## Required indicator (the red asterisk)
+
+When `required: true`, a field that renders its **own label** shows a red `*` after the label text — the same
+indicator as `MTS.Input`. **Single source of truth (CSS):**
+
+```css
+/* base/matios-ui-base.css — always loaded */
+.mts-label--required::after { content: ' *'; color: var(--mts-color-danger); }
+```
+
+The selector is **standalone**, so each component just adds the `mts-label--required` modifier to its label element
+when `required` (regardless of the label's own base class — `mts-label`, `mts-picker-label`,
+`mts-numberinput__label`, …). No per-component asterisk CSS is duplicated.
+
+**Coverage:**
+
+| Shows the asterisk (renders a field label) | Criterion |
+|--------------------------------------------|-----------|
+| `Input` · `NationalId` · `PhoneInput` · `Select` · `NumberInput` · `DatePicker` · `ColorPicker` · `TagInput` · `TransferList` · `Slider` | `mts-label--required` on the label when `required` |
+| `Checkbox` (single) · `Toggle` (single) | `mts-label--required` on the inline control label |
+
+| Does **not** show it | Why |
+|----------------------|-----|
+| `OTP` · `Autocomplete` · `Rating` · `RichEditor` | They don't render a field label — the consumer supplies the label (and its asterisk) externally |
+| `CheckboxGroup` · `Radio` | Groups render per-option labels, not a group title — the consumer provides the group caption if a `*` is wanted |
+
+> `NationalId` historically ships its own identical rule (`.mts-nationalid__label--required::after`); it already
+> looks correct, so it's left as-is (a harmless minor duplication that can be folded into the base rule later).
+
+---
+
 ## Consumer pattern
 
 ```js

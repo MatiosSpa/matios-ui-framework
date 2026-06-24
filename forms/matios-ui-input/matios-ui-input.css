@@ -42,10 +42,7 @@
   line-height: var(--mts-line-height-tight); /* was missing → label was taller than .mts-form-label, misaligning rows */
 }
 
-.mts-label--required::after {
-  content: ' *';
-  color: var(--mts-color-danger);
-}
+/* .mts-label--required::after moved to base/matios-ui-base.css (single source of truth, always loaded) */
 
 .mts-form-hint  { font-size: var(--mts-font-size-xs); color: var(--mts-text-muted); }
 .mts-form-error { font-size: var(--mts-font-size-xs); color: var(--mts-color-danger); }

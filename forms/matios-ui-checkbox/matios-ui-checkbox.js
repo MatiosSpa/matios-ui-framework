@@ -109,7 +109,7 @@ MTS.Checkbox = class MtsCheckbox {
     this._el.appendChild(this._inputEl);
     if (this.label) {
       const lbl = document.createElement('label');
-      lbl.className   = 'mts-checkbox__label';
+      lbl.className   = 'mts-checkbox__label' + (this.required ? ' mts-label--required' : '');
       lbl.textContent = this.label;
       lbl.addEventListener('click', () => { if (!this.disabled) this._inputEl.click(); });
       this._el.appendChild(lbl);

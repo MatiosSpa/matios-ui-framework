@@ -165,7 +165,7 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
       host.replaceChildren(); // safe: clearing
       if (this.label) {
         const lbl = document.createElement("label");
-        lbl.className   = "mts-picker-label";
+        lbl.className   = "mts-picker-label" + (this.required ? " mts-label--required" : "");
         lbl.textContent = this.label;
         host.appendChild(lbl);
       }

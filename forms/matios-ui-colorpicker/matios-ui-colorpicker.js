@@ -178,7 +178,7 @@ MTS.ColorPicker = class MtsColorPicker {
 
     if (!fieldOnly && this.label) {
       const lbl = document.createElement('label');
-      lbl.className = 'mts-colorpicker__label';
+      lbl.className = 'mts-colorpicker__label' + (this.required ? ' mts-label--required' : '');
       lbl.textContent = this.label;
       this._el.appendChild(lbl);
     }
