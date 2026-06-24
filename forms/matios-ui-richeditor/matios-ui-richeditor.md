@@ -201,6 +201,14 @@ Handlebars string. The consumer can submit the form unchanged — the value stay
 
 ---
 
+## CSS Classes
+
+Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTRACT.md):
+
+- `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) - shared, single source in `base/matios-ui-base.css`.
+
+---
+
 ## Changelog
 
 ### 2026-06-23

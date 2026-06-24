@@ -141,6 +141,8 @@ document.getElementById('my-input').querySelector('input')
 Uses the framework base tokens for surface, border, text and state colors — notably `--mts-text-disabled` for the
 disabled style, plus `--mts-danger-*` for the error state. Theme via `data-mts-mode` / `data-mts-accent`.
 
+**Validation classes:** `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) — shared, single source in `base/matios-ui-base.css`. Error state: `.mts-input-wrap--error`. See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
+
 ---
 
 ## Accessibility

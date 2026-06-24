@@ -124,6 +124,14 @@ Europe (ES, PT, GB, FR, DE, IT); Asia/Pacific (CN, JP).
 
 ---
 
+## CSS Classes
+
+Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTRACT.md):
+
+- `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) - shared, single source in `base/matios-ui-base.css`.
+
+---
+
 ## Accessibility
 
 - The country selector is keyboard-operable and searchable; the phone field accepts digits with live formatting.

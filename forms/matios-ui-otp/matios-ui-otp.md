@@ -88,6 +88,15 @@ new MTS.OTP('#otp', {
 
 ---
 
+## CSS Classes
+
+Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTRACT.md):
+
+- `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) - shared, single source in `base/matios-ui-base.css`.
+- `.mts-otp--error` - error state on the control (red border), toggled by `setError()`.
+
+---
+
 ## Accessibility
 
 - Each box is a real input with auto-advance; keep an accessible label on the group and announce the error state.

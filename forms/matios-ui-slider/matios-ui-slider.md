@@ -92,6 +92,14 @@ document.getElementById('my-slider')
 
 ---
 
+## CSS Classes
+
+Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTRACT.md):
+
+- `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) - shared, single source in `base/matios-ui-base.css`.
+
+---
+
 ## Accessibility
 
 - Each thumb is keyboard-operable: arrow keys step by `step`, `Home`/`End` jump to min/max.

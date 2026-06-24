@@ -112,6 +112,15 @@ document.getElementById('my-picker')
 
 ---
 
+## CSS Classes
+
+Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTRACT.md):
+
+- `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) - shared, single source in `base/matios-ui-base.css`.
+- `.mts-colorpicker__trigger-wrap--error` - error state on the control (red border), toggled by `setError()`.
+
+---
+
 ## Accessibility
 
 - The hex input accepts typed values; the sliders are keyboard-operable (arrow keys step H/S/L).

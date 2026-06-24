@@ -78,6 +78,14 @@ document.getElementById('my-rating')
 
 ---
 
+## CSS Classes
+
+Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTRACT.md):
+
+- `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) - shared, single source in `base/matios-ui-base.css`.
+
+---
+
 ## Accessibility
 
 - In interactive mode the stars are keyboard-operable (arrow keys step the value, respecting `halfStars`).

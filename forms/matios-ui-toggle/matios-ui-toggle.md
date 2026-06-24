@@ -77,6 +77,14 @@ document.getElementById('my-toggle').querySelector('input')
 
 ---
 
+## CSS Classes
+
+Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTRACT.md):
+
+- `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) - shared, single source in `base/matios-ui-base.css`.
+
+---
+
 ## Accessibility
 
 - Renders a real `<input type="checkbox">` styled as a switch — focusable and toggled with `Space`.

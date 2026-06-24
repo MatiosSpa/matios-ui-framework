@@ -170,6 +170,15 @@ document.getElementById('my-input')
 
 ---
 
+## CSS Classes
+
+Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTRACT.md):
+
+- `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) - shared, single source in `base/matios-ui-base.css`.
+- `.mts-picker-wrap--error` - error state on the control (red border), toggled by `setError()`.
+
+---
+
 ## Accessibility
 
 - The popup traps focus while open and closes on `Esc`; the calendar grid is navigable with the arrow keys.

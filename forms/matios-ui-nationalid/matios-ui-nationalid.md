@@ -149,6 +149,8 @@ A country can have several `types` (e.g. person vs company). Use `detect(raw)` t
 
 All colors/spacing use `--mts-*` tokens; the enabled background is `--mts-bg-surface` (same as `MTS.Input`).
 
+> Note: `MTS.NationalId.Input` ships its own `--required` / `--error` classes (above). The rest of the form-field family uses the shared `.mts-label--required` / `.mts-form-error` / `.mts-form-hint` from `base/matios-ui-base.css` — see [Form Field Contract](../FORM-FIELD-CONTRACT.md).
+
 ## Accessibility
 
 - Label linked to the input via `for`/`id`.

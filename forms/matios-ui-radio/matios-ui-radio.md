@@ -90,6 +90,14 @@ document.getElementById('my-radio')
 
 ---
 
+## CSS Classes
+
+Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTRACT.md):
+
+- `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) - shared, single source in `base/matios-ui-base.css`.
+
+---
+
 ## Accessibility
 
 - Renders real `<input type="radio">` controls sharing a `name` — arrow keys move selection within the group.

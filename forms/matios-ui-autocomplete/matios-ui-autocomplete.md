@@ -122,6 +122,15 @@ ac.destroy()               // clears DOM, event listeners and unwraps the input
 
 ---
 
+## CSS Classes
+
+Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTRACT.md):
+
+- `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) - shared, single source in `base/matios-ui-base.css`.
+- `.mts-ac__wrap--error` - error state on the control (red border), toggled by `setError()`.
+
+---
+
 ## Changelog
 
 ### 2026-06-23

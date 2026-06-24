@@ -140,6 +140,8 @@ document.getElementById('my-select')
 Uses the framework base tokens for surface, border, text and accent colors, plus the popup/dropdown surface and
 shadow tokens. Theme via `data-mts-mode` / `data-mts-accent`.
 
+**Validation classes:** `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) — shared, single source in `base/matios-ui-base.css`. Error state: `.mts-select__trigger--error`. See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
+
 ---
 
 ## Accessibility

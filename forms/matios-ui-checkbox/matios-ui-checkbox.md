@@ -111,6 +111,14 @@ document.getElementById('my-checkbox').querySelector('input')
 
 ---
 
+## CSS Classes
+
+Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTRACT.md):
+
+- `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) - shared, single source in `base/matios-ui-base.css`.
+
+---
+
 ## Accessibility
 
 - Renders a real `<input type="checkbox">` with an associated `<label>` — focusable and toggled with `Space`.

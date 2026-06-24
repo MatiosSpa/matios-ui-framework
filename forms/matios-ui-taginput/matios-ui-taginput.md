@@ -96,6 +96,14 @@ ti.on('add', function (e) { console.log(e.detail.tag); });
 
 ---
 
+## CSS Classes
+
+Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTRACT.md):
+
+- `.mts-form-error` (inline message), `.mts-form-hint` (helper text), `.mts-label--required` (red asterisk on the label) - shared, single source in `base/matios-ui-base.css`.
+
+---
+
 ## Accessibility
 
 - Existing tags are removable by keyboard (`Backspace` from the empty input, or the per-tag remove control).
