@@ -110,6 +110,37 @@ when `required` (regardless of the label's own base class — `mts-label`, `mts-
 
 ---
 
+## CSS classes reference
+
+### Shared (single source — `base/matios-ui-base.css`, always loaded)
+
+| Class | Role |
+|-------|------|
+| `.mts-label` | Field label base style (also in `matios-ui-label.css`) |
+| `.mts-label--required` | `::after` red asterisk on a required field label |
+| `.mts-form-hint` | Helper text under a field (`font-size-xs`, muted) |
+| `.mts-form-error` | Inline validation message under a field (`font-size-xs`, danger) — where `setError()` renders |
+
+### Per-component error-state class (toggled on the control when invalid)
+
+Each component flips its own wrapper class for the red border, **in its own CSS**:
+
+| Component | Error-state class |
+|-----------|-------------------|
+| `Input` | `.mts-input-wrap--error` |
+| `Select` | `.mts-select__trigger--error` |
+| `DatePicker` | `.mts-picker-wrap--error` |
+| `NumberInput` | `.mts-numberinput__wrap--error` |
+| `ColorPicker` | `.mts-colorpicker__trigger-wrap--error` |
+| `Autocomplete` | `.mts-ac__wrap--error` |
+| `OTP` | `.mts-otp--error` |
+| `NationalId` | `.mts-nationalid__wrap--error` |
+| `PhoneInput` · `Checkbox` · `Radio` · `Toggle` · `Rating` · `TagInput` · `TransferList` · `Slider` | *(message only — no dedicated border class)* |
+
+> Live examples of `.mts-label--required` / `.mts-form-hint` / `.mts-form-error` are in `css-helpers/demo.html` (section 16).
+
+---
+
 ## Consumer pattern
 
 ```js

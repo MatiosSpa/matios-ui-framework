@@ -204,6 +204,12 @@
     <div id="s15"></div>
   </div>
 
+  <div class="demo-section">
+    <div class="demo-section-title">16 — Form field primitives · base · matios-ui-base.css</div>
+    <div id="s16a"></div>
+    <div id="s16b"></div>
+  </div>
+
 </div><!-- /demo-page -->
 
 <script>
@@ -633,6 +639,33 @@ mk('s15', `
   <p>mts-clearfix — the container does not collapse.</p>
 </div>
 `, '170px');
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* 16 · FORM FIELD PRIMITIVES (base)                                          */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+// Required asterisk — .mts-label--required (works on any label class)
+mk('s16a', `
+<div class="mts-d-flex mts-flex--column mts-gap-3">
+  <label class="mts-label">Optional field</label>
+  <label class="mts-label mts-label--required">Required field</label>
+  <span class="mts-text-color--muted mts-text--xs">The red * is added by .mts-label--required (any required form field shows it).</span>
+</div>
+`, '150px');
+
+// Hint & error text slots — .mts-form-hint / .mts-form-error
+mk('s16b', `
+<div class="mts-d-flex mts-flex--column mts-gap-3">
+  <div>
+    <label class="mts-label">Email</label>
+    <div class="mts-form-hint">.mts-form-hint — helper text under a field</div>
+  </div>
+  <div>
+    <label class="mts-label mts-label--required">Email</label>
+    <div class="mts-form-error">.mts-form-error — inline validation message (validate())</div>
+  </div>
+</div>
+`, '160px');
 
 </script>
 </body>

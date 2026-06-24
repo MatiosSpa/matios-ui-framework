@@ -15,6 +15,9 @@
      — Colores (viven en themes/)
      — Estilos de inputs/select/textarea/checkbox etc.
        (cada componente tiene su propio CSS)
+     EXCEPCIÓN: primitivos compartidos de campo (no inputs completos) que toda la familia
+     usa y que deben estar siempre cargados: .mts-label--required (asterisco) y
+     .mts-form-hint / .mts-form-error (texto de ayuda/error). Single source of truth.
 
    Uso obligatorio:
      <link rel="stylesheet" href="base/matios-ui-base.css">
@@ -948,8 +951,15 @@ button {
 .mts-relative    { position: relative; }
 .mts-absolute    { position: absolute; }
 
-/* ── Required field indicator (single source of truth) ──────────────
-   Any form-field label carrying .mts-label--required gets the red asterisk.
-   Standalone selector → works on any label class (mts-label, mts-picker-label,
-   mts-numberinput__label, …) when the component adds this modifier on required. */
+/* ── Shared form-field primitives (single source of truth) ──────────
+   NOT full input/select styling (that stays per-component) — only the cross-cutting
+   bits the whole form-field family shares, so they're styled wherever a field is used
+   (every page loads base.css, but not necessarily input.css/label.css).
+
+   · .mts-label--required → red asterisk after any required field label. Standalone
+     selector → works on any label class (mts-label, mts-picker-label, …).
+   · .mts-form-hint / .mts-form-error → the helper/error text slot under a field. */
 .mts-label--required::after { content: " *"; color: var(--mts-color-danger); }
+
+.mts-form-hint  { font-size: var(--mts-font-size-xs); color: var(--mts-text-muted);   line-height: var(--mts-line-height-base); }
+.mts-form-error { font-size: var(--mts-font-size-xs); color: var(--mts-color-danger);  line-height: var(--mts-line-height-base); }
