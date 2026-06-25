@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    (function(){
+      var sp=location.search||location.hash||'';
+      var mm=sp.match(/mts-mode=([a-z-]+)/);
+      var ma=sp.match(/mts-accent=([a-z-]+)/);
+      if(mm) document.documentElement.setAttribute('data-mts-mode',mm[1]);
+      if(ma) document.documentElement.setAttribute('data-mts-accent',ma[1]);
+      try{
+        var p=window.parent;
+        if(p&&p!==window){
+          var pm=p.currentModeVal||p.document.documentElement.getAttribute('data-mts-mode');
+          var pa=p.currentAccentVal||p.document.documentElement.getAttribute('data-mts-accent');
+          if(pm) document.documentElement.setAttribute('data-mts-mode',pm);
+          if(pa) document.documentElement.setAttribute('data-mts-accent',pa);
+          else   document.documentElement.removeAttribute('data-mts-accent');
+        }
+      }catch(e){}
+    })();
+  </script>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MTS.LockScreen — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../base/matios-ui-base.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="../../themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="../../support/demo-shared.css">
+  <link rel="stylesheet" href="../../navigation/matios-ui-tabs/matios-ui-tabs.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-button/matios-ui-button.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-copybutton/matios-ui-copybutton.css">
+  <link rel="stylesheet" href="../../forms/matios-ui-input/matios-ui-input.css">
+  <link rel="stylesheet" href="../../display/matios-ui-avatar/matios-ui-avatar.css">
+  <link rel="stylesheet" href="../../utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="../../icons/matios-ui-icons.css">
+  <link rel="stylesheet" href="./matios-ui-lockscreen.css">
+  <script src="../../support/demo-shared.js"></script>
+  <script src="../../navigation/matios-ui-tabs/matios-ui-tabs.js"></script>
+  <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
+  <script src="../../forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+  <script src="../../forms/matios-ui-input/matios-ui-input.js"></script>
+  <script src="../../display/matios-ui-avatar/matios-ui-avatar.js"></script>
+  <script src="../../utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="../../icons/matios-ui-icons.js"></script>
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="./matios-ui-lockscreen-i18n.js"></script>
+  <script src="./matios-ui-lockscreen.js"></script>
+</head>
+<body>
+
+<div class="demo-page">
+  <div class="demo-header">
+    <h1><span>MTS</span>.LockScreen</h1>
+    <p id="demo-subtitle"></p>
+  </div>
+
+  <div class="demo-section"><div class="demo-section-title" id="s1-title"></div><div id="tabs-s1"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s2-title"></div><div id="tabs-s2"></div></div>
+  <div class="demo-section"><div class="demo-section-title" id="s3-title"></div><div id="tabs-s3"></div></div>
+</div>
+
+<script>
+/* ── Standard demo helpers ── */
+function indentHtml(html){
+  var indent=0, step=2;
+  var voids=/^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i;
+  var result='';
+  (html.match(/<[^>]+>|[^<]+/g)||[]).forEach(function(tok){
+    var t=tok.trim(); if(!t) return;
+    if(/^<\//.test(t)){ indent=Math.max(0,indent-step); result+=' '.repeat(indent)+t+'\n'; }
+    else if(/^<[^!]/.test(t)){
+      result+=' '.repeat(indent)+t+'\n';
+      var tag=(t.match(/^<([a-z][a-z0-9-]*)/i)||[])[1]||'';
+      if(!voids.test(tag) && !/\/>$/.test(t)) indent+=step;
+    } else { var text=t.replace(/\s+/g,' '); if(text) result+=' '.repeat(indent)+text+'\n'; }
+  });
+  return result.trimEnd();
+}
+function makeSection(id, previewHtml, jsCode, initFn, height){
+  new MTS.Tabs('#'+id, { variant:'card', height:height||'260px', lazy:false, tabs:[
+    { id:id+'-preview', label:'Preview',    content: previewHtml },
+    { id:id+'-html',    label:'HTML',       content: '<div id="'+id+'-cb-html"></div>' },
+    { id:id+'-js',      label:'JavaScript', content: '<div id="'+id+'-cb-js"></div>'   },
+  ]});
+  new MTS.CodeBlock('#'+id+'-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
+  new MTS.CodeBlock('#'+id+'-cb-js',   { code: jsCode,                  language: 'javascript', copyable: true });
+  if (typeof initFn === 'function') initFn();
+}
+
+/* Only one lock alive at a time */
+var _lock = null;
+function makeLock(options) {
+  if (_lock) { _lock.destroy(); }
+  _lock = new MTS.LockScreen(options);
+  return _lock;
+}
+
+/* ── Locale: English by default; ?lang=es|en|pt ── */
+(function () {
+  var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+  var lang = m ? m[1] : 'en';
+  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+})();
+var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.LockScreen']) || {};
+var D = L.demo || {};
+
+document.getElementById('demo-subtitle').textContent = D.subtitle || 'In-place re-authentication overlay (lock-screen style). UI + events only; the consumer wires the actual check.';
+document.getElementById('s1-title').textContent = D.s1Title || '1 — Basic (correct password: "matios")';
+document.getElementById('s2-title').textContent = D.s2Title || '2 — No photo (initials) + no "forgot" link';
+document.getElementById('s3-title').textContent = D.s3Title || '3 — API (show / setError / setBusy / setUser)';
+
+/* A demo onUnlock: "matios" unlocks; anything else fails. Simulates async. */
+function demoUnlock(password, done) {
+  setTimeout(function () {
+    done(password === 'matios');   // done(false) → uses the localized errorInvalid message
+  }, 600);
+}
+
+/* ══════════════════════════ 1 — Basic ══════════════════════════ */
+var preview1 =
+  '<div class="demo-stack" style="max-width:360px;">' +
+    '<div id="s1-btn"></div>' +
+    '<p style="margin:8px 0 0;font-size:13px;color:var(--mts-text-muted);">' + (D.hintTry || 'Try "matios" to unlock; anything else shows an error.') + '</p>' +
+  '</div>';
+
+var js1 =
+  "var lock = new MTS.LockScreen({\n" +
+  "  userName:  'Pedro Gómez',\n" +
+  "  avatarUrl: '/uploads/u/123.jpg',   // falls back to initials if missing\n" +
+  "  onUnlock: function (password, done) {\n" +
+  "    reauth(password)                 // your call to /api/v1/auth/*\n" +
+  "      .then(function () { done(true); })\n" +
+  "      .catch(function () { done(false); }); // or done(false, 'Wrong password')\n" +
+  "  },\n" +
+  "  onForgot: function () { goToReset(); },\n" +
+  "});\n\n" +
+  "lock.show();";
+
+makeSection('tabs-s1', preview1, js1, function () {
+  new MTS.Button('#s1-btn', {
+    label: D.btnLock || 'Lock screen',
+    variant: 'primary',
+    onClick: function () {
+      makeLock({
+        userName: D.userName || 'Pedro Gómez',
+        onUnlock: demoUnlock,
+        onForgot: function () { MTS.Toast && MTS.Toast.show && MTS.Toast.show({ message: D.forgotMsg || 'Forgot password', variant: 'info' }); },
+      }).show();
+    },
+  });
+}, '220px');
+
+/* ══════════════════════ 2 — Initials, no forgot ══════════════════════ */
+var preview2 = '<div class="demo-stack" style="max-width:360px;"><div id="s2-btn"></div></div>';
+var js2 =
+  "new MTS.LockScreen({\n" +
+  "  userName:    'Ana Torres',   // no avatarUrl → initials + auto color\n" +
+  "  showForgot:  false,\n" +
+  "  onUnlock:    function (password, done) { /* … */ },\n" +
+  "}).show();";
+
+makeSection('tabs-s2', preview2, js2, function () {
+  new MTS.Button('#s2-btn', {
+    label: D.btnLock || 'Lock screen',
+    variant: 'secondary',
+    onClick: function () {
+      makeLock({
+        userName: D.userName2 || 'Ana Torres',
+        showForgot: false,
+        onUnlock: demoUnlock,
+      }).show();
+    },
+  });
+}, '180px');
+
+/* ══════════════════════════ 3 — API ══════════════════════════ */
+var preview3 =
+  '<div class="demo-stack" style="max-width:360px;">' +
+    '<div id="s3-btn"></div>' +
+    '<div class="result-box" id="s3-res">' + (D.result || '— lock and try to unlock —') + '</div>' +
+  '</div>';
+
+var js3 =
+  "var lock = new MTS.LockScreen({ userName: 'Pedro Gómez', onUnlock: check });\n" +
+  "lock.show();\n\n" +
+  "// inside check(password, done):\n" +
+  "lock.setBusy(true);              // 'verifying…' (button spinner + disabled input)\n" +
+  "// on failure:\n" +
+  "lock.setError('Wrong password'); // inline error, keeps the lock open\n" +
+  "// switch identity:\n" +
+  "lock.setUser({ userName: 'Ana Torres', avatarUrl: null });\n" +
+  "lock.hide();                     // close programmatically";
+
+makeSection('tabs-s3', preview3, js3, function () {
+  var res = document.getElementById('s3-res');
+  new MTS.Button('#s3-btn', {
+    label: D.btnLock || 'Lock screen',
+    variant: 'primary',
+    onClick: function () {
+      var lock = makeLock({
+        userName: D.userName || 'Pedro Gómez',
+        onUnlock: function (password, done) {
+          setTimeout(function () {
+            var ok = password === 'matios';
+            done(ok);
+            res.textContent = ok ? (D.unlocked || 'Unlocked ✓') : 'setError → ' + (L.messages && L.messages.errorInvalid || 'Wrong password');
+          }, 600);
+        },
+      });
+      lock.on('shown',  function () { res.textContent = D.result || '— lock and try to unlock —'; });
+      lock.show();
+    },
+  });
+}, '240px');
+</script>
+
+</body>
+</html>

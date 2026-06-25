@@ -1,0 +1,91 @@
+/* ============================================================
+   MATIOS UI — matios-ui-lockscreen.css
+   MTS.LockScreen — overlay full-screen de re-autenticación.
+   Solo tokens --mts-*. z-index por encima de todo (lock real).
+   ============================================================ */
+
+.mts-lockscreen {
+  position: fixed;
+  inset: 0;
+  z-index: var(--mts-z-lockscreen, 800);   /* sobre modal/toast/tooltip */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--mts-space-5);
+  /* Cover de privacidad: color sólido como fallback + blur donde haya soporte */
+  background: var(--mts-bg-overlay-solid, rgba(20, 22, 28, 0.72));
+  opacity: 0;
+  transition: opacity var(--mts-transition-base);
+}
+
+@supports (backdrop-filter: blur(2px)) or (-webkit-backdrop-filter: blur(2px)) {
+  .mts-lockscreen {
+    background: var(--mts-bg-overlay, rgba(20, 22, 28, 0.45));
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+
+.mts-lockscreen--visible { opacity: 1; }
+
+/* Bloqueo de scroll del fondo mientras está activo */
+body.mts-lockscreen-open { overflow: hidden; }
+
+/* ── Card ── */
+.mts-lockscreen__card {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--mts-space-4);
+  padding: var(--mts-space-8) var(--mts-space-6);
+  background: var(--mts-bg-surface);
+  border: var(--mts-border-width) var(--mts-border-style) var(--mts-border-color);
+  border-radius: var(--mts-radius-xl);
+  box-shadow: var(--mts-shadow-lg);
+  text-align: center;
+}
+
+.mts-lockscreen__avatar { margin-bottom: var(--mts-space-1); }
+
+.mts-lockscreen__title {
+  font-size: var(--mts-font-size-lg);
+  font-weight: var(--mts-font-weight-semibold);
+  color: var(--mts-text-primary);
+  line-height: var(--mts-line-height-tight);
+}
+
+.mts-lockscreen__name {
+  font-size: var(--mts-font-size-md);
+  font-weight: var(--mts-font-weight-medium);
+  color: var(--mts-text-primary);
+}
+
+.mts-lockscreen__subtitle {
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-text-muted);
+  margin-top: calc(-1 * var(--mts-space-2));
+}
+
+/* Campo + botón a ancho completo de la card */
+.mts-lockscreen__field { width: 100%; }
+.mts-lockscreen__btn   { width: 100%; }
+.mts-lockscreen__btn .mts-btn { width: 100%; }
+
+.mts-lockscreen__error {
+  width: 100%;
+  margin-top: calc(-1 * var(--mts-space-2));
+  text-align: left;
+}
+
+.mts-lockscreen__forgot {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: var(--mts-font-size-sm);
+  color: var(--mts-color-primary);
+  transition: color var(--mts-transition-fast);
+}
+.mts-lockscreen__forgot:hover { color: var(--mts-color-primary-hover); text-decoration: underline; }
