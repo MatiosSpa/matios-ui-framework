@@ -75,6 +75,7 @@ MTS.Select = class MtsSelect {
       : (options.value ?? null);
 
     this._isOpen    = false;
+    this._activeIndex = -1;   // keyboard-highlighted option in the open list
     this._listeners = {};
     this._search    = '';
     this._debTimer  = null;
@@ -364,6 +365,12 @@ MTS.Select = class MtsSelect {
           this._renderOptions();
         }
       });
+      this._searchEl.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown')      { e.preventDefault(); this._moveActive(1); }
+        else if (e.key === 'ArrowUp')   { e.preventDefault(); this._moveActive(-1); }
+        else if (e.key === 'Enter')     { if (this._selectActive()) e.preventDefault(); }
+        else if (e.key === 'Escape')    { this.close(); }
+      });
       searchWrap.appendChild(this._searchEl);
       this._dropdownEl.appendChild(searchWrap);
     }
@@ -383,6 +390,7 @@ MTS.Select = class MtsSelect {
 
   _renderOptions() {
     this._listEl.innerHTML = '';
+    this._activeIndex = -1;   // list rebuilt → reset keyboard highlight
     const q = this._search.toLowerCase();
 
     // If onSearch is active, options come pre-filtered from the dev
@@ -446,6 +454,30 @@ MTS.Select = class MtsSelect {
         this._listEl.appendChild(item);
       });
     });
+  }
+
+  /* Keyboard highlight: move the active option (skips disabled), wraps around, scrolls into view. */
+  _moveActive(dir) {
+    if (!this._isOpen || !this._listEl) return;
+    const opts = this._listEl.querySelectorAll('.mts-select__option:not(.mts-select__option--disabled)');
+    if (!opts.length) return;
+    let i = this._activeIndex + dir;
+    if (i < 0) i = opts.length - 1;
+    if (i >= opts.length) i = 0;
+    for (let k = 0; k < opts.length; k++) opts[k].classList.remove('mts-select__option--active');
+    opts[i].classList.add('mts-select__option--active');
+    opts[i].scrollIntoView({ block: 'nearest' });
+    this._activeIndex = i;
+  }
+
+  /* Selects the currently highlighted option (Enter). Returns true if it acted. */
+  _selectActive() {
+    if (!this._isOpen || this._activeIndex < 0 || !this._listEl) return false;
+    const opts = this._listEl.querySelectorAll('.mts-select__option:not(.mts-select__option--disabled)');
+    const el = opts[this._activeIndex];
+    if (!el) return false;
+    el.click();
+    return true;
   }
 
   _selectOption(opt) {
@@ -555,8 +587,19 @@ MTS.Select = class MtsSelect {
   _bindEvents() {
     this._triggerEl.addEventListener('click', () => { if (!this.disabled) this.toggle(); });
     this._triggerEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.toggle(); }
-      if (e.key === 'Escape') this.close();
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (this._isOpen && this._selectActive()) return;   // pick the highlighted option
+        this.toggle();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (!this._isOpen) this.open(); else this._moveActive(1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (this._isOpen) this._moveActive(-1);
+      } else if (e.key === 'Escape') {
+        this.close();
+      }
     });
 
     // Close when clicking outside / Cerrar al hacer click fuera
