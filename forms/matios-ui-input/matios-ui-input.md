@@ -156,6 +156,9 @@ disabled style, plus `--mts-danger-*` for the error state. Theme via `data-mts-m
 ## Changelog
 
 ### 2026-06-23
+- Hardening: `_renderValidation()` now writes the feedback `className`/`textContent` only when they actually change
+  (idempotent), and `selectOnFocus` only calls `.select()` while the input is still focused. Prevents repeated
+  focus/blur/validate cycles from emitting redundant DOM mutations (which could feed an external observer / `:has()` loop).
 - Validation messages are now **localized** (es/en/pt) via the component i18n `messages` namespace — previously they
   were hardcoded in Spanish. New `errorMessage` option overrides the `required` message. The clear/show-password
   `aria-label`s are localized too. Aligns with the [Form Field Contract](../FORM-FIELD-CONTRACT.md). No API/behavior change.

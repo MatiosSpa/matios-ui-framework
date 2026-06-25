@@ -294,7 +294,10 @@ MTS.Input = class MtsInput {
 
   _bindEvents() {
     this._inputEl.addEventListener('input', (e) => {
-      if (this._clearBtn) this._clearBtn.style.display = e.target.value ? 'flex' : 'none';
+      if (this._clearBtn) {
+        const disp = e.target.value ? 'flex' : 'none';
+        if (this._clearBtn.style.display !== disp) this._clearBtn.style.display = disp;   // idempotent
+      }
       this._updateCount();
       if (this.validateOnInput) this.validate();
       this._emit('change', { value: e.target.value });
@@ -309,7 +312,10 @@ MTS.Input = class MtsInput {
     this._inputEl.addEventListener('focus', () => {
       this._wrapEl.classList.add('mts-input-wrap--focus');
       if (this.selectOnFocus && this.type !== 'password') {
-        setTimeout(() => this._inputEl.select(), 0);
+        setTimeout(() => {
+          // only select if still the focused element (avoid acting on a stale/blurred node)
+          if (this._inputEl && document.activeElement === this._inputEl) this._inputEl.select();
+        }, 0);
       }
       this._emit('focus', { value: this.getValue() });
     });
@@ -335,10 +341,15 @@ MTS.Input = class MtsInput {
   }
 
   _renderValidation() {
+    if (!this._wrapEl || !this._feedbackEl) return;
     this._wrapEl.classList.toggle('mts-input-wrap--error', !this._isValid);
     this._wrapEl.classList.remove('mts-input-wrap--success');
-    this._feedbackEl.className   = this._isValid ? 'mts-form-hint' : 'mts-form-error';
-    this._feedbackEl.textContent = this._isValid ? this.hint : this._errors[0];
+    // Idempotent writes: only touch the DOM when the value actually changes, so a repeated
+    // validate() (focus/blur cycles) can't emit redundant mutations that feed an observer loop.
+    const cls = this._isValid ? 'mts-form-hint' : 'mts-form-error';
+    const txt = this._isValid ? (this.hint || '') : (this._errors[0] || '');
+    if (this._feedbackEl.className   !== cls) this._feedbackEl.className   = cls;
+    if (this._feedbackEl.textContent !== txt) this._feedbackEl.textContent = txt;
   }
 
   _emit(event, detail = {}) {
