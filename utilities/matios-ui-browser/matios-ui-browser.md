@@ -16,7 +16,9 @@ No CSS required.
 
 ## guard — page protection
 
-Adds friction for the user, not real security. F12 and Ctrl+U cannot be blocked.
+Adds **friction, not real security**. A determined user always gets around it. `guard.devtools()`
+hooks the **capture phase**, so F12 / Ctrl+Shift+I/J/C / Ctrl+U *are* suppressed on modern browsers — but
+DevTools still opens via the menu, so it is a deterrent, not a lock. For real lockdown use kiosk mode / Electron.
 
 ```js
 MTS.Browser.guard.contextMenu(true)  // blocks the context menu
@@ -25,13 +27,14 @@ MTS.Browser.guard.dragImages(true)   // blocks dragging images and links
 MTS.Browser.guard.copy(true)         // blocks Ctrl+C / Cmd+C
 MTS.Browser.guard.print(true)        // blocks Ctrl+P / Cmd+P
 MTS.Browser.guard.save(true)         // blocks Ctrl+S / Cmd+S
+MTS.Browser.guard.devtools(true)     // tries to block DevTools: F12 · Ctrl+Shift+I/J/C · Ctrl+U (capture phase)
 
 // Passing false disables the guard
 MTS.Browser.guard.contextMenu(false)
 
 // Current state
 const state = MTS.Browser.guard.status();
-// → { contextMenu, textSelect, dragImages, copy, print, save }
+// → { contextMenu, textSelect, dragImages, copy, print, save, devtools }
 ```
 
 ---

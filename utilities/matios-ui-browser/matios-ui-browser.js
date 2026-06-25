@@ -8,8 +8,10 @@
 
    ⚠ Nota sobre protección:
    Las funciones de guard (contextMenu, textSelect, etc.) generan
-   FRICCIÓN, no seguridad real. F12 y Ctrl+U no son bloqueables.
-   Un usuario determinado siempre puede saltarlas.
+   FRICCIÓN, no seguridad real. guard.devtools() se engancha en FASE DE
+   CAPTURA, así que F12/Ctrl+Shift+I/J/C/Ctrl+U sí se suprimen en navegadores
+   modernos — pero NO es bloqueo garantizado: DevTools igual se abre por menú y
+   un usuario determinado siempre puede saltarlo. Lockdown real → kiosk/Electron.
 
    Uso:
      MTS.Browser.guard.contextMenu(true)
@@ -42,16 +44,16 @@ MTS.Browser = (() => {
     // _handlers[key] = { event, target, handler }
     const _handlers = {}
 
-    const _on = (key, event, target, handler) => {
+    const _on = (key, event, target, handler, capture = false) => {
       if (_handlers[key]) return
-      _handlers[key] = { event, target, handler }
-      target.addEventListener(event, handler)
+      _handlers[key] = { event, target, handler, capture }
+      target.addEventListener(event, handler, capture)
     }
 
     const _off = (key) => {
       if (!_handlers[key]) return
-      const { event, target, handler } = _handlers[key]
-      target.removeEventListener(event, handler)
+      const { event, target, handler, capture } = _handlers[key]
+      target.removeEventListener(event, handler, capture)
       delete _handlers[key]
     }
 
@@ -107,6 +109,25 @@ MTS.Browser = (() => {
         return this
       },
 
+      /* Intenta frenar la apertura de DevTools por teclado: F12, Ctrl+Shift+I/J/C
+         y Ctrl+U (ver fuente). Se engancha en FASE DE CAPTURA (3er arg = true) —
+         por eso sí suprime F12 en navegadores modernos, donde la fase de burbuja
+         llega tarde. Es FRICCIÓN, no bloqueo garantizado: DevTools igual se abre por
+         menú, y un usuario determinado lo saltea. Para lockdown real → kiosk/Electron. */
+      devtools(enable = true) {
+        enable
+          ? _on('devtools', 'keydown', document, e => {
+              const k = e.key
+              const hit =
+                k === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (k === 'I' || k === 'i' || k === 'J' || k === 'j' || k === 'C' || k === 'c')) ||
+                (e.ctrlKey && (k === 'U' || k === 'u'))
+              if (hit) { e.preventDefault(); e.stopPropagation() }
+            }, true)   // ← captura: clave para que funcione
+          : _off('devtools')
+        return this
+      },
+
       /* Estado actual de cada guard */
       status() {
         return {
@@ -116,6 +137,7 @@ MTS.Browser = (() => {
           copy:        'copy' in _handlers,
           print:       'print' in _handlers,
           save:        'save' in _handlers,
+          devtools:    'devtools' in _handlers,
         }
       },
     }

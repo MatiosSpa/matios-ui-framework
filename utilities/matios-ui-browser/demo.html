@@ -290,6 +290,7 @@
   chk('guard-checks', D.guardCopy        || 'Block Ctrl+C (copy)',  false, function (e) { MTS.Browser.guard.copy(e.detail.checked); });
   chk('guard-checks', D.guardPrint       || 'Block Ctrl+P (print)', false, function (e) { MTS.Browser.guard.print(e.detail.checked); });
   chk('guard-checks', D.guardSave        || 'Block Ctrl+S (save)',  false, function (e) { MTS.Browser.guard.save(e.detail.checked); });
+  chk('guard-checks', D.guardDevtools    || 'Try to block DevTools (F12 · Ctrl+Shift+I/J/C · Ctrl+U)', false, function (e) { MTS.Browser.guard.devtools(e.detail.checked); });
 
   /* ── 📍 Location ────────────────────────────────────────────── */
   btn('location-actions', D.locationGet || 'Get position', 'secondary', async function () {

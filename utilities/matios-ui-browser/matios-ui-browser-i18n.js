@@ -14,13 +14,14 @@
         subtitle:               'Utilidad universal de APIs del navegador. Prueba cada módulo en esta misma página.',
 
         guardTitle:             '🛡️ Guard — Protección de página',
-        guardNote:              'Genera fricción para el usuario casual. F12 y Ctrl+U no son bloqueables.',
+        guardNote:              'Genera fricción, no seguridad real. devtools se engancha en captura (F12 sí se intenta frenar), pero un usuario determinado igual lo saltea (menú, etc.). Para lockdown real → kiosk/Electron.',
         guardContextMenu:       'Bloquear clic derecho (contextMenu)',
         guardTextSelect:        'Bloquear selección de texto (textSelect)',
         guardDragImages:        'Bloquear arrastrar imágenes (dragImages)',
         guardCopy:              'Bloquear Ctrl+C (copy)',
         guardPrint:             'Bloquear Ctrl+P (print)',
         guardSave:              'Bloquear Ctrl+S (save)',
+        guardDevtools:          'Intentar bloquear DevTools (F12 · Ctrl+Shift+I/J/C · Ctrl+U)',
 
         locationTitle:          '📍 Location — Geolocalización',
         locationGet:            'Obtener posición',
@@ -113,13 +114,14 @@
         subtitle:               'Universal browser API utility. Try each module right on this page.',
 
         guardTitle:             '🛡️ Guard — Page protection',
-        guardNote:              'Creates friction for the casual user. F12 and Ctrl+U cannot be blocked.',
+        guardNote:              'Friction, not real security. devtools hooks the capture phase (F12 is suppressed in modern browsers), but a determined user still gets around it (menu, etc.). For real lockdown → kiosk/Electron.',
         guardContextMenu:       'Block right-click (contextMenu)',
         guardTextSelect:        'Block text selection (textSelect)',
         guardDragImages:        'Block image dragging (dragImages)',
         guardCopy:              'Block Ctrl+C (copy)',
         guardPrint:             'Block Ctrl+P (print)',
         guardSave:              'Block Ctrl+S (save)',
+        guardDevtools:          'Try to block DevTools (F12 · Ctrl+Shift+I/J/C · Ctrl+U)',
 
         locationTitle:          '📍 Location — Geolocation',
         locationGet:            'Get position',
@@ -212,13 +214,14 @@
         subtitle:               'Utilitário universal de APIs do navegador. Teste cada módulo nesta mesma página.',
 
         guardTitle:             '🛡️ Guard — Proteção de página',
-        guardNote:              'Gera fricção para o usuário casual. F12 e Ctrl+U não podem ser bloqueados.',
+        guardNote:              'Fricção, não segurança real. devtools engancha na fase de captura (F12 é suprimido nos navegadores modernos), mas um usuário determinado ainda contorna (menu, etc.). Para lockdown real → kiosk/Electron.',
         guardContextMenu:       'Bloquear clique direito (contextMenu)',
         guardTextSelect:        'Bloquear seleção de texto (textSelect)',
         guardDragImages:        'Bloquear arrastar imagens (dragImages)',
         guardCopy:              'Bloquear Ctrl+C (copy)',
         guardPrint:             'Bloquear Ctrl+P (print)',
         guardSave:              'Bloquear Ctrl+S (save)',
+        guardDevtools:          'Tentar bloquear DevTools (F12 · Ctrl+Shift+I/J/C · Ctrl+U)',
 
         locationTitle:          '📍 Location — Geolocalização',
         locationGet:            'Obter posição',
