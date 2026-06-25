@@ -24,10 +24,10 @@
         s2Title:     '2 — Sin foto (iniciales) + sin "olvidé mi clave"',
         s3Title:     '3 — API (show / setError / setBusy / setUser)',
         btnLock:     'Bloquear pantalla',
-        hintTry:     'Probá "matios" para desbloquear; cualquier otra cosa muestra error.',
+        hintTry:     'Prueba "matios" para desbloquear; cualquier otra cosa muestra error.',
         userName:    'Pedro Gómez',
         userName2:   'Ana Torres',
-        result:      '— bloqueá y probá desbloquear —',
+        result:      '— bloquea e intenta desbloquear —',
         unlocked:    'Desbloqueado ✓',
         forgotMsg:   'Click en "Olvidé mi clave"'
       }

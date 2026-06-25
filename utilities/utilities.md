@@ -29,7 +29,7 @@ new MTS.SessionTimeout({
   messages: {
     title:      'Tu sesión está por vencer',
     body:       'Por inactividad, tu sesión se cerrará en {time}.',
-    warning:    'Si tenés trabajo sin guardar, podrías perderlo.',
+    warning:    'Si tienes trabajo sin guardar, podrías perderlo.',
     btnRefresh: 'Renovar sesión',
     btnExpire:  'Cerrar sesión',
   },
