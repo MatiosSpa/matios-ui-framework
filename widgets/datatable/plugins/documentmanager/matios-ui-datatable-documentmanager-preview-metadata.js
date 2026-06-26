@@ -106,6 +106,7 @@ MTS.DocumentManagerPreviewMetadataPanel = class DocumentManagerPreviewMetadataPa
       var editBtn  = new MTS.Button(editWrap, {
         variant:   'ghost',
         size:      'sm',
+        iconOnly:  true,   // botón-ícono compacto (consistente con el "+" de notas)
         iconLeft:  typeof MTS.Icon !== 'undefined' ? MTS.Icon.get('edit-2') : '',
         ariaLabel: tooltip,
       });

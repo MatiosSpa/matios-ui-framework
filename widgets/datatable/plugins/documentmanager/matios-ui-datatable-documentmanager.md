@@ -366,8 +366,8 @@ new MTS.DataTable({
 ## Changelog
 
 ### 2026-06-25
-- Notes panel: the "add note" (+) button is now a compact icon button (`iconOnly: true`) — it previously reserved
-  label padding/width and looked oversized in the panel header.
+- Panel header buttons are now compact icon buttons (`iconOnly: true`): the notes "+" (add note) and the metadata
+  "edit" button. They previously reserved label padding/width and looked oversized in the panel header.
 
 ### Initial
 - DocumentManager plugin stack over `MTS.DataTable`: folder navigation, breadcrumb, drag-drop, OS dropzone, upload
