@@ -1,6 +1,6 @@
 # MTS.Icon
 
-SVG icon library — 278 icons, outline + filled variants, 7 sizes, semantic colors. Zero dependencies, auto-initialized on DOM load.
+SVG icon library — 308 icons, outline + filled variants, 7 sizes, semantic colors. Zero dependencies, auto-initialized on DOM load.
 
 ---
 
@@ -92,5 +92,5 @@ UI, Security and Layout — e.g. `search`, `home`, `check-circle`, `file-text`, 
 ## Changelog
 
 ### Initial
-- SVG icon library: 278 icons, outline + filled variants, 7 sizes, semantic colors, CSS-class and JS APIs
+- SVG icon library: 308 icons, outline + filled variants, 7 sizes, semantic colors, CSS-class and JS APIs
   (`get` / `render` / `list` / `initAll`), auto-init on DOM load.

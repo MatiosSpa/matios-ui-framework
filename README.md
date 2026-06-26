@@ -6,7 +6,7 @@
 
 <p align="center">
   Zero-dependency UI framework built with pure CSS and JavaScript.<br>
-  Mode + accent theming &nbsp;·&nbsp; High-contrast support &nbsp;·&nbsp; 80+ components &nbsp;·&nbsp; 278 icons
+  Mode + accent theming &nbsp;·&nbsp; High-contrast support &nbsp;·&nbsp; 85+ components &nbsp;·&nbsp; 308 icons
 </p>
 
 <p align="center">
@@ -149,7 +149,7 @@ Available accents: `violet` · `olive` · `blue` · `corporate` · `navy` · `em
 `HttpClient` · `CodeBlock` · `DevPanel` · `DiagnosticsPanel` · `JsonViewer` · `SessionTimeout` · `PageLoader` · `Sanitize` · `Browser`
 
 ### Icons
-**278 icons** — outline / filled · semantic color variants · size variants · spin animation
+**308 icons** — outline / filled · semantic color variants · size variants · spin animation
 
 ```html
 <i class="mts-icon mts-icon-trash"></i>
@@ -269,7 +269,7 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and the [`CODE_OF_CONDUCT.md`](./CODE
 
 Matios UI is free and MIT-licensed. If it saves you time, you can support its ongoing development:
 
-[![Donate with PayPal](https://img.shields.io/badge/PayPal-Donate-00457C?logo=paypal&logoColor=white)](https://paypal.me/GContrerasGomez)
+[![Support on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20me-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/gcontrerasgomez)
 
 <details>
 <summary><strong>🪙 Donate with crypto</strong></summary>
