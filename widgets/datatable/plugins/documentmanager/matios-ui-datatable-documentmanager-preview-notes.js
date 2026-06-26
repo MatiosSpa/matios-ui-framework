@@ -176,7 +176,9 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
                 /* Agregar la nueva nota al final */
                 var newLoc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewNotesPanel'] ?? {};
                 listEl.appendChild(self._buildNoteItem(note, item, listEl, newLoc));
-                listEl.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                /* Scroll DENTRO de la lista (no burbujea al panel/página): idempotente —
+                   no-op si la lista no desborda, baja al final si hay muchas notas. */
+                listEl.scrollTop = listEl.scrollHeight;
               })
               .catch(function(err) {
                 console.error('[MTS.DocumentManagerPreviewNotesPanel] Error al guardar nota:', err);

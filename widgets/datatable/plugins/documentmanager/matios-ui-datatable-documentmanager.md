@@ -365,6 +365,12 @@ new MTS.DataTable({
 
 ## Changelog
 
+### 2026-06-26
+- Notes panel: fixed the panel shifting when adding a note. `scrollIntoView` bubbled to the nearest scrollable
+  ancestor (panel/page) when the list wasn't overflowing — replaced with `listEl.scrollTop = listEl.scrollHeight`
+  (scrolls only the list; no-op when it doesn't overflow). Header bar is now `position: sticky` so the "+" never
+  scrolls out of view.
+
 ### 2026-06-25
 - Panel header buttons are now compact icon buttons (`iconOnly: true`): the notes "+" (add note) and the metadata
   "edit" button. They previously reserved label padding/width and looked oversized in the panel header.
