@@ -1,7 +1,7 @@
 ﻿/* ============================================================
-   MATIOS UI â€” matios-ui-colorpicker.js
-   MTS.ColorPicker â€” Selector de color standalone
-                     Hex, RGB, HSL â€” sliders H/S/L â€” paleta
+   MATIOS UI — matios-ui-colorpicker.js
+   MTS.ColorPicker — Selector de color standalone
+                     Hex, RGB, HSL — sliders H/S/L — paleta
    0 dependencias.
    Version: 1.0.0
    ============================================================ */
@@ -11,13 +11,13 @@ MTS.ColorPicker = class MtsColorPicker {
   /**
    * @param {string|Element} selector
    * @param {object} options
-   * @param {string}   options.value       Color inicial (hex) â€” default: '#4f8eff'
+   * @param {string}   options.value       Color inicial (hex) — default: '#4f8eff'
    * @param {string}   options.label       Etiqueta
-   * @param {string}   options.format      'hex'|'rgb'|'hsl' â€” default: 'hex'
+   * @param {string}   options.format      'hex'|'rgb'|'hsl' — default: 'hex'
    * @param {Array}    options.presets     Colores de la paleta (máx. 20) — default: 20 colores
-   * @param {boolean}  options.showPresets Muestra paleta â€” default: true
-   * @param {boolean}  options.showSliders Muestra sliders HSL â€” default: true
-   * @param {boolean}  options.showInput         Muestra input de texto â€” default: true
+   * @param {boolean}  options.showPresets Muestra paleta — default: true
+   * @param {boolean}  options.showSliders Muestra sliders HSL — default: true
+   * @param {boolean}  options.showInput         Muestra input de texto — default: true
    * @param {boolean}  options.showFormatSwitch  Muestra botón para cambiar hex/rgb/hsl — default: true
    * @param {boolean}  options.showTriggerText   Muestra el valor hex/rgb/hsl en el trigger — default: true
    * @param {string}   options.triggerVariant    'default'|'preview' — default: 'default'
@@ -32,7 +32,7 @@ MTS.ColorPicker = class MtsColorPicker {
   constructor(selector, options = {}) {
     this._el      = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
-    /* â”€â”€ data-* â†’ inicializaciÃ³n HTML declarativa â”€â”€ */
+    /* â”€â”€ data-* â†’ inicialización HTML declarativa â”€â”€ */
     const _ds = this._el?.dataset || {};
     const _fromHTML = {};
     if (_ds.value !== undefined) _fromHTML.value = _ds.value;
@@ -95,14 +95,14 @@ MTS.ColorPicker = class MtsColorPicker {
     // Always visible, no trigger button / Siempre visible, sin botón trigger
     this.inline = options.inline ?? false;
 
-    // Size: 'sm' | 'md' | 'lg' / TamaÃ±o
+    // Size: 'sm' | 'md' | 'lg' / Tamaño
     this.size = options.size || 'md';
 
     // Render mode: 'auto' | 'field-only' | 'standalone'
     // Modo de render: 'auto' | 'field-only' | 'standalone'
     this.renderMode = options.renderMode || 'auto';
 
-    // Disables interaction / Deshabilita la interacciÃ³n
+    // Disables interaction / Deshabilita la interacción
     this.disabled = options.disabled ?? false;
 
     // Fires when color changes / Se dispara al cambiar el color
@@ -411,7 +411,7 @@ MTS.ColorPicker = class MtsColorPicker {
       this._popEl.appendChild(palette);
     }
 
-    /* â”€â”€ Footer â€” only in popup mode (not inline) â”€â”€ */
+    /* â”€â”€ Footer — only in popup mode (not inline) â”€â”€ */
     if (!this.inline) {
       const footer = document.createElement('div');
       footer.className = 'mts-colorpicker__footer';

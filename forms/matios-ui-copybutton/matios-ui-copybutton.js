@@ -1,6 +1,6 @@
 ﻿/* ============================================================
-   MATIOS UI â€” matios-ui-copybutton.js
-   MTS.CopyButton â€” Copy-to-clipboard button with visual feedback
+   MATIOS UI — matios-ui-copybutton.js
+   MTS.CopyButton — Copy-to-clipboard button with visual feedback
    Version: 1.1.0
    ============================================================ */
 
@@ -13,7 +13,7 @@ MTS.CopyButton = class MtsCopyButton {
     if (!this._el) { console.error('[MTS.CopyButton] Not found / No encontrado:', selector); return; }
 
     // Read data-* for declarative HTML initialization
-    // Lee data-* para inicializaciÃ³n HTML declarativa
+    // Lee data-* para inicialización HTML declarativa
     const _ds = this._el?.dataset || {};
     const _fromHTML = {};
     if (_ds.text        !== undefined) _fromHTML.text        = _ds.text;
@@ -26,32 +26,32 @@ MTS.CopyButton = class MtsCopyButton {
     if (_ds.resetDelay  !== undefined) _fromHTML.resetDelay  = parseInt(_ds.resetDelay);
     options = { ..._fromHTML, ...options };
 
-    // Static text to copy / Texto estÃ¡tico a copiar
+    // Static text to copy / Texto estático a copiar
     this.text = options.text ?? null;
 
     // Selector/element whose value or textContent to copy
     // Selector/elemento cuyo value o textContent copiar
     this.target = options.target ?? null;
 
-    // Button label / Label del botÃ³n
+    // Button label / Label del botón
     this.label = options.label ?? 'Copiar';
 
     // Label shown after copying / Label mostrado tras copiar
-    this.labelCopied = options.labelCopied ?? 'Â¡Copiado!';
+    this.labelCopied = options.labelCopied ?? '¡Copiado!';
 
-    // Default icon SVG / SVG del Ã­cono por defecto
+    // Default icon SVG / SVG del ícono por defecto
     this.icon = options.icon ?? this._defaultIcon();
 
-    // Icon shown after copying / Ãcono mostrado tras copiar
+    // Icon shown after copying / Ícono mostrado tras copiar
     this.iconCopied = options.iconCopied ?? this._checkIcon();
 
-    // Button variant / Variante del botÃ³n
+    // Button variant / Variante del botón
     this.variant = options.variant ?? 'secondary';
 
-    // Size: 'sm' | '' | 'lg' / TamaÃ±o
+    // Size: 'sm' | '' | 'lg' / Tamaño
     this.size = options.size ?? '';
 
-    // Icon only mode / Modo solo Ã­cono
+    // Icon only mode / Modo solo ícono
     this.iconOnly = options.iconOnly ?? false;
 
     // Delay in ms before resetting to initial state / Delay en ms antes de resetear
@@ -69,7 +69,7 @@ MTS.CopyButton = class MtsCopyButton {
   // Change the text to copy / Cambiar el texto a copiar
   setText(text) { this.text = text; return this; }
 
-  // Trigger copy programmatically / Disparar copia programÃ¡ticamente
+  // Trigger copy programmatically / Disparar copia programáticamente
   copy() { this._doCopy(); return this; }
 
   // Destroy the component / Destruir el componente

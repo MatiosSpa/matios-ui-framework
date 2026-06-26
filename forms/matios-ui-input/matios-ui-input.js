@@ -1,6 +1,6 @@
 ﻿/* ============================================================
-   MATIOS UI â€” matios-ui-input.js
-   MTS.Input â€” Input, Textarea con validaciÃ³n y estados
+   MATIOS UI — matios-ui-input.js
+   MTS.Input — Input, Textarea con validación y estados
    Eventos DOM: mts:input:change | mts:input:focus | mts:input:blur | mts:input:validate
    Version: 1.0.0
    ============================================================ */
@@ -11,7 +11,7 @@ MTS.Input = class MtsInput {
   /**
    * @param {string|Element} selector
    * @param {object} options
-   * @param {string}   options.type        'text'|'email'|'password'|'number'|'textarea' â€” default: 'text'
+   * @param {string}   options.type        'text'|'email'|'password'|'number'|'textarea' — default: 'text'
    * @param {string}   options.label       Label del campo
    * @param {string}   options.placeholder
    * @param {string}   options.hint        Texto de ayuda debajo del input
@@ -19,15 +19,15 @@ MTS.Input = class MtsInput {
    * @param {boolean}  options.required    Campo obligatorio
    * @param {boolean}  options.disabled
    * @param {boolean}  options.readonly
-   * @param {string}   options.iconLeft    SVG string del Ã­cono izquierdo
-   * @param {string}   options.iconRight   SVG string del Ã­cono derecho
-   * @param {boolean}  options.clearable   BotÃ³n Ã— para limpiar
-   * @param {boolean}  options.showPassword Toggle para mostrar contraseÃ±a
+   * @param {string}   options.iconLeft    SVG string del ícono izquierdo
+   * @param {string}   options.iconRight   SVG string del ícono derecho
+   * @param {boolean}  options.clearable   Botón Ã— para limpiar
+   * @param {boolean}  options.showPassword Toggle para mostrar contraseña
    * @param {number}   options.maxLength
    * @param {boolean}  options.showCount   Muestra contador de caracteres
-   * @param {number}   options.rows        Para textarea â€” default: 4
-   * @param {string}   options.resize      Para textarea â€” 'none' | 'vertical' | 'horizontal' | 'both'. Default: 'vertical' (mismo que default del browser).
-   * @param {object}   options.rules       Reglas de validaciÃ³n { required, min, max, minLength, maxLength, pattern, custom }
+   * @param {number}   options.rows        Para textarea — default: 4
+   * @param {string}   options.resize      Para textarea — 'none' | 'vertical' | 'horizontal' | 'both'. Default: 'vertical' (mismo que default del browser).
+   * @param {object}   options.rules       Reglas de validación { required, min, max, minLength, maxLength, pattern, custom }
    * @param {boolean}  options.selectOnFocus   Selecciona todo el texto al recibir foco — default: false
    * @param {boolean}  options.nextOnEnter     Enter mueve el foco al siguiente input en el DOM — default: false. No aplica a textarea
    * @param {boolean}  options.validateOnBlur
@@ -41,7 +41,7 @@ MTS.Input = class MtsInput {
       ? document.querySelector(selector)
       : selector;
     if (!this._container) { console.error('[MTS.Input] No encontrado:', selector); return; }
-    /* â”€â”€ data-* â†’ inicializaciÃ³n HTML declarativa â”€â”€ */
+    /* â”€â”€ data-* â†’ inicialización HTML declarativa â”€â”€ */
     const _ds = this._container?.dataset || {};
     const _fromHTML = {};
     if (_ds.type !== undefined) _fromHTML.type = _ds.type;
@@ -170,7 +170,7 @@ MTS.Input = class MtsInput {
     const explicitFieldOnly = this.renderMode === 'field-only';
     const explicitStandalone = this.renderMode === 'standalone';
     /* Si el padre ya es mts-form-group (layout HTML), este elemento
-       actÃºa solo como wrapper del campo â€” no crea otro mts-form-group */
+       actúa solo como wrapper del campo — no crea otro mts-form-group */
     const parentIsGroup = this._container.parentElement?.classList.contains('mts-form-group');
     const fieldOnly = explicitFieldOnly || (!explicitStandalone && parentIsGroup);
     if (fieldOnly) {
@@ -248,7 +248,7 @@ MTS.Input = class MtsInput {
       this._eyeBtn = document.createElement('button');
       this._eyeBtn.className = 'mts-input__icon mts-input__icon--right mts-input__eye';
       this._eyeBtn.setAttribute('aria-label', this._t('showPassword', 'Show password'));
-      // TODO: reemplazar con MTS.Icons cuando estÃ©n listos
+      // TODO: reemplazar con MTS.Icons cuando estén listos
       this._eyeBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
       this._eyeBtn.addEventListener('click', () => {
         const show = this._inputEl.type === 'password';

@@ -1,21 +1,21 @@
 ﻿/* ============================================================
-   MATIOS UI â€” matios-ui-stepper.js
-   MTS.Stepper â€” Flujo paso a paso y progreso visual
+   MATIOS UI — matios-ui-stepper.js
+   MTS.Stepper — Flujo paso a paso y progreso visual
    
    Modos:
-     'wizard'   â€” pasos con contenido/paneles (formularios, tablas, etc.)
-     'progress' â€” solo indicador visual, sin paneles
+     'wizard'   — pasos con contenido/paneles (formularios, tablas, etc.)
+     'progress' — solo indicador visual, sin paneles
 
    Variantes (mode:'progress'):
-     'default'  â€” indicador + label + descripciÃ³n
-     'compact'  â€” indicador pequeÃ±o + label
-     'dots'     â€” puntos minimalistas con barra de progreso
+     'default'  — indicador + label + descripción
+     'compact'  — indicador pequeño + label
+     'dots'     — puntos minimalistas con barra de progreso
 
    Eventos DOM:
-     mts:stepper:change       â€” cambio de paso
-     mts:stepper:complete     â€” llegÃ³ al Ãºltimo paso
-     mts:stepper:stepclick    â€” click manual en un paso
-     mts:stepper:statuschange â€” cambio de estado de un paso
+     mts:stepper:change       — cambio de paso
+     mts:stepper:complete     — llegó al último paso
+     mts:stepper:stepclick    — click manual en un paso
+     mts:stepper:statuschange — cambio de estado de un paso
 
    Version: 2.0.0
    ============================================================ */
@@ -38,13 +38,13 @@ MTS.Stepper = class MtsStepper {
     // Variante (solo modo progress)
     this.variant = options.variant || 'default';
 
-    // Steps array â€” each item is a step definition / Arreglo de pasos
+    // Steps array — each item is a step definition / Arreglo de pasos
     this.steps = (options.steps || []).map(s => ({ ...s }));
 
-    // Initially active step index / Ãndice del paso activo inicial
+    // Initially active step index / Índice del paso activo inicial
     this.active = options.active ?? 0;
 
-    // Layout direction: 'horizontal' | 'vertical' / DirecciÃ³n del layout
+    // Layout direction: 'horizontal' | 'vertical' / Dirección del layout
     this.direction = options.direction || 'horizontal';
 
     // Allow clicking steps to navigate / Permitir navegar haciendo click en los pasos
@@ -56,7 +56,7 @@ MTS.Stepper = class MtsStepper {
     // Fires when active step changes / Se dispara al cambiar el paso activo
     if (options.onChange)       this.on('change',       options.onChange);
 
-    // Fires when the last step is reached / Se dispara al llegar al Ãºltimo paso
+    // Fires when the last step is reached / Se dispara al llegar al último paso
     if (options.onComplete)     this.on('complete',     options.onComplete);
 
     // Fires when user clicks a step (clickable mode) / Se dispara al hacer click en un paso
@@ -149,7 +149,7 @@ MTS.Stepper = class MtsStepper {
     this._el.appendChild(this._trackEl);
     this._renderIndicators();
 
-    /* Paneles â€” solo wizard */
+    /* Paneles — solo wizard */
     if (this.mode === 'wizard') {
       this._panelsEl = document.createElement('div');
       this._panelsEl.className = 'mts-stepper__panels';
@@ -158,7 +158,7 @@ MTS.Stepper = class MtsStepper {
       this._showPanel(this.active);
     }
 
-    /* Barra de progreso â€” solo dots */
+    /* Barra de progreso — solo dots */
     if (this.mode === 'progress' && this.variant === 'dots') {
       this._progressBar = document.createElement('div');
       this._progressBar.className = 'mts-stepper__progress-bar';
@@ -212,7 +212,7 @@ MTS.Stepper = class MtsStepper {
       }
       item.appendChild(indicator);
 
-      /* Texto â€” no en dots */
+      /* Texto — no en dots */
       if (self.variant !== 'dots') {
         var textWrap = document.createElement('div');
         textWrap.className = 'mts-stepper__text';
@@ -231,7 +231,7 @@ MTS.Stepper = class MtsStepper {
         item.appendChild(textWrap);
       }
 
-      /* LÃ­nea conectora â€” no en el Ãºltimo */
+      /* Línea conectora — no en el último */
       if (idx < self.steps.length - 1) {
         var line = document.createElement('div');
         line.className = 'mts-stepper__line' + (isDone ? ' mts-stepper__line--done' : '');
@@ -263,7 +263,7 @@ MTS.Stepper = class MtsStepper {
     var panel = this._panelEls[index];
     if (!panel) return;
 
-    /* Lazy render â€” solo la primera vez */
+    /* Lazy render — solo la primera vez */
     if (!panel.dataset.rendered) {
       var step     = this.steps[index];
       var content  = step.content;

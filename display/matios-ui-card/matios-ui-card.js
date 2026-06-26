@@ -21,8 +21,8 @@ MTS.Card = class MtsCard {
    * @param {boolean} options.clickable
    * @param {boolean} options.selected
    * @param {boolean} options.horizontal
-   * @param {Array}   options.actions       [{ label, icon, variant, onClick }] â€” en el header
-   * @param {Array}   options.footer        [{ label, icon, variant, onClick }] â€” en el footer
+   * @param {Array}   options.actions       [{ label, icon, variant, onClick }] — en el header
+   * @param {Array}   options.footer        [{ label, icon, variant, onClick }] — en el footer
    * @param {string}  options.footerAlign   'start'|'end'|'between'|'center'
    * @param {function} options.onClick      Callback si clickable
    */
@@ -32,10 +32,10 @@ MTS.Card = class MtsCard {
       : selector;
     if (!this._el) { console.error('[MTS.Card] No encontrado:', selector); return; }
 
-    // Card header title / TÃ­tulo del header
+    // Card header title / Título del header
     this.title = options.title ?? null;
 
-    // Card subtitle / SubtÃ­tulo
+    // Card subtitle / Subtítulo
     this.subtitle = options.subtitle ?? null;
 
     // Body HTML content / Contenido HTML del cuerpo
@@ -47,14 +47,14 @@ MTS.Card = class MtsCard {
     // Image alt text / Texto alternativo de la imagen
     this.imageAlt = options.imageAlt ?? '';
 
-    // Image aspect ratio: 'default' | 'square' | 'wide' / RelaciÃ³n de aspecto de la imagen
+    // Image aspect ratio: 'default' | 'square' | 'wide' / Relación de aspecto de la imagen
     this.imageRatio = options.imageRatio ?? 'default';
 
     // Color variant: 'flat' | 'elevated' | 'outlined' | 'primary' | 'success' | 'warning' | 'danger'
     // Variante de color
     this.variant = options.variant ?? null;
 
-    // Size modifier: '' | 'sm' | 'lg' / Modificador de tamaÃ±o
+    // Size modifier: '' | 'sm' | 'lg' / Modificador de tamaño
     this.size = options.size ?? '';
 
     // Show hover effect / Mostrar efecto hover
@@ -69,13 +69,13 @@ MTS.Card = class MtsCard {
     // Horizontal layout / Layout horizontal
     this.horizontal = options.horizontal ?? false;
 
-    // Header action buttons: [{ label, icon, variant, onClick }] / Botones de acciÃ³n en el header
+    // Header action buttons: [{ label, icon, variant, onClick }] / Botones de acción en el header
     this.actions = options.actions ?? [];
 
     // Footer buttons: [{ label, icon, variant, onClick }] / Botones del footer
     this.footer = options.footer ?? [];
 
-    // Footer alignment: 'start' | 'end' | 'between' | 'center' / AlineaciÃ³n del footer
+    // Footer alignment: 'start' | 'end' | 'between' | 'center' / Alineación del footer
     this.footerAlign = options.footerAlign ?? 'start';
 
     this._listeners = {};

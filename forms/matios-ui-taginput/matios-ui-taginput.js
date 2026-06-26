@@ -1,11 +1,11 @@
 ﻿/* ============================================================
-   MATIOS UI â€” matios-ui-taginput.js
-   MTS.TagInput â€” Tags with suggestions, debounce and object support
+   MATIOS UI — matios-ui-taginput.js
+   MTS.TagInput — Tags with suggestions, debounce and object support
    Version: 2.0.0
 
    Tags are stored as objects: { uid, name }
-     uid  â€” unique identifier (email, id, uuid, etc.)
-     name â€” display text shown in the chip
+     uid  — unique identifier (email, id, uuid, etc.)
+     name — display text shown in the chip
 
    Usage:
      const ti = new MTS.TagInput('#el', {
@@ -18,7 +18,7 @@
      });
 
      ti.getTags();           // â†’ [{ uid, name }, ...]
-     ti.setTags([{ uid: 'abc@x.com', name: 'Ana LÃ³pez' }]);
+     ti.setTags([{ uid: 'abc@x.com', name: 'Ana López' }]);
    ============================================================ */
 
 window.MTS = window.MTS || {};
@@ -54,7 +54,7 @@ MTS.TagInput = class MtsTagInput {
     this.debounceMs      = options.debounce       ?? 300;
 
     /* onSearch: async (query: string) => { uid, name }[]
-       Si se provee, reemplaza las suggestions estÃ¡ticas */
+       Si se provee, reemplaza las suggestions estáticas */
     this.onSearch = options.onSearch || null;
 
     this._listeners     = {};
@@ -100,7 +100,7 @@ MTS.TagInput = class MtsTagInput {
     return fallback;
   }
 
-  /*â”€â”€ NormalizaciÃ³n interna â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /*â”€â”€ Normalización interna â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   _normalize(tag) {
     if (typeof tag === 'string') return { uid: tag, name: tag };
     /* Acepta { uid, name } o { value, label } (compatibilidad con Select) */
@@ -110,7 +110,7 @@ MTS.TagInput = class MtsTagInput {
     };
   }
 
-  /* â”€â”€ API pÃºblica â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /* â”€â”€ API pública â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
   /* Retorna [{ uid, name }, ...] */
   getTags() { return this.tags.map(t => ({ ...t })); }
@@ -122,7 +122,7 @@ MTS.TagInput = class MtsTagInput {
     return this;
   }
 
-  /* Agrega un tag â€” acepta { uid, name } o string */
+  /* Agrega un tag — acepta { uid, name } o string */
   addTag(tag) { this._addTag(this._normalize(tag)); return this; }
 
   /* Elimina un tag por uid o por objeto { uid } */
@@ -227,7 +227,7 @@ MTS.TagInput = class MtsTagInput {
   _addTag(tag) {
     if (this.maxTags && this.tags.length >= this.maxTags) return;
     if (!tag?.name) return;
-    /* DeduplicaciÃ³n por uid */
+    /* Deduplicación por uid */
     if (!this.allowDuplicates && this.tags.some(t => t.uid === tag.uid)) return;
     this.tags.push(tag);
     this._inputEl.value = '';

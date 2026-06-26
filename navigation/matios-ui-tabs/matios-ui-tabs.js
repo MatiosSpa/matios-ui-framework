@@ -1,6 +1,6 @@
 ﻿/* ============================================================
-   MATIOS UI â€” matios-ui-tabs.js
-   MTS.Tabs â€” PestaÃ±as horizontal/vertical, underline/pill/card
+   MATIOS UI — matios-ui-tabs.js
+   MTS.Tabs — Pestañas horizontal/vertical, underline/pill/card
    Eventos DOM: mts:tabs:change
    Version: 1.0.0
    ============================================================ */
@@ -12,9 +12,9 @@ MTS.Tabs = class MtsTabs {
    * @param {string|Element} selector  Contenedor
    * @param {object} options
    * @param {Array}    options.tabs       [{ id, label, content, icon?, disabled?, badge? }]
-   * @param {string}   options.active     ID de la pestaÃ±a activa inicial
-   * @param {string}   options.variant    'underline'|'pill'|'card' â€” default: 'underline'
-   * @param {string}   options.direction  'horizontal'|'vertical' â€” default: 'horizontal'
+   * @param {string}   options.active     ID de la pestaña activa inicial
+   * @param {string}   options.variant    'underline'|'pill'|'card' — default: 'underline'
+   * @param {string}   options.direction  'horizontal'|'vertical' — default: 'horizontal'
    * @param {boolean}  options.lazy       Renderiza el contenido solo al activar
    * @param {function} options.onChange
    */
@@ -22,20 +22,20 @@ MTS.Tabs = class MtsTabs {
     this._el         = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) { console.error('[MTS.Tabs] No encontrado:', selector); return; }
     // Tab items: [{ id, label, content, icon?, disabled?, badge? }]
-    // PestaÃ±as: arreglo de objetos
+    // Pestañas: arreglo de objetos
     this.tabs = options.tabs || [];
 
-    // Initially active tab ID / ID de la pestaÃ±a activa inicial
+    // Initially active tab ID / ID de la pestaña activa inicial
     this.active = options.active || this.tabs[0]?.id;
 
     // Visual variant: 'underline' | 'pill' | 'card' / Variante visual
     this.variant = options.variant || 'underline';
 
-    // Layout direction: 'horizontal' | 'vertical' / DirecciÃ³n del layout
+    // Layout direction: 'horizontal' | 'vertical' / Dirección del layout
     this.direction = options.direction || 'horizontal';
 
-    // Lazy render â€” only renders panel content when first activated
-    // Renderizado lazy â€” solo renderiza el panel al activarse por primera vez
+    // Lazy render — only renders panel content when first activated
+    // Renderizado lazy — solo renderiza el panel al activarse por primera vez
     // Default false: all panels render on build so DOM elements are immediately available
     this.lazy = options.lazy ?? false;
 
@@ -62,7 +62,7 @@ MTS.Tabs = class MtsTabs {
     this._rendered  = new Set();
     this._listeners = {};
 
-    // Fires when active tab changes / Se dispara al cambiar la pestaÃ±a activa
+    // Fires when active tab changes / Se dispara al cambiar la pestaña activa
     if (options.onChange) this.on('change', options.onChange);
     this._build();
   }
@@ -84,7 +84,7 @@ MTS.Tabs = class MtsTabs {
 
   _build() {
     this._el.replaceChildren();
-    // Resetear clase limpia â€” quitar modificadores del build anterior
+    // Resetear clase limpia — quitar modificadores del build anterior
     const isStretch = this.stretch || this.height === 'stretch';
     this._syncClasses([
       `mts-tabs`,
@@ -103,7 +103,7 @@ MTS.Tabs = class MtsTabs {
     if (!this.border) {
       this._el.classList.add('mts-tabs--no-border');
     } else {
-      /* Setear la CSS variable para el grosor â€” el CSS la consume */
+      /* Setear la CSS variable para el grosor — el CSS la consume */
       this._el.style.setProperty('--mts-tabs-border-width', this.borderWidth);
     }
     /* Ancho custom del nav vertical */
@@ -166,7 +166,7 @@ MTS.Tabs = class MtsTabs {
       this._panelsEl.appendChild(panel);
     });
     /* El borde izquierdo lo maneja el CSS via --mts-tabs-border-width */
-    /* No aplicar style inline â€” evita conflicto con el CSS */
+    /* No aplicar style inline — evita conflicto con el CSS */
     this._el.appendChild(this._panelsEl);
   }
 
