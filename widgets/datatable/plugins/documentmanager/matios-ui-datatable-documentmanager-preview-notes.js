@@ -91,6 +91,7 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
       var addBtn  = new MTS.Button(addWrap, {
         variant:   'ghost',
         size:      'sm',
+        iconOnly:  true,   // botón-ícono compacto (sin padding de label)
         iconLeft:  typeof MTS.Icon !== 'undefined' ? MTS.Icon.get('add') : '',
         ariaLabel: tooltip,
       });
