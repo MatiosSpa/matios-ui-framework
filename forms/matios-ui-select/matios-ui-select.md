@@ -155,6 +155,10 @@ shadow tokens. Theme via `data-mts-mode` / `data-mts-accent`.
 
 ## Changelog
 
+### 2026-06-26
+- i18n: the trigger placeholder (`Select…`), the search placeholder (`Search…`), the empty/no-results message and the
+  min-chars hint are now localized (es/en/pt) — previously hardcoded in Spanish.
+
 ### 2026-06-23
 - Keyboard navigation of options: `↓`/`↑` highlight (wraps, skips disabled, scrolls into view) and `Enter` selects the highlighted option — works from the search field and the trigger (the Accessibility section described this, but it wasn't implemented).
 - Validation contract: `required` + `errorMessage` + `validate()` + `setError`/`clearError` (inline error, localized message). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).

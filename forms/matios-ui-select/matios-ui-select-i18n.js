@@ -10,7 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.Select': {
-      messages: { required: 'Este campo es obligatorio' },
+      messages: { required: 'Este campo es obligatorio', placeholder: 'Selecciona...', searchPlaceholder: 'Buscar...', noResults: 'Sin resultados', minCharsHint: 'Escribe al menos {n} caracteres para buscar' },
       demo: {
         subtitle:            'Select personalizado con búsqueda, multi-select, carga asíncrona, cascada y enhancement progresivo desde HTML declarativo.',
         s1Title:             '1 — Variantes básicas',
@@ -32,7 +32,7 @@
 
   MTS.registerLocale('en', {
     'MTS.Select': {
-      messages: { required: 'This field is required' },
+      messages: { required: 'This field is required', placeholder: 'Select...', searchPlaceholder: 'Search...', noResults: 'No results', minCharsHint: 'Type at least {n} characters to search' },
       demo: {
         subtitle:            'Custom select with search, multi-select, async loading, cascading and progressive enhancement from declarative HTML.',
         s1Title:             '1 — Basic variants',
@@ -54,7 +54,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.Select': {
-      messages: { required: 'Este campo é obrigatório' },
+      messages: { required: 'Este campo é obrigatório', placeholder: 'Selecione...', searchPlaceholder: 'Buscar...', noResults: 'Sem resultados', minCharsHint: 'Digite ao menos {n} caracteres para buscar' },
       demo: {
         subtitle:            'Select personalizado com busca, multi-select, carregamento assíncrono, cascata e enhancement progressivo a partir de HTML declarativo.',
         s1Title:             '1 — Variantes básicas',

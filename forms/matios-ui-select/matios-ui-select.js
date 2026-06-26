@@ -39,7 +39,7 @@ MTS.Select = class MtsSelect {
     this.label = options.label || '';
 
     // Placeholder text / Texto placeholder
-    this.placeholder = options.placeholder || 'Selecciona...';
+    this.placeholder = options.placeholder || this._t('placeholder', 'Select...');
 
     // Helper text / Texto de ayuda
     this.hint = options.hint || '';
@@ -351,7 +351,7 @@ MTS.Select = class MtsSelect {
       this._searchEl = document.createElement('input');
       this._searchEl.type        = 'text';
       this._searchEl.className   = 'mts-select__search';
-      this._searchEl.placeholder = 'Buscar...';
+      this._searchEl.placeholder = this._t('searchPlaceholder', 'Search...');
       this._searchEl.addEventListener('input', (e) => {
         this._search = e.target.value;
         if (this._onSearch) {
@@ -403,8 +403,8 @@ MTS.Select = class MtsSelect {
       const empty = document.createElement('div');
       empty.className   = 'mts-select__empty';
       empty.textContent = this._onSearch && this._search.length < this.minChars
-        ? `Escribe al menos ${this.minChars} caracter${this.minChars > 1 ? 'es' : ''} para buscar`
-        : 'Sin resultados';
+        ? this._t('minCharsHint', 'Type at least {n} characters to search').replace('{n}', this.minChars)
+        : this._t('noResults', 'No results');
       this._listEl.appendChild(empty);
       return;
     }
