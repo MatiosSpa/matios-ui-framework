@@ -90,8 +90,7 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
       var addWrap = document.createElement('div');
       var addBtn  = new MTS.Button(addWrap, {
         variant:   'ghost',
-        size:      'xs',
-        iconOnly:  true,
+        size:      'sm',
         iconLeft:  typeof MTS.Icon !== 'undefined' ? MTS.Icon.get('add') : '',
         ariaLabel: tooltip,
       });
