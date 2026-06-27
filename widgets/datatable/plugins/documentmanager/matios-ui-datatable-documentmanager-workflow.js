@@ -528,7 +528,7 @@ MTS.DocumentManagerWorkflowPlugin = class DocumentManagerWorkflowPlugin {
       onReorder: function(event) {
         if (typeof self._options.onReorder !== 'function') return
         const reordered = event.detail.items.map(function(listItem, idx) {
-          var original = participants.find(function(p) { return p.id === listItem.id })
+          let original = participants.find(function(p) { return p.id === listItem.id })
           if (!original) return null
           return Object.assign({}, original, { order: idx + 1 })
         }).filter(Boolean)

@@ -94,7 +94,7 @@ MTS.Select = class MtsSelect {
     if (options.onSelect) this.on('change', options.onSelect);
 
     // Auto-clear a standing validation error whenever the value changes
-    var self = this;
+    let self = this;
     this.on('change', function () { if (self._error) self.clearError(); });
 
     this._build();

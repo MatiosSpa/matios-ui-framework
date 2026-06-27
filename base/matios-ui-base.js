@@ -47,7 +47,7 @@
         eventNames.forEach(function (name) {
             instance._listeners[name] = [];
 
-            var method = 'on' + name.charAt(0).toUpperCase() + name.slice(1);
+            let method = 'on' + name.charAt(0).toUpperCase() + name.slice(1);
 
             instance[method] = function (handler) {
                 if (typeof handler !== 'function') {
@@ -55,7 +55,7 @@
                 }
                 instance._listeners[name].push(handler);
                 return function () {
-                    var idx = instance._listeners[name].indexOf(handler);
+                    let idx = instance._listeners[name].indexOf(handler);
                     if (idx !== -1) {
                         instance._listeners[name].splice(idx, 1);
                     }
@@ -68,7 +68,7 @@
         });
 
         instance._emit = function (name, payload) {
-            var list = instance._listeners[name];
+            let list = instance._listeners[name];
             if (!list || !list.length) { return; }
             list.slice().forEach(function (fn) {
                 fn(payload);

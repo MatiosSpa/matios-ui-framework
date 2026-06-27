@@ -56,9 +56,9 @@ MTS.DatePicker.DateRange = class MtsDatePickerDateRange extends MTS.DatePicker.B
     info.className = "mts-picker-range__info";
     const s = this._rangeStart ? this._formatDate(this._rangeStart) : "—";
     const e = this._rangeEnd   ? this._formatDate(this._rangeEnd)   : "—";
-    var _sSpan = document.createElement('span'); _sSpan.textContent = s;
-    var _arrow = document.createElement('span'); _arrow.className = 'mts-picker-range__arrow'; _arrow.textContent = '→';
-    var _eSpan = document.createElement('span'); _eSpan.textContent = e;
+    let _sSpan = document.createElement('span'); _sSpan.textContent = s;
+    let _arrow = document.createElement('span'); _arrow.className = 'mts-picker-range__arrow'; _arrow.textContent = '→';
+    let _eSpan = document.createElement('span'); _eSpan.textContent = e;
     info.appendChild(_sSpan); info.appendChild(_arrow); info.appendChild(_eSpan);
     this._popupEl.appendChild(info);
 
@@ -154,9 +154,9 @@ MTS.DatePicker.DateRange = class MtsDatePickerDateRange extends MTS.DatePicker.B
     const s = this._rangeStart ? this._formatDate(this._rangeStart) : "—";
     const e = this._rangeEnd   ? this._formatDate(this._rangeEnd)   : "—";
     info.innerHTML = '';
-    var _sSpan2 = document.createElement('span'); _sSpan2.textContent = s;
-    var _arrow2 = document.createElement('span'); _arrow2.className = 'mts-picker-range__arrow'; _arrow2.textContent = '→';
-    var _eSpan2 = document.createElement('span'); _eSpan2.textContent = e;
+    let _sSpan2 = document.createElement('span'); _sSpan2.textContent = s;
+    let _arrow2 = document.createElement('span'); _arrow2.className = 'mts-picker-range__arrow'; _arrow2.textContent = '→';
+    let _eSpan2 = document.createElement('span'); _eSpan2.textContent = e;
     info.appendChild(_sSpan2); info.appendChild(_arrow2); info.appendChild(_eSpan2);
 
     /* Habilitar/deshabilitar botón Aceptar */

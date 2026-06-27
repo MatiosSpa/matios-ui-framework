@@ -65,7 +65,7 @@ MTS.Shell = class MtsShell {
    * @param {'topbar'|'sidenav'|'main'|'statusbar'} name
    */
   getSlot(name) {
-    var map = {
+    let map = {
       topbar:    this._topbarEl,
       sidenav:   this._sidenavEl,
       main:      this._mainEl,
@@ -108,7 +108,7 @@ MTS.Shell = class MtsShell {
     if (this._statusbarEl) this._statusbarEl.classList.add('mts-shell__statusbar');
 
     /* Modificadores en el root → activan el grid template correcto */
-    var cls = ['mts-shell'];
+    let cls = ['mts-shell'];
     if (this._topbarEl)    cls.push('mts-shell--top');
     if (this._sidenavEl)   cls.push('mts-shell--side');
     if (this._statusbarEl) cls.push('mts-shell--status');

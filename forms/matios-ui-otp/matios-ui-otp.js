@@ -93,7 +93,7 @@
 
   /* Form-field contract: required = the code must be complete. */
   OTP.prototype.validate = function () {
-    var ok = !this._required || this.isComplete();
+    let ok = !this._required || this.isComplete();
     if (ok) { this.clearError(); }
     else    { this.setError(this._errorMessage || this._t('required', 'This field is required')); }
     this._emit('validate', { valid: ok, errors: ok ? [] : [(this._errorEl && this._errorEl.textContent) || ''] });
@@ -102,16 +102,16 @@
 
   OTP.prototype._t = function (key, fallback) {
     try {
-      var ns = (global.MTS && global.MTS.getLocale) ? global.MTS.getLocale()['MTS.OTP'] : null;
-      var m  = ns && ns.messages;
+      let ns = (global.MTS && global.MTS.getLocale) ? global.MTS.getLocale()['MTS.OTP'] : null;
+      let m  = ns && ns.messages;
       if (m && m[key] != null) { return m[key]; }
     } catch (e) {}
     return fallback;
   };
 
   OTP.prototype.focus = function () {
-    var first = null;
-    for (var i = 0; i < this._inputs.length; i++) {
+    let first = null;
+    for (let i = 0; i < this._inputs.length; i++) {
       if (!this._inputs[i].value) { first = this._inputs[i]; break; }
     }
     (first || this._inputs[0]).focus();
@@ -155,11 +155,11 @@
     this._root.className = 'mts-otp';
 
     // Cajas
-    var boxesEl = document.createElement('div');
+    let boxesEl = document.createElement('div');
     boxesEl.className = 'mts-otp__boxes';
 
-    for (var i = 0; i < this._length; i++) {
-      var inp = document.createElement('input');
+    for (let i = 0; i < this._length; i++) {
+      let inp = document.createElement('input');
       inp.type = 'text';
       inp.className = 'mts-otp__box';
       inp.maxLength = 1;
@@ -189,7 +189,7 @@
 
     // Resend link — solo si se pasó onResend
     if (this._onResend) {
-      var resendBtn = document.createElement('button');
+      let resendBtn = document.createElement('button');
       resendBtn.type = 'button';
       resendBtn.className = 'mts-otp__resend';
       resendBtn.textContent = this._resendLabel;
@@ -205,7 +205,7 @@
   /* ── Eventos ─────────────────────────────────────────────── */
 
   OTP.prototype._bindEvents = function () {
-    var self = this;
+    let self = this;
 
     this._inputs.forEach(function (inp, idx) {
 
@@ -237,7 +237,7 @@
       inp.addEventListener('input', function () {
         if (self._expired || self._disabled) { inp.value = ''; return; }
 
-        var val = self._type === 'numeric'
+        let val = self._type === 'numeric'
           ? inp.value.replace(/\D/g, '')
           : inp.value.replace(/[^a-zA-Z0-9]/g, '');
 
@@ -259,19 +259,19 @@
         if (self._expired || self._disabled) { e.preventDefault(); return; }
         e.preventDefault();
 
-        var text     = (e.clipboardData || window.clipboardData).getData('text');
-        var filtered = self._type === 'numeric'
+        let text     = (e.clipboardData || window.clipboardData).getData('text');
+        let filtered = self._type === 'numeric'
           ? text.replace(/\D/g, '')
           : text.replace(/[^a-zA-Z0-9]/g, '');
 
         // Siempre llena desde la caja 0
-        for (var i = 0; i < self._inputs.length; i++) {
+        for (let i = 0; i < self._inputs.length; i++) {
           self._inputs[i].value = filtered[i] || '';
           self._inputs[i].classList.toggle('mts-otp__box--filled', !!filtered[i]);
         }
 
         // Foco a la siguiente caja vacía o a la última
-        var next = Math.min(filtered.length, self._inputs.length - 1);
+        let next = Math.min(filtered.length, self._inputs.length - 1);
         self._inputs[next].focus();
 
         self.clearError();
@@ -290,7 +290,7 @@
   /* ── Timer ───────────────────────────────────────────────── */
 
   OTP.prototype._startTimer = function () {
-    var self = this;
+    let self = this;
     this._renderTimer();
     this._timerInterval = setInterval(function () {
       self._timerRemaining--;
@@ -309,9 +309,9 @@
 
   OTP.prototype._renderTimer = function () {
     if (!this._timerEl) { return; }
-    var s  = Math.max(0, this._timerRemaining);
-    var mm = Math.floor(s / 60);
-    var ss = s % 60;
+    let s  = Math.max(0, this._timerRemaining);
+    let mm = Math.floor(s / 60);
+    let ss = s % 60;
     this._timerEl.textContent = mm > 0
       ? mm + ':' + (ss < 10 ? '0' : '') + ss
       : ss + 's';
@@ -320,8 +320,8 @@
   /* ── Helpers ─────────────────────────────────────────────── */
 
   OTP.prototype._notifyChange = function () {
-    var code     = this.getValue();
-    var complete = code.length === this._length;
+    let code     = this.getValue();
+    let complete = code.length === this._length;
     if (this._onChange) { this._onChange(code, complete); }
     this._emit('change', { code: code, complete: complete });
     if (complete) {

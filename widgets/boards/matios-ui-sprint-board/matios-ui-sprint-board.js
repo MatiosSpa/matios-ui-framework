@@ -24,11 +24,11 @@
 
   /* ── Constantes ─────────────────────────────────────────── */
 
-  var STORY_TYPES = ['userstory', 'task', 'bug', 'epic', 'spike'];
-  var PRIORITIES  = ['low', 'medium', 'high', 'critical'];
-  var SP_VALUES   = [1, 2, 3, 5, 8, 13, 21];
+  let STORY_TYPES = ['userstory', 'task', 'bug', 'epic', 'spike'];
+  let PRIORITIES  = ['low', 'medium', 'high', 'critical'];
+  let SP_VALUES   = [1, 2, 3, 5, 8, 13, 21];
 
-  var TYPE_ICON_NAMES = {
+  let TYPE_ICON_NAMES = {
     userstory: 'book-open',
     task:      'check-circle',
     bug:       'bug',
@@ -36,7 +36,7 @@
     spike:     'cpu',
   };
 
-  var TYPE_COLORS = {
+  let TYPE_COLORS = {
     userstory: 'var(--mts-color-primary)',
     task:      'var(--mts-color-success)',
     bug:       'var(--mts-color-danger)',
@@ -44,34 +44,34 @@
     spike:     'var(--mts-text-muted)',
   };
 
-  var STATUS_COLS = ['todo', 'wip', 'done'];
+  let STATUS_COLS = ['todo', 'wip', 'done'];
 
   // ── Cosecha de formulario (modal del dev) ────────────────
   // clave = name||id ; valor = _mtsInstance.getValue()/.value. Sin clave → se ignora.
   function collectAddTaskData(root) {
-    var data = {};
+    let data = {};
     if (!root) return data;
-    var walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
+    let walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
       acceptNode: function (node) {
         if (node.hasAttribute && node.hasAttribute('data-mts-collect-ignore')) return NodeFilter.FILTER_REJECT;
         return NodeFilter.FILTER_ACCEPT;
       }
     });
-    var node;
+    let node;
     while ((node = walker.nextNode())) {
-      var isMts = !!node._mtsInstance;
-      var isNative = (node.tagName === 'INPUT' || node.tagName === 'SELECT' || node.tagName === 'TEXTAREA') &&
+      let isMts = !!node._mtsInstance;
+      let isNative = (node.tagName === 'INPUT' || node.tagName === 'SELECT' || node.tagName === 'TEXTAREA') &&
         node.type !== 'submit' && node.type !== 'button' && node.type !== 'reset' && node.type !== 'image';
       if (!isMts && !isNative) continue;
       if (isNative && !isMts) {
-        var p = node.parentNode, inside = false;
+        let p = node.parentNode, inside = false;
         while (p && p !== root) { if (p._mtsInstance) { inside = true; break; } p = p.parentNode; }
         if (inside) continue;
       }
-      var key = (node.getAttribute && node.getAttribute('name')) || node.id;
+      let key = (node.getAttribute && node.getAttribute('name')) || node.id;
       if (!key) continue;
       if (Object.prototype.hasOwnProperty.call(data, key)) continue;
-      var inst = node._mtsInstance, val;
+      let inst = node._mtsInstance, val;
       if (inst && typeof inst.getValue === 'function')       val = inst.getValue();
       else if (inst && typeof inst.isChecked === 'function') val = inst.isChecked();
       else if (inst && typeof inst.getTags === 'function')   val = inst.getTags();
@@ -88,7 +88,7 @@
     this._el = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
 
-    var opts = options || {};
+    let opts = options || {};
     this._opts           = opts;
     this._dataSource     = opts.dataSource || null;
     this._currentSprintId = opts.currentSprintId || null;
@@ -132,7 +132,7 @@
 
   // i18n: texto propio del componente (capa MTS.SprintBoard) con fallback.
   SprintBoard.prototype._t = function (key, fallback) {
-    var loc = (global.MTS && typeof global.MTS.getLocale === 'function') ? global.MTS.getLocale()['MTS.SprintBoard'] : null;
+    let loc = (global.MTS && typeof global.MTS.getLocale === 'function') ? global.MTS.getLocale()['MTS.SprintBoard'] : null;
     return (loc && loc[key] != null) ? loc[key] : fallback;
   };
 
@@ -151,7 +151,7 @@
     ];
   };
   SprintBoard.prototype.getCode = function () {
-    var sel = (this._el && this._el.id) ? ("'#" + this._el.id + "'") : "'#sprint'";
+    let sel = (this._el && this._el.id) ? ("'#" + this._el.id + "'") : "'#sprint'";
     return [
       'const sprint = new MTS.SprintBoard(' + sel + ', {',
       '  dataSource:   myDataSource,',
@@ -165,7 +165,7 @@
   // Acepta: summary|title, issuetype|type, key|code; storyPoints, priority, status, assignees.
   SprintBoard.prototype._normalizeCanonicalStory = function (t) {
     t = t || {};
-    var out = {};
+    let out = {};
     out.id          = t.id || ('s-' + Date.now());
     out.code        = t.code || t.key || undefined;
     out.title       = t.title || t.summary || '';
@@ -179,7 +179,7 @@
     if (Array.isArray(t.tags)) { out.tags = t.tags; }
     if (t._location) { out._location = t._location; }
 
-    var known = { id:1, code:1, key:1, title:1, summary:1, description:1, type:1, issuetype:1,
+    let known = { id:1, code:1, key:1, title:1, summary:1, description:1, type:1, issuetype:1,
                   storyPoints:1, priority:1, status:1, assignees:1, assignee:1, tags:1, _location:1 };
     out.extras = {};
     Object.keys(t).forEach(function (k) { if (!known[k]) { out.extras[k] = t[k]; } });
@@ -189,28 +189,28 @@
 
   // Cosecha el modal del dev y dispara onAddTask. Lo llama el botón confirmar del modal del dev.
   SprintBoard.prototype.submitAddTask = function () {
-    var cfg = this._addTaskCfg;
+    let cfg = this._addTaskCfg;
     if (!cfg) return this;
-    var root = typeof cfg.form === 'string'  ? document.querySelector(cfg.form)
+    let root = typeof cfg.form === 'string'  ? document.querySelector(cfg.form)
              : cfg.form ? cfg.form
              : typeof cfg.modal === 'string' ? document.querySelector(cfg.modal)
              : cfg.modal || null;
     if (!root) return this;
 
-    var data = collectAddTaskData(root);
+    let data = collectAddTaskData(root);
     if (typeof cfg.map === 'function') { data = cfg.map(data) || data; }
 
-    var self = this, settled = false;
+    let self = this, settled = false;
     function finish(story) {
       if (settled) return;
       settled = true;
-      var t = (story && typeof story === 'object') ? story : data;
+      let t = (story && typeof story === 'object') ? story : data;
       t = self._normalizeCanonicalStory(t);
       self.addStory(t, t._location || 'backlog');
       if (typeof cfg.close === 'function') cfg.close();
     }
-    var ev = { data: data, resolve: finish, reject: function () { settled = true; } };
-    var has = this._listeners.addTask && this._listeners.addTask.length;
+    let ev = { data: data, resolve: finish, reject: function () { settled = true; } };
+    let has = this._listeners.addTask && this._listeners.addTask.length;
     this._emit('addTask', ev);
     if (!has) finish();
     return this;
@@ -231,11 +231,11 @@
   };
 
   SprintBoard.prototype.updateStory = function (id, fields) {
-    var story = this._storyById(id);
+    let story = this._storyById(id);
     if (!story) return this;
-    var changed = {};
-    var keys    = Object.keys(fields);
-    for (var i = 0; i < keys.length; i++) {
+    let changed = {};
+    let keys    = Object.keys(fields);
+    for (let i = 0; i < keys.length; i++) {
       if (story[keys[i]] !== fields[keys[i]]) { story[keys[i]] = fields[keys[i]]; changed[keys[i]] = fields[keys[i]]; }
     }
     if (Object.keys(changed).length) {
@@ -246,9 +246,9 @@
   };
 
   SprintBoard.prototype.deleteStory = function (id) {
-    var story = this._storyById(id);
+    let story = this._storyById(id);
     if (!story) return this;
-    var idx = this._stories.indexOf(story);
+    let idx = this._stories.indexOf(story);
     this._stories.splice(idx, 1);
     this._emit('storyDelete', { story: story });
     this._renderAll();
@@ -256,9 +256,9 @@
   };
 
   SprintBoard.prototype.moveStory = function (id, target) {
-    var story = this._storyById(id);
+    let story = this._storyById(id);
     if (!story) return this;
-    var from = { type: story.sprintId ? 'sprint' : 'backlog', columnId: story.status };
+    let from = { type: story.sprintId ? 'sprint' : 'backlog', columnId: story.status };
     if (target.type === 'sprint') {
       story.sprintId = this._currentSprintId;
       story.status   = target.columnId || 'todo';
@@ -272,7 +272,7 @@
   };
 
   SprintBoard.prototype.startSprint = function (sprintId) {
-    var sprint = this._sprintById(sprintId);
+    let sprint = this._sprintById(sprintId);
     if (!sprint) return this;
     sprint.status = 'active';
     this._currentSprintId = sprintId;
@@ -282,11 +282,11 @@
   };
 
   SprintBoard.prototype.completeSprint = function (sprintId) {
-    var sprint = this._sprintById(sprintId);
+    let sprint = this._sprintById(sprintId);
     if (!sprint) return this;
     sprint.status = 'completed';
-    var done    = this._stories.filter(function(s) { return s.sprintId === sprintId && s.status === 'done'; });
-    var pending = this._stories.filter(function(s) { return s.sprintId === sprintId && s.status !== 'done'; });
+    let done    = this._stories.filter(function(s) { return s.sprintId === sprintId && s.status === 'done'; });
+    let pending = this._stories.filter(function(s) { return s.sprintId === sprintId && s.status !== 'done'; });
     // Mover pendientes al backlog
     pending.forEach(function(s) { s.sprintId = null; s.status = null; });
     this._emit('sprintComplete', { sprint: sprint, doneStories: done, pendingStories: pending });
@@ -305,7 +305,7 @@
   };
 
   SprintBoard.prototype.getCurrentSprintStories = function () {
-    var id = this._currentSprintId;
+    let id = this._currentSprintId;
     return this._stories.filter(function(s) { return s.sprintId === id; });
   };
 
@@ -326,8 +326,8 @@
   /* ── Interno: load ─────────────────────────────────────── */
 
   SprintBoard.prototype._load = function () {
-    var self = this;
-    var promise;
+    let self = this;
+    let promise;
     try   { promise = Promise.resolve(this._dataSource({})); }
     catch (e) { promise = Promise.reject(e); }
 
@@ -335,7 +335,7 @@
       self._stories = res.stories || [];
       self._sprints = res.sprints || [];
       if (!self._currentSprintId) {
-        var active = self._sprints.find(function(s) { return s.status === 'active'; });
+        let active = self._sprints.find(function(s) { return s.status === 'active'; });
         if (active) self._currentSprintId = active.id;
       }
       self._emit('load', { stories: self._stories, sprints: self._sprints });
@@ -353,33 +353,33 @@
 
     // Velocity banner (opcional)
     if (this._showVelocity) {
-      var banner = document.createElement('div');
+      let banner = document.createElement('div');
       banner.className = 'mts-sb__velocity';
       this._velocityEl = banner;
       this._el.appendChild(banner);
     }
 
     // Sprint selector + actions toolbar
-    var toolbar = document.createElement('div');
+    let toolbar = document.createElement('div');
     toolbar.className = 'mts-sb__toolbar';
     this._toolbarEl = toolbar;
     this._el.appendChild(toolbar);
 
     // Split panel
-    var splitWrap = document.createElement('div');
+    let splitWrap = document.createElement('div');
     splitWrap.className = 'mts-sb__split';
     this._splitEl = splitWrap;
 
     // Panel Backlog (izq)
     if (this._showBacklog) {
-      var backlogPanel = document.createElement('div');
+      let backlogPanel = document.createElement('div');
       backlogPanel.className = 'mts-sb__backlog-panel';
       this._backlogEl = backlogPanel;
       splitWrap.appendChild(backlogPanel);
     }
 
     // Panel Sprint (der)
-    var sprintPanel = document.createElement('div');
+    let sprintPanel = document.createElement('div');
     sprintPanel.className = 'mts-sb__sprint-panel';
     this._sprintPanelEl = sprintPanel;
     splitWrap.appendChild(sprintPanel);
@@ -408,26 +408,26 @@
   };
 
   SprintBoard.prototype._renderToolbar = function () {
-    var self    = this;
-    var toolbar = this._toolbarEl;
+    let self    = this;
+    let toolbar = this._toolbarEl;
     toolbar.innerHTML = ''; // safe: clearing
 
-    var sprint  = this._currentSprint();
-    var sprintLabel = sprint ? (sprint.name || this._t('sprintFallback', 'Sprint')) + (sprint.goal ? ' — ' + sprint.goal : '') : this._t('noSprint', 'Sin sprint activo');
+    let sprint  = this._currentSprint();
+    let sprintLabel = sprint ? (sprint.name || this._t('sprintFallback', 'Sprint')) + (sprint.goal ? ' — ' + sprint.goal : '') : this._t('noSprint', 'Sin sprint activo');
 
-    var info = document.createElement('div');
+    let info = document.createElement('div');
     info.className = 'mts-sb__sprint-info';
-    var nameEl = document.createElement('span');
+    let nameEl = document.createElement('span');
     nameEl.className   = 'mts-sb__sprint-name';
     nameEl.textContent = sprintLabel;
     info.appendChild(nameEl);
     toolbar.appendChild(info);
 
-    var actions = document.createElement('div');
+    let actions = document.createElement('div');
     actions.className = 'mts-sb__toolbar-actions';
 
     if (sprint && sprint.status === 'planning') {
-      var btnStart = document.createElement('button');
+      let btnStart = document.createElement('button');
       btnStart.className   = 'mts-btn mts-btn--primary mts-btn--sm';
       btnStart.textContent = this._t('startSprint', 'Iniciar Sprint');
       btnStart.addEventListener('click', function() { self.startSprint(sprint.id); });
@@ -435,7 +435,7 @@
     }
 
     if (sprint && sprint.status === 'active') {
-      var btnComplete = document.createElement('button');
+      let btnComplete = document.createElement('button');
       btnComplete.className   = 'mts-btn mts-btn--ghost mts-btn--sm';
       btnComplete.textContent = this._t('closeSprint', 'Cerrar Sprint');
       btnComplete.addEventListener('click', function() { self.completeSprint(sprint.id); });
@@ -443,7 +443,7 @@
     }
 
     if (this._addStories) {
-      var btnAdd = document.createElement('button');
+      let btnAdd = document.createElement('button');
       btnAdd.className   = 'mts-btn mts-btn--ghost mts-btn--sm';
       btnAdd.textContent = this._t('addStoryInline', '+ Historia');
       btnAdd.addEventListener('click', function() { self._showAddStoryForm(); });
@@ -451,8 +451,8 @@
     }
 
     if (this._addTaskCfg) {
-      var cfg = this._addTaskCfg;
-      var btnAddTask = document.createElement('button');
+      let cfg = this._addTaskCfg;
+      let btnAddTask = document.createElement('button');
       btnAddTask.className   = 'mts-btn mts-btn--primary mts-btn--sm';
       btnAddTask.textContent = cfg.label || this._t('addStoryDefault', '+ Agregar historia');
       btnAddTask.addEventListener('click', function() { if (typeof cfg.open === 'function') cfg.open(); });
@@ -463,17 +463,17 @@
   };
 
   SprintBoard.prototype._renderBacklog = function () {
-    var self = this;
-    var panel = this._backlogEl;
+    let self = this;
+    let panel = this._backlogEl;
     panel.innerHTML = ''; // safe: clearing
 
-    var header = document.createElement('div');
+    let header = document.createElement('div');
     header.className = 'mts-sb__panel-header';
-    var h = document.createElement('span');
+    let h = document.createElement('span');
     h.className   = 'mts-sb__panel-title';
     h.textContent = this._t('backlog', 'Backlog');
-    var backlog = this.getBacklog();
-    var count = document.createElement('span');
+    let backlog = this.getBacklog();
+    let count = document.createElement('span');
     count.className   = 'mts-sb__panel-count';
     count.textContent = backlog.length;
     header.appendChild(h);
@@ -481,14 +481,14 @@
     panel.appendChild(header);
 
     if (!backlog.length) {
-      var empty = document.createElement('div');
+      let empty = document.createElement('div');
       empty.className   = 'mts-sb__empty';
       empty.textContent = this._t('backlogEmpty', 'Backlog vacío');
       panel.appendChild(empty);
       return;
     }
 
-    var list = document.createElement('div');
+    let list = document.createElement('div');
     list.className = 'mts-sb__backlog-list';
     backlog.forEach(function(story) {
       list.appendChild(self._buildStoryRow(story, 'backlog'));
@@ -497,20 +497,20 @@
   };
 
   SprintBoard.prototype._renderSprint = function () {
-    var self   = this;
-    var panel  = this._sprintPanelEl;
+    let self   = this;
+    let panel  = this._sprintPanelEl;
     panel.innerHTML = ''; // safe: clearing
 
-    var sprint  = this._currentSprint();
-    var stories = this.getCurrentSprintStories();
+    let sprint  = this._currentSprint();
+    let stories = this.getCurrentSprintStories();
 
-    var header = document.createElement('div');
+    let header = document.createElement('div');
     header.className = 'mts-sb__panel-header';
-    var h = document.createElement('span');
+    let h = document.createElement('span');
     h.className   = 'mts-sb__panel-title';
     h.textContent = sprint ? (sprint.name || 'Sprint') : 'Sprint';
-    var totalSP = stories.reduce(function(acc, s) { return acc + (s.storyPoints || 0); }, 0);
-    var spBadge = document.createElement('span');
+    let totalSP = stories.reduce(function(acc, s) { return acc + (s.storyPoints || 0); }, 0);
+    let spBadge = document.createElement('span');
     spBadge.className   = 'mts-sb__sp-badge';
     spBadge.textContent = totalSP + ' SP';
     header.appendChild(h);
@@ -519,12 +519,12 @@
 
     // Usar MTS.Kanban internamente para el panel Sprint
     if (global.MTS && global.MTS.Kanban) {
-      var kanbanEl = document.createElement('div');
+      let kanbanEl = document.createElement('div');
       kanbanEl.className = 'mts-sb__kanban-wrap';
       panel.appendChild(kanbanEl);
 
-      var kanbanCols = this._columns.map(function(col) {
-        var colStories = stories.filter(function(s) { return s.status === col.id; });
+      let kanbanCols = this._columns.map(function(col) {
+        let colStories = stories.filter(function(s) { return s.status === col.id; });
         return {
           id:    col.id,
           title: col.title,
@@ -539,18 +539,18 @@
         columns:  kanbanCols,
         addCards: false,
         onCardMove: function(e) {
-          var story = self._storyById(e.card.id);
+          let story = self._storyById(e.card.id);
           if (!story) return;
-          var from = { type: 'sprint', columnId: story.status };
+          let from = { type: 'sprint', columnId: story.status };
           story.status = e.toColId;
-          var to   = { type: 'sprint', columnId: e.toColId };
+          let to   = { type: 'sprint', columnId: e.toColId };
           self._emit('storyMove', { story: story, from: from, to: to });
           self._renderSprint();
         },
         onCardClick: function(e) {
-          var story = self._storyById(e.card.id);
+          let story = self._storyById(e.card.id);
           if (story) {
-            var prev = !!self._selected[story.id];
+            let prev = !!self._selected[story.id];
             self._selected = {};
             if (!prev) self._selected[story.id] = true;
             self._emit('select', { stories: self._getSelected() });
@@ -559,16 +559,16 @@
       });
     } else {
       // Fallback sin MTS.Kanban: columnas simples
-      var cols = document.createElement('div');
+      let cols = document.createElement('div');
       cols.className = 'mts-sb__cols';
       this._columns.forEach(function(col) {
-        var colEl = document.createElement('div');
+        let colEl = document.createElement('div');
         colEl.className = 'mts-sb__col';
-        var colH = document.createElement('div');
+        let colH = document.createElement('div');
         colH.className   = 'mts-sb__col-title';
         colH.textContent = col.title;
         colEl.appendChild(colH);
-        var colStories = stories.filter(function(s) { return s.status === col.id; });
+        let colStories = stories.filter(function(s) { return s.status === col.id; });
         colStories.forEach(function(s) { colEl.appendChild(self._buildStoryRow(s, 'sprint')); });
         cols.appendChild(colEl);
       });
@@ -577,25 +577,25 @@
   };
 
   SprintBoard.prototype._renderVelocity = function () {
-    var sprint  = this._currentSprint();
-    var stories = this.getCurrentSprintStories();
+    let sprint  = this._currentSprint();
+    let stories = this.getCurrentSprintStories();
     if (!sprint || !this._velocityEl) return;
 
-    var total     = stories.reduce(function(a, s) { return a + (s.storyPoints || 0); }, 0);
-    var committed = sprint.committed || sprint.capacity || 0;
-    var pct       = committed ? Math.min(100, Math.round(total / committed * 100)) : 0;
+    let total     = stories.reduce(function(a, s) { return a + (s.storyPoints || 0); }, 0);
+    let committed = sprint.committed || sprint.capacity || 0;
+    let pct       = committed ? Math.min(100, Math.round(total / committed * 100)) : 0;
 
-    var el = this._velocityEl;
+    let el = this._velocityEl;
     el.innerHTML = ''; // safe: clearing
 
-    var label = document.createElement('span');
+    let label = document.createElement('span');
     label.className   = 'mts-sb__velocity-label';
     label.textContent = this._t('capacity', 'Capacidad') + ': ' + total + ' / ' + committed + ' ' + this._t('sp', 'SP') + ' (' + pct + '%)';
     el.appendChild(label);
 
-    var bar = document.createElement('div');
+    let bar = document.createElement('div');
     bar.className = 'mts-sb__capacity-bar';
-    var fill = document.createElement('div');
+    let fill = document.createElement('div');
     fill.className           = 'mts-sb__capacity-fill' + (pct > 100 ? ' mts-sb__capacity-fill--over' : '');
     fill.style.width         = Math.min(100, pct) + '%';
     bar.appendChild(fill);
@@ -605,19 +605,19 @@
   /* ── Interno: build story row ─────────────────────────── */
 
   SprintBoard.prototype._buildStoryRow = function (story, location) {
-    var self = this;
-    var row  = document.createElement('div');
+    let self = this;
+    let row  = document.createElement('div');
     row.className = 'mts-sb__story' +
       (this._selected[story.id] ? ' mts-sb__story--selected' : '') +
       (story.priority ? ' mts-sb__story--' + story.priority : '');
     row.dataset.storyId = story.id;
 
     // Tipo icono — usa MTS.Icon si está disponible, fallback a inicial
-    var typeEl = document.createElement('span');
+    let typeEl = document.createElement('span');
     typeEl.className = 'mts-sb__story-type';
     typeEl.title     = story.type || 'userstory';
     typeEl.style.color = TYPE_COLORS[story.type] || TYPE_COLORS.userstory;
-    var iconName = TYPE_ICON_NAMES[story.type] || TYPE_ICON_NAMES.userstory;
+    let iconName = TYPE_ICON_NAMES[story.type] || TYPE_ICON_NAMES.userstory;
     if (global.MTS && global.MTS.Icon) {
       MTS.Icon.render(iconName, typeEl); // safe: literal icon SVG from registry
     } else {
@@ -626,15 +626,15 @@
     row.appendChild(typeEl);
 
     // Código + título
-    var body = document.createElement('div');
+    let body = document.createElement('div');
     body.className = 'mts-sb__story-body';
     if (story.code) {
-      var code = document.createElement('span');
+      let code = document.createElement('span');
       code.className   = 'mts-sb__story-code';
       code.textContent = story.code;
       body.appendChild(code);
     }
-    var title = document.createElement('span');
+    let title = document.createElement('span');
     title.className   = 'mts-sb__story-title';
     title.textContent = story.title || '';
     body.appendChild(title);
@@ -642,14 +642,14 @@
 
     // Story points badge
     if (story.storyPoints != null) {
-      var sp = document.createElement('span');
+      let sp = document.createElement('span');
       sp.className   = 'mts-sb__sp-badge mts-sb__sp-badge--sm';
       sp.textContent = story.storyPoints;
       row.appendChild(sp);
     }
 
     // Botón mover (backlog → sprint / sprint → backlog)
-    var btnMove = document.createElement('button');
+    let btnMove = document.createElement('button');
     btnMove.className = 'mts-sb__story-move';
     if (location === 'backlog') {
       btnMove.title       = this._t('moveToSprint', 'Mover al Sprint');
@@ -669,7 +669,7 @@
     // Click para selección
     row.addEventListener('click', function(e) {
       if (e.target === btnMove) return;
-      var prev = !!self._selected[story.id];
+      let prev = !!self._selected[story.id];
       if (!e.ctrlKey && !e.metaKey) self._selected = {};
       if (prev && (e.ctrlKey || e.metaKey)) {
         delete self._selected[story.id];
@@ -698,41 +698,41 @@
 
   SprintBoard.prototype._showAddStoryForm = function () {
     // Form simple modal-less para agregar historia al backlog
-    var self  = this;
-    var panel = this._backlogEl || this._sprintPanelEl;
+    let self  = this;
+    let panel = this._backlogEl || this._sprintPanelEl;
 
     // Evitar duplicados
     if (panel.querySelector('.mts-sb__add-form')) return;
 
-    var form = document.createElement('div');
+    let form = document.createElement('div');
     form.className = 'mts-sb__add-form';
 
-    var titleInput = document.createElement('input');
+    let titleInput = document.createElement('input');
     titleInput.className   = 'mts-sb__add-input';
     titleInput.placeholder = this._t('titlePh', 'Título de la historia *');
     titleInput.type        = 'text';
 
-    var spSelect = document.createElement('select');
+    let spSelect = document.createElement('select');
     spSelect.className = 'mts-sb__add-field';
-    var optNone = document.createElement('option');
+    let optNone = document.createElement('option');
     optNone.value       = '';
     optNone.textContent = this._t('sp', 'SP');
     spSelect.appendChild(optNone);
     SP_VALUES.forEach(function(v) {
-      var o = document.createElement('option');
+      let o = document.createElement('option');
       o.value       = String(v);
       o.textContent = String(v);
       spSelect.appendChild(o);
     });
 
-    var actions = document.createElement('div');
+    let actions = document.createElement('div');
     actions.className = 'mts-sb__add-actions';
 
-    var confirmBtn = document.createElement('button');
+    let confirmBtn = document.createElement('button');
     confirmBtn.className   = 'mts-btn mts-btn--primary mts-btn--sm';
     confirmBtn.textContent = this._t('add', 'Agregar');
 
-    var cancelBtn = document.createElement('button');
+    let cancelBtn = document.createElement('button');
     cancelBtn.className   = 'mts-btn mts-btn--ghost mts-btn--sm';
     cancelBtn.textContent = this._t('cancel', 'Cancelar');
 
@@ -744,11 +744,11 @@
     panel.insertBefore(form, panel.firstChild);
     titleInput.focus();
 
-    var cancel = function() { form.remove(); };
-    var confirm = function() {
-      var title = titleInput.value.trim();
+    let cancel = function() { form.remove(); };
+    let confirm = function() {
+      let title = titleInput.value.trim();
       if (!title) { titleInput.focus(); return; }
-      var sp = spSelect.value ? parseInt(spSelect.value) : undefined;
+      let sp = spSelect.value ? parseInt(spSelect.value) : undefined;
       self.addStory({ id: 's' + Date.now(), title: title, storyPoints: sp, type: 'userstory' }, 'backlog');
       form.remove();
     };
@@ -764,14 +764,14 @@
   /* ── Interno: helpers ─────────────────────────────────── */
 
   SprintBoard.prototype._storyById = function (id) {
-    for (var i = 0; i < this._stories.length; i++) {
+    for (let i = 0; i < this._stories.length; i++) {
       if (this._stories[i].id === id) return this._stories[i];
     }
     return null;
   };
 
   SprintBoard.prototype._sprintById = function (id) {
-    for (var i = 0; i < this._sprints.length; i++) {
+    for (let i = 0; i < this._sprints.length; i++) {
       if (this._sprints[i].id === id) return this._sprints[i];
     }
     return null;
@@ -783,7 +783,7 @@
   };
 
   SprintBoard.prototype._getSelected = function () {
-    var self = this;
+    let self = this;
     return this._stories.filter(function(s) { return self._selected[s.id]; });
   };
 

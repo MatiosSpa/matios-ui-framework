@@ -112,7 +112,7 @@ MTS.Topbar = class MtsTopbar {
   _build() {
     this._el.innerHTML = '';
 
-    var classes = ['mts-topbar'];
+    let classes = ['mts-topbar'];
     if (this.sticky)  classes.push('mts-topbar--sticky');
     if (!this.shadow) classes.push('mts-topbar--no-shadow');
     if (!this.border) classes.push('mts-topbar--no-border');
@@ -146,7 +146,7 @@ MTS.Topbar = class MtsTopbar {
       this._inject(this._centerEl, this.center);
       this._el.appendChild(this._centerEl);
     } else {
-      var spacer = document.createElement('div');
+      let spacer = document.createElement('div');
       spacer.className = 'mts-topbar__spacer';
       this._el.appendChild(spacer);
     }
@@ -159,9 +159,9 @@ MTS.Topbar = class MtsTopbar {
   }
 
   _buildBrand() {
-    var b   = this.brand;
-    var tag = b.href ? 'a' : 'button';
-    var el  = document.createElement(tag);
+    let b   = this.brand;
+    let tag = b.href ? 'a' : 'button';
+    let el  = document.createElement(tag);
     el.className = 'mts-topbar__brand';
 
     if (b.href) {
@@ -175,25 +175,25 @@ MTS.Topbar = class MtsTopbar {
     }
 
     if (b.logo) {
-      var logoWrap = document.createElement('div');
+      let logoWrap = document.createElement('div');
       logoWrap.className = 'mts-topbar__logo';
       logoWrap.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(b.logo) : b.logo;
       el.appendChild(logoWrap);
     }
 
     if (b.title || b.subtitle) {
-      var info = document.createElement('div');
+      let info = document.createElement('div');
       info.className = 'mts-topbar__brand-info';
 
       if (b.title) {
-        var titleEl = document.createElement('div');
+        let titleEl = document.createElement('div');
         titleEl.className = 'mts-topbar__title';
         titleEl.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(b.title) : b.title;
         info.appendChild(titleEl);
       }
 
       if (b.subtitle) {
-        var subEl = document.createElement('div');
+        let subEl = document.createElement('div');
         subEl.className = 'mts-topbar__subtitle';
         subEl.textContent = b.subtitle;
         info.appendChild(subEl);

@@ -32,13 +32,13 @@
          });
        },
        onPrev: function(currentItem) {
-         var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
-         var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
+         let files = dm.getItems().filter(function(i) { return i.type === 'file'; });
+         let idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
          if (idx > 0) dmPreview.show(files[idx - 1]);
        },
        onNext: function(currentItem) {
-         var files = dm.getItems().filter(function(i) { return i.type === 'file'; });
-         var idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
+         let files = dm.getItems().filter(function(i) { return i.type === 'file'; });
+         let idx   = files.findIndex(function(i) { return i.id === currentItem.id; });
          if (idx < files.length - 1) dmPreview.show(files[idx + 1]);
        },
      });
@@ -179,7 +179,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
   install(dm) {
     this._dm = dm;
-    var self = this;
+    let self = this;
     this._options.panels.forEach(function(panel) {
       if (typeof panel.install === 'function') panel.install(self);
     });
@@ -259,8 +259,8 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   ---------------------------------------------------------- */
 
   _buildModal() {
-    var self = this;
-    var body = this._buildBody();
+    let self = this;
+    let body = this._buildBody();
 
     this._modal = new MTS.Modal({
       size:     'fullscreen',
@@ -299,15 +299,15 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   }
 
   _injectHeaderButtons() {
-    var self      = this;
-    var headerEl  = this._modal._headerEl;
-    var titleEl   = this._modal._titleEl;
-    var closeBtnEl = headerEl.querySelector('.mts-modal__close');
+    let self      = this;
+    let headerEl  = this._modal._headerEl;
+    let titleEl   = this._modal._titleEl;
+    let closeBtnEl = headerEl.querySelector('.mts-modal__close');
 
     // — Botones de navegación: se insertan antes del título —
     // insertBefore(X, title) dos veces produce: [prev][next][title]
     if (this._options.onPrev) {
-      var prevEl = document.createElement('button');
+      let prevEl = document.createElement('button');
       prevEl.type = 'button';
       new MTS.Button(prevEl, {
         iconLeft: MTS.Icon ? MTS.Icon.get('arrow-left') : '←',
@@ -323,7 +323,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     }
 
     if (this._options.onNext) {
-      var nextEl = document.createElement('button');
+      let nextEl = document.createElement('button');
       nextEl.type = 'button';
       new MTS.Button(nextEl, {
         iconLeft: MTS.Icon ? MTS.Icon.get('arrow-right') : '→',
@@ -340,7 +340,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
     // — Badge de versión (read-only): MTS.Badge, hidden al inicio.
     //   No se inserta aquí — _updateTitle() lo adjunta al span del nombre. —
-    var badgeEl = document.createElement('span');
+    let badgeEl = document.createElement('span');
     this._versionBadgeEl  = badgeEl;
     this._versionBadgeApi = new MTS.Badge(badgeEl, {
       label:   '',
@@ -352,7 +352,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
     // — Botón "Reemplazar": abre file picker → modal de confirmación —
     if (this._options.onReplace) {
-      var replaceEl = document.createElement('button');
+      let replaceEl = document.createElement('button');
       replaceEl.type = 'button';
       new MTS.Button(replaceEl, {
         label:    this._t('replace', 'Reemplazar'),
@@ -368,7 +368,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
     // — Botón de descarga: se inserta antes del botón × —
     if (this._options.onDownload) {
-      var dlEl = document.createElement('button');
+      let dlEl = document.createElement('button');
       dlEl.type = 'button';
       new MTS.Button(dlEl, {
         label:    this._t('download', 'Descargar'),
@@ -384,20 +384,20 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   }
 
   _buildBody() {
-    var self = this;
+    let self = this;
 
-    var wrap = document.createElement('div');
+    let wrap = document.createElement('div');
     wrap.className = 'dm-preview__wrap';
     this._wrapEl = wrap;
 
     // — Área del iframe —
-    var iframeArea = document.createElement('div');
+    let iframeArea = document.createElement('div');
     iframeArea.className = 'dm-preview__iframe-area';
 
     // Spinner overlay
-    var spinnerWrap = document.createElement('div');
+    let spinnerWrap = document.createElement('div');
     spinnerWrap.className = 'dm-preview__spinner-wrap';
-    var spinner = document.createElement('div');
+    let spinner = document.createElement('div');
     spinner.className = 'mts-spinner';
     spinnerWrap.appendChild(spinner);
     this._spinnerWrap = spinnerWrap;
@@ -409,7 +409,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     this._iframe.setAttribute('title', this._t('iframeTitle', 'Vista previa del documento'));
 
     // Botón toggle del panel lateral
-    var toggleBtn = document.createElement('button');
+    let toggleBtn = document.createElement('button');
     toggleBtn.className = 'dm-preview__toggle-btn';
     toggleBtn.setAttribute('type', 'button');
     toggleBtn.setAttribute('aria-label', this._t('panelToggle', 'Mostrar u ocultar panel lateral'));
@@ -427,15 +427,15 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
     // — Panel lateral colapsible —
     if (this._options.panels.length > 0) {
-      var panel = document.createElement('div');
+      let panel = document.createElement('div');
       panel.className = 'dm-preview__panel';
       panel.style.setProperty('--dm-preview-panel-width', this._options.panelWidth);
       if (this._panelOpen) panel.classList.add('dm-preview__panel--open');
 
-      var panelInner = document.createElement('div');
+      let panelInner = document.createElement('div');
       panelInner.className = 'dm-preview__panel-inner';
 
-      var accEl = document.createElement('div');
+      let accEl = document.createElement('div');
       panelInner.appendChild(accEl);
       panel.appendChild(panelInner);
       wrap.appendChild(panel);
@@ -452,11 +452,11 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
     // — File input oculto para "Reemplazar" —
     if (this._options.onReplace) {
-      var replaceInput = document.createElement('input');
+      let replaceInput = document.createElement('input');
       replaceInput.type   = 'file';
       replaceInput.hidden = true;
       replaceInput.addEventListener('change', function() {
-        var file = replaceInput.files && replaceInput.files[0];
+        let file = replaceInput.files && replaceInput.files[0];
         if (!file) return;
         // No dispara onReplace inmediatamente — abre el modal de confirmación
         self._showConfirm(file);
@@ -471,18 +471,18 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   }
 
   _buildAccordion(container) {
-    var self   = this;
-    var panels = this._options.panels;
+    let self   = this;
+    let panels = this._options.panels;
     if (!panels.length) return;
 
-    var items = panels.map(function(panel, index) {
+    let items = panels.map(function(panel, index) {
       return {
         id:      panel.key,
         title:   panel.label,
         icon:    panel.icon || null,
         open:    index === 0,
         content: function() {
-          var div = document.createElement('div');
+          let div = document.createElement('div');
           div.className = 'dm-preview__acc-content';
           return div;
         },
@@ -494,8 +494,8 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       flush:    true,
       multiple: false,
       onOpen: function(e) {
-        var key   = e.detail.id;
-        var panel = self._findPanel(key);
+        let key   = e.detail.id;
+        let panel = self._findPanel(key);
         if (panel && !self._panelLoaded[key]) {
           self._loadPanel(panel, key);
         }
@@ -508,14 +508,14 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   ---------------------------------------------------------- */
 
   _refreshPanels(item) {
-    var self = this;
+    let self = this;
     this._panelLoaded = {};
 
     if (!this._accordion) return;
 
     // Limpiar contenido previo de todos los paneles
     this._options.panels.forEach(function(panel) {
-      var inner = self._getAccContent(panel.key);
+      let inner = self._getAccContent(panel.key);
       if (inner) inner.replaceChildren();
     });
 
@@ -528,14 +528,14 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   }
 
   _loadPanel(panel, key) {
-    var self  = this;
-    var item  = this._currentItem;
-    var inner = this._getAccContent(key);
+    let self  = this;
+    let item  = this._currentItem;
+    let inner = this._getAccContent(key);
     if (!inner) return;
 
     // Render sincrónico: skeleton o placeholder
     if (typeof panel.render === 'function') {
-      var skeleton = panel.render(item);
+      let skeleton = panel.render(item);
       if (skeleton instanceof Element) {
         inner.replaceChildren(skeleton);
         this._refreshAccordionHeight(key);
@@ -544,7 +544,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
     // Load asíncrono: contenido real
     if (typeof panel.load === 'function') {
-      var result = panel.load(item);
+      let result = panel.load(item);
 
       if (result && typeof result.then === 'function') {
         result.then(function(el) {
@@ -568,7 +568,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
   _refreshAccordionHeight(key) {
     if (!this._accEl) return;
-    var body = this._accEl.querySelector('#mts-acc-body-' + key);
+    let body = this._accEl.querySelector('#mts-acc-body-' + key);
     if (!body || !body.classList.contains('mts-accordion__body--open')) return;
     // RAF para asegurar que el DOM está actualizado antes de medir
     requestAnimationFrame(function() {
@@ -597,13 +597,13 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
   _loadIframe(item) {
     // Prioridad: URL pasada en show(item, url) > urlResolver(item)
-    var url = this._overrideUrl;
+    let url = this._overrideUrl;
     if (!url && this._options.urlResolver && item) {
       url = this._options.urlResolver(item);
     }
     if (!url) return;
 
-    var self = this;
+    let self = this;
     this._spinnerWrap.classList.add('dm-preview__spinner-wrap--visible');
     this._iframe.onload = function() {
       self._spinnerWrap.classList.remove('dm-preview__spinner-wrap--visible');
@@ -656,9 +656,9 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
   _updateTitle(item) {
     if (!this._modal || !item) return;
 
-    var iconName = this._fileIconName(item);
-    var name = item.name || '';
-    var titleEl = this._modal._titleEl;
+    let iconName = this._fileIconName(item);
+    let name = item.name || '';
+    let titleEl = this._modal._titleEl;
 
     // Sin acceso al nodo del título → fallback al API público (texto plano).
     // MTS.Modal.setTitle() con un string usa textContent, así que un SVG en
@@ -668,16 +668,16 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     titleEl.innerHTML = ''; // safe: clearing
 
     if (window.MTS && MTS.Icon) {
-      var svg = MTS.Icon.get(iconName);
+      let svg = MTS.Icon.get(iconName);
       if (svg) {
-        var iconEl = document.createElement('span');
+        let iconEl = document.createElement('span');
         iconEl.className = 'dm-preview__title-icon';
         iconEl.innerHTML = svg; // fuente confiable (MTS.Icon)
         titleEl.appendChild(iconEl);
       }
     }
 
-    var textEl = document.createElement('span');
+    let textEl = document.createElement('span');
     textEl.className = 'dm-preview__title-text';
     textEl.textContent = name; // textContent escapa solo
     titleEl.appendChild(textEl);
@@ -700,43 +700,43 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
    * Pre-construye los elementos reutilizables entre estados (file info, ver row, botones).
    */
   _buildConfirmOverlay() {
-    var self = this;
+    let self = this;
 
-    var overlay = document.createElement('div');
+    let overlay = document.createElement('div');
     overlay.className = 'dm-preview__confirm-overlay';
     overlay.hidden    = true;
 
-    var card = document.createElement('div');
+    let card = document.createElement('div');
     card.className = 'dm-preview__confirm-card';
 
     // — Título —
-    var titleEl = document.createElement('p');
+    let titleEl = document.createElement('p');
     titleEl.className   = 'dm-preview__confirm-card-title';
     titleEl.textContent = this._t('confirmTitle', 'Reemplazar documento');
 
     // — Info del archivo (siempre en el card; se oculta en estado success) —
-    var fileEl = document.createElement('div');
+    let fileEl = document.createElement('div');
     fileEl.className = 'dm-preview__confirm-file';
     this._confirmFileEl = fileEl;
 
     // — Zona dinámica: versión / spinner / éxito / error —
-    var contentEl = document.createElement('div');
+    let contentEl = document.createElement('div');
     contentEl.className = 'dm-preview__confirm-content';
     this._confirmContentEl = contentEl;
 
     // — Acciones (se reemplaza según el estado) —
-    var actionsEl = document.createElement('div');
+    let actionsEl = document.createElement('div');
     actionsEl.className = 'dm-preview__confirm-actions';
     this._confirmActionsEl = actionsEl;
 
     // Pre-construir fila de versión (reutilizada en estados idle y error→retry)
-    var verRow = document.createElement('div');
+    let verRow = document.createElement('div');
     verRow.className = 'dm-preview__confirm-version';
-    var verLabel = document.createElement('label');
+    let verLabel = document.createElement('label');
     verLabel.className   = 'dm-preview__confirm-version-label';
     verLabel.textContent = this._t('confirmVersionLabel', 'Nueva versión:');
     verLabel.setAttribute('for', 'dm-preview-ver-input');
-    var verInput = document.createElement('input');
+    let verInput = document.createElement('input');
     verInput.type      = 'number';
     verInput.id        = 'dm-preview-ver-input';
     verInput.min       = '1';
@@ -749,13 +749,13 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
     this._versionInputEl  = verInput;
 
     // Pre-construir botones Cancelar y Subir
-    var cancelEl = document.createElement('button');
+    let cancelEl = document.createElement('button');
     cancelEl.type = 'button';
     new MTS.Button(cancelEl, { label: this._t('confirmCancel', 'Cancelar'), size: 'sm', variant: 'ghost' })
       .on('click', function() { self._hideConfirm(); });
     this._confirmCancelEl = cancelEl;
 
-    var submitEl = document.createElement('button');
+    let submitEl = document.createElement('button');
     submitEl.type = 'button';
     new MTS.Button(submitEl, {
       label:    this._t('confirmUpload', 'Subir'),
@@ -782,14 +782,14 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
     // Versión sugerida: versión actual (entero) + 1
     if (this._versionInputEl) {
-      var current = parseInt(this._currentItem && this._currentItem.version, 10) || 1;
+      let current = parseInt(this._currentItem && this._currentItem.version, 10) || 1;
       this._versionInputEl.value = current + 1;
     }
 
     // Detectar si la extensión del archivo seleccionado difiere del documento actual
-    var dotIdx  = file.name.lastIndexOf('.');
-    var newExt  = dotIdx !== -1 ? file.name.slice(dotIdx + 1).toLowerCase() : '';
-    var currExt = ((this._currentItem && this._currentItem.ext) || '').toLowerCase();
+    let dotIdx  = file.name.lastIndexOf('.');
+    let newExt  = dotIdx !== -1 ? file.name.slice(dotIdx + 1).toLowerCase() : '';
+    let currExt = ((this._currentItem && this._currentItem.ext) || '').toLowerCase();
     this._extMismatch = (newExt !== '' && currExt !== '' && newExt !== currExt);
 
     this._renderConfirmFile(file);
@@ -815,12 +815,12 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
    * Si no retorna Promise, cierra inmediatamente (sin feedback).
    */
   _submitReplace() {
-    var self = this;
+    let self = this;
     if (!this._confirmFile) return;
 
-    var version = parseInt(this._versionInputEl.value, 10) || 1;
+    let version = parseInt(this._versionInputEl.value, 10) || 1;
 
-    var result = this._options.onReplace(
+    let result = this._options.onReplace(
       this._currentItem, this._confirmFile, version
     );
 
@@ -834,7 +834,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
           self._loadIframe(self._currentItem);
         }, 1500);
       }).catch(function(err) {
-        var msg = (err && err.message) ? err.message : self._t('confirmError', 'Error al subir el archivo.');
+        let msg = (err && err.message) ? err.message : self._t('confirmError', 'Error al subir el archivo.');
         self._setConfirmState('error', msg);
       });
     } else {
@@ -851,10 +851,10 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
    *   'error'   — mensaje de error + Reintentar/Cerrar
    */
   _setConfirmState(state, message) {
-    var self      = this;
-    var contentEl = this._confirmContentEl;
-    var actionsEl = this._confirmActionsEl;
-    var fileEl    = this._confirmFileEl;
+    let self      = this;
+    let contentEl = this._confirmContentEl;
+    let actionsEl = this._confirmActionsEl;
+    let fileEl    = this._confirmFileEl;
 
     if (!contentEl || !actionsEl) return;
     contentEl.replaceChildren();
@@ -866,12 +866,12 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
       // Advertencia si la extensión del nuevo archivo no coincide con el documento actual
       if (this._extMismatch) {
-        var warnEl = document.createElement('div');
+        let warnEl = document.createElement('div');
         warnEl.className = 'dm-preview__confirm-warning';
-        var warnIcon = document.createElement('span');
+        let warnIcon = document.createElement('span');
         warnIcon.className = 'dm-preview__confirm-warning-icon';
         if (window.MTS && MTS.Icon) warnIcon.innerHTML = MTS.Icon.get('alert-triangle') || '';
-        var warnText = document.createElement('span');
+        let warnText = document.createElement('span');
         warnText.textContent = this._t('confirmExtWarning', 'El archivo seleccionado tiene una extensión diferente al documento actual.');
         warnEl.appendChild(warnIcon);
         warnEl.appendChild(warnText);
@@ -885,14 +885,14 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
       if (fileEl) fileEl.hidden = false;
 
       // Barra de progreso indeterminada
-      var progressWrap = document.createElement('div');
+      let progressWrap = document.createElement('div');
       progressWrap.className = 'dm-preview__confirm-progress';
-      var progressBar = document.createElement('div');
+      let progressBar = document.createElement('div');
       progressBar.className = 'dm-preview__confirm-progress-bar';
       progressWrap.appendChild(progressBar);
 
       // Texto "Subiendo..."
-      var loadingText = document.createElement('span');
+      let loadingText = document.createElement('span');
       loadingText.className   = 'dm-preview__confirm-status-text';
       loadingText.textContent = this._t('confirmUploading', 'Subiendo...');
 
@@ -902,12 +902,12 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
     } else if (state === 'success') {
       if (fileEl) fileEl.hidden = true;
-      var successEl = document.createElement('div');
+      let successEl = document.createElement('div');
       successEl.className = 'dm-preview__confirm-status dm-preview__confirm-status--success';
-      var successIcon = document.createElement('span');
+      let successIcon = document.createElement('span');
       successIcon.className = 'dm-preview__confirm-status-icon';
       if (window.MTS && MTS.Icon) successIcon.innerHTML = MTS.Icon.get('check-circle') || '✓';
-      var successText = document.createElement('span');
+      let successText = document.createElement('span');
       successText.className   = 'dm-preview__confirm-status-text';
       successText.textContent = this._t('confirmSuccess', 'Documento reemplazado.');
       successEl.appendChild(successIcon);
@@ -916,24 +916,24 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
     } else if (state === 'error') {
       if (fileEl) fileEl.hidden = false;
-      var errorEl = document.createElement('div');
+      let errorEl = document.createElement('div');
       errorEl.className = 'dm-preview__confirm-status dm-preview__confirm-status--error';
-      var errorIcon = document.createElement('span');
+      let errorIcon = document.createElement('span');
       errorIcon.className = 'dm-preview__confirm-status-icon';
       if (window.MTS && MTS.Icon) errorIcon.innerHTML = MTS.Icon.get('alert-circle') || '✕';
-      var errorText = document.createElement('span');
+      let errorText = document.createElement('span');
       errorText.className   = 'dm-preview__confirm-status-text';
       errorText.textContent = message || this._t('confirmError', 'Error al subir el archivo.');
       errorEl.appendChild(errorIcon);
       errorEl.appendChild(errorText);
       contentEl.appendChild(errorEl);
 
-      var retryEl = document.createElement('button');
+      let retryEl = document.createElement('button');
       retryEl.type = 'button';
       new MTS.Button(retryEl, { label: self._t('confirmRetry', 'Reintentar'), size: 'sm', variant: 'ghost' })
         .on('click', function() { self._setConfirmState('idle'); });
 
-      var closeEl = document.createElement('button');
+      let closeEl = document.createElement('button');
       closeEl.type = 'button';
       new MTS.Button(closeEl, { label: self._t('confirmClose', 'Cerrar'), size: 'sm', variant: 'ghost' })
         .on('click', function() { self._hideConfirm(); });
@@ -947,30 +947,30 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
    * Rellena la zona de info del archivo en el overlay de confirmación.
    */
   _renderConfirmFile(file) {
-    var fileEl = this._confirmFileEl;
+    let fileEl = this._confirmFileEl;
     if (!fileEl) return;
     fileEl.replaceChildren();
 
     // Ícono del tipo de archivo
-    var iconEl = document.createElement('span');
+    let iconEl = document.createElement('span');
     iconEl.className = 'dm-preview__confirm-file-icon';
-    var dotIdx   = file.name.lastIndexOf('.');
-    var ext      = dotIdx !== -1 ? file.name.slice(dotIdx + 1) : '';
-    var iconName = this._fileIconName({ ext: ext, mimeType: file.type });
+    let dotIdx   = file.name.lastIndexOf('.');
+    let ext      = dotIdx !== -1 ? file.name.slice(dotIdx + 1) : '';
+    let iconName = this._fileIconName({ ext: ext, mimeType: file.type });
     if (window.MTS && MTS.Icon) {
       iconEl.innerHTML = MTS.Icon.get(iconName) || '';
     }
 
     // Info: nombre + tamaño
-    var infoEl = document.createElement('div');
+    let infoEl = document.createElement('div');
     infoEl.className = 'dm-preview__confirm-file-info';
 
-    var nameEl = document.createElement('span');
+    let nameEl = document.createElement('span');
     nameEl.className   = 'dm-preview__confirm-file-name';
     nameEl.textContent = file.name;
     nameEl.title       = file.name;
 
-    var sizeEl = document.createElement('span');
+    let sizeEl = document.createElement('span');
     sizeEl.className   = 'dm-preview__confirm-file-size';
     sizeEl.textContent = this._formatBytes(file.size);
 
@@ -1000,7 +1000,7 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
    */
   _updateReplaceState(item) {
     if (!this._options.onReplace || !this._replaceInput) return;
-    var accept = (this._dm && this._dm._options && this._dm._options.accept)
+    let accept = (this._dm && this._dm._options && this._dm._options.accept)
                ? this._dm._options.accept
                : '*';
     this._replaceInput.accept = (accept === '*') ? '' : accept;
@@ -1024,8 +1024,8 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
    * Mapea extensión o mimeType del ítem al nombre del ícono de MTS.Icon.
    */
   _fileIconName(item) {
-    var ext  = ((item.ext  || item.extension || '')).toLowerCase();
-    var mime = ((item.mimeType || item.contentType || '')).toLowerCase();
+    let ext  = ((item.ext  || item.extension || '')).toLowerCase();
+    let mime = ((item.mimeType || item.contentType || '')).toLowerCase();
 
     if (ext === 'pdf' || mime === 'application/pdf')                              return 'file-pdf';
     if (ext === 'doc'  || ext === 'docx' || mime.indexOf('word') !== -1)          return 'file-word';
@@ -1066,13 +1066,13 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
    * Si no encuentra la key, retorna el fallback hardcodeado (siempre en español).
    */
   _t(key, fallback) {
-    var loc = this._dm?._table?._cfg?.locale?.['MTS.DocumentManagerPreviewPlugin'] ?? {};
+    let loc = this._dm?._table?._cfg?.locale?.['MTS.DocumentManagerPreviewPlugin'] ?? {};
     return loc[key] !== undefined ? loc[key] : (fallback !== undefined ? fallback : key);
   }
 
   _findPanel(key) {
-    var panels = this._options.panels;
-    for (var i = 0; i < panels.length; i++) {
+    let panels = this._options.panels;
+    for (let i = 0; i < panels.length; i++) {
       if (panels[i].key === key) return panels[i];
     }
     return null;
@@ -1141,7 +1141,7 @@ MTS.DocumentManagerPreviewBasicInfoPanel = class DocumentManagerPreviewBasicInfo
 
   get key()   { return 'dm-basic-info'; }
   get label() {
-    var loc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewBasicInfoPanel'] ?? {};
+    let loc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewBasicInfoPanel'] ?? {};
     return loc.panelLabel || 'Información básica';
   }
   get icon()  { return typeof MTS.Icon !== 'undefined' ? MTS.Icon.get('info') : null; }
@@ -1212,16 +1212,16 @@ MTS.DocumentManagerPreviewBasicInfoPanel = class DocumentManagerPreviewBasicInfo
 
   /** Skeleton de carga — tantas filas como campos configurados */
   render(item) {
-    var wrap = document.createElement('div');
+    let wrap = document.createElement('div');
     wrap.className = 'dm-preview__basic-info dm-preview__basic-info--loading';
-    for (var i = 0; i < this._fields.length; i++) {
-      var row = document.createElement('div');
+    for (let i = 0; i < this._fields.length; i++) {
+      let row = document.createElement('div');
       row.className = 'dm-preview__info-row';
 
-      var labelSk = document.createElement('div');
+      let labelSk = document.createElement('div');
       labelSk.className = 'dm-preview__info-skeleton-label';
 
-      var valueSk = document.createElement('div');
+      let valueSk = document.createElement('div');
       valueSk.className = 'dm-preview__info-skeleton-value dm-preview__info-skeleton-value--w' + (i % 4);
 
       row.appendChild(labelSk);
@@ -1233,8 +1233,8 @@ MTS.DocumentManagerPreviewBasicInfoPanel = class DocumentManagerPreviewBasicInfo
 
   /** Contenido real — acepta async; en producción haría un fetch */
   load(item) {
-    var fields  = this._fields;
-    var loc     = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewBasicInfoPanel'] ?? {};
+    let fields  = this._fields;
+    let loc     = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewBasicInfoPanel'] ?? {};
     return new Promise(function(resolve) {
       setTimeout(function() {
         resolve(MTS.DocumentManagerPreviewBasicInfoPanel._buildContent(item, fields, loc));
@@ -1254,33 +1254,33 @@ MTS.DocumentManagerPreviewBasicInfoPanel = class DocumentManagerPreviewBasicInfo
    */
   static _buildContent(item, fields, loc) {
     loc = loc || {};
-    var wrap = document.createElement('div');
+    let wrap = document.createElement('div');
     wrap.className = 'dm-preview__basic-info';
 
     fields.forEach(function(fieldDef) {
-      var rawValue;
+      let rawValue;
       if (typeof fieldDef.resolve === 'function') {
         try { rawValue = fieldDef.resolve(item); } catch (e) { rawValue = '—'; }
       } else if (fieldDef.field != null) {
         rawValue = item[fieldDef.field];
       }
 
-      var displayValue = (rawValue != null && rawValue !== '') ? String(rawValue) : '—';
+      let displayValue = (rawValue != null && rawValue !== '') ? String(rawValue) : '—';
 
       /* Resolver label: localizado > labelKey > label hardcodeado */
-      var labelText = (fieldDef.labelKey && loc[fieldDef.labelKey])
+      let labelText = (fieldDef.labelKey && loc[fieldDef.labelKey])
         || fieldDef.label
         || fieldDef.labelKey
         || '';
 
-      var row = document.createElement('div');
+      let row = document.createElement('div');
       row.className = 'dm-preview__info-row';
 
-      var labelEl = document.createElement('span');
+      let labelEl = document.createElement('span');
       labelEl.className   = 'dm-preview__info-label';
       labelEl.textContent = labelText + ':';
 
-      var valueEl = document.createElement('span');
+      let valueEl = document.createElement('span');
       valueEl.className   = 'dm-preview__info-value';
       valueEl.textContent = displayValue;
       valueEl.title       = displayValue;   // tooltip para valores truncados

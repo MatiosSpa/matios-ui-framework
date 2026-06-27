@@ -85,12 +85,12 @@ MTS.ConfirmButton = class MtsConfirmButton {
     this._btnMain.type      = 'button';
     this._btnMain.className = 'mts-btn mts-btn--' + this.variant + ' mts-btn--' + this.size;
     if (this.iconLeft) {
-      var _iconSpan = document.createElement('span');
+      let _iconSpan = document.createElement('span');
       _iconSpan.className = 'mts-btn__icon';
       _iconSpan.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.iconLeft) : this.iconLeft;
       this._btnMain.appendChild(_iconSpan);
     }
-    var _labelSpan = document.createElement('span');
+    let _labelSpan = document.createElement('span');
     _labelSpan.textContent = this.label;
     this._btnMain.appendChild(_labelSpan);
     this._btnMain.addEventListener('click', () => this._setPending(true));

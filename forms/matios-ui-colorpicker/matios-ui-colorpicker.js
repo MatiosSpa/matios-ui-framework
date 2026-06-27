@@ -120,7 +120,7 @@ MTS.ColorPicker = class MtsColorPicker {
     if (options.onClose) this.on('close', options.onClose);
 
     // Auto-clear a standing validation error whenever the color changes
-    var self = this;
+    let self = this;
     this.on('change', function () { if (self._error) self.clearError(); });
 
     this._open       = false;

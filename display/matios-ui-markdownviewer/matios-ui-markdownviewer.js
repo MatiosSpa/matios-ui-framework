@@ -8,7 +8,7 @@
 (function (global) {
   'use strict';
 
-  var _uid = 0;
+  let _uid = 0;
 
   /* ── Constructor ─────────────────────────────────────────── */
 
@@ -37,7 +37,7 @@
   /* ── Fetch ───────────────────────────────────────────────── */
 
   MarkdownViewer.prototype._fetch = function (url) {
-    var self = this;
+    let self = this;
     fetch(url)
       .then(function (res) {
         if (!res.ok) { throw new Error('HTTP ' + res.status); }
@@ -54,9 +54,9 @@
   /* ── Parser ──────────────────────────────────────────────── */
 
   MarkdownViewer.prototype._parse = function (md) {
-    var blocks = [];
+    let blocks = [];
 
-    var h = md
+    let h = md
       .replace(/```(\w*)\n?([\s\S]*?)```/g, function (_, lang, code) {
         blocks.push({ lang: lang || 'text', code: code.trim() });
         return '\x00B' + (blocks.length - 1) + '\x00';
@@ -73,11 +73,11 @@
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
       .replace(/^&gt; (.+)$/gm,    '<blockquote>$1</blockquote>')
       .replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm, function (_, hdr, rows) {
-        var ths = hdr.split('|')
+        let ths = hdr.split('|')
           .filter(function (c) { return c.trim(); })
           .map(function (c) { return '<th>' + c.trim() + '</th>'; })
           .join('');
-        var trs = rows.trim().split('\n')
+        let trs = rows.trim().split('\n')
           .map(function (r) {
             return '<tr>' + r.split('|')
               .filter(function (c) { return c.trim(); })
@@ -97,24 +97,24 @@
   /* ── Render ──────────────────────────────────────────────── */
 
   MarkdownViewer.prototype._render = function (parsed) {
-    var self   = this;
-    var blocks = parsed.blocks;
-    var uid    = this._id;
+    let self   = this;
+    let blocks = parsed.blocks;
+    let uid    = this._id;
 
-    var h = parsed.html.replace(/\x00B(\d+)\x00/g, function (_, i) {
+    let h = parsed.html.replace(/\x00B(\d+)\x00/g, function (_, i) {
       return '<div id="' + uid + '-cb-' + i + '" class="mts-mdv__codeblock"></div>';
     });
 
     this._contentEl.innerHTML = h;
 
     blocks.forEach(function (block, i) {
-      var el = document.getElementById(uid + '-cb-' + i);
+      let el = document.getElementById(uid + '-cb-' + i);
       if (!el) { return; }
       if (window.MTS && MTS.CodeBlock) {
         new MTS.CodeBlock(el, { code: block.code, language: block.lang, copyable: true });
       } else {
-        var pre  = document.createElement('pre');
-        var code = document.createElement('code');
+        let pre  = document.createElement('pre');
+        let code = document.createElement('code');
         code.textContent = block.code;
         pre.appendChild(code);
         el.appendChild(pre);

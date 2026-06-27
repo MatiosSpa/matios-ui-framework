@@ -38,7 +38,7 @@ MTS.SideNav = class MtsSideNav {
     if (options.onCollapse) this.on('collapse', options.onCollapse);
 
     if (options.collapseBtn) {
-      var btn = document.querySelector(options.collapseBtn);
+      let btn = document.querySelector(options.collapseBtn);
       if (btn) btn.addEventListener('click', () => this.toggleCollapse());
     }
 
@@ -84,7 +84,7 @@ MTS.SideNav = class MtsSideNav {
 
   _build() {
     this._el.innerHTML = '';
-    var cls = ['mts-sidenav'];
+    let cls = ['mts-sidenav'];
     if (this.collapsed) cls.push('mts-sidenav--collapsed');
     if (!this.brand)    cls.push('mts-sidenav--no-brand');
     this._syncClasses(cls);
@@ -95,8 +95,8 @@ MTS.SideNav = class MtsSideNav {
     }
 
     /* Toggle btn */
-    var self = this;
-    var toggleBtn = document.createElement('button');
+    let self = this;
+    let toggleBtn = document.createElement('button');
     toggleBtn.type = 'button';
     toggleBtn.className = 'mts-sidenav__toggle';
     this._setToggleIcon(toggleBtn);
@@ -104,7 +104,7 @@ MTS.SideNav = class MtsSideNav {
     this._el.appendChild(toggleBtn);
 
     /* Nav / MTS.Menu */
-    var nav = document.createElement('nav');
+    let nav = document.createElement('nav');
     nav.className = 'mts-sidenav__nav';
     if (this.menu) {
       if (this._menuNavEl) this.menu._unmount(this._menuNavEl);
@@ -115,7 +115,7 @@ MTS.SideNav = class MtsSideNav {
 
     /* Footer */
     if (this.footer) {
-      var footEl = document.createElement('div');
+      let footEl = document.createElement('div');
       footEl.className = 'mts-sidenav__footer';
       footEl.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(this.footer) : this.footer;
       this._el.appendChild(footEl);
@@ -126,8 +126,8 @@ MTS.SideNav = class MtsSideNav {
   }
 
   _buildBrand() {
-    var b  = this.brand;
-    var el = document.createElement('div');
+    let b  = this.brand;
+    let el = document.createElement('div');
     el.className = 'mts-sidenav__brand';
 
     if (b.onClick) {
@@ -136,14 +136,14 @@ MTS.SideNav = class MtsSideNav {
     }
 
     if (b.logo) {
-      var logoWrap = document.createElement('div');
+      let logoWrap = document.createElement('div');
       logoWrap.className = 'mts-sidenav__brand-logo';
       logoWrap.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(b.logo) : b.logo;
       el.appendChild(logoWrap);
     }
 
     if (b.title) {
-      var titleEl = document.createElement('div');
+      let titleEl = document.createElement('div');
       titleEl.className = 'mts-sidenav__brand-title';
       titleEl.textContent = b.title;
       el.appendChild(titleEl);
@@ -163,7 +163,7 @@ MTS.SideNav = class MtsSideNav {
     this._el.classList.toggle('mts-sidenav--collapsed', this.collapsed);
 
     /* Actualizar toggle btn */
-    var btn = this._el.querySelector('.mts-sidenav__toggle');
+    let btn = this._el.querySelector('.mts-sidenav__toggle');
     if (btn) this._setToggleIcon(btn);
 
     /* Ocultar tooltip si se expande */
@@ -181,7 +181,7 @@ MTS.SideNav = class MtsSideNav {
    * al nav con event delegation — así escapa el overflow:hidden del sidenav.
    */
   _initTooltip(nav) {
-    var self = this;
+    let self = this;
 
     /* Singleton por instancia */
     if (!this._tipEl) {
@@ -201,14 +201,14 @@ MTS.SideNav = class MtsSideNav {
 
     this._tipOver = function(e) {
       if (!self.collapsed) return;
-      var btn = e.target && e.target.closest && e.target.closest('.mts-menu__item--tree');
+      let btn = e.target && e.target.closest && e.target.closest('.mts-menu__item--tree');
       if (!btn) return;
-      var lbl = btn.querySelector('.mts-menu__label');
+      let lbl = btn.querySelector('.mts-menu__label');
       if (!lbl) return;
-      var text = lbl.textContent.trim();
+      let text = lbl.textContent.trim();
       if (!text) return;
 
-      var rect = btn.getBoundingClientRect();
+      let rect = btn.getBoundingClientRect();
       self._tipEl.textContent = text;
       self._tipEl.style.top  = (rect.top + rect.height / 2) + 'px';
       self._tipEl.style.left = (rect.right + 10) + 'px';
@@ -217,7 +217,7 @@ MTS.SideNav = class MtsSideNav {
 
     this._tipOut = function(e) {
       /* Solo ocultar si salimos del botón o del nav */
-      var related = e.relatedTarget;
+      let related = e.relatedTarget;
       if (related && related.closest && related.closest('.mts-menu__item--tree')) return;
       self._hideTooltip();
     };
@@ -248,7 +248,7 @@ MTS.SideNav = class MtsSideNav {
      ════════════════════════════════════════════════════ */
 
   _syncClasses(classes) {
-    var prev = Array.from(this._el.classList).filter(function(c) {
+    let prev = Array.from(this._el.classList).filter(function(c) {
       return c === 'mts-sidenav' || c.startsWith('mts-sidenav--') || c === 'mts-sidenav--no-brand';
     });
     if (prev.length) this._el.classList.remove.apply(this._el.classList, prev);
@@ -256,7 +256,7 @@ MTS.SideNav = class MtsSideNav {
   }
 
   _emit(event, detail) {
-    var self = this;
+    let self = this;
     (this._listeners[event] || []).forEach(function(fn) { fn({ type: event, detail: detail }); });
     if (this._el && this._el.dispatchEvent) {
       this._el.dispatchEvent(new CustomEvent('mts:sidenav:' + event, { bubbles: true, detail: detail }));

@@ -60,11 +60,11 @@ MTS.DevPanel = class MtsDevPanel {
     row.className = 'dp-log__row';
     const time = new Date().toLocaleTimeString('es-CL',
       { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-    var _timeEl = document.createElement('span'); _timeEl.className = 'dp-log__time'; _timeEl.textContent = time;
-    var _badgeEl = document.createElement('span'); _badgeEl.className = 'dp-log__badge dp-log__badge--' + badge; _badgeEl.textContent = badge;
-    var _msgEl = document.createElement('span'); _msgEl.className = 'dp-log__msg'; _msgEl.textContent = message;
+    let _timeEl = document.createElement('span'); _timeEl.className = 'dp-log__time'; _timeEl.textContent = time;
+    let _badgeEl = document.createElement('span'); _badgeEl.className = 'dp-log__badge dp-log__badge--' + badge; _badgeEl.textContent = badge;
+    let _msgEl = document.createElement('span'); _msgEl.className = 'dp-log__msg'; _msgEl.textContent = message;
     row.appendChild(_timeEl); row.appendChild(_badgeEl); row.appendChild(_msgEl);
-    if (detail) { var _detailEl = document.createElement('span'); _detailEl.className = 'dp-log__detail'; _detailEl.textContent = detail; row.appendChild(_detailEl); }
+    if (detail) { let _detailEl = document.createElement('span'); _detailEl.className = 'dp-log__detail'; _detailEl.textContent = detail; row.appendChild(_detailEl); }
     this._logBodyEl.prepend(row);
     const rows = this._logBodyEl.querySelectorAll('.dp-log__row');
     if (rows.length > 200) rows[rows.length - 1].remove();

@@ -83,7 +83,7 @@ MTS.PanelDropdown = class MtsPanelDropdown {
     this._panelEl = null;
 
     // Click en trigger
-    var self = this;
+    let self = this;
     this._triggerHandler = function(e) {
       e.stopPropagation();
       self.toggle();
@@ -100,7 +100,7 @@ MTS.PanelDropdown = class MtsPanelDropdown {
     // Scroll: reposiciona si el trigger sigue visible; cierra si salió del viewport
     this._scrollHandler = function() {
       if (!self._open) return;
-      var r = self._trigger.getBoundingClientRect();
+      let r = self._trigger.getBoundingClientRect();
       if (r.bottom < 0 || r.top > window.innerHeight) {
         self.close();
       } else {
@@ -117,7 +117,7 @@ MTS.PanelDropdown = class MtsPanelDropdown {
   open() {
     if (this._open) return this;
     // Cerrar cualquier otra instancia abierta antes de abrir esta
-    var current = MTS.PanelDropdown._current;
+    let current = MTS.PanelDropdown._current;
     if (current && current !== this) current.close();
     MTS.PanelDropdown._current = this;
     this._open = true;
@@ -151,7 +151,7 @@ MTS.PanelDropdown = class MtsPanelDropdown {
   setItems(items) {
     this._items = items || [];
     if (this._open && this._panelEl) {
-      var bodyEl = this._panelEl.querySelector('.mts-paneldropdown__body');
+      let bodyEl = this._panelEl.querySelector('.mts-paneldropdown__body');
       if (bodyEl) {
         bodyEl.innerHTML = '';
         this._renderItems(bodyEl);
@@ -163,7 +163,7 @@ MTS.PanelDropdown = class MtsPanelDropdown {
   setHeaderBadge(n) {
     if (this._header) this._header.badge = n;
     if (this._open && this._panelEl) {
-      var badgeEl = this._panelEl.querySelector('.mts-paneldropdown__header-badge');
+      let badgeEl = this._panelEl.querySelector('.mts-paneldropdown__header-badge');
       if (badgeEl) {
         if (n !== null && n !== undefined && n !== 0) {
           badgeEl.textContent = n;
@@ -186,8 +186,8 @@ MTS.PanelDropdown = class MtsPanelDropdown {
   /* ── Build del panel ──────────────────────────────────────── */
 
   _buildPanel() {
-    var self  = this;
-    var panel = document.createElement('div');
+    let self  = this;
+    let panel = document.createElement('div');
     panel.className = 'mts-paneldropdown';
     panel.style.width = this._width + 'px';
 
@@ -196,15 +196,15 @@ MTS.PanelDropdown = class MtsPanelDropdown {
 
     // Header
     if (this._header) {
-      var header = document.createElement('div');
+      let header = document.createElement('div');
       header.className = 'mts-paneldropdown__header';
 
-      var title = document.createElement('span');
+      let title = document.createElement('span');
       title.className = 'mts-paneldropdown__header-title';
       title.textContent = this._header.title || '';
       header.appendChild(title);
 
-      var badge = document.createElement('span');
+      let badge = document.createElement('span');
       badge.className = 'mts-paneldropdown__header-badge';
       if (this._header.badge !== null && this._header.badge !== undefined && this._header.badge !== 0) {
         badge.textContent = this._header.badge;
@@ -216,7 +216,7 @@ MTS.PanelDropdown = class MtsPanelDropdown {
     }
 
     // Body
-    var body = document.createElement('div');
+    let body = document.createElement('div');
     body.className = 'mts-paneldropdown__body';
     body.style.maxHeight = this._maxHeight + 'px';
     this._renderItems(body);
@@ -224,10 +224,10 @@ MTS.PanelDropdown = class MtsPanelDropdown {
 
     // Footer
     if (this._footer) {
-      var footer = document.createElement('div');
+      let footer = document.createElement('div');
       footer.className = 'mts-paneldropdown__footer';
 
-      var footerBtn = document.createElement('button');
+      let footerBtn = document.createElement('button');
       footerBtn.type = 'button';
       footerBtn.className = 'mts-paneldropdown__footer-btn';
       footerBtn.textContent = this._footer.label || '';
@@ -245,25 +245,25 @@ MTS.PanelDropdown = class MtsPanelDropdown {
   }
 
   _renderItems(container) {
-    var self = this;
+    let self = this;
     this._items.forEach(function(item) {
 
       // Divider
       if (item.divider) {
-        var div = document.createElement('div');
+        let div = document.createElement('div');
         div.className = 'mts-paneldropdown__divider';
         container.appendChild(div);
         return;
       }
 
-      var btn = document.createElement('button');
+      let btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'mts-paneldropdown__item' +
         (item.unread ? ' mts-paneldropdown__item--unread' : '');
 
       // Dot de color
       if (item.dot) {
-        var dot = document.createElement('span');
+        let dot = document.createElement('span');
         dot.className = 'mts-paneldropdown__item-dot';
         dot.style.background = item.dot;
         btn.appendChild(dot);
@@ -271,25 +271,25 @@ MTS.PanelDropdown = class MtsPanelDropdown {
 
       // Ícono
       if (item.icon) {
-        var iconWrap = document.createElement('span');
+        let iconWrap = document.createElement('span');
         iconWrap.className = 'mts-paneldropdown__item-icon';
-        var ico = document.createElement('i');
+        let ico = document.createElement('i');
         ico.className = 'mts-icon ' + item.icon;
         iconWrap.appendChild(ico);
         btn.appendChild(iconWrap);
       }
 
       // Contenido (title + desc)
-      var content = document.createElement('span');
+      let content = document.createElement('span');
       content.className = 'mts-paneldropdown__item-content';
 
-      var titleEl = document.createElement('span');
+      let titleEl = document.createElement('span');
       titleEl.className = 'mts-paneldropdown__item-title';
       titleEl.textContent = item.title || '';
       content.appendChild(titleEl);
 
       if (item.description) {
-        var descEl = document.createElement('span');
+        let descEl = document.createElement('span');
         descEl.className = 'mts-paneldropdown__item-desc';
         descEl.textContent = item.description;
         content.appendChild(descEl);
@@ -299,7 +299,7 @@ MTS.PanelDropdown = class MtsPanelDropdown {
 
       // Timestamp
       if (item.timestamp) {
-        var timeEl = document.createElement('span');
+        let timeEl = document.createElement('span');
         timeEl.className = 'mts-paneldropdown__item-time';
         timeEl.textContent = item.timestamp;
         btn.appendChild(timeEl);
@@ -320,12 +320,12 @@ MTS.PanelDropdown = class MtsPanelDropdown {
 
   _positionPanel() {
     if (!this._panelEl || !this._trigger) return;
-    var rect        = this._trigger.getBoundingClientRect();
-    var panel       = this._panelEl;
+    let rect        = this._trigger.getBoundingClientRect();
+    let panel       = this._panelEl;
     // offsetHeight fuerza reflow síncrono — evita leer 0 antes del primer paint
-    var panelHeight = panel.offsetHeight || this._maxHeight;
-    var top         = rect.bottom + 6;
-    var left;
+    let panelHeight = panel.offsetHeight || this._maxHeight;
+    let top         = rect.bottom + 6;
+    let left;
 
     if (this._position === 'bottom-start') {
       left = rect.left;

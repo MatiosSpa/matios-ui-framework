@@ -42,7 +42,7 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     if (options.onClose)   this.on("close",  options.onClose);
 
     /* Auto-clear a standing validation error whenever the value changes */
-    var self = this;
+    let self = this;
     this.on("change", function () { if (self._error) self.clearError(); });
 
     /* Textos de botones configurables */
@@ -642,21 +642,21 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
    ──────────────────────────────────────────────────────────── */
 MTS.DatePicker.linkRange = function (from, to, opts) {
   opts = opts || {};
-  var allowSameDay = opts.allowSameDay !== false; // default true
-  var clampTo      = opts.clampTo      !== false; // default true
+  let allowSameDay = opts.allowSameDay !== false; // default true
+  let clampTo      = opts.clampTo      !== false; // default true
 
-  function offset(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function offset(d, n) { let x = new Date(d); x.setDate(x.getDate() + n); return x; }
 
   function syncTo() {
-    var t = to.getValue();
+    let t = to.getValue();
     from.setMaxDate(t ? (allowSameDay ? t : offset(t, -1)) : null);
   }
   function syncFrom() {
-    var f = from.getValue();
+    let f = from.getValue();
     to.setMinDate(f ? (allowSameDay ? f : offset(f, 1)) : null);
     if (clampTo && f) {
-      var minAllowed = allowSameDay ? f : offset(f, 1);
-      var t = to.getValue();
+      let minAllowed = allowSameDay ? f : offset(f, 1);
+      let t = to.getValue();
       if (t && t < minAllowed) to.setValue(minAllowed);
     }
     syncTo();

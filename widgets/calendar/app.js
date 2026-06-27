@@ -227,7 +227,7 @@ async function changeDataMode(mode) {
   log('api', `Fuente de datos: ${modo}`);
 }
 
-var cal;
+let cal;
 
 /* ════════════════════════════════════════════════════
    3. EVENT MODALS

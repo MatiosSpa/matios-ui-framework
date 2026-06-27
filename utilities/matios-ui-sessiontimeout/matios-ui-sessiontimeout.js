@@ -177,10 +177,10 @@ MTS.SessionTimeout = class MtsSessionTimeout {
   ══════════════════════════════════════════════════════════════ */
 
   _buildModalTitle() {
-    var wrap = document.createElement('span');
+    let wrap = document.createElement('span');
     wrap.className = 'mts-session-timeout__title';
     if (this._titleIcon) {
-      var icon = document.createElement('i');
+      let icon = document.createElement('i');
       icon.className = 'mts-icon mts-icon-' + this._titleIcon;
       wrap.appendChild(icon);
       wrap.appendChild(document.createTextNode(' '));

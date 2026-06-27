@@ -17,7 +17,7 @@
     options = options || {};
 
     /* Datasource: JS > DOM */
-    var domDs          = this._readDatasourceFromDOM();
+    let domDs          = this._readDatasourceFromDOM();
     this._datasource   = options.datasource ? options.datasource.slice() : domDs;
 
     this.row             = options.row             || {};
@@ -45,28 +45,28 @@
   /* ── Helpers de atributo ─────────────────────────────────── */
 
   ItemList.prototype._boolAttr = function (name) {
-    var val = this._el.getAttribute('data-' + name);
+    let val = this._el.getAttribute('data-' + name);
     return val === 'true' || val === '';
   };
 
   ItemList.prototype._numAttr = function (name, fallback) {
-    var val = this._el.getAttribute('data-' + name);
+    let val = this._el.getAttribute('data-' + name);
     return val != null ? parseInt(val) : fallback;
   };
 
   /* ── Leer datasource del DOM ─────────────────────────────── */
 
   ItemList.prototype._readDatasourceFromDOM = function () {
-    var items = [];
+    let items = [];
     if (this._el.tagName !== 'UL') { return items; }
 
-    var lis = this._el.querySelectorAll(':scope > li');
+    let lis = this._el.querySelectorAll(':scope > li');
     Array.prototype.forEach.call(lis, function (li) {
-      var item = {};
+      let item = {};
       Array.prototype.forEach.call(li.attributes, function (attr) {
         if (attr.name.indexOf('data-') !== 0) { return; }
-        var key = attr.name.slice(5).replace(/-([a-z])/g, function (_, c) { return c.toUpperCase(); });
-        var val = attr.value;
+        let key = attr.name.slice(5).replace(/-([a-z])/g, function (_, c) { return c.toUpperCase(); });
+        let val = attr.value;
         if (val !== '' && !isNaN(val)) { val = Number(val); }
         else if (val === 'true')  { val = true; }
         else if (val === 'false') { val = false; }
@@ -100,7 +100,7 @@
     this._ul.innerHTML = '';
 
     if (!this._datasource.length) {
-      var emptyLi = document.createElement('li');
+      let emptyLi = document.createElement('li');
       emptyLi.className = 'mts-itemlist__empty';
       emptyLi.textContent = this.empty;
       this._ul.appendChild(emptyLi);
@@ -108,7 +108,7 @@
       return;
     }
 
-    var self = this;
+    let self = this;
     this._datasource.forEach(function (item, index) {
       self._ul.appendChild(self._buildItem(item, index));
     });
@@ -119,10 +119,10 @@
   /* ── Render ítem ─────────────────────────────────────────── */
 
   ItemList.prototype._buildItem = function (item, index) {
-    var self       = this;
-    var isDisabled = !!(self.disabledBind && item[self.disabledBind]);
+    let self       = this;
+    let isDisabled = !!(self.disabledBind && item[self.disabledBind]);
 
-    var li = document.createElement('li');
+    let li = document.createElement('li');
     li.className = 'mts-itemlist__item';
     if (isDisabled)                              { li.classList.add('mts-itemlist__item--disabled'); }
     if (self.selectable && !isDisabled)          { li.classList.add('mts-itemlist__item--selectable'); }
@@ -132,7 +132,7 @@
 
     /* Reflejar TODOS los campos como data-* */
     Object.keys(item).forEach(function (key) {
-      var attr = key.replace(/([A-Z])/g, function (_, c) { return '-' + c.toLowerCase(); });
+      let attr = key.replace(/([A-Z])/g, function (_, c) { return '-' + c.toLowerCase(); });
       li.setAttribute('data-' + attr, item[key] != null ? item[key] : '');
     });
 
@@ -140,17 +140,17 @@
     if (self.row.leading) { li.appendChild(self._buildLeading(item)); }
 
     /* Body */
-    var body = document.createElement('div');
+    let body = document.createElement('div');
     body.className = 'mts-itemlist__body';
 
     if (self.row.primary) {
-      var primary = document.createElement('span');
+      let primary = document.createElement('span');
       primary.className = 'mts-itemlist__primary';
       primary.textContent = item[self.row.primary] != null ? String(item[self.row.primary]) : '';
       body.appendChild(primary);
     }
     if (self.row.secondary) {
-      var secondary = document.createElement('span');
+      let secondary = document.createElement('span');
       secondary.className = 'mts-itemlist__secondary';
       secondary.textContent = item[self.row.secondary] != null ? String(item[self.row.secondary]) : '';
       body.appendChild(secondary);
@@ -159,10 +159,10 @@
 
     /* Controls */
     if (self.row.controls && self.row.controls.length) {
-      var ctrlWrap = document.createElement('div');
+      let ctrlWrap = document.createElement('div');
       ctrlWrap.className = 'mts-itemlist__controls';
       self.row.controls.forEach(function (ctrl) {
-        var ctrlEl = self._buildControl(ctrl, item, li);
+        let ctrlEl = self._buildControl(ctrl, item, li);
         if (ctrlEl) { ctrlWrap.appendChild(ctrlEl); }
       });
       li.appendChild(ctrlWrap);
@@ -173,7 +173,7 @@
 
     /* canRemove — × automático */
     if (self.canRemove && !isDisabled) {
-      var removeBtn = document.createElement('button');
+      let removeBtn = document.createElement('button');
       removeBtn.type = 'button';
       removeBtn.className = 'mts-itemlist__remove';
       removeBtn.setAttribute('aria-label', 'Eliminar');
@@ -198,17 +198,17 @@
   /* ── Leading ─────────────────────────────────────────────── */
 
   ItemList.prototype._buildLeading = function (item) {
-    var self    = this;
-    var leading = self.row.leading;
-    var wrap    = document.createElement('div');
+    let self    = this;
+    let leading = self.row.leading;
+    let wrap    = document.createElement('div');
     wrap.className = 'mts-itemlist__leading';
 
     if (leading.type === 'avatar') {
-      var src    = leading.bind ? item[leading.bind] : (leading.value || '');
-      var name   = self.row.primary ? (item[self.row.primary] || '') : '';
+      let src    = leading.bind ? item[leading.bind] : (leading.value || '');
+      let name   = self.row.primary ? (item[self.row.primary] || '') : '';
 
       if (src) {
-        var img = document.createElement('img');
+        let img = document.createElement('img');
         img.className = 'mts-itemlist__avatar';
         img.src = src;
         img.alt = name;
@@ -222,11 +222,11 @@
       }
 
     } else if (leading.type === 'initials') {
-      var text = leading.bind ? (item[leading.bind] || '') : (leading.value || '');
+      let text = leading.bind ? (item[leading.bind] || '') : (leading.value || '');
       wrap.appendChild(_makeInitials(text));
 
     } else if (leading.type === 'icon') {
-      var iconName = leading.bind ? (item[leading.bind] || '') : (leading.value || '');
+      let iconName = leading.bind ? (item[leading.bind] || '') : (leading.value || '');
       wrap.appendChild(_makeIcon(iconName));
     }
 
@@ -236,12 +236,12 @@
   /* ── Trailing ────────────────────────────────────────────── */
 
   ItemList.prototype._buildTrailing = function (item) {
-    var trailing = this.row.trailing;
-    var wrap     = document.createElement('div');
+    let trailing = this.row.trailing;
+    let wrap     = document.createElement('div');
     wrap.className = 'mts-itemlist__trailing';
 
     if (trailing.type === 'icon') {
-      var iconName = trailing.bind ? (item[trailing.bind] || '') : (trailing.value || '');
+      let iconName = trailing.bind ? (item[trailing.bind] || '') : (trailing.value || '');
       wrap.appendChild(_makeIcon(iconName));
     }
     return wrap;
@@ -250,15 +250,15 @@
   /* ── Control ─────────────────────────────────────────────── */
 
   ItemList.prototype._buildControl = function (ctrl, item, li) {
-    var self = this;
+    let self = this;
 
     /* select */
     if (ctrl.type === 'select') {
-      var sel = document.createElement('select');
+      let sel = document.createElement('select');
       sel.className = 'mts-itemlist__ctrl-select';
       if (ctrl.options) {
         ctrl.options.forEach(function (opt) {
-          var optEl = document.createElement('option');
+          let optEl = document.createElement('option');
           optEl.value = opt.value;
           optEl.textContent = opt.label;
           if (ctrl.bind && item[ctrl.bind] == opt.value) { optEl.selected = true; }
@@ -267,10 +267,10 @@
       }
       sel.addEventListener('change', function (e) {
         e.stopPropagation();
-        var newVal = isNaN(sel.value) ? sel.value : Number(sel.value);
+        let newVal = isNaN(sel.value) ? sel.value : Number(sel.value);
         if (ctrl.bind) {
           item[ctrl.bind] = newVal;
-          var attr = ctrl.bind.replace(/([A-Z])/g, function (_, c) { return '-' + c.toLowerCase(); });
+          let attr = ctrl.bind.replace(/([A-Z])/g, function (_, c) { return '-' + c.toLowerCase(); });
           li.setAttribute('data-' + attr, newVal);
         }
         self._emit('change', { item: item, control: ctrl.bind || 'select', value: newVal, el: li });
@@ -281,11 +281,11 @@
 
     /* badge — solo se pinta si el item trae valor */
     if (ctrl.type === 'badge') {
-      var val = ctrl.bind ? item[ctrl.bind] : null;
+      let val = ctrl.bind ? item[ctrl.bind] : null;
       if (!val) { return null; }
-      var badge   = document.createElement('span');
+      let badge   = document.createElement('span');
       badge.className = 'mts-badge';
-      var variant = ctrl.variantBind ? item[ctrl.variantBind] : (ctrl.variant || null);
+      let variant = ctrl.variantBind ? item[ctrl.variantBind] : (ctrl.variant || null);
       if (variant) { badge.classList.add('mts-badge--' + variant); }
       badge.textContent = val;
       return badge;
@@ -293,17 +293,17 @@
 
     /* button */
     if (ctrl.type === 'button') {
-      var btn = document.createElement('button');
+      let btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'mts-itemlist__ctrl-btn';
       if (ctrl.tooltip) { btn.setAttribute('title', ctrl.tooltip); }
       if (ctrl.icon) {
-        var iconWrap = _makeIcon(ctrl.icon);
+        let iconWrap = _makeIcon(ctrl.icon);
         iconWrap.className = 'mts-itemlist__ctrl-icon';
         btn.appendChild(iconWrap);
       }
       if (ctrl.label) {
-        var lbl = document.createElement('span');
+        let lbl = document.createElement('span');
         lbl.textContent = ctrl.label;
         btn.appendChild(lbl);
       }
@@ -325,20 +325,20 @@
   /* ── Scroll ──────────────────────────────────────────────── */
 
   ItemList.prototype._applyScroll = function () {
-    var ul = this._ul;
+    let ul = this._ul;
     if (!this.scroll) {
       ul.classList.remove('mts-itemlist--scroll');
       ul.style.removeProperty('--mts-il-max-height');
       return;
     }
 
-    var active = this.maxItems == null || this._datasource.length > this.maxItems;
+    let active = this.maxItems == null || this._datasource.length > this.maxItems;
     ul.classList.toggle('mts-itemlist--scroll', active);
 
     if (active && this.maxItems) {
-      var maxN = this.maxItems;
+      let maxN = this.maxItems;
       requestAnimationFrame(function () {
-        var first = ul.querySelector('.mts-itemlist__item');
+        let first = ul.querySelector('.mts-itemlist__item');
         if (first) {
           ul.style.setProperty('--mts-il-max-height', (first.offsetHeight * maxN) + 'px');
         }
@@ -349,7 +349,7 @@
   /* ── Acciones internas ───────────────────────────────────── */
 
   ItemList.prototype._doRemove = function (item, li) {
-    var idx = this._datasource.indexOf(item);
+    let idx = this._datasource.indexOf(item);
     if (idx === -1) { return; }
     this._datasource.splice(idx, 1);
     if (this._selectedValue === item.value) { this._selectedValue = null; }
@@ -365,7 +365,7 @@
       this._emit('select', { item: null, el: li });
       if (this._onSelect) { this._onSelect({ detail: { item: null, el: li } }); }
     } else {
-      var prev = this._ul.querySelector('.mts-itemlist__item--selected');
+      let prev = this._ul.querySelector('.mts-itemlist__item--selected');
       if (prev) { prev.classList.remove('mts-itemlist__item--selected'); }
       this._selectedValue = item.value;
       li.classList.add('mts-itemlist__item--selected');
@@ -378,22 +378,22 @@
 
   ItemList.prototype.addItem = function (item) {
     if (!this.allowDuplicates) {
-      for (var i = 0; i < this._datasource.length; i++) {
+      for (let i = 0; i < this._datasource.length; i++) {
         if (this._datasource[i].value === item.value) { return this; }
       }
     }
     this._datasource.push(item);
     this._renderItems();
-    var newEl = this._ul.querySelector('[data-value="' + item.value + '"]:last-child') || this._ul.lastElementChild;
+    let newEl = this._ul.querySelector('[data-value="' + item.value + '"]:last-child') || this._ul.lastElementChild;
     this._emit('add', { item: item, index: this._datasource.length - 1, el: newEl });
     if (this._onAdd) { this._onAdd({ detail: { item: item, index: this._datasource.length - 1, el: newEl } }); }
     return this;
   };
 
   ItemList.prototype.removeItem = function (value) {
-    var found = null;
-    var idx   = -1;
-    for (var i = 0; i < this._datasource.length; i++) {
+    let found = null;
+    let idx   = -1;
+    for (let i = 0; i < this._datasource.length; i++) {
       if (this._datasource[i].value === value) { found = this._datasource[i]; idx = i; break; }
     }
     if (!found) { return this; }
@@ -406,7 +406,7 @@
   };
 
   ItemList.prototype.updateItem = function (value, patch) {
-    var item = this.findItem(value);
+    let item = this.findItem(value);
     if (!item) { return this; }
     Object.keys(patch).forEach(function (k) { item[k] = patch[k]; });
     this._renderItems();
@@ -414,7 +414,7 @@
   };
 
   ItemList.prototype.findItem = function (value) {
-    for (var i = 0; i < this._datasource.length; i++) {
+    for (let i = 0; i < this._datasource.length; i++) {
       if (this._datasource[i].value === value) { return this._datasource[i]; }
     }
     return null;
@@ -433,14 +433,14 @@
 
   ItemList.prototype.getSelected = function () {
     if (this._selectedValue == null) { return null; }
-    var item = this.findItem(this._selectedValue);
+    let item = this.findItem(this._selectedValue);
     if (!item) { return null; }
-    var el = this._ul.querySelector('[data-value="' + this._selectedValue + '"]');
+    let el = this._ul.querySelector('[data-value="' + this._selectedValue + '"]');
     return { item: item, el: el };
   };
 
   ItemList.prototype.clearSelection = function () {
-    var prev = this._ul.querySelector('.mts-itemlist__item--selected');
+    let prev = this._ul.querySelector('.mts-itemlist__item--selected');
     if (prev) { prev.classList.remove('mts-itemlist__item--selected'); }
     this._selectedValue = null;
     return this;
@@ -461,20 +461,20 @@
 
   function _initials(text) {
     if (!text) { return '?'; }
-    var parts = String(text).trim().split(/\s+/);
+    let parts = String(text).trim().split(/\s+/);
     if (parts.length === 1) { return parts[0].slice(0, 2).toUpperCase(); }
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 
   function _makeInitials(text) {
-    var span = document.createElement('span');
+    let span = document.createElement('span');
     span.className = 'mts-itemlist__initials';
     span.textContent = _initials(text);
     return span;
   }
 
   /* SVG inline — strings estáticos y seguros, no son datos de usuario */
-  var _ICONS = {
+  let _ICONS = {
     'user':          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="5.5" r="2.5"/><path d="M2.5 14c0-3 2.4-5.5 5.5-5.5s5.5 2.5 5.5 5.5"/></svg>',
     'x':             '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>',
     'edit':          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 2.5l3 3L5 14H2v-3L10.5 2.5z"/></svg>',
@@ -488,7 +488,7 @@
   };
 
   function _makeIcon(name) {
-    var wrap = document.createElement('span');
+    let wrap = document.createElement('span');
     wrap.className = 'mts-itemlist__icon';
     /* innerHTML aceptable: string literal del registry interno, sin datos de usuario */
     wrap.innerHTML = _ICONS[name] || _ICONS['user'];

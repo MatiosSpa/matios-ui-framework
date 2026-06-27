@@ -121,7 +121,7 @@ MTS.StatusBar = class MtsStatusBar {
       this._inject(this._centerEl, this.center);
       this._el.appendChild(this._centerEl);
     } else {
-      var spacer = document.createElement('div');
+      let spacer = document.createElement('div');
       spacer.className = 'mts-statusbar__spacer';
       this._el.appendChild(spacer);
     }
@@ -136,7 +136,7 @@ MTS.StatusBar = class MtsStatusBar {
   }
 
   _syncClasses() {
-    var cls = ['mts-statusbar'];
+    let cls = ['mts-statusbar'];
     if (this.variant && this.variant !== 'default') {
       cls.push('mts-statusbar--' + this.variant);
     }

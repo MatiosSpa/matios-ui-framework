@@ -102,7 +102,7 @@ MTS.CopyButton = class MtsCopyButton {
     this._el.innerHTML = '';
     const ic = document.createElement('span');
     ic.className = 'mts-btn__icon-left';
-    var _icon = copied ? this.iconCopied : this.icon;
+    let _icon = copied ? this.iconCopied : this.icon;
     ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(_icon) : _icon;
     this._el.appendChild(ic);
     if (!this.iconOnly) {

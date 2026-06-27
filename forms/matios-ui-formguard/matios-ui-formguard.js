@@ -30,7 +30,7 @@
 
   /* ── Utilidades privadas ─────────────────────────────────── */
 
-  var _uidCounter = 0;
+  let _uidCounter = 0;
   function _uid() {
     _uidCounter++;
     return 'mfg-' + _uidCounter + '-' + Math.random().toString(36).slice(2, 7);
@@ -43,7 +43,7 @@
   }
 
   function _readValue(el) {
-    var inst = el._mtsInstance;
+    let inst = el._mtsInstance;
     if (inst) {
       if (typeof inst.getValue   === 'function') { return inst.getValue();   }
       if (typeof inst.isChecked  === 'function') { return inst.isChecked();  }
@@ -55,12 +55,12 @@
 
   /* ── Estado privado del singleton ───────────────────────── */
 
-  var _started        = false;
-  var _options        = {};
-  var _forms          = new Map();   /* formEl → FormState */
-  var _dirtyCount     = 0;
-  var _observer       = null;
-  var _beforeUnloadFn = null;
+  let _started        = false;
+  let _options        = {};
+  let _forms          = new Map();   /* formEl → FormState */
+  let _dirtyCount     = 0;
+  let _observer       = null;
+  let _beforeUnloadFn = null;
 
   /* ── FormState ───────────────────────────────────────────── */
 
@@ -76,10 +76,10 @@
   /* ── collectControls ─────────────────────────────────────── */
 
   function collectControls(formEl) {
-    var results = [];
-    var seen    = new Set();
+    let results = [];
+    let seen    = new Set();
 
-    var walker = document.createTreeWalker(
+    let walker = document.createTreeWalker(
       formEl,
       NodeFilter.SHOW_ELEMENT,
       {
@@ -99,9 +99,9 @@
       }
     );
 
-    var node;
+    let node;
     while ((node = walker.nextNode())) {
-      var include = false;
+      let include = false;
 
       if (node._mtsInstance) {
         /* componente MTS — siempre incluir */
@@ -130,8 +130,8 @@
 
   function takeSnapshot(formState) {
     formState.snapshot.clear();
-    for (var i = 0; i < formState.controls.length; i++) {
-      var el = formState.controls[i];
+    for (let i = 0; i < formState.controls.length; i++) {
+      let el = formState.controls[i];
       formState.snapshot.set(el._mtsGuardId, _serialize(_readValue(el)));
     }
   }
@@ -139,10 +139,10 @@
   /* ── Dirty check ─────────────────────────────────────────── */
 
   function computeIsDirty(formState) {
-    for (var i = 0; i < formState.controls.length; i++) {
-      var el      = formState.controls[i];
-      var current  = _serialize(_readValue(el));
-      var original = formState.snapshot.get(el._mtsGuardId);
+    for (let i = 0; i < formState.controls.length; i++) {
+      let el      = formState.controls[i];
+      let current  = _serialize(_readValue(el));
+      let original = formState.snapshot.get(el._mtsGuardId);
       if (current !== original) { return true; }
     }
     return false;
@@ -152,7 +152,7 @@
 
   function _updateDirtyUI(formState, isDirty) {
     /* título — selector explícito o .mts-card__title dentro del form */
-    var titleTarget = null;
+    let titleTarget = null;
     if (formState.el.dataset.mtsFormTitleTarget) {
       titleTarget = document.querySelector(formState.el.dataset.mtsFormTitleTarget);
     } else {
@@ -160,9 +160,9 @@
     }
 
     if (titleTarget) {
-      var existingMark = titleTarget.querySelector('.mts-formguard__dirty-mark');
+      let existingMark = titleTarget.querySelector('.mts-formguard__dirty-mark');
       if (isDirty && !existingMark) {
-        var mark = document.createElement('span');
+        let mark = document.createElement('span');
         mark.className = 'mts-formguard__dirty-mark';
         mark.setAttribute('aria-hidden', 'true');
         mark.textContent = ' *';
@@ -173,9 +173,9 @@
     }
 
     /* botón guardar — dot via CSS ::after */
-    var saveSel = formState.el.dataset.mtsFormSave;
+    let saveSel = formState.el.dataset.mtsFormSave;
     if (saveSel) {
-      var saveBtn = document.querySelector(saveSel);
+      let saveBtn = document.querySelector(saveSel);
       if (saveBtn) {
         if (isDirty) {
           saveBtn.classList.add('mts-formguard__save--dirty');
@@ -189,7 +189,7 @@
   /* ── updateDirty ─────────────────────────────────────────── */
 
   function updateDirty(formState) {
-    var wasDirty = formState.isDirty;
+    let wasDirty = formState.isDirty;
     formState.isDirty = computeIsDirty(formState);
 
     if (formState.isDirty !== wasDirty) {
@@ -227,13 +227,13 @@
   }
 
   function _showBeforeUnloadModal() {
-    var messages   = _options.messages || {};
-    var title      = messages.modalTitle   || 'Cambios sin guardar';
-    var body       = messages.modalBody    || 'Tienes cambios sin guardar. Si sales ahora, se perderán.';
-    var btnKeep    = messages.btnKeep      || 'Seguir editando';
-    var btnDiscard = messages.btnDiscard   || 'Salir sin guardar';
+    let messages   = _options.messages || {};
+    let title      = messages.modalTitle   || 'Cambios sin guardar';
+    let body       = messages.modalBody    || 'Tienes cambios sin guardar. Si sales ahora, se perderán.';
+    let btnKeep    = messages.btnKeep      || 'Seguir editando';
+    let btnDiscard = messages.btnDiscard   || 'Salir sin guardar';
 
-    var modal = new MTS.Modal({
+    let modal = new MTS.Modal({
       title: title,
       body:  body,
       size:  'sm',
@@ -263,7 +263,7 @@
 
   /* ── Handlers de cambio por burbujeo ─────────────────────── */
 
-  var _MTS_EVENTS = [
+  let _MTS_EVENTS = [
     'mts:input:change',      'mts:toggle:change',    'mts:select:change',
     'mts:checkbox:change',   'mts:radio:change',     'mts:slider:change',
     'mts:taginput:change',   'mts:picker:change',    'mts:numberinput:change',
@@ -271,9 +271,9 @@
   ];
 
   function _onAnyChange(e) {
-    var formEl = e.target.closest('[data-mts-form]');
+    let formEl = e.target.closest('[data-mts-form]');
     if (!formEl) { return; }
-    var formState = _forms.get(formEl);
+    let formState = _forms.get(formEl);
     if (!formState || !formState._snapshotReady) { return; }
     updateDirty(formState);
   }
@@ -287,12 +287,12 @@
   /* ── Intercepción de navegación (botón back) ─────────────── */
 
   function _onClickCapture(e) {
-    var btn = e.target.closest('[data-mts-form-back]');
+    let btn = e.target.closest('[data-mts-form-back]');
     if (!btn) { return; }
 
     /* resolver el form asociado */
-    var formEl = null;
-    var backVal = btn.dataset.mtsFormBack;
+    let formEl = null;
+    let backVal = btn.dataset.mtsFormBack;
     if (backVal) {
       /* data-mts-form-back="selector" apunta al form */
       formEl = document.querySelector(backVal);
@@ -303,13 +303,13 @@
     }
     if (!formEl) {
       /* si el botón está fuera, tomar cualquier form sucio */
-      var first = null;
+      let first = null;
       _forms.forEach(function (fs) { if (fs.isDirty && !first) { first = fs.el; } });
       formEl = first;
     }
     if (!formEl) { return; }
 
-    var formState = _forms.get(formEl);
+    let formState = _forms.get(formEl);
     if (!formState || !formState.isDirty) { return; }
 
     e.preventDefault();
@@ -326,19 +326,19 @@
   /* ── Modal de navegación ─────────────────────────────────── */
 
   function openNavigateModal(formState, proceedFn) {
-    var allowed = formState.el.dispatchEvent(new CustomEvent('mts:form:before-navigate', {
+    let allowed = formState.el.dispatchEvent(new CustomEvent('mts:form:before-navigate', {
       bubbles: true, cancelable: true,
       detail: { formId: formState.id }
     }));
     if (!allowed) { return; }
 
-    var saveSel = formState.el.dataset.mtsFormSave;
+    let saveSel = formState.el.dataset.mtsFormSave;
 
     if (window.MTS && window.MTS.Modal) {
       _openMtsModal(formState, proceedFn, saveSel);
     } else {
       /* fallback nativo */
-      var msg = (_options.messages && _options.messages.unsavedChanges)
+      let msg = (_options.messages && _options.messages.unsavedChanges)
         || 'Tienes cambios sin guardar. ¿Deseas descartarlos?';
       if (confirm(msg)) {
         resetForm(formState);
@@ -348,14 +348,14 @@
   }
 
   function _openMtsModal(formState, proceedFn, saveSel) {
-    var messages   = _options.messages || {};
-    var title      = messages.modalTitle   || 'Cambios sin guardar';
-    var body       = messages.modalBody    || 'Tienes cambios sin guardar en este formulario.';
-    var btnKeep    = messages.btnKeep      || 'Seguir editando';
-    var btnDiscard = messages.btnDiscard   || 'Descartar cambios';
-    var btnSave    = messages.btnSave      || 'Guardar y salir';
+    let messages   = _options.messages || {};
+    let title      = messages.modalTitle   || 'Cambios sin guardar';
+    let body       = messages.modalBody    || 'Tienes cambios sin guardar en este formulario.';
+    let btnKeep    = messages.btnKeep      || 'Seguir editando';
+    let btnDiscard = messages.btnDiscard   || 'Descartar cambios';
+    let btnSave    = messages.btnSave      || 'Guardar y salir';
 
-    var footerBtns = [
+    let footerBtns = [
       { label: btnKeep, variant: 'ghost',   onClick: function () { modal.close(); } },
       { label: btnDiscard, variant: 'danger', onClick: function () { modal.close(); resetForm(formState); proceedFn(); } }
     ];
@@ -366,14 +366,14 @@
       });
     }
 
-    var modal = new MTS.Modal({ title: title, body: body, size: 'sm', closeOnBackdrop: false, footer: footerBtns });
+    let modal = new MTS.Modal({ title: title, body: body, size: 'sm', closeOnBackdrop: false, footer: footerBtns });
     modal.open();
   }
 
   function _handleSaveAndExit(formState, modal, proceedFn) {
-    var saveSel = formState.el.dataset.mtsFormSave;
+    let saveSel = formState.el.dataset.mtsFormSave;
     if (!saveSel) { modal.close(); proceedFn(); return; }
-    var saveBtn = document.querySelector(saveSel);
+    let saveBtn = document.querySelector(saveSel);
     if (saveBtn) { saveBtn.click(); }
 
     function onAck(e) {
@@ -392,7 +392,7 @@
 
   function resetForm(formState) {
     takeSnapshot(formState);
-    var wasDirty = formState.isDirty;
+    let wasDirty = formState.isDirty;
     formState.isDirty = false;
     if (wasDirty) {
       _dirtyCount = Math.max(0, _dirtyCount - 1);
@@ -408,9 +408,9 @@
   /* ── mts:form:snapshot-sync ──────────────────────────────── */
 
   function _onSnapshotSync(e) {
-    var formEl = e.target.closest('[data-mts-form]');
+    let formEl = e.target.closest('[data-mts-form]');
     if (!formEl) { return; }
-    var formState = _forms.get(formEl);
+    let formState = _forms.get(formEl);
     if (!formState) { return; }
     /* re-collect por si hay nuevos controles desde el último adopt */
     formState.controls       = collectControls(formEl);
@@ -422,7 +422,7 @@
 
   function adopt(formEl) {
     if (_forms.has(formEl)) { return; }
-    var formState = new FormState(formEl);
+    let formState = new FormState(formEl);
     _forms.set(formEl, formState);
     /* Diferimos el collect con setTimeout(0) para que los componentes MTS
        (que pueden instanciarse en el mismo bloque de script después de start())
@@ -436,7 +436,7 @@
   }
 
   function release(formEl) {
-    var formState = _forms.get(formEl);
+    let formState = _forms.get(formEl);
     if (!formState) { return; }
     if (formState.isDirty) {
       _dirtyCount = Math.max(0, _dirtyCount - 1);

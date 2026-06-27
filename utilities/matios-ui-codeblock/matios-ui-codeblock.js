@@ -21,7 +21,7 @@ MTS.CodeBlock = class MtsCodeBlock {
     this.wrap = options.wrap ?? ds.wrap === 'true';
     this.height = options.height ?? ds.height ?? 'auto';
 
-    var _copy = options.copy || {};
+    let _copy = options.copy || {};
     this.copy = {
       iconOnly:     _copy.iconOnly     !== undefined ? _copy.iconOnly     : true,
       label:        _copy.label        !== undefined ? _copy.label        : 'Copiar',
@@ -110,9 +110,9 @@ MTS.CodeBlock = class MtsCodeBlock {
     const actions = document.createElement('div');
     actions.className = 'mts-codeblock__actions';
 
-    var langHost = document.createElement('span');
+    let langHost = document.createElement('span');
     langHost.className = 'mts-codeblock__lang';
-    var langText = MTS.CodeBlock.normalizeLanguage(this.language).toUpperCase();
+    let langText = MTS.CodeBlock.normalizeLanguage(this.language).toUpperCase();
     if (window.MTS && MTS.Badge) {
       new MTS.Badge(langHost, { label: langText, variant: 'secondary', size: 'sm' });
     } else {

@@ -23,7 +23,7 @@ MTS.DocumentManagerPreviewVersionsPanel = class DocumentManagerPreviewVersionsPa
   get key() { return 'dm-versions'; }
 
   get label() {
-    var loc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewVersionsPanel'] ?? {};
+    let loc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewVersionsPanel'] ?? {};
     return loc.panelLabel || 'Versiones';
   }
 
@@ -44,11 +44,11 @@ MTS.DocumentManagerPreviewVersionsPanel = class DocumentManagerPreviewVersionsPa
   /* ── Skeleton ─────────────────────────────────────────── */
 
   render(item) {
-    var wrap = document.createElement('div');
+    let wrap = document.createElement('div');
     wrap.className = 'dm-versions dm-versions--loading';
-    var list = document.createElement('div');
+    let list = document.createElement('div');
     list.className = 'dm-versions__list';
-    for (var i = 0; i < 3; i++) {
+    for (let i = 0; i < 3; i++) {
       list.appendChild(this._buildSkeletonRow());
     }
     wrap.appendChild(list);
@@ -58,7 +58,7 @@ MTS.DocumentManagerPreviewVersionsPanel = class DocumentManagerPreviewVersionsPa
   /* ── Load ─────────────────────────────────────────────── */
 
   load(item) {
-    var self = this;
+    let self = this;
     if (!this._onLoad) {
       return this._buildEmptyEl();
     }
@@ -75,10 +75,10 @@ MTS.DocumentManagerPreviewVersionsPanel = class DocumentManagerPreviewVersionsPa
   /* ── Render lista ─────────────────────────────────────── */
 
   _renderList(versions, item) {
-    var self = this;
-    var loc  = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewVersionsPanel'] ?? {};
+    let self = this;
+    let loc  = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewVersionsPanel'] ?? {};
 
-    var wrap = document.createElement('div');
+    let wrap = document.createElement('div');
     wrap.className = 'dm-versions';
 
     if (!versions.length) {
@@ -86,20 +86,20 @@ MTS.DocumentManagerPreviewVersionsPanel = class DocumentManagerPreviewVersionsPa
       return wrap;
     }
 
-    var list = document.createElement('div');
+    let list = document.createElement('div');
     list.className = 'dm-versions__list';
     wrap.appendChild(list);
 
-    var rowEls = [];
+    let rowEls = [];
 
     versions.forEach(function(version) {
-      var row = document.createElement('div');
+      let row = document.createElement('div');
       row.className = 'dm-versions__item' + (version.isCurrent ? ' dm-versions__item--active' : '');
       row.setAttribute('role', 'button');
       row.setAttribute('tabindex', '0');
 
       /* Badge de versión — izquierda */
-      var badgeWrap = document.createElement('div');
+      let badgeWrap = document.createElement('div');
       badgeWrap.className = 'dm-versions__badge-wrap';
       if (typeof MTS.Badge !== 'undefined') {
         new MTS.Badge(badgeWrap, {
@@ -112,23 +112,23 @@ MTS.DocumentManagerPreviewVersionsPanel = class DocumentManagerPreviewVersionsPa
       row.appendChild(badgeWrap);
 
       /* Info: nombre + meta — centro */
-      var info = document.createElement('div');
+      let info = document.createElement('div');
       info.className = 'dm-versions__info';
 
-      var nameEl = document.createElement('div');
+      let nameEl = document.createElement('div');
       nameEl.className   = 'dm-versions__name';
       nameEl.textContent = version.name || ('Versión ' + version.version);
       nameEl.title       = nameEl.textContent;
       info.appendChild(nameEl);
 
-      var metaParts = [];
+      let metaParts = [];
       if (version.author)   metaParts.push(version.author);
       if (version.modified) metaParts.push(version.modified);
       if (version.size != null) {
         metaParts.push(MTS.DocumentManagerPreviewVersionsPanel._formatSize(version.size));
       }
       if (metaParts.length) {
-        var metaEl = document.createElement('div');
+        let metaEl = document.createElement('div');
         metaEl.className   = 'dm-versions__meta';
         metaEl.textContent = metaParts.join(' · ');
         info.appendChild(metaEl);
@@ -138,7 +138,7 @@ MTS.DocumentManagerPreviewVersionsPanel = class DocumentManagerPreviewVersionsPa
 
       /* Badge "Actual" — derecha, solo en isCurrent */
       if (version.isCurrent) {
-        var currentWrap = document.createElement('div');
+        let currentWrap = document.createElement('div');
         currentWrap.className = 'dm-versions__current-wrap';
         if (typeof MTS.Badge !== 'undefined') {
           new MTS.Badge(currentWrap, {
@@ -179,19 +179,19 @@ MTS.DocumentManagerPreviewVersionsPanel = class DocumentManagerPreviewVersionsPa
   /* ── Helpers ──────────────────────────────────────────── */
 
   _buildSkeletonRow() {
-    var row = document.createElement('div');
+    let row = document.createElement('div');
     row.className = 'dm-versions__skeleton-row';
 
-    var badge = document.createElement('div');
+    let badge = document.createElement('div');
     badge.className = 'dm-versions__skeleton-badge';
     row.appendChild(badge);
 
-    var lines = document.createElement('div');
+    let lines = document.createElement('div');
     lines.className = 'dm-versions__skeleton-lines';
 
-    var l1 = document.createElement('div');
+    let l1 = document.createElement('div');
     l1.className = 'dm-versions__skeleton-line dm-versions__skeleton-line--name';
-    var l2 = document.createElement('div');
+    let l2 = document.createElement('div');
     l2.className = 'dm-versions__skeleton-line dm-versions__skeleton-line--meta';
 
     lines.appendChild(l1);
@@ -201,8 +201,8 @@ MTS.DocumentManagerPreviewVersionsPanel = class DocumentManagerPreviewVersionsPa
   }
 
   _buildEmptyEl() {
-    var loc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewVersionsPanel'] ?? {};
-    var p = document.createElement('p');
+    let loc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewVersionsPanel'] ?? {};
+    let p = document.createElement('p');
     p.className   = 'dm-versions__empty';
     p.textContent = loc.noVersions || 'Sin versiones.';
     return p;

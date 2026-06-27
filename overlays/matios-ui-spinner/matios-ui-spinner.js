@@ -27,8 +27,8 @@ MTS.Spinner = class MtsSpinner {
     if (!this._el) return;
 
     /* Inicialización declarativa via data-* */
-    var ds = this._el.dataset || {};
-    var fromHTML = {}, k;
+    let ds = this._el.dataset || {};
+    let fromHTML = {}, k;
     if (ds.variant  !== undefined) fromHTML.variant  = ds.variant;
     if (ds.size     !== undefined) fromHTML.size     = ds.size;
     if (ds.color    !== undefined) fromHTML.color    = ds.color;
@@ -38,7 +38,7 @@ MTS.Spinner = class MtsSpinner {
     if (ds.overlay  !== undefined) fromHTML.overlay  = true;
 
     /* data-* como base, options como override */
-    var merged = {};
+    let merged = {};
     for (k in fromHTML) { merged[k] = fromHTML[k]; }
     for (k in options)  { merged[k] = options[k];  }
 
@@ -66,7 +66,7 @@ MTS.Spinner = class MtsSpinner {
      ════════════════════════════════════════════════════ */
 
   _syncClasses() {
-    var keep = [], list = this._el.classList, i;
+    let keep = [], list = this._el.classList, i;
     for (i = 0; i < list.length; i++) {
       if (!list[i].startsWith('mts-spinner')) keep.push(list[i]);
     }
@@ -76,8 +76,8 @@ MTS.Spinner = class MtsSpinner {
   }
 
   _applyColor() {
-    var tones = { warning: 1, danger: 1, success: 1, muted: 1 };
-    var el = this._el;
+    let tones = { warning: 1, danger: 1, success: 1, muted: 1 };
+    let el = this._el;
 
     if (this.color) {
       if (tones[this.color]) {
@@ -95,7 +95,7 @@ MTS.Spinner = class MtsSpinner {
   }
 
   _createElement(cls) {
-    var el = document.createElement('div');
+    let el = document.createElement('div');
     if (cls) el.className = cls;
     return el;
   }
@@ -105,10 +105,10 @@ MTS.Spinner = class MtsSpinner {
     this._syncClasses();
     this._applyColor();
 
-    var inner = document.createElement('div');
+    let inner = document.createElement('div');
     inner.className = 'mts-spinner__inner--' + this.variant;
 
-    var i;
+    let i;
 
     switch (this.variant) {
 
@@ -130,12 +130,12 @@ MTS.Spinner = class MtsSpinner {
       default: break;
     }
 
-    var body = this._createElement('mts-spinner__body');
+    let body = this._createElement('mts-spinner__body');
     body.appendChild(inner);
     this._el.appendChild(body);
 
     if (this.label) {
-      var lbl = this._createElement('mts-spinner__label');
+      let lbl = this._createElement('mts-spinner__label');
       lbl.textContent = this.label;
       this._el.appendChild(lbl);
     }

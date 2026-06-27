@@ -7,7 +7,7 @@
 window.MTS = window.MTS || {};
 
 (function () {
-  var warned = false;
+  let warned = false;
 
   function warnDeprecated() {
     if (warned) return;
@@ -73,15 +73,15 @@ window.MTS = window.MTS || {};
       this._el.innerHTML = '';
       this._syncClasses(['mts-stepprogress', 'mts-stepprogress--' + this.variant]);
 
-      var total = this.steps.length;
-      var self = this;
+      let total = this.steps.length;
+      let self = this;
 
       this.steps.forEach(function (step, i) {
-        var isDone = i < self.active;
-        var isActive = i === self.active;
-        var isError = step._status === 'error';
+        let isDone = i < self.active;
+        let isActive = i === self.active;
+        let isError = step._status === 'error';
 
-        var item = document.createElement('div');
+        let item = document.createElement('div');
         item.className =
           'mts-stepprogress__item' +
           (isDone ? ' mts-stepprogress__item--done' : '') +
@@ -93,7 +93,7 @@ window.MTS = window.MTS || {};
           item.addEventListener('click', function () { self.goTo(i); });
         }
 
-        var indicator = document.createElement('div');
+        let indicator = document.createElement('div');
         indicator.className = 'mts-stepprogress__indicator';
 
         if (isError) {
@@ -101,7 +101,7 @@ window.MTS = window.MTS || {};
         } else if (isDone) {
           indicator.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
         } else {
-          var num = document.createElement('span');
+          let num = document.createElement('span');
           num.textContent = i + 1;
           indicator.appendChild(num);
         }
@@ -109,16 +109,16 @@ window.MTS = window.MTS || {};
         item.appendChild(indicator);
 
         if (self.variant !== 'dots') {
-          var text = document.createElement('div');
+          let text = document.createElement('div');
           text.className = 'mts-stepprogress__text';
 
-          var label = document.createElement('div');
+          let label = document.createElement('div');
           label.className = 'mts-stepprogress__label';
           label.textContent = step.label;
           text.appendChild(label);
 
           if (step.description && self.variant === 'default') {
-            var desc = document.createElement('div');
+            let desc = document.createElement('div');
             desc.className = 'mts-stepprogress__desc';
             desc.textContent = step.description;
             text.appendChild(desc);
@@ -128,7 +128,7 @@ window.MTS = window.MTS || {};
         }
 
         if (i < total - 1) {
-          var line = document.createElement('div');
+          let line = document.createElement('div');
           line.className = 'mts-stepprogress__line' + (isDone ? ' mts-stepprogress__line--done' : '');
           item.appendChild(line);
         }
@@ -136,11 +136,11 @@ window.MTS = window.MTS || {};
         self._el.appendChild(item);
       });
 
-      var pct = total > 1 ? (this.active / (total - 1)) * 100 : 0;
-      var bar = document.createElement('div');
+      let pct = total > 1 ? (this.active / (total - 1)) * 100 : 0;
+      let bar = document.createElement('div');
       bar.className = 'mts-stepprogress__bar';
 
-      var fill = document.createElement('div');
+      let fill = document.createElement('div');
       fill.className = 'mts-stepprogress__bar-fill';
       fill.style.width = pct + '%';
 
@@ -149,7 +149,7 @@ window.MTS = window.MTS || {};
     }
 
     _syncClasses(classes) {
-      var previousMatiosClasses = Array.from(this._el.classList).filter(function (cls) {
+      let previousMatiosClasses = Array.from(this._el.classList).filter(function (cls) {
         return cls === 'mts-stepprogress' || cls.indexOf('mts-stepprogress--') === 0;
       });
       if (previousMatiosClasses.length) this._el.classList.remove.apply(this._el.classList, previousMatiosClasses);
@@ -174,11 +174,11 @@ window.MTS = window.MTS || {};
 
       if (this._usingStepper) {
         warnDeprecated();
-        var self = this;
-        var userOnChange = options.onChange;
-        var userOnComplete = options.onComplete;
-        var userOnStepClick = options.onStepClick;
-        var userOnStatusChange = options.onStatusChange;
+        let self = this;
+        let userOnChange = options.onChange;
+        let userOnComplete = options.onComplete;
+        let userOnStepClick = options.onStepClick;
+        let userOnStatusChange = options.onStatusChange;
 
         this._impl = new MTS.Stepper(this._el, Object.assign({}, options, {
           mode: 'progress',

@@ -33,7 +33,7 @@
      })
    ============================================================ */
 
-var MTS = MTS || {};
+let MTS = MTS || {};
 
 MTS.DataTableColumnActionsPlugin = class DataTableColumnActionsPlugin {
 

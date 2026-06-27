@@ -115,7 +115,7 @@ MTS.PhoneInput = class MtsPhoneInput {
      debe coincidir con la del formato del país. Vacío es válido salvo que sea requerido. */
   _expectedLen()     { return (this._country().fmt.match(/#/g) || []).length; }
   isValid()          { return this._raw ? (this._raw.length === this._expectedLen()) : !this.required; }
-  _t(key, fallback)  { try { var ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.PhoneInput'] : null; if (ns && ns[key] != null) return ns[key]; } catch (e) {} return fallback; }
+  _t(key, fallback)  { try { let ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.PhoneInput'] : null; if (ns && ns[key] != null) return ns[key]; } catch (e) {} return fallback; }
   _validateNow() {
     if (!this._raw) {
       if (this.required) this.setError(this._t('required', 'Required')); else this.clearError();
@@ -135,7 +135,7 @@ MTS.PhoneInput = class MtsPhoneInput {
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   clearError()       { this._error = ''; this._renderError(); return this; }
   /* Form-field contract: validates required + phone length, renders the error inline and returns the result. */
-  validate()         { var valid = this._validateNow(); this._emit('validate', { valid: valid, errors: valid ? [] : [this._error] }); return valid; }
+  validate()         { let valid = this._validateNow(); this._emit('validate', { valid: valid, errors: valid ? [] : [this._error] }); return valid; }
   disable()          { this.disabled = true;  this._build(); return this; }
   enable()           { this.disabled = false; this._build(); return this; }
 
@@ -194,8 +194,8 @@ MTS.PhoneInput = class MtsPhoneInput {
     trigger.type = 'button';
     trigger.className = 'mts-phoneinput__country';
     trigger.disabled = this.disabled;
-    var _S = typeof MTS !== 'undefined' && MTS.Sanitize;
-    var _trigHtml = '<span class="mts-phoneinput__flag">' + (_S ? MTS.Sanitize.html(c.flag) : c.flag) + '</span>'
+    let _S = typeof MTS !== 'undefined' && MTS.Sanitize;
+    let _trigHtml = '<span class="mts-phoneinput__flag">' + (_S ? MTS.Sanitize.html(c.flag) : c.flag) + '</span>'
       + '<span class="mts-phoneinput__dial">' + (_S ? MTS.Sanitize.html(c.dial) : c.dial) + '</span>'
       + '<span class="mts-phoneinput__chevron">▾</span>';
     trigger.innerHTML = _trigHtml;
@@ -289,7 +289,7 @@ MTS.PhoneInput = class MtsPhoneInput {
     this._renderError();
 
     /* Cerrar dd al click fuera — listener único almacenado para poder removerlo */
-    var _self = this;
+    let _self = this;
     this._onDocClick = function(e) {
       if (_self._dd && !_self._dd.contains(e.target) && !_self._trigger.contains(e.target)) {
         _self._closeDd();
@@ -307,7 +307,7 @@ MTS.PhoneInput = class MtsPhoneInput {
     countries.forEach(c => {
       const li = document.createElement('li');
       li.className = 'mts-phoneinput__dd-item' + (c.code === this._countryCode ? ' mts-phoneinput__dd-item--active' : '');
-      var _liS = typeof MTS !== 'undefined' && MTS.Sanitize;
+      let _liS = typeof MTS !== 'undefined' && MTS.Sanitize;
       li.innerHTML = '<span class="mts-phoneinput__flag">' + (_liS ? MTS.Sanitize.html(c.flag) : c.flag) + '</span>'
         + '<span class="mts-phoneinput__dd-name">' + (_liS ? MTS.Sanitize.html(c.name) : c.name) + '</span>'
         + '<span class="mts-phoneinput__dd-dial">' + (_liS ? MTS.Sanitize.html(c.dial) : c.dial) + '</span>';
@@ -326,12 +326,12 @@ MTS.PhoneInput = class MtsPhoneInput {
   _filterDd(q, list) { this._renderDdList(list, q); }
   _toggleDd()   { this._ddOpen ? this._closeDd() : this._openDd(); }
   _positionDd() {
-    var rect  = this._trigger.getBoundingClientRect();
-    var dd    = this._dd;
-    var ddW   = 280;
-    var ddH   = dd.offsetHeight || 260;
-    var left  = rect.left;
-    var spaceBelow = window.innerHeight - rect.bottom;
+    let rect  = this._trigger.getBoundingClientRect();
+    let dd    = this._dd;
+    let ddW   = 280;
+    let ddH   = dd.offsetHeight || 260;
+    let left  = rect.left;
+    let spaceBelow = window.innerHeight - rect.bottom;
     /* Evitar desborde por la derecha */
     if (left + ddW > window.innerWidth - 8) { left = window.innerWidth - ddW - 8; }
     if (left < 8) { left = 8; }
@@ -350,13 +350,13 @@ MTS.PhoneInput = class MtsPhoneInput {
   _openDd() {
     this._dd.style.display = '';
     this._positionDd();
-    var searchEl = this._dd.querySelector('.mts-phoneinput__dd-search');
+    let searchEl = this._dd.querySelector('.mts-phoneinput__dd-search');
     if (searchEl) { searchEl.value = ''; searchEl.focus(); }
     this._renderDdList(this._dd.querySelector('.mts-phoneinput__dd-list'), '');
     this._ddOpen = true;
     this._trigger.classList.add('mts-phoneinput__country--open');
     /* Reposicionar al hacer scroll o resize (igual que MTS.Select) */
-    var _self = this;
+    let _self = this;
     this._onScrollResize = function() { _self._positionDd(); };
     window.addEventListener('scroll', this._onScrollResize, true);
     window.addEventListener('resize', this._onScrollResize);
@@ -380,7 +380,7 @@ MTS.PhoneInput = class MtsPhoneInput {
     this._wrap?.classList.toggle('mts-phoneinput__wrap--error', !!this._error);
   }
   _emit(event, detail) {
-    var listeners = this._listeners[event] || [];
+    let listeners = this._listeners[event] || [];
     listeners.forEach(function(fn) { fn({ type: event, detail: detail }); });
     if (this._el) {
       this._el.dispatchEvent(new CustomEvent('mts:phoneinput:' + event, { bubbles: true, detail: detail }));
@@ -394,7 +394,7 @@ MTS.PhoneInput = class MtsPhoneInput {
    */
   static addCountry(entry) {
     if (!entry || !entry.code) return false;
-    var exists = MTS.PhoneInput.COUNTRIES.some(function(c) {
+    let exists = MTS.PhoneInput.COUNTRIES.some(function(c) {
       return c.code === entry.code;
     });
     if (exists) return false;
@@ -408,7 +408,7 @@ MTS.PhoneInput = class MtsPhoneInput {
    * @returns {{ added: number, skipped: number }}
    */
   static addCountries(entries) {
-    var result = { added: 0, skipped: 0 };
+    let result = { added: 0, skipped: 0 };
     if (!Array.isArray(entries)) return result;
     entries.forEach(function(entry) {
       if (MTS.PhoneInput.addCountry(entry)) result.added++;

@@ -10,7 +10,7 @@
    Dependencias: MTS.Avatar, MTS.Input, MTS.Button (+ i18n propio).
 
    Uso básico:
-     var lock = new MTS.LockScreen({
+     let lock = new MTS.LockScreen({
        userName: 'Pedro Gómez',
        avatarUrl: '/uploads/u/123.jpg',
        onUnlock: function (password, done) {

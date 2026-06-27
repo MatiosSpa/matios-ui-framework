@@ -47,21 +47,21 @@
 
   Autocomplete.prototype._build = function () {
     /* Envuelve el input en .mts-ac__wrap */
-    var wrap = document.createElement('div');
+    let wrap = document.createElement('div');
     wrap.className = 'mts-ac__wrap';
     this._input.parentNode.insertBefore(wrap, this._input);
     wrap.appendChild(this._input);
     this._wrap = wrap;
 
     /* Form-field error slot — below the field */
-    var errEl = document.createElement('span');
+    let errEl = document.createElement('span');
     errEl.className = 'mts-form-error';
     errEl.style.display = 'none';
     wrap.insertAdjacentElement('afterend', errEl);
     this._errEl = errEl;
 
     /* Botón × */
-    var clearBtn = document.createElement('button');
+    let clearBtn = document.createElement('button');
     clearBtn.type = 'button';
     clearBtn.className = 'mts-ac__clear';
     clearBtn.setAttribute('aria-label', 'Limpiar');
@@ -71,7 +71,7 @@
     this._clearBtn = clearBtn;
 
     /* Dropdown — portal en body */
-    var dropdown = document.createElement('ul');
+    let dropdown = document.createElement('ul');
     dropdown.className = 'mts-ac__dropdown';
     dropdown.style.display = 'none';
     document.body.appendChild(dropdown);
@@ -81,12 +81,12 @@
   /* ── Eventos ─────────────────────────────────────────────── */
 
   Autocomplete.prototype._bindEvents = function () {
-    var self = this;
+    let self = this;
 
     /* Input */
     this._input.addEventListener('input', function () {
       if (self._error) { self.clearError(); }   // auto-clear while editing
-      var val = self._input.value;
+      let val = self._input.value;
       self._clearBtn.style.display = val ? '' : 'none';
 
       /* Si el usuario edita después de seleccionar → resetea value */
@@ -140,7 +140,7 @@
   /* ── Query ───────────────────────────────────────────────── */
 
   Autocomplete.prototype._query = function (query) {
-    var self = this;
+    let self = this;
 
     if (typeof this._datasource === 'function') {
       this._setLoading(true);
@@ -150,8 +150,8 @@
       });
 
     } else if (Array.isArray(this._datasource)) {
-      var q        = query.toLowerCase();
-      var filtered = this._datasource.filter(function (item) {
+      let q        = query.toLowerCase();
+      let filtered = this._datasource.filter(function (item) {
         return String(item[self._textField] || '').toLowerCase().indexOf(q) !== -1;
       });
       this._showResults(filtered);
@@ -161,19 +161,19 @@
   /* ── Mostrar resultados ──────────────────────────────────── */
 
   Autocomplete.prototype._showResults = function (results) {
-    var self = this;
+    let self = this;
     this._results     = results;
     this._activeIndex = -1;
     this._dropdown.innerHTML = '';
 
     if (!results.length) {
-      var emptyLi = document.createElement('li');
+      let emptyLi = document.createElement('li');
       emptyLi.className = 'mts-ac__empty';
       emptyLi.textContent = this._empty;
       this._dropdown.appendChild(emptyLi);
     } else {
       results.forEach(function (item, idx) {
-        var li = document.createElement('li');
+        let li = document.createElement('li');
         li.className = 'mts-ac__item';
         li.textContent = item[self._textField] != null ? String(item[self._textField]) : '';
         li.addEventListener('mousedown', function (e) {
@@ -191,8 +191,8 @@
   /* ── Seleccionar ítem ────────────────────────────────────── */
 
   Autocomplete.prototype._selectItem = function (item) {
-    var text  = item[this._textField]  != null ? String(item[this._textField])  : '';
-    var value = item[this._valueField] != null ? String(item[this._valueField]) : '';
+    let text  = item[this._textField]  != null ? String(item[this._textField])  : '';
+    let value = item[this._valueField] != null ? String(item[this._valueField]) : '';
 
     this._selectedItem = item;
     this._input.value  = text;
@@ -224,7 +224,7 @@
   };
 
   Autocomplete.prototype._positionDropdown = function () {
-    var rect = this._input.getBoundingClientRect();
+    let rect = this._input.getBoundingClientRect();
     this._dropdown.style.top   = (rect.bottom + 4) + 'px';
     this._dropdown.style.left  = rect.left + 'px';
     this._dropdown.style.width = rect.width + 'px';
@@ -233,16 +233,16 @@
   /* ── Navegación teclado ──────────────────────────────────── */
 
   Autocomplete.prototype._moveActive = function (dir) {
-    var items = this._dropdown.querySelectorAll('.mts-ac__item');
+    let items = this._dropdown.querySelectorAll('.mts-ac__item');
     if (!items.length) { return; }
-    var next = this._activeIndex + dir;
+    let next = this._activeIndex + dir;
     if (next < 0)              { next = items.length - 1; }
     if (next >= items.length)  { next = 0; }
     this._setActive(next);
   };
 
   Autocomplete.prototype._setActive = function (idx) {
-    var items = this._dropdown.querySelectorAll('.mts-ac__item');
+    let items = this._dropdown.querySelectorAll('.mts-ac__item');
     Array.prototype.forEach.call(items, function (li) {
       li.classList.remove('mts-ac__item--active');
     });
@@ -274,8 +274,8 @@
   };
   Autocomplete.prototype.clearError = function () { return this.setError(''); };
   Autocomplete.prototype.validate = function () {
-    var v  = this.getValue();
-    var ok = !this._required || (v != null && v !== '');
+    let v  = this.getValue();
+    let ok = !this._required || (v != null && v !== '');
     if (ok) { this.clearError(); }
     else    { this.setError(this._errorMessage || this._t('required', 'This field is required')); }
     try { this._input.dispatchEvent(new CustomEvent('mts:autocomplete:validate', { bubbles: true, detail: { valid: ok, errors: ok ? [] : [this._error] } })); } catch (e) {}
@@ -283,8 +283,8 @@
   };
   Autocomplete.prototype._t = function (key, fallback) {
     try {
-      var ns = (global.MTS && global.MTS.getLocale) ? global.MTS.getLocale()['MTS.Autocomplete'] : null;
-      var m  = ns && ns.messages;
+      let ns = (global.MTS && global.MTS.getLocale) ? global.MTS.getLocale()['MTS.Autocomplete'] : null;
+      let m  = ns && ns.messages;
       if (m && m[key] != null) { return m[key]; }
     } catch (e) {}
     return fallback;

@@ -24,7 +24,7 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
   get key() { return 'dm-notes'; }
 
   get label() {
-    var loc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewNotesPanel'] ?? {};
+    let loc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewNotesPanel'] ?? {};
     return loc.panelLabel || 'Notas';
   }
 
@@ -47,9 +47,9 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
   /* ── Skeleton ─────────────────────────────────────────── */
 
   render(item) {
-    var wrap = document.createElement('div');
+    let wrap = document.createElement('div');
     wrap.className = 'dm-notes dm-notes--loading';
-    for (var i = 0; i < 3; i++) {
+    for (let i = 0; i < 3; i++) {
       wrap.appendChild(this._buildSkeletonItem());
     }
     return wrap;
@@ -58,7 +58,7 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
   /* ── Load ─────────────────────────────────────────────── */
 
   load(item) {
-    var self = this;
+    let self = this;
     if (!this._onLoad) {
       return this._buildEmptyEl();
     }
@@ -75,20 +75,20 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
   /* ── Panel: cabecera + lista ──────────────────────────── */
 
   _renderPanel(notes, item) {
-    var self = this;
-    var loc  = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewNotesPanel'] ?? {};
+    let self = this;
+    let loc  = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewNotesPanel'] ?? {};
 
-    var wrap = document.createElement('div');
+    let wrap = document.createElement('div');
     wrap.className = 'dm-notes';
 
     /* ── Cabecera con botón Agregar ────────────────────── */
     if (typeof this._onSave === 'function') {
-      var headerBar = document.createElement('div');
+      let headerBar = document.createElement('div');
       headerBar.className = 'dm-notes__header-bar';
 
-      var tooltip = this._addTooltip || loc.send || 'Agregar';
-      var addWrap = document.createElement('div');
-      var addBtn  = new MTS.Button(addWrap, {
+      let tooltip = this._addTooltip || loc.send || 'Agregar';
+      let addWrap = document.createElement('div');
+      let addBtn  = new MTS.Button(addWrap, {
         variant:   'ghost',
         size:      'sm',
         iconOnly:  true,   // botón-ícono compacto (sin padding de label)
@@ -104,12 +104,12 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
     }
 
     /* ── Lista ─────────────────────────────────────────── */
-    var listEl = document.createElement('div');
+    let listEl = document.createElement('div');
     listEl.className = 'dm-notes__list';
     wrap.appendChild(listEl);
 
     if (!notes.length) {
-      var emptyEl = document.createElement('p');
+      let emptyEl = document.createElement('p');
       emptyEl.className   = 'dm-notes__empty';
       emptyEl.textContent = loc.noNotes || 'Sin notas.';
       listEl.appendChild(emptyEl);
@@ -125,23 +125,23 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
   /* ── Modal: nueva nota ────────────────────────────────── */
 
   _openAddModal(item, listEl, loc) {
-    var self = this;
+    let self = this;
 
     /* Body del modal */
-    var bodyEl = document.createElement('div');
+    let bodyEl = document.createElement('div');
 
-    var textarea = document.createElement('textarea');
+    let textarea = document.createElement('textarea');
     textarea.className   = 'dm-notes__textarea';
     textarea.placeholder = loc.placeholder || 'Escribe una nota...';
     textarea.rows        = 4;
     bodyEl.appendChild(textarea);
 
-    var errorEl = document.createElement('span');
+    let errorEl = document.createElement('span');
     errorEl.className = 'dm-notes__error';
     errorEl.hidden    = true;
     bodyEl.appendChild(errorEl);
 
-    var modal = new MTS.Modal({
+    let modal = new MTS.Modal({
       title:    loc.addTitle || 'Nueva nota',
       body:     bodyEl,
       size:     'sm',
@@ -159,7 +159,7 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
           variant:  'primary',
           disabled: true,
           onClick:  function() {
-            var text = textarea.value.trim();
+            let text = textarea.value.trim();
             if (!text) return;
 
             modal.setButtonLoading('dm-notes-add-btn', true);
@@ -170,11 +170,11 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
                 modal.destroy();
 
                 /* Quitar estado vacío si existía */
-                var emptyEl = listEl.querySelector('.dm-notes__empty');
+                let emptyEl = listEl.querySelector('.dm-notes__empty');
                 if (emptyEl) emptyEl.remove();
 
                 /* Agregar la nueva nota al final */
-                var newLoc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewNotesPanel'] ?? {};
+                let newLoc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewNotesPanel'] ?? {};
                 listEl.appendChild(self._buildNoteItem(note, item, listEl, newLoc));
                 /* Scroll DENTRO de la lista (no burbujea al panel/página): idempotente —
                    no-op si la lista no desborda, baja al final si hay muchas notas. */
@@ -202,7 +202,7 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
           if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
             e.preventDefault();
             if (textarea.value.trim()) {
-              var addBtnEl = modal.element.querySelector('#dm-notes-add-btn');
+              let addBtnEl = modal.element.querySelector('#dm-notes-add-btn');
               if (addBtnEl && !addBtnEl.disabled) addBtnEl.click();
             }
           }
@@ -216,33 +216,33 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
   /* ── Fila de nota ─────────────────────────────────────── */
 
   _buildNoteItem(note, item, listEl, loc) {
-    var self = this;
+    let self = this;
 
-    var row = document.createElement('div');
+    let row = document.createElement('div');
     row.className = 'dm-notes__item' + (note.isOwn ? ' dm-notes__item--own' : '');
 
     /* Avatar */
-    var avatarEl = document.createElement('div');
+    let avatarEl = document.createElement('div');
     avatarEl.className   = 'dm-notes__avatar';
     avatarEl.textContent = MTS.DocumentManagerPreviewNotesPanel._initials(note.name, note.lastName);
     avatarEl.setAttribute('aria-hidden', 'true');
     row.appendChild(avatarEl);
 
     /* Contenido */
-    var contentEl = document.createElement('div');
+    let contentEl = document.createElement('div');
     contentEl.className = 'dm-notes__content';
 
     /* Header: nombre + fecha + botón eliminar */
-    var headerEl = document.createElement('div');
+    let headerEl = document.createElement('div');
     headerEl.className = 'dm-notes__header';
 
-    var authorEl = document.createElement('span');
+    let authorEl = document.createElement('span');
     authorEl.className   = 'dm-notes__author';
     authorEl.textContent = (note.name || '') + ' ' + (note.lastName || '');
     headerEl.appendChild(authorEl);
 
     if (note.date) {
-      var dateEl = document.createElement('span');
+      let dateEl = document.createElement('span');
       dateEl.className   = 'dm-notes__date';
       dateEl.textContent = note.date;
       headerEl.appendChild(dateEl);
@@ -250,9 +250,9 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
 
     /* Botón eliminar — solo notas propias con onDelete definido */
     if (note.isOwn && typeof self._onDelete === 'function') {
-      var delWrap = document.createElement('div');
+      let delWrap = document.createElement('div');
       delWrap.className = 'dm-notes__delete-wrap';
-      var delBtn = new MTS.Button(delWrap, {
+      let delBtn = new MTS.Button(delWrap, {
         variant:   'ghost',
         size:      'xs',
         iconLeft:  typeof MTS.Icon !== 'undefined' ? MTS.Icon.get('trash-2') : '',
@@ -275,7 +275,7 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
     contentEl.appendChild(headerEl);
 
     /* Texto */
-    var textEl = document.createElement('p');
+    let textEl = document.createElement('p');
     textEl.className   = 'dm-notes__text';
     textEl.textContent = note.text;
     contentEl.appendChild(textEl);
@@ -287,21 +287,21 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
   /* ── Skeleton ─────────────────────────────────────────── */
 
   _buildSkeletonItem() {
-    var row = document.createElement('div');
+    let row = document.createElement('div');
     row.className = 'dm-notes__skeleton-item';
 
-    var avatar = document.createElement('div');
+    let avatar = document.createElement('div');
     avatar.className = 'dm-notes__skeleton-avatar';
     row.appendChild(avatar);
 
-    var lines = document.createElement('div');
+    let lines = document.createElement('div');
     lines.className = 'dm-notes__skeleton-lines';
 
-    var l1 = document.createElement('div');
+    let l1 = document.createElement('div');
     l1.className = 'dm-notes__skeleton-line dm-notes__skeleton-line--header';
-    var l2 = document.createElement('div');
+    let l2 = document.createElement('div');
     l2.className = 'dm-notes__skeleton-line dm-notes__skeleton-line--text';
-    var l3 = document.createElement('div');
+    let l3 = document.createElement('div');
     l3.className = 'dm-notes__skeleton-line dm-notes__skeleton-line--text-short';
 
     lines.appendChild(l1);
@@ -312,8 +312,8 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
   }
 
   _buildEmptyEl() {
-    var loc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewNotesPanel'] ?? {};
-    var p = document.createElement('p');
+    let loc = MTS.DataTable?._activeLocale?.['MTS.DocumentManagerPreviewNotesPanel'] ?? {};
+    let p = document.createElement('p');
     p.className   = 'dm-notes__empty';
     p.textContent = loc.noNotes || 'Sin notas.';
     return p;
@@ -322,8 +322,8 @@ MTS.DocumentManagerPreviewNotesPanel = class DocumentManagerPreviewNotesPanel {
   /* ── Helpers ──────────────────────────────────────────── */
 
   static _initials(name, lastName) {
-    var a = (name     || '').trim().charAt(0).toUpperCase();
-    var b = (lastName || '').trim().charAt(0).toUpperCase();
+    let a = (name     || '').trim().charAt(0).toUpperCase();
+    let b = (lastName || '').trim().charAt(0).toUpperCase();
     return a + b;
   }
 

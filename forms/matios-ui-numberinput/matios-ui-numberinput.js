@@ -112,13 +112,13 @@ MTS.NumberInput = class MtsNumberInput {
   clearError()     { this._error = ''; this._renderError(); return this; }
   /* Form-field contract: required = a value must be entered (null = empty). */
   validate() {
-    var ok = !this.required || this.value != null;
+    let ok = !this.required || this.value != null;
     if (ok) this.clearError(); else this.setError(this.errorMessage || this._t('required', 'This field is required'));
     this._emit('validate', { valid: ok, errors: ok ? [] : [this._error] });
     return ok;
   }
   _t(key, fallback) {
-    try { var ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.NumberInput'] : null; var m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    try { let ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.NumberInput'] : null; let m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
     return fallback;
   }
   disable()        { this.disabled = true;  this._build(); return this; }
@@ -318,7 +318,7 @@ MTS.NumberInput = class MtsNumberInput {
     btn.addEventListener('click', (e) => e.stopPropagation());
   }
   _emit(event, detail) {
-    var listeners = this._listeners[event] || [];
+    let listeners = this._listeners[event] || [];
     if (event === 'change') {
       listeners.forEach(function(fn) { fn(detail.value, detail.formatted); });
     } else {

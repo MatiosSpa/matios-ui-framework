@@ -88,7 +88,7 @@ MTS.PasswordStrength = class MtsPasswordStrength {
   /** Si se configura maxLength, lo aplica automáticamente al input nativo. */
   _applyMaxLength(maxLength) {
     if (!maxLength) return;
-    var inputEl = this._getInputEl();
+    let inputEl = this._getInputEl();
     if (inputEl) inputEl.setAttribute('maxlength', maxLength);
   }
 

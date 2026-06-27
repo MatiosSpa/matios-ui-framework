@@ -84,21 +84,21 @@ MTS.Menu = class MtsMenu {
 
   /** Actualiza el badge de un item */
   setBadge(key, value) {
-    var item = this._findItem(key, this.items);
+    let item = this._findItem(key, this.items);
     if (item) { item.badge = value; this._rebuildAll(); }
     return this;
   }
 
   /** Deshabilita un item */
   disable(key) {
-    var item = this._findItem(key, this.items);
+    let item = this._findItem(key, this.items);
     if (item) { item.disabled = true; this._rebuildAll(); }
     return this;
   }
 
   /** Habilita un item */
   enable(key) {
-    var item = this._findItem(key, this.items);
+    let item = this._findItem(key, this.items);
     if (item) { item.disabled = false; this._rebuildAll(); }
     return this;
   }
@@ -139,7 +139,7 @@ MTS.Menu = class MtsMenu {
      ════════════════════════════════════════════════════ */
 
   _rebuildAll() {
-    var self = this;
+    let self = this;
     this._removeDocHandler();
     this._mounts.forEach(function(m) { self._render(m.el, m.mode); });
   }
@@ -159,15 +159,15 @@ MTS.Menu = class MtsMenu {
      ──────────────────────────────────────── */
 
   _renderHorizontal(container) {
-    var self = this;
+    let self = this;
     container.className = 'mts-menu mts-menu--horizontal';
-    var useOverflow = (this.overflow === 'auto');
+    let useOverflow = (this.overflow === 'auto');
     if (useOverflow) container.classList.add('mts-menu--overflow');
 
     // Construir los nodos inline guardando la referencia item↔node (para el overflow).
     this._hItems = [];
     this.items.forEach(function(item) {
-      var node;
+      let node;
       if (item.divider) {
         node = document.createElement('span');
         node.className = 'mts-menu__divider';
@@ -187,7 +187,7 @@ MTS.Menu = class MtsMenu {
     if (useOverflow) {
       this._buildOverflowNode(container);
       this._setupResizeObserver(container);
-      var selfRaf = this;
+      let selfRaf = this;
       requestAnimationFrame(function() { selfRaf._distributeOverflow(container); });
     }
   }
@@ -198,24 +198,24 @@ MTS.Menu = class MtsMenu {
 
   // Nodo "Más" (label/ícono + dropdown) al final; oculto mientras todo entre.
   _buildOverflowNode(container) {
-    var self = this;
-    var node = document.createElement('div');
+    let self = this;
+    let node = document.createElement('div');
     node.className = 'mts-menu__node mts-menu__overflow';
     node.setAttribute('hidden', '');
 
-    var label = this.overflowLabel || this._t('more', 'More');
-    var btn = this._buildBtn({ label: label, icon: this.overflowIcon }, 'mts-menu__item');
+    let label = this.overflowLabel || this._t('more', 'More');
+    let btn = this._buildBtn({ label: label, icon: this.overflowIcon }, 'mts-menu__item');
     btn.setAttribute('aria-haspopup', 'true');
     btn.setAttribute('aria-expanded', 'false');
     this._appendChevron(btn, 'down');
     node.appendChild(btn);
 
-    var dropdown = document.createElement('div');
+    let dropdown = document.createElement('div');
     dropdown.className = 'mts-menu__dropdown';
     node.appendChild(dropdown);
 
     function openNode() {
-      var menu = node.closest('.mts-menu');
+      let menu = node.closest('.mts-menu');
       if (menu) menu.querySelectorAll('.mts-menu__node--open').forEach(function(n) { n.classList.remove('mts-menu__node--open'); });
       node.classList.add('mts-menu__node--open');
       btn.setAttribute('aria-expanded', 'true');
@@ -246,38 +246,38 @@ MTS.Menu = class MtsMenu {
   // O(n) por pasada. Respeta el orden original de los items.
   _distributeOverflow(container) {
     if (!this._moreNode || !this._hItems) return;
-    var moreNode = this._moreNode;
-    var moreDrop = this._moreDropdown;
+    let moreNode = this._moreNode;
+    let moreDrop = this._moreDropdown;
 
     // 1. Reset — todos los nodos inline antes del "Más"; dropdown vacío; "Más" oculto.
     moreNode.setAttribute('hidden', '');
     moreDrop.innerHTML = '';
-    for (var i = 0; i < this._hItems.length; i++) {
+    for (let i = 0; i < this._hItems.length; i++) {
       container.insertBefore(this._hItems[i].node, moreNode);
     }
 
-    var avail = this._availableWidth(container);
+    let avail = this._availableWidth(container);
     if (!avail || !this._hItems.length) return;
-    var cLeft = container.getBoundingClientRect().left;
+    let cLeft = container.getBoundingClientRect().left;
 
     // 2. ¿Entra todo? (borde derecho del último <= ancho disponible)
-    var lastRight = this._hItems[this._hItems.length - 1].node.getBoundingClientRect().right - cLeft;
+    let lastRight = this._hItems[this._hItems.length - 1].node.getBoundingClientRect().right - cLeft;
     if (lastRight <= avail + 1) return; // todo cabe → "Más" queda oculto
 
     // 3. Hay overflow: mostrar "Más" para medir su ancho y reservarlo.
     moreNode.removeAttribute('hidden');
-    var limit = avail - (moreNode.offsetWidth + 4);
+    let limit = avail - (moreNode.offsetWidth + 4);
 
     // 4. Primer nodo cuyo borde derecho se pasa del límite.
-    var cut = -1;
-    for (var j = 0; j < this._hItems.length; j++) {
+    let cut = -1;
+    for (let j = 0; j < this._hItems.length; j++) {
       if (this._hItems[j].node.getBoundingClientRect().right - cLeft > limit) { cut = j; break; }
     }
     if (cut < 0) return;
 
     // 5. Mover los sobrantes (en orden) al dropdown "Más".
-    for (var k = cut; k < this._hItems.length; k++) {
-      var rec = this._hItems[k];
+    for (let k = cut; k < this._hItems.length; k++) {
+      let rec = this._hItems[k];
       if (rec.node.parentNode === container) container.removeChild(rec.node);
       if (rec.divider) moreDrop.appendChild(this._mkDivider());
       else moreDrop.appendChild(this._buildDropdownItem(rec.item));
@@ -287,7 +287,7 @@ MTS.Menu = class MtsMenu {
 
   // Recalcula el overflow cuando cambia el ancho del contenedor.
   _setupResizeObserver(container) {
-    var self = this;
+    let self = this;
     if (this._resizeObs) { this._resizeObs.disconnect(); this._resizeObs = null; }
     if (typeof ResizeObserver === 'undefined') return;
     this._resizeObs = new ResizeObserver(function() {
@@ -308,16 +308,16 @@ MTS.Menu = class MtsMenu {
   // los items en flex-shrink:0, puede expandirse a min-content y entonces
   // container.clientWidth mide el ancho EXPANDIDO, no el disponible.
   _availableWidth(container) {
-    var parent = container.parentElement;
+    let parent = container.parentElement;
     if (!parent) return container.clientWidth;
-    var gap = 0;
+    let gap = 0;
     if (window.getComputedStyle) { gap = parseFloat(getComputedStyle(parent).gap) || 0; }
-    var taken = 0;
+    let taken = 0;
     Array.prototype.forEach.call(parent.children, function(sib) {
       if (sib === container) return;
       taken += sib.offsetWidth + gap;
     });
-    var avail = parent.clientWidth - taken;
+    let avail = parent.clientWidth - taken;
     return avail > 0 ? avail : container.clientWidth;
   }
 
@@ -332,27 +332,27 @@ MTS.Menu = class MtsMenu {
   // Lee el locale del componente (namespace MTS.Menu) con fallback.
   _t(key, fallback) {
     try {
-      var loc = (window.MTS && MTS.getLocale) ? MTS.getLocale() : null;
-      var ns = loc && loc['MTS.Menu'];
+      let loc = (window.MTS && MTS.getLocale) ? MTS.getLocale() : null;
+      let ns = loc && loc['MTS.Menu'];
       if (ns && ns[key] != null) return ns[key];
     } catch (e) {}
     return fallback;
   }
 
   _buildHorizontalItem(item) {
-    var self = this;
-    var hasChildren = !!(item.children && item.children.length);
+    let self = this;
+    let hasChildren = !!(item.children && item.children.length);
 
-    var node = document.createElement('div');
+    let node = document.createElement('div');
     node.className = 'mts-menu__node';
 
-    var btn = this._buildBtn(item, 'mts-menu__item');
+    let btn = this._buildBtn(item, 'mts-menu__item');
 
     if (hasChildren) {
       this._appendChevron(btn, 'down');
       node.appendChild(btn);
 
-      var dropdown = document.createElement('div');
+      let dropdown = document.createElement('div');
       dropdown.className = 'mts-menu__dropdown';
       item.children.forEach(function(child) {
         if (child.divider) {
@@ -372,9 +372,9 @@ MTS.Menu = class MtsMenu {
       } else {
         btn.addEventListener('click', function(e) {
           e.stopPropagation();
-          var isOpen = node.classList.contains('mts-menu__node--open');
+          let isOpen = node.classList.contains('mts-menu__node--open');
           // Cerrar todos los otros nodos abiertos del mismo nivel
-          var menu = node.closest('.mts-menu');
+          let menu = node.closest('.mts-menu');
           if (menu) {
             menu.querySelectorAll('.mts-menu__node--open').forEach(function(n) {
               n.classList.remove('mts-menu__node--open');
@@ -395,19 +395,19 @@ MTS.Menu = class MtsMenu {
   }
 
   _buildDropdownItem(item) {
-    var self = this;
-    var hasChildren = !!(item.children && item.children.length);
+    let self = this;
+    let hasChildren = !!(item.children && item.children.length);
 
-    var node = document.createElement('div');
+    let node = document.createElement('div');
     node.className = 'mts-menu__node';
 
-    var btn = this._buildBtn(item, 'mts-menu__item mts-menu__item--dd');
+    let btn = this._buildBtn(item, 'mts-menu__item mts-menu__item--dd');
 
     if (hasChildren) {
       this._appendChevron(btn, 'right');
       node.appendChild(btn);
 
-      var sub = document.createElement('div');
+      let sub = document.createElement('div');
       sub.className = 'mts-menu__dropdown mts-menu__dropdown--sub';
       item.children.forEach(function(child) {
         if (child.divider) { sub.appendChild(self._mkDivider()); return; }
@@ -429,7 +429,7 @@ MTS.Menu = class MtsMenu {
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
         // Cerrar todo el menú
-        var menu = node.closest('.mts-menu');
+        let menu = node.closest('.mts-menu');
         if (menu) {
           menu.querySelectorAll('.mts-menu__node--open').forEach(function(n) {
             n.classList.remove('mts-menu__node--open');
@@ -447,7 +447,7 @@ MTS.Menu = class MtsMenu {
      ──────────────────────────────────────── */
 
   _renderTree(container, items, depth) {
-    var self = this;
+    let self = this;
 
     if (depth === 0) {
       container.className = 'mts-menu mts-menu--tree';
@@ -464,9 +464,9 @@ MTS.Menu = class MtsMenu {
            para que `{ group: '' }` no caiga al render de item normal. Si el label
            queda vacío tras trim (''/' '/'\t'), no se emite header — señal declarativa
            de "grupo sin título visible" (consistente en sidenav y topbar). */
-        var grpLabel = String(item.group == null ? '' : item.group).trim();
+        let grpLabel = String(item.group == null ? '' : item.group).trim();
         if (grpLabel) {
-          var grpEl = document.createElement('div');
+          let grpEl = document.createElement('div');
           grpEl.className = 'mts-menu__group-label';
           grpEl.textContent = grpLabel;
           container.appendChild(grpEl);
@@ -474,10 +474,10 @@ MTS.Menu = class MtsMenu {
         return;
       }
 
-      var hasChildren = !!(item.children && item.children.length);
-      var isOpen      = self._openItems.has(item.key);
+      let hasChildren = !!(item.children && item.children.length);
+      let isOpen      = self._openItems.has(item.key);
 
-      var btn = self._buildBtn(item,
+      let btn = self._buildBtn(item,
         'mts-menu__item mts-menu__item--tree' +
         (depth > 0 ? ' mts-menu__item--sub' : '')
       );
@@ -499,7 +499,7 @@ MTS.Menu = class MtsMenu {
       container.appendChild(btn);
 
       if (hasChildren && isOpen) {
-        var sub = document.createElement('div');
+        let sub = document.createElement('div');
         sub.className = 'mts-menu__sub';
         self._renderTree(sub, item.children, depth + 1);
         container.appendChild(sub);
@@ -512,10 +512,10 @@ MTS.Menu = class MtsMenu {
      ════════════════════════════════════════════════════ */
 
   _buildBtn(item, extraClass) {
-    var isActive  = item.key && item.key === this.active;
-    var isDropdown = extraClass.indexOf('mts-menu__item--dd') !== -1;
+    let isActive  = item.key && item.key === this.active;
+    let isDropdown = extraClass.indexOf('mts-menu__item--dd') !== -1;
 
-    var btn = document.createElement('button');
+    let btn = document.createElement('button');
     btn.type = 'button';
     btn.className = extraClass
       + (isActive       ? ' mts-menu__item--active'   : '')
@@ -523,26 +523,26 @@ MTS.Menu = class MtsMenu {
     if (item.disabled) btn.disabled = true;
 
     if (item.icon) {
-      var ico = document.createElement('span');
+      let ico = document.createElement('span');
       ico.className = 'mts-menu__icon';
-      var icoI = document.createElement('i');
+      let icoI = document.createElement('i');
       icoI.className = 'mts-icon ' + item.icon;
       ico.appendChild(icoI);
       btn.appendChild(ico);
     } else if (isDropdown) {
       // Placeholder para alinear labels aunque no haya ícono
-      var ico = document.createElement('span');
+      let ico = document.createElement('span');
       ico.className = 'mts-menu__icon mts-menu__icon--empty';
       btn.appendChild(ico);
     }
 
-    var lbl = document.createElement('span');
+    let lbl = document.createElement('span');
     lbl.className = 'mts-menu__label';
     lbl.textContent = item.label;
     btn.appendChild(lbl);
 
     if (item.badge !== undefined && item.badge !== null) {
-      var badge = document.createElement('span');
+      let badge = document.createElement('span');
       badge.className = 'mts-menu__badge';
       badge.textContent = item.badge;
       btn.appendChild(badge);
@@ -552,7 +552,7 @@ MTS.Menu = class MtsMenu {
   }
 
   _appendChevron(btn, direction) {
-    var chv = document.createElement('span');
+    let chv = document.createElement('span');
     chv.className = 'mts-menu__chevron'
       + (direction === 'up'    ? ' mts-menu__chevron--open'  : '')
       + (direction === 'right' ? ' mts-menu__chevron--right' : '');
@@ -561,7 +561,7 @@ MTS.Menu = class MtsMenu {
   }
 
   _mkDivider() {
-    var div = document.createElement('div');
+    let div = document.createElement('div');
     div.className = 'mts-menu__divider';
     return div;
   }
@@ -577,10 +577,10 @@ MTS.Menu = class MtsMenu {
   }
 
   _findItem(key, items) {
-    for (var i = 0; i < items.length; i++) {
+    for (let i = 0; i < items.length; i++) {
       if (items[i].key === key) return items[i];
       if (items[i].children) {
-        var found = this._findItem(key, items[i].children);
+        let found = this._findItem(key, items[i].children);
         if (found) return found;
       }
     }
@@ -588,8 +588,8 @@ MTS.Menu = class MtsMenu {
   }
 
   _autoDetectActive() {
-    var path = window.location.pathname;
-    var found = this._findByHref(path, this.items);
+    let path = window.location.pathname;
+    let found = this._findByHref(path, this.items);
     if (found) {
       this.active = found.key;
       this._openAncestors(found.key, this.items);
@@ -598,8 +598,8 @@ MTS.Menu = class MtsMenu {
 
   /** Abre todos los ancestros del item con el key dado (para acordión) */
   _openAncestors(key, items) {
-    for (var i = 0; i < items.length; i++) {
-      var item = items[i];
+    for (let i = 0; i < items.length; i++) {
+      let item = items[i];
       if (!item.children) continue;
       if (this._containsKey(key, item.children)) {
         this._openItems.add(item.key);
@@ -615,7 +615,7 @@ MTS.Menu = class MtsMenu {
 
   /** Comprueba si un key existe en el árbol de items */
   _containsKey(key, items) {
-    for (var i = 0; i < items.length; i++) {
+    for (let i = 0; i < items.length; i++) {
       if (items[i].key === key) return true;
       if (items[i].children && this._containsKey(key, items[i].children)) return true;
     }
@@ -623,10 +623,10 @@ MTS.Menu = class MtsMenu {
   }
 
   _findByHref(path, items) {
-    for (var i = 0; i < items.length; i++) {
+    for (let i = 0; i < items.length; i++) {
       if (items[i].href && path.indexOf(items[i].href) !== -1) return items[i];
       if (items[i].children) {
-        var found = this._findByHref(path, items[i].children);
+        let found = this._findByHref(path, items[i].children);
         if (found) return found;
       }
     }
@@ -643,11 +643,11 @@ MTS.Menu = class MtsMenu {
    * Corrige desborde derecho del viewport.
    */
   _positionDropdown(dropEl, anchorEl) {
-    var rect = anchorEl.getBoundingClientRect();
+    let rect = anchorEl.getBoundingClientRect();
     dropEl.style.top  = (rect.bottom + 4) + 'px';
     dropEl.style.left = rect.left + 'px';
     // Corrección de viewport derecho
-    var pr = dropEl.getBoundingClientRect();
+    let pr = dropEl.getBoundingClientRect();
     if (pr.right > window.innerWidth - 8) {
       dropEl.style.left = (window.innerWidth - pr.width - 8) + 'px';
     }
@@ -658,7 +658,7 @@ MTS.Menu = class MtsMenu {
      ════════════════════════════════════════════════════ */
 
   _addDocHandler(container) {
-    var self = this;
+    let self = this;
     this._removeDocHandler();
     this._docHandler = function() {
       container.querySelectorAll('.mts-menu__node--open').forEach(function(n) {

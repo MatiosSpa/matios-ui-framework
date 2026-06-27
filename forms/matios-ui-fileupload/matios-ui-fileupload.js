@@ -212,7 +212,7 @@ MTS.FileUpload = class MtsFileUpload {
         thumb.appendChild(img);
       } else {
         const ext = file.name.split('.').pop().toUpperCase().slice(0, 4);
-        var _extSpan = document.createElement('span');
+        let _extSpan = document.createElement('span');
         _extSpan.style.cssText = 'font-size:10px;font-weight:700;color:var(--mts-color-primary)';
         _extSpan.textContent = ext;
         thumb.appendChild(_extSpan);

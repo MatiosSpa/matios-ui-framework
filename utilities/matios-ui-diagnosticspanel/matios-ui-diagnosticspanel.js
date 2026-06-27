@@ -156,7 +156,7 @@ MTS.DiagnosticsPanel.prototype.clear = function(section) {
 };
 
 MTS.DiagnosticsPanel.prototype.toggle = function(force) {
-  var shouldOpen = typeof force === 'boolean' ? force : this.collapsed;
+  let shouldOpen = typeof force === 'boolean' ? force : this.collapsed;
   if (shouldOpen) this.show();
   else            this.hide();
   return this;
@@ -179,12 +179,12 @@ MTS.DiagnosticsPanel.prototype.hide = function() {
 };
 
 MTS.DiagnosticsPanel.prototype.copyReport = function() {
-  var text = this.getReportText();
+  let text = this.getReportText();
   if (!text) return Promise.resolve(false);
   if (navigator.clipboard && navigator.clipboard.writeText) {
     return navigator.clipboard.writeText(text).then(function() { return true; });
   }
-  var ta = document.createElement('textarea');
+  let ta = document.createElement('textarea');
   ta.value = text;
   ta.style.position = 'fixed';
   ta.style.opacity  = '0';
@@ -197,9 +197,9 @@ MTS.DiagnosticsPanel.prototype.copyReport = function() {
 
 MTS.DiagnosticsPanel.prototype.downloadReport = function(filename) {
   filename = filename || 'diagnostics-report.txt';
-  var blob = new Blob([this.getReportText()], { type: 'text/plain;charset=utf-8' });
-  var url  = URL.createObjectURL(blob);
-  var link = document.createElement('a');
+  let blob = new Blob([this.getReportText()], { type: 'text/plain;charset=utf-8' });
+  let url  = URL.createObjectURL(blob);
+  let link = document.createElement('a');
   link.href     = url;
   link.download = filename;
   link.click();
@@ -224,9 +224,9 @@ MTS.DiagnosticsPanel.prototype.getReportData = function() {
 };
 
 MTS.DiagnosticsPanel.prototype.getReportText = function() {
-  var self = this;
-  var data  = this.getReportData();
-  var lines = [];
+  let self = this;
+  let data  = this.getReportData();
+  let lines = [];
   lines.push('Matios Diagnostics Report');
   lines.push('=========================');
   lines.push('');
@@ -291,7 +291,7 @@ MTS.DiagnosticsPanel.prototype.destroy = function() {
    ════════════════════════════════════════════════════ */
 
 MTS.DiagnosticsPanel.prototype._build = function() {
-  var self = this;
+  let self = this;
 
   this._root = document.createElement('section');
   this._root.className = 'mts-diag' + (this.collapsed ? '' : ' mts-diag--open');
@@ -304,7 +304,7 @@ MTS.DiagnosticsPanel.prototype._build = function() {
     this._originalPaddingBottom = document.body.style.paddingBottom || '';
     document.body.appendChild(this._root);
   } else {
-    var computed = window.getComputedStyle(this._host);
+    let computed = window.getComputedStyle(this._host);
     if (computed.position === 'static') this._host.style.position = 'relative';
     this._root.classList.add('mts-diag--embedded');
     this._paddingTarget = this._host;
@@ -333,9 +333,9 @@ MTS.DiagnosticsPanel.prototype._build = function() {
   this._countNodes.errors   = this._dock.querySelector('[data-count="errors"]');
   this._dockIcon            = this._dock.querySelector('[data-diag-icon]');
 
-  var dockActions = this._dock.querySelector('.mts-diag__dock-actions');
+  let dockActions = this._dock.querySelector('.mts-diag__dock-actions');
 
-  var clearBtn = document.createElement('button');
+  let clearBtn = document.createElement('button');
   clearBtn.type = 'button';
   clearBtn.className = 'dp-log__clear';
   clearBtn.textContent = 'Clear';
@@ -367,7 +367,7 @@ MTS.DiagnosticsPanel.prototype._build = function() {
   this._sheet.appendChild(this._resizeHandle);
   this._bindResize();
 
-  var header = document.createElement('div');
+  let header = document.createElement('div');
   header.className = 'mts-diag__header';
   header.innerHTML =
     '<div>' +
@@ -377,7 +377,7 @@ MTS.DiagnosticsPanel.prototype._build = function() {
     '<div class="mts-diag__header-actions"></div>';
   this._sheet.appendChild(header);
 
-  var headerActions = header.querySelector('.mts-diag__header-actions');
+  let headerActions = header.querySelector('.mts-diag__header-actions');
 
   this._headerGroupHost = document.createElement('div');
   this._headerGroupHost.className = 'mts-diag__button-group';
@@ -396,7 +396,7 @@ MTS.DiagnosticsPanel.prototype._build = function() {
 };
 
 MTS.DiagnosticsPanel.prototype._buildTabs = function() {
-  var tabs = [];
+  let tabs = [];
 
   if (this.showLogViewer) {
     this._logList = document.createElement('div');
@@ -405,7 +405,7 @@ MTS.DiagnosticsPanel.prototype._buildTabs = function() {
   }
 
   if (this.showRequestInspector) {
-    var reqWrap = document.createElement('div');
+    let reqWrap = document.createElement('div');
     reqWrap.className = this._canUseJsonViewer() ? 'mts-diag__stack mts-diag__stack--single' : 'mts-diag__stack';
     this._requestList = document.createElement('div');
     this._requestList.className = 'mts-diag__list';
@@ -432,7 +432,7 @@ MTS.DiagnosticsPanel.prototype._buildTabs = function() {
   }
 
   if (this.showExport) {
-    var exportWrap = document.createElement('div');
+    let exportWrap = document.createElement('div');
     exportWrap.className = 'mts-diag__stack mts-diag__stack--single';
     this._exportPreview = document.createElement('pre');
     this._exportPreview.className = 'mts-diag__detail';
@@ -451,17 +451,17 @@ MTS.DiagnosticsPanel.prototype._buildTabs = function() {
 MTS.DiagnosticsPanel.prototype._buildJsonDrawer = function() {
   if (!this._canUseJsonViewer()) return;
 
-  var content = document.createElement('div');
+  let content = document.createElement('div');
   content.className = 'mts-diag__jsondrawer-content';
 
-  var tabsHost = document.createElement('div');
+  let tabsHost = document.createElement('div');
   tabsHost.className = 'mts-diag__jsondrawer-tabs';
   content.appendChild(tabsHost);
 
-  var requestHost = document.createElement('div');
+  let requestHost = document.createElement('div');
   requestHost.className = 'mts-h-full';
 
-  var responseHost = document.createElement('div');
+  let responseHost = document.createElement('div');
   responseHost.className = 'mts-h-full';
 
   this._jsonDrawerTabs = new MTS.Tabs(tabsHost, {
@@ -499,7 +499,7 @@ MTS.DiagnosticsPanel.prototype._buildJsonDrawer = function() {
 };
 
 MTS.DiagnosticsPanel.prototype._buildHeaderActions = function() {
-  var self = this;
+  let self = this;
   if (!this._headerGroupHost) return;
   this._headerGroupHost.innerHTML = '';
 
@@ -528,7 +528,7 @@ MTS.DiagnosticsPanel.prototype._buildHeaderActions = function() {
     return;
   }
 
-  var copyBtn = document.createElement('button');
+  let copyBtn = document.createElement('button');
   copyBtn.type = 'button';
   copyBtn.className = 'mts-btn mts-btn--secondary mts-btn--sm';
   copyBtn.innerHTML = this._icon('copy', 14) + '<span class="mts-btn__label">Copiar</span>';
@@ -537,7 +537,7 @@ MTS.DiagnosticsPanel.prototype._buildHeaderActions = function() {
   });
   this._headerGroupHost.appendChild(copyBtn);
 
-  var downloadBtn = document.createElement('button');
+  let downloadBtn = document.createElement('button');
   downloadBtn.type = 'button';
   downloadBtn.className = 'mts-btn mts-btn--secondary mts-btn--sm';
   downloadBtn.innerHTML = this._icon('download', 14) + '<span class="mts-btn__label">Descargar</span>';
@@ -550,7 +550,7 @@ MTS.DiagnosticsPanel.prototype._buildHeaderActions = function() {
    ════════════════════════════════════════════════════ */
 
 MTS.DiagnosticsPanel.prototype._wrapPanel = function(content) {
-  var panel = document.createElement('div');
+  let panel = document.createElement('div');
   panel.className = 'mts-diag__panel';
   panel.appendChild(content);
   return panel;
@@ -566,7 +566,7 @@ MTS.DiagnosticsPanel.prototype._renderAll = function() {
 };
 
 MTS.DiagnosticsPanel.prototype._renderLogs = function() {
-  var self = this;
+  let self = this;
   if (!this._logList) return;
   this._logList.innerHTML = '';
   if (!this.logs.length) {
@@ -574,7 +574,7 @@ MTS.DiagnosticsPanel.prototype._renderLogs = function() {
     return;
   }
   this.logs.forEach(function(item) {
-    var row = document.createElement('article');
+    let row = document.createElement('article');
     row.className = 'mts-diag__item';
     row.innerHTML =
       '<div class="mts-diag__item-top">' +
@@ -589,7 +589,7 @@ MTS.DiagnosticsPanel.prototype._renderLogs = function() {
 };
 
 MTS.DiagnosticsPanel.prototype._renderRequests = function() {
-  var self = this;
+  let self = this;
   if (!this._requestList) return;
   this._requestList.innerHTML = '';
   if (!this.requests.length) {
@@ -598,7 +598,7 @@ MTS.DiagnosticsPanel.prototype._renderRequests = function() {
     return;
   }
   this.requests.forEach(function(item, index) {
-    var row = document.createElement('button');
+    let row = document.createElement('button');
     row.type = 'button';
     row.className = 'mts-diag__request';
     row.innerHTML =
@@ -636,7 +636,7 @@ MTS.DiagnosticsPanel.prototype._renderRequests = function() {
 };
 
 MTS.DiagnosticsPanel.prototype._renderErrors = function() {
-  var self = this;
+  let self = this;
   if (!this._errorList) return;
   this._errorList.innerHTML = '';
   if (!this.errors.length) {
@@ -644,7 +644,7 @@ MTS.DiagnosticsPanel.prototype._renderErrors = function() {
     return;
   }
   this.errors.forEach(function(item) {
-    var row = document.createElement('article');
+    let row = document.createElement('article');
     row.className = 'mts-diag__item';
     row.innerHTML =
       '<div class="mts-diag__item-top">' +
@@ -658,11 +658,11 @@ MTS.DiagnosticsPanel.prototype._renderErrors = function() {
 };
 
 MTS.DiagnosticsPanel.prototype._renderSession = function() {
-  var self = this;
+  let self = this;
   if (!this._sessionView) return;
   this._sessionView.innerHTML = '';
   Object.keys(this.session).forEach(function(key) {
-    var row = document.createElement('div');
+    let row = document.createElement('div');
     row.className = 'mts-diag__kv';
     row.innerHTML =
       '<span class="mts-diag__kv-key">'   + self._escape(key) + '</span>' +
@@ -688,11 +688,11 @@ MTS.DiagnosticsPanel.prototype._updateCounts = function() {
 
 MTS.DiagnosticsPanel.prototype._syncPanelHeight = function() {
   if (!this._sheet) return;
-  var dockHeight    = this._dock ? this._dock.offsetHeight : 44;
-  var viewportHeight = window.innerHeight || 900;
-  var maxHeight     = Math.max(220, viewportHeight - dockHeight - 48);
-  var configured    = this._parsePx(this.height);
-  var finalHeight   = Math.min(configured || 340, maxHeight);
+  let dockHeight    = this._dock ? this._dock.offsetHeight : 44;
+  let viewportHeight = window.innerHeight || 900;
+  let maxHeight     = Math.max(220, viewportHeight - dockHeight - 48);
+  let configured    = this._parsePx(this.height);
+  let finalHeight   = Math.min(configured || 340, maxHeight);
   if (this._root) this._root.style.setProperty('--mts-diag-dock-h', dockHeight + 'px');
   this._sheet.style.setProperty('--mts-diag-sheet-height', finalHeight + 'px');
   this._applyDockOffset(dockHeight);
@@ -700,13 +700,13 @@ MTS.DiagnosticsPanel.prototype._syncPanelHeight = function() {
 
 MTS.DiagnosticsPanel.prototype._openJsonDrawerForRequest = function(item) {
   if (!this._jsonDrawer || !this._jsonRequestViewer || !this._jsonResponseViewer) return;
-  var title = item.method + ' ' + item.url;
+  let title = item.method + ' ' + item.url;
   this._jsonDrawer.setTitle(this._escape(title));
   this._jsonRequestViewer.setTitle('Request body',  this._formatTime(item.createdAt));
   this._jsonRequestViewer.setData(item.requestBody  || '');
   this._jsonResponseViewer.setTitle('Response body', 'Status ' + item.status + ' • ' + item.durationMs + ' ms');
   this._jsonResponseViewer.setData(item.responseBody || '');
-  var activeTab = item.requestBody ? 'request' : 'response';
+  let activeTab = item.requestBody ? 'request' : 'response';
   if (this._jsonDrawerTabs && typeof this._jsonDrawerTabs.setActive === 'function') {
     this._jsonDrawerTabs.setActive(activeTab);
   }
@@ -719,37 +719,37 @@ MTS.DiagnosticsPanel.prototype._canUseJsonViewer = function() {
 
 MTS.DiagnosticsPanel.prototype._applyDockOffset = function(dockHeight) {
   if (!this._paddingTarget) return;
-  var target = this._paddingTarget;
-  var computed = window.getComputedStyle(target);
-  var inlinePadding = target.style.paddingBottom;
-  var basePadding = parseFloat(inlinePadding || computed.paddingBottom) || 0;
-  var reserve = (dockHeight || (this._dock ? this._dock.offsetHeight : 36)) + 8;
+  let target = this._paddingTarget;
+  let computed = window.getComputedStyle(target);
+  let inlinePadding = target.style.paddingBottom;
+  let basePadding = parseFloat(inlinePadding || computed.paddingBottom) || 0;
+  let reserve = (dockHeight || (this._dock ? this._dock.offsetHeight : 36)) + 8;
 
   if (!target.dataset.mtsDiagBasePaddingBottom) {
     target.dataset.mtsDiagBasePaddingBottom = String(basePadding);
   }
 
-  var original = parseFloat(target.dataset.mtsDiagBasePaddingBottom || '0') || 0;
+  let original = parseFloat(target.dataset.mtsDiagBasePaddingBottom || '0') || 0;
   target.style.paddingBottom = (original + reserve) + 'px';
 };
 
 MTS.DiagnosticsPanel.prototype._restoreDockOffset = function() {
   if (!this._paddingTarget) return;
-  var target = this._paddingTarget;
+  let target = this._paddingTarget;
   if (this._originalPaddingBottom) target.style.paddingBottom = this._originalPaddingBottom;
   else target.style.removeProperty('padding-bottom');
   delete target.dataset.mtsDiagBasePaddingBottom;
 };
 
 MTS.DiagnosticsPanel.prototype._bindResize = function() {
-  var self = this;
+  let self = this;
   if (!this._resizeHandle || !this._sheet) return;
-  var min       = 180;
-  var startY    = 0;
-  var startHeight = 0;
+  let min       = 180;
+  let startY    = 0;
+  let startHeight = 0;
 
   function onMove(clientY) {
-    var next = Math.max(min, startHeight + (startY - clientY));
+    let next = Math.max(min, startHeight + (startY - clientY));
     self.height = next + 'px';
     self._syncPanelHeight();
   }
@@ -801,8 +801,8 @@ MTS.DiagnosticsPanel.prototype._bindResize = function() {
    ════════════════════════════════════════════════════ */
 
 MTS.DiagnosticsPanel.prototype._subscribeGlobals = function() {
-  var self = this;
-  var bridge = MTS.DiagnosticsPanel._bridge = MTS.DiagnosticsPanel._bridge || {
+  let self = this;
+  let bridge = MTS.DiagnosticsPanel._bridge = MTS.DiagnosticsPanel._bridge || {
     consolePatched: false,
     fetchPatched:   false,
     errorPatched:   false,
@@ -817,7 +817,7 @@ MTS.DiagnosticsPanel.prototype._subscribeGlobals = function() {
     ['log', 'info', 'warn', 'error'].forEach(function(method) {
       bridge.originalConsole[method] = console[method].bind(console);
       console[method] = function() {
-        var args = Array.prototype.slice.call(arguments);
+        let args = Array.prototype.slice.call(arguments);
         bridge.subscribers.forEach(function(panel) {
           if (panel.captureConsole) panel.log(method, panel._argsToMessage(args), '', { source: 'console' });
         });
@@ -832,15 +832,15 @@ MTS.DiagnosticsPanel.prototype._subscribeGlobals = function() {
     bridge.originalFetch = window.fetch.bind(window);
     window.fetch = function(input, init) {
       init = init || {};
-      var startedAt   = Date.now();
-      var method      = ((init && init.method) || (input && input.method) || 'GET').toUpperCase();
-      var url         = typeof input === 'string' ? input : (input && input.url) || '';
-      var requestBody = init && init.body ? String(init.body) : '';
+      let startedAt   = Date.now();
+      let method      = ((init && init.method) || (input && input.method) || 'GET').toUpperCase();
+      let url         = typeof input === 'string' ? input : (input && input.url) || '';
+      let requestBody = init && init.body ? String(init.body) : '';
 
       return bridge.originalFetch(input, init).then(function(response) {
-        var clone = response.clone();
+        let clone = response.clone();
         return clone.text().then(function(responseBody) {
-          var record = {
+          let record = {
             method:       method,
             url:          url,
             status:       response.status,
@@ -855,7 +855,7 @@ MTS.DiagnosticsPanel.prototype._subscribeGlobals = function() {
           return response;
         }, function() {
           /* clone.text() failed — still forward the original response */
-          var record = {
+          let record = {
             method:       method,
             url:          url,
             status:       response.status,
@@ -870,7 +870,7 @@ MTS.DiagnosticsPanel.prototype._subscribeGlobals = function() {
           return response;
         });
       }, function(error) {
-        var record = {
+        let record = {
           method:       method,
           url:          url,
           status:       0,
@@ -908,7 +908,7 @@ MTS.DiagnosticsPanel.prototype._subscribeGlobals = function() {
       });
     };
     bridge.onRejection = function(event) {
-      var reason = event.reason || {};
+      let reason = event.reason || {};
       bridge.subscribers.forEach(function(panel) {
         if (!panel.captureWindowErrors) return;
         panel.addError({
@@ -925,7 +925,7 @@ MTS.DiagnosticsPanel.prototype._subscribeGlobals = function() {
 };
 
 MTS.DiagnosticsPanel.prototype._unsubscribeGlobals = function() {
-  var bridge = MTS.DiagnosticsPanel._bridge;
+  let bridge = MTS.DiagnosticsPanel._bridge;
   if (!bridge) return;
   bridge.subscribers.delete(this);
 };
@@ -935,7 +935,7 @@ MTS.DiagnosticsPanel.prototype._unsubscribeGlobals = function() {
    ════════════════════════════════════════════════════ */
 
 MTS.DiagnosticsPanel.prototype._empty = function(text) {
-  var el = document.createElement('div');
+  let el = document.createElement('div');
   el.className = 'mts-diag__empty';
   el.textContent = text;
   return el;
@@ -951,18 +951,18 @@ MTS.DiagnosticsPanel.prototype._uid = function(prefix) {
 };
 
 MTS.DiagnosticsPanel.prototype._formatTime = function(value) {
-  var d = value ? new Date(value) : new Date();
+  let d = value ? new Date(value) : new Date();
   return d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 };
 
 MTS.DiagnosticsPanel.prototype._parsePx = function(value) {
   if (typeof value === 'number') return value;
-  var match = String(value || '').match(/(\d+(?:\.\d+)?)px/);
+  let match = String(value || '').match(/(\d+(?:\.\d+)?)px/);
   return match ? Number(match[1]) : null;
 };
 
 MTS.DiagnosticsPanel.prototype._argsToMessage = function(args) {
-  var self = this;
+  let self = this;
   return args.map(function(arg) { return self._stringify(arg); }).join(' ');
 };
 
@@ -978,7 +978,7 @@ MTS.DiagnosticsPanel.prototype._compact = function(value) {
 };
 
 MTS.DiagnosticsPanel.prototype._limit = function(value, max) {
-  var text = value == null ? '' : String(value);
+  let text = value == null ? '' : String(value);
   return text.length > max ? text.slice(0, max) + '\n…' : text;
 };
 

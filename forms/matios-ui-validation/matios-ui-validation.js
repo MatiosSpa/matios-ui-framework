@@ -4,7 +4,7 @@
    Inspirado en jQuery Validation, API propia.
 
    Uso:
-     var v = new MTS.Validate('#mi-form', {
+     let v = new MTS.Validate('#mi-form', {
        rules: {
          nombre:  { required: true, minLength: 3 },
          email:   { required: true, email: true },
@@ -70,10 +70,10 @@ MTS.Validate = function MtsValidate(selectorOrForm, options) {
 
 /** Valida el formulario completo. Retorna true si es válido. */
 MTS.Validate.prototype.validate = function() {
-  var self = this;
-  var i, name, el, error, fname, fel, firstField;
+  let self = this;
+  let i, name, el, error, fname, fel, firstField;
   this._errors = {};
-  var fields = Object.keys(this.rules);
+  let fields = Object.keys(this.rules);
 
   for (i = 0; i < fields.length; i++) {
     name = fields[i];
@@ -95,7 +95,7 @@ MTS.Validate.prototype.validate = function() {
     }
   }
 
-  var valid = Object.keys(this._errors).length === 0;
+  let valid = Object.keys(this._errors).length === 0;
   if (valid) {
     if (self.onValid) self.onValid(this.getData());
   } else {
@@ -114,7 +114,7 @@ MTS.Validate.prototype.isValid = function() {
 };
 
 MTS.Validate.prototype.getErrors = function() {
-  var copy = {}, key;
+  let copy = {}, key;
   for (key in this._errors) {
     if (this._errors.hasOwnProperty(key)) copy[key] = this._errors[key];
   }
@@ -123,9 +123,9 @@ MTS.Validate.prototype.getErrors = function() {
 
 /** Recopilar valores de todos los campos */
 MTS.Validate.prototype.getData = function() {
-  var data = {};
-  var elements = this._form.querySelectorAll('input, select, textarea');
-  var i, el;
+  let data = {};
+  let elements = this._form.querySelectorAll('input, select, textarea');
+  let i, el;
   for (i = 0; i < elements.length; i++) {
     el = elements[i];
     if (!el.name) continue;
@@ -144,11 +144,11 @@ MTS.Validate.prototype.getData = function() {
 
 /** Limpiar todos los errores visualmente */
 MTS.Validate.prototype.clearErrors = function() {
-  var i;
+  let i;
   this._errors = {};
-  var errorEls = this._form.querySelectorAll('.mts-validation-error');
+  let errorEls = this._form.querySelectorAll('.mts-validation-error');
   for (i = 0; i < errorEls.length; i++) errorEls[i].remove();
-  var stateEls = this._form.querySelectorAll('.mts-input-error, .mts-input-success');
+  let stateEls = this._form.querySelectorAll('.mts-input-error, .mts-input-success');
   for (i = 0; i < stateEls.length; i++) {
     stateEls[i].classList.remove('mts-input-error', 'mts-input-success');
   }
@@ -157,7 +157,7 @@ MTS.Validate.prototype.clearErrors = function() {
 /** Establecer un error manualmente (para errores del servidor) */
 MTS.Validate.prototype.setError = function(fieldName, message) {
   this._errors[fieldName] = message;
-  var el = this._getField(fieldName);
+  let el = this._getField(fieldName);
   if (el) this._showError(el, message);
 };
 
@@ -176,23 +176,23 @@ MTS.Validate.prototype.addRule = function(fieldName, rule, message) {
    ============================================================ */
 
 MTS.Validate.prototype._build = function() {
-  var self = this;
-  var fields = Object.keys(this.rules);
+  let self = this;
+  let fields = Object.keys(this.rules);
 
   this._form.addEventListener('submit', function(e) {
     e.preventDefault();
     self.validate();
   });
 
-  for (var i = 0; i < fields.length; i++) {
+  for (let i = 0; i < fields.length; i++) {
     (function(name) {
-      var el = self._getField(name);
+      let el = self._getField(name);
       if (!el) return;
 
       if (self.validateOnBlur) {
         el.addEventListener('blur', function() {
           if (!self._touched[name]) return;
-          var err = self._validateField(name, el);
+          let err = self._validateField(name, el);
           if (err) { self._showError(el, err); self._errors[name] = err; }
           else     { self._clearFieldError(el); self._showSuccess(el); delete self._errors[name]; }
         });
@@ -201,7 +201,7 @@ MTS.Validate.prototype._build = function() {
       if (self.validateOnInput) {
         el.addEventListener('input', function() {
           if (!self._touched[name]) return;
-          var err = self._validateField(name, el);
+          let err = self._validateField(name, el);
           if (err) { self._showError(el, err); self._errors[name] = err; }
           else     { self._clearFieldError(el); delete self._errors[name]; }
         });
@@ -217,11 +217,11 @@ MTS.Validate.prototype._build = function() {
    ============================================================ */
 
 MTS.Validate.prototype._validateField = function(name, el) {
-  var rules    = this.rules[name] || {};
-  var value    = this._getValue(el);
-  var msgs     = this.messages[name] || {};
-  var ruleNames = Object.keys(rules);
-  var i, rule, param, result;
+  let rules    = this.rules[name] || {};
+  let value    = this._getValue(el);
+  let msgs     = this.messages[name] || {};
+  let ruleNames = Object.keys(rules);
+  let i, rule, param, result;
 
   for (i = 0; i < ruleNames.length; i++) {
     rule   = ruleNames[i];
@@ -235,11 +235,11 @@ MTS.Validate.prototype._validateField = function(name, el) {
 };
 
 MTS.Validate.prototype._applyRule = function(rule, param, value, el) {
-  var str     = String(value !== undefined && value !== null ? value : '').trim();
-  var num     = parseFloat(str);
-  var isEmpty = str === '' || value === null || value === undefined;
-  var i, clean, body, dv, sum, mul, expected, dvCalc;
-  var target, targetVal, rx, sizeMB, accepted, a, ok, file, lname, la, res;
+  let str     = String(value !== undefined && value !== null ? value : '').trim();
+  let num     = parseFloat(str);
+  let isEmpty = str === '' || value === null || value === undefined;
+  let i, clean, body, dv, sum, mul, expected, dvCalc;
+  let target, targetVal, rx, sizeMB, accepted, a, ok, file, lname, la, res;
 
   switch (rule) {
 
@@ -374,7 +374,7 @@ MTS.Validate.prototype._getMtsInstance = function(el) {
 MTS.Validate.prototype._getValue = function(el) {
   if (el.type === 'checkbox') return el.checked;
   if (el.type === 'radio') {
-    var checked = this._form.querySelector('[name="' + el.name + '"]:checked');
+    let checked = this._form.querySelector('[name="' + el.name + '"]:checked');
     return checked ? checked.value : null;
   }
   return el.value;
@@ -382,32 +382,32 @@ MTS.Validate.prototype._getValue = function(el) {
 
 MTS.Validate.prototype._showError = function(el, message) {
   this._clearFieldError(el);
-  var mts = this._getMtsInstance(el);
+  let mts = this._getMtsInstance(el);
   if (mts && mts.setError) { mts.setError(message); return; }
   el.classList.add('mts-input-error');
   el.classList.remove('mts-input-success');
-  var wrap = el.closest('.mts-form-group') || el.parentElement;
-  var span = document.createElement('span');
+  let wrap = el.closest('.mts-form-group') || el.parentElement;
+  let span = document.createElement('span');
   span.className = 'mts-validation-error mts-form-error';
   span.textContent = message;
   wrap.appendChild(span);
 };
 
 MTS.Validate.prototype._showSuccess = function(el) {
-  var mts = this._getMtsInstance(el);
+  let mts = this._getMtsInstance(el);
   if (mts && mts.clearError) { mts.clearError(); return; }
   el.classList.add('mts-input-success');
   el.classList.remove('mts-input-error');
 };
 
 MTS.Validate.prototype._clearFieldError = function(el) {
-  var i;
-  var mts = this._getMtsInstance(el);
+  let i;
+  let mts = this._getMtsInstance(el);
   if (mts && mts.clearError) { mts.clearError(); return; }
   el.classList.remove('mts-input-error', 'mts-input-success');
-  var wrap = el.closest('.mts-form-group') || el.parentElement;
+  let wrap = el.closest('.mts-form-group') || el.parentElement;
   if (wrap) {
-    var errorEls = wrap.querySelectorAll('.mts-validation-error');
+    let errorEls = wrap.querySelectorAll('.mts-validation-error');
     for (i = 0; i < errorEls.length; i++) errorEls[i].remove();
   }
 };

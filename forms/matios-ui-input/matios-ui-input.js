@@ -305,7 +305,7 @@ MTS.Input = class MtsInput {
     this._inputEl.addEventListener('keydown', (e) => {
       if (this.nextOnEnter && e.key === 'Enter' && this.type !== 'textarea') {
         e.preventDefault();
-        var next = this._findNextInput();
+        let next = this._findNextInput();
         if (next) next.focus();
       }
     });
@@ -327,10 +327,10 @@ MTS.Input = class MtsInput {
   }
 
   _findNextInput() {
-    var all = Array.from(document.querySelectorAll(
+    let all = Array.from(document.querySelectorAll(
       'input:not([disabled]):not([type="hidden"]), textarea:not([disabled]), select:not([disabled])'
     )).filter(function(el) { return el.offsetParent !== null; });
-    var idx = all.indexOf(this._inputEl);
+    let idx = all.indexOf(this._inputEl);
     return (idx !== -1 && idx < all.length - 1) ? all[idx + 1] : null;
   }
 

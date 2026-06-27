@@ -64,10 +64,10 @@
       t.appendChild(ds);
     }
 
-    var pairs = [['x', xFmt(xVal)], ['y', yFmt(yVal)]];
+    let pairs = [['x', xFmt(xVal)], ['y', yFmt(yVal)]];
     if (rVal != null) pairs.push(['r', u.defaultFmt(rVal)]);
 
-    for (var pi = 0; pi < pairs.length; pi++) {
+    for (let pi = 0; pi < pairs.length; pi++) {
       const row = document.createElement('div');
       row.className = 'mts-chart__tooltip-row';
       const lbl = document.createElement('span');
@@ -733,8 +733,8 @@
               nm.textContent = (dsLabel ? dsLabel + ' · ' : '') + cat;
               header.appendChild(dot2); header.appendChild(nm);
               t.appendChild(header);
-              var rows = [['Max', st.max], ['Q3', st.q3], ['Mediana', st.median], ['Q1', st.q1], ['Min', st.min]];
-              for (var ri = 0; ri < rows.length; ri++) {
+              let rows = [['Max', st.max], ['Q3', st.q3], ['Mediana', st.median], ['Q1', st.q1], ['Min', st.min]];
+              for (let ri = 0; ri < rows.length; ri++) {
                 const row = document.createElement('div');
                 row.className = 'mts-chart__tooltip-row';
                 const lbl2 = document.createElement('span');

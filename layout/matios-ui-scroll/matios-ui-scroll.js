@@ -64,8 +64,8 @@ MTS.Scroll = class MtsScroll {
    */
   scrollTo(pos, smooth) {
     smooth = smooth !== false;
-    var isH = this.direction === 'horizontal';
-    var opts = { behavior: smooth ? 'smooth' : 'auto' };
+    let isH = this.direction === 'horizontal';
+    let opts = { behavior: smooth ? 'smooth' : 'auto' };
     opts[isH ? 'left' : 'top'] = pos;
     this._viewport.scrollTo(opts);
     return this;
@@ -76,8 +76,8 @@ MTS.Scroll = class MtsScroll {
 
   /** Mueve al final */
   scrollToEnd(smooth) {
-    var isH = this.direction === 'horizontal';
-    var max = isH
+    let isH = this.direction === 'horizontal';
+    let max = isH
       ? this._viewport.scrollWidth  - this._viewport.clientWidth
       : this._viewport.scrollHeight - this._viewport.clientHeight;
     return this.scrollTo(max, smooth);
@@ -92,9 +92,9 @@ MTS.Scroll = class MtsScroll {
 
   /** Porcentaje scrolleado (0–100) */
   getPercent() {
-    var isH = this.direction === 'horizontal';
-    var pos  = isH ? this._viewport.scrollLeft  : this._viewport.scrollTop;
-    var max  = isH
+    let isH = this.direction === 'horizontal';
+    let pos  = isH ? this._viewport.scrollLeft  : this._viewport.scrollTop;
+    let max  = isH
       ? this._viewport.scrollWidth  - this._viewport.clientWidth
       : this._viewport.scrollHeight - this._viewport.clientHeight;
     return max <= 0 ? 100 : Math.round((pos / max) * 100);
@@ -111,7 +111,7 @@ MTS.Scroll = class MtsScroll {
     if (this._viewport && this._scrollHandler) {
       this._viewport.removeEventListener('scroll', this._scrollHandler);
     }
-    var content = this._viewport ? this._viewport.innerHTML : '';
+    let content = this._viewport ? this._viewport.innerHTML : '';
     this._el.innerHTML = content;
     this._el.classList.remove(
       'mts-scroll',
@@ -127,14 +127,14 @@ MTS.Scroll = class MtsScroll {
 
   _build() {
     /* Mover contenido existente al viewport */
-    var content = this._el.innerHTML;
+    let content = this._el.innerHTML;
     this._el.innerHTML = '';
 
     /* Clases del bloque raíz */
     this._el.classList.add('mts-scroll', 'mts-scroll--' + this.direction);
 
     /* Viewport */
-    var viewport = document.createElement('div');
+    let viewport = document.createElement('div');
     viewport.className = 'mts-scroll__viewport';
     viewport.innerHTML = content;
     this._viewport = viewport;
@@ -160,13 +160,13 @@ MTS.Scroll = class MtsScroll {
   }
 
   _makeFade(side) {
-    var el = document.createElement('div');
+    let el = document.createElement('div');
     el.className = 'mts-scroll__fade mts-scroll__fade--' + side;
     return el;
   }
 
   _bindScroll() {
-    var self = this;
+    let self = this;
     this._scrollHandler = function () {
       self._updateFades();
       self._checkReach();
@@ -184,24 +184,24 @@ MTS.Scroll = class MtsScroll {
   _updateFades() {
     if (!this.shadows) return;
 
-    var isH  = this.direction === 'horizontal';
-    var pos  = isH ? this._viewport.scrollLeft  : this._viewport.scrollTop;
-    var size = isH ? this._viewport.scrollWidth  : this._viewport.scrollHeight;
-    var vis  = isH ? this._viewport.clientWidth  : this._viewport.clientHeight;
+    let isH  = this.direction === 'horizontal';
+    let pos  = isH ? this._viewport.scrollLeft  : this._viewport.scrollTop;
+    let size = isH ? this._viewport.scrollWidth  : this._viewport.scrollHeight;
+    let vis  = isH ? this._viewport.clientWidth  : this._viewport.clientHeight;
 
-    var atStart = pos <= 0;
-    var atEnd   = pos >= size - vis - 1;
+    let atStart = pos <= 0;
+    let atEnd   = pos >= size - vis - 1;
 
     this._fadeStart.classList.toggle('mts-scroll__fade--visible', !atStart);
     this._fadeEnd.classList.toggle('mts-scroll__fade--visible',   !atEnd);
   }
 
   _checkReach() {
-    var isH  = this.direction === 'horizontal';
-    var pos  = isH ? this._viewport.scrollLeft  : this._viewport.scrollTop;
-    var size = isH ? this._viewport.scrollWidth  : this._viewport.scrollHeight;
-    var vis  = isH ? this._viewport.clientWidth  : this._viewport.clientHeight;
-    var max  = size - vis;
+    let isH  = this.direction === 'horizontal';
+    let pos  = isH ? this._viewport.scrollLeft  : this._viewport.scrollTop;
+    let size = isH ? this._viewport.scrollWidth  : this._viewport.scrollHeight;
+    let vis  = isH ? this._viewport.clientWidth  : this._viewport.clientHeight;
+    let max  = size - vis;
 
     /* onReachStart */
     if (pos <= this.threshold && !this._atStart) {

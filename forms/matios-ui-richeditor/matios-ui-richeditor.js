@@ -41,14 +41,14 @@ MTS.RichEditor = class MtsRichEditor {
     options = options || {};
 
     /* ── Textarea fuente de verdad (progressive enhancement) ── */
-    var el = typeof selector === 'string' ? document.querySelector(selector) : selector;
+    let el = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!el) return;
     this._textarea = (el.tagName === 'TEXTAREA') ? el
       : (el.querySelector('textarea') || document.createElement('textarea'));
     if (!this._textarea.parentNode) el.appendChild(this._textarea);
 
     /* ── Labels — defaults en español, consumidor sobreescribe lo que necesita ── */
-    var DEF_LABELS = {
+    let DEF_LABELS = {
       bold: 'Negrita', italic: 'Cursiva', underline: 'Subrayado', strike: 'Tachado',
       normal: 'Normal', heading1: 'Título 1', heading2: 'Título 2', heading3: 'Título 3',
       quote: 'Cita', code: 'Código',
@@ -94,7 +94,7 @@ MTS.RichEditor = class MtsRichEditor {
     this.required     = options.required     != null ? options.required : false;
     this.errorMessage = options.errorMessage != null ? options.errorMessage : null;
     this._error       = '';
-    var self = this;
+    let self = this;
     this.on('change', function () { if (self._error) self.clearError(); });
 
     this._build();
@@ -129,13 +129,13 @@ MTS.RichEditor = class MtsRichEditor {
   }
   clearError() { return this.setError(''); }
   validate() {
-    var ok = !this.required || (this.getText() || '').trim() !== '';
+    let ok = !this.required || (this.getText() || '').trim() !== '';
     if (ok) { this.clearError(); } else { this.setError(this.errorMessage || this._t('required', 'This field is required')); }
     this._emit('validate', { valid: ok, errors: ok ? [] : [this._error] });
     return ok;
   }
   _t(key, fallback) {
-    try { var ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.RichEditor'] : null; var m = ns && ns.messages; if (m && m[key] != null) { return m[key]; } } catch (e) {}
+    try { let ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.RichEditor'] : null; let m = ns && ns.messages; if (m && m[key] != null) { return m[key]; } } catch (e) {}
     return fallback;
   }
 
@@ -194,13 +194,13 @@ MTS.RichEditor = class MtsRichEditor {
 
   insertField(token) {
     if (this.disabled || this.readonly || this._preview || this._htmlMode) return this;
-    var self = this;
+    let self = this;
     if (this._editor) this._editor.focus();
     this._restoreRange();
-    var chip = this._createChip(token);
-    var sel  = window.getSelection();
+    let chip = this._createChip(token);
+    let sel  = window.getSelection();
     if (sel && sel.rangeCount > 0) {
-      var range = sel.getRangeAt(0);
+      let range = sel.getRangeAt(0);
       range.deleteContents();
       range.insertNode(chip);
       range.setStartAfter(chip);
@@ -238,32 +238,32 @@ MTS.RichEditor = class MtsRichEditor {
   ══════════════════════════════════════════════════════════════ */
 
   _build() {
-    var self = this;
-    var L    = this.labels;
+    let self = this;
+    let L    = this.labels;
 
     /* Ocultar textarea original */
     this._textarea.hidden = true;
 
     /* Wrapper raíz */
-    var el = document.createElement('div');
+    let el = document.createElement('div');
     el.className = 'mts-re';
     if (this.disabled) el.classList.add('mts-re--disabled');
     this._el = el;
 
     /* Toolbar */
-    var tb = document.createElement('div');
+    let tb = document.createElement('div');
     tb.className = 'mts-re__toolbar';
     this._buildToolbar(tb);
     this._toolbarEl = tb;
     el.appendChild(tb);
 
     /* Link bar */
-    var linkBar = document.createElement('div');
+    let linkBar = document.createElement('div');
     linkBar.className = 'mts-re__link-bar mts-re__link-bar--hidden';
-    var linkLabel = document.createElement('span');
+    let linkLabel = document.createElement('span');
     linkLabel.className = 'mts-re__link-label';
     linkLabel.textContent = L.urlLabel;
-    var linkInput = document.createElement('input');
+    let linkInput = document.createElement('input');
     linkInput.type = 'text';
     linkInput.className = 'mts-re__link-input';
     linkInput.placeholder = 'https://...';
@@ -271,13 +271,13 @@ MTS.RichEditor = class MtsRichEditor {
       if (e.key === 'Enter')  { e.preventDefault(); self._applyLink(linkInput.value); }
       if (e.key === 'Escape') { self._hideLinkBar(); }
     });
-    var linkApply = document.createElement('button');
+    let linkApply = document.createElement('button');
     linkApply.type = 'button';
     linkApply.className = 'mts-re__btn mts-re__btn--sm mts-re__btn--primary';
     linkApply.textContent = L.urlApply;
     linkApply.addEventListener('mousedown', function(e) { e.preventDefault(); });
     linkApply.addEventListener('click', function() { self._applyLink(linkInput.value); });
-    var linkCancel = document.createElement('button');
+    let linkCancel = document.createElement('button');
     linkCancel.type = 'button';
     linkCancel.className = 'mts-re__btn mts-re__btn--sm';
     linkCancel.textContent = L.urlCancel;
@@ -292,20 +292,20 @@ MTS.RichEditor = class MtsRichEditor {
     el.appendChild(linkBar);
 
     /* HTML source panel */
-    var htmlPanel = document.createElement('div');
+    let htmlPanel = document.createElement('div');
     htmlPanel.className = 'mts-re__html-panel mts-re__html-panel--hidden';
-    var htmlActions = document.createElement('div');
+    let htmlActions = document.createElement('div');
     htmlActions.className = 'mts-re__html-actions';
-    var htmlActionsLabel = document.createElement('span');
+    let htmlActionsLabel = document.createElement('span');
     htmlActionsLabel.className = 'mts-re__html-actions-label';
     htmlActionsLabel.textContent = 'HTML';
-    var htmlApplyBtn = document.createElement('button');
+    let htmlApplyBtn = document.createElement('button');
     htmlApplyBtn.type = 'button';
     htmlApplyBtn.className = 'mts-re__btn mts-re__btn--sm mts-re__btn--primary';
     htmlApplyBtn.textContent = L.htmlApply;
     htmlApplyBtn.addEventListener('mousedown', function(e) { e.preventDefault(); });
     htmlApplyBtn.addEventListener('click', function() { self._applyHtml(); });
-    var htmlCancelBtn = document.createElement('button');
+    let htmlCancelBtn = document.createElement('button');
     htmlCancelBtn.type = 'button';
     htmlCancelBtn.className = 'mts-re__btn mts-re__btn--sm';
     htmlCancelBtn.textContent = L.htmlCancel;
@@ -316,7 +316,7 @@ MTS.RichEditor = class MtsRichEditor {
     htmlActions.appendChild(htmlCancelBtn);
 
     /* Host del CodeBlock editable (o textarea de fallback si MTS.CodeBlock no está disponible) */
-    var htmlCbHost = document.createElement('div');
+    let htmlCbHost = document.createElement('div');
     htmlPanel.appendChild(htmlActions);
     htmlPanel.appendChild(htmlCbHost);
     this._htmlPanelEl  = htmlPanel;
@@ -334,7 +334,7 @@ MTS.RichEditor = class MtsRichEditor {
       });
     } else {
       /* Fallback: textarea plano */
-      var htmlTextarea = document.createElement('textarea');
+      let htmlTextarea = document.createElement('textarea');
       htmlTextarea.className = 'mts-re__html-textarea';
       htmlTextarea.spellcheck = false;
       htmlTextarea.style.height = this.height;
@@ -345,16 +345,16 @@ MTS.RichEditor = class MtsRichEditor {
     el.appendChild(htmlPanel);
 
     /* Body: flex row */
-    var body = document.createElement('div');
+    let body = document.createElement('div');
     body.className = 'mts-re__body';
 
     /* Editor wrap */
-    var editorWrap = document.createElement('div');
+    let editorWrap = document.createElement('div');
     editorWrap.className = 'mts-re__editor-wrap';
     editorWrap.style.minHeight = this.minHeight;
     editorWrap.style.height    = this.height;
 
-    var editor = document.createElement('div');
+    let editor = document.createElement('div');
     editor.className = 'mts-re__editor';
     editor.contentEditable = (!this.disabled && !this.readonly) ? 'true' : 'false';
     editor.spellcheck = true;
@@ -394,7 +394,7 @@ MTS.RichEditor = class MtsRichEditor {
     el.appendChild(body);
 
     /* Status bar */
-    var status = document.createElement('div');
+    let status = document.createElement('div');
     status.className = 'mts-re__status';
     this._statusEl = status;
     el.appendChild(status);
@@ -415,30 +415,30 @@ MTS.RichEditor = class MtsRichEditor {
   ══════════════════════════════════════════════════════════════ */
 
   _buildToolbar(tb) {
-    var self = this;
-    var BTN  = MTS.RichEditor.ToolbarButton;
+    let self = this;
+    let BTN  = MTS.RichEditor.ToolbarButton;
 
     this._btnMap           = {};
     this._formatSelect     = null;
     this._fontSizeSelect   = null;
     this._fontFamilySelect = null;
 
-    var defs      = this._getButtonDefs();
+    let defs      = this._getButtonDefs();
     this._btnDefs = defs;
-    var items     = this._normalizeToolbar(this.toolbar);
+    let items     = this._normalizeToolbar(this.toolbar);
 
     items.forEach(function(item) {
 
       /* ── Separador ── */
       if (item === BTN.SEP) {
-        var sep = document.createElement('div');
+        let sep = document.createElement('div');
         sep.className = 'mts-re__sep';
         tb.appendChild(sep);
         return;
       }
 
       /* ── Normalizar a config object ── */
-      var cfg;
+      let cfg;
       if (typeof item === 'string') {
         cfg = { button: item };
       } else if (item && item.button) {
@@ -448,21 +448,21 @@ MTS.RichEditor = class MtsRichEditor {
       }
       if (cfg.show === false) return;
 
-      var def = defs[cfg.button];
+      let def = defs[cfg.button];
       if (!def) return;
 
-      var label   = cfg.label   || self.labels[def.labelKey] || '';
-      var tooltip = cfg.tooltip || label;
+      let label   = cfg.label   || self.labels[def.labelKey] || '';
+      let tooltip = cfg.tooltip || label;
 
       /* ── Select ── */
       if (def.type === 'select') {
-        var opts = self._resolveSelectOpts(def, cfg);
+        let opts = self._resolveSelectOpts(def, cfg);
         if (!opts.length) return;
-        var sel = document.createElement('select');
+        let sel = document.createElement('select');
         sel.className = 'mts-re__select';
         sel.title = tooltip;
         opts.forEach(function(o) {
-          var opt = document.createElement('option');
+          let opt = document.createElement('option');
           opt.value       = o.value;
           opt.textContent = o.label;
           sel.appendChild(opt);
@@ -480,13 +480,13 @@ MTS.RichEditor = class MtsRichEditor {
 
       /* ── Color picker ── */
       } else if (def.type === 'color' || def.type === 'bgcolor') {
-        var wrap = document.createElement('div');
+        let wrap = document.createElement('div');
         wrap.className = 'mts-re__color-wrap';
         wrap.title = tooltip;
-        var ico = document.createElement('div');
+        let ico = document.createElement('div');
         ico.className = 'mts-re__color-icon';
         ico.innerHTML = def.icon;
-        var inp = document.createElement('input');
+        let inp = document.createElement('input');
         inp.type  = 'color';
         inp.value = def.type === 'color' ? '#000000' : '#ffff00';
         inp.className = 'mts-re__color-input';
@@ -498,16 +498,16 @@ MTS.RichEditor = class MtsRichEditor {
 
       /* ── Botón ── */
       } else {
-        var btn = document.createElement('button');
+        let btn = document.createElement('button');
         btn.type      = 'button';
         btn.className = 'mts-re__btn';
-        var iconSpan = document.createElement('span');
+        let iconSpan = document.createElement('span');
         iconSpan.className = 'mts-re__btn-icon';
         iconSpan.innerHTML = (typeof MTS !== 'undefined' && MTS.Sanitize)
           ? MTS.Sanitize.html(def.icon) : def.icon;
         btn.appendChild(iconSpan);
         if (def.hasLabel) {
-          var lbl = document.createElement('span');
+          let lbl = document.createElement('span');
           lbl.className   = 'mts-re__btn-label';
           lbl.textContent = label;
           btn.appendChild(lbl);
@@ -528,13 +528,13 @@ MTS.RichEditor = class MtsRichEditor {
 
   /* Expande el array toolbar (legacy strings o constantes TB) a un array plano normalizado */
   _normalizeToolbar(raw) {
-    var self = this;
-    var BTN  = MTS.RichEditor.ToolbarButton;
+    let self = this;
+    let BTN  = MTS.RichEditor.ToolbarButton;
 
-    var LEGACY = {
+    let LEGACY = {
       format: [BTN.BOLD, BTN.ITALIC, BTN.UNDERLINE, BTN.STRIKE, { button: BTN.FORMAT_BLOCK }],
       font: (function() {
-        var acc = [];
+        let acc = [];
         if (self.fontSizes && self.fontSizes.length) acc.push({ button: BTN.FONT_SIZE,   options: self.fontSizes });
         if (self.fonts     && self.fonts.length)     acc.push({ button: BTN.FONT_FAMILY, options: self.fonts });
         return acc;
@@ -548,8 +548,8 @@ MTS.RichEditor = class MtsRichEditor {
       fields: [BTN.FIELDS],
     };
 
-    var result      = [];
-    var afterLegacy = false;
+    let result      = [];
+    let afterLegacy = false;
 
     raw.forEach(function(item) {
       if (typeof item === 'string' && LEGACY[item]) {
@@ -570,7 +570,7 @@ MTS.RichEditor = class MtsRichEditor {
 
   /* Resuelve las opciones finales para un select según su tipo */
   _resolveSelectOpts(def, cfg) {
-    var rawOpts = cfg.options;
+    let rawOpts = cfg.options;
 
     if (def.isFormatBlock) {
       if (!rawOpts || !rawOpts.length) return def.defaultOptions;
@@ -595,10 +595,10 @@ MTS.RichEditor = class MtsRichEditor {
 
   /* Registro completo de todos los botones disponibles en el toolbar */
   _getButtonDefs() {
-    var self = this;
-    var L    = this.labels;
+    let self = this;
+    let L    = this.labels;
 
-    var SVG = {
+    let SVG = {
       bold:      '<b>B</b>',
       italic:    '<i>I</i>',
       underline: '<u>U</u>',
@@ -688,7 +688,7 @@ MTS.RichEditor = class MtsRichEditor {
   }
 
   _saveRange() {
-    var sel = window.getSelection();
+    let sel = window.getSelection();
     if (sel && sel.rangeCount > 0 && this._editor && this._editor.contains(sel.anchorNode)) {
       this._savedRange = sel.getRangeAt(0).cloneRange();
     }
@@ -696,20 +696,20 @@ MTS.RichEditor = class MtsRichEditor {
 
   _restoreRange() {
     if (!this._savedRange) return;
-    var sel = window.getSelection();
+    let sel = window.getSelection();
     if (sel) { sel.removeAllRanges(); sel.addRange(this._savedRange); }
   }
 
   _updateToolbarState() {
-    var self = this;
-    var BTN  = MTS.RichEditor.ToolbarButton;
+    let self = this;
+    let BTN  = MTS.RichEditor.ToolbarButton;
 
     /* Botones con cmdState — iterar sobre _btnDefs y consultar queryCommandState */
     if (this._btnDefs) {
       Object.keys(this._btnDefs).forEach(function(key) {
-        var def = self._btnDefs[key];
+        let def = self._btnDefs[key];
         if (!def.cmdState) return;
-        var btn = self._btnMap[key];
+        let btn = self._btnMap[key];
         if (!btn) return;
         try { btn.classList.toggle('mts-re__btn--active', document.queryCommandState(def.cmdState)); } catch(e) {}
       });
@@ -720,7 +720,7 @@ MTS.RichEditor = class MtsRichEditor {
        de browsers, pero nuestra opción Normal tiene value:'div'. Normalizamos. */
     if (this._formatSelect) {
       try {
-        var fbVal = (document.queryCommandValue('formatBlock') || '').toLowerCase();
+        let fbVal = (document.queryCommandValue('formatBlock') || '').toLowerCase();
         if (fbVal === 'p' || fbVal === '') fbVal = 'div';
         this._formatSelect.value = fbVal;
       } catch(e) {}
@@ -728,12 +728,12 @@ MTS.RichEditor = class MtsRichEditor {
     /* Select de familia de fuente — compara primer token de la familia */
     if (this._fontFamilySelect) {
       try {
-        var fontName = (document.queryCommandValue('fontName') || '').replace(/['"]/g, '').toLowerCase();
-        var ffs = this._fontFamilySelect;
-        var fMatched = false;
+        let fontName = (document.queryCommandValue('fontName') || '').replace(/['"]/g, '').toLowerCase();
+        let ffs = this._fontFamilySelect;
+        let fMatched = false;
         Array.prototype.forEach.call(ffs.options, function(opt) {
           if (!opt.value) return;
-          var first = opt.value.split(',')[0].trim().toLowerCase();
+          let first = opt.value.split(',')[0].trim().toLowerCase();
           if (first && first === fontName.split(',')[0].trim()) { ffs.value = opt.value; fMatched = true; }
         });
         if (!fMatched) ffs.value = ffs.options[0] ? ffs.options[0].value : '';
@@ -742,13 +742,13 @@ MTS.RichEditor = class MtsRichEditor {
     /* Select de tamaño de fuente — computed style del nodo bajo el cursor */
     if (this._fontSizeSelect) {
       try {
-        var selObj = window.getSelection();
-        var node   = selObj && selObj.focusNode;
+        let selObj = window.getSelection();
+        let node   = selObj && selObj.focusNode;
         if (node && node.nodeType === 3) node = node.parentNode;
-        var computedSize = (node && this._editor && this._editor.contains(node))
+        let computedSize = (node && this._editor && this._editor.contains(node))
           ? window.getComputedStyle(node).fontSize : '';
-        var fss      = this._fontSizeSelect;
-        var sMatched = false;
+        let fss      = this._fontSizeSelect;
+        let sMatched = false;
         Array.prototype.forEach.call(fss.options, function(opt) {
           if (opt.value && opt.value === computedSize) { fss.value = opt.value; sMatched = true; }
         });
@@ -756,23 +756,23 @@ MTS.RichEditor = class MtsRichEditor {
       } catch(e) {}
     }
     /* Estado botón HTML source */
-    var htmlBtn = this._btnMap[BTN.HTML_SOURCE];
+    let htmlBtn = this._btnMap[BTN.HTML_SOURCE];
     if (htmlBtn) htmlBtn.classList.toggle('mts-re__btn--active', this._htmlMode);
     /* Estado botón paleta / campos */
-    var paletteBtn = this._btnMap[BTN.FIELDS];
+    let paletteBtn = this._btnMap[BTN.FIELDS];
     if (paletteBtn) paletteBtn.classList.toggle('mts-re__btn--active', this._paletteOpen);
   }
 
   _updateStatus() {
     if (!this._statusEl) return;
-    var text  = this._editor ? this._editor.innerText || '' : '';
-    var words = text.trim() ? text.trim().split(/\s+/).length : 0;
-    var chars = text.length;
+    let text  = this._editor ? this._editor.innerText || '' : '';
+    let words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    let chars = text.length;
     this._statusEl.textContent = words + ' palabras · ' + chars + ' caracteres';
   }
 
   _emit(event, detail) {
-    var self = this;
+    let self = this;
     (this._listeners[event] || []).forEach(function(fn) { fn({ type: event, detail: detail }); });
     if (self._textarea) {
       self._textarea.dispatchEvent(new CustomEvent('mts:re:' + event, { bubbles: true, detail: detail }));
@@ -806,7 +806,7 @@ MTS.RichEditor = class MtsRichEditor {
 
   _applyLink(url) {
     if (!url || !url.trim()) return;
-    var safeUrl = (typeof MTS !== 'undefined' && MTS.Sanitize) ? MTS.Sanitize.url(url.trim()) : url.trim();
+    let safeUrl = (typeof MTS !== 'undefined' && MTS.Sanitize) ? MTS.Sanitize.url(url.trim()) : url.trim();
     if (!safeUrl) return;
     this._hideLinkBar();
     this._exec('createLink', safeUrl);
@@ -820,7 +820,7 @@ MTS.RichEditor = class MtsRichEditor {
 
   _showHtmlPanel() {
     this._htmlMode = true;
-    var html = this._prettyHtml(this._serialize());
+    let html = this._prettyHtml(this._serialize());
     if (this._htmlCodeBlock) {
       this._htmlCodeBlock.setCode(html);
     } else if (this._htmlTextarea) {
@@ -832,7 +832,7 @@ MTS.RichEditor = class MtsRichEditor {
     if (this._toolbarEl) this._toolbarEl.classList.add('mts-re__toolbar--html-mode');
     if (this._paletteEl) this._paletteEl.classList.add('mts-re__palette--html-mode');
     /* Foco al textarea del CodeBlock o al textarea de fallback */
-    var focusTarget = (this._htmlCodeBlock && this._htmlCodeBlock._editTextarea)
+    let focusTarget = (this._htmlCodeBlock && this._htmlCodeBlock._editTextarea)
       ? this._htmlCodeBlock._editTextarea
       : this._htmlTextarea;
     if (focusTarget) setTimeout(function() { focusTarget.focus(); }, 0);
@@ -851,7 +851,7 @@ MTS.RichEditor = class MtsRichEditor {
   }
 
   _applyHtml() {
-    var raw = this._htmlCodeBlock
+    let raw = this._htmlCodeBlock
       ? this._htmlCodeBlock.getValue()
       : (this._htmlTextarea ? this._htmlTextarea.value : '');
     this._hideHtmlPanel();
@@ -866,39 +866,39 @@ MTS.RichEditor = class MtsRichEditor {
     if (this._paletteEl) {
       this._paletteEl.classList.toggle('mts-re__palette--hidden', !this._paletteOpen);
     }
-    var btn = this._btnMap[MTS.RichEditor.ToolbarButton.FIELDS];
+    let btn = this._btnMap[MTS.RichEditor.ToolbarButton.FIELDS];
     if (btn) btn.classList.toggle('mts-re__btn--active', this._paletteOpen);
   }
 
   /* ── Table picker ── */
 
   _buildTablePicker() {
-    var self   = this;
-    var COLS   = 8;
-    var ROWS   = 8;
-    var picker = document.createElement('div');
+    let self   = this;
+    let COLS   = 8;
+    let ROWS   = 8;
+    let picker = document.createElement('div');
     picker.className = 'mts-re__table-picker mts-re__table-picker--hidden';
 
-    var label = document.createElement('div');
+    let label = document.createElement('div');
     label.className = 'mts-re__table-picker-label';
     label.textContent = this.labels.table;
     picker.appendChild(label);
 
-    var grid = document.createElement('div');
+    let grid = document.createElement('div');
     grid.className = 'mts-re__table-picker-grid';
     picker.appendChild(grid);
 
     /* Construir celdas del grid */
-    var cells = [];
-    var r, c;
+    let cells = [];
+    let r, c;
     for (r = 0; r < ROWS; r++) {
       cells[r] = [];
       for (c = 0; c < COLS; c++) {
         (function(row, col) {
-          var cell = document.createElement('span');
+          let cell = document.createElement('span');
           cell.className = 'mts-re__table-picker-cell';
           cell.addEventListener('mouseover', function() {
-            var i, j;
+            let i, j;
             for (i = 0; i < ROWS; i++) {
               for (j = 0; j < COLS; j++) {
                 cells[i][j].classList.toggle(
@@ -919,7 +919,7 @@ MTS.RichEditor = class MtsRichEditor {
     }
 
     picker.addEventListener('mouseleave', function() {
-      var i, j;
+      let i, j;
       for (i = 0; i < ROWS; i++) {
         for (j = 0; j < COLS; j++) {
           cells[i][j].classList.remove('mts-re__table-picker-cell--active');
@@ -942,8 +942,8 @@ MTS.RichEditor = class MtsRichEditor {
   }
 
   _showTablePicker(btn) {
-    var self = this;
-    var rect = btn.getBoundingClientRect();
+    let self = this;
+    let rect = btn.getBoundingClientRect();
     this._tablePickerEl.style.top  = (rect.bottom + 4) + 'px';
     this._tablePickerEl.style.left = rect.left + 'px';
     this._tablePickerEl.classList.remove('mts-re__table-picker--hidden');
@@ -966,8 +966,8 @@ MTS.RichEditor = class MtsRichEditor {
   }
 
   _insertTable(rows, cols) {
-    var html = '<table><tbody>';
-    var r, c;
+    let html = '<table><tbody>';
+    let r, c;
     for (r = 0; r < rows; r++) {
       html += '<tr>';
       for (c = 0; c < cols; c++) { html += '<td>&nbsp;</td>'; }
@@ -987,9 +987,9 @@ MTS.RichEditor = class MtsRichEditor {
   _execFontSize(size) {
     this._restoreRange();
     document.execCommand('fontSize', false, '7');
-    var fonts = this._editor ? this._editor.querySelectorAll('font[size="7"]') : [];
+    let fonts = this._editor ? this._editor.querySelectorAll('font[size="7"]') : [];
     Array.prototype.forEach.call(fonts, function(f) {
-      var span = document.createElement('span');
+      let span = document.createElement('span');
       span.style.fontSize = size;
       while (f.firstChild) span.appendChild(f.firstChild);
       f.parentNode.replaceChild(span, f);
@@ -1029,14 +1029,14 @@ MTS.RichEditor = class MtsRichEditor {
   /* ── Paleta de campos ── */
 
   _buildPalette() {
-    var self = this;
-    var palette = document.createElement('aside');
+    let self = this;
+    let palette = document.createElement('aside');
     palette.className = 'mts-re__palette mts-re__palette--hidden';
     this._paletteEl = palette;
 
-    var searchWrap = document.createElement('div');
+    let searchWrap = document.createElement('div');
     searchWrap.className = 'mts-re__palette-search';
-    var searchInput = document.createElement('input');
+    let searchInput = document.createElement('input');
     searchInput.type = 'text';
     searchInput.className = 'mts-re__palette-search-input';
     searchInput.placeholder = this.searchPlaceholder;
@@ -1048,12 +1048,12 @@ MTS.RichEditor = class MtsRichEditor {
     searchWrap.appendChild(searchInput);
     palette.appendChild(searchWrap);
 
-    var groupsWrap = document.createElement('div');
+    let groupsWrap = document.createElement('div');
     groupsWrap.className = 'mts-re__palette-groups';
     this._paletteGroupsEl = groupsWrap;
     palette.appendChild(groupsWrap);
 
-    var customSection = document.createElement('div');
+    let customSection = document.createElement('div');
     customSection.className = 'mts-re__palette-custom';
     this._paletteCustomEl = customSection;
     this._renderCustomSection();
@@ -1064,14 +1064,14 @@ MTS.RichEditor = class MtsRichEditor {
   }
 
   _renderPaletteGroups(filter) {
-    var self = this;
-    var wrap = this._paletteGroupsEl;
+    let self = this;
+    let wrap = this._paletteGroupsEl;
     while (wrap.firstChild) wrap.removeChild(wrap.firstChild);
 
-    var groups     = {};
-    var groupOrder = [];
+    let groups     = {};
+    let groupOrder = [];
     this._catalog.forEach(function(entry) {
-      var g = entry.group || 'Otros';
+      let g = entry.group || 'Otros';
       if (!groups[g]) { groups[g] = []; groupOrder.push(g); }
       groups[g].push(entry);
     });
@@ -1082,9 +1082,9 @@ MTS.RichEditor = class MtsRichEditor {
       });
     }
 
-    var hasVisible = false;
+    let hasVisible = false;
     groupOrder.forEach(function(groupName) {
-      var items = groups[groupName].filter(function(entry) {
+      let items = groups[groupName].filter(function(entry) {
         if (!filter) return true;
         return entry.label.toLowerCase().indexOf(filter) >= 0
             || entry.token.toLowerCase().indexOf(filter) >= 0;
@@ -1092,16 +1092,16 @@ MTS.RichEditor = class MtsRichEditor {
       if (!items.length) return;
       hasVisible = true;
 
-      var collapsed = filter ? false : !!self._groupCollapsed[groupName];
+      let collapsed = filter ? false : !!self._groupCollapsed[groupName];
 
-      var groupEl = document.createElement('div');
+      let groupEl = document.createElement('div');
       groupEl.className = 'mts-re__palette-group' + (collapsed ? ' mts-re__palette-group--collapsed' : '');
 
-      var header = document.createElement('div');
+      let header = document.createElement('div');
       header.className = 'mts-re__palette-group-header';
-      var headerText = document.createElement('span');
+      let headerText = document.createElement('span');
       headerText.textContent = groupName;
-      var arrow = document.createElement('span');
+      let arrow = document.createElement('span');
       arrow.className = 'mts-re__palette-group-arrow';
       arrow.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
       header.appendChild(headerText);
@@ -1109,21 +1109,21 @@ MTS.RichEditor = class MtsRichEditor {
       header.addEventListener('mousedown', function(e) { e.preventDefault(); });
       header.addEventListener('click', function() {
         if (filter) return;
-        var isNowCollapsed = groupEl.classList.toggle('mts-re__palette-group--collapsed');
+        let isNowCollapsed = groupEl.classList.toggle('mts-re__palette-group--collapsed');
         self._groupCollapsed[groupName] = isNowCollapsed;
       });
 
-      var body = document.createElement('div');
+      let body = document.createElement('div');
       body.className = 'mts-re__palette-group-body';
 
       items.forEach(function(entry) {
-        var item = document.createElement('div');
+        let item = document.createElement('div');
         item.className = 'mts-re__palette-item';
         if (groupName === 'Custom') item.classList.add('mts-re__palette-item--custom');
-        var labelEl = document.createElement('span');
+        let labelEl = document.createElement('span');
         labelEl.className = 'mts-re__palette-item-label';
         labelEl.textContent = entry.label;
-        var tokenEl = document.createElement('span');
+        let tokenEl = document.createElement('span');
         tokenEl.className = 'mts-re__palette-item-token';
         tokenEl.textContent = entry.token;
         item.appendChild(labelEl);
@@ -1139,7 +1139,7 @@ MTS.RichEditor = class MtsRichEditor {
     });
 
     if (!hasVisible && filter) {
-      var empty = document.createElement('div');
+      let empty = document.createElement('div');
       empty.className = 'mts-re__palette-empty';
       empty.textContent = 'Sin resultados para "' + filter + '"';
       wrap.appendChild(empty);
@@ -1147,11 +1147,11 @@ MTS.RichEditor = class MtsRichEditor {
   }
 
   _renderCustomSection() {
-    var self = this;
-    var wrap = this._paletteCustomEl;
+    let self = this;
+    let wrap = this._paletteCustomEl;
     while (wrap.firstChild) wrap.removeChild(wrap.firstChild);
 
-    var addBtn = document.createElement('button');
+    let addBtn = document.createElement('button');
     addBtn.type = 'button';
     addBtn.className = 'mts-re__btn mts-re__btn--add-custom';
     addBtn.textContent = '+ Campo personalizado';
@@ -1161,11 +1161,11 @@ MTS.RichEditor = class MtsRichEditor {
     });
     wrap.appendChild(addBtn);
 
-    var form = document.createElement('div');
+    let form = document.createElement('div');
     form.className = 'mts-re__custom-form mts-re__custom-form--hidden';
 
     function makeInput(ph) {
-      var inp = document.createElement('input');
+      let inp = document.createElement('input');
       inp.type = 'text';
       inp.placeholder = ph;
       inp.className = 'mts-re__custom-input';
@@ -1173,20 +1173,20 @@ MTS.RichEditor = class MtsRichEditor {
       return inp;
     }
 
-    var inpToken = makeInput('Nombre del campo (ej: cliente)');
-    var inpLabel = makeInput('Etiqueta visible');
-    var inpDV    = makeInput('Valor por defecto (opcional)');
-    var actions  = document.createElement('div');
+    let inpToken = makeInput('Nombre del campo (ej: cliente)');
+    let inpLabel = makeInput('Etiqueta visible');
+    let inpDV    = makeInput('Valor por defecto (opcional)');
+    let actions  = document.createElement('div');
     actions.className = 'mts-re__custom-actions';
 
-    var saveBtn = document.createElement('button');
+    let saveBtn = document.createElement('button');
     saveBtn.type = 'button';
     saveBtn.className = 'mts-re__btn mts-re__btn--primary mts-re__btn--sm';
     saveBtn.textContent = 'Agregar';
     saveBtn.addEventListener('mousedown', function(e) { e.preventDefault(); });
     saveBtn.addEventListener('click', function() {
-      var raw   = inpToken.value.trim().replace(/[^a-zA-Z0-9_.]/g, '');
-      var label = inpLabel.value.trim();
+      let raw   = inpToken.value.trim().replace(/[^a-zA-Z0-9_.]/g, '');
+      let label = inpLabel.value.trim();
       if (!raw || !label) return;
       self._customFields.push({ token: '{{custom.' + raw + '}}', label: label, defaultValue: inpDV.value.trim() });
       self._renderPaletteGroups(self._paletteSearchEl ? self._paletteSearchEl.value.trim().toLowerCase() : '');
@@ -1194,7 +1194,7 @@ MTS.RichEditor = class MtsRichEditor {
       form.classList.add('mts-re__custom-form--hidden');
     });
 
-    var cancelBtn = document.createElement('button');
+    let cancelBtn = document.createElement('button');
     cancelBtn.type = 'button';
     cancelBtn.className = 'mts-re__btn mts-re__btn--sm';
     cancelBtn.textContent = 'Cancelar';
@@ -1214,22 +1214,22 @@ MTS.RichEditor = class MtsRichEditor {
 
   _onPaste(e) {
     e.preventDefault();
-    var text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    let text = (e.clipboardData || window.clipboardData).getData('text/plain');
     if (!text) return;
     this._insertTextAtCursor(text);
   }
 
   _onKeydown(e) {
     if (e.key !== 'Backspace' && e.key !== 'Delete') return;
-    var sel = window.getSelection();
+    let sel = window.getSelection();
     if (!sel || sel.rangeCount === 0) return;
-    var range = sel.getRangeAt(0);
+    let range = sel.getRangeAt(0);
     if (!range.collapsed) return;
 
     if (e.key === 'Backspace') {
-      var node = range.startContainer;
+      let node = range.startContainer;
       if (node.nodeType === Node.TEXT_NODE && range.startOffset === 0) {
-        var prev = node.previousSibling;
+        let prev = node.previousSibling;
         if (prev && prev.classList && prev.classList.contains('mts-re__chip')) {
           prev.remove(); e.preventDefault();
           this._syncTextarea();
@@ -1238,9 +1238,9 @@ MTS.RichEditor = class MtsRichEditor {
       }
     }
     if (e.key === 'Delete') {
-      var nodeD = range.startContainer;
+      let nodeD = range.startContainer;
       if (nodeD.nodeType === Node.TEXT_NODE && range.startOffset === nodeD.nodeValue.length) {
-        var next = nodeD.nextSibling;
+        let next = nodeD.nextSibling;
         if (next && next.classList && next.classList.contains('mts-re__chip')) {
           next.remove(); e.preventDefault();
           this._syncTextarea();
@@ -1253,9 +1253,9 @@ MTS.RichEditor = class MtsRichEditor {
   /* ── Chips ── */
 
   _createChip(token) {
-    var label    = this._findLabel(token);
-    var isCustom = /^\{\{custom\./.test(token);
-    var span = document.createElement('span');
+    let label    = this._findLabel(token);
+    let isCustom = /^\{\{custom\./.test(token);
+    let span = document.createElement('span');
     span.className = 'mts-re__chip' + (isCustom ? ' mts-re__chip--custom' : '');
     span.contentEditable = 'false';
     span.draggable = false;
@@ -1265,38 +1265,38 @@ MTS.RichEditor = class MtsRichEditor {
   }
 
   _findLabel(token) {
-    var i;
+    let i;
     for (i = 0; i < this._catalog.length; i++) {
       if (this._catalog[i].token === token) return this._catalog[i].label;
     }
     for (i = 0; i < this._customFields.length; i++) {
       if (this._customFields[i].token === token) return this._customFields[i].label;
     }
-    var m = token.match(/^\{\{(.+)\}\}$/);
+    let m = token.match(/^\{\{(.+)\}\}$/);
     return m ? m[1] : token;
   }
 
   _tokenizeTextNodes(root) {
-    var self    = this;
-    var TOKEN_RE = /\{\{[^}]+\}\}/;
-    var nodes   = [];
-    var walker  = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    let self    = this;
+    let TOKEN_RE = /\{\{[^}]+\}\}/;
+    let nodes   = [];
+    let walker  = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
       acceptNode: function(node) {
         if (node.parentNode && node.parentNode.classList &&
             node.parentNode.classList.contains('mts-re__chip')) return NodeFilter.FILTER_REJECT;
         return TOKEN_RE.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
       }
     });
-    var n;
+    let n;
     while ((n = walker.nextNode())) nodes.push(n);
     nodes.forEach(function(tn) { self._tokenizeTextNode(tn); });
   }
 
   _tokenizeTextNode(textNode) {
-    var self  = this;
-    var parts = textNode.nodeValue.split(/(\{\{[^}]+\}\})/g);
+    let self  = this;
+    let parts = textNode.nodeValue.split(/(\{\{[^}]+\}\})/g);
     if (parts.length === 1) return;
-    var frag = document.createDocumentFragment();
+    let frag = document.createDocumentFragment();
     parts.forEach(function(part) {
       if (/^\{\{[^}]+\}\}$/.test(part)) {
         frag.appendChild(self._createChip(part));
@@ -1319,15 +1319,15 @@ MTS.RichEditor = class MtsRichEditor {
     /* Elementos de bloque — generan salto de línea + indentación propia.
        HR es bloque void (sin hijos). IMG, BR, INPUT son inline/reemplazados
        → van por la rama outerHTML junto a STRONG, EM, A, SPAN, etc. */
-    var BLOCK = { P:1, DIV:1, H1:1, H2:1, H3:1, H4:1, H5:1, H6:1,
+    let BLOCK = { P:1, DIV:1, H1:1, H2:1, H3:1, H4:1, H5:1, H6:1,
                   UL:1, OL:1, LI:1, BLOCKQUOTE:1, PRE:1, HR:1,
                   TABLE:1, THEAD:1, TBODY:1, TFOOT:1, TR:1, TD:1, TH:1,
                   FIGURE:1, FIGCAPTION:1,
                   SECTION:1, ARTICLE:1, HEADER:1, FOOTER:1, MAIN:1, NAV:1 };
-    var IND = '  ';
+    let IND = '  ';
 
     function getAttrs(el) {
-      var s = '';
+      let s = '';
       Array.prototype.forEach.call(el.attributes, function(a) {
         s += ' ' + a.name;
         if (a.value !== '') s += '="' + a.value + '"';
@@ -1336,19 +1336,19 @@ MTS.RichEditor = class MtsRichEditor {
     }
 
     function walk(node, depth) {
-      var out = '';
-      var pad = IND.repeat(depth);
+      let out = '';
+      let pad = IND.repeat(depth);
       Array.prototype.forEach.call(node.childNodes, function(child) {
         if (child.nodeType === 3) {           /* TEXT_NODE — inline, sin tocar */
           if (child.nodeValue.trim()) out += child.nodeValue;
         } else if (child.nodeType === 1) {    /* ELEMENT_NODE */
-          var tag = child.tagName;
+          let tag = child.tagName;
           if (BLOCK[tag]) {
             if (child.childNodes.length === 0) {
               /* Bloque vacío o void (ej. <hr>) */
               out += '\n' + pad + child.outerHTML;
             } else {
-              var inner = walk(child, depth + 1);
+              let inner = walk(child, depth + 1);
               out += '\n' + pad
                    + '<' + tag.toLowerCase() + getAttrs(child) + '>'
                    + inner
@@ -1363,14 +1363,14 @@ MTS.RichEditor = class MtsRichEditor {
       return out;
     }
 
-    var wrap = document.createElement('div');
+    let wrap = document.createElement('div');
     wrap.innerHTML = html;
     return walk(wrap, 0).trim();
   }
 
   _serialize() {
     if (!this._editor) return '';
-    var clone = this._editor.cloneNode(true);
+    let clone = this._editor.cloneNode(true);
     clone.querySelectorAll('.mts-re__chip').forEach(function(chip) {
       chip.replaceWith(document.createTextNode(chip.getAttribute('data-token') || ''));
     });
@@ -1379,7 +1379,7 @@ MTS.RichEditor = class MtsRichEditor {
 
   _setEditorContent(str) {
     if (!this._editor) return;
-    var safe = (typeof MTS !== 'undefined' && MTS.Sanitize) ? MTS.Sanitize.html(str) : str;
+    let safe = (typeof MTS !== 'undefined' && MTS.Sanitize) ? MTS.Sanitize.html(str) : str;
     this._editor.innerHTML = safe;
     this._tokenizeTextNodes(this._editor);
     this._editor.classList.toggle('mts-re__editor--empty', !this._editor.textContent.trim());
@@ -1391,9 +1391,9 @@ MTS.RichEditor = class MtsRichEditor {
   }
 
   _insertTextAtCursor(text) {
-    var self  = this;
-    var parts = text.split(/(\{\{[^}]+\}\})/g);
-    var frag  = document.createDocumentFragment();
+    let self  = this;
+    let parts = text.split(/(\{\{[^}]+\}\})/g);
+    let frag  = document.createDocumentFragment();
     parts.forEach(function(part) {
       if (/^\{\{[^}]+\}\}$/.test(part)) {
         frag.appendChild(self._createChip(part));
@@ -1401,9 +1401,9 @@ MTS.RichEditor = class MtsRichEditor {
         frag.appendChild(document.createTextNode(part));
       }
     });
-    var sel = window.getSelection();
+    let sel = window.getSelection();
     if (sel && sel.rangeCount > 0) {
-      var range = sel.getRangeAt(0);
+      let range = sel.getRangeAt(0);
       range.deleteContents();
       range.insertNode(frag);
       range.collapse(false);

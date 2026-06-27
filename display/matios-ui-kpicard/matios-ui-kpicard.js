@@ -59,7 +59,7 @@ MTS.KPICard.prototype.off = function(e, cb) {
 
 MTS.KPICard.prototype.update = function(opts) {
   opts = opts || {};
-  var key;
+  let key;
   for (key in opts) {
     if (opts.hasOwnProperty(key)) this[key] = opts[key];
   }
@@ -68,11 +68,11 @@ MTS.KPICard.prototype.update = function(opts) {
 };
 
 MTS.KPICard.prototype._build = function() {
-  var self = this;
+  let self = this;
   this._syncClasses();
   this._el.innerHTML = '';
 
-  var clickListeners = this._listeners['click'];
+  let clickListeners = this._listeners['click'];
   if (clickListeners && clickListeners.length) {
     this._el.style.cursor = 'pointer';
     if (!this._handleClick) {
@@ -85,32 +85,32 @@ MTS.KPICard.prototype._build = function() {
     if (this._handleClick) this._el.removeEventListener('click', this._handleClick);
   }
 
-  var header = document.createElement('div');
+  let header = document.createElement('div');
   header.className = 'mts-kpicard__header';
 
-  var label = document.createElement('span');
+  let label = document.createElement('span');
   label.className = 'mts-kpicard__label';
   label.textContent = this.label;
   header.appendChild(label);
 
   if (this.icon) {
-    var ic = document.createElement('div');
+    let ic = document.createElement('div');
     ic.className = 'mts-kpicard__icon';
     ic.innerHTML = (typeof MTS !== 'undefined' && MTS.Sanitize) ? MTS.Sanitize.html(this.icon) : this.icon;
     header.appendChild(ic);
   }
   this._el.appendChild(header);
 
-  var valueWrap = document.createElement('div');
+  let valueWrap = document.createElement('div');
   valueWrap.className = 'mts-kpicard__value-wrap';
 
-  var val = document.createElement('span');
+  let val = document.createElement('span');
   val.className = 'mts-kpicard__value';
   val.textContent = this.value;
   valueWrap.appendChild(val);
 
   if (this.unit) {
-    var unit = document.createElement('span');
+    let unit = document.createElement('span');
     unit.className = 'mts-kpicard__unit';
     unit.textContent = this.unit;
     valueWrap.appendChild(unit);
@@ -118,22 +118,22 @@ MTS.KPICard.prototype._build = function() {
   this._el.appendChild(valueWrap);
 
   if (this.trend !== null) {
-    var trendEl = document.createElement('div');
-    var up = this.trend >= 0;
+    let trendEl = document.createElement('div');
+    let up = this.trend >= 0;
     trendEl.className = 'mts-kpicard__trend mts-kpicard__trend--' + (up ? 'up' : 'down');
 
-    var arrow = document.createElement('span');
+    let arrow = document.createElement('span');
     arrow.className = 'mts-kpicard__trend-arrow';
     arrow.textContent = up ? '↑' : '↓';
 
-    var pct = document.createElement('span');
+    let pct = document.createElement('span');
     pct.textContent = Math.abs(this.trend) + '%';
 
     trendEl.appendChild(arrow);
     trendEl.appendChild(pct);
 
     if (this.trendLabel) {
-      var lbl = document.createElement('span');
+      let lbl = document.createElement('span');
       lbl.className = 'mts-kpicard__trend-label';
       lbl.textContent = this.trendLabel;
       trendEl.appendChild(lbl);
@@ -147,9 +147,9 @@ MTS.KPICard.prototype._build = function() {
 };
 
 MTS.KPICard.prototype._syncClasses = function() {
-  var i, cls;
-  var toRemove = [];
-  var classList = this._el.classList;
+  let i, cls;
+  let toRemove = [];
+  let classList = this._el.classList;
   for (i = 0; i < classList.length; i++) {
     cls = classList[i];
     if (cls === 'mts-kpicard' || cls.indexOf('mts-kpicard--') === 0) {
@@ -163,33 +163,33 @@ MTS.KPICard.prototype._syncClasses = function() {
   this._el.classList.add('mts-kpicard');
   this._el.classList.add('mts-kpicard--' + this.variant);
 
-  var clickListeners = this._listeners['click'];
+  let clickListeners = this._listeners['click'];
   if (clickListeners && clickListeners.length) {
     this._el.classList.add('mts-kpicard--clickable');
   }
 };
 
 MTS.KPICard.prototype._buildSparkline = function() {
-  var data  = this.sparkline;
-  var min   = Math.min.apply(null, data);
-  var max   = Math.max.apply(null, data);
-  var range = max - min || 1;
-  var w = 100, h = 32;
-  var pts = [];
-  var i, x, y;
+  let data  = this.sparkline;
+  let min   = Math.min.apply(null, data);
+  let max   = Math.max.apply(null, data);
+  let range = max - min || 1;
+  let w = 100, h = 32;
+  let pts = [];
+  let i, x, y;
   for (i = 0; i < data.length; i++) {
     x = (i / (data.length - 1)) * w;
     y = h - ((data[i] - min) / range) * (h - 4) - 2;
     pts.push(x + ',' + y);
   }
-  var points = pts.join(' ');
+  let points = pts.join(' ');
 
-  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
   svg.setAttribute('class', 'mts-kpicard__sparkline');
   svg.setAttribute('preserveAspectRatio', 'none');
 
-  var polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+  let polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
   polyline.setAttribute('points', points);
   polyline.setAttribute('fill', 'none');
   polyline.setAttribute('stroke', 'currentColor');
@@ -198,15 +198,15 @@ MTS.KPICard.prototype._buildSparkline = function() {
   polyline.setAttribute('stroke-linejoin', 'round');
   svg.appendChild(polyline);
 
-  var wrap = document.createElement('div');
+  let wrap = document.createElement('div');
   wrap.className = 'mts-kpicard__sparkline-wrap';
   wrap.appendChild(svg);
   return wrap;
 };
 
 MTS.KPICard.prototype._emit = function(event, detail) {
-  var listeners = this._listeners[event] || [];
-  var i;
+  let listeners = this._listeners[event] || [];
+  let i;
   for (i = 0; i < listeners.length; i++) {
     listeners[i]({ type: event, detail: detail });
   }

@@ -36,7 +36,7 @@ MTS.Slider = class MtsSlider {
 
     // Internal values / Valores internos
     if (this.range) {
-      var val  = options.value;
+      let val  = options.value;
       this._v1 = Array.isArray(val) ? val[0] : this.min;
       this._v2 = Array.isArray(val) ? val[1] : this.max;
     } else {
@@ -112,7 +112,7 @@ MTS.Slider = class MtsSlider {
 
   _snap(v) {
     // Snap to nearest step / Redondear al step más cercano
-    var snapped = Math.round((v - this.min) / this.step) * this.step + this.min;
+    let snapped = Math.round((v - this.min) / this.step) * this.step + this.min;
     return Math.min(this.max, Math.max(this.min, snapped));
   }
 
@@ -127,7 +127,7 @@ MTS.Slider = class MtsSlider {
       this._header = document.createElement('div');
       this._header.className = 'mts-slider__header';
       if (this.label) {
-        var lbl = document.createElement('span');
+        let lbl = document.createElement('span');
         lbl.className   = 'mts-label' + (this.required ? ' mts-label--required' : '');
         lbl.textContent = this.label;
         this._header.appendChild(lbl);
@@ -173,8 +173,8 @@ MTS.Slider = class MtsSlider {
   }
 
   _bindThumb(thumb, which) {
-    var self     = this;
-    var dragging = false;
+    let self     = this;
+    let dragging = false;
 
     thumb.addEventListener('mousedown', startDrag);
     thumb.addEventListener('touchstart', startDrag, { passive: false });
@@ -196,10 +196,10 @@ MTS.Slider = class MtsSlider {
     function onMove(e) {
       if (!dragging) return;
       e.preventDefault();
-      var clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      var rect    = self._track.getBoundingClientRect();
-      var pct     = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-      var val     = self._snap(self.min + pct * (self.max - self.min));
+      let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      let rect    = self._track.getBoundingClientRect();
+      let pct     = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+      let val     = self._snap(self.min + pct * (self.max - self.min));
 
       if (which === 1) {
         // Thumb 1 cannot exceed thumb 2 / Thumb 1 no puede superar al thumb 2
@@ -226,9 +226,9 @@ MTS.Slider = class MtsSlider {
   }
 
   _render() {
-    var pct1 = this._pct(this._v1);
+    let pct1 = this._pct(this._v1);
     if (this.range) {
-      var pct2 = this._pct(this._v2);
+      let pct2 = this._pct(this._v2);
       this._fill.style.left    = pct1 + '%';
       this._fill.style.width   = (pct2 - pct1) + '%';
       this._thumb1.style.left  = pct1 + '%';

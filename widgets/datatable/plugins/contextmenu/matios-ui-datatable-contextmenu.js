@@ -28,7 +28,7 @@
      })
    ============================================================ */
 
-var MTS = MTS || {};
+let MTS = MTS || {};
 
 MTS.DataTableContextMenuPlugin = class DataTableContextMenuPlugin {
 
