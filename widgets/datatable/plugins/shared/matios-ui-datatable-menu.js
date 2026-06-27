@@ -28,7 +28,7 @@
      MTS.DataTableMenu.renderTrigger('Opciones') // label custom
    ============================================================ */
 
-let MTS = MTS || {};
+window.MTS = window.MTS || {};
 
 MTS.DataTableMenu = class DataTableMenu {
 
