@@ -1,0 +1,67 @@
+{
+  "name": "matios-ui",
+  "version": "1.0.0",
+  "description": "Zero-dependency UI framework built with pure CSS and JavaScript. Mode + accent theming, 85+ components, 308 icons.",
+  "license": "MIT",
+  "author": "Matios SpA",
+  "homepage": "https://ui-framework.matios.cl",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatiosSpa/matios-ui-framework.git"
+  },
+  "keywords": [
+    "ui",
+    "ui-framework",
+    "components",
+    "css",
+    "javascript",
+    "zero-dependency",
+    "no-build",
+    "theming",
+    "datatable",
+    "design-system"
+  ],
+  "main": "./dist/matios-ui.min.js",
+  "module": "./dist/matios-ui.esm.mjs",
+  "style": "./dist/matios-ui.min.css",
+  "unpkg": "./dist/matios-ui.min.js",
+  "jsdelivr": "./dist/matios-ui.min.js",
+  "exports": {
+    ".": {
+      "import": "./dist/matios-ui.esm.mjs",
+      "require": "./dist/matios-ui.min.js",
+      "default": "./dist/matios-ui.min.js"
+    },
+    "./css": "./dist/matios-ui.min.css",
+    "./dist/*": "./dist/*",
+    "./themes/*": "./themes/*",
+    "./package.json": "./package.json",
+    "./*": "./*"
+  },
+  "files": [
+    "dist",
+    "base",
+    "forms",
+    "navigation",
+    "overlays",
+    "display",
+    "layout",
+    "data",
+    "utilities",
+    "widgets",
+    "icons",
+    "themes",
+    "README.md",
+    "README.es.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node test/smoke.js",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "sideEffects": true,
+  "devDependencies": {
+    "esbuild": "^0.23.1"
+  }
+}

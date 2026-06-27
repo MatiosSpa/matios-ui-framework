@@ -34,6 +34,37 @@ Matios UI takes a different approach:
 
 ---
 
+## Install
+
+**CDN (no build, no install)** — the whole framework in two tags:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/matios-ui/dist/matios-ui.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/matios-ui/themes/matios-ui-accent-violet.css">
+<script src="https://cdn.jsdelivr.net/npm/matios-ui/dist/matios-ui.min.js"></script>
+```
+
+**npm** — for bundlers (Vite, webpack, etc.):
+
+```bash
+npm install matios-ui
+```
+
+```js
+import "matios-ui";        // registers window.MTS (all components)
+import "matios-ui/css";    // base + component styles
+import "matios-ui/themes/matios-ui-accent-violet.css";
+
+new MTS.Button("#btn", { label: "Hello", variant: "primary" });
+```
+
+> The `dist/` bundles are produced by `npm run build` (esbuild). The source stays
+> a zero-dependency, no-build set of `window.MTS` scripts — you can also drop the
+> individual component files in via `<script>`, exactly as below. Adding npm/CDN
+> changed nothing about that.
+
+---
+
 ## Quick Start
 
 Open `index.html` in your browser to explore the full component library.
