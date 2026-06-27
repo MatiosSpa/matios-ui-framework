@@ -39,21 +39,21 @@ Matios UI takes a different approach:
 **CDN (no build, no install)** — the whole framework in two tags:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/matios-ui/dist/matios-ui.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/matios-ui/themes/matios-ui-accent-violet.css">
-<script src="https://cdn.jsdelivr.net/npm/matios-ui/dist/matios-ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@matios/ui/dist/matios-ui.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@matios/ui/themes/matios-ui-accent-violet.css">
+<script src="https://cdn.jsdelivr.net/npm/@matios/ui/dist/matios-ui.min.js"></script>
 ```
 
 **npm** — for bundlers (Vite, webpack, etc.):
 
 ```bash
-npm install matios-ui
+npm install @matios/ui
 ```
 
 ```js
-import "matios-ui";        // registers window.MTS (all components)
-import "matios-ui/css";    // base + component styles
-import "matios-ui/themes/matios-ui-accent-violet.css";
+import "@matios/ui";        // registers window.MTS (all components)
+import "@matios/ui/css";    // base + component styles
+import "@matios/ui/themes/matios-ui-accent-violet.css";
 
 new MTS.Button("#btn", { label: "Hello", variant: "primary" });
 ```

@@ -14,7 +14,7 @@ _Nothing yet._
 First public release.
 
 ### Tooling & distribution
-- **npm package** (`matios-ui`) with `dist/` bundles built by esbuild: global/UMD (`matios-ui.min.js`), ESM
+- **npm package** (`@matios/ui`) with `dist/` bundles built by esbuild: global/UMD (`matios-ui.min.js`), ESM
   (`matios-ui.esm.mjs`) and a single CSS bundle (`matios-ui.min.css`). CDN-ready via jsDelivr / unpkg. The source stays a
   zero-dependency, no-build `window.MTS` set — the bundles are an additive distribution channel.
 - **TypeScript declarations** (`dist/matios-ui.d.ts`, UMD) generated from source: 150 members typed (component classes
