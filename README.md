@@ -58,10 +58,14 @@ import "matios-ui/themes/matios-ui-accent-violet.css";
 new MTS.Button("#btn", { label: "Hello", variant: "primary" });
 ```
 
-> The `dist/` bundles are produced by `npm run build` (esbuild). The source stays
-> a zero-dependency, no-build set of `window.MTS` scripts — you can also drop the
-> individual component files in via `<script>`, exactly as below. Adding npm/CDN
-> changed nothing about that.
+**TypeScript** — type declarations ship with the package (`dist/matios-ui.d.ts`).
+`MTS`, every component class and its options are typed out of the box, for both
+`import MTS from "matios-ui"` and the global `window.MTS`.
+
+> The `dist/` bundles and `.d.ts` are produced by `npm run build` (esbuild). The
+> source stays a zero-dependency, no-build set of `window.MTS` scripts — you can
+> also drop the individual component files in via `<script>`, exactly as below.
+> Adding npm/CDN/types changed nothing about that.
 
 ---
 

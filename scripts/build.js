@@ -19,6 +19,7 @@ const path    = require('path');
 const vm      = require('vm');
 const esbuild = require('esbuild');
 const { makeStubWindow } = require('../test/stub-window');
+const { generate: generateTypes } = require('./gen-types');
 
 const ROOT = path.resolve(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -103,6 +104,10 @@ async function main() {
   const cssMin = await esbuild.transform(cssSrc, { loader: 'css', minify: true, legalComments: 'none' });
   fs.writeFileSync(path.join(DIST, 'matios-ui.min.css'), banner + '\n' + cssMin.code);
 
+  /* --- Tipos TypeScript (.d.ts) generados desde el source --- */
+  const types = generateTypes();
+  fs.writeFileSync(path.join(DIST, 'matios-ui.d.ts'), types.dts);
+
   /* --- Verificación: el bundle global carga y puebla MTS; el source corre en strict (ESM) --- */
   const stub = makeStubWindow();
   vm.runInContext(fs.readFileSync(path.join(DIST, 'matios-ui.min.js'), 'utf8'), vm.createContext(stub), { filename: 'matios-ui.min.js' });
@@ -117,6 +122,7 @@ async function main() {
   console.log('  dist/matios-ui.min.js   ' + kb(globalMin.code));
   console.log('  dist/matios-ui.esm.mjs  ' + kb(esmMin.code));
   console.log('  dist/matios-ui.min.css  ' + kb(cssMin.code));
+  console.log('  dist/matios-ui.d.ts     ' + types.count + ' classes typed');
   console.log('  verify: MTS entries = ' + entries + ' (global ok, strict/ESM ok)');
   console.log('\n✓ build complete\n');
 }
