@@ -5,7 +5,7 @@
    ============================================================ */
 
 (function (global) {
-  var MTS = global.MTS = global.MTS || {};
+  let MTS = global.MTS = global.MTS || {};
   if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
   MTS.registerLocale('es', {

@@ -49,6 +49,7 @@ Sub-plugins are passed via `plugins: [...]` in each parent's options.
 | `rootLabel` | `string` | `'Root'` | Label for the root folder in the breadcrumb |
 | `breadcrumb` | `boolean` | `false` | Show the folder navigation breadcrumb |
 | `showFileExtensionColor` | `boolean` | `false` | Color the file icon by type (PDF red, Word blue, Excel green, …). Off by default → icons follow the theme |
+| `iconSize` | `string \| number` | `'20px'` | File/folder icon size (any CSS length; a number is treated as `px`) |
 | `dragDrop` | `boolean` | `false` | Enable drag-and-drop to move items between folders |
 | `dropzone` | `boolean` | `false` | Enable OS file drop over the table to trigger upload |
 | `accept` | `string` | `'*'` | Accepted file types — extensions (`.pdf`), MIME types (`image/*`), comma-separated |
@@ -389,6 +390,10 @@ new MTS.DataTable({
 ---
 
 ## Changelog
+
+### 2026-06-26 — Icon size + flat version badge
+- New option `iconSize` (default `20px`) — file/folder icon size, any CSS length.
+- File icons bumped 16 → 20px default for balance with the version badge.
 
 ### 2026-06-26 — File-type icon colors
 - New opt-in option `showFileExtensionColor` (default `false`): colors each file icon by type (PDF red, Word blue,

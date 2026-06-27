@@ -45,7 +45,7 @@ window.MTS = window.MTS || {};
 
 /* ── Utilidad: deep merge recursivo ───────────────────────── */
 MTS._deepMerge = function(target, source) {
-  var result = Object.assign({}, target);
+  let result = Object.assign({}, target);
   Object.keys(source).forEach(function(key) {
     if (source[key] !== null && typeof source[key] === 'object' && !Array.isArray(source[key])) {
       result[key] = MTS._deepMerge(result[key] || {}, source[key]);
@@ -557,7 +557,7 @@ MTS.setLocale = function(key) {
  * @returns {object}
  */
 MTS.getLocale = function(key) {
-  var k = key || MTS._locale || 'es';
+  let k = key || MTS._locale || 'es';
   return MTS.Locales[k] || MTS.Locales['es'] || {};
 };
 
@@ -590,22 +590,22 @@ if (window.MTS && window.MTS.DataTable) {
   MTS.DataTable.registerLocale = function(key, obj) {
     /* El objeto antiguo tenía estructura plana con dm.*, filter, colvis.
        Lo mapeamos a la nueva estructura por nombre de componente. */
-    var mapped = {};
+    let mapped = {};
     if (obj['MTS.DataTable'] || obj.search !== undefined) {
       /* Ya viene en nuevo formato o es solo strings raíz */
       MTS.registerLocale(key, obj);
       return;
     }
     /* Mapeo legacy → nuevo */
-    var dtKeys = ['search','noData','loading','error','retry','showing','perPage','previous','next'];
-    var dtSection = {};
+    let dtKeys = ['search','noData','loading','error','retry','showing','perPage','previous','next'];
+    let dtSection = {};
     dtKeys.forEach(function(k) { if (obj[k] !== undefined) dtSection[k] = obj[k]; });
     if (Object.keys(dtSection).length) mapped['MTS.DataTable'] = dtSection;
     if (obj.filter)  mapped['MTS.DataTableFilterPlugin']             = obj.filter;
     if (obj.colvis)  mapped['MTS.DataTableColumnVisibilityPlugin']   = obj.colvis;
     if (obj.dm) {
-      var dm = obj.dm;
-      var dmSection = {};
+      let dm = obj.dm;
+      let dmSection = {};
       if (dm.nav)            dmSection.nav      = dm.nav;
       if (dm.dropzoneLabel)  dmSection.dropzone = dm.dropzoneLabel;
       if (dm.status)         dmSection.status         = dm.status;

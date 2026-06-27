@@ -72,6 +72,8 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
       // Color del icono según el tipo de archivo (opt-in). Default false:
       // los iconos siguen el color del theme hasta que se active.
       showFileExtensionColor: options.showFileExtensionColor ?? false,
+      // Tamaño del icono de archivo/carpeta (CSS length). Default 20px.
+      iconSize: options.iconSize ?? null,
       dragDrop:             options.dragDrop             ?? false,
       dropzone:             options.dropzone             ?? false,
       // Restricciones de archivo
@@ -122,6 +124,12 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
 
     /* Color de icono por tipo de archivo — gated por clase raíz; el CSS pinta solo si está */
     if (this._options.showFileExtensionColor) table._el.classList.add('mts-dm--file-colors')
+
+    /* Tamaño del icono configurable — el CSS lo lee de --mts-dm-icon-size (fallback 20px) */
+    if (this._options.iconSize != null) {
+      const sz = typeof this._options.iconSize === 'number' ? this._options.iconSize + 'px' : this._options.iconSize
+      table._el.style.setProperty('--mts-dm-icon-size', sz)
+    }
 
     /* Hook onReady — se registra limpiamente, sin pisar otros listeners */
     table.registerHook('onReady', this._onTableReadyBound)

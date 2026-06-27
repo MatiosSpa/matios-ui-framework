@@ -76,11 +76,6 @@
   flex-shrink: 0;
 }
 
-/* Quita el glow del badge global — no pega en la tabla. Especificidad (0,2,0) para ganarle a .mts-badge--primary */
-.mts-dm-cell-name .mts-dm-name-version {
-  box-shadow: none;
-}
-
 .mts-dm-cell-name--folder {
   color: var(--mts-color-primary);
   cursor: pointer;
@@ -92,8 +87,8 @@
 }
 
 .mts-dm-cell-name svg {
-  width: 20px;
-  height: 20px;
+  width: var(--mts-dm-icon-size, 20px);
+  height: var(--mts-dm-icon-size, 20px);
   stroke: currentColor;
   fill: none;
   stroke-width: 2;
