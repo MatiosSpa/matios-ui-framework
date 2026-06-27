@@ -69,6 +69,9 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
     this._options = {
       rootLabel:            options.rootLabel            ?? 'Documentos',
       breadcrumb:           options.breadcrumb           ?? true,
+      // Color del icono según el tipo de archivo (opt-in). Default false:
+      // los iconos siguen el color del theme hasta que se active.
+      showFileExtensionColor: options.showFileExtensionColor ?? false,
       dragDrop:             options.dragDrop             ?? false,
       dropzone:             options.dropzone             ?? false,
       // Restricciones de archivo
@@ -116,6 +119,9 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
   ---------------------------------------------------------- */
   install(table) {
     this._table = table
+
+    /* Color de icono por tipo de archivo — gated por clase raíz; el CSS pinta solo si está */
+    if (this._options.showFileExtensionColor) table._el.classList.add('mts-dm--file-colors')
 
     /* Hook onReady — se registra limpiamente, sin pisar otros listeners */
     table.registerHook('onReady', this._onTableReadyBound)
@@ -179,6 +185,7 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
     })
 
     this._table.unregisterHook('onReady', this._onTableReadyBound)
+    this._table._el.classList.remove('mts-dm--file-colors')
     this._table._el.removeEventListener('click',       this._onNameClick,   { capture: true })
     this._table._el.removeEventListener('contextmenu', this._onContextMenu)
     if (this._options.dragDrop) {
@@ -514,12 +521,23 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
      HELPERS ESTÁTICOS DE RENDER (usados en columnas)
   ---------------------------------------------------------- */
   static renderName(value, row) {
-    const iconName = row.type === 'folder'
-      ? 'folder'
-      : MTS.DocumentManagerPlugin._extToIcon(row.ext || '')
-    const icon = typeof MTS?.Icon?.get === 'function' ? MTS.Icon.get(iconName) : ''
-    const cls  = row.type === 'folder' ? 'mts-dm-cell-name mts-dm-cell-name--folder' : 'mts-dm-cell-name'
-    const esc  = MTS.DocumentManagerPlugin._escHtml
+    const esc      = MTS.DocumentManagerPlugin._escHtml
+    const isFolder = row.type === 'folder'
+    const hasIcon  = typeof MTS?.Icon?.get === 'function'
+
+    // Icono: carpeta fija, o icono por extensión envuelto con su clase de familia
+    // (mts-dm-ext--{family}) para que el CSS aplique el color por tipo cuando
+    // showFileExtensionColor está activo. Los tipos desconocidos no llevan color.
+    let icon
+    if (isFolder) {
+      icon = hasIcon ? MTS.Icon.get('folder') : ''
+    } else {
+      const { icon: iconName, family } = MTS.DocumentManagerPlugin._extToType(row.ext || '')
+      const svg = hasIcon ? MTS.Icon.get(iconName) : ''
+      icon = `<span class="mts-dm-cell-icon mts-dm-ext--${family}">${svg}</span>`
+    }
+
+    const cls = isFolder ? 'mts-dm-cell-name mts-dm-cell-name--folder' : 'mts-dm-cell-name'
 
     // Badge de versión: solo en archivos con versión definida
     let versionBadge = ''
@@ -646,5 +664,17 @@ MTS.DocumentManagerPlugin = class DocumentManagerPlugin {
       tar: 'file-zip', '7z': 'file-zip', bz2: 'file-zip',
     }
     return map[ext.toLowerCase()] ?? 'file'   // tabla → siempre muestra algo
+  }
+
+  /**
+   * Tipo de archivo por extensión → { icon, family }.
+   * `family` se deriva del nombre del icono (file-pdf → 'pdf') y es la única
+   * fuente de verdad para el color por tipo. 'generic' para lo desconocido
+   * (sin color: hereda el color del theme).
+   */
+  static _extToType(ext) {
+    const icon   = MTS.DocumentManagerPlugin._extToIcon(ext)
+    const family = icon === 'file' ? 'generic' : icon.replace(/^file-/, '')
+    return { icon, family }
   }
 }

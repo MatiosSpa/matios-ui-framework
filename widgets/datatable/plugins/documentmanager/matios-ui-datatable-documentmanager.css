@@ -102,6 +102,66 @@
   color: var(--mts-color-primary);
 }
 
+/* ============================================================
+   3b. ICONO — color por tipo de archivo (opt-in)
+   Activado por .mts-dm--file-colors en la raíz de la tabla
+   (opción showFileExtensionColor del plugin). Sin la clase, los
+   iconos siguen el color del theme (--mts-text-muted, arriba).
+   Los tipos desconocidos no tienen regla → heredan el theme/accent.
+   ============================================================ */
+.mts-dm-cell-name .mts-dm-cell-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.mts-dm--file-colors {
+  --mts-dm-file-pdf:    #e5484d;
+  --mts-dm-file-word:   #3b82f6;
+  --mts-dm-file-excel:  #22a565;
+  --mts-dm-file-ppt:    #e8710a;
+  --mts-dm-file-image:  #14b8a6;
+  --mts-dm-file-video:  #8b5cf6;
+  --mts-dm-file-audio:  #ec4899;
+  --mts-dm-file-code:   #0ea5e9;
+  --mts-dm-file-zip:    #f59e0b;
+  --mts-dm-file-mail:   #0078d4;
+  --mts-dm-file-access: #a4373a;
+}
+
+.mts-dm--file-colors .mts-dm-ext--pdf        svg { color: var(--mts-dm-file-pdf); }
+.mts-dm--file-colors .mts-dm-ext--word       svg { color: var(--mts-dm-file-word); }
+.mts-dm--file-colors .mts-dm-ext--excel      svg,
+.mts-dm--file-colors .mts-dm-ext--csv        svg { color: var(--mts-dm-file-excel); }
+.mts-dm--file-colors .mts-dm-ext--powerpoint svg { color: var(--mts-dm-file-ppt); }
+.mts-dm--file-colors .mts-dm-ext--image      svg { color: var(--mts-dm-file-image); }
+.mts-dm--file-colors .mts-dm-ext--video      svg { color: var(--mts-dm-file-video); }
+.mts-dm--file-colors .mts-dm-ext--audio      svg { color: var(--mts-dm-file-audio); }
+.mts-dm--file-colors .mts-dm-ext--code       svg { color: var(--mts-dm-file-code); }
+.mts-dm--file-colors .mts-dm-ext--zip        svg { color: var(--mts-dm-file-zip); }
+.mts-dm--file-colors .mts-dm-ext--outlook    svg { color: var(--mts-dm-file-mail); }
+.mts-dm--file-colors .mts-dm-ext--access     svg { color: var(--mts-dm-file-access); }
+
+/* Modo oscuro — variantes algo más brillantes para superficie oscura */
+[data-mts-mode="dark"] .mts-dm--file-colors {
+  --mts-dm-file-pdf:    #ff6166;
+  --mts-dm-file-word:   #60a5fa;
+  --mts-dm-file-excel:  #34d399;
+  --mts-dm-file-ppt:    #fb923c;
+  --mts-dm-file-image:  #2dd4bf;
+  --mts-dm-file-video:  #a78bfa;
+  --mts-dm-file-audio:  #f472b6;
+  --mts-dm-file-code:   #38bdf8;
+  --mts-dm-file-zip:    #fbbf24;
+  --mts-dm-file-mail:   #3b9eff;
+  --mts-dm-file-access: #d65a5e;
+}
+
+/* Alto contraste — colapsa los iconos de archivo a monocromo (accesibilidad) */
+[data-mts-mode="high-contrast"] .mts-dm--file-colors .mts-dm-cell-icon svg {
+  color: var(--mts-text-muted);
+}
+
 
 /* ============================================================
    4. FILA — estados drag & drop

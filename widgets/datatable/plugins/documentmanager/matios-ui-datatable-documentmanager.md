@@ -48,6 +48,7 @@ Sub-plugins are passed via `plugins: [...]` in each parent's options.
 |--------|------|---------|-------------|
 | `rootLabel` | `string` | `'Root'` | Label for the root folder in the breadcrumb |
 | `breadcrumb` | `boolean` | `false` | Show the folder navigation breadcrumb |
+| `showFileExtensionColor` | `boolean` | `false` | Color the file icon by type (PDF red, Word blue, Excel green, …). Off by default → icons follow the theme |
 | `dragDrop` | `boolean` | `false` | Enable drag-and-drop to move items between folders |
 | `dropzone` | `boolean` | `false` | Enable OS file drop over the table to trigger upload |
 | `accept` | `string` | `'*'` | Accepted file types — extensions (`.pdf`), MIME types (`image/*`), comma-separated |
@@ -68,6 +69,30 @@ Sub-plugins are passed via `plugins: [...]` in each parent's options.
 
 **`onUpload` third argument** (when `onFileExists` is `'ask'`): `{ action: 'replace'|'version'|null, currentVersion: string|null }`
 (`null` action = new file with no conflict).
+
+### File-type icon colors (`showFileExtensionColor`)
+
+When enabled, the plugin adds a `mts-dm--file-colors` class to the table root and wraps each file icon in
+`mts-dm-ext--{family}` (the `family` is derived from the file extension). Well-known types get a recognizable,
+theme-aware color; unknown types keep the theme/accent color. Each color is a CSS variable you can override:
+
+| Family | Color | Token | Extensions |
+|--------|-------|-------|------------|
+| PDF | red | `--mts-dm-file-pdf` | pdf |
+| Word | blue | `--mts-dm-file-word` | doc, docx, odt, rtf |
+| Excel / CSV | green | `--mts-dm-file-excel` | xls, xlsx, ods, csv |
+| PowerPoint | orange | `--mts-dm-file-ppt` | ppt, pptx, odp |
+| Image | teal | `--mts-dm-file-image` | jpg, png, svg, gif, webp |
+| Video | violet | `--mts-dm-file-video` | mp4, mov, mkv, avi |
+| Audio | pink | `--mts-dm-file-audio` | mp3, wav, flac, m4a |
+| Code | cyan | `--mts-dm-file-code` | js, ts, py, json, html, … |
+| Archive | amber | `--mts-dm-file-zip` | zip, rar, 7z, gz, tar |
+| Email | sky blue | `--mts-dm-file-mail` | msg, eml, pst |
+| Access | maroon | `--mts-dm-file-access` | mdb, accdb |
+| Other | theme color | — | txt, visio, project, onenote, … |
+
+Dark mode uses slightly brighter variants; `high-contrast` collapses file icons to monochrome.
+`MTS.DocumentManagerPlugin._extToType(ext)` returns `{ icon, family }` if you need the mapping directly.
 
 ### Static render helpers
 
@@ -364,6 +389,11 @@ new MTS.DataTable({
 ---
 
 ## Changelog
+
+### 2026-06-26 — File-type icon colors
+- New opt-in option `showFileExtensionColor` (default `false`): colors each file icon by type (PDF red, Word blue,
+  Excel green, …) using theme-aware CSS variables; unknown types keep the theme color. Gated by a `mts-dm--file-colors`
+  root class, so default behavior is unchanged. New helper `_extToType(ext) → { icon, family }`.
 
 ### 2026-06-26
 - Notes panel: fixed the panel shifting when adding a note. `scrollIntoView` bubbled to the nearest scrollable
