@@ -24,6 +24,10 @@ const { generate: generateTypes } = require('./gen-types');
 const ROOT = path.resolve(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
 
+// Baseline de navegadores (≈ ES2020: el source usa ?. y ?? y nada más nuevo).
+// esbuild no eleva el código; solo garantiza que el dist no exceda este target.
+const TARGET = ['chrome80', 'firefox78', 'safari14', 'edge80'];
+
 const COMPONENT_DIRS = ['base', 'forms', 'navigation', 'overlays', 'display', 'layout', 'data', 'utilities', 'widgets', 'icons'];
 
 /* ---- Descubrimiento (mismo criterio que test/smoke.js) ---- */
@@ -92,16 +96,16 @@ async function main() {
   const banner = '/*! Matios UI v' + require('../package.json').version + ' | MIT | https://github.com/MatiosSpa/matios-ui-framework */';
 
   /* --- Global (script tag) — cada archivo ya está en su IIFE --- */
-  const globalMin = await esbuild.transform(jsSrc, { minify: true, legalComments: 'none' });
+  const globalMin = await esbuild.transform(jsSrc, { minify: true, target: TARGET, legalComments: 'none' });
   fs.writeFileSync(path.join(DIST, 'matios-ui.min.js'), banner + '\n' + globalMin.code);
 
   /* --- ESM (bundlers) --- */
   const esmSrc = jsSrc + "\nexport default (typeof window !== 'undefined' ? window : globalThis).MTS;\n";
-  const esmMin = await esbuild.transform(esmSrc, { minify: true, format: 'esm', legalComments: 'none' });
+  const esmMin = await esbuild.transform(esmSrc, { minify: true, format: 'esm', target: TARGET, legalComments: 'none' });
   fs.writeFileSync(path.join(DIST, 'matios-ui.esm.mjs'), banner + '\n' + esmMin.code);
 
   /* --- CSS (base + componentes) --- */
-  const cssMin = await esbuild.transform(cssSrc, { loader: 'css', minify: true, legalComments: 'none' });
+  const cssMin = await esbuild.transform(cssSrc, { loader: 'css', minify: true, target: TARGET, legalComments: 'none' });
   fs.writeFileSync(path.join(DIST, 'matios-ui.min.css'), banner + '\n' + cssMin.code);
 
   /* --- Tipos TypeScript (.d.ts) generados desde el source --- */

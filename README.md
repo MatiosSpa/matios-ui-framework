@@ -287,6 +287,29 @@ Matios UI is **production-ready** as a framework — coherent structure, consist
 
 ---
 
+## Browser support
+
+Modern evergreen browsers. The codebase targets **ES2020** (optional chaining `?.` and nullish `??`); it uses no newer
+syntax or APIs, no transpiler and no polyfills.
+
+| Browser | Minimum |
+|---|---|
+| Chrome / Edge | 80+ |
+| Firefox | 78+ |
+| Safari | 14+ |
+
+Internet Explorer is not supported. The published `dist/` bundles are pinned to this baseline via the build target.
+
+---
+
+## Versioning
+
+Matios UI follows [Semantic Versioning](https://semver.org/). The framework is versioned as a single unit (`MAJOR.MINOR.PATCH`);
+component-level changes are tracked by date in each component's `.md`. See [`CHANGELOG.md`](./CHANGELOG.md) for releases
+and [`RELEASING.md`](./RELEASING.md) for the release process.
+
+---
+
 ## Documentation
 
 - Every component has its own `.md` (Installation · Usage · Options · API · Events · CSS Variables · Accessibility · Changelog) next to its `.css`/`.js`/`demo.html`.
