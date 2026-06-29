@@ -155,6 +155,9 @@ disabled style, plus `--mts-danger-*` for the error state. Theme via `data-mts-m
 
 ## Changelog
 
+### 2026-06-29
+- Password reveal icon migrated to `MTS.Icon` (`eye`); dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### 2026-06-23
 - Hardening: `_renderValidation()` now writes the feedback `className`/`textContent` only when they actually change
   (idempotent), and `selectOnFocus` only calls `.select()` while the input is still focused. Prevents repeated

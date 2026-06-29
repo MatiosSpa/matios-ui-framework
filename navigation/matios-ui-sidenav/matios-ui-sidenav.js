@@ -154,8 +154,8 @@ MTS.SideNav = class MtsSideNav {
 
   _setToggleIcon(btn) {
     btn.innerHTML = this.collapsed
-      ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>'
-      : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>';
+      ? MTS.Icon.get('chevron-right')
+      : MTS.Icon.get('chevron-left');
     btn.setAttribute('title', this.collapsed ? 'Expandir' : 'Colapsar');
   }
 

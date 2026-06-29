@@ -556,7 +556,7 @@ MTS.Menu = class MtsMenu {
     chv.className = 'mts-menu__chevron'
       + (direction === 'up'    ? ' mts-menu__chevron--open'  : '')
       + (direction === 'right' ? ' mts-menu__chevron--right' : '');
-    chv.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+    chv.innerHTML = MTS.Icon.get('chevron-down');
     btn.appendChild(chv);
   }
 

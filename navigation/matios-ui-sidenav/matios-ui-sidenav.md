@@ -114,6 +114,9 @@ document.getElementById('sidebar')
 
 ## Changelog
 
+### 2026-06-29
+- Collapse toggle migrated to `MTS.Icon` (`chevron-left`/`chevron-right`); dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### Initial
 - Collapsible sidebar with nested submenus, badges, groups, dividers, accordion mode, logo/footer slots, external
   collapse button, and `setActive` / `collapse` / `expand` / `setItems` / `setBadge` API.

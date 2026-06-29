@@ -135,6 +135,10 @@ el.addEventListener('mts:tree:check',  function (e) { console.log(e.detail); });
 
 ## Changelog
 
+### 2026-06-29
+- Icons migrated to `MTS.Icon` (toggle → `chevron-down`/`chevron-right`, folder → `folder` outline/filled, leaf → `file`);
+  dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### Initial
 - Tree view with expand/collapse, selectable nodes, checkboxes with parent/child propagation, folder/file icons,
   connection lines, badges, and `expand` / `collapse` / `select` / `getChecked` API.

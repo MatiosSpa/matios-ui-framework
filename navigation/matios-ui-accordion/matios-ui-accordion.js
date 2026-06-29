@@ -166,7 +166,7 @@ MTS.Accordion = class MtsAccordion {
     if (item.icon) { const ic = document.createElement('span'); ic.className = 'mts-accordion__icon'; ic.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(item.icon) : item.icon; header.appendChild(ic); }
     const title = document.createElement('span'); title.className = 'mts-accordion__title'; title.textContent = item.title; header.appendChild(title);
     const arrow = document.createElement('span'); arrow.className = 'mts-accordion__arrow';
-    arrow.innerHTML = `<svg width="12" height="12" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+    arrow.innerHTML = MTS.Icon.get('chevron-down');
     header.appendChild(arrow);
 
     header.addEventListener('click', () => { if (!item.disabled) this.toggle(item.id); });

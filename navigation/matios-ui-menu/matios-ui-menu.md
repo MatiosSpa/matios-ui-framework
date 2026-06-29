@@ -109,6 +109,9 @@ their own DOM events for active-item changes.
 
 ## Changelog
 
+### 2026-06-29
+- Submenu chevron migrated to `MTS.Icon` (`chevron-down`, rotated via CSS); dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### 2026-06-23
 - `getItems()` — read back the top-level items as a shallow copy (collection-API symmetry across the framework).
 

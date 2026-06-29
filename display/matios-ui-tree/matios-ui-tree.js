@@ -97,8 +97,8 @@ MTS.Tree = class MtsTree {
     toggle.className = 'mts-tree__toggle';
     if (hasChildren) {
       toggle.innerHTML = node.expanded
-        ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>'
-        : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>';
+        ? MTS.Icon.get('chevron-down')
+        : MTS.Icon.get('chevron-right');
       toggle.addEventListener('click', (e) => {
         e.stopPropagation();
         if (node.disabled) return;
@@ -135,10 +135,10 @@ MTS.Tree = class MtsTree {
         ico.innerHTML = typeof MTS !== 'undefined' && MTS.Sanitize ? MTS.Sanitize.html(node.icon) : node.icon;
       } else if (hasChildren) {
         ico.innerHTML = node.expanded
-          ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>'
-          : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>';
+          ? MTS.Icon.get('folder', true)
+          : MTS.Icon.get('folder');
       } else {
-        ico.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>';
+        ico.innerHTML = MTS.Icon.get('file');
       }
       row.appendChild(ico);
     }

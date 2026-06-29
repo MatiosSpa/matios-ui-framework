@@ -323,7 +323,7 @@ MTS.Select = class MtsSelect {
 
     const arrow = document.createElement('span');
     arrow.className = 'mts-select__arrow';
-    arrow.innerHTML = `<svg width="12" height="12" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+    arrow.innerHTML = MTS.Icon.get('chevron-down');
 
     this._triggerEl.appendChild(this._valueEl);
 
@@ -446,7 +446,7 @@ MTS.Select = class MtsSelect {
         if (this._isSelected(opt.value)) {
           const check = document.createElement('span');
           check.className = 'mts-select__check';
-          check.innerHTML = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+          check.innerHTML = MTS.Icon.get('check');
           item.appendChild(check);
         }
 

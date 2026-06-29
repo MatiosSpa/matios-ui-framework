@@ -248,8 +248,7 @@ MTS.Input = class MtsInput {
       this._eyeBtn = document.createElement('button');
       this._eyeBtn.className = 'mts-input__icon mts-input__icon--right mts-input__eye';
       this._eyeBtn.setAttribute('aria-label', this._t('showPassword', 'Show password'));
-      // TODO: reemplazar con MTS.Icons cuando estén listos
-      this._eyeBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+      this._eyeBtn.innerHTML = MTS.Icon.get('eye');
       this._eyeBtn.addEventListener('click', () => {
         const show = this._inputEl.type === 'password';
         this._inputEl.type = show ? 'text' : 'password';

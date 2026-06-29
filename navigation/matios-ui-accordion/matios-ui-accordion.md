@@ -124,6 +124,9 @@ document.getElementById('my-accordion')
 
 ## Changelog
 
+### 2026-06-29
+- Header arrow migrated to `MTS.Icon` (`chevron-down`); dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### 2026-06-23
 - Dynamic items: `addItem(item[, { open }])`, `removeItem(id)` and `updateItem(id, patch)` — add, remove and update
   items at runtime with surgical DOM (only the affected node), so inner live controls keep their focus and state

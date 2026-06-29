@@ -130,6 +130,9 @@ Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTR
 
 ## Changelog
 
+### 2026-06-29
+- Trigger chevron migrated to `MTS.Icon` (`chevron-down`); dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### 2026-06-23
 - Validation contract: `required` + `errorMessage` + `validate()` + `setError`/`clearError` (inline error, localized message). Now supports `value: null` (empty state) so `required` is meaningful. See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
