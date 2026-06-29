@@ -79,7 +79,7 @@ row: {
 ```
 
 - **leading / trailing** — `'initials'` (circle with initials), `'avatar'` (`<img>` with automatic initials fallback),
-  `'icon'` (SVG from the internal registry). `bind` reads an item field; `value` is a static value.
+  `'icon'` (any icon name from `MTS.Icon` — see `MTS.Icon.list()`). `bind` reads an item field; `value` is a static value.
 - **controls** — array of `{ type: 'select', bind, options }`, `{ type: 'badge', bind, variant, variantBind }`, or
   `{ type: 'button', icon, action, label, tooltip }` (`action: 'remove'` calls `removeItem`; otherwise fires `onAction`).
 
@@ -121,6 +121,11 @@ Every datasource field is mirrored as a `data-*` attribute on the `<li>`, so any
 ---
 
 ## Changelog
+
+### 2026-06-29
+- Icons now resolve through the central `MTS.Icon` set (was a private 9-icon registry that silently fell back to the
+  `user` icon). Any name from `MTS.Icon.list()` works in `leading` / `trailing` / `button` controls (e.g. `chevron-up`,
+  `arrow-down`); an unknown name renders nothing and lets `MTS.Icon` emit its warning instead of showing a wrong icon.
 
 ### 2026-05-28
 - Component created. Slots: leading (initials/avatar/icon) · primary · secondary · trailing · controls

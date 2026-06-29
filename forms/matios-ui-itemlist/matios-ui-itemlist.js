@@ -473,25 +473,13 @@
     return span;
   }
 
-  /* SVG inline — strings estáticos y seguros, no son datos de usuario */
-  let _ICONS = {
-    'user':          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="5.5" r="2.5"/><path d="M2.5 14c0-3 2.4-5.5 5.5-5.5s5.5 2.5 5.5 5.5"/></svg>',
-    'x':             '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>',
-    'edit':          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 2.5l3 3L5 14H2v-3L10.5 2.5z"/></svg>',
-    'trash':         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4h12M5 4V2.5h6V4M4 4l.8 9.5h6.4L12 4"/></svg>',
-    'eye':           '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><ellipse cx="8" cy="8" rx="5.5" ry="3.5"/><circle cx="8" cy="8" r="1.5"/></svg>',
-    'check':         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8l4 4 7-7"/></svg>',
-    'plus':          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>',
-    'chevron-right': '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>',
-    'lock':          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 016 0v2"/></svg>',
-    'mail':          '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1.5" y="3.5" width="13" height="9" rx="1"/><path d="M1.5 4.5l6.5 5 6.5-5"/></svg>',
-  };
-
   function _makeIcon(name) {
     let wrap = document.createElement('span');
     wrap.className = 'mts-itemlist__icon';
-    /* innerHTML aceptable: string literal del registry interno, sin datos de usuario */
-    wrap.innerHTML = _ICONS[name] || _ICONS['user'];
+    /* Fuente única de íconos: MTS.Icon (mismo set que el resto de la UI). Sin
+       fallback a un ícono "equivocado": si el nombre no existe, MTS.Icon emite
+       su console.warn y el slot queda vacío. SVG estático, sin datos de usuario. */
+    wrap.innerHTML = (window.MTS && MTS.Icon && typeof MTS.Icon.get === 'function') ? (MTS.Icon.get(name) || '') : '';
     return wrap;
   }
 

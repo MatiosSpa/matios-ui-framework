@@ -48,6 +48,7 @@ const ICONS = {
                     f: `<path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>` },
   'minus':        { o: `<path d="M4 12h16" stroke-linecap="round"/>` },
   'close':        { o: `<path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/>` },
+  'x':            { o: `<path d="M18 6 6 18M6 6l12 12" stroke-linecap="round"/>` },
   'close-circle': { o: `<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6" stroke-linecap="round"/>` },
   'check':        { o: `<path d="M4 12l5.5 5.5L20 7" stroke-linecap="round" stroke-linejoin="round"/>` },
   'check-circle': { o: `<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/>`,
