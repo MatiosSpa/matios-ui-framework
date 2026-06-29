@@ -106,7 +106,7 @@ MTS.SortableList = class MtsSortableList {
     if (this.showHandle && !this.locked) {
       const handle = document.createElement('div');
       handle.className = 'mts-sortable__handle' + (item.disabled ? ' mts-sortable__handle--disabled' : '');
-      handle.innerHTML = '<svg width="14" height="20" viewBox="0 0 14 20" fill="currentColor"><circle cx="4" cy="4" r="1.5"/><circle cx="10" cy="4" r="1.5"/><circle cx="4" cy="10" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="4" cy="16" r="1.5"/><circle cx="10" cy="16" r="1.5"/></svg>';
+      handle.innerHTML = MTS.Icon.get('drag-handle');
       handle.title = 'Arrastrar para reordenar';
       row.appendChild(handle);
     }

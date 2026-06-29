@@ -151,7 +151,7 @@ MTS.NumberInput = class MtsNumberInput {
     const btnDec = document.createElement('button');
     btnDec.type = 'button';
     btnDec.className = 'mts-numberinput__btn mts-numberinput__btn--dec';
-    btnDec.innerHTML = '<svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+    btnDec.innerHTML = MTS.Icon.get('minus');
     btnDec.disabled = this.disabled || this.readonly || (this.min !== null && this.value <= this.min);
     this._bindHold(btnDec, () => this._step(-1));
 
@@ -206,7 +206,7 @@ MTS.NumberInput = class MtsNumberInput {
     const btnInc = document.createElement('button');
     btnInc.type = 'button';
     btnInc.className = 'mts-numberinput__btn mts-numberinput__btn--inc';
-    btnInc.innerHTML = '<svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+    btnInc.innerHTML = MTS.Icon.get('plus');
     btnInc.disabled = this.disabled || this.readonly || (this.max !== null && this.value >= this.max);
     this._bindHold(btnInc, () => this._step(1));
 

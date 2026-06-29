@@ -124,6 +124,9 @@ el.addEventListener('mts:sortable:itemclick', function (e) { console.log(e.detai
 
 ## Changelog
 
+### 2026-06-29
+- Drag handle migrated to `MTS.Icon` (`drag-handle`); dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### Initial
 - Sortable list with drag-and-drop, numbered items, drag handle, ↑↓ move buttons, icons/avatars/badges, locked
   read-only mode, and full item CRUD (`addItem` / `removeItem` / `updateItem` / `setItems`).

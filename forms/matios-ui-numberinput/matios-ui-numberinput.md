@@ -127,6 +127,9 @@ Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTR
 
 ## Changelog
 
+### 2026-06-29
+- Stepper icons migrated to `MTS.Icon` (decrement → `minus`, increment → `plus`); dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### 2026-06-23
 - Validation contract: `required` + `errorMessage` + `validate()` (inline error, localized message). `value` now
   supports `null` ("empty") so `required` is meaningful — `getValue()` returns `null` for an empty field and an empty
