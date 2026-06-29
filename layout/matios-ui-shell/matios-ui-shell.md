@@ -106,5 +106,10 @@ Top + Side + Status: topbar  topbar
 
 ## Changelog
 
+### 2026-06-29
+- `.mts-shell__sidenav` now scrolls on its own (`min-height: 0` + `overflow-y: auto`). Previously a tall sidenav (many
+  expanded groups) grew past its grid track and was clipped by the shell's `overflow: hidden`, with no scrollbar — items
+  below the fold became unreachable. The scrollbar only appears when the nav content exceeds the available height.
+
 ### 2026-05-13
 - Documentation created.
