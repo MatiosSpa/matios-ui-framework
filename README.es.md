@@ -6,7 +6,7 @@
 
 <p align="center">
   Framework de UI sin dependencias, hecho con CSS y JavaScript puros.<br>
-  Theming por modo + acento &nbsp;·&nbsp; Soporte de alto contraste &nbsp;·&nbsp; 85+ componentes &nbsp;·&nbsp; 314 íconos
+  Theming por modo + acento &nbsp;·&nbsp; Soporte de alto contraste &nbsp;·&nbsp; 85+ componentes &nbsp;·&nbsp; 316 íconos
 </p>
 
 <p align="center">
@@ -154,7 +154,7 @@ Acentos disponibles: `violet` · `olive` · `blue` · `corporate` · `navy` · `
 `HttpClient` · `CodeBlock` · `DevPanel` · `DiagnosticsPanel` · `JsonViewer` · `SessionTimeout` · `PageLoader` · `Sanitize` · `Browser`
 
 ### Icons
-**314 íconos** — outline / filled · variantes de color semántico · variantes de tamaño · animación spin
+**316 íconos** — outline / filled · variantes de color semántico · variantes de tamaño · animación spin
 
 ```html
 <i class="mts-icon mts-icon-trash"></i>
