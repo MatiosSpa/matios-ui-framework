@@ -211,6 +211,11 @@ Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTR
 
 ## Changelog
 
+### 2026-06-29
+- Toolbar icons migrated to `MTS.Icon` (lists, indent/outdent, align, link/unlink, text/bg color, undo/redo, clean →
+  `eraser`, source → `code`, fields → `grid`, table, palette chevron). `B`/`I`/`U`/`S` stay as typographic glyphs. Six
+  new icons added to the set: `indent`, `outdent`, `unlink`, `eraser`, `text-color`, `bg-color`. Requires `matios-ui-icons.js`.
+
 ### 2026-06-23
 - Validation contract: `required` + `errorMessage` + `validate()` (empty = no visible text) + `setError`/`clearError` (localized message). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
