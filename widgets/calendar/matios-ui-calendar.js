@@ -310,13 +310,13 @@ MTS.Calendar = class MtsCalendar {
     const left = document.createElement('div'); left.className = 'mts-calendar__toolbar-left';
 
     const prev = document.createElement('button'); prev.className = 'mts-calendar__nav-btn';
-    prev.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    prev.innerHTML = MTS.Icon.get('chevron-left');
     prev.addEventListener('click', () => this.prevWeek());
 
     this._periodLabelEl = document.createElement('span'); this._periodLabelEl.className = 'mts-calendar__period';
 
     const next = document.createElement('button'); next.className = 'mts-calendar__nav-btn';
-    next.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    next.innerHTML = MTS.Icon.get('chevron-right');
     next.addEventListener('click', () => this.nextWeek());
 
     const todayBtn = document.createElement('button'); todayBtn.className = 'mts-calendar__today-btn';
@@ -330,7 +330,7 @@ MTS.Calendar = class MtsCalendar {
     const csvBtn    = document.createElement('button'); csvBtn.className = 'mts-calendar__export-btn'; csvBtn.textContent = 'CSV'; csvBtn.addEventListener('click', () => this.exportCSV());
     const icalBtn   = document.createElement('button'); icalBtn.className = 'mts-calendar__export-btn'; icalBtn.textContent = 'iCal'; icalBtn.addEventListener('click', () => this.exportICal());
     const printBtn  = document.createElement('button'); printBtn.className = 'mts-calendar__export-btn';
-    printBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>`;
+    printBtn.innerHTML = MTS.Icon.get('printer');
     printBtn.addEventListener('click', () => this.print());
     exportW.appendChild(csvBtn); exportW.appendChild(icalBtn); exportW.appendChild(printBtn);
 

@@ -100,13 +100,9 @@ MTS.ScheduleView = class MtsScheduleView {
     if (!gridEl.children.length) {
       const empty = document.createElement('div');
       empty.className = 'mts-calendar__schedule-no-events';
-      empty.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:48px 0;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--mts-text-muted)" stroke-width="1.2">
-          <rect x="3" y="4" width="18" height="18" rx="2"/>
-          <path d="M16 2v4M8 2v4M3 10h18"/>
-          <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>
-        </svg>
-        <span style="font-size:13px;color:var(--mts-text-muted)">${locale?.noEvents||'Sin eventos en este período'}</span>
+      empty.innerHTML = `<div class="mts-calendar__schedule-empty">
+        ${MTS.Icon.get('calendar')}
+        <span>${locale?.noEvents||'Sin eventos en este período'}</span>
       </div>`;
       gridEl.appendChild(empty);
     }

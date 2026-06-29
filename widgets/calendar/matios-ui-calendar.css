@@ -63,6 +63,7 @@
   transition: all var(--mts-transition-fast);
 }
 .mts-calendar__export-btn:hover { background: var(--mts-bg-surface-2); color: var(--mts-text-primary); }
+.mts-calendar__export-btn svg { width: 13px; height: 13px; }
 
 .mts-calendar__nav-btn {
   width: 27px; height: 27px;
@@ -74,6 +75,7 @@
   transition: all var(--mts-transition-fast);
 }
 .mts-calendar__nav-btn:hover { background: var(--mts-bg-surface-2); color: var(--mts-text-primary); }
+.mts-calendar__nav-btn svg { width: 14px; height: 14px; }
 .mts-calendar__period {
   font-size: 13px; font-weight: 600;
   color: var(--mts-text-primary);
@@ -516,6 +518,10 @@
 }
 .mts-calendar__ctx-label { flex:1; pointer-events:none; }
 .mts-calendar__ctx-icon  { display:flex; align-items:center; opacity:.7; flex-shrink:0; pointer-events:none; }
+.mts-calendar__ctx-icon svg { width: 14px; height: 14px; }
+.mts-calendar__schedule-empty { display:flex; flex-direction:column; align-items:center; gap:10px; padding:48px 0; color:var(--mts-text-muted); }
+.mts-calendar__schedule-empty svg { width:48px; height:48px; }
+.mts-calendar__schedule-empty span { font-size:13px; }
 .mts-calendar__ctx-item:hover { background: var(--mts-bg-surface-2); }
 .mts-calendar__ctx-item--danger { color: var(--mts-color-danger, #f87171); }
 .mts-calendar__ctx-item--danger:hover { background: rgba(248,113,113,.08); }

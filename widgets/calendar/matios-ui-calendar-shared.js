@@ -299,9 +299,9 @@ MTS._CalendarShared = {
 
   showEventCtxMenu(x, y, ev, ctx, el, cal, emit) {
     const ICON = {
-      view:   `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M7 6v4M7 4.5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
-      edit:   `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9.5 2.5l2 2-7 7H2.5v-2l7-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>`,
-      delete: `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2.5h4V4M11 4l-.8 7.5H3.8L3 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      view:   MTS.Icon.get('info'),
+      edit:   MTS.Icon.get('edit'),
+      delete: MTS.Icon.get('trash'),
     };
     const t = cal._locale?.ctx || {};
     const baseItems = [

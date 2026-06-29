@@ -284,6 +284,11 @@ Endpoints: `GET/POST /widgets/calendar/mock-api/cal_events`, `PUT/DELETE …/cal
 
 ## Changelog
 
+### 2026-06-29
+- Icons migrated to `MTS.Icon` (nav → `chevron-left`/`chevron-right`, print → `printer`, event menu → `info`/`edit`/
+  `trash`, add-event → `add`, empty schedule → `calendar`); dropped inline SVG. The schedule empty-state inline styles
+  were moved to a `.mts-calendar__schedule-empty` class. Requires `matios-ui-icons.js`.
+
 ### Initial
 - Full calendar (week/month/day/agenda) with drag & drop, resize, async datasource (`autoRefetch`), overridable
   modals, `MTS.CalendarEvent.fromAPI` normalization, locked/readonly modes, CSV/iCal/print export, DevPanel, and a

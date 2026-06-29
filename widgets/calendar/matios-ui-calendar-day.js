@@ -166,7 +166,7 @@ MTS.DayView = class MtsDayView {
       e.preventDefault(); e.stopPropagation();
       ctx.setSelectedFromCell?.(dayJS, si, dateISO, hourRange);
       ctx.emit('slotRightClick', cellData);
-      const ICON_ADD = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+      const ICON_ADD = MTS.Icon.get('add');
       const baseItems = [{ label: ctx.locale?.ctx?.add||'Nuevo evento', icon:ICON_ADD, onClick:()=>ctx.emit('addEventRequest', cellData) }];
       const items = ctx.contextMenuCell ? ctx.contextMenuCell(cellData, baseItems, ctx.cal) : baseItems;
       MTS._CalendarShared.showCtxMenu(e.clientX, e.clientY, items);
