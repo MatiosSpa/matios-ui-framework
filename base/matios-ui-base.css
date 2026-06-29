@@ -133,6 +133,22 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Scrollbar temático global — adapta a dark/light/accent vía tokens.
+   Aplica al documento y a cualquier contenedor con scroll. Componentes con
+   scroll propio (MTS.Scroll, MTS.Shell) pueden sobrescribir el grosor. */
+html {
+  scrollbar-width: thin;                                /* Firefox */
+  scrollbar-color: var(--mts-border-color) transparent;
+}
+::-webkit-scrollbar        { width: 10px; height: 10px; }   /* WebKit / Blink */
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  {
+  background: var(--mts-border-color);
+  border-radius: 99px;
+  transition: background .15s;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--mts-color-primary); }
+
 img, svg, video {
   display: block;
   max-width: 100%;
