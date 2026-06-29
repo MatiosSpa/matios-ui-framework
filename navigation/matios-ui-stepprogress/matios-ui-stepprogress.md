@@ -52,6 +52,9 @@ implementation.
 
 ## Changelog
 
+### 2026-06-29
+- Indicator icons migrated to `MTS.Icon` (done → `check`, error → `close`); dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### Initial
 - Standalone step-progress indicator. Now superseded by `MTS.Stepper` (`mode: 'progress'`) and kept as a
   backward-compatible alias.

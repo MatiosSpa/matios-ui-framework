@@ -114,7 +114,7 @@ MTS.Lightbox = class MtsLightbox {
       const dlBtn = document.createElement('a');
       dlBtn.className = 'mts-lb__btn';
       dlBtn.download = '';
-      dlBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>';
+      dlBtn.innerHTML = MTS.Icon.get('download');
       this._dlBtn = dlBtn;
       actions.appendChild(dlBtn);
     }
@@ -122,7 +122,7 @@ MTS.Lightbox = class MtsLightbox {
     const closeBtn = document.createElement('button');
     closeBtn.type = 'button';
     closeBtn.className = 'mts-lb__btn';
-    closeBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+    closeBtn.innerHTML = MTS.Icon.get('close');
     closeBtn.addEventListener('click', () => this._destroy());
     actions.appendChild(closeBtn);
     toolbar.appendChild(actions);
@@ -137,13 +137,13 @@ MTS.Lightbox = class MtsLightbox {
     if (this._items.length > 1) {
       const prev = document.createElement('button');
       prev.type = 'button'; prev.className = 'mts-lb__nav mts-lb__nav--prev';
-      prev.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>';
+      prev.innerHTML = MTS.Icon.get('chevron-left');
       prev.addEventListener('click', (e) => { e.stopPropagation(); this._nav(-1); });
       lb.appendChild(prev);
 
       const next = document.createElement('button');
       next.type = 'button'; next.className = 'mts-lb__nav mts-lb__nav--next';
-      next.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>';
+      next.innerHTML = MTS.Icon.get('chevron-right');
       next.addEventListener('click', (e) => { e.stopPropagation(); this._nav(1); });
       lb.appendChild(next);
     }

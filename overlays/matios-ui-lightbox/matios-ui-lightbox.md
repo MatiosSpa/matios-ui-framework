@@ -124,6 +124,10 @@ document.addEventListener('mts:lightbox:change', function (e) { console.log(e.de
 
 ## Changelog
 
+### 2026-06-29
+- Toolbar/nav icons migrated to `MTS.Icon` (`download`/`close`, `chevron-left`/`chevron-right`); dropped inline SVG.
+  Requires `matios-ui-icons.js`.
+
 ### Initial
 - Media lightbox for images, HTML5 video, YouTube and Vimeo; navigation, zoom, thumbnail strip, counter, download,
   fade/slide animation, CSS-selector auto-bind, full keyboard control, and `open` / `close` / `next` / `prev` / `goTo`.

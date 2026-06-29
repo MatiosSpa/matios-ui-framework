@@ -116,6 +116,10 @@ el.addEventListener('mts:imagegallery:open',   function (e) { console.log(e.deta
 
 ## Changelog
 
+### 2026-06-29
+- Icons migrated to `MTS.Icon` (select → `check`, zoom → `maximize`, lightbox nav → `chevron-left`/`chevron-right`);
+  dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### Initial
 - Image gallery with `grid` / `masonry` / `list` layouts, category filters, multi-selection, built-in lightbox,
   and `getSelected` / `clearSelection` / `setImages`.

@@ -101,7 +101,7 @@ MTS.CommandPalette = class MtsCommandPalette {
 
     const searchIcon = document.createElement('div');
     searchIcon.className = 'mts-cmd__search-icon';
-    searchIcon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>';
+    searchIcon.innerHTML = MTS.Icon.get('search');
 
     const input = document.createElement('input');
     input.type          = 'text';

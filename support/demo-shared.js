@@ -330,19 +330,30 @@ function showSelOutput(id, v, t) {
     injectCss(new URL('../forms/matios-ui-button/matios-ui-button.css', sharedScriptUrl).href);
     injectCss(new URL('../forms/matios-ui-copybutton/matios-ui-copybutton.css', sharedScriptUrl).href);
     copyAssetsPromise = new Promise(function (resolve) {
-      var existing = document.querySelector('script[data-mts-codehl-copybutton="1"]');
-      if (existing) {
-        existing.addEventListener('load', function () { resolve(!!(window.MTS && window.MTS.CopyButton)); }, { once: true });
-        existing.addEventListener('error', function () { resolve(false); }, { once: true });
-        if (window.MTS && window.MTS.CopyButton) resolve(true);
-        return;
+      function injectScriptOnce(src, flag, ready) {
+        return new Promise(function (res) {
+          if (ready()) { res(true); return; }   // ya cargado estáticamente
+          var existing = document.querySelector('script[' + flag + '="1"]');
+          if (existing) {
+            if (ready()) { res(true); return; }
+            existing.addEventListener('load', function () { res(ready()); }, { once: true });
+            existing.addEventListener('error', function () { res(false); }, { once: true });
+            return;
+          }
+          var s = document.createElement('script');
+          s.src = src;
+          s.setAttribute(flag, '1');
+          s.onload = function () { res(ready()); };
+          s.onerror = function () { res(false); };
+          document.head.appendChild(s);
+        });
       }
-      var script = document.createElement('script');
-      script.src = new URL('../forms/matios-ui-copybutton/matios-ui-copybutton.js', sharedScriptUrl).href;
-      script.dataset.mtsCodehlCopybutton = '1';
-      script.onload = function () { resolve(!!(window.MTS && window.MTS.CopyButton)); };
-      script.onerror = function () { resolve(false); };
-      document.head.appendChild(script);
+      // MTS.Icon es dependencia del CopyButton (y de muchos componentes) → cargarlo
+      // junto al copybutton, así el botón se renderiza recién cuando ambos están listos.
+      Promise.all([
+        injectScriptOnce(new URL('../icons/matios-ui-icons.js', sharedScriptUrl).href, 'data-mts-codehl-icons', function () { return !!(window.MTS && window.MTS.Icon); }),
+        injectScriptOnce(new URL('../forms/matios-ui-copybutton/matios-ui-copybutton.js', sharedScriptUrl).href, 'data-mts-codehl-copybutton', function () { return !!(window.MTS && window.MTS.CopyButton); })
+      ]).then(function (r) { resolve(r[1]); });
     });
     return copyAssetsPromise;
   }

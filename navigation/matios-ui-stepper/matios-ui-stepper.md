@@ -130,6 +130,9 @@ el.addEventListener('mts:stepper:change', function (e) { console.log(e.detail); 
 
 ## Changelog
 
+### 2026-06-29
+- Indicator icons migrated to `MTS.Icon` (done → `check`, error → `close`); dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### Initial
 - Unified `wizard` + `progress` stepper (default/compact/dots variants), horizontal/vertical direction, per-step
   status/icon/disabled, navigation API (`next` / `prev` / `goTo`), and `MTS.StepProgress` compatibility alias.

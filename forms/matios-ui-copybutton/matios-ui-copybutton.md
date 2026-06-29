@@ -103,6 +103,9 @@ btn.copy();
 
 ## Changelog
 
+### 2026-06-29
+- Copy/confirm icons migrated to `MTS.Icon` (`copy`/`check`); dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### Initial
 - Copy-to-clipboard button with static text or target element, label/icon swap feedback with `resetDelay`,
   `iconOnly`, variants/sizes, `onCopy`, and `setText` / `copy`.

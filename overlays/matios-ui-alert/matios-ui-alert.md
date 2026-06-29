@@ -121,6 +121,10 @@ document.getElementById('my-alert')
 
 ## Changelog
 
+### 2026-06-29
+- Status icons migrated to `MTS.Icon` (`info`/`check-circle`/`alert-triangle`/`alert-circle`); dropped inline SVG.
+  Requires `matios-ui-icons.js`.
+
 ### 2026-06-20
 - `showBorders` option (`data-show-borders`): adds a subtle `0.5px` border on the other three sides; the `4px` left accent border stays.
 

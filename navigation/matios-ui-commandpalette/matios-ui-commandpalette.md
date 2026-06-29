@@ -120,6 +120,9 @@ document.addEventListener('mts:commandpalette:select', function (e) { console.lo
 
 ## Changelog
 
+### 2026-06-29
+- Search icon migrated to `MTS.Icon` (`search`); dropped inline SVG. Requires `matios-ui-icons.js`.
+
 ### Initial
 - ⌘K command palette with grouped results, icons, shortcut hints, keywords, local or async (`onSearch`) search,
   configurable hotkey/overlay/maxResults, and `open` / `close` / `toggle` / `setCommands` / `addCommands`.

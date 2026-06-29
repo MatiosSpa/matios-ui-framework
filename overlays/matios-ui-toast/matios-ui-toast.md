@@ -98,6 +98,10 @@ toast.close();
 
 ## Changelog
 
+### 2026-06-29
+- Status icons migrated to `MTS.Icon` (`alert-circle`/`check`/`alert-triangle`/`x-circle`/`info`); dropped inline SVG. The
+  loading state keeps its CSS spinner. Requires `matios-ui-icons.js`.
+
 ### Initial
 - Static toast API with default/success/warning/danger/info/loading variants, six positions, auto-dismiss or manual
   close, optional title/action/icon, and a returned handle with `close()`.

@@ -1087,16 +1087,12 @@ MTS.DocumentManagerPreviewPlugin = class DocumentManagerPreviewPlugin {
 
   // Panel abierto → flecha apunta a la derecha (clic = colapsar)
   _chevronRight() {
-    return '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-           '<path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
-           '</svg>';
+    return MTS.Icon.get('chevron-right');
   }
 
   // Panel cerrado → flecha apunta a la izquierda (clic = expandir)
   _chevronLeft() {
-    return '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-           '<path d="M10 3l-5 5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
-           '</svg>';
+    return MTS.Icon.get('chevron-left');
   }
 };
 

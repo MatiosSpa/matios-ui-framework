@@ -125,7 +125,7 @@ MTS.ImageGallery = class MtsImageGallery {
       if (this.selectable) {
         const cb = document.createElement('div');
         cb.className = 'mts-imagegallery__check' + (this._selected.has(img.id) ? ' mts-imagegallery__check--active' : '');
-        cb.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+        cb.innerHTML = MTS.Icon.get('check');
         cb.addEventListener('click', (e) => { e.stopPropagation(); this._toggleSelect(img); });
         overlay.appendChild(cb);
       }
@@ -140,7 +140,7 @@ MTS.ImageGallery = class MtsImageGallery {
       if (this.lightbox) {
         const zoomBtn = document.createElement('div');
         zoomBtn.className = 'mts-imagegallery__zoom';
-        zoomBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';
+        zoomBtn.innerHTML = MTS.Icon.get('maximize');
         overlay.appendChild(zoomBtn);
         card.addEventListener('click', () => this._openLB(this.images.indexOf(img)));
       }
@@ -203,13 +203,13 @@ MTS.ImageGallery = class MtsImageGallery {
     if (this.images.length > 1) {
       const prev = document.createElement('button');
       prev.className = 'mts-imagegallery__lb-nav mts-imagegallery__lb-nav--prev';
-      prev.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>';
+      prev.innerHTML = MTS.Icon.get('chevron-left');
       prev.addEventListener('click', () => this._openLB((this._lbIdx - 1 + this.images.length) % this.images.length));
       lb.appendChild(prev);
 
       const next = document.createElement('button');
       next.className = 'mts-imagegallery__lb-nav mts-imagegallery__lb-nav--next';
-      next.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>';
+      next.innerHTML = MTS.Icon.get('chevron-right');
       next.addEventListener('click', () => this._openLB((this._lbIdx + 1) % this.images.length));
       lb.appendChild(next);
     }

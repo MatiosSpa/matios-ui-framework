@@ -132,10 +132,10 @@ MTS.Alert = class MtsAlert {
 
   _getIcon() {
     const icons = {
-      info:    `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="8"/><path d="M10 9v5M10 6h.01"/></svg>`,
-      success: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="8"/><path d="M6.5 10.5l2.5 2.5 4.5-5"/></svg>`,
-      warning: `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.13 3.5L2 16h16L10.87 3.5a1 1 0 0 0-1.74 0z"/><path d="M10 8v4M10 14h.01"/></svg>`,
-      danger:  `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="8"/><path d="M10 6v4M10 14h.01"/></svg>`,
+      info:    MTS.Icon.get('info'),
+      success: MTS.Icon.get('check-circle'),
+      warning: MTS.Icon.get('alert-triangle'),
+      danger:  MTS.Icon.get('alert-circle'),
     };
     return icons[this.variant] || icons.info;
   }

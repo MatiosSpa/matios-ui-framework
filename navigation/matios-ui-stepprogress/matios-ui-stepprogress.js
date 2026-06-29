@@ -97,9 +97,9 @@ window.MTS = window.MTS || {};
         indicator.className = 'mts-stepprogress__indicator';
 
         if (isError) {
-          indicator.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+          indicator.innerHTML = MTS.Icon.get('close');
         } else if (isDone) {
-          indicator.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+          indicator.innerHTML = MTS.Icon.get('check');
         } else {
           let num = document.createElement('span');
           num.textContent = i + 1;
