@@ -113,6 +113,9 @@ Top + Side + Status: topbar  topbar
 - Themed scrollbar for the shell's scrollable areas (`.mts-shell__sidenav` + `.mts-shell__main--scroll`): thin,
   token-driven (`--mts-border-color` thumb, `--mts-color-primary` on hover) so it adapts to dark/light/accent, matching
   `MTS.Scroll`. No more default browser scrollbar.
+- Status bar now spans the full width (both columns) at the bottom; the sidenav tucks between the topbar and the status
+  bar, mirroring how the topbar spans full width above it. Affects the `side+status` and `top+side+status` layouts.
+  Previously the sidenav extended down into the status row and the status bar sat only under `main`.
 
 ### 2026-05-13
 - Documentation created.
