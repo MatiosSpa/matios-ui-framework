@@ -25,6 +25,28 @@
 .mts-shell__main--scroll { overflow: auto; }   /* opt-in cuando el main necesita scroll propio */
 .mts-shell__statusbar { grid-area: status;  }
 
+/* ── Scrollbar temático para las áreas scrollables del shell ──
+   Mismo look token-driven que MTS.Scroll → se adapta a dark/light/accent. */
+.mts-shell__sidenav,
+.mts-shell__main--scroll {
+  scrollbar-width: thin;                                /* Firefox */
+  scrollbar-color: var(--mts-border-color) transparent;
+}
+.mts-shell__sidenav::-webkit-scrollbar,
+.mts-shell__main--scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+
+.mts-shell__sidenav::-webkit-scrollbar-track,
+.mts-shell__main--scroll::-webkit-scrollbar-track { background: transparent; }
+
+.mts-shell__sidenav::-webkit-scrollbar-thumb,
+.mts-shell__main--scroll::-webkit-scrollbar-thumb {
+  background: var(--mts-border-color);
+  border-radius: 99px;
+  transition: background .15s;
+}
+.mts-shell__sidenav::-webkit-scrollbar-thumb:hover,
+.mts-shell__main--scroll::-webkit-scrollbar-thumb:hover { background: var(--mts-color-primary); }
+
 /* ════════════════════════════════════════════════════
    COMBINACIONES — CSS Grid templates
    top (T) · side (S) · status (St)

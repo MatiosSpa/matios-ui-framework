@@ -110,6 +110,9 @@ Top + Side + Status: topbar  topbar
 - `.mts-shell__sidenav` now scrolls on its own (`min-height: 0` + `overflow-y: auto`). Previously a tall sidenav (many
   expanded groups) grew past its grid track and was clipped by the shell's `overflow: hidden`, with no scrollbar — items
   below the fold became unreachable. The scrollbar only appears when the nav content exceeds the available height.
+- Themed scrollbar for the shell's scrollable areas (`.mts-shell__sidenav` + `.mts-shell__main--scroll`): thin,
+  token-driven (`--mts-border-color` thumb, `--mts-color-primary` on hover) so it adapts to dark/light/accent, matching
+  `MTS.Scroll`. No more default browser scrollbar.
 
 ### 2026-05-13
 - Documentation created.
