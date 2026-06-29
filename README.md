@@ -6,7 +6,7 @@
 
 <p align="center">
   Zero-dependency UI framework built with pure CSS and JavaScript.<br>
-  Mode + accent theming &nbsp;·&nbsp; High-contrast support &nbsp;·&nbsp; 85+ components &nbsp;·&nbsp; 308 icons
+  Mode + accent theming &nbsp;·&nbsp; High-contrast support &nbsp;·&nbsp; 85+ components &nbsp;·&nbsp; 314 icons
 </p>
 
 <p align="center">
@@ -184,7 +184,7 @@ Available accents: `violet` · `olive` · `blue` · `corporate` · `navy` · `em
 `HttpClient` · `CodeBlock` · `DevPanel` · `DiagnosticsPanel` · `JsonViewer` · `SessionTimeout` · `PageLoader` · `Sanitize` · `Browser`
 
 ### Icons
-**308 icons** — outline / filled · semantic color variants · size variants · spin animation
+**314 icons** — outline / filled · semantic color variants · size variants · spin animation
 
 ```html
 <i class="mts-icon mts-icon-trash"></i>
