@@ -8,7 +8,11 @@
    ============================================================ */
 
 const SW_NAME = 'sw-datatable';
-const VERSION = 'datatable-api-v3';
+const VERSION = 'datatable-api-v4';
+
+// Prefijo de la mock-api derivado de la ubicación REAL del SW → location-independent:
+// funciona montado en "/", en "/live-demo/" o donde sea, sin hardcodear la ruta.
+const API_PREFIX = self.location.pathname.replace(/[^/]*$/, '') + 'mock-api/';
 
 self.addEventListener('install',  () => self.skipWaiting());
 self.addEventListener('activate', e => {
@@ -17,14 +21,14 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
-  if (!url.pathname.startsWith('/widgets/datatable/mock-api/')) return;
+  if (!url.pathname.startsWith(API_PREFIX)) return;
   if (url.pathname.endsWith('.json')) return; // dejar pasar JSONs estáticos
   event.respondWith(handleRequest(event.request, url));
 });
 
 /* ── Router ───────────────────────────────────────────────── */
 async function handleRequest(request, url) {
-  const path   = url.pathname.replace('/widgets/datatable/mock-api/', '').replace(/\/$/, '');
+  const path   = url.pathname.replace(API_PREFIX, '').replace(/\/$/, '');
   const params = url.searchParams;
   const method = request.method;
 
@@ -510,7 +514,7 @@ function applyDocumentsQuery(data, params) {
 
 /* ── Helpers ──────────────────────────────────────────────── */
 async function loadJson(filename) {
-  const base = `${self.location.origin}/widgets/datatable/mock-api/data/`;
+  const base = `${self.location.origin}${API_PREFIX}data/`;
   const res  = await fetch(`${base}${filename}`);
   if (!res.ok) throw new Error(`No encontrado: ${filename}`);
   return res.json();

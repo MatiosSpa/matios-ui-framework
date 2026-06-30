@@ -9,7 +9,10 @@
    ============================================================ */
 
 const SW_NAME = 'sw-calendar';
-const VERSION = 'calendar-api-v7';
+const VERSION = 'calendar-api-v8';
+// Prefijo de la mock-api derivado del scope REAL del SW → location-independent
+// (funciona en "/", "/live-demo/" o donde sea, sin hardcodear la ruta).
+const API_PREFIX = new URL('./mock-api/', self.registration.scope).pathname;
 
 self.addEventListener('install',  () => self.skipWaiting());
 self.addEventListener('activate', e => {
@@ -19,14 +22,14 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   /* Solo interceptar rutas de la mock API — dejar pasar todo lo demás */
-  if (!url.pathname.startsWith('/widgets/calendar/mock-api/')) return;
+  if (!url.pathname.startsWith(API_PREFIX)) return;
   if (url.pathname.endsWith('.json')) return; /* dejar pasar los JSONs estáticos */
   event.respondWith(handleRequest(event.request, url));
 });
 
 /* ── Router ─────────────────────────────────────────────────── */
 async function handleRequest(request, url) {
-  const path   = url.pathname.replace('/widgets/calendar/mock-api/', '').replace(/\/$/, '');
+  const path   = url.pathname.replace(API_PREFIX, '').replace(/\/$/, '');
   const params = url.searchParams;
   const method = request.method;
 
@@ -292,7 +295,7 @@ function generateEvents(dateStart, dateEnd, lang = 'es') {
 
 /* ── Helpers ─────────────────────────────────────────────────── */
 async function loadJson(filename) {
-  const base = `${self.location.origin}/widgets/calendar/mock-api/data/`;
+  const base = `${self.location.origin}${API_PREFIX}data/`;
   const res  = await fetch(`${base}${filename}`);
   if (!res.ok) throw new Error(`No encontrado: ${filename}`);
   return res.json();

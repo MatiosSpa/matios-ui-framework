@@ -10,6 +10,10 @@
      7. MISC
    ============================================================ */
 
+/* ── HTTP client (dogfood: MTS.HttpClient con base absoluta calculada desde la
+   ubicación → location-independent; el SW de calendar la intercepta) ── */
+const http = new MTS.HttpClient({ baseUrl: new URL('mock-api', location.href).pathname });
+
 /* ── Global state — before any function that uses them ── */
 /* ─── Definición de todos los eventos — label, tipo badge, extractor de payload ─── */
 const EV_DEFS = [
@@ -116,15 +120,13 @@ async function fetchEvents(ctx = {}) {
   const loader = document.getElementById('dataLoader');
   if (loader) { loader.classList.add('loading'); loader.querySelector('span').textContent = 'Loading...'; }
   try {
-    const params = new URLSearchParams({
+    const env = await http.get('cal_events', { params: {
       dateStart: ctx.dateStart || '',
       dateEnd:   ctx.dateEnd   || '',
       view:      ctx.view      || 'week',
-    });
-    const url = `/widgets/calendar/mock-api/cal_events?${params}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const raw = await res.json();
+    }});
+    if (!env.success) throw new Error(env.message || `HTTP ${env.status}`);
+    const raw = env.data;
     const evs = (Array.isArray(raw) ? raw : (raw?.data || []))
       .map(item => MTS.CalendarEvent.fromAPI(item, cal).toJSON());
     if (loader) { loader.classList.remove('loading'); loader.classList.add('ok'); loader.querySelector('span').textContent = `${evs.length} events`; }
@@ -561,7 +563,7 @@ function buildEventForm(){
     const _ed = new Date(); _ed.setHours(_eh, _em || 0, 0, 0);
     _formInstances.fin.setValue(_ed);
   }
-  /* Invitados — TagInput con autocomplete contra /widgets/calendar/mock-api/attendees */
+  /* Invitados — TagInput con autocomplete contra mock-api/attendees */
   /* Invitados: solo precargar si es edición (se.id existe), no en nuevo evento */
   const _invitadosVal = se.id ? (se.data?.invitados || []) : [];
   _formInstances.invitados = new MTS.TagInput(c.querySelector('#ef-i'), {
@@ -572,10 +574,9 @@ function buildEventForm(){
     tags:        _invitadosVal,
     onSearch: async (q) => {
       try {
-        const url = '/widgets/calendar/mock-api/attendees' + (q ? '?q=' + encodeURIComponent(q) : '');
-        const res = await fetch(url);
-        if (!res.ok) return [];
-        return res.json(); // → [{ uid, name }]
+        const env = await http.get('attendees', { params: q ? { q } : {} });
+        if (!env.success) return [];
+        return env.data; // → [{ uid, name }]
       } catch { return []; }
     },
   });
@@ -585,7 +586,7 @@ function buildEventForm(){
     _formInstances.invitados._inputEl.setAttribute('name', `guests-${Date.now()}`);
   }
 
-  /* Sala / Lugar — Select con autocomplete contra /widgets/calendar/mock-api/meet_places */
+  /* Sala / Lugar — Select con autocomplete contra mock-api/meet_places */
   const _lugarVal = se.data?.sala || se.data?.lugar || '';
   _formInstances.lugar = new MTS.Select(c.querySelector('#ef-l'), {
     label:       'Sala / Lugar',
@@ -597,10 +598,9 @@ function buildEventForm(){
     options:     [],
     onSearch: async (q) => {
       try {
-        const url = '/widgets/calendar/mock-api/meet_places' + (q ? '?q=' + encodeURIComponent(q) : '');
-        const res = await fetch(url);
-        if (!res.ok) return [];
-        const data = await res.json();
+        const env = await http.get('meet_places', { params: q ? { q } : {} });
+        if (!env.success) return [];
+        const data = env.data;
         return data.map(p => ({ value: p.place, label: p.place, hint: p.capacity + ' personas' }));
       } catch { return []; }
     },
@@ -700,15 +700,11 @@ function openNewEventModal() {
 
       try {
         /* Simulate POST → /cal_events */
-        const res  = await fetch('/widgets/calendar/mock-api/cal_events', {
-          method:  'POST',
-          headers: { 'Content-Type':'application/json' },
-          body:    JSON.stringify(raw),
-        });
-        const json = await res.json();
+        const env  = await http.post('cal_events', raw);
+        const json = env.data || {};
         /* Use server uid si viene */
         if (json.uid) raw.uid = json.uid;
-        log('add', `POST /cal_events → ${json.message||'ok'}`, `uid: ${raw.uid}`);
+        log('add', `POST /cal_events → ${json.message || (env.success ? 'ok' : env.message)}`, `uid: ${raw.uid}`);
       } catch(e) {
         log('add', 'POST /cal_events falló — usando uid local', raw.uid);
       }
@@ -756,13 +752,9 @@ function openEditEventModal(event){
 
       try {
         /* Simulate PUT → /cal_events/{uid} */
-        const res  = await fetch(`/widgets/calendar/mock-api/cal_events/${uid}`, {
-          method:  'PUT',
-          headers: { 'Content-Type':'application/json' },
-          body:    JSON.stringify(raw),
-        });
-        const json = await res.json();
-        log('add', `PUT /cal_events/${uid} → ${json.message||'ok'}`, `uid: ${uid}`);
+        const env  = await http.put(`cal_events/${uid}`, raw);
+        const json = env.data || {};
+        log('add', `PUT /cal_events/${uid} → ${json.message || (env.success ? 'ok' : env.message)}`, `uid: ${uid}`);
       } catch(e) {
         log('add', 'PUT /cal_events falló — actualizando localmente', uid);
       }

@@ -255,7 +255,7 @@ const dmPreview = new MTS.DocumentManagerPreviewPlugin({
   // Replace document: returning a Promise activates the indeterminate bar.
   onReplace: (item, file, version) => {
     console.log('[dmPreview.onReplace]', item, file, version);
-    return http.upload('/widgets/datatable/mock-api/documents/' + item.id + '/replace', file, {
+    return http.upload('documents/' + item.id + '/replace', file, {
       data: { version: version },
     }).then((res) => {
       if (!res.success) throw new Error(res.message);
@@ -302,7 +302,7 @@ const dm = new MTS.DocumentManagerPlugin({
     fd.append('folderId',       folder?.id ?? '');
     fd.append('action',         action         ?? '');
     fd.append('currentVersion', currentVersion ?? '');
-    const res = await http.post('/widgets/datatable/mock-api/documents/upload', fd);
+    const res = await http.post('documents/upload', fd);
     if (!res.success) throw new Error(res.message ?? 'Error uploading the file');
   },
   onUploaded: (files, folder) => console.log('[dm.onUploaded]', { files, folder }),
@@ -361,7 +361,7 @@ new MTS.DataTable({
       render: MTS.DocumentManagerPlugin.renderWorkflowStatus },
   ],
   dataSource: async (query) => {
-    const res = await http.get('/widgets/datatable/mock-api/documents', { params: query });
+    const res = await http.get('documents', { params: query });
     if (!res.success) throw new Error(res.message);
     return res.data;
   },
@@ -388,7 +388,9 @@ function initTables() {
 
     // ── HttpClient ────────────────────────────────────────────────────────
     var http = new MTS.HttpClient({
-      baseUrl: '',
+      // Base absoluta calculada desde la ubicación de la página (location-independent):
+      // funciona montado en "/", "/live-demo/" o donde sea, y el SW la intercepta.
+      baseUrl: new URL('../../mock-api', location.href).pathname,
       debug:   true,
       headers: { 'X-App-Name': 'matios-ui-demo' },
     });
@@ -495,13 +497,13 @@ function initTables() {
       currentUser:   'crojas',   // logged-in user — it is their turn in the mock
 
       onLoadParticipants: function(item) {
-        return http.get('/widgets/datatable/mock-api/documents/' + item.id + '/participants')
+        return http.get('documents/' + item.id + '/participants')
           .then(function(res) { return res.data && res.data.data ? res.data.data : []; });
       },
       onReorder: function(participants, item) {
         console.log('[dm.onReorder] new order:', participants.map(function(p) { return { order: p.order, user: p.user, status: p.status }; }));
         return http.post(
-          '/widgets/datatable/mock-api/documents/' + item.id + '/participants/reorder',
+          'documents/' + item.id + '/participants/reorder',
           { order: participants.map(function(p) { return p.id; }) }
         );
       },
@@ -517,12 +519,12 @@ function initTables() {
     // ── Plugin 6: Preview ─────────────────────────────────────────────────
     var dmMetadata = new MTS.DocumentManagerPreviewMetadataPanel({
       onLoad: function(item) {
-        return http.get('/widgets/datatable/mock-api/documents/' + item.id + '/metadata')
+        return http.get('documents/' + item.id + '/metadata')
           .then(function(res) { return res.data && res.data.data ? res.data.data : []; });
       },
       onSave: function(item, fields) {
         console.log('[dmMetadata.onSave] item:', item, '| fields:', fields);
-        return http.put('/widgets/datatable/mock-api/documents/' + item.id + '/metadata', {
+        return http.put('documents/' + item.id + '/metadata', {
           fields:   fields,
           document: item,
         }).then(function(res) {
@@ -533,12 +535,12 @@ function initTables() {
 
     var dmNotes = new MTS.DocumentManagerPreviewNotesPanel({
       onLoad: function(item) {
-        return http.get('/widgets/datatable/mock-api/documents/' + item.id + '/notes')
+        return http.get('documents/' + item.id + '/notes')
           .then(function(res) { return res.data && res.data.data ? res.data.data : []; });
       },
       onSave: function(item, text) {
         console.log('[dmNotes.onSave] item:', item, '| text:', text);
-        return http.post('/widgets/datatable/mock-api/documents/' + item.id + '/notes', {
+        return http.post('documents/' + item.id + '/notes', {
           text:     text,
           document: item,
         }).then(function(res) {
@@ -554,7 +556,7 @@ function initTables() {
 
     var dmVersions = new MTS.DocumentManagerPreviewVersionsPanel({
       onLoad: function(item) {
-        return http.get('/widgets/datatable/mock-api/documents/' + item.id + '/versions')
+        return http.get('documents/' + item.id + '/versions')
           .then(function(res) { return res.data && res.data.data ? res.data.data : []; });
       },
       onVersionSelect: function(version, item) {
@@ -578,7 +580,7 @@ function initTables() {
       },
       onReplace: function(item, file, version) {
         console.log('[dmPreview.onReplace]', item, file, version);
-        return http.upload('/widgets/datatable/mock-api/documents/' + item.id + '/replace', file, {
+        return http.upload('documents/' + item.id + '/replace', file, {
           data: { version: version },
         }).then(function(res) {
           if (!res.success) throw new Error(res.message);
@@ -624,7 +626,7 @@ function initTables() {
         fd.append('folderId',       folder ? folder.id : '');
         fd.append('action',         action);
         fd.append('currentVersion', currentVersion);
-        var res = await http.post('/widgets/datatable/mock-api/documents/upload', fd);
+        var res = await http.post('documents/upload', fd);
         if (!res.success) throw new Error(res.message || 'Error uploading the file');
       },
       onUploaded: function(files, folder) { console.log('[dm.onUploaded]', { files: files, folder: folder }); },
@@ -671,7 +673,7 @@ function initTables() {
           render: MTS.DocumentManagerPlugin.renderWorkflowStatus },
       ],
       dataSource: async function(query) {
-        var res = await http.get('/widgets/datatable/mock-api/documents', { params: query });
+        var res = await http.get('documents', { params: query });
         if (!res.success) throw new Error(res.message);
         return res.data;
       },
@@ -697,7 +699,7 @@ function initTables() {
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('../../sw-datatable.js', { scope: '/widgets/datatable/' })
+  navigator.serviceWorker.register('../../sw-datatable.js', { scope: '../../' })
     .then(function(reg) {
       if (reg.active) { initTables(); return; }
       var sw = reg.installing || reg.waiting;

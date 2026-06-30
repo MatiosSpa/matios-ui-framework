@@ -120,7 +120,7 @@ async function fetchEvents(ctx = {}) {
       dateEnd:   ctx.dateEnd   || '',
       view:      ctx.view      || 'week',
     });
-    const url = `/calendar_v2/mock-api/cal_events?${params}`;
+    const url = `mock-api/cal_events?${params}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const raw = await res.json();
@@ -561,7 +561,7 @@ function buildEventForm(){
     const _ed = new Date(); _ed.setHours(_eh, _em || 0, 0, 0);
     _formInstances.fin.setValue(_ed);
   }
-  /* Invitados — TagInput con autocomplete contra /calendar_v2/mock-api/attendees */
+  /* Invitados — TagInput con autocomplete contra mock-api/attendees */
   /* Invitados: solo precargar si es edición (se.id existe), no en nuevo evento */
   const _invitadosVal = se.id ? (se.data?.invitados || []) : [];
   _formInstances.invitados = new MTS.TagInput(c.querySelector('#ef-i'), {
@@ -572,7 +572,7 @@ function buildEventForm(){
     tags:        _invitadosVal,
     onSearch: async (q) => {
       try {
-        const url = '/calendar_v2/mock-api/attendees' + (q ? '?q=' + encodeURIComponent(q) : '');
+        const url = 'mock-api/attendees' + (q ? '?q=' + encodeURIComponent(q) : '');
         const res = await fetch(url);
         if (!res.ok) return [];
         return res.json(); // → [{ uid, name }]
@@ -585,7 +585,7 @@ function buildEventForm(){
     _formInstances.invitados._inputEl.setAttribute('name', `guests-${Date.now()}`);
   }
 
-  /* Sala / Lugar — Select con autocomplete contra /calendar_v2/mock-api/meet_places */
+  /* Sala / Lugar — Select con autocomplete contra mock-api/meet_places */
   const _lugarVal = se.data?.sala || se.data?.lugar || '';
   _formInstances.lugar = new MTS.Select(c.querySelector('#ef-l'), {
     label:       'Sala / Lugar',
@@ -597,7 +597,7 @@ function buildEventForm(){
     options:     [],
     onSearch: async (q) => {
       try {
-        const url = '/calendar_v2/mock-api/meet_places' + (q ? '?q=' + encodeURIComponent(q) : '');
+        const url = 'mock-api/meet_places' + (q ? '?q=' + encodeURIComponent(q) : '');
         const res = await fetch(url);
         if (!res.ok) return [];
         const data = await res.json();
@@ -693,7 +693,7 @@ function openNewEventModal() {
 
       try {
         /* Simulate POST → /cal_events */
-        const res  = await fetch('/calendar_v2/mock-api/cal_events', {
+        const res  = await fetch('mock-api/cal_events', {
           method:  'POST',
           headers: { 'Content-Type':'application/json' },
           body:    JSON.stringify(raw),
@@ -749,7 +749,7 @@ function openEditEventModal(event){
 
       try {
         /* Simulate PUT → /cal_events/{uid} */
-        const res  = await fetch(`/calendar_v2/mock-api/cal_events/${uid}`, {
+        const res  = await fetch(`mock-api/cal_events/${uid}`, {
           method:  'PUT',
           headers: { 'Content-Type':'application/json' },
           body:    JSON.stringify(raw),

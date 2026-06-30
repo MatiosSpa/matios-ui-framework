@@ -90,6 +90,7 @@
   </div>
 </div>
 
+<script src="../../../../utilities/matios-ui-httpclient/matios-ui-httpclient.js"></script>
 <script src="../../matios-ui-datatable.js"></script>
 <script src="../../matios-ui-datatable-i18n.js"></script>
 <script src="../../plugins/toolbar/matios-ui-datatable-toolbar.js"></script>
@@ -157,7 +158,7 @@ new MTS.DataTable({
       },
     },
   ],
-  dataSource: { url: '/widgets/datatable/mock-api/items', method: 'GET' },
+  dataSource: { url: '../../mock-api/items', method: 'GET' },
   rowId:     'id',
   pageSize:  8,
   hover:     true,
@@ -245,7 +246,7 @@ function initTables() {
           },
         },
       ],
-      dataSource: { url: '/widgets/datatable/mock-api/items', method: 'GET' },
+      dataSource: { url: '../../mock-api/items', method: 'GET' },
       rowId:     'id',
       pageSize:  8,
       hover:     true,
@@ -261,7 +262,7 @@ function initTables() {
 }
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('../../sw-datatable.js', { scope: '/widgets/datatable/' })
+  navigator.serviceWorker.register('../../sw-datatable.js', { scope: '../../' })
     .then(reg => {
       if (reg.active) { initTables(); return; }
       const sw = reg.installing || reg.waiting;
