@@ -83,7 +83,6 @@
           }
         }
         const reg = await navigator.serviceWorker.register('./sw-http-samples.js', { scope: './' });
-        console.log('[sw-http-samples] Registrado — scope:', reg.scope);
       }
       _initSW().catch(err => console.warn('[sw-http-samples] No disponible:', err.message));
     }

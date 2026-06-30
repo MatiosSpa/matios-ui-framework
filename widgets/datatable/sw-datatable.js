@@ -13,7 +13,6 @@ const VERSION = 'datatable-api-v3';
 self.addEventListener('install',  () => self.skipWaiting());
 self.addEventListener('activate', e => {
   e.waitUntil(self.clients.claim());
-  console.log(`[${SW_NAME}] Activo — interceptando /widgets/datatable/mock-api/*`);
 });
 
 self.addEventListener('fetch', event => {

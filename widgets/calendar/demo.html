@@ -48,7 +48,6 @@
         }
         /* 2. Register SW from the component folder */
         const reg = await navigator.serviceWorker.register('./sw-calendar.js', { scope: './' });
-        console.log('[sw-calendar] Registered — scope:', reg.scope);
         if (reg.active) {
           _markSwReady();
         } else {
@@ -68,7 +67,6 @@
     function _markSwReady() {
       const opt = document.querySelector('#cfgMockApi option[value="events"]');
       if (opt) opt.textContent = '⚡ sw-calendar ✓ (active)';
-      console.log('[sw-calendar] ✓ Active — intercepting /widgets/calendar/mock-api/*');
     }
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">

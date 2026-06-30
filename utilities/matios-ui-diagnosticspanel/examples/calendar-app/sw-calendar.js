@@ -15,7 +15,6 @@ const API_PREFIX = new URL('./mock-api/', self.registration.scope).pathname;
 self.addEventListener('install',  () => self.skipWaiting());
 self.addEventListener('activate', e => {
   e.waitUntil(self.clients.claim());
-  console.log(`[${SW_NAME}] Activo — interceptando ${API_PREFIX}*`);
 });
 
 self.addEventListener('fetch', event => {

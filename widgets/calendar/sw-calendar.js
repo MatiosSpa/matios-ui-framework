@@ -14,7 +14,6 @@ const VERSION = 'calendar-api-v7';
 self.addEventListener('install',  () => self.skipWaiting());
 self.addEventListener('activate', e => {
   e.waitUntil(self.clients.claim());
-  console.log(`[${SW_NAME}] v2 Activo — interceptando /widgets/calendar/mock-api/*`);
 });
 
 self.addEventListener('fetch', event => {
