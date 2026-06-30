@@ -1,19 +1,20 @@
 name: Publish to npm
 
-# Publica @matios/ui en npm CON provenance (firma de procedencia verificable) al pushear un tag vX.Y.Z.
+# Publica @matios/ui en npm CON provenance al pushear un tag vX.Y.Z, vía npm Trusted Publishing (OIDC).
 #
-# Requisitos (una sola vez):
-#   - Secret del repo NPM_TOKEN  → Settings ▸ Secrets and variables ▸ Actions ▸ New repository secret.
-#     Usar un token de npm con permiso de publish (Automation o Granular con "Bypass 2FA" + R/W packages + org matios).
+# Requisito (una sola vez, en npmjs.com):
+#   Página del paquete ▸ Settings ▸ Trusted Publisher ▸ GitHub Actions, con:
+#     Organization/user: MatiosSpa · Repository: matios-ui-framework · Workflow: publish.yml
+#   → NO se necesita NPM_TOKEN ni secret: npm confía en este workflow vía OIDC y emite un token efímero.
 #
-# Flujo de release a partir de ahora (ya NO se publica a mano):
+# Flujo de release (ya NO se publica a mano):
 #   1. Bump de versión en package.json (conservador: patch para fixes/adiciones menores) + entrada en CHANGELOG.
 #   2. commit + push a main/docs.
 #   3. git tag vX.Y.Z  &&  git push origin vX.Y.Z   → este workflow buildea, testea y publica firmado.
 #
 # Notas:
 #   - `npm publish` dispara `prepublishOnly` (npm run build && npm test) → buildea dist/ y corre el smoke en CI.
-#   - `--provenance` requiere id-token: write + repo público + correr en GitHub Actions (no se puede en local).
+#   - Trusted Publishing + provenance requieren id-token: write + repo público + npm >= 11.5.1 (por eso el upgrade).
 #   - Si el version de package.json ya existe en npm, el publish falla (evita doble publicación).
 
 on:
@@ -35,9 +36,9 @@ jobs:
         with:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
+      - name: Use latest npm (Trusted Publishing/OIDC needs npm >= 11.5.1)
+        run: npm install -g npm@latest
       - name: Install devDeps (esbuild, typescript)
         run: npm ci
-      - name: Publish to npm with provenance
+      - name: Publish to npm (OIDC trusted publishing + provenance)
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
