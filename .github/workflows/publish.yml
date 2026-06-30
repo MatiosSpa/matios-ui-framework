@@ -1,0 +1,43 @@
+name: Publish to npm
+
+# Publica @matios/ui en npm CON provenance (firma de procedencia verificable) al pushear un tag vX.Y.Z.
+#
+# Requisitos (una sola vez):
+#   - Secret del repo NPM_TOKEN  → Settings ▸ Secrets and variables ▸ Actions ▸ New repository secret.
+#     Usar un token de npm con permiso de publish (Automation o Granular con "Bypass 2FA" + R/W packages + org matios).
+#
+# Flujo de release a partir de ahora (ya NO se publica a mano):
+#   1. Bump de versión en package.json (conservador: patch para fixes/adiciones menores) + entrada en CHANGELOG.
+#   2. commit + push a main/docs.
+#   3. git tag vX.Y.Z  &&  git push origin vX.Y.Z   → este workflow buildea, testea y publica firmado.
+#
+# Notas:
+#   - `npm publish` dispara `prepublishOnly` (npm run build && npm test) → buildea dist/ y corre el smoke en CI.
+#   - `--provenance` requiere id-token: write + repo público + correr en GitHub Actions (no se puede en local).
+#   - Si el version de package.json ya existe en npm, el publish falla (evita doble publicación).
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+  id-token: write        # requerido para --provenance (OIDC → Sigstore)
+
+jobs:
+  publish:
+    name: Build + publish (provenance)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - name: Install devDeps (esbuild, typescript)
+        run: npm ci
+      - name: Publish to npm with provenance
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
