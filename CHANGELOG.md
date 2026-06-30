@@ -9,6 +9,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 _Nothing yet._
 
+## [1.0.1] — 2026-06-29
+
+Maintenance release — internal icon consolidation, polish and fixes. No public API changes; safe drop-in over 1.0.0.
+
+### Added
+- **8 new icons** in the `MTS.Icon` set: `indent`, `outdent`, `unlink`, `eraser`, `text-color`, `bg-color`
+  (added while migrating the RichEditor toolbar), plus `git-branch` and `log-out`. Aliases for common Feather-style
+  names: `loader`→spinner, `dollar-sign`→dollar, `help-circle`→help, `zap`→lightning, `cog`→settings. **316 icons** total.
+
+### Changed
+- **All component icons now resolve through `MTS.Icon`** (internal): inline SVG glyphs across ItemList, Select, Accordion,
+  Menu, SideNav, Tree, Input, ColorPicker, Calendar, Toast, Alert, CopyButton, CommandPalette, Stepper, StepProgress,
+  ImageGallery, Lightbox, NumberInput, SortableList, RichEditor and the DataTable DocumentManager preview were replaced
+  by `MTS.Icon.get()`. Single source of truth; theme-reactive. (`MTS.Icon` ships in the bundle, so this is transparent
+  for bundle/CDN consumers.) Decorative graphics and partial-fill rating stars stay as-is.
+- **Themed scrollbar**, more distinguishable: applied globally (document + any scroll container) and in `MTS.Shell` —
+  thin, token-driven (`--mts-border-color-strong` thumb over a faint `--mts-bg-surface-2` track, rounded "pill"),
+  adapts to dark/light/accent instead of the default browser scrollbar.
+- **`MTS.Shell`**: status bar now spans the full width at the bottom (sidenav tucks between topbar and status, mirroring
+  the topbar); themed scrollbar for the sidenav/main scroll areas.
+
+### Fixed
+- **`MTS.Shell` sidenav** now scrolls on its own when its content exceeds the viewport (was clipped with no scrollbar).
+- **`MTS.ItemList`** icons resolve via `MTS.Icon` (dropped a private registry + silent fallback to the wrong glyph).
+
 ## [1.0.0] — 2026-06-26
 
 First public release.
