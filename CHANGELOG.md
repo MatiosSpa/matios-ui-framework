@@ -9,6 +9,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 _Nothing yet._
 
+## [1.0.2] — 2026-06-29
+
+Maintenance release. First version published via CI with **npm provenance** (cryptographically signed, verifiable
+build origin). No code changes over 1.0.1.
+
+### Added
+- `bugs` (issues URL) and a generous `engines.node` floor in `package.json` (packaging metadata).
+
 ## [1.0.1] — 2026-06-29
 
 Maintenance release — internal icon consolidation, polish and fixes. No public API changes; safe drop-in over 1.0.0.
