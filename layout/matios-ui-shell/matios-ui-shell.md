@@ -111,8 +111,9 @@ Top + Side + Status: topbar  topbar
   expanded groups) grew past its grid track and was clipped by the shell's `overflow: hidden`, with no scrollbar — items
   below the fold became unreachable. The scrollbar only appears when the nav content exceeds the available height.
 - Themed scrollbar for the shell's scrollable areas (`.mts-shell__sidenav` + `.mts-shell__main--scroll`): thin,
-  token-driven (`--mts-border-color` thumb, `--mts-color-primary` on hover) so it adapts to dark/light/accent, matching
-  `MTS.Scroll`. No more default browser scrollbar.
+  token-driven, adapts to dark/light/accent, matching the global base scrollbar — `--mts-border-color-strong` thumb over
+  a faint `--mts-bg-surface-2` track with a `background-clip: padding-box` gap (defined pill), `--mts-color-primary` on
+  hover. No more default browser scrollbar.
 - Status bar now spans the full width (both columns) at the bottom; the sidenav tucks between the topbar and the status
   bar, mirroring how the topbar spans full width above it. Affects the `side+status` and `top+side+status` layouts.
   Previously the sidenav extended down into the status row and the status bar sat only under `main`.

@@ -270,10 +270,11 @@ MyComponent.prototype.destroy = function () { this._disposeAllListeners(); /* â€
 ## Changelog
 
 ### 2026-06-29
-- Global themed scrollbar: thin, token-driven (`--mts-border-color` thumb, `--mts-color-primary` on hover, transparent
-  track, rounded) applied to the document and any scrollable container, so every page/demo adapts to dark/light/accent
-  instead of showing the default browser scrollbar. Components with their own scroll (`MTS.Scroll`, `MTS.Shell`) override
-  the thumb width.
+- Global themed scrollbar: thin, token-driven, applied to the document and any scrollable container, so every page/demo
+  adapts to dark/light/accent instead of showing the default browser scrollbar. Thumb uses `--mts-border-color-strong`
+  over a faint `--mts-bg-surface-2` track, with a `background-clip: padding-box` gap so it reads as a defined pill
+  (more distinguishable than a flush thumb); `--mts-color-primary` on hover. Components with their own scroll
+  (`MTS.Scroll`, `MTS.Shell`) override the thumb width.
 
 ### 2026-05-29
 - `matios-ui-base.js` created â€” `MTS._defineEvents` mixin for the explicit event API (Boards Kit).

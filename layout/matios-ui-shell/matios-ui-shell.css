@@ -30,18 +30,20 @@
 .mts-shell__sidenav,
 .mts-shell__main--scroll {
   scrollbar-width: thin;                                /* Firefox */
-  scrollbar-color: var(--mts-border-color) transparent;
+  scrollbar-color: var(--mts-border-color-strong) var(--mts-bg-surface-2);
 }
 .mts-shell__sidenav::-webkit-scrollbar,
 .mts-shell__main--scroll::-webkit-scrollbar { width: 8px; height: 8px; }
 
 .mts-shell__sidenav::-webkit-scrollbar-track,
-.mts-shell__main--scroll::-webkit-scrollbar-track { background: transparent; }
+.mts-shell__main--scroll::-webkit-scrollbar-track { background: var(--mts-bg-surface-2); }
 
 .mts-shell__sidenav::-webkit-scrollbar-thumb,
 .mts-shell__main--scroll::-webkit-scrollbar-thumb {
-  background: var(--mts-border-color);
+  background: var(--mts-border-color-strong);
   border-radius: 99px;
+  border: 1px solid var(--mts-bg-surface-2);
+  background-clip: padding-box;
   transition: background .15s;
 }
 .mts-shell__sidenav::-webkit-scrollbar-thumb:hover,

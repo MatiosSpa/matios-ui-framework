@@ -138,13 +138,15 @@ body {
    scroll propio (MTS.Scroll, MTS.Shell) pueden sobrescribir el grosor. */
 html {
   scrollbar-width: thin;                                /* Firefox */
-  scrollbar-color: var(--mts-border-color) transparent;
+  scrollbar-color: var(--mts-border-color-strong) var(--mts-bg-surface-2);
 }
 ::-webkit-scrollbar        { width: 10px; height: 10px; }   /* WebKit / Blink */
-::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-track  { background: var(--mts-bg-surface-2); border-radius: 99px; }
 ::-webkit-scrollbar-thumb  {
-  background: var(--mts-border-color);
+  background: var(--mts-border-color-strong);
   border-radius: 99px;
+  border: 2px solid var(--mts-bg-surface-2);   /* canal sutil que contrasta con el tema → define el pill */
+  background-clip: padding-box;
   transition: background .15s;
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--mts-color-primary); }
