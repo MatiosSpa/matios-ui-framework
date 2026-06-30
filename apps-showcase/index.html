@@ -78,16 +78,6 @@
             Root hub of complete interfaces built with Matios UI components. Each screen opens in a modal with a live preview and copyable code.
           </p>
         </div>
-        <div class="mts-d-flex mts-flex--wrap mts-gap-4">
-          <div class="mts-d-flex mts-flex--column mts-gap-2">
-            <span class="mts-text--xs mts-fw--semibold mts-text-color--muted">Mode</span>
-            <div class="mts-d-flex mts-flex--wrap mts-gap-2" id="mode-switcher"></div>
-          </div>
-          <div class="mts-d-flex mts-flex--column mts-gap-2">
-            <span class="mts-text--xs mts-fw--semibold mts-text-color--muted">Accent</span>
-            <div class="mts-d-flex mts-flex--wrap mts-gap-2" id="accent-switcher"></div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -1428,10 +1418,11 @@
       }
     }
 
+    /* El tema se hereda del docs-site (script de inherit + listener de message);
+       setMode/setAccent los invoca ese listener y _buildParams al abrir previews. */
     function setMode(mode) {
       currentMode = mode;
       document.documentElement.setAttribute('data-mts-mode', mode);
-      syncThemeButtons();
       syncPreviewTheme();
     }
 
@@ -1439,53 +1430,7 @@
       currentAccent = accent || '';
       if (currentAccent) document.documentElement.setAttribute('data-mts-accent', currentAccent);
       else document.documentElement.removeAttribute('data-mts-accent');
-      syncThemeButtons();
       syncPreviewTheme();
-    }
-
-    function syncThemeButtons() {
-      renderThemeButtons();
-      MTS.Icon.initAll();
-    }
-
-    function createButtonHost(parent) {
-      var host = document.createElement('div');
-      parent.appendChild(host);
-      return host;
-    }
-
-    function renderThemeButtons() {
-      var modeHost = document.getElementById('mode-switcher');
-      var accentHost = document.getElementById('accent-switcher');
-      modeHost.innerHTML = '';
-      accentHost.innerHTML = '';
-
-      [
-        { label: 'Dark', value: 'dark' },
-        { label: 'Light', value: 'light' },
-        { label: 'HC', value: 'high-contrast' }
-      ].forEach(function (item) {
-        new MTS.Button(createButtonHost(modeHost), {
-          label: item.label,
-          variant: currentMode === item.value ? 'primary' : 'secondary',
-          size: 'sm',
-          onClick: function () { setMode(item.value); }
-        });
-      });
-
-      [
-        { label: 'Base', value: '' },
-        { label: 'Violet', value: 'violet' },
-        { label: 'Blue', value: 'blue' },
-        { label: 'Olive', value: 'olive' }
-      ].forEach(function (item) {
-        new MTS.Button(createButtonHost(accentHost), {
-          label: item.label,
-          variant: currentAccent === item.value ? 'primary' : 'secondary',
-          size: 'sm',
-          onClick: function () { setAccent(item.value || null); }
-        });
-      });
     }
 
     function scrollToGroup(groupId) {
@@ -1976,7 +1921,6 @@
       }
     });
 
-    renderThemeButtons();
     syncGroupSectionsVisibility();
     buildGroups();
     decorateGroupSections();
