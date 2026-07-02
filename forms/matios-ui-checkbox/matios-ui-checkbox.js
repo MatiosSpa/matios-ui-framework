@@ -68,7 +68,7 @@ MTS.Checkbox = class MtsCheckbox {
     return ok;
   }
   _t(key, fallback) {
-    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.Checkbox'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    try { const ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.Checkbox'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
     return fallback;
   }
 
@@ -180,7 +180,7 @@ MTS.CheckboxGroup = class MtsCheckboxGroup {
     return ok;
   }
   _t(key, fallback) {
-    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.Checkbox'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    try { const ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.Checkbox'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
     return fallback;
   }
 

@@ -90,8 +90,8 @@
 <script>
 /* ═══ LOCALE ═══ All demo text comes from the component locale (MTS.Kanban). */
 /* Public demo: default English; ?lang=es|en|pt to switch. */
-(function () { var m = (location.search || '').match(/[?&]lang=(es|en|pt)/); if (window.MTS && MTS.setLocale) MTS.setLocale(m ? m[1] : 'en'); })();
-var LK = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Kanban']) || {};
+(function () { var m = (location.search || '').match(/[?&]lang=(es|en|pt)/); if (window.MTS && MTS.setLanguage) MTS.setLanguage(m ? m[1] : 'en'); })();
+var LK = (window.MTS && MTS.getString && MTS.getString()['MTS.Kanban']) || {};
 var UI = LK.ui || {};
 
 /* ═══ DATA ═══ */

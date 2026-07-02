@@ -332,7 +332,7 @@ MTS.Menu = class MtsMenu {
   // Lee el locale del componente (namespace MTS.Menu) con fallback.
   _t(key, fallback) {
     try {
-      let loc = (window.MTS && MTS.getLocale) ? MTS.getLocale() : null;
+      let loc = (window.MTS && MTS.getString) ? MTS.getString() : null;
       let ns = loc && loc['MTS.Menu'];
       if (ns && ns[key] != null) return ns[key];
     } catch (e) {}

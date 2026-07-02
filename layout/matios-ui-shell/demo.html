@@ -263,9 +263,9 @@
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
-  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  if (window.MTS) { if (typeof MTS.setLanguage === 'function') MTS.setLanguage(lang); else MTS._locale = lang; }
 })();
-var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Shell']) || {};
+var L = (window.MTS && MTS.getString && MTS.getString()['MTS.Shell']) || {};
 var D = L.demo || {};
 
 document.getElementById('demo-subtitle').textContent = D.subtitle || 'Layout orchestrator. Applies CSS Grid to the root element and assigns named areas to each slot. It does not create or move elements — it only adds classes.';

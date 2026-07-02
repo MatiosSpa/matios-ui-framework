@@ -26,8 +26,8 @@ Hierarchical SVG Gantt + WBS grid with inline editing, drag & drop, undo/redo an
 
 ### i18n
 
-The component reads its text from the `MTS.GanttChart` layer of the active locale
-(`MTS.getLocale()['MTS.GanttChart']`), with an English fallback when no locale is loaded. Its own locale file
+The component reads its text from the `MTS.GanttChart` layer of the active language
+(`MTS.getString()['MTS.GanttChart']`), with an English fallback when no locale is loaded. Its own locale file
 `matios-ui-gantt-chart-i18n.js` registers `es`/`en`/`pt` (months, column labels, `today`, `empty`, errors,
 `reorderHint`, `baselineLabel`, and the `ui` section for the demo). Override with
 `MTS.registerLocale('es', { 'MTS.GanttChart': { today: 'Hoy' } })`.
@@ -246,6 +246,10 @@ gantt.onTaskChange(function (e) {
 ---
 
 ## Changelog
+
+### 2026-07-01
+- `{ url }` dataSource: `Content-Type: application/json` is now added only for non-GET requests and only when the dev
+  didn't provide one; the `headers` object is cloned instead of mutated. `params` + `queryParams` merge unchanged.
 
 ### 2026-05-30
 - **Baseline**: `baselineStart`/`baselineEnd`/`baselineProgress` per task → thin grey ghost bar under the real bar;

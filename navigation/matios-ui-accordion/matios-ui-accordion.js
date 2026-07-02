@@ -214,8 +214,21 @@ MTS.Accordion = class MtsAccordion {
       } else {
         body.style.maxHeight  = body.scrollHeight + 'px';
         body.style.overflowY  = '';
+        /* Tras la transición soltar el max-height a 'none': el body sigue al contenido
+           (ej. iframes que auto-ajustan su alto) sin quedar clavado en un px feo. */
+        const clearMax = (ev) => {
+          if (ev.target !== body || ev.propertyName !== 'max-height') return;
+          body.removeEventListener('transitionend', clearMax);
+          if (body.classList.contains('mts-accordion__body--open')) body.style.maxHeight = 'none';
+        };
+        body.addEventListener('transitionend', clearMax);
       }
     } else {
+      /* Si venía en 'none', fijar un alto concreto antes de animar a 0 (si no, no hay transición). */
+      if (body.style.maxHeight === 'none' || !body.style.maxHeight) {
+        body.style.maxHeight = body.scrollHeight + 'px';
+        void body.offsetHeight;   // reflow: registra el valor inicial
+      }
       body.style.maxHeight = '0';
       body.style.overflowY = '';
     }

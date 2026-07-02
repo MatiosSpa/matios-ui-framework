@@ -45,7 +45,7 @@
   // i18n: textos propios del componente (capa MTS.GanttChart del locale activo) con fallback.
   // El locale base lo aporta matios-ui-i18n.js; las cadenas del Gantt, matios-ui-gantt-chart-i18n.js.
   function gT(key, fallback) {
-    let loc = (global.MTS && typeof global.MTS.getLocale === 'function') ? global.MTS.getLocale() : null;
+    let loc = (global.MTS && typeof global.MTS.getString === 'function') ? global.MTS.getString() : null;
     let g   = loc && loc['MTS.GanttChart'];
     let v   = g ? g[key] : undefined;
     return (v !== undefined && v !== null) ? v : fallback;
@@ -820,12 +820,13 @@
         let method = (ds.method || 'GET').toUpperCase();
         let params = Object.assign({}, ds.params || {}, query);
         let url    = ds.url;
-        let fetchOpts = { method: method, headers: ds.headers || {} };
+        let fetchOpts = { method: method, headers: Object.assign({}, ds.headers || {}) };
         if (method === 'GET') {
           let qs = new URLSearchParams(params).toString();
           if (qs) url += (url.indexOf('?') >= 0 ? '&' : '?') + qs;
         } else {
-          fetchOpts.headers['Content-Type'] = 'application/json';
+          let hasCT = Object.keys(fetchOpts.headers).some(function (k) { return k.toLowerCase() === 'content-type'; });
+          if (!hasCT) fetchOpts.headers['Content-Type'] = 'application/json';
           fetchOpts.body = JSON.stringify(params);
         }
         promise = fetch(url, fetchOpts).then(function (r) {

@@ -215,9 +215,9 @@
   (function () {
     var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
     var lang = m ? m[1] : 'en';
-    if (window.MTS) { if (typeof MTS.setLocale === 'function') { MTS.setLocale(lang); } else { MTS._locale = lang; } }
+    if (window.MTS) { if (typeof MTS.setLanguage === 'function') { MTS.setLanguage(lang); } else { MTS._locale = lang; } }
   })();
-  var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.FormGuard'].demo) || {};
+  var D = (window.MTS && MTS.getString && MTS.getString()['MTS.FormGuard'].demo) || {};
 
   /* ── Static texts from the locale ── */
   document.getElementById('demo-subtitle').textContent  = D.subtitle    || 'Declarative dirty-tracking — snapshot, navigation modal, beforeunload, visual indicators';

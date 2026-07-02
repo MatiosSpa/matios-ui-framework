@@ -19,7 +19,11 @@
      options  — array de strings o [{ value, label }]
 
      (type: 'async')
-     optionsSource  — { url, valueField, labelField, limit? }
+     optionsSource  — { url, method?, valueField, labelField, limit?, params?, headers? }
+                      method  — 'GET' (default) | 'POST' | ... GET → params/search/limit en la URL;
+                                no-GET → viajan en el body JSON.
+                      params  — objeto de query params extra
+                      headers — cabeceras que se envían en el fetch interno (ej. auth)
      searchable     — true → muestra input de búsqueda (default: true)
      debounce       — ms de espera antes de llamar al API (default: 300)
 
@@ -31,6 +35,14 @@
      { field: 'department', label: 'Área', type: 'async',
        optionsSource: { url: '/api/departments', valueField: 'id', labelField: 'name', limit: 20 },
        searchable: true, debounce: 300 }
+
+   Uso — async con auth + params extra (el fetch interno los aplica):
+     { field: 'department', label: 'Área', type: 'async',
+       optionsSource: {
+         url: '/api/departments', valueField: 'id', labelField: 'name', limit: 20,
+         params:  { active: true },                       // → ?active=true en la URL
+         headers: { Authorization: 'Bearer ' + token },   // → cabecera del request
+       } }
    ============================================================ */
 
 window.MTS = window.MTS || {};
@@ -257,11 +269,26 @@ MTS.DataTableFilterPlugin = class DataTableFilterPlugin {
       spinner.innerHTML = this._icon('refresh')
       listEl.appendChild(spinner)
 
-      const url = new URL(src.url, location.origin)
-      if (q)       url.searchParams.set('search', q)
-      if (src.limit) url.searchParams.set('limit', String(src.limit))
+      const url     = new URL(src.url, location.origin)
+      const method  = (src.method || 'GET').toUpperCase()
+      const headers = { ...(src.headers || {}) }
+      let   fetchOpts
 
-      fetch(url.toString())
+      if (method === 'GET') {
+        if (src.params) Object.keys(src.params).forEach(k => url.searchParams.set(k, String(src.params[k])))
+        if (q)          url.searchParams.set('search', q)
+        if (src.limit)  url.searchParams.set('limit', String(src.limit))
+        fetchOpts = { method, headers }
+      } else {
+        /* No-GET: params/search/limit viajan en el body JSON. Content-Type solo si el dev no lo puso. */
+        if (!Object.keys(headers).some(k => k.toLowerCase() === 'content-type')) headers['Content-Type'] = 'application/json'
+        const body = { ...(src.params || {}) }
+        if (q)         body.search = q
+        if (src.limit) body.limit  = src.limit
+        fetchOpts = { method, headers, body: JSON.stringify(body) }
+      }
+
+      fetch(url.toString(), fetchOpts)
         .then(r => r.json())
         .then(res => {
           listEl.replaceChildren()

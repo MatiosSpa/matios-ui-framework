@@ -982,3 +982,15 @@ button {
 
 .mts-form-hint  { font-size: var(--mts-font-size-xs); color: var(--mts-text-muted);   line-height: var(--mts-line-height-base); }
 .mts-form-error { font-size: var(--mts-font-size-xs); color: var(--mts-color-danger);  line-height: var(--mts-line-height-base); }
+
+/* Neutraliza el autofill del navegador: :-webkit-autofill impone su fondo (blanco/amarillo)
+   con una capa interna que background-color no puede tapar. El box-shadow inset lo enmascara
+   con el fondo del tema y -webkit-text-fill-color devuelve el color del texto. Sirve en cualquier modo/acento. */
+.mts-input:-webkit-autofill,       .mts-textarea:-webkit-autofill,
+.mts-input:-webkit-autofill:hover, .mts-input:-webkit-autofill:focus,
+.mts-textarea:-webkit-autofill:hover, .mts-textarea:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--mts-bg-surface) inset;
+  -webkit-text-fill-color: var(--mts-text-primary);
+  caret-color: var(--mts-text-primary);
+  transition: background-color 9999s ease-in-out 0s;
+}

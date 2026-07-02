@@ -21,6 +21,10 @@ MTS.Calendar = class MtsCalendar {
   static get DAYS_MON_SUN() { return [1,2,3,4,5,6,0]; }
   static get DAYS_SUN_SAT() { return [0,1,2,3,4,5,6]; }
 
+  /* ── Vistas (enum, evita strings mágicos; el valor sigue siendo string) ── */
+  static get VIEW()      { return { WEEK: 'week', MONTH: 'month', DAY: 'day', SCHEDULE: 'schedule' }; }
+  static get VIEWS_ALL() { return ['week', 'month', 'day', 'schedule']; }
+
   /* ── Constructor ────────────────────────────────────────── */
   constructor(selector, options = {}) {
     this._el = typeof selector === 'string'
@@ -57,14 +61,15 @@ MTS.Calendar = class MtsCalendar {
     this.slots      = options.slots     || null;
 
     /* i18n */
-    const localeKey = options.locale || 'es';
+    const localeKey = window.MTS && MTS.getLanguage && MTS.getLanguage();
     this._locale    = MTS.CalendarLocales?.[localeKey] || null;
     this._t         = key => this._locale?.[key] ?? key;
 
-    /* Datasource */
-    this._datasource       = options.datasource       ?? null;
-    this._datasourceParser = options.datasourceParser || null;
-    this._datasourceParams = options.datasourceParams || {};
+    /* Datasource — nombre homologado `dataSource` (camelCase, igual que DataTable/Gantt);
+       se mantiene `datasource` (minúscula) como alias para no romper el uso previo. */
+    this._datasource       = options.dataSource       ?? options.datasource       ?? null;
+    this._datasourceParser = options.dataSourceParser || options.datasourceParser || null;
+    this._datasourceParams = options.dataSourceParams || options.datasourceParams || {};
     this._autoRefetch      = options.autoRefetch      ?? true;
 
     /* Callbacks de render */

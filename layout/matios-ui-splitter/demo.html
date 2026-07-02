@@ -105,9 +105,9 @@
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
-  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  if (window.MTS) { if (typeof MTS.setLanguage === 'function') MTS.setLanguage(lang); else MTS._locale = lang; }
 })();
-var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Splitter'].demo) || {};
+var D = (window.MTS && MTS.getString && MTS.getString()['MTS.Splitter'].demo) || {};
 
 function setTheme(t){document.documentElement.setAttribute('data-mts-theme',t);try{if(window.parent&&window.parent!==window)window.parent.postMessage({type:'setTheme',theme:t},'*');}catch(e){}}
 window.addEventListener('message',function(e){if(e.data&&e.data.type==='setTheme')document.documentElement.setAttribute('data-mts-theme',e.data.theme);});

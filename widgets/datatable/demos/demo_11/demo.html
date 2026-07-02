@@ -149,7 +149,7 @@
 function makeSection(id, previewHtml, jsCode, initFn) {
   new MTS.Tabs('#' + id, {
     variant: 'card',
-    height:  '680px',
+    height: 'auto',
     lazy:    false,
     tabs: [
       { id: id + '-preview', label: 'Preview',    content: previewHtml },
@@ -157,19 +157,21 @@ function makeSection(id, previewHtml, jsCode, initFn) {
       { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cbjs"   style="height:100%"></div>' },
     ],
   });
-  new MTS.CodeBlock('#' + id + '-cbhtml', { code: previewHtml, language: 'html',       height: '100%', copyable: true });
-  new MTS.CodeBlock('#' + id + '-cbjs',   { code: jsCode,      language: 'javascript', height: '100%', copyable: true });
+  new MTS.CodeBlock('#' + id + '-cbhtml', { code: previewHtml, language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cbjs',   { code: jsCode,      language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
 
 const preview_s11 = '<div id="table11"></div>';
 
 const js_s11 =
-`// ── HttpClient ────────────────────────────────────────────────────────────
+`// Language is global — set it once at startup; every MTS component follows it.
+MTS.setLanguage('en');
+
+// ── HttpClient ────────────────────────────────────────────────────────────
 const http = new MTS.HttpClient({
-  baseUrl: '',
-  debug:   true,
-  headers: { 'X-App-Name': 'matios-ui-demo' },
+  baseUrl: '/api',
+  headers: { 'X-App-Name': 'my-app' },
 });
 
 // Public PDF URL to demonstrate a real preview in the iframe.
@@ -182,22 +184,22 @@ const PDF_DEMO_URL = 'https://docs.google.com/viewer'
 const toolbar = new MTS.DataTableToolbarPlugin({
   buttons: [
     { label: 'Upload',     icon: 'upload',      tooltip: 'Upload a file to the current folder',
-      action: () => dmUpload.open() },
+      action: function () { dmUpload.open(); } },
     { label: 'New folder', icon: 'folder-plus', tooltip: 'Create a new folder here',
-      action: () => console.log('[dm.onNewFolder]') },
+      action: function () { console.log('[dm.onNewFolder]'); } },
     { separator: true },
     { label: 'Download', icon: 'download', tooltip: 'Download the selected files',
-      condition: (table) => table.getSelection().length > 0,
-      action: (table) => console.log('[dm.onDownload]', table.getSelection()) },
+      condition: function (table) { return table.getSelection().length > 0; },
+      action:    function (table) { console.log('[dm.onDownload]', table.getSelection()); } },
     { label: 'Rename',   icon: 'edit',     tooltip: 'Rename the selected item',
-      condition: (table) => table.getSelection().length === 1,
-      action: (table) => console.log('[dm.onRename]', table.getSelection()[0]) },
+      condition: function (table) { return table.getSelection().length === 1; },
+      action:    function (table) { console.log('[dm.onRename]', table.getSelection()[0]); } },
     { label: 'Move',     icon: 'move',     tooltip: 'Move the selected items',
-      condition: (table) => table.getSelection().length > 0,
-      action: (table) => console.log('[dm.onMove]', table.getSelection()) },
+      condition: function (table) { return table.getSelection().length > 0; },
+      action:    function (table) { console.log('[dm.onMove]', table.getSelection()); } },
     { label: 'Delete',   icon: 'trash',    danger: true, tooltip: 'Delete the selected items',
-      condition: (table) => table.getSelection().length > 0,
-      action: (table) => console.log('[dm.onDelete]', table.getSelection()) },
+      condition: function (table) { return table.getSelection().length > 0; },
+      action:    function (table) { console.log('[dm.onDelete]', table.getSelection()); } },
   ],
 });
 
@@ -208,12 +210,12 @@ const filter = new MTS.DataTableFilterPlugin({
       options: [{ value: 'active', label: 'Active' }, { value: 'archived', label: 'Archived' }] },
     { field: 'workflowStatus', label: 'Workflow', type: 'select',
       options: [
-        { value: 'draft',    label: 'Draft'        },
-        { value: 'pending',  label: 'Pending'      },
-        { value: 'review',   label: 'In review'    },
-        { value: 'approved', label: 'Approved'     },
-        { value: 'signed',   label: 'Signed'       },
-        { value: 'rejected', label: 'Rejected'     },
+        { value: 'draft',    label: 'Draft'     },
+        { value: 'pending',  label: 'Pending'   },
+        { value: 'review',   label: 'In review' },
+        { value: 'approved', label: 'Approved'  },
+        { value: 'signed',   label: 'Signed'    },
+        { value: 'rejected', label: 'Rejected'  },
       ],
     },
   ],
@@ -226,15 +228,59 @@ const colVis = new MTS.DataTableColumnVisibilityPlugin();
 const dmUpload = new MTS.DocumentManagerUploadPlugin({
   uploadProgress: 'bar',
   uploadCheck: {
-    onCheckFileExists: (file, folder) => {
-      const items = dmUpload._dm?.getItems() ?? [];
-      const found = items.find(i => i.type === 'file' && i.name === file.name);
-      return found ? { version: found.version ?? 'v1' } : false;
+    onCheckFileExists: function (file, folder) {
+      const items = (dmUpload._dm && dmUpload._dm.getItems()) || [];
+      const found = items.find(function (i) { return i.type === 'file' && i.name === file.name; });
+      return found ? { version: found.version || 'v1' } : false;
     },
   },
 });
 
-// ── Plugin 5: Preview ─────────────────────────────────────────────────────
+// ── Plugin 5: Workflow ────────────────────────────────────────────────────
+// Named so its .participantsPanel can be handed to the Preview and so it can be
+// passed to the context menu. It surfaces in three places at once:
+// the toolbar (showInToolbar), the context menu (as a sub-plugin) and the preview panel.
+const dmWorkflow = new MTS.DocumentManagerWorkflowPlugin({
+  statusField:   'workflowStatus',
+  showInToolbar: true,
+  currentUser:   'crojas',   // logged-in user — enables Approve/Reject on their turn
+
+  onLoadParticipants: function (item) {
+    return http.get('documents/' + item.id + '/participants')
+      .then(function (res) { return res.data.data; });
+  },
+  onReorder: function (participants, item) {
+    return http.post('documents/' + item.id + '/participants/reorder', {
+      order: participants.map(function (p) { return p.id; }),
+    });
+  },
+
+  onStart:           function (items) { console.log('[dm.onStart]',           items); },
+  onSendForApproval: function (items) { console.log('[dm.onSendForApproval]', items); },
+  onApprove:         function (items, participant) { console.log('[dm.onApprove]', items, participant); },
+  onSign:            function (items) { console.log('[dm.onSign]',            items); },
+  onReject:          function (items, participant) { console.log('[dm.onReject]',  items, participant); },
+  onRestart:         function (items) { console.log('[dm.onRestart]',         items); },
+});
+
+// ── Plugin 6: Preview panels ──────────────────────────────────────────────
+const dmMetadata = new MTS.DocumentManagerPreviewMetadataPanel({
+  onLoad: function (item)         { return http.get('documents/' + item.id + '/metadata').then(function (r) { return r.data.data; }); },
+  onSave: function (item, fields) { return http.put('documents/' + item.id + '/metadata', { fields: fields }); },
+});
+
+const dmNotes = new MTS.DocumentManagerPreviewNotesPanel({
+  onLoad:   function (item)       { return http.get('documents/' + item.id + '/notes').then(function (r) { return r.data.data; }); },
+  onSave:   function (item, text) { return http.post('documents/' + item.id + '/notes', { text: text }).then(function (r) { return r.data.data; }); },
+  onDelete: function (note, item) { return http.delete('documents/' + item.id + '/notes/' + note.id); },
+});
+
+const dmVersions = new MTS.DocumentManagerPreviewVersionsPanel({
+  onLoad:          function (item)          { return http.get('documents/' + item.id + '/versions').then(function (r) { return r.data.data; }); },
+  onVersionSelect: function (version, item) { console.log('[dmVersions.onVersionSelect]', version.version, item.id); },
+});
+
+// ── Plugin 7: Preview ─────────────────────────────────────────────────────
 // Instantiated before dm so it can be passed as a plugin and used in
 // onFileClick / onPrev / onNext. dm is declared afterwards; the callbacks
 // close over it by reference (safe at runtime).
@@ -242,37 +288,39 @@ const dmPreview = new MTS.DocumentManagerPreviewPlugin({
 
   panels: [
     new MTS.DocumentManagerPreviewBasicInfoPanel(),
+    dmMetadata,
+    dmVersions,
+    dmNotes,
+    dmWorkflow.participantsPanel,   // Workflow injects its approval panel here
   ],
 
   // Fallback when show() does not receive an explicit URL.
-  urlResolver: (item) => 'preview.html?name=' + encodeURIComponent(item.name || ''),
+  urlResolver: function (item) { return 'preview.html?name=' + encodeURIComponent(item.name || ''); },
 
-  onDownload: (item) => {
+  onDownload: function (item) {
     console.log('[dmPreview.onDownload]', item);
     // window.open('/api/documents/' + item.id + '/download');
   },
 
   // Replace document: returning a Promise activates the indeterminate bar.
-  onReplace: (item, file, version) => {
+  onReplace: function (item, file, version) {
     console.log('[dmPreview.onReplace]', item, file, version);
     return http.upload('documents/' + item.id + '/replace', file, {
       data: { version: version },
-    }).then((res) => {
+    }).then(function (res) {
       if (!res.success) throw new Error(res.message);
     });
   },
 
   // Navigation between files in the current folder.
-  onPrev: (currentItem) => {
-    console.log('[dmPreview.onPrev]', currentItem);
-    const files = dm.getItems().filter((i) => i.type === 'file');
-    const idx   = files.findIndex((i) => i.id === currentItem.id);
+  onPrev: function (currentItem) {
+    const files = dm.getItems().filter(function (i) { return i.type === 'file'; });
+    const idx   = files.findIndex(function (i) { return i.id === currentItem.id; });
     if (idx > 0) dmPreview.show(files[idx - 1]);
   },
-  onNext: (currentItem) => {
-    console.log('[dmPreview.onNext]', currentItem);
-    const files = dm.getItems().filter((i) => i.type === 'file');
-    const idx   = files.findIndex((i) => i.id === currentItem.id);
+  onNext: function (currentItem) {
+    const files = dm.getItems().filter(function (i) { return i.type === 'file'; });
+    const idx   = files.findIndex(function (i) { return i.id === currentItem.id; });
     if (idx < files.length - 1) dmPreview.show(files[idx + 1]);
   },
 
@@ -280,7 +328,7 @@ const dmPreview = new MTS.DocumentManagerPreviewPlugin({
   panelWidth:   '340px',
 });
 
-// ── Plugin 6: DocumentManager ─────────────────────────────────────────────
+// ── Plugin 8: DocumentManager ─────────────────────────────────────────────
 const dm = new MTS.DocumentManagerPlugin({
   rootLabel:   'Documents',
   breadcrumb:  true,
@@ -294,22 +342,23 @@ const dm = new MTS.DocumentManagerPlugin({
   onFileExists:  'ask',
 
   dropzone:   true,
-  onFileDrop: (files, folder) => dmUpload.open(files, folder),
+  onFileDrop: function (files, folder) { dmUpload.open(files, folder); },
 
-  onUpload: async (file, folder, { action, currentVersion } = {}) => {
+  onUpload: async function (file, folder, opts) {
+    opts = opts || {};
     const fd = new FormData();
     fd.append('file',           file);
-    fd.append('folderId',       folder?.id ?? '');
-    fd.append('action',         action         ?? '');
-    fd.append('currentVersion', currentVersion ?? '');
+    fd.append('folderId',       folder ? folder.id : '');
+    fd.append('action',         opts.action         || '');
+    fd.append('currentVersion', opts.currentVersion || '');
     const res = await http.post('documents/upload', fd);
-    if (!res.success) throw new Error(res.message ?? 'Error uploading the file');
+    if (!res.success) throw new Error(res.message || 'Error uploading the file');
   },
-  onUploaded: (files, folder) => console.log('[dm.onUploaded]', { files, folder }),
-  onError:    (err, file, folder) => console.log('[dm.onError]', { err, file, folder }),
+  onUploaded: function (files, folder) { console.log('[dm.onUploaded]', { files: files, folder: folder }); },
+  onError:    function (err, file, folder) { console.log('[dm.onError]', { err: err, file: file, folder: folder }); },
 
   // onFileClick explicitly connects to the preview.
-  onFileClick: (item) => {
+  onFileClick: function (item) {
     console.log('[dm.onFileClick]', item);
     // PDFs use Google Docs Viewer to show a real document in the iframe.
     if (item.ext === 'pdf') {
@@ -319,30 +368,19 @@ const dm = new MTS.DocumentManagerPlugin({
     }
   },
 
-  onDrop: (items, folder) => console.log('[dm.onDrop]', { items, folder }),
+  onDrop: function (items, folder) { console.log('[dm.onDrop]', { items: items, folder: folder }); },
 
   plugins: [
     dmUpload,
     dmPreview,
     new MTS.DocumentManagerContextMenuPlugin({
-      onView:     (item)  => dmPreview.show(item),
-      onDownload: (items) => console.log('[dm.onDownload]', items),
-      onOpen:     (item)  => console.log('[dm.onOpen]',     item),
-      onRename:   (item)  => console.log('[dm.onRename]',   item),
-      onMove:     (items) => console.log('[dm.onMove]',     items),
-      onDelete:   (items) => console.log('[dm.onDelete]',   items),
-      plugins: [
-        new MTS.DocumentManagerWorkflowPlugin({
-          statusField:   'workflowStatus',
-          showInToolbar: true,
-          onStart:           (items) => console.log('[dm.onStart]',           items),
-          onSendForApproval: (items) => console.log('[dm.onSendForApproval]', items),
-          onApprove:         (items) => console.log('[dm.onApprove]',         items),
-          onSign:            (items) => console.log('[dm.onSign]',            items),
-          onReject:          (items) => console.log('[dm.onReject]',          items),
-          onRestart:         (items) => console.log('[dm.onRestart]',         items),
-        }),
-      ],
+      onView:     function (item)  { dmPreview.show(item); },
+      onDownload: function (items) { console.log('[dm.onDownload]', items); },
+      onOpen:     function (item)  { console.log('[dm.onOpen]',     item);  },
+      onRename:   function (item)  { console.log('[dm.onRename]',   item);  },
+      onMove:     function (items) { console.log('[dm.onMove]',     items); },
+      onDelete:   function (items) { console.log('[dm.onDelete]',   items); },
+      plugins: [dmWorkflow],   // Workflow is hosted by the context menu
     }),
   ],
 });
@@ -352,7 +390,7 @@ new MTS.DataTable({
   elementId: 'table11',
   columns: [
     { field: 'name',           label: 'Name',     sortable: true, alwaysVisible: true,
-      render: (v, row) => MTS.DocumentManagerPlugin.renderName(v, row) },
+      render: function (v, row) { return MTS.DocumentManagerPlugin.renderName(v, row); } },
     { field: 'sizeFormatted',  label: 'Size',     align: 'end',    width: '100px' },
     { field: 'modifiedAt',     label: 'Modified', sortable: true,  align: 'end', width: '130px' },
     { field: 'status',         label: 'Status',   align: 'center', width: '110px',
@@ -360,7 +398,7 @@ new MTS.DataTable({
     { field: 'workflowStatus', label: 'Workflow', align: 'center', width: '130px',
       render: MTS.DocumentManagerPlugin.renderWorkflowStatus },
   ],
-  dataSource: async (query) => {
+  dataSource: async function (query) {
     const res = await http.get('documents', { params: query });
     if (!res.success) throw new Error(res.message);
     return res.data;
@@ -377,7 +415,7 @@ new MTS.DataTable({
   pagination: { pageSizeOptions: [5, 10, 20, 50, 100] },
   actionColumn: true,
   plugins: [toolbar, filter, colVis, dm],
-  onSelectionChange: (items) => {
+  onSelectionChange: function (items) {
     toolbar.update();
     console.log('[table.onSelectionChange]', items);
   },
@@ -385,6 +423,9 @@ new MTS.DataTable({
 
 function initTables() {
   makeSection('tabs-s11', preview_s11, js_s11, function() {
+
+    // Idioma del demo — inglés (punto de entrada único MTS.setLanguage).
+    if (window.MTS && MTS.setLanguage) MTS.setLanguage('en');
 
     // ── HttpClient ────────────────────────────────────────────────────────
     var http = new MTS.HttpClient({

@@ -136,9 +136,9 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
-  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  if (window.MTS) { if (typeof MTS.setLanguage === 'function') MTS.setLanguage(lang); else MTS._locale = lang; }
 })();
-var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Progress'].demo) || {};
+var D = (window.MTS && MTS.getString && MTS.getString()['MTS.Progress'].demo) || {};
 
 function fmtStep(value) {
   return (D.stepFormat || 'Step {value} of 10').replace('{value}', value);

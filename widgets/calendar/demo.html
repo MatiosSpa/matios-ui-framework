@@ -137,6 +137,14 @@
   <script src="../../forms/matios-ui-colorpicker/matios-ui-colorpicker.js"></script>
   <script src="../../overlays/matios-ui-toast/matios-ui-toast.js"></script>
 
+  <!-- i18n global (base) + textos de cada componente del form → sin esto, los form components caen al fallback inglés -->
+  <script src="../../base/matios-ui-i18n.js"></script>
+  <script src="../../forms/matios-ui-input/matios-ui-input-i18n.js"></script>
+  <script src="../../forms/matios-ui-select/matios-ui-select-i18n.js"></script>
+  <script src="../../forms/matios-ui-date-picker/matios-ui-date-picker-i18n.js"></script>
+  <script src="../../forms/matios-ui-taginput/matios-ui-taginput-i18n.js"></script>
+  <script src="../../forms/matios-ui-colorpicker/matios-ui-colorpicker-i18n.js"></script>
+
   <link rel="stylesheet" href="../../utilities/matios-ui-devpanel/matios-ui-devpanel.css">
   <link rel="stylesheet" href="../../layout/matios-ui-splitter/matios-ui-splitter.css">
   <script src="../../layout/matios-ui-splitter/matios-ui-splitter.js"></script>
@@ -157,10 +165,9 @@
 <script>
   (function () {
     var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
-    if (window.MTS && MTS.setLocale) MTS.setLocale(m ? m[1] : 'en');
+    if (window.MTS && MTS.setLanguage) MTS.setLanguage(m ? m[1] : 'es');
   })();
 </script>
-<script src="../../utilities/matios-ui-httpclient/matios-ui-httpclient.js"></script>
 <script src="app.js"></script>
 <!-- ══════════════════════════════════════════════════════════
      USAGE EXAMPLE — copy, uncomment and adapt

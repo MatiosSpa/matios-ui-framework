@@ -96,7 +96,7 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     return ok;
   }
   _t(key, fallback) {
-    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()["MTS.DatePicker"] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    try { const ns = (window.MTS && MTS.getString) ? MTS.getString()["MTS.DatePicker"] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
     return fallback;
   }
 
@@ -485,19 +485,14 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     col.className = "mts-picker-time__col";
 
     const step = (delta) => {
-      if (type === "hour") {
-        const min = this.startHour ?? 0;
-        const max = this.endHour   ?? 23;
-        let v = this._selectedHour + delta;
-        if (v < min) v = max;
-        if (v > max) v = min;
-        this._selectedHour = v;
-      } else {
-        const mins = this._buildMinutes();
-        const idx  = mins.indexOf(this._selectedMinute);
-        const next = idx + delta;
-        this._selectedMinute = mins[(next + mins.length) % mins.length];
+      const cur = type === "hour" ? this._selectedHour : this._selectedMinute;
+      let i = items.indexOf(cur);
+      for (let n = 0; n < items.length; n++) {                        // avanza saltando los deshabilitados
+        i = (i + delta + items.length) % items.length;
+        if (!this._isTimeValueDisabled(type, items[i])) break;
       }
+      if (type === "hour") this._selectedHour   = items[i];
+      else                  this._selectedMinute = items[i];
       this._updatePopupContent();
     };
 
@@ -508,10 +503,25 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     upBtn.addEventListener("click", () => step(-1));
 
     /* ── 5 items fijos: 2 arriba del seleccionado, el activo, 2 abajo ── */
-    const idx = items.indexOf(selected);
+    if (!items.length) items = [selected != null ? selected : 0];
+    /* Si la selección quedó deshabilitada (por min/max), snap al primer valor válido. */
+    if (this._isTimeValueDisabled(type, selected)) {
+      const firstValid = items.find(v => !this._isTimeValueDisabled(type, v));
+      if (firstValid != null) {
+        selected = firstValid;
+        if (type === "hour") this._selectedHour = firstValid;
+        else                  this._selectedMinute = firstValid;
+      }
+    }
+    let idx = items.indexOf(selected);
+    if (idx < 0) idx = 0;
+    /* Con ≥5 opciones la rueda cicla (infinita). Con <5, NO se cicla para no duplicar valores:
+       los bordes quedan en blanco (null). */
+    const cyclic = items.length >= 5;
     const visibleItems = [-2, -1, 0, 1, 2].map(offset => {
-      const i = (idx + offset + items.length) % items.length;
-      return items[i];
+      let i = idx + offset;
+      if (cyclic) i = (i + items.length) % items.length;
+      return (i >= 0 && i < items.length) ? items[i] : null;
     });
 
     const list = document.createElement("div");
@@ -520,13 +530,23 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     visibleItems.forEach((val, pos) => {
       const item = document.createElement("div");
       item.className = "mts-picker-time__item";
+      if (val === null) {                                             // hueco (borde de lista corta) — no clickeable
+        item.classList.add("mts-picker-time__item--empty");
+        item.innerHTML = "&nbsp;";
+        list.appendChild(item);
+        return;
+      }
       item.textContent = String(val).padStart(2, "0");
       if (pos === 2) item.classList.add("mts-picker-time__item--selected"); // centro = posición 2
-      item.addEventListener("click", () => {
-        if (type === "hour") this._selectedHour   = val;
-        else                  this._selectedMinute = val;
-        this._updatePopupContent();
-      });
+      if (this._isTimeValueDisabled(type, val)) {                     // fuera de límites → visible pero no seleccionable
+        item.classList.add("mts-picker-time__item--disabled");
+      } else {
+        item.addEventListener("click", () => {
+          if (type === "hour") this._selectedHour   = val;
+          else                  this._selectedMinute = val;
+          this._updatePopupContent();
+        });
+      }
       list.appendChild(item);
     });
 
@@ -549,12 +569,41 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     return sep;
   }
 
+  /* Límites de hora efectivos según minDate/maxDate, relativos al día del valor actual.
+     Permite que linkRange restrinja la hora cuando el rango cae en el mismo día. */
+  _timeBounds() {
+    const ref      = this._value || new Date();
+    const dayStart = new Date(ref.getFullYear(), ref.getMonth(), ref.getDate(), 0, 0, 0, 0);
+    const dayEnd   = new Date(ref.getFullYear(), ref.getMonth(), ref.getDate(), 23, 59, 59, 999);
+    let minH = this.startHour ?? 0, minM = 0, maxH = this.endHour ?? 23, maxM = 59;
+    if (this.minDate && this.minDate > dayStart) {
+      if (this.minDate > dayEnd) { minH = 99; }                          // mínimo en un día posterior → nada válido hoy
+      else { minH = this.minDate.getHours(); minM = this.minDate.getMinutes(); }
+    }
+    if (this.maxDate && this.maxDate < dayEnd) {
+      if (this.maxDate < dayStart) { maxH = -1; }                         // máximo en un día anterior → nada válido hoy
+      else { maxH = this.maxDate.getHours(); maxM = this.maxDate.getMinutes(); }
+    }
+    return { minH, minM, maxH, maxM };
+  }
+
   _buildHours() {
     const h = []; for (let i = this.startHour ?? 0; i <= (this.endHour ?? 23); i++) h.push(i); return h;
   }
 
   _buildMinutes() {
     const m = []; for (let i = 0; i < 60; i += (this.timeStep ?? 5)) m.push(i); return m;
+  }
+
+  /* ¿La hora/minuto cae fuera de los límites (minDate/maxDate)? → se muestra pero deshabilitado.
+     Para minutos, el límite aplica solo en la hora frontera (minH/maxH). */
+  _isTimeValueDisabled(type, val) {
+    const b = this._timeBounds();
+    if (type === "hour") return val < b.minH || val > b.maxH;
+    let lo = 0, hi = 59;
+    if (this._selectedHour === b.minH) lo = b.minM;
+    if (this._selectedHour === b.maxH) hi = b.maxM;
+    return val < lo || val > hi;
   }
 
   _renderFooter(container, todayLabel = "Hoy") {
@@ -592,8 +641,16 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
   _isSelected(date)   { return false; }
 
   _isDisabled(date) {
-    if (this.minDate && date < this.minDate) return true;
-    if (this.maxDate && date > this.maxDate) return true;
+    /* Comparación a nivel-DÍA: si minDate/maxDate llevan hora (rango datetime), el mismo día NO se
+       deshabilita en el calendario — la restricción de hora la aplica el spinner (_timeBounds). */
+    if (this.minDate) {
+      const md = new Date(this.minDate.getFullYear(), this.minDate.getMonth(), this.minDate.getDate());
+      if (date < md) return true;
+    }
+    if (this.maxDate) {
+      const xd = new Date(this.maxDate.getFullYear(), this.maxDate.getMonth(), this.maxDate.getDate());
+      if (date > xd) return true;
+    }
     if (this.disabledDays?.includes(date.getDay())) return true;
     return false;
   }
@@ -642,22 +699,32 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
    ──────────────────────────────────────────────────────────── */
 MTS.DatePicker.linkRange = function (from, to, opts) {
   opts = opts || {};
-  let allowSameDay = opts.allowSameDay !== false; // default true
+  let allowSameDay = opts.allowSameDay !== false; // default true (para fechas)
   let clampTo      = opts.clampTo      !== false; // default true
 
-  function offset(d, n) { let x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  /* ¿Los pickers manejan hora? (Time / DateTime) → se aplica un gap mínimo entre from y to.
+     Mismo día → el "to" no puede ser menor a "from" + gap; distinto día → la hora queda libre
+     (el gap sobre un día posterior siempre se cumple). Default: 1 hora. */
+  function hasTime(p) { let m = p._modeClass && p._modeClass(); return m === "time" || m === "datetime"; }
+  let timeAware = hasTime(from) && hasTime(to);
 
-  function syncTo() {
-    let t = to.getValue();
-    from.setMaxDate(t ? (allowSameDay ? t : offset(t, -1)) : null);
-  }
+  function dOffset(d, n) { let x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function nextHour(d)   { let x = new Date(d); x.setHours(x.getHours() + 1, 0, 0, 0); return x; } // hora + 1, minutos a 0
+
+  /* El "to" (fin) se restringe por el "from" (inicio): en modo hora la HORA de fin debe ser al menos
+     la de inicio + 1 (minutos libres → todo el bloque de esa hora queda disponible). El "from" NO se
+     capea (inicio libre). En modo fecha se mantiene la restricción bidireccional. */
+  function minForTo(f)   { return !f ? null : timeAware ? nextHour(f) : (allowSameDay ? f : dOffset(f, 1)); }
+  function maxForFrom(t) { if (timeAware) return null; return !t ? null : (allowSameDay ? t : dOffset(t, -1)); }
+
+  function syncTo() { from.setMaxDate(maxForFrom(to.getValue())); }
   function syncFrom() {
-    let f = from.getValue();
-    to.setMinDate(f ? (allowSameDay ? f : offset(f, 1)) : null);
-    if (clampTo && f) {
-      let minAllowed = allowSameDay ? f : offset(f, 1);
+    let f    = from.getValue();
+    let minA = minForTo(f);
+    to.setMinDate(minA);
+    if (clampTo && f && minA) {
       let t = to.getValue();
-      if (t && t < minAllowed) to.setValue(minAllowed);
+      if (t && t < minA) to.setValue(minA);
     }
     syncTo();
   }

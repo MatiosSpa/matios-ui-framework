@@ -80,7 +80,7 @@ MTS.Rating = class MtsRating {
     return ok;
   }
   _t(key, fallback) {
-    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.Rating'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    try { const ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.Rating'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
     return fallback;
   }
 

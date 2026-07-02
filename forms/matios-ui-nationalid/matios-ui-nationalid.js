@@ -415,7 +415,7 @@ MTS.NationalId.Input = class MtsNationalIdInput {
   /* ── locale ── */
   _t(key, fallback) {
     try {
-      const loc = (window.MTS && MTS.getLocale) ? MTS.getLocale() : null;
+      const loc = (window.MTS && MTS.getString) ? MTS.getString() : null;
       const ns = loc && loc['MTS.NationalId'];
       if (ns && ns[key] != null) return ns[key];
     } catch (e) {}

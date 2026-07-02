@@ -132,9 +132,9 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
-  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  if (window.MTS) { if (typeof MTS.setLanguage === 'function') MTS.setLanguage(lang); else MTS._locale = lang; }
 })();
-var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Skeleton'].demo) || {};
+var D = (window.MTS && MTS.getString && MTS.getString()['MTS.Skeleton'].demo) || {};
 
 document.getElementById('demo-subtitle').textContent = D.subtitle || 'Animated loading placeholder — text, circle, rect, card, list, table · pulse and wave animations.';
 document.getElementById('s1-title').textContent      = D.s1Title || '1 — Text · Circle · Rect';

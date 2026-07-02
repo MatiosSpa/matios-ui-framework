@@ -154,7 +154,7 @@ MTS.Input = class MtsInput {
   /* Localized message lookup — MTS.Input → messages namespace; falls back to the given default. */
   _t(key, fallback) {
     try {
-      const ns = (typeof window !== 'undefined' && window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.Input'] : null;
+      const ns = (typeof window !== 'undefined' && window.MTS && MTS.getString) ? MTS.getString()['MTS.Input'] : null;
       const m  = ns && ns.messages;
       if (m && m[key] != null) return m[key];
     } catch (e) {}

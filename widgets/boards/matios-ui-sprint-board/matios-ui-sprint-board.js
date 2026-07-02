@@ -132,7 +132,7 @@
 
   // i18n: texto propio del componente (capa MTS.SprintBoard) con fallback.
   SprintBoard.prototype._t = function (key, fallback) {
-    let loc = (global.MTS && typeof global.MTS.getLocale === 'function') ? global.MTS.getLocale()['MTS.SprintBoard'] : null;
+    let loc = (global.MTS && typeof global.MTS.getString === 'function') ? global.MTS.getString()['MTS.SprintBoard'] : null;
     return (loc && loc[key] != null) ? loc[key] : fallback;
   };
 

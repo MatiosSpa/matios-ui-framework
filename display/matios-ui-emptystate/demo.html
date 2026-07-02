@@ -114,9 +114,9 @@ function indentHtml(html) {
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
-  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  if (window.MTS) { if (typeof MTS.setLanguage === 'function') MTS.setLanguage(lang); else MTS._locale = lang; }
 })();
-var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.EmptyState'].demo) || {};
+var D = (window.MTS && MTS.getString && MTS.getString()['MTS.EmptyState'].demo) || {};
 
 var T = {
   subtitle:          D.subtitle          || 'EmptyState demo updated to the Preview | HTML | JavaScript pattern.',

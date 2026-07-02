@@ -361,7 +361,7 @@
   flex-shrink: 0;
 }
 
-.mts-picker-time__item:hover:not(.mts-picker-time__item--selected) {
+.mts-picker-time__item:hover:not(.mts-picker-time__item--selected):not(.mts-picker-time__item--disabled):not(.mts-picker-time__item--empty) {
   background: var(--mts-color-primary-light);
   color: var(--mts-color-primary);
 }
@@ -370,6 +370,19 @@
   background: var(--mts-color-primary);
   color: var(--mts-color-primary-text);
   font-weight: var(--mts-font-weight-semibold);
+}
+
+/* Hora/minuto fuera de los límites (linkRange): visible pero no seleccionable. */
+.mts-picker-time__item--disabled {
+  opacity: .3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Hueco de relleno cuando la lista tiene pocos ítems. */
+.mts-picker-time__item--empty {
+  cursor: default;
+  pointer-events: none;
 }
 
 /* Separador — padding-top = arrow(28) + gap(4) para alinearse con el item central */

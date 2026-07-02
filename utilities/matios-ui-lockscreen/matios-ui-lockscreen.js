@@ -54,7 +54,7 @@ MTS.LockScreen = class MtsLockScreen {
   _t(key, fallback) {
     if (this._msg[key] != null) return this._msg[key];
     try {
-      const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.LockScreen'] : null;
+      const ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.LockScreen'] : null;
       const m  = ns && ns.messages;
       if (m && m[key] != null) return m[key];
     } catch (e) {}

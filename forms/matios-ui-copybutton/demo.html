@@ -144,9 +144,9 @@ function setResult(id, text) {
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
-  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  if (window.MTS) { if (typeof MTS.setLanguage === 'function') MTS.setLanguage(lang); else MTS._locale = lang; }
 })();
-var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.CopyButton'] && MTS.getLocale()['MTS.CopyButton'].demo) || {};
+var D = (window.MTS && MTS.getString && MTS.getString()['MTS.CopyButton'] && MTS.getString()['MTS.CopyButton'].demo) || {};
 
 document.getElementById('demo-subtitle').textContent = D.subtitle || 'Button to copy text or target content to the clipboard with visual feedback.';
 document.getElementById('s1-title').textContent      = D.s1Title || '1 — Variants and sizes';

@@ -123,12 +123,9 @@ MTS.DataTable = class DataTable {
   _mergeDefaults(cfg) {
     const d = MTS.DataTable._defaults
 
-    /* Resolver locale desde el sistema global MTS.Locales (matios-ui-i18n.js).
-       Fallback a MTS.DataTable.getLocale para retrocompatibilidad. */
-    const locKey = cfg.locale ?? d.locale ?? 'es'
-    const loc = typeof MTS?.getLocale === 'function'
-      ? MTS.getLocale(locKey)
-      : (typeof MTS?.DataTable?.getLocale === 'function' ? MTS.DataTable.getLocale(locKey) : {})
+    /* Idioma: siempre desde el global (MTS.setLanguage). Si el i18n no está cargado
+       (uso suelto sin base/matios-ui-i18n.js) cae a {} y se usan los `texts` propios. */
+    const loc = (window.MTS && MTS.getString && MTS.getString()) || {}
     /* Textos del core DataTable — viven en la sección 'MTS.DataTable' del locale */
     const locTexts = loc['MTS.DataTable'] || {}
     /* Exponer locale activo para renders estáticos de plugins (ej: DM renderStatus) */
@@ -185,42 +182,23 @@ MTS.DataTable = class DataTable {
     if (typeof ds === 'function') return ds
 
     if (ds && typeof ds.url === 'string') {
-      // Dogfood: si MTS.HttpClient está cargado, la DataTable trae los datos con el
-      // cliente HTTP del propio framework (headers, interceptores, envelope, logging).
-      // Si no está, cae a fetch nativo → el modo { url } sigue andando sin dependencia dura.
-      const headers = { 'Content-Type': 'application/json', ...(ds.headers || {}) }
-      // Resolvemos ds.url (relativa / root-absoluta / full URL) contra la ubicación
-      // del documento → origin + pathname correctos. Así HttpClient (que prefija "/")
-      // no colapsa una ruta relativa a la raíz. Location-independent.
-      let http = null, endpoint = ds.url
-      if (window.MTS && MTS.HttpClient) {
-        const u  = new URL(ds.url, location.href)
-        http     = new MTS.HttpClient({ baseUrl: u.origin, headers })
-        endpoint = u.pathname
-      }
-
       return (query) => {
-        const method = (ds.method || 'GET').toUpperCase()
-        const params = Object.fromEntries(
-          Object.entries(query).filter(([, v]) => v !== null && v !== undefined && v !== '')
+        const method  = (ds.method || 'GET').toUpperCase()
+        const headers = { ...(ds.headers || {}) }
+        // Params fijos de `ds.params` + los del query (paginación/orden/búsqueda). El query gana.
+        const params  = Object.fromEntries(
+          Object.entries({ ...(ds.params || {}), ...query })
+            .filter(([, v]) => v !== null && v !== undefined && v !== '')
         )
 
-        if (http) {
-          const req = method === 'GET'
-            ? http.get(endpoint, { params })
-            : http[method.toLowerCase()](endpoint, params)
-          return req.then(res => {
-            if (!res.success) throw new Error(res.message || `HTTP ${res.status}`)
-            return res.data
-          })
-        }
-
-        // Fallback: fetch nativo (sin MTS.HttpClient cargado)
         if (method === 'GET') {
           const qs = new URLSearchParams(params).toString()
           return fetch(`${ds.url}?${qs}`, { method, headers })
             .then(r => { if (!r.ok) throw new Error(`${r.status} ${r.statusText}`); return r.json() })
         }
+        // Content-Type solo cuando hay body (no-GET) y si el dev no definió el suyo.
+        const hasContentType = Object.keys(headers).some(k => k.toLowerCase() === 'content-type')
+        if (!hasContentType) headers['Content-Type'] = 'application/json'
         return fetch(ds.url, { method, headers, body: JSON.stringify(params) })
           .then(r => { if (!r.ok) throw new Error(`${r.status} ${r.statusText}`); return r.json() })
       }

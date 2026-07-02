@@ -9,7 +9,7 @@
    ============================================================ */
 
 const SW_NAME = 'sw-calendar';
-const VERSION = 'calendar-api-v8';
+const VERSION = 'calendar-api-v9';
 // Prefijo de la mock-api derivado del scope REAL del SW → location-independent
 // (funciona en "/", "/live-demo/" o donde sea, sin hardcodear la ruta).
 const API_PREFIX = new URL('./mock-api/', self.registration.scope).pathname;

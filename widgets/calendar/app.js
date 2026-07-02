@@ -10,10 +10,6 @@
      7. MISC
    ============================================================ */
 
-/* ── HTTP client (dogfood: MTS.HttpClient con base absoluta calculada desde la
-   ubicación → location-independent; el SW de calendar la intercepta) ── */
-const http = new MTS.HttpClient({ baseUrl: new URL('mock-api', location.href).pathname });
-
 /* ── Global state — before any function that uses them ── */
 /* ─── Definición de todos los eventos — label, tipo badge, extractor de payload ─── */
 const EV_DEFS = [
@@ -120,13 +116,15 @@ async function fetchEvents(ctx = {}) {
   const loader = document.getElementById('dataLoader');
   if (loader) { loader.classList.add('loading'); loader.querySelector('span').textContent = 'Loading...'; }
   try {
-    const env = await http.get('cal_events', { params: {
+    const params = new URLSearchParams({
       dateStart: ctx.dateStart || '',
       dateEnd:   ctx.dateEnd   || '',
       view:      ctx.view      || 'week',
-    }});
-    if (!env.success) throw new Error(env.message || `HTTP ${env.status}`);
-    const raw = env.data;
+    });
+    const url = `mock-api/cal_events?${params}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const raw = await res.json();
     const evs = (Array.isArray(raw) ? raw : (raw?.data || []))
       .map(item => MTS.CalendarEvent.fromAPI(item, cal).toJSON());
     if (loader) { loader.classList.remove('loading'); loader.classList.add('ok'); loader.querySelector('span').textContent = `${evs.length} events`; }
@@ -149,7 +147,7 @@ const CFG = {
   header:    'both',
   startTime: '08:00',
   endTime:   '19:00',
-  slotSize:  60,
+  slotSize:  15,
   slotLabel: 'auto',
   slots:     null,
   drag:      true,
@@ -340,7 +338,7 @@ async function buildCalendar(events){
     /* Click simple → abre detalle directamente */
     onEventClick: ({detail})=>{
       log('click',`Click: "${detail.event.title}"`,`día ${detail.event.day}`);
-      if(!detail.event.locked) openEventDetail(detail.event);
+      openEventDetail(detail.event);   /* el modal de detalle maneja locked como solo-lectura */
     },
     onEventDblClick: ({detail})=>{
       log('click',`DblClick: "${detail.event.title}"`);
@@ -503,7 +501,7 @@ function buildEventForm(){
   const _diaISO = (se.date && se.date !== '0000-00-00') ? se.date : null;
   /* Hora inicio/fin desde hourRange */
   const [_hrStart='09:00', _hrEnd='10:00'] = (se.hourRange||'09:00-10:00').split('-');
-  _formInstances.titulo=new MTS.Input(c.querySelector('#ef-t'),{label:'Título *',placeholder:'Ej: Reunión de equipo',value:se.title||'',clearable:true,maxLength:80,autocomplete:'new-password'});
+  _formInstances.titulo=new MTS.Input(c.querySelector('#ef-t'),{label:'Título',required:true,placeholder:'Ej: Reunión de equipo',value:se.title||'',clearable:true,maxLength:80,autocomplete:'new-password'});
   /* Picker de fecha — muestra la fecha real del slot */
   const _diaWrap = c.querySelector('#ef-d');
   _diaWrap.className = 'mts-form-group';
@@ -518,8 +516,8 @@ function buildEventForm(){
   if (_diaISO) _formInstances.dia.setValue(new Date(_diaISO + 'T12:00:00'));
   _formInstances.tipo=new MTS.Select(c.querySelector('#ef-tipo'),{label:'Tipo',value:se.data?.tipo||'Reunion',options:[{value:'Reunion',label:'Reunión'},{value:'Cliente',label:'Cliente'},{value:'Demo',label:'Demo'},{value:'Formacion',label:'Formación'},{value:'Social',label:'Social'},{value:'Otro',label:'Otro'}]});
   /* Time pickers — rango y paso del calendario */
-  const _calStartH = parseInt((CFG.startTime||'08:00').split(':')[0]);
-  const _calEndH   = parseInt((CFG.endTime  ||'19:00').split(':')[0]);
+  const _calStartH = parseInt((CFG.startTime||'00:00').split(':')[0]);
+  const _calEndH   = parseInt((CFG.endTime  ||'23:00').split(':')[0]);
   const _calStep   = CFG.slotSize || 60;
   const _siWrap = c.querySelector('#ef-si');
   _siWrap.className = 'mts-form-group';
@@ -563,6 +561,8 @@ function buildEventForm(){
     const _ed = new Date(); _ed.setHours(_eh, _em || 0, 0, 0);
     _formInstances.fin.setValue(_ed);
   }
+  /* Enlaza inicio/fin: la hora de fin no puede ser menor a inicio + 1h (mismo día). */
+  MTS.DatePicker.linkRange(_formInstances.inicio, _formInstances.fin);
   /* Invitados — TagInput con autocomplete contra mock-api/attendees */
   /* Invitados: solo precargar si es edición (se.id existe), no en nuevo evento */
   const _invitadosVal = se.id ? (se.data?.invitados || []) : [];
@@ -574,9 +574,10 @@ function buildEventForm(){
     tags:        _invitadosVal,
     onSearch: async (q) => {
       try {
-        const env = await http.get('attendees', { params: q ? { q } : {} });
-        if (!env.success) return [];
-        return env.data; // → [{ uid, name }]
+        const url = 'mock-api/attendees' + (q ? '?q=' + encodeURIComponent(q) : '');
+        const res = await fetch(url);
+        if (!res.ok) return [];
+        return res.json(); // → [{ uid, name }]
       } catch { return []; }
     },
   });
@@ -598,9 +599,10 @@ function buildEventForm(){
     options:     [],
     onSearch: async (q) => {
       try {
-        const env = await http.get('meet_places', { params: q ? { q } : {} });
-        if (!env.success) return [];
-        const data = env.data;
+        const url = 'mock-api/meet_places' + (q ? '?q=' + encodeURIComponent(q) : '');
+        const res = await fetch(url);
+        if (!res.ok) return [];
+        const data = await res.json();
         return data.map(p => ({ value: p.place, label: p.place, hint: p.capacity + ' personas' }));
       } catch { return []; }
     },
@@ -682,7 +684,7 @@ function openNewEventModal() {
     {label:'Cancelar', icon:MTS.Icon.get('close',14), variant:'ghost', onClick:()=>{ cal.clearSelectedEvent(); modal.hide(); }},
     {label:'Crear evento', icon:MTS.Icon.get('calendar-plus',14), variant:'primary',onClick: async ()=>{
       const v = getFormValues(colorPicker);
-      if (!v.titulo) { toast('warning','El título es obligatorio'); return; }
+      if (!_formInstances.titulo.validate()) return;   /* required:true → error inline del input, sin toast */
       const colorHex = v.color; /* MTS.ColorPicker.getValue() returns hex */
 
       /* Build raw con la nueva estructura { uid, startDate, startHour, endHour } */
@@ -700,11 +702,15 @@ function openNewEventModal() {
 
       try {
         /* Simulate POST → /cal_events */
-        const env  = await http.post('cal_events', raw);
-        const json = env.data || {};
+        const res  = await fetch('mock-api/cal_events', {
+          method:  'POST',
+          headers: { 'Content-Type':'application/json' },
+          body:    JSON.stringify(raw),
+        });
+        const json = await res.json();
         /* Use server uid si viene */
         if (json.uid) raw.uid = json.uid;
-        log('add', `POST /cal_events → ${json.message || (env.success ? 'ok' : env.message)}`, `uid: ${raw.uid}`);
+        log('add', `POST /cal_events → ${json.message||'ok'}`, `uid: ${raw.uid}`);
       } catch(e) {
         log('add', 'POST /cal_events falló — usando uid local', raw.uid);
       }
@@ -733,7 +739,7 @@ function openEditEventModal(event){
     {label:'Cancelar', icon:MTS.Icon.get('close',14), variant:'ghost', onClick:()=>{ cal.clearSelectedEvent(); modal.hide(); }},
     {label:'Guardar cambios', icon:MTS.Icon.get('save',14), variant:'primary',onClick: async ()=>{
       const v = getFormValues(colorPicker);
-      if (!v.titulo) { toast('warning','El título es obligatorio'); return; }
+      if (!_formInstances.titulo.validate()) return;   /* required:true → error inline del input, sin toast */
       const colorHex = v.color; /* MTS.ColorPicker.getValue() returns hex */
 
       /* Build raw actualizado */
@@ -752,9 +758,13 @@ function openEditEventModal(event){
 
       try {
         /* Simulate PUT → /cal_events/{uid} */
-        const env  = await http.put(`cal_events/${uid}`, raw);
-        const json = env.data || {};
-        log('add', `PUT /cal_events/${uid} → ${json.message || (env.success ? 'ok' : env.message)}`, `uid: ${uid}`);
+        const res  = await fetch(`mock-api/cal_events/${uid}`, {
+          method:  'PUT',
+          headers: { 'Content-Type':'application/json' },
+          body:    JSON.stringify(raw),
+        });
+        const json = await res.json();
+        log('add', `PUT /cal_events/${uid} → ${json.message||'ok'}`, `uid: ${uid}`);
       } catch(e) {
         log('add', 'PUT /cal_events falló — actualizando localmente', uid);
       }

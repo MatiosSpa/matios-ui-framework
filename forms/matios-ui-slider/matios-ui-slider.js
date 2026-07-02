@@ -79,7 +79,7 @@ MTS.Slider = class MtsSlider {
     return true;
   }
   _t(key, fallback) {
-    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.Slider'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    try { const ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.Slider'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
     return fallback;
   }
 

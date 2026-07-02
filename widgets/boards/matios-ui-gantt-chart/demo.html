@@ -112,8 +112,8 @@
 /* ═══ LOCALE ═══ */
 /* All visible demo text comes from the component locale (MTS.GanttChart.ui). Zero hard-coded strings. */
 /* Public demo: default English; ?lang=es|en|pt to switch. */
-(function () { var m = (location.search || '').match(/[?&]lang=(es|en|pt)/); if (window.MTS && MTS.setLocale) MTS.setLocale(m ? m[1] : 'en'); })();
-var UI = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.GanttChart'] && MTS.getLocale()['MTS.GanttChart'].ui) || {};
+(function () { var m = (location.search || '').match(/[?&]lang=(es|en|pt)/); if (window.MTS && MTS.setLanguage) MTS.setLanguage(m ? m[1] : 'en'); })();
+var UI = (window.MTS && MTS.getString && MTS.getString()['MTS.GanttChart'] && MTS.getString()['MTS.GanttChart'].ui) || {};
 
 /* ═══ DATA ═══ */
 /* Team with uid — the uid travels in each assignee so the BE can identify the person. */

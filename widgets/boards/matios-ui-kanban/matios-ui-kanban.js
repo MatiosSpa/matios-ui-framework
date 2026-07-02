@@ -73,7 +73,7 @@ MTS.Kanban = class MtsKanban {
 
   // i18n: texto propio del componente (capa MTS.Kanban) con fallback.
   _t(key, fallback) {
-    let loc = (window.MTS && typeof MTS.getLocale === 'function') ? MTS.getLocale()['MTS.Kanban'] : null;
+    let loc = (window.MTS && typeof MTS.getString === 'function') ? MTS.getString()['MTS.Kanban'] : null;
     return (loc && loc[key] != null) ? loc[key] : fallback;
   }
 

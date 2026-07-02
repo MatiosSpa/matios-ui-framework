@@ -2,7 +2,7 @@
    matios-ui-gantt-chart-i18n.js
    Textos propios de MTS.GanttChart (es/en/pt). Mismo nombre del
    componente + "-i18n". Se registra bajo el namespace del componente
-   (MTS.GanttChart) y se consume con MTS.getLocale()['MTS.GanttChart'].
+   (MTS.GanttChart) y se consume con MTS.getString()['MTS.GanttChart'].
    El locale base (MTS.Locales) sigue siendo la capa común.
    ============================================================ */
 (function () {

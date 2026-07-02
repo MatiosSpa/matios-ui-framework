@@ -12,12 +12,12 @@
 
    ── API ────────────────────────────────────────────────────
 
-   // Cambiar locale global (afecta todos los componentes)
-   MTS.setLocale('en')
+   // Cambiar idioma global (afecta todos los componentes)
+   MTS.setLanguage('en')
 
-   // Obtener el objeto de un locale
-   MTS.getLocale('en')               // → { 'MTS.DataTable': {...}, ... }
-   MTS.getLocale()                   // → locale activo (default: 'es')
+   // Obtener la tabla de strings del idioma activo
+   MTS.getString()                   // → { 'MTS.DataTable': {...}, ... }
+   MTS.getString()['MTS.DataTable']  // → strings de ese componente
 
    // Agregar o sobreescribir keys — deep merge, sin pisar el resto
    MTS.registerLocale('es', {
@@ -37,7 +37,7 @@
 
    ── AÑADIR UN COMPONENTE NUEVO ──────────────────────────────
    1. Agregar la sección en 'es' y 'en' con el nombre del componente.
-   2. En el componente, implementar _t(key) usando MTS.getLocale().
+   2. En el componente, implementar _t(key) usando MTS.getString().
    3. Documentar las keys disponibles en el JSDoc del componente.
    ============================================================ */
 
@@ -541,22 +541,30 @@ MTS.Locales = {
 MTS._locale = 'es';
 
 /**
- * Cambia el locale activo para todos los componentes MTS.
+ * Cambia el idioma activo para todos los componentes MTS.
  * Los componentes que ya están montados no se actualizan
  * automáticamente — re-montar o recargar la página.
- * @param {string} key — clave de locale registrada en MTS.Locales
+ * @param {string} key — clave de idioma ('es' | 'en' | 'pt' | custom)
  */
-MTS.setLocale = function(key) {
+MTS.setLanguage = function(key) {
   MTS._locale = key;
 };
 
 /**
- * Retorna el objeto de locale para la clave dada.
- * Si la clave no existe, cae a 'es'.
- * @param {string} [key] — si se omite usa MTS._locale
- * @returns {object}
+ * Retorna la clave del idioma activo (default 'es').
+ * @returns {string} — 'es' | 'en' | 'pt' | ...
  */
-MTS.getLocale = function(key) {
+MTS.getLanguage = function() {
+  return MTS._locale || 'es';
+};
+
+/**
+ * Retorna la tabla de strings (textos de todos los componentes) del idioma activo.
+ * Uso: MTS.getString()['MTS.X']. Si la clave no existe, cae a 'es'.
+ * @param {string} [key] — si se omite usa el idioma activo
+ * @returns {object} — { 'MTS.Input': {...}, 'MTS.DataTable': {...}, ... }
+ */
+MTS.getString = function(key) {
   let k = key || MTS._locale || 'es';
   return MTS.Locales[k] || MTS.Locales['es'] || {};
 };
@@ -618,8 +626,5 @@ if (window.MTS && window.MTS.DataTable) {
     }
     if (obj.dmUpload) mapped['MTS.DocumentManagerUploadPlugin'] = obj.dmUpload;
     MTS.registerLocale(key, mapped);
-  };
-  MTS.DataTable.getLocale = function(key) {
-    return MTS.getLocale(key);
   };
 }

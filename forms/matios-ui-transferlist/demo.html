@@ -159,9 +159,9 @@ function fmt(tpl, vars) {
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
-  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  if (window.MTS) { if (typeof MTS.setLanguage === 'function') MTS.setLanguage(lang); else MTS._locale = lang; }
 })();
-var L = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.TransferList']) || {};
+var L = (window.MTS && MTS.getString && MTS.getString()['MTS.TransferList']) || {};
 var D = L.demo || {};
 
 document.getElementById('demo-subtitle').textContent = D.subtitle || 'Transfer between lists with origin/selected datasource, drag and drop, optional buttons and unique validation on the target. The examples combine generic cases and a real business case.';

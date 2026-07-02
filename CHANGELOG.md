@@ -7,7 +7,61 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-_Nothing yet._
+Data-loading components standardized around the same override pattern: they `fetch` internally by default, but every
+request is overridable via a dev-provided async function (you own the transport — native `fetch`, `MTS.HttpClient`,
+auth, interceptors). The built-in `{ url }` paths now honor the headers and params you configure.
+
+### Added
+- **DataTable `{ url }` dataSource** now merges `ds.params` (fixed query params) with the live paging/sort/search query
+  — previously `params` was documented but ignored. The live query wins on key clashes.
+- **FilterPlugin async `optionsSource`** now accepts `method` (`'GET'` default / `'POST'`/…), `params` (extra query
+  params) and `headers` (e.g. `Authorization`) on its internal fetch: `optionsSource: { url, method?, valueField,
+  labelField, limit?, params?, headers? }`. GET sends `params`/`search`/`limit` in the query string; non-GET in the JSON body.
+- **Calendar enums** (values are plain strings — non-breaking): `MTS.Calendar.VIEW` / `MTS.Calendar.VIEWS_ALL` and
+  `MTS.CalendarUI.ACTION` — typo-safe alternatives to the `'week'` / `'create'` magic strings.
+- **`MTS.CalendarUI.commit(action, event)`** — public method to trigger the persistence funnel (`onEvent`) and paint the
+  grid from your own button/modal, reusing the same path as the built-in modals and drag/resize.
+- **Calendar `pt` locale** — built-in Brazilian Portuguese; `locale` is now `'es'` · `'en'` · `'pt'`.
+- **i18n language API** — `MTS.setLanguage(code)` sets the global language, `MTS.getLanguage()` returns the active code
+  (defaults to `'es'`), and `MTS.getString()` returns the active language's string table (`MTS.getString()['MTS.X']`).
+  One `MTS.setLanguage()` at startup drives every component — there is no per-instance `locale` option.
+- **DatePicker `linkRange` now works with time** — the Time picker honors `minDate`/`maxDate` (out-of-range hours/minutes
+  are shown disabled instead of removed), so `linkRange(start, end)` also constrains a start/end **time** pair: on the same
+  day the end must be at least the start hour + 1; across days the time is unconstrained.
+
+### Changed
+- **Language is global-only** — components read the active language solely from `MTS.getLanguage()`. The per-instance
+  `locale` option was removed from `MTS.DataTable`, `MTS.Calendar` and `MTS.CalendarUI` (they previously defaulted to
+  `'es'` and ignored a global `MTS.setLanguage()`). Change the language once, at startup.
+- **Calendar**: `dataSource` (camelCase) is now the canonical loader option, aligned with `MTS.DataTable` and
+  `MTS.GanttChart`. The legacy lowercase `datasource` still works as an **alias** (same for `dataSourceParser` /
+  `dataSourceParams`). No breaking change — existing code keeps running.
+
+### Fixed
+- **DataTable / Gantt `{ url }` dataSource**: `Content-Type: application/json` is now added **only** for non-GET
+  requests (which carry a body) and **only when the dev didn't set their own** — a plain GET no longer forces an
+  unnecessary CORS preflight. Gantt additionally **clones** the `headers` object instead of mutating the dev's.
+- **Calendar built-in delete** now calls `onEvent('delete', …)` before removing the event from the grid — previously it
+  removed it visually but never notified the persistence layer, so deletions were never sent to the backend.
+- **Inputs (`.mts-input` / `.mts-textarea`)**: browser autofill no longer paints a white/yellow background over the
+  themed surface — masked with `-webkit-box-shadow … inset` + `-webkit-text-fill-color`, so autofilled fields keep the
+  active theme's colors (fixes the white-background bug in dark mode).
+- **Accordion**: releases its animated `max-height` to `none` after the open transition, so an open panel follows
+  dynamically-resizing content (e.g. an auto-sizing iframe) instead of staying clamped to the height measured at open time.
+
+### Docs
+If you clone the repo, the live demos are the fastest way in — each one is copy-paste runnable and its **"View docs"**
+button now opens the matching Markdown.
+- **`MTS.DataTable` — per-plugin docs & examples**: each demo now ships its own `.md` (the base table **plus** the full
+  plugin, built from the real plugin source and demo code) reachable from **"View docs"** — `ContextMenu`,
+  `ColumnActions`, `Toolbar`, `Filter`, `ColumnVisibility`, `ExpandRow`, and the composite `DocumentManager` (rewritten
+  inside-out: Upload · Workflow · Preview + Metadata/Notes/Versions/BasicInfo panels · ContextMenu, with the i18n namespaces).
+- **`MTS.DataTableFilterPlugin`** example now shows two async `optionsSource` side by side — one `POST` and one `GET` —
+  each carrying its own `headers`, so the new `method`/`headers` support is visible at a glance.
+- **`MTS.Calendar` / `MTS.CalendarUI`** — full copy-paste example rewritten around the new enums, `commit(action, event)`
+  and the `onEvent` persistence funnel.
+- **`MTS.DataTable`** — consolidated to a single complete example, corrected against the real component API (the
+  previously documented `onLoad` / `onError` / `{ page, size }` did not exist).
 
 ## [1.0.2] — 2026-06-29
 

@@ -66,7 +66,7 @@
     .dt-demo-frame {
       display: block;
       width: 100%;
-      min-height: 1100px;
+      min-height: 200px;   /* solo placeholder mientras carga; el alto real lo pone el auto-size (JS) */
       border: none;
       background: transparent;
       overflow: hidden;
@@ -89,16 +89,16 @@
 
 <script>
   const DEMOS = [
-    { id: 'd1',  label: '1 — Basic with search and pagination',                                  src: 'demos/demo_1/demo.html'  },
-    { id: 'd2',  label: '2 — Multiple selection with checkboxes',                                 src: 'demos/demo_2/demo.html'  },
-    { id: 'd3',  label: '3 — Custom render per cell + fixed header + rowClass',                   src: 'demos/demo_3/demo.html'  },
-    { id: 'd4',  label: '4 — MTS.ContextMenuPlugin (right click + actions column)',               src: 'demos/demo_4/demo.html'  },
-    { id: 'd5',  label: '5 — MTS.DataTableColumnActionsPlugin (standalone actions column)',       src: 'demos/demo_6/demo.html'  },
-    { id: 'd6',  label: '6 — MTS.DataTableToolbarPlugin (toolbar buttons)',                       src: 'demos/demo_7/demo.html'  },
-    { id: 'd7',  label: '7 — MTS.DataTableFilterPlugin (filters with chips)',                     src: 'demos/demo_8/demo.html'  },
-    { id: 'd8',  label: '8 — MTS.DataTableColumnVisibilityPlugin (column toggle)',                src: 'demos/demo_9/demo.html'  },
-    { id: 'd9',  label: '9 — MTS.DataTableExpandRowPlugin (expandable rows)',                     src: 'demos/demo_10/demo.html' },
-    { id: 'd10', label: '10 — DocumentManager completo (Upload + Preview + Workflow + Filter + ColVis)', src: 'demos/demo_11/demo.html' },
+    { id: 'd1',  label: '1 — Basic with search and pagination',                                  src: 'demos/demo_1/demo.html',  md: 'sc-datatable'        },
+    { id: 'd2',  label: '2 — Multiple selection with checkboxes',                                 src: 'demos/demo_2/demo.html',  md: 'sc-datatable'        },
+    { id: 'd3',  label: '3 — Custom render per cell + fixed header + rowClass',                   src: 'demos/demo_3/demo.html',  md: 'sc-datatable'        },
+    { id: 'd4',  label: '4 — MTS.DataTableContextMenuPlugin (right click + actions column)',      src: 'demos/demo_4/demo.html',  md: 'dt-contextmenu'      },
+    { id: 'd5',  label: '5 — MTS.DataTableColumnActionsPlugin (standalone actions column)',       src: 'demos/demo_6/demo.html',  md: 'dt-columnactions'    },
+    { id: 'd6',  label: '6 — MTS.DataTableToolbarPlugin (toolbar buttons)',                       src: 'demos/demo_7/demo.html',  md: 'dt-toolbar'          },
+    { id: 'd7',  label: '7 — MTS.DataTableFilterPlugin (filters with chips)',                     src: 'demos/demo_8/demo.html',  md: 'dt-filter'           },
+    { id: 'd8',  label: '8 — MTS.DataTableColumnVisibilityPlugin (column toggle)',                src: 'demos/demo_9/demo.html',  md: 'dt-columnvisibility' },
+    { id: 'd9',  label: '9 — MTS.DataTableExpandRowPlugin (expandable rows)',                     src: 'demos/demo_10/demo.html', md: 'dt-expandrow'        },
+    { id: 'd10', label: '10 — MTS.DocumentManagerPlugin (Upload + Preview + Workflow + Filter + ColVis)', src: 'demos/demo_11/demo.html', md: 'dt-documentmanager' },
   ];
 
   /* Propaga modo y acento activo al iframe que se abre */
@@ -122,6 +122,10 @@
                 </iframe>`,
     })),
     onOpen: (e) => {
+      /* Notifica al explorer qué plugin está activo → el botón "View docs" carga su .md */
+      const demo = DEMOS.find(x => x.id === e.detail.id);
+      if (typeof mtsNotifyActiveComponent === 'function') mtsNotifyActiveComponent(demo && demo.md ? demo.md : 'sc-datatable');
+
       const body = document.getElementById(`mts-acc-body-${e.detail.id}`);
       if (!body) return;
       const frame = body.querySelector('iframe[data-src]');
@@ -131,26 +135,39 @@
       frame.src = buildFrameSrc(frame.getAttribute('data-src'));
       frame.removeAttribute('data-src');
 
-      /* Auto-sizing: ajusta la altura al contenido real del iframe */
+      /* Auto-sizing: ajusta la altura al contenido REAL del iframe.
+         Se mide body.scrollHeight (NO documentElement): documentElement se pisa al alto del
+         iframe (clientHeight) y nunca encoge → quedaba clavado en un valor inflado. El body sí
+         refleja el contenido. */
       frame.addEventListener('load', () => {
+        const doc  = frame.contentDocument;
+        const page = doc.querySelector('.demo-page') || doc.body;
         const syncHeight = () => {
           try {
-            const h = frame.contentDocument.documentElement.scrollHeight;
+            /* Medimos el WRAPPER de contenido (.demo-page) + el padding del body.
+               documentElement/body se pisan al alto del iframe (clientHeight) y no encogen;
+               el rect del wrapper refleja el alto real del contenido. */
+            const cs  = doc.defaultView.getComputedStyle(doc.body);
+            const pad = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
+            const h   = Math.ceil(page.getBoundingClientRect().height + pad);
             if (h > 0) frame.style.height = h + 'px';
           } catch (_) {}
         };
         syncHeight();
-        /* Sigue sincronizando cuando la tabla termina de cargar los datos */
+        /* Sigue sincronizando cuando la tabla/tabs terminan de construirse */
         try {
           const ro = new ResizeObserver(syncHeight);
-          ro.observe(frame.contentDocument.documentElement);
+          ro.observe(page);
         } catch (_) {}
       }, { once: true });
     },
+    onClose: () => {
+      /* Al colapsar, vuelve a la doc base del DataTable en el explorer */
+      if (typeof mtsNotifyActiveComponent === 'function') mtsNotifyActiveComponent('sc-datatable');
+    },
   });
 
-  /* Abre el primer panel al cargar */
-  accordion.open('d1');
+  /* Todos los paneles arrancan colapsados — el usuario abre el que quiera. */
 </script>
 </body>
 </html>

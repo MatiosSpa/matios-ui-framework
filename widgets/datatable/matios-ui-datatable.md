@@ -15,25 +15,68 @@ Dynamic data table with pagination, sorting, search, selection and plugins. Pure
 
 ---
 
-## Usage
+## Complete example (copy-paste)
+
+Everything wired: columns with a custom render, remote `dataSource` (paging/sort/search happen server-side), selection,
+events and the methods you'll call later. `query` carries the paging/sort/search state on every load.
 
 ```html
-<div id="myTable"></div>
+<div id="usersTable"></div>
 ```
 
 ```js
-new MTS.DataTable({
-  elementId: 'myTable',
+// (optional) your transport, if you prefer HttpClient over fetch:
+// const http = new MTS.HttpClient({ baseUrl: '/api' });
+
+const datatable = new MTS.DataTable({
+  elementId: 'usersTable',
+  rowId:     'id',                     // field that uniquely identifies each row (required for selection)
+
   columns: [
-    { field: 'name',  label: 'Name', sortable: true },
-    { field: 'email', label: 'Email' },
+    { field: 'name',   label: 'Name',   sortable: true },
+    { field: 'email',  label: 'Email' },
+    { field: 'status', label: 'Status', align: 'center',
+      render: function (value, row) {  // custom cell — return an HTML string or plain text
+        return value === 'active' ? 'Active' : 'Inactive';
+      } },
   ],
+
+  // ── LOAD: called on init and on every page / sort / search change. You own the transport. ──
   dataSource: async function (query) {
+    // query = { pageNumber, pageSize, orderBy, orderDir, search, ...pluginParams }
     const res = await fetch('/api/users?' + new URLSearchParams(query));
-    return res.json();
+    return res.json();                 // must return { data: [...], total, totalPages }
+    // ── or with HttpClient (you handle auth/interceptors): ──
+    // const res = await http.get('/users', { params: query });
+    // if (!res.success) throw new Error(res.message);
+    // return res.data;                // { data, total, totalPages }
   },
+
+  pageSize:   10,
+  pagination: { pageSizeOptions: [10, 25, 50, 100] },
+  sort:       { column: 'name', direction: 'asc' },
+  search:     { enabled: true, minChars: 1, width: '240px' },
+  selection:  { mode: 'multi', checkboxes: true },   // 'none' | 'single' | 'multi'
+  hover:      true,
+  striped:    false,
+
+  // ── Events (real callback names — full list in the Events section below) ──
+  onReady:           function () {},                   // once, after the first render
+  onAfterLoad:       function (result) {},             // after each load — result = { data, total, totalPages }
+  onLoadError:       function (err) {},                // when dataSource throws
+  onSelectionChange: function (items) {},              // array of selected row objects
 });
+
+// ── Methods (call later) ──
+// datatable.reload();                      // reload current page keeping state
+// datatable.setSearch('john');             // set search text and reload
+// datatable.setParams({ tenantId: 42 });   // merge extra query params and reload
+// datatable.goToPage(2);
+// datatable.getSelection();                // array of selected rows
 ```
+
+> **Zero-config alternative:** instead of the function, pass `dataSource: { url: '/api/users', headers, params }` and the
+> table fetches it for you (native `fetch`). See [DataSource](#datasource) for both forms.
 
 ---
 
@@ -68,20 +111,34 @@ columns: [
 ### DataSource
 
 ```js
-// Async function — recommended
-dataSource: async function (query) {
-  const res = await http.get('/api/items', { params: query });
+// 1) Function (recommended) — YOU own the transport: MTS.HttpClient, auth,
+//    interceptors, a custom client… This is the override point for HttpClient.
+const http = new MTS.HttpClient({ baseUrl: '/api' });
+dataSource: async (query) => {
+  const res = await http.get('/items', { params: query });   // ← MTS.HttpClient
   if (!res.success) throw new Error(res.message);
-  return res.data;
-}
+  return res.data;                                           // { data, total, totalPages }
+};
 
-// Direct URL (GET/POST)
-dataSource: { url: '/api/items', method: 'GET', headers: {}, params: {} }
+// 2) Direct URL — zero-config. The table fetches it for you with native fetch().
+dataSource: {
+  url:     '/api/items',
+  method:  'GET',
+  headers: { Authorization: 'Bearer ' + token },   // sent on every request
+  params:  { tenantId: 42 },                        // merged with page/size/orderBy/search
+};
 ```
+
+**Built-in `{ url }` behavior:**
+- `headers` — sent on every request (e.g. `{ Authorization: 'Bearer …' }`).
+- `params` — fixed query params merged with the paging/sort/search query (`page,size,orderBy,orderDir,search`); the live query wins on key clash.
+- `Content-Type: application/json` is added **only** for non-GET requests (which carry a body) and **only if you didn't set your own** — so a plain GET won't trigger an unnecessary CORS preflight.
+
+> **Need HttpClient, auth, or a custom transport?** Use the **function** form (option 1) — that's the override point. The `{ url }` form uses a built-in native `fetch` for the simple case.
 
 **API response contract:** `{ data: [], total: 0, totalPages: 1 }`.
 
-**Query the dataSource receives:** `{ page, size, orderBy, orderDir, search, … }` (plus any params injected by
+**Query the dataSource receives:** `{ pageNumber, pageSize, orderBy, orderDir, search, … }` (plus any params injected by
 plugins such as FilterPlugin).
 
 ### Pagination & layout
@@ -126,22 +183,29 @@ pagination: { pageSizeOptions: [5, 10, 25, 50, 100] }
 actionColumn: true, actionColumnLabel: '', actionColumnWidth: '120px', // controlled by DocumentManagerContextMenuPlugin
 rowClass: function (row) { return row.status === 'inactive' ? 'mts-row--muted' : null; },
 persist:  { enabled: true, key: 'my-table' },        // persists page, sort, search, page size
-locale:   'es',                                       // 'es' | 'en' — requires matios-ui-datatable-i18n.js
-texts:    { search: 'Search...', noData: 'No results', /* … merged over the active locale */ },
+// Language is global — call MTS.setLanguage('en') once at startup; there is no per-instance locale option.
+texts:    { search: 'Search...', noData: 'No results', /* … merged over the active language */ },
 ```
 
 ---
 
 ## Events / Callbacks
 
-```js
-new MTS.DataTable({
-  onSelectionChange: function (items) { console.log(items); }, // array of selected objects
-  onReady:           function (table) {},                       // once, after the first full render
-  onLoad:            function (result, table) {},               // after each successful data load
-  onError:           function (err, table) {},                  // when dataSource throws
-});
-```
+Passed as options (see the complete example above). Real callback names and signatures:
+
+| Callback | Signature | Fires |
+|----------|-----------|-------|
+| `onReady` | `()` | once, after the first full render |
+| `onBeforeLoad` | `(query)` | before each request |
+| `onAfterLoad` | `(result)` | after each successful load — `result` = `{ data, total, totalPages }` |
+| `onLoadError` | `(err)` | when `dataSource` throws |
+| `onSelectionChange` | `(items)` | selection changes — `items` = array of selected rows |
+| `onRowSelect` / `onRowDeselect` | `(item, items)` | a single row is (de)selected |
+| `onPageChange` | `(page, query)` | page changes |
+| `onSortChange` | `(orderBy, orderDir)` | sort changes |
+| `onSearchChange` | `(text)` | search text changes |
+| `onRowRender` / `onRowRendered` | `(td, item, col)` / `(row, item)` | cell / row render hooks |
+| `onRowDragStart` / `onRowDrop` | `(item, index)` / `(dragItem, item, from, to)` | row drag & drop |
 
 ---
 
@@ -213,6 +277,10 @@ table.unregisterHook('onReady', onReady);
 ---
 
 ## Changelog
+
+### 2026-07-01
+- `{ url }` dataSource now merges `ds.params` with the paging/sort/search query, and adds `Content-Type: application/json`
+  only for non-GET requests when the dev didn't set one (avoids an unnecessary CORS preflight on GET). `headers` unchanged.
 
 ### 2026-06-23
 - `getData()` — read back the rows currently rendered (active page) as a shallow copy, mirroring `getSelection()`.

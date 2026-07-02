@@ -118,7 +118,7 @@ MTS.NumberInput = class MtsNumberInput {
     return ok;
   }
   _t(key, fallback) {
-    try { let ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.NumberInput'] : null; let m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    try { let ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.NumberInput'] : null; let m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
     return fallback;
   }
   disable()        { this.disabled = true;  this._build(); return this; }

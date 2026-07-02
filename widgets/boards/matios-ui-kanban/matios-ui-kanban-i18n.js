@@ -2,7 +2,7 @@
    matios-ui-kanban-i18n.js
    Textos propios de MTS.Kanban (es/en/pt). Mismo nombre del
    componente + "-i18n". Namespace MTS.Kanban; se consume con
-   MTS.getLocale()['MTS.Kanban']. El locale base sigue siendo
+   MTS.getString()['MTS.Kanban']. El locale base sigue siendo
    base/matios-ui-i18n.js.
    ============================================================ */
 (function () {

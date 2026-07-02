@@ -92,7 +92,7 @@ MTS.TransferList = class MtsTransferList {
     return ok;
   }
   _t(key, fallback) {
-    try { let ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.TransferList'] : null; let m = ns && ns.messages; if (m && m[key] != null) { return m[key]; } } catch (e) {}
+    try { let ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.TransferList'] : null; let m = ns && ns.messages; if (m && m[key] != null) { return m[key]; } } catch (e) {}
     return fallback;
   }
 

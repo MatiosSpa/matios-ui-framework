@@ -119,9 +119,9 @@
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
-  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  if (window.MTS) { if (typeof MTS.setLanguage === 'function') MTS.setLanguage(lang); else MTS._locale = lang; }
 })();
-var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.StatusBar'] && MTS.getLocale()['MTS.StatusBar'].demo) || {};
+var D = (window.MTS && MTS.getString && MTS.getString()['MTS.StatusBar'] && MTS.getString()['MTS.StatusBar'].demo) || {};
 
 document.getElementById('demo-subtitle').textContent = D.subtitle || 'Bottom status bar with free slots (start, center, end). Ideal for secondary information: connection, version, environment, shortcuts, status messages. It is not navigation — it is context.';
 document.getElementById('s1-title').textContent = D.s1Title || '1 — Default';

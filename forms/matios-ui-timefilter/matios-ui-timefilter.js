@@ -91,7 +91,7 @@ MTS.TimeFilter = class MtsTimeFilter {
   _t(key, fallback) {
     if (this.texts && this.texts[key] != null) return this.texts[key];
     try {
-      const loc = (window.MTS && MTS.getLocale) ? MTS.getLocale() : null;
+      const loc = (window.MTS && MTS.getString) ? MTS.getString() : null;
       const ns = loc && loc['MTS.TimeFilter'];
       if (ns && ns[key] != null) return ns[key];
     } catch (e) {}
@@ -102,7 +102,7 @@ MTS.TimeFilter = class MtsTimeFilter {
     const key = (n === 1) ? 'unitsOne' : 'units';
     if (this.texts && this.texts[key] && this.texts[key][u] != null) return this.texts[key][u];
     try {
-      const loc = (window.MTS && MTS.getLocale) ? MTS.getLocale() : null;
+      const loc = (window.MTS && MTS.getString) ? MTS.getString() : null;
       const ns = loc && loc['MTS.TimeFilter'];
       if (ns && ns[key] && ns[key][u] != null) return ns[key][u];
       if (ns && ns.units && ns.units[u] != null) return ns.units[u]; // plural fallback
@@ -114,7 +114,7 @@ MTS.TimeFilter = class MtsTimeFilter {
   _presetLabel(key) {
     if (this.texts && this.texts.presets && this.texts.presets[key] != null) return this.texts.presets[key];
     try {
-      const loc = (window.MTS && MTS.getLocale) ? MTS.getLocale() : null;
+      const loc = (window.MTS && MTS.getString) ? MTS.getString() : null;
       const ns = loc && loc['MTS.TimeFilter'];
       if (ns && ns.presets && ns.presets[key] != null) return ns.presets[key];
     } catch (e) {}

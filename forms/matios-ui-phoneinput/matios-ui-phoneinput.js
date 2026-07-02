@@ -115,7 +115,7 @@ MTS.PhoneInput = class MtsPhoneInput {
      debe coincidir con la del formato del país. Vacío es válido salvo que sea requerido. */
   _expectedLen()     { return (this._country().fmt.match(/#/g) || []).length; }
   isValid()          { return this._raw ? (this._raw.length === this._expectedLen()) : !this.required; }
-  _t(key, fallback)  { try { let ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.PhoneInput'] : null; if (ns && ns[key] != null) return ns[key]; } catch (e) {} return fallback; }
+  _t(key, fallback)  { try { let ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.PhoneInput'] : null; if (ns && ns[key] != null) return ns[key]; } catch (e) {} return fallback; }
   _validateNow() {
     if (!this._raw) {
       if (this.required) this.setError(this._t('required', 'Required')); else this.clearError();

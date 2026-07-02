@@ -283,7 +283,7 @@
   };
   Autocomplete.prototype._t = function (key, fallback) {
     try {
-      let ns = (global.MTS && global.MTS.getLocale) ? global.MTS.getLocale()['MTS.Autocomplete'] : null;
+      let ns = (global.MTS && global.MTS.getString) ? global.MTS.getString()['MTS.Autocomplete'] : null;
       let m  = ns && ns.messages;
       if (m && m[key] != null) { return m[key]; }
     } catch (e) {}

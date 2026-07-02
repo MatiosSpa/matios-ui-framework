@@ -356,7 +356,7 @@
   flex-shrink: 0;
 }
 
-.mts-picker-time__item:hover:not(.mts-picker-time__item--selected) {
+.mts-picker-time__item:hover:not(.mts-picker-time__item--selected):not(.mts-picker-time__item--disabled):not(.mts-picker-time__item--empty) {
   background: var(--mts-color-primary-light);
   color: var(--mts-color-primary);
 }
@@ -366,6 +366,19 @@
   color: var(--mts-color-primary-text);
   font-weight: var(--mts-font-weight-semibold);
   border-radius: var(--mts-radius-md);
+}
+
+/* Hora/minuto fuera de los límites (linkRange): visible pero no seleccionable. */
+.mts-picker-time__item--disabled {
+  opacity: .3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Hueco de relleno cuando la lista tiene pocos ítems. */
+.mts-picker-time__item--empty {
+  cursor: default;
+  pointer-events: none;
 }
 
 /* Separador : — se alinea automáticamente porque .mts-picker-time usa align-items:center */

@@ -15,6 +15,50 @@ new MTS.DataTable({ plugins: [toolbar] /* … */ });
 
 ---
 
+## Complete example (copy-paste)
+
+Base table + a toolbar with static buttons and a state-reactive one (`Delete selection` enables only when rows are
+selected — note `onSelectionChange → toolbar.update()`):
+
+```html
+<div id="usersTable"></div>
+```
+
+```js
+const toolbar = new MTS.DataTableToolbarPlugin({
+  buttons: [
+    { label: 'New',    icon: 'plus',     tooltip: 'Create a new record', action: function (table) { console.log('new'); } },
+    { label: 'Export', icon: 'download', tooltip: 'Export visible data',  action: function () { console.log('export'); } },
+    { icon: 'refresh', tooltip: 'Reload table',                            action: function (table) { table.reload(); } },
+
+    { separator: true },
+
+    { label: 'Delete selection', icon: 'trash', danger: true, tooltip: 'Delete the selected records',
+      condition: function (table) { return table.getSelection().length > 0; },   // enabled only with a selection
+      action:    function (table) { console.log('delete', table.getSelection().map(function (i) { return i.name; })); } },
+  ],
+});
+
+const datatable = new MTS.DataTable({
+  elementId: 'usersTable',
+  rowId:     'id',
+  columns: [
+    { field: 'id',     label: '#',      sortable: true, align: 'end', width: '60px' },
+    { field: 'name',   label: 'Name',   sortable: true },
+    { field: 'email',  label: 'Email',  sortable: true },
+    { field: 'status', label: 'Status', align: 'center' },
+  ],
+  dataSource: { url: '/api/users', method: 'GET' },
+  pageSize:   8,
+  search:     { enabled: true, minChars: 1, width: '240px' },
+  selection:  { mode: 'multi' },
+  plugins:    [toolbar],
+  onSelectionChange: function () { toolbar.update(); },   // re-evaluate button conditions
+});
+```
+
+---
+
 ## Button options
 
 | Property | Type | Description |

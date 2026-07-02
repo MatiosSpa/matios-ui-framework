@@ -144,9 +144,9 @@ function setResult(id, text) {
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
-  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  if (window.MTS) { if (typeof MTS.setLanguage === 'function') MTS.setLanguage(lang); else MTS._locale = lang; }
 })();
-var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.PhoneInput'] && MTS.getLocale()['MTS.PhoneInput'].demo) || {};
+var D = (window.MTS && MTS.getString && MTS.getString()['MTS.PhoneInput'] && MTS.getString()['MTS.PhoneInput'].demo) || {};
 
 document.getElementById('demo-subtitle').textContent = D.subtitle || 'Phone input with country selector, automatic formatting and progressive enhancement from declarative HTML.';
 document.getElementById('s1-title').textContent      = D.s1Title || '1 — Basic — Chile default';

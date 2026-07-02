@@ -156,7 +156,7 @@ MTS.ColorPicker = class MtsColorPicker {
     return ok;
   }
   _t(key, fallback) {
-    try { const ns = (window.MTS && MTS.getLocale) ? MTS.getLocale()['MTS.ColorPicker'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    try { const ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.ColorPicker'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
     return fallback;
   }
   setFormat(f)     { this.format = f; this._updateTrigger(); return this; }

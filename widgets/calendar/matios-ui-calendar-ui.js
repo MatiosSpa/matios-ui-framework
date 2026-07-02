@@ -29,6 +29,11 @@ window.MTS = window.MTS || {};
 
 MTS.CalendarUI = class CalendarUI {
 
+  /* ── Acciones de persistencia (enum; el valor sigue siendo string) ── */
+  static get ACTION() {
+    return { CREATE: 'create', UPDATE: 'update', DELETE: 'delete', DROP: 'drop', RESIZE: 'resize' };
+  }
+
   /* ──────────────────────────────────────────
      CONSTRUCTOR
   ────────────────────────────────────────── */
@@ -88,7 +93,6 @@ MTS.CalendarUI = class CalendarUI {
     const opts = Object.assign({
       view:         'week',
       views:        ['week','month','day','schedule'],
-      locale:       'es',
       draggable:    true,
       resizable:    true,
       showTooltips: true,
@@ -188,6 +192,8 @@ MTS.CalendarUI = class CalendarUI {
 
   async _doDelete(ev) {
     try {
+      /* Persistir ANTES de quitar de la grilla: si el backend falla, el evento no se borra visualmente. */
+      if (this._onEvent) await this._onEvent(MTS.CalendarUI.ACTION.DELETE, ev.toJSON ? ev.toJSON() : ev, this.cal);
       this.cal.removeEvent(ev.uid ?? ev.id);
       MTS.Toast?.show({ message: `"${ev.title}" eliminado`, variant: 'danger', duration: 2500 });
     } catch (err) {
@@ -205,6 +211,26 @@ MTS.CalendarUI = class CalendarUI {
 
   openEditModal(ev) {
     this._openModal(ev);
+  }
+
+  /* ── commit: dispara la persistencia (onEvent) + pinta la grilla, desde TU propia UI (botón/modal
+     propio). Mismo embudo que usan los modales built-in y el drag/resize. `onEvent` puede devolver el
+     evento persistido (ej. con el id real en un create) → se pinta con ese. ── */
+  async commit(action, event) {
+    let result = event;
+    if (this._onEvent) {
+      const r = await this._onEvent(action, event, this.cal);
+      if (r) result = r;
+    }
+    const A = MTS.CalendarUI.ACTION;
+    switch (action) {
+      case A.CREATE: this.cal.addEvent(result);                             break;
+      case A.UPDATE:
+      case A.DROP:
+      case A.RESIZE: this.cal.updateEvent(result.uid ?? result.id, result); break;
+      case A.DELETE: this.cal.removeEvent(result.uid ?? result.id);         break;
+    }
+    return result;
   }
 
   /* ──────────────────────────────────────────

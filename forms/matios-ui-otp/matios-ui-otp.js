@@ -102,7 +102,7 @@
 
   OTP.prototype._t = function (key, fallback) {
     try {
-      let ns = (global.MTS && global.MTS.getLocale) ? global.MTS.getLocale()['MTS.OTP'] : null;
+      let ns = (global.MTS && global.MTS.getString) ? global.MTS.getString()['MTS.OTP'] : null;
       let m  = ns && ns.messages;
       if (m && m[key] != null) { return m[key]; }
     } catch (e) {}

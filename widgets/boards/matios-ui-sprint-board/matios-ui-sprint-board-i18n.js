@@ -1,7 +1,7 @@
 /* ============================================================
    matios-ui-sprint-board-i18n.js
    Textos propios de MTS.SprintBoard (es/en/pt). Namespace
-   MTS.SprintBoard; se consume con MTS.getLocale()['MTS.SprintBoard'].
+   MTS.SprintBoard; se consume con MTS.getString()['MTS.SprintBoard'].
    El locale base sigue siendo base/matios-ui-i18n.js.
    ============================================================ */
 (function () {

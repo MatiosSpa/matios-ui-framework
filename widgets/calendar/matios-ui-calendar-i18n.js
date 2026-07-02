@@ -1,16 +1,17 @@
 /* ============================================================
    MATIOS UI — matios-ui-calendar-i18n.js  v1.0.0
 
-   Textos del calendario por locale.
-   Pasar al constructor: locale: 'es'  (default)
+   Textos del calendario por locale. Idiomas incluidos: es (default), en, pt.
+   Pasar al constructor: locale: 'es' | 'en' | 'pt'
 
    Uso:
      new MTS.Calendar('#cal', { locale: 'es' })
      new MTS.Calendar('#cal', { locale: 'en' })
-
-     // Locale custom:
-     MTS.Calendar.registerLocale('pt', { ... })
      new MTS.Calendar('#cal', { locale: 'pt' })
+
+     // Locale custom (cualquier otro idioma):
+     MTS.Calendar.registerLocale('fr', { ... })
+     new MTS.Calendar('#cal', { locale: 'fr' })
    ============================================================ */
 
 window.MTS = window.MTS || {};
@@ -97,6 +98,46 @@ MTS.CalendarLocales = {
     hour:      'Time',
   },
 
+  pt: {
+    today:       'Hoje',
+    week:        'Semana',
+    month:       'Mês',
+    day:         'Dia',
+    schedule:    'Agenda',
+    allDay:      'Dia inteiro',
+    noEvents:    'Sem eventos neste período',
+    more:        n => `+${n} mais`,
+    weekOf:      'Semana de',
+    months: [
+      'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+      'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro',
+    ],
+    monthsShort: [
+      'Jan','Fev','Mar','Abr','Mai','Jun',
+      'Jul','Ago','Set','Out','Nov','Dez',
+    ],
+    days: {
+      mini:  ['S','T','Q','Q','S','S','D'],
+      short: ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+    },
+    export: {
+      csv:   'Exportar CSV',
+      ical:  'Exportar iCal',
+      print: 'Imprimir',
+    },
+    ctx: {
+      view:   'Ver evento',
+      edit:   'Editar evento',
+      delete: 'Excluir evento',
+      add:    'Novo evento',
+      color:  'Cor',
+    },
+    locked:    'Horário reservado',
+    collision: 'Horário ocupado',
+    mod:       'Mód.',
+    hour:      'Hora',
+  },
+
 };
 
 /* Registrar locale custom */
@@ -104,7 +145,3 @@ MTS.Calendar.registerLocale = function(key, obj) {
   MTS.CalendarLocales[key] = obj;
 };
 
-/* Obtener locale activo — fallback a 'es' */
-MTS.Calendar.getLocale = function(key) {
-  return MTS.CalendarLocales[key] || MTS.CalendarLocales['es'];
-};

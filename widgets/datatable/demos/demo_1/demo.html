@@ -86,7 +86,6 @@
   </div>
 </div>
 
-<script src="../../../../utilities/matios-ui-httpclient/matios-ui-httpclient.js"></script>
 <script src="../../matios-ui-datatable.js"></script>
 <script src="../../matios-ui-datatable-i18n.js"></script>
 <script>
@@ -94,7 +93,7 @@
 function makeSection(id, previewHtml, jsCode, initFn) {
   new MTS.Tabs('#' + id, {
     variant: 'card',
-    height:  '520px',
+    height: 'auto',
     lazy:    false,
     tabs: [
       { id: id + '-preview', label: 'Preview',    content: previewHtml },
@@ -102,8 +101,8 @@ function makeSection(id, previewHtml, jsCode, initFn) {
       { id: id + '-js',      label: 'JavaScript', content: '<div id="' + id + '-cbjs"   style="height:100%"></div>' },
     ],
   });
-  new MTS.CodeBlock('#' + id + '-cbhtml', { code: previewHtml, language: 'html',       height: '100%', copyable: true });
-  new MTS.CodeBlock('#' + id + '-cbjs',   { code: jsCode,      language: 'javascript', height: '100%', copyable: true });
+  new MTS.CodeBlock('#' + id + '-cbhtml', { code: previewHtml, language: 'html',       copyable: true });
+  new MTS.CodeBlock('#' + id + '-cbjs',   { code: jsCode,      language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
 

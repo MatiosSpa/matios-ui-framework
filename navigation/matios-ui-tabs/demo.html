@@ -101,9 +101,9 @@
 (function () {
   var m = (location.search || '').match(/[?&]lang=(es|en|pt)/);
   var lang = m ? m[1] : 'en';
-  if (window.MTS) { if (typeof MTS.setLocale === 'function') MTS.setLocale(lang); else MTS._locale = lang; }
+  if (window.MTS) { if (typeof MTS.setLanguage === 'function') MTS.setLanguage(lang); else MTS._locale = lang; }
 })();
-var D = (window.MTS && MTS.getLocale && MTS.getLocale()['MTS.Tabs'] && MTS.getLocale()['MTS.Tabs'].demo) || {};
+var D = (window.MTS && MTS.getString && MTS.getString()['MTS.Tabs'] && MTS.getString()['MTS.Tabs'].demo) || {};
 
 document.getElementById('demo-subtitle').textContent = D.subtitle || 'Underline, pill and card — horizontal and vertical — icons, badges and programmatic API.';
 document.getElementById('demo-notice').innerHTML     = D.notice   || 'Note: this demo uses a manual shell for <strong>Preview | HTML | JavaScript</strong> to avoid the clash between the outer and inner <strong>MTS.Tabs</strong> within the same component.';
