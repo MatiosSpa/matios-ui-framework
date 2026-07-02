@@ -160,10 +160,11 @@ function mdToHtml(md) {
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
     .replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm, function (_, hdr, rows) {
       function splitCells(line) {
-        var cells = line.split('|');
+        /* honor escaped pipes (\| = literal | in a GFM cell) — don't split on them */
+        var cells = line.replace(/\\\|/g, '\x00').split('|');
         if (cells.length && !cells[0].trim()) cells.shift();
         if (cells.length && !cells[cells.length - 1].trim()) cells.pop();
-        return cells;
+        return cells.map(function (c) { return c.replace(/\x00/g, '|'); });
       }
       var ths = splitCells(hdr)
         .map(function (c) { return '<th>' + c.trim() + '</th>'; }).join('');

@@ -145,9 +145,13 @@
 <script src="../../forms/matios-ui-select/matios-ui-select.js"></script>
 <script src="../../forms/matios-ui-button/matios-ui-button.js"></script>
 <script src="../../widgets/datatable/matios-ui-datatable.js"></script>
+<script src="../../base/matios-ui-i18n.js"></script>
 <script src="../../widgets/datatable/matios-ui-datatable-i18n.js"></script>
 
 <script>
+
+/* Idioma del demo — inglés (punto de entrada único MTS.setLanguage). */
+if (window.MTS && MTS.setLanguage) MTS.setLanguage('en');
 
 /* ============================================================
    FAKE DATA
@@ -539,7 +543,6 @@ new MTS.DataTable({
   hover:    true,
   striped:  true,
   search:   { enabled: true, minChars: 1 },
-  locale:   'en',
 });
 
 /* ============================================================

@@ -55,17 +55,17 @@ rest are optional and drive specific features.
 
 | Field | Type | Required | Used by |
 |-------|------|----------|---------|
-| `id` | `string · number` | yes | `rowId`, navigation, every action |
+| `id` | `string \| number` | yes | `rowId`, navigation, every action |
 | `name` | `string` | yes | `renderName`, preview, click behavior |
-| `type` | `'file' · 'folder'` | yes | `renderName` icon, click (folder navigates / file opens), drag targets |
-| `parentId` | `string · number · null` | — | Folder navigation filter (see below) — the item's parent folder |
+| `type` | `'file' \| 'folder'` | yes | `renderName` icon, click (folder navigates / file opens), drag targets |
+| `parentId` | `string \| number \| null` | — | Folder navigation filter (see below) — the item's parent folder |
 | `ext` | `string` | — | `renderName` file icon (extension without dot: `pdf`, `docx`) |
-| `version` | `string · number · null` | — | `renderName` version badge |
-| `size` | `number · null` | — | `renderSize` helper (bytes) |
-| `sizeFormatted` | `string · null` | — | Pre-formatted size from the server (used directly, no render) |
-| `modifiedAt` | `string · null` | — | Date column |
-| `status` | `'active' · 'archived' · 'deleted'` | — | `renderStatus` badge |
-| `workflowStatus` | `'draft' · 'pending' · 'review' · 'approved' · 'rejected' · 'signed'` | — | `renderWorkflowStatus` badge, WorkflowPlugin |
+| `version` | `string \| number \| null` | — | `renderName` version badge |
+| `size` | `number \| null` | — | `renderSize` helper (bytes) |
+| `sizeFormatted` | `string \| null` | — | Pre-formatted size from the server (used directly, no render) |
+| `modifiedAt` | `string \| null` | — | Date column |
+| `status` | `'active' \| 'archived' \| 'deleted'` | — | `renderStatus` badge |
+| `workflowStatus` | `'draft' \| 'pending' \| 'review' \| 'approved' \| 'rejected' \| 'signed'` | — | `renderWorkflowStatus` badge, WorkflowPlugin |
 
 Preview side panels read a few more fields (`mimeType`, `owner`, `createdAt`, …) — those are
 listed in the [preview panels](#the-preview-panels) section where they are actually consumed.
@@ -201,9 +201,9 @@ DocumentManager** — the dev decides when it opens.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `uploadProgress` | `'bar' · 'spinner'` | `'bar'` | Per-file progress indicator style. There is no `'none'`. |
-| `modalPosition` | `'top' · 'center' · 'bottom'` | `'top'` | Vertical position of the upload modal |
-| `uploadCheck` | `object · null` | `null` | Duplicate-detection hook (see below) |
+| `uploadProgress` | `'bar' \| 'spinner'` | `'bar'` | Per-file progress indicator style. There is no `'none'`. |
+| `modalPosition` | `'top' \| 'center' \| 'bottom'` | `'top'` | Vertical position of the upload modal |
+| `uploadCheck` | `object \| null` | `null` | Duplicate-detection hook (see below) |
 | `uploadCheck.onCheckFileExists` | `async (file, folder)` | — | Return `false` (new file), `true`, or `{ version }` to flag an existing file — the `version` shows as a badge in the conflict UI |
 
 > `accept`, `multiple`, `maxFiles`, `maxFileSizeMB` and `onFileExists` are **not** options here —
@@ -319,7 +319,7 @@ callback is provided.
 |---|---|---|---|
 | `statusField` | `string` | `'workflowStatus'` | Item field holding the workflow state |
 | `showInToolbar` | `boolean` | `false` | Also render the workflow buttons in the toolbar |
-| `currentUser` | `string · null` | `null` | The logged-in user's key — enables the participants panel's Approve/Reject only when it is this user's turn |
+| `currentUser` | `string \| null` | `null` | The logged-in user's key — enables the participants panel's Approve/Reject only when it is this user's turn |
 | `onStart` | `(items)` | `null` | `null` → `draft` |
 | `onSendForApproval` | `(items)` | `null` | `draft` → `pending` |
 | `onApprove` | `(items, participant?)` | `null` | `pending` → `approved`. `participant` is set **only** when triggered from the participants panel |
@@ -346,10 +346,10 @@ buttons. `onLoadParticipants(item)` returns the chain; each participant:
 
 | Field | Type | Purpose |
 |---|---|---|
-| `id` | `string · number` | Reorder identity |
+| `id` | `string \| number` | Reorder identity |
 | `name` / `lastName` | `string` | Display name + avatar initials |
 | `user` | `string` | User key — matched against `currentUser` |
-| `status` | `'pending' · 'approved' · 'rejected' · 'signed'` | Badge + reorder lock |
+| `status` | `'pending' \| 'approved' \| 'rejected' \| 'signed'` | Badge + reorder lock |
 | `order` | `number` | Position in the chain |
 | `cantReorder` | `boolean` | Pins this participant (also locked when `status` is `approved`/`rejected`/`signed`) |
 
@@ -558,7 +558,7 @@ create the panels it receives first.
 | Option | Type | Default | Description |
 |---|---|---|---|
 | `panels` | `array` | `[]` | Side-accordion panels (built-in and/or `dmWorkflow.participantsPanel`) |
-| `urlResolver` | `(item) → string · null` | `null` | Iframe URL for the item. Overridden by an explicit URL in `show(item, url)` |
+| `urlResolver` | `(item) → string \| null` | `null` | Iframe URL for the item. Overridden by an explicit URL in `show(item, url)` |
 | `onDownload` | `(item)` | `null` | Header **Download** button. Omit → no button |
 | `onReplace` | `(item, file, version) → Promise` | `null` | Header **Replace** button. Return a Promise to drive the confirm overlay's progress bar. Omit → no button |
 | `onPrev` | `(currentItem)` | `null` | Header **←** button |
@@ -698,7 +698,7 @@ own navigation/display options and event callbacks.
 | `rootLabel` | `string` | `'Documentos'` | Breadcrumb root label |
 | `breadcrumb` | `boolean` | `true` | Show the breadcrumb in the toolbar's left slot |
 | `showFileExtensionColor` | `boolean` | `false` | Color file icons by type (opt-in) |
-| `iconSize` | `string · number` | `null` (→ `20px`) | File/folder icon size (`--mts-dm-icon-size`) |
+| `iconSize` | `string \| number` | `null` (→ `20px`) | File/folder icon size (`--mts-dm-icon-size`) |
 | `dragDrop` | `boolean` | `false` | Internal drag & drop to move items into folders |
 | `dropzone` | `boolean` | `false` | OS file drop over the table |
 
@@ -708,9 +708,9 @@ own navigation/display options and event callbacks.
 |---|---|---|---|
 | `accept` | `string` | `'*'` | Accepted extensions/MIME (`'.pdf,.docx,image/*'`) |
 | `multiple` | `boolean` | `true` | Allow multiple files |
-| `maxFiles` | `number · null` | `null` | Max files per upload |
-| `maxFileSizeMB` | `number · null` | `null` | Max size per file (MB) |
-| `onFileExists` | `'ask' · 'replace' · 'version' · 'skip'` | `'ask'` | Duplicate policy |
+| `maxFiles` | `number \| null` | `null` | Max files per upload |
+| `maxFileSizeMB` | `number \| null` | `null` | Max size per file (MB) |
+| `onFileExists` | `'ask' \| 'replace' \| 'version' \| 'skip'` | `'ask'` | Duplicate policy |
 
 ### Options — events & plugins
 

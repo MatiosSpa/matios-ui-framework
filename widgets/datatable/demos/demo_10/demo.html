@@ -88,9 +88,12 @@
 </div>
 
 <script src="../../matios-ui-datatable.js"></script>
+<script src="../../../../base/matios-ui-i18n.js"></script>
 <script src="../../matios-ui-datatable-i18n.js"></script>
 <script src="../../plugins/expandrow/matios-ui-datatable-expandrow.js"></script>
 <script>
+
+if (window.MTS && MTS.setLanguage) MTS.setLanguage("en");
 
 function makeSection(id, previewHtml, jsCode, initFn) {
   new MTS.Tabs('#' + id, {
