@@ -11,7 +11,20 @@ Kanban board with drag & drop between columns, WIP limits, priorities, assignees
 <link rel="stylesheet" href="widgets/boards/matios-ui-kanban/matios-ui-kanban.css">
 <script src="base/matios-ui-base.js"></script>
 <script src="widgets/boards/matios-ui-kanban/matios-ui-kanban.js"></script>
+
+<!-- Optional: i18n (es/en/pt) — base locale + component locale -->
+<script src="base/matios-ui-i18n.js"></script>
+<script src="widgets/boards/matios-ui-kanban/matios-ui-kanban-i18n.js"></script>
 ```
+
+### i18n
+
+The component reads its text from the `MTS.Kanban` layer of the active language
+(`MTS.getString()['MTS.Kanban']`), with an English fallback when no locale is loaded. Its own locale file
+`matios-ui-kanban-i18n.js` registers `es`/`en`/`pt` (inline add-card form: title/description/tags/assignee
+placeholders, priority labels, `noResults`, column management, and the `ui` section for the demo). Set the active
+language once at startup with `MTS.setLanguage('en')`; override strings with
+`MTS.registerLocale('es', { 'MTS.Kanban': { addCard: 'Nueva' } })`.
 
 ---
 
@@ -44,9 +57,9 @@ const kanban = new MTS.Kanban('#kanban', {
 | `addCards` | `boolean` | `false` | Show an inline "Add card" button in each column |
 | `addTask` | `object` | — | Enables a toolbar with an "+ Add task" button. **The modal is supplied by the dev** (see below). `showButton:false` = dev provides their own button and confirms with `submitAddTask()` |
 | `editColumns` | `boolean` | `false` | Live column management: rename (double-click the title), delete (× in the header) and a "+ Column" tile. Emits `columnAdd`/`columnRemove`/`columnChange` |
-| `dataSource` | `fn(query) → Promise<{columns, cards}>` | — | Async data load |
-| `onSearchAssignee` | `fn(q) → items[]` | — | Async user search for the form |
-| `onLoad` / `onCardAdd` / `onCardChange` / `onCardMove` / `onCardDelete` / `onCardClick` / `onColumnChange` / `onAddTask` | `fn` | — | Constructor handlers |
+| `dataSource` | `fn(query) → Promise<{columns, cards}>` | — | Async data load. Cards may be nested inside each column (as `column.cards[]`, the pattern the shipped demo uses) or supplied as a flat `cards[]` array keyed by `colId` |
+| `onSearchAssignee` | `fn(q) → items[] \| Promise<items[]>` | — | Async user search for the form; resolves to `{ name }` items (the Promise form is awaited) |
+| `onLoad` / `onCardAdd` / `onCardChange` / `onCardMove` / `onCardDelete` / `onCardClick` / `onColumnAdd` / `onColumnRemove` / `onColumnChange` / `onAddTask` | `fn` | — | Constructor handlers |
 
 ### `addTask` — add via the dev's modal
 
@@ -77,8 +90,9 @@ board structure is unchanged (backward-compatible, including the Kanban embedded
 // Card
 {
   id: 'card-1', title: 'Set up CI/CD', description: 'Free text…',
-  priority: 'low' | 'medium' | 'high' | 'critical',
-  tags: ['devops', 'backend'], assignee: 'Ana Torres', dueDate: 'Dec 15',
+  priority: 'low' | 'medium' | 'high',
+  tags: ['devops', 'backend'], // strings or { label } objects
+  assignee: 'Ana Torres', due: 'Dec 15',
 }
 ```
 
@@ -137,6 +151,7 @@ The FE does not persist — event payloads are ready to send to the BE:
 | `getColumns()` | Current columns (with their cards) as a shallow copy |
 | `getCards([colId])` | Cards of a column by id, or every card flattened when `colId` is omitted |
 | `reload()` | Re-invoke dataSource or rebuild |
+| `getConfig()` / `getCode()` | `MTS.DevPanel` contract |
 | `destroy()` | Clear DOM and listeners |
 
 ```js
@@ -160,28 +175,3 @@ component-specific tokens to override.
 
 - Provide a keyboard path to move cards (drag & drop is a pointer gesture); reflect WIP-limit breaches in text, not
   color alone.
-
----
-
-## Changelog
-
-### 2026-06-23
-- `getColumns()` and `getCards([colId])` — read back the board state (columns with cards, or cards by column / all
-  flattened) as shallow copies. Completes the mutate-and-read collection API.
-
-### 2026-05-31 — Consolidated demo + DevPanel + i18n + BE integration
-- Own i18n `matios-ui-kanban-i18n.js` (es/en/pt, namespace `MTS.Kanban`) + `_t()`; all internal strings localized.
-- `MTS.DevPanel` contract: `getConfig()` (toggle `addCards`) + `getCode()`.
-- `addTask.showButton: false`: the dev supplies their own button and confirms with `submitAddTask()`.
-- Single consolidated `demo.html` (DevPanel + Topbar + async dataSource + add/edit modal + `apiSim`); `demos/` removed.
-- Dynamic column management (`editColumns`): `addColumn` / `removeColumn` / `renameColumn` + the column events and UI.
-- FE↔BE contract: new `matios-ui-kanban-backend.md` + "Backend integration" section here.
-
-### 2026-05-30
-- `addTask` feature — toolbar button + `onAddTask({ data, resolve, reject })`; dev modal; harvest by `name`/`id`;
-  canonical+alias card normalization; `submitAddTask()`.
-
-### 2026-05-29
-- **Breaking**: moved to `widgets/boards/matios-ui-kanban/`; `onMove` → `onCardMove`; handlers receive the payload
-  directly. New events `onLoad`/`onCardChange`/`onCardDelete`/`onColumnChange`; new methods `updateCard`/`reload`.
-  DOM events kept for backward compatibility. Requires `base/matios-ui-base.js`.

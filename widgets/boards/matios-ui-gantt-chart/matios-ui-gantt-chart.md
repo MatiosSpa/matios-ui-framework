@@ -64,11 +64,11 @@ gantt.onTaskChange(function (e) { console.log('Task edited:', e.task.id, e.field
 | `gridWidth` | `number` | — | Initial grid panel width in px |
 | `hoursPerDay` | `number` | `8` | To compute `durationHours` |
 | `undoLimit` | `number` | `50` | Undo/redo stack size |
-| `palette` | `string[]` | 10 colors | Auto-assigned when `task.color` is undefined |
+| `queryParams` | `object` | — | Extra params merged into the dataSource query |
 | `addTask` | `object` | — | Enables the "+ Add task" toolbar button. **The modal is supplied by the dev** (see below) |
 | `editTask` | `boolean` | `false` | Double-click the **name** emits `onTaskEdit` (full modal); other editable cells emit `onCellEdit` (per-cell editor). Disables inline editing; single click still selects |
 | `reorderable` | `boolean` | `false` | Per-row drag handle. Drop between rows = move as sibling; drop on a row = nest (child). Renumbers the WBS and reorders; emits `onReorder` |
-| `onLoad` / `onError` / `onTaskAdd` / `onTaskChange` / `onTaskMove` / `onTaskResize` / `onTaskDelete` / `onLinkAdd` / `onLinkRemove` / `onSelect` / `onScaleChange` / `onExport` | `fn` | — | Constructor handler shortcuts |
+| `onLoad` / `onError` / `onTaskAdd` / `onTaskChange` / `onTaskMove` / `onTaskResize` / `onTaskDelete` / `onAssigneesClick` / `onAssigneesChange` / `onTaskEdit` / `onCellEdit` / `onReorder` / `onBaselineSave` / `onLinkAdd` / `onLinkRemove` / `onSelect` / `onScaleChange` / `onExport` / `onImport` | `fn` | — | Constructor handler shortcuts |
 
 ### `addTask` — add via the dev's modal
 
@@ -76,11 +76,12 @@ The component provides the standard button and the harvest; the modal is the dev
 
 ```js
 addTask: {
-  form:  '#my-form',                        // container to harvest (or `modal:`)
-  open:  function () { myModal.show(); },
-  close: function () { myModal.hide(); },
-  label: '+ Add task',                      // optional
-  map:   function (data) { return data; },  // optional
+  form:       '#my-form',                        // container to harvest (or `modal:`)
+  open:       function () { myModal.show(); },
+  close:      function () { myModal.hide(); },
+  label:      '+ Add task',                       // optional
+  showButton: true,                               // optional; false = dev renders its own button
+  map:        function (data) { return data; },   // optional
 }
 ```
 
@@ -101,7 +102,7 @@ unrecognized fields → `task.extras`.
 {
   id: 't1', wbs: '1.2', label: 'Scope analysis', start: '2026-01-13', end: '2026-01-17',
   color: '#3b82f6', progress: 0.5, status: 'wip', predecessors: ['1.1'],
-  assignees: [{ uid: 'u1', name: 'Ana', avatar: 'url?' }], // uid = person id (for the BE)
+  assignees: [{ name: 'Ana', avatar: 'url?' }], // component reads name + avatar; extra fields (e.g. a BE id) pass through untouched
   children: [/* … */],
   // Baseline (optional plan snapshot — draws the ghost bar if present):
   baselineStart: '2026-01-13', baselineEnd: '2026-01-17', baselineProgress: 0,
@@ -143,7 +144,7 @@ dispose(); // unsubscribe
 
 ### Backend integration
 
-Payloads are ready to send to the BE (normalized task/`fields`; `assignees` with `uid`; `predecessors` as WBS). The
+Payloads are ready to send to the BE (normalized task/`fields`; `assignees` as provided; `predecessors` as WBS). The
 component does not persist — the consumer chooses the endpoint:
 
 | Event | Suggested BE action | Payload |
@@ -152,7 +153,7 @@ component does not persist — the consumer chooses the endpoint:
 | `onTaskChange` | `PATCH /tasks/:id` | `e.fields` (only what changed) |
 | `onTaskMove` · `onTaskResize` | `PATCH /tasks/:id` | `{ start, end }` |
 | `onTaskDelete` | `DELETE /tasks/:id` | `{ id }` |
-| `onAssigneesChange` | `PUT /tasks/:id/assignees` | `e.assignees` (`[{ uid, name }]`) |
+| `onAssigneesChange` | `PUT /tasks/:id/assignees` | `e.assignees` (`[{ name, avatar? }]` + any passthrough fields) |
 | `onReorder` | `PUT /tasks/reorder` | `e.tasks` with the new WBS/order |
 | `onBaselineSave` | `POST /projects/:id/baseline` | `e.baseline` = `[{ id, start, end, progress }]` |
 | `onExport` / `onImport` | `POST /projects/export\|import` | `e.tasks` / file (CSV resolved on the front; Excel/MSProject serialized by the BE) |
@@ -214,6 +215,10 @@ displays — the snapshot lives in the DB.
 
 ## Connecting with MTS.Kanban via events
 
+> **Illustrative pseudo-code — not runnable as-is.** `fetchTasks`, `buildColumnsFromTasks`, and
+> `colIdToProgress` are placeholders you supply for your data; only `progressToColId` is shown. It
+> demonstrates the event wiring pattern, not a copy-paste snippet.
+
 ```js
 function progressToColId(p) { return p === 1 ? 'done' : (p > 0 ? 'wip' : 'todo'); }
 
@@ -242,32 +247,3 @@ gantt.onTaskChange(function (e) {
 
 - The grid is focusable (`tabindex=0`); `Ctrl+Z` / `Ctrl+Y` undo/redo when `editable`. Drag/resize are pointer
   gestures — inline/cell editing and the dev modal provide keyboard paths.
-
----
-
-## Changelog
-
-### 2026-07-01
-- `{ url }` dataSource: `Content-Type: application/json` is now added only for non-GET requests and only when the dev
-  didn't provide one; the `headers` object is cloned instead of mutated. `params` + `queryParams` merge unchanged.
-
-### 2026-05-30
-- **Baseline**: `baselineStart`/`baselineEnd`/`baselineProgress` per task → thin grey ghost bar under the real bar;
-  `saveBaseline()` / `clearBaseline()` + `onBaselineSave`; **Variance** column (`field:'variance'`, late/early/ontime).
-  New backend contract doc `matios-ui-gantt-chart-backend.md`.
-- **`assignees` with `uid`** (`{ uid, name, avatar? }`) and a documented backend-integration mapping; demo `apiSim`.
-- **Per-cell editor** — `onCellEdit({ task, field, column, anchorEl, updateTask })`; demo adds a Dependencies column
-  with anchored `MTS.Popover` editors (TagInput / DatePicker / Slider).
-- **Own i18n** `matios-ui-gantt-chart-i18n.js` (es/en/pt) + `_t()`; redesigned grid (progress mini-bar, zebra, phase
-  accent); demo with no satellite/inline CSS.
-- **Show/hide columns at runtime** (`setColumnVisible` / `getColumns`); consolidated `demo.html` wrapped in
-  `MTS.DevPanel` (`getConfig` / `getCode`); `demos/` folder removed.
-- **Undo/redo by snapshots** covering add/edit/delete/reorder/assignees/import, plus bar move/resize; `Ctrl+Z`/`Ctrl+Y`.
-- **Save as / Open** (`exportTasks` / `importFile` / `setTasks`, CSV on the front); horizontal grid scroll;
-  `reorderable` + `onReorder` (sibling/nest with WBS renumber + predecessor remap); `editTask` + `onTaskEdit`;
-  editable assignees cell (`onAssigneesClick` / `setAssignees`); `addTask` toolbar button.
-
-### 2026-05-29
-- **Breaking**: renamed `MTS.ProjectManager` → `MTS.GanttChart`; moved to `widgets/boards/matios-ui-gantt-chart/`;
-  events migrated from `.on(STRING)` → `.onXxxx(fn)`; CSS BEM `mts-project__*` → `mts-gantt__*`. Requires
-  `base/matios-ui-base.js`. Built-in Kanban sync removed in favor of the event pattern.

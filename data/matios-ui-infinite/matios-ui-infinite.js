@@ -31,9 +31,9 @@ MTS.Infinite = class MtsInfinite {
    * @param {number}   options.pageSize          Registros por carga — default: 20
    * @param {string}   options.layout            'vertical'|'grid'|'table' — default: 'vertical'
    * @param {number}   options.threshold         IntersectionObserver threshold — default: 0.1
-   * @param {string}   options.loaderText        Texto del loader — default: 'Cargando...'
-   * @param {string}   options.endText           Texto al terminar — default: 'No hay más resultados'
-   * @param {object}   options.emptyState        { icon, title, message }
+   * @param {string}   options.loaderText        Texto del loader — default: i18n MTS.Infinite.loaderText
+   * @param {string}   options.endText           Texto al terminar — default: i18n MTS.Infinite.endText
+   * @param {object}   options.emptyState        { icon, title, message } — title/message default desde i18n MTS.Infinite
    * @param {boolean}  options.animate           Animar entrada de items — default: true
    * @param {function} options.onLoad            (items, page) => {} — callback post carga
    * @param {function} options.onError           (error) => {}
@@ -55,10 +55,10 @@ MTS.Infinite = class MtsInfinite {
     this.pageSize     = options.pageSize    ?? 20;
     this.layout       = options.layout      || 'vertical';
     this.threshold    = options.threshold   ?? 0.1;
-    this.loaderText   = options.loaderText  || 'Cargando...';
-    this.endText      = options.endText     || 'No hay más resultados';
+    this.loaderText   = options.loaderText  || this._t('loaderText', 'Cargando...');
+    this.endText      = options.endText     || this._t('endText', 'No hay más resultados');
     this.animate      = options.animate     ?? true;
-    this.emptyState   = options.emptyState  || { icon: '📭', title: 'Sin resultados', message: '' };
+    this.emptyState   = options.emptyState  || { icon: '📭', title: this._t('emptyTitle', 'Sin resultados'), message: this._t('emptyMessage', '') };
 
     /* Estado */
     this._page        = 1;
@@ -79,6 +79,12 @@ MTS.Infinite = class MtsInfinite {
 
     this._build();
     this._observe();
+  }
+
+  /* i18n: texto propio del componente (capa MTS.Infinite del idioma activo) con fallback. */
+  _t(key, fallback) {
+    let loc = (window.MTS && typeof MTS.getString === 'function') ? MTS.getString()['MTS.Infinite'] : null;
+    return (loc && loc[key] != null) ? loc[key] : fallback;
   }
 
   /* ============================================================

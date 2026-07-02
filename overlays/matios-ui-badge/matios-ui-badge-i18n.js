@@ -10,6 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.Badge': {
+      removeLabel: 'Quitar',
       demo: {
         subtitle:        'Badges, pills y contadores — solo CSS o vía JS — tags removibles y notification dots.',
         s1Title:         '1 — Solo CSS',
@@ -26,6 +27,7 @@
 
   MTS.registerLocale('en', {
     'MTS.Badge': {
+      removeLabel: 'Remove',
       demo: {
         subtitle:        'Badges, pills and counters — CSS-only or via JS — removable tags and notification dots.',
         s1Title:         '1 — CSS only',
@@ -42,6 +44,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.Badge': {
+      removeLabel: 'Remover',
       demo: {
         subtitle:        'Badges, pills e contadores — só CSS ou via JS — tags removíveis e notification dots.',
         s1Title:         '1 — Só CSS',

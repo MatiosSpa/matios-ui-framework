@@ -10,6 +10,15 @@
 
   MTS.registerLocale('es', {
     'MTS.Modal': {
+      chrome: {
+        closeAriaLabel: 'Cerrar',
+        confirmTitle:   '¿Estás seguro?',
+        confirmLabel:   'Confirmar',
+        cancelLabel:    'Cancelar',
+        alertTitle:     'Aviso',
+        acceptLabel:    'Aceptar',
+        promptTitle:    'Ingresa un valor'
+      },
       demo: {
         subtitle:            'Diálogo modal — tamaños, botones de pie, scrollable, estático, helpers confirm/alert/prompt.',
         s1Title:             '1 — Tamaños',
@@ -52,6 +61,15 @@
 
   MTS.registerLocale('en', {
     'MTS.Modal': {
+      chrome: {
+        closeAriaLabel: 'Close',
+        confirmTitle:   'Are you sure?',
+        confirmLabel:   'Confirm',
+        cancelLabel:    'Cancel',
+        alertTitle:     'Notice',
+        acceptLabel:    'OK',
+        promptTitle:    'Enter a value'
+      },
       demo: {
         subtitle:            'Dialog modal — sizes, footer buttons, scrollable, static, confirm/alert/prompt helpers.',
         s1Title:             '1 — Sizes',
@@ -94,6 +112,15 @@
 
   MTS.registerLocale('pt', {
     'MTS.Modal': {
+      chrome: {
+        closeAriaLabel: 'Fechar',
+        confirmTitle:   'Tem certeza?',
+        confirmLabel:   'Confirmar',
+        cancelLabel:    'Cancelar',
+        alertTitle:     'Aviso',
+        acceptLabel:    'OK',
+        promptTitle:    'Digite um valor'
+      },
       demo: {
         subtitle:            'Diálogo modal — tamanhos, botões de rodapé, scrollable, estático, helpers confirm/alert/prompt.',
         s1Title:             '1 — Tamanhos',

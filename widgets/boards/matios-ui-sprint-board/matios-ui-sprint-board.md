@@ -16,7 +16,21 @@ Scrum board: a Backlog panel (left) + Sprint Board (right) with bidirectional dr
 <script src="layout/matios-ui-splitter/matios-ui-splitter.js"></script>
 <script src="widgets/boards/matios-ui-kanban/matios-ui-kanban.js"></script>
 <script src="widgets/boards/matios-ui-sprint-board/matios-ui-sprint-board.js"></script>
+
+<!-- Optional: i18n (es/en/pt) — base locale + component locale -->
+<script src="base/matios-ui-i18n.js"></script>
+<script src="widgets/boards/matios-ui-sprint-board/matios-ui-sprint-board-i18n.js"></script>
 ```
+
+### i18n
+
+The component reads its text from the `MTS.SprintBoard` layer of the active language
+(`MTS.getString()['MTS.SprintBoard']`), with an English fallback when no locale is loaded. Its own locale file
+`matios-ui-sprint-board-i18n.js` registers `es`/`en`/`pt` (column titles, sprint actions, backlog labels, capacity,
+the inline add-story form, and the `ui` section for the demo). Set the active language once at startup with
+`MTS.setLanguage('en')`; override strings with
+`MTS.registerLocale('es', { 'MTS.SprintBoard': { backlog: 'Pila' } })`. The default `columns` (`todo`/`wip`/`done`)
+take their titles from this layer.
 
 ---
 
@@ -51,7 +65,7 @@ sb.onSprintStart(function (e) { activateSprint(e.sprint.id); });
 | `splitter` | `'horizontal' \| 'vertical'` | `'horizontal'` | Backlog vs Sprint orientation |
 | `addStories` | `boolean` | `false` | "+ Story" button in the toolbar |
 | `addTask` | `object` | — | Enables the "+ Add story" toolbar button. **The modal is supplied by the dev** |
-| `onLoad` / `onError` / `onStoryAdd` / `onStoryChange` / `onStoryMove` / `onStoryDelete` / `onSprintChange` / `onSprintStart` / `onSprintComplete` / `onSelect` | `fn` | — | Constructor handlers |
+| `onLoad` / `onError` / `onStoryAdd` / `onStoryChange` / `onStoryMove` / `onStoryDelete` / `onSprintStart` / `onSprintComplete` / `onSelect` | `fn` | — | Constructor handlers |
 
 ### `addTask` — add via the dev's modal
 
@@ -68,17 +82,19 @@ Aliases: `summary`/`title`→`title`, `issuetype`/`type`→`type`, `key`→`code
   id: 's1', code: 'PRJ-42', title: 'As a user I want…', description: '…',
   type: 'userstory' | 'task' | 'bug' | 'epic' | 'spike',
   storyPoints: 5, priority: 'low' | 'medium' | 'high' | 'critical',
-  tags: ['ui'], assignees: [{ id, name, avatar }],
-  sprintId: null | 'sprint-7', status: 'todo' | 'wip' | 'done', parentEpicId: null,
+  tags: ['ui'], assignees: [{ name }],
+  sprintId: null | 'sprint-7', status: 'todo' | 'wip' | 'done',
 }
 
 // Sprint
 {
   id: 'sprint-7', number: 7, name: 'Sprint 7', goal: 'Close onboarding UI',
   startDate: '2026-06-01', endDate: '2026-06-14',
-  status: 'planning' | 'active' | 'completed' | 'cancelled', capacity: 40, committed: 38,
+  status: 'planning' | 'active' | 'completed', capacity: 40, committed: 38,
 }
 ```
+
+> `storyPoints` uses the Fibonacci scale (`SP_VALUES`): `1, 2, 3, 5, 8, 13, 21` — the values offered by the inline add-story form.
 
 ---
 
@@ -93,7 +109,6 @@ Aliases: `summary`/`title`→`title`, `issuetype`/`type`→`type`, `key`→`code
 | `onStoryChange(fn)` | `{ story, fields }` | Story updated |
 | `onStoryMove(fn)` | `{ story, from, to }` | Moved between Backlog/Sprint or columns |
 | `onStoryDelete(fn)` | `{ story }` | Story removed |
-| `onSprintChange(fn)` | `{ sprint, fields }` | Sprint edited |
 | `onSprintStart(fn)` | `{ sprint }` | Sprint activated |
 | `onSprintComplete(fn)` | `{ sprint, doneStories, pendingStories }` | Sprint closed |
 | `onSelect(fn)` | `{ stories }` | Selection changed |
@@ -109,7 +124,7 @@ The FE does not persist — event payloads are ready to send to the BE:
 
 | Event | BE action | Payload |
 |-------|-----------|---------|
-| `onStoryAdd` | `POST /api/stories` | full story (`assignees[].uid`, `type`, `storyPoints`, `_location`) |
+| `onStoryAdd` | `POST /api/stories` | full story (`assignees[].name`, `type`, `storyPoints`, `_location`) |
 | `onStoryChange` | `PATCH /api/stories/:id` | `fields` |
 | `onStoryMove` | `PATCH /api/stories/:id` | `{ from, to }` |
 | `onStoryDelete` | `DELETE /api/stories/:id` | `{ id }` |
@@ -131,6 +146,7 @@ The FE does not persist — event payloads are ready to send to the BE:
 | `startSprint(id)` / `completeSprint(id)` | Activate / close a sprint (close moves pending stories to the backlog) |
 | `setCurrentSprint(id)` | Change the visible sprint |
 | `getBacklog()` / `getCurrentSprintStories()` | Read helpers |
+| `getConfig()` / `getCode()` | `MTS.DevPanel` contract |
 | `reload()` / `destroy()` | Re-invoke dataSource / clean up |
 
 ---
@@ -146,22 +162,3 @@ The Sprint panel uses `MTS.Kanban` internally. SprintBoard listens to the Kanban
 
 - Backlog ↔ Sprint moves are also available via buttons (not only drag); convey story type/priority in text, not
   color alone.
-
----
-
-## Changelog
-
-### 2026-05-31 — Consolidated demo + DevPanel + i18n + BE integration
-- Own i18n `matios-ui-sprint-board-i18n.js` (es/en/pt, namespace `MTS.SprintBoard`) + `_t()`; all internal strings localized.
-- `MTS.DevPanel` contract: `getConfig()` (toggles `showBacklog`/`showVelocity`/`addStories`) + `getCode()`.
-- Single consolidated `demo.html` (DevPanel + Topbar + async dataSource + add/edit modal + `apiSim`); `demos/` removed.
-- FE↔BE contract: new `matios-ui-sprint-board-backend.md` + "Backend integration" section here.
-
-### 2026-05-30
-- `addTask` feature — "+ Add story" toolbar button + `onAddTask({ data, resolve, reject })`; dev modal; canonical
-  (Jira-style) + alias story normalization; `submitAddTask()`.
-- Fix: `_storyToCard()` referenced a non-existent `TYPE_ICONS` constant → render `ReferenceError`.
-
-### 2026-05-29
-- New component — `widgets/boards/matios-ui-sprint-board/`. Implements the 10 events; Sprint panel composed from
-  `MTS.Kanban`; bidirectional Backlog ↔ Sprint; configurable `MTS.Splitter`; velocity banner with capacity bar.

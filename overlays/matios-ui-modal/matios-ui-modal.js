@@ -104,6 +104,9 @@ MTS.Modal = class MtsModal {
     this._focusTrap = null;
     this._prevFocus = null;
 
+    // Localized chrome (aria labels, etc.) / Chrome localizado
+    this.closeAriaLabel = options.closeAriaLabel || this._t('closeAriaLabel', 'Cerrar');
+
     // Bootstrap migration — wraps an existing HTML element / Migración Bootstrap — envuelve elemento existente
     this._elementId = options.elementId || null;
 
@@ -298,6 +301,20 @@ MTS.Modal = class MtsModal {
     return this;
   }
 
+  /* ============================================================
+     i18n — chrome localizado (aria labels, etc.)
+     ============================================================ */
+
+  /**
+   * Resuelve un string de chrome desde MTS.getString()['MTS.Modal'].chrome;
+   * cae al fallback literal si no hay i18n cargado.
+   */
+  _t(key, fallback) {
+    const loc = (window.MTS && typeof MTS.getString === 'function') ? MTS.getString()['MTS.Modal'] : null;
+    const chrome = loc && loc.chrome;
+    return (chrome && chrome[key] != null) ? chrome[key] : fallback;
+  }
+
   /** ¿Está abierto? */
   get isOpen() { return this._isOpen; }
 
@@ -309,6 +326,16 @@ MTS.Modal = class MtsModal {
      ============================================================ */
 
   /**
+   * Resolutor estático de chrome (para confirm/alert/prompt que corren sin instancia).
+   * Lee MTS.getString()['MTS.Modal'].chrome; cae al fallback literal.
+   */
+  static _ts(key, fallback) {
+    const loc = (window.MTS && typeof MTS.getString === 'function') ? MTS.getString()['MTS.Modal'] : null;
+    const chrome = loc && loc.chrome;
+    return (chrome && chrome[key] != null) ? chrome[key] : fallback;
+  }
+
+  /**
    * Modal de confirmación
    * Soporta dos estilos:
    *   Promise:  MTS.Modal.confirm({...}).then(ok => { if(ok) ... })
@@ -316,7 +343,7 @@ MTS.Modal = class MtsModal {
    * @returns {Promise<boolean>}
    */
   static confirm({
-    title   = '¿Estás seguro?',
+    title   = null,
     message = '',
     confirmLabel = null,
     cancelLabel  = null,
@@ -329,11 +356,12 @@ MTS.Modal = class MtsModal {
     onConfirm = null,
     onCancel  = null,
   } = {}) {
-    const okLabel  = confirmLabel || confirmText || 'Confirmar';
-    const nokLabel = cancelLabel  || cancelText  || 'Cancelar';
+    const dlgTitle = title || MTS.Modal._ts('confirmTitle', '¿Estás seguro?');
+    const okLabel  = confirmLabel || confirmText || MTS.Modal._ts('confirmLabel', 'Confirmar');
+    const nokLabel = cancelLabel  || cancelText  || MTS.Modal._ts('cancelLabel', 'Cancelar');
     return new Promise(resolve => {
       const modal = new MTS.Modal({
-        title,
+        title: dlgTitle,
         size,
         static: true,
         body: `<p class="mts-modal-confirm__message">${message}</p>`,
@@ -364,22 +392,24 @@ MTS.Modal = class MtsModal {
    * @returns {Promise<void>}
    */
   static alert({
-    title    = 'Aviso',
+    title    = null,
     message  = '',
-    label    = 'Aceptar',
+    label    = null,
     size     = 'sm',
     onAccept = null,
   } = {}) {
+    const dlgTitle = title || MTS.Modal._ts('alertTitle', 'Aviso');
+    const okLabel  = label || MTS.Modal._ts('acceptLabel', 'Aceptar');
     return new Promise(resolve => {
       const modal = new MTS.Modal({
-        title,
+        title: dlgTitle,
         size,
         static: true,
         body: `<p class="mts-modal-confirm__message">${message}</p>`,
         buttons: [
           {
             id:      'mts-alert-ok',
-            label,
+            label:   okLabel,
             variant: 'primary',
             close:   true,
             onClick: () => { if (onAccept) onAccept(); resolve(); },
@@ -396,18 +426,21 @@ MTS.Modal = class MtsModal {
    * @returns {Promise<string|null>} — null si cancela
    */
   static prompt({
-    title       = 'Ingresa un valor',
+    title       = null,
     label       = '',
     placeholder = '',
     value       = '',
-    confirmLabel = 'Aceptar',
-    cancelLabel  = 'Cancelar',
+    confirmLabel = null,
+    cancelLabel  = null,
     size         = 'sm',
   } = {}) {
+    const dlgTitle = title        || MTS.Modal._ts('promptTitle', 'Ingresa un valor');
+    const okLabel  = confirmLabel || MTS.Modal._ts('acceptLabel', 'Aceptar');
+    const nokLabel = cancelLabel  || MTS.Modal._ts('cancelLabel', 'Cancelar');
     return new Promise(resolve => {
       const inputId = `mts-prompt-input-${Date.now()}`;
       const modal   = new MTS.Modal({
-        title,
+        title: dlgTitle,
         size,
         static: true,
         body: `
@@ -426,14 +459,14 @@ MTS.Modal = class MtsModal {
         buttons: [
           {
             id:      'mts-prompt-cancel',
-            label:   cancelLabel,
+            label:   nokLabel,
             variant: 'ghost',
             close:   true,
             onClick: () => resolve(null),
           },
           {
             id:      'mts-prompt-ok',
-            label:   confirmLabel,
+            label:   okLabel,
             variant: 'primary',
             close:   true,
             onClick: () => {
@@ -491,7 +524,7 @@ MTS.Modal = class MtsModal {
     if (this.closable) {
       const closeBtn = document.createElement('button');
       closeBtn.className        = 'mts-modal__close';
-      closeBtn.setAttribute('aria-label', 'Cerrar');
+      closeBtn.setAttribute('aria-label', this.closeAriaLabel);
       closeBtn.innerHTML        = '&times;';
       closeBtn.addEventListener('click', () => this.hide());
       this._headerEl.appendChild(closeBtn);

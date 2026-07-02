@@ -61,8 +61,9 @@ async function start() {
 ## Complete example (copy-paste)
 
 Everything wired: load, all raw events, the persistence funnel, your own button, and the three ways to open a
-create flow. Built-in UI text (modals, nav, buttons) is driven by the component i18n — set `locale` to `'es'`,
-`'en'` or `'pt'`; your own labels (`eventTypes`, your buttons) are yours to localize.
+create flow. Built-in UI text (nav, buttons, view labels) is driven by the component i18n — the language is global,
+set once at startup with `MTS.setLanguage('en')` (see [i18n](#i18n)); your own labels (`eventTypes`, your buttons)
+are yours to localize.
 
 ```html
 <button type="button" id="btnNewEvent">+ New event</button>   <!-- your button, native or MTS — same onclick -->
@@ -306,7 +307,6 @@ The calendar instance, normally accessed via `calendarUI.cal` after `await calen
 | `startTime` / `endTime` | string | `'08:00'` / `'20:00'` | Grid time range |
 | `slotSize` | number | `60` | Slot size in minutes |
 | `slots` | array | `null` | Custom slots (ignores `startTime`/`endTime`/`slotSize`) |
-| `locale` | string | `'es'` | `'es'` · `'en'` · `'pt'` — built-in UI text (modals, nav, buttons) comes from the component i18n |
 | `draggable` / `resizable` | boolean | `true` | Allow drag & drop / resize |
 | `readonly` | boolean | `false` | Block all write interactions |
 | `allowOverlap` | boolean | `false` | Allow overlapping events |
@@ -316,7 +316,9 @@ The calendar instance, normally accessed via `calendarUI.cal` after `await calen
 | `maxMonthEvents` | number | `3` | Max visible events per day in month view |
 | `autoRefetch` | boolean | `true` | Reload datasource on navigation |
 | `dataSource` / `dataSourceParser` | function | `null` | Async event loader / response transform (lowercase `datasource` still accepted as alias) |
-| `docsPath` | string | `null` | Path to a `.md` — shows a "Docs" toolbar button |
+| `onEventRender` | function | `null` | `(el, event)` hook to decorate each event chip after its default content is rendered |
+| `contextMenuEvent` | function | `null` | `(event, ctx, baseItems, cal)` → array of items for the event right-click menu (`baseItems` has Edit/Delete pre-wired) |
+| `contextMenuCell` | function | `null` | `(cellData, baseItems, cal)` → array of items for the empty-cell right-click menu |
 | `debug` | boolean | `false` | Internal console logs |
 
 **Day constants:** `MTS.Calendar.DAYS_MON_FRI` `[1..5]` · `DAYS_MON_SAT` · `DAYS_MON_SUN` · `DAYS_SUN_SAT`.
@@ -437,6 +439,9 @@ renderEventDeleteModal: function (cal, event) { return Promise.resolve(confirm('
 Available in development mode (activated with `?dev` in the URL, or on `localhost` / `127.0.0.1`). Panels: **Config**
 (adjust options live), **Log** (clicks/drops/resize/errors) and **Code** (generated JS for the current config).
 
+The panels are powered by two `MTS.DevPanel` contract methods on the calendar instance: `cal.getConfig()` returns the
+grouped, editable option descriptors, and `cal.getCode()` returns a JS string that reproduces the current config.
+
 ---
 
 ## Mock API
@@ -455,33 +460,49 @@ Endpoints: `GET/POST /widgets/calendar/mock-api/cal_events`, `PUT/DELETE …/cal
 
 ---
 
+## i18n
+
+The built-in UI text (nav, `Today` button, view labels, context menus) is localized through the global MTS language
+API. There is **no per-instance `locale` option** — the active language is a single global setting.
+
+Add the optional i18n scripts after the component scripts:
+
+```html
+<script src="../../base/matios-ui-i18n.js"></script>   <!-- global language API -->
+<script src="matios-ui-calendar-i18n.js"></script>      <!-- calendar strings (es · en · pt) -->
+```
+
+Set the language **once at startup**, before creating the calendar:
+
+```js
+MTS.setLanguage('en');   // 'es' (default) · 'en' · 'pt'
+```
+
+The calendar reads the active language with `MTS.getLanguage()` and picks its strings from its own namespace table
+`MTS.CalendarLocales`. Without the i18n script the calendar falls back to its Spanish defaults.
+
+Register or override a locale with `MTS.Calendar.registerLocale(code, table)`:
+
+```js
+MTS.Calendar.registerLocale('fr', {
+  today:    'Aujourd\'hui',
+  week:     'Semaine',
+  month:    'Mois',
+  day:      'Jour',
+  schedule: 'Agenda',
+  months:      ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+  monthsShort: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+  days: { mini: ['L', 'M', 'M', 'J', 'V', 'S', 'D'], short: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] },
+});
+MTS.setLanguage('fr');
+```
+
+> Your own labels (`eventTypes`, your buttons, the built-in modal field labels) are not covered by the calendar i18n —
+> localize those yourself.
+
+---
+
 ## Accessibility
 
 - Drag/resize are pointer gestures — creation/edit/detail modals provide the keyboard path; `Esc` closes them.
 - `locked` and `readonly` reflect non-editability; convey it in text, not color alone.
-
----
-
-## Changelog
-
-### 2026-07-01
-- `dataSource` (camelCase) is now the canonical loader option, aligned with `MTS.DataTable` / `MTS.GanttChart`. The
-  legacy lowercase `datasource` still works as an alias (same for `dataSourceParser` / `dataSourceParams`). No breaking change.
-- **Enums** added (values stay plain strings — non-breaking): `MTS.Calendar.VIEW` / `VIEWS_ALL` and
-  `MTS.CalendarUI.ACTION` — typo-safe alternatives to the `'week'` / `'create'` magic strings.
-- **`calendarUI.commit(action, event)`** — public method to trigger the persistence funnel (`onEvent`) + paint the grid
-  from your own button/modal, without reimplementing it.
-- **Fixed:** the built-in delete now calls `onEvent('delete', …)` before removing from the grid (previously it removed
-  visually but never notified the persistence layer, so deletions weren't sent to the backend).
-- **i18n:** added the built-in `pt` (Brazilian Portuguese) locale — `locale` is now `'es'` · `'en'` · `'pt'`.
-- Added a full **copy-paste example** covering load, all events, the persistence funnel, and the three ways to wire your own button.
-
-### 2026-06-29
-- Icons migrated to `MTS.Icon` (nav → `chevron-left`/`chevron-right`, print → `printer`, event menu → `info`/`edit`/
-  `trash`, add-event → `add`, empty schedule → `calendar`); dropped inline SVG. The schedule empty-state inline styles
-  were moved to a `.mts-calendar__schedule-empty` class. Requires `matios-ui-icons.js`.
-
-### Initial
-- Full calendar (week/month/day/agenda) with drag & drop, resize, async datasource (`autoRefetch`), overridable
-  modals, `MTS.CalendarEvent.fromAPI` normalization, locked/readonly modes, CSV/iCal/print export, DevPanel, and a
-  Service-Worker mock API for development.

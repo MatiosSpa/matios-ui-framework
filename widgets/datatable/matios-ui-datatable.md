@@ -11,7 +11,13 @@ Dynamic data table with pagination, sorting, search, selection and plugins. Pure
 <link rel="stylesheet" href="../data/matios-ui-table/matios-ui-table.css">
 <link rel="stylesheet" href="matios-ui-datatable.css">
 <script src="matios-ui-datatable.js"></script>
+
+<!-- Optional — only if you want a language other than the built-in Spanish defaults -->
+<script src="../base/matios-ui-i18n.js"></script>
+<script src="matios-ui-datatable-i18n.js"></script>
 ```
+
+The two i18n scripts are optional. Without them the table renders with its built-in Spanish `texts`. See [i18n](#i18n).
 
 ---
 
@@ -61,7 +67,7 @@ const datatable = new MTS.DataTable({
   striped:    false,
 
   // ── Events (real callback names — full list in the Events section below) ──
-  onReady:           function () {},                   // once, after the first render
+  onReady:           function () {},                   // after every grid render
   onAfterLoad:       function (result) {},             // after each load — result = { data, total, totalPages }
   onLoadError:       function (err) {},                // when dataSource throws
   onSelectionChange: function (items) {},              // array of selected row objects
@@ -100,13 +106,13 @@ columns: [
     align:         'start',    // 'start' | 'center' | 'end'
     width:         '200px',    // fixed width (optional)
     alwaysVisible: true,       // cannot be hidden via ColumnVisibility
-    render:        function (v, row) { return v; }, // custom renderer
+    render:        function (v, row, td) { return v; }, // custom renderer
   },
 ]
 ```
 
-`render(value, row)` receives the field value and the full row object. If it returns an HTML string it is set via
-`innerHTML`; without `render`, `textContent` is used.
+`render(value, row, td)` receives the field value, the full row object and the `<td>` element. If it returns an HTML
+string it is set via `innerHTML`; without `render`, `textContent` is used.
 
 ### DataSource
 
@@ -125,13 +131,13 @@ dataSource: {
   url:     '/api/items',
   method:  'GET',
   headers: { Authorization: 'Bearer ' + token },   // sent on every request
-  params:  { tenantId: 42 },                        // merged with page/size/orderBy/search
+  params:  { tenantId: 42 },                        // merged with pageNumber/pageSize/orderBy/orderDir/search
 };
 ```
 
 **Built-in `{ url }` behavior:**
 - `headers` — sent on every request (e.g. `{ Authorization: 'Bearer …' }`).
-- `params` — fixed query params merged with the paging/sort/search query (`page,size,orderBy,orderDir,search`); the live query wins on key clash.
+- `params` — fixed query params merged with the paging/sort/search query (`pageNumber,pageSize,orderBy,orderDir,search`); the live query wins on key clash.
 - `Content-Type: application/json` is added **only** for non-GET requests (which carry a body) and **only if you didn't set your own** — so a plain GET won't trigger an unnecessary CORS preflight.
 
 > **Need HttpClient, auth, or a custom transport?** Use the **function** form (option 1) — that's the override point. The `{ url }` form uses a built-in native `fetch` for the simple case.
@@ -153,6 +159,8 @@ plugins such as FilterPlugin).
 | `compact` | `boolean` | `false` | Less cell padding |
 | `fixedHeader` | `boolean` | `false` | Sticky header on vertical scroll |
 | `fixedHeaderHeight` | `string` | `'400px'` | Max scroll-area height when `fixedHeader: true` |
+| `dragDrop` | `object` | `{ enabled: false }` | `{ enabled: true }` makes rows draggable; fires `onRowDragStart` / `onRowDrop` |
+| `debug` | `boolean` | `false` | Verbose `console.log` of lifecycle, events and queries |
 
 ### Initial sort, search & selection
 
@@ -180,11 +188,13 @@ pagination: { pageSizeOptions: [5, 10, 25, 50, 100] }
 ### Action column, row class, persistence, i18n
 
 ```js
-actionColumn: true, actionColumnLabel: '', actionColumnWidth: '120px', // controlled by DocumentManagerContextMenuPlugin
+actionColumn:      true,     // read by ContextMenu / DocumentManager plugins
+actionColumnLabel: '',
+actionColumnWidth: '120px',
 rowClass: function (row) { return row.status === 'inactive' ? 'mts-row--muted' : null; },
 persist:  { enabled: true, key: 'my-table' },        // persists page, sort, search, page size
-// Language is global — call MTS.setLanguage('en') once at startup; there is no per-instance locale option.
-texts:    { search: 'Search...', noData: 'No results', /* … merged over the active language */ },
+// Language is global — see the i18n section. Per-instance text overrides go in `texts`:
+texts:    { search: 'Search...', noData: 'No results' },   // merged over the active language
 ```
 
 ---
@@ -195,7 +205,7 @@ Passed as options (see the complete example above). Real callback names and sign
 
 | Callback | Signature | Fires |
 |----------|-----------|-------|
-| `onReady` | `()` | once, after the first full render |
+| `onReady` | `()` | after every grid render (initial load and each reload / redraw) |
 | `onBeforeLoad` | `(query)` | before each request |
 | `onAfterLoad` | `(result)` | after each successful load — `result` = `{ data, total, totalPages }` |
 | `onLoadError` | `(err)` | when `dataSource` throws |
@@ -231,6 +241,17 @@ Passed as options (see the complete example above). Real callback names and sign
 | `clearSelection()` | Deselect all rows |
 | `selectRow(id)` / `deselectRow(id)` | Select / deselect a row by id |
 
+### Toolbar slots (used by plugins)
+
+The toolbar has four slots. Passing an element mounts it; passing `null` clears it. Each call rebuilds the toolbar in place.
+
+| Method | Description |
+|--------|-------------|
+| `setToolbarBreadcrumb(el)` | Breadcrumb slot (own full-width row when action buttons are also present) |
+| `setToolbarLeft(el)` | Left slot — action buttons |
+| `setToolbarFilter(el)` | Center slot — filter chips |
+| `setToolbarActions(el)` | Far-right slot — column-visibility, etc. |
+
 ### Plugins, hooks & lifecycle
 
 | Method | Description |
@@ -251,11 +272,11 @@ table.unregisterHook('onReady', onReady);
 
 | Requirement | Description |
 |-------------|-------------|
-| `static descriptor.name` | Unique id (e.g. `'MTS.DataTableToolbarPlugin'`) |
-| `static descriptor.version` | Semver version |
-| `static descriptor.provides` | Capability it exposes (avoids conflicts) |
-| `install(table)` | Called on mount, receives the DataTable instance |
-| `uninstall()` | Called on unmount — must clean up DOM, listeners and references |
+| `static descriptor.name` | Unique id (e.g. `'MTS.DataTableToolbarPlugin'`) — required |
+| `static descriptor.requires` | Host it targets — must include `'MTS.DataTable'` (string or array), required |
+| `static descriptor.version` | Semver version (logged; optional) |
+| `install(table)` | Called on `use()`, receives the DataTable instance — required |
+| `uninstall()` | Called on `remove()` / `destroy()` — must clean up DOM, listeners and references — required |
 
 ## Available plugins
 
@@ -269,22 +290,69 @@ table.unregisterHook('onReady', onReady);
 
 ---
 
+## i18n
+
+Language is **global** — one setting drives the chrome of every MTS component on the page. There is no per-instance
+`locale` option.
+
+Load the two optional scripts (see [Installation](#installation)) and set the language **once at startup**, before
+constructing the table:
+
+```html
+<script src="../base/matios-ui-i18n.js"></script>
+<script src="matios-ui-datatable-i18n.js"></script>
+<script>
+MTS.setLanguage('en');   // 'es' (default) | 'en' | 'pt' | any registered code
+</script>
+```
+
+The core reads its strings from the global table via `MTS.getString()` / `MTS.getLanguage()`. Its texts live under the
+`'MTS.DataTable'` namespace of the active language:
+
+| Key | Default (en) |
+|-----|--------------|
+| `search` | `Search...` |
+| `noData` | `No results` |
+| `loading` | `Loading...` |
+| `error` | `Error loading data.` |
+| `retry` | `Retry` |
+| `showing` | `Showing {start}–{end} of {total}` |
+| `perPage` | `Rows:` |
+| `previous` | `Previous` |
+| `next` | `Next` |
+
+`showing` supports the `{start}`, `{end}` and `{total}` placeholders.
+
+**Per-instance overrides** — the `texts` option overrides individual keys for one table only (precedence:
+built-in defaults → active language → your `texts`):
+
+```js
+texts: {
+  search:  'Search user...',
+  noData:  'No users found',
+  showing: 'Showing {start}–{end} of {total} users',
+}
+```
+
+**Add or extend a language** globally with `MTS.registerLocale(code, overrides)` (deep merge — unlisted keys are
+preserved):
+
+```js
+MTS.registerLocale('en', {
+  'MTS.DataTable': { noData: 'Nothing here yet' }
+});
+// or a brand-new language (unspecified keys fall back to 'es'):
+MTS.registerLocale('fr', {
+  'MTS.DataTable': { search: 'Rechercher...', noData: 'Aucun résultat' }
+});
+```
+
+> `matios-ui-datatable-i18n.js` is a backward-compat shim: the real strings live in `base/matios-ui-i18n.js`. Loading
+> it is harmless but only needed for code that still reads the legacy `MTS.DataTableLocales` alias.
+
+---
+
 ## Accessibility
 
 - Built on `MTS.Table` semantics (real `<th>` headers with scope); sortable headers expose the current sort state.
 - Selection checkboxes and pagination controls are keyboard-operable; reflect the selected/current state in text.
-
----
-
-## Changelog
-
-### 2026-07-01
-- `{ url }` dataSource now merges `ds.params` with the paging/sort/search query, and adds `Content-Type: application/json`
-  only for non-GET requests when the dev didn't set one (avoids an unnecessary CORS preflight on GET). `headers` unchanged.
-
-### 2026-06-23
-- `getData()` — read back the rows currently rendered (active page) as a shallow copy, mirroring `getSelection()`.
-
-### Initial
-- Dynamic data table: async/URL dataSource with a fixed response contract, pagination, sorting, search, single/multi
-  selection, persistence, i18n, custom renderers/row classes, a plugin system with lifecycle hooks, and five plugins.

@@ -82,8 +82,8 @@ sk.destroy();
 
 ---
 
-## Changelog
+## i18n
 
-### Initial
-- Loading skeleton with text/circle/rect/card/list/table variants, configurable lines/rows/cols/items, pulse/wave/
-  none animations, CSS-only bones, and `show` / `hide` / `destroy`.
+The component renders no localizable runtime strings — it builds only visual placeholder bones and sets no
+`aria-label` or other text. `matios-ui-skeleton-i18n.js` under the `MTS.Skeleton` namespace holds **demo-only**
+strings (section titles and labels) and is not required in production.

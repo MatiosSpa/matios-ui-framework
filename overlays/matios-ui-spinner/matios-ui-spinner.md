@@ -1,6 +1,6 @@
 # MTS.Spinner
 
-Animated loading indicator with multiple variants, five sizes, semantic or custom colors (up to three), label text and full-screen overlay mode.
+Animated loading indicator with 13 variants, five sizes, semantic or custom colors (up to three), label text and full-screen overlay mode.
 
 ---
 
@@ -48,7 +48,8 @@ overlay.hide();
 <script> new MTS.Spinner('#my-spinner'); </script>
 ```
 
-Supported `data-*`: `data-variant`, `data-size`, `data-color`, `data-label`, `data-overlay`. `options` always take
+Supported `data-*`: `data-variant`, `data-size`, `data-color`, `data-color2`, `data-color3`, `data-label`,
+`data-overlay`. `data-overlay` is treated as a boolean (its presence enables the overlay). `options` always take
 priority over `data-*`.
 
 ---
@@ -58,7 +59,7 @@ priority over `data-*`.
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `variant` | `string` | `'ring'` | Spinner type (see variants below) |
-| `size` | `string` | `'md'` | `'xs'` (16) · `'sm'` (24) · `'md'` (36) · `'lg'` (48) · `'xl'` (64) px |
+| `size` | `string` | `'md'` | `'xs'` · `'sm'` · `'md'` · `'lg'` · `'xl'` — scales the spinner via CSS `zoom` (0.20 / 0.30 / 0.45 / 0.60 / 0.80) |
 | `color` | `string` | `null` | Semantic tone (`'warning'` / `'danger'` / `'success'` / `'muted'`) or any CSS color value |
 | `color2` | `string` | `null` | Secondary color — `dual`, `orbital`, `triple` (inherits `color` if unset) |
 | `color3` | `string` | `null` | Tertiary color — `orbital`, `triple` (inherits `color` if unset) |
@@ -104,13 +105,5 @@ The component exposes three custom properties, overridable on the container:
 
 ## Accessibility
 
-- Mark the loading region with `aria-busy="true"` and provide a `label` (or `aria-label`) so the spinner has an
-  accessible name; announce when loading completes.
-
----
-
-## Changelog
-
-### Initial
-- Loading spinner with 13 variants (`ring` default), five sizes, semantic/custom colors with up to three tones,
-  label, full-screen overlay, `data-*` API, `--mts-spinner-color[-2|-3]` variables, and `show` / `hide` / `destroy`.
+- The component does not set ARIA attributes itself. Mark the loading region with `aria-busy="true"` and provide a
+  `label` (or `aria-label`) so the spinner has an accessible name; announce when loading completes.

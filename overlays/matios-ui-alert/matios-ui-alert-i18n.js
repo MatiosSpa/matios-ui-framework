@@ -10,6 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.Alert': {
+      closeLabel: 'Cerrar',
       demo: {
         subtitle:              'Alertas y banners inline — variantes, botón de acción, auto-dismiss y uso solo CSS.',
         s1Title:               '1 — Variantes',
@@ -53,6 +54,7 @@
 
   MTS.registerLocale('en', {
     'MTS.Alert': {
+      closeLabel: 'Close',
       demo: {
         subtitle:              'Inline alerts and banners — variants, action button, auto-dismiss and CSS-only usage.',
         s1Title:               '1 — Variants',
@@ -96,6 +98,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.Alert': {
+      closeLabel: 'Fechar',
       demo: {
         subtitle:              'Alertas e banners inline — variantes, botão de ação, auto-dismiss e uso somente CSS.',
         s1Title:               '1 — Variantes',

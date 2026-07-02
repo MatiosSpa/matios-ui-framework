@@ -74,6 +74,89 @@ Add `.mts-table--responsive` and a `data-label` on each `<td>` — used as the c
 </table>
 ```
 
+### Sortable headers
+
+Mark the column with `.mts-table__th--sortable`, add `.mts-table__th--asc` / `--desc` for the active direction, and place the CSS-triangle icon inside:
+
+```html
+<th class="mts-table__th mts-table__th--sortable mts-table__th--asc">
+  Name
+  <span class="mts-table__sort">
+    <span class="mts-table__sort-up"></span>
+    <span class="mts-table__sort-down"></span>
+  </span>
+</th>
+```
+
+### Actions column
+
+Use `.mts-table__td--actions` on the cell (right-aligned, no wrap) to hold icon-only buttons. The header stays a plain `.mts-table__th`:
+
+```html
+<td class="mts-table__td mts-table__td--actions">
+  <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">
+    <i class="mts-icon mts-icon-eye mts-icon--sm"></i>
+  </button>
+  <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">
+    <i class="mts-icon mts-icon-edit mts-icon--sm"></i>
+  </button>
+  <button class="mts-btn mts-btn--ghost mts-btn--sm mts-btn--icon">
+    <i class="mts-icon mts-icon-trash mts-icon--sm"></i>
+  </button>
+</td>
+```
+
+### Checkbox selection
+
+Fixed-width checkbox column via `.mts-table__th--check` / `.mts-table__td--check`, with a styled `.mts-table__checkbox`. Combine with `.mts-table__row--selected` to highlight checked rows:
+
+```html
+<tr class="mts-table__row mts-table__row--selected">
+  <td class="mts-table__td mts-table__td--check">
+    <input type="checkbox" class="mts-table__checkbox" checked>
+  </td>
+  <td class="mts-table__td">Ana García</td>
+</tr>
+```
+
+### Empty state
+
+A single full-width cell with `.mts-table__empty` and its icon / title / message elements:
+
+```html
+<tr>
+  <td colspan="4" class="mts-table__empty">
+    <i class="mts-icon mts-icon-inbox mts-icon--xl mts-table__empty-icon"></i>
+    <div class="mts-table__empty-title">No records found</div>
+    <div class="mts-table__empty-msg">Try other filters or add a new item.</div>
+  </td>
+</tr>
+```
+
+### Footer / totals
+
+Put a `.mts-table__tfoot` row inside `<tfoot>` (bold, top border):
+
+```html
+<tfoot>
+  <tr class="mts-table__tfoot">
+    <td class="mts-table__td" colspan="2"><strong>Total</strong></td>
+    <td class="mts-table__td mts-table__td--end"><strong>286</strong></td>
+    <td class="mts-table__td mts-table__td--end"><strong>$2.356,70</strong></td>
+  </tr>
+</tfoot>
+```
+
+### Truncated text
+
+`.mts-table__td--truncate` clips overflow with an ellipsis (default `max-width: 200px`). Add a `title` for the full-text native tooltip:
+
+```html
+<td class="mts-table__td mts-table__td--truncate" title="Full description here…">
+  Full description here…
+</td>
+```
+
 ---
 
 ## CSS Classes
@@ -100,8 +183,7 @@ Add `.mts-table--responsive` and a `data-label` on each `<td>` — used as the c
 | `.mts-table__th--sortable` | Sortable column (cursor + hover) |
 | `.mts-table__th--asc` / `--desc` | Active ascending / descending sort |
 | `.mts-table__th--end` / `--center` | Right / center alignment |
-| `.mts-table__th--check` | Checkbox column (fixed width) |
-| `.mts-table__th--actions` | Actions column |
+| `.mts-table__th--check` | Checkbox column (fixed 40px width) |
 | `.mts-table__sort` / `__sort-up` / `__sort-down` | Sort icon container + CSS-triangle arrows |
 
 ### Rows
@@ -121,9 +203,9 @@ Add `.mts-table--responsive` and a `data-label` on each `<td>` — used as the c
 |-------|-------------|
 | `.mts-table__td` | Table cell |
 | `.mts-table__td--end` / `--center` | Right / center alignment |
-| `.mts-table__td--check` | Checkbox column (fixed width) |
-| `.mts-table__td--actions` | Actions column (right, no wrap) |
-| `.mts-table__td--truncate` | Ellipsis truncation (requires consumer `max-width`) |
+| `.mts-table__td--check` | Checkbox column (fixed 40px width) |
+| `.mts-table__td--actions` | Actions column (right-aligned, no wrap) |
+| `.mts-table__td--truncate` | Ellipsis truncation (default `max-width: 200px`, override per cell) |
 
 ### Footer, empty state & checkbox
 
@@ -138,9 +220,10 @@ Add `.mts-table--responsive` and a `data-label` on each `<td>` — used as the c
 ## Notes
 
 - `mts-table--flush` removes side padding — useful inside an `MTS.Card` with a tight body.
-- `mts-table--fixed` requires the wrapper to have a defined `max-height`; without it the header will not stick.
-- `mts-table__td--truncate` requires a consumer-defined `max-width` — the component does not assume a width.
-- For server-side pagination, sorting, filters and advanced plugins, use `MTS.DataTable` (`widgets/datatable`).
+- `mts-table--fixed` requires the wrapper to have a defined `max-height` (+ `overflow-y: auto`); without it the header will not stick.
+- `mts-table__td--truncate` ships a default `max-width: 200px`; override it per cell (`style="max-width: …"`) when a column needs a different width. Pair it with a `title` attribute for the native full-text tooltip.
+- The actions column has no header-cell modifier — the header is a plain `mts-table__th`; only `mts-table__td--actions` (right-aligned, no wrap) is a real class. The demo tags the header with `mts-table__th--actions` purely as a marker, but it has no styling effect.
+- For server-side pagination, sorting, filters and advanced plugins, use `MTS.DataTable` (`widgets/datatable`), which reuses these classes internally.
 
 ---
 
@@ -149,10 +232,4 @@ Add `.mts-table--responsive` and a `data-label` on each `<td>` — used as the c
 - Use real `<th>` headers with proper scope so screen readers associate cells with columns.
 - For `--clickable` rows, ensure the action is reachable by keyboard (a focusable control inside the row).
 
----
-
-## Changelog
-
-### 2026-05-17
-- Documentation homologated to the standard template; fixed-header and truncation examples use a consumer class
-  (no inline styles).
+> The `demo.html` page is localized (es / en / pt) via `matios-ui-table-i18n.js`; the component itself is pure CSS and has no runtime strings.

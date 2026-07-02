@@ -81,6 +81,11 @@ MTS.Alert = class MtsAlert {
   setMessage(msg) { if (this._msgEl) this._msgEl.textContent = msg; return this; }
   on(e, cb)       { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
 
+  _t(key, fallback) {
+    let loc = (window.MTS && typeof MTS.getString === 'function') ? MTS.getString()['MTS.Alert'] : null;
+    return (loc && loc[key] != null) ? loc[key] : fallback;
+  }
+
   _build() {
     this._el = document.createElement('div');
     this._el.className = `mts-alert mts-alert--${this.variant}` + (this.showBorders ? ' mts-alert--bordered' : '');
@@ -122,7 +127,7 @@ MTS.Alert = class MtsAlert {
       const closeBtn = document.createElement('button');
       closeBtn.className = 'mts-alert__close';
       closeBtn.innerHTML = '&times;';
-      closeBtn.setAttribute('aria-label', 'Cerrar');
+      closeBtn.setAttribute('aria-label', this._t('closeLabel', 'Close'));
       closeBtn.addEventListener('click', () => this.close());
       this._el.appendChild(closeBtn);
     }

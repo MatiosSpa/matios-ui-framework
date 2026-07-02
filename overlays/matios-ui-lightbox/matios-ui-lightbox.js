@@ -80,6 +80,12 @@ MTS.Lightbox = class MtsLightbox {
     if (options.onChange) this.on('change', options.onChange);
   }
 
+  /* i18n: reads chrome text from MTS.Lightbox namespace, with a literal fallback */
+  _t(key, fallback) {
+    const dict = (typeof MTS.getString === 'function' ? MTS.getString()['MTS.Lightbox'] : null) || {};
+    return dict[key] || fallback;
+  }
+
   /* ── API ── */
   open(index)  { this._idx = index ?? 0; this._render(); return this; }
   close()      { this._destroy(); return this; }
@@ -114,6 +120,7 @@ MTS.Lightbox = class MtsLightbox {
       const dlBtn = document.createElement('a');
       dlBtn.className = 'mts-lb__btn';
       dlBtn.download = '';
+      dlBtn.setAttribute('aria-label', this._t('download', 'Download'));
       dlBtn.innerHTML = MTS.Icon.get('download');
       this._dlBtn = dlBtn;
       actions.appendChild(dlBtn);
@@ -122,6 +129,7 @@ MTS.Lightbox = class MtsLightbox {
     const closeBtn = document.createElement('button');
     closeBtn.type = 'button';
     closeBtn.className = 'mts-lb__btn';
+    closeBtn.setAttribute('aria-label', this._t('close', 'Close'));
     closeBtn.innerHTML = MTS.Icon.get('close');
     closeBtn.addEventListener('click', () => this._destroy());
     actions.appendChild(closeBtn);
@@ -137,12 +145,14 @@ MTS.Lightbox = class MtsLightbox {
     if (this._items.length > 1) {
       const prev = document.createElement('button');
       prev.type = 'button'; prev.className = 'mts-lb__nav mts-lb__nav--prev';
+      prev.setAttribute('aria-label', this._t('prev', 'Previous'));
       prev.innerHTML = MTS.Icon.get('chevron-left');
       prev.addEventListener('click', (e) => { e.stopPropagation(); this._nav(-1); });
       lb.appendChild(prev);
 
       const next = document.createElement('button');
       next.type = 'button'; next.className = 'mts-lb__nav mts-lb__nav--next';
+      next.setAttribute('aria-label', this._t('next', 'Next'));
       next.innerHTML = MTS.Icon.get('chevron-right');
       next.addEventListener('click', (e) => { e.stopPropagation(); this._nav(1); });
       lb.appendChild(next);
@@ -251,7 +261,11 @@ MTS.Lightbox = class MtsLightbox {
 
   _updateUI() {
     const item = this._items[this._idx];
-    if (this._counterEl) this._counterEl.textContent = (this._idx + 1) + ' / ' + this._items.length;
+    if (this._counterEl) {
+      this._counterEl.textContent = this._t('counter', '{current} / {total}')
+        .replace('{current}', this._idx + 1)
+        .replace('{total}', this._items.length);
+    }
     if (this._captionEl) { this._captionEl.textContent = item?.caption || ''; this._captionEl.style.display = item?.caption ? '' : 'none'; }
     /* Thumbs */
     if (this._thumbStrip) {

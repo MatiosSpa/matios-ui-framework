@@ -10,6 +10,11 @@
 
   MTS.registerLocale('es', {
     'MTS.Lightbox': {
+      close:    'Cerrar',
+      prev:     'Anterior',
+      next:     'Siguiente',
+      download: 'Descargar',
+      counter:  '{current} / {total}',
       demo: {
         subtitle:            'Visor de medios — imágenes, video, YouTube, Vimeo · zoom · miniaturas · auto-bind.',
         s1Title:             '1 — Uso programático',
@@ -38,6 +43,11 @@
 
   MTS.registerLocale('en', {
     'MTS.Lightbox': {
+      close:    'Close',
+      prev:     'Previous',
+      next:     'Next',
+      download: 'Download',
+      counter:  '{current} / {total}',
       demo: {
         subtitle:            'Media viewer — images, video, YouTube, Vimeo · zoom · thumbnails · auto-bind.',
         s1Title:             '1 — Programmatic use',
@@ -66,6 +76,11 @@
 
   MTS.registerLocale('pt', {
     'MTS.Lightbox': {
+      close:    'Fechar',
+      prev:     'Anterior',
+      next:     'Próximo',
+      download: 'Baixar',
+      counter:  '{current} / {total}',
       demo: {
         subtitle:            'Visualizador de mídia — imagens, vídeo, YouTube, Vimeo · zoom · miniaturas · auto-bind.',
         s1Title:             '1 — Uso programático',

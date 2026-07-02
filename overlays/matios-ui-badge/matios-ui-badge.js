@@ -103,6 +103,12 @@ MTS.Badge = class MtsBadge {
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
+  /** Localized string from the MTS.Badge i18n namespace, with fallback */
+  _t(key, fallback) {
+    const strings = (typeof MTS.getString === 'function' && MTS.getString()['MTS.Badge']) || {};
+    return strings[key] || fallback;
+  }
+
   /** Actualiza el contador */
   setCount(count) {
     this.count = count;
@@ -201,7 +207,7 @@ MTS.Badge = class MtsBadge {
     if (this.removable) {
       const removeBtn = document.createElement('button');
       removeBtn.className = 'mts-badge__remove';
-      removeBtn.setAttribute('aria-label', 'Remover');
+      removeBtn.setAttribute('aria-label', this._t('removeLabel', 'Remove'));
       removeBtn.innerHTML = '&times;';
       removeBtn.addEventListener('click', (e) => {
         e.stopPropagation();

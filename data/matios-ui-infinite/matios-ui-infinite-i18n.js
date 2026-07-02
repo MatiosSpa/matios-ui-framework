@@ -10,6 +10,10 @@
 
   MTS.registerLocale('es', {
     'MTS.Infinite': {
+      loaderText:   'Cargando...',
+      endText:      'No hay más resultados',
+      emptyTitle:   'Sin resultados',
+      emptyMessage: '',
       demo: {
         subtitle:               'Scroll infinito con carga incremental controlada por el desarrollador en layouts vertical y grid.',
         s1Title:                '1 — Layout vertical',
@@ -31,6 +35,10 @@
 
   MTS.registerLocale('en', {
     'MTS.Infinite': {
+      loaderText:   'Loading...',
+      endText:      'No more results',
+      emptyTitle:   'No results',
+      emptyMessage: '',
       demo: {
         subtitle:               'Infinite scroll with incremental loading controlled by the developer in vertical and grid layouts.',
         s1Title:                '1 — Vertical layout',
@@ -52,6 +60,10 @@
 
   MTS.registerLocale('pt', {
     'MTS.Infinite': {
+      loaderText:   'Carregando...',
+      endText:      'Não há mais resultados',
+      emptyTitle:   'Sem resultados',
+      emptyMessage: '',
       demo: {
         subtitle:               'Scroll infinito com carregamento incremental controlado pelo desenvolvedor em layouts vertical e grade.',
         s1Title:                '1 — Layout vertical',
