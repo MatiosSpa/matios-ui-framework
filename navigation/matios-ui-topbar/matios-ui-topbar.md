@@ -64,6 +64,7 @@ new MTS.Topbar('#my-topbar', {
 | `start` | `string \| Element` | `null` | Left slot (between brand and spacer) |
 | `center` | `string \| Element` | `null` | Center slot — replaces the spacer |
 | `end` | `string \| Element` | `null` | Right slot |
+| `menu` | `MTS.Menu` | `null` | An `MTS.Menu` instance rendered horizontally in the center. Takes priority over `center` when both are provided. Ignored unless it is an instance of `MTS.Menu`. |
 | `height` | `string` | `null` | Override `--mts-topbar-height` (e.g. `'50px'`) |
 | `sticky` | `boolean` | `false` | `position:sticky; top:0` |
 | `shadow` | `boolean` | `true` | Bottom box-shadow |
@@ -131,11 +132,4 @@ new MTS.SideNav('#sidenav', { items: [/* … */], onChange: function (e) { navig
 - The `selector` element becomes `.mts-topbar` directly — no extra wrapper is created.
 - A divider `<span class="mts-topbar__divider"></span>` can be placed inside any slot to separate action groups.
 - For `sticky`, the parent needs `height:100vh` (or similar) for sticky positioning to work.
-
----
-
-## Changelog
-
-### Initial
-- Top bar with brand (logo/title/subtitle/href/onClick), start/center/end slots, sticky/shadow/border options,
-  CSS-only usage, `--mts-topbar-*` variables, and `setBrand` / `setStart` / `setEnd` / `setCenter` / `getSlot`.
+- Passing a `menu` (an `MTS.Menu` instance) renders it horizontally in the center and takes priority over `center`. The component has no localizable text of its own — all logo, title, slot, and button content is caller-supplied, so no per-component i18n applies.

@@ -16,24 +16,34 @@ Application layout orchestrator. Applies CSS Grid to the root element and distri
 ## Usage
 
 ```html
-<div id="mainTopbar"></div>
-<nav id="sideNav"></nav>
-<div id="mainContent"></div>
-<div id="mainStatusBar"></div>
+<!-- Shell does not create elements — it works on the ones that already exist. -->
+<div id="app">
+  <div id="topbar"></div>
+  <div id="sidenav"></div>
+  <div id="main"></div>
+  <div id="statusbar"></div>
+</div>
 ```
 
 ```js
-const topbar    = new MTS.Topbar('#mainTopbar', { /* … */ });
-const sidenav   = new MTS.SideNav('#sideNav', { /* … */ });
-const statusbar = new MTS.StatusBar('#mainStatusBar', { /* … */ });
+// 1. Initialize the components on their own elements first.
+const topbar    = new MTS.Topbar('#topbar', { /* … */ });
+const sidenav   = new MTS.SideNav('#sidenav', { /* … */ });
+const statusbar = new MTS.StatusBar('#statusbar', { /* … */ });
 
-new MTS.Shell(document.body, {
+// 2. Shell joins them — accepts any combination of the three.
+new MTS.Shell('#app', {
   topbar:    topbar,
   sidenav:   sidenav,
   statusbar: statusbar,
-  main:      '#mainContent',
+  main:      '#main',
 });
 ```
+
+Each slot reference accepts an MTS instance, a string selector, or an `Element`. Shell adds
+`mts-shell` (plus `mts-shell--top` / `mts-shell--side` / `mts-shell--status` for the present slots)
+to the root, and `mts-shell__topbar` / `mts-shell__sidenav` / `mts-shell__main` /
+`mts-shell__statusbar` to each child.
 
 > **Important:** initialize `MTS.Topbar`, `MTS.SideNav` and `MTS.StatusBar` **before** `MTS.Shell`. Shell uses
 > `classList.add()` (additive), while those components use `className =` (replacement); if Shell runs first, the slot
@@ -49,7 +59,7 @@ new MTS.Shell(document.body, {
 | `sidenav` | `MTS.SideNav \| string \| Element` | `null` | SideNav instance, selector or Element |
 | `statusbar` | `MTS.StatusBar \| string \| Element` | `null` | StatusBar instance, selector or Element |
 | `main` | `string \| Element` | `null` | Selector or Element of the main content area |
-| `height` | `string` | `'100vh'` | Total shell height (e.g. `'100dvh'`, `'800px'`) |
+| `height` | `string` | `null` | Total shell height (e.g. `'100dvh'`, `'800px'`). When omitted, the shell inherits the CSS default `--mts-shell-height: 100vh` |
 
 All slots are optional — Shell applies the correct grid template based on which slots are present.
 
@@ -104,19 +114,19 @@ Top + Side + Status: topbar  topbar
 
 ---
 
-## Changelog
+## i18n
 
-### 2026-06-29
-- `.mts-shell__sidenav` now scrolls on its own (`min-height: 0` + `overflow-y: auto`). Previously a tall sidenav (many
-  expanded groups) grew past its grid track and was clipped by the shell's `overflow: hidden`, with no scrollbar — items
-  below the fold became unreachable. The scrollbar only appears when the nav content exceeds the available height.
-- Themed scrollbar for the shell's scrollable areas (`.mts-shell__sidenav` + `.mts-shell__main--scroll`): thin,
-  token-driven, adapts to dark/light/accent, matching the global base scrollbar — `--mts-border-color-strong` thumb over
-  a faint `--mts-bg-surface-2` track with a `background-clip: padding-box` gap (defined pill), `--mts-color-primary` on
-  hover. No more default browser scrollbar.
-- Status bar now spans the full width (both columns) at the bottom; the sidenav tucks between the topbar and the status
-  bar, mirroring how the topbar spans full width above it. Affects the `side+status` and `top+side+status` layouts.
-  Previously the sidenav extended down into the status row and the status bar sat only under `main`.
+Shell renders **no chrome text of its own** — it only applies CSS classes to the elements you pass in, so there is
+nothing for it to translate. Any user-facing copy (menu labels, brand title, status text) comes from the components
+mounted into the slots (`MTS.Topbar`, `MTS.SideNav`, `MTS.StatusBar`), which localize themselves via the global
+language API.
 
-### 2026-05-13
-- Documentation created.
+Set the language once at startup with the global API — there is no per-instance `locale` option and no
+`getMessages` / `setLocale` / `getLocale`:
+
+```js
+MTS.setLanguage('es'); // 'es' | 'en' | 'pt'
+```
+
+The `MTS.Shell` i18n namespace (in `matios-ui-shell-i18n.js`) contains only strings for this demo page
+(`MTS.getString()['MTS.Shell'].demo.*`); it is not consumed by the component itself.

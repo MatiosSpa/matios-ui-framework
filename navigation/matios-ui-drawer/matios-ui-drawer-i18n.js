@@ -10,6 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.Drawer': {
+      closeLabel: 'Cerrar',
       demo: {
         subtitle:           'Panel lateral deslizante — izquierda, derecha, arriba, abajo · sm/md/lg/full · modo estático.',
         s1Title:            '1 — Posiciones',
@@ -37,6 +38,7 @@
 
   MTS.registerLocale('en', {
     'MTS.Drawer': {
+      closeLabel: 'Close',
       demo: {
         subtitle:           'Sliding side panel — left, right, top, bottom · sm/md/lg/full · static mode.',
         s1Title:            '1 — Positions',
@@ -64,6 +66,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.Drawer': {
+      closeLabel: 'Fechar',
       demo: {
         subtitle:           'Painel lateral deslizante — esquerda, direita, topo, base · sm/md/lg/full · modo estático.',
         s1Title:            '1 — Posições',

@@ -10,6 +10,13 @@
 
   MTS.registerLocale('es', {
     'MTS.CommandPalette': {
+      placeholder:  'Buscar comando...',
+      esc:          'ESC',
+      hintNavigate: 'navegar',
+      hintRun:      'ejecutar',
+      hintClose:    'cerrar',
+      noResults:    'Sin resultados para "{query}"',
+      empty:        'No hay comandos disponibles',
       demo: {
         subtitle:                 'Buscador de comandos tipo ⌘K con comandos agrupados y acciones.',
         s1Title:                  '1 — Básico',
@@ -31,6 +38,13 @@
 
   MTS.registerLocale('en', {
     'MTS.CommandPalette': {
+      placeholder:  'Search command...',
+      esc:          'ESC',
+      hintNavigate: 'navigate',
+      hintRun:      'run',
+      hintClose:    'close',
+      noResults:    'No results for "{query}"',
+      empty:        'No commands available',
       demo: {
         subtitle:                 '⌘K-style command search with grouped commands and actions.',
         s1Title:                  '1 — Basic',
@@ -52,6 +66,13 @@
 
   MTS.registerLocale('pt', {
     'MTS.CommandPalette': {
+      placeholder:  'Buscar comando...',
+      esc:          'ESC',
+      hintNavigate: 'navegar',
+      hintRun:      'executar',
+      hintClose:    'fechar',
+      noResults:    'Sem resultados para "{query}"',
+      empty:        'Nenhum comando disponível',
       demo: {
         subtitle:                 'Busca de comandos no estilo ⌘K com comandos agrupados e ações.',
         s1Title:                  '1 — Básico',

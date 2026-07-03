@@ -10,6 +10,8 @@
 
   MTS.registerLocale('es', {
     'MTS.Breadcrumb': {
+      navLabel:    'Ruta de navegación',
+      expandLabel: 'Mostrar ruta completa',
       demo: {
         subtitle:            'Ruta de navegación — separador personalizado, íconos, colapso de desbordamiento, ítems dinámicos.',
         s1Title:             '1 — Básico con onClick',
@@ -33,6 +35,8 @@
 
   MTS.registerLocale('en', {
     'MTS.Breadcrumb': {
+      navLabel:    'Breadcrumb',
+      expandLabel: 'Show full path',
       demo: {
         subtitle:            'Navigation breadcrumb — custom separator, icons, collapsible overflow, dynamic items.',
         s1Title:             '1 — Basic with onClick',
@@ -56,6 +60,8 @@
 
   MTS.registerLocale('pt', {
     'MTS.Breadcrumb': {
+      navLabel:    'Trilha de navegação',
+      expandLabel: 'Mostrar caminho completo',
       demo: {
         subtitle:            'Trilha de navegação — separador personalizado, ícones, recolhimento de excesso, itens dinâmicos.',
         s1Title:             '1 — Básico com onClick',

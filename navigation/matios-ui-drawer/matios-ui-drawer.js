@@ -66,6 +66,16 @@ MTS.Drawer = class MtsDrawer {
   destroy() { this.hide(); setTimeout(() => { this._drawerEl?.remove(); this._backdropEl?.remove(); }, 350); }
   on(e, cb) { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
 
+  // Reads the component locale (namespace MTS.Drawer) with fallback.
+  _t(key, fallback) {
+    try {
+      let loc = (window.MTS && MTS.getString) ? MTS.getString() : null;
+      let ns = loc && loc['MTS.Drawer'];
+      if (ns && ns[key] != null) return ns[key];
+    } catch (e) {}
+    return fallback;
+  }
+
   _build() {
     this._backdropEl = document.createElement('div');
     this._backdropEl.className = 'mts-drawer-backdrop';
@@ -88,7 +98,7 @@ MTS.Drawer = class MtsDrawer {
       const closeBtn = document.createElement('button');
       closeBtn.className = 'mts-drawer__close';
       closeBtn.innerHTML = '&times;';
-      closeBtn.setAttribute('aria-label', 'Cerrar');
+      closeBtn.setAttribute('aria-label', this._t('closeLabel', 'Close'));
       closeBtn.addEventListener('click', () => this.hide());
       header.appendChild(closeBtn);
     }

@@ -9,6 +9,11 @@ Navigation breadcrumb with custom separator, icon support, collapsible overflow 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-breadcrumb.css">
+
+<!-- Optional: i18n base + component locale (for translated chrome labels) -->
+<script src="matios-ui-i18n.js"></script>
+<script src="matios-ui-breadcrumb-i18n.js"></script>
+
 <script src="matios-ui-breadcrumb.js"></script>
 ```
 
@@ -84,9 +89,9 @@ bc.on('click', function (e) { console.log(e.detail.item); });
 
 ## Events
 
-| Method | DOM event | Payload |
-|--------|-----------|---------|
-| `onClick` | `mts:breadcrumb:click` | `{ item, index }` |
+| Option / listener | DOM event | Payload |
+|-------------------|-----------|---------|
+| `onClick` / `on('click', cb)` | `mts:breadcrumb:click` | `{ item, index }` |
 
 ```js
 document.getElementById('my-breadcrumb')
@@ -97,13 +102,31 @@ document.getElementById('my-breadcrumb')
 
 ## Accessibility
 
-- Renders as a `nav` landmark; the last item represents the current page and is not a link.
-- Items with `href` are real links; keyboard users tab through them and the collapsed overflow expands on activation.
+- Renders as a `nav` landmark with an `aria-label` (`Breadcrumb`, localized via i18n).
+- The last item represents the current page (`aria-current="page"`) and is not a link.
+- Items with `href` are real links; keyboard users tab through them.
+- Separators carry `aria-hidden="true"`.
+- The collapsed overflow is a `button` with an `aria-label` (`Show full path`, localized); activating it expands the full path.
 
 ---
 
-## Changelog
+## i18n
 
-### Initial
-- Breadcrumb with custom separator, per-item icon/href/handler, collapsible overflow (`maxItems`), click event,
-  and dynamic `setItems` / `push` / `pop`.
+Chrome labels (the `nav` `aria-label` and the overflow-expand `aria-label`) come from the global language API.
+Item labels are always supplied by the developer through `items`.
+
+Load `matios-ui-i18n.js` and `matios-ui-breadcrumb-i18n.js`, then set the language once at startup:
+
+```js
+MTS.setLanguage('es'); // 'es' | 'en' | 'pt'
+```
+
+Namespace `MTS.Breadcrumb` — chrome keys:
+
+| Key | en | es | pt |
+|-----|----|----|----|
+| `navLabel` | `Breadcrumb` | `Ruta de navegación` | `Trilha de navegação` |
+| `expandLabel` | `Show full path` | `Mostrar ruta completa` | `Mostrar caminho completo` |
+
+Without the i18n scripts the component falls back to the English literals. There is no per-instance
+`locale` option; the language is global (`MTS.setLanguage` / `MTS.getLanguage` / `MTS.getString`).

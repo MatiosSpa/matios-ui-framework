@@ -8,32 +8,38 @@ Shared navigation model used by `MTS.Topbar` (horizontal mode) and `MTS.SideNav`
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
+<link rel="stylesheet" href="matios-ui-icons.css">
 <link rel="stylesheet" href="matios-ui-menu.css">
+<script src="matios-ui-icons.js"></script>
 <script src="matios-ui-menu.js"></script>
 ```
+
+`matios-ui-icons.js` is required — the submenu chevron is drawn with `MTS.Icon`.
 
 ---
 
 ## Usage
+
+`MTS.Menu` takes a single `options` object; it does not mount itself. You hand the instance to a host (`MTS.Topbar` and/or `MTS.SideNav`), which renders it.
 
 ```js
 const menu = new MTS.Menu({
   active:  'dashboard',
   trigger: 'click', // horizontal mode only: 'click' | 'hover'
   items: [
-    { key: 'dashboard', label: 'Dashboard', icon: '<svg>...</svg>', href: '/dashboard' },
-    { key: 'reports',   label: 'Reports',   badge: 3, children: [
-      { key: 'reports-sales', label: 'Sales',     href: '/reports/sales' },
-      { key: 'reports-stock', label: 'Inventory', href: '/reports/stock' },
+    { key: 'dashboard', label: 'Dashboard', icon: 'mts-icon-home' },
+    { key: 'reports',   label: 'Reports',   icon: 'mts-icon-bar-chart-2', badge: 3, children: [
+      { key: 'reports-sales', label: 'Sales' },
+      { key: 'reports-stock', label: 'Inventory' },
     ]},
     { divider: true },
-    { key: 'settings', label: 'Settings', href: '/settings', disabled: true },
+    { key: 'config', label: 'Config', icon: 'mts-icon-settings' },
   ],
-  onClick: function (item) { router.push(item.href); }, // receives the full item, incl. any extra props
+  onClick: function (item) { console.log(item.key); }, // receives the full item, incl. any extra props
 });
 
 // Hand the same instance to a host component
-new MTS.Topbar('#topbar', { menu: menu });
+new MTS.Topbar('#topbar',  { menu: menu });
 new MTS.SideNav('#sidebar', { menu: menu });
 ```
 
@@ -44,12 +50,14 @@ new MTS.SideNav('#sidebar', { menu: menu });
 
 ## Options
 
+Everything is passed in a single `options` object: `new MTS.Menu(options)`.
+
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `items` | `array` | `[]` | Navigation item tree (see schema below) |
 | `active` | `string` | auto | Key of the initially active item (auto-detected from `href` if omitted) |
-| `trigger` | `string` | `'click'` | Horizontal mode only — `'click'` · `'hover'` |
-| `overflow` | `string` | `'none'` | Horizontal mode only — `'auto'` enables Priority+ Navigation: items that don't fit collapse into a "More" dropdown, recalculated on container resize (`ResizeObserver`). The host container must be width-bounded (`flex:1; min-width:0`). |
+| `trigger` | `string` | `'click'` | Horizontal mode only — `'click'` \| `'hover'` |
+| `overflow` | `string` | `'none'` | Horizontal mode only — `'auto'` enables Priority+ Navigation: items that don't fit collapse into a "More" dropdown, recalculated on container resize (`ResizeObserver`) |
 | `overflowLabel` | `string` | i18n `more` | Label for the overflow trigger (defaults to the localized "More" / "Más" / "Mais") |
 | `overflowIcon` | `string` | — | Optional `mts-icon` class for the overflow trigger |
 | `onClick` | `function` | — | `function(item)` — receives the full item, including any extra props |
@@ -60,12 +68,12 @@ new MTS.SideNav('#sidebar', { menu: menu });
 |----------|------|-------------|
 | `key` | `string` | Unique identifier |
 | `label` | `string` | Display text |
-| `icon` | `string` | Icon HTML (optional) |
+| `icon` | `string` | `mts-icon` class, e.g. `'mts-icon-home'` (optional) |
 | `badge` | `string \| number` | Badge value (optional) |
-| `href` | `string` | Link URL (optional) |
+| `href` | `string` | Link URL — only used for auto-active detection against the current path (optional) |
 | `children` | `array` | Nested items (submenu) |
 | `disabled` | `boolean` | Disables the item |
-| `divider` | `boolean` | Renders a separator |
+| `divider` | `boolean` | Renders a separator (no other props needed) |
 | `group` | `string` | Tree mode — renders a group-label header. An **empty/whitespace** value (`''`, `' '`) renders **no header** (declarative "group without a visible title") |
 
 Any extra property added to an item is passed through intact to `onClick`.
@@ -81,7 +89,8 @@ Any extra property added to an item is passed through intact to `onClick`.
 | `getActive()` | Returns the active key |
 | `getItems()` | Top-level items as a shallow copy (each may carry `children`) |
 | `setBadge(key, value)` | Update an item badge (chainable) |
-| `disable(key)` / `enable(key)` | Toggle an item's disabled state (chainable) |
+| `disable(key)` | Disable an item (chainable) |
+| `enable(key)` | Enable an item (chainable) |
 | `destroy()` | Unmount from every host and clean up |
 
 ```js
@@ -95,26 +104,25 @@ menu.getItems();   // → [{ key, label, children? }, …] (copy)
 
 ## Events
 
-Navigation is reported through the `onClick(item)` callback. Host components (`MTS.Topbar` / `MTS.SideNav`) expose
-their own DOM events for active-item changes.
+Navigation is reported through the `onClick(item)` callback — it fires when a leaf item is clicked and receives the full item object (including any extra props). There are no separate DOM events on the menu itself; host components (`MTS.Topbar` / `MTS.SideNav`) expose their own.
 
 ---
 
 ## Accessibility
 
-- Items with `href` render as links; submenus open by keyboard and `Esc` closes them in horizontal mode.
-- A `disabled` item is skipped by keyboard navigation; the active item is exposed as the current state.
+- Horizontal submenu triggers set `aria-haspopup` and toggle `aria-expanded` as their dropdown opens and closes.
+- A `disabled` item renders as a disabled `<button>` and is skipped by interaction.
 
 ---
 
-## Changelog
+## i18n
 
-### 2026-06-29
-- Submenu chevron migrated to `MTS.Icon` (`chevron-down`, rotated via CSS); dropped inline SVG. Requires `matios-ui-icons.js`.
+Namespace: `MTS.Menu`. Item labels are always dev-supplied (via each item's `label`), so the component itself localizes almost nothing. The only built-in string is the overflow trigger's default label, read from `MTS.getString()['MTS.Menu'].more` (falling back to `"More"`); `overflowLabel` overrides it per instance.
 
-### 2026-06-23
-- `getItems()` — read back the top-level items as a shallow copy (collection-API symmetry across the framework).
+Set the language once, globally, at startup:
 
-### Initial
-- Shared navigation model for `MTS.Topbar` and `MTS.SideNav`: item tree with keys/icons/badges/href/children,
-  multi-host mounting kept in sync, auto-active detection, and `setItems` / `setActive` / `setBadge` / `disable` / `enable`.
+```js
+MTS.setLanguage('es'); // 'es' | 'en' | 'pt'  — default 'es'
+```
+
+The bundle ships all three locales. There is no per-instance `locale` option and no `getMessages` / `setLocale` / `getLocale`.

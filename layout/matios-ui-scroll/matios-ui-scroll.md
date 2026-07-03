@@ -21,8 +21,8 @@ Scrollable container with a themed scrollbar (thin, adapted to the active theme)
 
 ```js
 new MTS.Scroll('#my-scroll', {
-  direction:  'vertical',
-  onReachEnd: function () { console.log('reached the end — load more data'); },
+  direction: 'vertical',
+  onReachEnd: function () { console.log('reached the end — load more data'); }
 });
 ```
 
@@ -48,15 +48,18 @@ new MTS.Scroll('#my-scroll', {
 | Method | Description |
 |--------|-------------|
 | `scrollTo(px[, smooth])` | Move to a position in px (`smooth` defaults to `true`) |
-| `scrollToStart()` / `scrollToEnd()` | Move to start / end |
-| `getScroll()` | Current position in px |
+| `scrollToStart([smooth])` / `scrollToEnd([smooth])` | Move to start / end (`smooth` defaults to `true`) |
+| `getScroll()` | Current position in px (`scrollLeft` when `direction: 'horizontal'`, otherwise `scrollTop`) |
 | `getPercent()` | Scroll percentage (0–100) |
 | `update()` | Recalculate fades (after content grows dynamically) |
 | `destroy()` | Remove the component and restore the original DOM |
 
+All methods except `getScroll()` / `getPercent()` return the instance, so calls chain.
+
 ```js
 const sc = new MTS.Scroll('#my-scroll', { direction: 'vertical' });
-sc.scrollToEnd();
+sc.scrollToEnd();       // smooth by default
+sc.scrollTo(200, false); // jump without animation
 sc.update();
 ```
 
@@ -89,10 +92,3 @@ sc.update();
 - For containers over `mts-bg-surface` / `-2`, pass `fadeBg: 'var(--mts-bg-surface)'` so the fade blends correctly.
 - `onReachEnd` is ideal as an infinite-scroll trigger — pairs well with `MTS.Infinite`.
 - Call `update()` if the content grows dynamically after initialization.
-
----
-
-## Changelog
-
-### 2026-05-13
-- Documentation homologated to the standard template.

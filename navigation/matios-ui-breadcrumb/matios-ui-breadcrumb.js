@@ -45,9 +45,19 @@ MTS.Breadcrumb = class MtsBreadcrumb {
   on(e, cb)       { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   destroy()       { this._el.innerHTML = ''; }
 
+  // Reads the component locale (namespace MTS.Breadcrumb) with fallback.
+  _t(key, fallback) {
+    try {
+      let loc = (window.MTS && MTS.getString) ? MTS.getString() : null;
+      let ns = loc && loc['MTS.Breadcrumb'];
+      if (ns && ns[key] != null) return ns[key];
+    } catch (e) {}
+    return fallback;
+  }
+
   _build() {
     this._el.innerHTML = '';
-    this._el.setAttribute('aria-label', 'Ruta de navegación');
+    this._el.setAttribute('aria-label', this._t('navLabel', 'Breadcrumb'));
 
     const nav = document.createElement('nav');
     nav.className = 'mts-breadcrumb';
@@ -73,7 +83,7 @@ MTS.Breadcrumb = class MtsBreadcrumb {
         const btn = document.createElement('button');
         btn.className   = 'mts-breadcrumb__ellipsis';
         btn.textContent = '...';
-        btn.setAttribute('aria-label', 'Mostrar ruta completa');
+        btn.setAttribute('aria-label', this._t('expandLabel', 'Show full path'));
         btn.addEventListener('click', () => { this._collapsed = false; this._build(); });
         li.appendChild(btn);
       } else if (isLast || (!item.href && !item.onClick)) {

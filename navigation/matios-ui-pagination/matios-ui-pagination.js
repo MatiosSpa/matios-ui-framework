@@ -68,6 +68,13 @@ MTS.Pagination = class MtsPagination {
     this._build();
   }
 
+  /* ── i18n helper — reads MTS.Pagination namespace / lee el namespace MTS.Pagination ── */
+  _t(key, fallback) {
+    const strings = (window.MTS && typeof MTS.getString === 'function' && MTS.getString()) || {};
+    const ns = strings['MTS.Pagination'] || {};
+    return ns[key] != null ? ns[key] : fallback;
+  }
+
   /* ── API ── */
   setPage(p)     { this.page = Math.max(1, Math.min(p, this._totalPages())); this._build(); this._emit(); return this; }
   setTotal(t)    { this.total = t; this.page = 1; this._build(); return this; }
@@ -115,8 +122,11 @@ MTS.Pagination = class MtsPagination {
       const info = document.createElement('span');
       info.className = 'mts-pagination__info';
       info.textContent = this.total === 0
-        ? 'Sin resultados'
-        : 'Mostrando ' + this._from() + '–' + this._to() + ' de ' + this.total;
+        ? this._t('empty', 'No results')
+        : this._t('info', 'Showing {from}–{to} of {total}')
+            .replace('{from}', this._from())
+            .replace('{to}', this._to())
+            .replace('{total}', this.total);
       this._el.appendChild(info);
     }
 
@@ -129,7 +139,7 @@ MTS.Pagination = class MtsPagination {
       sizeWrap.className = 'mts-pagination__sizes';
       const lbl = document.createElement('span');
       lbl.className = 'mts-pagination__sizes-label';
-      lbl.textContent = 'Filas:';
+      lbl.textContent = this._t('rowsLabel', 'Rows:');
       const sel = document.createElement('select');
       sel.className = 'mts-pagination__size-select';
       this.pageSizes.forEach(s => {
@@ -174,7 +184,7 @@ MTS.Pagination = class MtsPagination {
       const jumpWrap = document.createElement('div');
       jumpWrap.className = 'mts-pagination__jump';
       const lbl = document.createElement('span');
-      lbl.textContent = 'Ir a:';
+      lbl.textContent = this._t('jumpLabel', 'Go to:');
       lbl.className = 'mts-pagination__sizes-label';
       const inp = document.createElement('input');
       inp.type = 'number'; inp.min = 1; inp.max = tp;

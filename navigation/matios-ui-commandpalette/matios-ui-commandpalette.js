@@ -12,7 +12,7 @@ MTS.CommandPalette = class MtsCommandPalette {
     this.commands = options.commands || [];
 
     // Input placeholder / Placeholder del input
-    this.placeholder = options.placeholder || 'Buscar comando...';
+    this.placeholder = options.placeholder || this._t('placeholder', 'Buscar comando...');
 
     // Hotkey letter — default: 'k' (⌘K / Ctrl+K) / Tecla para abrir
     this.hotkey = options.hotkey || 'k';
@@ -43,6 +43,16 @@ MTS.CommandPalette = class MtsCommandPalette {
     if (options.onSearch) this.on('search', options.onSearch);
 
     this._init();
+  }
+
+  /* ── i18n ────────────────────────────────────────────── */
+
+  // Read a localized chrome string from MTS.CommandPalette namespace / Lee un string localizado del chrome
+  _t(key, fallback) {
+    const loc = (window.MTS && typeof MTS.getString === 'function')
+      ? MTS.getString()['MTS.CommandPalette']
+      : null;
+    return (loc && loc[key] != null) ? loc[key] : fallback;
   }
 
   /* ── API ─────────────────────────────────────────────── */
@@ -112,7 +122,7 @@ MTS.CommandPalette = class MtsCommandPalette {
 
     const kbdHint = document.createElement('kbd');
     kbdHint.className   = 'mts-cmd__esc';
-    kbdHint.textContent = 'ESC';
+    kbdHint.textContent = this._t('esc', 'ESC');
 
     inputWrap.appendChild(searchIcon);
     inputWrap.appendChild(input);
@@ -126,7 +136,18 @@ MTS.CommandPalette = class MtsCommandPalette {
 
     const footer = document.createElement('div');
     footer.className = 'mts-cmd__footer';
-    footer.innerHTML = '<span><kbd>↑↓</kbd> navegar</span><span><kbd>↵</kbd> ejecutar</span><span><kbd>ESC</kbd> cerrar</span>';
+    const navHint  = document.createElement('span');
+    navHint.innerHTML = '<kbd>↑↓</kbd> ';
+    navHint.appendChild(document.createTextNode(this._t('hintNavigate', 'navegar')));
+    const runHint  = document.createElement('span');
+    runHint.innerHTML = '<kbd>↵</kbd> ';
+    runHint.appendChild(document.createTextNode(this._t('hintRun', 'ejecutar')));
+    const closeHint = document.createElement('span');
+    closeHint.innerHTML = '<kbd>' + this._t('esc', 'ESC') + '</kbd> ';
+    closeHint.appendChild(document.createTextNode(this._t('hintClose', 'cerrar')));
+    footer.appendChild(navHint);
+    footer.appendChild(runHint);
+    footer.appendChild(closeHint);
     wrap.appendChild(footer);
 
     overlay.appendChild(wrap);
@@ -188,7 +209,9 @@ MTS.CommandPalette = class MtsCommandPalette {
     if (!this._results.length) {
       const empty = document.createElement('div');
       empty.className   = 'mts-cmd__empty';
-      empty.textContent = query ? `Sin resultados para "${query}"` : 'No hay comandos disponibles';
+      empty.textContent = query
+        ? this._t('noResults', 'Sin resultados para "{query}"').replace('{query}', query)
+        : this._t('empty', 'No hay comandos disponibles');
       list.appendChild(empty);
       return;
     }

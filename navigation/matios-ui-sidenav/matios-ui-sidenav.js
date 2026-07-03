@@ -156,7 +156,21 @@ MTS.SideNav = class MtsSideNav {
     btn.innerHTML = this.collapsed
       ? MTS.Icon.get('chevron-right')
       : MTS.Icon.get('chevron-left');
-    btn.setAttribute('title', this.collapsed ? 'Expandir' : 'Colapsar');
+    let label = this.collapsed
+      ? this._t('expand', 'Expand')
+      : this._t('collapse', 'Collapse');
+    btn.setAttribute('title', label);
+    btn.setAttribute('aria-label', label);
+  }
+
+  // Lee el locale del componente (namespace MTS.SideNav) con fallback.
+  _t(key, fallback) {
+    try {
+      let loc = (window.MTS && MTS.getString) ? MTS.getString() : null;
+      let ns = loc && loc['MTS.SideNav'];
+      if (ns && ns[key] != null) return ns[key];
+    } catch (e) {}
+    return fallback;
   }
 
   _applyCollapse() {

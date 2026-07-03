@@ -9,8 +9,12 @@ Sliding side panel with backdrop, four positions, four sizes, static mode and pr
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-drawer.css">
+<script src="matios-ui-i18n.js"></script>
+<script src="matios-ui-drawer-i18n.js"></script>
 <script src="matios-ui-drawer.js"></script>
 ```
+
+The `-i18n.js` file is optional; without it the close-button `aria-label` falls back to `Close`.
 
 ---
 
@@ -41,8 +45,7 @@ const confirmDrawer = new MTS.Drawer({
            '<button class="mts-btn mts-btn--danger" data-action="confirm">Confirm</button>',
   static:  true,
 });
-// Wire the footer buttons after creation (avoid inline handlers)
-confirmDrawer.el.querySelector('[data-action="cancel"]').addEventListener('click', function () { confirmDrawer.hide(); });
+confirmDrawer.show();
 
 // Bottom sheet
 new MTS.Drawer({ title: 'Options', position: 'bottom', size: 'sm', content: '<ul>...</ul>' });
@@ -87,26 +90,34 @@ drawer.setContent('<p>New content</p>');
 
 ## Events
 
-| Method | DOM event | When |
-|--------|-----------|------|
+| Callback | DOM event | When |
+|----------|-----------|------|
 | `onOpen` | `mts:drawer:open` | The drawer opens |
 | `onClose` | `mts:drawer:close` | The drawer closes |
 
+The `onOpen` / `onClose` callbacks receive `{ type, detail }`.
+The DOM events bubble and carry `detail: { drawer }` (the instance).
+
 ```js
-document.addEventListener('mts:drawer:open', function (e) { console.log('opened'); });
+document.addEventListener('mts:drawer:open', function (e) { console.log('opened', e.detail.drawer); });
 ```
 
 ---
 
 ## Accessibility
 
-- While open, focus is trapped inside the drawer and `Esc` closes it (unless `static`); closing returns focus.
+- The dialog is rendered with `role="dialog"` and `aria-modal="true"`.
+- `Esc` closes the drawer unless `static` is set (and `closable` is `true`).
 - The backdrop click closes the drawer in non-static mode; provide an explicit close control for `closable: false`.
+- The close button exposes an `aria-label` read from the `MTS.Drawer` locale (`Close` / `Cerrar` / `Fechar`).
 
 ---
 
-## Changelog
+## i18n
 
-### Initial
-- Sliding drawer with left/right/top/bottom positions, sm/md/lg/full sizes, backdrop, static mode, footer,
-  `show` / `hide` / `toggle` / `setTitle` / `setContent`, and `onOpen` / `onClose`.
+The component reads its chrome (the close-button `aria-label`) from the global language set via
+`MTS.setLanguage(lang)`, using the `MTS.Drawer` namespace. There is no per-instance locale option.
+
+```js
+MTS.setLanguage('es'); // 'es' | 'en' | 'pt' — set once at startup
+```

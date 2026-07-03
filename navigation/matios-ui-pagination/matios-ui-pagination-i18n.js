@@ -10,6 +10,10 @@
 
   MTS.registerLocale('es', {
     'MTS.Pagination': {
+      empty:     'Sin resultados',
+      info:      'Mostrando {from}–{to} de {total}',
+      rowsLabel: 'Filas:',
+      jumpLabel: 'Ir a:',
       demo: {
         subtitle:            'Paginación completa — selector de page size, resumen de registros, ir a página, variantes de tamaño.',
         s1Title:             '1 — Básico con onChange',
@@ -30,6 +34,10 @@
 
   MTS.registerLocale('en', {
     'MTS.Pagination': {
+      empty:     'No results',
+      info:      'Showing {from}–{to} of {total}',
+      rowsLabel: 'Rows:',
+      jumpLabel: 'Go to:',
       demo: {
         subtitle:            'Full pagination — page size selector, record summary, jump-to-page, size variants.',
         s1Title:             '1 — Basic with onChange',
@@ -50,6 +58,10 @@
 
   MTS.registerLocale('pt', {
     'MTS.Pagination': {
+      empty:     'Sem resultados',
+      info:      'Mostrando {from}–{to} de {total}',
+      rowsLabel: 'Linhas:',
+      jumpLabel: 'Ir para:',
       demo: {
         subtitle:            'Paginação completa — seletor de page size, resumo de registros, ir para página, variantes de tamanho.',
         s1Title:             '1 — Básico com onChange',

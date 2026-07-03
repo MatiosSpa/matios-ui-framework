@@ -9,8 +9,13 @@ Expandable sections component with single or multiple open panels, flush mode an
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-accordion.css">
+<script src="matios-ui-icons.js"></script>
+<script src="matios-ui-sanitize.js"></script>
 <script src="matios-ui-accordion.js"></script>
 ```
+
+`matios-ui-icons.js` is required — the header arrow is rendered with `MTS.Icon.get('chevron-down')`.
+`matios-ui-sanitize.js` is optional — when present, string `content` and `icon` HTML are sanitized through `MTS.Sanitize.html`.
 
 ---
 
@@ -29,14 +34,28 @@ new MTS.Accordion('#accordion-basic', {
 });
 
 // Multiple open
-new MTS.Accordion('#accordion-multi', { multiple: true, items: [/* … */] });
+new MTS.Accordion('#accordion-multi', {
+  multiple: true,
+  items: [/* … */],
+});
 
 // Flush — no card border
-new MTS.Accordion('#accordion-flush', { flush: true, items: [/* … */] });
+new MTS.Accordion('#accordion-flush', {
+  flush: true,
+  items: [/* … */],
+});
 
 // With icons
 new MTS.Accordion('#accordion-icons', {
-  items: [{ id: 'a', icon: '<svg>...</svg>', title: 'Settings', content: '...' }],
+  items: [
+    { id: 'a', icon: '<svg>...</svg>', title: 'Settings', content: '...' },
+  ],
+});
+
+// Scrollable body — cap the panel body height in px (enables internal scroll)
+new MTS.Accordion('#accordion-scroll', {
+  bodyMaxHeight: 200,
+  items: [/* … */],
 });
 
 // Dynamic items — add / update / remove at runtime (no full rebuild)
@@ -53,10 +72,11 @@ acc.removeItem('f1');                       // out of DOM + state
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `items` | `array` | `[]` | Accordion items (see schema below) |
-| `multiple` | `boolean` | `false` | Allow multiple panels open simultaneously |
+| `multiple` | `boolean` | `false` | Allow multiple panels open simultaneously. When `false`, opening a panel collapses the others |
 | `flush` | `boolean` | `false` | No card border — flat style |
-| `onOpen` | `function` | — | Fires when a panel opens — `{ id }` |
-| `onClose` | `function` | — | Fires when a panel closes — `{ id }` |
+| `bodyMaxHeight` | `number` | `null` | Max panel body height in px — enables internal vertical scroll for that body |
+| `onOpen` | `function` | — | Fires when a panel opens — `{ id, item }` |
+| `onClose` | `function` | — | Fires when a panel closes — `{ id, item }` |
 
 ### Item schema
 
@@ -64,10 +84,10 @@ acc.removeItem('f1');                       // out of DOM + state
 |----------|------|-------------|
 | `id` | `string` | Unique identifier |
 | `title` | `string` | Panel header text |
-| `content` | `string` | Panel HTML content |
-| `icon` | `string` | Icon HTML (optional) |
-| `open` | `boolean` | Initially open |
-| `disabled` | `boolean` | Disables the panel |
+| `content` | `string` \| `Element` \| `function` | Panel content — HTML string, a DOM `Element`, or a function returning an `Element` |
+| `icon` | `string` | Icon HTML rendered before the title (optional) |
+| `open` | `boolean` | Initially open (optional) |
+| `disabled` | `boolean` | Disables the panel — header not clickable (optional) |
 
 ---
 
@@ -80,13 +100,15 @@ acc.removeItem('f1');                       // out of DOM + state
 | `isOpen(id)` | Whether a panel is open |
 | `setItemDisabled(id, bool)` | Disable / enable an item at runtime (closes it if it was open) |
 | `isDisabled(id)` | Current disabled state |
-| `addItem(item[, { open }])` | Append an item at runtime (same shape as `options.items`); mounts only the new node. Duplicate `id` is a no-op. With `{ open: true }` it opens on insert (collapsing others if `multiple` is false). |
+| `addItem(item[, { open }])` | Append an item at runtime (same shape as `options.items`); mounts only the new node. Duplicate `id` is a no-op. With `{ open: true }` it opens on insert (collapsing others if `multiple` is false) |
 | `removeItem(id)` | Remove an item — out of the DOM, the registry and the open set |
 | `updateItem(id, patch)` | Update a rendered item in-place (`{ title?, icon?, disabled? }`) without rebuilding its content — keeps focus/state of inner controls |
 | `hasItem(id)` | Whether an item with that id exists |
 | `getItems()` | Shallow copy of the current items array |
 | `on(event, cb)` | Listen to `'open'` / `'close'` |
-| `destroy()` | Destroy the instance |
+| `destroy()` | Empty the container element |
+
+All mutating methods return the instance (chainable).
 
 ```js
 const acc = new MTS.Accordion('#my-accordion', { items: [/* … */] });
@@ -103,10 +125,14 @@ acc.removeItem('x');
 
 ## Events
 
-| Method | DOM event | Payload |
-|--------|-----------|---------|
-| `onOpen` | `mts:accordion:open` | `{ id }` |
-| `onClose` | `mts:accordion:close` | `{ id }` |
+Each event fires both the registered callback (`onOpen` / `onClose`, or via `on(...)`) and a bubbling DOM `CustomEvent` on the container element.
+
+| Callback | DOM event | Payload |
+|----------|-----------|---------|
+| `onOpen` | `mts:accordion:open` | `{ id, item }` |
+| `onClose` | `mts:accordion:close` | `{ id, item }` |
+
+`id` is the item id; `item` is the matching entry from `items`.
 
 ```js
 document.getElementById('my-accordion')
@@ -117,23 +143,13 @@ document.getElementById('my-accordion')
 
 ## Accessibility
 
-- Headers render as buttons: focusable, toggled with `Enter`/`Space`; a `disabled` item is skipped.
-- The panel content is associated with its header so assistive tech announces the expanded/collapsed state.
+- Headers render as `<button>` elements: focusable, toggled with `Enter` / `Space`; a `disabled` item is skipped.
+- Each header carries `aria-expanded` (boolean, tracks the open state) and `aria-controls` pointing at its body, which has `role="region"` — so assistive tech announces the expanded / collapsed state.
 
 ---
 
-## Changelog
+## i18n
 
-### 2026-06-29
-- Header arrow migrated to `MTS.Icon` (`chevron-down`); dropped inline SVG. Requires `matios-ui-icons.js`.
+`MTS.Accordion` has no translatable chrome: the header arrow is an SVG icon and `aria-expanded` is a boolean, not text. Panel `title` and `content` are supplied by you, in whatever language you pass. There is nothing to localize on the component itself, so no per-instance `locale` option exists.
 
-### 2026-06-23
-- Dynamic items: `addItem(item[, { open }])`, `removeItem(id)` and `updateItem(id, patch)` — add, remove and update
-  items at runtime with surgical DOM (only the affected node), so inner live controls keep their focus and state
-  (no full rebuild). Plus `hasItem(id)` and `getItems()`. Brings `MTS.Accordion` in line with the other collection
-  components (`MTS.ItemList`, `MTS.Tabs`). Non-breaking.
-
-### 2026-05-21
-- `setItemDisabled(id, bool)` — disable/enable an item at runtime without rebuilding the DOM; an open item closes
-  automatically when disabled.
-- `isDisabled(id)` — returns the current disabled state.
+The `MTS.Accordion` i18n namespace registered in `matios-ui-accordion-i18n.js` holds only the strings used by the demo page (es / en / pt); it is not read by the component.

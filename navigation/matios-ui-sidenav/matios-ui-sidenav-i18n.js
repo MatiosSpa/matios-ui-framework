@@ -10,6 +10,8 @@
 
   MTS.registerLocale('es', {
     'MTS.SideNav': {
+      collapse:             'Colapsar',
+      expand:               'Expandir',
       demo: {
         subtitle:           'Navegación lateral colapsable. Requiere una instancia de MTS.Menu en modo tree.',
         s1Title:            '1 — Con MTS.Menu',
@@ -30,6 +32,8 @@
 
   MTS.registerLocale('en', {
     'MTS.SideNav': {
+      collapse:             'Collapse',
+      expand:               'Expand',
       demo: {
         subtitle:           'Collapsible side navigation. Requires an MTS.Menu instance in tree mode.',
         s1Title:            '1 — With MTS.Menu',
@@ -50,6 +54,8 @@
 
   MTS.registerLocale('pt', {
     'MTS.SideNav': {
+      collapse:             'Recolher',
+      expand:               'Expandir',
       demo: {
         subtitle:           'Navegação lateral recolhível. Requer uma instância de MTS.Menu no modo tree.',
         s1Title:            '1 — Com MTS.Menu',

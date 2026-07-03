@@ -81,6 +81,18 @@ MTS.DashboardGrid = class MtsDashboardGrid {
   }
 
   /* ════════════════════════════════════════════════════
+     I18N
+     ════════════════════════════════════════════════════ */
+
+  /** Resuelve una key de i18n del namespace MTS.DashboardGrid; usa fallback si no existe */
+  _t(key, fallback) {
+    const loc = (window.MTS && typeof MTS.getString === 'function')
+      ? MTS.getString()['MTS.DashboardGrid']
+      : null;
+    return (loc && loc[key] != null) ? loc[key] : fallback;
+  }
+
+  /* ════════════════════════════════════════════════════
      API PÚBLICA
      ════════════════════════════════════════════════════ */
 
@@ -213,8 +225,9 @@ MTS.DashboardGrid = class MtsDashboardGrid {
       // Drag handle
       const dragHandle = document.createElement('div');
       dragHandle.className = 'mts-dashboardgrid__drag-handle';
-      dragHandle.setAttribute('aria-label', 'Mover widget');
-      dragHandle.setAttribute('title', 'Mover widget');
+      const dragLabel = this._t('dragHandle', 'Mover widget');
+      dragHandle.setAttribute('aria-label', dragLabel);
+      dragHandle.setAttribute('title', dragLabel);
       dragHandle.setAttribute('role', 'button');
       dragHandle.setAttribute('tabindex', '0');
 
@@ -235,8 +248,9 @@ MTS.DashboardGrid = class MtsDashboardGrid {
       const removeBtn = document.createElement('button');
       removeBtn.type = 'button';
       removeBtn.className = 'mts-dashboardgrid__remove-btn';
-      removeBtn.setAttribute('aria-label', 'Eliminar widget');
-      removeBtn.setAttribute('title', 'Eliminar widget');
+      const removeLabel = this._t('removeWidget', 'Eliminar widget');
+      removeBtn.setAttribute('aria-label', removeLabel);
+      removeBtn.setAttribute('title', removeLabel);
       removeBtn.textContent = '×';
       el.appendChild(removeBtn);
 
@@ -248,8 +262,9 @@ MTS.DashboardGrid = class MtsDashboardGrid {
       // Resize handle
       const resizeHandle = document.createElement('div');
       resizeHandle.className = 'mts-dashboardgrid__resize-handle';
-      resizeHandle.setAttribute('aria-label', 'Redimensionar widget');
-      resizeHandle.setAttribute('title', 'Redimensionar widget');
+      const resizeLabel = this._t('resizeHandle', 'Redimensionar widget');
+      resizeHandle.setAttribute('aria-label', resizeLabel);
+      resizeHandle.setAttribute('title', resizeLabel);
       resizeHandle.setAttribute('role', 'button');
       resizeHandle.setAttribute('tabindex', '0');
       el.appendChild(resizeHandle);
@@ -323,13 +338,13 @@ MTS.DashboardGrid = class MtsDashboardGrid {
 
     const title = document.createElement('div');
     title.className = 'mts-dashboardgrid__tray-title';
-    title.textContent = 'Widgets disponibles';
+    title.textContent = this._t('trayTitle', 'Widgets disponibles');
     this._trayEl.appendChild(title);
 
     if (this._availableItems.length === 0) {
       const empty = document.createElement('p');
       empty.className = 'mts-dashboardgrid__tray-empty';
-      empty.textContent = 'Todos los widgets están en el dashboard';
+      empty.textContent = this._t('trayEmpty', 'Todos los widgets están en el dashboard');
       this._trayEl.appendChild(empty);
       return;
     }
