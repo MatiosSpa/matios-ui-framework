@@ -25,10 +25,11 @@ const COMPONENT_DIRS = ['base', 'forms', 'navigation', 'overlays', 'display', 'l
 
 // Funciones de utilidad de MTS (no son clases) — tipadas a mano.
 const HAND_FUNCS = {
-  registerLocale: 'function registerLocale(code: string, bundle: Record<string, any>): void;',
-  setLanguage:    'function setLanguage(code: string): void;',
-  getLanguage:    'function getLanguage(): string;',
-  getString:    'function getString(code?: string): Record<string, any>;',
+  registerLanguage: 'function registerLanguage(code: string, bundle: Record<string, any>): void;',
+  registerLocale:   'function registerLocale(code: string, bundle: Record<string, any>): void;', // alias
+  setLanguage:      'function setLanguage(code: string): void;',
+  getLanguage:      'function getLanguage(): string;',
+  getString:        'function getString(code?: string): Record<string, any>;',
 };
 
 /* ---- Descubrimiento (mismo criterio que smoke/build) ---- */

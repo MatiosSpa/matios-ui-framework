@@ -365,7 +365,7 @@ MTS.Validate.prototype._applyRule = function(rule, param, value, el) {
 /**
  * Resuelve el mensaje por defecto de una regla desde la tabla INTERNA del
  * componente (MTS.Validate._messages), eligiendo idioma por MTS.getLanguage()
- * (fallback 'es'). NO usa la tabla global i18n ni registerLocale.
+ * (fallback 'es'). NO usa la tabla global i18n ni registerLanguage.
  * Sustituye el placeholder {n} por el parámetro de la regla si se provee.
  * @param {string} key      — clave de la regla
  * @param {string} fallback — texto de último recurso si la clave no existe

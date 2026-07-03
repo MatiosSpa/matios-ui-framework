@@ -10,7 +10,7 @@
      new MTS.Calendar('#cal', { locale: 'pt' })
 
      // Locale custom (cualquier otro idioma):
-     MTS.Calendar.registerLocale('fr', { ... })
+     MTS.Calendar.registerLanguage('fr', { ... })
      new MTS.Calendar('#cal', { locale: 'fr' })
    ============================================================ */
 
