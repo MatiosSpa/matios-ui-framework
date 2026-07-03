@@ -574,8 +574,10 @@ function initGroupLauncher(selector, items) {
     var src  = wrap.dataset.src || '';
     var docUrl = null;
     if (src) {
-      /* derive the component's doc: '<folder>/demo.html' → '<folder>/matios-ui-<comp>.md', absolute */
-      var rel = src.replace(/[?#].*$/, '').replace(/[^\/]*\.html$/, 'matios-ui-' + comp + '.md');
+      /* derive the component's doc: '<folder>/demo.html' → '<folder>/matios-ui-<comp>.md', absolute.
+         Lowercase the key so camelCase ids (e.g. 'stepProgress') resolve to the real lowercase
+         filename on case-sensitive servers. */
+      var rel = src.replace(/[?#].*$/, '').replace(/[^\/]*\.html$/, 'matios-ui-' + comp.toLowerCase() + '.md');
       try { docUrl = new URL(rel, location.href).href; } catch (e) { docUrl = null; }
     }
     mtsNotifyActiveComponent(comp, docUrl, wrap.dataset.title || '');
