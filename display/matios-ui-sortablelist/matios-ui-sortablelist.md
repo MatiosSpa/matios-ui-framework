@@ -9,42 +9,50 @@ Drag-and-drop sortable list with numbered items, move buttons, icons, avatars, b
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-sortablelist.css">
+<script src="matios-ui-icons.js"></script>
 <script src="matios-ui-sortablelist.js"></script>
 ```
+
+The drag handle is drawn with `MTS.Icon.get('drag-handle')`, so `matios-ui-icons.js` is required whenever `showHandle` is on (the default).
+
+Optional — load `matios-ui-i18n.js` and `matios-ui-sortablelist-i18n.js` before the component to localize the internal handle/move-button titles (see [i18n](#i18n)).
 
 ---
 
 ## Usage
 
 ```js
-// Basic sortable
 const list = new MTS.SortableList('#my-list', {
-  variant:     'default',
   numbered:    true,
-  showHandle:  true,
   moveButtons: true,
   items: [
-    { id: '1', title: 'Design review',  description: 'Ana García',    badge: { label: 'Pending',     variant: 'warning' } },
-    { id: '2', title: 'Backend API',    description: 'Pedro López',   badge: { label: 'In progress', variant: 'primary' } },
-    { id: '3', title: 'QA testing',     description: 'Laura Sánchez', disabled: true },
-    { id: '4', title: 'Deploy to prod', description: 'Carlos Ruiz',   badge: { label: 'Blocked',     variant: 'danger' } },
+    { id: '1', title: 'Design review', description: 'Ana García',  badge: { label: 'Pending',     variant: 'warning' } },
+    { id: '2', title: 'Backend API',   description: 'Pedro López', badge: { label: 'In progress', variant: 'primary' } },
+    { id: '3', title: 'QA testing',    description: 'Laura Sánchez', disabled: true }
   ],
-  onReorder:   function (e) { saveOrder(e.detail.items); },
-  onItemClick: function (e) { openDetail(e.detail.item); },
+  onReorder: function (e) {
+    console.log(e.detail.items);
+  },
+  onItemClick: function (e) {
+    console.log(e.detail.item.id);
+  }
 });
 
 // With icons and metadata
 new MTS.SortableList('#my-list', {
   variant: 'compact',
   items: [
-    { id: '1', title: 'Critical bug',    icon: '🔴', meta: 'P1 · 2h' },
-    { id: '2', title: 'Feature request', icon: '🟡', meta: 'P2 · 4h' },
-    { id: '3', title: 'Documentation',   icon: '🟢', meta: 'P3 · 1h' },
-  ],
+    { id: '1', title: 'Critical bug',    icon: MTS.Icon.get('warning', 16),      meta: 'P1 · 2h' },
+    { id: '2', title: 'Feature request', icon: MTS.Icon.get('star', 16),         meta: 'P2 · 4h' },
+    { id: '3', title: 'Documentation',   icon: MTS.Icon.get('check-circle', 16), meta: 'P3 · 1h' }
+  ]
 });
 
 // Read-only (locked)
-new MTS.SortableList('#my-list', { locked: true, items: [/* … */] });
+new MTS.SortableList('#my-list', {
+  locked: true,
+  items: [/* … */]
+});
 ```
 
 ---
@@ -54,26 +62,29 @@ new MTS.SortableList('#my-list', { locked: true, items: [/* … */] });
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `items` | `array` | `[]` | Item list (see schema below) |
-| `variant` | `string` | `'default'` | `'default'` · `'flush'` · `'compact'` |
+| `variant` | `string` | `'default'` | `'default'` \| `'flush'` \| `'compact'` |
 | `numbered` | `boolean` | `false` | Show order numbers |
-| `showHandle` | `boolean` | `true` | Show the drag handle |
+| `showHandle` | `boolean` | `true` | Show the drag handle (requires `matios-ui-icons.js`) |
 | `locked` | `boolean` | `false` | Read-only — no drag |
 | `moveButtons` | `boolean` | `false` | Show ↑ ↓ move buttons |
-| `onReorder` | `function` | — | Fires on reorder — `({ items, fromIndex, toIndex })` |
+| `onReorder` | `function` | — | Fires on reorder — `({ items, fromIndex, toIndex, item })` |
 | `onItemClick` | `function` | — | Fires on item click — `({ item, index })` |
 
 ### Item schema
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `id` | `string` | Unique identifier |
+| `id` | `string` | Unique identifier (used by `removeItem` and drag `dataTransfer`) |
 | `title` | `string` | Item title |
-| `description` | `string` | Subtitle text |
+| `description` | `string` | Subtitle text (hidden when `variant: 'compact'`) |
 | `meta` | `string` | Right-side metadata |
-| `icon` | `string` | SVG icon HTML |
-| `avatar` | `string` | Avatar initials |
-| `badge` | `object` | `{ label, variant }` |
-| `disabled` | `boolean` | Disable drag for this item |
+| `icon` | `string` | Icon HTML (sanitized via `MTS.Sanitize` when available) |
+| `avatar` | `string` | Full name — initials are derived (first letter of up to two words) |
+| `avatarColor` | `string` | Background color for the avatar badge |
+| `badge` | `object` \| `string` | `{ label, variant }`, or a plain string used as the label with the `default` variant |
+| `disabled` | `boolean` | Disable drag and move buttons for this item |
+
+`icon` takes precedence over `avatar` when both are set.
 
 ---
 
@@ -81,36 +92,71 @@ new MTS.SortableList('#my-list', { locked: true, items: [/* … */] });
 
 | Method | Description |
 |--------|-------------|
-| `getItems()` | Get the current order |
-| `setItems(array)` | Replace all items |
-| `addItem(item[, index])` | Add an item (optionally at an index) |
-| `removeItem(id)` | Remove an item by id |
-| `updateItem(id, patch)` | Update an item |
-| `lock()` / `unlock()` | Toggle read-only mode |
-| `on(event, cb)` / `off(event, cb)` | Register / remove listeners (`'reorder'`, `'itemClick'`) |
+| `getItems()` | Returns a shallow copy of the current ordered items |
+| `setItems(array)` | Replace all items and rebuild |
+| `addItem(item[, index])` | Add an item; appends when `index` is omitted, otherwise inserts at `index` |
+| `removeItem(id)` | Remove the item whose `id` matches |
+| `updateItem(id, props)` | Merge `props` into the item with that `id` and rebuild |
+| `lock()` | Switch to read-only mode |
+| `unlock()` | Leave read-only mode |
+| `on(event, cb)` | Register a listener (`'reorder'` \| `'itemClick'`) |
+| `off(event, cb)` | Remove a listener |
+| `destroy()` | Empty the container |
+
+All mutating methods return `this` for chaining.
 
 ```js
 const list = new MTS.SortableList('#my-list', { items: [/* … */] });
 list.addItem({ id: 'top', title: 'At top' }, 0);
 list.updateItem('1', { title: 'Updated title' });
-list.on('reorder', function (e) { console.log(e.detail.items); });
+list.on('reorder', function (e) {
+  console.log(e.detail.items);
+});
 ```
 
 ---
 
 ## Events
 
-| Method | Payload | When |
-|--------|---------|------|
-| `onReorder(fn)` / `on('reorder', fn)` | `{ items, fromIndex, toIndex }` | Items are reordered |
-| `onItemClick(fn)` / `on('itemClick', fn)` | `{ item, index }` | An item is clicked |
+Emitted both through callbacks / `on(...)` listeners and as bubbling DOM `CustomEvent`s on the container. Callback and DOM listeners receive the same `detail` payload (via `e.detail`).
 
-Also dispatched as DOM events:
+| Event | Payload | When |
+|-------|---------|------|
+| `reorder` | `{ items, fromIndex, toIndex, item }` | An item is moved (drag-drop or ↑ ↓ buttons) |
+| `itemClick` | `{ item, index }` | An item row is clicked |
+
+- `items` — the full reordered list (shallow copy).
+- `fromIndex` / `toIndex` — the item's old and new positions.
+- `item` — the moved item (present in `reorder` only).
+
+DOM event names keep the original casing:
 
 ```js
-el.addEventListener('mts:sortable:reorder',   function (e) { console.log(e.detail); });
-el.addEventListener('mts:sortable:itemclick', function (e) { console.log(e.detail); });
+el.addEventListener('mts:sortable:reorder', function (e) {
+  console.log(e.detail.items, e.detail.fromIndex, e.detail.toIndex);
+});
+el.addEventListener('mts:sortable:itemClick', function (e) {
+  console.log(e.detail.item, e.detail.index);
+});
 ```
+
+---
+
+## i18n
+
+The component's own chrome (drag-handle title and the ↑ ↓ button titles) reads from
+`MTS.getString()['MTS.SortableList'].chrome` when `matios-ui-i18n.js` and
+`matios-ui-sortablelist-i18n.js` are loaded. Set the active language once at startup with
+`MTS.setLanguage('es' | 'en' | 'pt')`; without the i18n files, English fallbacks are used.
+
+| Key | English | Used for |
+|-----|---------|----------|
+| `handleTitle` | `Drag to reorder` | `title` on the drag handle |
+| `moveUp` | `Move up` | `title` on the ↑ button |
+| `moveDown` | `Move down` | `title` on the ↓ button |
+
+Item content (`title`, `description`, `meta`, `badge`, …) is supplied by the developer and is never
+translated by the component. There is no per-instance `locale` option — language is global.
 
 ---
 
@@ -119,14 +165,3 @@ el.addEventListener('mts:sortable:itemclick', function (e) { console.log(e.detai
 - Move buttons (`moveButtons`) provide a keyboard-operable alternative to drag-and-drop — keep them enabled when
   pointer dragging is the only other affordance.
 - A `disabled` item or `locked` list is not draggable; reflect that state visually and in any status text.
-
----
-
-## Changelog
-
-### 2026-06-29
-- Drag handle migrated to `MTS.Icon` (`drag-handle`); dropped inline SVG. Requires `matios-ui-icons.js`.
-
-### Initial
-- Sortable list with drag-and-drop, numbered items, drag handle, ↑↓ move buttons, icons/avatars/badges, locked
-  read-only mode, and full item CRUD (`addItem` / `removeItem` / `updateItem` / `setItems`).

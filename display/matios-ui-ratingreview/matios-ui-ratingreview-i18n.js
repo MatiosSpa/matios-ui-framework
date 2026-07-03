@@ -10,6 +10,8 @@
 
   MTS.registerLocale('es', {
     'MTS.RatingReview': {
+      reviews:    'reseñas',
+      yourRating: 'Tu calificación:',
       demo: {
         subtitle:               'Widget de reseñas con promedio, desglose por estrellas y votación interactiva.',
         s1Title:                '1 — Solo lectura con desglose',
@@ -28,6 +30,8 @@
 
   MTS.registerLocale('en', {
     'MTS.RatingReview': {
+      reviews:    'reviews',
+      yourRating: 'Your rating:',
       demo: {
         subtitle:               'Review widget with average, star breakdown and interactive voting.',
         s1Title:                '1 — Read-only with breakdown',
@@ -46,6 +50,8 @@
 
   MTS.registerLocale('pt', {
     'MTS.RatingReview': {
+      reviews:    'avaliações',
+      yourRating: 'Sua avaliação:',
       demo: {
         subtitle:               'Widget de avaliações com média, distribuição por estrelas e votação interativa.',
         s1Title:                '1 — Somente leitura com distribuição',

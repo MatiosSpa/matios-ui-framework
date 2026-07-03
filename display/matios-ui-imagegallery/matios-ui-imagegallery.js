@@ -47,6 +47,11 @@ MTS.ImageGallery = class MtsImageGallery {
     this._build();
   }
 
+  _t(key, fallback) {
+    try { const ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.ImageGallery'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    return fallback;
+  }
+
   /* ── API ── */
   setImages(images)    { this.images = images; this._selected.clear(); this._build(); return this; }
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
@@ -74,7 +79,7 @@ MTS.ImageGallery = class MtsImageGallery {
       const allBtn = document.createElement('button');
       allBtn.type = 'button';
       allBtn.className = 'mts-imagegallery__filter-btn' + (!this._activeFilter ? ' mts-imagegallery__filter-btn--active' : '');
-      allBtn.textContent = 'Todos';
+      allBtn.textContent = this._t('all', 'Todos');
       allBtn.addEventListener('click', () => { this._activeFilter = null; this._build(); });
       bar.appendChild(allBtn);
       this.filters.forEach(tag => {
@@ -101,7 +106,7 @@ MTS.ImageGallery = class MtsImageGallery {
     if (!visible.length) {
       const empty = document.createElement('div');
       empty.className = 'mts-imagegallery__empty';
-      empty.textContent = 'Sin imágenes';
+      empty.textContent = this._t('empty', 'Sin imágenes');
       grid.appendChild(empty);
       return;
     }

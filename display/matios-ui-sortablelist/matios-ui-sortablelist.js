@@ -76,6 +76,16 @@ MTS.SortableList = class MtsSortableList {
   off(e, cb)               { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   destroy()                { this._el.innerHTML = ''; }
 
+  /* ── i18n del chrome interno ─────────────────────────── */
+  _t(key, fallback) {
+    try {
+      const ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.SortableList'] : null;
+      const c = ns && ns.chrome;
+      if (c && c[key] != null) return c[key];
+    } catch (e) {}
+    return fallback;
+  }
+
   /* ── Build ───────────────────────────────────────────── */
 
   _reindex() {
@@ -107,7 +117,7 @@ MTS.SortableList = class MtsSortableList {
       const handle = document.createElement('div');
       handle.className = 'mts-sortable__handle' + (item.disabled ? ' mts-sortable__handle--disabled' : '');
       handle.innerHTML = MTS.Icon.get('drag-handle');
-      handle.title = 'Arrastrar para reordenar';
+      handle.title = this._t('handleTitle', 'Drag to reorder');
       row.appendChild(handle);
     }
 
@@ -176,14 +186,14 @@ MTS.SortableList = class MtsSortableList {
       const up = document.createElement('button');
       up.className = 'mts-sortable__move-btn';
       up.innerHTML = '↑';
-      up.title = 'Mover arriba';
+      up.title = this._t('moveUp', 'Move up');
       up.disabled = idx === 0;
       up.addEventListener('click', (e) => { e.stopPropagation(); this._move(idx, idx - 1); });
 
       const down = document.createElement('button');
       down.className = 'mts-sortable__move-btn';
       down.innerHTML = '↓';
-      down.title = 'Mover abajo';
+      down.title = this._t('moveDown', 'Move down');
       down.disabled = idx === this.items.length - 1;
       down.addEventListener('click', (e) => { e.stopPropagation(); this._move(idx, idx + 1); });
 

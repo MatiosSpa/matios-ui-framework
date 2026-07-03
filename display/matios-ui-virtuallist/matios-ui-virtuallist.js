@@ -50,6 +50,7 @@ MTS.VirtualList = class MtsVirtualList {
     if (this._scrollEl) this._scrollEl.scrollTop = top;
     return this;
   }
+  scrollToIndex(index) { return this.scrollTo(index); }
   scrollToTop()     { if (this._scrollEl) this._scrollEl.scrollTop = 0; return this; }
   getVisibleRange() {
     const first = Math.max(0, Math.floor(this._scrollTop / this.itemHeight) - this.buffer);

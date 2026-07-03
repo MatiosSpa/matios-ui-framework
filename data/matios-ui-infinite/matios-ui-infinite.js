@@ -260,13 +260,11 @@ MTS.Infinite = class MtsInfinite {
         this._emit('end', { total: this._totalLoaded });
       }
 
-      this._emit('load', { items, page: this._page - 1 });
       this._emit('load', { items, page: this._page - 1, total: this._totalLoaded });
 
     } catch (err) {
       console.error('[MTS.Infinite] onLoadMore error:', err);
       this._showError(err?.message || 'Error al cargar datos');
-      this._emit('error', { error: err });
       this._emit('error', { error: err });
     } finally {
       this._loading = false;

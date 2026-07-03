@@ -12,6 +12,13 @@ Vertical or horizontal timeline with icons, badges, dates, colors and clickable 
 <script src="matios-ui-timeline.js"></script>
 ```
 
+Optional dependencies:
+
+- **`matios-ui-sanitize.js`** — if loaded, the `icon` and `description` HTML is passed through
+  `MTS.Sanitize.html()`. When absent, that HTML is inserted as-is.
+- **`matios-ui-badge.css`** — required to style the per-event `badge` (the component emits
+  `mts-badge` markup; it does not instantiate `MTS.Badge`).
+
 ---
 
 ## Usage
@@ -20,21 +27,27 @@ Vertical or horizontal timeline with icons, badges, dates, colors and clickable 
 // Vertical left (default)
 new MTS.Timeline('#my-timeline', {
   direction: 'vertical',
-  align:     'left',
+  align: 'left',
   events: [
-    { id: 'deploy', title: 'Production deploy', description: 'v2.4.0 deployed successfully.', date: '2 min ago', badge: { label: 'Success', variant: 'success' } },
-    { id: 'review', title: 'Code review',       description: 'PR #142 approved.',             date: '1 hour ago', color: '#7c3aed' },
-    { id: 'commit', title: 'Commit pushed',     date: 'Yesterday' },
+    { title: 'Order charged', date: 'Today',      description: '$248.00 charged.' },
+    { title: 'Order shipped', date: 'Yesterday',  description: 'Tracking #9X4712.' },
+    { title: 'Order placed',  date: '3 days ago', description: '3 items.' }
   ],
-  onEventClick: function (e) { console.log(e.detail.event.id); },
+  onEventClick: function (e) { console.log(e.detail.event, e.detail.index); }
 });
 
 // Alternating layout
-new MTS.Timeline('#my-timeline', { align: 'alternate', events: [/* … */] });
-
-// With custom icons
 new MTS.Timeline('#my-timeline', {
-  events: [{ title: 'Payment received', icon: '<svg>...</svg>', color: '#16a34a' }],
+  align: 'alternate',
+  events: [/* … */]
+});
+
+// With a badge, a colored dot and a custom icon
+new MTS.Timeline('#my-timeline', {
+  events: [
+    { title: 'Production deploy', date: '2 min ago', badge: { label: 'Success', variant: 'success' } },
+    { title: 'Payment received',  color: '#16a34a', icon: '<svg>...</svg>' }
+  ]
 });
 ```
 
@@ -71,21 +84,28 @@ new MTS.Timeline('#my-timeline', {
 | `addEvent(event)` | Add one event and re-render |
 | `on(event, cb)` / `off(event, cb)` | Register / remove listeners (`'eventclick'`) |
 
+Every method returns the instance, so calls can be chained.
+
 ```js
 const tl = new MTS.Timeline('#my-timeline', { events: [/* … */] });
-tl.addEvent({ id: 'new', title: 'New event', date: 'Just now' });
-tl.on('eventclick', function (e) { console.log(e.detail.event.id); });
+tl.addEvent({ title: 'New event', date: 'Just now' });
+tl.on('eventclick', function (e) { console.log(e.detail.event, e.detail.index); });
 ```
 
 ---
 
 ## Events
 
-| Method | Payload | When |
-|--------|---------|------|
-| `onEventClick(fn)` / `on('eventclick', fn)` | `{ event, index }` | An event item is clicked |
+| Event | Payload | When |
+|-------|---------|------|
+| `eventclick` | `{ event, index }` | An event item is clicked |
 
-Also dispatched as a DOM event:
+Items are only made clickable when an `eventclick` listener is registered (via the `onEventClick`
+option or `on('eventclick', fn)`). Listener callbacks receive `{ type, detail }`, where `detail`
+carries `{ event, index }`.
+
+The same event is also dispatched as a bubbling DOM `CustomEvent` named `mts:timeline:eventclick`,
+whose `detail` is `{ event, index }`:
 
 ```js
 document.getElementById('my-timeline')
@@ -94,15 +114,19 @@ document.getElementById('my-timeline')
 
 ---
 
+## i18n
+
+The component renders no chrome text of its own — every visible string (titles, dates, descriptions,
+badge labels) comes from the `events` you supply, so there is nothing for the component to localize.
+Provide already-localized `events` for the active language.
+
+The global language API (`MTS.setLanguage` / `MTS.getLanguage` / `MTS.getString`) still applies to the
+surrounding page and to shared components (such as `MTS.Badge`). There is no per-instance `locale`
+option and no `getMessages` / `setLocale` / `getLocale` methods.
+
+---
+
 ## Accessibility
 
 - Each event title should be meaningful on its own; the dot color and icon are decorative.
 - For a horizontal timeline, ensure the container is scrollable/focusable when content overflows.
-
----
-
-## Changelog
-
-### Initial
-- Timeline with vertical/horizontal direction, left/right/alternate alignment, per-event icon/color/badge/date,
-  clickable events (`onEventClick`), and `setEvents` / `addEvent`.

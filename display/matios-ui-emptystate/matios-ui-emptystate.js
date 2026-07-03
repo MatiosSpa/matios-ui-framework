@@ -52,6 +52,15 @@ MTS.EmptyState = class MtsEmptyState {
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
+  _t(key, fallback) {
+    try {
+      const ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.EmptyState'] : null;
+      const m = ns && ns.messages;
+      if (m && m[key] != null) return m[key];
+    } catch (e) {}
+    return fallback;
+  }
+
   _build() {
     this._syncClasses([`mts-emptystate`, `mts-emptystate--${this.size}`]);
     this._el.innerHTML = '';
@@ -91,16 +100,21 @@ MTS.EmptyState = class MtsEmptyState {
   }
 
   _defaultTitle() {
-    const titles = { 'no-data': 'Sin datos', 'search': 'Sin resultados', 'error': 'Algo salió mal', 'permissions': 'Acceso denegado' };
-    return titles[this.variant] || 'Sin contenido';
+    const titles = {
+      'no-data':     this._t('titleNoData',      'Sin datos'),
+      'search':      this._t('titleSearch',      'Sin resultados'),
+      'error':       this._t('titleError',       'Algo salió mal'),
+      'permissions': this._t('titlePermissions', 'Acceso denegado'),
+    };
+    return titles[this.variant] || this._t('titleDefault', 'Sin contenido');
   }
 
   _defaultDescription() {
     const descs = {
-      'no-data':     'No hay datos para mostrar en este momento.',
-      'search':      'Intenta con otros términos de búsqueda.',
-      'error':       'Ocurrió un error inesperado. Intenta nuevamente.',
-      'permissions': 'No tienes permisos para ver este contenido.',
+      'no-data':     this._t('descNoData',      'No hay datos para mostrar en este momento.'),
+      'search':      this._t('descSearch',      'Intenta con otros términos de búsqueda.'),
+      'error':       this._t('descError',       'Ocurrió un error inesperado. Intenta nuevamente.'),
+      'permissions': this._t('descPermissions', 'No tienes permisos para ver este contenido.'),
     };
     return descs[this.variant] || '';
   }

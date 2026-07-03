@@ -49,6 +49,11 @@ MTS.RatingReview = class MtsRatingReview {
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
 
+  _t(key, fallback) {
+    let loc = (window.MTS && typeof MTS.getString === 'function') ? MTS.getString()['MTS.RatingReview'] : null;
+    return (loc && loc[key] != null) ? loc[key] : fallback;
+  }
+
   _stars(count, size) {
     let out = '';
     for (let i = 1; i <= 5; i++) {
@@ -78,7 +83,7 @@ MTS.RatingReview = class MtsRatingReview {
     starsEl.innerHTML = this._stars(this.average, this.size === 'lg' ? 20 : 16);
     const totalEl = document.createElement('div');
     totalEl.className = 'mts-ratingreview__total';
-    totalEl.textContent = this.total.toLocaleString('es-CL') + ' reseñas';
+    totalEl.textContent = this.total.toLocaleString() + ' ' + this._t('reviews', 'reviews');
     left.appendChild(avg);
     left.appendChild(starsEl);
     left.appendChild(totalEl);
@@ -105,7 +110,7 @@ MTS.RatingReview = class MtsRatingReview {
       iRow.className = 'mts-ratingreview__interactive';
       const lbl = document.createElement('span');
       lbl.className = 'mts-ratingreview__interactive-label';
-      lbl.textContent = 'Tu calificación:';
+      lbl.textContent = this._t('yourRating', 'Tu calificación:');
       iRow.appendChild(lbl);
       const starsWrap = document.createElement('div');
       starsWrap.className = 'mts-ratingreview__interactive-stars';

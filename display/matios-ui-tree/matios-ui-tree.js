@@ -26,7 +26,7 @@ MTS.Tree = class MtsTree {
     this._el         = typeof selector === 'string' ? document.querySelector(selector) : selector;
     if (!this._el) return;
     this.nodes       = this._cloneNodes(options.nodes || []);
-    this.expandAll   = options.expandAll   ?? false;
+    this._expandAll  = options.expandAll   ?? false;
     this.selectable  = options.selectable  ?? false;
     this.checkable   = options.checkable   ?? false;
     this.showIcons   = options.showIcons   ?? true;
@@ -46,20 +46,21 @@ MTS.Tree = class MtsTree {
     // Se dispara al cambiar un checkbox
     if (options.onCheck)  this.on('check',  options.onCheck);
 
-    if (this.expandAll) this._expandAllNodes(this.nodes);
+    if (this._expandAll) this._expandAllNodes(this.nodes);
     this._build();
   }
 
   /* ── API ── */
   expand(id)        { const n=this._findNode(id); if(n){n.expanded=true; this._build();} return this; }
   collapse(id)      { const n=this._findNode(id); if(n){n.expanded=false;this._build();} return this; }
-  expandAll2()      { this._expandAllNodes(this.nodes); this._build(); return this; }
+  expandAll()       { this._expandAllNodes(this.nodes); this._build(); return this; }
+  expandAll2()      { return this.expandAll(); } // deprecated alias of expandAll()
   collapseAll()     { this._collapseAllNodes(this.nodes); this._build(); return this; }
   select(id)        { this._selectNode(id); return this; }
   check(id, val)    { const n=this._findNode(id); if(n){n.checked=val??true; this._build();} return this; }
   getChecked()      { return this._getCheckedIds(this.nodes); }
   getSelected()     { return this._selected; }
-  setNodes(nodes)   { this.nodes=this._cloneNodes(nodes); if(this.expandAll)this._expandAllNodes(this.nodes); this._build(); return this; }
+  setNodes(nodes)   { this.nodes=this._cloneNodes(nodes); if(this._expandAll)this._expandAllNodes(this.nodes); this._build(); return this; }
   on(e,cb)          { if(!this._listeners[e])this._listeners[e]=[]; this._listeners[e].push(cb); return this; }
   destroy()         { this._el.innerHTML=''; }
 

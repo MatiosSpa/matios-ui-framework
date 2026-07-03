@@ -10,6 +10,10 @@
 
   MTS.registerLocale('es', {
     'MTS.Countdown': {
+      days:  'días',
+      hours: 'horas',
+      mins:  'min',
+      secs:  'seg',
       demo: {
         subtitle:          'Temporizador de cuenta regresiva animado — bloques, compacto, minimal y API imperativa.',
         s1Title:           '1 — Variante: bloques (por defecto)',
@@ -24,6 +28,10 @@
 
   MTS.registerLocale('en', {
     'MTS.Countdown': {
+      days:  'days',
+      hours: 'hours',
+      mins:  'min',
+      secs:  'sec',
       demo: {
         subtitle:          'Animated countdown timer — blocks, compact, minimal, and imperative API.',
         s1Title:           '1 — Variant: blocks (default)',
@@ -38,6 +46,10 @@
 
   MTS.registerLocale('pt', {
     'MTS.Countdown': {
+      days:  'dias',
+      hours: 'horas',
+      mins:  'min',
+      secs:  'seg',
       demo: {
         subtitle:          'Cronômetro de contagem regressiva animado — blocos, compacto, minimal e API imperativa.',
         s1Title:           '1 — Variante: blocos (padrão)',

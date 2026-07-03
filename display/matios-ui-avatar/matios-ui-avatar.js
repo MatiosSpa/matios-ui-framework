@@ -52,6 +52,28 @@ MTS.Avatar = class MtsAvatar {
   setStatus(status) { this.status = status; this._build(); return this; }
   setSrc(src)       { this.src = src; this._build(); return this; }
 
+  // Patch any subset of fields and re-render. When `name` changes without an explicit
+  // `initials`/`color` in the same call, both are recomputed from the new name.
+  update(options = {}) {
+    if ('src'      in options) this.src      = options.src;
+    if ('name'     in options) this.name     = options.name || '';
+    if ('initials' in options) this.initials = options.initials;
+    else if ('name' in options) this.initials = MTS.Avatar.getInitials(this.name);
+    if ('color'    in options) this.color    = options.color;
+    else if ('name' in options) this.color   = MTS.Avatar.colorFromName(this.name);
+    if ('size'     in options) this.size     = options.size;
+    if ('status'   in options) this.status   = options.status;
+    if ('square'   in options) this.square   = options.square;
+    if ('badge'    in options) this.badge    = options.badge;
+    this._build();
+    return this;
+  }
+
+  _t(key, fallback) {
+    try { const ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.Avatar'] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
+    return fallback;
+  }
+
   _syncClasses() {
     const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-avatar'));
     this._el.className = keep.join(' ');
@@ -61,7 +83,7 @@ MTS.Avatar = class MtsAvatar {
 
   _build() {
     this._syncClasses();
-    this._el.setAttribute('aria-label', this.name || 'Avatar');
+    this._el.setAttribute('aria-label', this.name || this._t('avatarLabel', 'Avatar'));
     this._el.innerHTML = '';
 
     if (this.src) {

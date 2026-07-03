@@ -73,13 +73,18 @@
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
       .replace(/^&gt; (.+)$/gm,    '<blockquote>$1</blockquote>')
       .replace(/^\|(.+)\|\s*\n\|[-| :]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm, function (_, hdr, rows) {
-        let ths = hdr.split('|')
+        function splitCells(line) {
+          /* honor escaped pipes (\| = literal | in a GFM cell) — don't split on them */
+          let cells = line.replace(/\\\|/g, '\x00').split('|');
+          return cells.map(function (c) { return c.replace(/\x00/g, '|'); });
+        }
+        let ths = splitCells(hdr)
           .filter(function (c) { return c.trim(); })
           .map(function (c) { return '<th>' + c.trim() + '</th>'; })
           .join('');
         let trs = rows.trim().split('\n')
           .map(function (r) {
-            return '<tr>' + r.split('|')
+            return '<tr>' + splitCells(r)
               .filter(function (c) { return c.trim(); })
               .map(function (c) { return '<td>' + c.trim() + '</td>'; })
               .join('') + '</tr>';

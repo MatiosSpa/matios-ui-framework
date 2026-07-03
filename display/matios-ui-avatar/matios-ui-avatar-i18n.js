@@ -10,6 +10,9 @@
 
   MTS.registerLocale('es', {
     'MTS.Avatar': {
+      messages: {
+        avatarLabel: 'Avatar'
+      },
       demo: {
         subtitle:    'Demo de Avatar actualizado al patrón Preview | HTML | JavaScript.',
         s1Title:     '1 — Básico y estados',
@@ -24,6 +27,9 @@
 
   MTS.registerLocale('en', {
     'MTS.Avatar': {
+      messages: {
+        avatarLabel: 'Avatar'
+      },
       demo: {
         subtitle:    'Avatar demo updated to the Preview | HTML | JavaScript pattern.',
         s1Title:     '1 — Basic and states',
@@ -38,6 +44,9 @@
 
   MTS.registerLocale('pt', {
     'MTS.Avatar': {
+      messages: {
+        avatarLabel: 'Avatar'
+      },
       demo: {
         subtitle:    'Demo de Avatar atualizado ao padrão Preview | HTML | JavaScript.',
         s1Title:     '1 — Básico e estados',

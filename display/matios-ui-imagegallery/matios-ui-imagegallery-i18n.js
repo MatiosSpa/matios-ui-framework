@@ -10,6 +10,10 @@
 
   MTS.registerLocale('es', {
     'MTS.ImageGallery': {
+      messages: {
+        all:   'Todos',
+        empty: 'Sin imágenes'
+      },
       demo: {
         subtitle:               'Galería de imágenes — grid, masonry, lista · filtros por categoría · selección múltiple · lightbox integrado.',
         s1Title:                '1 — Grid con filtros y lightbox',
@@ -27,6 +31,10 @@
 
   MTS.registerLocale('en', {
     'MTS.ImageGallery': {
+      messages: {
+        all:   'All',
+        empty: 'No images'
+      },
       demo: {
         subtitle:               'Image gallery — grid, masonry, list · filters by category · multi-selection · built-in lightbox.',
         s1Title:                '1 — Grid with filters and lightbox',
@@ -44,6 +52,10 @@
 
   MTS.registerLocale('pt', {
     'MTS.ImageGallery': {
+      messages: {
+        all:   'Todos',
+        empty: 'Sem imagens'
+      },
       demo: {
         subtitle:               'Galeria de imagens — grade, masonry, lista · filtros por categoria · seleção múltipla · lightbox integrado.',
         s1Title:                '1 — Grade com filtros e lightbox',

@@ -39,8 +39,14 @@ MTS.Countdown = class MtsCountdown {
     // Separator between blocks (compact/minimal) / Separador entre bloques
     this.separator = options.separator || ':';
 
-    // Unit labels / Labels de cada unidad
-    this.labels = Object.assign({ days:'días', hours:'horas', mins:'min', secs:'seg' }, options.labels || {});
+    // Unit labels — defaults from i18n (MTS.Countdown), per-option override wins
+    // Labels de cada unidad — defaults desde i18n; el override por opción manda
+    this.labels = Object.assign({
+      days:  this._t('days',  'días'),
+      hours: this._t('hours', 'horas'),
+      mins:  this._t('mins',  'min'),
+      secs:  this._t('secs',  'seg'),
+    }, options.labels || {});
     this._interval = null;
     this._prev     = {};
     this._listeners = {};
@@ -67,6 +73,11 @@ MTS.Countdown = class MtsCountdown {
   destroy() { this.pause(); this._el.innerHTML = ''; }
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
+
+  _t(key, fallback) {
+    let loc = (window.MTS && typeof MTS.getString === 'function') ? MTS.getString()['MTS.Countdown'] : null;
+    return (loc && loc[key] != null) ? loc[key] : fallback;
+  }
 
   _syncClasses() {
     const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-countdown'));

@@ -10,6 +10,17 @@
 
   MTS.registerLocale('es', {
     'MTS.EmptyState': {
+      messages: {
+        titleNoData:      'Sin datos',
+        titleSearch:      'Sin resultados',
+        titleError:       'Algo salió mal',
+        titlePermissions: 'Acceso denegado',
+        titleDefault:     'Sin contenido',
+        descNoData:       'No hay datos para mostrar en este momento.',
+        descSearch:       'Intenta con otros términos de búsqueda.',
+        descError:        'Ocurrió un error inesperado. Intenta nuevamente.',
+        descPermissions:  'No tienes permisos para ver este contenido.'
+      },
       demo: {
         subtitle:           'Demo de EmptyState actualizado al patrón Preview | HTML | JavaScript.',
         s1Title:            '1 — Variantes',
@@ -34,6 +45,17 @@
 
   MTS.registerLocale('en', {
     'MTS.EmptyState': {
+      messages: {
+        titleNoData:      'No data',
+        titleSearch:      'No results',
+        titleError:       'Something went wrong',
+        titlePermissions: 'Access denied',
+        titleDefault:     'Nothing here',
+        descNoData:       'There is no data to show right now.',
+        descSearch:       'Try different search terms.',
+        descError:        'An unexpected error occurred. Please try again.',
+        descPermissions:  'You do not have permission to view this content.'
+      },
       demo: {
         subtitle:           'EmptyState demo updated to the Preview | HTML | JavaScript pattern.',
         s1Title:            '1 — Variants',
@@ -58,6 +80,17 @@
 
   MTS.registerLocale('pt', {
     'MTS.EmptyState': {
+      messages: {
+        titleNoData:      'Sem dados',
+        titleSearch:      'Sem resultados',
+        titleError:       'Algo deu errado',
+        titlePermissions: 'Acesso negado',
+        titleDefault:     'Nada aqui',
+        descNoData:       'Não há dados para mostrar no momento.',
+        descSearch:       'Tente com outros termos de busca.',
+        descError:        'Ocorreu um erro inesperado. Tente novamente.',
+        descPermissions:  'Você não tem permissão para ver este conteúdo.'
+      },
       demo: {
         subtitle:           'Demo do EmptyState atualizado ao padrão Preview | HTML | JavaScript.',
         s1Title:            '1 — Variantes',

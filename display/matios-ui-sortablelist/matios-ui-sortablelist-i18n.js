@@ -10,6 +10,11 @@
 
   MTS.registerLocale('es', {
     'MTS.SortableList': {
+      chrome: {
+        handleTitle: 'Arrastrar para reordenar',
+        moveUp:      'Mover arriba',
+        moveDown:    'Mover abajo'
+      },
       demo: {
         subtitle:                'Lista reordenable por arrastre — numerada, botones de mover, íconos, badges y controles de API.',
         s1Title:                 '1 — Flujo de aprobaciones',
@@ -42,6 +47,11 @@
 
   MTS.registerLocale('en', {
     'MTS.SortableList': {
+      chrome: {
+        handleTitle: 'Drag to reorder',
+        moveUp:      'Move up',
+        moveDown:    'Move down'
+      },
       demo: {
         subtitle:                'Drag-and-drop sortable list — numbered, move buttons, icons, badges and API controls.',
         s1Title:                 '1 — Approval workflow',
@@ -74,6 +84,11 @@
 
   MTS.registerLocale('pt', {
     'MTS.SortableList': {
+      chrome: {
+        handleTitle: 'Arraste para reordenar',
+        moveUp:      'Mover para cima',
+        moveDown:    'Mover para baixo'
+      },
       demo: {
         subtitle:                'Lista reordenável por arrastar — numerada, botões de mover, ícones, badges e controles de API.',
         s1Title:                 '1 — Fluxo de aprovações',
