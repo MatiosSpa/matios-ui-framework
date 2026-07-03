@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-mts-mode="dark">
+<head>
+  <script>
+    /* Inherit mode/accent from the URL params or the parent frame (same as the demos). */
+    (function () {
+      var sp = location.search || location.hash || '';
+      var mm = sp.match(/mts-mode=([a-z-]+)/);
+      var ma = sp.match(/mts-accent=([a-z-]+)/);
+      if (mm) document.documentElement.setAttribute('data-mts-mode', mm[1]);
+      if (ma) document.documentElement.setAttribute('data-mts-accent', ma[1]);
+      try {
+        var p = window.parent;
+        if (p && p !== window) {
+          var pm = p.currentModeVal   || p.document.documentElement.getAttribute('data-mts-mode');
+          var pa = p.currentAccentVal || p.document.documentElement.getAttribute('data-mts-accent');
+          if (pm) document.documentElement.setAttribute('data-mts-mode', pm);
+          if (pa) document.documentElement.setAttribute('data-mts-accent', pa);
+          else    document.documentElement.removeAttribute('data-mts-accent');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Matios UI — Changelog</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="base/matios-ui-base.css">
+  <link rel="stylesheet" href="themes/matios-ui-mode-dark.css">
+  <link rel="stylesheet" href="themes/matios-ui-mode-light.css">
+  <link rel="stylesheet" href="themes/matios-ui-mode-high-contrast.css">
+  <link rel="stylesheet" href="themes/matios-ui-mode-midnight.css">
+  <link rel="stylesheet" href="themes/matios-ui-mode-obsidian.css">
+  <link rel="stylesheet" href="themes/matios-ui-mode-forest.css">
+  <link rel="stylesheet" href="themes/matios-ui-mode-abyss.css">
+  <link rel="stylesheet" href="themes/matios-ui-mode-ember.css">
+  <link rel="stylesheet" href="themes/matios-ui-mode-dune.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-violet.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-olive.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-blue.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-corporate.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-navy.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-emerald.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-petrol.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-crimson.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-rose.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-orange.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-sky.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-indigo.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-teal.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-slate.css">
+  <link rel="stylesheet" href="themes/matios-ui-accent-bronze.css">
+
+  <link rel="stylesheet" href="utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+  <link rel="stylesheet" href="display/matios-ui-markdownviewer/matios-ui-markdownviewer.css">
+
+  <style>
+    body { margin: 0; background: var(--mts-bg-body); }
+    .changelog-wrap { max-width: 820px; margin: 0 auto; padding: 32px 24px 64px; }
+  </style>
+
+  <script src="icons/matios-ui-icons.js"></script>
+  <script src="utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+  <script src="base/matios-ui-i18n.js"></script>
+  <script src="display/matios-ui-markdownviewer/matios-ui-markdownviewer-i18n.js"></script>
+  <script src="display/matios-ui-markdownviewer/matios-ui-markdownviewer.js"></script>
+  <script src="matios_version.js"></script>
+</head>
+<body>
+  <div class="changelog-wrap"><div id="changelog-view"></div></div>
+
+  <script>
+    (function () {
+      var m    = (location.search || '').match(/[?&]lang=(es|en|pt)/);
+      var lang = m ? m[1] : 'en';
+      if (window.MTS && typeof MTS.setLanguage === 'function') MTS.setLanguage(lang);
+
+      var file = (window.MATIOS_VERSION && MATIOS_VERSION.change_log) || 'CHANGELOG.md';
+      new MTS.MarkdownViewer('#changelog-view', { url: file });
+    })();
+  </script>
+</body>
+</html>

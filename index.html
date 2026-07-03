@@ -86,6 +86,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="layout/matios-ui-scroll/matios-ui-scroll.js"></script>
 <script src="navigation/matios-ui-statusbar/matios-ui-statusbar.js"></script>
 <script src="layout/matios-ui-shell/matios-ui-shell.js"></script>
+<script src="matios_version.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--mts-bg-body);color:var(--mts-text-primary);font-family:'DM Sans',sans-serif;}
@@ -436,7 +437,7 @@ var mainTopbar = new MTS.Topbar('#mainTopbar', {
   brand: {
     logo: LOGO_HTML,
     title: 'Matios<span style="color:var(--mts-color-primary)">UI</span>',
-    subtitle: 'v1.0.0',
+    subtitle: 'v' + MATIOS_VERSION.version,
     onClick: function() { goWelcome(); }
   },
   end: END_HTML
@@ -464,7 +465,19 @@ var mainMenu = new MTS.Menu({
 
 var mainSideNav = new MTS.SideNav('#sideNav', {
   menu:   mainMenu,
-  footer: '<span style="font-size:10px;color:var(--mts-text-muted)">Matios UI · v1.0.0</span>'
+  footer: '<span style="font-size:10px;color:var(--mts-text-muted)">Matios UI · <a href="#" id="clVersionLink" style="color:inherit;text-decoration:underline">v' + MATIOS_VERSION.version + '</a></span>'
+});
+
+/* Version link → open the changelog full-screen in the main frame (same as a demo). */
+document.addEventListener('click', function (e) {
+  var link = e.target.closest ? e.target.closest('#clVersionLink') : null;
+  if (!link) return;
+  e.preventDefault();
+  var frame   = document.getElementById('mainFrame');
+  var welcome = document.getElementById('welcomeScreen');
+  if (welcome) welcome.style.display = 'none';
+  frame.style.display = 'block';
+  frame.src = 'changelog.html?' + _buildParams();
 });
 
 var mainStatusBar = new MTS.StatusBar('#mainStatusBar', {
@@ -474,7 +487,7 @@ var mainStatusBar = new MTS.StatusBar('#mainStatusBar', {
       'Matios UI Framework' +
     '</span>' +
     '<span class="mts-statusbar__sep"></span>' +
-    '<span class="mts-statusbar__tag mts-statusbar__tag--primary">v1.0.0</span>',
+    '<span class="mts-statusbar__tag mts-statusbar__tag--primary">v' + MATIOS_VERSION.version + '</span>',
   end:
     '<span class="mts-statusbar__item">85+ components</span>' +
     '<span class="mts-statusbar__sep"></span>' +
