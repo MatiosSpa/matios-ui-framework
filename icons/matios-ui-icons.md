@@ -54,9 +54,12 @@ Use `<i>` tags with `mts-icon` + `mts-icon-{name}`. Auto-initialized on `DOMCont
 
 ```js
 MTS.Icon.get('trash');                                  // → '<svg …>…</svg>'
+MTS.Icon.get('mts-icon-trash');                         // same icon — the 'mts-icon-' prefix is accepted too
 MTS.Icon.render('edit', document.getElementById('ic')); // inject
 document.getElementById('my-icon').innerHTML = MTS.Icon.get('user');
 ```
+
+`get()` (and `render()`) accept **either the plain name** (`'trash'`) **or the CSS-class form** (`'mts-icon-trash'`) — the `mts-icon-` prefix is stripped when present. The same applies to the `icon` config of `MTS.Menu` / `MTS.PanelDropdown` (and `MTS.SideNav` / `MTS.Topbar`, which use `MTS.Menu`): both `icon: 'user'` and `icon: 'mts-icon-user'` work.
 
 ---
 
@@ -86,11 +89,4 @@ UI, Security and Layout — e.g. `search`, `home`, `check-circle`, `file-text`, 
 
 - Icons render as `<svg>` and are decorative by default; add `aria-label` (or adjacent text) when an icon conveys
   meaning on its own, or `aria-hidden="true"` when it merely decorates labeled content.
-
----
-
-## Changelog
-
-### Initial
-- SVG icon library: 308 icons, outline + filled variants, 7 sizes, semantic colors, CSS-class and JS APIs
   (`get` / `render` / `list` / `initAll`), auto-init on DOM load.
