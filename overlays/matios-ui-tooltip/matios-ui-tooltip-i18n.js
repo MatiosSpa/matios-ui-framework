@@ -44,7 +44,7 @@
         ttCustom:        'Tooltip violeta personalizado',
         ttDelay:         'Aparece tras 500ms',
         // Sección 4 — initAll()
-        ttDataTop:       'Tooltip desde data-tooltip',
+        ttDataTop:       'Tooltip desde data-mts-tooltip',
         ttDataBottom:    'Posición abajo',
         ttDataLight:     'Variante clara',
         ttDataClick:     'Trigger por click'
@@ -88,7 +88,7 @@
         ttCustom:        'Custom violet tooltip',
         ttDelay:         'Appears after 500ms',
         // Section 4 — initAll()
-        ttDataTop:       'Tooltip from data-tooltip',
+        ttDataTop:       'Tooltip from data-mts-tooltip',
         ttDataBottom:    'Bottom position',
         ttDataLight:     'Light variant',
         ttDataClick:     'Click trigger'
@@ -132,7 +132,7 @@
         ttCustom:        'Tooltip violeta personalizado',
         ttDelay:         'Aparece após 500ms',
         // Seção 4 — initAll()
-        ttDataTop:       'Tooltip a partir de data-tooltip',
+        ttDataTop:       'Tooltip a partir de data-mts-tooltip',
         ttDataBottom:    'Posição abaixo',
         ttDataLight:     'Variante clara',
         ttDataClick:     'Gatilho por clique'

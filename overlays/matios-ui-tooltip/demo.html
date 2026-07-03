@@ -174,7 +174,7 @@ var ttLight      = D.ttLight      || 'Light variant';
 var ttHtml       = D.ttHtml       || '<strong>Pro tip:</strong> Use ⌘S to save.';
 var ttCustom     = D.ttCustom     || 'Custom violet tooltip';
 var ttDelay      = D.ttDelay      || 'Appears after 500ms';
-var ttDataTop    = D.ttDataTop    || 'Tooltip from data-tooltip';
+var ttDataTop    = D.ttDataTop    || 'Tooltip from data-mts-tooltip';
 var ttDataBottom = D.ttDataBottom || 'Bottom position';
 var ttDataLight  = D.ttDataLight  || 'Light variant';
 var ttDataClick  = D.ttDataClick  || 'Click trigger';
@@ -272,27 +272,27 @@ var preview_s4 = `
   <button id="tt-data-top"
     data-label="${labelTop}"
     data-variant="secondary"
-    data-tooltip="${ttDataTop}"
-    data-tooltip-position="top"></button>
+    data-mts-tooltip="${ttDataTop}"
+    data-mts-tooltip-position="top"></button>
 
   <button id="tt-data-bottom"
     data-label="${labelBottom}"
     data-variant="secondary"
-    data-tooltip="${ttDataBottom}"
-    data-tooltip-position="bottom"></button>
+    data-mts-tooltip="${ttDataBottom}"
+    data-mts-tooltip-position="bottom"></button>
 
   <button id="tt-data-light"
     data-label="${labelLight}"
     data-variant="secondary"
-    data-tooltip="${ttDataLight}"
-    data-tooltip-position="top"
-    data-tooltip-variant="light"></button>
+    data-mts-tooltip="${ttDataLight}"
+    data-mts-tooltip-position="top"
+    data-mts-tooltip-variant="light"></button>
 
   <button id="tt-data-click"
     data-label="${labelClick}"
     data-variant="secondary"
-    data-tooltip="${ttDataClick}"
-    data-tooltip-trigger="click"></button>
+    data-mts-tooltip="${ttDataClick}"
+    data-mts-tooltip-trigger="click"></button>
 </div>`;
 
 var js_s4 = `new MTS.Button('#tt-data-top');

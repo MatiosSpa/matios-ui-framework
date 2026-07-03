@@ -200,9 +200,9 @@ function showConfirm() {
   MTS.Modal.confirm({
     title: 'Delete record',
     message: 'This action cannot be undone.',
-    confirm: 'Delete',
-    cancel: 'Cancel',
-    danger: true,
+    confirmLabel: 'Delete',
+    cancelLabel: 'Cancel',
+    variant: 'danger',
     onConfirm: function () {
       document.getElementById('modal-helper-result').textContent = 'onConfirm → confirmed';
     },
@@ -361,9 +361,9 @@ function showConfirm() {
   MTS.Modal.confirm({
     title: D.confirmTitle || 'Delete record',
     message: D.confirmMessage || 'This action cannot be undone.',
-    confirm: D.confirmConfirm || 'Delete',
-    cancel: D.confirmCancel || 'Cancel',
-    danger: true,
+    confirmLabel: D.confirmConfirm || 'Delete',
+    cancelLabel: D.confirmCancel || 'Cancel',
+    variant: 'danger',
     onConfirm: function () {
       setText('modal-helper-result', 'onConfirm → ' + (D.confirmDone || 'confirmed'));
     },
