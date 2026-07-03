@@ -9,8 +9,12 @@ On/off switch component with three sizes, optional label and disabled state.
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-toggle.css">
+<script src="matios-ui-i18n.js"></script>
+<script src="matios-ui-toggle-i18n.js"></script>
 <script src="matios-ui-toggle.js"></script>
 ```
+
+`matios-ui-i18n.js` and `matios-ui-toggle-i18n.js` are optional — needed only if you use the `required` validation message with `MTS.setLanguage`.
 
 ---
 
@@ -23,7 +27,7 @@ const toggle = new MTS.Toggle('#my-toggle', {
   label:    'Active notifications',
   checked:  true,
   size:     'md',
-  onChange: function (e) { console.log('checked:', e.detail.checked); },
+  onChange: function (e) { console.log('checked:', e.detail.checked); }
 });
 
 // Disabled
@@ -39,8 +43,10 @@ new MTS.Toggle('#my-toggle-disabled', { label: 'Not available', disabled: true, 
 | `label` | `string` | `''` | Text displayed next to the switch |
 | `checked` | `boolean` | `false` | Initial state |
 | `disabled` | `boolean` | `false` | Disables all interaction |
-| `size` | `string` | `'md'` | `'sm'` (32×18) · `'md'` (42×24) · `'lg'` (52×30) |
-| `onChange` | `function` | — | Fires when the state changes — `{ checked }` |
+| `size` | `string` | `'md'` | `'sm'` (32×18) \| `'md'` (42×24) \| `'lg'` (52×30) |
+| `onChange` | `function` | — | Shortcut for `on('change', cb)`; receives `{ type, detail }` where `detail` is `{ checked }` |
+| `required` | `boolean` | `false` | Marks the switch as required (must be on to pass `validate()`) |
+| `errorMessage` | `string` | `null` | Overrides the localized default error message shown by `validate()` |
 
 ---
 
@@ -85,18 +91,21 @@ Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTR
 
 ---
 
+## i18n
+
+The switch itself has no built-in on/off text — labels are always dev-supplied via the `label` option. The only localized string is the default validation message shown by `validate()` when `required` is set.
+
+It is read from the `MTS.Toggle` namespace under `messages.required` (keys `es` / `en` / `pt`, default Spanish neutral). Set the language once at startup:
+
+```js
+MTS.setLanguage('en'); // 'es' | 'en' | 'pt'
+```
+
+Passing `errorMessage` overrides the localized default for that instance. There is no per-instance `locale` option.
+
+---
+
 ## Accessibility
 
 - Renders a real `<input type="checkbox">` styled as a switch — focusable and toggled with `Space`.
 - Provide a `label` (or `aria-label`) so the switch has an accessible name describing what it controls.
-
----
-
-## Changelog
-
-### 2026-06-23
-- Validation contract: `required` (must be on) + `errorMessage` + `validate()` + `setError`/`clearError` (localized). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
-
-### Initial
-- On/off switch with `sm` / `md` / `lg` sizes, optional label, disabled state, `onChange`, and
-  `isChecked` / `setChecked` / `toggle`.

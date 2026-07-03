@@ -27,7 +27,7 @@
     this.canRemove       = options.canRemove       != null ? !!options.canRemove       : this._boolAttr('can-remove');
     this.allowDuplicates = options.allowDuplicates != null ? !!options.allowDuplicates : this._boolAttr('allow-duplicates');
     this.disabledBind    = options.disabledBind    || this._el.getAttribute('data-disabled-bind') || null;
-    this.empty           = options.empty           || this._el.getAttribute('data-empty') || 'Sin resultados.';
+    this.empty           = options.empty           || this._el.getAttribute('data-empty') || null;
 
     this._onAdd    = typeof options.onAdd    === 'function' ? options.onAdd    : null;
     this._onChange = typeof options.onChange === 'function' ? options.onChange : null;
@@ -41,6 +41,13 @@
     this._build();
     this._el._mtsInstance = this;
   }
+
+  /* ── i18n ────────────────────────────────────────────────── */
+
+  ItemList.prototype._t = function (key, fallback) {
+    let loc = (window.MTS && typeof MTS.getString === 'function') ? MTS.getString()['MTS.ItemList'] : null;
+    return (loc && loc[key] != null) ? loc[key] : fallback;
+  };
 
   /* ── Helpers de atributo ─────────────────────────────────── */
 
@@ -102,7 +109,7 @@
     if (!this._datasource.length) {
       let emptyLi = document.createElement('li');
       emptyLi.className = 'mts-itemlist__empty';
-      emptyLi.textContent = this.empty;
+      emptyLi.textContent = this.empty != null ? this.empty : this._t('empty', 'No results.');
       this._ul.appendChild(emptyLi);
       this._ul.classList.remove('mts-itemlist--scroll');
       return;
@@ -176,7 +183,7 @@
       let removeBtn = document.createElement('button');
       removeBtn.type = 'button';
       removeBtn.className = 'mts-itemlist__remove';
-      removeBtn.setAttribute('aria-label', 'Eliminar');
+      removeBtn.setAttribute('aria-label', self._t('remove', 'Remove'));
       removeBtn.textContent = '×';
       removeBtn.addEventListener('click', function (e) {
         e.stopPropagation();

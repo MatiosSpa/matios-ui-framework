@@ -160,13 +160,7 @@ Set the language once at startup with `MTS.setLanguage('en' | 'es' | 'pt')`; shi
 | `noResults` | `Sin resultados para "{query}"` | Empty state while searching (`{query}` is substituted) |
 | `empty` | `No hay comandos disponibles` | Empty state with no query |
 
-Override or extend any key with `MTS.registerLocale`:
-
-```js
-MTS.registerLocale('en', {
-  'MTS.CommandPalette': { empty: 'Nothing here yet' }
-});
-```
+The search input placeholder can be overridden per instance with the `placeholder` option.
 
 ---
 

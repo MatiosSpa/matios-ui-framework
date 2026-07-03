@@ -136,14 +136,6 @@ Keys under `MTS.getString()['MTS.EmptyState'].messages`:
 | `titlePermissions` / `descPermissions` | `variant: 'permissions'` |
 | `titleDefault` | Title fallback for an unknown variant |
 
-Override or extend a locale with `MTS.registerLocale`:
-
-```js
-MTS.registerLocale('en', {
-  'MTS.EmptyState': { messages: { titleNoData: 'Nothing to show' } }
-});
-```
-
 Without `matios-ui-i18n.js` / `matios-ui-emptystate-i18n.js` loaded, the component falls back to its built-in Spanish strings.
 
 ---

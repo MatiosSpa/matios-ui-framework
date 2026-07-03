@@ -10,6 +10,11 @@ Include this file before any other MTS CSS:
 
 ```html
 <link rel="stylesheet" href="matios-ui-base.css">
+
+<!-- Optional: a visual mode + accent (see Themes) -->
+<link rel="stylesheet" href="../themes/matios-ui-mode-dark.css">
+<link rel="stylesheet" href="../themes/matios-ui-accent-violet.css">
+
 <!-- then the components -->
 <link rel="stylesheet" href="matios-ui-grid.css">
 ```
@@ -18,40 +23,55 @@ Include this file before any other MTS CSS:
 
 ## Themes
 
-The theme system works through the `data-mts-theme` attribute on any container. Set it on `<html>` or `<body>` to
-apply globally.
-
-| Value | Description |
-|-------|-------------|
-| `light` | Light (default) |
-| `dark` | Dark |
-| `ocean` | Ocean blue (example custom theme) |
+Theming is driven by two independent attributes on `<html>` (or any container): **`data-mts-mode`** (the full visual
+base) and the optional **`data-mts-accent`** (redefines the primary colour family). Each value is a separate CSS file
+under `themes/` — link only the ones you use. `matios-ui-base.css` alone renders the default (light) baseline.
 
 ```html
-<html data-mts-theme="dark">
+<html data-mts-mode="dark" data-mts-accent="violet">
 ```
+
+### Modes (`data-mts-mode`)
+
+`dark` · `light` · `high-contrast` · `midnight` · `obsidian` · `forest` · `abyss` · `ember` · `dune`
+(`themes/matios-ui-mode-<name>.css`). `high-contrast` is a complete standalone mode.
+
+### Accents (`data-mts-accent`)
+
+`corporate` · `navy` · `emerald` · `petrol` · `blue` · `olive` · `violet` · `crimson` · `rose` · `orange` · `sky` ·
+`indigo` · `teal` · `slate` · `bronze` · `high-contrast` (`themes/matios-ui-accent-<name>.css`). Optional — the mode
+already defines a complete look.
 
 ```js
-// Change the theme globally
-document.documentElement.setAttribute('data-mts-theme', 'dark');
+// Change the mode globally
+document.documentElement.setAttribute('data-mts-mode', 'dark');
 
 // Toggle dark/light
-const current = document.documentElement.getAttribute('data-mts-theme');
-document.documentElement.setAttribute('data-mts-theme', current === 'dark' ? 'light' : 'dark');
+const current = document.documentElement.getAttribute('data-mts-mode');
+document.documentElement.setAttribute('data-mts-mode', current === 'dark' ? 'light' : 'dark');
+
+// Set an accent (or remove it to fall back to the mode's own primary)
+document.documentElement.setAttribute('data-mts-accent', 'emerald');
 ```
 
-### Create your own theme
+### Create your own mode or accent
 
-Copy this block into your CSS and redefine only the variables you need:
+Redefine only the tokens you need under the matching attribute selector:
 
 ```css
-[data-mts-theme="my-theme"] {
+[data-mts-mode="my-mode"] {
+  --mts-bg-body:             #0b1020;
+  --mts-bg-surface:          #141a2e;
+  --mts-text-primary:        #e6eaf5;
+}
+
+[data-mts-accent="my-accent"] {
   --mts-color-primary:       #7c3aed;
   --mts-color-primary-hover: #6d28d9;
-  --mts-color-accent:        #f59e0b;
-  --mts-bg-body:             #faf5ff;
 }
 ```
+
+> See `themes/README.md` for the full architecture and the canonical import list.
 
 ---
 
@@ -158,6 +178,7 @@ sidebar by toggling `.mts-layout__sidebar--collapsed`.
 <button class="mts-btn mts-btn--secondary">Secondary</button>
 <button class="mts-btn mts-btn--ghost">Ghost</button>
 <button class="mts-btn mts-btn--danger">Delete</button>
+<button class="mts-btn mts-btn--success">Success</button>
 <button class="mts-btn mts-btn--link">Link</button>
 
 <!-- Sizes: --xs, --sm, (default), --lg, --xl. Modifiers: --block, --round, --icon -->
@@ -183,7 +204,7 @@ sidebar by toggling `.mts-layout__sidebar--collapsed`.
 </div>
 ```
 
-Also: `.mts-textarea`, `.mts-select`.
+Also `.mts-textarea` (base). Styled dropdowns live in the `MTS.Select` component, not in the base layer.
 
 ---
 
@@ -262,20 +283,5 @@ MyComponent.prototype.destroy = function () { this._disposeAllListeners(); /* �
 
 ## Accessibility
 
-- Tokens drive contrast; when adding a custom theme keep text/surface pairs above WCAG AA contrast.
+- Tokens drive contrast; when adding a custom mode/accent keep text/surface pairs above WCAG AA contrast.
 - Respect `prefers-reduced-motion` for the loaders/skeleton animations in your app shell.
-
----
-
-## Changelog
-
-### 2026-06-29
-- Global themed scrollbar: thin, token-driven, applied to the document and any scrollable container, so every page/demo
-  adapts to dark/light/accent instead of showing the default browser scrollbar. Thumb uses `--mts-border-color-strong`
-  over a faint `--mts-bg-surface-2` track, with a `background-clip: padding-box` gap so it reads as a defined pill
-  (more distinguishable than a flush thumb); `--mts-color-primary` on hover. Components with their own scroll
-  (`MTS.Scroll`, `MTS.Shell`) override the thumb width.
-
-### 2026-05-29
-- `matios-ui-base.js` created — `MTS._defineEvents` mixin for the explicit event API (Boards Kit).
-- Token `--mts-z-popover: 500` added to the z-index stack; toast 500→600, tooltip 600→700.

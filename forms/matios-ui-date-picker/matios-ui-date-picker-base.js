@@ -99,6 +99,11 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     try { const ns = (window.MTS && MTS.getString) ? MTS.getString()["MTS.DatePicker"] : null; const m = ns && ns.messages; if (m && m[key] != null) return m[key]; } catch (e) {}
     return fallback;
   }
+  /* Chrome (weekday/month labels, footer buttons, aria) del locale activo. */
+  _chrome(key, fallback) {
+    try { const ns = (window.MTS && MTS.getString) ? MTS.getString()["MTS.DatePicker"] : null; const c = ns && ns.chrome; if (c && c[key] != null) return c[key]; } catch (e) {}
+    return fallback;
+  }
 
   /* Normaliza Date | string | null → Date | null */
   _toDate(v) {
@@ -190,7 +195,7 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     if (this.clearable) {
       const clear = document.createElement("button");
       clear.className = "mts-picker__clear";
-      clear.setAttribute("aria-label", "Limpiar");
+      clear.setAttribute("aria-label", this._chrome("clearAria", "Limpiar"));
       clear.setAttribute("tabindex", "-1");
       clear.innerHTML = "&times;";
       clear.addEventListener("click", (e) => { e.stopPropagation(); this.clear(); this.close(); });
@@ -278,7 +283,7 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
 
     const prevBtn = document.createElement("button");
     prevBtn.className = "mts-picker-cal__nav";
-    prevBtn.setAttribute("aria-label", "Mes anterior");
+    prevBtn.setAttribute("aria-label", this._chrome("prevMonth", "Mes anterior"));
     prevBtn.innerHTML = "&#8249;";
     prevBtn.addEventListener("click", () => {
       if (calIndex === 0) {
@@ -294,7 +299,7 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     const monthYear = document.createElement("button");
     monthYear.className = "mts-picker-cal__month-year mts-picker-cal__month-year--btn";
     monthYear.textContent = this._formatMonthYear(viewDate);
-    monthYear.title = "Ver meses";
+    monthYear.title = this._chrome("viewMonths", "Ver meses");
     monthYear.addEventListener("click", () => {
       this._calViewYear = viewDate.getFullYear();
       this._calView = 'months';
@@ -303,7 +308,7 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
 
     const nextBtn = document.createElement("button");
     nextBtn.className = "mts-picker-cal__nav";
-    nextBtn.setAttribute("aria-label", "Mes siguiente");
+    nextBtn.setAttribute("aria-label", this._chrome("nextMonth", "Mes siguiente"));
     nextBtn.innerHTML = "&#8250;";
     nextBtn.addEventListener("click", () => {
       if (calIndex === 0) {
@@ -320,7 +325,7 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
 
     const weekdays = document.createElement("div");
     weekdays.className = "mts-picker-cal__weekdays";
-    ["Lu","Ma","Mi","Ju","Vi","Sá","Do"].forEach(d => {
+    this._chrome("weekdays", ["Lu","Ma","Mi","Ju","Vi","Sá","Do"]).forEach(d => {
       const span = document.createElement("span"); span.textContent = d; weekdays.appendChild(span);
     });
     cal.appendChild(weekdays);
@@ -388,7 +393,7 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
     const yearBtn = document.createElement("button");
     yearBtn.className = "mts-picker-cal__month-year mts-picker-cal__month-year--btn";
     yearBtn.textContent = year;
-    yearBtn.title = "Ver años";
+    yearBtn.title = this._chrome("viewYears", "Ver años");
     yearBtn.addEventListener("click", () => { this._calView = 'years'; this._updatePopupContent(); });
 
     const nextBtn = document.createElement("button");
@@ -401,7 +406,7 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
 
     const grid = document.createElement("div");
     grid.className = "mts-picker-cal__month-grid";
-    const MONTHS = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+    const MONTHS = this._chrome("monthsShort", ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"]);
     const selMonth = this._value ? this._value.getMonth() : -1;
     const selYear  = this._value ? this._value.getFullYear() : -1;
     const curMonth = new Date().getMonth();
@@ -607,10 +612,12 @@ MTS.DatePicker.Base = class MtsDatePickerBase {
   }
 
   _renderFooter(container, todayLabel = "Hoy") {
-    /* Textos configurables: btnToday / btnNow / btnAccept */
-    const labelLeft  = this.btnNow || this.btnToday || todayLabel;
-    const labelRight = this.btnAccept || "Aceptar";
+    /* todayLabel actúa como señal de modo ("Ahora" = time); el texto real viene del locale
+       o de los overrides configurables (btnToday / btnNow / btnAccept). */
     const isTime     = todayLabel === "Ahora";
+    const localeLeft = isTime ? this._chrome("now", "Ahora") : this._chrome("today", "Hoy");
+    const labelLeft  = this.btnNow || this.btnToday || localeLeft;
+    const labelRight = this.btnAccept || this._chrome("accept", "Aceptar");
 
     const footer = document.createElement("div");
     footer.className = "mts-picker-footer";

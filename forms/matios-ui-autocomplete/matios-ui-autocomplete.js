@@ -19,7 +19,7 @@
     this._textField  = options.textField  || 'text';
     this._minChars   = options.minChars  != null ? parseInt(options.minChars) : 1;
     this._debounceMs = options.debounce  != null ? parseInt(options.debounce)  : 300;
-    this._empty      = options.empty     || 'Sin resultados.';
+    this._empty      = options.empty != null ? options.empty : this._t('empty', 'No results.');
     this._datasource = options.datasource != null ? options.datasource : null;
 
     this._onSelect = typeof options.onSelect === 'function' ? options.onSelect : null;
@@ -64,7 +64,7 @@
     let clearBtn = document.createElement('button');
     clearBtn.type = 'button';
     clearBtn.className = 'mts-ac__clear';
-    clearBtn.setAttribute('aria-label', 'Limpiar');
+    clearBtn.setAttribute('aria-label', this._t('clear', 'Clear'));
     clearBtn.textContent = '×';
     clearBtn.style.display = 'none';
     wrap.appendChild(clearBtn);

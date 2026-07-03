@@ -8,8 +8,8 @@
   let MTS = global.MTS = global.MTS || {};
   if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', { 'MTS.OTP': { messages: { required: 'Este campo es obligatorio' } } });
-  MTS.registerLocale('en', { 'MTS.OTP': { messages: { required: 'This field is required' } } });
-  MTS.registerLocale('pt', { 'MTS.OTP': { messages: { required: 'Este campo é obrigatório' } } });
+  MTS.registerLocale('es', { 'MTS.OTP': { messages: { required: 'Este campo es obligatorio', boxLabel: 'Carácter {n} de {total}', resend: 'Reenviar código' } } });
+  MTS.registerLocale('en', { 'MTS.OTP': { messages: { required: 'This field is required', boxLabel: 'Character {n} of {total}', resend: 'Resend code' } } });
+  MTS.registerLocale('pt', { 'MTS.OTP': { messages: { required: 'Este campo é obrigatório', boxLabel: 'Caractere {n} de {total}', resend: 'Reenviar código' } } });
 
 })(window);

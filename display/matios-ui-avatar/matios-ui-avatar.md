@@ -145,16 +145,6 @@ Set the language once at startup with the global API; the component reads it aut
 MTS.setLanguage('en');   // 'es' | 'en' | 'pt'
 ```
 
-To override or add the fallback string:
-
-```js
-MTS.registerLocale('en', {
-  'MTS.Avatar': {
-    messages: { avatarLabel: 'Avatar' }
-  }
-});
-```
-
 The bundled `matios-ui-avatar-i18n.js` ships `es`, `en` and `pt`. The `demo.*` keys inside it are for the demo page only and are not read by the component.
 
 ---

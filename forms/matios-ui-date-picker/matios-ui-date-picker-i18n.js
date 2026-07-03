@@ -11,6 +11,20 @@
   MTS.registerLocale('es', {
     'MTS.DatePicker': {
       messages: { required: 'Este campo es obligatorio' },
+      chrome: {
+        weekdays:    ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'],
+        monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        today:       'Hoy',
+        now:         'Ahora',
+        accept:      'Aceptar',
+        clear:       'Limpiar',
+        week:        'Semana',
+        clearAria:   'Limpiar',
+        prevMonth:   'Mes anterior',
+        nextMonth:   'Mes siguiente',
+        viewMonths:  'Ver meses',
+        viewYears:   'Ver años'
+      },
       demo: {
         subtitle:            'Selectores de fecha, hora, rango, mes y semana. Cada tipo es una clase independiente.',
         s1Title:             '1 — Fecha / Hora / Fecha y hora',
@@ -48,6 +62,20 @@
   MTS.registerLocale('en', {
     'MTS.DatePicker': {
       messages: { required: 'This field is required' },
+      chrome: {
+        weekdays:    ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+        monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        today:       'Today',
+        now:         'Now',
+        accept:      'Accept',
+        clear:       'Clear',
+        week:        'Week',
+        clearAria:   'Clear',
+        prevMonth:   'Previous month',
+        nextMonth:   'Next month',
+        viewMonths:  'View months',
+        viewYears:   'View years'
+      },
       demo: {
         subtitle:            'Date, time, range, month and week pickers. Each type is an independent class.',
         s1Title:             '1 — Date / Time / DateTime',
@@ -85,6 +113,20 @@
   MTS.registerLocale('pt', {
     'MTS.DatePicker': {
       messages: { required: 'Este campo é obrigatório' },
+      chrome: {
+        weekdays:    ['Se', 'Te', 'Qa', 'Qi', 'Se', 'Sá', 'Do'],
+        monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        today:       'Hoje',
+        now:         'Agora',
+        accept:      'Aceitar',
+        clear:       'Limpar',
+        week:        'Semana',
+        clearAria:   'Limpar',
+        prevMonth:   'Mês anterior',
+        nextMonth:   'Próximo mês',
+        viewMonths:  'Ver meses',
+        viewYears:   'Ver anos'
+      },
       demo: {
         subtitle:            'Seletores de data, hora, intervalo, mês e semana. Cada tipo é uma classe independente.',
         s1Title:             '1 — Data / Hora / Data e hora',

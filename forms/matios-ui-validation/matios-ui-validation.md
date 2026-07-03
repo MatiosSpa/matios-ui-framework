@@ -1,6 +1,6 @@
 # MTS.Validate
 
-Form validation without dependencies. Auto-integrates with `MTS.Input` — detects instances and uses their own error/success API.
+Form validation without dependencies. Auto-integrates with `MTS.Input` — when a field is backed by an `MTS.Input` instance, errors and success states are rendered through that instance's own API; otherwise the component falls back to plain DOM elements and CSS classes.
 
 ---
 
@@ -10,44 +10,63 @@ Form validation without dependencies. Auto-integrates with `MTS.Input` — detec
 <link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-input.css">
 <script src="matios-ui-input.js"></script>
+
+<!-- Optional: global i18n (default messages in en/pt; without it, messages are Spanish) -->
+<script src="matios-ui-i18n.js"></script>
+<script src="matios-ui-validation-i18n.js"></script>
+
 <script src="matios-ui-validation.js"></script>
 ```
+
+`matios-ui-input.js` is only required when you bind fields through `MTS.Input`. The validator works against any plain `<input>`, `<select>` or `<textarea>` on its own.
 
 ---
 
 ## Usage
 
-`MTS.Validate` detects `MTS.Input` instances automatically. **The input `name` must match the key in `rules`.**
+`MTS.Validate` locates each field by looking up `[name="<key>"]` first, then `#<key>`, where `<key>` is the key used in `rules`. When a field is an `MTS.Input`, its `name` must match the key in `rules`.
 
 ```html
 <form id="my-form">
   <div id="field-name"></div>
   <div id="field-email"></div>
-  <button type="submit" class="mts-btn mts-btn--primary">Submit</button>
+  <div><button type="submit" id="field-submit"></button></div>
 </form>
 ```
 
 ```js
-new MTS.Input('#field-name',  { name: 'name',  label: 'Full name', rules: { required: true, minLength: 3 } });
-new MTS.Input('#field-email', { name: 'email', label: 'Email', type: 'email', rules: { required: true, email: true } });
-new MTS.Input('#field-pass',  { name: 'password', label: 'Password', type: 'password',
-  rules: { required: true, minLength: 8, pattern: /(?=.*\d)(?=.*[a-z])/ } });
+new MTS.Input('#field-name', {
+  name: 'name',
+  label: 'Full name',
+  rules: { required: true, minLength: 3 }
+});
+new MTS.Input('#field-email', {
+  name: 'email',
+  label: 'Email',
+  type: 'email',
+  rules: { required: true, email: true }
+});
+new MTS.Button('#field-submit', { label: 'Submit form', variant: 'primary' });
 
 const v = new MTS.Validate('#my-form', {
   rules: {
-    name:     { required: true, minLength: 3 },
-    email:    { required: true, email: true },
-    password: { required: true, minLength: 8 },
+    name:  { required: true, minLength: 3 },
+    email: { required: true, email: true }
   },
   messages: {
-    name:  { required: 'Name cannot be empty', minLength: 'At least 3 characters' },
-    email: { email: 'Enter a valid email address' },
+    name: { required: 'Name is required', minLength: 'At least 3 characters' }
   },
   validateOnBlur: true,
-  onValid:   function (data)   { submitToServer(data); },
-  onInvalid: function (errors) { console.log(errors); },
+  onValid: function (data) {
+    console.log('valid', data);
+  },
+  onInvalid: function (errors) {
+    console.log('errors', errors);
+  }
 });
 ```
+
+The constructor accepts a selector string or a form element as its first argument. On `submit`, the form's default action is prevented and `validate()` runs automatically.
 
 ---
 
@@ -55,72 +74,104 @@ const v = new MTS.Validate('#my-form', {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `rules` | `object` | `{}` | Validation rules per field name |
-| `messages` | `object` | `{}` | Custom error messages per field/rule |
-| `validateOnBlur` | `boolean` | `true` | Validate when a field loses focus |
-| `validateOnInput` | `boolean` | `false` | Validate on every keystroke |
-| `onValid` | `function` | — | Fires on submit when the form is valid — `(data)` |
-| `onInvalid` | `function` | — | Fires on submit when the form has errors — `(errors)` |
+| `rules` | `object` | `{}` | Validation rules per field key |
+| `messages` | `object` | `{}` | Custom error messages per field/rule — `{ fieldKey: { ruleName: 'message' } }` |
+| `validateOnBlur` | `boolean` | `true` | Validate a field when it loses focus (only after it has been focused once) |
+| `validateOnInput` | `boolean` | `false` | Validate a field on every keystroke (only after it has been focused once) |
+| `onValid` | `function` | `null` | Fires on submit when every field is valid — receives `(data)` |
+| `onInvalid` | `function` | `null` | Fires on submit when there are errors — receives `(errors)` |
 
 ### Validation rules
 
-| Rule | Type | Description |
-|------|------|-------------|
-| `required` | `boolean` | Field cannot be empty |
-| `minLength` / `maxLength` | `number` | Min / max characters |
-| `min` / `max` | `number` | Min / max numeric value |
-| `email` / `url` | `boolean` | Valid email / URL format |
-| `number` / `integer` | `boolean` | Numeric only / integer only |
-| `pattern` | `RegExp` | Custom regex |
-| `equalTo` | `string` | Must equal another field (e.g. `'#pass'`) |
-| `rut` | `boolean` | Chilean RUT validation |
-| `phone` | `boolean` | Phone format |
-| `date` | `boolean` | Valid date |
-| `minDate` / `maxDate` | `string` | Min / max date (e.g. `'2024-01-01'`) |
-| `accept` | `string` | File types (`'image/*'`, `'.pdf'`) |
-| `maxSize` | `number` | Max file size in MB |
-| `custom` | `function` | `(value, el) → true \| 'error'` |
+Each rule is declared as `ruleName: param`. `null` / `undefined` / empty values pass every rule except `required` (rules short-circuit on empty input), so combine with `required` when a value is mandatory. Boolean rules only run when their param is truthy.
+
+| Rule | Param type | Description |
+|------|------------|-------------|
+| `required` | `boolean` | Field cannot be empty (checkbox must be checked; file input must have a file) |
+| `minLength` | `number` | Minimum number of characters |
+| `maxLength` | `number` | Maximum number of characters |
+| `min` | `number` | Minimum numeric value |
+| `max` | `number` | Maximum numeric value |
+| `email` | `boolean` | Valid email format |
+| `url` | `boolean` | Valid URL (parseable by the `URL` constructor) |
+| `number` | `boolean` | Any numeric value |
+| `integer` | `boolean` | Whole number only |
+| `pattern` | `RegExp` \| `string` | Value must match the regular expression |
+| `equalTo` | `string` | Value must equal another field's value, given as a selector (e.g. `'#pass'`) |
+| `rut` | `boolean` | Chilean RUT (modulo-11 check digit) |
+| `phone` | `boolean` | Phone-number format |
+| `date` | `boolean` | Parseable date |
+| `minDate` | `string` | Value must be on or after this date (e.g. `'2024-01-01'`) |
+| `maxDate` | `string` | Value must be on or before this date |
+| `accept` | `string` | Allowed file types, comma-separated (`'image/*'`, `'.pdf'`, `'application/pdf'`) |
+| `maxSize` | `number` | Maximum file size in MB |
+| `custom` | `function` | `(value, el)` returning `true` when valid, or an error string when invalid |
 
 ---
 
 ## API
 
-| Method | Description |
-|--------|-------------|
-| `validate()` | Validate the whole form → `boolean` |
-| `isValid()` | Current validity → `boolean` |
-| `getErrors()` | `{ fieldName: 'message', … }` |
-| `getData()` | `{ fieldName: value, … }` |
-| `clearErrors()` | Clear all visual errors |
-| `setError(field, msg)` | Set a server-side error |
-| `addRule(field, rule, value)` | Add a rule at runtime |
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `validate()` | `boolean` | Validate every field, render errors/success, fire `onValid`/`onInvalid`, and scroll/focus the first invalid field |
+| `isValid()` | `boolean` | `true` when there are no errors from the last validation pass |
+| `getErrors()` | `object` | Copy of the current errors as `{ fieldKey: 'message' }` |
+| `getData()` | `object` | Collected values of every named `input` / `select` / `textarea` in the form (checkboxes as `boolean`, files as `FileList`) |
+| `clearErrors()` | — | Remove all error/success markers and reset the errors map |
+| `setError(field, message)` | — | Set an error on a field manually (e.g. a server-side error) |
+| `addRule(field, rule, message)` | — | Add a rule (set to `true`) to a field at runtime, with an optional custom message |
 
 ```js
-const v = new MTS.Validate('#my-form', { rules: { /* … */ } });
-if (!v.validate()) v.setError('email', 'Email already exists');
+const v = new MTS.Validate('#my-form', { rules: { email: { required: true, email: true } } });
+if (!v.validate()) {
+  v.setError('email', 'Email already exists');
+}
 ```
+
+### Rule helpers
+
+`MTS.Validate.rules` is a static set of factory functions that return a `{ rule, messages }` fragment, handy when composing rule objects with an inline message:
+
+| Helper | Returns |
+|--------|---------|
+| `MTS.Validate.rules.required(msg)` | `{ required: true, messages: { required: msg } }` |
+| `MTS.Validate.rules.email(msg)` | `{ email: true, messages: { email: msg } }` |
+| `MTS.Validate.rules.minLength(n, msg)` | `{ minLength: n, messages: { minLength: msg } }` |
+| `MTS.Validate.rules.maxLength(n, msg)` | `{ maxLength: n, messages: { maxLength: msg } }` |
+| `MTS.Validate.rules.min(n, msg)` | `{ min: n, messages: { min: msg } }` |
+| `MTS.Validate.rules.max(n, msg)` | `{ max: n, messages: { max: msg } }` |
 
 ---
 
-## Events
+## Callbacks
 
-| Method | Payload | When |
+Both callbacks are passed as constructor options and fire on submit (and on the explicit `validate()` call).
+
+| Option | Payload | When |
 |--------|---------|------|
-| `onValid(fn)` | `(data)` | Submit, all fields valid |
-| `onInvalid(fn)` | `(errors)` | Submit, validation errors present |
+| `onValid` | `(data)` | Every field is valid — `data` is the result of `getData()` |
+| `onInvalid` | `(errors)` | One or more fields failed — `errors` is `{ fieldKey: 'message' }` |
+
+---
+
+## Internationalization
+
+Default per-rule messages are **built into the component** (`MTS.Validate._messages`, with `es` / `en` / `pt`) and are picked by the active global language. Set it once at startup:
+
+```js
+MTS.setLanguage('en'); // 'es' (default) | 'en' | 'pt'
+```
+
+The component resolves each default from its **internal** table via `MTS.getLanguage()` (fallback: `es`). These defaults are **not** registered in the global i18n table and do **not** require `matios-ui-validation-i18n.js` — that file only carries the demo-page strings. There is **no** per-instance `locale` option.
+
+**To change a message, pass it per field/rule** — that is your content, not a language change. An explicit string in the field's `messages` map (or the string returned by a `custom` function) always wins over the internal default. See the [Rules](#rules) examples.
+
+Messages with a numeric parameter (`minLength`, `maxLength`, `min`, `max`, `minDate`, `maxDate`, `accept`, `maxSize`) use the `{n}` placeholder, which is replaced with the rule's param at render time.
 
 ---
 
 ## Accessibility
 
-- Errors are rendered through each `MTS.Input`'s own error API, so they stay associated with the field for
-  assistive tech. `setError` surfaces server-side errors the same way.
-- Submitting an invalid form moves attention to the failing fields rather than silently blocking.
-
----
-
-## Changelog
-
-### Initial
-- Dependency-free form validation auto-integrated with `MTS.Input`: 18 built-in rules (incl. `rut`, `equalTo`,
-  `custom`), per-field/rule messages, blur/input timing, server-error injection, and a full programmatic API.
+- When a field is an `MTS.Input`, errors are rendered through that instance's own error API, keeping them associated with the field for assistive technology. `setError` surfaces server-side errors the same way.
+- For plain fields, the invalid element gets the `mts-input-error` class and a `.mts-validation-error` message node is appended to the closest `.mts-form-group` (or the field's parent).
+- Submitting an invalid form scrolls the first failing field into view and moves focus to it, rather than silently blocking.

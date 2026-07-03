@@ -10,6 +10,9 @@
 
   MTS.registerLocale('es', {
     'MTS.Button': {
+      messages: {
+        actions:             'Acciones'
+      },
       demo: {
         subtitle:            'Botones con variantes, tamaños, iconos, agrupación y mejora progresiva desde HTML declarativo.',
         s1Title:             '1 — Variantes',
@@ -49,6 +52,9 @@
 
   MTS.registerLocale('en', {
     'MTS.Button': {
+      messages: {
+        actions:             'Actions'
+      },
       demo: {
         subtitle:            'Buttons with variants, sizes, icons, grouping and progressive enhancement from declarative HTML.',
         s1Title:             '1 — Variants',
@@ -88,6 +94,9 @@
 
   MTS.registerLocale('pt', {
     'MTS.Button': {
+      messages: {
+        actions:             'Ações'
+      },
       demo: {
         subtitle:            'Botões com variantes, tamanhos, ícones, agrupamento e melhoria progressiva a partir de HTML declarativo.',
         s1Title:             '1 — Variantes',

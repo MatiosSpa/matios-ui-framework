@@ -10,6 +10,11 @@
 
   MTS.registerLocale('es', {
     'MTS.ConfirmButton': {
+      messages: {
+        delete:                 'Eliminar',
+        confirm:                '¿Confirmar?',
+        cancel:                 'No'
+      },
       demo: {
         subtitle:               'Confirmación inline en dos pasos para acciones sensibles, con enhancement progresivo desde HTML declarativo.',
         s1Title:                '1 — Variantes',
@@ -39,6 +44,11 @@
 
   MTS.registerLocale('en', {
     'MTS.ConfirmButton': {
+      messages: {
+        delete:                 'Delete',
+        confirm:                'Confirm?',
+        cancel:                 'No'
+      },
       demo: {
         subtitle:               'Two-step inline confirmation for sensitive actions, with progressive enhancement from declarative HTML.',
         s1Title:                '1 — Variants',
@@ -68,6 +78,11 @@
 
   MTS.registerLocale('pt', {
     'MTS.ConfirmButton': {
+      messages: {
+        delete:                 'Excluir',
+        confirm:                'Confirmar?',
+        cancel:                 'Não'
+      },
       demo: {
         subtitle:               'Confirmação inline em dois passos para ações sensíveis, com enhancement progressivo a partir de HTML declarativo.',
         s1Title:                '1 — Variantes',

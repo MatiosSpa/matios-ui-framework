@@ -10,6 +10,22 @@
 
   MTS.registerLocale('es', {
     'MTS.PasswordStrength': {
+      levelWeak:         'Débil',
+      levelFair:         'Regular',
+      levelStrong:       'Fuerte',
+      levelVeryStrong:   'Muy fuerte',
+      minLength_one:     'Mínimo {n} caracter',
+      minLength_many:    'Mínimo {n} caracteres',
+      maxLength_one:     'Máximo {n} caracter',
+      maxLength_many:    'Máximo {n} caracteres',
+      minUppercase_one:  'Al menos {n} mayúscula',
+      minUppercase_many: 'Al menos {n} mayúsculas',
+      minLowercase_one:  'Al menos {n} minúscula',
+      minLowercase_many: 'Al menos {n} minúsculas',
+      minNumbers_one:    'Al menos {n} número',
+      minNumbers_many:   'Al menos {n} números',
+      minSpecial_one:    'Al menos {n} símbolo ({list})',
+      minSpecial_many:   'Al menos {n} símbolos ({list})',
       demo: {
         subtitle:            'Medidor de fortaleza de contraseña en tiempo real. Configurable: largo mínimo/máximo, mayúsculas, minúsculas, números y símbolos especiales.',
         s1Title:             '1 — Básico (solo largo mínimo)',
@@ -35,6 +51,22 @@
 
   MTS.registerLocale('en', {
     'MTS.PasswordStrength': {
+      levelWeak:         'Weak',
+      levelFair:         'Fair',
+      levelStrong:       'Strong',
+      levelVeryStrong:   'Very strong',
+      minLength_one:     'Minimum {n} character',
+      minLength_many:    'Minimum {n} characters',
+      maxLength_one:     'Maximum {n} character',
+      maxLength_many:    'Maximum {n} characters',
+      minUppercase_one:  'At least {n} uppercase letter',
+      minUppercase_many: 'At least {n} uppercase letters',
+      minLowercase_one:  'At least {n} lowercase letter',
+      minLowercase_many: 'At least {n} lowercase letters',
+      minNumbers_one:    'At least {n} number',
+      minNumbers_many:   'At least {n} numbers',
+      minSpecial_one:    'At least {n} symbol ({list})',
+      minSpecial_many:   'At least {n} symbols ({list})',
       demo: {
         subtitle:            'Real-time password strength meter. Configurable: min/max length, uppercase, lowercase, numbers and special symbols.',
         s1Title:             '1 — Basic (minimum length only)',
@@ -60,6 +92,22 @@
 
   MTS.registerLocale('pt', {
     'MTS.PasswordStrength': {
+      levelWeak:         'Fraca',
+      levelFair:         'Regular',
+      levelStrong:       'Forte',
+      levelVeryStrong:   'Muito forte',
+      minLength_one:     'Mínimo {n} caractere',
+      minLength_many:    'Mínimo {n} caracteres',
+      maxLength_one:     'Máximo {n} caractere',
+      maxLength_many:    'Máximo {n} caracteres',
+      minUppercase_one:  'Pelo menos {n} maiúscula',
+      minUppercase_many: 'Pelo menos {n} maiúsculas',
+      minLowercase_one:  'Pelo menos {n} minúscula',
+      minLowercase_many: 'Pelo menos {n} minúsculas',
+      minNumbers_one:    'Pelo menos {n} número',
+      minNumbers_many:   'Pelo menos {n} números',
+      minSpecial_one:    'Pelo menos {n} símbolo ({list})',
+      minSpecial_many:   'Pelo menos {n} símbolos ({list})',
       demo: {
         subtitle:            'Medidor de força de senha em tempo real. Configurável: comprimento mínimo/máximo, maiúsculas, minúsculas, números e símbolos especiais.',
         s1Title:             '1 — Básico (apenas comprimento mínimo)',

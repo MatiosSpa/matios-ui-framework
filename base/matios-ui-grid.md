@@ -53,8 +53,20 @@ Breakpoint prefixes: `sm` (576px), `md` (768px), `lg` (992px), `xl` (1200px).
 |-------|-------------|
 | `.mts-g-col-{1..12}` | Span N of 12 columns (e.g. `-3` = 25%, `-6` = 50%, `-8` = 66%) |
 | `.mts-g-col-{sm\|md\|lg\|xl}-{1..12}` | Responsive span per breakpoint |
-| `.mts-g-start-{n}` | Start at column `n` |
-| `.mts-grid--center` / `--start` / `--end` | `align-items: center / start / end` |
+| `.mts-g-col-full` | Span the whole row (`1 / -1`) |
+| `.mts-g-start-{1..12}` | Start at column `n` |
+| `.mts-grid--center` / `--start` / `--end` / `--stretch` | `align-items` (cross-axis) |
+| `.mts-grid--justify-center` / `--justify-end` | `justify-items` (inline-axis) |
+
+### Column-count shortcuts & auto grids
+
+| Class | Description |
+|-------|-------------|
+| `.mts-grid--2` / `--3` / `--4` | Shortcut for `--mts-columns: 2 / 3 / 4` |
+| `.mts-grid--auto-fill` | `repeat(auto-fill, minmax(--mts-col-min, 1fr))` — as many columns as fit |
+| `.mts-grid--auto-fit` | Same, with `auto-fit` (stretches the last row to fill) |
+
+Auto grids size their columns with `--mts-col-min` (default `200px`).
 
 ### Gap modifiers
 
@@ -76,6 +88,7 @@ Applied directly on the `.mts-grid` container:
 | `--mts-gap` | `1rem` | Horizontal and vertical gap |
 | `--mts-col-gap` | — | Horizontal gap only |
 | `--mts-row-gap` | — | Vertical gap only |
+| `--mts-col-min` | `200px` | Min column width for `--auto-fill` / `--auto-fit` |
 
 ---
 
@@ -83,11 +96,3 @@ Applied directly on the `.mts-grid` container:
 
 - This is the low-level CSS grid (`base/`). For structural page layout with a JS helper and layout shortcuts, see
   `MTS.Grid` (`layout/matios-ui-grid`); for forms, see `MTS.FormLayout`.
-
----
-
-## Changelog
-
-### Initial
-- Native 12-column CSS grid: column/responsive/start classes, gap modifiers, alignment, and `--mts-columns` /
-  `--mts-rows` / `--mts-gap` control variables.

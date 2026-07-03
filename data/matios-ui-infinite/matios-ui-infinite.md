@@ -177,12 +177,10 @@ console.log(strings.demo.subtitle);
 console.log(MTS.getLanguage());   // 'en'
 ```
 
-**Add or extend a language** globally with `MTS.registerLocale(code, overrides)` (deep merge — unlisted keys are preserved):
+**Per-instance override:** the `loaderText`, `endText` and `emptyState` (`{ icon, title, message }`) options override the active-language chrome for that instance:
 
 ```js
-MTS.registerLocale('en', {
-  'MTS.Infinite': { loaderText: 'Loading more…', endText: 'That is everything' }
-});
+new MTS.Infinite(el, { onLoadMore, loaderText: 'Loading more…', endText: 'That is everything' });
 ```
 
 Bundled languages: `es`, `en`, `pt`.

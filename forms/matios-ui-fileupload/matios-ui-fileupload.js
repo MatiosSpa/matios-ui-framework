@@ -26,7 +26,7 @@ MTS.FileUpload = class MtsFileUpload {
     this.maxFiles = options.maxFiles || null;
 
     // Drop zone label HTML / HTML del label de la zona de drop
-    this.label = options.label || 'Arrastra archivos aquí o <span>selecciona</span>';
+    this.label = options.label || this._t('label', 'Arrastra archivos aquí o <span>selecciona</span>');
 
     // Helper text below the zone / Texto de ayuda debajo de la zona
     this.hint = options.hint || '';
@@ -53,6 +53,18 @@ MTS.FileUpload = class MtsFileUpload {
     // Fires when a file is removed: (file) => {} / Se dispara al remover un archivo
     if (options.onRemove) this.on('remove', options.onRemove);
     this._build();
+  }
+
+  // Localized string with {placeholder} interpolation / Cadena localizada con interpolación de {placeholder}
+  _t(key, fallback, vars) {
+    let loc = (window.MTS && typeof MTS.getString === 'function') ? MTS.getString()['MTS.FileUpload'] : null;
+    let str = (loc && loc[key] != null) ? loc[key] : fallback;
+    if (vars) {
+      Object.keys(vars).forEach(function (k) {
+        str = str.replace('{' + k + '}', vars[k]);
+      });
+    }
+    return str;
   }
 
   /* ── API ─────────────────────────────────────────────── */
@@ -155,7 +167,7 @@ MTS.FileUpload = class MtsFileUpload {
     newFiles.forEach(file => {
       // Validate file size / Validar tamaño
       if (this.maxSize && file.size > this.maxSize * 1024 * 1024) {
-        errors.push(`"${file.name}" supera el límite de ${this.maxSize}MB.`);
+        errors.push(this._t('errorTooLarge', '"{name}" supera el límite de {size}MB.', { name: file.name, size: this.maxSize }));
         return;
       }
       // Validate file type / Validar tipo
@@ -166,7 +178,7 @@ MTS.FileUpload = class MtsFileUpload {
           if (a.startsWith('.')) return file.name.toLowerCase().endsWith(a.toLowerCase());
           return file.type === a;
         });
-        if (!ok) { errors.push(`"${file.name}" no es un tipo aceptado.`); return; }
+        if (!ok) { errors.push(this._t('errorType', '"{name}" no es un tipo aceptado.', { name: file.name })); return; }
       }
       // Skip duplicates / Omitir duplicados
       if (this._files.some(f => f.name === file.name && f.size === file.size)) return;
@@ -177,7 +189,7 @@ MTS.FileUpload = class MtsFileUpload {
 
     // Validate max files / Validar máximo de archivos
     if (this.maxFiles && this._files.length > this.maxFiles) {
-      errors.push(`Máximo ${this.maxFiles} archivos.`);
+      errors.push(this._t('errorMaxFiles', 'Máximo {n} archivos.', { n: this.maxFiles }));
       this._files = this._files.slice(0, this.maxFiles);
     }
 
@@ -235,7 +247,7 @@ MTS.FileUpload = class MtsFileUpload {
       const remove = document.createElement('button');
       remove.type      = 'button';
       remove.className = 'mts-fileupload__remove';
-      remove.setAttribute('aria-label', 'Eliminar');
+      remove.setAttribute('aria-label', this._t('removeLabel', 'Eliminar'));
       remove.innerHTML = '&times;';
       remove.addEventListener('click', (e) => {
         e.stopPropagation();

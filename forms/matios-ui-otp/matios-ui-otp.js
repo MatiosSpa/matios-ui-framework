@@ -26,7 +26,7 @@
     this._onExpire    = typeof options.onExpire   === 'function' ? options.onExpire   : null;
     this._onChange    = typeof options.onChange   === 'function' ? options.onChange   : null;
     this._onResend    = typeof options.onResend   === 'function' ? options.onResend   : null;
-    this._resendLabel = options.resendLabel || 'Reenviar código';
+    this._resendLabel = options.resendLabel || this._t('resend', 'Resend code');
 
     this._listeners        = {};
     this._inputs           = [];
@@ -168,7 +168,7 @@
       inp.setAttribute('autocorrect',    'off');
       inp.setAttribute('autocapitalize', 'off');
       inp.setAttribute('spellcheck',     'false');
-      inp.setAttribute('aria-label',     'Código ' + (i + 1) + ' de ' + this._length);
+      inp.setAttribute('aria-label',     this._t('boxLabel', 'Character {n} of {total}').replace('{n}', i + 1).replace('{total}', this._length));
       this._inputs.push(inp);
       boxesEl.appendChild(inp);
     }

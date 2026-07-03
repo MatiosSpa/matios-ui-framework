@@ -68,8 +68,8 @@ MTS.DatePicker.DateRange = class MtsDatePickerDateRange extends MTS.DatePicker.B
 
   /* Sobreescribir _renderFooter para DateRange */
   _renderFooter(container, clearLabel) {
-    const labelClear  = this.btnClear  || clearLabel || "Limpiar";
-    const labelAccept = this.btnAccept || "Aceptar";
+    const labelClear  = this.btnClear  || this._chrome("clear",  clearLabel || "Limpiar");
+    const labelAccept = this.btnAccept || this._chrome("accept", "Aceptar");
 
     const footer = document.createElement("div");
     footer.className = "mts-picker-footer";

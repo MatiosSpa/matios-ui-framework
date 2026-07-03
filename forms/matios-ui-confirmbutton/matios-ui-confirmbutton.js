@@ -27,13 +27,13 @@ MTS.ConfirmButton = class MtsConfirmButton {
     options = { ..._fromHTML, ...options };
 
     // Initial button label / Label del botón inicial
-    this.label = options.label || 'Eliminar';
+    this.label = options.label || this._t('delete', 'Delete');
 
     // Label shown on the confirm button / Label del botón de confirmar
-    this.confirmLabel = options.confirmLabel || '¿Confirmar?';
+    this.confirmLabel = options.confirmLabel || this._t('confirm', 'Confirm?');
 
     // Label shown on the cancel button / Label del botón de cancelar
-    this.cancelLabel = options.cancelLabel || 'No';
+    this.cancelLabel = options.cancelLabel || this._t('cancel', 'No');
 
     // Initial button variant / Variante del botón inicial
     this.variant = options.variant || 'secondary';
@@ -70,6 +70,16 @@ MTS.ConfirmButton = class MtsConfirmButton {
 
   // Enable all buttons / Habilitar todos los botones
   enable()  { this._el.querySelectorAll('button').forEach(b => b.disabled = false); return this; }
+
+  /* Localized chrome lookup — MTS.ConfirmButton → messages namespace; English fallback. */
+  _t(key, fallback) {
+    try {
+      const ns = (typeof window !== 'undefined' && window.MTS && MTS.getString) ? MTS.getString()['MTS.ConfirmButton'] : null;
+      const m  = ns && ns.messages;
+      if (m && m[key] != null) return m[key];
+    } catch (e) {}
+    return fallback;
+  }
 
   _syncClasses() {
     const keep = Array.from(this._el.classList).filter(cls => !cls.startsWith('mts-confirmbutton'));

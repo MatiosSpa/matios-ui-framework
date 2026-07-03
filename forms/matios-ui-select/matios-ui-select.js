@@ -251,7 +251,7 @@ MTS.Select = class MtsSelect {
       this._listEl.innerHTML = '';
       const loader = document.createElement('div');
       loader.className = 'mts-select__loading';
-      loader.innerHTML = '<span class="mts-select__loading-spinner"></span> Buscando...';
+      loader.innerHTML = '<span class="mts-select__loading-spinner"></span> ' + this._t('loading', 'Searching...');
       this._listEl.appendChild(loader);
     }
   }

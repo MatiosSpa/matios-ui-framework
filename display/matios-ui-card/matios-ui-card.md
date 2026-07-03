@@ -218,7 +218,7 @@ If you localize your own card content, set the global language once at startup:
 MTS.setLanguage('es'); // or 'en' | 'pt'
 ```
 
-Register additional locale bundles with `MTS.registerLocale(lang, dictionary)`. There is no per-instance `locale` option.
+There is no per-instance `locale` option.
 
 ---
 

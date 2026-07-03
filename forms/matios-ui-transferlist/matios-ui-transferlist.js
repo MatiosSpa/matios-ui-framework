@@ -16,11 +16,11 @@ MTS.TransferList = class MtsTransferList {
     this.label = options.label || '';
     this.hint = options.hint || '';
 
-    this.originTitle = options.originTitle || options.availableTitle || 'Origin';
-    this.selectedTitle = options.selectedTitle || options.targetTitle || 'Selected';
+    this.originTitle = options.originTitle || options.availableTitle || this._t('originTitle', 'Origin');
+    this.selectedTitle = options.selectedTitle || options.targetTitle || this._t('selectedTitle', 'Selected');
 
-    this.originEmptyText = options.originEmptyText || options.availableEmptyText || 'No items available';
-    this.selectedEmptyText = options.selectedEmptyText || 'No items selected';
+    this.originEmptyText = options.originEmptyText || options.availableEmptyText || this._t('originEmpty', 'No items available');
+    this.selectedEmptyText = options.selectedEmptyText || this._t('selectedEmpty', 'No items selected');
 
     this.itemLabel = options.itemLabel || 'label';
     this.itemDescription = options.itemDescription || 'description';
@@ -40,7 +40,7 @@ MTS.TransferList = class MtsTransferList {
 
     this.validateUnique = options.validateUnique === true;
     this.validateKey = options.validateKey || null;
-    this.duplicateMessage = options.duplicateMessage || 'Duplicate item';
+    this.duplicateMessage = options.duplicateMessage || this._t('duplicate', 'Duplicate item');
 
     this._onRequestItem = typeof options.onRequestItem === 'function' ? options.onRequestItem : null;
     this._onSelectionChange = typeof options.onSelectionChange === 'function' ? options.onSelectionChange : null;
@@ -252,10 +252,10 @@ MTS.TransferList = class MtsTransferList {
     if (!this.showMoveButtons) { return null; }
 
     let btns = [
-      { action: 'all-to-selected', label: 'Move all to selected', show: this.buttons.allToSelected, char: '»' },
-      { action: 'to-selected',     label: 'Move to selected',     show: this.buttons.toSelected,    char: '›' },
-      { action: 'to-origin',       label: 'Move to origin',       show: this.buttons.toOrigin,      char: '‹' },
-      { action: 'all-to-origin',   label: 'Move all to origin',   show: this.buttons.allToOrigin,   char: '«' },
+      { action: 'all-to-selected', label: this._t('moveAllToSelected', 'Move all to selected'), show: this.buttons.allToSelected, char: '»' },
+      { action: 'to-selected',     label: this._t('moveToSelected', 'Move to selected'),        show: this.buttons.toSelected,    char: '›' },
+      { action: 'to-origin',       label: this._t('moveToOrigin', 'Move to origin'),            show: this.buttons.toOrigin,      char: '‹' },
+      { action: 'all-to-origin',   label: this._t('moveAllToOrigin', 'Move all to origin'),     show: this.buttons.allToOrigin,   char: '«' },
     ];
 
     let visible = btns.filter(function (b) { return b.show; });
@@ -432,7 +432,7 @@ MTS.TransferList = class MtsTransferList {
         removeBtn.type = 'button';
         removeBtn.className = 'mts-transferlist__item-remove';
         removeBtn.setAttribute('data-transfer-remove', entry.key);
-        removeBtn.setAttribute('aria-label', 'Remove item');
+        removeBtn.setAttribute('aria-label', self._t('removeItem', 'Remove item'));
         removeBtn.textContent = '×';
         itemEl.appendChild(removeBtn);
       }

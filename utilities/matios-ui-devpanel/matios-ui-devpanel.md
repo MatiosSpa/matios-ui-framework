@@ -158,18 +158,7 @@ Chrome text (panel titles and the log **Clear** button) is read from `MTS.getStr
 MTS.setLanguage('en');
 ```
 
-There is no per-instance `locale` option. Bundled languages: `es`, `en`, `pt`. Override or add one with `MTS.registerLocale`:
-
-```js
-MTS.registerLocale('en', {
-  'MTS.DevPanel': {
-    configTitle: 'Config',
-    codeTitle:   'JavaScript',
-    logTitle:    'Activity Log',
-    clear:       'Clear'
-  }
-});
-```
+There is no per-instance `locale` option. Bundled languages: `es`, `en`, `pt`. The panel localizes its chrome from the active global language.
 
 | Key | Purpose |
 |---|---|

@@ -10,6 +10,9 @@
 
   MTS.registerLocale('es', {
     'MTS.Label': {
+      messages: {
+        optional:           'opcional'
+      },
       demo: {
         subtitle:           'Etiquetas de formulario con badges required/optional, hint, error y enhancement progresivo.',
         s1Title:            '1 — HTML puro',
@@ -24,6 +27,9 @@
 
   MTS.registerLocale('en', {
     'MTS.Label': {
+      messages: {
+        optional:           'optional'
+      },
       demo: {
         subtitle:           'Form labels with required/optional badges, hint, error and progressive enhancement.',
         s1Title:            '1 — Pure HTML',
@@ -38,6 +44,9 @@
 
   MTS.registerLocale('pt', {
     'MTS.Label': {
+      messages: {
+        optional:           'opcional'
+      },
       demo: {
         subtitle:           'Rótulos de formulário com badges required/optional, dica, erro e enhancement progressivo.',
         s1Title:            '1 — HTML puro',

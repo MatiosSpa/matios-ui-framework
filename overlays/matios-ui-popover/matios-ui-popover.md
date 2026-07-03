@@ -140,7 +140,7 @@ document.getElementById('my-btn')
 The component ships a locale bundle in `matios-ui-popover-i18n.js` under the `MTS.Popover` namespace (used by the demo). It builds on the shared i18n base (`matios-ui-i18n.js`).
 
 - Set the language once at startup with `MTS.setLanguage('en')` (`'es'` / `'en'` / `'pt'`).
-- Add or override strings with `MTS.registerLocale(lang, { 'MTS.Popover': { ... } })`.
+- Strings come from the active global language (`MTS.getLanguage()` / `MTS.getString()`).
 - There is no per-instance `locale` option. The popover chrome has no localizable text of its own — the close button is the `×` glyph — so no strings are read at runtime by the component itself.
 
 ```js

@@ -148,10 +148,4 @@ Set the language once at startup — there is no per-instance locale option.
 MTS.setLanguage('es'); // 'es' | 'en' | 'pt'
 ```
 
-To override a label:
-
-```js
-MTS.registerLocale('en', {
-  'MTS.SideNav': { collapse: 'Hide menu', expand: 'Show menu' }
-});
-```
+The nav item labels are not owned by SideNav — they come from the `MTS.Menu` instance you pass via the `menu` option, so localize them there.

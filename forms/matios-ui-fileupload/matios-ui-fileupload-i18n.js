@@ -10,6 +10,11 @@
 
   MTS.registerLocale('es', {
     'MTS.FileUpload': {
+      label:         'Arrastra archivos aquí o <span>selecciona</span>',
+      removeLabel:   'Eliminar',
+      errorTooLarge: '"{name}" supera el límite de {size}MB.',
+      errorType:     '"{name}" no es un tipo aceptado.',
+      errorMaxFiles: 'Máximo {n} archivos.',
       demo: {
         subtitle:            'Zona de archivos con arrastrar y soltar, validación, previsualizaciones y helpers de API.',
         s1Title:             '1 — Imágenes con preview',
@@ -33,6 +38,11 @@
 
   MTS.registerLocale('en', {
     'MTS.FileUpload': {
+      label:         'Drag files here or <span>browse</span>',
+      removeLabel:   'Remove',
+      errorTooLarge: '"{name}" exceeds the {size}MB limit.',
+      errorType:     '"{name}" is not an accepted type.',
+      errorMaxFiles: 'Maximum {n} files.',
       demo: {
         subtitle:            'Drag & drop file zone with validation, previews and API helpers.',
         s1Title:             '1 — Images with preview',
@@ -56,6 +66,11 @@
 
   MTS.registerLocale('pt', {
     'MTS.FileUpload': {
+      label:         'Arraste arquivos aqui ou <span>selecione</span>',
+      removeLabel:   'Remover',
+      errorTooLarge: '"{name}" excede o limite de {size}MB.',
+      errorType:     '"{name}" não é um tipo aceito.',
+      errorMaxFiles: 'Máximo {n} arquivos.',
       demo: {
         subtitle:            'Zona de arrastar e soltar arquivos com validação, pré-visualizações e helpers de API.',
         s1Title:             '1 — Imagens com pré-visualização',

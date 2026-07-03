@@ -10,7 +10,7 @@
 
   MTS.registerLocale('es', {
     'MTS.Rating': {
-      messages: { required: 'Este campo es obligatorio' },
+      messages: { required: 'Este campo es obligatorio', starLabel: '{n} estrellas' },
       demo: {
         subtitle:                'Calificación por estrellas con variantes, tamaños y enhancement progresivo desde HTML declarativo.',
         s1Title:                 '1 — Variantes',
@@ -31,7 +31,7 @@
 
   MTS.registerLocale('en', {
     'MTS.Rating': {
-      messages: { required: 'This field is required' },
+      messages: { required: 'This field is required', starLabel: '{n} stars' },
       demo: {
         subtitle:                'Star rating with variants, sizes and progressive enhancement from declarative HTML.',
         s1Title:                 '1 — Variants',
@@ -52,7 +52,7 @@
 
   MTS.registerLocale('pt', {
     'MTS.Rating': {
-      messages: { required: 'Este campo é obrigatório' },
+      messages: { required: 'Este campo é obrigatório', starLabel: '{n} estrelas' },
       demo: {
         subtitle:                'Avaliação por estrelas com variantes, tamanhos e enhancement progressivo a partir de HTML declarativo.',
         s1Title:                 '1 — Variantes',

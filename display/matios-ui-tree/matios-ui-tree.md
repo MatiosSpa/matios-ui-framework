@@ -161,10 +161,4 @@ Set the language once at startup:
 MTS.setLanguage('en'); // 'es' | 'en' | 'pt'
 ```
 
-To add or override a locale, register it before use:
-
-```js
-MTS.registerLocale('en', { 'MTS.Tree': { /* … */ } });
-```
-
 There is no per-instance `locale` option and no `getMessages` / `setLocale` / `getLocale` API.

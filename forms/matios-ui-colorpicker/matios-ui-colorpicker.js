@@ -90,7 +90,7 @@ MTS.ColorPicker = class MtsColorPicker {
     this.triggerVariant = options.triggerVariant || 'default';
 
     // Text shown inside the preview chip (triggerVariant:'preview')
-    this.previewText = options.previewText || 'Vista previa';
+    this.previewText = options.previewText || this._t('previewText', 'Preview');
 
     // Always visible, no trigger button / Siempre visible, sin botón trigger
     this.inline = options.inline ?? false;
@@ -253,7 +253,7 @@ MTS.ColorPicker = class MtsColorPicker {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'mts-colorpicker__preview-chip-btn';
-    btn.setAttribute('aria-label', 'Seleccionar color');
+    btn.setAttribute('aria-label', this._t('pickColor', 'Pick a color'));
     btn.innerHTML = (typeof MTS !== 'undefined' && MTS.Icon) ? MTS.Icon.get('palette', 16) : '';
     this._previewBtn = btn;
 
@@ -429,7 +429,7 @@ MTS.ColorPicker = class MtsColorPicker {
 
       const okBtn = document.createElement('button');
       okBtn.type = 'button'; okBtn.className = 'mts-btn mts-btn--primary mts-btn--sm';
-      okBtn.textContent = 'Aceptar';
+      okBtn.textContent = this._t('apply', 'Apply');
       okBtn.addEventListener('click', () => {
         this._updateTrigger();
         this._emitChange();

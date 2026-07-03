@@ -64,7 +64,7 @@ MTS.DatePicker.Week = class MtsDatePickerWeek extends MTS.DatePicker.Base {
   _updateInputValue() {
     if (!this._value) { this._input.value = ""; return; }
     const w = this._getWeekNumber(this._weekStart);
-    this._input.value = "Semana " + String(w).padStart(2,"0") + " - " + this._weekStart.getFullYear();
+    this._input.value = this._chrome("week", "Semana") + " " + String(w).padStart(2,"0") + " - " + this._weekStart.getFullYear();
     this._clearBtn?.classList.add("mts-picker__clear--visible");
   }
 };

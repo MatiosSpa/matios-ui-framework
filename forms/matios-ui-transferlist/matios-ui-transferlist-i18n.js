@@ -10,7 +10,19 @@
 
   MTS.registerLocale('es', {
     'MTS.TransferList': {
-      messages: { required: 'Este campo es obligatorio' },
+      messages: {
+        required:        'Este campo es obligatorio',
+        originTitle:     'Origen',
+        selectedTitle:   'Seleccionados',
+        originEmpty:     'No hay elementos disponibles',
+        selectedEmpty:   'No hay elementos seleccionados',
+        duplicate:       'Elemento duplicado',
+        moveAllToSelected: 'Mover todo a seleccionados',
+        moveToSelected:  'Mover a seleccionados',
+        moveToOrigin:    'Mover al origen',
+        moveAllToOrigin: 'Mover todo al origen',
+        removeItem:      'Quitar elemento'
+      },
       demo: {
         subtitle:              'Transferencia entre listas con datasource origen/seleccionado, arrastrar y soltar, botones opcionales y validacion unica en destino. Los ejemplos combinan casos genericos y un caso real de negocio.',
         s1Title:               '1 - Basico',
@@ -65,7 +77,19 @@
 
   MTS.registerLocale('en', {
     'MTS.TransferList': {
-      messages: { required: 'This field is required' },
+      messages: {
+        required:        'This field is required',
+        originTitle:     'Origin',
+        selectedTitle:   'Selected',
+        originEmpty:     'No items available',
+        selectedEmpty:   'No items selected',
+        duplicate:       'Duplicate item',
+        moveAllToSelected: 'Move all to selected',
+        moveToSelected:  'Move to selected',
+        moveToOrigin:    'Move to origin',
+        moveAllToOrigin: 'Move all to origin',
+        removeItem:      'Remove item'
+      },
       demo: {
         subtitle:              'Transfer between lists with origin/selected datasource, drag and drop, optional buttons and unique validation on the target. The examples combine generic cases and a real business case.',
         s1Title:               '1 - Basic',
@@ -120,7 +144,19 @@
 
   MTS.registerLocale('pt', {
     'MTS.TransferList': {
-      messages: { required: 'Este campo é obrigatório' },
+      messages: {
+        required:        'Este campo é obrigatório',
+        originTitle:     'Origem',
+        selectedTitle:   'Selecionados',
+        originEmpty:     'Não há itens disponíveis',
+        selectedEmpty:   'Não há itens selecionados',
+        duplicate:       'Item duplicado',
+        moveAllToSelected: 'Mover tudo para selecionados',
+        moveToSelected:  'Mover para selecionados',
+        moveToOrigin:    'Mover para a origem',
+        moveAllToOrigin: 'Mover tudo para a origem',
+        removeItem:      'Remover item'
+      },
       demo: {
         subtitle:              'Transferencia entre listas com datasource origem/selecionado, arrastar e soltar, botoes opcionais e validacao unica no destino. Os exemplos combinam casos genericos e um caso real de negocio.',
         s1Title:               '1 - Basico',

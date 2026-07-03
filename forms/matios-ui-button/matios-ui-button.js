@@ -337,7 +337,7 @@ MTS.MenuButton = class MtsMenuButton {
     btnEl.type  = 'button';
     this._wrap.appendChild(btnEl);
     this._btn = new MTS.Button(btnEl, {
-      label:     options.label    || 'Acciones',
+      label:     options.label    || this._t('actions', 'Actions'),
       variant:   options.variant  || 'secondary',
       size:      options.size     || '',
       iconLeft:  options.iconLeft || null,
@@ -353,6 +353,16 @@ MTS.MenuButton = class MtsMenuButton {
 
     this._container.appendChild(this._wrap);
     this._bindEvents();
+  }
+
+  /* Localized chrome lookup — MTS.Button → messages namespace; English fallback. */
+  _t(key, fallback) {
+    try {
+      const ns = (typeof window !== 'undefined' && window.MTS && MTS.getString) ? MTS.getString()['MTS.Button'] : null;
+      const m  = ns && ns.messages;
+      if (m && m[key] != null) return m[key];
+    } catch (e) {}
+    return fallback;
   }
 
   _buildItems() {

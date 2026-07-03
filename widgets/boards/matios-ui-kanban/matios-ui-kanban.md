@@ -23,8 +23,8 @@ The component reads its text from the `MTS.Kanban` layer of the active language
 (`MTS.getString()['MTS.Kanban']`), with an English fallback when no locale is loaded. Its own locale file
 `matios-ui-kanban-i18n.js` registers `es`/`en`/`pt` (inline add-card form: title/description/tags/assignee
 placeholders, priority labels, `noResults`, column management, and the `ui` section for the demo). Set the active
-language once at startup with `MTS.setLanguage('en')`; override strings with
-`MTS.registerLocale('es', { 'MTS.Kanban': { addCard: 'Nueva' } })`.
+language once at startup with `MTS.setLanguage('en')`; the component then localizes its chrome from the active
+language.
 
 ---
 

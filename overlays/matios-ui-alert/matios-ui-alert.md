@@ -151,17 +151,7 @@ Load the i18n scripts (optional; only if you need the localized `aria-label`), s
 </script>
 ```
 
-Add or override a locale with `MTS.registerLocale`:
-
-```js
-MTS.registerLocale('en', {
-  'MTS.Alert': {
-    closeLabel: 'Dismiss'
-  }
-});
-```
-
-There is no per-instance `locale` option: language is a single global setting applied with `MTS.setLanguage`.
+The `aria-label` comes from the active global language (`MTS.getLanguage()` / `MTS.getString()`). There is no per-instance `locale` option: language is a single global setting applied with `MTS.setLanguage`.
 
 ---
 

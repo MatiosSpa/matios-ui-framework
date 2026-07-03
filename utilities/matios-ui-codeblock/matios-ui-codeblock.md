@@ -144,11 +144,15 @@ Keys under `MTS.CodeBlock`:
 | `copied` | ¡Copiado! | Copied! | Copiado! |
 | `tooltip` | Copiar | Copy | Copiar |
 
-Bundled locales: `es` (default), `en`, `pt`. Override or add strings with `MTS.registerLocale`:
+Bundled locales: `es` (default), `en`, `pt`.
+
+For a single instance, override the copy button strings with the `copy` option instead of relying on the active language:
 
 ```js
-MTS.registerLocale('en', {
-  'MTS.CodeBlock': { copy: 'Copy code' }
+new MTS.CodeBlock('#snippet', {
+  code: 'const ok = true;',
+  language: 'javascript',
+  copy: { label: 'Copy code', labelCopied: 'Copied!', tooltip: 'Copy code' }
 });
 ```
 

@@ -10,7 +10,12 @@
 
   MTS.registerLocale('es', {
     'MTS.ColorPicker': {
-      messages: { required: 'Este campo es obligatorio' },
+      messages: {
+        required:    'Este campo es obligatorio',
+        apply:       'Aceptar',
+        pickColor:   'Seleccionar color',
+        previewText: 'Vista previa'
+      },
       demo: {
         subtitle:               'Selector de color standalone — sliders HSL, paleta de presets, salida hex/rgb/hsl.',
         s1Title:                '1 — Trigger (popup) — tamaños',
@@ -42,7 +47,12 @@
 
   MTS.registerLocale('en', {
     'MTS.ColorPicker': {
-      messages: { required: 'This field is required' },
+      messages: {
+        required:    'This field is required',
+        apply:       'Apply',
+        pickColor:   'Pick a color',
+        previewText: 'Preview'
+      },
       demo: {
         subtitle:               'Standalone color picker — HSL sliders, preset palette, hex/rgb/hsl output.',
         s1Title:                '1 — Trigger (popup) — sizes',
@@ -74,7 +84,12 @@
 
   MTS.registerLocale('pt', {
     'MTS.ColorPicker': {
-      messages: { required: 'Este campo é obrigatório' },
+      messages: {
+        required:    'Este campo é obrigatório',
+        apply:       'Aplicar',
+        pickColor:   'Selecionar cor',
+        previewText: 'Pré-visualização'
+      },
       demo: {
         subtitle:               'Seletor de cor standalone — sliders HSL, paleta de presets, saída hex/rgb/hsl.',
         s1Title:                '1 — Trigger (popup) — tamanhos',

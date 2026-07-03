@@ -10,6 +10,10 @@
 
   MTS.registerLocale('es', {
     'MTS.CopyButton': {
+      messages: {
+        copy:            'Copiar',
+        copied:          '¡Copiado!'
+      },
       demo: {
         subtitle:        'Botón para copiar texto o contenido objetivo al portapapeles con feedback visual.',
         s1Title:         '1 — Variantes y tamaños',
@@ -25,6 +29,10 @@
 
   MTS.registerLocale('en', {
     'MTS.CopyButton': {
+      messages: {
+        copy:            'Copy',
+        copied:          'Copied!'
+      },
       demo: {
         subtitle:        'Button to copy text or target content to the clipboard with visual feedback.',
         s1Title:         '1 — Variants and sizes',
@@ -40,6 +48,10 @@
 
   MTS.registerLocale('pt', {
     'MTS.CopyButton': {
+      messages: {
+        copy:            'Copiar',
+        copied:          'Copiado!'
+      },
       demo: {
         subtitle:        'Botão para copiar texto ou conteúdo alvo para a área de transferência com feedback visual.',
         s1Title:         '1 — Variantes e tamanhos',

@@ -267,12 +267,4 @@ Keys (defaults shipped for `es`, `en`, `pt`):
 | `unknownError` | `Unknown error` | Failure with no server message |
 | `requestFailed` | `Request failed` | `download()` non-2xx response |
 
-Override or add a language with `MTS.registerLocale`:
-
-```js
-MTS.registerLocale('en', {
-  'MTS.HttpClient': { messages: { networkError: 'Connection failed' } }
-});
-```
-
 Without the i18n pack, the client falls back to the English defaults shown above.

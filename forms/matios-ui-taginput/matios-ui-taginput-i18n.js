@@ -10,7 +10,11 @@
 
   MTS.registerLocale('es', {
     'MTS.TagInput': {
-      messages: { required: 'Este campo es obligatorio' },
+      messages: {
+        required:    'Este campo es obligatorio',
+        placeholder: 'Agregar...',
+        removeTag:   'Eliminar {tag}'
+      },
       demo: {
         subtitle:                  'Etiquetas con sugerencias locales, búsqueda async y enhancement progresivo desde HTML declarativo.',
         s1Title:                   '1 — Sugerencias locales',
@@ -37,7 +41,11 @@
 
   MTS.registerLocale('en', {
     'MTS.TagInput': {
-      messages: { required: 'This field is required' },
+      messages: {
+        required:    'This field is required',
+        placeholder: 'Add...',
+        removeTag:   'Remove {tag}'
+      },
       demo: {
         subtitle:                  'Tags with local suggestions, async search and progressive enhancement from declarative HTML.',
         s1Title:                   '1 — Local suggestions',
@@ -64,7 +72,11 @@
 
   MTS.registerLocale('pt', {
     'MTS.TagInput': {
-      messages: { required: 'Este campo é obrigatório' },
+      messages: {
+        required:    'Este campo é obrigatório',
+        placeholder: 'Adicionar...',
+        removeTag:   'Remover {tag}'
+      },
       demo: {
         subtitle:                  'Etiquetas com sugestões locais, busca assíncrona e enhancement progressivo a partir de HTML declarativo.',
         s1Title:                   '1 — Sugestões locais',

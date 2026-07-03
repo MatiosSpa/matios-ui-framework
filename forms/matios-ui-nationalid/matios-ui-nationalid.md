@@ -57,10 +57,9 @@ MTS.NationalId.countries();                    // → ['AR','BR','CL', …]
 | `required` | `boolean` | `false` | Also via `data-required`. Gates validity: empty is valid **unless** required. Does **not** set the native HTML `required` (no browser bubble) |
 | `size` | `string` | `'md'` | `'sm'` · `'md'` · `'lg'` |
 | `disabled` | `boolean` | `false` | Disables the field |
-| `errorMessage` | `string` | i18n `invalid` | Error text; `{doc}` is replaced by the doc label (RUT, CPF…) |
+| `errorMessage` | `string` | i18n `invalid` | Error text; `{doc}` is replaced by the doc label (RUT, CPF…). Overrides the localized default |
 | `maxLength` | `number` | derived | Override the derived attribute cap (formatted length + 2) |
-| `autocomplete` | `string` | `'browser-off'` | Per platform standard |
-| `onChange` | `function` | — | `function(v)` — receives the value object |
+| `onChange` | `function` | — | `function(v)` — receives the value object; subscribed as a `'change'` listener |
 
 > **maxLength.** Derived as `formattedLength + 2` (a small buffer so the native `maxlength` never blocks the formatter). The real cap is by **digit count** in JS (`maxDigits` per type), and the source of truth for correctness is `validate()` — not the length.
 
@@ -74,7 +73,9 @@ MTS.NationalId.countries();                    // → ['AR','BR','CL', …]
 | `resolveType(country, value, [type])` | resolved type key |
 | `countries()` | array of registered ISO-2 codes |
 | `getCountry(code)` | the country definition |
-| `registerCountry(code, def)` | register / override a country |
+| `registerCountry(code, def)` | register / override a country (returns `MTS.NationalId`) |
+| `clean(value)` | uppercased digits + `A-Z` only (keeps a `K` DV / leading letter) |
+| `onlyDigits(value)` | digits only |
 
 ### Input — `MTS.NationalId.Input`
 | Method | Description |
@@ -82,7 +83,7 @@ MTS.NationalId.countries();                    // → ['AR','BR','CL', …]
 | `getValue()` | `{ raw, formatted, valid, dv, type, country }` |
 | `isValid()` | `boolean` |
 | `validate()` | Validates required + format, renders the error inline, emits `'validate'`, returns `boolean` ([Form Field Contract](../FORM-FIELD-CONTRACT.md)) |
-| `setValue(v)` | Set value (re-formats + re-validates), chainable |
+| `setValue(v)` | Set value (cleans + re-formats, emits `'change'`); does not render the inline error until the next `validate()`/blur; chainable |
 | `setCountry(code)` | Switch country, chainable |
 | `setError(msg)` / `clearError()` | Manual error control |
 | `on(event, cb)` | Subscribe to an event |
@@ -90,7 +91,12 @@ MTS.NationalId.countries();                    // → ['AR','BR','CL', …]
 
 ## Events
 
-`mts:nationalid:change` (and the `onChange` callback) fire with the value object on every keystroke.
+Each event fires the `on(event, cb)` listeners and also dispatches a bubbling DOM `CustomEvent` on the host element (`detail` = the payload below).
+
+| Event | DOM event | Payload | When |
+|---|---|---|---|
+| `change` | `mts:nationalid:change` | `{ raw, formatted, valid, dv, type, country }` | Every keystroke, and on `setValue()` |
+| `validate` | `mts:nationalid:validate` | `{ valid, errors }` (`errors` = string array) | On the public `validate()` call |
 
 ```javascript
 document.getElementById('rut')
@@ -137,6 +143,23 @@ MTS.NationalId.registerCountry('XX', {
 
 A country can have several `types` (e.g. person vs company). Use `detect(raw)` to auto-pick when `type:'auto'`; otherwise pass `type` explicitly.
 
+## i18n
+
+The component localizes its two built-in messages through the global language API. Load `base/matios-ui-i18n.js` + `matios-ui-nationalid-i18n.js`, then set the language once at startup:
+
+```js
+MTS.setLanguage('es');   // 'es' | 'en' | 'pt' — default resolved by the base i18n
+```
+
+Keys live under the `MTS.NationalId` namespace (read via `MTS.getString()['MTS.NationalId']`):
+
+| Key | es | en | pt |
+|---|---|---|---|
+| `invalid` | `{doc} inválido` | `Invalid {doc}` | `{doc} inválido` |
+| `required` | `Requerido` | `Required` | `Obrigatório` |
+
+`{doc}` is replaced by the resolved type label (RUT, CPF, DNI/NIF…). The `errorMessage` option overrides the `invalid` message for that instance. Without the i18n files, the code falls back to the English literals. There is no per-instance `locale` option — language is global.
+
 ## CSS Classes
 
 | Class | Element |
@@ -156,8 +179,4 @@ All colors/spacing use `--mts-*` tokens; the enabled background is `--mts-bg-sur
 - Label linked to the input via `for`/`id`.
 - Error text linked via `aria-describedby` and announced with `aria-live="polite"`.
 - `aria-invalid="true"` on the input while invalid.
-
-## Changelog
-
-- **2026-06-23** — Added the public `validate()` method (required + format → inline error + `'validate'` event), aligning `MTS.NationalId.Input` with the [Form Field Contract](../FORM-FIELD-CONTRACT.md). Already had `required` + `errorMessage` + `setError`/`clearError`.
-- **2026-06-10** — Initial version. Core (registry + format + validate) with CL, BR, ES, EC, AR, PE, CO, UY, PT, US; `MTS.NationalId.Input` (format-as-you-type with digit-count caret restore, validation, configurable error message, derived `maxLength`); es/en/pt locale.
+- The input is rendered with `autocomplete="off"` (browser autofill disabled), per platform standard.

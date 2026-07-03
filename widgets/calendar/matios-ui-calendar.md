@@ -481,22 +481,6 @@ MTS.setLanguage('en');   // 'es' (default) · 'en' · 'pt'
 The calendar reads the active language with `MTS.getLanguage()` and picks its strings from its own namespace table
 `MTS.CalendarLocales`. Without the i18n script the calendar falls back to its Spanish defaults.
 
-Register or override a locale with `MTS.Calendar.registerLocale(code, table)`:
-
-```js
-MTS.Calendar.registerLocale('fr', {
-  today:    'Aujourd\'hui',
-  week:     'Semaine',
-  month:    'Mois',
-  day:      'Jour',
-  schedule: 'Agenda',
-  months:      ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-  monthsShort: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
-  days: { mini: ['L', 'M', 'M', 'J', 'V', 'S', 'D'], short: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] },
-});
-MTS.setLanguage('fr');
-```
-
 > Your own labels (`eventTypes`, your buttons, the built-in modal field labels) are not covered by the calendar i18n —
 > localize those yourself.
 

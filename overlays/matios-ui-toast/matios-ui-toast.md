@@ -177,11 +177,4 @@ The sibling `matios-ui-toast-i18n.js` file contains **demo strings only** (under
 MTS.setLanguage('es'); // 'es' | 'en' | 'pt'
 ```
 
-To add or override a language, register it before setting it:
-
-```js
-MTS.registerLocale('fr', { 'MTS.Toast': { /* ... */ } });
-MTS.setLanguage('fr');
-```
-
 There is no per-instance `locale` option.

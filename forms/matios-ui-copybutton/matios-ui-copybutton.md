@@ -10,8 +10,14 @@ Copy-to-clipboard button with automatic visual feedback, target-element support 
 <link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-button.css">
 <link rel="stylesheet" href="matios-ui-copybutton.css">
+<!-- Required: the default copy/check icons come from MTS.Icon -->
+<script src="matios-ui-icons.js"></script>
 <script src="matios-ui-button.js"></script>
 <script src="matios-ui-copybutton.js"></script>
+
+<!-- Optional: i18n for the button label + demo strings -->
+<script src="matios-ui-i18n.js"></script>
+<script src="matios-ui-copybutton-i18n.js"></script>
 ```
 
 ---
@@ -26,7 +32,7 @@ const btn = new MTS.CopyButton('#my-btn', {
   labelCopied: 'Copied!',
   variant:     'secondary',
   resetDelay:  2000,
-  onCopy:      function (text) { console.log('copied:', text); },
+  onCopy:      function (e) { console.log('copied:', e.detail.text); },
 });
 
 // Copy from another element (reads .value or .textContent)
@@ -45,7 +51,7 @@ new MTS.CopyButton('#btn-key', { target: '#api-key', iconOnly: true, size: 'sm',
 </div>
 
 <script>
-  new MTS.CopyButton('#btn-copy', { onCopy: function (text) { console.log('copied:', text); } });
+  new MTS.CopyButton('#btn-copy', { onCopy: function (e) { console.log('copied:', e.detail.text); } });
   new MTS.CopyButton('#btn-key', { target: '#api-key' });
 </script>
 ```
@@ -66,7 +72,7 @@ new MTS.CopyButton('#btn-key', { target: '#api-key', iconOnly: true, size: 'sm',
 | `size` | `string` | `''` | `'sm'` · `''` · `'lg'` |
 | `iconOnly` | `boolean` | `false` | Icon only, no label |
 | `resetDelay` | `number` | `2000` | ms before resetting to the initial state |
-| `onCopy` | `function` | — | Fires after copying — `(text)` |
+| `onCopy` | `function` | — | Fires after a successful copy. The handler receives one argument: `{ type: 'copy', detail: { text } }` |
 
 ---
 
@@ -88,9 +94,30 @@ btn.copy();
 
 ## Events
 
-| Method | Payload | When |
-|--------|---------|------|
-| `onCopy(fn)` | `(text)` | After a successful copy |
+The `onCopy` callback and the `copy` listener (registered with `on('copy', fn)`) both receive a single object `{ type: 'copy', detail: { text } }` — read the copied value as `e.detail.text`.
+
+| Registration | Payload | When |
+|--------------|---------|------|
+| `onCopy` option / `on('copy', fn)` | `{ type, detail: { text } }` | After a successful copy |
+
+A bubbling DOM `CustomEvent` is also dispatched on the element, with the text in its `detail`:
+
+```js
+document.getElementById('my-btn')
+  .addEventListener('mts:copybutton:copy', function (e) { console.log(e.detail.text); });
+```
+
+---
+
+## Internationalization (i18n)
+
+The button's own chrome — the `label` (`Copy`) and `labelCopied` (`Copied!`) text — is read from the `MTS.CopyButton` namespace of the active language, with an English fallback when the i18n script isn't loaded. Bundled languages: `es`, `en`, `pt`.
+
+```js
+MTS.setLanguage('en');   // 'es' | 'en' | 'pt' — set once at startup, before creating components
+```
+
+Passing `label` / `labelCopied` explicitly overrides the localized text for that instance. The optional file `matios-ui-copybutton-i18n.js` also carries the strings the demo page uses (under `MTS.CopyButton.demo`).
 
 ---
 
@@ -98,14 +125,3 @@ btn.copy();
 
 - For `iconOnly` buttons, provide an accessible name (`aria-label`) since there is no visible label.
 - The copied state is conveyed by both label and icon change; the label change also helps assistive tech.
-
----
-
-## Changelog
-
-### 2026-06-29
-- Copy/confirm icons migrated to `MTS.Icon` (`copy`/`check`); dropped inline SVG. Requires `matios-ui-icons.js`.
-
-### Initial
-- Copy-to-clipboard button with static text or target element, label/icon swap feedback with `resetDelay`,
-  `iconOnly`, variants/sizes, `onCopy`, and `setText` / `copy`.

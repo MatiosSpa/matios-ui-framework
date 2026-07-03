@@ -36,6 +36,14 @@
     return 'mfg-' + _uidCounter + '-' + Math.random().toString(36).slice(2, 7);
   }
 
+  function _t(key, fallback) {
+    if (window.MTS && typeof MTS.getString === 'function') {
+      let table = MTS.getString()['MTS.FormGuard'];
+      if (table && table[key] !== undefined && table[key] !== null) { return table[key]; }
+    }
+    return fallback;
+  }
+
   function _serialize(val) {
     if (val === null || val === undefined) { return ''; }
     if (typeof val === 'object') { return JSON.stringify(val); }
@@ -228,10 +236,10 @@
 
   function _showBeforeUnloadModal() {
     let messages   = _options.messages || {};
-    let title      = messages.modalTitle   || 'Cambios sin guardar';
-    let body       = messages.modalBody    || 'Tienes cambios sin guardar. Si sales ahora, se perderán.';
-    let btnKeep    = messages.btnKeep      || 'Seguir editando';
-    let btnDiscard = messages.btnDiscard   || 'Salir sin guardar';
+    let title      = messages.modalTitle   || _t('modalTitle',       'Cambios sin guardar');
+    let body       = messages.modalBody    || _t('beforeUnloadBody', 'Tienes cambios sin guardar. Si sales ahora, se perderán.');
+    let btnKeep    = messages.btnKeep      || _t('btnKeep',          'Seguir editando');
+    let btnDiscard = messages.btnDiscard   || _t('btnDiscardUnload', 'Salir sin guardar');
 
     let modal = new MTS.Modal({
       title: title,
@@ -339,7 +347,7 @@
     } else {
       /* fallback nativo */
       let msg = (_options.messages && _options.messages.unsavedChanges)
-        || 'Tienes cambios sin guardar. ¿Deseas descartarlos?';
+        || _t('unsavedChanges', 'Tienes cambios sin guardar. ¿Deseas descartarlos?');
       if (confirm(msg)) {
         resetForm(formState);
         proceedFn();
@@ -349,11 +357,11 @@
 
   function _openMtsModal(formState, proceedFn, saveSel) {
     let messages   = _options.messages || {};
-    let title      = messages.modalTitle   || 'Cambios sin guardar';
-    let body       = messages.modalBody    || 'Tienes cambios sin guardar en este formulario.';
-    let btnKeep    = messages.btnKeep      || 'Seguir editando';
-    let btnDiscard = messages.btnDiscard   || 'Descartar cambios';
-    let btnSave    = messages.btnSave      || 'Guardar y salir';
+    let title      = messages.modalTitle   || _t('modalTitle',  'Cambios sin guardar');
+    let body       = messages.modalBody    || _t('modalBody',   'Tienes cambios sin guardar en este formulario.');
+    let btnKeep    = messages.btnKeep      || _t('btnKeep',     'Seguir editando');
+    let btnDiscard = messages.btnDiscard   || _t('btnDiscard',  'Descartar cambios');
+    let btnSave    = messages.btnSave      || _t('btnSave',     'Guardar y salir');
 
     let footerBtns = [
       { label: btnKeep, variant: 'ghost',   onClick: function () { modal.close(); } },
@@ -495,6 +503,11 @@
     /**
      * Inicia FormGuard. Adopta todos los [data-mts-form] existentes
      * y observa el DOM para adoptar/liberar los que aparezcan/desaparezcan.
+     *
+     * Los textos de la UI se leen del locale activo vía
+     * MTS.getString()['MTS.FormGuard'] (keys: modalTitle, modalBody,
+     * beforeUnloadBody, btnKeep, btnDiscard, btnDiscardUnload, btnSave,
+     * unsavedChanges). options.messages tiene precedencia sobre el locale.
      *
      * @param {object} [options]
      * @param {object} [options.messages]  Sobreescribe los textos de la UI.

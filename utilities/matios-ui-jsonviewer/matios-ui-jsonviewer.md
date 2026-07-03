@@ -128,11 +128,15 @@ Keys under `MTS.JsonViewer` (`{n}` is replaced by the count):
 | `keyOne` | {n} clave | {n} key | {n} chave |
 | `keyMany` | {n} claves | {n} keys | {n} chaves |
 
-Bundled locales: `es` (default), `en`, `pt`. Override or add strings with `MTS.registerLocale`:
+Bundled locales: `es` (default), `en`, `pt`.
+
+The empty-state and editor placeholder text can be overridden per instance with the `emptyText` and `placeholder` options, independent of the active language:
 
 ```js
-MTS.registerLocale('en', {
-  'MTS.JsonViewer': { copy: 'Copy JSON' }
+new MTS.JsonViewer('#payload', {
+  data: { ok: true },
+  emptyText: 'No JSON data.',
+  placeholder: 'Paste JSON here and press Format.'
 });
 ```
 

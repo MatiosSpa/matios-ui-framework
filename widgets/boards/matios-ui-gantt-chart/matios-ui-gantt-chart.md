@@ -29,8 +29,8 @@ Hierarchical SVG Gantt + WBS grid with inline editing, drag & drop, undo/redo an
 The component reads its text from the `MTS.GanttChart` layer of the active language
 (`MTS.getString()['MTS.GanttChart']`), with an English fallback when no locale is loaded. Its own locale file
 `matios-ui-gantt-chart-i18n.js` registers `es`/`en`/`pt` (months, column labels, `today`, `empty`, errors,
-`reorderHint`, `baselineLabel`, and the `ui` section for the demo). Override with
-`MTS.registerLocale('es', { 'MTS.GanttChart': { today: 'Hoy' } })`.
+`reorderHint`, `baselineLabel`, and the `ui` section for the demo). Set the active language once at startup with
+`MTS.setLanguage('en')`; the component then localizes its chrome from the active language.
 
 ---
 

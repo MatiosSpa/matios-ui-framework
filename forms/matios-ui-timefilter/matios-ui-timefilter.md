@@ -43,15 +43,23 @@ It does **not** filter data itself. It resolves a `{ from, to }` range and hands
 ```js
 var tf = new MTS.TimeFilter('#filter', {
   value: { mode: 'relative', n: 1, unit: 'h' },   // initial range
+  quickRanges: [
+    { n: 15, unit: 'm' }, { n: 1, unit: 'h' }, { n: 24, unit: 'h' },
+    { preset: 'today' }, { preset: 'yesterday' }, { preset: 'thisWeek' }
+  ],
   onChange: function (range) {
-    // range = full RangeResult (see API). e.g. ask the backend for data:
+    // range = { mode, n, unit, preset, from, to, fromIso, toIso, label }
     fetch('/api/logs?' + tf.query());             // from=<iso>&to=<iso>
+    console.log(range.label, range.fromIso, range.toIso);
   }
 });
 
-// at any time, a single get() returns everything:
+// swap the presets at runtime:
+tf.setQuickRanges([{ preset: 'thisMonth' }, { preset: 'lastMonth' }]);
+
+// at any time, a single get() returns everything (relative recomputes to=now):
 var r = tf.get();
-// { mode, n, unit, from, to, fromIso, toIso, label }
+// { mode, n, unit, preset, from, to, fromIso, toIso, label }
 ```
 
 Element-first, like the rest of the framework: `new MTS.TimeFilter(domElement|selector, options)` renders in place. There is no `.mount()`.
@@ -100,7 +108,7 @@ Element-first, like the rest of the framework: `new MTS.TimeFilter(domElement|se
   to:      Date,        // resolved end (always present; in relative = now)
   fromIso: '2026-06-19T13:00:00.000Z',  // from.toISOString() (UTC)
   toIso:   '2026-06-19T14:00:00.000Z',  // to.toISOString()   (UTC)
-  label:   'Last 1 hours'               // human label of the active range
+  label:   'Last 1 hour'                // human label of the active range (singular when n === 1)
 }
 ```
 
@@ -158,16 +166,15 @@ document.getElementById('filter')
 
 ## CSS Variables
 
-Uses the global design tokens — no component-specific variables. The panel relies on:
+Uses the global design tokens — no component-specific variables. The stylesheet reads:
 
 | Token | Used for |
 |-------|----------|
-| `--mts-border-color` | Inline-error border / field outlines (via composed components) |
-| `--mts-color-danger` | Invalid-range message |
-| `--mts-radius-md` | Panel / field corners |
-| `--mts-space-1` … `--mts-space-3` | Internal spacing |
+| `--mts-space-1` · `--mts-space-2` · `--mts-space-3` | Internal spacing (tabs, rows, actions) |
+| `--mts-font-size-sm` | Inline-error text size |
+| `--mts-color-danger` | Inline invalid-range message (fallback when `MTS.Toast` is absent) |
 
-Theming follows `data-mts-mode` (light / dark / high-contrast) and `data-mts-accent`.
+Theming follows `data-mts-mode` and `data-mts-accent`.
 
 ### i18n / text overrides
 
@@ -179,12 +186,17 @@ new MTS.TimeFilter('#filter', {
     tabRelative: 'Relative', tabAbsolute: 'Absolute', tabQuick: 'Quick',
     amount: 'Amount', unit: 'Unit', from: 'From', to: 'To',
     apply: 'Apply', lastN: 'Last', invalidRange: 'Invalid range.',
-    units: { m: 'minutes', h: 'hours', d: 'days', w: 'weeks' }
+    units:    { m: 'minutes', h: 'hours', d: 'days', w: 'weeks' },   // plural (n !== 1)
+    unitsOne: { m: 'minute', h: 'hour', d: 'day', w: 'week' },       // singular (n === 1)
+    presets:  { today: 'Today', yesterday: 'Yesterday', thisWeek: 'This week',
+                lastWeek: 'Last week', thisMonth: 'This month', lastMonth: 'Last month' }
   }
 });
 ```
 
-The shipped i18n catalog (`matios-ui-timefilter-i18n.js`) provides `es` / `en` / `pt` (default `es`).
+Each key in `texts` wins over the i18n catalog; anything omitted falls through to the catalog and then to the built-in English fallback. The shipped catalog (`matios-ui-timefilter-i18n.js`) registers the `MTS.TimeFilter` namespace for `es` / `en` / `pt` (default `es`).
+
+The active language is global: set it once with `MTS.setLanguage('es'|'en'|'pt')` (read back with `MTS.getLanguage()`). There is **no** per-instance `locale` option.
 
 ---
 
@@ -193,13 +205,3 @@ The shipped i18n catalog (`matios-ui-timefilter-i18n.js`) provides `es` / `en` /
 - Trigger is a `<button>` with `aria-haspopup="dialog"` and `aria-expanded`.
 - Panel is `role="dialog"`; focus moves to the first control on open and `Esc` closes it (provided by `MTS.Popover`).
 - Tabs use `role="tablist"` / `role="tab"` with `aria-selected`, and `←` / `→` move between them.
-
----
-
-## Changelog
-
-### Initial
-- Time-window filter with Relative / Absolute / Quick modes over `MTS.Popover` (manual), `MTS.NumberInput`, `MTS.Select` and `MTS.DatePicker`.
-- `get()` / `getValue()` / `set()` / `apply()` / `query()` / `open()` / `close()` / `destroy()`; `onChange` / `onOpen` / `onClose` + DOM events.
-- `texts` override + `es`/`en`/`pt` i18n; relative-mode auto-advance (`to = now` on each `get()`).
-- Quick tab supports **semantic presets** (`today`/`yesterday`/`thisWeek`/`lastWeek`/`thisMonth`/`lastMonth`) alongside relative ones; `setQuickRanges()` swaps them at runtime; singular/plural unit labels ("Last 1 hour" vs "Last 2 hours"); the panel stays anchored to the trigger on scroll / resize.

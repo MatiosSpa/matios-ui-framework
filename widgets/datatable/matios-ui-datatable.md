@@ -334,19 +334,6 @@ texts: {
 }
 ```
 
-**Add or extend a language** globally with `MTS.registerLocale(code, overrides)` (deep merge — unlisted keys are
-preserved):
-
-```js
-MTS.registerLocale('en', {
-  'MTS.DataTable': { noData: 'Nothing here yet' }
-});
-// or a brand-new language (unspecified keys fall back to 'es'):
-MTS.registerLocale('fr', {
-  'MTS.DataTable': { search: 'Rechercher...', noData: 'Aucun résultat' }
-});
-```
-
 > `matios-ui-datatable-i18n.js` is a backward-compat shim: the real strings live in `base/matios-ui-i18n.js`. Loading
 > it is harmless but only needed for code that still reads the legacy `MTS.DataTableLocales` alias.
 

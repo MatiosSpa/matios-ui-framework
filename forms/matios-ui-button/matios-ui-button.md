@@ -1,6 +1,6 @@
 # MTS.Button
 
-Button component with variants, sizes, icons, loading state, groups and custom styles.
+Button component with variants, sizes, icons, loading state and custom styles. The same file also ships three companions: `MTS.ButtonGroup`, `MTS.MenuButton` (dropdown) and `MTS.SplitButton` (primary action + menu).
 
 ---
 
@@ -10,6 +10,13 @@ Button component with variants, sizes, icons, loading state, groups and custom s
 <link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-button.css">
 <script src="matios-ui-button.js"></script>
+
+<!-- Optional: MTS.MenuButton / MTS.SplitButton use MTS.Icon for the chevron (falls back to a plain ▾) -->
+<script src="matios-ui-icons.js"></script>
+
+<!-- Optional: i18n for MenuButton's default label + demo strings -->
+<script src="matios-ui-i18n.js"></script>
+<script src="matios-ui-button-i18n.js"></script>
 ```
 
 ---
@@ -116,6 +123,86 @@ group.getButton(0).disable();
 group.getButtons(); // → [MTS.Button, …]
 ```
 
+`MTS.ButtonGroup(container, buttons, options)` — `buttons` is an array of `MTS.Button` option objects; `options` accepts `size` (uniform size for the group) and `activeOnClick` (default `true` — the clicked button gets `mts-btn--active`).
+
+---
+
+## MTS.MenuButton
+
+A trigger button that opens a dropdown menu. Built into the container you pass (element-first): it appends its own wrapper, trigger and list.
+
+```js
+const menu = new MTS.MenuButton('#toolbar', {
+  label:   'Actions',
+  variant: 'secondary',
+  items: [
+    { label: 'Edit',      icon: MTS.Icon.get('edit-2'), onClick: function () {} },
+    { label: 'Duplicate', icon: MTS.Icon.get('copy'),   onClick: function () {} },
+    '---',                                                      // separator
+    { label: 'Delete',    icon: MTS.Icon.get('trash'), danger: true, onClick: function () {} },
+  ],
+});
+```
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `label` | `string` | localized `'Actions'` | Trigger label |
+| `variant` | `string` | `'secondary'` | Trigger variant |
+| `size` | `string` | `''` | Trigger size |
+| `iconLeft` | `string` | `null` | Left icon HTML on the trigger |
+| `iconRight` | `string` | chevron icon | Right icon HTML (defaults to `chevron-down`, or `▾` without `MTS.Icon`) |
+| `disabled` | `boolean` | `false` | Disable the trigger |
+| `items` | `array` | `[]` | Menu items (see below) |
+
+**Item shape:** `{ label, icon, danger, disabled, onClick }`, or the string `'---'` for a separator. Selecting an item closes the menu, then calls its `onClick`.
+
+| Method | Description |
+|--------|-------------|
+| `open()` / `close()` / `toggle()` | Control the menu |
+| `setItems(items)` | Replace the items and rebuild |
+| `getButton()` | The underlying `MTS.Button` trigger instance |
+| `destroy()` | Remove the wrapper from the DOM |
+
+The menu closes automatically on an outside click.
+
+---
+
+## MTS.SplitButton
+
+A primary action button plus an arrow that opens a menu of secondary options. Built into the container you pass.
+
+```js
+const split = new MTS.SplitButton('#toolbar', {
+  label:    'Save',
+  variant:  'primary',
+  iconLeft: MTS.Icon.get('save'),
+  onClick:  function () { save(); },              // primary action
+  items: [
+    { label: 'Save draft',       onClick: function () {} },
+    { label: 'Save and publish', onClick: function () {} },
+    '---',
+    { label: 'Discard', danger: true, onClick: function () {} },
+  ],
+});
+```
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `label` | `string` | `''` | Main button label |
+| `variant` | `string` | `'primary'` | Variant of both the main and arrow buttons |
+| `size` | `string` | `''` | Size of both buttons |
+| `iconLeft` | `string` | `null` | Left icon HTML on the main button |
+| `disabled` | `boolean` | `false` | Disable both buttons |
+| `onClick` | `function` | — | Primary action (main button click) |
+| `items` | `array` | `[]` | Menu items — same shape as `MTS.MenuButton` |
+
+| Method | Description |
+|--------|-------------|
+| `open()` / `close()` / `toggle()` | Control the menu |
+| `setItems(items)` | Replace the items and rebuild |
+| `getMainButton()` / `getArrowButton()` | The underlying `MTS.Button` instances |
+| `destroy()` | Remove the wrapper from the DOM |
+
 ---
 
 ## Events
@@ -144,11 +231,12 @@ document.getElementById('my-btn')
 
 ---
 
-## Changelog
+## Internationalization (i18n)
 
-### 2026-06-21
-- Non-native hosts (`<span>`/`<div>`/…) now receive button semantics — `role="button"`, `tabindex`, `Enter`/`Space` activation and `aria-disabled` — applied without changing the DOM, so existing consumers are unaffected. Native `<button>`/`<a>` keep working in place.
+`MTS.Button` has almost no chrome of its own — the button `label` is developer-supplied, so it is not localized. The only localized string is **`MTS.MenuButton`'s default label** (`Actions`), read from the `MTS.Button` namespace of the active language with an English fallback. Bundled languages: `es`, `en`, `pt`.
 
-### Initial
-- Button with 7 variants, 5 sizes, left/right icons, `iconOnly`, `block`, `round`, `loading`, `shadow`, `ring`,
-  `data-*` declarative API, runtime setters, `MTS.ButtonGroup`, and `mts:button:click` DOM event.
+```js
+MTS.setLanguage('en');   // 'es' | 'en' | 'pt' — set once at startup, before creating components
+```
+
+Passing `label` to `MTS.MenuButton` overrides it for that instance. The optional file `matios-ui-button-i18n.js` also carries the strings the demo page uses (under `MTS.Button.demo`).

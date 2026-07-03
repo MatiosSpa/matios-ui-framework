@@ -144,21 +144,12 @@ Built-in label keys:
 | `mins` | `min` | `min` | `min` |
 | `secs` | `seg` | `sec` | `seg` |
 
-Override or add a language with `MTS.registerLocale`:
+A per-instance `labels` option (`{ days, hours, mins, secs }`) always wins over the i18n
+values. There is no per-instance `locale` option — language is global.
 
 ```js
-MTS.registerLocale('en', {
-  'MTS.Countdown': {
-    days: 'd',
-    hours: 'h',
-    mins: 'm',
-    secs: 's',
-  },
-});
+new MTS.Countdown(el, { target: date, labels: { days: 'd', hours: 'h', mins: 'm', secs: 's' } });
 ```
-
-A per-instance `labels` option always wins over the i18n values. There is no per-instance
-`locale` option — language is global.
 
 ---
 

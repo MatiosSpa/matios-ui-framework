@@ -69,6 +69,40 @@ MTS.PasswordStrength = class MtsPasswordStrength {
   /** Retorna los resultados de cada regla: [{ label, ok }]. */
   getResults() { return this._results.slice(); }
 
+  /* ── i18n: busca en MTS.PasswordStrength y cae al fallback dado. ── */
+  _t(key, fallback) {
+    try {
+      const ns = (typeof window !== 'undefined' && window.MTS && MTS.getString)
+        ? MTS.getString()['MTS.PasswordStrength']
+        : null;
+      if (ns && ns[key] != null) return ns[key];
+    } catch (e) {}
+    return fallback;
+  }
+
+  /* ── Elige la forma singular/plural según n y aplica {n}/{list}. ── */
+  _tPlural(base, n, list) {
+    const key = n === 1 ? base + '_one' : base + '_many';
+    const defaults = {
+      minLength_one:    'Minimum {n} character',
+      minLength_many:   'Minimum {n} characters',
+      maxLength_one:    'Maximum {n} character',
+      maxLength_many:   'Maximum {n} characters',
+      minUppercase_one: 'At least {n} uppercase letter',
+      minUppercase_many:'At least {n} uppercase letters',
+      minLowercase_one: 'At least {n} lowercase letter',
+      minLowercase_many:'At least {n} lowercase letters',
+      minNumbers_one:   'At least {n} number',
+      minNumbers_many:  'At least {n} numbers',
+      minSpecial_one:   'At least {n} symbol ({list})',
+      minSpecial_many:  'At least {n} symbols ({list})',
+    };
+    let text = this._t(key, defaults[key] || '');
+    text = text.replace('{n}', n);
+    if (list != null) text = text.replace('{list}', list);
+    return text;
+  }
+
   /** Destruye el componente y limpia el contenedor. */
   destroy() {
     this._container.textContent = '';
@@ -103,7 +137,7 @@ MTS.PasswordStrength = class MtsPasswordStrength {
       const n = options.minLength;
       rules.push({
         key:   'minLength',
-        label: 'Mínimo ' + n + ' caracter' + (n !== 1 ? 'es' : ''),
+        label: this._tPlural('minLength', n),
         check: function(value) { return value.length >= n; },
       });
     }
@@ -112,7 +146,7 @@ MTS.PasswordStrength = class MtsPasswordStrength {
       const n = options.maxLength;
       rules.push({
         key:   'maxLength',
-        label: 'Máximo ' + n + ' caracter' + (n !== 1 ? 'es' : ''),
+        label: this._tPlural('maxLength', n),
         check: function(value) { return value.length <= n; },
       });
     }
@@ -121,7 +155,7 @@ MTS.PasswordStrength = class MtsPasswordStrength {
       const n = options.minUppercase;
       rules.push({
         key:   'minUppercase',
-        label: 'Al menos ' + n + ' mayúscula' + (n !== 1 ? 's' : ''),
+        label: this._tPlural('minUppercase', n),
         check: function(value) { return (value.match(/[A-Z]/g) || []).length >= n; },
       });
     }
@@ -130,7 +164,7 @@ MTS.PasswordStrength = class MtsPasswordStrength {
       const n = options.minLowercase;
       rules.push({
         key:   'minLowercase',
-        label: 'Al menos ' + n + ' minúscula' + (n !== 1 ? 's' : ''),
+        label: this._tPlural('minLowercase', n),
         check: function(value) { return (value.match(/[a-z]/g) || []).length >= n; },
       });
     }
@@ -139,7 +173,7 @@ MTS.PasswordStrength = class MtsPasswordStrength {
       const n = options.minNumbers;
       rules.push({
         key:   'minNumbers',
-        label: 'Al menos ' + n + ' número' + (n !== 1 ? 's' : ''),
+        label: this._tPlural('minNumbers', n),
         check: function(value) { return (value.match(/[0-9]/g) || []).length >= n; },
       });
     }
@@ -153,7 +187,7 @@ MTS.PasswordStrength = class MtsPasswordStrength {
       const regex   = new RegExp('[' + escaped + ']', 'g');
       rules.push({
         key:   'minSpecial',
-        label: 'Al menos ' + n + ' símbolo' + (n !== 1 ? 's' : '') + ' (' + preview + ')',
+        label: this._tPlural('minSpecial', n, preview),
         check: function(value) { return (value.match(regex) || []).length >= n; },
       });
     }
@@ -320,10 +354,10 @@ MTS.PasswordStrength = class MtsPasswordStrength {
     /* Label */
     const labelMap = {
       '':            '',
-      'weak':        'Débil',
-      'fair':        'Regular',
-      'strong':      'Fuerte',
-      'very-strong': 'Muy fuerte',
+      'weak':        this._t('levelWeak',       'Weak'),
+      'fair':        this._t('levelFair',       'Fair'),
+      'strong':      this._t('levelStrong',     'Strong'),
+      'very-strong': this._t('levelVeryStrong', 'Very strong'),
     };
     this._labelEl.textContent = labelMap[level] || '';
 

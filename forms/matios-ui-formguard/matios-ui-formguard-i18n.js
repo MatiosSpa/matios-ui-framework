@@ -10,6 +10,15 @@
 
   MTS.registerLocale('es', {
     'MTS.FormGuard': {
+      modalTitle:            'Cambios sin guardar',
+      modalBody:             'Tienes cambios sin guardar en este formulario.',
+      beforeUnloadBody:      'Tienes cambios sin guardar. Si sales ahora, se perderán.',
+      btnKeep:               'Seguir editando',
+      btnDiscard:            'Descartar cambios',
+      btnDiscardUnload:      'Salir sin guardar',
+      btnSave:               'Guardar y salir',
+      unsavedChanges:        'Tienes cambios sin guardar. ¿Deseas descartarlos?',
+
       demo: {
         subtitle:            'Dirty-tracking declarativo — snapshot, modal de navegación, beforeunload, indicadores visuales',
 
@@ -73,6 +82,15 @@
 
   MTS.registerLocale('en', {
     'MTS.FormGuard': {
+      modalTitle:            'Unsaved changes',
+      modalBody:             'There are unsaved changes in this form.',
+      beforeUnloadBody:      'You have unsaved changes. If you leave now, they will be lost.',
+      btnKeep:               'Keep editing',
+      btnDiscard:            'Discard changes',
+      btnDiscardUnload:      'Leave without saving',
+      btnSave:               'Save and leave',
+      unsavedChanges:        'You have unsaved changes. Do you want to discard them?',
+
       demo: {
         subtitle:            'Declarative dirty-tracking — snapshot, navigation modal, beforeunload, visual indicators',
 
@@ -136,6 +154,15 @@
 
   MTS.registerLocale('pt', {
     'MTS.FormGuard': {
+      modalTitle:            'Alterações não salvas',
+      modalBody:             'Há alterações não salvas neste formulário.',
+      beforeUnloadBody:      'Você tem alterações não salvas. Se sair agora, elas serão perdidas.',
+      btnKeep:               'Continuar editando',
+      btnDiscard:            'Descartar alterações',
+      btnDiscardUnload:      'Sair sem salvar',
+      btnSave:               'Salvar e sair',
+      unsavedChanges:        'Você tem alterações não salvas. Deseja descartá-las?',
+
       demo: {
         subtitle:            'Dirty-tracking declarativo — snapshot, modal de navegação, beforeunload, indicadores visuais',
 

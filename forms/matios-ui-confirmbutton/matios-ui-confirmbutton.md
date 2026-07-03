@@ -10,9 +10,14 @@ Two-step inline confirmation button. Prevents accidental actions without requiri
 <link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-button.css">
 <link rel="stylesheet" href="matios-ui-confirmbutton.css">
-<script src="matios-ui-button.js"></script>
 <script src="matios-ui-confirmbutton.js"></script>
+
+<!-- Optional: i18n for the default labels + demo strings -->
+<script src="matios-ui-i18n.js"></script>
+<script src="matios-ui-confirmbutton-i18n.js"></script>
 ```
+
+> The component renders its own `.mts-btn` elements, so it only needs `matios-ui-button.css` (not `matios-ui-button.js`).
 
 ---
 
@@ -84,10 +89,12 @@ btn.reset();
 
 ## Events
 
-| Method | When |
-|--------|------|
-| `onConfirm(fn)` | The user clicks the confirm button |
-| `onCancel(fn)` | The user cancels or the timeout bar expires |
+Both are **constructor option callbacks** (there is no `.on()` subscription method). Each is called with no arguments.
+
+| Callback | When |
+|----------|------|
+| `onConfirm` | The user clicks the confirm button |
+| `onCancel` | The user cancels, or the timeout bar expires |
 
 ---
 
@@ -98,8 +105,12 @@ btn.reset();
 
 ---
 
-## Changelog
+## Internationalization (i18n)
 
-### Initial
-- Two-step inline confirm button with configurable labels/variants, auto-cancel timeout bar, `data-*` API,
-  `onConfirm` / `onCancel`, and `reset` / `disable` / `enable`.
+The three default labels — `label` (`Delete`), `confirmLabel` (`Confirm?`) and `cancelLabel` (`No`) — are read from the `MTS.ConfirmButton` namespace of the active language, with an English fallback when the i18n script isn't loaded. Bundled languages: `es`, `en`, `pt`.
+
+```js
+MTS.setLanguage('en');   // 'es' | 'en' | 'pt' — set once at startup, before creating components
+```
+
+Passing `label` / `confirmLabel` / `cancelLabel` (or their `data-*` equivalents) overrides the localized text for that instance. The optional file `matios-ui-confirmbutton-i18n.js` also carries the strings the demo page uses (under `MTS.ConfirmButton.demo`).

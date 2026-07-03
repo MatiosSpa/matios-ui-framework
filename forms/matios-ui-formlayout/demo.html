@@ -133,7 +133,7 @@ function makeSection(id, previewHtml, jsCode, initFn, height) {
     ]
   });
   new MTS.CodeBlock('#' + id + '-cb-html', { code: indentHtml(previewHtml), language: 'html',       copyable: true });
-  new MTS.CodeBlock('#' + id + '-cb-js',   { code: jsCode || '',            language: 'javascript', copyable: true });
+  new MTS.CodeBlock('#' + id + '-cb-js',   { code: (typeof JS_BY_ID !== 'undefined' && JS_BY_ID[id]) || jsCode || '', language: 'javascript', copyable: true });
   if (typeof initFn === 'function') initFn();
 }
 
@@ -153,6 +153,206 @@ document.getElementById('s4-title').textContent = D.s4Title || '4 — Horizontal
 document.getElementById('s5-title').textContent = D.s5Title || '5 — Inline';
 document.getElementById('s6-title').textContent = D.s6Title || '6 — Sections';
 document.getElementById('s7-title').textContent = D.s7Title || '7 — Form Card';
+
+// — JavaScript tab: FormLayout is pure CSS (no MTS.FormLayout class). Each entry
+//   rebuilds the section's form with the DOM API + the real field components
+//   (MTS.Input / MTS.Button), mirroring the HTML tab without using innerHTML. —
+const JS_BY_ID = {
+  "tabs-s1": `// FormLayout is pure CSS — there is no MTS.FormLayout class.
+// Build the .mts-form skeleton with the DOM API, then mount the field
+// components (MTS.Input / MTS.Button) inside it. No innerHTML.
+const form = document.createElement('form');
+form.className = 'mts-form';
+
+// Full name (required)
+const gName = document.createElement('div');
+gName.className = 'mts-form-group';
+const lName = document.createElement('label');
+lName.className = 'mts-form-label mts-form-label--required';
+lName.textContent = 'Full name';
+gName.appendChild(lName);
+form.appendChild(gName);
+new MTS.Input(gName, { placeholder: 'John Doe', renderMode: 'field-only' });
+
+// Email (with hint)
+const gEmail = document.createElement('div');
+gEmail.className = 'mts-form-group';
+const lEmail = document.createElement('label');
+lEmail.className = 'mts-form-label';
+lEmail.textContent = 'Email';
+gEmail.appendChild(lEmail);
+form.appendChild(gEmail);
+new MTS.Input(gEmail, { type: 'email', hint: "We'll send confirmations here.", renderMode: 'field-only' });
+
+// Footer actions
+const footer = document.createElement('div');
+footer.className = 'mts-form-footer mts-form-footer--end';
+form.appendChild(footer);
+const bCancel = document.createElement('button');
+bCancel.type = 'button';
+footer.appendChild(bCancel);
+new MTS.Button(bCancel, { label: 'Cancel', variant: 'secondary' });
+const bSave = document.createElement('button');
+bSave.type = 'button';
+footer.appendChild(bSave);
+new MTS.Button(bSave, { label: 'Save', variant: 'primary' });
+
+document.querySelector('#form-target').appendChild(form);`,
+
+  "tabs-s2": `// Grid layout: the .mts-form--grid modifier + the --mts-form-cols property.
+const form = document.createElement('form');
+form.className = 'mts-form mts-form--grid';
+form.style.setProperty('--mts-form-cols', '2');   // number of columns
+
+// One .mts-form-group per column
+const gFirst = document.createElement('div');
+gFirst.className = 'mts-form-group';
+const lFirst = document.createElement('label');
+lFirst.className = 'mts-form-label mts-form-label--required';
+lFirst.textContent = 'First name';
+gFirst.appendChild(lFirst);
+form.appendChild(gFirst);
+new MTS.Input(gFirst, { placeholder: 'John', renderMode: 'field-only' });
+
+// ...add the other column fields the same way...
+
+// A field that spans the full row: add the --full modifier
+const gAddress = document.createElement('div');
+gAddress.className = 'mts-form-group mts-form-group--full';
+const lAddress = document.createElement('label');
+lAddress.className = 'mts-form-label';
+lAddress.textContent = 'Address';
+gAddress.appendChild(lAddress);
+form.appendChild(gAddress);
+new MTS.Input(gAddress, { placeholder: 'Main St. 123', renderMode: 'field-only' });
+
+document.querySelector('#form-target').appendChild(form);`,
+
+  "tabs-s3": `// 3-column grid — same pattern, --mts-form-cols: 3
+const form = document.createElement('form');
+form.className = 'mts-form mts-form--grid';
+form.style.setProperty('--mts-form-cols', '3');
+
+// ...three .mts-form-group fields (createElement + label + MTS.Input field-only)...
+
+// Textarea spanning all three columns
+const gDesc = document.createElement('div');
+gDesc.className = 'mts-form-group mts-form-group--full';
+const lDesc = document.createElement('label');
+lDesc.className = 'mts-form-label';
+lDesc.textContent = 'Description';
+gDesc.appendChild(lDesc);
+form.appendChild(gDesc);
+new MTS.Input(gDesc, { type: 'textarea', rows: 2, placeholder: 'Product description...', renderMode: 'field-only' });
+
+document.querySelector('#form-target').appendChild(form);`,
+
+  "tabs-s4": `// Horizontal layout: label and field share a row (.mts-form--horizontal)
+const form = document.createElement('form');
+form.className = 'mts-form mts-form--horizontal';
+
+const gEmail = document.createElement('div');
+gEmail.className = 'mts-form-group';
+const lEmail = document.createElement('label');
+lEmail.className = 'mts-form-label mts-form-label--required';
+lEmail.textContent = 'Email';
+gEmail.appendChild(lEmail);
+form.appendChild(gEmail);
+new MTS.Input(gEmail, { type: 'email', placeholder: 'user@example.com', renderMode: 'field-only' });
+
+// ...more fields...
+
+// Optional: widen the label column
+form.style.setProperty('--mts-form-label-width', '200px');
+
+document.querySelector('#form-target').appendChild(form);`,
+
+  "tabs-s5": `// Inline layout: fields and buttons flow in one row (.mts-form--inline)
+const form = document.createElement('form');
+form.className = 'mts-form mts-form--inline';
+
+const gSearch = document.createElement('div');
+gSearch.className = 'mts-form-group';
+const lSearch = document.createElement('label');
+lSearch.className = 'mts-form-label';
+lSearch.textContent = 'Search';
+gSearch.appendChild(lSearch);
+form.appendChild(gSearch);
+new MTS.Input(gSearch, { placeholder: 'Name or email...', renderMode: 'field-only' });
+
+// ...more filter fields...
+
+// Buttons sit directly in the inline form (no footer)
+const bSearch = document.createElement('button');
+bSearch.type = 'button';
+form.appendChild(bSearch);
+new MTS.Button(bSearch, { label: 'Search', variant: 'primary' });
+
+document.querySelector('#form-target').appendChild(form);`,
+
+  "tabs-s6": `// Sections group related fields under a heading (.mts-form-section)
+const form = document.createElement('form');
+form.className = 'mts-form';
+
+const section = document.createElement('div');
+section.className = 'mts-form-section';
+const title = document.createElement('h3');
+title.className = 'mts-form-section__title';
+title.textContent = 'Personal data';
+const desc = document.createElement('p');
+desc.className = 'mts-form-section__desc';
+desc.textContent = 'Basic user information.';
+section.appendChild(title);
+section.appendChild(desc);
+form.appendChild(section);
+
+// Fields go inside the section, not the form
+const gName = document.createElement('div');
+gName.className = 'mts-form-group';
+const lName = document.createElement('label');
+lName.className = 'mts-form-label mts-form-label--required';
+lName.textContent = 'Full name';
+gName.appendChild(lName);
+section.appendChild(gName);
+new MTS.Input(gName, { placeholder: 'John Doe', renderMode: 'field-only' });
+
+// ...add more sections and fields the same way...
+
+document.querySelector('#form-target').appendChild(form);`,
+
+  "tabs-s7": `// Form card: a titled container that wraps the form (.mts-form-card)
+const card = document.createElement('div');
+card.className = 'mts-form-card';
+
+const header = document.createElement('div');
+header.className = 'mts-form-card__header';
+const title = document.createElement('h2');
+title.className = 'mts-form-card__title';
+title.textContent = 'New user';
+const subtitle = document.createElement('p');
+subtitle.className = 'mts-form-card__subtitle';
+subtitle.textContent = 'Fill in the details to create the account.';
+header.appendChild(title);
+header.appendChild(subtitle);
+card.appendChild(header);
+
+const form = document.createElement('form');
+form.className = 'mts-form';
+card.appendChild(form);
+
+const gUser = document.createElement('div');
+gUser.className = 'mts-form-group';
+const lUser = document.createElement('label');
+lUser.className = 'mts-form-label mts-form-label--required';
+lUser.textContent = 'Username';
+gUser.appendChild(lUser);
+form.appendChild(gUser);
+new MTS.Input(gUser, { placeholder: 'johndoe', renderMode: 'field-only' });
+
+// ...more fields + footer...
+
+document.querySelector('#form-target').appendChild(card);`
+};
 
 makeSection("tabs-s1", "<form class=\"mts-form\" onsubmit=\"return false\" style=\"max-width:480px\">\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label mts-form-label--required\" for=\"s-name\">" + (D.labelFullName || "Full name") + "</label>\n<input class=\"mts-input\" id=\"s-name\" placeholder=\"" + (D.phName || "John Doe") + "\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\" for=\"s-email\">" + (D.labelEmail || "Email") + "</label>\n<input class=\"mts-input\" id=\"s-email\" placeholder=\"" + (D.phEmailCompany || "john@company.com") + "\" type=\"email\"/>\n<span class=\"mts-form-hint\">" + (D.hintConfirm || "We'll send confirmations here.") + "</span>\n</div>\n<div class=\"mts-form-footer mts-form-footer--end\">\n<button class=\"mts-btn mts-btn--secondary\" type=\"button\">" + (D.btnCancel || "Cancel") + "</button>\n<button class=\"mts-btn mts-btn--primary\" type=\"button\">" + (D.btnSave || "Save") + "</button>\n</div>\n</form>", "<form class=\"mts-form\">\n  <div class=\"mts-form-group\">\n    <label class=\"mts-form-label mts-form-label--required\" for=\"name\">Full name</label>\n    <input class=\"mts-input\" id=\"name\" placeholder=\"John Doe\">\n  </div>\n  <div class=\"mts-form-group\">\n    <label class=\"mts-form-label\" for=\"email\">Email</label>\n    <input class=\"mts-input\" id=\"email\" type=\"email\">\n    <span class=\"mts-form-hint\">We'll send confirmations here.</span>\n  </div>\n  <div class=\"mts-form-footer mts-form-footer--end\">\n    <button class=\"mts-btn mts-btn--secondary\">Cancel</button>\n    <button class=\"mts-btn mts-btn--primary\">Save</button>\n  </div>\n</form>", "// Pure CSS component \u2014 no JavaScript enhancement required.\n// This demo shows layout patterns using HTML classes only.\n// Use the HTML tab as the source of truth for implementation.");
 makeSection("tabs-s2", "<form class=\"mts-form mts-form--grid\" onsubmit=\"return false\" style=\"--mts-form-cols:2;max-width:600px\">\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label mts-form-label--required\">" + (D.labelFirstName || "First name") + "</label>\n<input class=\"mts-input\" placeholder=\"" + (D.phFirst || "John") + "\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label mts-form-label--required\">" + (D.labelLastName || "Last name") + "</label>\n<input class=\"mts-input\" placeholder=\"" + (D.phLast || "Doe") + "\"/>\n</div>\n<div class=\"mts-form-group mts-form-group--full\">\n<label class=\"mts-form-label\">" + (D.labelAddress || "Address") + "</label>\n<input class=\"mts-input\" placeholder=\"" + (D.phStreet || "Main St. 123") + "\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">" + (D.labelCity || "City") + "</label>\n<input class=\"mts-input\" placeholder=\"" + (D.phCity || "Santiago") + "\"/>\n</div>\n<div class=\"mts-form-group\">\n<label class=\"mts-form-label\">" + (D.labelZip || "Zip code") + "</label>\n<input class=\"mts-input\" placeholder=\"" + (D.phZip || "12345") + "\"/>\n</div>\n<div class=\"mts-form-footer mts-form-footer--end mts-form-group--full\">\n<button class=\"mts-btn mts-btn--primary\" type=\"button\">" + (D.btnSave || "Save") + "</button>\n</div>\n</form>", "<\!-- --mts-form-cols controls column count / controla la cantidad de columnas -->\n<form class=\"mts-form mts-form--grid\" style=\"--mts-form-cols:2\">\n  <div class=\"mts-form-group\">...</div>\n  <div class=\"mts-form-group\">...</div>\n  <\!-- Full-width field / Campo de ancho completo -->\n  <div class=\"mts-form-group mts-form-group--full\">...</div>\n</form>\n\n<\!-- 3 columns / 3 columnas -->\n<form class=\"mts-form mts-form--grid\" style=\"--mts-form-cols:3\">...</form>", "// Pure CSS component \u2014 no JavaScript enhancement required.\n// This demo shows layout patterns using HTML classes only.\n// Use the HTML tab as the source of truth for implementation.");

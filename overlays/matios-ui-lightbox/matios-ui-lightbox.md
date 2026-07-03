@@ -177,16 +177,4 @@ Built-in keys under `MTS.Lightbox`:
 
 The `counter` value is a template — `{current}` and `{total}` are interpolated at render time.
 
-To add or override a language, register a locale before instantiating:
-
-```js
-MTS.registerLocale('en', {
-  'MTS.Lightbox': {
-    close:    'Close',
-    prev:     'Previous',
-    next:     'Next',
-    download: 'Download',
-    counter:  '{current} of {total}',
-  },
-});
-```
+These strings come from the active global language (`MTS.getLanguage()` / `MTS.getString()`). There is no per-instance `locale` option: language is a single global setting applied with `MTS.setLanguage`.

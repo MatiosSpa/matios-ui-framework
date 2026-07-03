@@ -67,6 +67,7 @@ The container only needs to exist in the DOM (`<div id="radio-priority"></div>`)
 | `setValue(value)` | Set the selected value programmatically |
 | `validate()` | Validates `required` (empty = none selected), inline error + `'validate'` event → `boolean` |
 | `setError(msg)` / `clearError()` | Set / clear the error state |
+| `on(event, callback)` | Register a listener (`'change'`, `'validate'`) — returns the instance |
 
 Accepts `required` + `errorMessage` (localized default) — see [Form Field Contract](../FORM-FIELD-CONTRACT.md).
 
@@ -79,14 +80,17 @@ radio.setValue('b');
 
 ## Events
 
-| Method | DOM event | Payload |
-|--------|-----------|---------|
-| `onChange` | `mts:radio:change` | `{ value }` |
+| Listener | DOM event | Payload |
+|----------|-----------|---------|
+| `on('change', …)` / `onChange` | `mts:radio:change` | `{ value }` |
+| `on('validate', …)` | `mts:radio:validate` | `{ valid, errors }` |
 
 ```js
 document.getElementById('my-radio')
   .addEventListener('mts:radio:change', function (e) { console.log(e.detail.value); });
 ```
+
+`on()` listeners receive `{ type, detail }`; the DOM `CustomEvent` carries the payload in `e.detail`.
 
 ---
 
@@ -105,11 +109,11 @@ Validation (form-field contract) - see [Form Field Contract](../FORM-FIELD-CONTR
 
 ---
 
-## Changelog
+## i18n
 
-### 2026-06-23
-- Validation contract: `required` + `errorMessage` + `validate()` + `setError`/`clearError` (localized message). See [Form Field Contract](../FORM-FIELD-CONTRACT.md).
-
-### Initial
-- Radio group with single selection, vertical/horizontal layout, per-option disable, auto group name,
-  `onChange`, and `getValue` / `setValue`.
+The only chrome string is the `required` validation message. It is read from the global language
+via `MTS.getString()['MTS.Radio'].messages.required` (namespace `MTS.Radio`, keys `es` / `en` / `pt`),
+with a hardcoded `'This field is required'` fallback if i18n is not loaded. Set the language once at
+startup with `MTS.setLanguage('es' | 'en' | 'pt')`. Per-instance `errorMessage` overrides the localized
+default. There is no per-instance `locale` option. Option `label`s are developer-supplied — not localized
+by the component.

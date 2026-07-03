@@ -43,7 +43,7 @@ MTS.DatePicker.Month = class MtsDatePickerMonth extends MTS.DatePicker.Base {
 
     const grid = document.createElement("div");
     grid.className = "mts-picker-month__grid";
-    const months = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+    const months = this._chrome("monthsShort", ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"]);
 
     months.forEach((m, i) => {
       const btn = document.createElement("button");

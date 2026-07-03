@@ -276,23 +276,13 @@ Load the global i18n and the component i18n, then set the language **once** at s
 MTS.setLanguage('es'); // 'es' | 'en' | 'pt'
 ```
 
-Namespace: **`MTS.Modal`** — chrome strings under `chrome`, demo-page strings under `demo`. To add or override a language, register it before setting it:
+Namespace: **`MTS.Modal`** — chrome strings under `chrome`, demo-page strings under `demo`.
+
+To override a single string for one instance, pass the matching per-call option — it always wins over the localized value:
 
 ```js
-MTS.registerLocale('fr', {
-  'MTS.Modal': {
-    chrome: {
-      closeAriaLabel: 'Fermer',
-      confirmTitle:   'Êtes-vous sûr ?',
-      confirmLabel:   'Confirmer',
-      cancelLabel:    'Annuler',
-      alertTitle:     'Avis',
-      acceptLabel:    'OK',
-      promptTitle:    'Saisissez une valeur',
-    },
-  },
-});
-MTS.setLanguage('fr');
+new MTS.Modal({ closeAriaLabel: 'Fermer', /* ... */ });
+MTS.Modal.confirm({ confirmLabel: 'Delete', cancelLabel: 'Keep' });
 ```
 
 If the component i18n is not loaded, the chrome falls back to built-in literals. There is no per-instance `locale` option.

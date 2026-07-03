@@ -10,6 +10,10 @@ Form label component with required/optional badges, hint text, error state and s
 <link rel="stylesheet" href="matios-ui-base.css">
 <link rel="stylesheet" href="matios-ui-label.css">
 <script src="matios-ui-label.js"></script>
+
+<!-- Optional: i18n for the optional-badge text + demo strings -->
+<script src="matios-ui-i18n.js"></script>
+<script src="matios-ui-label-i18n.js"></script>
 ```
 
 ---
@@ -112,8 +116,12 @@ lbl.setError('This field is required');
 
 ---
 
-## Changelog
+## Internationalization (i18n)
 
-### Initial
-- Form label with required/optional badges, hint and error text, size variants, visually-hidden mode, CSS-only
-  usage, and `setText` / `setHint` / `setError` / `setRequired` API.
+The only chrome the component renders on its own is the **optional badge** text (shown when `optional: true`). It is read from the `MTS.Label` namespace of the active language, with an English fallback when the i18n script isn't loaded. Bundled languages: `es`, `en`, `pt`.
+
+```js
+MTS.setLanguage('en');   // 'es' | 'en' | 'pt' — set once at startup, before creating components
+```
+
+Everything else (`text`, `hint`, `error`) is developer-supplied, so it is not localized by the component. The optional file `matios-ui-label-i18n.js` also carries the strings the demo page uses (under `MTS.Label.demo`).

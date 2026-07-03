@@ -13,8 +13,8 @@ MTS.RichEditor = class MtsRichEditor {
    * @param {string|Element} selector   <textarea> existente o selector CSS
    * @param {object} options
    * @param {Array}    options.catalog           [{token, label, group}]
-   * @param {string}   options.placeholder       default: 'Escribe el mensaje...'
-   * @param {string}   options.searchPlaceholder default: 'Buscar campo...'
+   * @param {string}   options.placeholder       default: localized ('MTS.RichEditor'.placeholder)
+   * @param {string}   options.searchPlaceholder default: localized ('MTS.RichEditor'.searchPlaceholder)
    * @param {string}   options.height            default: '260px'
    * @param {string}   options.minHeight         default: '120px'
    * @param {boolean}  options.disabled
@@ -47,27 +47,28 @@ MTS.RichEditor = class MtsRichEditor {
       : (el.querySelector('textarea') || document.createElement('textarea'));
     if (!this._textarea.parentNode) el.appendChild(this._textarea);
 
-    /* ── Labels — defaults en español, consumidor sobreescribe lo que necesita ── */
+    /* ── Labels — defaults desde el locale activo (MTS.RichEditor); consumidor sobreescribe lo que necesita ── */
+    let t = this._t.bind(this);
     let DEF_LABELS = {
-      bold: 'Negrita', italic: 'Cursiva', underline: 'Subrayado', strike: 'Tachado',
-      normal: 'Normal', heading1: 'Título 1', heading2: 'Título 2', heading3: 'Título 3',
-      quote: 'Cita', code: 'Código',
-      listUl: 'Lista', listOl: 'Lista numerada', indent: 'Indentar', outdent: 'Desindentar',
-      alignLeft: 'Izquierda', alignCenter: 'Centro', alignRight: 'Derecha', alignFull: 'Justificado',
-      linkInsert: 'Insertar enlace', linkRemove: 'Quitar enlace',
-      textColor: 'Color de texto', bgColor: 'Color de fondo',
-      undo: 'Deshacer', redo: 'Rehacer', cleanFormat: 'Limpiar formato',
-      htmlSource: 'HTML', fields: 'Campos', fontSize: 'Tamaño', fontFamily: 'Fuente',
-      urlLabel: 'URL:', urlApply: 'Aplicar', urlCancel: '×',
-      htmlApply: 'Aplicar', htmlCancel: '×',
-      table: 'Tabla',
+      bold: t('bold', 'Bold'), italic: t('italic', 'Italic'), underline: t('underline', 'Underline'), strike: t('strike', 'Strikethrough'),
+      normal: t('normal', 'Normal'), heading1: t('heading1', 'Heading 1'), heading2: t('heading2', 'Heading 2'), heading3: t('heading3', 'Heading 3'),
+      quote: t('quote', 'Quote'), code: t('code', 'Code'),
+      listUl: t('listUl', 'Bullet list'), listOl: t('listOl', 'Numbered list'), indent: t('indent', 'Indent'), outdent: t('outdent', 'Outdent'),
+      alignLeft: t('alignLeft', 'Align left'), alignCenter: t('alignCenter', 'Align center'), alignRight: t('alignRight', 'Align right'), alignFull: t('alignFull', 'Justify'),
+      linkInsert: t('linkInsert', 'Insert link'), linkRemove: t('linkRemove', 'Remove link'),
+      textColor: t('textColor', 'Text color'), bgColor: t('bgColor', 'Background color'),
+      undo: t('undo', 'Undo'), redo: t('redo', 'Redo'), cleanFormat: t('cleanFormat', 'Clear format'),
+      htmlSource: t('htmlSource', 'HTML'), fields: t('fields', 'Fields'), fontSize: t('fontSize', 'Size'), fontFamily: t('fontFamily', 'Font'),
+      urlLabel: t('urlLabel', 'URL:'), urlApply: t('urlApply', 'Apply'), urlCancel: t('urlCancel', '×'),
+      htmlApply: t('htmlApply', 'Apply'), htmlCancel: t('htmlCancel', '×'),
+      table: t('table', 'Table'),
     };
     this.labels = Object.assign({}, DEF_LABELS, options.labels || {});
 
     /* ── Opciones ── */
     this._catalog          = options.catalog          || [];
-    this.placeholder       = options.placeholder      || 'Escribe el mensaje...';
-    this.searchPlaceholder = options.searchPlaceholder || 'Buscar campo...';
+    this.placeholder       = options.placeholder      || t('placeholder', 'Write your message...');
+    this.searchPlaceholder = options.searchPlaceholder || t('searchPlaceholder', 'Search field...');
     this.height            = options.height            || '260px';
     this.minHeight         = options.minHeight         || '120px';
     this.disabled          = options.disabled          || false;
@@ -266,7 +267,7 @@ MTS.RichEditor = class MtsRichEditor {
     let linkInput = document.createElement('input');
     linkInput.type = 'text';
     linkInput.className = 'mts-re__link-input';
-    linkInput.placeholder = 'https://...';
+    linkInput.placeholder = this._t('urlPlaceholder', 'https://...');
     linkInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter')  { e.preventDefault(); self._applyLink(linkInput.value); }
       if (e.key === 'Escape') { self._hideLinkBar(); }
@@ -768,7 +769,7 @@ MTS.RichEditor = class MtsRichEditor {
     let text  = this._editor ? this._editor.innerText || '' : '';
     let words = text.trim() ? text.trim().split(/\s+/).length : 0;
     let chars = text.length;
-    this._statusEl.textContent = words + ' palabras · ' + chars + ' caracteres';
+    this._statusEl.textContent = words + ' ' + this._t('words', 'words') + ' · ' + chars + ' ' + this._t('characters', 'characters');
   }
 
   _emit(event, detail) {
@@ -1071,7 +1072,7 @@ MTS.RichEditor = class MtsRichEditor {
     let groups     = {};
     let groupOrder = [];
     this._catalog.forEach(function(entry) {
-      let g = entry.group || 'Otros';
+      let g = entry.group || self._t('groupOther', 'Other');
       if (!groups[g]) { groups[g] = []; groupOrder.push(g); }
       groups[g].push(entry);
     });
@@ -1141,7 +1142,7 @@ MTS.RichEditor = class MtsRichEditor {
     if (!hasVisible && filter) {
       let empty = document.createElement('div');
       empty.className = 'mts-re__palette-empty';
-      empty.textContent = 'Sin resultados para "' + filter + '"';
+      empty.textContent = self._t('noResults', 'No results for "{q}"').replace('{q}', filter);
       wrap.appendChild(empty);
     }
   }
@@ -1154,7 +1155,7 @@ MTS.RichEditor = class MtsRichEditor {
     let addBtn = document.createElement('button');
     addBtn.type = 'button';
     addBtn.className = 'mts-re__btn mts-re__btn--add-custom';
-    addBtn.textContent = '+ Campo personalizado';
+    addBtn.textContent = self._t('customFieldAdd', '+ Custom field');
     addBtn.addEventListener('mousedown', function(e) { e.preventDefault(); });
     addBtn.addEventListener('click', function() {
       form.classList.toggle('mts-re__custom-form--hidden');
@@ -1173,16 +1174,16 @@ MTS.RichEditor = class MtsRichEditor {
       return inp;
     }
 
-    let inpToken = makeInput('Nombre del campo (ej: cliente)');
-    let inpLabel = makeInput('Etiqueta visible');
-    let inpDV    = makeInput('Valor por defecto (opcional)');
+    let inpToken = makeInput(self._t('customFieldNamePh', 'Field name (e.g. customer)'));
+    let inpLabel = makeInput(self._t('customFieldLabelPh', 'Visible label'));
+    let inpDV    = makeInput(self._t('customFieldDefaultPh', 'Default value (optional)'));
     let actions  = document.createElement('div');
     actions.className = 'mts-re__custom-actions';
 
     let saveBtn = document.createElement('button');
     saveBtn.type = 'button';
     saveBtn.className = 'mts-re__btn mts-re__btn--primary mts-re__btn--sm';
-    saveBtn.textContent = 'Agregar';
+    saveBtn.textContent = self._t('customFieldSave', 'Add');
     saveBtn.addEventListener('mousedown', function(e) { e.preventDefault(); });
     saveBtn.addEventListener('click', function() {
       let raw   = inpToken.value.trim().replace(/[^a-zA-Z0-9_.]/g, '');
@@ -1197,7 +1198,7 @@ MTS.RichEditor = class MtsRichEditor {
     let cancelBtn = document.createElement('button');
     cancelBtn.type = 'button';
     cancelBtn.className = 'mts-re__btn mts-re__btn--sm';
-    cancelBtn.textContent = 'Cancelar';
+    cancelBtn.textContent = self._t('customFieldCancel', 'Cancel');
     cancelBtn.addEventListener('mousedown', function(e) { e.preventDefault(); });
     cancelBtn.addEventListener('click', function() { form.classList.add('mts-re__custom-form--hidden'); });
 

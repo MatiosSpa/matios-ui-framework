@@ -999,16 +999,7 @@ Each plugin reads its **own namespace** from the active locale:
 | `MTS.DocumentManagerPreviewNotesPanel` | notes panel + add modal |
 | `MTS.DocumentManagerPreviewVersionsPanel` | versions panel |
 
-To customize a language or add one, register the namespaces you need and select it. Missing keys fall
-back to the built-in defaults, so you only override what you need:
-
-```js
-MTS.registerLocale('en', {
-  'MTS.DocumentManagerUploadPlugin':      { selectFiles: 'Choose files', dropHint: 'Drag files here' },
-  'MTS.DocumentManagerContextMenuPlugin': { view: 'Preview', download: 'Get a copy' },
-});
-MTS.setLanguage('en');
-```
+Each plugin localizes its chrome from the active global language; set it once at startup with `MTS.setLanguage(code)`.
 
 ---
 

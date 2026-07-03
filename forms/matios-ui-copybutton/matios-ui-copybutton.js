@@ -34,10 +34,10 @@ MTS.CopyButton = class MtsCopyButton {
     this.target = options.target ?? null;
 
     // Button label / Label del botón
-    this.label = options.label ?? 'Copiar';
+    this.label = options.label ?? this._t('copy', 'Copy');
 
     // Label shown after copying / Label mostrado tras copiar
-    this.labelCopied = options.labelCopied ?? '¡Copiado!';
+    this.labelCopied = options.labelCopied ?? this._t('copied', 'Copied!');
 
     // Default icon SVG / SVG del ícono por defecto
     this.icon = options.icon ?? this._defaultIcon();
@@ -76,6 +76,16 @@ MTS.CopyButton = class MtsCopyButton {
   on(e, cb)  { if (!this._listeners[e]) this._listeners[e] = []; this._listeners[e].push(cb); return this; }
   off(e, cb) { this._listeners[e] = (this._listeners[e] || []).filter(f => f !== cb); return this; }
   destroy()  { this._el.innerHTML = ''; }
+
+  /* Localized chrome lookup — MTS.CopyButton → messages namespace; English fallback. */
+  _t(key, fallback) {
+    try {
+      const ns = (typeof window !== 'undefined' && window.MTS && MTS.getString) ? MTS.getString()['MTS.CopyButton'] : null;
+      const m  = ns && ns.messages;
+      if (m && m[key] != null) return m[key];
+    } catch (e) {}
+    return fallback;
+  }
 
   _build() {
     this._syncClasses();

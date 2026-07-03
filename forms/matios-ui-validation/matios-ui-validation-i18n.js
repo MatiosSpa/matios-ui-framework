@@ -10,6 +10,8 @@
 
   MTS.registerLocale('es', {
     'MTS.Validate': {
+      // Los mensajes por defecto de las reglas viven INTERNOS en el componente
+      // (MTS.Validate._messages, elegidos por MTS.getLanguage()). Aquí solo va el demo.
       demo: {
         subtitle:               'Validación de formularios con reglas, mensajes y helpers de API.',
         s1Title:                '1 — Formulario completo',
@@ -53,6 +55,8 @@
 
   MTS.registerLocale('en', {
     'MTS.Validate': {
+      // Default per-rule messages live INTERNALLY in the component
+      // (MTS.Validate._messages, picked by MTS.getLanguage()). Only demo strings here.
       demo: {
         subtitle:               'Form validation with rules, messages and API helpers.',
         s1Title:                '1 — Full form',
@@ -96,6 +100,8 @@
 
   MTS.registerLocale('pt', {
     'MTS.Validate': {
+      // As mensagens padrão das regras vivem INTERNAS no componente
+      // (MTS.Validate._messages, escolhidas por MTS.getLanguage()). Aqui só o demo.
       demo: {
         subtitle:               'Validação de formulários com regras, mensagens e helpers de API.',
         s1Title:                '1 — Formulário completo',

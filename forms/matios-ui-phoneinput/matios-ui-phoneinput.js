@@ -259,7 +259,7 @@ MTS.PhoneInput = class MtsPhoneInput {
     const search = document.createElement('input');
     search.type = 'text';
     search.className = 'mts-phoneinput__dd-search';
-    search.placeholder = 'Buscar país...';
+    search.placeholder = this._t('searchPlaceholder', 'Search country...');
     search.addEventListener('input', () => this._filterDd(search.value, list));
     search.addEventListener('click', e => e.stopPropagation());
     dd.appendChild(search);

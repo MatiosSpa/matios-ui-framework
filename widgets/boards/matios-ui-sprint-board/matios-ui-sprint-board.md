@@ -28,9 +28,8 @@ The component reads its text from the `MTS.SprintBoard` layer of the active lang
 (`MTS.getString()['MTS.SprintBoard']`), with an English fallback when no locale is loaded. Its own locale file
 `matios-ui-sprint-board-i18n.js` registers `es`/`en`/`pt` (column titles, sprint actions, backlog labels, capacity,
 the inline add-story form, and the `ui` section for the demo). Set the active language once at startup with
-`MTS.setLanguage('en')`; override strings with
-`MTS.registerLocale('es', { 'MTS.SprintBoard': { backlog: 'Pila' } })`. The default `columns` (`todo`/`wip`/`done`)
-take their titles from this layer.
+`MTS.setLanguage('en')`; the component then localizes its chrome from the active language. The default `columns`
+(`todo`/`wip`/`done`) take their titles from this layer.
 
 ---
 

@@ -8,8 +8,21 @@ Declarative dirty-tracking for forms. A single `MTS.FormGuard.start()` call in t
 
 ```html
 <link rel="stylesheet" href="matios-ui-formguard.css">
+
+<!-- Optional: global i18n table + FormGuard locale strings (load before formguard.js) -->
+<script src="../../base/matios-ui-i18n.js"></script>
+<script src="matios-ui-formguard-i18n.js"></script>
+
+<!-- Optional: MTS.Modal — used for the in-app confirm dialog; without it FormGuard
+     falls back to the native confirm() / beforeunload prompt -->
+<script src="../../overlays/matios-ui-modal/matios-ui-modal.js"></script>
+
 <script src="matios-ui-formguard.js"></script>
 ```
+
+`matios-ui-i18n.js` + `matios-ui-formguard-i18n.js` are optional: without them FormGuard runs with its
+built-in Spanish defaults. `matios-ui-modal.js` is also optional — see the [Notes](#notes) on the
+`beforeunload` / navigation flow.
 
 Initialize once, in the app shell:
 
@@ -82,10 +95,22 @@ new MTS.Select('#select-role', { options: [/* … */] });
 | `MTS.FormGuard.hasUnsavedChanges()` | `boolean` — true if at least one form is dirty |
 | `MTS.FormGuard.getDirtyCount()` | `number` — count of dirty forms |
 
-### `start()` message options
+### `start()` message overrides
 
-`messages.unsavedChanges` (native `confirm()` fallback), `messages.modalTitle`, `messages.modalBody`,
-`messages.btnKeep`, `messages.btnDiscard`, `messages.btnSave`.
+By default the modal/confirm texts come from the active locale (see [i18n](#i18n)). Pass `options.messages`
+to override individual strings — an override always wins over the locale value.
+
+| `messages` key | Where it is used | Overrides locale key |
+|----------------|------------------|----------------------|
+| `unsavedChanges` | Native `confirm()` fallback (when `MTS.Modal` is not loaded) | `unsavedChanges` |
+| `modalTitle` | Title of both the navigation modal and the `beforeunload` modal | `modalTitle` |
+| `modalBody` | Body of both the navigation modal and the `beforeunload` modal | `modalBody` / `beforeUnloadBody` |
+| `btnKeep` | "Keep editing" button in both modals | `btnKeep` |
+| `btnDiscard` | Discard button (navigation modal → `btnDiscard`; `beforeunload` modal → `btnDiscardUnload`) | `btnDiscard` / `btnDiscardUnload` |
+| `btnSave` | "Save and leave" button in the navigation modal (only when `data-mts-form-save` is set) | `btnSave` |
+
+Note: a single `messages.modalBody` / `messages.btnDiscard` override replaces the string in *both* modals,
+whereas the locale keeps a distinct wording per modal (`modalBody`/`beforeUnloadBody`, `btnDiscard`/`btnDiscardUnload`).
 
 ---
 
@@ -147,12 +172,35 @@ of the modal — there is no web API to suppress it.
 
 ---
 
-## Changelog
+## i18n
 
-### 2026-05-21
-- Component created. Declarative singleton: `start` / `stop` / `syncAll` / `sync` / `hasUnsavedChanges` / `getDirtyCount`.
-- MutationObserver auto adopt/release; reversible per-control snapshot dirty tracking.
-- 3-button modal (MTS.Modal + `confirm()` fallback); `beforeunload` guard when dirty.
-- `_mtsInstance` convention across Input, Toggle, Select, Checkbox, CheckboxGroup, Radio, Slider, TagInput,
-  DatePicker.Base, RichEditor, NumberInput, PhoneInput.
-- Events: `mts:form:dirty-change`, `mts:form:before-navigate`, `mts:form:save-ack`, `mts:form:snapshot-sync`.
+All modal/confirm strings are read from the global locale table under the namespace `MTS.FormGuard`.
+Set the language once at startup; there is no per-instance `locale` option.
+
+```js
+MTS.setLanguage('en');   // 'es' (default) | 'en' | 'pt'
+MTS.FormGuard.start();
+```
+
+Bundled keys (all three languages ship in the bundle):
+
+| Key | Where it is used |
+|-----|------------------|
+| `modalTitle` | Title of the navigation modal and the `beforeunload` modal |
+| `modalBody` | Body of the navigation modal |
+| `beforeUnloadBody` | Body of the `beforeunload` modal |
+| `btnKeep` | "Keep editing" button |
+| `btnDiscard` | Discard button in the navigation modal |
+| `btnDiscardUnload` | Discard button in the `beforeunload` modal |
+| `btnSave` | "Save and leave" button (navigation modal, only with `data-mts-form-save`) |
+| `unsavedChanges` | Message for the native `confirm()` fallback |
+
+Override any of these strings for a single call via `options.messages`
+(see [`start()` message overrides](#start-message-overrides) — `options.messages` wins over the locale):
+
+```js
+MTS.FormGuard.start({ messages: { btnDiscard: 'Discard and go back' } });
+```
+
+Native `beforeunload` limitation: on tab/window close the browser may show its own confirmation
+dialog. That prompt text is browser-controlled and cannot be localized by any web API.

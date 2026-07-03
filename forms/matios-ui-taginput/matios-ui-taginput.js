@@ -45,7 +45,7 @@ MTS.TagInput = class MtsTagInput {
     /* Sugerencias: [{ uid, name }] o strings */
     this.suggestions = options.suggestions || [];
 
-    this.placeholder     = options.placeholder    || 'Agregar...';
+    this.placeholder     = options.placeholder    || this._t('placeholder', 'Add...');
     this.label           = options.label          || '';
     this.maxTags         = options.maxTags        || null;
     this.allowDuplicates = options.allowDuplicates ?? false;
@@ -257,7 +257,7 @@ MTS.TagInput = class MtsTagInput {
       const rm = document.createElement('button');
       rm.className = 'mts-taginput__tag-remove';
       rm.innerHTML = '&times;';
-      rm.setAttribute('aria-label', 'Eliminar ' + tag.name);
+      rm.setAttribute('aria-label', this._t('removeTag', 'Remove {tag}').replace('{tag}', tag.name));
       rm.addEventListener('mousedown', (e) => { e.preventDefault(); this._removeByUid(tag.uid); });
       chip.appendChild(rm);
       this._tagsEl.appendChild(chip);

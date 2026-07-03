@@ -130,14 +130,6 @@ MTS.setLanguage('en');   // 'es' | 'en' | 'pt'
 
 Load `base/matios-ui-i18n.js` and `matios-ui-diagnosticspanel-i18n.js` before the component. Built-in languages are `es`, `en` and `pt`; a missing key falls back to `es`. There is no per-instance `locale` option — the language is global and read at build time, so change it before constructing the panel (or rebuild after switching).
 
-To override or extend a string, register it before building:
-
-```js
-MTS.registerLocale('en', {
-  'MTS.DiagnosticsPanel': { clear: 'Wipe' }
-});
-```
-
 ---
 
 ## Notes

@@ -110,7 +110,8 @@ MTS.Rating = class MtsRating {
     for (let i = 1; i <= this.max; i++) {
       const star = document.createElement('button');
       star.className = 'mts-rating__star';
-      star.setAttribute('aria-label', `${i} estrella${i > 1 ? 's' : ''}`);
+      const starLabel = this._t('starLabel', '{n} stars').replace('{n}', String(i));
+      star.setAttribute('aria-label', starLabel);
       star.setAttribute('type', 'button');
       if (this.readonly) { star.disabled = true; }
 

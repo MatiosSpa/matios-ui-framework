@@ -73,6 +73,16 @@ MTS.Label = class MtsLabel {
   // Destroy the component / Destruir el componente
   destroy() { this._el.innerHTML = ''; }
 
+  /* Localized chrome lookup — MTS.Label → messages namespace; English fallback. */
+  _t(key, fallback) {
+    try {
+      const ns = (typeof window !== 'undefined' && window.MTS && MTS.getString) ? MTS.getString()['MTS.Label'] : null;
+      const m  = ns && ns.messages;
+      if (m && m[key] != null) return m[key];
+    } catch (e) {}
+    return fallback;
+  }
+
   /* ── Build / Construcción ───────────────────────────── */
 
   _build() {
@@ -90,7 +100,7 @@ MTS.Label = class MtsLabel {
     if (this.optional) {
       const badge = document.createElement('span');
       badge.className   = 'mts-label__optional';
-      badge.textContent = 'opcional';
+      badge.textContent = this._t('optional', 'optional');
       this._el.appendChild(badge);
     }
 
