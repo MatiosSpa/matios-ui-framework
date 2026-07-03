@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Breadcrumb': {
       navLabel:    'Ruta de navegación',
       expandLabel: 'Mostrar ruta completa',
@@ -33,7 +33,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Breadcrumb': {
       navLabel:    'Breadcrumb',
       expandLabel: 'Show full path',
@@ -58,7 +58,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Breadcrumb': {
       navLabel:    'Trilha de navegação',
       expandLabel: 'Mostrar caminho completo',

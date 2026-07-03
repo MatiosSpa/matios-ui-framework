@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Progress': {
       demo: {
         subtitle:        'Barra · círculo · indeterminado — variantes, rayado, animado y métodos de API.',
@@ -25,7 +25,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Progress': {
       demo: {
         subtitle:        'Bar · circle · indeterminate — variants, striped, animated and API methods.',
@@ -42,7 +42,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Progress': {
       demo: {
         subtitle:        'Barra · círculo · indeterminado — variantes, listrado, animado e métodos de API.',

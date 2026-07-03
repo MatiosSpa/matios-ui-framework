@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Scroll': {
       demo: {
         subtitle:        'Contenedor scrollable con scrollbar temático, fades de borde adaptativos y eventos de posición.',
@@ -49,7 +49,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Scroll': {
       demo: {
         subtitle:        'Scrollable container with themed scrollbar, adaptive edge fades and position events.',
@@ -90,7 +90,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Scroll': {
       demo: {
         subtitle:        'Contêiner rolável com barra de rolagem temática, fades de borda adaptativos e eventos de posição.',

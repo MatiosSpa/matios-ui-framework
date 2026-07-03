@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Grid': {
       demo: {
         subtitle:        'Distribución estructural de página con CSS Grid nativo, spans responsivos y helpers de layout.',
@@ -43,7 +43,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Grid': {
       demo: {
         subtitle:        'Structural page layout with native CSS Grid, responsive spans and layout helpers.',
@@ -78,7 +78,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Grid': {
       demo: {
         subtitle:        'Layout estrutural de página com CSS Grid nativo, spans responsivos e helpers de layout.',

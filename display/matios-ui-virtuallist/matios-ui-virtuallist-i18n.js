@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.VirtualList': {
       demo: {
         subtitle:           'Lista virtualizada — renderiza solo los ítems visibles · 100.000+ filas · scroll infinito vía onEndReached.',
@@ -26,7 +26,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.VirtualList': {
       demo: {
         subtitle:           'Virtualized list — renders only visible items · 100,000+ rows · infinite scroll via onEndReached.',
@@ -44,7 +44,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.VirtualList': {
       demo: {
         subtitle:           'Lista virtualizada — renderiza apenas os itens visíveis · 100.000+ linhas · rolagem infinita via onEndReached.',

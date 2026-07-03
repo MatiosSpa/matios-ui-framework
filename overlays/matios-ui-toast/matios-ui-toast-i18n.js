@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Toast': {
       demo: {
         subtitle:            'Notificaciones fugaces — variantes, posiciones, botón de acción y estado de carga.',
@@ -33,7 +33,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Toast': {
       demo: {
         subtitle:            'Transient notifications — variants, positions, action button and loading state.',
@@ -58,7 +58,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Toast': {
       demo: {
         subtitle:            'Notificações efêmeras — variantes, posições, botão de ação e estado de carregamento.',

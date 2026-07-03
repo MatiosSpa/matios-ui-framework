@@ -7,12 +7,12 @@
    ============================================================ */
 (function () {
   'use strict';
-  if (!window.MTS || typeof MTS.registerLocale !== 'function') {
-    if (window.console) { window.console.warn('[gantt-chart-i18n] MTS.registerLocale no disponible.'); }
+  if (!window.MTS || typeof MTS.registerLanguage !== 'function') {
+    if (window.console) { window.console.warn('[gantt-chart-i18n] MTS.registerLanguage no disponible.'); }
     return;
   }
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.GanttChart': {
       months:           ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
       weekPrefix:       'S',
@@ -47,7 +47,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.GanttChart': {
       months:           ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       weekPrefix:       'W',
@@ -81,7 +81,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.GanttChart': {
       months:           ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
       weekPrefix:       'S',

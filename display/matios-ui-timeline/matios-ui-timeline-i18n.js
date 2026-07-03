@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Timeline': {
       demo: {
         subtitle:        'Demo de Timeline actualizado al patrón Preview | HTML | JavaScript.',
@@ -24,7 +24,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Timeline': {
       demo: {
         subtitle:        'Timeline demo updated to the Preview | HTML | JavaScript pattern.',
@@ -40,7 +40,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Timeline': {
       demo: {
         subtitle:        'Demo de Timeline atualizado ao padrão Preview | HTML | JavaScript.',

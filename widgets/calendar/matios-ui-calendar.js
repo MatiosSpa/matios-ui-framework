@@ -62,7 +62,7 @@ MTS.Calendar = class MtsCalendar {
 
     /* i18n */
     const localeKey = window.MTS && MTS.getLanguage && MTS.getLanguage();
-    this._locale    = MTS.CalendarLocales?.[localeKey] || null;
+    this._locale    = MTS.CalendarLanguages?.[localeKey] || null;
     this._t         = key => this._locale?.[key] ?? key;
 
     /* Datasource — nombre homologado `dataSource` (camelCase, igual que DataTable/Gantt);

@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Validate': {
       // Los mensajes por defecto de las reglas viven INTERNOS en el componente
       // (MTS.Validate._messages, elegidos por MTS.getLanguage()). Aquí solo va el demo.
@@ -53,7 +53,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Validate': {
       // Default per-rule messages live INTERNALLY in the component
       // (MTS.Validate._messages, picked by MTS.getLanguage()). Only demo strings here.
@@ -98,7 +98,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Validate': {
       // As mensagens padrão das regras vivem INTERNAS no componente
       // (MTS.Validate._messages, escolhidas por MTS.getLanguage()). Aqui só o demo.

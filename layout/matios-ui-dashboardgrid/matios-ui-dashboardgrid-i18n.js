@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.DashboardGrid': {
       dragHandle:   'Mover widget',
       removeWidget: 'Eliminar widget',
@@ -18,7 +18,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.DashboardGrid': {
       dragHandle:   'Move widget',
       removeWidget: 'Remove widget',
@@ -28,7 +28,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.DashboardGrid': {
       dragHandle:   'Mover widget',
       removeWidget: 'Remover widget',

@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Pagination': {
       empty:     'Sin resultados',
       info:      'Mostrando {from}–{to} de {total}',
@@ -32,7 +32,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Pagination': {
       empty:     'No results',
       info:      'Showing {from}–{to} of {total}',
@@ -56,7 +56,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Pagination': {
       empty:     'Sem resultados',
       info:      'Mostrando {from}–{to} de {total}',

@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Sanitize': {
       demo: {
         subtitle:        'Utilidad de escape y sanitización para prevención de XSS. Sin dependencias.',
@@ -27,7 +27,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Sanitize': {
       demo: {
         subtitle:        'Escape and sanitization utility for XSS prevention. No dependencies.',
@@ -46,7 +46,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Sanitize': {
       demo: {
         subtitle:        'Utilitário de escape e sanitização para prevenção de XSS. Sem dependências.',

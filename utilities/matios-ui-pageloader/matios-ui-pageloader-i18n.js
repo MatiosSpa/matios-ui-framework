@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.PageLoader': {
       demo: {
         subtitle:       'Indicador de carga de página estilo NProgress. Barra fija con avance automático (trickle), overlay blocker con spinner o progress circle, o ambos a la vez.',
@@ -28,7 +28,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.PageLoader': {
       demo: {
         subtitle:       'NProgress-style page loading indicator. Fixed bar with automatic trickle, blocker overlay with spinner or progress circle, or both at once.',
@@ -48,7 +48,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.PageLoader': {
       demo: {
         subtitle:       'Indicador de carregamento de página estilo NProgress. Barra fixa com avanço automático (trickle), overlay blocker com spinner ou progress circle, ou ambos ao mesmo tempo.',

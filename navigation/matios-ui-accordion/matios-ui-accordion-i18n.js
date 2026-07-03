@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Accordion': {
       demo: {
         subtitle:            'Secciones expandibles — uno o varios paneles abiertos, modo flush, íconos, control programático.',
@@ -62,7 +62,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Accordion': {
       demo: {
         subtitle:            'Expandable sections — single or multiple open, flush mode, icons, programmatic control.',
@@ -116,7 +116,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Accordion': {
       demo: {
         subtitle:            'Seções expansíveis — um ou vários painéis abertos, modo flush, ícones, controle programático.',

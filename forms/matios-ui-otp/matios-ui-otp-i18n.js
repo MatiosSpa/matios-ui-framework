@@ -6,10 +6,10 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', { 'MTS.OTP': { messages: { required: 'Este campo es obligatorio', boxLabel: 'Carácter {n} de {total}', resend: 'Reenviar código' } } });
-  MTS.registerLocale('en', { 'MTS.OTP': { messages: { required: 'This field is required', boxLabel: 'Character {n} of {total}', resend: 'Resend code' } } });
-  MTS.registerLocale('pt', { 'MTS.OTP': { messages: { required: 'Este campo é obrigatório', boxLabel: 'Caractere {n} de {total}', resend: 'Reenviar código' } } });
+  MTS.registerLanguage('es', { 'MTS.OTP': { messages: { required: 'Este campo es obligatorio', boxLabel: 'Carácter {n} de {total}', resend: 'Reenviar código' } } });
+  MTS.registerLanguage('en', { 'MTS.OTP': { messages: { required: 'This field is required', boxLabel: 'Character {n} of {total}', resend: 'Resend code' } } });
+  MTS.registerLanguage('pt', { 'MTS.OTP': { messages: { required: 'Este campo é obrigatório', boxLabel: 'Caractere {n} de {total}', resend: 'Reenviar código' } } });
 
 })(window);

@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Tabs': {
       demo: {
         subtitle:            'Underline, pill y card — horizontal y vertical — íconos, badges y API programática.',
@@ -30,7 +30,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Tabs': {
       demo: {
         subtitle:            'Underline, pill and card — horizontal and vertical — icons, badges and programmatic API.',
@@ -52,7 +52,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Tabs': {
       demo: {
         subtitle:            'Underline, pill e card — horizontal e vertical — ícones, badges e API programática.',

@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Topbar': {
       demo: {
         subtitle:           'Barra superior para dashboards y apps — brand, slots de contenido y composición con SideNav.',
@@ -33,7 +33,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Topbar': {
       demo: {
         subtitle:           'Top bar for dashboards and apps — brand, content slots and composition with SideNav.',
@@ -58,7 +58,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Topbar': {
       demo: {
         subtitle:           'Barra superior para dashboards e apps — brand, slots de conteúdo e composição com SideNav.',

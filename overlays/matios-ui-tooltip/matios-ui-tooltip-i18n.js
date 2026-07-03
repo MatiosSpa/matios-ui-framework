@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Tooltip': {
       demo: {
         subtitle:        'Tooltip con posicionamiento inteligente — hover, click, focus, variantes dark/light y contenido HTML.',
@@ -52,7 +52,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Tooltip': {
       demo: {
         subtitle:        'Tooltip with smart positioning — hover, click, focus, dark/light variants and HTML content.',
@@ -96,7 +96,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Tooltip': {
       demo: {
         subtitle:        'Tooltip com posicionamento inteligente — hover, clique, foco, variantes dark/light e conteúdo HTML.',

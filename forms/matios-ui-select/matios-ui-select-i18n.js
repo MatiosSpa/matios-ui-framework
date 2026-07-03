@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Select': {
       messages: { required: 'Este campo es obligatorio', placeholder: 'Selecciona...', searchPlaceholder: 'Buscar...', noResults: 'Sin resultados', minCharsHint: 'Escribe al menos {n} caracteres para buscar', loading: 'Buscando...' },
       demo: {
@@ -30,7 +30,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Select': {
       messages: { required: 'This field is required', placeholder: 'Select...', searchPlaceholder: 'Search...', noResults: 'No results', minCharsHint: 'Type at least {n} characters to search', loading: 'Searching...' },
       demo: {
@@ -52,7 +52,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Select': {
       messages: { required: 'Este campo é obrigatório', placeholder: 'Selecione...', searchPlaceholder: 'Buscar...', noResults: 'Sem resultados', minCharsHint: 'Digite ao menos {n} caracteres para buscar', loading: 'Buscando...' },
       demo: {

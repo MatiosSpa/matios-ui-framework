@@ -7,12 +7,12 @@
    ============================================================ */
 (function () {
   'use strict';
-  if (!window.MTS || typeof MTS.registerLocale !== 'function') {
-    if (window.console) { window.console.warn('[kanban-i18n] MTS.registerLocale no disponible.'); }
+  if (!window.MTS || typeof MTS.registerLanguage !== 'function') {
+    if (window.console) { window.console.warn('[kanban-i18n] MTS.registerLanguage no disponible.'); }
     return;
   }
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Kanban': {
       addTaskDefault: '+ Agregar tarea',
       addCard:        'Agregar tarjeta',
@@ -35,7 +35,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Kanban': {
       addTaskDefault: '+ Add task',
       addCard:        'Add card',
@@ -57,7 +57,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Kanban': {
       addTaskDefault: '+ Adicionar tarefa',
       addCard:        'Adicionar cartão',

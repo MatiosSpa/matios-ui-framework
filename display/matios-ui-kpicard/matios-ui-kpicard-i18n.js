@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.KPICard': {
       demo: {
         subtitle:           'Demo de KPICard actualizado al patrón Preview | HTML | JavaScript.',
@@ -23,7 +23,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.KPICard': {
       demo: {
         subtitle:           'KPICard demo updated to the Preview | HTML | JavaScript pattern.',
@@ -38,7 +38,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.KPICard': {
       demo: {
         subtitle:           'Demo do KPICard atualizado ao padrão Preview | HTML | JavaScript.',

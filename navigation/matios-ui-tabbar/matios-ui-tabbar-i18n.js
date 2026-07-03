@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.TabBar': {
       demo: {
         subtitle:            'Barra de navegación tipo app móvil con variantes, badges y API básica.',
@@ -22,7 +22,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.TabBar': {
       demo: {
         subtitle:            'Mobile app-style navigation bar with variants, badges and basic API.',
@@ -36,7 +36,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.TabBar': {
       demo: {
         subtitle:            'Barra de navegação estilo app móvel com variantes, badges e API básica.',

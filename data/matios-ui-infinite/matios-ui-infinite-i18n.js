@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Infinite': {
       loaderText:   'Cargando...',
       endText:      'No hay más resultados',
@@ -33,7 +33,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Infinite': {
       loaderText:   'Loading...',
       endText:      'No more results',
@@ -58,7 +58,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Infinite': {
       loaderText:   'Carregando...',
       endText:      'Não há mais resultados',

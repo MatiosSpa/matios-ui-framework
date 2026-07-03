@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.StatusBar': {
       demo: {
         subtitle:        'Barra de estado inferior con slots libres (start, center, end). Ideal para información secundaria: conexión, versión, entorno, atajos, mensajes de estado. No es navegación — es contexto.',
@@ -37,7 +37,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.StatusBar': {
       demo: {
         subtitle:        'Bottom status bar with free slots (start, center, end). Ideal for secondary information: connection, version, environment, shortcuts, status messages. It is not navigation — it is context.',
@@ -66,7 +66,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.StatusBar': {
       demo: {
         subtitle:        'Barra de status inferior com slots livres (start, center, end). Ideal para informações secundárias: conexão, versão, ambiente, atalhos, mensagens de status. Não é navegação — é contexto.',

@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Dropdown': {
       demo: {
         subtitle:          'Menú desplegable — grupos, íconos, atajos, divisores, submenús y modo hover.',
@@ -23,7 +23,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Dropdown': {
       demo: {
         subtitle:          'Dropdown menu — groups, icons, shortcuts, dividers, submenus and hover mode.',
@@ -38,7 +38,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Dropdown': {
       demo: {
         subtitle:          'Menu suspenso — grupos, ícones, atalhos, divisores, submenus e modo hover.',

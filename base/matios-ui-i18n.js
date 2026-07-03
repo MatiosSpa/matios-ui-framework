@@ -20,12 +20,12 @@
    MTS.getString()['MTS.DataTable']  // → strings de ese componente
 
    // Agregar o sobreescribir keys — deep merge, sin pisar el resto
-   MTS.registerLocale('es', {
+   MTS.registerLanguage('es', {
      'MTS.DocumentManagerPreviewPlugin': { download: 'Bajar archivo' }
    })
 
-   // Registrar un locale nuevo completo
-   MTS.registerLocale('pt', {
+   // Registrar un idioma nuevo completo
+   MTS.registerLanguage('pt', {
      'MTS.DataTable': { search: 'Pesquisar...', noData: 'Sem resultados', ... },
      'MTS.DocumentManagerPlugin': { ... },
    })
@@ -56,8 +56,8 @@ MTS._deepMerge = function(target, source) {
   return result;
 };
 
-/* ── Registro de locales ───────────────────────────────────── */
-MTS.Locales = {
+/* ── Registro de idiomas ───────────────────────────────────── */
+MTS.Languages = {
 
   /* ── Español ─────────────────────────────────────────────── */
   es: {
@@ -535,10 +535,13 @@ MTS.Locales = {
 
 };
 
+/* alias de compatibilidad — el nombre viejo apunta al mismo objeto */
+MTS.Locales = MTS.Languages;
+
 /* ── API global ───────────────────────────────────────────── */
 
-/** Locale activo (default 'es') */
-MTS._locale = 'es';
+/** Idioma activo (default 'es') */
+MTS._language = 'es';
 
 /**
  * Cambia el idioma activo para todos los componentes MTS.
@@ -547,7 +550,7 @@ MTS._locale = 'es';
  * @param {string} key — clave de idioma ('es' | 'en' | 'pt' | custom)
  */
 MTS.setLanguage = function(key) {
-  MTS._locale = key;
+  MTS._language = key;
 };
 
 /**
@@ -555,7 +558,7 @@ MTS.setLanguage = function(key) {
  * @returns {string} — 'es' | 'en' | 'pt' | ...
  */
 MTS.getLanguage = function() {
-  return MTS._locale || 'es';
+  return MTS._language || MTS._locale || 'es';
 };
 
 /**
@@ -565,43 +568,46 @@ MTS.getLanguage = function() {
  * @returns {object} — { 'MTS.Input': {...}, 'MTS.DataTable': {...}, ... }
  */
 MTS.getString = function(key) {
-  let k = key || MTS._locale || 'es';
-  return MTS.Locales[k] || MTS.Locales['es'] || {};
+  let k = key || MTS._language || MTS._locale || 'es';
+  return MTS.Languages[k] || MTS.Languages['es'] || {};
 };
 
 /**
- * Registra o extiende un locale con deep merge.
+ * Registra o extiende un idioma con deep merge.
  * Las keys existentes no mencionadas en `overrides` se preservan.
+ * (El nombre viejo `MTS.registerLocale` sigue como alias.)
  *
- * @param {string} key      — clave del locale ('es', 'en', 'pt', ...)
+ * @param {string} key      — clave del idioma ('es', 'en', 'pt', ...)
  * @param {object} overrides — objeto parcial a mezclar
  *
  * @example
  * // Sobreescribir solo el botón de descarga en español
- * MTS.registerLocale('es', {
+ * MTS.registerLanguage('es', {
  *   'MTS.DocumentManagerPreviewPlugin': { download: 'Bajar archivo' }
  * })
  *
  * @example
- * // Registrar un locale nuevo (parcial — lo no definido usa fallback 'es')
- * MTS.registerLocale('pt', {
+ * // Registrar un idioma nuevo (parcial — lo no definido usa fallback 'es')
+ * MTS.registerLanguage('pt', {
  *   'MTS.DataTable': { search: 'Pesquisar...', noData: 'Sem resultados' }
  * })
  */
-MTS.registerLocale = function(key, overrides) {
-  MTS.Locales[key] = MTS._deepMerge(MTS.Locales[key] || {}, overrides);
+MTS.registerLanguage = function(key, overrides) {
+  MTS.Languages[key] = MTS._deepMerge(MTS.Languages[key] || {}, overrides);
 };
+/* alias de compatibilidad — el nombre viejo sigue funcionando */
+MTS.registerLocale = MTS.registerLanguage;
 
 /* ── Compatibilidad con MTS.DataTable.registerLocale ─────── */
 /* Mapea el sistema antiguo al nuevo para no romper código existente */
 if (window.MTS && window.MTS.DataTable) {
-  MTS.DataTable.registerLocale = function(key, obj) {
+  MTS.DataTable.registerLanguage = function(key, obj) {
     /* El objeto antiguo tenía estructura plana con dm.*, filter, colvis.
        Lo mapeamos a la nueva estructura por nombre de componente. */
     let mapped = {};
     if (obj['MTS.DataTable'] || obj.search !== undefined) {
       /* Ya viene en nuevo formato o es solo strings raíz */
-      MTS.registerLocale(key, obj);
+      MTS.registerLanguage(key, obj);
       return;
     }
     /* Mapeo legacy → nuevo */
@@ -625,6 +631,8 @@ if (window.MTS && window.MTS.DataTable) {
       if (dm.preview)  mapped['MTS.DocumentManagerPreviewPlugin']     = dm.preview;
     }
     if (obj.dmUpload) mapped['MTS.DocumentManagerUploadPlugin'] = obj.dmUpload;
-    MTS.registerLocale(key, mapped);
+    MTS.registerLanguage(key, mapped);
   };
+  /* alias de compatibilidad */
+  MTS.DataTable.registerLocale = MTS.DataTable.registerLanguage;
 }

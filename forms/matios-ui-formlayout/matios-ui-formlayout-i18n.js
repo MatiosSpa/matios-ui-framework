@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.FormLayout': {
       demo: {
         subtitle:        'Sistema de layout de formularios — CSS puro. Stack, grid, horizontal, inline, secciones y card.',
@@ -76,7 +76,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.FormLayout': {
       demo: {
         subtitle:        'Form layout system — pure CSS. Stack, grid, horizontal, inline, sections and card.',
@@ -144,7 +144,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.FormLayout': {
       demo: {
         subtitle:        'Sistema de layout de formulários — CSS puro. Stack, grid, horizontal, inline, seções e card.',

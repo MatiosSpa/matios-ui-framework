@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.StepProgress': {
       demo: {
         subtitle:            'Alias de compatibilidad. El componente oficial ahora es MTS.Stepper.',
@@ -20,7 +20,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.StepProgress': {
       demo: {
         subtitle:            'Compatibility alias. The official component is now MTS.Stepper.',
@@ -32,7 +32,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.StepProgress': {
       demo: {
         subtitle:            'Alias de compatibilidade. O componente oficial agora é MTS.Stepper.',

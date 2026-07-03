@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Tree': {
       demo: {
         subtitle:                'Vista de árbol con expandir/colapsar, selección, checkboxes y API básica para escenarios jerárquicos.',
@@ -31,7 +31,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Tree': {
       demo: {
         subtitle:                'Tree view with expand/collapse, selection, checkboxes and a basic API for hierarchical scenarios.',
@@ -54,7 +54,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Tree': {
       demo: {
         subtitle:                'Visualização em árvore com expandir/recolher, seleção, checkboxes e uma API básica para cenários hierárquicos.',

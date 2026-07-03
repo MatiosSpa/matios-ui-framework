@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.ContextMenu': {
       demo: {
         subtitle:                'Menú contextual por click derecho con acciones, íconos y atajos.',
@@ -23,7 +23,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.ContextMenu': {
       demo: {
         subtitle:                'Right-click context menu with actions, icons and shortcuts.',
@@ -38,7 +38,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.ContextMenu': {
       demo: {
         subtitle:                'Menu de contexto por clique direito com ações, ícones e atalhos.',

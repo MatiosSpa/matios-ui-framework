@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Skeleton': {
       demo: {
         subtitle:        'Placeholder de carga animado — texto, círculo, rectángulo, tarjeta, lista, tabla · animaciones pulse y wave.',
@@ -28,7 +28,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Skeleton': {
       demo: {
         subtitle:        'Animated loading placeholder — text, circle, rect, card, list, table · pulse and wave animations.',
@@ -48,7 +48,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Skeleton': {
       demo: {
         subtitle:        'Placeholder de carregamento animado — texto, círculo, retângulo, cartão, lista, tabela · animações pulse e wave.',

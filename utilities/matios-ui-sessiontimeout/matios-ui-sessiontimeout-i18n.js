@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.SessionTimeout': {
       title:      'Tu sesión está por vencer',
       body:       'Por inactividad, tu sesión se cerrará en {time}.',
@@ -46,7 +46,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.SessionTimeout': {
       title:      'Your session is about to expire',
       body:       'Due to inactivity, your session will close in {time}.',
@@ -84,7 +84,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.SessionTimeout': {
       title:      'Sua sessão está prestes a expirar',
       body:       'Por inatividade, sua sessão será encerrada em {time}.',

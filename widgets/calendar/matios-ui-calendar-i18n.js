@@ -16,7 +16,7 @@
 
 window.MTS = window.MTS || {};
 
-MTS.CalendarLocales = {
+MTS.CalendarLanguages = {
 
   es: {
     today:       'Hoy',
@@ -140,8 +140,13 @@ MTS.CalendarLocales = {
 
 };
 
-/* Registrar locale custom */
-MTS.Calendar.registerLocale = function(key, obj) {
-  MTS.CalendarLocales[key] = obj;
+/* alias de compatibilidad */
+MTS.CalendarLocales = MTS.CalendarLanguages;
+
+/* Registrar idioma custom */
+MTS.Calendar.registerLanguage = function(key, obj) {
+  MTS.CalendarLanguages[key] = obj;
 };
+/* alias de compatibilidad */
+MTS.Calendar.registerLocale = MTS.Calendar.registerLanguage;
 

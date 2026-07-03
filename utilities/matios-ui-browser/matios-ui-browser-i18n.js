@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Browser': {
       demo: {
         subtitle:               'Utilidad universal de APIs del navegador. Prueba cada módulo en esta misma página.',
@@ -108,7 +108,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Browser': {
       demo: {
         subtitle:               'Universal browser API utility. Try each module right on this page.',
@@ -208,7 +208,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Browser': {
       demo: {
         subtitle:               'Utilitário universal de APIs do navegador. Teste cada módulo nesta mesma página.',

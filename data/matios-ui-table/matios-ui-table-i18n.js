@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Table': {
       demo: {
         subtitle:            'Componente de tabla CSS-only — sin JavaScript requerido. Variantes, estados de fila, cabeceras ordenables, columnas de acciones.',
@@ -68,7 +68,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Table': {
       demo: {
         subtitle:            'CSS-only table component — no JavaScript required. Variants, row states, sortable headers, action columns.',
@@ -128,7 +128,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Table': {
       demo: {
         subtitle:            'Componente de tabela CSS-only — sem JavaScript necessário. Variantes, estados de linha, cabeçalhos ordenáveis, colunas de ações.',

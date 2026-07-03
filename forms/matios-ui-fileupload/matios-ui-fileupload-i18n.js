@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.FileUpload': {
       label:         'Arrastra archivos aquí o <span>selecciona</span>',
       removeLabel:   'Eliminar',
@@ -36,7 +36,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.FileUpload': {
       label:         'Drag files here or <span>browse</span>',
       removeLabel:   'Remove',
@@ -64,7 +64,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.FileUpload': {
       label:         'Arraste arquivos aqui ou <span>selecione</span>',
       removeLabel:   'Remover',

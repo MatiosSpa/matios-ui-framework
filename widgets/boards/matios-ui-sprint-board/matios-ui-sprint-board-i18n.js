@@ -6,12 +6,12 @@
    ============================================================ */
 (function () {
   'use strict';
-  if (!window.MTS || typeof MTS.registerLocale !== 'function') {
-    if (window.console) { window.console.warn('[sprint-board-i18n] MTS.registerLocale no disponible.'); }
+  if (!window.MTS || typeof MTS.registerLanguage !== 'function') {
+    if (window.console) { window.console.warn('[sprint-board-i18n] MTS.registerLanguage no disponible.'); }
     return;
   }
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.SprintBoard': {
       colTodo: 'Por hacer', colWip: 'En curso', colDone: 'Completado',
       noSprint: 'Sin sprint activo', sprintFallback: 'Sprint',
@@ -31,7 +31,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.SprintBoard': {
       colTodo: 'To do', colWip: 'In progress', colDone: 'Done',
       noSprint: 'No active sprint', sprintFallback: 'Sprint',
@@ -51,7 +51,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.SprintBoard': {
       colTodo: 'A fazer', colWip: 'Em curso', colDone: 'Concluído',
       noSprint: 'Sem sprint ativo', sprintFallback: 'Sprint',

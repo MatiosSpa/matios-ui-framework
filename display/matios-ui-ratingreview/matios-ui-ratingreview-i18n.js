@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.RatingReview': {
       reviews:    'reseñas',
       yourRating: 'Tu calificación:',
@@ -28,7 +28,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.RatingReview': {
       reviews:    'reviews',
       yourRating: 'Your rating:',
@@ -48,7 +48,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.RatingReview': {
       reviews:    'avaliações',
       yourRating: 'Sua avaliação:',

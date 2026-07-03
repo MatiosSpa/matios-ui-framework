@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Spinner': {
       demo: {
         subtitle:        'Indicadores de carga animados — 12 variantes, tonos de color, 5 tamaños, label y overlay.',
@@ -25,7 +25,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Spinner': {
       demo: {
         subtitle:        'Animated loading indicators — 12 variants, color tones, 5 sizes, label and overlay.',
@@ -42,7 +42,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Spinner': {
       demo: {
         subtitle:        'Indicadores de carregamento animados — 12 variantes, tons de cor, 5 tamanhos, label e overlay.',

@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.ScrollSpy': {
       demo: {
         subtitle:        'Resalta el link activo al hacer scroll por las secciones.',
@@ -41,7 +41,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.ScrollSpy': {
       demo: {
         subtitle:        'Highlights the active link as you scroll through the sections.',
@@ -74,7 +74,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.ScrollSpy': {
       demo: {
         subtitle:        'Destaca o link ativo ao rolar pelas seções.',

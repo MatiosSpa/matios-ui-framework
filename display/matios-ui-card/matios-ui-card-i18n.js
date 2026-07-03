@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Card': {
       demo: {
         subtitle:            'Card genérica — header, body, footer, imagen, variantes, hoverable, clickable, acciones.',
@@ -50,7 +50,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Card': {
       demo: {
         subtitle:            'Generic card — header, body, footer, image, variants, hoverable, clickable, actions.',
@@ -92,7 +92,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Card': {
       demo: {
         subtitle:            'Card genérico — cabeçalho, corpo, rodapé, imagem, variantes, hoverable, clicável, ações.',

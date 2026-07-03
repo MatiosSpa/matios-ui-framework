@@ -6,9 +6,9 @@
 
 (function (global) {
   let MTS = global.MTS = global.MTS || {};
-  if (typeof MTS.registerLocale !== 'function') { return; } // requiere base/matios-ui-i18n.js
+  if (typeof MTS.registerLanguage !== 'function') { return; } // requiere base/matios-ui-i18n.js
 
-  MTS.registerLocale('es', {
+  MTS.registerLanguage('es', {
     'MTS.Splitter': {
       demo: {
         subtitle:            'Paneles redimensionables con drag. Horizontal, vertical y colapsable.',
@@ -32,7 +32,7 @@
     }
   });
 
-  MTS.registerLocale('en', {
+  MTS.registerLanguage('en', {
     'MTS.Splitter': {
       demo: {
         subtitle:            'Resizable panels with drag. Horizontal, vertical and collapsible.',
@@ -56,7 +56,7 @@
     }
   });
 
-  MTS.registerLocale('pt', {
+  MTS.registerLanguage('pt', {
     'MTS.Splitter': {
       demo: {
         subtitle:            'Painéis redimensionáveis com arraste. Horizontal, vertical e recolhível.',
