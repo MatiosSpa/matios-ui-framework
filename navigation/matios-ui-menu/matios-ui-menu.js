@@ -526,7 +526,9 @@ MTS.Menu = class MtsMenu {
       let ico = document.createElement('span');
       ico.className = 'mts-menu__icon';
       let icoI = document.createElement('i');
-      icoI.className = 'mts-icon ' + item.icon;
+      // Acepta 'user' o 'mts-icon-user' (mismo criterio que MTS.Icon.get)
+      let iconCls = item.icon.indexOf('mts-icon-') === 0 ? item.icon : 'mts-icon-' + item.icon;
+      icoI.className = 'mts-icon ' + iconCls;
       ico.appendChild(icoI);
       btn.appendChild(ico);
     } else if (isDropdown) {

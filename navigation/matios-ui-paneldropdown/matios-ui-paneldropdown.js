@@ -274,7 +274,9 @@ MTS.PanelDropdown = class MtsPanelDropdown {
         let iconWrap = document.createElement('span');
         iconWrap.className = 'mts-paneldropdown__item-icon';
         let ico = document.createElement('i');
-        ico.className = 'mts-icon ' + item.icon;
+        // Acepta 'user' o 'mts-icon-user' (mismo criterio que MTS.Icon.get)
+        let iconCls = item.icon.indexOf('mts-icon-') === 0 ? item.icon : 'mts-icon-' + item.icon;
+        ico.className = 'mts-icon ' + iconCls;
         iconWrap.appendChild(ico);
         btn.appendChild(iconWrap);
       }
