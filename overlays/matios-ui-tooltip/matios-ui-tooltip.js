@@ -23,15 +23,19 @@ MTS.Tooltip = class MtsTooltip {
   constructor(target, options = {}) {
     this._target   = typeof target === 'string' ? document.querySelector(target) : target;
     if (!this._target) return;
-    /* ── data-* → inicialización HTML declarativa ── */
+    /* ── data-mts-tooltip-* → inicialización HTML declarativa ──
+       Namespaced (same as initAll) so the target's own data-* (e.g. an MTS.Button's
+       data-variant) never leaks into the tooltip's config. */
     const _ds = this._target?.dataset || {};
     const _fromHTML = {};
-    if (_ds.content !== undefined) _fromHTML.content = _ds.content;
-    if (_ds.position !== undefined) _fromHTML.position = _ds.position;
-    if (_ds.trigger !== undefined) _fromHTML.trigger = _ds.trigger;
-    if (_ds.delay !== undefined) _fromHTML.delay = parseInt(_ds.delay);
-    if (_ds.variant !== undefined) _fromHTML.variant = _ds.variant;
-    if (_ds.maxWidth !== undefined) _fromHTML.maxWidth = _ds.maxWidth;
+    if (_ds.mtsTooltip !== undefined)         _fromHTML.content  = _ds.mtsTooltip;
+    if (_ds.mtsTooltipPosition !== undefined) _fromHTML.position = _ds.mtsTooltipPosition;
+    if (_ds.mtsTooltipTrigger !== undefined)  _fromHTML.trigger  = _ds.mtsTooltipTrigger;
+    if (_ds.mtsTooltipDelay !== undefined)    _fromHTML.delay    = parseInt(_ds.mtsTooltipDelay);
+    if (_ds.mtsTooltipVariant !== undefined)  _fromHTML.variant  = _ds.mtsTooltipVariant;
+    if (_ds.mtsTooltipColor !== undefined)    _fromHTML.color    = _ds.mtsTooltipColor;
+    if (_ds.mtsTooltipBg !== undefined)       _fromHTML.bg       = _ds.mtsTooltipBg;
+    if (_ds.mtsTooltipMaxWidth !== undefined) _fromHTML.maxWidth = _ds.mtsTooltipMaxWidth;
     options = { ..._fromHTML, ...options };
 
     // Tooltip HTML content or text / Contenido HTML o texto del tooltip
