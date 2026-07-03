@@ -129,7 +129,7 @@ Any unrecognized language renders as escaped plain text.
 
 ## i18n
 
-The component reads its copy button strings from the global i18n table under the `MTS.CodeBlock` namespace. Set the language once at startup with `MTS.setLanguage`; there is no per-instance locale option.
+The component reads its copy button strings from the global i18n table under the `MTS.CodeBlock` namespace. Set the language once at startup with `MTS.setLanguage`; there is no per-instance `locale` option.
 
 ```js
 MTS.setLanguage('en');

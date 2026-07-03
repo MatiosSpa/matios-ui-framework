@@ -115,7 +115,7 @@ document.getElementById('my-zone')
 
 Localized chrome is read from `MTS.getString()['MTS.FileUpload']` via the global language API.
 Set the language once at startup with `MTS.setLanguage('es' | 'en' | 'pt')`; there is no
-per-instance locale option. Explicit `label` / `hint` options always win over the localized
+per-instance `locale` option. Explicit `label` / `hint` options always win over the localized
 defaults.
 
 | Key | Purpose | Placeholders |

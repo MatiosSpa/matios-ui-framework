@@ -100,7 +100,7 @@ viewer.expandAll();
 
 ## i18n
 
-The component reads its toolbar labels, state badges and summaries from the global i18n table under the `MTS.JsonViewer` namespace. Set the language once at startup with `MTS.setLanguage`; there is no per-instance locale option.
+The component reads its toolbar labels, state badges and summaries from the global i18n table under the `MTS.JsonViewer` namespace. Set the language once at startup with `MTS.setLanguage`; there is no per-instance `locale` option.
 
 ```js
 MTS.setLanguage('en');

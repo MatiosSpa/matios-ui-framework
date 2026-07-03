@@ -139,7 +139,7 @@ Each entry in `avatars` is passed straight to `MTS.Avatar`, so any avatar option
 
 Namespace: `MTS.Avatar`. The only localizable runtime string is the `aria-label` fallback used when no `name` is provided (default `'Avatar'`). It is read from `MTS.getString()['MTS.Avatar'].messages.avatarLabel`.
 
-Set the language once at startup with the global API; the component reads it automatically. There is no per-instance locale option.
+Set the language once at startup with the global API; the component reads it automatically. There is no per-instance `locale` option.
 
 ```js
 MTS.setLanguage('en');   // 'es' | 'en' | 'pt'

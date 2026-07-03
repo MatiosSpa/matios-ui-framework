@@ -121,4 +121,4 @@ Structural classes applied by the component: `.mts-statusbar` (host), `.mts-stat
 
 ## Internationalization
 
-The component renders no chrome text of its own — every slot is filled with content you supply, so there is nothing to translate at runtime. The bundled `matios-ui-statusbar-i18n.js` registers only the `MTS.StatusBar.demo.*` strings used by the demo page, under the global language set by `MTS.setLanguage('es' | 'en' | 'pt')`. There is no per-instance locale option.
+The component renders no chrome text of its own — every slot is filled with content you supply, so there is nothing to translate at runtime. The bundled `matios-ui-statusbar-i18n.js` registers only the `MTS.StatusBar.demo.*` strings used by the demo page, under the global language set by `MTS.setLanguage('es' | 'en' | 'pt')`. There is no per-instance `locale` option.

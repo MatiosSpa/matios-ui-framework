@@ -1,17 +1,16 @@
 /* ============================================================
    MATIOS UI — matios-ui-calendar-i18n.js  v1.0.0
 
-   Textos del calendario por locale. Idiomas incluidos: es (default), en, pt.
-   Pasar al constructor: locale: 'es' | 'en' | 'pt'
+   Textos del calendario por idioma. Incluidos: es (default), en, pt.
+   El idioma es GLOBAL — NO hay opción `locale` por instancia.
 
    Uso:
-     new MTS.Calendar('#cal', { locale: 'es' })
-     new MTS.Calendar('#cal', { locale: 'en' })
-     new MTS.Calendar('#cal', { locale: 'pt' })
+     MTS.setLanguage('en')          // 'es' (default) | 'en' | 'pt' — una vez al arranque
+     new MTS.Calendar('#cal', { ... })
 
-     // Locale custom (cualquier otro idioma):
+     // Idioma custom (cualquier otro):
      MTS.Calendar.registerLanguage('fr', { ... })
-     new MTS.Calendar('#cal', { locale: 'fr' })
+     MTS.setLanguage('fr')
    ============================================================ */
 
 window.MTS = window.MTS || {};

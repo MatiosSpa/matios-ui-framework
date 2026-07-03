@@ -181,7 +181,7 @@ document.getElementById('my-badge')
 
 The only localizable runtime string is the remove button's `aria-label`. It is read from `MTS.getString()['MTS.Badge'].removeLabel` (keys shipped for `es` / `en` / `pt`); if the i18n file is not loaded it falls back to `"Remove"`. All badge content (`label`, `count`) is developer-supplied and not localized by the component.
 
-Set the language once at startup with `MTS.setLanguage('es' | 'en' | 'pt')`. There is no per-instance locale option.
+Set the language once at startup with `MTS.setLanguage('es' | 'en' | 'pt')`. There is no per-instance `locale` option.
 
 ---
 

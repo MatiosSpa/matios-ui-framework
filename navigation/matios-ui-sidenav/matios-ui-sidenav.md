@@ -142,7 +142,7 @@ document.getElementById('sidebar')
 
 The toggle button's `title` / `aria-label` are read from the active language under the `MTS.SideNav` namespace (keys `collapse` and `expand`), with English fallbacks. Bundled languages: `es`, `en`, `pt`.
 
-Set the language once at startup — there is no per-instance locale option.
+Set the language once at startup — there is no per-instance `locale` option.
 
 ```js
 MTS.setLanguage('es'); // 'es' | 'en' | 'pt'

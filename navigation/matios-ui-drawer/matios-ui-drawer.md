@@ -116,7 +116,7 @@ document.addEventListener('mts:drawer:open', function (e) { console.log('opened'
 ## i18n
 
 The component reads its chrome (the close-button `aria-label`) from the global language set via
-`MTS.setLanguage(lang)`, using the `MTS.Drawer` namespace. There is no per-instance locale option.
+`MTS.setLanguage(lang)`, using the `MTS.Drawer` namespace. There is no per-instance `locale` option.
 
 ```js
 MTS.setLanguage('es'); // 'es' | 'en' | 'pt' — set once at startup

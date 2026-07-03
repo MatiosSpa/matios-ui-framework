@@ -124,7 +124,7 @@ The auto title/description for each preset variant are read from the global i18n
 MTS.setLanguage('en'); // 'es' (default) | 'en' | 'pt'
 ```
 
-There is no per-instance language option. Any `title` / `description` you pass in `options` always wins over the i18n default.
+There is no per-instance `locale` option. Any `title` / `description` you pass in `options` always wins over the i18n default.
 
 Keys under `MTS.getString()['MTS.EmptyState'].messages`:
 

@@ -138,7 +138,7 @@ document.querySelector('#otp').addEventListener('mts:otp:change', function (e) {
 
 ## i18n
 
-The component reads its built-in text from the global language table under the namespace `MTS.OTP`. Set the language once at startup with `MTS.setLanguage('en' | 'es' | 'pt')`; the boxes' `aria-label`, the `required` message and the default resend label follow it. There is no per-instance locale option.
+The component reads its built-in text from the global language table under the namespace `MTS.OTP`. Set the language once at startup with `MTS.setLanguage('en' | 'es' | 'pt')`; the boxes' `aria-label`, the `required` message and the default resend label follow it. There is no per-instance `locale` option.
 
 Keys under `MTS.OTP.messages`:
 

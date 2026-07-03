@@ -153,7 +153,7 @@ Localized keys (`MTS.getString()['MTS.TagInput'].messages`):
 | `removeTag` | `Remove {tag}` | Per-tag remove `aria-label`; `{tag}` → the tag name |
 | `required` | `This field is required` | Default `validate()` error |
 
-Explicit `placeholder` / `errorMessage` options always override the localized values. There is no per-instance locale option.
+Explicit `placeholder` / `errorMessage` options always override the localized values. There is no per-instance `locale` option.
 
 ---
 

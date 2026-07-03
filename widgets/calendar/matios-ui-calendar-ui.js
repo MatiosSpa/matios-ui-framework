@@ -4,9 +4,8 @@
    Orquestador de UI del calendario.
    Encapsula: init, modales (nuevo/editar/detalle), drop, delete.
 
-   Uso mínimo:
+   Uso mínimo (idioma global: MTS.setLanguage('es'|'en'|'pt') al arranque):
      const ui = new MTS.CalendarUI('#calendario', {
-       locale: 'es',
        // Un solo callback para todas las acciones
        onEvent: async (action, event, cal) => {
          // action: 'create'|'view'|'edit'|'delete'|'drop'|'resize'

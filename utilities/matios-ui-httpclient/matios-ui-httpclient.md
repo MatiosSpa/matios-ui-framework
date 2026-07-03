@@ -252,7 +252,7 @@ On failure `message` carries the server's `Message` / `message` / `error` field 
 
 ## i18n
 
-Default error messages come from the shared i18n system under the namespace `MTS.HttpClient` (sub-object `messages`). Set the language once at app start; the active language applies to every instance. There is no per-instance locale option.
+Default error messages come from the shared i18n system under the namespace `MTS.HttpClient` (sub-object `messages`). Set the language once at app start; the active language applies to every instance. There is no per-instance `locale` option.
 
 ```js
 MTS.setLanguage('en'); // 'es' | 'en' | 'pt' — default 'es'

@@ -148,7 +148,7 @@ When `lightbox` is `true`, clicking a card (or calling `openLightbox(index)`) op
 
 Namespace: `MTS.ImageGallery`. The only localizable runtime chrome is the `all` filter button (default `'Todos'` / `'All'`) and the `empty` state text (default `'Sin imágenes'` / `'No images'`), read from `MTS.getString()['MTS.ImageGallery'].messages`. Captions, alt text and tag labels are developer-supplied and are not translated.
 
-Set the language once at startup with `MTS.setLanguage('es' | 'en' | 'pt')`; there is no per-instance locale option.
+Set the language once at startup with `MTS.setLanguage('es' | 'en' | 'pt')`; there is no per-instance `locale` option.
 
 ```js
 MTS.setLanguage('en');

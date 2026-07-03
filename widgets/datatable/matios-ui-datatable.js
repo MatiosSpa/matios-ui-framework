@@ -25,7 +25,6 @@ MTS.DataTable = class DataTable {
     dragDrop:  { enabled: false },
     persist:   { enabled: false, key: null },
     rowClass:  null,
-    locale:    'es',
     texts: {
       search:   'Buscar...',
       noData:   'Sin resultados',
