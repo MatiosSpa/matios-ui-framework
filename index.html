@@ -617,11 +617,21 @@ var rmCopyBtn = new MTS.CopyButton('#rmCpBtnHost', {
 });
 
 async function openDocs() {
-  const mdKey = currentActiveMd || currentItem?.md || currentItem?.key || currentItem?.id;
-  /* MD_MAP wins (supports multi-file docs); otherwise use the doc derived from the launcher (B). */
-  const entry    = (mdKey && MD_MAP[mdKey]) || currentActiveDoc;
+  /* Precedence: the active component's own doc first (MD_MAP override for multi-file docs,
+     else the .md derived from the launcher — B); only fall back to the group doc when no
+     component accordion is active. Bug fix: previously the group key (currentItem.key) was
+     folded into mdKey, so a component not in MD_MAP resolved to the GROUP readme instead of
+     its own derived doc. */
+  let entry, cacheKey;
+  if (currentActiveMd && MD_MAP[currentActiveMd]) {
+    entry = MD_MAP[currentActiveMd]; cacheKey = currentActiveMd;
+  } else if (currentActiveDoc) {
+    entry = currentActiveDoc; cacheKey = currentActiveDoc;
+  } else {
+    const gk = currentItem?.md || currentItem?.key || currentItem?.id;
+    if (gk && MD_MAP[gk]) { entry = MD_MAP[gk]; cacheKey = gk; }
+  }
   if (!entry) return;
-  const cacheKey = (mdKey && MD_MAP[mdKey]) ? mdKey : currentActiveDoc;
 
   rmDrawer.setTitle(currentActiveDocLabel || (currentItem ? currentItem.label : 'Documentation'));
 
