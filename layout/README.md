@@ -8,10 +8,12 @@ Page structure and composition components. They manage space, area distribution 
 
 | Component | JS class | Description |
 |-----------|----------|-------------|
+| `matios-ui-dashboardgrid` | `MTS.DashboardGrid` | Bento dashboard grid — drag & drop, widget tray, resize and collision modes. |
 | `matios-ui-grid` | — (CSS) | Structural layout with native CSS Grid — responsive spans, layout shortcuts and a JS helper (`MTS.Grid`). |
 | `matios-ui-intersectionreveal` | `MTS.IntersectionReveal` | Animates elements as they enter the viewport using IntersectionObserver. Replaces AOS/ScrollReveal. |
 | `matios-ui-scroll` | `MTS.Scroll` | Scrollable container with a themed scrollbar, adaptive edge fades and scroll events. |
 | `matios-ui-scrollspy` | `MTS.ScrollSpy` | Highlights the active navigation link based on the visible section during scroll. |
+| `matios-ui-shell` | `MTS.Shell` | Layout orchestrator — Topbar + SideNav + StatusBar + main region with CSS Grid. |
 | `matios-ui-splitter` | `MTS.Splitter` | Drag-resizable panels — horizontal, vertical and collapsible. |
 
 ---

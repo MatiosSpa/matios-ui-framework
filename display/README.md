@@ -10,10 +10,13 @@ Visualization and content-presentation components. They do not take direct user 
 |-----------|----------|-------------|
 | `matios-ui-avatar` | `MTS.Avatar` | Avatar with image, initials or icon. Size/shape variants and stacked avatar groups. |
 | `matios-ui-card` | `MTS.Card` | Generic card with header, body, footer, image, variants and hoverable/clickable states. |
+| `widgets/charts` | `MTS.Chart` | Native SVG charts — 0 dependencies. Bar, line, area, pie/donut, composite, flow, indicators, statistical and temporal. |
 | `matios-ui-countdown` | `MTS.Countdown` | Animated countdown timer — blocks, compact, minimal, with an imperative API. |
 | `matios-ui-emptystate` | `MTS.EmptyState` | Empty state with icon, title, description and CTA action. For lists, searches and errors. |
 | `matios-ui-imagegallery` | `MTS.ImageGallery` | Image gallery with grid/masonry/list layouts, category filters and multi-selection. |
+| `matios-ui-kanban` | `MTS.Kanban` | Column board with cards and counters. |
 | `matios-ui-kpicard` | `MTS.KPICard` | Metric card with main value, trend, sparkline and color variants. |
+| `matios-ui-markdownviewer` | `MTS.MarkdownViewer` | Fetches and renders a remote `.md` — headings, tables, code, lists. |
 | `matios-ui-ratingreview` | `MTS.RatingReview` | Review widget with average, star breakdown and interactive voting. |
 | `matios-ui-sortablelist` | `MTS.SortableList` | Drag & drop sortable list with numbering, move buttons, icons and badges. |
 | `matios-ui-timeline` | `MTS.Timeline` | Vertical timeline with items, icons, color variants and alternating layout. |

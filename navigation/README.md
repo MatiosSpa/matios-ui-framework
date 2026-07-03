@@ -18,6 +18,7 @@ Navigation and interface-structure components. From global navigation controls (
 | `matios-ui-pagination` | `MTS.Pagination` | Full pagination — page-size selector, record summary and jump-to-page. |
 | `matios-ui-paneldropdown` | `MTS.PanelDropdown` | Floating anchored panel — notifications, user menu, rich actions. |
 | `matios-ui-sidenav` | `MTS.SideNav` | Collapsible side navigation with `MTS.Menu` support, icons and mini (icons-only) mode. |
+| `matios-ui-statusbar` | `MTS.StatusBar` | Bottom status bar with free slots — dots, tags and items. |
 | `matios-ui-stepper` | `MTS.Stepper` | Unified wizard + progress — step flows, checkout, compact mode, per-step status. |
 | `matios-ui-stepprogress` | `MTS.StepProgress` | Compatibility alias — the official component is `MTS.Stepper`. |
 | `matios-ui-tabbar` | `MTS.TabBar` | Mobile-app style bottom navigation bar with variants, badges and a basic API. |

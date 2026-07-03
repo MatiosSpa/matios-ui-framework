@@ -14,12 +14,14 @@ Input and form components. From primitive controls (input, checkbox, radio) to a
 | `matios-ui-confirmbutton` | `MTS.ConfirmButton` | Two-step inline confirmation for sensitive actions, with timeout and danger variants. |
 | `matios-ui-copybutton` | `MTS.CopyButton` | Copies text or target content to the clipboard with configurable visual feedback. |
 | `matios-ui-date-picker` | `MTS.DatePicker.{Date,Time,DateTime,DateRange,Month,Week}` | Date, time, range, month and week pickers — each type an independent class over a shared base. |
-| `matios-ui-fileupload` | `MTS.FileUpload` | Drag & drop zone with type/size validation, previews and upload helpers. |
+| `matios-ui-fileupload` | `MTS.FileUpload` | Drag & drop zone with type/size validation and previews — selection-only (hand the files to your own uploader via `getFiles()`). |
 | `matios-ui-formlayout` | — (CSS only) | Form layout system — stack, grid, horizontal, inline, sections and responsive columns. |
 | `matios-ui-formguard` | `MTS.FormGuard` | Declarative dirty-tracking for forms (unsaved-changes guard). |
 | `matios-ui-input` | `MTS.Input` | Text fields and textarea with validation, states and progressive enhancement. |
+| `matios-ui-itemlist` | `MTS.ItemList` | Rich list — avatar, inline controls, selectable, `canRemove` and scroll with `maxItems`. |
 | `matios-ui-label` | `MTS.Label` | Form labels with required/optional badges, hint and error message. |
 | `matios-ui-numberinput` | `MTS.NumberInput` | Numeric input with +/− buttons, min/max, step and currency/percentage formats. |
+| `matios-ui-otp` | `MTS.OTP` | One-time-code input — auto-advance, paste, timer and error state. |
 | `matios-ui-passwordstrength` | `MTS.PasswordStrength` | Real-time password-strength meter with configurable rules. |
 | `matios-ui-phoneinput` | `MTS.PhoneInput` | Phone input with country selector and automatic regional formatting. |
 | `matios-ui-nationalid` | `MTS.NationalId` | National/tax ID input per country (RUT, CPF, CUIT, DNI…) — format-as-you-type + checksum validation. |
@@ -29,6 +31,7 @@ Input and form components. From primitive controls (input, checkbox, radio) to a
 | `matios-ui-select` | `MTS.Select` | Custom select with search, multi-select and async loading. |
 | `matios-ui-slider` | `MTS.Slider` | Single and dual-range slider with programmatic control. |
 | `matios-ui-taginput` | `MTS.TagInput` | Tag input with local suggestions and async search. |
+| `matios-ui-timefilter` | `MTS.TimeFilter` | Kibana-style time-window filter — relative, absolute and quick presets. |
 | `matios-ui-toggle` | `MTS.Toggle` | On/off switch in multiple sizes with label, disabled state and a programmatic API. |
 | `matios-ui-transferlist` | `MTS.TransferList` | Dual-list transfer with datasource, drag & drop and move buttons. |
 | `matios-ui-validation` | `MTS.Validate` | Form validation with rules, messages and API helpers. |
@@ -40,6 +43,6 @@ Input and form components. From primitive controls (input, checkbox, radio) to a
 - All input components follow the **progressive-enhancement** pattern: they work as native HTML if the JS does not load.
 - `matios-ui-formlayout` is CSS-only — no JS instance required.
 - Validation integrates with `MTS.Input`, `MTS.Select` and other controls via `MTS.Validate`.
-- `matios-ui-picker/` is a leftover duplicate of `matios-ui-date-picker/` — use the latter.
+- `matios-ui-date-picker` is modular — `MTS.DatePicker.{Date,Time,DateTime,DateRange,Month,Week}` over a shared base.
 
 > For detailed documentation of each component, see its individual `.md` file.
