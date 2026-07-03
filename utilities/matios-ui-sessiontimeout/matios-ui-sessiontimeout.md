@@ -9,14 +9,18 @@ Inactivity session-timeout management. Shows a fixed progress bar at the bottom 
 ## Installation
 
 ```html
-<link rel="stylesheet" href="forms/matios-ui-progress/matios-ui-progress.css">
+<link rel="stylesheet" href="overlays/matios-ui-progress/matios-ui-progress.css">
 <link rel="stylesheet" href="overlays/matios-ui-modal/matios-ui-modal.css">
 <link rel="stylesheet" href="utilities/matios-ui-sessiontimeout/matios-ui-sessiontimeout.css">
 
-<script src="forms/matios-ui-progress/matios-ui-progress.js"></script>
+<script src="overlays/matios-ui-progress/matios-ui-progress.js"></script>
 <script src="overlays/matios-ui-modal/matios-ui-modal.js"></script>
+<script src="base/matios-ui-i18n.js"></script>
+<script src="utilities/matios-ui-sessiontimeout/matios-ui-sessiontimeout-i18n.js"></script>
 <script src="utilities/matios-ui-sessiontimeout/matios-ui-sessiontimeout.js"></script>
 ```
+
+`base/matios-ui-i18n.js` and the component's `-i18n.js` provide the localized modal chrome (title, body, warning, button labels). Without them the component falls back to built-in English strings.
 
 ---
 
@@ -60,15 +64,15 @@ new MTS.SessionTimeout({ timeoutMinutes: 30, warningMinutes: 0, onExpire: functi
 | `warningMinutes` | `number` | `5` | Minutes remaining when the warning modal opens (`0` disables it) |
 | `titleIcon` | `string` | `'alert-triangle'` | `MTS.Icon` name left of the title (`''` to omit) |
 | `titleText` | `string` | `messages.title` | Modal title text |
-| `messages.title` | `string` | localized | Base title text |
+| `messages.title` | `string` | localized | Base title text (used by `titleText` when that is omitted) |
 | `messages.body` | `string` | localized | Modal body. `{time}` is replaced with the live countdown (`MM:SS`) |
 | `messages.warning` | `string` | localized | Warning text below the body (`''` to hide) |
 | `messages.btnRefresh` | `string` | localized | Primary button label |
 | `messages.btnExpire` | `string` | localized | Secondary button label |
-| `onRefresh` | `function(done)` | — | Called on "Refresh". Call `done()` to reset the timer; on failed refresh, do not call it (the timer keeps running) |
-| `onExpire` | `function` | — | Called when the timer reaches zero or the user chooses "Sign out" |
+| `onRefresh` | `function(done)` | — | Called on the primary button. Call `done()` to reset the timer; on failed refresh, do not call it (the timer keeps running) |
+| `onExpire` | `function` | — | Called when the timer reaches zero or the user clicks the secondary button |
 
-> Default message strings resolve from the active locale; override via `titleText` / `messages.*` (English example above).
+> Default message strings resolve from the active locale (`MTS.SessionTimeout` i18n namespace). Override per instance via `titleText` / `messages.*` (English example above).
 
 ---
 
@@ -96,13 +100,21 @@ session.reset();
 
 ---
 
-## Accessibility
+## i18n
 
-- The warning modal traps focus and announces the remaining time; keep `warningMinutes` long enough to read and act.
+The modal chrome (title, body, warning, button labels) is read from the global i18n store
+under the `MTS.SessionTimeout` namespace. Set the active language once at startup:
+
+```js
+MTS.setLanguage('en'); // 'es' | 'en' | 'pt' — ships with all three
+```
+
+Keys resolved from the namespace: `title`, `body` (contains `{time}`), `warning`,
+`btnRefresh`, `btnExpire`. Per-instance overrides via `titleText` / `messages.*` always win
+over the localized defaults. There is no per-instance `locale` option.
 
 ---
 
-## Changelog
+## Accessibility
 
-### 2026-05-17
-- Install paths corrected to full paths from the framework root.
+- The warning modal traps focus and announces the remaining time; keep `warningMinutes` long enough to read and act.

@@ -24,15 +24,20 @@ MTS.CodeBlock = class MtsCodeBlock {
     let _copy = options.copy || {};
     this.copy = {
       iconOnly:     _copy.iconOnly     !== undefined ? _copy.iconOnly     : true,
-      label:        _copy.label        !== undefined ? _copy.label        : 'Copiar',
-      labelCopied:  _copy.labelCopied  !== undefined ? _copy.labelCopied  : '¡Copiado!',
-      tooltip:      _copy.tooltip      !== undefined ? _copy.tooltip      : 'Copiar / Copy',
+      label:        _copy.label        !== undefined ? _copy.label        : this._t('copy', 'Copiar'),
+      labelCopied:  _copy.labelCopied  !== undefined ? _copy.labelCopied  : this._t('copied', '¡Copiado!'),
+      tooltip:      _copy.tooltip      !== undefined ? _copy.tooltip      : this._t('tooltip', 'Copiar'),
     };
 
     this._copyInstance = null;
     this._fallbackCopyHandler = null;
     this._copyTimer = null;
     this._build();
+  }
+
+  _t(key, fallback) {
+    let table = (window.MTS && typeof MTS.getString === 'function') ? (MTS.getString()['MTS.CodeBlock'] || {}) : {};
+    return table[key] !== undefined ? table[key] : fallback;
   }
 
   setCode(code) {
@@ -161,7 +166,7 @@ MTS.CodeBlock = class MtsCodeBlock {
       return;
     }
 
-    this._copyHost.innerHTML = '<span class="mts-btn__label">Copiar</span>';
+    this._copyHost.innerHTML = '<span class="mts-btn__label">' + MTS.CodeBlock._escapeHtml(this.copy.label) + '</span>';
     this._fallbackCopyHandler = () => {
       const text = this.code || '';
       if (!text) return;
@@ -183,10 +188,10 @@ MTS.CodeBlock = class MtsCodeBlock {
   }
 
   _showFallbackCopied() {
-    this._copyHost.innerHTML = '<span class="mts-btn__label">Copiado</span>';
+    this._copyHost.innerHTML = '<span class="mts-btn__label">' + MTS.CodeBlock._escapeHtml(this.copy.labelCopied) + '</span>';
     clearTimeout(this._copyTimer);
     this._copyTimer = setTimeout(() => {
-      if (this._copyHost) this._copyHost.innerHTML = '<span class="mts-btn__label">Copiar</span>';
+      if (this._copyHost) this._copyHost.innerHTML = '<span class="mts-btn__label">' + MTS.CodeBlock._escapeHtml(this.copy.label) + '</span>';
     }, 1800);
   }
 

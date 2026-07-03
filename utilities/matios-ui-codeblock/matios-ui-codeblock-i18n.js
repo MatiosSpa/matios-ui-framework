@@ -10,6 +10,9 @@
 
   MTS.registerLocale('es', {
     'MTS.CodeBlock': {
+      copy:    'Copiar',
+      copied:  '¡Copiado!',
+      tooltip: 'Copiar',
       demo: {
         subtitle:   'Resaltado de sintaxis Matios para snippets compartidos, preview de código en demos y vistas de fuente dentro del showcase.',
         s1Title:    '1 — HTML / CSS / JavaScript',
@@ -22,6 +25,9 @@
 
   MTS.registerLocale('en', {
     'MTS.CodeBlock': {
+      copy:    'Copy',
+      copied:  'Copied!',
+      tooltip: 'Copy',
       demo: {
         subtitle:   'Matios syntax highlighting for shared snippets, code preview in demos and source views inside the showcase.',
         s1Title:    '1 — HTML / CSS / JavaScript',
@@ -34,6 +40,9 @@
 
   MTS.registerLocale('pt', {
     'MTS.CodeBlock': {
+      copy:    'Copiar',
+      copied:  'Copiado!',
+      tooltip: 'Copiar',
       demo: {
         subtitle:   'Realce de sintaxe Matios para snippets compartilhados, preview de código em demos e visualizações de fonte dentro do showcase.',
         s1Title:    '1 — HTML / CSS / JavaScript',

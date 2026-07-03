@@ -51,6 +51,18 @@ MTS.HttpClient = class MtsHttpClient {
   }
 
   /* ──────────────────────────────────────────
+     i18n — mensajes por defecto del contrato de respuesta
+  ────────────────────────────────────────── */
+  _t(key, fallback) {
+    try {
+      const ns = (window.MTS && MTS.getString) ? MTS.getString()['MTS.HttpClient'] : null;
+      const m = ns && ns.messages;
+      if (m && m[key] != null) return m[key];
+    } catch (e) {}
+    return fallback;
+  }
+
+  /* ──────────────────────────────────────────
      SHORTCUTS PÚBLICOS
   ────────────────────────────────────────── */
   get(endpoint, options = {})           { return this._request('GET',    endpoint, null,   options); }
@@ -170,7 +182,7 @@ MTS.HttpClient = class MtsHttpClient {
         const ok = xhr.status >= 200 && xhr.status < 300;
         const res = ok
           ? { success: true,  status: xhr.status, message: null, data: parsed }
-          : { success: false, status: xhr.status, message: parsed.Message || parsed.message || 'Error desconocido', data: null };
+          : { success: false, status: xhr.status, message: parsed.Message || parsed.message || this._t('unknownError', 'Unknown error'), data: null };
 
         this._log(ok ? 'success' : 'error', 'POST (upload)', url, res);
         this._fireCallbacks(ok ? 'success' : 'error', res, options);
@@ -178,7 +190,7 @@ MTS.HttpClient = class MtsHttpClient {
       });
 
       xhr.addEventListener('error', () => {
-        const res = { success: false, status: 0, message: 'Error de red', data: null };
+        const res = { success: false, status: 0, message: this._t('networkError', 'Network error'), data: null };
         this._fireCallbacks('error', res, options);
         resolve(res);
       });
@@ -216,7 +228,7 @@ MTS.HttpClient = class MtsHttpClient {
       clearTimeout(timer);
 
       if (!response.ok) {
-        const res = { success: false, status: response.status, message: `Error: ${response.status}`, data: null };
+        const res = { success: false, status: response.status, message: this._t('requestFailed', 'Request failed') + ': ' + response.status, data: null };
         this._fireCallbacks('error', res, options);
         return res;
       }
@@ -229,7 +241,7 @@ MTS.HttpClient = class MtsHttpClient {
 
     } catch (err) {
       const isTimeout = err.name === 'AbortError';
-      const res = { success: false, status: isTimeout ? 408 : 0, message: isTimeout ? 'Timeout' : (err.message || 'Error de red'), data: null };
+      const res = { success: false, status: isTimeout ? 408 : 0, message: isTimeout ? this._t('timeout', 'Request timed out') : (err.message || this._t('networkError', 'Network error')), data: null };
       this._fireCallbacks(isTimeout ? 'timeout' : 'error', res, options);
       return res;
     }
@@ -275,7 +287,7 @@ MTS.HttpClient = class MtsHttpClient {
         const res = {
           success: false,
           status:  response.status,
-          message: json.Message || json.message || json.error || 'Error desconocido',
+          message: json.Message || json.message || json.error || this._t('unknownError', 'Unknown error'),
           data:    null,
         };
 
@@ -318,7 +330,7 @@ MTS.HttpClient = class MtsHttpClient {
     } catch (err) {
       /* Timeout */
       if (err.name === 'AbortError') {
-        const res = { success: false, status: 408, message: `Timeout después de ${options.timeout ?? this._timeout}ms`, data: null };
+        const res = { success: false, status: 408, message: this._t('timeout', 'Request timed out'), data: null };
         const finalRes = await this._runAfterInterceptors(res);
         this._log('timeout', method, url, finalRes);
         this._fireCallbacks('timeout', finalRes, options);
@@ -326,7 +338,7 @@ MTS.HttpClient = class MtsHttpClient {
       }
 
       /* Error de red u otro */
-      const res = { success: false, status: 0, message: err.message || 'Error de red', data: null };
+      const res = { success: false, status: 0, message: err.message || this._t('networkError', 'Network error'), data: null };
       const finalRes = await this._runAfterInterceptors(res);
       this._log('error', method, url, finalRes);
       this._fireCallbacks('error', finalRes, options);

@@ -10,6 +10,12 @@
 
   MTS.registerLocale('es', {
     'MTS.HttpClient': {
+      messages: {
+        networkError:  'Error de red',
+        timeout:       'Tiempo de espera agotado',
+        unknownError:  'Error desconocido',
+        requestFailed: 'La petición falló'
+      },
       demo: {
         subtitle:            'Cliente HTTP con contrato consistente, timeout, retry, interceptores, upload y download usando el patrón estándar de demo.',
         s1Title:             '1 — Petición GET',
@@ -51,6 +57,12 @@
 
   MTS.registerLocale('en', {
     'MTS.HttpClient': {
+      messages: {
+        networkError:  'Network error',
+        timeout:       'Request timed out',
+        unknownError:  'Unknown error',
+        requestFailed: 'Request failed'
+      },
       demo: {
         subtitle:            'HTTP client with a consistent contract, timeout, retry, interceptors, upload and download using the standard demo pattern.',
         s1Title:             '1 — GET request',
@@ -92,6 +104,12 @@
 
   MTS.registerLocale('pt', {
     'MTS.HttpClient': {
+      messages: {
+        networkError:  'Erro de rede',
+        timeout:       'Tempo de espera esgotado',
+        unknownError:  'Erro desconhecido',
+        requestFailed: 'A requisição falhou'
+      },
       demo: {
         subtitle:            'Cliente HTTP com contrato consistente, timeout, retry, interceptores, upload e download usando o padrão padrão de demo.',
         s1Title:             '1 — Requisição GET',

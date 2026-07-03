@@ -1,6 +1,6 @@
 # MTS.CodeBlock
 
-Reusable code block with syntax highlighting and optional copy.
+Reusable code block with lightweight syntax highlighting and an optional copy button.
 
 ---
 
@@ -8,6 +8,20 @@ Reusable code block with syntax highlighting and optional copy.
 
 ```html
 <link rel="stylesheet" href="utilities/matios-ui-codeblock/matios-ui-codeblock.css">
+<script src="utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
+```
+
+Optional dependencies (auto-detected at runtime, no import order enforced):
+
+- `MTS.Badge` — renders the language chip in the toolbar. Falls back to plain text when absent.
+- `MTS.CopyButton` — powers the copy action. Falls back to a native Clipboard-API button when absent.
+- `base/matios-ui-i18n.js` + `matios-ui-codeblock-i18n.js` — localizes the copy button labels. Without them the component uses its built-in Spanish defaults.
+
+```html
+<link rel="stylesheet" href="forms/matios-ui-copybutton/matios-ui-copybutton.css">
+<script src="base/matios-ui-i18n.js"></script>
+<script src="forms/matios-ui-copybutton/matios-ui-copybutton.js"></script>
+<script src="utilities/matios-ui-codeblock/matios-ui-codeblock-i18n.js"></script>
 <script src="utilities/matios-ui-codeblock/matios-ui-codeblock.js"></script>
 ```
 
@@ -21,12 +35,14 @@ Reusable code block with syntax highlighting and optional copy.
 
 ```js
 new MTS.CodeBlock('#snippet', {
-  title:    'index.html',
-  subtitle: 'apps/users/index.html',
+  title:    'role-create/index.html',
+  subtitle: 'apps-showcase/roles/role-create/index.html',
   language: 'html',
-  code:     '<section class="mts-surface">...</section>',
+  code:     '<section class="mts-surface mts-p-4">...</section>'
 });
 ```
+
+The first argument is a CSS selector string or a DOM element. The component builds itself in place inside that element.
 
 ---
 
@@ -35,56 +51,118 @@ new MTS.CodeBlock('#snippet', {
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `code` | `string` | `''` | Source text to render |
-| `language` | `string` | `'text'` | Language or alias (`js`, `ts`, `cs`, `html`, `sql`, …) |
-| `title` | `string` | `''` | Short snippet title |
-| `subtitle` | `string` | `''` | Secondary meta, e.g. the file path |
+| `language` | `string` | `'text'` | Language or alias (see Supported languages) |
+| `title` | `string` | `''` | Short snippet title shown in the toolbar |
+| `subtitle` | `string` | `''` | Secondary meta line, e.g. the file path |
 | `copyable` | `boolean` | `true` | Show the copy action |
-| `wrap` | `boolean` | `false` | Enable `pre-wrap` for long lines |
+| `toolbar` | `boolean` | `true` | Show the toolbar; when `false` it stays hidden even with title/copy |
+| `wrap` | `boolean` | `false` | Enable soft wrapping for long lines |
+| `height` | `string` | `'auto'` | CSS value for the block height (sets `--mts-codeblock-height`), e.g. `'400px'` or `'100%'` |
+| `copy` | `object` | see below | Copy button configuration |
+
+Every option can also be provided as a `data-*` attribute on the host element (`data-code`, `data-language`, `data-title`, `data-subtitle`, `data-copyable`, `data-toolbar`, `data-wrap`, `data-height`). An explicit option in the constructor takes precedence over the attribute.
+
+### `copy` object
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `iconOnly` | `boolean` | `true` | Render the copy button as an icon only |
+| `label` | `string` | i18n `copy` | Idle button label |
+| `labelCopied` | `string` | i18n `copied` | Label shown right after copying |
+| `tooltip` | `string` | i18n `tooltip` | `title` attribute of the copy button |
+
+The three text defaults come from the active locale (`MTS.CodeBlock` namespace). Pass an explicit value to override the localized default.
 
 ---
 
 ## API
 
-| Method | Description |
-|--------|-------------|
-| `setCode(code)` | Replace the source code |
-| `setLanguage(lang)` | Change the highlighting language |
-| `setTitle(title[, subtitle])` | Update the title and subtitle |
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `setCode(code)` | `this` | Replace the source code and re-render |
+| `setLanguage(language)` | `this` | Change the highlighting language |
+| `setTitle(title[, subtitle])` | `this` | Update the title and, optionally, the subtitle |
+| `destroy()` | `void` | Clear timers, destroy the copy instance, and empty the host |
 
 ```js
-const block = new MTS.CodeBlock('#snippet', { code: 'const ok = true;', language: 'javascript' });
+const block = new MTS.CodeBlock('#snippet', {
+  code:     'const ok = true;',
+  language: 'javascript'
+});
+
 block.setCode('const ok = false;');
 block.setLanguage('typescript');
 block.setTitle('main.ts', 'src/main.ts');
+block.destroy();
 ```
+
+### Static helpers
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `MTS.CodeBlock.normalizeLanguage(language)` | `string` | Resolve an alias to its canonical language name |
+| `MTS.CodeBlock.highlight(code, language)` | `string` | Return the highlighted HTML for a snippet without building a block |
 
 ---
 
 ## Supported languages
 
-`html` · `xml` · `css` · `javascript` · `typescript` · `jsx` · `tsx` · `json` · `csharp` · `java` · `sql` · `bash`
-· `powershell` · `yaml` · `text`
+`html` · `xml` · `css` · `javascript` · `typescript` · `jsx` · `tsx` · `json` · `csharp` · `java` · `sql` · `bash` · `powershell` · `yaml` · `text`
 
-**Aliases:** `js` → `javascript`, `ts` → `typescript`, `cs` → `csharp`, `sh` → `bash`, `ps1` → `powershell`,
-`markup` → `html`, `scss`/`less` → `css`.
+Any unrecognized language renders as escaped plain text.
+
+**Aliases:**
+
+| Alias | Resolves to |
+|-------|-------------|
+| `js` \| `mjs` \| `cjs` | `javascript` |
+| `ts` | `typescript` |
+| `markup` \| `svg` | `html` |
+| `xaml` \| `csproj` \| `config` | `xml` |
+| `scss` \| `less` | `css` |
+| `yml` | `yaml` |
+| `sh` \| `shell` \| `zsh` | `bash` |
+| `ps1` \| `psm1` \| `pwsh` | `powershell` |
+| `cs` \| `c#` | `csharp` |
+
+---
+
+## i18n
+
+The component reads its copy button strings from the global i18n table under the `MTS.CodeBlock` namespace. Set the language once at startup with `MTS.setLanguage`; there is no per-instance locale option.
+
+```js
+MTS.setLanguage('en');
+new MTS.CodeBlock('#snippet', { code: 'const ok = true;', language: 'javascript' });
+```
+
+Keys under `MTS.CodeBlock`:
+
+| Key | es | en | pt |
+|-----|----|----|----|
+| `copy` | Copiar | Copy | Copiar |
+| `copied` | ¡Copiado! | Copied! | Copiado! |
+| `tooltip` | Copiar | Copy | Copiar |
+
+Bundled locales: `es` (default), `en`, `pt`. Override or add strings with `MTS.registerLocale`:
+
+```js
+MTS.registerLocale('en', {
+  'MTS.CodeBlock': { copy: 'Copy code' }
+});
+```
+
+If `base/matios-ui-i18n.js` is not loaded, the component uses its built-in Spanish defaults.
 
 ---
 
 ## Notes
 
-- If `MTS.CopyButton` is loaded, `CodeBlock` uses it for the copy button; otherwise it falls back to a simple button
-  using the native Clipboard API.
+- If `MTS.CopyButton` is loaded, `CodeBlock` uses it for the copy button; otherwise it falls back to a simple button using the native Clipboard API.
 - The highlighting is lightweight and consistent — not a full parser for each language.
 
 ---
 
 ## Accessibility
 
-- The copy button is a real, keyboard-focusable control; the code renders inside `<pre><code>` preserving whitespace.
-
----
-
-## Changelog
-
-### 2026-05-17
-- Documentation homologated to the standard template; install paths added from the framework root.
+- The copy button is a real, keyboard-focusable `<button>` control; the code renders inside `<pre><code>` preserving whitespace.

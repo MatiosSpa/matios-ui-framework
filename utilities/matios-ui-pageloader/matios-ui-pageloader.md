@@ -9,12 +9,12 @@ NProgress-style page loading indicator. A fixed bar at the top or bottom of the 
 ## Installation
 
 ```html
-<link rel="stylesheet" href="forms/matios-ui-progress/matios-ui-progress.css">
-<link rel="stylesheet" href="forms/matios-ui-spinner/matios-ui-spinner.css">
+<link rel="stylesheet" href="overlays/matios-ui-progress/matios-ui-progress.css">
+<link rel="stylesheet" href="overlays/matios-ui-spinner/matios-ui-spinner.css">
 <link rel="stylesheet" href="utilities/matios-ui-pageloader/matios-ui-pageloader.css">
 
-<script src="forms/matios-ui-progress/matios-ui-progress.js"></script>
-<script src="forms/matios-ui-spinner/matios-ui-spinner.js"></script>
+<script src="overlays/matios-ui-progress/matios-ui-progress.js"></script>
+<script src="overlays/matios-ui-spinner/matios-ui-spinner.js"></script>
 <script src="utilities/matios-ui-pageloader/matios-ui-pageloader.js"></script>
 ```
 
@@ -98,10 +98,3 @@ loader.done();
 ## Accessibility
 
 - For the blocker mode, mark the page region `aria-busy="true"` while loading and restore focus when done.
-
----
-
-## Changelog
-
-### 2026-05-17
-- Install paths corrected to full paths from the framework root.

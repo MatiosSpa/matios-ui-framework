@@ -21,6 +21,7 @@ UI + events only — it does **not** know about auth, endpoints or sessions. It 
 <script src="matios-ui-avatar.js"></script>
 <script src="matios-ui-input.js"></script>
 <script src="matios-ui-button.js"></script>
+<script src="matios-ui-i18n.js"></script>
 <script src="matios-ui-lockscreen-i18n.js"></script>
 <script src="matios-ui-lockscreen.js"></script>
 ```
@@ -119,15 +120,49 @@ All colors/spacing use `--mts-*` tokens. The password uses `autocomplete: "brows
 
 ---
 
+## i18n
+
+All chrome text (title, subtitle, password placeholder, unlock button, "forgot" link, invalid-password error) comes from
+the shipped locale bundle — **nothing is hardcoded**. The namespace is `MTS.LockScreen` and ships `es`, `en` and `pt`.
+
+Set the language **once**, globally, at app start:
+
+```js
+MTS.setLanguage('en');   // 'es' | 'en' | 'pt'
+```
+
+There is no per-instance `locale` option. To override individual strings for a single lock screen, pass `messages`:
+
+```js
+const lock = new MTS.LockScreen({
+  userName: 'Pedro Gómez',
+  messages: {
+    title:               'Session locked',
+    subtitle:            'Enter your password to continue',
+    passwordPlaceholder: 'Password',
+    btnUnlock:           'Unlock',
+    forgot:              'Forgot my password',
+    errorInvalid:        'Wrong password',
+  },
+  onUnlock: function (password, done) { /* … */ },
+});
+```
+
+Resolution order per key: `messages[key]` (instance override) → `MTS.getString()['MTS.LockScreen'].messages[key]`
+(active language) → built-in fallback. Requires `base/matios-ui-i18n.js` loaded before `matios-ui-lockscreen-i18n.js`.
+
+| Key | `en` | `es` | `pt` |
+|-----|------|------|------|
+| `title` | Screen locked | Sesión bloqueada | Tela bloqueada |
+| `subtitle` | Enter your password to continue | Ingresa tu clave para continuar | Digite sua senha para continuar |
+| `passwordPlaceholder` | Password | Clave | Senha |
+| `btnUnlock` | Unlock | Ingresar | Entrar |
+| `forgot` | Forgot my password | Olvidé mi clave | Esqueci minha senha |
+| `errorInvalid` | Wrong password | Clave incorrecta | Senha incorreta |
+
+---
+
 ## Accessibility
 
 - `role="dialog"` + `aria-modal="true"` + focus trap; initial focus on the password field.
 - The unlock button announces its busy state; the error region is `aria-live="polite"`.
-
----
-
-## Changelog
-
-### 2026-06-25
-- Initial version. Re-authentication overlay reusing `MTS.Avatar` / `MTS.Input` / `MTS.Button`; `onUnlock(password, done)`
-  delegation (no auth logic), focus trap + scroll lock, blur/solid privacy cover, i18n es/en/pt, full programmatic API.

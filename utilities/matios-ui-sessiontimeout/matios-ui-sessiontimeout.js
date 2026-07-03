@@ -21,15 +21,23 @@ MTS.SessionTimeout = class MtsSessionTimeout {
 
   /* ── Constructor ── */
 
+  /* ── i18n helper ── */
+
+  _t(key, fallback) {
+    const strings = (window.MTS && typeof MTS.getString === 'function' && MTS.getString()) || {};
+    const ns      = strings['MTS.SessionTimeout'] || {};
+    return ns[key] != null ? ns[key] : fallback;
+  }
+
   constructor(options) {
     options = options || {};
 
     const MSG_DEFAULTS = {
-      title:      'Tu sesión está por vencer',
-      body:       'Por inactividad, tu sesión se cerrará en {time}.',
-      warning:    'Si tienes trabajo sin guardar, podrías perderlo.',
-      btnRefresh: 'Renovar sesión',
-      btnExpire:  'Cerrar sesión',
+      title:      this._t('title',      'Your session is about to expire'),
+      body:       this._t('body',       'Due to inactivity, your session will close in {time}.'),
+      warning:    this._t('warning',    'If you have unsaved work, you could lose it.'),
+      btnRefresh: this._t('btnRefresh', 'Renew session'),
+      btnExpire:  this._t('btnExpire',  'Sign out'),
     };
 
     const userMsg        = options.messages || {};

@@ -320,9 +320,9 @@ MTS.DiagnosticsPanel.prototype._build = function() {
       '<span class="mts-diag__dock-icon" data-diag-icon>' + this._chevron(this.collapsed ? 'up' : 'down') + '</span>' +
       '<div class="mts-diag__dock-title">' + this._escape(this.title) + '</div>' +
       '<div class="mts-diag__counts">' +
-        '<span class="mts-diag__count" data-count="logs">0 logs</span>' +
-        '<span class="mts-diag__count" data-count="requests">0 requests</span>' +
-        '<span class="mts-diag__count" data-count="errors">0 errores</span>' +
+        '<span class="mts-diag__count" data-count="logs">0 ' + this._escape(this._t('unitLogs', 'logs')) + '</span>' +
+        '<span class="mts-diag__count" data-count="requests">0 ' + this._escape(this._t('unitRequests', 'requests')) + '</span>' +
+        '<span class="mts-diag__count" data-count="errors">0 ' + this._escape(this._t('unitErrors', 'errores')) + '</span>' +
       '</div>' +
     '</div>' +
     '<div class="mts-diag__dock-actions"></div>';
@@ -338,7 +338,7 @@ MTS.DiagnosticsPanel.prototype._build = function() {
   let clearBtn = document.createElement('button');
   clearBtn.type = 'button';
   clearBtn.className = 'dp-log__clear';
-  clearBtn.textContent = 'Clear';
+  clearBtn.textContent = this._t('clear', 'Clear');
   clearBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     self.clear();
@@ -371,7 +371,7 @@ MTS.DiagnosticsPanel.prototype._build = function() {
   header.className = 'mts-diag__header';
   header.innerHTML =
     '<div>' +
-      '<p class="mts-diag__eyebrow">Utilities</p>' +
+      '<p class="mts-diag__eyebrow">' + this._escape(this._t('eyebrow', 'Utilities')) + '</p>' +
       '<h3 class="mts-diag__heading">' + this._escape(this.appName) + '</h3>' +
     '</div>' +
     '<div class="mts-diag__header-actions"></div>';
@@ -401,7 +401,7 @@ MTS.DiagnosticsPanel.prototype._buildTabs = function() {
   if (this.showLogViewer) {
     this._logList = document.createElement('div');
     this._logList.className = 'mts-diag__list';
-    tabs.push({ id: 'logs', label: 'Activity', content: this._wrapPanel(this._logList) });
+    tabs.push({ id: 'logs', label: this._t('tabActivity', 'Activity'), content: this._wrapPanel(this._logList) });
   }
 
   if (this.showRequestInspector) {
@@ -413,22 +413,22 @@ MTS.DiagnosticsPanel.prototype._buildTabs = function() {
     if (!this._canUseJsonViewer()) {
       this._requestDetail = document.createElement('pre');
       this._requestDetail.className = 'mts-diag__detail';
-      this._requestDetail.textContent = 'Selecciona un request para ver mas detalle.';
+      this._requestDetail.textContent = this._t('requestPrompt', 'Select a request to see more detail.');
       reqWrap.appendChild(this._requestDetail);
     }
-    tabs.push({ id: 'requests', label: 'Requests', content: this._wrapPanel(reqWrap) });
+    tabs.push({ id: 'requests', label: this._t('tabRequests', 'Requests'), content: this._wrapPanel(reqWrap) });
   }
 
   if (this.showErrorViewer) {
     this._errorList = document.createElement('div');
     this._errorList.className = 'mts-diag__list';
-    tabs.push({ id: 'errors', label: 'Errors', content: this._wrapPanel(this._errorList) });
+    tabs.push({ id: 'errors', label: this._t('tabErrors', 'Errors'), content: this._wrapPanel(this._errorList) });
   }
 
   if (this.showSessionInfo) {
     this._sessionView = document.createElement('div');
     this._sessionView.className = 'mts-diag__session';
-    tabs.push({ id: 'session', label: 'Session', content: this._wrapPanel(this._sessionView) });
+    tabs.push({ id: 'session', label: this._t('tabSession', 'Session'), content: this._wrapPanel(this._sessionView) });
   }
 
   if (this.showExport) {
@@ -437,7 +437,7 @@ MTS.DiagnosticsPanel.prototype._buildTabs = function() {
     this._exportPreview = document.createElement('pre');
     this._exportPreview.className = 'mts-diag__detail';
     exportWrap.appendChild(this._exportPreview);
-    tabs.push({ id: 'export', label: 'Export', content: this._wrapPanel(exportWrap) });
+    tabs.push({ id: 'export', label: this._t('tabExport', 'Export'), content: this._wrapPanel(exportWrap) });
   }
 
   this._tabs = new MTS.Tabs(this._tabsHost, {
@@ -469,27 +469,27 @@ MTS.DiagnosticsPanel.prototype._buildJsonDrawer = function() {
     stretch: true,
     lazy:    false,
     tabs: [
-      { id: 'request',  label: 'Request',  content: requestHost  },
-      { id: 'response', label: 'Response', content: responseHost }
+      { id: 'request',  label: this._t('tabRequest',  'Request'),  content: requestHost  },
+      { id: 'response', label: this._t('tabResponse', 'Response'), content: responseHost }
     ]
   });
 
   this._jsonRequestViewer = new MTS.JsonViewer(requestHost, {
-    title:    'Request body',
-    subtitle: 'Selecciona un request',
+    title:    this._t('requestBody', 'Request body'),
+    subtitle: this._t('requestPlaceholder', 'Select a request'),
     copyable: true,
     height:   '100%'
   });
 
   this._jsonResponseViewer = new MTS.JsonViewer(responseHost, {
-    title:    'Response body',
-    subtitle: 'Selecciona un request',
+    title:    this._t('responseBody', 'Response body'),
+    subtitle: this._t('requestPlaceholder', 'Select a request'),
     copyable: true,
     height:   '100%'
   });
 
   this._jsonDrawer = new MTS.Drawer({
-    title:    'Request JSON',
+    title:    this._t('drawerTitle', 'Request JSON'),
     content:  content,
     position: 'right',
     size:     'lg',
@@ -506,16 +506,16 @@ MTS.DiagnosticsPanel.prototype._buildHeaderActions = function() {
   if (window.MTS && MTS.ButtonGroup) {
     new MTS.ButtonGroup(this._headerGroupHost, [
       {
-        label:   'Copiar',
+        label:   this._t('copy', 'Copy'),
         variant: 'secondary',
         size:    'sm',
         icon:    this._icon('copy', 14),
         onClick: function() {
-          self.copyReport().then(function() { self.log('info', 'Reporte copiado', 'clipboard'); });
+          self.copyReport().then(function() { self.log('info', self._t('reportCopied', 'Report copied'), 'clipboard'); });
         }
       },
       {
-        label:   'Descargar',
+        label:   this._t('download', 'Download'),
         variant: 'secondary',
         size:    'sm',
         icon:    this._icon('download', 14),
@@ -531,16 +531,16 @@ MTS.DiagnosticsPanel.prototype._buildHeaderActions = function() {
   let copyBtn = document.createElement('button');
   copyBtn.type = 'button';
   copyBtn.className = 'mts-btn mts-btn--secondary mts-btn--sm';
-  copyBtn.innerHTML = this._icon('copy', 14) + '<span class="mts-btn__label">Copiar</span>';
+  copyBtn.innerHTML = this._icon('copy', 14) + '<span class="mts-btn__label">' + this._escape(this._t('copy', 'Copy')) + '</span>';
   copyBtn.addEventListener('click', function() {
-    self.copyReport().then(function() { self.log('info', 'Reporte copiado', 'clipboard'); });
+    self.copyReport().then(function() { self.log('info', self._t('reportCopied', 'Report copied'), 'clipboard'); });
   });
   this._headerGroupHost.appendChild(copyBtn);
 
   let downloadBtn = document.createElement('button');
   downloadBtn.type = 'button';
   downloadBtn.className = 'mts-btn mts-btn--secondary mts-btn--sm';
-  downloadBtn.innerHTML = this._icon('download', 14) + '<span class="mts-btn__label">Descargar</span>';
+  downloadBtn.innerHTML = this._icon('download', 14) + '<span class="mts-btn__label">' + this._escape(this._t('download', 'Download')) + '</span>';
   downloadBtn.addEventListener('click', function() { self.downloadReport(); });
   this._headerGroupHost.appendChild(downloadBtn);
 };
@@ -570,7 +570,7 @@ MTS.DiagnosticsPanel.prototype._renderLogs = function() {
   if (!this._logList) return;
   this._logList.innerHTML = '';
   if (!this.logs.length) {
-    this._logList.appendChild(this._empty('Todavia no hay actividad registrada.'));
+    this._logList.appendChild(this._empty(this._t('emptyLogs', 'No activity recorded yet.')));
     return;
   }
   this.logs.forEach(function(item) {
@@ -593,8 +593,8 @@ MTS.DiagnosticsPanel.prototype._renderRequests = function() {
   if (!this._requestList) return;
   this._requestList.innerHTML = '';
   if (!this.requests.length) {
-    this._requestList.appendChild(this._empty('Todavia no hay requests interceptados.'));
-    if (this._requestDetail) this._requestDetail.textContent = 'Selecciona un request para ver mas detalle.';
+    this._requestList.appendChild(this._empty(this._t('emptyRequests', 'No requests intercepted yet.')));
+    if (this._requestDetail) this._requestDetail.textContent = this._t('requestPrompt', 'Select a request to see more detail.');
     return;
   }
   this.requests.forEach(function(item, index) {
@@ -640,7 +640,7 @@ MTS.DiagnosticsPanel.prototype._renderErrors = function() {
   if (!this._errorList) return;
   this._errorList.innerHTML = '';
   if (!this.errors.length) {
-    this._errorList.appendChild(this._empty('Todavia no hay errores capturados.'));
+    this._errorList.appendChild(this._empty(this._t('emptyErrors', 'No errors captured yet.')));
     return;
   }
   this.errors.forEach(function(item) {
@@ -677,9 +677,9 @@ MTS.DiagnosticsPanel.prototype._renderExport = function() {
 };
 
 MTS.DiagnosticsPanel.prototype._updateCounts = function() {
-  if (this._countNodes.logs)     this._countNodes.logs.textContent     = this.logs.length     + ' logs';
-  if (this._countNodes.requests) this._countNodes.requests.textContent = this.requests.length + ' requests';
-  if (this._countNodes.errors)   this._countNodes.errors.textContent   = this.errors.length   + ' errores';
+  if (this._countNodes.logs)     this._countNodes.logs.textContent     = this.logs.length     + ' ' + this._t('unitLogs', 'logs');
+  if (this._countNodes.requests) this._countNodes.requests.textContent = this.requests.length + ' ' + this._t('unitRequests', 'requests');
+  if (this._countNodes.errors)   this._countNodes.errors.textContent   = this.errors.length   + ' ' + this._t('unitErrors', 'errores');
 };
 
 /* ════════════════════════════════════════════════════
@@ -702,9 +702,9 @@ MTS.DiagnosticsPanel.prototype._openJsonDrawerForRequest = function(item) {
   if (!this._jsonDrawer || !this._jsonRequestViewer || !this._jsonResponseViewer) return;
   let title = item.method + ' ' + item.url;
   this._jsonDrawer.setTitle(this._escape(title));
-  this._jsonRequestViewer.setTitle('Request body',  this._formatTime(item.createdAt));
+  this._jsonRequestViewer.setTitle(this._t('requestBody', 'Request body'),  this._formatTime(item.createdAt));
   this._jsonRequestViewer.setData(item.requestBody  || '');
-  this._jsonResponseViewer.setTitle('Response body', 'Status ' + item.status + ' • ' + item.durationMs + ' ms');
+  this._jsonResponseViewer.setTitle(this._t('responseBody', 'Response body'), 'Status ' + item.status + ' • ' + item.durationMs + ' ms');
   this._jsonResponseViewer.setData(item.responseBody || '');
   let activeTab = item.requestBody ? 'request' : 'response';
   if (this._jsonDrawerTabs && typeof this._jsonDrawerTabs.setActive === 'function') {
@@ -933,6 +933,14 @@ MTS.DiagnosticsPanel.prototype._unsubscribeGlobals = function() {
 /* ════════════════════════════════════════════════════
    HELPERS
    ════════════════════════════════════════════════════ */
+
+MTS.DiagnosticsPanel.prototype._t = function(key, fallback) {
+  try {
+    let ns = (window.MTS && typeof MTS.getString === 'function') ? MTS.getString()['MTS.DiagnosticsPanel'] : null;
+    if (ns && ns[key] != null) return ns[key];
+  } catch (error) { /* fallback */ }
+  return fallback;
+};
 
 MTS.DiagnosticsPanel.prototype._empty = function(text) {
   let el = document.createElement('div');

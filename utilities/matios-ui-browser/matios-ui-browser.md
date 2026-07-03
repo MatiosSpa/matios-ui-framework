@@ -10,7 +10,8 @@ Static utility that unifies the native browser APIs behind a consistent interfac
 <script src="utilities/matios-ui-browser/matios-ui-browser.js"></script>
 ```
 
-No CSS required.
+No CSS required. The utility exposes a single static object, `MTS.Browser` — there is no
+constructor and nothing to instantiate.
 
 ---
 
@@ -239,15 +240,52 @@ const quota = await MTS.Browser.storage.quota();
 
 ---
 
+## Full example
+
+```html
+<script src="utilities/matios-ui-browser/matios-ui-browser.js"></script>
+<script>
+  // Guard the page against casual copying
+  MTS.Browser.guard.contextMenu(true);
+  MTS.Browser.guard.copy(true);
+
+  // React to connectivity changes
+  MTS.Browser.network.onChange(function(online) {
+    console.log(online ? 'Back online' : 'Offline');
+  });
+
+  // Read the battery when supported
+  if (MTS.Browser.battery.isSupported()) {
+    MTS.Browser.battery.get().then(function(bat) {
+      console.log(bat.level + '% – charging:', bat.charging);
+    });
+  }
+
+  // Persist a value (JSON is handled automatically)
+  MTS.Browser.storage.local.set('lastVisit', { ts: Date.now() });
+</script>
+```
+
+---
+
 ## Notes
 
-- Every sub-module exposes `isSupported()` — check it before using in contexts where the API may not be available.
+- Every sub-module exposes `isSupported()` (except `guard`, `network`, `visibility` and
+  `storage`, which rely on always-available DOM APIs) — check it before using in contexts where
+  the API may not be available.
+- Methods that hit an unsupported API **throw** an `Error` (or reject the returned promise) —
+  wrap calls in `try` / `catch` or `.catch()`.
 - `guard` adds friction, not real security. A determined user can always bypass it.
 - `captureFetch` and `captureConsole` are not part of this module — see `MTS.DiagnosticsPanel`.
 
 ---
 
-## Changelog
+## Localization
 
-### Initial
-- Documentation created from scratch (standard template).
+`MTS.Browser` has **no localizable runtime strings**. It returns data (booleans, objects,
+strings) and never renders UI, so there is no chrome to translate. The only user-facing text it
+produces is developer-facing `Error` messages thrown when an API is unsupported.
+
+The sibling file `matios-ui-browser-i18n.js` (namespace `MTS.Browser`, keys under `demo.*`) is
+**demo-only**: it feeds the labels of `demo.html` through `MTS.getString()` and is not required
+by the utility itself. You do not need to load it in production.

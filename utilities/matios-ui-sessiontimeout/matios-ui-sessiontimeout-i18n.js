@@ -10,6 +10,11 @@
 
   MTS.registerLocale('es', {
     'MTS.SessionTimeout': {
+      title:      'Tu sesión está por vencer',
+      body:       'Por inactividad, tu sesión se cerrará en {time}.',
+      warning:    'Si tienes trabajo sin guardar, podrías perderlo.',
+      btnRefresh: 'Renovar sesión',
+      btnExpire:  'Cerrar sesión',
       demo: {
         subtitle:        'Gestión de timeout de sesión por inactividad. Barra de progreso fija en el borde inferior + modal de advertencia con countdown configurable. Compatible con cualquier estrategia de renovación de token.',
         s1Title:         '1 — Básico',
@@ -43,6 +48,11 @@
 
   MTS.registerLocale('en', {
     'MTS.SessionTimeout': {
+      title:      'Your session is about to expire',
+      body:       'Due to inactivity, your session will close in {time}.',
+      warning:    'If you have unsaved work, you could lose it.',
+      btnRefresh: 'Renew session',
+      btnExpire:  'Sign out',
       demo: {
         subtitle:        'Session timeout management on inactivity. Fixed progress bar at the bottom edge + warning modal with configurable countdown. Compatible with any token refresh strategy.',
         s1Title:         '1 — Basic',
@@ -76,6 +86,11 @@
 
   MTS.registerLocale('pt', {
     'MTS.SessionTimeout': {
+      title:      'Sua sessão está prestes a expirar',
+      body:       'Por inatividade, sua sessão será encerrada em {time}.',
+      warning:    'Se você tem trabalho não salvo, poderá perdê-lo.',
+      btnRefresh: 'Renovar sessão',
+      btnExpire:  'Encerrar sessão',
       demo: {
         subtitle:        'Gestão de timeout de sessão por inatividade. Barra de progresso fixa na borda inferior + modal de aviso com contagem regressiva configurável. Compatível com qualquer estratégia de renovação de token.',
         s1Title:         '1 — Básico',

@@ -50,6 +50,13 @@ MTS.DevPanel = class MtsDevPanel {
     this.refreshCode();
   }
 
+  /* ── i18n ───────────────────────────────────────────────── */
+
+  _t(key, fallback) {
+    let loc = (window.MTS && typeof MTS.getString === 'function') ? MTS.getString()['MTS.DevPanel'] : null;
+    return (loc && loc[key] != null) ? loc[key] : fallback;
+  }
+
   /* ── Public API ─────────────────────────────────────────── */
 
   log(badge, message, detail = '') {
@@ -123,7 +130,7 @@ MTS.DevPanel = class MtsDevPanel {
       cfgPanel.innerHTML =
         '<div class="dp-panel__header">' +
           '<span class="dp-panel__icon">' + this._icon('settings') + '</span>' +
-          '<span class="dp-panel__title">Config</span>' +
+          '<span class="dp-panel__title">' + this._escape(this._t('configTitle', 'Config')) + '</span>' +
           '<button class="dp-panel__toggle" data-panel="config">' + this._icon('chevron-left') + '</button>' +
         '</div>' +
         '<div class="dp-panel__body" id="dp-cfg-body"></div>';
@@ -146,7 +153,7 @@ MTS.DevPanel = class MtsDevPanel {
       codePanel.innerHTML =
         '<div class="dp-panel__header">' +
           '<span class="dp-panel__icon">' + this._icon('code') + '</span>' +
-          '<span class="dp-panel__title">JavaScript</span>' +
+          '<span class="dp-panel__title">' + this._escape(this._t('codeTitle', 'JavaScript')) + '</span>' +
           '<button class="dp-panel__btn" id="dp-copy-btn">' + this._icon('copy') + '</button>' +
           '<button class="dp-panel__toggle" data-panel="code">' + this._icon('chevron-right') + '</button>' +
         '</div>' +
@@ -201,10 +208,10 @@ MTS.DevPanel = class MtsDevPanel {
       logPanel.innerHTML =
         '<div class="dp-log__header" id="dp-log-header">' +
           '<span class="dp-log__icon">' + this._icon('activity') + '</span>' +
-          '<span class="dp-log__label">Activity Log</span>' +
+          '<span class="dp-log__label">' + this._escape(this._t('logTitle', 'Activity Log')) + '</span>' +
           '<span class="dp-log__count" id="dp-log-count">0</span>' +
           '<div class="dp-log__spacer"></div>' +
-          '<button class="dp-log__clear" id="dp-log-clear">Clear</button>' +
+          '<button class="dp-log__clear" id="dp-log-clear">' + this._escape(this._t('clear', 'Clear')) + '</button>' +
           '<span class="dp-log__chevron">▾</span>' +
         '</div>' +
         '<div class="dp-log__body" id="dp-log-body"></div>';

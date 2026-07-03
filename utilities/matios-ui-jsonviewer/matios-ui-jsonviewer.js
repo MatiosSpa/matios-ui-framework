@@ -20,9 +20,9 @@ MTS.JsonViewer = function MtsJsonViewer(selector, options) {
   this.copyable       = _def(options.copyable,       ds.copyable !== 'false');
   this.height         = _def(options.height,         _def(ds.height,   'auto'));
   this.collapsedDepth = _def(options.collapsedDepth, this._parseCollapsedDepth(ds.collapsedDepth));
-  this.emptyText      = _def(options.emptyText,      _def(ds.emptyText,    'Sin datos JSON.'));
+  this.emptyText      = _def(options.emptyText,      _def(ds.emptyText,    this._t('emptyText', 'Sin datos JSON.')));
   this.editable       = _def(options.editable,       ds.editable === 'true');
-  this.placeholder    = _def(options.placeholder,    _def(ds.placeholder, 'Pega aqui un JSON y presiona Format.'));
+  this.placeholder    = _def(options.placeholder,    _def(ds.placeholder, this._t('placeholder', 'Pega aqui un JSON y presiona Format.')));
 
   this._source              = _def(options.data, _def(ds.data, ''));
   this._parsed              = null;
@@ -137,7 +137,7 @@ MTS.JsonViewer.prototype._build = function() {
     this._editorActions.className = 'mts-jsonviewer__editor-actions';
     this._editor.appendChild(this._editorActions);
 
-    this._formatBtn = this._makeActionButton('Format');
+    this._formatBtn = this._makeActionButton(this._t('format', 'Format'));
     this._formatBtn.addEventListener('click', function() { self.format(); });
     this._editorActions.appendChild(this._formatBtn);
 
@@ -203,15 +203,15 @@ MTS.JsonViewer.prototype._renderToolbar = function() {
 
   let state = document.createElement('span');
   state.className = 'mts-jsonviewer__state' + (this._parseError ? ' is-error' : '');
-  state.textContent = this._parseError ? 'RAW' : 'JSON';
+  state.textContent = this._parseError ? this._t('stateRaw', 'RAW') : this._t('stateJson', 'JSON');
   actions.appendChild(state);
 
   if (!this._parseError && this._isCompound(this._parsed)) {
-    let collapseBtn = this._makeActionButton('Collapse');
+    let collapseBtn = this._makeActionButton(this._t('collapseAll', 'Collapse'));
     collapseBtn.addEventListener('click', function() { self.collapseAll(); });
     actions.appendChild(collapseBtn);
 
-    let expandBtn = this._makeActionButton('Expand');
+    let expandBtn = this._makeActionButton(this._t('expandAll', 'Expand'));
     expandBtn.addEventListener('click', function() { self.expandAll(); });
     actions.appendChild(expandBtn);
   }
@@ -246,7 +246,7 @@ MTS.JsonViewer.prototype._renderBody = function() {
     let errorEl = document.createElement('div');
     errorEl.className = 'mts-jsonviewer__error';
     errorEl.innerHTML =
-      '<span class="mts-jsonviewer__state is-error">JSON invalido</span>' +
+      '<span class="mts-jsonviewer__state is-error">' + this._escape(this._t('invalidJson', 'JSON invalido')) + '</span>' +
       '<p class="mts-jsonviewer__error-text">' + this._escape(this._parseError) + '</p>';
     this._viewer.appendChild(errorEl);
 
@@ -328,7 +328,7 @@ MTS.JsonViewer.prototype._renderValue = function(value, path, level, key, isRoot
       emptyEl.className = 'mts-jsonviewer__line mts-jsonviewer__line--empty';
       emptyEl.style.setProperty('--level', level + 1);
       emptyEl.innerHTML = '<span class="mts-jsonviewer__empty-label">' +
-        (isArray ? '(empty array)' : '(empty object)') + '</span>';
+        this._escape(isArray ? this._t('emptyArray', '(empty array)') : this._t('emptyObject', '(empty object)')) + '</span>';
       children.appendChild(emptyEl);
     } else {
       keys.forEach(function(childKey) {
@@ -398,18 +398,21 @@ MTS.JsonViewer.prototype._syncCopyButton = function() {
     return;
   }
 
+  let copyLabel   = this._t('copy', 'Copiar');
+  let copiedLabel = this._t('copied', 'Copiado');
+
   if (window.MTS && MTS.CopyButton) {
     this._copyInstance = new MTS.CopyButton(this._copyHost, {
       text: copyText,
-      label: 'Copiar',
-      labelCopied: 'Copiado',
+      label: copyLabel,
+      labelCopied: copiedLabel,
       variant: 'secondary',
       size: 'sm'
     });
     return;
   }
 
-  this._copyHost.innerHTML = '<span class="mts-btn__label">Copiar</span>';
+  this._copyHost.innerHTML = '<span class="mts-btn__label">' + this._escape(copyLabel) + '</span>';
   this._fallbackCopyHandler = function() {
     if (!copyText) return;
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -431,16 +434,24 @@ MTS.JsonViewer.prototype._syncCopyButton = function() {
 
 MTS.JsonViewer.prototype._showFallbackCopied = function() {
   let self = this;
-  this._copyHost.innerHTML = '<span class="mts-btn__label">Copiado</span>';
+  this._copyHost.innerHTML = '<span class="mts-btn__label">' + this._escape(this._t('copied', 'Copiado')) + '</span>';
   clearTimeout(this._copyTimer);
   this._copyTimer = setTimeout(function() {
-    if (self._copyHost) self._copyHost.innerHTML = '<span class="mts-btn__label">Copiar</span>';
+    if (self._copyHost) self._copyHost.innerHTML = '<span class="mts-btn__label">' + self._escape(self._t('copy', 'Copiar')) + '</span>';
   }, 1800);
 };
 
 /* ════════════════════════════════════════════════════
    HELPERS
    ════════════════════════════════════════════════════ */
+
+MTS.JsonViewer.prototype._t = function(key, fallback) {
+  try {
+    let ns = (window.MTS && typeof MTS.getString === 'function') ? MTS.getString()['MTS.JsonViewer'] : null;
+    if (ns && ns[key] != null) return ns[key];
+  } catch (error) { /* fallback */ }
+  return fallback;
+};
 
 MTS.JsonViewer.prototype._makeActionButton = function(label) {
   let btn = document.createElement('button');
@@ -451,9 +462,13 @@ MTS.JsonViewer.prototype._makeActionButton = function(label) {
 };
 
 MTS.JsonViewer.prototype._summary = function(value) {
-  if (Array.isArray(value)) return value.length + (value.length === 1 ? ' item' : ' items');
+  if (Array.isArray(value)) {
+    let tpl = value.length === 1 ? this._t('itemOne', '{n} item') : this._t('itemMany', '{n} items');
+    return tpl.replace('{n}', value.length);
+  }
   let count = Object.keys(value || {}).length;
-  return count + (count === 1 ? ' key' : ' keys');
+  let keyTpl = count === 1 ? this._t('keyOne', '{n} key') : this._t('keyMany', '{n} keys');
+  return keyTpl.replace('{n}', count);
 };
 
 MTS.JsonViewer.prototype._valueClass = function(value) {
