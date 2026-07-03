@@ -290,6 +290,10 @@ let modeGroup     = null;
 let accentGroup   = null;
 let currentItem   = null;
 let currentActiveMd = null;
+/* Approach B — doc derived from the launcher item (src → sibling .md), used when the
+   component is not in MD_MAP so the specific doc always resolves without hand-maintaining it. */
+let currentActiveDoc = null;
+let currentActiveDocLabel = null;
 let mdCache       = {};
 let currentMdRaw  = '';
 
@@ -506,6 +510,8 @@ new MTS.Shell(document.body, {
 function loadContent(item) {
   currentItem = item;
   currentActiveMd = null;
+  currentActiveDoc = null;
+  currentActiveDocLabel = null;
 
   var mdKey = item.md || item.key;
   var docsBtn = document.getElementById('docsBtn');
@@ -583,11 +589,14 @@ window.addEventListener('message', function(e) {
 
   if (e.data.type === 'mts:accActive') {
     const component = e.data.component;
-    currentActiveMd = (component && MD_MAP[component]) ? component : null;
+    currentActiveMd       = (component && MD_MAP[component]) ? component : null;
+    currentActiveDoc      = (!currentActiveMd && e.data.doc) ? e.data.doc : null;
+    currentActiveDocLabel = e.data.label || null;
     const mdKey = currentActiveMd || currentItem?.md || currentItem?.key || currentItem?.id;
     var docsBtn = document.getElementById('docsBtn');
-    if (docsBtn) docsBtn.style.display = !!(mdKey && MD_MAP[mdKey]) ? '' : 'none';
-    if (currentActiveMd) delete mdCache[currentActiveMd];
+    if (docsBtn) docsBtn.style.display = ((mdKey && MD_MAP[mdKey]) || currentActiveDoc) ? '' : 'none';
+    if (currentActiveMd)  delete mdCache[currentActiveMd];
+    if (currentActiveDoc) delete mdCache[currentActiveDoc];
   }
 });
 
@@ -609,13 +618,14 @@ var rmCopyBtn = new MTS.CopyButton('#rmCpBtnHost', {
 
 async function openDocs() {
   const mdKey = currentActiveMd || currentItem?.md || currentItem?.key || currentItem?.id;
-  if (!mdKey) return;
-  const entry = MD_MAP[mdKey];
+  /* MD_MAP wins (supports multi-file docs); otherwise use the doc derived from the launcher (B). */
+  const entry    = (mdKey && MD_MAP[mdKey]) || currentActiveDoc;
   if (!entry) return;
+  const cacheKey = (mdKey && MD_MAP[mdKey]) ? mdKey : currentActiveDoc;
 
-  rmDrawer.setTitle(currentItem.label);
+  rmDrawer.setTitle(currentActiveDocLabel || (currentItem ? currentItem.label : 'Documentation'));
 
-  if (!mdCache[mdKey]) {
+  if (!mdCache[cacheKey]) {
     var spinHost = document.createElement('div');
     spinHost.style.cssText = 'display:flex;align-items:center;justify-content:center;padding:60px 0';
     rmDrawer.setContent(spinHost);
@@ -624,7 +634,7 @@ async function openDocs() {
 
   rmDrawer.show();
 
-  if (mdCache[mdKey]) { renderMd(mdCache[mdKey]); return; }
+  if (mdCache[cacheKey]) { renderMd(mdCache[cacheKey]); return; }
 
   try {
     let combined = '';
@@ -632,7 +642,7 @@ async function openDocs() {
       try { const r = await fetch(url); if (r.ok) combined += (combined ? '\n\n---\n\n' : '') + await r.text(); } catch(e) {}
     }
     if (!combined) throw new Error('empty');
-    mdCache[mdKey] = combined;
+    mdCache[cacheKey] = combined;
     renderMd(combined);
   } catch(e) {
     rmDrawer.setContent(

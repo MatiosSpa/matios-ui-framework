@@ -494,10 +494,15 @@ function mtsBuildDemoSrc(src) {
   return src + '#' + hash;
 }
 
-function mtsNotifyActiveComponent(component) {
+function mtsNotifyActiveComponent(component, doc, label) {
   try {
     if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: 'mts:accActive', component: component || null }, '*');
+      window.parent.postMessage({
+        type: 'mts:accActive',
+        component: component || null,
+        doc:   doc   || null,   // absolute URL of the component's .md, derived from its demo src
+        label: label || null
+      }, '*');
     }
   } catch (e) {}
 }
@@ -539,6 +544,7 @@ function initGroupLauncher(selector, items) {
     if (!wrap) return;
     wrap.dataset.src = item.src;
     wrap.dataset.component = item.component || item.id;
+    wrap.dataset.title = item.title || '';
     var titleNode = wrap.querySelector('.mts-accordion__title');
     if (titleNode) {
       var block = document.createElement('span');
@@ -564,7 +570,15 @@ function initGroupLauncher(selector, items) {
     var iframe = wrap ? wrap.querySelector('.demo-launcher__iframe') : null;
     if (!iframe) return;
     iframe.src = mtsBuildDemoSrc(wrap.dataset.src || '');
-    mtsNotifyActiveComponent(wrap.dataset.component || id);
+    var comp = wrap.dataset.component || id;
+    var src  = wrap.dataset.src || '';
+    var docUrl = null;
+    if (src) {
+      /* derive the component's doc: '<folder>/demo.html' → '<folder>/matios-ui-<comp>.md', absolute */
+      var rel = src.replace(/[?#].*$/, '').replace(/[^\/]*\.html$/, 'matios-ui-' + comp + '.md');
+      try { docUrl = new URL(rel, location.href).href; } catch (e) { docUrl = null; }
+    }
+    mtsNotifyActiveComponent(comp, docUrl, wrap.dataset.title || '');
     setTimeout(function () {
       var body = wrap.querySelector('.mts-accordion__body');
       if (body && body.classList.contains('mts-accordion__body--open')) {
