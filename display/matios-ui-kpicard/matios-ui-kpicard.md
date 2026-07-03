@@ -137,7 +137,7 @@ Language is set globally, once, at startup:
 MTS.setLanguage('en'); // 'es' | 'en' | 'pt'
 ```
 
-There is no per-instance `locale` option and no `getMessages` / `setLocale` / `getLocale` API.
+There is no per-instance `locale` option.
 
 ---
 

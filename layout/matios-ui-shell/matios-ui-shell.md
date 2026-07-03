@@ -121,8 +121,7 @@ nothing for it to translate. Any user-facing copy (menu labels, brand title, sta
 mounted into the slots (`MTS.Topbar`, `MTS.SideNav`, `MTS.StatusBar`), which localize themselves via the global
 language API.
 
-Set the language once at startup with the global API — there is no per-instance `locale` option and no
-`getMessages` / `setLocale` / `getLocale`:
+Set the language once at startup with the global API — there is no per-instance `locale` option:
 
 ```js
 MTS.setLanguage('es'); // 'es' | 'en' | 'pt'

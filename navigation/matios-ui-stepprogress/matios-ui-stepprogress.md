@@ -155,5 +155,4 @@ indicators are numbers or `MTS.Icon` glyphs. There is nothing to translate at ru
 
 The `MTS.StepProgress` i18n namespace (`matios-ui-stepprogress-i18n.js`) holds **only the demo page strings** (`demo.*`
 in `es` / `en` / `pt`), read through the global `MTS.getString()['MTS.StepProgress']`. Language is selected once at
-startup with `MTS.setLanguage('es' | 'en' | 'pt')`. There is no per-instance `locale` option and no
-`getMessages` / `setLocale` / `getLocale` API.
+startup with `MTS.setLanguage('es' | 'en' | 'pt')`. There is no per-instance `locale` option.

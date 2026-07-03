@@ -123,6 +123,6 @@ Validation (form-field contract) — see [Form Field Contract](../FORM-FIELD-CON
 
 The slider displays only numeric values (`min` / `max` / current value), so it renders no translatable chrome — the visible output is driven entirely by your `value`, `label` and `labelFormat`. The `MTS.Slider` namespace registers a single `messages.required` string per language (es / en / pt) for the form-field contract.
 
-Language is global and set once at startup with `MTS.setLanguage('en' | 'es' | 'pt')`. There is no per-instance `locale` option, and no `getMessages` / `setLocale` / `getLocale` methods.
+Language is global and set once at startup with `MTS.setLanguage('en' | 'es' | 'pt')`. There is no per-instance `locale` option.
 
 The demo texts live in `matios-ui-slider-i18n.js` under the same namespace (the `demo` block); those keys are demo-only and are not read by the component.

@@ -126,6 +126,6 @@ Related global helpers:
 | `MTS.getLanguage()` | Returns the active language code. |
 | `MTS.getString()` | Returns the merged string table for the active language. |
 
-There is no per-instance `locale` option, and no `getMessages` / `setLocale` / `getLocale` methods.
+There is no per-instance `locale` option.
 
 The component itself renders no user-facing chrome of its own (no toolbar, no table-of-contents title, no empty-state label), so it has no localizable strings beyond the demo. The `MTS.MarkdownViewer` namespace in `matios-ui-markdownviewer-i18n.js` supplies the demo page text (`es` / `en` / `pt`). The copy button on code blocks is owned and localized by `MTS.CodeBlock`.

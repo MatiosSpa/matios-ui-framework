@@ -115,4 +115,4 @@ There is no `refresh()`, `getConfig()`, or `getCode()` method.
 
 - The component reads no runtime chrome from i18n: nav text and section content are supplied by the developer, so there is nothing to localize inside the component itself.
 - `matios-ui-scrollspy-i18n.js` registers the `MTS.ScrollSpy` namespace only for the demo strings (`es` / `en` / `pt`, default `es`), read via `MTS.getString()['MTS.ScrollSpy'].demo`.
-- Set the language once at startup with `MTS.setLanguage('es' | 'en' | 'pt')`. There is no per-instance `locale` option and no `getMessages` / `setLocale` / `getLocale`.
+- Set the language once at startup with `MTS.setLanguage('es' | 'en' | 'pt')`. There is no per-instance `locale` option.

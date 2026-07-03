@@ -245,8 +245,7 @@ and set the language once at startup:
 MTS.setLanguage('en');   // 'es' (default) | 'en' | 'pt'
 ```
 
-There is no per-instance `locale` option and no `getMessages` / `setLocale` /
-`getLocale` methods. If the i18n file is not loaded, the chrome falls back to
+There is no per-instance `locale` option. If the i18n file is not loaded, the chrome falls back to
 Spanish.
 
 ### Keys

@@ -125,4 +125,4 @@ Set the language once, globally, at startup:
 MTS.setLanguage('es'); // 'es' | 'en' | 'pt'  — default 'es'
 ```
 
-The bundle ships all three locales. There is no per-instance `locale` option and no `getMessages` / `setLocale` / `getLocale`.
+The bundle ships all three locales. There is no per-instance `locale` option.

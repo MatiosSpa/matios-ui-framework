@@ -98,7 +98,7 @@ document.addEventListener('mts:reveal', function (event) {
 
 The component emits **no runtime chrome text** — it only toggles inline styles and dispatches `mts:reveal`. There is nothing to localize at runtime.
 
-`matios-ui-intersectionreveal-i18n.js` registers strings under the `MTS.IntersectionReveal` namespace, but every entry lives under a `demo` key and is used **only by `demo.html`**. It is not read by the component. There is no per-instance `locale` option and no `getMessages`/`setLocale`/`getLocale` API.
+`matios-ui-intersectionreveal-i18n.js` registers strings under the `MTS.IntersectionReveal` namespace, but every entry lives under a `demo` key and is used **only by `demo.html`**. It is not read by the component. There is no per-instance `locale` option.
 
 ---
 

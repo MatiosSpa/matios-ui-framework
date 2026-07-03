@@ -162,7 +162,7 @@ Localized strings live under the namespace `MTS.Autocomplete` in `matios-ui-auto
 MTS.setLanguage('en');   // 'es' (default) | 'en' | 'pt'
 ```
 
-There is no per-instance `locale` option and no `getMessages` / `setLocale` / `getLocale` API. Bundled keys (under `MTS.Autocomplete.messages`):
+There is no per-instance `locale` option. Bundled keys (under `MTS.Autocomplete.messages`):
 
 | Key | es | en | pt | Used for |
 |-----|----|----|----|----------|

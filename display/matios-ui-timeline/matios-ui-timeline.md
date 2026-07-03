@@ -121,8 +121,7 @@ badge labels) comes from the `events` you supply, so there is nothing for the co
 Provide already-localized `events` for the active language.
 
 The global language API (`MTS.setLanguage` / `MTS.getLanguage` / `MTS.getString`) still applies to the
-surrounding page and to shared components (such as `MTS.Badge`). There is no per-instance `locale`
-option and no `getMessages` / `setLocale` / `getLocale` methods.
+surrounding page and to shared components (such as `MTS.Badge`). There is no per-instance `locale` option.
 
 ---
 

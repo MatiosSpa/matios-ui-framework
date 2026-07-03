@@ -127,7 +127,7 @@ list.resume();
 list.reset();
 ```
 
-There is no `loadMore()`, `off()`, `setLocale()`, `getLocale()` or `getMessages()` method.
+There is no `loadMore()` or `off()` method.
 
 ---
 
