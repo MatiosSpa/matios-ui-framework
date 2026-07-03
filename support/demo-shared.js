@@ -545,6 +545,7 @@ function initGroupLauncher(selector, items) {
     wrap.dataset.src = item.src;
     wrap.dataset.component = item.component || item.id;
     wrap.dataset.title = item.title || '';
+    wrap.dataset.doc = item.doc || '';   // explicit doc path (non-standard layouts, e.g. charts)
     var titleNode = wrap.querySelector('.mts-accordion__title');
     if (titleNode) {
       var block = document.createElement('span');
@@ -572,14 +573,13 @@ function initGroupLauncher(selector, items) {
     iframe.src = mtsBuildDemoSrc(wrap.dataset.src || '');
     var comp = wrap.dataset.component || id;
     var src  = wrap.dataset.src || '';
+    /* Explicit item.doc wins (non-standard layouts like charts, where the .md lives elsewhere
+       and is named differently). Otherwise derive '<folder>/demo.html' → '<folder>/matios-ui-<comp>.md'.
+       Lowercase the key so camelCase ids (e.g. 'stepProgress') resolve on case-sensitive servers. */
+    var docRel = wrap.dataset.doc
+      || (src ? src.replace(/[?#].*$/, '').replace(/[^\/]*\.html$/, 'matios-ui-' + comp.toLowerCase() + '.md') : '');
     var docUrl = null;
-    if (src) {
-      /* derive the component's doc: '<folder>/demo.html' → '<folder>/matios-ui-<comp>.md', absolute.
-         Lowercase the key so camelCase ids (e.g. 'stepProgress') resolve to the real lowercase
-         filename on case-sensitive servers. */
-      var rel = src.replace(/[?#].*$/, '').replace(/[^\/]*\.html$/, 'matios-ui-' + comp.toLowerCase() + '.md');
-      try { docUrl = new URL(rel, location.href).href; } catch (e) { docUrl = null; }
-    }
+    if (docRel) { try { docUrl = new URL(docRel, location.href).href; } catch (e) { docUrl = null; } }
     mtsNotifyActiveComponent(comp, docUrl, wrap.dataset.title || '');
     setTimeout(function () {
       var body = wrap.querySelector('.mts-accordion__body');
