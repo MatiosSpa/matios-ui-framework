@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [1.0.3] — 2026-07-05
+
+Global language API and rename (`registerLocale`→`registerLanguage`, aliased), theming and component hardening
+(tooltip dark variant, revived `data-mts-mode` overrides), more forgiving icon inputs, and the data-loading
+override pattern finished across the data components. Fully backward compatible — patch.
+
 Data-loading components standardized around the same override pattern: they `fetch` internally by default, but every
 request is overridable via a dev-provided async function (you own the transport — native `fetch`, `MTS.HttpClient`,
 auth, interceptors). The built-in `{ url }` paths now honor the headers and params you configure.
@@ -28,8 +36,13 @@ auth, interceptors). The built-in `{ url }` paths now honor the headers and para
 - **DatePicker `linkRange` now works with time** — the Time picker honors `minDate`/`maxDate` (out-of-range hours/minutes
   are shown disabled instead of removed), so `linkRange(start, end)` also constrains a start/end **time** pair: on the same
   day the end must be at least the start hour + 1; across days the time is unconstrained.
+- **Icons accept both forms** — `MTS.Icon.get()` / `render()` and the `icon:` config of `MTS.Menu` / `MTS.PanelDropdown`
+  (and `MTS.SideNav` / `MTS.Topbar`, which use `MTS.Menu`) accept either the plain name (`'trash'`) or the CSS-class form
+  (`'mts-icon-trash'`) — the `mts-icon-` prefix is stripped when present.
 
 ### Changed
+- **i18n registration renamed** — `MTS.registerLocale`→`MTS.registerLanguage` and `MTS.Locales`→`MTS.Languages`
+  (plus `MTS.DataTable`/`MTS.Calendar` registration). The old names stay as **aliases** — non-breaking.
 - **Language is global-only** — components read the active language solely from `MTS.getLanguage()`. The per-instance
   `locale` option was removed from `MTS.DataTable`, `MTS.Calendar` and `MTS.CalendarUI` (they previously defaulted to
   `'es'` and ignored a global `MTS.setLanguage()`). Change the language once, at startup.
@@ -48,6 +61,12 @@ auth, interceptors). The built-in `{ url }` paths now honor the headers and para
   active theme's colors (fixes the white-background bug in dark mode).
 - **Accordion**: releases its animated `max-height` to `none` after the open transition, so an open panel follows
   dynamically-resizing content (e.g. an auto-sizing iframe) instead of staying clamped to the height measured at open time.
+- **Tooltip dark variant** now uses the inverse-surface tokens, so it renders opaque and legible on every mode (it was
+  transparent on the dark modes). The declarative API reads `data-mts-tooltip-*` attributes, fixing a collision with the
+  target's own `data-variant` (e.g. an `MTS.Button` used as the tooltip target).
+- **Dead `data-mts-theme` overrides revived** — badge, progress, slider, fileupload, kanban and calendar had light/dark
+  overrides keyed on the non-existent `data-mts-theme` (so they never applied); they now key on the real `data-mts-mode`
+  (`light` is the only light mode — every other mode is dark).
 
 ### Docs
 If you clone the repo, the live demos are the fastest way in — each one is copy-paste runnable and its **"View docs"**
